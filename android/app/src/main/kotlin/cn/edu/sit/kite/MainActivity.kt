@@ -1,4 +1,4 @@
-package com.example.kite_app
+package cn.edu.sit.kite
 
 import io.flutter.embedding.android.FlutterActivity
 

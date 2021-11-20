@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kite_app/widget/report/report.dart';
+import 'package:kite/widget/report/report.dart';
 
 void main() {
   runApp(const MyApp());

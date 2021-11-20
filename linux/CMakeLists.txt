@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(runner LANGUAGES CXX)
 
-set(BINARY_NAME "kite_app")
-set(APPLICATION_ID "com.example.kite_app")
+set(BINARY_NAME "kite")
+set(APPLICATION_ID "cn.edu.sit.kite")
 
 cmake_policy(SET CMP0063 NEW)
 
