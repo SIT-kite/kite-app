@@ -22,3 +22,7 @@ doc/api/
 
 # IDE
 .idea/
+
+# Flutter
+.flutter-plugins-dependencies
+.flutter-plugins
