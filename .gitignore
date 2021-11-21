@@ -26,3 +26,4 @@ doc/api/
 # Flutter
 .flutter-plugins-dependencies
 .flutter-plugins
+kite.iml

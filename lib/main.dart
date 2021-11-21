@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kite/widget/report/report.dart';
+import 'package:kite/page/home/home.dart';
+import 'package:kite/page/welcome/welcome.dart';
+import 'package:kite/page/report/report.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +17,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const DailyReportWidget(),
+      home: const HomePage(),
+      routes: {
+        '/home': (context) => const HomePage(),
+        '/report': (context) => const DailyReportPage(),
+        '/welcome': (context) => const IntroductionAnimationScreen(),
+      },
     );
   }
 }

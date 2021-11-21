@@ -4,14 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class DailyReportWidget extends StatefulWidget {
-  const DailyReportWidget({Key? key}) : super(key: key);
+class DailyReportPage extends StatefulWidget {
+  const DailyReportPage({Key? key}) : super(key: key);
 
   @override
-  _DailyReportWidgetState createState() => _DailyReportWidgetState();
+  _DailyReportPageState createState() => _DailyReportPageState();
 }
 
-class _DailyReportWidgetState extends State<DailyReportWidget> {
+class _DailyReportPageState extends State<DailyReportPage> {
   final Completer<WebViewController> _controller =
       Completer<WebViewController>();
 
@@ -45,7 +45,7 @@ class _DailyReportWidgetState extends State<DailyReportWidget> {
           controller.runJavascript(
               r"document.querySelector('.flex-direction > uni-view:nth-child(1)').textContent='上海应用技术大学小风筝研发中心'");
           controller.runJavascript(
-              r"document.querySelector('.flex-direction > uni-view:nth-child(2)').textContent=''");
+              r"document.querySelector('.flex-direction > uni-view:nth-child(2)').textContent='机协软件 联合开发'");
         },
       ),
     );
