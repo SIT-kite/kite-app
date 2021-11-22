@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:kite/page/home/home.dart';
-import 'package:kite/page/welcome/welcome.dart';
-import 'package:kite/page/report/report.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+import 'package:kite/routes/home.dart';
+import 'package:kite/routes/welcome.dart';
+import 'package:kite/routes/report.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+void main() => runApp(const KiteApp());
+
+class KiteApp extends StatelessWidget {
+  const KiteApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: '上应小风筝',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData.light(),
       home: const HomePage(),
       routes: {
         '/home': (context) => const HomePage(),
