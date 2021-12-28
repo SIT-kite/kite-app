@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kite/services/ocr.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -13,6 +14,14 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('登录'),
+      ),
+      body: Column(
+        children: [
+          ElevatedButton(
+            onPressed: () async {},
+            child: Text('Button'),
+          )
+        ],
       ),
     );
   }
