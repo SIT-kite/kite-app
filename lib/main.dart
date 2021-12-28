@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:kite/pages/login_page.dart';
+import 'package:kite/pages/login.dart';
 
-import 'package:kite/pages/home_page.dart';
+import 'package:kite/pages/home.dart';
 import 'package:kite/routes/welcome.dart';
-import 'package:kite/pages/report_page.dart';
+import 'package:kite/pages/report.dart';
 
 void main() => runApp(const KiteApp());
 
