@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -19,7 +17,7 @@ class _DailyReportPageState extends State<DailyReportPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('报不完的体温上报'),
+        title: const Text('疫情上报'),
         actions: [
           ElevatedButton(
             onPressed: () async {
