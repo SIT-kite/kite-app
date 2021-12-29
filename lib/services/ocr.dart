@@ -14,20 +14,18 @@ class OcrRecognizeException implements Exception {
 }
 
 class OcrServer {
-  final String hostname;
-  const OcrServer(this.hostname);
+  static const OCR_SERVER_URL = 'http://localhost:5000';
 
-  recognize(String imageBase64) async {
-    var response =
-        await Dio().post(hostname + '/captcha/recognition', data: imageBase64);
-    var responseBody = response.data.toString();
-    var result = jsonDecode(responseBody);
+  static recognize(String imageBase64) async {
+    var response = await Dio().post(
+      '$OCR_SERVER_URL/ocr/captcha',
+      data: imageBase64,
+    );
+    var result = response.data;
     var code = result['code'];
-    var msg = result['msg'];
-    var data = result['data'];
     if (result['code'] == 0) {
-      return data['captcha'].toString();
+      return result['data'];
     }
-    throw OcrRecognizeException(code, msg);
+    throw OcrRecognizeException(code, result['msg']);
   }
 }
