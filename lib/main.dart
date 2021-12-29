@@ -1,28 +1,24 @@
+import 'package:flutter_appcenter_bundle/flutter_appcenter_bundle.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/pages/login.dart';
-import 'package:kite/pages/home.dart';
-import 'package:kite/routes/welcome.dart';
-import 'package:kite/pages/report.dart';
 
+import 'package:kite/app.dart';
 
-class KiteApp extends StatelessWidget {
-  const KiteApp({Key? key}) : super(key: key);
+void main() async {
+  /* Initialize Microsoft AppCenter Analytics */
+  // await AppCenter.startAsync(
+  //   appSecretAndroid: '******',
+  //   appSecretIOS: '******',
+  //   enableAnalytics: true, // Defaults to true
+  //   enableCrashes: true, // Defaults to true
+  //   enableDistribute: false,
+  //   usePrivateDistributeTrack: false, // Defaults to false
+  //   disableAutomaticCheckForUpdate: true, // Defaults to false
+  // );
 
-  @override
-  Widget build(BuildContext context) {
+  // AppCenter.trackEventAsync('Start', <String, String> {
+  //   'prop1': 'prop1',
+  //   'prop2': 'prop2',
+  // });
 
-    final routes = {
-        '/home': (context) => const HomePage(),
-        '/dailyReport': (context) => const DailyReportPage(),
-        '/welcome': (context) => const IntroductionAnimationScreen(),
-        '/login': (context) => const LoginPage(),
-    };
-
-    return MaterialApp(
-      title: '上应小风筝',
-      theme: ThemeData.light(),
-      home: const HomePage(),
-      routes: routes,
-    );
-  }
+  runApp(const KiteApp());
 }
