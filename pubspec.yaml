@@ -38,6 +38,7 @@ dependencies:
   encrypt: ^5.0.1
   flutter_appcenter_bundle: ^3.3.2
   introduction_screen: ^2.1.0
+  logger: ^1.1.0
 
 dev_dependencies:
   flutter_test:
