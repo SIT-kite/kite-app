@@ -23,12 +23,16 @@ void main() async {
 
   // Initialize logger, only in debug mode
   if (kDebugMode) {
-    Logger.root.level = Level.ALL;
-    Logger.root.onRecord.listen((record) {
-      print(
-        '${record.level.name}: ${record.loggerName}: ${record.message}',
-      );
-    });
+    initializeLogger();
   }
   runApp(const KiteApp());
+}
+
+void initializeLogger() {
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen((record) {
+    print(
+      '${record.level.name}: ${record.loggerName}: ${record.message}',
+    );
+  });
 }
