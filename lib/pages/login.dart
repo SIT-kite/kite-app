@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kite/services/myportal.dart';
-import 'package:kite/services/sso/session.dart';
-import 'package:dio/dio.dart';
-import 'package:kite/services/sso/utils.dart';
-import 'package:beautiful_soup_dart/beautiful_soup.dart';
+import 'package:kite/services/sso/sso.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

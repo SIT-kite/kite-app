@@ -10,9 +10,14 @@ import 'encrypt_util.dart';
 
 import 'package:kite/services/ocr.dart';
 import './utils.dart';
-import './constants.dart';
 
 class Session {
+  static const String _authServerUrl =
+      'https://authserver.sit.edu.cn/authserver';
+  static const String _loginUrl = '$_authServerUrl/login';
+  static const String _needCaptchaUrl = '$_authServerUrl/needCaptcha.html';
+  static const String _captchaUrl = '$_authServerUrl/captcha.html';
+
   // http客户端对象
   late Dio _dio;
   // cookie缓存
@@ -35,6 +40,7 @@ class Session {
     }
 
     if (jar == null) {
+      // 默认初始化一个RAM的CookieJar
       _jar = DefaultCookieJar();
     } else {
       _jar = jar;
@@ -127,7 +133,7 @@ class Session {
       'rmShown': '1',
     };
     // 登录系统
-    var res = await _dio.post(Constant.LOGIN_URL,
+    var res = await _dio.post(_loginUrl,
         data: requestBody,
         options: DioUtils.NON_REDIRECT_OPTION_WITH_FORM_TYPE);
     // 处理重定向
@@ -152,14 +158,14 @@ class Session {
 
   /// 获取认证页面内容
   Future<String> _getAuthServerHtml() async {
-    var response = await _dio.get(Constant.LOGIN_URL);
+    var response = await _dio.get(_loginUrl);
     return response.data;
   }
 
   /// 判断是否需要验证码
   Future<bool> _needCaptcha() async {
     var response = await _dio.get(
-      Constant.NEED_CAPTCHA_URL,
+      _needCaptchaUrl,
       queryParameters: {
         'username': _username,
         'pwdEncrypt2': 'pwdEncryptSalt',
@@ -171,7 +177,7 @@ class Session {
   /// 获取验证码
   Future<String> _getCaptcha() async {
     var response = await _dio.get(
-      Constant.CAPTCHA_URL,
+      _captchaUrl,
       options: Options(
         responseType: ResponseType.bytes,
       ),
