@@ -1,22 +1,22 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:kite/services/ocr.dart';
-import './nonpersistentCookieJar.dart';
-import './utils.dart';
-import './constants.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:dio_log/dio_log.dart';
 import 'package:dio/adapter.dart';
-
+import 'package:cookie_jar/cookie_jar.dart';
 import 'encrypt_util.dart';
+
+import 'package:kite/services/ocr.dart';
+import './utils.dart';
+import './constants.dart';
 
 class Session {
   // http客户端对象
   late Dio _dio;
   // cookie缓存
-  late NonpersistentCookieJar _jar;
+  late CookieJar _jar;
   // 用户名
   final String _username;
   // 密码
@@ -26,7 +26,7 @@ class Session {
     this._username,
     this._password, {
     Dio? dio,
-    NonpersistentCookieJar? jar,
+    CookieJar? jar,
   }) {
     if (dio == null) {
       _dio = Dio();
@@ -35,7 +35,7 @@ class Session {
     }
 
     if (jar == null) {
-      _jar = NonpersistentCookieJar();
+      _jar = DefaultCookieJar();
     } else {
       _jar = jar;
     }
