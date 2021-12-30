@@ -28,9 +28,9 @@ class _LoginPageState extends State<LoginPage> {
             onPressed: () async {
               var username = '学号';
               var password = '密码';
-              var session = Session(username, password);
+              var session = Session();
 
-              await session.login();
+              await session.login(username, password);
               var userInfo = await MyPortal(session).getUserInfo();
               print(userInfo);
             },

@@ -22,14 +22,8 @@ class Session {
   late Dio _dio;
   // cookie缓存
   late CookieJar _jar;
-  // 用户名
-  final String _username;
-  // 密码
-  final String _password;
 
-  Session(
-    this._username,
-    this._password, {
+  Session({
     Dio? dio,
     CookieJar? jar,
   }) {
@@ -92,7 +86,7 @@ class Session {
   }
 
   /// 登录流程
-  Future<Response> login() async {
+  Future<Response> login(String username, String password) async {
     // 首先获取AuthServer首页
     var html = await _getAuthServerHtml();
     // 获取首页验证码
@@ -104,9 +98,9 @@ class Session {
     // 获取salt
     var salt = _getSaltFromAuthHtml(html);
     // 加密密码
-    var hashedPwd = hashPassword(salt, _password);
+    var hashedPwd = hashPassword(salt, password);
     // 登录系统，获得cookie
-    return await _login(_username, hashedPwd, captcha, casTicket);
+    return await _login(username, hashedPwd, captcha, casTicket);
   }
 
   /// 允许不安全的https访问，这在使用fiddler等抓包工具时很有用
@@ -163,11 +157,11 @@ class Session {
   }
 
   /// 判断是否需要验证码
-  Future<bool> _needCaptcha() async {
+  Future<bool> _needCaptcha(String username) async {
     var response = await _dio.get(
       _needCaptchaUrl,
       queryParameters: {
-        'username': _username,
+        'username': username,
         'pwdEncrypt2': 'pwdEncryptSalt',
       },
     );
