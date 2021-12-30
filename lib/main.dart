@@ -1,7 +1,8 @@
-import 'package:flutter_appcenter_bundle/flutter_appcenter_bundle.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:kite/app.dart';
+import 'package:logging/logging.dart';
 
 void main() async {
   /* Initialize Microsoft AppCenter Analytics */
@@ -20,5 +21,14 @@ void main() async {
   //   'prop2': 'prop2',
   // });
 
+  // Initialize logger, only in debug mode
+  if (kDebugMode) {
+    Logger.root.level = Level.ALL;
+    Logger.root.onRecord.listen((record) {
+      print(
+        '${record.level.name}: ${record.loggerName}: ${record.message}',
+      );
+    });
+  }
   runApp(const KiteApp());
 }
