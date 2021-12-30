@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kite/pages/login.dart';
 import 'package:kite/pages/home.dart';
-import 'package:kite/routes/welcome.dart';
 import 'package:kite/pages/report.dart';
 
 class KiteApp extends StatelessWidget {
@@ -12,7 +11,6 @@ class KiteApp extends StatelessWidget {
     final routes = {
       '/home': (context) => const HomePage(),
       '/dailyReport': (context) => const DailyReportPage(),
-      '/welcome': (context) => const IntroductionAnimationScreen(),
       '/login': (context) => const LoginPage(),
     };
 
