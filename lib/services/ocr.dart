@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 
 class OcrRecognizeException implements Exception {
@@ -14,11 +12,11 @@ class OcrRecognizeException implements Exception {
 }
 
 class OcrServer {
-  static const OCR_SERVER_URL = 'http://localhost:5000';
+  static const _ocrServerUrl = 'http://10.1.160.21:5000';
 
   static recognize(String imageBase64) async {
     var response = await Dio().post(
-      '$OCR_SERVER_URL/ocr/captcha',
+      '$_ocrServerUrl/ocr/captcha',
       data: imageBase64,
     );
     var result = response.data;
