@@ -5,51 +5,65 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const textStyle = TextStyle(color: Colors.white);
-    const decoration = BoxDecoration(
-        image: DecorationImage(
-            image: AssetImage("welcome/background.jpg"), fit: BoxFit.cover));
+    const textStyle =
+        TextStyle(color: Colors.white, fontWeight: FontWeight.normal);
+    var screenWidth = MediaQuery.of(context).size.width;
+    var screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
         body: SafeArea(
-            child: Container(
-      decoration: decoration,
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      alignment: Alignment.bottomLeft,
-      padding: const EdgeInsets.fromLTRB(20, 20, 0, 150),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('上应小风筝',
-              style: textStyle.copyWith(
-                  fontWeight: FontWeight.bold, fontSize: 30)),
-          Text('便利校园，一步到位',
-              style: textStyle.copyWith(
-                  fontWeight: FontWeight.normal, fontSize: 20)),
-          const SizedBox(height: 40.0),
-          OutlinedButton(
-              autofocus: true,
-              style: OutlinedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-                side: const BorderSide(width: 1, color: Colors.white),
-              ),
-              child: Text('登录',
+            child: Stack(
+      children: [
+        // Background image.
+        SizedBox(
+            width: screenWidth,
+            height: screenHeight,
+            child: const Image(
+                image: AssetImage("welcome/background.jpg"),
+                fit: BoxFit.cover)),
+        // Transparent layer.
+        Container(color: Colors.black.withOpacity(0.6)),
+        // Front weights. Texts and buttons are on the left bottom of the screen.
+        Container(
+          width: screenWidth,
+          height: screenHeight,
+          alignment: Alignment.bottomLeft,
+          // 150 px from the bottom edge and 20 px from the left edge.
+          padding: const EdgeInsets.fromLTRB(20, 20, 0, 150),
+          child: Column(
+            // If MainAxisSize.min is ignored, the height of the Container will be full.
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Title
+              Text('上应小风筝',
                   style: textStyle.copyWith(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.normal)),
-              onPressed: () {}),
-          TextButton(
-              style: TextButton.styleFrom(padding: const EdgeInsets.all(0.0)),
-              child: Text('我们为什么转做 App',
-                  style: textStyle.copyWith(color: Colors.white)),
-              onPressed: () {})
-        ],
-      ),
+                      fontWeight: FontWeight.bold, fontSize: 30)),
+              // Subtitle
+              Text('便利校园，一步到位', style: textStyle.copyWith(fontSize: 20)),
+              // Space
+              const SizedBox(height: 40.0),
+              // Login button
+              OutlinedButton(
+                  autofocus: true,
+                  style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    side: const BorderSide(width: 1, color: Colors.white),
+                  ),
+                  child: Text('登录', style: textStyle.copyWith(fontSize: 20)),
+                  onPressed: () {}),
+              // Text button
+              TextButton(
+                  style:
+                      TextButton.styleFrom(padding: const EdgeInsets.all(0.0)),
+                  child: const Text('我们为什么转做 App', style: textStyle),
+                  onPressed: () {})
+            ],
+          ),
+        )
+      ],
     )));
   }
 }
