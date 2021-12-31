@@ -44,6 +44,7 @@ dependencies:
   dio: ^4.0.4
   dio_cookie_manager: ^2.0.0
   dio_log: ^2.0.2
+  url_launcher: ^6.0.17
   
 
 dev_dependencies:
