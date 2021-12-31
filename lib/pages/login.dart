@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/services/myportal.dart';
 import 'package:kite/services/sso/sso.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // Rule of student id.
 RegExp reStudentId = RegExp(r'^((\d{9})|(\d{6}[YGHE\d]\d{3}))$');
@@ -50,6 +51,16 @@ class _LoginPageState extends State<LoginPage> {
   void onClickLogin() {
     final studentId = _usernameController.text;
     final password = _passwordController.text;
+  }
+
+  Future<void> _launchInBrowser(String url) async {
+    if (!await launch(
+      url,
+      forceSafariVC: false,
+      forceWebView: false,
+    )) {
+      throw 'Could not launch $url';
+    }
   }
 
   static void onOpenUserLicense() {}
@@ -121,15 +132,27 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget buildLoginButton() {
-    return Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-      SizedBox(
-        height: 40,
-        child: ElevatedButton(
-          onPressed: () {},
-          child: const Text('进入风筝元宇宙'),
-        ),
-      )
-    ]);
+    return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 40,
+            child: ElevatedButton(
+              onPressed: () {},
+              child: const Text('进入风筝元宇宙'),
+            ),
+          ),
+          TextButton(
+              child: const Text(
+                '忘记密码?',
+                style: TextStyle(color: Colors.grey),
+              ),
+              onPressed: () {
+                _launchInBrowser(
+                    'https://authserver.sit.edu.cn/authserver/getBackPasswordMainPage.do?service=https%3A%2F%2Fmyportal.sit.edu.cn%3A443%2F');
+              })
+        ]);
   }
 
   @override
