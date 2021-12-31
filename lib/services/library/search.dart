@@ -1,6 +1,9 @@
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:kite/services/library/constants.dart';
 import 'package:dio/dio.dart';
+
+part 'search.g.dart';
 
 enum SearchWay {
   // 按任意词查询
@@ -99,6 +102,7 @@ String sortOrderToString(SortOrder sw) {
   }[sw]!;
 }
 
+@JsonSerializable()
 class Book {
   String bookId;
   String isbn;
@@ -109,8 +113,12 @@ class Book {
   String callNo;
   Book(this.bookId, this.isbn, this.title, this.author, this.publisher,
       this.publishDate, this.callNo);
+
+  factory Book.fromJson(Map<String, dynamic> json) => _$BookFromJson(json);
+  Map<String, dynamic> toJson() => _$BookToJson(this);
 }
 
+@JsonSerializable()
 class BookSearchResult {
   int resultCount;
   double useTime;
@@ -119,87 +127,88 @@ class BookSearchResult {
   List<Book> books;
   BookSearchResult(this.resultCount, this.useTime, this.currentPage,
       this.totalPages, this.books);
+
+  factory BookSearchResult.fromJson(Map<String, dynamic> json) =>
+      _$BookSearchResultFromJson(json);
+  Map<String, dynamic> toJson() => _$BookSearchResultToJson(this);
 }
 
-class SearchLibraryRequest {
-  // 搜索关键字
-  String keyword;
-  // 搜索结果数量
-  int rows;
-  // 搜索分页号
-  int page;
-  // 搜索方式
-  SearchWay searchWay;
-  // 搜索结果的排序方式
-  SortWay sortWay;
-  // 搜索结果的升降序方式
-  SortOrder sortOrder;
+Future<BookSearchResult> searchBook({
+  String keyword = '',
+  int rows = 10,
+  int page = 1,
+  SearchWay searchWay = SearchWay.title,
+  SortWay sortWay = SortWay.matchScore,
+  SortOrder sortOrder = SortOrder.desc,
+}) async {
+  var response = await Dio().get(
+    Constants.searchUrl,
+    queryParameters: {
+      'q': keyword,
+      'searchType': 'standard',
+      'isFacet': 'true',
+      'view': 'standard',
+      'searchWay': searchWayToString(searchWay),
+      'rows': rows.toString(),
+      'sortWay': sortWayToString(sortWay),
+      'sortOrder': sortOrderToString(sortOrder),
+      'hasholding': '1',
+      'searchWay0': 'marc',
+      'logical0': 'AND',
+      'page': page.toString(),
+    },
+  );
 
-  SearchLibraryRequest({
-    this.keyword = '',
-    this.rows = 10,
-    this.page = 1,
-    this.searchWay = SearchWay.any,
-    this.sortWay = SortWay.matchScore,
-    this.sortOrder = SortOrder.asc,
-  });
-
-  Future<BookSearchResult> request() async {
-    var response = await Dio().get(
-      Constants.searchUrl,
-      queryParameters: {
-        'q': keyword,
-        'searchType': 'standard',
-        'isFacet': 'true',
-        'view': 'standard',
-        'searchWay': searchWayToString(searchWay),
-        'rows': rows.toString(),
-        'sortWay': sortWayToString(sortWay),
-        'sortOrder': sortOrderToString(sortOrder),
-        'hasholding': '1',
-        'searchWay0': 'marc',
-        'logical0': 'AND',
-        'page': page.toString(),
-      },
-    );
-
-    Book parseBook(Bs4Element e) {
-      // 获得图书信息
-      String getBookInfo(String selector) {
-        return e.find(selector)!.text!.trim();
-      }
-
-      var bookCoverImage = e.find('.bookcover_img')!;
-      var author = getBookInfo('.author-link');
-      var bookId = bookCoverImage.attributes['bookrecno']!;
-      var isbn = bookCoverImage.attributes['isbn']!;
-      var callNo = getBookInfo('.callnosSpan');
-      var publishDate =
-          getBookInfo('td:nth-child(4) > div:nth-child(1) > div:nth-child(3)')
-              .split('出版日期:')[1];
-      var publisher = getBookInfo('.publisher-link');
-      var title = getBookInfo('.title-link');
-      return Book(bookId, isbn, title, author, publisher, publishDate, callNo);
+  Book parseBook(Bs4Element e) {
+    // 获得图书信息
+    String getBookInfo(String name, String selector) {
+      return e.find(name, selector: selector)!.text.trim();
     }
 
-    var htmlElement = BeautifulSoup(response.data);
+    var bookCoverImage = e.find('img', class_: 'bookcover_img')!;
+    var author = getBookInfo('a', '.author-link');
+    var bookId = bookCoverImage.attributes['bookrecno']!;
+    var isbn = bookCoverImage.attributes['isbn']!;
+    var callNo = getBookInfo('span', '.callnosSpan');
+    var publishDate =
+        getBookInfo('div', 'div').split('出版日期:')[1].split('\n')[0].trim();
 
-    var currentPage = 0;
-    var resultNumAndTime =
-        htmlElement.find('#search_meta > div:nth-child(1)')!.text;
-    print(resultNumAndTime);
-    var totalPages =
-        htmlElement.find('div.meneame:nth-child(4) > span:nth-child(1)')!.text;
-    print(totalPages);
-
-    return BookSearchResult(
-        1,
-        0,
-        currentPage,
-        0,
-        htmlElement
-            .findAll('.resultTable > tbody:nth-child(1) > tr')
-            .map((e) => parseBook(e))
-            .toList());
+    var publisher = getBookInfo('a', '.publisher-link');
+    var title = getBookInfo('a', '.title-link');
+    return Book(bookId, isbn, title, author, publisher, publishDate, callNo);
   }
+
+  var htmlElement = BeautifulSoup(response.data);
+
+  var currentPage =
+      htmlElement.find('b', selector: '.meneame > b')!.text.trim();
+  var resultNumAndTime = htmlElement
+      .find(
+        'div',
+        selector: '#search_meta > div:nth-child(1)',
+      )!
+      .text;
+  var resultCount = int.parse(RegExp(r'检索到: (\S*) 条结果')
+      .allMatches(resultNumAndTime)
+      .first
+      .group(1)!
+      .replaceAll(',', ''));
+  var useTime = double.parse(
+      RegExp(r'检索时间: (\S*) 秒').allMatches(resultNumAndTime).first.group(1)!);
+  var totalPages = htmlElement
+      .find('div', class_: 'meneame')!
+      .find('span', class_: 'disabled')!
+      .text
+      .trim();
+
+  return BookSearchResult(
+      resultCount,
+      useTime,
+      int.parse(currentPage),
+      int.parse(totalPages.substring(1, totalPages.length - 1).trim()),
+      htmlElement
+          .find('table', class_: 'resultTable')!
+          .findAll('tr')
+          .map((e) => parseBook(e))
+          .toList());
 }
