@@ -57,3 +57,8 @@ kite.iml
 **/ios/Flutter/flutter_export_environment.sh
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
+
+# 这些文件时 json_serializable 库动态生成的json序列化与反序列化代码
+# 这些文件是 build_runner 动态生成的
+# 编译之前使用命令行flutter pub run build_runner build
+*.g.dart

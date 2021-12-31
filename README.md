@@ -36,6 +36,10 @@ cd ./kite-app
 
 # 安装依赖
 flutter pub get
+
+# 生成json序列化与反序列化代码
+flutter pub run build_runner build
+
 # 打包生成 apk
 flutter build apk
 # 使用 Web 方式运行
