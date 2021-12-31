@@ -28,7 +28,19 @@ enum SearchWay {
 }
 
 String searchWayToString(SearchWay sw) {
-  return {SearchWay.any: ''}[sw]!;
+  return {
+    SearchWay.any: '',
+    SearchWay.title: 'title',
+    SearchWay.titleProper: 'title200a',
+    SearchWay.isbn: 'isbn',
+    SearchWay.author: 'author',
+    SearchWay.subjectWord: 'subject',
+    SearchWay.classNo: 'class',
+    SearchWay.ctrlNo: 'ctrlno',
+    SearchWay.orderNo: 'orderno',
+    SearchWay.publisher: 'publisher',
+    SearchWay.callNo: 'callno',
+  }[sw]!;
 }
 
 enum SortWay {
@@ -59,7 +71,20 @@ enum SortWay {
 }
 
 String sortWayToString(SortWay sw) {
-  return {SortWay.matchScore: 'score'}[sw]!;
+  return {
+    SortWay.matchScore: 'score',
+    SortWay.publishDate: 'pubdate_sort',
+    SortWay.subject: 'subject_sort',
+    SortWay.title: 'title_sort',
+    SortWay.author: 'author_sort',
+    SortWay.callNo: 'callno_sort',
+    SortWay.pinyin: 'pinyin_sort',
+    SortWay.loanCount: 'loannum_sort',
+    SortWay.renewCount: 'renew_sort',
+    SortWay.titleWeight: 'title200Weight',
+    SortWay.titleProperWeight: 'title200aWeight',
+    SortWay.volume: 'title200h',
+  }[sw]!;
 }
 
 enum SortOrder {
@@ -68,7 +93,10 @@ enum SortOrder {
 }
 
 String sortOrderToString(SortOrder sw) {
-  return {SortOrder.asc: 'asc', SortOrder.desc: 'desc'}[sw]!;
+  return {
+    SortOrder.asc: 'asc',
+    SortOrder.desc: 'desc',
+  }[sw]!;
 }
 
 class Book {
