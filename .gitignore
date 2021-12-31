@@ -62,3 +62,4 @@ kite.iml
 # 这些文件是 build_runner 动态生成的
 # 编译之前使用命令行flutter pub run build_runner build
 *.g.dart
+.VSCodeCounter
