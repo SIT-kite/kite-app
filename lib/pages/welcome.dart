@@ -40,9 +40,9 @@ class WelcomePage extends StatelessWidget {
               // Title
               Text('上应小风筝',
                   style: textStyle.copyWith(
-                      fontWeight: FontWeight.bold, fontSize: 30)),
+                      fontWeight: FontWeight.bold, fontSize: 35)),
               // Subtitle
-              Text('便利校园，一步到位', style: textStyle.copyWith(fontSize: 20)),
+              Text('便利校园，一步到位', style: textStyle.copyWith(fontSize: 25)),
               // Space
               const SizedBox(height: 40.0),
               // Login button
