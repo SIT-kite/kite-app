@@ -6,10 +6,11 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:dio_log/dio_log.dart';
 import 'package:dio/adapter.dart';
 import 'package:cookie_jar/cookie_jar.dart';
-import 'encrypt_util.dart';
+import 'package:beautiful_soup_dart/beautiful_soup.dart';
 
 import 'package:kite/services/ocr.dart';
 import './utils.dart';
+import './encrypt_util.dart';
 
 class Session {
   static const String _authServerUrl =
@@ -85,8 +86,20 @@ class Session {
     return await DioUtils.processRedirect(_dio, res);
   }
 
-  /// 登录流程
+  /// 带异常的登录
   Future<Response> login(String username, String password) async {
+    var response = await _login(username, password);
+    var page = BeautifulSoup(response.data);
+
+    var authError = page.find('span', class_: 'auth_error');
+    if (authError != null) {
+      throw CredentialsInvalidException(authError.text.trim());
+    }
+    return response;
+  }
+
+  /// 登录流程
+  Future<Response> _login(String username, String password) async {
     // 首先获取AuthServer首页
     var html = await _getAuthServerHtml();
     // 获取首页验证码
@@ -100,7 +113,7 @@ class Session {
     // 加密密码
     var hashedPwd = hashPassword(salt, password);
     // 登录系统，获得cookie
-    return await _login(username, hashedPwd, captcha, casTicket);
+    return await _loginRaw(username, hashedPwd, captcha, casTicket);
   }
 
   /// 允许不安全的https访问，这在使用fiddler等抓包工具时很有用
@@ -114,7 +127,7 @@ class Session {
   }
 
   /// 登录统一认证平台
-  Future<Response> _login(String username, String hashedPassword,
+  Future<Response> _loginRaw(String username, String hashedPassword,
       String captcha, String casTicket) async {
     var requestBody = {
       'username': username,
@@ -178,5 +191,15 @@ class Session {
     );
     Uint8List captchaData = response.data;
     return base64Encode(captchaData);
+  }
+}
+
+class CredentialsInvalidException implements Exception {
+  String msg;
+  CredentialsInvalidException([this.msg = '']);
+
+  @override
+  String toString() {
+    return msg;
   }
 }
