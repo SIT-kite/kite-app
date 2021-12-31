@@ -7,12 +7,12 @@ class Network {
   static const _checkStatusUrl = _drcomUrl + '/chkstatus';
   static const _logoutUrl = _drcomUrl + '/logout';
 
-  Future<Response> _get(String url,
+  static Future<Response> _get(String url,
       {Map<String, dynamic>? queryParameters}) async {
     return await Dio().get(url, queryParameters: queryParameters);
   }
 
-  Future<Response> login(String username, String password) async {
+  static Future<Response> login(String username, String password) async {
     return await _get(
       _loginUrl,
       queryParameters: {
@@ -32,7 +32,7 @@ class Network {
     );
   }
 
-  Future<Response> checkStatus() async {
+  static Future<Response> checkStatus() async {
     return await _get(
       _checkStatusUrl,
       queryParameters: {
@@ -43,7 +43,7 @@ class Network {
     );
   }
 
-  Future<Response> logout() async {
+  static Future<Response> logout() async {
     return await _get(
       _logoutUrl,
       queryParameters: {
