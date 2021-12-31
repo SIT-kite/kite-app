@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'login.dart';
+
 class WelcomePage extends StatelessWidget {
   const WelcomePage({Key? key}) : super(key: key);
 
@@ -29,7 +31,7 @@ class WelcomePage extends StatelessWidget {
           height: screenHeight,
           alignment: Alignment.bottomLeft,
           // 150 px from the bottom edge and 20 px from the left edge.
-          padding: const EdgeInsets.fromLTRB(20, 20, 0, 150),
+          padding: const EdgeInsets.fromLTRB(40, 20, 0, 150),
           child: Column(
             // If MainAxisSize.min is ignored, the height of the Container will be full.
             mainAxisSize: MainAxisSize.min,
@@ -53,7 +55,10 @@ class WelcomePage extends StatelessWidget {
                     side: const BorderSide(width: 1, color: Colors.white),
                   ),
                   child: Text('登录', style: textStyle.copyWith(fontSize: 20)),
-                  onPressed: () {}),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => LoginPage()));
+                  }),
               // Text button
               TextButton(
                   style:
