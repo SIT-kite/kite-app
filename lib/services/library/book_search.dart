@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:kite/services/library/constants.dart';
 import 'package:dio/dio.dart';
 
-part 'search.g.dart';
+part 'book_search.g.dart';
 
 enum SearchWay {
   // 按任意词查询
