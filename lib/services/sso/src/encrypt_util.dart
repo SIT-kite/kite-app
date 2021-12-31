@@ -24,8 +24,6 @@ class MyEncrypt {
     _iv = IV.fromUtf8(iv);
   }
   String aesEncrypt(String content) {
-    print('aesEncrypt: ' + content);
-    print('key: ' + _key!.bytes.toString());
     return Encrypter(
       AES(
         _key!,
