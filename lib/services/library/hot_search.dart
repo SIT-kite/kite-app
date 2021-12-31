@@ -1,7 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
+import 'package:json_annotation/json_annotation.dart';
 import './constants.dart';
 
+part 'hot_search.g.dart';
+
+@JsonSerializable()
 class HotSearchItem {
   String hotSearchWord;
   int count;
@@ -13,11 +17,12 @@ class HotSearchItem {
     return HotSearchItem(texts[0], int.parse(texts[1]));
   }
 
-  Map<String, dynamic> toMap() {
-    return {'hotSearchWord': hotSearchWord, 'count': count};
-  }
+  factory HotSearchItem.fromJson(Map<String, dynamic> json) =>
+      _$HotSearchItemFromJson(json);
+  Map<String, dynamic> toJson() => _$HotSearchItemToJson(this);
 }
 
+@JsonSerializable()
 class HotSearch {
   List<HotSearchItem> recentMonth = [];
   List<HotSearchItem> totalTime = [];
@@ -30,7 +35,7 @@ class HotSearch {
     List<HotSearchItem> getHotSearchItems(Bs4Element fieldset) {
       return fieldset
           .findAll('a')
-          .map((e) => HotSearchItem.parse(e.text!))
+          .map((e) => HotSearchItem.parse(e.text))
           .toList();
     }
 
@@ -38,10 +43,7 @@ class HotSearch {
         getHotSearchItems(fieldsets[0]), getHotSearchItems(fieldsets[0]));
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'recentMonth': recentMonth.map((e) => e.toMap()).toList(),
-      'totalTime': totalTime.map((e) => e.toMap()).toList(),
-    };
-  }
+  factory HotSearch.fromJson(Map<String, dynamic> json) =>
+      _$HotSearchFromJson(json);
+  Map<String, dynamic> toJson() => _$HotSearchToJson(this);
 }
