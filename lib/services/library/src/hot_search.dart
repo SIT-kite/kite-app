@@ -1,7 +1,8 @@
-import 'package:dio/dio.dart';
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
+import 'package:dio/dio.dart';
 import 'package:json_annotation/json_annotation.dart';
-import './constants.dart';
+
+import 'constants.dart';
 
 part 'hot_search.g.dart';
 

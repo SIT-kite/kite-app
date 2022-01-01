@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kite/services/library/hot_search.dart';
+import 'package:kite/services/library/library.dart';
 
 void main() {
   test('should', () async {

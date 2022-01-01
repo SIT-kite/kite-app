@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:kite/services/library/constants.dart';
+import 'package:kite/services/library/src/constants.dart';
 
-import './book_search.dart';
+import 'book_search.dart';
 
 part 'image_search.g.dart';
 

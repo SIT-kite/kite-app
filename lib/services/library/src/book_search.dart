@@ -1,7 +1,7 @@
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:kite/services/library/constants.dart';
 import 'package:dio/dio.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:kite/services/library/src/constants.dart';
 
 part 'book_search.g.dart';
 
