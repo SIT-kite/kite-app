@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/pages/login.dart';
 import 'package:kite/pages/home.dart';
 import 'package:kite/pages/report.dart';
+import 'package:kite/pages/welcome.dart';
 
 class KiteApp extends StatelessWidget {
   const KiteApp({Key? key}) : super(key: key);
@@ -11,13 +12,13 @@ class KiteApp extends StatelessWidget {
     final routes = {
       '/home': (context) => const HomePage(),
       '/dailyReport': (context) => const DailyReportPage(),
-      '/login': (context) => const LoginPage(),
+      '/login': (context) => LoginPage(),
     };
 
     return MaterialApp(
       title: '上应小风筝',
       theme: ThemeData.light(),
-      home: const HomePage(),
+      home: WelcomePage(),
       routes: routes,
     );
   }
