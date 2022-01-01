@@ -21,7 +21,7 @@ class WelcomePage extends StatelessWidget {
             width: screenWidth,
             height: screenHeight,
             child: const Image(
-                image: AssetImage("welcome/background.jpg"),
+                image: AssetImage("assets/welcome/background.jpg"),
                 fit: BoxFit.cover)),
         // Transparent layer.
         Container(color: Colors.black.withOpacity(0.6)),
