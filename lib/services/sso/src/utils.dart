@@ -20,7 +20,7 @@ import 'package:dio/dio.dart';
 /// Useful utils when processing network requests by dio.
 class DioUtils {
   // ignore: non_constant_identifier_names
-  static get NON_REDIRECT_OPTION_WITH_FORM_TYPE {
+  static Options get NON_REDIRECT_OPTION_WITH_FORM_TYPE {
     return Options(
         contentType: Headers.formUrlEncodedContentType,
         followRedirects: false,
@@ -30,7 +30,7 @@ class DioUtils {
   }
 
   // ignore: non_constant_identifier_names
-  static NON_REDIRECT_OPTION_WITH_FORM_TYPE_AND_HEADER(
+  static Options NON_REDIRECT_OPTION_WITH_FORM_TYPE_AND_HEADER(
           Map<String, dynamic> header) =>
       Options(
           headers: header,
@@ -50,8 +50,15 @@ class DioUtils {
       if (!Uri.parse(location).isAbsolute) {
         location = response.requestOptions.uri.origin + '/' + location;
       }
-      return processRedirect(dio,
-          await dio.get(location, options: NON_REDIRECT_OPTION_WITH_FORM_TYPE));
+      return processRedirect(
+        dio,
+        await dio.get(
+          location,
+          options: NON_REDIRECT_OPTION_WITH_FORM_TYPE.copyWith(
+            responseType: response.requestOptions.responseType,
+          ),
+        ),
+      );
     } else {
       return response;
     }
