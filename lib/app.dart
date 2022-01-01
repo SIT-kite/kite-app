@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kite/pages/about.dart';
+import 'package:kite/pages/consumption.dart';
 import 'package:kite/pages/login.dart';
 import 'package:kite/pages/home.dart';
 import 'package:kite/pages/report.dart';
@@ -16,6 +17,7 @@ class KiteApp extends StatelessWidget {
       '/login': (context) => const LoginPage(),
       '/welcome': (context) => const WelcomePage(),
       '/about': (context) => const AboutPage(),
+      '/consumption': (context) => ConsumptionPage(),
     };
 
     return MaterialApp(

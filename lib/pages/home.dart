@@ -32,6 +32,8 @@ class HomePage extends StatelessWidget {
             AssetImage('assets/home/icon_daily_report.png'), '体温上报'),
         ItemWidget(
             '/library', AssetImage('assets/home/icon_library.png'), '图书馆'),
+        ItemWidget('/consumption',
+            AssetImage('assets/home/icon_consumption.png'), '消费查询'),
         SizedBox(height: 20.0),
         ItemWidget('/dailyReport',
             AssetImage('assets/home/icon_daily_report.png'), '体温上报'),
