@@ -1,16 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+
+import 'package:beautiful_soup_dart/beautiful_soup.dart';
+import 'package:cookie_jar/cookie_jar.dart';
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:dio_log/dio_log.dart';
-import 'package:dio/adapter.dart';
-import 'package:cookie_jar/cookie_jar.dart';
-import 'package:beautiful_soup_dart/beautiful_soup.dart';
-
 import 'package:kite/services/ocr.dart';
-import './utils.dart';
+
 import './encrypt_util.dart';
+import './utils.dart';
 
 class Session {
   static const String _authServerUrl =
@@ -28,18 +29,9 @@ class Session {
     Dio? dio,
     CookieJar? jar,
   }) {
-    if (dio == null) {
-      _dio = Dio();
-    } else {
-      _dio = dio;
-    }
-
-    if (jar == null) {
-      // 默认初始化一个RAM的CookieJar
-      _jar = DefaultCookieJar();
-    } else {
-      _jar = jar;
-    }
+    _dio = dio ?? Dio();
+    // 默认初始化一个RAM的CookieJar
+    _jar = jar ?? DefaultCookieJar();
 
     // 添加拦截器
     _dio.interceptors.add(CookieManager(_jar));
