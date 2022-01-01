@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ItemWidget extends StatefulWidget {
   final String routeName;
-  final Icon icon;
+  final AssetImage icon;
   final String title;
 
   const ItemWidget(this.routeName, this.icon, this.title, {Key? key});
@@ -13,7 +13,7 @@ class ItemWidget extends StatefulWidget {
 
 class _ItemWidgetState extends State<ItemWidget> {
   String routeName;
-  Icon icon;
+  AssetImage icon;
   String title;
   String content = "加载中";
 
@@ -26,24 +26,33 @@ class _ItemWidgetState extends State<ItemWidget> {
     final contentStyle = TextStyle().copyWith(fontSize: 15);
 
     return InkWell(
-      onTap: () {
-        Navigator.of(context).pushNamed(routeName);
-      },
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-        // decoration: BoxDecoration(
-        // border: Border.all(
-        //   color: Colors.transparent,
-        //   width: 0,
-        //   style: BorderStyle.none,
-        // ),
-        // ),
-        child: Column(children: [
-          Row(children: [Text(title, style: titleStyle)]),
-          const SizedBox(height: 2.0),
-          Row(children: [Text(content, style: contentStyle)]),
-        ]),
-      ),
-    );
+        onTap: () {
+          Navigator.of(context).pushNamed(routeName);
+        },
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+          // decoration: BoxDecoration(
+          // border: Border.all(
+          //   color: Colors.transparent,
+          //   width: 0,
+          //   style: BorderStyle.none,
+          // ),
+          // ),
+          child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            SizedBox(
+              height: 40,
+              width: 40,
+              child: Center(
+                child: Image(image: icon, width: 30, height: 30),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Row(children: [Text(title, style: titleStyle)]),
+              const SizedBox(height: 2.0),
+              Row(children: [Text(content, style: contentStyle)]),
+            ])
+          ]),
+        ));
   }
 }

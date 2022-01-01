@@ -28,11 +28,13 @@ class HomePage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: const [
-        ItemWidget('/dailyReport', Icon(Icons.access_alarm), '体温上报'),
-        ItemWidget('/welcome', Icon(Icons.access_alarm), '欢迎页'),
-        ItemWidget('/login', Icon(Icons.access_alarm), '登录页'),
+        ItemWidget('/dailyReport',
+            AssetImage('assets/home/icon_daily_report.png'), '体温上报'),
+        ItemWidget(
+            '/library', AssetImage('assets/home/icon_library.png'), '图书馆'),
         SizedBox(height: 20.0),
-        ItemWidget('/dailyReport', Icon(Icons.access_alarm), '体温上报'),
+        ItemWidget('/dailyReport',
+            AssetImage('assets/home/icon_daily_report.png'), '体温上报'),
       ],
     );
   }
