@@ -8,8 +8,8 @@ class AuthStorage {
   final SharedPreferences prefs;
   const AuthStorage(this.prefs);
 
-  String get username => prefs.getString(_usernameKey)!;
-  String get password => prefs.getString(_passwordKey)!;
+  String get username => prefs.getString(_usernameKey) ?? '';
+  String get password => prefs.getString(_passwordKey) ?? '';
   set username(String foo) => prefs.setString(_usernameKey, foo);
   set password(String foo) => prefs.setString(_passwordKey, foo);
   bool get hasUsername => prefs.containsKey(_usernameKey);
