@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'home/gretting.dart';
 import 'home/item.dart';
@@ -56,7 +57,8 @@ class HomePage extends StatelessWidget {
       ),
       ListTile(
         title: const Text('设置'),
-        onTap: () {
+        onTap: () async {
+          (await SharedPreferences.getInstance()).clear();
           Navigator.pop(context);
         },
       ),
