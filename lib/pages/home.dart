@@ -39,6 +39,34 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  Widget buildDrawer(BuildContext context) {
+    return Drawer(
+        child: ListView(padding: EdgeInsets.zero, children: [
+      const DrawerHeader(
+        decoration: BoxDecoration(color: Colors.blue),
+        child: Text('用户信息区域'),
+      ),
+      ListTile(
+        title: const Text('主题'),
+        onTap: () {
+          Navigator.pop(context);
+        },
+      ),
+      ListTile(
+        title: const Text('设置'),
+        onTap: () {
+          Navigator.pop(context);
+        },
+      ),
+      ListTile(
+        title: const Text('关于'),
+        onTap: () {
+          Navigator.pop(context);
+        },
+      ),
+    ]));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,6 +90,7 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
+      drawer: buildDrawer(context),
     );
   }
 }
