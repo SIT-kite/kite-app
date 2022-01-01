@@ -28,6 +28,8 @@ dependencies:
   enough_convert: ^1.4.0
   grouped_list: ^4.1.0
   flutter_svg: ^1.0.0
+  flutter_icmp_ping: ^3.0.2
+  check_vpn_connection: ^0.0.2
 
 dev_dependencies:
   flutter_test:
