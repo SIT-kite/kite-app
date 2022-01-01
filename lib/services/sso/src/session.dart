@@ -49,12 +49,17 @@ class Session {
   }
 
   /// 请求数据
-  Future<Response> get(String url,
-      {Map<String, String>? queryParameters}) async {
+  Future<Response> get(
+    String url, {
+    Map<String, String>? queryParameters,
+    ResponseType? responseType,
+  }) async {
     var res = await _dio.get(
       url,
       queryParameters: queryParameters,
-      options: DioUtils.NON_REDIRECT_OPTION_WITH_FORM_TYPE,
+      options: DioUtils.NON_REDIRECT_OPTION_WITH_FORM_TYPE.copyWith(
+        responseType: responseType,
+      ),
     );
 
     // // 处理重定向
@@ -66,11 +71,14 @@ class Session {
     String url, {
     Map<String, String>? queryParameters,
     dynamic data,
+    ResponseType? responseType,
   }) async {
     var res = await _dio.post(
       url,
       queryParameters: queryParameters,
-      options: DioUtils.NON_REDIRECT_OPTION_WITH_FORM_TYPE,
+      options: DioUtils.NON_REDIRECT_OPTION_WITH_FORM_TYPE.copyWith(
+        responseType: responseType,
+      ),
       data: data,
     );
 
@@ -89,6 +97,9 @@ class Session {
     }
     return response;
   }
+
+  Dio get dio => _dio;
+  CookieJar get cookie => _jar;
 
   /// 登录流程
   Future<Response> _login(String username, String password) async {
