@@ -103,14 +103,14 @@ List data = [
   },
 ];
 
-class ConsumptionPage extends StatefulWidget {
-  ConsumptionPage({Key? key}) : super(key: key);
+class ExpensePage extends StatefulWidget {
+  ExpensePage({Key? key}) : super(key: key);
 
   @override
-  _ConsumptionPageState createState() => _ConsumptionPageState();
+  _ExpensePageState createState() => _ExpensePageState();
 }
 
-class _ConsumptionPageState extends State<ConsumptionPage> {
+class _ExpensePageState extends State<ExpensePage> {
   int _currentIndex = 0; // 底部导航键的标志位
 
   @override
