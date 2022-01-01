@@ -96,8 +96,12 @@ class Session {
     var html = await _getAuthServerHtml();
     // 获取首页验证码
     var captchaImage = await _getCaptcha();
-    // 识别验证码
-    var captcha = await OcrServer.recognize(captchaImage);
+
+    var captcha = '';
+    if (await _needCaptcha(username)) {
+      // 识别验证码
+      captcha = await OcrServer.recognize(captchaImage);
+    }
     // 获取casTicket
     var casTicket = _getCasTicketFromAuthHtml(html);
     // 获取salt
