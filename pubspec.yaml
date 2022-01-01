@@ -24,7 +24,7 @@ dependencies:
   url_launcher: ^6.0.17
   shared_preferences: ^2.0.11
   pull_to_refresh: ^2.0.0
-
+  flash: ^2.0.3+1
 
 dev_dependencies:
   flutter_test:
