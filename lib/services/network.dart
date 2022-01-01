@@ -7,10 +7,17 @@ part 'network.g.dart';
 
 @JsonSerializable()
 class CheckStatusResult {
+  // 1表示已登录
+  // 0表示未登录
   final int result;
-  final int time;
+  // 当前的校园网ip
+  @JsonKey(name: 'v46ip')
+  final String ip;
 
-  const CheckStatusResult(this.result, this.time);
+  // 当前登录学号
+  String? uid;
+
+  CheckStatusResult(this.result, this.ip, {this.uid});
   factory CheckStatusResult.fromJson(Map<String, dynamic> json) =>
       _$CheckStatusResultFromJson(json);
   Map<String, dynamic> toJson() => _$CheckStatusResultToJson(this);
@@ -18,6 +25,8 @@ class CheckStatusResult {
 
 @JsonSerializable()
 class LogoutResult {
+  final int result;
+  LogoutResult(this.result);
   factory LogoutResult.fromJson(Map<String, dynamic> json) =>
       _$LogoutResultFromJson(json);
   Map<String, dynamic> toJson() => _$LogoutResultToJson(this);
@@ -25,6 +34,8 @@ class LogoutResult {
 
 @JsonSerializable()
 class LoginResult {
+  final int result;
+  const LoginResult(this.result);
   factory LoginResult.fromJson(Map<String, dynamic> json) =>
       _$LoginResultFromJson(json);
   Map<String, dynamic> toJson() => _$LoginResultToJson(this);
@@ -46,7 +57,7 @@ class Network {
         responseType: ResponseType.plain,
       ),
     );
-    var jsonp = response.data.toString();
+    var jsonp = response.data.toString().trim();
     return jsonDecode(jsonp.substring(7, jsonp.length - 1));
   }
 
