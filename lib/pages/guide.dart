@@ -18,7 +18,7 @@ class _GuidePageState extends State<GuidePage> {
     // Navigate to home page when the guide is at end.
     // Note: Consider change it to login page.
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const HomePage()),
+      MaterialPageRoute(builder: (_) => HomePage()),
     );
   }
 

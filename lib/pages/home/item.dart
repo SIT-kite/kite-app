@@ -26,7 +26,9 @@ class _ItemWidgetState extends State<ItemWidget> {
     final contentStyle = TextStyle().copyWith(fontSize: 15);
 
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).pushNamed(routeName);
+      },
       child: Container(
         padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
         // decoration: BoxDecoration(
@@ -39,7 +41,7 @@ class _ItemWidgetState extends State<ItemWidget> {
         child: Column(children: [
           Row(children: [Text(title, style: titleStyle)]),
           const SizedBox(height: 2.0),
-          Row(children: [Text('内容', style: contentStyle)]),
+          Row(children: [Text(content, style: contentStyle)]),
         ]),
       ),
     );
