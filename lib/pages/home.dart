@@ -63,6 +63,20 @@ class HomePage extends StatelessWidget {
         },
       ),
       ListTile(
+        title: const Text('网络工具'),
+        onTap: () {
+          Navigator.pop(context);
+          Navigator.of(context).pushNamed('/connectivity');
+        },
+      ),
+      ListTile(
+        title: const Text('校园卡工具'),
+        onTap: () {
+          Navigator.pop(context);
+          Navigator.of(context).pushNamed('/campusCard');
+        },
+      ),
+      ListTile(
         title: const Text('关于'),
         onTap: () {
           Navigator.pop(context);

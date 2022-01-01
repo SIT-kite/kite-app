@@ -30,6 +30,7 @@ dependencies:
   flutter_svg: ^1.0.0
   flutter_icmp_ping: ^3.0.2
   check_vpn_connection: ^0.0.2
+  nfc_manager: ^3.1.0
 
 dev_dependencies:
   flutter_test:
@@ -43,3 +44,5 @@ flutter:
   assets:
     - assets/home/
     - assets/welcome/
+    - assets/connectivity/
+    - assets/campusCard/

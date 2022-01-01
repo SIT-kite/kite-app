@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kite/pages/about.dart';
+import 'package:kite/pages/campus_card.dart';
 import 'package:kite/pages/connectivity.dart';
 import 'package:kite/pages/expense.dart';
 import 'package:kite/pages/home.dart';
@@ -22,6 +23,7 @@ class KiteApp extends StatelessWidget {
       '/about': (context) => const AboutPage(),
       '/expense': (context) => ExpensePage(),
       '/connectivity': (context) => ConnectivityPage(),
+      '/campusCard': (context) => CampusCardPage(),
     };
 
     return MaterialApp(
