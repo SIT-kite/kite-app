@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kite/storage/auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'login.dart';
 
@@ -7,6 +9,12 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 若用户使用过，那么直接跳转到首页
+    SharedPreferences.getInstance().then((prefs) {
+      if (AuthStorage(prefs).hasUsername) {
+        Navigator.pushNamed(context, '/home');
+      }
+    });
     const textStyle =
         TextStyle(color: Colors.white, fontWeight: FontWeight.normal);
     var screenWidth = MediaQuery.of(context).size.width;

@@ -19,7 +19,7 @@ class KiteApp extends StatelessWidget {
     return MaterialApp(
       title: '上应小风筝',
       theme: ThemeData.light(),
-      home: WelcomePage(),
+      home: const WelcomePage(),
       routes: routes,
     );
   }
