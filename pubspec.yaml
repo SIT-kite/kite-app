@@ -26,6 +26,7 @@ dependencies:
   flash: ^2.0.3+1
   flutter_markdown: ^0.6.9
   grouped_list: ^4.1.0
+  flutter_svg: ^1.0.0
 
 dev_dependencies:
   flutter_test:
