@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kite/services/sso/sso.dart';
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
-import 'package:kite/main.dart' show initializeLogger;
 
 void main() {
   test('test login', () async {
