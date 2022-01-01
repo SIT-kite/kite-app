@@ -25,6 +25,7 @@ dependencies:
   pull_to_refresh: ^2.0.0
   flash: ^2.0.3+1
   flutter_markdown: ^0.6.9
+  enough_convert: ^1.4.0
   grouped_list: ^4.1.0
   flutter_svg: ^1.0.0
 
