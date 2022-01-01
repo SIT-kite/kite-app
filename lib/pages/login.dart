@@ -2,6 +2,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/services/myportal.dart';
 import 'package:kite/services/sso/sso.dart';
+import 'package:kite/storage/auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // Rule of student id.
@@ -43,14 +45,12 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    // TODO: Auto fill last username.
-    _usernameController.text = 'username';
     super.initState();
-  }
-
-  void onClickLogin() {
-    final studentId = _usernameController.text;
-    final password = _passwordController.text;
+    SharedPreferences.getInstance().then((prefs) {
+      var auth = AuthStorage(prefs);
+      _usernameController.text = auth.username;
+      _passwordController.text = auth.password;
+    });
   }
 
   Future<void> _launchInBrowser(String url) async {
@@ -139,7 +139,18 @@ class _LoginPageState extends State<LoginPage> {
           SizedBox(
             height: 40,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () async {
+                bool formValid =
+                    (_formKey.currentState as FormState).validate();
+                if (!formValid) {
+                  return;
+                }
+                var prefs = await SharedPreferences.getInstance();
+                var auth = AuthStorage(prefs);
+                auth.username = _usernameController.text;
+                auth.password = _passwordController.text;
+                Navigator.pushNamed(context, '/welcome');
+              },
               child: const Text('进入风筝元宇宙'),
             ),
           ),
