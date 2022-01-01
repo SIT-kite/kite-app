@@ -62,6 +62,7 @@ class HomePage extends StatelessWidget {
         title: const Text('关于'),
         onTap: () {
           Navigator.pop(context);
+          Navigator.of(context).pushNamed('/about');
         },
       ),
     ]));
