@@ -9,7 +9,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.2
   webview_flutter: ^3.0.0
   animations: ^2.0.2
   encrypt: ^5.0.1
