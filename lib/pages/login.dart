@@ -5,6 +5,7 @@ import 'package:kite/services/sso/sso.dart';
 import 'package:kite/storage/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:kite/utils/flash_utils.dart';
 
 // Rule of student id.
 RegExp reStudentId = RegExp(r'^((\d{9})|(\d{6}[YGHE\d]\d{3}))$');
@@ -29,7 +30,6 @@ class _LoginPageState extends State<LoginPage> {
   // State
   bool isPasswordClear = false;
   bool isLicenseAccepted = false;
-  bool isDoingLogin = false;
 
   static String? _usernameValidator(String? username) {
     if (username != null && username.isNotEmpty) {
@@ -41,6 +41,24 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
     return null;
+  }
+
+  /// 用户点击登录按钮后
+  Future<void> onLogin() async {
+    bool formValid = (_formKey.currentState as FormState).validate();
+    if (!formValid) {
+      return;
+    }
+    if (!isLicenseAccepted) {
+      showBasicFlash(context, const Text('请勾选用户协议'));
+      return;
+    }
+
+    var prefs = await SharedPreferences.getInstance();
+    var auth = AuthStorage(prefs);
+    auth.username = _usernameController.text;
+    auth.password = _passwordController.text;
+    Navigator.pushNamed(context, '/welcome');
   }
 
   @override
@@ -139,18 +157,7 @@ class _LoginPageState extends State<LoginPage> {
           SizedBox(
             height: 40,
             child: ElevatedButton(
-              onPressed: () async {
-                bool formValid =
-                    (_formKey.currentState as FormState).validate();
-                if (!formValid) {
-                  return;
-                }
-                var prefs = await SharedPreferences.getInstance();
-                var auth = AuthStorage(prefs);
-                auth.username = _usernameController.text;
-                auth.password = _passwordController.text;
-                Navigator.pushNamed(context, '/welcome');
-              },
+              onPressed: onLogin,
               child: const Text('进入风筝元宇宙'),
             ),
           ),
