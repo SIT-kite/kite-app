@@ -26,8 +26,16 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
-      child: Markdown(selectable: true, data: markdownContent),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('关于'),
+      ),
+      body: const SafeArea(
+        child: Markdown(
+          selectable: true,
+          data: markdownContent,
+        ),
+      ),
     );
   }
 }
