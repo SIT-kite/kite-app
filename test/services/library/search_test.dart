@@ -7,10 +7,10 @@ import 'package:logger/logger.dart';
 void main() {
   var logger = Logger();
   test('search test', () async {
-    var result = await searchBook(
+    var result = await BookSearchResult.search(
       keyword: 'Java',
       rows: 10,
     );
-    logger.d(jsonDecode(jsonEncode(result.toJson())));
+    logger.i(jsonDecode(jsonEncode(result.toJson())));
   });
 }

@@ -5,7 +5,8 @@ import 'package:logger/logger.dart';
 void main() {
   var logger = Logger();
   test('book_info test', () async {
-    var bookInfo = await BookInfo.queryBookInfo('631021');
+    var books = await BookSearchResult.search(rows: 100);
+    var bookInfo = await BookInfo.query(books.books[0].bookId);
     logger.i(bookInfo);
   });
 }

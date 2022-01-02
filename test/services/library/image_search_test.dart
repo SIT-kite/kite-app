@@ -5,8 +5,8 @@ import 'package:logger/logger.dart';
 void main() {
   var logger = Logger();
   test('search test', () async {
-    var books = await searchBook(keyword: 'Java');
-    var result = await searchImageByBookList(books.books);
+    var books = await BookSearchResult.search(keyword: 'Java');
+    var result = await BookImage.searchByBookList(books.books);
     logger.d(result);
   });
 }
