@@ -25,6 +25,10 @@ class Session {
   // cookie缓存
   late CookieJar _jar;
 
+  // 如果登录成功，那么username与password将不为null
+  String? _username;
+  String? _password;
+
   Session({
     Dio? dio,
     CookieJar? jar,
@@ -86,6 +90,9 @@ class Session {
     return await DioUtils.processRedirect(_dio, res);
   }
 
+  String? get username => _username;
+  String? get password => _password;
+
   /// 带异常的登录
   Future<Response> login(String username, String password) async {
     var response = await _login(username, password);
@@ -95,6 +102,8 @@ class Session {
     if (authError != null) {
       throw CredentialsInvalidException(authError.text.trim());
     }
+    _username = username;
+    _password = password;
     return response;
   }
 
