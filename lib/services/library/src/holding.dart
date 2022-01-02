@@ -1,10 +1,13 @@
+import 'package:dio/dio.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:kite/services/library/src/constants.dart';
+import 'package:logger/logger.dart';
 
 part 'holding.g.dart';
 
 /// 图书的流通类型
 @JsonSerializable()
-class CirculateType {
+class _CirculateType {
   // 流通类型代码
   @JsonKey(name: 'cirtype')
   final String circulateType;
@@ -26,27 +29,27 @@ class CirculateType {
   // 不知道是啥
   final int isPreviService;
 
-  const CirculateType(this.circulateType, this.libraryCode, this.name,
+  const _CirculateType(this.circulateType, this.libraryCode, this.name,
       this.description, this.loanNumSign, this.isPreviService);
-  factory CirculateType.fromJson(Map<String, dynamic> json) =>
+  factory _CirculateType.fromJson(Map<String, dynamic> json) =>
       _$CirculateTypeFromJson(json);
   Map<String, dynamic> toJson() => _$CirculateTypeToJson(this);
 }
 
 @JsonSerializable()
-class HoldState {
+class _HoldState {
   final int stateType;
   final String stateName;
 
-  const HoldState(this.stateType, this.stateName);
+  const _HoldState(this.stateType, this.stateName);
 
-  factory HoldState.fromJson(Map<String, dynamic> json) =>
+  factory _HoldState.fromJson(Map<String, dynamic> json) =>
       _$HoldStateFromJson(json);
   Map<String, dynamic> toJson() => _$HoldStateToJson(this);
 }
 
 @JsonSerializable()
-class HoldingItem {
+class _HoldingItem {
   // 图书记录号(同一本书可能有多本，该参数用于标识同一本书的不同本)
   @JsonKey(name: 'recno')
   final int bookRecordId;
@@ -98,7 +101,7 @@ class HoldingItem {
   // 总价
   final double totalPrice;
 
-  const HoldingItem(
+  const _HoldingItem(
       this.bookRecordId,
       this.bookId,
       this.stateType,
@@ -114,15 +117,15 @@ class HoldingItem {
       this.singlePrice,
       this.totalPrice);
 // double totalLoanNum;
-  factory HoldingItem.fromJson(Map<String, dynamic> json) =>
+  factory _HoldingItem.fromJson(Map<String, dynamic> json) =>
       _$HoldingItemFromJson(json);
   Map<String, dynamic> toJson() => _$HoldingItemToJson(this);
 }
 
 @JsonSerializable()
-class BookHoldingInfo {
+class _BookHoldingInfo {
   // 馆藏信息列表
-  final List<HoldingItem> holdingList;
+  final List<_HoldingItem> holdingList;
 
   // "libcodeMap": {
   //     "SITLIB": "上应大",
@@ -155,7 +158,7 @@ class BookHoldingInfo {
   //   "SIT_US02": {
   //       "cirtype": "SIT_US02",
   @JsonKey(name: 'pBCtypeMap')
-  final Map<String, CirculateType> circulateTypeMap;
+  final Map<String, _CirculateType> circulateTypeMap;
 
   // "holdStateMap": {
   //   "32": {
@@ -167,7 +170,7 @@ class BookHoldingInfo {
   //       "stateName": "流通还回上架中"
   //   },
   // 馆藏状态
-  final Map<String, HoldState> holdStateMap;
+  final Map<String, _HoldState> holdStateMap;
 
   // 不知道是啥
   // "libcodeDeferDateMap": {
@@ -183,7 +186,7 @@ class BookHoldingInfo {
   // },
   final Map<String, String> barcodeLocationUrlMap;
 
-  const BookHoldingInfo(
+  const _BookHoldingInfo(
       this.holdingList,
       this.libraryCodeMap,
       this.locationMap,
@@ -192,10 +195,133 @@ class BookHoldingInfo {
       this.libcodeDeferDateMap,
       this.barcodeLocationUrlMap);
 
-  factory BookHoldingInfo.fromJson(Map<String, dynamic> json) =>
+  factory _BookHoldingInfo.fromJson(Map<String, dynamic> json) =>
       _$BookHoldingInfoFromJson(json);
 
   Map<String, dynamic> toJson() => _$BookHoldingInfoToJson(this);
 }
 
-class Holding {}
+class HoldingItem {
+  // 图书记录号(同一本书可能有多本，该参数用于标识同一本书的不同本)
+  final int bookRecordId;
+
+  // 图书编号(用于标识哪本书)
+  final int bookId;
+
+  // 馆藏状态类型名称
+  final String stateTypeName;
+
+  // 条码号
+  final String barcode;
+
+  // 索书号
+  final String callNo;
+
+  // 文献所属馆
+  final String originLibrary;
+  // 所属馆位置
+  final String originLocation;
+
+  // 文献所在馆
+  final String currentLibrary;
+  // 所在馆位置
+  final String currentLocation;
+
+  // 流通类型名称
+  final String circulateTypeName;
+  // 流通类型描述
+  final String circulateTypeDescription;
+
+  // 注册日期
+  final DateTime registerDate;
+
+  // 入馆日期
+  final DateTime inDate;
+
+  // 单价
+  final double singlePrice;
+
+  // 总价
+  final double totalPrice;
+
+  const HoldingItem(
+      this.bookRecordId,
+      this.bookId,
+      this.stateTypeName,
+      this.barcode,
+      this.callNo,
+      this.originLibrary,
+      this.originLocation,
+      this.currentLibrary,
+      this.currentLocation,
+      this.circulateTypeName,
+      this.circulateTypeDescription,
+      this.registerDate,
+      this.inDate,
+      this.singlePrice,
+      this.totalPrice);
+
+  @override
+  String toString() {
+    return 'HoldingItem{bookRecordId: $bookRecordId, bookId: $bookId, stateTypeName: $stateTypeName, barcode: $barcode, callNo: $callNo, originLibrary: $originLibrary, originLocation: $originLocation, currentLibrary: $currentLibrary, currentLocation: $currentLocation, circulateTypeName: $circulateTypeName, circulateTypeDescription: $circulateTypeDescription, registerDate: $registerDate, inDate: $inDate, singlePrice: $singlePrice, totalPrice: $totalPrice}';
+  }
+}
+
+class HoldingInfo {
+  final List<HoldingItem> holdingList;
+
+  const HoldingInfo(this.holdingList);
+
+  @override
+  String toString() {
+    return 'HoldingInfo{holdingList: $holdingList}';
+  }
+
+  static Future<HoldingInfo> queryByBookId(int bookId) async {
+    var logger = Logger();
+    var response = await Dio().get('${Constants.bookHoldingUrl}/$bookId');
+
+    var rawBookHoldingInfo = _BookHoldingInfo.fromJson(response.data);
+    var result = rawBookHoldingInfo.holdingList.map((rawHoldingItem) {
+      var bookRecordId = rawHoldingItem.bookRecordId;
+      var bookId = rawHoldingItem.bookId;
+      var stateTypeName = rawBookHoldingInfo
+          .holdStateMap[rawHoldingItem.stateType.toString()]!.stateName;
+      var barcode = rawHoldingItem.barcode;
+      var callNo = rawHoldingItem.callNo;
+      var originLibrary =
+          rawBookHoldingInfo.libraryCodeMap[rawHoldingItem.originLibraryCode]!;
+      var originLocation =
+          rawBookHoldingInfo.locationMap[rawHoldingItem.originLocationCode]!;
+      var currentLibrary =
+          rawBookHoldingInfo.libraryCodeMap[rawHoldingItem.currentLibraryCode]!;
+      var currentLocation =
+          rawBookHoldingInfo.locationMap[rawHoldingItem.currentLocationCode]!;
+      var circulateTypeName = rawBookHoldingInfo
+          .circulateTypeMap[rawHoldingItem.circulateType]!.name;
+      var circulateTypeDescription = rawBookHoldingInfo
+          .circulateTypeMap[rawHoldingItem.circulateType]!.description;
+      var registerDate = DateTime.parse(rawHoldingItem.registerDate);
+      var inDate = DateTime.parse(rawHoldingItem.inDate);
+      var singlePrice = rawHoldingItem.singlePrice;
+      var totalPrice = rawHoldingItem.totalPrice;
+      return HoldingItem(
+          bookRecordId,
+          bookId,
+          stateTypeName,
+          barcode,
+          callNo,
+          originLibrary,
+          originLocation,
+          currentLibrary,
+          currentLocation,
+          circulateTypeName,
+          circulateTypeDescription,
+          registerDate,
+          inDate,
+          singlePrice,
+          totalPrice);
+    }).toList();
+    return HoldingInfo(result);
+  }
+}
