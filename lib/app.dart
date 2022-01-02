@@ -3,7 +3,7 @@ import 'package:kite/pages/about.dart';
 import 'package:kite/pages/campus_card.dart';
 import 'package:kite/pages/connectivity.dart';
 import 'package:kite/pages/expense.dart';
-import 'package:kite/pages/electricity/index.dart';
+import 'package:kite/pages/electricity.dart';
 import 'package:kite/pages/home.dart';
 import 'package:kite/pages/login.dart';
 import 'package:kite/pages/report.dart';
