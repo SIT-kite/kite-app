@@ -41,7 +41,7 @@ class KiteApp extends StatelessWidget {
             if (AuthStorage(prefs).hasUsername) {
               return HomePage();
             } else {
-              return const ElectricityPage();
+              return const WelcomePage();
             }
           } else {
             // 请求未结束，白屏
