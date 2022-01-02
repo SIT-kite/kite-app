@@ -12,7 +12,7 @@ class HomePage extends StatelessWidget {
       RefreshController(initialRefresh: false);
 
   void _onHomeRefresh() {
-    _refreshController.loadComplete();
+    _refreshController.refreshCompleted(resetFooterState: true);
 
     // TODO: Signal all functions to refresh.
   }
@@ -92,12 +92,11 @@ class HomePage extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(40, 30, 40, 0),
-          child: SingleChildScrollView(
-            child: SmartRefresher(
+          child: SmartRefresher(
               enablePullDown: true,
               enablePullUp: false,
               controller: _refreshController,
-              child: Column(
+            child: SingleChildScrollView(child: Column(
                 children: [
                   buildTitleLine(),
                   const SizedBox(height: 20.0),
@@ -105,12 +104,11 @@ class HomePage extends StatelessWidget {
                   const SizedBox(height: 20.0),
                   buildFunctions(),
                 ],
-              ),
+              )),
               onRefresh: _onHomeRefresh,
             ),
           ),
         ),
-      ),
       drawer: buildDrawer(context),
     );
   }

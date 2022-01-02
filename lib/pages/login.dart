@@ -58,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
     var auth = AuthStorage(prefs);
     auth.username = _usernameController.text;
     auth.password = _passwordController.text;
-    Navigator.pushNamed(context, '/welcome');
+    Navigator.pushNamed(context, '/home');
   }
 
   @override
