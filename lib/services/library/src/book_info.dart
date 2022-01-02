@@ -17,8 +17,11 @@ class BookInfo {
     return 'BookInfo{title: $title, isbn: $isbn, price: $price, rawDetail: $rawDetail}';
   }
 
-  static Future<BookInfo> queryBookInfo(String bookId) async {
-    var response = await Dio().get(Constants.bookUrl + '/$bookId');
+  static Future<BookInfo> query(
+    String bookId, {
+    Dio? dio,
+  }) async {
+    var response = await (dio ?? Dio()).get(Constants.bookUrl + '/$bookId');
     var html = response.data;
 
     var detailItems = BeautifulSoup(html)
