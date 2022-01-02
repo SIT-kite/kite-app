@@ -22,36 +22,49 @@ class BookImage {
       _$BookImageFromJson(json);
 
   Map<String, dynamic> toJson() => _$BookImageToJson(this);
-}
 
-Future<Map<String, BookImage>> searchImageByBookList(
-    List<Book> bookList) async {
-  return await searchImageByIsbnList(bookList.map((e) => e.isbn).toList());
-}
+  Future<Map<String, BookImage>> searchByBookList(
+    List<Book> bookList, {
+    Dio? dio,
+  }) async {
+    return await searchByIsbnList(
+      bookList.map((e) => e.isbn).toList(),
+      dio: dio,
+    );
+  }
 
-Future<Map<String, BookImage>> searchImageByIsbnList(
-    List<String> isbnList) async {
-  return await searchImageByIsbnStr(isbnList.join(','));
-}
+  Future<Map<String, BookImage>> searchByIsbnList(
+    List<String> isbnList, {
+    Dio? dio,
+  }) async {
+    return await searchByIsbnStr(
+      isbnList.join(','),
+      dio: dio,
+    );
+  }
 
-Future<Map<String, BookImage>> searchImageByIsbnStr(String isbnStr) async {
-  var response = await Dio().get(Constants.bookImageInfoUrl,
-      queryParameters: {
-        'glc': 'U1SH021060',
-        'cmdACT': 'getImages',
-        'type': '0',
-        'isbns': isbnStr,
+  Future<Map<String, BookImage>> searchByIsbnStr(
+    String isbnStr, {
+    Dio? dio,
+  }) async {
+    var response = await (dio ?? Dio()).get(Constants.bookImageInfoUrl,
+        queryParameters: {
+          'glc': 'U1SH021060',
+          'cmdACT': 'getImages',
+          'type': '0',
+          'isbns': isbnStr,
+        },
+        options: Options(responseType: ResponseType.plain));
+    var responseStr = (response.data as String).trim();
+    responseStr = responseStr.substring(1, responseStr.length - 1);
+    var result = <String, BookImage>{};
+    (jsonDecode(responseStr)['result'] as List<dynamic>)
+        .map((e) => BookImage.fromJson(e))
+        .forEach(
+      (e) {
+        result[e.isbn] = e;
       },
-      options: Options(responseType: ResponseType.plain));
-  var responseStr = (response.data as String).trim();
-  responseStr = responseStr.substring(1, responseStr.length - 1);
-  var result = <String, BookImage>{};
-  (jsonDecode(responseStr)['result'] as List<dynamic>)
-      .map((e) => BookImage.fromJson(e))
-      .forEach(
-    (e) {
-      result[e.isbn] = e;
-    },
-  );
-  return result;
+    );
+    return result;
+  }
 }
