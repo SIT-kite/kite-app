@@ -1,7 +1,7 @@
+import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:dio/dio.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kite/services/library/src/constants.dart';
-import 'package:logger/logger.dart';
 
 part 'holding.g.dart';
 
@@ -323,4 +323,29 @@ class HoldingInfo {
     }).toList();
     return HoldingInfo(result);
   }
+}
+
+/// 搜索附近的书的id号
+Future<List<String>> searchNearBookIdList(String bookId) async {
+  var response = await Dio().get(
+    Constants.virtualBookshelfUrl,
+    queryParameters: {
+      'bookrecno': bookId,
+
+      // 1 表示不出现同一本书的重复书籍
+      'holding': '1',
+    },
+  );
+  String html = response.data;
+
+  return BeautifulSoup(html)
+      .findAll(
+        'a',
+        attrs: {'target': '_blank'},
+      )
+      .map(
+        (e) => e.attributes['href']!,
+      )
+      .map((e) => e.split('book/')[1])
+      .toList();
 }

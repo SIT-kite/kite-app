@@ -8,4 +8,9 @@ void main() {
     var a = await HoldingInfo.queryByBookId('54387');
     logger.i(a.holdingList);
   });
+
+  test('near book search', () async {
+    var list = await searchNearBookIdList('54387');
+    logger.i(list);
+  });
 }

@@ -6,7 +6,7 @@ class Constants {
   static const apiUrl = opacUrl + '/api';
   static const bookUrl = opacUrl + '/book';
   static const bookHoldingUrl = apiUrl + '/holding';
-
+  static const virtualBookshelfUrl = apiUrl + '/virtualBookshelf';
   static const bookImageInfoUrl =
       'https://book-resource.dataesb.com/websearch/metares';
 }
