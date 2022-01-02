@@ -80,58 +80,52 @@ class _ElectricityPageState extends State<ElectricityPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-      color: Colors.grey[200],
-      child: Column(children: [
-        Container(
-          margin: const EdgeInsets.only(top: 50),
-          child: _buildTitleLine(),
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 30),
-          child: _buildTextInputBox('楼号', '房间号'),
-        ),
-        Container(
-          margin: const EdgeInsets.only(left: 80, right: 80),
-          child: _buildButtonBox(
-              '查询余额', const Color(0xFF2e62cd), '查询使用情况', const Color(0xFFf08c00)),
-        ),
-        Container(
-          width: double.infinity,
-          margin: const EdgeInsets.only(
-            top: 30,
-            left: 10,
-            right: 10,
-          ),
-          child: _buildTextBlock(context),
-        ),
-        _buildChartBlock(
-            switchChart,
-            showDays,
-            !showDays ? hoursBottomTitles : daysBottomTitles,
-            !showDays ? hoursAxisYData : daysAxisYData,
-            !showDays
-                ? {'minX': 0, 'maxX': 24}
-                : {
-                    'minX': 0,
-                    'maxX': 7,
-                  },
-            !showDays
-                ? {'minY': 0, 'maxY': 6}
-                : {
-                    'minY': 0,
-                    'maxY': 4.5,
-                  },
-            1,
-            !showDays ? 3 : 1),
-      ]),
-    ));
+      appBar: AppBar(
+        title: const Text('电费余额查询'),
+      ) ,
+        body: SafeArea(child:Container(
+          color: Colors.grey[200],
+          child: Column(children: [
+            Container(
+              margin: const EdgeInsets.only(top: 30),
+              child: _buildTextInputBox('楼号', '房间号'),
+            ),
+            Container(
+              margin: const EdgeInsets.only(left: 80, right: 80),
+              child: _buildButtonBox(
+                  '查询余额', const Color(0xFF2e62cd), '查询使用情况', const Color(0xFFf08c00)),
+            ),
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(
+                top: 30,
+                left: 10,
+                right: 10,
+              ),
+              child: _buildTextBlock(context),
+            ),
+            _buildChartBlock(
+                switchChart,
+                showDays,
+                !showDays ? hoursBottomTitles : daysBottomTitles,
+                !showDays ? hoursAxisYData : daysAxisYData,
+                !showDays
+                    ? {'minX': 0, 'maxX': 24}
+                    : {
+                  'minX': 0,
+                  'maxX': 7,
+                },
+                !showDays
+                    ? {'minY': 0, 'maxY': 6}
+                    : {
+                  'minY': 0,
+                  'maxY': 4.5,
+                },
+                1,
+                !showDays ? 3 : 1),
+          ]),
+        )));
   }
-}
-
-Widget _buildTitleLine() {
-  return const Text('电费余额查询',
-      style: TextStyle(fontSize: 22, color: Colors.black87));
 }
 
 Widget _buildTextInput(String _hintText) {
@@ -223,13 +217,12 @@ Widget _buildChartBlock(
     Map<String, double> yConstrains,
     double leftInterval,
     double bottomInterval) {
-  return SafeArea(
-      child: Stack(
+  return Stack(
     children: <Widget>[
       AspectRatio(
         aspectRatio: 1.70,
         child: Container(
-          decoration: const BoxDecoration(color: Color(0xff232d37)),
+          decoration: const BoxDecoration(color: Colors.white,),
           child: Padding(
             padding: const EdgeInsets.only(
                 right: 22.0, left: 2.0, top: 30, bottom: 2),
@@ -265,7 +258,7 @@ Widget _buildChartBlock(
             ),
           ])),
     ],
-  ));
+  );
 }
 
 LineChart _buildLineChart(
