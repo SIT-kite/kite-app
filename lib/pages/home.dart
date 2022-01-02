@@ -92,20 +92,22 @@ class HomePage extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(40, 30, 40, 0),
-          child: SmartRefresher(
-            enablePullDown: true,
-            enablePullUp: false,
-            controller: _refreshController,
-            child: Column(
-              children: [
-                buildTitleLine(),
-                const SizedBox(height: 20.0),
-                GreetingWidget(),
-                const SizedBox(height: 20.0),
-                buildFunctions(),
-              ],
+          child: SingleChildScrollView(
+            child: SmartRefresher(
+              enablePullDown: true,
+              enablePullUp: false,
+              controller: _refreshController,
+              child: Column(
+                children: [
+                  buildTitleLine(),
+                  const SizedBox(height: 20.0),
+                  GreetingWidget(),
+                  const SizedBox(height: 20.0),
+                  buildFunctions(),
+                ],
+              ),
+              onRefresh: _onHomeRefresh,
             ),
-            onRefresh: _onHomeRefresh,
           ),
         ),
       ),
