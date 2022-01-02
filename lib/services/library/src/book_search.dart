@@ -140,8 +140,9 @@ Future<BookSearchResult> searchBook({
   SearchWay searchWay = SearchWay.title,
   SortWay sortWay = SortWay.matchScore,
   SortOrder sortOrder = SortOrder.desc,
+  Dio? dio,
 }) async {
-  var response = await Dio().get(
+  var response = await (dio ?? Dio()).get(
     Constants.searchUrl,
     queryParameters: {
       'q': keyword,
