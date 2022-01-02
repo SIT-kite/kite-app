@@ -67,7 +67,9 @@ class _ElectricityPageState extends State<ElectricityPage> {
                     style: ButtonStyle(
                         backgroundColor:
                         MaterialStateProperty.all(Color(0xFFf08c00))),
-                    onPressed: () {},
+                    onPressed: () {
+
+                    },
                     child: const Text('查询使用情况'),
                   ),
                 ],
@@ -82,6 +84,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
                       Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                         GestureDetector(
                           onTap: () {
+                            _showInfo(context,'此数据来源于校内在线电费查询平台。如有错误，请以充值机显示金额为准～');
                           },
                           child: Container(
                             // Change button text when light changes state.
@@ -126,4 +129,25 @@ class _ElectricityPageState extends State<ElectricityPage> {
           color: Colors.grey[200],
         ));
   }
+}
+
+Future<void> _showInfo(context, String content) async {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        content: SingleChildScrollView(
+          child: Text(content),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('知道啦!'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
