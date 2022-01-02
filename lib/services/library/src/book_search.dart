@@ -205,7 +205,10 @@ Future<BookSearchResult> searchBook({
       resultCount,
       useTime,
       int.parse(currentPage),
-      int.parse(totalPages.substring(1, totalPages.length - 1).trim()),
+      int.parse(totalPages
+          .substring(1, totalPages.length - 1)
+          .trim()
+          .replaceAll(',', '')),
       htmlElement
           .find('table', class_: 'resultTable')!
           .findAll('tr')
