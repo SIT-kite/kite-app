@@ -29,8 +29,8 @@ class HotSearch {
   List<HotSearchItem> totalTime = [];
   HotSearch(this.recentMonth, this.totalTime);
 
-  static Future<HotSearch> request() async {
-    var response = await Dio().get(Constants.hotSearchUrl);
+  static Future<HotSearch> request({Dio? dio}) async {
+    var response = await (dio ?? Dio()).get(Constants.hotSearchUrl);
     var fieldsets = BeautifulSoup(response.data).findAll('fieldset');
 
     List<HotSearchItem> getHotSearchItems(Bs4Element fieldset) {
