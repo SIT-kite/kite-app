@@ -23,7 +23,7 @@ class BookImage {
 
   Map<String, dynamic> toJson() => _$BookImageToJson(this);
 
-  Future<Map<String, BookImage>> searchByBookList(
+  static Future<Map<String, BookImage>> searchByBookList(
     List<Book> bookList, {
     Dio? dio,
   }) async {
@@ -33,7 +33,7 @@ class BookImage {
     );
   }
 
-  Future<Map<String, BookImage>> searchByIsbnList(
+  static Future<Map<String, BookImage>> searchByIsbnList(
     List<String> isbnList, {
     Dio? dio,
   }) async {
@@ -43,7 +43,7 @@ class BookImage {
     );
   }
 
-  Future<Map<String, BookImage>> searchByIsbnStr(
+  static Future<Map<String, BookImage>> searchByIsbnStr(
     String isbnStr, {
     Dio? dio,
   }) async {

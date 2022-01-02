@@ -132,7 +132,7 @@ class BookSearchResult {
       _$BookSearchResultFromJson(json);
   Map<String, dynamic> toJson() => _$BookSearchResultToJson(this);
 
-  Future<BookSearchResult> search({
+  static Future<BookSearchResult> search({
     String keyword = '',
     int rows = 10,
     int page = 1,
