@@ -4,6 +4,7 @@ import 'package:kite/pages/campus_card.dart';
 import 'package:kite/pages/connectivity.dart';
 import 'package:kite/pages/expense.dart';
 import 'package:kite/pages/electricity.dart';
+import 'package:kite/pages/score.dart';
 import 'package:kite/pages/home.dart';
 import 'package:kite/pages/login.dart';
 import 'package:kite/pages/report.dart';
@@ -26,6 +27,7 @@ class KiteApp extends StatelessWidget {
       '/connectivity': (context) => ConnectivityPage(),
       '/campusCard': (context) => CampusCardPage(),
       '/electricity': (context) => ElectricityPage(),
+      '/score': (context) => ScorePage(),
     };
 
     return MaterialApp(
