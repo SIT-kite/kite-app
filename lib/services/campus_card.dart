@@ -5,8 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'campus_card.g.dart';
 
-const String cardService =
-    'http://210.35.98.178:7101/LMWeb/WebApi/HYongHu.ashx';
+const String cardService = 'http://210.35.98.178:7101/LMWeb/WebApi/HYongHu.ashx';
 
 @JsonSerializable()
 class CardInfo {
@@ -19,8 +18,7 @@ class CardInfo {
 
   const CardInfo(this.studentId, this.studentName, this.major);
 
-  factory CardInfo.fromJson(Map<String, dynamic> json) =>
-      _$CardInfoFromJson(json);
+  factory CardInfo.fromJson(Map<String, dynamic> json) => _$CardInfoFromJson(json);
   // Map<String, dynamic> toJson() => _$CardInfoToJson(this);`
 }
 
@@ -41,7 +39,8 @@ Future<CardInfo?> getCardInfo(int cardId) async {
   final cardIdString = cardId2String(cardId);
 
   final response = await dio.get(cardService,
-      queryParameters: {'KaHao': cardIdString, 'Method': 'GetUserInfoByKaHao'});
+      queryParameters: {'KaHao': cardIdString, 'Method': 'GetUserInfoByKaHao'},
+      options: Options(sendTimeout: 5, receiveTimeout: 5));
   String html = response.data;
 
   if (html == 'NotData') {

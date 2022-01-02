@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
 import 'package:flash/flash.dart';
-import 'package:nfc_manager/nfc_manager.dart';
-
+import 'package:flutter/material.dart';
 import 'package:kite/services/campus_card.dart';
+import 'package:kite/utils/flash_utils.dart';
+import 'package:nfc_manager/nfc_manager.dart';
 
 class CampusCardRecord {
   final int cardId;
@@ -19,8 +19,7 @@ class CampusCardRecord {
 
   CampusCardRecord(this.cardId, this.studentName, this.studentId, this.major);
 
-  static CampusCardRecord valid(
-      int cardId, String studentName, String studentId, String major) {
+  static CampusCardRecord valid(int cardId, String studentName, String studentId, String major) {
     return CampusCardRecord(cardId, studentName, studentId, major);
   }
 
@@ -62,10 +61,7 @@ class _CampusCardPageState extends State<CampusCardPage> {
     } // End of for statement.
 
     int cardUid = 0;
-    cardUid = (uid.elementAt(3) << 24) |
-        (uid.elementAt(2) << 16) |
-        (uid.elementAt(1) << 8) |
-        uid.elementAt(0);
+    cardUid = (uid.elementAt(3) << 24) | (uid.elementAt(2) << 16) | (uid.elementAt(1) << 8) | uid.elementAt(0);
 
     var completer = Completer();
     context.showBlockDialog(dismissCompleter: completer);
@@ -75,12 +71,14 @@ class _CampusCardPageState extends State<CampusCardPage> {
 
       setState(() {
         if (cardInfo != null) {
-          _cardsRead.add(CampusCardRecord.valid(cardUid, cardInfo.studentName,
-              cardInfo.studentId, cardInfo.major));
+          _cardsRead.add(CampusCardRecord.valid(cardUid, cardInfo.studentName, cardInfo.studentId, cardInfo.major));
         } else {
           _cardsRead.add(CampusCardRecord.invalid(cardUid));
         }
       });
+    }).catchError((_) {
+      completer.complete();
+      showBasicFlash(context, const Text('网络错误'));
     });
   }
 
@@ -128,10 +126,7 @@ class _CampusCardPageState extends State<CampusCardPage> {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 40.0),
-          Image(
-              image: AssetImage('assets/campusCard/illustration.png'),
-              height: 300,
-              width: 300),
+          Image(image: AssetImage('assets/campusCard/illustration.png'), height: 300, width: 300),
         ],
       ),
     );
@@ -149,23 +144,33 @@ class _CampusCardPageState extends State<CampusCardPage> {
   }
 
   Widget buildCardRecord() {
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-      children: _cardsRead.map(
-        (cardRecord) {
-          return buildCardItem(cardRecord);
-        },
-      ).toList(),
-    );
+    return Column(children: [
+      const SizedBox(
+          height: 30,
+          child: Text(
+            '数据源缺少补办卡信息, 结果仅供参考.',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          )),
+      ListView(
+        shrinkWrap: true,
+        children: _cardsRead.map(
+          (cardRecord) {
+            return buildCardItem(cardRecord);
+          },
+        ).toList(),
+      )
+    ]);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text('校园卡工具')),
       body: SafeArea(
-        child: isNfcAvailable
-            ? (_cardsRead.isNotEmpty ? buildCardRecord() : buildPrompt())
-            : buildFailedPrompt(),
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+          child: isNfcAvailable ? (_cardsRead.isNotEmpty ? buildCardRecord() : buildPrompt()) : buildFailedPrompt(),
+        ),
       ),
     );
   }
