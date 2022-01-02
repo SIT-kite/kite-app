@@ -20,7 +20,7 @@ enum SearchWay {
   subjectWord,
   // 分类号
   classNo,
-  // 控制号
+  // 控制号(就是搜索结果的bookId图书号)
   ctrlNo,
   // 订购号
   orderNo,
