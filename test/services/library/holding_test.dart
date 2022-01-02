@@ -5,7 +5,7 @@ import 'package:logger/logger.dart';
 void main() {
   var logger = Logger();
   test('holding test', () async {
-    var a = await HoldingInfo.queryByBookId(54387);
+    var a = await HoldingInfo.queryByBookId('54387');
     logger.i(a.holdingList);
   });
 }

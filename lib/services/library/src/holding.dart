@@ -277,8 +277,7 @@ class HoldingInfo {
     return 'HoldingInfo{holdingList: $holdingList}';
   }
 
-  static Future<HoldingInfo> queryByBookId(int bookId) async {
-    var logger = Logger();
+  static Future<HoldingInfo> queryByBookId(String bookId) async {
     var response = await Dio().get('${Constants.bookHoldingUrl}/$bookId');
 
     var rawBookHoldingInfo = _BookHoldingInfo.fromJson(response.data);
