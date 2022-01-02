@@ -27,28 +27,38 @@ class _ScorePageState extends State<ScorePage> {
     return Scaffold(
         body: (SafeArea(
             child: Column(children: [
-      Container(margin: EdgeInsets.only(top: 10),child: _buildHeader(selectorInfo)),
+      Container(
+          margin: EdgeInsets.only(top: 10), child: _buildHeader(selectorInfo)),
+      _buildGpaBlock(),
     ]))));
   }
 }
 
 Widget _buildHeader(Map<String, Map<String, dynamic>> selectorInfo) {
-  return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
+  return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
     _buildSelectorBox(selectorInfo),
-    Container(margin: EdgeInsets.only(right: 20),child: Icon(Icons.refresh, color: Colors.blue,size: 30))
+    Container(
+        margin: EdgeInsets.only(right: 20),
+        child: Icon(Icons.refresh, color: Colors.blue, size: 30))
   ]);
 }
 
 Widget _buildSelectorBox(Map<String, Map<String, dynamic>> selectorInfo) {
   return Row(children: [
-    Container(margin: EdgeInsets.only(left: 15),child:_buildSelector(
-        selectorInfo['year']!['dropdownValue'],
-        selectorInfo['year']!['items'],
-        selectorInfo['year']!['setDropdownValue']) ,),
-    Container(margin: EdgeInsets.only(left: 15),child: _buildSelector(
-        selectorInfo['semester']!['dropdownValue'],
-        selectorInfo['semester']!['items'],
-        selectorInfo['semester']!['setDropdownValue']),)
+    Container(
+      margin: EdgeInsets.only(left: 15),
+      child: _buildSelector(
+          selectorInfo['year']!['dropdownValue'],
+          selectorInfo['year']!['items'],
+          selectorInfo['year']!['setDropdownValue']),
+    ),
+    Container(
+      margin: EdgeInsets.only(left: 15),
+      child: _buildSelector(
+          selectorInfo['semester']!['dropdownValue'],
+          selectorInfo['semester']!['items'],
+          selectorInfo['semester']!['setDropdownValue']),
+    )
   ]);
 }
 
@@ -75,6 +85,16 @@ Widget _buildSelector(
       );
     }).toList(),
   );
+}
+
+Widget _buildGpaBlock() {
+  return Container(
+      color: Colors.green,
+      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Text(
+          '该学期绩点为 2.81, 努力总会有回报哒!',
+        )
+      ]));
 }
 
 String _getInitYearDropdownValue() {
