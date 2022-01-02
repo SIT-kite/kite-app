@@ -8,42 +8,42 @@ import 'package:nfc_manager/nfc_manager.dart';
 import 'package:kite/services/campus_card.dart';
 
 class CampusCardRecord {
-  late final int cardId;
+  final int cardId;
 
   bool isCardRecognized = false;
-  late String studentName;
-  late String studentId;
-  late String major;
+  final String studentName;
+  final String studentId;
+  final String major;
 
   final int ts = DateTime.now().millisecondsSinceEpoch;
 
-  CampusCardRecord(this.cardId,
-      [String studentId = '',
-      String studentName = '未知卡',
-      String major = 'Unknown']) {
-    if (studentId != '') {
-      this.studentId = studentId;
-      this.studentName = studentName;
-      this.major = major;
-      isCardRecognized = true;
-    }
+  CampusCardRecord(this.cardId, this.studentName, this.studentId, this.major);
+
+  static CampusCardRecord valid(
+      int cardId, String studentName, String studentId, String major) {
+    return CampusCardRecord(cardId, studentName, studentId, major);
+  }
+
+  static CampusCardRecord invalid(int cardId) {
+    return CampusCardRecord(cardId, '未知卡', '', 'Unknown');
   }
 }
 
 class CampusCardPage extends StatefulWidget {
-  CampusCardPage({Key? key}) : super(key: key);
+  const CampusCardPage({Key? key}) : super(key: key);
 
   @override
   _CampusCardPageState createState() => _CampusCardPageState();
 }
 
 class _CampusCardPageState extends State<CampusCardPage> {
+  bool isNfcAvailable = false;
   final List<CampusCardRecord> _cardsRead = [];
 
   static String _dateToString(DateTime date) {
     final local = date.toLocal();
 
-    return '$local.year-$local.month-$local.day $local.hour-$local.minute';
+    return '${local.month} 月 ${local.day} 日 ${local.hour}:${local.minute}';
   }
 
   static String _tsToString(int ts) {
@@ -62,23 +62,23 @@ class _CampusCardPageState extends State<CampusCardPage> {
     } // End of for statement.
 
     int cardUid = 0;
-    cardUid = (uid.elementAt(0) << 24) |
-        (uid.elementAt(1) << 16) |
-        (uid.elementAt(0) << 8) |
+    cardUid = (uid.elementAt(3) << 24) |
+        (uid.elementAt(2) << 16) |
+        (uid.elementAt(1) << 8) |
         uid.elementAt(0);
 
     var completer = Completer();
-
     context.showBlockDialog(dismissCompleter: completer);
+
     getCardInfo(cardUid).then((cardInfo) {
       completer.complete();
 
       setState(() {
         if (cardInfo != null) {
-          _cardsRead.add(CampusCardRecord(cardUid, cardInfo.studentId,
-              cardInfo.studentName, cardInfo.major));
+          _cardsRead.add(CampusCardRecord.valid(cardUid, cardInfo.studentName,
+              cardInfo.studentId, cardInfo.major));
         } else {
-          _cardsRead.add(CampusCardRecord(cardUid));
+          _cardsRead.add(CampusCardRecord.invalid(cardUid));
         }
       });
     });
@@ -86,16 +86,26 @@ class _CampusCardPageState extends State<CampusCardPage> {
 
   @override
   void initState() {
-    // Start Session
-    NfcManager.instance.startSession(onDiscovered: onNewCardDiscovered);
-
     super.initState();
+
+    // Start Session
+    NfcManager.instance.isAvailable().then((value) {
+      setState(() {
+        isNfcAvailable = value;
+      });
+      if (isNfcAvailable) {
+        NfcManager.instance.startSession(onDiscovered: onNewCardDiscovered);
+      }
+      print('$isNfcAvailable');
+    });
   }
 
   @override
   void dispose() {
     // Stop session
-    NfcManager.instance.stopSession();
+    if (isNfcAvailable) {
+      NfcManager.instance.stopSession();
+    }
     super.dispose();
   }
 
@@ -127,44 +137,36 @@ class _CampusCardPageState extends State<CampusCardPage> {
     );
   }
 
-  Widget buildCardRecord() {
-    return ListView.builder(
-      itemBuilder: (BuildContext context, int index) => Row(
-        children: [
-          Column(
-            children: [
-              Text(_cardsRead[index].studentName),
-              Text(_cardsRead[index].major),
-            ],
-          ),
-          Column(
-            children: [
-              Text(_cardsRead[index].cardId.toString()),
-              Text(_tsToString(_cardsRead[index].ts)),
-            ],
-          ),
-        ],
+  Widget buildCardItem(CampusCardRecord cardRecord) {
+    return ListTile(
+      leading: const Icon(Icons.credit_card_sharp),
+      title: Text('${cardRecord.studentName} ${cardRecord.studentId}'),
+      subtitle: Text(cardRecord.major),
+      trailing: Text(
+        _tsToString(cardRecord.ts),
       ),
+    );
+  }
+
+  Widget buildCardRecord() {
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+      children: _cardsRead.map(
+        (cardRecord) {
+          return buildCardItem(cardRecord);
+        },
+      ).toList(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_cardsRead.isNotEmpty) {
-      return buildCardRecord();
-    }
-
-    return FutureBuilder<bool>(
-      future: NfcManager.instance.isAvailable(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          bool isAvailable = snapshot.data!;
-          if (isAvailable) {
-            return buildPrompt();
-          }
-        }
-        return buildFailedPrompt();
-      },
+    return Scaffold(
+      body: SafeArea(
+        child: isNfcAvailable
+            ? (_cardsRead.isNotEmpty ? buildCardRecord() : buildPrompt())
+            : buildFailedPrompt(),
+      ),
     );
   }
 }
