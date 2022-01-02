@@ -3,6 +3,7 @@ import 'package:kite/pages/about.dart';
 import 'package:kite/pages/campus_card.dart';
 import 'package:kite/pages/connectivity.dart';
 import 'package:kite/pages/expense.dart';
+import 'package:kite/pages/electricity/index.dart';
 import 'package:kite/pages/home.dart';
 import 'package:kite/pages/login.dart';
 import 'package:kite/pages/report.dart';
@@ -24,6 +25,7 @@ class KiteApp extends StatelessWidget {
       '/expense': (context) => ExpensePage(),
       '/connectivity': (context) => ConnectivityPage(),
       '/campusCard': (context) => CampusCardPage(),
+      '/electricity': (context) => ElectricityPage(),
     };
 
     return MaterialApp(
@@ -39,7 +41,7 @@ class KiteApp extends StatelessWidget {
             if (AuthStorage(prefs).hasUsername) {
               return HomePage();
             } else {
-              return const WelcomePage();
+              return const ElectricityPage();
             }
           } else {
             // 请求未结束，白屏
