@@ -30,7 +30,7 @@ enum SearchWay {
   callNo,
 }
 
-String searchWayToString(SearchWay sw) {
+String _searchWayToString(SearchWay sw) {
   return {
     SearchWay.any: '',
     SearchWay.title: 'title',
@@ -73,7 +73,7 @@ enum SortWay {
   volume,
 }
 
-String sortWayToString(SortWay sw) {
+String _sortWayToString(SortWay sw) {
   return {
     SortWay.matchScore: 'score',
     SortWay.publishDate: 'pubdate_sort',
@@ -95,7 +95,7 @@ enum SortOrder {
   desc,
 }
 
-String sortOrderToString(SortOrder sw) {
+String _sortOrderToString(SortOrder sw) {
   return {
     SortOrder.asc: 'asc',
     SortOrder.desc: 'desc',
@@ -148,10 +148,10 @@ Future<BookSearchResult> searchBook({
       'searchType': 'standard',
       'isFacet': 'true',
       'view': 'standard',
-      'searchWay': searchWayToString(searchWay),
+      'searchWay': _searchWayToString(searchWay),
       'rows': rows.toString(),
-      'sortWay': sortWayToString(sortWay),
-      'sortOrder': sortOrderToString(sortOrder),
+      'sortWay': _sortWayToString(sortWay),
+      'sortOrder': _sortOrderToString(sortOrder),
       'hasholding': '1',
       'searchWay0': 'marc',
       'logical0': 'AND',
