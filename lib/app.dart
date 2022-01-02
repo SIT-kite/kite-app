@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:kite/pages/about.dart';
 import 'package:kite/pages/campus_card.dart';
 import 'package:kite/pages/connectivity.dart';
-import 'package:kite/pages/expense.dart';
 import 'package:kite/pages/electricity.dart';
-import 'package:kite/pages/score.dart';
+import 'package:kite/pages/expense.dart';
+import 'package:kite/pages/game.dart';
 import 'package:kite/pages/home.dart';
 import 'package:kite/pages/login.dart';
 import 'package:kite/pages/report.dart';
+import 'package:kite/pages/score.dart';
 import 'package:kite/pages/welcome.dart';
 import 'package:kite/storage/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,6 +29,7 @@ class KiteApp extends StatelessWidget {
       '/campusCard': (context) => CampusCardPage(),
       '/electricity': (context) => ElectricityPage(),
       '/score': (context) => ScorePage(),
+      '/game': (context) => GamePage(),
     };
 
     return MaterialApp(

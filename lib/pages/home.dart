@@ -38,6 +38,8 @@ class HomePage extends StatelessWidget {
         SizedBox(height: 20.0),
         ItemWidget('/dailyReport',
             AssetImage('assets/home/icon_daily_report.png'), '体温上报'),
+        SizedBox(height: 20.0),
+        ItemWidget('/game', AssetImage('assets/home/icon_library.png'), '小游戏'),
       ],
     );
   }
@@ -93,22 +95,23 @@ class HomePage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.fromLTRB(40, 30, 40, 0),
           child: SmartRefresher(
-              enablePullDown: true,
-              enablePullUp: false,
-              controller: _refreshController,
-            child: SingleChildScrollView(child: Column(
-                children: [
-                  buildTitleLine(),
-                  const SizedBox(height: 20.0),
-                  GreetingWidget(),
-                  const SizedBox(height: 20.0),
-                  buildFunctions(),
-                ],
-              )),
-              onRefresh: _onHomeRefresh,
-            ),
+            enablePullDown: true,
+            enablePullUp: false,
+            controller: _refreshController,
+            child: SingleChildScrollView(
+                child: Column(
+              children: [
+                buildTitleLine(),
+                const SizedBox(height: 20.0),
+                GreetingWidget(),
+                const SizedBox(height: 20.0),
+                buildFunctions(),
+              ],
+            )),
+            onRefresh: _onHomeRefresh,
           ),
         ),
+      ),
       drawer: buildDrawer(context),
     );
   }
