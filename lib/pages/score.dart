@@ -27,24 +27,28 @@ class _ScorePageState extends State<ScorePage> {
     return Scaffold(
         body: (SafeArea(
             child: Column(children: [
-      Container(
-          margin: EdgeInsets.only(left: 30), child: _buildHeader(selectorInfo)),
+      Container(margin: EdgeInsets.only(top: 10),child: _buildHeader(selectorInfo)),
     ]))));
   }
 }
 
 Widget _buildHeader(Map<String, Map<String, dynamic>> selectorInfo) {
+  return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
+    _buildSelectorBox(selectorInfo),
+    Container(margin: EdgeInsets.only(right: 20),child: Icon(Icons.refresh, color: Colors.blue,size: 30))
+  ]);
+}
+
+Widget _buildSelectorBox(Map<String, Map<String, dynamic>> selectorInfo) {
   return Row(children: [
-    Container(
-        child: _buildSelector(
-            selectorInfo['year']!['dropdownValue'],
-            selectorInfo['year']!['items'],
-            selectorInfo['year']!['setDropdownValue'])),
-    Container(
-        child: _buildSelector(
-            selectorInfo['semester']!['dropdownValue'],
-            selectorInfo['semester']!['items'],
-            selectorInfo['semester']!['setDropdownValue'])),
+    Container(margin: EdgeInsets.only(left: 15),child:_buildSelector(
+        selectorInfo['year']!['dropdownValue'],
+        selectorInfo['year']!['items'],
+        selectorInfo['year']!['setDropdownValue']) ,),
+    Container(margin: EdgeInsets.only(left: 15),child: _buildSelector(
+        selectorInfo['semester']!['dropdownValue'],
+        selectorInfo['semester']!['items'],
+        selectorInfo['semester']!['setDropdownValue']),)
   ]);
 }
 
@@ -55,7 +59,7 @@ Widget _buildSelector(
     isDense: true,
     icon: const Icon(Icons.keyboard_arrow_down_outlined),
     style: const TextStyle(
-      color: Colors.blue,
+      color: Color(0xFF002766),
     ),
     underline: Container(
       height: 2,
