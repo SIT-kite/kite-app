@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 ///测试数据
 List data = [
@@ -111,17 +112,20 @@ class ExpensePage extends StatefulWidget {
 }
 
 class _ExpensePageState extends State<ExpensePage> {
-  int _currentIndex = 0; // 底部导航键的标志位
+  int _currentIndex = 1; // 底部导航键的标志位
 
   @override
   Widget build(BuildContext context) {
+    // num money = 0;
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,
-        leading: const IconButton(
+        leading: IconButton(
           icon: Icon(Icons.keyboard_arrow_left),
           tooltip: '返回',
-          onPressed: null,
+          onPressed: () {
+            Navigator.pop(context, true);
+          },
         ),
         title: const Text("消费"),
         centerTitle: true,
@@ -138,32 +142,14 @@ class _ExpensePageState extends State<ExpensePage> {
           ? GroupedListView<dynamic, String>(
               elements: data,
               groupBy: (element) => element['month'],
-              // groupComparator: (value1, value2) => value2.compareTo(value1),
-              // itemComparator: (item1, item2) =>
-              //     item1['name'].compareTo(item2['name'])
-              // order: GroupedListOrder.DESC,
+              sort: false,
               useStickyGroupSeparators: true,
-              groupSeparatorBuilder: (String value) {
-                // int money = 0;
-                // int num = 0;
-                // for (int row = 0; row < data[section].length; row++) {
-                //   money = data[section][row]["money"];
-                //   num += money;
-                // }
-                // string hhh = money.toString();
-                return ListTile(
-                  title: Text('${value}月', textScaleFactor: 1.5),
-                  subtitle: Text('支出:￥'),
-                  //   trailing: Image.asset(
-                  //        'D:/WORK/wechat/text-app/text_app/assets/telegram .png'),
-                );
-              },
               itemBuilder: (c, element) {
                 var place = element["place"];
                 var money = element["money"];
                 var time = element["time"];
                 var icon = element["label"] == 'canteen'
-                    ? Icon(Icons.liquor)
+                    ? Icon(Icons.food_bank_outlined)
                     : Icon(Icons.storefront);
                 return ListTile(
                   leading: icon,
@@ -171,10 +157,27 @@ class _ExpensePageState extends State<ExpensePage> {
                   trailing: Text('-$money', textScaleFactor: 1.5),
                   subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[Text('$place'), Text('$time')]),
+                      children: <Widget>[Text('$time')]),
                 );
-              })
-          : ListView(children: _getListBill(30)),
+              },
+              groupHeaderBuilder: (Data) {
+                num money = 0;
+                data.forEach((value) {
+                  value['month'] == Data['month']
+                      ? money += value['money']
+                      : '';
+                });
+                return ListTile(
+                  title: Text('${Data['month']}月', textScaleFactor: 1.5),
+                  subtitle: Text('支出:${money}￥'),
+                  //   trailing: Image.asset(
+                  //        'D:/WORK/wechat/text-app/text_app/assets/telegram .png'),
+                );
+              },
+            )
+          : statistical(),
+      // : Column(children: _getListBill(30)),
+      // : ListView(children: _getListBill(30)),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
@@ -199,18 +202,157 @@ class _ExpensePageState extends State<ExpensePage> {
   }
 
   _getListBill(int width) {
-    List<Widget> widgets = [];
-    for (int i = 0; i < width; i++) {
-      widgets.add(GestureDetector(
-        child: Padding(
-          padding: EdgeInsets.all(20.0),
-          child: Text("消费 $i"),
-        ),
-        onTap: () {
-          print('他想看 $i');
-        },
-      ));
-    }
+    List<Widget> widgets = [
+      // ListTile(
+      //   title: Row(children: <Widget>[
+      //     Text('2021年12月', textScaleFactor: 1.5),
+      //     IconButton(
+      //       icon: Icon(Icons.keyboard_arrow_down),
+      //       onPressed: null,
+      //     ),
+      //   ]),
+      //   subtitle: Column(
+      //       crossAxisAlignment: CrossAxisAlignment.start,
+      //       children: <Widget>[
+      //         Text('支出 102 笔 合计'),
+      //         Text('￥12345', textScaleFactor: 1.5)
+      //       ]),
+      // ),
+      Center(
+          child: Padding(
+        padding: EdgeInsets.all(20),
+        child: MyLineChart(),
+      )),
+      // Card(
+      //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      //   color: Colors.red[300],
+      //   child: Column(
+      //       mainAxisSize: MainAxisSize.min,
+      //       crossAxisAlignment: CrossAxisAlignment.start,
+      //       children: <Widget>[
+      //         Text('  支出对比', textScaleFactor: 1.5),
+      //         // Image.asset('assets/home/icon_daily_report.png'),
+      //         MyLineChart(),
+      //         // Center(child: MyLineChart())
+      //       ]),
+      // )
+    ];
     return widgets;
+  }
+}
+
+class MyLineChart extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // 第一条线
+    List<FlSpot> spots1 = [
+      FlSpot(1, 1),
+      FlSpot(2, 1.5),
+      FlSpot(3, 1.4),
+      FlSpot(4, 3.4),
+      FlSpot(5, 2),
+      FlSpot(6, 1.8),
+      FlSpot(7, 1.8),
+      FlSpot(8, 1.8),
+      FlSpot(9, 1.8),
+      FlSpot(10, 1.8),
+      FlSpot(11, 1.8),
+      FlSpot(12, 2.2),
+      FlSpot(13, 1.8),
+    ];
+    return LineChart(
+      LineChartData(
+        borderData:
+            FlBorderData(border: Border(bottom: BorderSide(width: 1.0))),
+        // backgroundColor: Colors.red[100],
+        lineBarsData: [
+          LineChartBarData(
+            belowBarData: BarAreaData(
+                show: true, colors: [Color.fromRGBO(228, 242, 253, 1)]),
+            spots: spots1,
+            colors: [Color.fromRGBO(49, 127, 227, 100)],
+            preventCurveOverShooting: false,
+            isCurved: true,
+            barWidth: 3,
+            preventCurveOvershootingThreshold: 3.0,
+          ),
+        ],
+        gridData: FlGridData(
+          show: true,
+          drawVerticalLine: false,
+          getDrawingHorizontalLine: (value) {
+            return FlLine(
+              color: Colors.blue[100],
+              strokeWidth: 1,
+              dashArray: [20, 10],
+            );
+          },
+        ),
+        titlesData: FlTitlesData(
+          show: true,
+          rightTitles: SideTitles(showTitles: false),
+          leftTitles: SideTitles(showTitles: false),
+          topTitles: SideTitles(showTitles: false),
+        ),
+      ),
+    );
+  }
+}
+
+class statistical extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: <Widget>[
+      ListTile(
+        minVerticalPadding: 10.0,
+        title: Row(children: <Widget>[
+          Text('2021年12月', textScaleFactor: 1.5),
+          IconButton(
+            icon: Icon(Icons.keyboard_arrow_down),
+            onPressed: null,
+          ),
+        ]),
+        subtitle: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text('支出 102 笔 合计'),
+              Text('￥12345', textScaleFactor: 1.5)
+            ]),
+      ),
+      Card(
+          margin: EdgeInsets.fromLTRB(10, 0, 10, 20),
+          // shadowColor: Colors.yellow,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          // elevation: 10, // 阴影高度
+          child: Padding(
+              padding:
+                  EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
+              child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Padding(
+                      padding: EdgeInsets.only(
+                          left: 0, right: 0, top: 0, bottom: 10),
+                      child: Text('支出对比', textScaleFactor: 1.5),
+                    ),
+                    AspectRatio(
+                      aspectRatio: 2.2,
+                      child: MyLineChart(),
+                    )
+                  ]))),
+      Card(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('支出分类', textScaleFactor: 1.5),
+          ],
+        ),
+      )
+    ]);
   }
 }
