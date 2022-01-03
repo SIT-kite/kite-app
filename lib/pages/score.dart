@@ -39,7 +39,7 @@ class _ScorePageState extends State<ScorePage> {
           ]),
           child: _buildGpaBlock()),
       Container(
-        child: _buildListItem(),
+        child: _ListItem(),
       )
     ])));
   }
@@ -121,63 +121,88 @@ Widget _buildGpaBlock() {
 //       });
 // }
 
-Widget _buildListItem() {
-  return Container(
-      margin: const EdgeInsets.only(
-        left: 15,
-        right: 15,
-      ),
-      padding: const EdgeInsets.only(
-        bottom: 5,
-      ),
-      decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: Colors.blue, width: 1))),
-      child: Row(children: [
-        Expanded(
-          flex: 1,
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Container(
-              padding: const EdgeInsets.only(bottom: 5),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  border: Border(
-                      bottom:
-                          BorderSide(color: Colors.orange.shade300, width: 3))),
-              child: Text('Python程序设计基础',
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+class _ListItem extends StatefulWidget {
+  const _ListItem({Key? key}) : super(key: key);
+
+  @override
+  _ListItemState createState() => _ListItemState();
+}
+
+class _ListItemState extends State<_ListItem> {
+  bool isFolded = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+        onTap: () {
+          setState(() {
+            isFolded = !isFolded;
+          });
+        },
+        child: Container(
+            margin: const EdgeInsets.only(
+              top: 10,
+              left: 15,
+              right: 15,
             ),
-            Container(
-              margin: const EdgeInsets.only(top: 3),
-              child: Text('必修 | 学分: 2'),
+            padding: const EdgeInsets.only(
+              bottom: 5,
             ),
-            Container(
-              margin: const EdgeInsets.only(top: 5),
-              padding: const EdgeInsets.only(
-                left: 5,
+            decoration: const BoxDecoration(
+                border:
+                    Border(bottom: BorderSide(color: Colors.blue, width: 1))),
+            child: Row(children: [
+              Expanded(
+                flex: 1,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(
+                                    color: Colors.orange.shade300, width: 3))),
+                        child: Text('Python程序设计基础',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18)),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 3),
+                        child: Text('必修 | 学分: 2'),
+                      ),
+                      !isFolded
+                          ? Container(
+                              margin: const EdgeInsets.only(top: 5),
+                              padding: const EdgeInsets.only(
+                                left: 5,
+                              ),
+                              decoration: const BoxDecoration(
+                                  border: Border(
+                                      left: BorderSide(
+                                          color: Colors.blue, width: 3))),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('平时: 73 占比: 40%'),
+                                    Text('期中: 73 占比: 10%'),
+                                    Text('期末: 73 占比: 50%'),
+                                    Text('总评: 73 占比: 100%')
+                                  ]),
+                            )
+                          : Container(),
+                    ]),
               ),
-              decoration: const BoxDecoration(
-                  border:
-                      Border(left: BorderSide(color: Colors.blue, width: 3))),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('平时: 73 占比: 40%'),
-                    Text('期中: 73 占比: 10%'),
-                    Text('期末: 73 占比: 50%'),
-                    Text('总评: 73 占比: 100%')
-                  ]),
-            )
-          ]),
-        ),
-        Container(
-            margin: const EdgeInsets.only(left: 15),
-            child: Text('85',
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Colors.blue)))
-      ]));
+              Container(
+                  margin: const EdgeInsets.only(left: 15),
+                  child: Text('85',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.blue)))
+            ])));
+  }
 }
 
 String _getInitYearDropdownValue() {
