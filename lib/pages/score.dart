@@ -38,8 +38,9 @@ class _ScorePageState extends State<ScorePage> {
                 color: Color(0xFFd9d9d9), offset: Offset(0, 2), blurRadius: 1)
           ]),
           child: _buildGpaBlock()),
-      Container(
-        child: _ListItem(),
+      Expanded(
+        flex: 1,
+        child: _buildListView(),
       )
     ])));
   }
@@ -111,15 +112,18 @@ Widget _buildGpaBlock() {
       ]));
 }
 
-// Widget _buildListView() {
-//   return ListView.builder(
-//       shrinkWrap: true,
-//       itemCount: 10,
-//       itemExtent: 50.0, //强制高度为50.0
-//       itemBuilder: (BuildContext context, int index) {
-//         return Text("1");
-//       });
-// }
+Widget _buildListView() {
+  return ListView.separated(
+    shrinkWrap: true,
+    itemCount: 15,
+    itemBuilder: (BuildContext context, int index) {
+      return _ListItem();
+    },
+    separatorBuilder: (BuildContext context, int index) {
+      return index  == 0 || index == 3? Text('第一学期') : Container();
+    },
+  );
+}
 
 class _ListItem extends StatefulWidget {
   const _ListItem({Key? key}) : super(key: key);
