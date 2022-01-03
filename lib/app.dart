@@ -7,6 +7,7 @@ import 'package:kite/pages/expense.dart';
 import 'package:kite/pages/game.dart';
 import 'package:kite/pages/home.dart';
 import 'package:kite/pages/login.dart';
+import 'package:kite/pages/office.dart';
 import 'package:kite/pages/report.dart';
 import 'package:kite/pages/score.dart';
 import 'package:kite/pages/welcome.dart';
@@ -26,10 +27,11 @@ class KiteApp extends StatelessWidget {
       '/about': (context) => const AboutPage(),
       '/expense': (context) => ExpensePage(),
       '/connectivity': (context) => ConnectivityPage(),
-      '/campusCard': (context) => CampusCardPage(),
-      '/electricity': (context) => ElectricityPage(),
-      '/score': (context) => ScorePage(),
-      '/game': (context) => GamePage(),
+      '/campusCard': (context) => const CampusCardPage(),
+      '/electricity': (context) => const ElectricityPage(),
+      '/score': (context) => const ScorePage(),
+      '/office': (context) => const OfficePage(),
+      '/game': (context) => const GamePage(),
     };
 
     return MaterialApp(

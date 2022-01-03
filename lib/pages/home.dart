@@ -8,8 +8,7 @@ import 'home/item.dart';
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
 
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   void _onHomeRefresh() {
     _refreshController.refreshCompleted(resetFooterState: true);
@@ -20,8 +19,7 @@ class HomePage extends StatelessWidget {
   Widget buildTitleLine() {
     return const Align(
       alignment: Alignment.centerLeft,
-      child: Text('上应小风筝',
-          style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
+      child: Text('上应小风筝', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
     );
   }
 
@@ -29,15 +27,12 @@ class HomePage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: const [
-        ItemWidget('/dailyReport',
-            AssetImage('assets/home/icon_daily_report.png'), '体温上报'),
-        ItemWidget(
-            '/library', AssetImage('assets/home/icon_library.png'), '图书馆'),
-        ItemWidget(
-            '/expense', AssetImage('assets/home/icon_consumption.png'), '消费查询'),
+        ItemWidget('/dailyReport', AssetImage('assets/home/icon_daily_report.png'), '体温上报'),
+        ItemWidget('/library', AssetImage('assets/home/icon_library.png'), '图书馆'),
+        ItemWidget('/expense', AssetImage('assets/home/icon_consumption.png'), '消费查询'),
         SizedBox(height: 20.0),
-        ItemWidget('/dailyReport',
-            AssetImage('assets/home/icon_daily_report.png'), '体温上报'),
+        ItemWidget('/dailyReport', AssetImage('assets/home/icon_daily_report.png'), '体温上报'),
+        ItemWidget('/office', AssetImage('assets/home/icon_library.png'), '办公'),
         SizedBox(height: 20.0),
         ItemWidget('/game', AssetImage('assets/home/icon_library.png'), '小游戏'),
       ],
