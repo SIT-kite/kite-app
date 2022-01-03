@@ -12,7 +12,6 @@ dependencies:
   webview_flutter: ^3.0.0
   animations: ^2.0.2
   encrypt: ^5.0.1
-#  flutter_appcenter_bundle: ^3.3.2
   json_serializable: ^6.1.3
   beautiful_soup_dart: ^0.2.0
   dio: ^4.0.4
@@ -27,7 +26,6 @@ dependencies:
   enough_convert: ^1.4.0
   grouped_list: ^4.1.0
   flutter_svg: ^1.0.0
-  flutter_icmp_ping: ^3.0.2
   check_vpn_connection: ^0.0.2
   nfc_manager: ^3.1.0
   fl_chart: ^0.40.6

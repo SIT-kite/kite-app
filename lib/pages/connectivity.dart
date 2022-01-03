@@ -1,7 +1,6 @@
 import 'package:check_vpn_connection/check_vpn_connection.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icmp_ping/flutter_icmp_ping.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/services/network.dart';
 
