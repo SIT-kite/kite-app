@@ -23,13 +23,18 @@ class _ScorePageState extends State<ScorePage> {
     });
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: (SafeArea(
             child: Column(children: [
       Container(
-          margin: EdgeInsets.only(top: 10), child: _buildHeader(selectorInfo)),
-      _buildGpaBlock(),
+          margin: const EdgeInsets.only(top: 10),
+          child: _buildHeader(selectorInfo)),
+      Container(
+          margin: const EdgeInsets.only(top: 10),
+          decoration: BoxDecoration(boxShadow:[BoxShadow(color: Color(0xFFd9d9d9), offset: Offset(0, 2), blurRadius:1)]),
+          child: _buildGpaBlock()),
     ]))));
   }
 }
@@ -38,22 +43,22 @@ Widget _buildHeader(Map<String, Map<String, dynamic>> selectorInfo) {
   return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
     _buildSelectorBox(selectorInfo),
     Container(
-        margin: EdgeInsets.only(right: 20),
-        child: Icon(Icons.refresh, color: Colors.blue, size: 30))
+        margin: const EdgeInsets.only(right: 20),
+        child: const Icon(Icons.refresh, color: Colors.blue, size: 30))
   ]);
 }
 
 Widget _buildSelectorBox(Map<String, Map<String, dynamic>> selectorInfo) {
   return Row(children: [
     Container(
-      margin: EdgeInsets.only(left: 15),
+      margin: const EdgeInsets.only(left: 15),
       child: _buildSelector(
           selectorInfo['year']!['dropdownValue'],
           selectorInfo['year']!['items'],
           selectorInfo['year']!['setDropdownValue']),
     ),
     Container(
-      margin: EdgeInsets.only(left: 15),
+      margin: const EdgeInsets.only(left: 15),
       child: _buildSelector(
           selectorInfo['semester']!['dropdownValue'],
           selectorInfo['semester']!['items'],
@@ -89,8 +94,9 @@ Widget _buildSelector(
 
 Widget _buildGpaBlock() {
   return Container(
-      color: Colors.green,
-      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      padding: const EdgeInsets.all(10),
+      color: const Color(0xFFffe599),
+      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
         Text(
           '该学期绩点为 2.81, 努力总会有回报哒!',
         )
