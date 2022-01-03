@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:kite/storage/auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class DailyReportPage extends StatefulWidget {
@@ -10,41 +13,48 @@ class DailyReportPage extends StatefulWidget {
 }
 
 class _DailyReportPageState extends State<DailyReportPage> {
-  final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
+  final Completer<WebViewController> _controller = Completer<WebViewController>();
+
+  void _onRefresh() async {
+    var controller = await _controller.future;
+    await controller.reload();
+  }
+
+  Future<String> _queryLocalUser() async => AuthStorage(await SharedPreferences.getInstance()).username;
+
+  static Future<String> _getInjectionJs(String userName) async {
+    return (await rootBundle.loadString('assets/dailyReport/injection.js')).replaceFirst('{username}', userName);
+  }
+
+  void _onPageFinished(String url) async {
+    if (url != 'http://xgfy.sit.edu.cn/h5/#/') {
+      return;
+    }
+    final controller = await _controller.future;
+    final String user = await _queryLocalUser();
+    final String js = await _getInjectionJs(user);
+    controller.runJavascript(js);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('疫情上报'),
+        title: const Text('体温上报'),
         actions: [
-          ElevatedButton(
-            onPressed: () async {
-              var controller = await _controller.future;
-              await controller.reload();
-            },
-            child: const Icon(Icons.refresh),
-          )
+          IconButton(
+            onPressed: _onRefresh,
+            icon: const Icon(Icons.refresh),
+          ),
         ],
       ),
       body: WebView(
-        initialUrl: 'http://xgfy.sit.edu.cn/h5/#',
+        initialUrl: 'http://xgfy.sit.edu.cn/h5/#/pages/index/index',
         javascriptMode: JavascriptMode.unrestricted,
         onWebViewCreated: (WebViewController webViewController) {
           _controller.complete(webViewController);
         },
-        onProgress: (int progress) {
-          print("WebView is loading (progress : $progress%)");
-        },
-        onPageFinished: (String url) async {
-          print('OnPageFinished: $url');
-          var controller = await _controller.future;
-          controller.runJavascript(
-              r"document.querySelector('.flex-direction > uni-view:nth-child(1)').textContent='上海应用技术大学小风筝研发中心'");
-          controller.runJavascript(
-              r"document.querySelector('.flex-direction > uni-view:nth-child(2)').textContent='机协软件 联合开发'");
-        },
+        onPageFinished: _onPageFinished,
       ),
     );
   }
