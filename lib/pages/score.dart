@@ -26,22 +26,31 @@ class _ScorePageState extends State<ScorePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: (SafeArea(
+        body: SafeArea(
             child: Column(children: [
       Container(
           margin: const EdgeInsets.only(top: 10),
           child: _buildHeader(selectorInfo)),
       Container(
           margin: const EdgeInsets.only(top: 10),
-          decoration: BoxDecoration(boxShadow:[BoxShadow(color: Color(0xFFd9d9d9), offset: Offset(0, 2), blurRadius:1)]),
+          decoration: const BoxDecoration(boxShadow: [
+            BoxShadow(
+                color: Color(0xFFd9d9d9), offset: Offset(0, 2), blurRadius: 1)
+          ]),
           child: _buildGpaBlock()),
-    ]))));
+      Container(
+        child: _buildListItem(),
+      )
+    ])));
   }
 }
 
 Widget _buildHeader(Map<String, Map<String, dynamic>> selectorInfo) {
   return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-    _buildSelectorBox(selectorInfo),
+    Container(
+      margin: const EdgeInsets.only(left: 15),
+      child: _buildSelectorBox(selectorInfo),
+    ),
     Container(
         margin: const EdgeInsets.only(right: 20),
         child: const Icon(Icons.refresh, color: Colors.blue, size: 30))
@@ -51,7 +60,6 @@ Widget _buildHeader(Map<String, Map<String, dynamic>> selectorInfo) {
 Widget _buildSelectorBox(Map<String, Map<String, dynamic>> selectorInfo) {
   return Row(children: [
     Container(
-      margin: const EdgeInsets.only(left: 15),
       child: _buildSelector(
           selectorInfo['year']!['dropdownValue'],
           selectorInfo['year']!['items'],
@@ -100,6 +108,75 @@ Widget _buildGpaBlock() {
         Text(
           '该学期绩点为 2.81, 努力总会有回报哒!',
         )
+      ]));
+}
+
+// Widget _buildListView() {
+//   return ListView.builder(
+//       shrinkWrap: true,
+//       itemCount: 10,
+//       itemExtent: 50.0, //强制高度为50.0
+//       itemBuilder: (BuildContext context, int index) {
+//         return Text("1");
+//       });
+// }
+
+Widget _buildListItem() {
+  return Container(
+      margin: const EdgeInsets.only(
+        left: 15,
+        right: 15,
+      ),
+      padding: const EdgeInsets.only(
+        bottom: 5,
+      ),
+      decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: Colors.blue, width: 1))),
+      child: Row(children: [
+        Expanded(
+          flex: 1,
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Container(
+              padding: const EdgeInsets.only(bottom: 5),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  border: Border(
+                      bottom:
+                          BorderSide(color: Colors.orange.shade300, width: 3))),
+              child: Text('Python程序设计基础',
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 3),
+              child: Text('必修 | 学分: 2'),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 5),
+              padding: const EdgeInsets.only(
+                left: 5,
+              ),
+              decoration: const BoxDecoration(
+                  border:
+                      Border(left: BorderSide(color: Colors.blue, width: 3))),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('平时: 73 占比: 40%'),
+                    Text('期中: 73 占比: 10%'),
+                    Text('期末: 73 占比: 50%'),
+                    Text('总评: 73 占比: 100%')
+                  ]),
+            )
+          ]),
+        ),
+        Container(
+            margin: const EdgeInsets.only(left: 15),
+            child: Text('85',
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.blue)))
       ]));
 }
 
