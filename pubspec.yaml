@@ -14,6 +14,7 @@ dependencies:
   encrypt: ^5.0.1
   crypto: ^3.0.1
   json_serializable: ^6.1.3
+  json_annotation: ^4.4.0
   beautiful_soup_dart: ^0.2.0
   dio: ^4.0.4
   dio_cookie_manager: ^2.0.0
@@ -47,3 +48,11 @@ flutter:
     - assets/connectivity/
     - assets/campusCard/
     - assets/dailyReport/
+    - assets/fonts/
+
+  fonts:
+    # This iconfont file downloaded from ywb.sit.edu.cn
+    # which is imported for office module. So I named it office_iconfont.
+    - family: office_iconfont
+      fonts:
+        - asset: assets/fonts/office_iconfont.ttf

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kite/pages/office/apply.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kite/services/office/office.dart';
 import 'package:kite/storage/auth.dart';
@@ -14,6 +15,8 @@ class OfficePage extends StatefulWidget {
 
 class _OfficePageState extends State<OfficePage> {
   List<SimpleFunction> _functionList = [];
+  AuthStorage? user;
+  OfficeSession? session;
 
   Future<AuthStorage> _queryLocalCredential() async => AuthStorage(await SharedPreferences.getInstance());
 
@@ -22,15 +25,15 @@ class _OfficePageState extends State<OfficePage> {
     super.initState();
 
     Future.delayed(Duration.zero, () async {
-      final AuthStorage credential = await _queryLocalCredential();
+      user = await _queryLocalCredential();
 
-      if (credential.username != '') {
-        final OfficeSession? session = await login(credential.username, credential.password);
+      if (user != null && user!.username != '') {
+        session = await login(user!.username, user!.password);
         if (session == null) {
           return;
         }
 
-        selectFunctions(session).then(
+        selectFunctions(session!).then(
           (value) => setState(() {
             _functionList = value;
           }),
@@ -41,8 +44,15 @@ class _OfficePageState extends State<OfficePage> {
 
   Widget buildFunctionItem(SimpleFunction function) {
     return ListTile(
+      leading: SizedBox(height: 40, width: 40, child: Center(child: Icon(function.icon, size: 35))),
       title: Text(function.name),
       subtitle: Text(function.summary),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const ApplyPage('123')),
+        );
+      },
     );
   }
 
