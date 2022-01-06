@@ -58,7 +58,7 @@ class ScoreDetail {
   }
 }
 
-List<ScoreDetail> getScoreDetail(String htmlPage) {
+List<ScoreDetail> parseScoreDetail(String htmlPage) {
   final BeautifulSoup soup = BeautifulSoup(htmlPage);
   List<ScoreDetail> result = [];
   var scoreDetailList = soup.findAll(scoreDetailPage);
