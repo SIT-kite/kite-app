@@ -1,5 +1,59 @@
 import 'package:flutter/material.dart';
 
+const _semesterItems = ['第一学期', '第二学期', '整个学年'];
+var _items = [
+  _ListItem(item: {
+    'name': 'Python程序设计',
+    'isValued': true,
+    'score': 85,
+    'info': {
+      'required': true,
+      'credit': 2.5,
+    },
+    'detail': [
+      {
+        'category': 'normal',
+        'score': 99,
+        'percent': 80,
+      }
+    ]
+  }),
+  _ListItem(item: {
+    'name': 'Python程序设计',
+    'isValued': true,
+    'score': 85,
+    'info': {
+      'required': true,
+      'credit': 2.5,
+    },
+    'detail': [
+      {
+        'category': 'normal',
+        'score': 99,
+        'percent': 80,
+      }
+    ]
+  }),
+  _ListItem(item: {
+    'name': 'Python程序设计',
+    'isValued': true,
+    'score': 85,
+    'info': {
+      'required': true,
+      'credit': 2.5,
+    },
+    'detail': [
+      {
+        'category': 'normal',
+        'score': 99,
+        'percent': 80,
+      }
+    ]
+  })
+];
+enum _Mode { year, semester }
+
+
 class ScorePage extends StatefulWidget {
   const ScorePage({Key? key}) : super(key: key);
 
@@ -12,13 +66,16 @@ class _ScorePageState extends State<ScorePage> {
 
   @override
   _ScorePageState() {
-    selectorInfo = _getInitSelectorInfo((newValue) {
+    selectorInfo = _getInitSelectorInfo((_Mode mode, newValue) {
       setState(() {
-        selectorInfo['year']!['dropdownValue'] = newValue;
-      });
-    }, (newValue) {
-      setState(() {
-        selectorInfo['semester']!['dropdownValue'] = newValue;
+        switch (mode) {
+          case _Mode.year:
+            selectorInfo['year']!['dropdownValue'] = newValue;
+            break;
+          case _Mode.semester:
+            selectorInfo['semester']!['dropdownValue'] = newValue;
+            break;
+        }
       });
     });
   }
@@ -40,7 +97,7 @@ class _ScorePageState extends State<ScorePage> {
           child: _buildGpaBlock()),
       Expanded(
         flex: 1,
-        child: _buildListView(),
+        child: _buildListView(_items),
       )
     ])));
   }
@@ -62,6 +119,7 @@ Widget _buildSelectorBox(Map<String, Map<String, dynamic>> selectorInfo) {
   return Row(children: [
     Container(
       child: _buildSelector(
+          _Mode.year,
           selectorInfo['year']!['dropdownValue'],
           selectorInfo['year']!['items'],
           selectorInfo['year']!['setDropdownValue']),
@@ -69,6 +127,7 @@ Widget _buildSelectorBox(Map<String, Map<String, dynamic>> selectorInfo) {
     Container(
       margin: const EdgeInsets.only(left: 15),
       child: _buildSelector(
+          _Mode.semester,
           selectorInfo['semester']!['dropdownValue'],
           selectorInfo['semester']!['items'],
           selectorInfo['semester']!['setDropdownValue']),
@@ -77,7 +136,7 @@ Widget _buildSelectorBox(Map<String, Map<String, dynamic>> selectorInfo) {
 }
 
 Widget _buildSelector(
-    String dropdownValue, List<String> _items, setDropdownValue) {
+    _Mode mode, String dropdownValue, List<String> _items, setDropdownValue) {
   return DropdownButton<String>(
     value: dropdownValue,
     isDense: true,
@@ -90,7 +149,7 @@ Widget _buildSelector(
       color: Colors.blue,
     ),
     onChanged: (String? newValue) {
-      setDropdownValue(newValue);
+      setDropdownValue(mode, newValue);
     },
     items: _items.map<DropdownMenuItem<String>>((String value) {
       return DropdownMenuItem<String>(
@@ -112,27 +171,57 @@ Widget _buildGpaBlock() {
       ]));
 }
 
-Widget _buildListView() {
+Widget _buildListView(List<_ListItem> items) {
   return ListView.separated(
     shrinkWrap: true,
-    itemCount: 15,
+    itemCount: items.length,
     itemBuilder: (BuildContext context, int index) {
-      return _ListItem();
+      return items[index];
     },
     separatorBuilder: (BuildContext context, int index) {
-      return index  == 0 || index == 3? Text('第一学期') : Container();
+      return index == 0 || index == 3 ? Text('第一学期') : Container();
     },
   );
 }
 
 class _ListItem extends StatefulWidget {
-  const _ListItem({Key? key}) : super(key: key);
+  @override
+  _ListItem({Key? key, required Map<String, dynamic> item}) : super(key: key) {
+    name = item['name'];
+    score = item['score'];
+    isValued = item['isValued'];
+    info = item['info'];
+    detail = item['detail'];
+  }
+
+  String name = '';
+  bool isValued = true;
+  int score = 0;
+  Map<String, dynamic> info = {};
+  List<Map<String, dynamic>> detail = [];
 
   @override
-  _ListItemState createState() => _ListItemState();
+  _ListItemState createState() =>
+      _ListItemState(name, isValued, score, info, detail);
 }
 
 class _ListItemState extends State<_ListItem> {
+  @override
+  _ListItemState(String _name, bool _isValued, int _score,
+      Map<String, dynamic> _info, List<Map<String, dynamic>> _detail) {
+    name = _name;
+    isValued = _isValued;
+    score = _score;
+    info = _info;
+    detail = _detail;
+  }
+
+  String name = '';
+  bool isValued = true;
+  int score = 0;
+  Map<String, dynamic> info = {};
+  List<Map<String, dynamic>> detail = [];
+
   bool isFolded = true;
 
   @override
@@ -168,13 +257,14 @@ class _ListItemState extends State<_ListItem> {
                             border: Border(
                                 bottom: BorderSide(
                                     color: Colors.orange.shade300, width: 3))),
-                        child: Text('Python程序设计基础',
+                        child: Text(name == '' ? '( 空 )' : name,
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 18)),
                       ),
                       Container(
                         margin: const EdgeInsets.only(top: 3),
-                        child: Text('必修 | 学分: 2'),
+                        child: Text(
+                            '${info['required'] == true ? '必修' : '选修'} | 学分: ${info['credit']}'),
                       ),
                       !isFolded
                           ? Container(
@@ -188,19 +278,25 @@ class _ListItemState extends State<_ListItem> {
                                           color: Colors.blue, width: 3))),
                               child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('平时: 73 占比: 40%'),
-                                    Text('期中: 73 占比: 10%'),
-                                    Text('期末: 73 占比: 50%'),
-                                    Text('总评: 73 占比: 100%')
-                                  ]),
+                                  children: detail.map((item) {
+                                    if (item['category'] == 'normal')
+                                      return Text(
+                                          '平时: ${item['score']} 占比: ${item['percent']}%');
+                                    else if (item['category'] == 'midTerm')
+                                      return Text(
+                                          '期中: ${item['score']} 占比: ${item['percent']}%');
+                                    else if (item['category'] == 'endTerm')
+                                      return Text(
+                                          '期末: ${item['score']} 占比: ${item['percent']}%');
+                                    return Container();
+                                  }).toList()),
                             )
                           : Container(),
                     ]),
               ),
               Container(
                   margin: const EdgeInsets.only(left: 15),
-                  child: Text('85',
+                  child: Text('${isValued ? score : '待评教'}',
                       style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
@@ -209,34 +305,49 @@ class _ListItemState extends State<_ListItem> {
   }
 }
 
-String _getInitYearDropdownValue() {
-  return '2020 - 2021';
+String _getInitDropdownValue(_Mode mode) {
+  switch (mode) {
+    case _Mode.year:
+      {
+        return '2020 - 2021';
+      }
+
+    case _Mode.semester:
+      {
+        return '第一学期';
+      }
+  }
 }
 
-String _getInitSemesterDropdownValue() {
-  return '第一学期';
+List<String> _getInitYearItems(String studentId) {
+  final date = DateTime.now();
+  final nowMonth = date.month;
+  final nowYear = int.parse(date.year.toString().substring(2, 4));
+  final startYear = int.parse(studentId.toString().substring(0, 2));
+  final monthInterval = (nowYear - startYear) * 12 + nowMonth - 9;
+  const baseString = '20';
+  List<String> yearItems = [];
+
+  for (int i = 0, year = startYear;
+      i < (monthInterval / 12 + 1).toInt();
+      i++, year++) {
+    yearItems.add('$baseString$year - $baseString${year + 1}');
+  }
+
+  return yearItems;
 }
 
-List<String> _getInitYearItems() {
-  return ['2020 - 2021', '2021 - 2022'];
-}
-
-List<String> _getInitSemesterItems() {
-  return ['第一学期', '第二学期', '整个学年'];
-}
-
-Map<String, Map<String, dynamic>> _getInitSelectorInfo(
-    setYearDropdownValue, setSemesterDropdownValue) {
+Map<String, Map<String, dynamic>> _getInitSelectorInfo(setDropdownValue) {
   return {
     'year': {
-      'dropdownValue': _getInitYearDropdownValue(),
-      'items': _getInitYearItems(),
-      'setDropdownValue': setYearDropdownValue
+      'dropdownValue': _getInitDropdownValue(_Mode.year),
+      'items': _getInitYearItems('2010'),
+      'setDropdownValue': setDropdownValue
     },
     'semester': {
-      'dropdownValue': _getInitSemesterDropdownValue(),
-      'items': _getInitSemesterItems(),
-      'setDropdownValue': setSemesterDropdownValue
+      'dropdownValue': _getInitDropdownValue(_Mode.semester),
+      'items': _semesterItems,
+      'setDropdownValue': setDropdownValue
     }
   };
 }
