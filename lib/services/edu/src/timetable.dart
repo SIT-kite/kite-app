@@ -1,7 +1,7 @@
 import 'dart:core';
 
 import 'package:kite/services/edu/src/timetable_parser.dart';
-import 'package:kite/services/sso/src/session.dart';
+import 'package:kite/services/sso/sso.dart';
 
 enum Semester {
   all,
@@ -25,7 +25,7 @@ class TimetableService {
   static const _timeTableUrl =
       'http://jwxt.sit.edu.cn/jwglxt/kbcx/xskbcx_cxXsgrkb.html';
 
-  final Session _session;
+  final ISession _session;
 
   const TimetableService(this._session);
 
@@ -47,7 +47,8 @@ class TimetableService {
       _timeTableUrl,
       queryParameters: {
         'gnmkdm': 'N253508',
-        'su': _session.username!,
+        // 实测以下被注释的字段根本无用，又提高了耦合
+        // 'su': _session.username!,
       },
       data: {
         // 学年名

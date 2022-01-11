@@ -1,12 +1,12 @@
 import 'package:kite/services/edu/edu.dart';
 import 'package:kite/services/edu/src/score_detail_parser.dart';
-import 'package:kite/services/sso/src/session.dart';
+import 'package:kite/services/sso/sso.dart';
 
 class ScoreDetailService {
   static const _scoreDetailUrl =
       'http://jwxt.sit.edu.cn/jwglxt/cjcx/cjcx_cxCjxqGjh.html';
 
-  final Session _session;
+  final ISession _session;
 
   const ScoreDetailService(this._session);
 
@@ -29,7 +29,8 @@ class ScoreDetailService {
       _scoreDetailUrl,
       queryParameters: {
         'qnmkdm': 'N305005',
-        'su': _session.username!,
+        // 实测以下被注释的字段根本无用，又提高了耦合
+        // 'su': _session.username!,
       },
       data: {
         // 班级
