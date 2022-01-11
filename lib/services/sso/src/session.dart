@@ -115,12 +115,16 @@ class Session {
     // 首先获取AuthServer首页
     var html = await _getAuthServerHtml();
     // 获取首页验证码
-    var captchaImage = await _getCaptcha();
 
     var captcha = '';
     if (await _needCaptcha(username)) {
       // 识别验证码
-      captcha = await OcrServer.recognize(captchaImage);
+      // 一定要让识别到的字符串长度为4
+      // 如果不是4，那就再试一次
+      do {
+        var captchaImage = await _getCaptcha();
+        captcha = await OcrServer.recognize(captchaImage);
+      } while (captcha.length != 4);
     }
     // 获取casTicket
     var casTicket = _getCasTicketFromAuthHtml(html);
