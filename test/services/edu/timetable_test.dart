@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kite/services/edu/edu.dart';
+import 'package:kite/services/edu/src/edu_session.dart';
 import 'package:kite/services/sso/src/session.dart';
 import 'package:logger/logger.dart';
 
@@ -8,8 +9,8 @@ void main() {
   test('timetable test', () async {
     Session session = Session();
     await session.login('', '');
-    await session.get('http://jwxt.sit.edu.cn/sso/jziotlogin');
-    var table = await TimetableService(session).getTimetable(
+    var eduSession = EduSession(session);
+    var table = await TimetableService(eduSession).getTimetable(
       const SchoolYear(2021),
       Semester.firstTerm,
     );
