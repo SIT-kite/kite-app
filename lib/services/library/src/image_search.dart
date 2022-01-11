@@ -8,6 +8,7 @@ import 'book_search.dart';
 
 part 'image_search.g.dart';
 
+/// 本类提供了一系列，通过查询图书图片的方法，返回结果类型为字典，以ISBN为键
 @JsonSerializable()
 class BookImage {
   final String isbn;
