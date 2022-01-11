@@ -9,7 +9,7 @@ void main() {
     Session session = Session();
     await session.login('', '');
     await session.get('http://jwxt.sit.edu.cn/sso/jziotlogin');
-    var table = await Timetable(session).getTimetable(
+    var table = await TimetableService(session).getTimetable(
       const SchoolYear(2021),
       Semester.firstTerm,
     );

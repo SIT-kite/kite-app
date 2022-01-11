@@ -21,13 +21,13 @@ class SchoolYear {
   }
 }
 
-class Timetable {
+class TimetableService {
   static const _timeTableUrl =
       'http://jwxt.sit.edu.cn/jwglxt/kbcx/xskbcx_cxXsgrkb.html';
 
   final Session _session;
 
-  const Timetable(this._session);
+  const TimetableService(this._session);
 
   static String _semesterToRequestField(Semester semester) {
     return {
