@@ -11,12 +11,22 @@ class EduSession implements ISession {
     Map<String, String>? queryParameters,
     ResponseType? responseType,
   }) async {
-    // TODO: 应当在此处判断教务是否需要cookie
-    return await _session.get(
-      url,
-      queryParameters: queryParameters,
-      responseType: responseType,
-    );
+    Future<Response> fetch() async {
+      return await _session.get(
+        url,
+        queryParameters: queryParameters,
+        responseType: responseType,
+      );
+    }
+
+    var response = await fetch();
+    // 如果返回值是登陆页面，那就从sso跳转过来
+    if (!_isEduLoginPage(response)) {
+      return response;
+    }
+    await _getCookie(response);
+    // 再一次发请求
+    return await fetch();
   }
 
   @override
@@ -26,12 +36,31 @@ class EduSession implements ISession {
     data,
     ResponseType? responseType,
   }) async {
-    // TODO: 应当在此处判断教务是否需要cookie
-    return await _session.post(
-      url,
-      queryParameters: queryParameters,
-      data: data,
-      responseType: responseType,
-    );
+    Future<Response> fetch() async {
+      return await _session.post(
+        url,
+        queryParameters: queryParameters,
+        data: data,
+        responseType: responseType,
+      );
+    }
+
+    var response = await fetch();
+    // 如果返回值是登陆页面，那就从sso跳转过来
+    if (!_isEduLoginPage(response)) {
+      return response;
+    }
+    await _getCookie(response);
+    // 再一次发请求
+    return await fetch();
+  }
+
+  Future<void> _getCookie(Response response) async {
+    await _session.get('http://jwxt.sit.edu.cn/sso/jziotlogin');
+  }
+
+  bool _isEduLoginPage(Response response) {
+    return response.data.runtimeType == String &&
+        (response.data as String).contains('用户登录');
   }
 }
