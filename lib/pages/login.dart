@@ -24,8 +24,7 @@ class _LoginPageState extends State<LoginPage> {
 
   GlobalKey _formKey = GlobalKey<FormState>();
 
-  final TapGestureRecognizer _recognizer = TapGestureRecognizer()
-    ..onTap = onOpenUserLicense;
+  final TapGestureRecognizer _recognizer = TapGestureRecognizer()..onTap = onOpenUserLicense;
 
   // State
   bool isPasswordClear = false;
@@ -34,8 +33,7 @@ class _LoginPageState extends State<LoginPage> {
   static String? _usernameValidator(String? username) {
     if (username != null && username.isNotEmpty) {
       // When user complete his input, check it.
-      if (((username.length == 9 || username.length == 10) &&
-              !reStudentId.hasMatch(username)) ||
+      if (((username.length == 9 || username.length == 10) && !reStudentId.hasMatch(username)) ||
           username.length > 10) {
         return '学号格式不正确';
       }
@@ -58,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
     var auth = AuthStorage(prefs);
     auth.username = _usernameController.text;
     auth.password = _passwordController.text;
-    Navigator.pushNamed(context, '/home');
+    Navigator.pushReplacementNamed(context, '/home');
   }
 
   @override
@@ -86,8 +84,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget buildTitleLine() {
     return Container(
         alignment: Alignment.centerLeft,
-        child: const Text('欢迎登录',
-            style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)));
+        child: const Text('欢迎登录', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)));
   }
 
   Widget buildLoginForm() {
@@ -99,10 +96,7 @@ class _LoginPageState extends State<LoginPage> {
             TextFormField(
               controller: _usernameController,
               autofocus: true,
-              decoration: const InputDecoration(
-                  labelText: '学号',
-                  hintText: '输入你的学号',
-                  icon: Icon(Icons.person)),
+              decoration: const InputDecoration(labelText: '学号', hintText: '输入你的学号', icon: Icon(Icons.person)),
               validator: _usernameValidator,
             ),
             TextFormField(
@@ -111,9 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                 obscureText: !isPasswordClear,
                 decoration: InputDecoration(
                     suffixIcon: IconButton(
-                      icon: Icon(isPasswordClear
-                          ? Icons.visibility_off
-                          : Icons.visibility),
+                      icon: Icon(isPasswordClear ? Icons.visibility_off : Icons.visibility),
                       onPressed: () {
                         setState(() {
                           isPasswordClear = !isPasswordClear;
@@ -128,49 +120,40 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget buildUserLicenseCheckbox() {
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Checkbox(
-              value: isLicenseAccepted,
-              onChanged: (_isLicenseAccepted) {
-                setState(() {
-                  isLicenseAccepted = _isLicenseAccepted!;
-                });
-              }),
-          Text.rich(TextSpan(children: [
-            const TextSpan(text: '我已阅读并同意'),
-            TextSpan(
-                text: '《上应小风筝用户协议》',
-                style: const TextStyle(color: Colors.blue),
-                recognizer: _recognizer),
-          ]))
-        ]);
+    return Row(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: [
+      Checkbox(
+          value: isLicenseAccepted,
+          onChanged: (_isLicenseAccepted) {
+            setState(() {
+              isLicenseAccepted = _isLicenseAccepted!;
+            });
+          }),
+      Text.rich(TextSpan(children: [
+        const TextSpan(text: '我已阅读并同意'),
+        TextSpan(text: '《上应小风筝用户协议》', style: const TextStyle(color: Colors.blue), recognizer: _recognizer),
+      ]))
+    ]);
   }
 
   Widget buildLoginButton() {
-    return Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 40,
-            child: ElevatedButton(
-              onPressed: onLogin,
-              child: const Text('进入风筝元宇宙'),
-            ),
+    return Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.start, children: [
+      SizedBox(
+        height: 40,
+        child: ElevatedButton(
+          onPressed: onLogin,
+          child: const Text('进入风筝元宇宙'),
+        ),
+      ),
+      TextButton(
+          child: const Text(
+            '忘记密码?',
+            style: TextStyle(color: Colors.grey),
           ),
-          TextButton(
-              child: const Text(
-                '忘记密码?',
-                style: TextStyle(color: Colors.grey),
-              ),
-              onPressed: () {
-                _launchInBrowser(
-                    'https://authserver.sit.edu.cn/authserver/getBackPasswordMainPage.do?service=https%3A%2F%2Fmyportal.sit.edu.cn%3A443%2F');
-              })
-        ]);
+          onPressed: () {
+            _launchInBrowser(
+                'https://authserver.sit.edu.cn/authserver/getBackPasswordMainPage.do?service=https%3A%2F%2Fmyportal.sit.edu.cn%3A443%2F');
+          })
+    ]);
   }
 
   @override

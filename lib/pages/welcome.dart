@@ -7,8 +7,7 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const textStyle =
-        TextStyle(color: Colors.white, fontWeight: FontWeight.normal);
+    const textStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.normal);
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
 
@@ -19,9 +18,7 @@ class WelcomePage extends StatelessWidget {
           SizedBox(
               width: screenWidth,
               height: screenHeight,
-              child: const Image(
-                  image: AssetImage("assets/welcome/background.jpg"),
-                  fit: BoxFit.cover)),
+              child: const Image(image: AssetImage("assets/welcome/background.jpg"), fit: BoxFit.cover)),
           // Transparent layer.
           Container(color: Colors.black.withOpacity(0.6)),
           // Front weights. Texts and buttons are on the left bottom of the screen.
@@ -37,9 +34,7 @@ class WelcomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Title
-                Text('上应小风筝',
-                    style: textStyle.copyWith(
-                        fontWeight: FontWeight.bold, fontSize: 35)),
+                Text('上应小风筝', style: textStyle.copyWith(fontWeight: FontWeight.bold, fontSize: 35)),
                 // Subtitle
                 Text('便利校园，一步到位', style: textStyle.copyWith(fontSize: 25)),
                 // Space
@@ -55,13 +50,11 @@ class WelcomePage extends StatelessWidget {
                     ),
                     child: Text('登录', style: textStyle.copyWith(fontSize: 20)),
                     onPressed: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => LoginPage()));
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginPage()));
                     }),
                 // Text button
                 TextButton(
-                    style: TextButton.styleFrom(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0)),
+                    style: TextButton.styleFrom(padding: const EdgeInsets.fromLTRB(0, 10, 0, 0)),
                     child: const Text('我们为什么转做 App', style: textStyle),
                     onPressed: () {})
               ],
