@@ -13,6 +13,7 @@ dependencies:
   webview_flutter: ^3.0.0
   url_launcher: ^6.0.17
   flutter_markdown: ^0.6.9
+  flutter_widget_from_html_core: ^0.8.4
 
   # UI
   animations: ^2.0.2
@@ -48,7 +49,6 @@ dependencies:
   flutter_bugly: ^0.4.3
   flutter_phoenix: ^1.0.0
   catcher: ^0.6.9
-  flutter_widget_from_html_core: ^0.8.4
 
 dev_dependencies:
   flutter_test:
