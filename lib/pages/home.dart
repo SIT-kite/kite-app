@@ -88,7 +88,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(40, 30, 40, 0),
+          padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
           child: SmartRefresher(
             enablePullDown: true,
             enablePullUp: false,

@@ -65,6 +65,7 @@ flutter:
     - assets/campusCard/
     - assets/dailyReport/
     - assets/fonts/
+    - assets/weather/
 
   fonts:
     # This iconfont file downloaded from ywb.sit.edu.cn
