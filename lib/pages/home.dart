@@ -1,4 +1,7 @@
+import 'package:flash/src/flash_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:kite/pages/home/drawer.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -51,76 +54,33 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget buildDrawer(BuildContext context) {
-    return Drawer(
-        child: ListView(padding: EdgeInsets.zero, children: [
-      const DrawerHeader(
-        decoration: BoxDecoration(color: Colors.blue),
-        child: Text('用户信息区域'),
-      ),
-      ListTile(
-        title: const Text('主题'),
-        onTap: () {
-          Navigator.pop(context);
-        },
-      ),
-      ListTile(
-        title: const Text('设置'),
-        onTap: () async {
-          (await SharedPreferences.getInstance()).clear();
-          Navigator.pop(context);
-        },
-      ),
-      ListTile(
-        title: const Text('网络工具'),
-        onTap: () {
-          Navigator.pop(context);
-          Navigator.of(context).pushNamed('/connectivity');
-        },
-      ),
-      ListTile(
-        title: const Text('校园卡工具'),
-        onTap: () {
-          Navigator.pop(context);
-          Navigator.of(context).pushNamed('/campusCard');
-        },
-      ),
-      ListTile(
-        title: const Text('关于'),
-        onTap: () {
-          Navigator.pop(context);
-          Navigator.of(context).pushNamed('/about');
-        },
-      ),
-    ]));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
-          child: SmartRefresher(
-            enablePullDown: true,
-            enablePullUp: false,
-            controller: _refreshController,
+        child: SmartRefresher(
+          enablePullDown: true,
+          enablePullUp: false,
+          controller: _refreshController,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
             child: SingleChildScrollView(
-                child: Column(
-              children: [
-                buildTitleLine(context),
-                const SizedBox(height: 20.0),
-                GreetingWidget(),
-                const SizedBox(height: 20.0),
-                buildFunctions(),
-              ],
-            )),
-            onRefresh: _onHomeRefresh,
+              child: Column(
+                children: [
+                  buildTitleLine(context),
+                  const SizedBox(height: 20.0),
+                  GreetingWidget(),
+                  const SizedBox(height: 20.0),
+                  buildFunctions(),
+                ],
+              ),
+            ),
           ),
+          onRefresh: _onHomeRefresh,
         ),
       ),
-      drawer: buildDrawer(context),
+      drawer: const KiteDrawer(),
     );
   }
 }
