@@ -23,6 +23,8 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   int campus = 1;
   late Weather currentWeather;
 
+  final textStyle = const TextStyle(color: Colors.black54, fontSize: 20);
+
   @override
   void initState() {
     super.initState();
@@ -48,7 +50,13 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   }
 
   Widget _buildWeatherIcon(String iconCode) {
-    return SvgPicture.asset('assets/weather/$iconCode.svg', fit: BoxFit.fill);
+    return TextButton(
+        onPressed: () => setState(
+              () {
+                campus = campus == 1 ? 2 : 1;
+              },
+            ),
+        child: SvgPicture.asset('assets/weather/$iconCode.svg', width: 60, height: 60, fit: BoxFit.fill));
   }
 
   Widget buildAll(BuildContext context) {
@@ -58,12 +66,11 @@ class _GreetingWidgetState extends State<GreetingWidget> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('上午好，'),
-            Text('今天是你在上应大的第 $studyDays 天，'),
-            Text('${_getCampusName()} ${currentWeather.weather}， ${currentWeather.temperature} °C')
+            Text('今天是你在上应大的第 $studyDays 天，', style: textStyle),
+            Text('${_getCampusName()}${currentWeather.weather}，${currentWeather.temperature} °C', style: textStyle)
           ],
         ),
-        SizedBox(width: 60, height: 60, child: _buildWeatherIcon(currentWeather.icon)),
+        SizedBox(child: _buildWeatherIcon(currentWeather.icon)),
       ],
     );
   }
