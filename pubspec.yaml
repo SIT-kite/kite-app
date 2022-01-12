@@ -48,6 +48,7 @@ dependencies:
   flutter_bugly: ^0.4.3
   flutter_phoenix: ^1.0.0
   catcher: ^0.6.9
+  flutter_widget_from_html_core: ^0.8.4
 
 dev_dependencies:
   flutter_test:

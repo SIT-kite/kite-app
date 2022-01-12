@@ -4,6 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kite/services/office/office.dart';
 import 'package:kite/storage/auth.dart';
 
+import 'office/detail.dart';
+
 const String functionMainPage = 'https://xgfy.sit.edu.cn/unifri-flow/WF/MyFlow.htm?ismobile=1&out=1&FK_Flow=123';
 
 class OfficePage extends StatefulWidget {
@@ -50,7 +52,7 @@ class _OfficePageState extends State<OfficePage> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => const ApplyPage('123')),
+          MaterialPageRoute(builder: (_) => DetailPage(session!, function)),
         );
       },
     );
