@@ -6,7 +6,22 @@ import 'package:kite/storage/auth.dart';
 
 import 'office/detail.dart';
 
-const String functionMainPage = 'https://xgfy.sit.edu.cn/unifri-flow/WF/MyFlow.htm?ismobile=1&out=1&FK_Flow=123';
+// 本科生常用功能列表
+final Set<String> commonUse = <String>{
+  '121',
+  '011',
+  '047',
+  '123',
+  '124',
+  '024',
+  '125',
+  '165',
+  '075',
+  '202',
+  '023',
+  '067',
+  '059'
+};
 
 class OfficePage extends StatefulWidget {
   const OfficePage({Key? key}) : super(key: key);
@@ -19,6 +34,8 @@ class _OfficePageState extends State<OfficePage> {
   List<SimpleFunction> _functionList = [];
   AuthStorage? user;
   OfficeSession? session;
+
+  bool enableFilter = true;
 
   Future<AuthStorage> _queryLocalCredential() async => AuthStorage(await SharedPreferences.getInstance());
 
@@ -44,7 +61,7 @@ class _OfficePageState extends State<OfficePage> {
     });
   }
 
-  Widget buildNotice() {
+  Widget _buildNotice() {
     return Container(
       alignment: Alignment.center,
       child: const Text(
@@ -70,19 +87,54 @@ class _OfficePageState extends State<OfficePage> {
     );
   }
 
-  Widget buildFunctionList() {
+  Widget _buildFunctionList() {
     return ListView(
-      children: _functionList.map(buildFunctionItem).toList(),
+      children: _functionList
+          .where((element) => commonUse.contains(element.id) || !enableFilter)
+          .map(buildFunctionItem)
+          .toList(),
+    );
+  }
+
+  PopupMenuButton _buildMenuButton(BuildContext context) {
+    return PopupMenuButton(
+      itemBuilder: (BuildContext context) {
+        return [
+          PopupMenuItem(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Checkbox(
+                  value: enableFilter,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      enableFilter = value ?? true;
+                    });
+                  },
+                ),
+                const Text('过滤不常用功能')
+              ],
+            ),
+          ),
+        ];
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('办公')),
+      appBar: AppBar(
+        title: const Text('办公'),
+        actions: [_buildMenuButton(context)],
+      ),
       body: SafeArea(
-        child:
-            Column(children: [Expanded(child: buildNotice(), flex: 1), Expanded(child: buildFunctionList(), flex: 10)]),
+        child: Column(
+          children: [
+            Expanded(child: _buildNotice(), flex: 1),
+            Expanded(child: _buildFunctionList(), flex: 10),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
