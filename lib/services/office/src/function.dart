@@ -91,7 +91,7 @@ Future<FunctionDetail> getFunctionDetail(OfficeSession session, String functionI
         'timestamp': timestamp,
         'signature': sign(timestamp),
       }));
-  final Map<String, dynamic> data = jsonDecode(response.data);
+  final Map<String, dynamic> data = response.data;
   final List<FunctionDetailSection> sections =
       (data['value'] as List<dynamic>).map((e) => FunctionDetailSection.fromJson(e)).toList();
 
