@@ -1,57 +1,65 @@
 import 'package:flutter/material.dart';
+// import 'package:flutter_svg/svg.dart';
 
 const _semesterItems = ['第一学期', '第二学期', '整个学年'];
-var _items = [
-  _ListItem(item: {
-    'name': 'Python程序设计',
-    'isValued': true,
-    'score': 85,
-    'info': {
-      'required': true,
-      'credit': 2.5,
-    },
-    'detail': [
-      {
-        'category': 'normal',
-        'score': 99,
-        'percent': 80,
-      }
-    ]
-  }),
-  _ListItem(item: {
-    'name': 'Python程序设计',
-    'isValued': true,
-    'score': 85,
-    'info': {
-      'required': true,
-      'credit': 2.5,
-    },
-    'detail': [
-      {
-        'category': 'normal',
-        'score': 99,
-        'percent': 80,
-      }
-    ]
-  }),
-  _ListItem(item: {
-    'name': 'Python程序设计',
-    'isValued': true,
-    'score': 85,
-    'info': {
-      'required': true,
-      'credit': 2.5,
-    },
-    'detail': [
-      {
-        'category': 'normal',
-        'score': 99,
-        'percent': 80,
-      }
-    ]
-  })
-];
 enum _Mode { year, semester }
+
+List<Map<String, dynamic>> _items = [
+  {
+    'name': 'Python程序设计',
+    'id': 'G123',
+    'isValued': true,
+    'score': 90,
+    'info': {
+      'semester': 1,
+      'required': true,
+      'credit': 2.5,
+    },
+    'detail': [
+      {
+        'category': 'normal',
+        'score': 99,
+        'percent': 80,
+      }
+    ]
+  },
+  {
+    'name': 'Python程序设计',
+    'id': 'G123',
+    'isValued': true,
+    'score': 85,
+    'info': {
+      'semester': 1,
+      'required': true,
+      'credit': 2.5,
+    },
+    'detail': [
+      {
+        'category': 'normal',
+        'score': 99,
+        'percent': 80,
+      }
+    ]
+  },
+  {
+    'name': 'Python程序设计',
+    'id': 'h123',
+    'isValued': true,
+    'score': 85,
+    'info': {
+      'semester': 1,
+      'required': true,
+      'credit': 2.5,
+    },
+    'detail': [
+      {
+        'category': 'normal',
+        'score': 99,
+        'percent': 80,
+      }
+    ]
+  },
+];
 
 
 class ScorePage extends StatefulWidget {
@@ -63,21 +71,39 @@ class ScorePage extends StatefulWidget {
 
 class _ScorePageState extends State<ScorePage> {
   Map<String, Map<String, dynamic>> selectorInfo = {};
+  _Mode mode = _Mode.year;
 
   @override
   _ScorePageState() {
-    selectorInfo = _getInitSelectorInfo((_Mode mode, newValue) {
+    selectorInfo = _getInitSelectorInfo((_Mode _mode, newValue) {
       setState(() {
-        switch (mode) {
+        switch (_mode) {
           case _Mode.year:
             selectorInfo['year']!['dropdownValue'] = newValue;
             break;
           case _Mode.semester:
-            selectorInfo['semester']!['dropdownValue'] = newValue;
-            break;
+            {
+              selectorInfo['semester']!['dropdownValue'] = newValue;
+              switch (newValue) {
+                case '第一学期':
+                case '第二学期': mode = _Mode.semester; break;
+                case '整个学年': mode = _Mode.year; break;
+              }
+              break;
+            }
         }
       });
     });
+
+    switch (selectorInfo['semester']!['dropdownValue']) {
+      case '第一学期':
+      case '第二学期':
+        mode = _Mode.semester;
+        break;
+      case '整个学年':
+        mode = _Mode.year;
+        break;
+    }
   }
 
   @override
@@ -94,11 +120,12 @@ class _ScorePageState extends State<ScorePage> {
             BoxShadow(
                 color: Color(0xFFd9d9d9), offset: Offset(0, 2), blurRadius: 1)
           ]),
-          child: _buildGpaBlock()),
+          child: _buildGpaBlock(mode)),
       Expanded(
         flex: 1,
-        child: _buildListView(_items),
-      )
+        child: _buildListView(_getListItems(mode)),
+      ),
+      // _buildNotFound()
     ])));
   }
 }
@@ -111,34 +138,27 @@ Widget _buildHeader(Map<String, Map<String, dynamic>> selectorInfo) {
     ),
     Container(
         margin: const EdgeInsets.only(right: 20),
-        child: const Icon(Icons.refresh, color: Colors.blue, size: 30))
+        child: GestureDetector(
+            onTap: () {},
+            child: Icon(Icons.refresh, color: Colors.blue, size: 30)))
   ]);
 }
 
 Widget _buildSelectorBox(Map<String, Map<String, dynamic>> selectorInfo) {
   return Row(children: [
     Container(
-      child: _buildSelector(
-          _Mode.year,
-          selectorInfo['year']!['dropdownValue'],
-          selectorInfo['year']!['items'],
-          selectorInfo['year']!['setDropdownValue']),
+      child: _buildSelector(_Mode.year, selectorInfo['year']!),
     ),
     Container(
       margin: const EdgeInsets.only(left: 15),
-      child: _buildSelector(
-          _Mode.semester,
-          selectorInfo['semester']!['dropdownValue'],
-          selectorInfo['semester']!['items'],
-          selectorInfo['semester']!['setDropdownValue']),
+      child: _buildSelector(_Mode.semester, selectorInfo['semester']!),
     )
   ]);
 }
 
-Widget _buildSelector(
-    _Mode mode, String dropdownValue, List<String> _items, setDropdownValue) {
+Widget _buildSelector(_Mode mode, Map<String, dynamic> info) {
   return DropdownButton<String>(
-    value: dropdownValue,
+    value: info['dropdownValue'],
     isDense: true,
     icon: const Icon(Icons.keyboard_arrow_down_outlined),
     style: const TextStyle(
@@ -149,9 +169,9 @@ Widget _buildSelector(
       color: Colors.blue,
     ),
     onChanged: (String? newValue) {
-      setDropdownValue(mode, newValue);
+      info['setDropdownValue'](mode, newValue);
     },
-    items: _items.map<DropdownMenuItem<String>>((String value) {
+    items: info['items'].map<DropdownMenuItem<String>>((String value) {
       return DropdownMenuItem<String>(
         value: value,
         child: Text(value),
@@ -160,34 +180,50 @@ Widget _buildSelector(
   );
 }
 
-Widget _buildGpaBlock() {
+Widget _buildGpaBlock(_Mode mode) {
   return Container(
       padding: const EdgeInsets.all(10),
       color: const Color(0xFFffe599),
-      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
+      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         Text(
-          '该学期绩点为 2.81, 努力总会有回报哒!',
+          '该学期绩点为 ${_getGpa(mode)}, 努力总会有回报哒!',
         )
       ]));
 }
 
-Widget _buildListView(List<_ListItem> items) {
-  return ListView.separated(
+Widget _buildListView(List<Widget> listItems) {
+  return ListView.builder(
     shrinkWrap: true,
-    itemCount: items.length,
+    itemCount: listItems.length,
     itemBuilder: (BuildContext context, int index) {
-      return items[index];
-    },
-    separatorBuilder: (BuildContext context, int index) {
-      return index == 0 || index == 3 ? Text('第一学期') : Container();
+      return listItems[index];
     },
   );
+}
+
+Widget _buildListSeparator(String content) {
+  return Container(
+      margin: const EdgeInsets.only(
+        top: 15,
+        left: 15,
+        right: 15,
+      ),
+      decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: Colors.grey, width: 3))),
+      child: Container(
+          margin: const EdgeInsets.only(bottom: 5),
+          child: Text(content,
+              style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue))));
 }
 
 class _ListItem extends StatefulWidget {
   @override
   _ListItem({Key? key, required Map<String, dynamic> item}) : super(key: key) {
     name = item['name'];
+    id = item['id'];
     score = item['score'];
     isValued = item['isValued'];
     info = item['info'];
@@ -195,6 +231,7 @@ class _ListItem extends StatefulWidget {
   }
 
   String name = '';
+  String id = '';
   bool isValued = true;
   int score = 0;
   Map<String, dynamic> info = {};
@@ -202,14 +239,15 @@ class _ListItem extends StatefulWidget {
 
   @override
   _ListItemState createState() =>
-      _ListItemState(name, isValued, score, info, detail);
+      _ListItemState(name, id, isValued, score, info, detail);
 }
 
 class _ListItemState extends State<_ListItem> {
   @override
-  _ListItemState(String _name, bool _isValued, int _score,
+  _ListItemState(String _name, String _id, bool _isValued, int _score,
       Map<String, dynamic> _info, List<Map<String, dynamic>> _detail) {
     name = _name;
+    id = _id;
     isValued = _isValued;
     score = _score;
     info = _info;
@@ -217,6 +255,7 @@ class _ListItemState extends State<_ListItem> {
   }
 
   String name = '';
+  String id = '';
   bool isValued = true;
   int score = 0;
   Map<String, dynamic> info = {};
@@ -305,6 +344,21 @@ class _ListItemState extends State<_ListItem> {
   }
 }
 
+// Widget _buildNotFound() {
+//   return Column(
+//     children: [
+//       _notFoundPicture,
+//       Text('暂时还没有成绩哦!'),
+//       Text('如果成绩刚刚出炉，可点击右上角刷新按钮尝试刷新~'),
+//     ]
+//   );
+// }
+
+// Widget _notFoundPicture = SvgPicture.asset(
+//     'assets/score/not-found.svg',
+//       width: 260, height: 260,
+// );
+
 String _getInitDropdownValue(_Mode mode) {
   switch (mode) {
     case _Mode.year:
@@ -350,4 +404,43 @@ Map<String, Map<String, dynamic>> _getInitSelectorInfo(setDropdownValue) {
       'setDropdownValue': setDropdownValue
     }
   };
+}
+
+double _getGpa(_Mode mode) {
+  List<Map<String, dynamic>> courseList = [];
+  double totalCredits = 0.0;
+  double t = 0.0;
+
+  switch (mode) {
+    case _Mode.semester:
+      courseList.addAll(_items);
+      break;
+    case _Mode.year:
+      courseList.addAll(_items);
+      courseList.addAll(_items);
+      break;
+  }
+  courseList.forEach((course) {
+    if (course['id'][0] == 'G' && course['isValued'] == true) {
+      t += course['info']['credit'] * course['score'];
+      totalCredits += course['info']['credit'];
+    }
+  });
+  double result = (t / totalCredits / 10.0) - 5.0;
+  return result.isNaN ? 0.0 : result;
+}
+
+List<Widget> _getListItems(_Mode mode) {
+  List<Widget> listItems = [];
+  switch (mode) {
+    case _Mode.semester:
+      listItems.addAll(_items.map((_item) => _ListItem(item: _item)));
+      break;
+    case _Mode.year:
+      listItems.add(_buildListSeparator('第一学期'));
+      listItems.addAll(_items.map((_item) => _ListItem(item: _item)));
+      listItems.add(_buildListSeparator('第二学期'));
+      listItems.addAll(_items.map((_item) => _ListItem(item: _item)));
+  }
+  return listItems;
 }
