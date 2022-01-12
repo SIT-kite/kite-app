@@ -28,7 +28,7 @@ class ScoreDetailService {
     var response = await _session.post(
       _scoreDetailUrl,
       queryParameters: {
-        'qnmkdm': 'N305005',
+        'gnmkdm': 'N305005',
         // 实测以下被注释的字段根本无用，又提高了耦合
         // 'su': _session.username!,
       },
