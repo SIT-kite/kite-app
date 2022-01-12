@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:kite/services/sso/sso.dart';
 
 class EduSession implements ISession {
-  final Session _session;
+  final ISession _session;
   const EduSession(this._session);
 
   @override
