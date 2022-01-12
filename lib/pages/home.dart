@@ -8,6 +8,7 @@ import 'home/item.dart';
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   void _onHomeRefresh() {
@@ -16,10 +17,21 @@ class HomePage extends StatelessWidget {
     // TODO: Signal all functions to refresh.
   }
 
-  Widget buildTitleLine() {
-    return const Align(
+  Widget buildTitleLine(BuildContext context) {
+    return Align(
       alignment: Alignment.centerLeft,
-      child: Text('上应小风筝', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
+      child: Row(
+        children: [
+          IconButton(
+            iconSize: 35,
+            icon: const Icon(Icons.menu_outlined),
+            onPressed: () {
+              _scaffoldKey.currentState?.openDrawer();
+            },
+          ),
+          const Text('上应小风筝', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold))
+        ],
+      ),
     );
   }
 
@@ -86,6 +98,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
@@ -96,7 +109,7 @@ class HomePage extends StatelessWidget {
             child: SingleChildScrollView(
                 child: Column(
               children: [
-                buildTitleLine(),
+                buildTitleLine(context),
                 const SizedBox(height: 20.0),
                 GreetingWidget(),
                 const SizedBox(height: 20.0),
