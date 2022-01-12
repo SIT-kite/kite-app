@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/services/myportal.dart';
 import 'package:kite/services/sso/sso.dart';
 import 'package:kite/storage/auth.dart';
+import 'package:kite/utils/url_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:kite/utils/flash_utils.dart';
@@ -67,16 +68,6 @@ class _LoginPageState extends State<LoginPage> {
       _usernameController.text = auth.username;
       _passwordController.text = auth.password;
     });
-  }
-
-  Future<void> _launchInBrowser(String url) async {
-    if (!await launch(
-      url,
-      forceSafariVC: false,
-      forceWebView: false,
-    )) {
-      throw 'Could not launch $url';
-    }
   }
 
   static void onOpenUserLicense() {}
@@ -150,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
             style: TextStyle(color: Colors.grey),
           ),
           onPressed: () {
-            _launchInBrowser(
+            launchInBrowser(
                 'https://authserver.sit.edu.cn/authserver/getBackPasswordMainPage.do?service=https%3A%2F%2Fmyportal.sit.edu.cn%3A443%2F');
           })
     ]);
