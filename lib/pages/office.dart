@@ -44,6 +44,18 @@ class _OfficePageState extends State<OfficePage> {
     });
   }
 
+  Widget buildNotice() {
+    return Container(
+      alignment: Alignment.center,
+      child: const Text(
+        '本模块及子模块的内容来源于 "上应一网通办"。\n'
+        '对于绝大多数业务，您在平台完成申请后，仍然要去现场办理。',
+        overflow: TextOverflow.visible,
+      ),
+      padding: const EdgeInsets.all(15),
+    );
+  }
+
   Widget buildFunctionItem(SimpleFunction function) {
     return ListTile(
       leading: SizedBox(height: 40, width: 40, child: Center(child: Icon(function.icon, size: 35))),
@@ -68,7 +80,10 @@ class _OfficePageState extends State<OfficePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('办公')),
-      body: SafeArea(child: buildFunctionList()),
+      body: SafeArea(
+        child:
+            Column(children: [Expanded(child: buildNotice(), flex: 1), Expanded(child: buildFunctionList(), flex: 10)]),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         tooltip: '我的消息',
