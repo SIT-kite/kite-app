@@ -1,7 +1,7 @@
 import 'dart:core';
 
 import 'package:kite/services/edu/src/timetable_parser.dart';
-import 'package:kite/services/sso/sso.dart';
+import 'package:kite/services/session_interface.dart';
 
 enum Semester {
   all,

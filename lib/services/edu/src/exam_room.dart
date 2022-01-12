@@ -1,6 +1,6 @@
 import 'package:kite/services/edu/edu.dart';
 import 'package:kite/services/edu/src/exam_room_parser.dart';
-import 'package:kite/services/sso/sso.dart';
+import 'package:kite/services/session_interface.dart';
 
 class ExamRoomService {
   static const _examRoomUrl =

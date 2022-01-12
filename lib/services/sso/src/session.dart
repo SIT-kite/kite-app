@@ -9,7 +9,7 @@ import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:dio_log/dio_log.dart';
 import 'package:kite/services/ocr.dart';
-import 'package:kite/services/sso/src/session_interface.dart';
+import 'package:kite/services/session_interface.dart';
 
 import './encrypt_util.dart';
 import './utils.dart';

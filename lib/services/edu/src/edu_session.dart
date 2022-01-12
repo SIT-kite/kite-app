@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:kite/services/sso/sso.dart';
+import 'package:kite/services/session_interface.dart';
 
 class EduSession implements ISession {
   final ISession _session;

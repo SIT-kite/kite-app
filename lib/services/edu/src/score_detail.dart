@@ -1,6 +1,6 @@
 import 'package:kite/services/edu/edu.dart';
 import 'package:kite/services/edu/src/score_detail_parser.dart';
-import 'package:kite/services/sso/sso.dart';
+import 'package:kite/services/session_interface.dart';
 
 class ScoreDetailService {
   static const _scoreDetailUrl =
