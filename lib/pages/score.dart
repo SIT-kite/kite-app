@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/svg.dart';
 
 const _semesterItems = ['第一学期', '第二学期', '整个学年'];
 enum _Mode { year, semester }
@@ -114,18 +114,20 @@ class _ScorePageState extends State<ScorePage> {
       Container(
           margin: const EdgeInsets.only(top: 10),
           child: _buildHeader(selectorInfo)),
+      _items.length !=0?
       Container(
           margin: const EdgeInsets.only(top: 10),
           decoration: const BoxDecoration(boxShadow: [
             BoxShadow(
                 color: Color(0xFFd9d9d9), offset: Offset(0, 2), blurRadius: 1)
           ]),
-          child: _buildGpaBlock(mode)),
+          child: _buildGpaBlock(mode)) : Container(),
+      _items.length !=0?
       Expanded(
         flex: 1,
         child: _buildListView(_getListItems(mode)),
-      ),
-      // _buildNotFound()
+      ) : Container(),
+      _items.length !=0? Container() : _buildNotFound()
     ])));
   }
 }
@@ -344,20 +346,20 @@ class _ListItemState extends State<_ListItem> {
   }
 }
 
-// Widget _buildNotFound() {
-//   return Column(
-//     children: [
-//       _notFoundPicture,
-//       Text('暂时还没有成绩哦!'),
-//       Text('如果成绩刚刚出炉，可点击右上角刷新按钮尝试刷新~'),
-//     ]
-//   );
-// }
+Widget _buildNotFound() {
+  return Column(
+    children: [
+      Container(child: _notFoundPicture,),
+      const Text('暂时还没有成绩哦!', style: TextStyle(color: Colors.grey)),
+      Container(margin: EdgeInsets.only(left:40, right:40),child: const Text('如果成绩刚刚出炉，可点击右上角刷新按钮尝试刷新~',textAlign: TextAlign.center,style: TextStyle(color: Colors.grey)),)
+    ]
+  );
+}
 
-// Widget _notFoundPicture = SvgPicture.asset(
-//     'assets/score/not-found.svg',
-//       width: 260, height: 260,
-// );
+Widget _notFoundPicture = SvgPicture.asset(
+    'assets/score/not-found.svg',
+      width: 260, height: 260,
+);
 
 String _getInitDropdownValue(_Mode mode) {
   switch (mode) {
