@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
 
 const List<Color> _GRADIENTCOLORS = [
   Color(0xff23b6e6),
@@ -80,10 +80,11 @@ class _ElectricityPageState extends State<ElectricityPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('电费余额查询'),
-      ) ,
-        body: SafeArea(child:Container(
+        appBar: AppBar(
+          title: const Text('电费余额查询'),
+        ),
+        body: SafeArea(
+            child: Container(
           color: Colors.grey[200],
           child: Column(children: [
             Container(
@@ -92,8 +93,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
             ),
             Container(
               margin: const EdgeInsets.only(left: 80, right: 80),
-              child: _buildButtonBox(
-                  '查询余额', const Color(0xFF2e62cd), '查询使用情况', const Color(0xFFf08c00)),
+              child: _buildButtonBox('查询余额', const Color(0xFF2e62cd), '查询使用情况', const Color(0xFFf08c00)),
             ),
             Container(
               width: double.infinity,
@@ -112,15 +112,15 @@ class _ElectricityPageState extends State<ElectricityPage> {
                 !showDays
                     ? {'minX': 0, 'maxX': 24}
                     : {
-                  'minX': 0,
-                  'maxX': 7,
-                },
+                        'minX': 0,
+                        'maxX': 7,
+                      },
                 !showDays
                     ? {'minY': 0, 'maxY': 6}
                     : {
-                  'minY': 0,
-                  'maxY': 4.5,
-                },
+                        'minY': 0,
+                        'maxY': 4.5,
+                      },
                 1,
                 !showDays ? 3 : 1),
           ]),
@@ -147,8 +147,7 @@ Widget _buildTextInputBox(hintText1, hintText2) {
   return SizedBox(
     width: 300,
     height: 60,
-    child:
-        Row(children: [_buildTextInput(hintText1), _buildTextInput(hintText2)]),
+    child: Row(children: [_buildTextInput(hintText1), _buildTextInput(hintText2)]),
   );
 }
 
@@ -160,8 +159,7 @@ Widget _buildButton(String label, Color color) {
   );
 }
 
-Widget _buildButtonBox(
-    String label1, Color color1, String label2, Color color2) {
+Widget _buildButtonBox(String label1, Color color1, String label2, Color color2) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
@@ -194,8 +192,7 @@ Widget _buildTextBlock(context) {
             },
 
             // Change button text when light changes state.
-            child: Text('数据不一致?',
-                style: TextStyle(color: Colors.grey[400], fontSize: 12)),
+            child: Text('数据不一致?', style: TextStyle(color: Colors.grey[400], fontSize: 12)),
           )
         ]),
         Text('房间号:'),
@@ -203,31 +200,23 @@ Widget _buildTextBlock(context) {
         Text('剩余电量:'),
         Container(
             margin: const EdgeInsets.only(top: 5),
-            child: Text('更新时间:',
-                style: TextStyle(color: Colors.grey.shade500, fontSize: 12))),
+            child: Text('更新时间:', style: TextStyle(color: Colors.grey.shade500, fontSize: 12))),
       ]));
 }
 
-Widget _buildChartBlock(
-    switchChart,
-    bool showDays,
-    List<String> bottomTitles,
-    List<FlSpot> axisYData,
-    Map<String, double> xConstrains,
-    Map<String, double> yConstrains,
-    double leftInterval,
-    double bottomInterval) {
+Widget _buildChartBlock(switchChart, bool showDays, List<String> bottomTitles, List<FlSpot> axisYData,
+    Map<String, double> xConstrains, Map<String, double> yConstrains, double leftInterval, double bottomInterval) {
   return Stack(
     children: <Widget>[
       AspectRatio(
         aspectRatio: 1.70,
         child: Container(
-          decoration: const BoxDecoration(color: Colors.white,),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+          ),
           child: Padding(
-            padding: const EdgeInsets.only(
-                right: 22.0, left: 2.0, top: 30, bottom: 2),
-            child: _buildLineChart(bottomTitles, axisYData, xConstrains,
-                yConstrains, leftInterval, bottomInterval),
+            padding: const EdgeInsets.only(right: 22.0, left: 2.0, top: 30, bottom: 2),
+            child: _buildLineChart(bottomTitles, axisYData, xConstrains, yConstrains, leftInterval, bottomInterval),
           ),
         ),
       ),
@@ -240,9 +229,7 @@ Widget _buildChartBlock(
               child: Row(children: [
                 Text(
                   '过去一天',
-                  style: TextStyle(
-                      fontSize: 12,
-                      color: showDays ? Colors.grey : Colors.blue),
+                  style: TextStyle(fontSize: 12, color: showDays ? Colors.grey : Colors.blue),
                 ),
                 const Text(
                   ' / ',
@@ -250,9 +237,7 @@ Widget _buildChartBlock(
                 ),
                 Text(
                   '过去一周',
-                  style: TextStyle(
-                      fontSize: 12,
-                      color: showDays ? Colors.blue : Colors.grey),
+                  style: TextStyle(fontSize: 12, color: showDays ? Colors.blue : Colors.grey),
                 )
               ]),
             ),
@@ -261,16 +246,11 @@ Widget _buildChartBlock(
   );
 }
 
-LineChart _buildLineChart(
-    List<String> bottomTitles,
-    List<FlSpot> axisYData,
-    Map<String, double> xConstrains,
-    Map<String, double> yConstrains,
-    double leftInterval,
-    double bottomInterval) {
+LineChart _buildLineChart(List<String> bottomTitles, List<FlSpot> axisYData, Map<String, double> xConstrains,
+    Map<String, double> yConstrains, double leftInterval, double bottomInterval) {
   return LineChart(LineChartData(
-    lineTouchData: LineTouchData(touchTooltipData:
-        LineTouchTooltipData(getTooltipItems: (List<LineBarSpot> touchedSpots) {
+    lineTouchData:
+        LineTouchData(touchTooltipData: LineTouchTooltipData(getTooltipItems: (List<LineBarSpot> touchedSpots) {
       return touchedSpots.map((LineBarSpot touchedSpot) {
         final textStyle = TextStyle(
           color: touchedSpot.bar.colors[0],
@@ -304,11 +284,9 @@ LineChart _buildLineChart(
         showTitles: true,
         reservedSize: 22,
         interval: bottomInterval,
-        getTextStyles: (context, value) => const TextStyle(
-            color: Color(0xff68737d),
-            fontWeight: FontWeight.bold,
-            fontSize: 14),
-        getTitles: (value) => bottomTitles.length == 8 && value.toInt() > 7? '' : bottomTitles[value.toInt()],
+        getTextStyles: (context, value) =>
+            const TextStyle(color: Color(0xff68737d), fontWeight: FontWeight.bold, fontSize: 14),
+        getTitles: (value) => bottomTitles.length == 8 && value.toInt() > 7 ? '' : bottomTitles[value.toInt()],
         margin: 8,
       ),
       leftTitles: SideTitles(
@@ -324,9 +302,7 @@ LineChart _buildLineChart(
         margin: 12,
       ),
     ),
-    borderData: FlBorderData(
-        show: true,
-        border: Border.all(color: const Color(0xff37434d), width: 1)),
+    borderData: FlBorderData(show: true, border: Border.all(color: const Color(0xff37434d), width: 1)),
     minX: xConstrains['minX'],
     maxX: xConstrains['maxX'],
     minY: yConstrains['minY'],
@@ -343,8 +319,7 @@ LineChart _buildLineChart(
         ),
         belowBarData: BarAreaData(
           show: true,
-          colors:
-              _GRADIENTCOLORS.map((color) => color.withOpacity(0.3)).toList(),
+          colors: _GRADIENTCOLORS.map((color) => color.withOpacity(0.3)).toList(),
         ),
       ),
     ],
@@ -372,30 +347,25 @@ Future<void> _showInfo(context, String _content) async {
   );
 }
 
-void _initHoursAxisYData(
-    List<Map<String, dynamic>> hoursData, List<FlSpot> hoursAxisYData) {
+void _initHoursAxisYData(List<Map<String, dynamic>> hoursData, List<FlSpot> hoursAxisYData) {
   for (int i = 0; i < hoursData.length; i++) {
-    hoursAxisYData
-        .add((FlSpot(i.toDouble(), hoursData[i]['consumption'] / 0.15)));
+    hoursAxisYData.add((FlSpot(i.toDouble(), hoursData[i]['consumption'] / 0.15)));
   }
 }
 
-void _initDaysAxisYData(
-    List<Map<String, dynamic>> daysData, List<FlSpot> daysAxisYData) {
+void _initDaysAxisYData(List<Map<String, dynamic>> daysData, List<FlSpot> daysAxisYData) {
   for (int i = 0; i < daysData.length; i++) {
     daysAxisYData.add((FlSpot(i.toDouble(), daysData[i]['consumption'])));
   }
 }
 
-void _initHoursBottomTitles(
-    List<Map<String, dynamic>> hoursData, List<String> hoursBottomTitles) {
+void _initHoursBottomTitles(List<Map<String, dynamic>> hoursData, List<String> hoursBottomTitles) {
   for (int i = 0; i < hoursData.length; i++) {
     hoursBottomTitles.add(hoursData[i]['time'].substring(11));
   }
 }
 
-void _initDaysBottomTitles(
-    List<Map<String, dynamic>> daysData, List<String> daysBottomTitles) {
+void _initDaysBottomTitles(List<Map<String, dynamic>> daysData, List<String> daysBottomTitles) {
   for (int i = 0; i < daysData.length; i++) {
     daysBottomTitles.add(daysData[i]['date'].substring(5));
   }

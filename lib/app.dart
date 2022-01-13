@@ -21,7 +21,7 @@ class KiteApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final routes = {
       '/home': (context) => HomePage(),
-      '/dailyReport': (context) => const DailyReportPage(),
+      '/report': (context) => const DailyReportPage(),
       '/login': (context) => const LoginPage(),
       '/welcome': (context) => const WelcomePage(),
       '/about': (context) => const AboutPage(),

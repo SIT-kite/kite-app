@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kite/storage/auth.dart';
@@ -23,7 +24,7 @@ class _DailyReportPageState extends State<DailyReportPage> {
   Future<String> _queryLocalUser() async => AuthStorage(await SharedPreferences.getInstance()).username;
 
   static Future<String> _getInjectionJs(String userName) async {
-    return (await rootBundle.loadString('assets/dailyReport/injection.js')).replaceFirst('{username}', userName);
+    return (await rootBundle.loadString('assets/report/injection.js')).replaceFirst('{username}', userName);
   }
 
   void _onPageFinished(String url) async {

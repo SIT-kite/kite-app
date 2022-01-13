@@ -1,11 +1,8 @@
-import 'package:flash/src/flash_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:kite/pages/home/drawer.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import 'home/gretting.dart';
+import 'home/greeting.dart';
 import 'home/item.dart';
 
 class HomePage extends StatelessWidget {
@@ -42,11 +39,11 @@ class HomePage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: const [
-        ItemWidget('/dailyReport', AssetImage('assets/home/icon_daily_report.png'), '体温上报'),
+        ItemWidget('/report', AssetImage('assets/home/icon_daily_report.png'), '体温上报'),
         ItemWidget('/library', AssetImage('assets/home/icon_library.png'), '图书馆'),
         ItemWidget('/expense', AssetImage('assets/home/icon_consumption.png'), '消费查询'),
         SizedBox(height: 20.0),
-        ItemWidget('/dailyReport', AssetImage('assets/home/icon_daily_report.png'), '体温上报'),
+        ItemWidget('/report', AssetImage('assets/home/icon_daily_report.png'), '体温上报'),
         ItemWidget('/office', AssetImage('assets/home/icon_library.png'), '办公'),
         SizedBox(height: 20.0),
         ItemWidget('/game', AssetImage('assets/home/icon_library.png'), '小游戏'),

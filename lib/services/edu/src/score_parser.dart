@@ -32,8 +32,6 @@ class Score {
 
   factory Score.fromJson(Map<String, dynamic> json) => _$ScoreFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ScoreToJson(this);
-
   @override
   String toString() {
     return 'Score{score: $score, course: $course, courseId: $courseId, classId: $classId, schoolYear: $schoolYear, semester: $semester, credit: $credit}';

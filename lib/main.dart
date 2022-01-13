@@ -20,11 +20,11 @@ void main() async {
         );
       });
     } else {
-      // 桌面端不使用Bugly
+      // 桌面端不使用 Bugly
       runApp(Phoenix(child: const KiteApp()));
     }
   } on Error catch (_, e) {
-    // Web端不支持判定平台，也不使用Bugly
+    // Web端不支持判定平台，也不使用 Bugly
     runApp(Phoenix(child: const KiteApp()));
   }
 }

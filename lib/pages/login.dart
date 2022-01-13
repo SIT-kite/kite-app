@@ -1,12 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/services/myportal.dart';
-import 'package:kite/services/sso/sso.dart';
 import 'package:kite/storage/auth.dart';
+import 'package:kite/utils/flash_utils.dart';
 import 'package:kite/utils/url_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:kite/utils/flash_utils.dart';
 
 // Rule of student id.
 RegExp reStudentId = RegExp(r'^((\d{9})|(\d{6}[YGHE\d]\d{3}))$');

@@ -1,107 +1,23 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
-import 'package:fl_chart/fl_chart.dart';
 
 ///测试数据
 List data = [
-  {
-    'place': '食堂',
-    'label': 'canteen',
-    'money': 100,
-    'time': '2021/12/28',
-    'month': '12'
-  },
-  {
-    'place': '商店',
-    'label': 'store',
-    'money': 90,
-    'time': '2021/12/27',
-    'month': '12'
-  },
-  {
-    'place': '商店',
-    'label': 'store',
-    'money': 90,
-    'time': '2021/12/27',
-    'month': '12'
-  },
-  {
-    'place': '商店',
-    'label': 'store',
-    'money': 90,
-    'time': '2021/12/27',
-    'month': '12'
-  },
-  {
-    'place': '商店',
-    'label': 'store',
-    'money': 90,
-    'time': '2021/11/27',
-    'month': '11'
-  },
-  {
-    'place': '商店',
-    'label': 'store',
-    'money': 90,
-    'time': '2021/11/27',
-    'month': '11'
-  },
-  {
-    'place': '商店',
-    'label': 'store',
-    'money': 90,
-    'time': '2021/11/27',
-    'month': '11'
-  },
-  {
-    'place': '食堂',
-    'label': 'canteen',
-    'money': 100,
-    'time': '2021/10/28',
-    'month': '10'
-  },
-  {
-    'place': '食堂',
-    'label': 'canteen',
-    'money': 100,
-    'time': '2021/10/28',
-    'month': '10'
-  },
-  {
-    'place': '食堂',
-    'label': 'canteen',
-    'money': 100,
-    'time': '2021/9/28',
-    'month': '9'
-  },
-  {
-    'place': '食堂',
-    'label': 'canteen',
-    'money': 100,
-    'time': '2021/9/28',
-    'month': '9'
-  },
-  {
-    'place': '食堂',
-    'label': 'canteen',
-    'money': 100,
-    'time': '2021/9/28',
-    'month': '9'
-  },
-  {
-    'place': '食堂',
-    'label': 'canteen',
-    'money': 100,
-    'time': '2021/8/28',
-    'month': '8'
-  },
-  {
-    'place': '食堂',
-    'label': 'canteen',
-    'money': 100,
-    'time': '2021/8/28',
-    'month': '8'
-  },
+  {'place': '食堂', 'label': 'canteen', 'money': 100, 'time': '2021/12/28', 'month': '12'},
+  {'place': '商店', 'label': 'store', 'money': 90, 'time': '2021/12/27', 'month': '12'},
+  {'place': '商店', 'label': 'store', 'money': 90, 'time': '2021/12/27', 'month': '12'},
+  {'place': '商店', 'label': 'store', 'money': 90, 'time': '2021/12/27', 'month': '12'},
+  {'place': '商店', 'label': 'store', 'money': 90, 'time': '2021/11/27', 'month': '11'},
+  {'place': '商店', 'label': 'store', 'money': 90, 'time': '2021/11/27', 'month': '11'},
+  {'place': '商店', 'label': 'store', 'money': 90, 'time': '2021/11/27', 'month': '11'},
+  {'place': '食堂', 'label': 'canteen', 'money': 100, 'time': '2021/10/28', 'month': '10'},
+  {'place': '食堂', 'label': 'canteen', 'money': 100, 'time': '2021/10/28', 'month': '10'},
+  {'place': '食堂', 'label': 'canteen', 'money': 100, 'time': '2021/9/28', 'month': '9'},
+  {'place': '食堂', 'label': 'canteen', 'money': 100, 'time': '2021/9/28', 'month': '9'},
+  {'place': '食堂', 'label': 'canteen', 'money': 100, 'time': '2021/9/28', 'month': '9'},
+  {'place': '食堂', 'label': 'canteen', 'money': 100, 'time': '2021/8/28', 'month': '8'},
+  {'place': '食堂', 'label': 'canteen', 'money': 100, 'time': '2021/8/28', 'month': '8'},
 ];
 
 class ExpensePage extends StatefulWidget {
@@ -148,24 +64,18 @@ class _ExpensePageState extends State<ExpensePage> {
                 var place = element["place"];
                 var money = element["money"];
                 var time = element["time"];
-                var icon = element["label"] == 'canteen'
-                    ? Icon(Icons.food_bank_outlined)
-                    : Icon(Icons.storefront);
+                var icon = element["label"] == 'canteen' ? Icon(Icons.food_bank_outlined) : Icon(Icons.storefront);
                 return ListTile(
                   leading: icon,
                   title: Text('$place'),
                   trailing: Text('-$money', textScaleFactor: 1.5),
-                  subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[Text('$time')]),
+                  subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[Text('$time')]),
                 );
               },
               groupHeaderBuilder: (Data) {
                 num money = 0;
                 data.forEach((value) {
-                  value['month'] == Data['month']
-                      ? money += value['money']
-                      : '';
+                  value['month'] == Data['month'] ? money += value['money'] : '';
                 });
                 return ListTile(
                   title: Text('${Data['month']}月', textScaleFactor: 1.5),
@@ -262,13 +172,11 @@ class MyLineChart extends StatelessWidget {
     ];
     return LineChart(
       LineChartData(
-        borderData:
-            FlBorderData(border: Border(bottom: BorderSide(width: 1.0))),
+        borderData: FlBorderData(border: Border(bottom: BorderSide(width: 1.0))),
         // backgroundColor: Colors.red[100],
         lineBarsData: [
           LineChartBarData(
-            belowBarData: BarAreaData(
-                show: true, colors: [Color.fromRGBO(228, 242, 253, 1)]),
+            belowBarData: BarAreaData(show: true, colors: [Color.fromRGBO(228, 242, 253, 1)]),
             spots: spots1,
             colors: [Color.fromRGBO(49, 127, 227, 100)],
             preventCurveOverShooting: false,
@@ -315,10 +223,7 @@ class statistical extends StatelessWidget {
         subtitle: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text('支出 102 笔 合计'),
-              Text('￥12345', textScaleFactor: 1.5)
-            ]),
+            children: <Widget>[Text('支出 102 笔 合计'), Text('￥12345', textScaleFactor: 1.5)]),
       ),
       Card(
           margin: EdgeInsets.fromLTRB(10, 0, 10, 20),
@@ -328,15 +233,13 @@ class statistical extends StatelessWidget {
           ),
           // elevation: 10, // 阴影高度
           child: Padding(
-              padding:
-                  EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
+              padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
               child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     const Padding(
-                      padding: EdgeInsets.only(
-                          left: 0, right: 0, top: 0, bottom: 10),
+                      padding: EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 10),
                       child: Text('支出对比', textScaleFactor: 1.5),
                     ),
                     AspectRatio(

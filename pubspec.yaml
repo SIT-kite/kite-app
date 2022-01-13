@@ -63,8 +63,8 @@ flutter:
     - assets/home/
     - assets/welcome/
     - assets/connectivity/
-    - assets/campusCard/
-    - assets/dailyReport/
+    - assets/campus_card/
+    - assets/report/
     - assets/fonts/
     - assets/weather/
 

@@ -126,7 +126,7 @@ class _CampusCardPageState extends State<CampusCardPage> {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 40.0),
-          Image(image: AssetImage('assets/campusCard/illustration.png'), height: 300, width: 300),
+          Image(image: AssetImage('assets/campus_card/illustration.png'), height: 300, width: 300),
         ],
       ),
     );

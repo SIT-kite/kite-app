@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/services/weather.dart';
@@ -12,7 +11,7 @@ int _calcStudyDays(int entranceYear) {
 }
 
 class GreetingWidget extends StatefulWidget {
-  GreetingWidget({Key? key}) : super(key: key);
+  const GreetingWidget({Key? key}) : super(key: key);
 
   @override
   _GreetingWidgetState createState() => _GreetingWidgetState();

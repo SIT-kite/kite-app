@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kite/services/office/office.dart';
+
 import 'signature.dart';
 
 part 'message.g.dart';
