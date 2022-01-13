@@ -11,6 +11,7 @@ import 'package:kite/pages/office.dart';
 import 'package:kite/pages/report.dart';
 import 'package:kite/pages/score.dart';
 import 'package:kite/pages/welcome.dart';
+import 'package:kite/pages/wiki.dart';
 import 'package:kite/storage/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -32,6 +33,7 @@ class KiteApp extends StatelessWidget {
       '/score': (context) => const ScorePage(),
       '/office': (context) => const OfficePage(),
       '/game': (context) => const GamePage(),
+      '/wiki': (context) => const WikiPage(),
     };
 
     return MaterialApp(

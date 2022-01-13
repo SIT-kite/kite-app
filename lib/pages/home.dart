@@ -47,6 +47,7 @@ class HomePage extends StatelessWidget {
         ItemWidget('/office', AssetImage('assets/home/icon_library.png'), '办公'),
         SizedBox(height: 20.0),
         ItemWidget('/game', AssetImage('assets/home/icon_library.png'), '小游戏'),
+        ItemWidget('/wiki', AssetImage('assets/home/icon_library.png'), 'Wiki'),
       ],
     );
   }

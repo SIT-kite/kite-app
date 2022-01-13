@@ -67,6 +67,7 @@ flutter:
     - assets/report/
     - assets/fonts/
     - assets/weather/
+    - assets/wiki/
 
   fonts:
     # This iconfont file downloaded from ywb.sit.edu.cn
