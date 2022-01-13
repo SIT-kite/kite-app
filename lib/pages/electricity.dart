@@ -118,10 +118,10 @@ class _ElectricityPageState extends State<ElectricityPage> {
                         'maxX': 7,
                       },
                 !showDays
-                    ? {'minY': 0, 'maxY': 6}
+                    ? {'minY': 0, 'maxY': getMaxY(HOURSDATA)}
                     : {
                         'minY': 0,
-                        'maxY': 4.5,
+                        'maxY': getMaxY(DAYSDATA),
                       },
                 1,
                 !showDays ? 3 : 1),
@@ -219,7 +219,7 @@ Widget _buildChartBlock(
     Map<String, double> yConstrains,
     double leftInterval,
     double bottomInterval) {
-  return Stack(
+  return Column(
     children: <Widget>[
       AspectRatio(
         aspectRatio: 1.70,
@@ -228,39 +228,34 @@ Widget _buildChartBlock(
             color: Colors.white,
           ),
           child: Padding(
-            padding: const EdgeInsets.only(
-                right: 22.0, left: 2.0, top: 30, bottom: 2),
+            padding:
+                const EdgeInsets.only(right: 24, left: 24, top: 20, bottom: 0),
             child: _buildLineChart(bottomTitles, axisYData, xConstrains,
                 yConstrains, leftInterval, bottomInterval),
           ),
         ),
       ),
-      SizedBox(
-          width: null,
-          height: 34,
-          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            TextButton(
-              onPressed: switchChart,
-              child: Row(children: [
-                Text(
-                  '过去一天',
-                  style: TextStyle(
-                      fontSize: 12,
-                      color: showDays ? Colors.grey : Colors.blue),
-                ),
-                const Text(
-                  ' / ',
-                  style: TextStyle(fontSize: 12, color: Colors.white),
-                ),
-                Text(
-                  '过去一周',
-                  style: TextStyle(
-                      fontSize: 12,
-                      color: showDays ? Colors.blue : Colors.grey),
-                )
-              ]),
+      Container(color:Colors.white, child:Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        TextButton(
+          onPressed: switchChart,
+          child: Row(children: [
+            Text(
+              '过去一天',
+              style: TextStyle(
+                  fontSize: 20, color: showDays ? Colors.grey : Colors.blue),
             ),
-          ])),
+            const Text(
+              ' / ',
+              style: TextStyle(fontSize: 20, color: Colors.black),
+            ),
+            Text(
+              '过去一周',
+              style: TextStyle(
+                  fontSize: 20, color: showDays ? Colors.blue : Colors.grey),
+            )
+          ]),
+        ),
+      ]),)
     ],
   );
 }
@@ -306,7 +301,7 @@ LineChart _buildLineChart(
       topTitles: SideTitles(showTitles: false),
       bottomTitles: SideTitles(
         showTitles: true,
-        reservedSize: 22,
+        reservedSize: 20,
         interval: bottomInterval,
         getTextStyles: (context, value) => const TextStyle(
             color: Color(0xff68737d),
@@ -315,7 +310,7 @@ LineChart _buildLineChart(
         getTitles: (value) => bottomTitles.length == 8 && value.toInt() > 7
             ? ''
             : bottomTitles[value.toInt()],
-        margin: 8,
+        margin: 4,
       ),
       leftTitles: SideTitles(
         showTitles: true,
@@ -325,9 +320,9 @@ LineChart _buildLineChart(
           fontWeight: FontWeight.bold,
           fontSize: 15,
         ),
-        getTitles: (value) => value.toInt().toString() + '.00',
-        reservedSize: 32,
-        margin: 12,
+        getTitles: (value) => value.toInt().toString(),
+        reservedSize: 0,
+        margin: 8,
       ),
     ),
     borderData: FlBorderData(
@@ -382,27 +377,36 @@ void _initHoursAxisYData(
     List<Map<String, dynamic>> hoursData, List<FlSpot> hoursAxisYData) {
   for (int i = 0; i < hoursData.length; i++) {
     hoursAxisYData
-        .add((FlSpot(i.toDouble(), hoursData[i]['consumption'] / 0.15)));
+        .add((FlSpot(i.toDouble(), hoursData[i]['consumption'].toDouble())));
   }
 }
 
 void _initDaysAxisYData(
     List<Map<String, dynamic>> daysData, List<FlSpot> daysAxisYData) {
   for (int i = 0; i < daysData.length; i++) {
-    daysAxisYData.add((FlSpot(i.toDouble(), daysData[i]['consumption'])));
+    daysAxisYData.add((FlSpot(i.toDouble(), daysData[i]['consumption'].toDouble())));
   }
 }
 
 void _initHoursBottomTitles(
     List<Map<String, dynamic>> hoursData, List<String> hoursBottomTitles) {
   for (int i = 0; i < hoursData.length; i++) {
-    hoursBottomTitles.add(hoursData[i]['time'].substring(11));
+    hoursBottomTitles.add(hoursData[i]['time'].substring(11, 13));
   }
 }
 
 void _initDaysBottomTitles(
     List<Map<String, dynamic>> daysData, List<String> daysBottomTitles) {
   for (int i = 0; i < daysData.length; i++) {
-    daysBottomTitles.add(daysData[i]['date'].substring(5));
+    daysBottomTitles.add(daysData[i]['date'].substring(8, 10));
   }
+}
+
+double getMaxY(List<Map<String, dynamic>> data) {
+    double maxY = 0;
+    data.forEach((item) {
+      maxY = maxY > item['consumption'].toDouble() ? maxY : item['consumption'].toDouble();
+    });
+    return maxY;
+    // return maxY.toInt() - maxY < 0? maxY.toInt() + 1 : maxY.toInt();
 }
