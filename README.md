@@ -40,6 +40,9 @@ flutter pub get
 # 生成json序列化与反序列化代码
 flutter pub run build_runner build
 
+# 生成 splash screen
+flutter pub run flutter_native_splash:create
+
 # 打包生成 apk
 flutter build apk
 # 使用 Web 方式运行

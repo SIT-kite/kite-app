@@ -18,22 +18,30 @@
 
     <meta charset="UTF-8" />
     <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
-    <meta name="description" content="A new Flutter project." />
+    <meta name="description" content="A new Flutter project."/>
 
     <!-- iOS meta tags & icons -->
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="apple-mobile-web-app-title" content="kite" />
-    <link rel="apple-touch-icon" href="icons/Icon-192.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="apple-mobile-web-app-title" content="kite"/>
+    <link rel="apple-touch-icon" href="icons/Icon-192.png"/>
 
     <title>kite</title>
-    <link rel="manifest" href="manifest.json" />
+    <link rel="manifest" href="manifest.json"/>
+    <link href="splash/style.css" rel="stylesheet" type="text/css">
   </head>
   <body>
-    <!-- This script installs service_worker.js to provide PWA functionality to
-       application. For more information, see:
-       https://developers.google.com/web/fundamentals/primers/service-workers -->
-    <script>
+  <picture id="splash">
+    <source media="(prefers-color-scheme: light) or (prefers-color-scheme: no-preference)"
+            srcset="splash/img/light-1x.png 1x, splash/img/light-2x.png 2x, splash/img/light-3x.png 3x, splash/img/light-4x.png 4x">
+    <source media="(prefers-color-scheme: dark)"
+            srcset="splash/img/dark-1x.png 1x, splash/img/dark-2x.png 2x, splash/img/dark-3x.png 3x, splash/img/dark-4x.png 4x">
+    <img aria-hidden="true" class="center" src="splash/img/light-1x.png"/>
+  </picture>
+  <!-- This script installs service_worker.js to provide PWA functionality to
+     application. For more information, see:
+     https://developers.google.com/web/fundamentals/primers/service-workers -->
+  <script>
       var serviceWorkerVersion = null;
       var scriptLoaded = false;
       function loadMainDartJs() {
