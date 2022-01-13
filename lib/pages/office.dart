@@ -52,7 +52,7 @@ class _OfficePageState extends State<OfficePage> {
           return;
         }
 
-        selectFunctions(session!).then(
+        selectFunctionsByCountDesc(session!).then(
           (value) => setState(() {
             _functionList = value;
           }),
@@ -78,6 +78,7 @@ class _OfficePageState extends State<OfficePage> {
       leading: SizedBox(height: 40, width: 40, child: Center(child: Icon(function.icon, size: 35))),
       title: Text(function.name),
       subtitle: Text(function.summary),
+      trailing: Text(function.count.toString()),
       onTap: () {
         Navigator.push(
           context,

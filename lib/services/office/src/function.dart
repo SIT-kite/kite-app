@@ -56,7 +56,7 @@ Future<List<SimpleFunction>> selectFunctions(OfficeSession session) async {
 
 Future<List<SimpleFunction>> selectFunctionsByCountDesc(OfficeSession session) async {
   final functions = await selectFunctions(session);
-  functions.sort((a, b) => a.count.compareTo(b.count));
+  functions.sort((a, b) => b.count.compareTo(a.count));
   return functions;
 }
 
