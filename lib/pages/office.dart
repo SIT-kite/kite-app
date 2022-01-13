@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kite/pages/office/apply.dart';
+import 'package:kite/pages/office/message.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kite/services/office/office.dart';
 import 'package:kite/storage/auth.dart';
@@ -122,6 +122,10 @@ class _OfficePageState extends State<OfficePage> {
     );
   }
 
+  void _navigateMessagePage() {
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => MessagePage(session!)));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,7 +142,7 @@ class _OfficePageState extends State<OfficePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: _navigateMessagePage,
         tooltip: '我的消息',
         child: const Icon(Icons.mail_outline),
         backgroundColor: Colors.blue,
