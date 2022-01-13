@@ -104,7 +104,11 @@ class _ElectricityPageState extends State<ElectricityPage> {
                 left: 10,
                 right: 10,
               ),
-              child: _buildTextBlock(context),
+              child: _buildBalanceTextBlock(context),
+            ),
+            Container(
+              padding: EdgeInsets.only(left: 40, right: 40),
+              child: _buildRankTextBlock(),
             ),
             _buildChartBlock(
                 switchChart,
@@ -118,10 +122,10 @@ class _ElectricityPageState extends State<ElectricityPage> {
                         'maxX': 7,
                       },
                 !showDays
-                    ? {'minY': 0, 'maxY': getMaxY(HOURSDATA)}
+                    ? {'minY': 0, 'maxY': 6}
                     : {
                         'minY': 0,
-                        'maxY': getMaxY(DAYSDATA),
+                        'maxY': 4.5,
                       },
                 1,
                 !showDays ? 3 : 1),
@@ -130,10 +134,10 @@ class _ElectricityPageState extends State<ElectricityPage> {
   }
 }
 
-Widget _buildTextInput(String _hintText) {
+Widget _buildTextInput(String _hintText, int _maxLength) {
   return Expanded(
       child: TextField(
-    maxLength: 2,
+    maxLength: _maxLength,
     maxLines: 1,
     textAlignVertical: const TextAlignVertical(y: 1),
     keyboardType: const TextInputType.numberWithOptions(),
@@ -149,8 +153,10 @@ Widget _buildTextInputBox(hintText1, hintText2) {
   return SizedBox(
     width: 300,
     height: 60,
-    child:
-        Row(children: [_buildTextInput(hintText1), _buildTextInput(hintText2)]),
+    child: Row(children: [
+      _buildTextInput(hintText1, 2),
+      _buildTextInput(hintText2, 4)
+    ]),
   );
 }
 
@@ -173,7 +179,7 @@ Widget _buildButtonBox(
   );
 }
 
-Widget _buildTextBlock(context) {
+Widget _buildBalanceTextBlock(context) {
   return Container(
       padding: const EdgeInsets.only(
         top: 5,
@@ -210,6 +216,30 @@ Widget _buildTextBlock(context) {
       ]));
 }
 
+Widget _buildRankTextBlock() {
+  return Container(padding:EdgeInsets.only(top: 10,bottom: 10),decoration: BoxDecoration(
+    color: Colors.white,
+    //设置四周圆角 角度
+    borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+    //设置四周边框
+    border: Border.all(width: 2, color: Colors.blue.shade400),
+  ),child:Column(
+    children: [
+      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Text('0.00',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 32,
+                color: Colors.black)),
+        Text('元',
+            style: TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 16, color: Colors.grey)),
+      ]),
+      Text('24小时消费超越了 ${0.00}% 的寝室', style: TextStyle(fontSize: 16))
+    ],
+  ));
+}
+
 Widget _buildChartBlock(
     switchChart,
     bool showDays,
@@ -219,7 +249,7 @@ Widget _buildChartBlock(
     Map<String, double> yConstrains,
     double leftInterval,
     double bottomInterval) {
-  return Column(
+  return Stack(
     children: <Widget>[
       AspectRatio(
         aspectRatio: 1.70,
@@ -228,34 +258,66 @@ Widget _buildChartBlock(
             color: Colors.white,
           ),
           child: Padding(
-            padding:
-                const EdgeInsets.only(right: 24, left: 24, top: 20, bottom: 0),
+            padding: const EdgeInsets.only(
+                right: 22.0, left: 2.0, top: 30, bottom: 2),
             child: _buildLineChart(bottomTitles, axisYData, xConstrains,
                 yConstrains, leftInterval, bottomInterval),
           ),
         ),
       ),
-      Container(color:Colors.white, child:Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        TextButton(
-          onPressed: switchChart,
-          child: Row(children: [
-            Text(
-              '过去一天',
-              style: TextStyle(
-                  fontSize: 20, color: showDays ? Colors.grey : Colors.blue),
+<<<<<<< HEAD
+      Container(
+        color: Colors.white,
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          TextButton(
+            onPressed: switchChart,
+            child: Row(children: [
+              Text(
+                '过去一天',
+                style: TextStyle(
+                    fontSize: 20, color: showDays ? Colors.grey : Colors.blue),
+              ),
+              const Text(
+                ' / ',
+                style: TextStyle(fontSize: 20, color: Colors.black),
+              ),
+              Text(
+                '过去一周',
+                style: TextStyle(
+                    fontSize: 20, color: showDays ? Colors.blue : Colors.grey),
+              )
+            ]),
+          ),
+        ]),
+      )
+=======
+      SizedBox(
+          width: null,
+          height: 34,
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            TextButton(
+              onPressed: switchChart,
+              child: Row(children: [
+                Text(
+                  '过去一天',
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: showDays ? Colors.grey : Colors.blue),
+                ),
+                const Text(
+                  ' / ',
+                  style: TextStyle(fontSize: 12, color: Colors.white),
+                ),
+                Text(
+                  '过去一周',
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: showDays ? Colors.blue : Colors.grey),
+                )
+              ]),
             ),
-            const Text(
-              ' / ',
-              style: TextStyle(fontSize: 20, color: Colors.black),
-            ),
-            Text(
-              '过去一周',
-              style: TextStyle(
-                  fontSize: 20, color: showDays ? Colors.blue : Colors.grey),
-            )
-          ]),
-        ),
-      ]),)
+          ])),
+>>>>>>> parent of 5f1700a (Add: 电费查询模块图表组件添加自动计算 maxY)
     ],
   );
 }
@@ -301,7 +363,7 @@ LineChart _buildLineChart(
       topTitles: SideTitles(showTitles: false),
       bottomTitles: SideTitles(
         showTitles: true,
-        reservedSize: 20,
+        reservedSize: 22,
         interval: bottomInterval,
         getTextStyles: (context, value) => const TextStyle(
             color: Color(0xff68737d),
@@ -310,7 +372,7 @@ LineChart _buildLineChart(
         getTitles: (value) => bottomTitles.length == 8 && value.toInt() > 7
             ? ''
             : bottomTitles[value.toInt()],
-        margin: 4,
+        margin: 8,
       ),
       leftTitles: SideTitles(
         showTitles: true,
@@ -320,9 +382,9 @@ LineChart _buildLineChart(
           fontWeight: FontWeight.bold,
           fontSize: 15,
         ),
-        getTitles: (value) => value.toInt().toString(),
-        reservedSize: 0,
-        margin: 8,
+        getTitles: (value) => value.toInt().toString() + '.00',
+        reservedSize: 32,
+        margin: 12,
       ),
     ),
     borderData: FlBorderData(
@@ -377,36 +439,45 @@ void _initHoursAxisYData(
     List<Map<String, dynamic>> hoursData, List<FlSpot> hoursAxisYData) {
   for (int i = 0; i < hoursData.length; i++) {
     hoursAxisYData
-        .add((FlSpot(i.toDouble(), hoursData[i]['consumption'].toDouble())));
+        .add((FlSpot(i.toDouble(), hoursData[i]['consumption'] / 0.15)));
   }
 }
 
 void _initDaysAxisYData(
     List<Map<String, dynamic>> daysData, List<FlSpot> daysAxisYData) {
   for (int i = 0; i < daysData.length; i++) {
-    daysAxisYData.add((FlSpot(i.toDouble(), daysData[i]['consumption'].toDouble())));
+<<<<<<< HEAD
+    daysAxisYData
+        .add((FlSpot(i.toDouble(), daysData[i]['consumption'].toDouble())));
+=======
+    daysAxisYData.add((FlSpot(i.toDouble(), daysData[i]['consumption'])));
+>>>>>>> parent of 5f1700a (Add: 电费查询模块图表组件添加自动计算 maxY)
   }
 }
 
 void _initHoursBottomTitles(
     List<Map<String, dynamic>> hoursData, List<String> hoursBottomTitles) {
   for (int i = 0; i < hoursData.length; i++) {
-    hoursBottomTitles.add(hoursData[i]['time'].substring(11, 13));
+    hoursBottomTitles.add(hoursData[i]['time'].substring(11));
   }
 }
 
 void _initDaysBottomTitles(
     List<Map<String, dynamic>> daysData, List<String> daysBottomTitles) {
   for (int i = 0; i < daysData.length; i++) {
-    daysBottomTitles.add(daysData[i]['date'].substring(8, 10));
+    daysBottomTitles.add(daysData[i]['date'].substring(5));
   }
 }
+<<<<<<< HEAD
 
 double getMaxY(List<Map<String, dynamic>> data) {
-    double maxY = 0;
-    data.forEach((item) {
-      maxY = maxY > item['consumption'].toDouble() ? maxY : item['consumption'].toDouble();
-    });
-    return maxY;
-    // return maxY.toInt() - maxY < 0? maxY.toInt() + 1 : maxY.toInt();
+  double maxY = 0;
+  data.forEach((item) {
+    maxY = maxY > item['consumption'].toDouble()
+        ? maxY
+        : item['consumption'].toDouble();
+  });
+  return maxY;
 }
+=======
+>>>>>>> parent of 5f1700a (Add: 电费查询模块图表组件添加自动计算 maxY)
