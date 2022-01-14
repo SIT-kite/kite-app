@@ -90,7 +90,7 @@ class DetailPage extends StatelessWidget {
         child: const Icon(Icons.east),
         onPressed: () {
           // 跳转到申请页面
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => ApplyPage(function.id)));
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => ApplyPage(function)));
         },
       ),
     );
