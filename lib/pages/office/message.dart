@@ -25,7 +25,7 @@ class MessagePage extends StatelessWidget {
           final OfficeMessagePage page = snapshot.data!;
           return buildMessageList(page.msgList);
         }
-        return const Center(child: Text('Loading…'));
+        return const Center(child: CircularProgressIndicator());
       },
     );
   }

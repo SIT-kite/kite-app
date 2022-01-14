@@ -31,34 +31,49 @@ class OfficePage extends StatefulWidget {
 }
 
 class _OfficePageState extends State<OfficePage> {
-  List<SimpleFunction> _functionList = [];
   AuthStorage? user;
   OfficeSession? session;
-
   bool enableFilter = true;
 
   Future<AuthStorage> _queryLocalCredential() async => AuthStorage(await SharedPreferences.getInstance());
 
+  Future<List<SimpleFunction>> _fetchFuncList() async {
+    user = await _queryLocalCredential();
+
+    if (user != null && user!.username != '') {
+      session = await login(user!.username, user!.password);
+      if (session != null) {
+        return await selectFunctionsByCountDesc(session!);
+      }
+    }
+    return [];
+  }
+
+  Widget _buildFunctionList(List<SimpleFunction> functionList) {
+    return ListView(
+      children: functionList
+          .where((element) => commonUse.contains(element.id) || !enableFilter)
+          .map(buildFunctionItem)
+          .toList(),
+    );
+  }
+
+  Widget _buildBody() {
+    return FutureBuilder<List<SimpleFunction>>(
+      future: _fetchFuncList(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final List<SimpleFunction> result = snapshot.data!;
+          return _buildFunctionList(result);
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
-
-    Future.delayed(Duration.zero, () async {
-      user = await _queryLocalCredential();
-
-      if (user != null && user!.username != '') {
-        session = await login(user!.username, user!.password);
-        if (session == null) {
-          return;
-        }
-
-        selectFunctionsByCountDesc(session!).then(
-          (value) => setState(() {
-            _functionList = value;
-          }),
-        );
-      }
-    });
   }
 
   Widget _buildNotice() {
@@ -85,15 +100,6 @@ class _OfficePageState extends State<OfficePage> {
           MaterialPageRoute(builder: (_) => DetailPage(session!, function)),
         );
       },
-    );
-  }
-
-  Widget _buildFunctionList() {
-    return ListView(
-      children: _functionList
-          .where((element) => commonUse.contains(element.id) || !enableFilter)
-          .map(buildFunctionItem)
-          .toList(),
     );
   }
 
@@ -137,7 +143,7 @@ class _OfficePageState extends State<OfficePage> {
         child: Column(
           children: [
             Expanded(child: _buildNotice(), flex: 1),
-            Expanded(child: _buildFunctionList(), flex: 10),
+            Expanded(child: _buildBody(), flex: 10),
           ],
         ),
       ),

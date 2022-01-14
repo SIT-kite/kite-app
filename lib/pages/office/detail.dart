@@ -82,7 +82,7 @@ class DetailPage extends StatelessWidget {
               final FunctionDetail function = snapshot.data!;
               return buildBody(function.sections);
             }
-            return const Center(child: Text('Loading...'));
+            return const Center(child: CircularProgressIndicator());
           },
         ),
       ),
