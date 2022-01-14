@@ -39,7 +39,7 @@ class HomePage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: const [
-        ItemWidget('/report', AssetImage('assets/home/icon_daily_report.png'), '体温上报'),
+        ItemWidget('/electricity', AssetImage('assets/home/icon_daily_report.png'), '电费查询'),
         ItemWidget('/library', AssetImage('assets/home/icon_library.png'), '图书馆'),
         ItemWidget('/expense', AssetImage('assets/home/icon_consumption.png'), '消费查询'),
         SizedBox(height: 20.0),
@@ -48,6 +48,7 @@ class HomePage extends StatelessWidget {
         SizedBox(height: 20.0),
         ItemWidget('/game', AssetImage('assets/home/icon_library.png'), '小游戏'),
         ItemWidget('/wiki', AssetImage('assets/home/icon_library.png'), 'Wiki'),
+        ItemWidget('/market', AssetImage('assets/home/icon_library.png'), '二手书广场')
       ],
     );
   }

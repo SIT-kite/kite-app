@@ -6,7 +6,9 @@ import 'package:kite/pages/electricity.dart';
 import 'package:kite/pages/expense.dart';
 import 'package:kite/pages/game.dart';
 import 'package:kite/pages/home.dart';
+import 'package:kite/pages/library/library.dart';
 import 'package:kite/pages/login.dart';
+import 'package:kite/pages/makert.dart';
 import 'package:kite/pages/office.dart';
 import 'package:kite/pages/report.dart';
 import 'package:kite/pages/score.dart';
@@ -34,6 +36,8 @@ class KiteApp extends StatelessWidget {
       '/office': (context) => const OfficePage(),
       '/game': (context) => const GamePage(),
       '/wiki': (context) => const WikiPage(),
+      '/library': (context) => const LibraryPage(),
+      '/market': (context) => const MarketPage(),
     };
 
     return MaterialApp(
@@ -52,8 +56,7 @@ class KiteApp extends StatelessWidget {
               return const WelcomePage();
             }
           } else {
-            // 请求未结束，白屏
-            return Container();
+            return const CircularProgressIndicator();
           }
         },
       ),
