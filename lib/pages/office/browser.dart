@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:kite/services/office/src/function.dart';
 import 'package:kite/services/session_pool.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class ApplyPage extends StatelessWidget {
-  final SimpleFunction function;
+class BrowserPage extends StatelessWidget {
+  final String functionName;
+  final String url;
 
-  const ApplyPage(this.function, {Key? key}) : super(key: key);
+  const BrowserPage(this.functionName, this.url, {Key? key}) : super(key: key);
 
   List<WebViewCookie> _loadCookieFromCookieJar() {
     final cookieJar = SessionPool.cookieJar;
@@ -22,14 +22,12 @@ class ApplyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String applyUrl = 'https://xgfy.sit.edu.cn/unifri-flow/WF/MyFlow.htm?ismobile=1&out=1&FK_Flow=${function.id}';
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(function.name),
+        title: Text(functionName),
       ),
       body: WebView(
-        initialUrl: applyUrl,
+        initialUrl: url,
         initialCookies: _loadCookieFromCookieJar(),
       ),
     );

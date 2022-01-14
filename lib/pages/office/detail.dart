@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
-import 'package:kite/pages/office/apply.dart';
+import 'package:kite/pages/office/browser.dart';
 import 'package:kite/services/office/office.dart';
 import 'package:kite/utils/url_launcher.dart';
 
@@ -90,7 +90,10 @@ class DetailPage extends StatelessWidget {
         child: const Icon(Icons.east),
         onPressed: () {
           // 跳转到申请页面
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => ApplyPage(function)));
+          final String applyUrl =
+              'https://xgfy.sit.edu.cn/unifri-flow/WF/MyFlow.htm?ismobile=1&out=1&FK_Flow=${function.id}';
+          Navigator.of(context)
+              .pushReplacement(MaterialPageRoute(builder: (_) => BrowserPage(function.name, applyUrl)));
         },
       ),
     );
