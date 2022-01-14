@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 
+import '../../session_pool.dart';
+
 const String serviceLogin = 'https://xgfy.sit.edu.cn/unifri-flow/login';
 
 class OfficeSession {
@@ -13,7 +15,7 @@ class OfficeSession {
 }
 
 Future<OfficeSession?> login(String username, String password) async {
-  final dio = Dio();
+  final dio = SessionPool.ssoSession.dio;
   final Map<String, String> credential = {'account': username, 'userPassword': password, 'remember': 'true'};
 
   print(credential);
