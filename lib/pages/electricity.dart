@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 const List<Color> _GRADIENTCOLORS = [
   Color(0xff23b6e6),
@@ -54,6 +55,9 @@ class ElectricityPage extends StatefulWidget {
 
 class _ElectricityPageState extends State<ElectricityPage> {
   bool showDays = false;
+  String building = '';
+  String room = '';
+  bool isShowBalance = true;
   List<String> daysBottomTitles = [];
   List<String> hoursBottomTitles = [];
   List<String> daysLeftTitles = [];
@@ -77,40 +81,102 @@ class _ElectricityPageState extends State<ElectricityPage> {
     });
   }
 
+  String checkRoomValid() {
+    int buildingInt = 0;
+    int roomInt = 0;
+    try {
+      buildingInt = int.parse(building);
+      roomInt = int.parse(room);
+    } catch (e) {
+      _showInfo(context, '输入格式有误');
+      return 'error';
+    }
+
+    if (buildingInt >= 1 &&
+        buildingInt < 27 &&
+        roomInt > 100 &&
+        roomInt / 100 >= 0 &&
+        roomInt / 100 < 17 &&
+    roomInt % 100 < 31 && roomInt % 100 > 0) {
+      final result = '10${buildingInt}${roomInt}';
+      return result;
+    } else {
+      _showInfo(context, '输入格式有误');
+      return 'error';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.grey[200],
         appBar: AppBar(
           title: const Text('电费余额查询'),
         ),
         body: SafeArea(
             child: SingleChildScrollView(
                 child: Container(
-          color: Colors.grey[200],
+
           child: Column(children: [
             Container(
               margin: const EdgeInsets.only(top: 30),
-              child: _buildTextInputBox('楼号', '房间号'),
+              child: _buildTextInputBox(
+                  '楼号',
+                  (newValue) {
+                    setState(() {
+                      building = newValue;
+                    });
+                  },
+                  '房间号',
+                  (newValue) {
+                    setState(() {
+                      room = newValue;
+                    });
+                  }),
             ),
             Container(
               margin: const EdgeInsets.only(left: 80, right: 80),
-              child: _buildButtonBox('查询余额', const Color(0xFF2e62cd), '查询使用情况',
-                  const Color(0xFFf08c00)),
+              child: _buildButtonBox(
+                  '查询余额',
+                  () {
+                    String result = checkRoomValid();
+                    if(result != 'error') {
+                      setState(() {
+                        isShowBalance = true;
+                      });
+                    }
+                  },
+                  '查询使用情况',
+                  () {
+                    String result = checkRoomValid();
+                    if(result != 'error') {
+                      setState(() {
+                        isShowBalance = false;
+                      });
+                    }
+                  }),
             ),
-            Container(
-              width: double.infinity,
+            isShowBalance
+                ? Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.only(
+                      top: 30,
+                      left: 10,
+                      right: 10,
+                    ),
+                    child: _buildBalanceTextBlock(context),
+                  )
+                : Container(),
+            isShowBalance? Container() : Container(
               margin: const EdgeInsets.only(
-                top: 30,
-                left: 10,
-                right: 10,
+                top: 40,
+                bottom: 40,
+                left: 40,
+                right: 40,
               ),
-              child: _buildBalanceTextBlock(context),
-            ),
-            Container(
-              padding: EdgeInsets.only(left: 40, right: 40),
               child: _buildRankTextBlock(),
-            ),
-            _buildChartBlock(
+            ) ,
+            isShowBalance? Container() :_buildChartBlock(
                 switchChart,
                 showDays,
                 !showDays ? hoursBottomTitles : daysBottomTitles,
@@ -122,10 +188,10 @@ class _ElectricityPageState extends State<ElectricityPage> {
                         'maxX': 7,
                       },
                 !showDays
-                    ? {'minY': 0, 'maxY': getMaxY(HOURSDATA)}
+                    ? {'minY': 0, 'maxY': _getMaxY(HOURSDATA)}
                     : {
                         'minY': 0,
-                        'maxY': getMaxY(DAYSDATA),
+                        'maxY': _getMaxY(DAYSDATA),
                       },
                 1,
                 !showDays ? 3 : 1),
@@ -134,45 +200,48 @@ class _ElectricityPageState extends State<ElectricityPage> {
   }
 }
 
-Widget _buildTextInput(String _hintText,int _maxLength) {
+Widget _buildTextInput(String _hintText, int _maxLength, callBack) {
   return Expanded(
       child: TextField(
-    maxLength: _maxLength,
-    maxLines: 1,
-    textAlignVertical: const TextAlignVertical(y: 1),
-    keyboardType: const TextInputType.numberWithOptions(),
-    decoration: InputDecoration(
-        alignLabelWithHint: true,
-        border: const OutlineInputBorder(),
-        hintText: _hintText,
-        hintStyle: const TextStyle(color: Colors.grey)),
-  ));
+          maxLength: _maxLength,
+          maxLines: 1,
+          textAlignVertical: const TextAlignVertical(y: 1),
+          keyboardType: const TextInputType.numberWithOptions(),
+          decoration: InputDecoration(
+              alignLabelWithHint: true,
+              border: const OutlineInputBorder(),
+              hintText: _hintText,
+              hintStyle: const TextStyle(color: Colors.grey)),
+          onChanged: (newValue) {
+            callBack(newValue);
+          }));
 }
 
-Widget _buildTextInputBox(hintText1, hintText2) {
+Widget _buildTextInputBox(hintText1, callBack1, hintText2, callBack2) {
   return SizedBox(
     width: 300,
     height: 60,
-    child:
-        Row(children: [_buildTextInput(hintText1, 2), _buildTextInput(hintText2, 4)]),
+    child: Row(children: [
+      _buildTextInput(hintText1, 2, callBack1),
+      _buildTextInput(hintText2, 4, callBack2)
+    ]),
   );
 }
 
-Widget _buildButton(String label, Color color) {
+Widget _buildButton(String label, Color color, callBack) {
   return ElevatedButton(
     style: ButtonStyle(backgroundColor: MaterialStateProperty.all(color)),
-    onPressed: () {},
+    onPressed: callBack,
     child: Text(label),
   );
 }
 
-Widget _buildButtonBox(
-    String label1, Color color1, String label2, Color color2) {
+Widget _buildButtonBox(String label1, callBack1, String label2, callBack2) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      _buildButton(label1, color1),
-      _buildButton(label2, color2),
+      _buildButton(label1, Color(0xFF2e62cd), callBack1),
+      _buildButton(label2, Color(0xFFf08c00), callBack2),
     ],
   );
 }
@@ -215,27 +284,38 @@ Widget _buildBalanceTextBlock(context) {
 }
 
 Widget _buildRankTextBlock() {
-  return Container(padding:EdgeInsets.only(top: 10,bottom: 10),decoration: BoxDecoration(
-    color: Colors.white,
-    //设置四周圆角 角度
-    borderRadius: const BorderRadius.all(Radius.circular(4.0)),
-    //设置四周边框
-    border: Border.all(width: 2, color: Colors.blue.shade400),
-  ),child:Column(
-    children: [
-      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Text('0.00',
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 32,
-                color: Colors.black)),
-        Text('元',
-            style: TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 16, color: Colors.grey)),
-      ]),
-      Text('24小时消费超越了 ${0.00}% 的寝室', style: TextStyle(fontSize: 16))
-    ],
-  ));
+  return Container(
+      padding: EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        //设置四周圆角 角度
+        borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+        //设置四周边框
+        border: Border.all(width: 2, color: Colors.blue.shade400),
+      ),
+      child: Column(
+        children: [
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Text('0.00',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 32,
+                    color: Colors.black)),
+            Text('元',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Colors.grey)),
+          ]),
+          Text('24小时消费超越了 ${0.00}% 的寝室', style: TextStyle(fontSize: 16)),
+          Container(
+              margin: EdgeInsets.only(top: 5, bottom: 5),
+              height: 1,
+              color: Colors.blue),
+          Text('上次充值 ${_getCharge(DAYSDATA)} 元'),
+          Text('( 仅可查询七天内且最新一次充值记录 )')
+        ],
+      ));
 }
 
 Widget _buildChartBlock(
@@ -252,9 +332,9 @@ Widget _buildChartBlock(
       AspectRatio(
         aspectRatio: 1.70,
         child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-          ),
+          // decoration: const BoxDecoration(
+          //   color: Colors.white,
+          // ),
           child: Padding(
             padding:
                 const EdgeInsets.only(right: 24, left: 24, top: 20, bottom: 0),
@@ -263,27 +343,30 @@ Widget _buildChartBlock(
           ),
         ),
       ),
-      Container(color:Colors.white, child:Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        TextButton(
-          onPressed: switchChart,
-          child: Row(children: [
-            Text(
-              '过去一天',
-              style: TextStyle(
-                  fontSize: 20, color: showDays ? Colors.grey : Colors.blue),
-            ),
-            const Text(
-              ' / ',
-              style: TextStyle(fontSize: 20, color: Colors.black),
-            ),
-            Text(
-              '过去一周',
-              style: TextStyle(
-                  fontSize: 20, color: showDays ? Colors.blue : Colors.grey),
-            )
-          ]),
-        ),
-      ]),)
+      Container(
+        // color: Colors.white,
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          TextButton(
+            onPressed: switchChart,
+            child: Row(children: [
+              Text(
+                '过去一天',
+                style: TextStyle(
+                    fontSize: 20, color: showDays ? Colors.grey : Colors.blue),
+              ),
+              const Text(
+                ' / ',
+                style: TextStyle(fontSize: 20, color: Colors.black),
+              ),
+              Text(
+                '过去一周',
+                style: TextStyle(
+                    fontSize: 20, color: showDays ? Colors.blue : Colors.grey),
+              )
+            ]),
+          ),
+        ]),
+      )
     ],
   );
 }
@@ -412,7 +495,8 @@ void _initHoursAxisYData(
 void _initDaysAxisYData(
     List<Map<String, dynamic>> daysData, List<FlSpot> daysAxisYData) {
   for (int i = 0; i < daysData.length; i++) {
-    daysAxisYData.add((FlSpot(i.toDouble(), daysData[i]['consumption'].toDouble())));
+    daysAxisYData
+        .add((FlSpot(i.toDouble(), daysData[i]['consumption'].toDouble())));
   }
 }
 
@@ -430,11 +514,23 @@ void _initDaysBottomTitles(
   }
 }
 
-double getMaxY(List<Map<String, dynamic>> data) {
-    double maxY = 0;
-    data.forEach((item) {
-      maxY = maxY > item['consumption'].toDouble() ? maxY : item['consumption'].toDouble();
-    });
-    return maxY;
-    // return maxY.toInt() - maxY < 0? maxY.toInt() + 1 : maxY.toInt();
+double _getMaxY(List<Map<String, dynamic>> data) {
+  double maxY = 0;
+  data.forEach((item) {
+    maxY = maxY > item['consumption'].toDouble()
+        ? maxY
+        : item['consumption'].toDouble();
+  });
+  return maxY;
+  // return maxY.toInt() - maxY < 0? maxY.toInt() + 1 : maxY.toInt();
+}
+
+String _getCharge(List<Map<String, dynamic>> data) {
+  double charge = 0.0;
+  data.forEach((item) {
+    charge = item['consumption'].toDouble() > charge
+        ? item['consumption'].toDouble()
+        : charge;
+  });
+  return charge.toStringAsFixed(2);
 }
