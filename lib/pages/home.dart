@@ -40,6 +40,7 @@ class HomePage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: const [
         ItemWidget('/electricity', AssetImage('assets/home/icon_daily_report.png'), '电费查询'),
+        ItemWidget('/score', AssetImage('assets/home/icon_daily_report.png'), '成绩'),
         ItemWidget('/library', AssetImage('assets/home/icon_library.png'), '图书馆'),
         ItemWidget('/expense', AssetImage('assets/home/icon_consumption.png'), '消费查询'),
         SizedBox(height: 20.0),
