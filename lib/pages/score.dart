@@ -8,13 +8,9 @@ List<Map<String, dynamic>> _items = [
   {
     'name': 'Python程序设计',
     'id': 'G123',
-    'isValued': true,
+    'isValued': false,
     'score': 90,
-    'info': {
-      'semester': 1,
-      'required': true,
-      'credit': 2.5,
-    },
+    'credit': 2.5,
     'detail': [
       {
         'category': 'normal',
@@ -26,13 +22,9 @@ List<Map<String, dynamic>> _items = [
   {
     'name': 'Python程序设计',
     'id': 'G123',
-    'isValued': true,
-    'score': 85,
-    'info': {
-      'semester': 1,
-      'required': true,
-      'credit': 2.5,
-    },
+    'isValued': false,
+    'score': 90,
+    'credit': 2.5,
     'detail': [
       {
         'category': 'normal',
@@ -43,14 +35,10 @@ List<Map<String, dynamic>> _items = [
   },
   {
     'name': 'Python程序设计',
-    'id': 'h123',
-    'isValued': true,
-    'score': 85,
-    'info': {
-      'semester': 1,
-      'required': true,
-      'credit': 2.5,
-    },
+    'id': 'G123',
+    'isValued': false,
+    'score': 90,
+    'credit': 2.5,
     'detail': [
       {
         'category': 'normal',
@@ -228,7 +216,7 @@ class _ListItem extends StatefulWidget {
     id = item['id'];
     score = item['score'];
     isValued = item['isValued'];
-    info = item['info'];
+    credit = item['credit'];
     detail = item['detail'];
   }
 
@@ -236,23 +224,23 @@ class _ListItem extends StatefulWidget {
   String id = '';
   bool isValued = true;
   int score = 0;
-  Map<String, dynamic> info = {};
+  double credit = 0.0;
   List<Map<String, dynamic>> detail = [];
 
   @override
   _ListItemState createState() =>
-      _ListItemState(name, id, isValued, score, info, detail);
+      _ListItemState(name, id, isValued, score, credit, detail);
 }
 
 class _ListItemState extends State<_ListItem> {
   @override
   _ListItemState(String _name, String _id, bool _isValued, int _score,
-      Map<String, dynamic> _info, List<Map<String, dynamic>> _detail) {
+      double _credit, List<Map<String, dynamic>> _detail) {
     name = _name;
     id = _id;
     isValued = _isValued;
     score = _score;
-    info = _info;
+    credit = _credit;
     detail = _detail;
   }
 
@@ -260,7 +248,7 @@ class _ListItemState extends State<_ListItem> {
   String id = '';
   bool isValued = true;
   int score = 0;
-  Map<String, dynamic> info = {};
+  double credit = 0.0;
   List<Map<String, dynamic>> detail = [];
 
   bool isFolded = true;
@@ -270,7 +258,28 @@ class _ListItemState extends State<_ListItem> {
     return GestureDetector(
         onTap: () {
           setState(() {
-            isFolded = !isFolded;
+            if(isValued) {
+              isFolded = !isFolded;
+            } else {
+              showDialog<void>(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    content: SingleChildScrollView(
+                      child: Text(''),
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('知道啦!'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            }
           });
         },
         child: Container(
@@ -305,7 +314,7 @@ class _ListItemState extends State<_ListItem> {
                       Container(
                         margin: const EdgeInsets.only(top: 3),
                         child: Text(
-                            '${info['required'] == true ? '必修' : '选修'} | 学分: ${info['credit']}'),
+                            '${id[0] != 'G'? '必修' : '选修'} | 学分: ${credit}'),
                       ),
                       !isFolded
                           ? Container(
@@ -337,7 +346,7 @@ class _ListItemState extends State<_ListItem> {
               ),
               Container(
                   margin: const EdgeInsets.only(left: 15),
-                  child: Text('${isValued ? score : '待评教'}',
+                  child: Text('${isValued? score : '待评教'}',
                       style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
@@ -423,9 +432,9 @@ double _getGpa(_Mode mode) {
       break;
   }
   courseList.forEach((course) {
-    if (course['id'][0] == 'G' && course['isValued'] == true) {
-      t += course['info']['credit'] * course['score'];
-      totalCredits += course['info']['credit'];
+    if (course['id'][0] != 'G' && course['isValued'] == true) {
+      t += course['credit'] * course['score'];
+      totalCredits += course['credit'];
     }
   });
   double result = (t / totalCredits / 10.0) - 5.0;
@@ -444,5 +453,8 @@ List<Widget> _getListItems(_Mode mode) {
       listItems.add(_buildListSeparator('第二学期'));
       listItems.addAll(_items.map((_item) => _ListItem(item: _item)));
   }
+  listItems.add(
+      Container(margin:EdgeInsets.only(top: 10),child:Text('已经到底了哦~', textAlign: TextAlign.center,style: TextStyle(color: Colors.blue)),)
+  );
   return listItems;
 }
