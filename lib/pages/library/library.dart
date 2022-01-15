@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/pages/library/constants.dart';
 
 import './components/fake_search_field.dart';
+import './search_delegate.dart';
 
 class LibraryPage extends StatelessWidget {
   const LibraryPage({Key? key}) : super(key: key);
@@ -15,9 +16,9 @@ class LibraryPage extends StatelessWidget {
     return Saying.sayings[index];
   }
 
-  AppBar _buildAppBar() {
+  AppBar _buildAppBar(BuildContext context) {
     return AppBar(
-      leading: const BackButton(color: Colors.blue),
+      leading: const BackButton(color: Colors.grey),
       title: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -25,7 +26,7 @@ class LibraryPage extends StatelessWidget {
             child: SizedBox(
               child: FakeSearchField(
                 onTap: () {
-                  // showSearch(context: context, delegate: SearchBarDelegate());
+                  showSearch(context: context, delegate: SearchBarDelegate());
                 },
                 suggestion: "Search",
               ),
@@ -112,9 +113,8 @@ class LibraryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(context),
       body: _buildBody(context),
     );
-    // backgroundColor: BaseColor.colorFFF5F5F5,
   }
 }
