@@ -121,6 +121,7 @@ class Session extends ASession {
   }
 
   /// 允许不安全的https访问，这在使用fiddler等抓包工具时很有用
+  // ignore: unused_element
   void _allowInsecure() {
     (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (HttpClient client) {
