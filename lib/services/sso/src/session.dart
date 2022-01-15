@@ -65,6 +65,7 @@ class Session extends ASession {
       url,
       queryParameters: queryParameters,
       options: DioUtils.NON_REDIRECT_OPTION_WITH_FORM_TYPE.copyWith(
+        method: method,
         responseType: responseType,
       ),
       data: data,
