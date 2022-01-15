@@ -43,6 +43,7 @@ class KiteApp extends StatelessWidget {
     return MaterialApp(
       title: '上应小风筝',
       theme: ThemeData.light(),
+      debugShowCheckedModeBanner: false,
       home: FutureBuilder<SharedPreferences>(
         future: SharedPreferences.getInstance(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
