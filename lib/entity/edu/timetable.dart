@@ -1,13 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'timetable_parser.g.dart';
-
-class TimeTableParser {}
-
-RegExp weekRegex = RegExp(r"(\d{1,2})(:?-(\d{1,2}))?");
+part 'timetable.g.dart';
 
 @JsonSerializable()
 class Course {
+  static RegExp weekRegex = RegExp(r"(\d{1,2})(:?-(\d{1,2}))?");
+
   @JsonKey(name: 'kcmc')
   // 课程名称
   String? courseName;
@@ -149,14 +147,4 @@ class Course {
   static int _stringToInt(String s) => int.tryParse(s) ?? 0;
 
   static String _trimString(String s) => s.trim();
-}
-
-List<Course> parseTimetable(Map<String, dynamic> json) {
-  List<Course> result = [];
-  for (var course in json["kbList"]) {
-    Course newCourse = Course();
-    newCourse = Course.fromJson(course);
-    result.add(newCourse);
-  }
-  return result;
 }

@@ -1,33 +1,15 @@
 import 'dart:core';
 
+import 'package:kite/entity/edu/timetable.dart';
+import 'package:kite/entity/edu/year_semester.dart';
+import 'package:kite/services/abstract_service.dart';
 import 'package:kite/services/abstract_session.dart';
-import 'package:kite/services/edu/src/timetable_parser.dart';
 
-enum Semester {
-  all,
-  firstTerm,
-  secondTerm,
-  midTerm,
-}
-
-class SchoolYear {
-  static const all = SchoolYear(null);
-  final int? _year;
-  const SchoolYear(this._year);
-
-  @override
-  String toString() {
-    return (_year ?? '').toString();
-  }
-}
-
-class TimetableService {
+class TimetableService extends AService {
   static const _timeTableUrl =
       'http://jwxt.sit.edu.cn/jwglxt/kbcx/xskbcx_cxXsgrkb.html';
 
-  final ASession _session;
-
-  const TimetableService(this._session);
+  TimetableService(ASession session) : super(session);
 
   static String _semesterToRequestField(Semester semester) {
     return {
@@ -38,12 +20,22 @@ class TimetableService {
     }[semester]!;
   }
 
+  static List<Course> _parseTimetable(Map<String, dynamic> json) {
+    List<Course> result = [];
+    for (var course in json["kbList"]) {
+      Course newCourse = Course();
+      newCourse = Course.fromJson(course);
+      result.add(newCourse);
+    }
+    return result;
+  }
+
   /// 获取课表
   Future<List<Course>> getTimetable(
     SchoolYear schoolYear,
     Semester semester,
   ) async {
-    var response = await _session.post(
+    var response = await session.post(
       _timeTableUrl,
       queryParameters: {
         'gnmkdm': 'N253508',
@@ -57,6 +49,6 @@ class TimetableService {
         'xqm': _semesterToRequestField(semester),
       },
     );
-    return parseTimetable(response.data);
+    return _parseTimetable(response.data);
   }
 }

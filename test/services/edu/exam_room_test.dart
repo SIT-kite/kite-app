@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kite/services/edu/edu.dart';
-import 'package:kite/services/edu/src/edu_session.dart';
-import 'package:kite/services/sso/src/sso_session.dart';
+import 'package:kite/services/edu/edu_session.dart';
+import 'package:kite/services/sso/src/session.dart';
 import 'package:logger/logger.dart';
 
 void main() {

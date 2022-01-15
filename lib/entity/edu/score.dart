@@ -1,8 +1,6 @@
-import 'dart:convert';
-
 import 'package:json_annotation/json_annotation.dart';
 
-part 'score_parser.g.dart';
+part 'score.g.dart';
 
 @JsonSerializable()
 class Score {
@@ -43,15 +41,4 @@ class Score {
   }
 
   static double _stringToDouble(String s) => double.tryParse(s) ?? -1.0;
-}
-
-List<Score> parseScoreListPage(String page) {
-  var jsonPage = jsonDecode(page);
-  List<Score> result = [];
-  for (var score in jsonPage["items"]) {
-    Score newScore = Score();
-    newScore = Score.fromJson(score);
-    result.add(newScore);
-  }
-  return result;
 }

@@ -1,14 +1,15 @@
-import 'package:kite/services/abstract_session.dart';
-import 'package:kite/services/edu/edu.dart';
-import 'package:kite/services/edu/src/exam_room_parser.dart';
+import 'dart:convert';
 
-class ExamRoomService {
+import 'package:kite/entity/edu/exam_room.dart';
+import 'package:kite/entity/edu/year_semester.dart';
+import 'package:kite/services/abstract_service.dart';
+import 'package:kite/services/abstract_session.dart';
+
+class ExamRoomService extends AService {
   static const _examRoomUrl =
       'http://http://jwxt.sit.edu.cn/jwglxt/kwgl/kscx_cxXsksxxIndex.html';
 
-  final ASession _session;
-
-  const ExamRoomService(this._session);
+  ExamRoomService(ASession session) : super(session);
 
   static String _semesterToRequestField(Semester semester) {
     return {
@@ -19,12 +20,22 @@ class ExamRoomService {
     }[semester]!;
   }
 
+  List<ExamRoom> parseExamRoomPage(String page) {
+    var jsonPage = jsonDecode(page);
+    List<ExamRoom> result = [];
+    for (var examRoom in jsonPage["items"]) {
+      ExamRoom newExamRoom = ExamRoom.fromJson(examRoom);
+      result.add(newExamRoom);
+    }
+    return result;
+  }
+
   /// 获取考场信息
   Future<List<ExamRoom>> getExamRoomList(
     SchoolYear schoolYear,
     Semester semester,
   ) async {
-    var response = await _session.post(
+    var response = await session.post(
       _examRoomUrl,
       queryParameters: {
         'gnmkdm': 'N358105',
