@@ -1,14 +1,16 @@
 import 'package:kite/services/edu/edu.dart';
 import 'package:kite/services/edu/src/score_parser.dart';
 import 'package:kite/services/session_interface.dart';
+import 'package:kite/services/session_pool.dart';
+
+const _scoreUrl = 'http://jwxt.sit.edu.cn/jwglxt/cjcx/cjcx_cxDgXscj.html';
 
 class ScoreService {
-  static const _scoreUrl =
-      'http://jwxt.sit.edu.cn/jwglxt/cjcx/cjcx_cxDgXscj.html';
+  late final ISession _session;
 
-  final ISession _session;
-
-  const ScoreService(this._session);
+  ScoreService({ISession? session}) {
+    _session = session ?? SessionPool.eduSession;
+  }
 
   static String _semesterToRequestField(Semester semester) {
     return {
@@ -40,4 +42,15 @@ class ScoreService {
     );
     return parseScoreListPage(response.data);
   }
+}
+
+double calcGPA(List<Score> _scoreList) {
+  double totalCredits = 0.0;
+  double sum = 0.0;
+
+  _scoreList.forEach((s) {
+    totalCredits += s.credit;
+    sum == s.credit * s.value;
+  });
+  return sum / totalCredits / 10.0 - 5.0;
 }

@@ -1,54 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kite/pages/score/banner.dart';
+import 'package:kite/pages/score/item.dart';
+import 'package:kite/services/edu/edu.dart';
+import 'package:kite/services/edu/src/score_parser.dart';
 
-const _semesterItems = ['第一学期', '第二学期', '整个学年'];
-enum _Mode { year, semester }
+List<int> _generateYearList(int entranceYear) {
+  final date = DateTime.now();
+  final currentMonth = date.month;
+  final currentYear = date.year % 100;
+  final monthInterval = (currentYear - entranceYear) * 12 + currentMonth - 9;
 
-List<Map<String, dynamic>> _items = [
-  {
-    'name': 'Python程序设计',
-    'id': 'G123',
-    'isValued': false,
-    'score': 90,
-    'credit': 2.5,
-    'detail': [
-      {
-        'category': 'normal',
-        'score': 99,
-        'percent': 80,
-      }
-    ]
-  },
-  {
-    'name': 'Python程序设计',
-    'id': 'G123',
-    'isValued': false,
-    'score': 90,
-    'credit': 2.5,
-    'detail': [
-      {
-        'category': 'normal',
-        'score': 99,
-        'percent': 80,
-      }
-    ]
-  },
-  {
-    'name': 'Python程序设计',
-    'id': 'G123',
-    'isValued': false,
-    'score': 90,
-    'credit': 2.5,
-    'detail': [
-      {
-        'category': 'normal',
-        'score': 99,
-        'percent': 80,
-      }
-    ]
-  },
-];
-
+  List<int> yearItems = [];
+  for (int i = 0, year = entranceYear; i < (monthInterval / 12 as int) + 1; i++, year++) {
+    yearItems.add(year);
+  }
+  return yearItems;
+}
 
 class ScorePage extends StatefulWidget {
   const ScorePage({Key? key}) : super(key: key);
@@ -58,403 +26,143 @@ class ScorePage extends StatefulWidget {
 }
 
 class _ScorePageState extends State<ScorePage> {
-  Map<String, Map<String, dynamic>> selectorInfo = {};
-  _Mode mode = _Mode.year;
+  int selectedYear = 2021;
+  Semester selectedSemester = Semester.firstTerm; // todo: use proper value.
+  late List<Score> _scoreList;
 
-  @override
-  _ScorePageState() {
-    selectorInfo = _getInitSelectorInfo((_Mode _mode, newValue) {
-      setState(() {
-        switch (_mode) {
-          case _Mode.year:
-            selectorInfo['year']!['dropdownValue'] = newValue;
-            break;
-          case _Mode.semester:
-            {
-              selectorInfo['semester']!['dropdownValue'] = newValue;
-              switch (newValue) {
-                case '第一学期':
-                case '第二学期': mode = _Mode.semester; break;
-                case '整个学年': mode = _Mode.year; break;
-              }
-              break;
-            }
+  final Widget _notFoundPicture = SvgPicture.asset(
+    'assets/score/not-found.svg',
+    width: 260,
+    height: 260,
+  );
+
+  Widget _buildHeader() {
+    return Container(
+      margin: const EdgeInsets.only(left: 15),
+      child: _buildSelectorRow(),
+    );
+  }
+
+  Widget _buildSelectorRow() {
+    String buildYearString(int startYear) {
+      return '20$startYear - 20${startYear + 1}';
+    }
+
+    Widget buildSelector(List<int> alternatives, void Function(int?) callback) {
+      final items = alternatives
+          .map(
+            (e) => DropdownMenuItem<int>(
+              value: e,
+              child: Text(buildYearString(e)),
+            ),
+          )
+          .toList();
+
+      return DropdownButton<int>(
+        isDense: true,
+        icon: const Icon(Icons.keyboard_arrow_down_outlined),
+        style: const TextStyle(
+          color: Color(0xFF002766),
+        ),
+        underline: Container(
+          height: 2,
+          color: Colors.blue,
+        ),
+        onChanged: callback,
+        items: items,
+      );
+    }
+
+    Widget buildYearSelector() {
+      final List<int> yearList = _generateYearList(18); // TODO: Use actual year here.
+      return buildSelector(yearList, (int? selected) {
+        if (selected != null && selected != selectedYear) {
+          setState(() {
+            selectedYear = selected;
+          });
         }
       });
-    });
-
-    switch (selectorInfo['semester']!['dropdownValue']) {
-      case '第一学期':
-      case '第二学期':
-        mode = _Mode.semester;
-        break;
-      case '整个学年':
-        mode = _Mode.year;
-        break;
     }
+
+    Widget buildSemesterSelector() {
+      const List semesters = Semester.values;
+      return buildSelector(semesters.cast(), (int? selected) {
+        if (selected != null && selected != (selectedSemester as int)) {
+          setState(() {
+            selectedSemester = selected as Semester;
+          });
+        }
+      });
+    }
+
+    return Row(children: [
+      Container(
+        child: buildYearSelector(),
+      ),
+      Container(
+        margin: const EdgeInsets.only(left: 15),
+        child: buildSemesterSelector(),
+      )
+    ]);
+  }
+
+  Widget _buildListView() {
+    return ListView(children: _scoreList.map((e) => ScoreItem(e)).toList());
+  }
+
+  Widget _buildNoResult() {
+    return Column(children: [
+      Container(
+        child: _notFoundPicture,
+      ),
+      const Text('暂时还没有成绩', style: TextStyle(color: Colors.grey)),
+      Container(
+        margin: const EdgeInsets.only(left: 40, right: 40),
+        child:
+            const Text('如果成绩刚刚出炉，可点击右上角刷新按钮尝试刷新~', textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),
+      )
+    ]);
+  }
+
+  Widget _buildScoreResult() {
+    return FutureBuilder<List<Score>>(
+      future: ScoreService().getScoreList(SchoolYear(selectedYear), selectedSemester),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final scoreList = snapshot.data!;
+
+          if (scoreList.isNotEmpty) {
+            return Column(
+              children: [
+                GpaBanner(selectedSemester, _scoreList),
+                _buildListView(),
+              ],
+            );
+          } else {
+            return _buildNoResult();
+          }
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-            child: Column(children: [
-      Container(
-          margin: const EdgeInsets.only(top: 10),
-          child: _buildHeader(selectorInfo)),
-      _items.length !=0?
-      Container(
-          margin: const EdgeInsets.only(top: 10),
-          decoration: const BoxDecoration(boxShadow: [
-            BoxShadow(
-                color: Color(0xFFd9d9d9), offset: Offset(0, 2), blurRadius: 1)
-          ]),
-          child: _buildGpaBlock(mode)) : Container(),
-      _items.length !=0?
-      Expanded(
-        flex: 1,
-        child: _buildListView(_getListItems(mode)),
-      ) : Container(),
-      _items.length !=0? Container() : _buildNotFound()
-    ])));
-  }
-}
-
-Widget _buildHeader(Map<String, Map<String, dynamic>> selectorInfo) {
-  return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-    Container(
-      margin: const EdgeInsets.only(left: 15),
-      child: _buildSelectorBox(selectorInfo),
-    ),
-    Container(
-        margin: const EdgeInsets.only(right: 20),
-        child: GestureDetector(
-            onTap: () {},
-            child: Icon(Icons.refresh, color: Colors.blue, size: 30)))
-  ]);
-}
-
-Widget _buildSelectorBox(Map<String, Map<String, dynamic>> selectorInfo) {
-  return Row(children: [
-    Container(
-      child: _buildSelector(_Mode.year, selectorInfo['year']!),
-    ),
-    Container(
-      margin: const EdgeInsets.only(left: 15),
-      child: _buildSelector(_Mode.semester, selectorInfo['semester']!),
-    )
-  ]);
-}
-
-Widget _buildSelector(_Mode mode, Map<String, dynamic> info) {
-  return DropdownButton<String>(
-    value: info['dropdownValue'],
-    isDense: true,
-    icon: const Icon(Icons.keyboard_arrow_down_outlined),
-    style: const TextStyle(
-      color: Color(0xFF002766),
-    ),
-    underline: Container(
-      height: 2,
-      color: Colors.blue,
-    ),
-    onChanged: (String? newValue) {
-      info['setDropdownValue'](mode, newValue);
-    },
-    items: info['items'].map<DropdownMenuItem<String>>((String value) {
-      return DropdownMenuItem<String>(
-        value: value,
-        child: Text(value),
-      );
-    }).toList(),
-  );
-}
-
-Widget _buildGpaBlock(_Mode mode) {
-  return Container(
-      padding: const EdgeInsets.all(10),
-      color: const Color(0xFFffe599),
-      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Text(
-          '该学期绩点为 ${_getGpa(mode)}, 努力总会有回报哒!',
-        )
-      ]));
-}
-
-Widget _buildListView(List<Widget> listItems) {
-  return ListView.builder(
-    shrinkWrap: true,
-    itemCount: listItems.length,
-    itemBuilder: (BuildContext context, int index) {
-      return listItems[index];
-    },
-  );
-}
-
-Widget _buildListSeparator(String content) {
-  return Container(
-      margin: const EdgeInsets.only(
-        top: 15,
-        left: 15,
-        right: 15,
+      appBar: AppBar(
+        title: const Text('成绩查询'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () {},
+          )
+        ],
       ),
-      decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: Colors.grey, width: 3))),
-      child: Container(
-          margin: const EdgeInsets.only(bottom: 5),
-          child: Text(content,
-              style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blue))));
-}
-
-class _ListItem extends StatefulWidget {
-  @override
-  _ListItem({Key? key, required Map<String, dynamic> item}) : super(key: key) {
-    name = item['name'];
-    id = item['id'];
-    score = item['score'];
-    isValued = item['isValued'];
-    credit = item['credit'];
-    detail = item['detail'];
+      body: Column(children: [
+        _buildHeader(),
+        _buildScoreResult(),
+      ]),
+    );
   }
-
-  String name = '';
-  String id = '';
-  bool isValued = true;
-  int score = 0;
-  double credit = 0.0;
-  List<Map<String, dynamic>> detail = [];
-
-  @override
-  _ListItemState createState() =>
-      _ListItemState(name, id, isValued, score, credit, detail);
-}
-
-class _ListItemState extends State<_ListItem> {
-  @override
-  _ListItemState(String _name, String _id, bool _isValued, int _score,
-      double _credit, List<Map<String, dynamic>> _detail) {
-    name = _name;
-    id = _id;
-    isValued = _isValued;
-    score = _score;
-    credit = _credit;
-    detail = _detail;
-  }
-
-  String name = '';
-  String id = '';
-  bool isValued = true;
-  int score = 0;
-  double credit = 0.0;
-  List<Map<String, dynamic>> detail = [];
-
-  bool isFolded = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: () {
-          setState(() {
-            if(isValued) {
-              isFolded = !isFolded;
-            } else {
-              showDialog<void>(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    content: SingleChildScrollView(
-                      child: Text(''),
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('知道啦!'),
-                      ),
-                    ],
-                  );
-                },
-              );
-            }
-          });
-        },
-        child: Container(
-            margin: const EdgeInsets.only(
-              top: 10,
-              left: 15,
-              right: 15,
-            ),
-            padding: const EdgeInsets.only(
-              bottom: 5,
-            ),
-            decoration: const BoxDecoration(
-                border:
-                    Border(bottom: BorderSide(color: Colors.blue, width: 1))),
-            child: Row(children: [
-              Expanded(
-                flex: 1,
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(
-                                    color: Colors.orange.shade300, width: 3))),
-                        child: Text(name == '' ? '( 空 )' : name,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18)),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 3),
-                        child: Text(
-                            '${id[0] != 'G'? '必修' : '选修'} | 学分: ${credit}'),
-                      ),
-                      !isFolded
-                          ? Container(
-                              margin: const EdgeInsets.only(top: 5),
-                              padding: const EdgeInsets.only(
-                                left: 5,
-                              ),
-                              decoration: const BoxDecoration(
-                                  border: Border(
-                                      left: BorderSide(
-                                          color: Colors.blue, width: 3))),
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: detail.map((item) {
-                                    if (item['category'] == 'normal')
-                                      return Text(
-                                          '平时: ${item['score']} 占比: ${item['percent']}%');
-                                    else if (item['category'] == 'midTerm')
-                                      return Text(
-                                          '期中: ${item['score']} 占比: ${item['percent']}%');
-                                    else if (item['category'] == 'endTerm')
-                                      return Text(
-                                          '期末: ${item['score']} 占比: ${item['percent']}%');
-                                    return Container();
-                                  }).toList()),
-                            )
-                          : Container(),
-                    ]),
-              ),
-              Container(
-                  margin: const EdgeInsets.only(left: 15),
-                  child: Text('${isValued? score : '待评教'}',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: Colors.blue)))
-            ])));
-  }
-}
-
-Widget _buildNotFound() {
-  return Column(
-    children: [
-      Container(child: _notFoundPicture,),
-      const Text('暂时还没有成绩哦!', style: TextStyle(color: Colors.grey)),
-      Container(margin: EdgeInsets.only(left:40, right:40),child: const Text('如果成绩刚刚出炉，可点击右上角刷新按钮尝试刷新~',textAlign: TextAlign.center,style: TextStyle(color: Colors.grey)),)
-    ]
-  );
-}
-
-Widget _notFoundPicture = SvgPicture.asset(
-    'assets/score/not-found.svg',
-      width: 260, height: 260,
-);
-
-String _getInitDropdownValue(_Mode mode) {
-  switch (mode) {
-    case _Mode.year:
-      {
-        return '2020 - 2021';
-      }
-
-    case _Mode.semester:
-      {
-        return '第一学期';
-      }
-  }
-}
-
-List<String> _getInitYearItems(String studentId) {
-  final date = DateTime.now();
-  final nowMonth = date.month;
-  final nowYear = int.parse(date.year.toString().substring(2, 4));
-  final startYear = int.parse(studentId.toString().substring(0, 2));
-  final monthInterval = (nowYear - startYear) * 12 + nowMonth - 9;
-  const baseString = '20';
-  List<String> yearItems = [];
-
-  for (int i = 0, year = startYear;
-      i < (monthInterval / 12 + 1).toInt();
-      i++, year++) {
-    yearItems.add('$baseString$year - $baseString${year + 1}');
-  }
-
-  return yearItems;
-}
-
-Map<String, Map<String, dynamic>> _getInitSelectorInfo(setDropdownValue) {
-  return {
-    'year': {
-      'dropdownValue': _getInitDropdownValue(_Mode.year),
-      'items': _getInitYearItems('2010'),
-      'setDropdownValue': setDropdownValue
-    },
-    'semester': {
-      'dropdownValue': _getInitDropdownValue(_Mode.semester),
-      'items': _semesterItems,
-      'setDropdownValue': setDropdownValue
-    }
-  };
-}
-
-double _getGpa(_Mode mode) {
-  List<Map<String, dynamic>> courseList = [];
-  double totalCredits = 0.0;
-  double t = 0.0;
-
-  switch (mode) {
-    case _Mode.semester:
-      courseList.addAll(_items);
-      break;
-    case _Mode.year:
-      courseList.addAll(_items);
-      courseList.addAll(_items);
-      break;
-  }
-  courseList.forEach((course) {
-    if (course['id'][0] != 'G' && course['isValued'] == true) {
-      t += course['credit'] * course['score'];
-      totalCredits += course['credit'];
-    }
-  });
-  double result = (t / totalCredits / 10.0) - 5.0;
-  return result.isNaN ? 0.0 : result;
-}
-
-List<Widget> _getListItems(_Mode mode) {
-  List<Widget> listItems = [];
-  switch (mode) {
-    case _Mode.semester:
-      listItems.addAll(_items.map((_item) => _ListItem(item: _item)));
-      break;
-    case _Mode.year:
-      listItems.add(_buildListSeparator('第一学期'));
-      listItems.addAll(_items.map((_item) => _ListItem(item: _item)));
-      listItems.add(_buildListSeparator('第二学期'));
-      listItems.addAll(_items.map((_item) => _ListItem(item: _item)));
-  }
-  listItems.add(
-      Container(margin:EdgeInsets.only(top: 10),child:Text('已经到底了哦~', textAlign: TextAlign.center,style: TextStyle(color: Colors.blue)),)
-  );
-  return listItems;
 }

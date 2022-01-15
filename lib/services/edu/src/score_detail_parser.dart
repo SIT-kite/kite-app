@@ -18,42 +18,29 @@ String scorePercentage = "td:nth-child(3)";
 String scoreNumber = "td:nth-child(5)";
 
 class ScoreDetail {
-  // 成绩名称
+  /// 成绩名称
   String scoreType = "";
 
-  // 百分比
+  /// 占总成绩百分比
   String percentage = "";
 
-  // 总评
-  double score = 0.0;
+  /// 成绩数值
+  double value = 0.0;
 
-  ScoreDetail(this.scoreType, this.percentage, this.score);
-
-  @override
-  String toString() {
-    return 'ScoreDetail{scoreType: $scoreType, percentage: $percentage, score: $score}';
-  }
+  ScoreDetail(this.scoreType, this.percentage, this.value);
 
   static String _replaceNbsp(String s) => s.replaceAll("&nbsp;", "");
 
-  static String _replaceCurlyBrackets(String s) =>
-      s.replaceAll("【 ", "").replaceAll(" 】", "");
+  static String _replaceCurlyBrackets(String s) => s.replaceAll("【 ", "").replaceAll(" 】", "");
 
   static double _stringToDouble(String s) => double.tryParse(s) ?? -1.0;
 
   static ScoreDetail _scoreDetailMap(Bs4Element item) {
-    String scoreDetailType = item
-        .findAll(scoreForm)
-        .map((e) => _replaceCurlyBrackets(e.innerHtml.trim()))
-        .elementAt(0);
-    String scoreDetailPercentage = item
-        .findAll(scorePercentage)
-        .map((e) => _replaceNbsp(e.innerHtml.trim()))
-        .elementAt(0);
-    double scoreDetail = item
-        .findAll(scoreNumber)
-        .map((e) => _stringToDouble(_replaceNbsp(e.innerHtml.trim())))
-        .elementAt(0);
+    String scoreDetailType = item.findAll(scoreForm).map((e) => _replaceCurlyBrackets(e.innerHtml.trim())).elementAt(0);
+    String scoreDetailPercentage =
+        item.findAll(scorePercentage).map((e) => _replaceNbsp(e.innerHtml.trim())).elementAt(0);
+    double scoreDetail =
+        item.findAll(scoreNumber).map((e) => _stringToDouble(_replaceNbsp(e.innerHtml.trim()))).elementAt(0);
     return ScoreDetail(scoreDetailType, scoreDetailPercentage, scoreDetail);
   }
 }

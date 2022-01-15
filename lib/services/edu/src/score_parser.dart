@@ -8,7 +8,7 @@ part 'score_parser.g.dart';
 class Score {
   @JsonKey(name: 'cj', fromJson: _stringToDouble)
   // 成绩
-  double score = 0.0;
+  double value = 0.0;
   @JsonKey(name: 'kcmc')
   // 课程
   String course = "";
@@ -34,7 +34,7 @@ class Score {
 
   @override
   String toString() {
-    return 'Score{score: $score, course: $course, courseId: $courseId, classId: $classId, schoolYear: $schoolYear, semester: $semester, credit: $credit}';
+    return 'Score{score: $value, course: $course, courseId: $courseId, classId: $classId, schoolYear: $schoolYear, semester: $semester, credit: $credit}';
   }
 
   static int _stringToSemester(String s) {

@@ -1,4 +1,3 @@
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kite/services/edu/edu.dart';
 import 'package:kite/services/sso/sso.dart';
@@ -10,7 +9,7 @@ void main() {
     Session session = Session();
     await session.login('', '');
     await session.get('http://jwxt.sit.edu.cn/sso/jziotlogin');
-    var table = await ScoreService(session).getScoreList(
+    var table = await ScoreService(session: session).getScoreList(
       const SchoolYear(2021),
       Semester.firstTerm,
     );

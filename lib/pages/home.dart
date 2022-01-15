@@ -57,6 +57,8 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: Color(0xffff1b00),
+      backgroundColor: Colors.white,
       key: _scaffoldKey,
       body: SafeArea(
         child: SmartRefresher(
@@ -72,7 +74,14 @@ class HomePage extends StatelessWidget {
                   const SizedBox(height: 20.0),
                   GreetingWidget(),
                   const SizedBox(height: 20.0),
-                  buildFunctions(),
+                  Container(
+                      // decoration: const BoxDecoration(
+                      //   image: DecorationImage(
+                      //     image: AssetImage("assets/home/bg.png"),
+                      //     fit: BoxFit.cover,
+                      //   ),
+                      // ),
+                      child: buildFunctions())
                 ],
               ),
             ),
