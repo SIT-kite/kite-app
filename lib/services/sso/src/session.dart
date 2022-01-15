@@ -14,7 +14,7 @@ import 'package:kite/services/ocr.dart';
 import './encrypt_util.dart';
 import './utils.dart';
 
-class Session extends ASession {
+class SsoSession extends ASession {
   static const String _authServerUrl =
       'https://authserver.sit.edu.cn/authserver';
   static const String _loginUrl = '$_authServerUrl/login';
@@ -30,7 +30,7 @@ class Session extends ASession {
   String? _username;
   String? _password;
 
-  Session({
+  SsoSession({
     Dio? dio,
     CookieJar? jar,
   }) {

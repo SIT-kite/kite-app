@@ -1,10 +1,10 @@
+import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kite/services/sso/sso.dart';
-import 'package:beautiful_soup_dart/beautiful_soup.dart';
 
 void main() {
   test('test login', () async {
-    var session = Session();
+    var session = SsoSession();
     var a = await session.login('', '');
     var index = await session.get('https://myportal.sit.edu.cn/');
     var list = BeautifulSoup(index.data)

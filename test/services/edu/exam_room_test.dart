@@ -7,7 +7,7 @@ import 'package:logger/logger.dart';
 void main() {
   var logger = Logger();
   test('timetable test', () async {
-    Session session = Session();
+    SsoSession session = SsoSession();
     await session.login('', '');
     var eduSession = EduSession(session);
     var table = await ExamRoomService(eduSession).getExamRoomList(

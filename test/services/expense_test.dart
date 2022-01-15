@@ -10,7 +10,7 @@ void main() {
     const cardUrl = 'http://card.sit.edu.cn/personalxiaofei.jsp';
     var username = '';
     var password = '';
-    var session = Session();
+    var session = SsoSession();
     await session.login(username, password);
     var response = await session.get(
       cardUrl,

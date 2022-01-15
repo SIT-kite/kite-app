@@ -6,7 +6,7 @@ import 'package:logger/logger.dart';
 void main() {
   var logger = Logger();
   test('edu test', () async {
-    Session session = Session();
+    SsoSession session = SsoSession();
     await session.login('', '');
     await session.get('http://jwxt.sit.edu.cn/sso/jziotlogin');
     var table = await ScoreService(session: session).getScoreList(

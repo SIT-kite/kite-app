@@ -2,7 +2,7 @@ import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:kite/services/sso/sso.dart';
 
 class MyPortal {
-  Session session;
+  SsoSession session;
 
   MyPortal(this.session);
 
