@@ -1,12 +1,12 @@
+import 'package:kite/services/abstract_session.dart';
 import 'package:kite/services/edu/edu.dart';
 import 'package:kite/services/edu/src/exam_room_parser.dart';
-import 'package:kite/services/session_interface.dart';
 
 class ExamRoomService {
   static const _examRoomUrl =
       'http://http://jwxt.sit.edu.cn/jwglxt/kwgl/kscx_cxXsksxxIndex.html';
 
-  final ISession _session;
+  final ASession _session;
 
   const ExamRoomService(this._session);
 

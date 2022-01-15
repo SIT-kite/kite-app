@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:kite/services/session_interface.dart';
+import 'package:kite/services/abstract_session.dart';
 
-class EduSession extends ISession {
-  final ISession _session;
+class EduSession extends ASession {
+  final ASession _session;
   EduSession(this._session);
 
   Future<void> _getCookie(Response response) async {

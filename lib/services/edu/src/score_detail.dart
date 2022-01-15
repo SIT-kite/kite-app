@@ -1,12 +1,12 @@
+import 'package:kite/services/abstract_session.dart';
 import 'package:kite/services/edu/edu.dart';
 import 'package:kite/services/edu/src/score_detail_parser.dart';
-import 'package:kite/services/session_interface.dart';
 
 class ScoreDetailService {
   static const _scoreDetailUrl =
       'http://jwxt.sit.edu.cn/jwglxt/cjcx/cjcx_cxCjxqGjh.html';
 
-  final ISession _session;
+  final ASession _session;
 
   const ScoreDetailService(this._session);
 

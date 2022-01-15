@@ -1,7 +1,7 @@
 import 'dart:core';
 
+import 'package:kite/services/abstract_session.dart';
 import 'package:kite/services/edu/src/timetable_parser.dart';
-import 'package:kite/services/session_interface.dart';
 
 enum Semester {
   all,
@@ -25,7 +25,7 @@ class TimetableService {
   static const _timeTableUrl =
       'http://jwxt.sit.edu.cn/jwglxt/kbcx/xskbcx_cxXsgrkb.html';
 
-  final ISession _session;
+  final ASession _session;
 
   const TimetableService(this._session);
 

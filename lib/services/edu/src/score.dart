@@ -1,14 +1,14 @@
+import 'package:kite/services/abstract_session.dart';
 import 'package:kite/services/edu/edu.dart';
 import 'package:kite/services/edu/src/score_parser.dart';
-import 'package:kite/services/session_interface.dart';
 import 'package:kite/services/session_pool.dart';
 
 const _scoreUrl = 'http://jwxt.sit.edu.cn/jwglxt/cjcx/cjcx_cxDgXscj.html';
 
 class ScoreService {
-  late final ISession _session;
+  late final ASession _session;
 
-  ScoreService({ISession? session}) {
+  ScoreService({ASession? session}) {
     _session = session ?? SessionPool.eduSession;
   }
 

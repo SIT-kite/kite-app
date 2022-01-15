@@ -8,13 +8,13 @@ import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:dio_log/dio_log.dart';
+import 'package:kite/services/abstract_session.dart';
 import 'package:kite/services/ocr.dart';
-import 'package:kite/services/session_interface.dart';
 
 import './encrypt_util.dart';
 import './utils.dart';
 
-class Session extends ISession {
+class Session extends ASession {
   static const String _authServerUrl =
       'https://authserver.sit.edu.cn/authserver';
   static const String _loginUrl = '$_authServerUrl/login';

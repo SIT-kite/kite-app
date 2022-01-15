@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-abstract class ISession {
+abstract class ASession {
   Future<Response> request(
     String url,
     String method, {

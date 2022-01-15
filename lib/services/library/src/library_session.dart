@@ -1,8 +1,7 @@
-import 'package:dio/src/options.dart';
-import 'package:dio/src/response.dart';
-import 'package:kite/services/session_interface.dart';
+import 'package:dio/dio.dart';
+import 'package:kite/services/abstract_session.dart';
 
-class LibrarySession extends ISession {
+class LibrarySession extends ASession {
   @override
   Future<Response> request(
     String url,
