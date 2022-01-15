@@ -36,3 +36,25 @@ abstract class ASession {
     );
   }
 }
+
+class DefaultSession extends ASession {
+  var dio = Dio();
+  @override
+  Future<Response> request(
+    String url,
+    String method, {
+    Map<String, String>? queryParameters,
+    data,
+    ResponseType? responseType,
+  }) {
+    return dio.request(
+      url,
+      data: data,
+      queryParameters: queryParameters,
+      options: Options(
+        method: method,
+        responseType: responseType,
+      ),
+    );
+  }
+}

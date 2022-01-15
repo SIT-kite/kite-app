@@ -1,7 +1,9 @@
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
-import 'package:dio/dio.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:kite/services/library/src/constants.dart';
+import 'package:kite/entity/library/holding.dart';
+import 'package:kite/services/abstract_service.dart';
+import 'package:kite/services/abstract_session.dart';
+import 'package:kite/services/library/constants.dart';
 
 part 'holding.g.dart';
 
@@ -201,88 +203,11 @@ class _BookHoldingInfo {
   Map<String, dynamic> toJson() => _$BookHoldingInfoToJson(this);
 }
 
-class HoldingItem {
-  // 图书记录号(同一本书可能有多本，该参数用于标识同一本书的不同本)
-  final int bookRecordId;
+class HoldingInfoService extends AService {
+  HoldingInfoService(ASession session) : super(session);
 
-  // 图书编号(用于标识哪本书)
-  final int bookId;
-
-  // 馆藏状态类型名称
-  final String stateTypeName;
-
-  // 条码号
-  final String barcode;
-
-  // 索书号
-  final String callNo;
-
-  // 文献所属馆
-  final String originLibrary;
-  // 所属馆位置
-  final String originLocation;
-
-  // 文献所在馆
-  final String currentLibrary;
-  // 所在馆位置
-  final String currentLocation;
-
-  // 流通类型名称
-  final String circulateTypeName;
-  // 流通类型描述
-  final String circulateTypeDescription;
-
-  // 注册日期
-  final DateTime registerDate;
-
-  // 入馆日期
-  final DateTime inDate;
-
-  // 单价
-  final double singlePrice;
-
-  // 总价
-  final double totalPrice;
-
-  const HoldingItem(
-      this.bookRecordId,
-      this.bookId,
-      this.stateTypeName,
-      this.barcode,
-      this.callNo,
-      this.originLibrary,
-      this.originLocation,
-      this.currentLibrary,
-      this.currentLocation,
-      this.circulateTypeName,
-      this.circulateTypeDescription,
-      this.registerDate,
-      this.inDate,
-      this.singlePrice,
-      this.totalPrice);
-
-  @override
-  String toString() {
-    return 'HoldingItem{bookRecordId: $bookRecordId, bookId: $bookId, stateTypeName: $stateTypeName, barcode: $barcode, callNo: $callNo, originLibrary: $originLibrary, originLocation: $originLocation, currentLibrary: $currentLibrary, currentLocation: $currentLocation, circulateTypeName: $circulateTypeName, circulateTypeDescription: $circulateTypeDescription, registerDate: $registerDate, inDate: $inDate, singlePrice: $singlePrice, totalPrice: $totalPrice}';
-  }
-}
-
-class HoldingInfo {
-  final List<HoldingItem> holdingList;
-
-  const HoldingInfo(this.holdingList);
-
-  @override
-  String toString() {
-    return 'HoldingInfo{holdingList: $holdingList}';
-  }
-
-  static Future<HoldingInfo> queryByBookId(
-    String bookId, {
-    Dio? dio,
-  }) async {
-    var response =
-        await (dio ?? Dio()).get('${Constants.bookHoldingUrl}/$bookId');
+  Future<HoldingInfo> queryByBookId(String bookId) async {
+    var response = await session.get('${Constants.bookHoldingUrl}/$bookId');
 
     var rawBookHoldingInfo = _BookHoldingInfo.fromJson(response.data);
     var result = rawBookHoldingInfo.holdingList.map((rawHoldingItem) {
@@ -327,29 +252,29 @@ class HoldingInfo {
     }).toList();
     return HoldingInfo(result);
   }
-}
 
-/// 搜索附近的书的id号
-Future<List<String>> searchNearBookIdList(String bookId) async {
-  var response = await Dio().get(
-    Constants.virtualBookshelfUrl,
-    queryParameters: {
-      'bookrecno': bookId,
+  /// 搜索附近的书的id号
+  Future<List<String>> searchNearBookIdList(String bookId) async {
+    var response = await session.get(
+      Constants.virtualBookshelfUrl,
+      queryParameters: {
+        'bookrecno': bookId,
 
-      // 1 表示不出现同一本书的重复书籍
-      'holding': '1',
-    },
-  );
-  String html = response.data;
+        // 1 表示不出现同一本书的重复书籍
+        'holding': '1',
+      },
+    );
+    String html = response.data;
 
-  return BeautifulSoup(html)
-      .findAll(
-        'a',
-        attrs: {'target': '_blank'},
-      )
-      .map(
-        (e) => e.attributes['href']!,
-      )
-      .map((e) => e.split('book/')[1])
-      .toList();
+    return BeautifulSoup(html)
+        .findAll(
+          'a',
+          attrs: {'target': '_blank'},
+        )
+        .map(
+          (e) => e.attributes['href']!,
+        )
+        .map((e) => e.split('book/')[1])
+        .toList();
+  }
 }

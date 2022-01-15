@@ -1,5 +1,5 @@
-import './book_search.dart';
-import './image_search.dart';
+import 'package:kite/entity/library/book_image.dart';
+import 'package:kite/entity/library/book_search.dart';
 
 class BookWithImage {
   Book book;

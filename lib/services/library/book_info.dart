@@ -1,27 +1,16 @@
 import 'dart:collection';
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
-import 'package:dio/dio.dart';
-import 'package:kite/services/library/src/constants.dart';
+import 'package:kite/entity/library/book_info.dart';
+import 'package:kite/services/abstract_service.dart';
+import 'package:kite/services/abstract_session.dart';
+import 'package:kite/services/library/constants.dart';
 
-class BookInfo {
-  final String title;
-  final String isbn;
-  final String price;
-  final LinkedHashMap<String, String> rawDetail;
+class BookInfoService extends AService {
+  BookInfoService(ASession session) : super(session);
 
-  const BookInfo(this.title, this.isbn, this.price, this.rawDetail);
-
-  @override
-  String toString() {
-    return 'BookInfo{title: $title, isbn: $isbn, price: $price, rawDetail: $rawDetail}';
-  }
-
-  static Future<BookInfo> query(
-    String bookId, {
-    Dio? dio,
-  }) async {
-    var response = await (dio ?? Dio()).get(Constants.bookUrl + '/$bookId');
+  Future<BookInfo> query(String bookId) async {
+    var response = await session.get(Constants.bookUrl + '/$bookId');
     var html = response.data;
 
     var detailItems = BeautifulSoup(html)
