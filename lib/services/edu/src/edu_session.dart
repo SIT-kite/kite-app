@@ -1,44 +1,31 @@
 import 'package:dio/dio.dart';
 import 'package:kite/services/session_interface.dart';
 
-class EduSession implements ISession {
+class EduSession extends ISession {
   final ISession _session;
-  const EduSession(this._session);
+  EduSession(this._session);
 
-  @override
-  Future<Response> get(
-    String url, {
-    Map<String, String>? queryParameters,
-    ResponseType? responseType,
-  }) async {
-    Future<Response> fetch() async {
-      return await _session.get(
-        url,
-        queryParameters: queryParameters,
-        responseType: responseType,
-      );
-    }
+  Future<void> _getCookie(Response response) async {
+    await _session.get('http://jwxt.sit.edu.cn/sso/jziotlogin');
+  }
 
-    var response = await fetch();
-    // 如果返回值是登陆页面，那就从sso跳转过来
-    if (!_isEduLoginPage(response)) {
-      return response;
-    }
-    await _getCookie(response);
-    // 再一次发请求
-    return await fetch();
+  bool _isEduLoginPage(Response response) {
+    return response.data.runtimeType == String &&
+        (response.data as String).contains('用户登录');
   }
 
   @override
-  Future<Response> post(
-    String url, {
+  Future<Response> request(
+    String url,
+    String method, {
     Map<String, String>? queryParameters,
     data,
     ResponseType? responseType,
   }) async {
     Future<Response> fetch() async {
-      return await _session.post(
+      return await _session.request(
         url,
+        method,
         queryParameters: queryParameters,
         data: data,
         responseType: responseType,
@@ -53,14 +40,5 @@ class EduSession implements ISession {
     await _getCookie(response);
     // 再一次发请求
     return await fetch();
-  }
-
-  Future<void> _getCookie(Response response) async {
-    await _session.get('http://jwxt.sit.edu.cn/sso/jziotlogin');
-  }
-
-  bool _isEduLoginPage(Response response) {
-    return response.data.runtimeType == String &&
-        (response.data as String).contains('用户登录');
   }
 }

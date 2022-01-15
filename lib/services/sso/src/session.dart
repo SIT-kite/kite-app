@@ -14,7 +14,7 @@ import 'package:kite/services/session_interface.dart';
 import './encrypt_util.dart';
 import './utils.dart';
 
-class Session implements ISession {
+class Session extends ISession {
   static const String _authServerUrl =
       'https://authserver.sit.edu.cn/authserver';
   static const String _loginUrl = '$_authServerUrl/login';
@@ -53,34 +53,15 @@ class Session implements ISession {
     };
   }
 
-  /// 请求数据
   @override
-  Future<Response> get(
-    String url, {
-    Map<String, String>? queryParameters,
-    ResponseType? responseType,
-  }) async {
-    var res = await _dio.get(
-      url,
-      queryParameters: queryParameters,
-      options: DioUtils.NON_REDIRECT_OPTION_WITH_FORM_TYPE.copyWith(
-        responseType: responseType,
-      ),
-    );
-
-    // // 处理重定向
-    return await DioUtils.processRedirect(_dio, res);
-  }
-
-  /// 请求数据
-  @override
-  Future<Response> post(
-    String url, {
+  Future<Response> request(
+    String url,
+    String method, {
     Map<String, String>? queryParameters,
     dynamic data,
     ResponseType? responseType,
   }) async {
-    var res = await _dio.post(
+    var res = await _dio.request(
       url,
       queryParameters: queryParameters,
       options: DioUtils.NON_REDIRECT_OPTION_WITH_FORM_TYPE.copyWith(
@@ -88,7 +69,6 @@ class Session implements ISession {
       ),
       data: data,
     );
-
     // // 处理重定向
     return await DioUtils.processRedirect(_dio, res);
   }
