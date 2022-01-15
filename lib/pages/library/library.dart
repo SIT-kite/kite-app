@@ -50,30 +50,34 @@ class LibraryPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSayingWidget(Saying saying,
-      {double? width, GestureTapCallback? onTap}) {
-    return GestureDetector(
-      child: Column(
-        children: saying.text.split('，').map((e) {
-              return SizedBox(
-                width: width,
-                child: Center(
-                  child: Text(e),
+  Widget _buildSayingWidget(
+    Saying saying, {
+    double? width,
+  }) {
+    return Column(
+      children: saying.text.split('，').map((e) {
+            return SizedBox(
+              width: width,
+              child: Center(
+                child: Text(e),
+              ),
+            );
+          }).toList() +
+          [
+            const SizedBox(height: 20),
+            SizedBox(
+              width: width,
+              child: Container(
+                alignment: Alignment.bottomRight,
+                child: Text(
+                  "——— ${_getRandomSaying().sayer}",
+                  style: const TextStyle(
+                    color: Colors.grey,
+                  ),
                 ),
-              );
-            }).toList() +
-            [
-              const SizedBox(height: 20),
-              SizedBox(
-                width: width,
-                child: Container(
-                  alignment: Alignment.bottomRight,
-                  child: Text("———" + _getRandomSaying().sayer),
-                ),
-              )
-            ],
-      ),
-      onTap: onTap,
+              ),
+            )
+          ],
     );
   }
 
@@ -98,7 +102,6 @@ class LibraryPage extends StatelessWidget {
             _buildSayingWidget(
               saying,
               width: sayingWidth,
-              onTap: () {},
             ),
           ],
         ),
