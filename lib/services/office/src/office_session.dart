@@ -22,15 +22,17 @@ Future<OfficeSession> login(String username, String password) async {
     throw OfficeLoginException('($code) $errMessage');
   }
   final String jwt = ((response.data as Map)['data'])['authorization'];
-  return OfficeSession(username, jwt, dio);
+  return OfficeSession(username, jwt);
 }
 
 class OfficeSession extends ASession {
   final String _userName;
   final String _jwtToken;
-  final Dio _dio;
+  late final Dio _dio;
 
-  OfficeSession(this._userName, this._jwtToken, this._dio);
+  OfficeSession(this._userName, this._jwtToken, {Dio? dio}) {
+    _dio = dio ?? SessionPool.dio;
+  }
 
   String get userName => _userName;
 
@@ -49,6 +51,7 @@ class OfficeSession extends ASession {
     String method, {
     Map<String, String>? queryParameters,
     dynamic data,
+    String? contentType,
     ResponseType? responseType,
     Options? options,
   }) async {
@@ -57,20 +60,19 @@ class OfficeSession extends ASession {
     // Make default options.
     final String ts = _getTimestamp();
     final String sign = _sign(ts);
-    newOptions.headers?.addAll({'timestamp': ts, 'signature': sign, 'Authorization': _jwtToken});
+    final Map<String, dynamic> newHeaders = {'timestamp': ts, 'signature': sign, 'Authorization': _jwtToken};
+
+    newOptions.headers == null ? newOptions.headers = newHeaders : newOptions.headers?.addAll(newHeaders);
     newOptions.method = method;
+    newOptions.contentType = contentType;
     newOptions.responseType = responseType;
 
-    Future<Response> fetch() async {
-      return await _dio.request(
-        url,
-        queryParameters: queryParameters,
-        data: data,
-        options: newOptions,
-      );
-    }
-
-    return await fetch();
+    return await _dio.request(
+      url,
+      queryParameters: queryParameters,
+      data: data,
+      options: newOptions,
+    );
   }
 }
 
