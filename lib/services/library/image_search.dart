@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:kite/dao/library/image_search.dart';
 import 'package:kite/entity/library/book_image.dart';
 import 'package:kite/entity/library/book_search.dart';
 import 'package:kite/services/abstract_session.dart';
@@ -9,13 +10,15 @@ import 'package:kite/services/library/constants.dart';
 import '../abstract_service.dart';
 
 /// 本类提供了一系列，通过查询图书图片的方法，返回结果类型为字典，以ISBN为键
-class BookImageSearchService extends AService {
+class BookImageSearchService extends AService implements BookImageSearchDao {
   BookImageSearchService(ASession session) : super(session);
 
+  @override
   Future<Map<String, BookImage>> searchByBookList(List<Book> bookList) async {
     return await searchByIsbnList(bookList.map((e) => e.isbn).toList());
   }
 
+  @override
   Future<Map<String, BookImage>> searchByIsbnList(List<String> isbnList) async {
     return await searchByIsbnStr(isbnList.join(','));
   }
@@ -34,9 +37,7 @@ class BookImageSearchService extends AService {
     var responseStr = (response.data as String).trim();
     responseStr = responseStr.substring(1, responseStr.length - 1);
     var result = <String, BookImage>{};
-    (jsonDecode(responseStr)['result'] as List<dynamic>)
-        .map((e) => BookImage.fromJson(e))
-        .forEach(
+    (jsonDecode(responseStr)['result'] as List<dynamic>).map((e) => BookImage.fromJson(e)).forEach(
       (e) {
         result[e.isbn] = e;
       },
