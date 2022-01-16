@@ -10,9 +10,15 @@ class HotSearchItem {
 }
 
 class HotSearch {
-  List<HotSearchItem> recentMonth = [];
-  List<HotSearchItem> totalTime = [];
-  HotSearch(this.recentMonth, this.totalTime);
+  // 近30天的热搜
+  List<HotSearchItem> recentMonth;
+
+  // 总共的热搜
+  List<HotSearchItem> totalTime;
+  HotSearch({
+    this.recentMonth = const [],
+    this.totalTime = const [],
+  });
 
   @override
   String toString() {

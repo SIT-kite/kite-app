@@ -1,11 +1,12 @@
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
+import 'package:kite/dao/library/hot_search.dart';
 import 'package:kite/entity/library/hot_search.dart';
 import 'package:kite/services/abstract_service.dart';
 import 'package:kite/services/abstract_session.dart';
 
 import 'constants.dart';
 
-class HotSearchService extends AService {
+class HotSearchService extends AService implements HotSearchDao {
   HotSearchService(ASession session) : super(session);
 
   HotSearchItem _parse(String rawText) {
@@ -14,6 +15,7 @@ class HotSearchService extends AService {
     return HotSearchItem(texts[0], int.parse(texts[1]));
   }
 
+  @override
   Future<HotSearch> getHotSearch() async {
     var response = await session.get(Constants.hotSearchUrl);
     var fieldsets = BeautifulSoup(response.data).findAll('fieldset');
@@ -23,6 +25,8 @@ class HotSearchService extends AService {
     }
 
     return HotSearch(
-        getHotSearchItems(fieldsets[0]), getHotSearchItems(fieldsets[0]));
+      recentMonth: getHotSearchItems(fieldsets[0]),
+      totalTime: getHotSearchItems(fieldsets[0]),
+    );
   }
 }
