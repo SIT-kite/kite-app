@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kite/services/edu/src/score_detail_parser.dart';
-import 'package:kite/services/edu/src/score_parser.dart';
+import 'package:kite/entity/edu/score.dart';
+import 'package:kite/entity/edu/score_detail.dart';
 
 class ScoreItem extends StatefulWidget {
   final Score _score;
@@ -29,7 +29,9 @@ class _ScoreItemState extends State<ScoreItem> {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: _scoreDetails!.map((e) => Text('${e.scoreType} (${e.percentage}): ${e.value}')).toList(),
+        children: _scoreDetails!
+            .map((e) => Text('${e.scoreType} (${e.percentage}): ${e.value}'))
+            .toList(),
       ),
     );
   }
@@ -38,7 +40,8 @@ class _ScoreItemState extends State<ScoreItem> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.fromLTRB(15, 10, 15, 5),
-      decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Colors.blue, width: 1))),
+      decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: Colors.blue, width: 1))),
       child: Row(children: [
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
@@ -49,19 +52,23 @@ class _ScoreItemState extends State<ScoreItem> {
                 bottom: BorderSide(color: Colors.orange.shade300, width: 3),
               ),
             ),
-            child: Text(_score.course, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            child: Text(_score.course,
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
           ),
           Container(
             margin: const EdgeInsets.only(top: 3),
             // TODO: 修改必修、选修判断方式.
-            child: Text('${_score.courseId[0] != 'G' ? '必修' : '选修'} | 学分: ${_score.credit}'),
+            child: Text(
+                '${_score.courseId[0] != 'G' ? '必修' : '选修'} | 学分: ${_score.credit}'),
           ),
         ]),
         Container(
           margin: const EdgeInsets.only(left: 15),
           child: Text(
             '${(_score.value - (-1)) < 0.1 ? _score.value : '待评教'}',
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.blue),
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 20, color: Colors.blue),
           ),
         ),
       ]),

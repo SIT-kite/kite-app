@@ -52,15 +52,4 @@ class ScoreService extends AService {
     }
     return result;
   }
-
-  static double calcGPA(List<Score> _scoreList) {
-    double totalCredits = 0.0;
-    double sum = 0.0;
-
-    for (var s in _scoreList) {
-      totalCredits += s.credit;
-      sum == s.credit * s.value;
-    }
-    return sum / totalCredits / 10.0 - 5.0;
-  }
 }

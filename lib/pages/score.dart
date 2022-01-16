@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kite/entity/edu/score.dart';
+import 'package:kite/entity/edu/year_semester.dart';
 import 'package:kite/pages/score/banner.dart';
 import 'package:kite/pages/score/item.dart';
-import 'package:kite/services/edu/edu.dart';
-import 'package:kite/services/edu/src/score_parser.dart';
+import 'package:kite/services/edu/score.dart';
+import 'package:kite/services/session_pool.dart';
 
 List<int> _generateYearList(int entranceYear) {
   final date = DateTime.now();
@@ -12,7 +14,9 @@ List<int> _generateYearList(int entranceYear) {
   final monthInterval = (currentYear - entranceYear) * 12 + currentMonth - 9;
 
   List<int> yearItems = [];
-  for (int i = 0, year = entranceYear; i < (monthInterval / 12 as int) + 1; i++, year++) {
+  for (int i = 0, year = entranceYear;
+      i < (monthInterval / 12 as int) + 1;
+      i++, year++) {
     yearItems.add(year);
   }
   return yearItems;
@@ -74,7 +78,8 @@ class _ScorePageState extends State<ScorePage> {
     }
 
     Widget buildYearSelector() {
-      final List<int> yearList = _generateYearList(18); // TODO: Use actual year here.
+      final List<int> yearList =
+          _generateYearList(18); // TODO: Use actual year here.
       return buildSelector(yearList, (int? selected) {
         if (selected != null && selected != selectedYear) {
           setState(() {
@@ -118,15 +123,16 @@ class _ScorePageState extends State<ScorePage> {
       const Text('暂时还没有成绩', style: TextStyle(color: Colors.grey)),
       Container(
         margin: const EdgeInsets.only(left: 40, right: 40),
-        child:
-            const Text('如果成绩刚刚出炉，可点击右上角刷新按钮尝试刷新~', textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),
+        child: const Text('如果成绩刚刚出炉，可点击右上角刷新按钮尝试刷新~',
+            textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),
       )
     ]);
   }
 
   Widget _buildScoreResult() {
     return FutureBuilder<List<Score>>(
-      future: ScoreService().getScoreList(SchoolYear(selectedYear), selectedSemester),
+      future: ScoreService(SessionPool.eduSession)
+          .getScoreList(SchoolYear(selectedYear), selectedSemester),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final scoreList = snapshot.data!;
