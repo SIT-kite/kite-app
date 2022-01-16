@@ -16,6 +16,7 @@ import 'package:kite/pages/welcome.dart';
 import 'package:kite/pages/wiki.dart';
 import 'package:kite/storage/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:kite/pages/timetable/timetable.dart';
 
 class KiteApp extends StatelessWidget {
   const KiteApp({Key? key}) : super(key: key);
@@ -38,6 +39,7 @@ class KiteApp extends StatelessWidget {
       '/wiki': (context) => const WikiPage(),
       '/library': (context) => const LibraryPage(),
       '/market': (context) => const MarketPage(),
+      '/timetable': (context) => const TimetablePage(),
     };
 
     return MaterialApp(
