@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/entity/library/hot_search.dart';
 import 'package:kite/entity/library/search_history.dart';
 import 'package:kite/pages/library/components/suggestion_items.dart';
+import 'package:kite/pages/library/search_result.dart';
 import 'package:kite/services/library/hot_search.dart';
 import 'package:kite/services/session_pool.dart';
 import 'package:kite/storage/search_history.dart';
@@ -64,9 +65,7 @@ class SearchBarDelegate extends SearchDelegate<String> {
         DateTime.now(),
       ));
     });
-    return Center(
-      child: Text(query),
-    );
+    return BookSearchResultWidget(query);
   }
 
   @override
