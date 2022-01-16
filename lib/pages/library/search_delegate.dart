@@ -5,6 +5,7 @@ import 'package:kite/pages/library/components/suggestion_items.dart';
 import 'package:kite/services/library/hot_search.dart';
 import 'package:kite/services/session_pool.dart';
 import 'package:kite/storage/search_history.dart';
+import 'package:kite/utils/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchBarDelegate extends SearchDelegate<String> {
@@ -127,6 +128,7 @@ class SearchBarDelegate extends SearchDelegate<String> {
               // future: HotSearchMock().getHotSearch(),
               future: HotSearchService(SessionPool.librarySession).getHotSearch(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
+                Log.info('获取热搜状态: ${snapshot.connectionState}');
                 // 若请求结束
                 if (snapshot.connectionState == ConnectionState.done) {
                   // 获取数据

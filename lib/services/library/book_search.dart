@@ -1,10 +1,11 @@
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
+import 'package:kite/dao/library/book_search.dart';
 import 'package:kite/entity/library/book_search.dart';
 import 'package:kite/services/abstract_service.dart';
 import 'package:kite/services/abstract_session.dart';
 import 'package:kite/services/library/constants.dart';
 
-class BookSearchService extends AService {
+class BookSearchService extends AService implements BookSearchDao {
   BookSearchService(ASession session) : super(session);
 
   static String _searchWayToString(SearchWay sw) {
@@ -58,14 +59,14 @@ class BookSearchService extends AService {
     var bookId = bookCoverImage.attributes['bookrecno']!;
     var isbn = bookCoverImage.attributes['isbn']!;
     var callNo = getBookInfo('span', '.callnosSpan');
-    var publishDate =
-        getBookInfo('div', 'div').split('出版日期:')[1].split('\n')[0].trim();
+    var publishDate = getBookInfo('div', 'div').split('出版日期:')[1].split('\n')[0].trim();
 
     var publisher = getBookInfo('a', '.publisher-link');
     var title = getBookInfo('a', '.title-link');
     return Book(bookId, isbn, title, author, publisher, publishDate, callNo);
   }
 
+  @override
   Future<BookSearchResult> search({
     String keyword = '',
     int rows = 10,
@@ -94,39 +95,23 @@ class BookSearchService extends AService {
 
     var htmlElement = BeautifulSoup(response.data);
 
-    var currentPage =
-        htmlElement.find('b', selector: '.meneame > b')!.text.trim();
+    var currentPage = htmlElement.find('b', selector: '.meneame > b')!.text.trim();
     var resultNumAndTime = htmlElement
         .find(
           'div',
           selector: '#search_meta > div:nth-child(1)',
         )!
         .text;
-    var resultCount = int.parse(RegExp(r'检索到: (\S*) 条结果')
-        .allMatches(resultNumAndTime)
-        .first
-        .group(1)!
-        .replaceAll(',', ''));
-    var useTime = double.parse(
-        RegExp(r'检索时间: (\S*) 秒').allMatches(resultNumAndTime).first.group(1)!);
-    var totalPages = htmlElement
-        .find('div', class_: 'meneame')!
-        .find('span', class_: 'disabled')!
-        .text
-        .trim();
+    var resultCount =
+        int.parse(RegExp(r'检索到: (\S*) 条结果').allMatches(resultNumAndTime).first.group(1)!.replaceAll(',', ''));
+    var useTime = double.parse(RegExp(r'检索时间: (\S*) 秒').allMatches(resultNumAndTime).first.group(1)!);
+    var totalPages = htmlElement.find('div', class_: 'meneame')!.find('span', class_: 'disabled')!.text.trim();
 
     return BookSearchResult(
         resultCount,
         useTime,
         int.parse(currentPage),
-        int.parse(totalPages
-            .substring(1, totalPages.length - 1)
-            .trim()
-            .replaceAll(',', '')),
-        htmlElement
-            .find('table', class_: 'resultTable')!
-            .findAll('tr')
-            .map((e) => _parseBook(e))
-            .toList());
+        int.parse(totalPages.substring(1, totalPages.length - 1).trim().replaceAll(',', '')),
+        htmlElement.find('table', class_: 'resultTable')!.findAll('tr').map((e) => _parseBook(e)).toList());
   }
 }
