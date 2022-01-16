@@ -62,7 +62,9 @@ class _SuggestionItemViewState extends State<SuggestionItemView> {
               child: SuggestionItem(
                 title: item,
                 onTap: () {
-                  (widget.onItemTap ?? () {})(item);
+                  if (widget.onItemTap != null) {
+                    widget.onItemTap!(item);
+                  }
                 },
               ),
             );
