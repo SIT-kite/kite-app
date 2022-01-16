@@ -1,13 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:cookie_jar/cookie_jar.dart';
-import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
-import 'package:dio_log/dio_log.dart';
 import 'package:kite/services/abstract_session.dart';
 import 'package:kite/services/ocr.dart';
 
@@ -37,20 +33,6 @@ class SsoSession extends ASession {
     _dio = dio ?? Dio();
     // 默认初始化一个RAM的CookieJar
     _jar = jar ?? DefaultCookieJar();
-
-    // 添加拦截器
-    _dio.interceptors.add(CookieManager(_jar));
-    _dio.interceptors.add(DioLogInterceptor());
-    // 若需要使用fiddler之类的抓包工具，则需要开启如下代码
-    // _allowInsecure();
-    _dio.options.headers = {
-      'accept':
-          'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-      'accept-language': 'ja,en-US;q=0.9,en;q=0.8,zh-CN;q=0.7,zh;q=0.6',
-      'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36',
-      'content-type': 'application/x-www-form-urlencoded',
-    };
   }
 
   @override
@@ -119,15 +101,6 @@ class SsoSession extends ASession {
     var hashedPwd = hashPassword(salt, password);
     // 登录系统，获得cookie
     return await _loginRaw(username, hashedPwd, captcha, casTicket);
-  }
-
-  /// 允许不安全的https访问，这在使用fiddler等抓包工具时很有用
-  // ignore: unused_element
-  void _allowInsecure() {
-    (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
-      client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
-      return client;
-    };
   }
 
   /// 登录统一认证平台
