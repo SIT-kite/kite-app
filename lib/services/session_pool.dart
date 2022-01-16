@@ -5,6 +5,7 @@ import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:kite/services/edu/edu_session.dart';
+import 'package:kite/services/library/library_session.dart';
 import 'package:kite/services/sso/sso.dart';
 
 const String? httpProxy = null;
@@ -18,6 +19,7 @@ class SessionPool {
 
   static final SsoSession ssoSession = SsoSession(dio: dio, jar: _cookieJar);
   static final EduSession eduSession = EduSession(ssoSession);
+  static final LibrarySession librarySession = LibrarySession();
 
   static Dio initDioInstance() {
     Dio dio = Dio();
