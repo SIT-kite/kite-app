@@ -95,7 +95,7 @@ class BookSearchService extends AService implements BookSearchDao {
 
     var htmlElement = BeautifulSoup(response.data);
 
-    var currentPage = htmlElement.find('b', selector: '.meneame > b')!.text.trim();
+    var currentPage = htmlElement.find('b', selector: '.meneame > b')?.text.trim() ?? '$page';
     var resultNumAndTime = htmlElement
         .find(
           'div',

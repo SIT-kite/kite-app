@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:kite/dao/library/book_search.dart';
 import 'package:kite/dao/library/image_search.dart';
+import 'package:kite/pages/library/book_info.dart';
 import 'package:kite/services/library/book_search.dart';
 import 'package:kite/services/library/image_search.dart';
 import 'package:kite/services/session_pool.dart';
+import 'package:kite/utils/flash_utils.dart';
 import 'package:kite/utils/library/search_util.dart';
+import 'package:kite/utils/logger.dart';
 
 class BookSearchResultWidget extends StatefulWidget {
   final String keyword;
-  // final BookSearchDao bookSearchDao = BookSearchMock();
   final BookSearchDao bookSearchDao = BookSearchService(SessionPool.librarySession);
   final BookImageSearchDao bookImageSearchDao = BookImageSearchService(SessionPool.librarySession);
 
@@ -21,10 +23,14 @@ class BookSearchResultWidget extends StatefulWidget {
 class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
   static const defaultBookCover = Icon(
     Icons.library_books_sharp,
-    size: 40,
+    size: 30,
   );
+
+  final _scrollController = ScrollController();
   Image buildBookCover(String imageUrl) {
     return Image(
+      height: 40,
+      width: 40,
       image: NetworkImage(imageUrl),
     );
   }
@@ -57,40 +63,95 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
           )
         ],
       ),
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (BuildContext context) {
+            return BookInfoPage(bi.book.bookId);
+          }),
+        );
+      },
     );
   }
 
+  var useTime = 0.0;
+  var searchResultCount = 0;
+
   /// 获得搜索结果
   Future<List<BookWithImage>> get(int rows, int page) async {
-    var searchResult = await widget.bookSearchDao.search(keyword: widget.keyword, rows: rows, page: page);
+    var searchResult = await widget.bookSearchDao.search(
+      keyword: widget.keyword,
+      rows: rows,
+      page: page,
+    );
+    useTime = searchResult.useTime;
+    searchResultCount = searchResult.resultCount;
+    Log.info(searchResult);
     var imageResult = await widget.bookImageSearchDao.searchByBookList(searchResult.books);
-
+    Log.info(imageResult);
     return BookWithImage.buildByJoin(searchResult.books, imageResult);
   }
 
+  int currentPage = 1;
+  List<BookWithImage> dataList = [];
+  bool isLoading = false;
+
+  Future<void> getData() async {
+    var firstPage = await get(10, currentPage);
+    setState(() {
+      dataList = firstPage;
+    });
+  }
+
+  Future<void> getMore() async {
+    if (!isLoading) {
+      setState(() {
+        isLoading = true;
+      });
+      showBasicFlash(context, Text('加载更多'));
+      var nextPage = await get(10, currentPage + 1);
+      if (nextPage.isNotEmpty) {
+        setState(() {
+          dataList.addAll(nextPage);
+          currentPage++;
+          isLoading = false;
+        });
+      } else {
+        showBasicFlash(context, Text('找不到更多了。。。'));
+        isLoading = false;
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+        Log.info('页面滑动到底部');
+        getMore();
+      }
+    });
+  }
+
+  Widget? a;
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<BookWithImage>>(
-        future: get(30, 1),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            List<BookWithImage> searchResult = snapshot.data;
-            return ListView(
-              children: searchResult
-                  .map((e) => [
-                        buildListTile(e),
-                        const SizedBox(
-                          height: 1,
-                          child: ColoredBox(color: Colors.grey),
-                        ),
-                      ])
-                  .expand((element) => element)
-                  .toList(),
-            );
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        });
+    Log.info('初始化列表');
+    return Column(
+      // crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('搜索结果数: $searchResultCount  用时: $useTime'),
+        Expanded(
+          child: ListView.builder(
+            itemBuilder: (BuildContext context, int index) {
+              return buildListTile(dataList[index]);
+            },
+            itemCount: dataList.length,
+            controller: _scrollController,
+          ),
+        ),
+      ],
+    );
   }
 }
