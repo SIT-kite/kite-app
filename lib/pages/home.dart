@@ -43,6 +43,7 @@ class HomePage extends StatelessWidget {
         ItemWidget('/score', AssetImage('assets/home/icon_daily_report.png'), '成绩'),
         ItemWidget('/library', AssetImage('assets/home/icon_library.png'), '图书馆'),
         ItemWidget('/expense', AssetImage('assets/home/icon_consumption.png'), '消费查询'),
+        ItemWidget("/timetable", AssetImage('assets/home/icon_timetable.png'), '课程表'),
         SizedBox(height: 20.0),
         ItemWidget('/report', AssetImage('assets/home/icon_daily_report.png'), '体温上报'),
         ItemWidget('/office', AssetImage('assets/home/icon_library.png'), '办公'),
