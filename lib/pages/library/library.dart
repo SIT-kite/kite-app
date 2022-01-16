@@ -2,9 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:kite/pages/library/constants.dart';
-
-import './components/fake_search_field.dart';
-import './search_delegate.dart';
+import 'package:kite/pages/library/search_delegate.dart';
 
 class LibraryPage extends StatelessWidget {
   const LibraryPage({Key? key}) : super(key: key);
@@ -18,36 +16,23 @@ class LibraryPage extends StatelessWidget {
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
-      leading: const BackButton(color: Colors.grey),
-      title: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: SizedBox(
-              child: FakeSearchField(
-                onTap: () {
-                  showSearch(context: context, delegate: SearchBarDelegate());
-                },
-                suggestion: "Search",
-              ),
-              height: 40,
-            ),
+      title: Text('图书馆'),
+      actions: [
+        IconButton(
+          onPressed: () {
+            showSearch(context: context, delegate: SearchBarDelegate());
+          },
+          icon: const Icon(
+            Icons.search,
           ),
-          const SizedBox(
-            width: 10,
+        ),
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(
+            Icons.person_pin,
           ),
-          IconButton(
-            padding: const EdgeInsets.all(0),
-            onPressed: () {},
-            icon: const Icon(
-              Icons.person_pin,
-              color: Colors.blue,
-              size: 40,
-            ),
-          ),
-        ],
-      ),
-      backgroundColor: Colors.white,
+        ),
+      ],
     );
   }
 
