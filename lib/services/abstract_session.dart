@@ -65,11 +65,12 @@ class DefaultSession extends ASession {
       url,
       data: data,
       queryParameters: queryParameters,
-      options: options?.copyWith(
-        method: method,
-        contentType: contentType,
-        responseType: responseType,
-      ),
+      options: options ??
+          Options().copyWith(
+            method: method,
+            contentType: contentType,
+            responseType: responseType,
+          ),
     );
   }
 }
