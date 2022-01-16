@@ -85,7 +85,8 @@ Future<OfficeMessagePage> getMessage(OfficeSession session, MessageType type, in
   final String url = _getMessageListUrl(type);
   final String payload = 'myFlow=1&pageIdx=$page&pageSize=999'; // TODO: 此处硬编码.
 
-  final response = await session.post(url, data: payload, responseType: ResponseType.json);
+  final response = await session.post(url,
+      data: payload, contentType: 'application/x-www-form-urlencoded', responseType: ResponseType.json);
   final List data = jsonDecode(response.data);
   final int totalNum = int.parse(data.last['totalNum']);
   final int totalPage = int.parse(data.last['totalPage']);
