@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:kite/services/office/office.dart';
-import 'package:kite/services/office/src/signature.dart';
 import 'package:kite/utils/iconfont.dart';
+
+import 'office_session.dart';
 
 part 'function.g.dart';
 
@@ -33,15 +33,7 @@ class SimpleFunction {
 Future<List<SimpleFunction>> selectFunctions(OfficeSession session) async {
   String payload = '{"appObject":"student","appName":null}';
 
-  final String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-  final Response response = await session.dio.post(serviceFunctionList,
-      data: payload,
-      options: Options(headers: {
-        'content-type': 'application/json',
-        'Authorization': session.jwtToken,
-        'timestamp': timestamp,
-        'signature': sign(timestamp),
-      }));
+  final Response response = await session.post(serviceFunctionList, data: payload, responseType: ResponseType.json);
 
   final Map<String, dynamic> data = response.data;
   final List<SimpleFunction> functionList = (data['value'] as List<dynamic>)
@@ -80,15 +72,7 @@ class FunctionDetail {
 Future<FunctionDetail> getFunctionDetail(OfficeSession session, String functionId) async {
   final String payload = '{"appID":"$functionId"}';
 
-  final String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-  final response = await session.dio.post(serviceFunctionDetail,
-      data: payload,
-      options: Options(headers: {
-        'content-type': 'application/json',
-        'authorization': session.jwtToken,
-        'timestamp': timestamp,
-        'signature': sign(timestamp),
-      }));
+  final response = await session.post(serviceFunctionDetail, data: payload, responseType: ResponseType.json);
   final Map<String, dynamic> data = response.data;
   final List<FunctionDetailSection> sections =
       (data['value'] as List<dynamic>).map((e) => FunctionDetailSection.fromJson(e)).toList();

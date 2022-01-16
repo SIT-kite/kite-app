@@ -1,5 +1,5 @@
 library office;
 
-export 'src/auth.dart';
 export 'src/function.dart';
 export 'src/message.dart';
+export 'src/office_session.dart';
