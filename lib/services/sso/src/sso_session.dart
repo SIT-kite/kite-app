@@ -4,8 +4,10 @@ import 'dart:typed_data';
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:kite/services/abstract_session.dart';
 import 'package:kite/services/ocr.dart';
+import 'package:kite/services/session_pool.dart';
 
 import './encrypt_util.dart';
 import './utils.dart';
@@ -30,9 +32,13 @@ class SsoSession extends ASession {
     Dio? dio,
     CookieJar? jar,
   }) {
-    _dio = dio ?? Dio();
-    // 默认初始化一个RAM的CookieJar
-    _jar = jar ?? DefaultCookieJar();
+    _dio = dio ?? SessionPool.dio;
+
+    if (jar == null) {
+      // 使用全局 cookieJar
+      _jar = jar ?? SessionPool.cookieJar;
+      _dio.interceptors.add(CookieManager(_jar));
+    }
   }
 
   @override
@@ -41,6 +47,7 @@ class SsoSession extends ASession {
     String method, {
     Map<String, String>? queryParameters,
     dynamic data,
+    String? contentType,
     ResponseType? responseType,
     Options? options,
   }) async {
@@ -49,6 +56,7 @@ class SsoSession extends ASession {
       queryParameters: queryParameters,
       options: DioUtils.NON_REDIRECT_OPTION_WITH_FORM_TYPE.copyWith(
         method: method,
+        contentType: contentType,
         responseType: responseType,
       ),
       data: data,
