@@ -14,9 +14,9 @@ import 'package:kite/pages/report.dart';
 import 'package:kite/pages/score.dart';
 import 'package:kite/pages/welcome.dart';
 import 'package:kite/pages/wiki.dart';
+import 'package:kite/pages/timetable/timetable.dart';
 import 'package:kite/storage/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:kite/pages/timetable/timetable.dart';
 
 class KiteApp extends StatelessWidget {
   const KiteApp({Key? key}) : super(key: key);
