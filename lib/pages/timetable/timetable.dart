@@ -279,12 +279,12 @@ class _TimetablePageState extends State<TimetablePage> {
 
   Widget _buildBottomSheet(CourseInfo courseInfo, Size phoneSize) {
     List<List<String>> detailList = [
-      ["assets/timetable/icons/courseId.png", courseInfo.classCode],
-      ["assets/timetable/icons/dynClassId.png", courseInfo.classOrderNumber],
-      ["assets/timetable/icons/campus.png"] + courseInfo.allShowLocation,
+      ["assets/timetable/courseId.png", courseInfo.classCode],
+      ["assets/timetable/dynClassId.png", courseInfo.classOrderNumber],
+      ["assets/timetable/campus.png"] + courseInfo.allShowLocation,
     ];
     for (int i = 0; i < courseInfo.allWeek.length; i++) {
-      detailList.add(["assets/timetable/icons/day.png"] + courseInfo.allWeek[i]);
+      detailList.add(["assets/timetable/day.png"] + courseInfo.allWeek[i]);
     }
     //用于在底部打开弹框的效果
     return Container(
