@@ -4,14 +4,18 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:flutter_user_agentx/flutter_user_agent.dart';
 import 'package:kite/services/edu/edu_session.dart';
 import 'package:kite/services/library/library_session.dart';
 import 'package:kite/services/sso/sso.dart';
 
-const String? httpProxy = null;
+const String? httpProxy = '10.3.0.13:8888';
 const bool allowBadCertificate = false;
 
 class SessionPool {
+  static const String defaultUaString = 'kite-app';
+  static String uaString = defaultUaString;
+
   static final Dio dio = initDioInstance();
   static final DefaultCookieJar _cookieJar = DefaultCookieJar();
 
@@ -41,6 +45,20 @@ class SessionPool {
     }
 
     (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = onHttpClientCreate;
+
+    // 设置默认 User-Agent 字符串.
+    dio.options.headers = {
+      'User-Agent': uaString,
+    };
     return dio;
+  }
+
+  static void initUserAgentString() {
+    Future.delayed(Duration.zero, () async {
+      await FlutterUserAgent.init();
+      uaString = FlutterUserAgent.webViewUserAgent! ?? defaultUaString;
+      // 更新 dio 设置的 user-agent 字符串
+      dio.options.headers['User-Agent'] = uaString;
+    });
   }
 }
