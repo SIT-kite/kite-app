@@ -71,6 +71,7 @@ flutter:
     - assets/wiki/
     - assets/score/
     - assets/library/
+    - assets/timetable/icons/
 
   fonts:
     # This iconfont file downloaded from ywb.sit.edu.cn
