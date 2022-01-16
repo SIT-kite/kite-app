@@ -109,7 +109,7 @@ class _TimetablePageState extends State<TimetablePage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 30.0,
-        title: Text(_selectedTime.toStr_YearMonth()),
+        title: Text("课程表"),
         actions: <Widget>[
           _MorePopupMenuButton(context),
         ],
