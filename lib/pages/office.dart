@@ -39,14 +39,8 @@ class _OfficePageState extends State<OfficePage> {
 
   Future<List<SimpleFunction>> _fetchFuncList() async {
     user = await _queryLocalCredential();
-
-    if (user != null && user!.username != '') {
-      session = await login(user!.username, user!.password);
-      if (session != null) {
-        return await selectFunctionsByCountDesc(session!);
-      }
-    }
-    return [];
+    session = await login(user!.username, user!.password);
+    return await selectFunctionsByCountDesc(session!);
   }
 
   Widget _buildFunctionList(List<SimpleFunction> functionList) {
@@ -65,6 +59,8 @@ class _OfficePageState extends State<OfficePage> {
         if (snapshot.hasData) {
           final List<SimpleFunction> result = snapshot.data!;
           return _buildFunctionList(result);
+        } else if (snapshot.hasError) {
+          return Center(child: Text(snapshot.error.toString()));
         }
         return const Center(child: CircularProgressIndicator());
       },
