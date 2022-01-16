@@ -19,7 +19,7 @@ class SessionPool {
 
   static final SsoSession ssoSession = SsoSession(dio: dio, jar: _cookieJar);
   static final EduSession eduSession = EduSession(ssoSession);
-  static final LibrarySession librarySession = LibrarySession();
+  static final LibrarySession librarySession = LibrarySession(dio);
 
   static Dio initDioInstance() {
     Dio dio = Dio();

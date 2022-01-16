@@ -44,7 +44,8 @@ abstract class ASession {
 }
 
 class DefaultSession extends ASession {
-  var dio = Dio();
+  Dio dio;
+  DefaultSession(this.dio);
   @override
   Future<Response> request(
     String url,
