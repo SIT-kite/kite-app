@@ -1,6 +1,6 @@
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
-import 'package:kite/services/edu/src/edu_session.dart';
+import 'package:kite/services/edu/edu_session.dart';
 import 'package:kite/services/sso/sso.dart';
 
 class SessionPool {
