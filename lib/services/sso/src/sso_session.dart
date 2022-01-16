@@ -15,14 +15,14 @@ import './encrypt_util.dart';
 import './utils.dart';
 
 class SsoSession extends ASession {
-  static const String _authServerUrl =
-      'https://authserver.sit.edu.cn/authserver';
+  static const String _authServerUrl = 'https://authserver.sit.edu.cn/authserver';
   static const String _loginUrl = '$_authServerUrl/login';
   static const String _needCaptchaUrl = '$_authServerUrl/needCaptcha.html';
   static const String _captchaUrl = '$_authServerUrl/captcha.html';
 
   // http客户端对象
   late Dio _dio;
+
   // cookie缓存
   late CookieJar _jar;
 
@@ -60,6 +60,7 @@ class SsoSession extends ASession {
     Map<String, String>? queryParameters,
     dynamic data,
     ResponseType? responseType,
+    Options? options,
   }) async {
     var res = await _dio.request(
       url,
@@ -123,17 +124,14 @@ class SsoSession extends ASession {
   /// 允许不安全的https访问，这在使用fiddler等抓包工具时很有用
   // ignore: unused_element
   void _allowInsecure() {
-    (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-        (HttpClient client) {
-      client.badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
+    (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
+      client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
       return client;
     };
   }
 
   /// 登录统一认证平台
-  Future<Response> _loginRaw(String username, String hashedPassword,
-      String captcha, String casTicket) async {
+  Future<Response> _loginRaw(String username, String hashedPassword, String captcha, String casTicket) async {
     var requestBody = {
       'username': username,
       'password': hashedPassword,
@@ -145,9 +143,7 @@ class SsoSession extends ASession {
       'rmShown': '1',
     };
     // 登录系统
-    var res = await _dio.post(_loginUrl,
-        data: requestBody,
-        options: DioUtils.NON_REDIRECT_OPTION_WITH_FORM_TYPE);
+    var res = await _dio.post(_loginUrl, data: requestBody, options: DioUtils.NON_REDIRECT_OPTION_WITH_FORM_TYPE);
     // 处理重定向
     return await DioUtils.processRedirect(_dio, res);
   }

@@ -1,3 +1,3 @@
 library sso;
 
-export 'src/session.dart';
+export 'src/sso_session.dart';

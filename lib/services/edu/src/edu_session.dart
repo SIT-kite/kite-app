@@ -10,8 +10,7 @@ class EduSession extends ASession {
   }
 
   bool _isEduLoginPage(Response response) {
-    return response.data.runtimeType == String &&
-        (response.data as String).contains('用户登录');
+    return response.data.runtimeType == String && (response.data as String).contains('用户登录');
   }
 
   @override
@@ -21,6 +20,7 @@ class EduSession extends ASession {
     Map<String, String>? queryParameters,
     data,
     ResponseType? responseType,
+    Options? options,
   }) async {
     Future<Response> fetch() async {
       return await _session.request(

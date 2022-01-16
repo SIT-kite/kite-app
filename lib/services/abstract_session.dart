@@ -6,18 +6,22 @@ abstract class ASession {
     String method, {
     Map<String, String>? queryParameters,
     dynamic data,
+    Options? options,
     ResponseType? responseType,
   });
+
   Future<Response> get(
     String url, {
     Map<String, String>? queryParameters,
     ResponseType? responseType,
+    Options? options,
   }) {
     return request(
       url,
       'GET',
       queryParameters: queryParameters,
       responseType: responseType,
+      options: options,
     );
   }
 
@@ -26,6 +30,7 @@ abstract class ASession {
     Map<String, String>? queryParameters,
     dynamic data,
     ResponseType? responseType,
+    Options? options,
   }) {
     return request(
       url,
@@ -33,6 +38,7 @@ abstract class ASession {
       queryParameters: queryParameters,
       data: data,
       responseType: responseType,
+      options: options,
     );
   }
 }
@@ -44,14 +50,15 @@ class DefaultSession extends ASession {
     String url,
     String method, {
     Map<String, String>? queryParameters,
-    data,
+    dynamic data,
+    Options? options,
     ResponseType? responseType,
   }) {
     return dio.request(
       url,
       data: data,
       queryParameters: queryParameters,
-      options: Options(
+      options: options?.copyWith(
         method: method,
         responseType: responseType,
       ),
