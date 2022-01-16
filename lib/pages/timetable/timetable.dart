@@ -108,7 +108,6 @@ class _TimetablePageState extends State<TimetablePage> {
     deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        leading: const Icon(Icons.home),
         elevation: 30.0,
         title: Text(_selectedTime.toStr_YearMonth()),
         actions: <Widget>[
