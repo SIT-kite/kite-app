@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class ItemWidget extends StatefulWidget {
-  final String routeName;
+  final String route;
   final AssetImage icon;
   final String title;
 
-  const ItemWidget(this.routeName, this.icon, this.title, {Key? key});
+  const ItemWidget(this.route, this.icon, this.title, {Key? key}) : super(key: key);
 
   @override
-  _ItemWidgetState createState() => _ItemWidgetState(routeName, icon, title);
+  _ItemWidgetState createState() => _ItemWidgetState(route, icon, title);
 }
 
 class _ItemWidgetState extends State<ItemWidget> {
@@ -21,9 +21,8 @@ class _ItemWidgetState extends State<ItemWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final titleStyle =
-        TextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.bold);
-    final contentStyle = TextStyle().copyWith(fontSize: 15);
+    final titleStyle = const TextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.bold);
+    final contentStyle = const TextStyle().copyWith(fontSize: 15);
 
     return InkWell(
         onTap: () {
@@ -31,13 +30,9 @@ class _ItemWidgetState extends State<ItemWidget> {
         },
         child: Container(
           padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-          // decoration: BoxDecoration(
-          // border: Border.all(
-          //   color: Colors.transparent,
-          //   width: 0,
-          //   style: BorderStyle.none,
-          // ),
-          // ),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.6),
+          ),
           child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
             SizedBox(
               height: 40,

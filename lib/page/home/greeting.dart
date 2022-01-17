@@ -22,7 +22,7 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   int campus = 1;
   late Weather currentWeather;
 
-  final textStyle = const TextStyle(color: Colors.black54, fontSize: 20);
+  final textStyle = const TextStyle(color: Colors.white70, fontSize: 20);
 
   @override
   void initState() {
@@ -50,12 +50,19 @@ class _GreetingWidgetState extends State<GreetingWidget> {
 
   Widget _buildWeatherIcon(String iconCode) {
     return TextButton(
-        onPressed: () => setState(
-              () {
-                campus = campus == 1 ? 2 : 1;
-              },
-            ),
-        child: SvgPicture.asset('assets/weather/$iconCode.svg', width: 60, height: 60, fit: BoxFit.fill));
+      onPressed: () => setState(
+        () {
+          campus = campus == 1 ? 2 : 1;
+        },
+      ),
+      child: SvgPicture.asset(
+        'assets/weather/$iconCode.svg',
+        width: 60,
+        height: 60,
+        fit: BoxFit.fill,
+        color: Colors.white,
+      ),
+    );
   }
 
   Widget buildAll(BuildContext context) {
@@ -65,8 +72,8 @@ class _GreetingWidgetState extends State<GreetingWidget> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('今天是你在上应大的第 $studyDays 天，', style: textStyle),
-            Text('${_getCampusName()}${currentWeather.weather}，${currentWeather.temperature} °C', style: textStyle)
+            Text('今天是你在上应大的第 $studyDays 天', style: textStyle),
+            Text('${_getCampusName()}${currentWeather.weather}  ${currentWeather.temperature} °C', style: textStyle)
           ],
         ),
         SizedBox(child: _buildWeatherIcon(currentWeather.icon)),
@@ -83,7 +90,7 @@ class _GreetingWidgetState extends State<GreetingWidget> {
         builder: (BuildContext context, AsyncSnapshot<Weather> snapshot) {
           if (snapshot.hasData) {
             currentWeather = snapshot.data!;
-            return buildAll(context);
+            return Container(padding: const EdgeInsets.only(left: 12, right: 12), child: buildAll(context));
           }
 
           return const Text("Loading……");
