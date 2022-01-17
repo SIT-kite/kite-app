@@ -16,7 +16,7 @@ class LibraryPage extends StatelessWidget {
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
-      title: Text('图书馆'),
+      title: const Text('图书馆'),
       actions: [
         IconButton(
           onPressed: () {
