@@ -15,8 +15,7 @@ import 'package:kite/page/score.dart';
 import 'package:kite/page/timetable/timetable.dart';
 import 'package:kite/page/welcome.dart';
 import 'package:kite/page/wiki.dart';
-import 'package:kite/storage/auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:kite/storage/storage_pool.dart';
 
 class KiteApp extends StatelessWidget {
   const KiteApp({Key? key}) : super(key: key);
@@ -46,23 +45,7 @@ class KiteApp extends StatelessWidget {
       title: '上应小风筝',
       theme: ThemeData.light(),
       debugShowCheckedModeBanner: false,
-      home: FutureBuilder<SharedPreferences>(
-        future: SharedPreferences.getInstance(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          // 请求已结束
-          if (snapshot.connectionState == ConnectionState.done) {
-            SharedPreferences prefs = snapshot.data;
-            // 若用户使用过，那么直接跳转到首页
-            if (AuthStorage(prefs).hasUsername) {
-              return HomePage();
-            } else {
-              return const WelcomePage();
-            }
-          } else {
-            return const CircularProgressIndicator();
-          }
-        },
-      ),
+      home: StoragePool.auth.hasUsername ? HomePage() : const WelcomePage(),
       routes: routes,
     );
   }

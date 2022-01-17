@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:kite/app.dart';
+import 'package:kite/storage/storage_pool.dart';
 
 import 'service/session_pool.dart';
 
@@ -13,9 +14,10 @@ void main() async {
   try {
     if (Platform.isAndroid || Platform.isIOS) {
       // Android/IOS使用 Bugly
-      FlutterBugly.postCatchedException(() {
+      FlutterBugly.postCatchedException(() async {
         runApp(Phoenix(child: const KiteApp()));
-
+        // 初始化持久化池
+        await StoragePool.init();
         SessionPool.initUserAgentString();
         FlutterBugly.init(
           androidAppId: "a83ed5243d",
@@ -24,10 +26,12 @@ void main() async {
       });
     } else {
       // 桌面端不使用 Bugly
+      await StoragePool.init();
       runApp(Phoenix(child: const KiteApp()));
     }
   } on Error catch (_, e) {
     // Web端不支持判定平台，也不使用 Bugly
+    await StoragePool.init();
     runApp(Phoenix(child: const KiteApp()));
   }
 }
