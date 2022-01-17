@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:kite/page/home/drawer.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import 'home/background.dart';
+import 'home/drawer.dart';
 import 'home/greeting.dart';
 import 'home/item.dart';
 
@@ -56,37 +57,31 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Color(0xffff1b00),
-      backgroundColor: Colors.white,
       key: _scaffoldKey,
-      body: SafeArea(
-        child: SmartRefresher(
-          enablePullDown: true,
-          enablePullUp: false,
-          controller: _refreshController,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  buildTitleLine(context),
-                  const SizedBox(height: 20.0),
-                  GreetingWidget(),
-                  const SizedBox(height: 20.0),
-                  Container(
-                      // decoration: const BoxDecoration(
-                      //   image: DecorationImage(
-                      //     image: AssetImage("assets/home/bg.png"),
-                      //     fit: BoxFit.cover,
-                      //   ),
-                      // ),
-                      child: buildFunctions())
-                ],
+      body: Stack(
+        children: [
+          const HomeBackground(),
+          SmartRefresher(
+            enablePullDown: true,
+            enablePullUp: false,
+            controller: _refreshController,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    buildTitleLine(context),
+                    const SizedBox(height: 20.0),
+                    const GreetingWidget(),
+                    const SizedBox(height: 20.0),
+                    buildFunctions()
+                  ],
+                ),
               ),
             ),
+            onRefresh: _onHomeRefresh,
           ),
-          onRefresh: _onHomeRefresh,
-        ),
+        ],
       ),
       drawer: const KiteDrawer(),
     );
