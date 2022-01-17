@@ -1,4 +1,4 @@
-import 'package:kite/entity/edu/score.dart';
+import 'package:kite/entity/edu.dart';
 
 /// 计算GPA
 double calcGPA(List<Score> scoreList) {

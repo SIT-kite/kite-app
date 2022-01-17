@@ -5,7 +5,7 @@ import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter_user_agentx/flutter_user_agent.dart';
-import 'package:kite/services/edu/edu_session.dart';
+import 'package:kite/services/edu.dart';
 import 'package:kite/services/library/library_session.dart';
 import 'package:kite/services/sso.dart';
 

@@ -1,13 +1,11 @@
 import 'dart:convert';
 
-import 'package:kite/entity/edu/exam_room.dart';
-import 'package:kite/entity/edu/year_semester.dart';
+import 'package:kite/entity/edu.dart';
 import 'package:kite/services/abstract_service.dart';
 import 'package:kite/services/abstract_session.dart';
 
 class ExamRoomService extends AService {
-  static const _examRoomUrl =
-      'http://http://jwxt.sit.edu.cn/jwglxt/kwgl/kscx_cxXsksxxIndex.html';
+  static const _examRoomUrl = 'http://http://jwxt.sit.edu.cn/jwglxt/kwgl/kscx_cxXsksxxIndex.html';
 
   ExamRoomService(ASession session) : super(session);
 
@@ -16,7 +14,6 @@ class ExamRoomService extends AService {
       Semester.all: '',
       Semester.firstTerm: '3',
       Semester.secondTerm: '12',
-      Semester.midTerm: '16',
     }[semester]!;
   }
 

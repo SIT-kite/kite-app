@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:kite/entity/edu/score.dart';
-import 'package:kite/entity/edu/year_semester.dart';
+import 'package:kite/entity/edu.dart';
 import 'package:kite/pages/score/banner.dart';
 import 'package:kite/pages/score/item.dart';
-import 'package:kite/services/edu/score.dart';
+import 'package:kite/services/edu.dart';
 import 'package:kite/services/session_pool.dart';
 
 List<int> _generateYearList(int entranceYear) {
@@ -14,9 +13,7 @@ List<int> _generateYearList(int entranceYear) {
   final monthInterval = (currentYear - entranceYear) * 12 + currentMonth - 9;
 
   List<int> yearItems = [];
-  for (int i = 0, year = entranceYear;
-      i < (monthInterval / 12 as int) + 1;
-      i++, year++) {
+  for (int i = 0, year = entranceYear; i < monthInterval / 12 + 1; i++, year++) {
     yearItems.add(year);
   }
   return yearItems;
@@ -52,12 +49,14 @@ class _ScorePageState extends State<ScorePage> {
       return '20$startYear - 20${startYear + 1}';
     }
 
-    Widget buildSelector(List<int> alternatives, void Function(int?) callback) {
-      final items = alternatives
+    /// 构建选择下拉框.
+    /// alternatives 是一个字典, key 为实际值, value 为显示值.
+    Widget buildSelector(Map<int, String> alternatives, void Function(int?) callback) {
+      final items = alternatives.keys
           .map(
-            (e) => DropdownMenuItem<int>(
-              value: e,
-              child: Text(buildYearString(e)),
+            (k) => DropdownMenuItem<int>(
+              value: k,
+              child: Text(alternatives[k]!),
             ),
           )
           .toList();
@@ -78,9 +77,10 @@ class _ScorePageState extends State<ScorePage> {
     }
 
     Widget buildYearSelector() {
-      final List<int> yearList =
-          _generateYearList(18); // TODO: Use actual year here.
-      return buildSelector(yearList, (int? selected) {
+      final List<int> yearList = _generateYearList(18).reversed.toList(); // TODO: Use actual year here.
+      final mapping = yearList.map((e) => MapEntry(e, buildYearString(e)));
+
+      return buildSelector(Map.fromEntries(mapping), (int? selected) {
         if (selected != null && selected != selectedYear) {
           setState(() {
             selectedYear = selected;
@@ -90,8 +90,13 @@ class _ScorePageState extends State<ScorePage> {
     }
 
     Widget buildSemesterSelector() {
-      const List semesters = Semester.values;
-      return buildSelector(semesters.cast(), (int? selected) {
+      const semesterDescription = {
+        Semester.all: '全学年',
+        Semester.firstTerm: '第一学期',
+        Semester.secondTerm: '第二学期',
+      };
+      final semesters = Semester.values.map((e) => MapEntry(e.index, semesterDescription[e]!));
+      return buildSelector(Map.fromEntries(semesters), (int? selected) {
         if (selected != null && selected != (selectedSemester as int)) {
           setState(() {
             selectedSemester = selected as Semester;
@@ -123,30 +128,33 @@ class _ScorePageState extends State<ScorePage> {
       const Text('暂时还没有成绩', style: TextStyle(color: Colors.grey)),
       Container(
         margin: const EdgeInsets.only(left: 40, right: 40),
-        child: const Text('如果成绩刚刚出炉，可点击右上角刷新按钮尝试刷新~',
-            textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),
+        child:
+            const Text('如果成绩刚刚出炉，可点击右上角刷新按钮尝试刷新~', textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),
       )
     ]);
   }
 
   Widget _buildScoreResult() {
     return FutureBuilder<List<Score>>(
-      future: ScoreService(SessionPool.eduSession)
-          .getScoreList(SchoolYear(selectedYear), selectedSemester),
+      future: ScoreService(SessionPool.eduSession).getScoreList(SchoolYear(selectedYear), selectedSemester),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final scoreList = snapshot.data!;
 
           if (scoreList.isNotEmpty) {
-            return Column(
-              children: [
-                GpaBanner(selectedSemester, _scoreList),
-                _buildListView(),
-              ],
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  GpaBanner(selectedSemester, _scoreList),
+                  _buildListView(),
+                ],
+              ),
             );
           } else {
             return _buildNoResult();
           }
+        } else if (snapshot.hasError) {
+          return Center(child: Text(snapshot.error.toString()));
         }
         return const Center(child: CircularProgressIndicator());
       },
@@ -166,8 +174,8 @@ class _ScorePageState extends State<ScorePage> {
         ],
       ),
       body: Column(children: [
-        _buildHeader(),
-        _buildScoreResult(),
+        Expanded(child: _buildHeader(), flex: 1),
+        Expanded(child: _buildScoreResult(), flex: 10),
       ]),
     );
   }

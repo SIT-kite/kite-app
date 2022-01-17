@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'exam_room.g.dart';
+part 'exam.g.dart';
 
 @JsonSerializable()
 class ExamRoom {
@@ -24,8 +24,8 @@ class ExamRoom {
   // 是否重修
   String isRebuild = "";
   ExamRoom();
-  factory ExamRoom.fromJson(Map<String, dynamic> json) =>
-      _$ExamRoomFromJson(json);
+
+  factory ExamRoom.fromJson(Map<String, dynamic> json) => _$ExamRoomFromJson(json);
 
   Map<String, dynamic> toJson() => _$ExamRoomToJson(this);
 

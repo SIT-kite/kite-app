@@ -1,13 +1,11 @@
 import 'dart:core';
 
-import 'package:kite/entity/edu/timetable.dart';
-import 'package:kite/entity/edu/year_semester.dart';
+import 'package:kite/entity/edu.dart';
 import 'package:kite/services/abstract_service.dart';
 import 'package:kite/services/abstract_session.dart';
 
 class TimetableService extends AService {
-  static const _timeTableUrl =
-      'http://jwxt.sit.edu.cn/jwglxt/kbcx/xskbcx_cxXsgrkb.html';
+  static const _timeTableUrl = 'http://jwxt.sit.edu.cn/jwglxt/kbcx/xskbcx_cxXsgrkb.html';
 
   TimetableService(ASession session) : super(session);
 
@@ -16,7 +14,6 @@ class TimetableService extends AService {
       Semester.all: '',
       Semester.firstTerm: '3',
       Semester.secondTerm: '12',
-      Semester.midTerm: '16',
     }[semester]!;
   }
 
