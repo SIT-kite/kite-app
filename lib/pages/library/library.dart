@@ -29,7 +29,7 @@ class LibraryPage extends StatelessWidget {
         IconButton(
           onPressed: () {},
           icon: const Icon(
-            Icons.person_pin,
+            Icons.person,
           ),
         ),
       ],

@@ -29,13 +29,6 @@ class SearchBarDelegate extends SearchDelegate<String> {
         },
         icon: const Icon(Icons.clear),
       ),
-      IconButton(
-        onPressed: () {
-          query = "";
-          showSuggestions(context);
-        },
-        icon: const Icon(Icons.search),
-      ),
     ];
   }
 
