@@ -16,16 +16,26 @@ class SessionPool {
   static const String defaultUaString = 'kite-app';
   static String uaString = defaultUaString;
 
-  static final Dio dio = initDioInstance();
   static final DefaultCookieJar _cookieJar = DefaultCookieJar();
-
   static DefaultCookieJar get cookieJar => _cookieJar;
 
-  static final SsoSession ssoSession = SsoSession(dio: dio, jar: _cookieJar);
-  static final EduSession eduSession = EduSession(ssoSession);
-  static final LibrarySession librarySession = LibrarySession(dio);
+  static late Dio dio;
+  static late SsoSession ssoSession;
+  static late EduSession eduSession;
+  static late LibrarySession librarySession;
 
-  static Dio initDioInstance() {
+  static Future<void> init() async {
+    // 只有初始化完dio后才能初始化UA
+    dio = _initDioInstance();
+    await _initUserAgentString();
+
+    // 下面初始化一大堆session
+    ssoSession = SsoSession(dio: dio, jar: _cookieJar);
+    eduSession = EduSession(ssoSession);
+    librarySession = LibrarySession(dio);
+  }
+
+  static Dio _initDioInstance() {
     Dio dio = Dio();
 
     // 添加拦截器
@@ -58,12 +68,10 @@ class SessionPool {
     return dio;
   }
 
-  static void initUserAgentString() {
-    Future.delayed(Duration.zero, () async {
-      await FkUserAgent.init();
-      uaString = FkUserAgent.webViewUserAgent ?? defaultUaString;
-      // 更新 dio 设置的 user-agent 字符串
-      dio.options.headers['User-Agent'] = uaString;
-    });
+  static Future<void> _initUserAgentString() async {
+    await FkUserAgent.init();
+    uaString = FkUserAgent.webViewUserAgent ?? defaultUaString;
+    // 更新 dio 设置的 user-agent 字符串
+    dio.options.headers['User-Agent'] = uaString;
   }
 }
