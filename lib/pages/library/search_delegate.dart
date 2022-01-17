@@ -121,17 +121,18 @@ class SearchBarDelegate extends SearchDelegate<String> {
               future: HotSearchService(SessionPool.librarySession).getHotSearch(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 Log.info('获取热搜状态: ${snapshot.connectionState}');
-                // 若请求结束
-                if (snapshot.connectionState == ConnectionState.done) {
+
+                if (snapshot.hasData) {
                   // 获取数据
-                  HotSearch hotSearch = snapshot.data;
+                  HotSearch hotSearch = snapshot.data!;
                   return SuggestionItemView(
                     titleItems: hotSearch.recentMonth.map((e) => e.hotSearchWord).toList(),
                     onItemTap: (title) => _searchByGiving(title, context),
                   );
-                } else {
-                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Center(child: Text(snapshot.error.toString()));
                 }
+                return const Center(child: CircularProgressIndicator());
               },
             ),
           ],
