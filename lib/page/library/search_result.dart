@@ -100,6 +100,8 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
 
   var useTime = 0.0;
   var searchResultCount = 0;
+  var currentPage = 1;
+  var totalPage = 10;
 
   /// 获得搜索结果
   Future<List<BookWithImage>> get(int rows, int page) async {
@@ -108,15 +110,22 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
       rows: rows,
       page: page,
     );
+
+    // 页数越界
+    if (searchResult.currentPage > totalPage) {
+      return [];
+    }
     useTime = searchResult.useTime;
     searchResultCount = searchResult.resultCount;
+    currentPage = searchResult.currentPage;
+    totalPage = searchResult.totalPages;
+
     Log.info(searchResult);
     var imageResult = await widget.bookImageSearchDao.searchByBookList(searchResult.books);
     Log.info(imageResult);
     return BookWithImage.buildByJoin(searchResult.books, imageResult);
   }
 
-  int currentPage = 1;
   List<BookWithImage> dataList = [];
   bool isLoading = false;
 
@@ -149,7 +158,6 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
         if (nextPage.isNotEmpty) {
           setState(() {
             dataList.addAll(nextPage);
-            currentPage++;
             isLoading = false;
           });
         } else {
@@ -182,7 +190,7 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
     return Column(
       // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('搜索结果数: $searchResultCount  用时: $useTime'),
+        Text('总结果数: $searchResultCount  用时: $useTime  已加载: $currentPage/$totalPage'),
         Expanded(
           child: ListView.builder(
             itemBuilder: (BuildContext context, int index) {
