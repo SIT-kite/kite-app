@@ -9,8 +9,8 @@ import 'package:kite/services/abstract_session.dart';
 import 'package:kite/services/ocr.dart';
 import 'package:kite/services/session_pool.dart';
 
-import './encrypt_util.dart';
-import './utils.dart';
+import 'encryption.dart';
+import 'utils.dart';
 
 class SsoSession extends ASession {
   static const String _authServerUrl = 'https://authserver.sit.edu.cn/authserver';

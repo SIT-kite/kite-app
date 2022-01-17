@@ -7,7 +7,7 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter_user_agentx/flutter_user_agent.dart';
 import 'package:kite/services/edu/edu_session.dart';
 import 'package:kite/services/library/library_session.dart';
-import 'package:kite/services/sso/sso.dart';
+import 'package:kite/services/sso.dart';
 
 const String? httpProxy = null;
 const bool allowBadCertificate = true;

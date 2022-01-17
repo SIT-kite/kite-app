@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:enough_convert/enough_convert.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kite/services/sso/sso.dart';
+import 'package:kite/services/sso.dart';
 import 'package:logger/logger.dart';
 
 void main() {

@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:kite/entity/edu/year_semester.dart';
 import 'package:kite/services/edu/edu_session.dart';
 import 'package:kite/services/edu/timetable.dart';
-import 'package:kite/services/sso/src/sso_session.dart';
+import 'package:kite/services/sso.dart';
 import 'package:logger/logger.dart';
 
 void main() {
