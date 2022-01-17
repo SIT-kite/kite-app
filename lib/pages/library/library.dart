@@ -36,10 +36,11 @@ class LibraryPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSayingWidget(
-    Saying saying, {
+  Widget _buildSayingWidget({
     double? width,
   }) {
+    final saying = _getRandomSaying();
+
     return Column(
       children: saying.text.split('，').map((e) {
             return SizedBox(
@@ -56,7 +57,7 @@ class LibraryPage extends StatelessWidget {
               child: Container(
                 alignment: Alignment.bottomRight,
                 child: Text(
-                  "——— ${_getRandomSaying().sayer}",
+                  "——— ${saying.sayer}",
                   style: const TextStyle(
                     color: Colors.grey,
                   ),
@@ -71,7 +72,6 @@ class LibraryPage extends StatelessWidget {
     var screenWidth = MediaQuery.of(context).size.width;
     var imageWidth = screenWidth * 0.6;
     var sayingWidth = screenWidth * 0.5;
-    var saying = _getRandomSaying();
     return Center(
       child: SizedBox(
         height: 400,
@@ -86,7 +86,6 @@ class LibraryPage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             _buildSayingWidget(
-              saying,
               width: sayingWidth,
             ),
           ],
