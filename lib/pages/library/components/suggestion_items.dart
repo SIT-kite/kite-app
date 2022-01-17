@@ -88,17 +88,14 @@ class SuggestionItem extends StatefulWidget {
 class _SuggestionItemState extends State<SuggestionItem> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: InkWell(
-        child: Chip(
-          label: Text(widget.title ?? ""),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
+    return InkWell(
+      child: Chip(
+        label: Text(widget.title ?? ""),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
         ),
-        onTap: widget.onTap,
       ),
-      color: Colors.white,
+      onTap: widget.onTap,
     );
   }
 }

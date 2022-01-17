@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:kite/dao/library/book_search.dart';
 import 'package:kite/dao/library/image_search.dart';
-import 'package:kite/pages/library/book_info.dart';
 import 'package:kite/services/library/book_search.dart';
 import 'package:kite/services/library/image_search.dart';
 import 'package:kite/services/session_pool.dart';
 import 'package:kite/utils/flash_utils.dart';
 import 'package:kite/utils/library/search_util.dart';
 import 'package:kite/utils/logger.dart';
+
+import 'book_info.dart';
 
 class BookSearchResultWidget extends StatefulWidget {
   final String keyword;
@@ -21,48 +22,73 @@ class BookSearchResultWidget extends StatefulWidget {
 }
 
 class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
-  static const defaultBookCover = Icon(
-    Icons.library_books_sharp,
-    size: 30,
-  );
-
   final _scrollController = ScrollController();
-  Image buildBookCover(String imageUrl) {
+  Widget buildBookCover(String? imageUrl) {
+    const def = Icon(
+      Icons.library_books_sharp,
+      size: 100,
+    );
+    if (imageUrl == null) {
+      return def;
+    }
+
     return Image(
-      height: 40,
-      width: 40,
       image: NetworkImage(imageUrl),
+      fit: BoxFit.cover,
     );
   }
 
   Widget buildListTile(BookWithImage bi) {
     var e = bi.book;
-    var image = bi.image?.resourceLink;
-    return ListTile(
-      title: Text(e.title),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(e.author),
-          Text(e.callNo),
-        ],
-      ),
-      leading: image == null ? defaultBookCover : buildBookCover(image),
-      trailing: Column(
-        verticalDirection: VerticalDirection.up,
-        children: [
-          ColoredBox(
-            color: Colors.black12,
-            child: Container(
-              margin: const EdgeInsets.all(5),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(100)),
-              // width: 80,
-              // height: 20,
-              child: const Text('馆藏(3)/在馆(1)'),
-            ),
-          )
-        ],
-      ),
+    var row = Row(
+      children: [
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.all(5),
+            child: buildBookCover(bi.image?.resourceLink),
+            height: 130,
+          ),
+          flex: 3,
+        ),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                e.title,
+                style: const TextStyle(
+                  fontSize: 18.0,
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text('作者:  ${e.author}'),
+              Text('索书号:  ${e.callNo}'),
+              Text('ISBN:  ${e.isbn}'),
+              Text('${e.publisher}  ${e.publishDate}'),
+              Row(
+                children: [
+                  const Expanded(child: Text(' ')),
+                  ColoredBox(
+                    color: Colors.black12,
+                    child: Container(
+                      margin: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(100)),
+                      // width: 80,
+                      // height: 20,
+                      child: const Text('馆藏(3)/在馆(1)'),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          flex: 7,
+        ),
+      ],
+    );
+    return InkWell(
+      child: row,
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(builder: (BuildContext context) {
@@ -107,7 +133,7 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
       setState(() {
         isLoading = true;
       });
-      showBasicFlash(context, Text('加载更多'));
+      showBasicFlash(context, const Text('加载更多'));
       var nextPage = await get(10, currentPage + 1);
       if (nextPage.isNotEmpty) {
         setState(() {
@@ -116,7 +142,7 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
           isLoading = false;
         });
       } else {
-        showBasicFlash(context, Text('找不到更多了。。。'));
+        showBasicFlash(context, const Text('找不到更多了'));
         isLoading = false;
       }
     }
@@ -145,7 +171,13 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
         Expanded(
           child: ListView.builder(
             itemBuilder: (BuildContext context, int index) {
-              return buildListTile(dataList[index]);
+              return Column(children: [
+                Container(
+                  child: buildListTile(dataList[index]),
+                  padding: const EdgeInsets.fromLTRB(10, 1, 10, 1),
+                ),
+                const Divider(color: Colors.black),
+              ]);
             },
             itemCount: dataList.length,
             controller: _scrollController,
