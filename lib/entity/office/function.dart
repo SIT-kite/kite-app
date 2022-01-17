@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:kite/utils/iconfont.dart';
+import 'package:kite/util/iconfont.dart';
 
 part 'function.g.dart';
 
