@@ -5,6 +5,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'home/background.dart';
 import 'home/drawer.dart';
 import 'home/greeting.dart';
+import 'home/group.dart';
 import 'home/item.dart';
 
 class HomePage extends StatelessWidget {
@@ -35,22 +36,28 @@ class HomePage extends StatelessWidget {
   }
 
   List<Widget> buildFunctionWidgets() {
-    return const [
-      GreetingWidget(),
-      SizedBox(height: 20.0),
-      ItemWidget('/electricity', AssetImage('assets/home/icon_daily_report.png'), '电费查询'),
-      ItemWidget('/score', AssetImage('assets/home/icon_daily_report.png'), '成绩'),
-      ItemWidget('/library', AssetImage('assets/home/icon_library.png'), '图书馆'),
-      ItemWidget('/expense', AssetImage('assets/home/icon_consumption.png'), '消费查询'),
-      ItemWidget("/timetable", AssetImage('assets/home/icon_timetable.png'), '课程表'),
-      SizedBox(height: 20.0),
-      ItemWidget('/report', AssetImage('assets/home/icon_daily_report.png'), '体温上报'),
-      ItemWidget('/office', AssetImage('assets/home/icon_library.png'), '办公'),
-      SizedBox(height: 20.0),
-      ItemWidget('/game', AssetImage('assets/home/icon_library.png'), '小游戏'),
-      ItemWidget('/wiki', AssetImage('assets/home/icon_library.png'), 'Wiki'),
-      ItemWidget('/market', AssetImage('assets/home/icon_library.png'), '二手书广场'),
-      SizedBox(height: 40),
+    return [
+      const GreetingWidget(),
+      const SizedBox(height: 20.0),
+      const HomeItemGroup([
+        ItemWidget('/electricity', AssetImage('assets/home/icon_daily_report.png'), '电费查询'),
+        ItemWidget('/score', AssetImage('assets/home/icon_daily_report.png'), '成绩'),
+        ItemWidget('/library', AssetImage('assets/home/icon_library.png'), '图书馆'),
+        ItemWidget('/expense', AssetImage('assets/home/icon_consumption.png'), '消费查询'),
+        ItemWidget("/timetable", AssetImage('assets/home/icon_timetable.png'), '课程表')
+      ]),
+      const SizedBox(height: 20.0),
+      const HomeItemGroup([
+        ItemWidget('/report', AssetImage('assets/home/icon_daily_report.png'), '体温上报'),
+        ItemWidget('/office', AssetImage('assets/home/icon_library.png'), '办公')
+      ]),
+      const SizedBox(height: 20.0),
+      const HomeItemGroup([
+        ItemWidget('/game', AssetImage('assets/home/icon_library.png'), '小游戏'),
+        ItemWidget('/wiki', AssetImage('assets/home/icon_library.png'), 'Wiki'),
+        ItemWidget('/market', AssetImage('assets/home/icon_library.png'), '二手书广场'),
+      ]),
+      const SizedBox(height: 40),
     ];
   }
 
