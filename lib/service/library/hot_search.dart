@@ -4,7 +4,7 @@ import 'package:kite/entity/library/hot_search.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/service/abstract_session.dart';
 
-import 'constants.dart';
+import 'constant.dart';
 
 class HotSearchService extends AService implements HotSearchDao {
   HotSearchService(ASession session) : super(session);

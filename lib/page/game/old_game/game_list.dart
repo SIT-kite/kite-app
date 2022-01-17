@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kite/page/game/old_game/constants.dart';
+import 'package:kite/page/game/old_game/constant.dart';
 import 'package:kite/page/game/old_game/index.dart';
 
 class WebGameListPage extends StatelessWidget {

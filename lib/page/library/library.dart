@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:kite/page/library/constants.dart';
+import 'package:kite/page/library/constant.dart';
 import 'package:kite/page/library/search_delegate.dart';
 
 class LibraryPage extends StatelessWidget {

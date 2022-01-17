@@ -5,7 +5,7 @@ import 'package:kite/dao/library/image_search.dart';
 import 'package:kite/entity/library/book_image.dart';
 import 'package:kite/entity/library/book_search.dart';
 import 'package:kite/service/abstract_session.dart';
-import 'package:kite/service/library/constants.dart';
+import 'package:kite/service/library/constant.dart';
 import 'package:kite/util/logger.dart';
 
 import '../abstract_service.dart';

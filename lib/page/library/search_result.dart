@@ -4,8 +4,8 @@ import 'package:kite/dao/library/image_search.dart';
 import 'package:kite/service/library/book_search.dart';
 import 'package:kite/service/library/image_search.dart';
 import 'package:kite/service/session_pool.dart';
-import 'package:kite/util/flash_utils.dart';
-import 'package:kite/util/library/search_util.dart';
+import 'package:kite/util/flash.dart';
+import 'package:kite/util/library/search.dart';
 import 'package:kite/util/logger.dart';
 
 import 'book_info.dart';

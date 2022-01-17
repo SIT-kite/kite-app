@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:kite/entity/library/holding.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/service/abstract_session.dart';
-import 'package:kite/service/library/constants.dart';
+import 'package:kite/service/library/constant.dart';
 
 part 'holding.g.dart';
 

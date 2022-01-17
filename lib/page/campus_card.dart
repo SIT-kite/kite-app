@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/service/campus_card.dart';
-import 'package:kite/util/flash_utils.dart';
+import 'package:kite/util/flash.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 
 class CampusCardRecord {

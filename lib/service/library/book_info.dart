@@ -4,7 +4,7 @@ import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:kite/entity/library/book_info.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/service/abstract_session.dart';
-import 'package:kite/service/library/constants.dart';
+import 'package:kite/service/library/constant.dart';
 
 class BookInfoService extends AService {
   BookInfoService(ASession session) : super(session);

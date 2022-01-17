@@ -3,7 +3,7 @@ import 'package:kite/dao/library/book_search.dart';
 import 'package:kite/entity/library/book_search.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/service/abstract_session.dart';
-import 'package:kite/service/library/constants.dart';
+import 'package:kite/service/library/constant.dart';
 
 class BookSearchService extends AService implements BookSearchDao {
   BookSearchService(ASession session) : super(session);

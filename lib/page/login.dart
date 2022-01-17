@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/storage/auth.dart';
-import 'package:kite/util/flash_utils.dart';
+import 'package:kite/util/flash.dart';
 import 'package:kite/util/url_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
