@@ -11,24 +11,24 @@ import 'service/session_pool.dart';
 
 /// 应用启动前需要的初始化
 Future<void> init() async {
-  // 初始化顺序交换会引发未知bug
-
-  // 先初始化本地持久化层
-  await StoragePool.init();
-  await SessionPool.init();
+  // Future.wait可以使多个Future并发执行
+  await Future.wait([
+    SessionPool.init(),
+    StoragePool.init(),
+  ]);
 }
 
 void main() async {
   // 使用说明
   // https://pub.dev/packages/flutter_bugly
-  Log.info('当前的系统版本：' + Platform.operatingSystem);
+  Log.info('当前操作系统：' + Platform.operatingSystem);
   try {
     if (Platform.isAndroid || Platform.isIOS) {
       // Android/IOS使用 Bugly
       FlutterBugly.postCatchedException(() async {
-        runApp(Phoenix(child: const KiteApp()));
-        // 初始化持久化池
+        Log.info('当前环境: Android/IOS');
         await init();
+        runApp(Phoenix(child: const KiteApp()));
         FlutterBugly.init(
           androidAppId: "a83ed5243d",
           iOSAppId: "7d8c9907b5",
@@ -37,13 +37,13 @@ void main() async {
     } else {
       // 桌面端不使用 Bugly
       Log.info('当前环境: Desktop');
-      runApp(Phoenix(child: const KiteApp()));
       await init();
+      runApp(Phoenix(child: const KiteApp()));
     }
   } on Error catch (_, __) {
     // Web端不支持判定平台，也不使用 Bugly
     Log.info('当前环境: Web');
-    runApp(Phoenix(child: const KiteApp()));
     await init();
+    runApp(Phoenix(child: const KiteApp()));
   }
 }
