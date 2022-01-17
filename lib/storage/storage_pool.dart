@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:kite/storage/auth.dart';
 import 'package:kite/storage/search_history.dart';
 import 'package:kite/util/logger.dart';
@@ -14,6 +15,9 @@ class StoragePool {
   static SearchHistoryStorage get searchHistory => _searchHistory;
 
   static Future<void> init() async {
+    // SP初始化之前必须确保这个执行
+    WidgetsFlutterBinding.ensureInitialized();
+    Log.info('WidgetsFlutterBinding.ensureInitialized');
     Log.info("初始化StoragePool");
     _prefs = await SharedPreferences.getInstance();
     _auth = AuthStorage(_prefs);
