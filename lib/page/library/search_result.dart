@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:kite/dao/library/book_search.dart';
+import 'package:kite/dao/library/holding_preview.dart';
 import 'package:kite/dao/library/image_search.dart';
+import 'package:kite/entity/library/book_image.dart';
+import 'package:kite/entity/library/holding_preview.dart';
 import 'package:kite/service/library.dart';
+import 'package:kite/service/library/holding_preview.dart';
 import 'package:kite/service/session_pool.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/library/search.dart';
@@ -13,6 +17,7 @@ class BookSearchResultWidget extends StatefulWidget {
   final String keyword;
   final BookSearchDao bookSearchDao = BookSearchService(SessionPool.librarySession);
   final BookImageSearchDao bookImageSearchDao = BookImageSearchService(SessionPool.librarySession);
+  final HoldingPreviewDao holdingPreviewDao = HoldingPreviewService(SessionPool.librarySession);
 
   BookSearchResultWidget(this.keyword, {Key? key}) : super(key: key);
 
@@ -37,8 +42,13 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
     );
   }
 
-  Widget buildListTile(BookWithImage bi) {
-    var e = bi.book;
+  Widget buildListTile(BookImageHolding bi) {
+    var book = bi.book;
+    var holding = bi.holding ?? [];
+    // 计算总共馆藏多少书
+    int copyCount = holding.map((e) => e.copyCount).reduce((value, element) => value + element);
+    // 计算总共可借多少书
+    int loanableCount = holding.map((e) => e.loanableCount).reduce((value, element) => value + element);
     var row = Row(
       children: [
         Expanded(
@@ -54,17 +64,17 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                e.title,
+                book.title,
                 style: const TextStyle(
                   fontSize: 18.0,
                   fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Text('作者:  ${e.author}'),
-              Text('索书号:  ${e.callNo}'),
-              Text('ISBN:  ${e.isbn}'),
-              Text('${e.publisher}  ${e.publishDate}'),
+              Text('作者:  ${book.author}'),
+              Text('索书号:  ${book.callNo}'),
+              Text('ISBN:  ${book.isbn}'),
+              Text('${book.publisher}  ${book.publishDate}'),
               Row(
                 children: [
                   const Expanded(child: Text(' ')),
@@ -75,7 +85,7 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(100)),
                       // width: 80,
                       // height: 20,
-                      child: const Text('馆藏(3)/在馆(1)'),
+                      child: Text('馆藏($copyCount)/在馆($loanableCount)'),
                     ),
                   ),
                 ],
@@ -104,7 +114,7 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
   var totalPage = 10;
 
   /// 获得搜索结果
-  Future<List<BookWithImage>> get(int rows, int page) async {
+  Future<List<BookImageHolding>> get(int rows, int page) async {
     var searchResult = await widget.bookSearchDao.search(
       keyword: widget.keyword,
       rows: rows,
@@ -121,12 +131,20 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
     totalPage = searchResult.totalPages;
 
     Log.info(searchResult);
-    var imageResult = await widget.bookImageSearchDao.searchByBookList(searchResult.books);
-    Log.info(imageResult);
-    return BookWithImage.buildByJoin(searchResult.books, imageResult);
+    var imageHoldingPreview = await Future.wait([
+      widget.bookImageSearchDao.searchByBookList(searchResult.books),
+      widget.holdingPreviewDao.getHoldingPreviews(searchResult.books.map((e) => e.bookId).toList()),
+    ]);
+    var imageResult = imageHoldingPreview[0] as Map<String, BookImage>;
+    var holdingPreviewResult = imageHoldingPreview[1] as HoldingPreviews;
+    return BookImageHolding.build(
+      searchResult.books,
+      imageResult,
+      holdingPreviewResult.previews,
+    );
   }
 
-  List<BookWithImage> dataList = [];
+  List<BookImageHolding> dataList = [];
   bool isLoading = false;
 
   Future<void> getData() async {
