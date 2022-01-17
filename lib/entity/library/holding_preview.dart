@@ -13,7 +13,7 @@ class HoldingPreviewItem {
   final String barcode;
 
   // 索书号
-  @JsonKey(name: 'callNo')
+  @JsonKey(name: 'callno')
   final String callNo;
 
   // 文献所在馆
@@ -53,6 +53,7 @@ class HoldingPreviewItem {
 
 @JsonSerializable()
 class HoldingPreviews {
+  @JsonKey(name: 'previews')
   final Map<String, List<HoldingPreviewItem>> previews;
   const HoldingPreviews(this.previews);
 
