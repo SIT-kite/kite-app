@@ -1,9 +1,10 @@
+import 'package:kite/util/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthStorage {
-  static const _namespace = '/auth/';
-  static const _usernameKey = _namespace + 'username';
-  static const _passwordKey = _namespace + 'password';
+  static final _namespace = Path().forward('auth');
+  static final _usernameKey = _namespace.forward('username').toString();
+  static final _passwordKey = _namespace.forward('password').toString();
 
   final SharedPreferences prefs;
   const AuthStorage(this.prefs);

@@ -2,13 +2,14 @@ import 'dart:convert';
 
 import 'package:kite/dao/library/search_history.dart';
 import 'package:kite/entity/library/search_history.dart';
+import 'package:kite/util/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// 搜索历史的持久化层，记录型数据应当存放在sqlite中
 /// 目前暂时使用SP代替
 class SearchHistoryStorage implements SearchHistoryDao {
-  static const _namespace = '/library';
-  static const _searchHistoryKey = _namespace + '/searchHistory';
+  static final _namespace = Path().forward('library');
+  static final _searchHistoryKey = _namespace.forward('searchHistory').toString();
   static final _emptyHistory = jsonEncode(const SearchHistory([]).toJson());
 
   final SharedPreferences prefs;
