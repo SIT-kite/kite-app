@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kite/pages/office/message.dart';
-import 'package:kite/services/office/office.dart';
+import 'package:kite/services/office.dart';
 import 'package:kite/storage/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

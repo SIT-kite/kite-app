@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kite/services/office/office.dart';
+import 'package:kite/services/office.dart';
 
 import 'browser.dart';
 
