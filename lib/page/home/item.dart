@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 
-class ItemWidget extends StatefulWidget {
+class HomeItem extends StatefulWidget {
   final String route;
   final AssetImage icon;
   final String title;
 
-  const ItemWidget(this.route, this.icon, this.title, {Key? key}) : super(key: key);
+  const HomeItem(this.route, this.icon, this.title, {Key? key}) : super(key: key);
 
   @override
-  _ItemWidgetState createState() => _ItemWidgetState(route, icon, title);
+  _HomeItemState createState() => _HomeItemState(route, icon, title);
 }
 
-class _ItemWidgetState extends State<ItemWidget> {
+class _HomeItemState extends State<HomeItem> {
   String routeName;
   AssetImage icon;
   String title;
   String content = "加载中";
 
-  _ItemWidgetState(this.routeName, this.icon, this.title);
+  _HomeItemState(this.routeName, this.icon, this.title);
 
   @override
   Widget build(BuildContext context) {

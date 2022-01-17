@@ -40,22 +40,22 @@ class HomePage extends StatelessWidget {
       const GreetingWidget(),
       const SizedBox(height: 20.0),
       const HomeItemGroup([
-        ItemWidget('/electricity', AssetImage('assets/home/icon_daily_report.png'), '电费查询'),
-        ItemWidget('/score', AssetImage('assets/home/icon_daily_report.png'), '成绩'),
-        ItemWidget('/library', AssetImage('assets/home/icon_library.png'), '图书馆'),
-        ItemWidget('/expense', AssetImage('assets/home/icon_consumption.png'), '消费查询'),
-        ItemWidget("/timetable", AssetImage('assets/home/icon_timetable.png'), '课程表')
+        HomeItem('/electricity', AssetImage('assets/home/icon_daily_report.png'), '电费查询'),
+        HomeItem('/score', AssetImage('assets/home/icon_daily_report.png'), '成绩'),
+        HomeItem('/library', AssetImage('assets/home/icon_library.png'), '图书馆'),
+        HomeItem('/expense', AssetImage('assets/home/icon_consumption.png'), '消费查询'),
+        HomeItem("/timetable", AssetImage('assets/home/icon_timetable.png'), '课程表')
       ]),
       const SizedBox(height: 20.0),
       const HomeItemGroup([
-        ItemWidget('/report', AssetImage('assets/home/icon_daily_report.png'), '体温上报'),
-        ItemWidget('/office', AssetImage('assets/home/icon_library.png'), '办公')
+        HomeItem('/report', AssetImage('assets/home/icon_daily_report.png'), '体温上报'),
+        HomeItem('/office', AssetImage('assets/home/icon_library.png'), '办公')
       ]),
       const SizedBox(height: 20.0),
       const HomeItemGroup([
-        ItemWidget('/game', AssetImage('assets/home/icon_library.png'), '小游戏'),
-        ItemWidget('/wiki', AssetImage('assets/home/icon_library.png'), 'Wiki'),
-        ItemWidget('/market', AssetImage('assets/home/icon_library.png'), '二手书广场'),
+        HomeItem('/game', AssetImage('assets/home/icon_library.png'), '小游戏'),
+        HomeItem('/wiki', AssetImage('assets/home/icon_library.png'), 'Wiki'),
+        HomeItem('/market', AssetImage('assets/home/icon_library.png'), '二手书广场'),
       ]),
       const SizedBox(height: 40),
     ];
