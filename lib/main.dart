@@ -12,10 +12,12 @@ import 'service/session_pool.dart';
 /// 应用启动前需要的初始化
 Future<void> init() async {
   // Future.wait可以使多个Future并发执行
+  Log.info('开始应用开启前的初始化');
   await Future.wait([
     SessionPool.init(),
     StoragePool.init(),
   ]);
+  Log.info('应用开启前初始化完成');
 }
 
 void main() async {
