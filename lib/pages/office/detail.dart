@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:kite/entity/office.dart';
 import 'package:kite/pages/office/browser.dart';
 import 'package:kite/services/office.dart';
 import 'package:kite/utils/url_launcher.dart';

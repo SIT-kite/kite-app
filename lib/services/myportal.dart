@@ -1,5 +1,5 @@
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
-import 'package:kite/services/sso/sso.dart';
+import 'package:kite/services/sso.dart';
 
 class MyPortal {
   SsoSession session;

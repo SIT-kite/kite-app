@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kite/entity/office.dart';
 import 'package:kite/pages/office/message.dart';
 import 'package:kite/services/office.dart';
 import 'package:kite/storage/auth.dart';

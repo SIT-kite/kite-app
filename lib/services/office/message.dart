@@ -1,33 +1,11 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:kite/entity/office.dart';
 
 import 'office_session.dart';
 
-part 'message.g.dart';
-
 const String serviceMessageCount = 'https://xgfy.sit.edu.cn/unifri-flow/user/queryFlowCount';
-
-enum MessageType {
-  todo,
-  doing,
-  done,
-}
-
-@JsonSerializable()
-class OfficeMessageCount {
-  @JsonKey(name: 'myFlow_complete_count')
-  final int completed;
-  @JsonKey(name: 'myFlow_runing_count')
-  final int inProgress;
-  @JsonKey(name: 'myFlow_todo_count')
-  final int inDraft;
-
-  const OfficeMessageCount(this.completed, this.inProgress, this.inDraft);
-
-  factory OfficeMessageCount.fromJson(Map<String, dynamic> json) => _$OfficeMessageCountFromJson(json);
-}
 
 Future<OfficeMessageCount> queryMessageCount(OfficeSession session) async {
   String payload = 'code=${session.userName}';
@@ -36,33 +14,6 @@ Future<OfficeMessageCount> queryMessageCount(OfficeSession session) async {
   final Map<String, dynamic> data = response.data;
   final OfficeMessageCount result = OfficeMessageCount.fromJson(data);
   return result;
-}
-
-@JsonSerializable()
-class OfficeMessageSummary {
-  @JsonKey(name: 'WorkID')
-  final int flowId;
-  @JsonKey(name: 'FK_Flow')
-  final String functionId;
-  @JsonKey(name: 'FlowName')
-  final String functionName;
-  @JsonKey(name: 'NodeName')
-  final String recentStep;
-  @JsonKey(name: 'FlowNote')
-  final String status;
-
-  const OfficeMessageSummary(this.flowId, this.functionId, this.functionName, this.recentStep, this.status);
-
-  factory OfficeMessageSummary.fromJson(Map<String, dynamic> json) => _$OfficeMessageSummaryFromJson(json);
-}
-
-class OfficeMessagePage {
-  final int totalNum;
-  final int totalPage;
-  final int currentPage;
-  final List<OfficeMessageSummary> msgList;
-
-  const OfficeMessagePage(this.totalNum, this.totalPage, this.currentPage, this.msgList);
 }
 
 String _getMessageListUrl(MessageType type) {

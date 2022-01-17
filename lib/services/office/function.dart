@@ -1,34 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:kite/utils/iconfont.dart';
+import 'package:kite/entity/office.dart';
 
 import 'office_session.dart';
 
-part 'function.g.dart';
-
 const String serviceFunctionList = 'https://xgfy.sit.edu.cn/app/public/queryAppManageJson';
 const String serviceFunctionDetail = 'https://xgfy.sit.edu.cn/app/public/queryAppFormJson';
-
-@JsonSerializable(createToJson: false)
-class SimpleFunction {
-  @JsonKey(name: 'appID')
-  final String id;
-  @JsonKey(name: 'appName')
-  final String name;
-  @JsonKey(name: 'appDescribe')
-  final String summary;
-  @JsonKey(name: 'appStatus')
-  final int status;
-  @JsonKey(name: 'appCount')
-  final int count;
-  @JsonKey(name: 'appIcon', fromJson: IconFont.query)
-  final IconData icon;
-
-  const SimpleFunction(this.id, this.name, this.summary, this.status, this.count, this.icon);
-
-  factory SimpleFunction.fromJson(Map<String, dynamic> json) => _$SimpleFunctionFromJson(json);
-}
 
 Future<List<SimpleFunction>> selectFunctions(OfficeSession session) async {
   String payload = '{"appObject":"student","appName":null}';
@@ -48,18 +24,6 @@ Future<List<SimpleFunction>> selectFunctionsByCountDesc(OfficeSession session) a
   final functions = await selectFunctions(session);
   functions.sort((a, b) => b.count.compareTo(a.count));
   return functions;
-}
-
-@JsonSerializable()
-class FunctionDetailSection {
-  @JsonKey(name: 'formName')
-  final String section;
-  final String type;
-  final DateTime createTime;
-  final String content;
-
-  const FunctionDetailSection(this.section, this.type, this.createTime, this.content);
-  factory FunctionDetailSection.fromJson(Map<String, dynamic> json) => _$FunctionDetailSectionFromJson(json);
 }
 
 class FunctionDetail {
