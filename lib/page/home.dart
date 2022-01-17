@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/page/home/drawer.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -20,17 +21,14 @@ class HomePage extends StatelessWidget {
   Widget buildTitleLine(BuildContext context) {
     return Align(
       alignment: Alignment.centerLeft,
-      child: Row(
-        children: [
-          IconButton(
-            iconSize: 35,
-            icon: const Icon(Icons.menu_outlined),
-            onPressed: () {
-              _scaffoldKey.currentState?.openDrawer();
-            },
-          ),
-          const Text('上应小风筝', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold))
-        ],
+      child: GestureDetector(
+        onTap: () {
+          _scaffoldKey.currentState?.openDrawer();
+        },
+        child: Row(children: [
+          SvgPicture.asset('assets/home/kite.svg', width: 45, height: 45),
+          Image.asset('assets/home/title.png', height: 40),
+        ]),
       ),
     );
   }
