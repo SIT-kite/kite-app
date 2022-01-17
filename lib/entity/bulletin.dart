@@ -1,0 +1,1 @@
+export 'bulletin/bulletin.dart';
