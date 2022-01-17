@@ -8,6 +8,7 @@ import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:kite/service/edu.dart';
 import 'package:kite/service/library/library_session.dart';
 import 'package:kite/service/sso.dart';
+import 'package:kite/util/logger.dart';
 
 const String? httpProxy = null;
 const bool allowBadCertificate = true;
@@ -25,6 +26,7 @@ class SessionPool {
   static late LibrarySession librarySession;
 
   static Future<void> init() async {
+    Log.info("初始化SessionPool");
     // 只有初始化完dio后才能初始化UA
     dio = _initDioInstance();
     await _initUserAgentString();
@@ -69,9 +71,16 @@ class SessionPool {
   }
 
   static Future<void> _initUserAgentString() async {
-    await FkUserAgent.init();
-    uaString = FkUserAgent.webViewUserAgent ?? defaultUaString;
-    // 更新 dio 设置的 user-agent 字符串
-    dio.options.headers['User-Agent'] = uaString;
+    try {
+      // 如果非IOS/Android，则该函数将抛异常
+      await FkUserAgent.init();
+      uaString = FkUserAgent.webViewUserAgent ?? defaultUaString;
+      // 更新 dio 设置的 user-agent 字符串
+      dio.options.headers['User-Agent'] = uaString;
+    } catch (e) {
+      // Desktop端将进入该异常
+      // TODO: 自定义UA
+      dio.options.headers['User-Agent'] = uaString;
+    }
   }
 }
