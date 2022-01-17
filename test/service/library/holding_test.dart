@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kite/service/library/holding.dart';
+import 'package:kite/service/library.dart';
 import 'package:kite/service/session_pool.dart';
 import 'package:logger/logger.dart';
 

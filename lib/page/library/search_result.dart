@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/dao/library/book_search.dart';
 import 'package:kite/dao/library/image_search.dart';
-import 'package:kite/service/library/book_search.dart';
-import 'package:kite/service/library/image_search.dart';
+import 'package:kite/service/library.dart';
 import 'package:kite/service/session_pool.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/library/search.dart';
