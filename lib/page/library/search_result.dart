@@ -132,16 +132,32 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
       setState(() {
         isLoading = true;
       });
-      showBasicFlash(context, const Text('加载更多'));
-      var nextPage = await get(10, currentPage + 1);
-      if (nextPage.isNotEmpty) {
-        setState(() {
-          dataList.addAll(nextPage);
-          currentPage++;
+      showBasicFlash(
+          context,
+          Row(
+            children: const [
+              CircularProgressIndicator(),
+              SizedBox(
+                width: 15,
+              ),
+              Text('正在加载更多结果')
+            ],
+          ),
+          duration: const Duration(seconds: 3));
+      try {
+        var nextPage = await get(10, currentPage + 1);
+        if (nextPage.isNotEmpty) {
+          setState(() {
+            dataList.addAll(nextPage);
+            currentPage++;
+            isLoading = false;
+          });
+        } else {
+          showBasicFlash(context, const Text('找不到更多了'));
           isLoading = false;
-        });
-      } else {
-        showBasicFlash(context, const Text('找不到更多了'));
+        }
+      } catch (e) {
+        showBasicFlash(context, const Text('网络异常，再试一次'));
         isLoading = false;
       }
     }
