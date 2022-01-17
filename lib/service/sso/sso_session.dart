@@ -8,6 +8,7 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:kite/service/abstract_session.dart';
 import 'package:kite/service/ocr.dart';
 import 'package:kite/service/session_pool.dart';
+import 'package:kite/util/logger.dart';
 
 import 'encryption.dart';
 import 'utils.dart';
@@ -32,6 +33,7 @@ class SsoSession extends ASession {
     Dio? dio,
     CookieJar? jar,
   }) {
+    Log.info('初始化 SsoSession');
     _dio = dio ?? SessionPool.dio;
 
     if (jar == null) {

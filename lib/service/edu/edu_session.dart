@@ -1,10 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:kite/service/abstract_session.dart';
+import 'package:kite/util/logger.dart';
 
 class EduSession extends ASession {
   final ASession _session;
 
-  EduSession(this._session);
+  EduSession(this._session) {
+    Log.info('初始化 EduSession');
+  }
 
   Future<void> _refreshCookie() async {
     await _session.get('http://jwxt.sit.edu.cn/sso/jziotlogin');
