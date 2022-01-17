@@ -14,7 +14,7 @@ dependencies:
   url_launcher: ^6.0.17
   flutter_markdown: ^0.6.9
   flutter_widget_from_html_core: ^0.8.4
-  flutter_user_agentx: ^1.2.4
+  fk_user_agent: ^2.0.1
 
   # UI
   animations: ^2.0.2

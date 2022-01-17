@@ -4,7 +4,7 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
-import 'package:flutter_user_agentx/flutter_user_agent.dart';
+import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:kite/service/edu.dart';
 import 'package:kite/service/library/library_session.dart';
 import 'package:kite/service/sso.dart';
@@ -60,8 +60,8 @@ class SessionPool {
 
   static void initUserAgentString() {
     Future.delayed(Duration.zero, () async {
-      await FlutterUserAgent.init();
-      uaString = FlutterUserAgent.webViewUserAgent ?? defaultUaString;
+      await FkUserAgent.init();
+      uaString = FkUserAgent.webViewUserAgent ?? defaultUaString;
       // 更新 dio 设置的 user-agent 字符串
       dio.options.headers['User-Agent'] = uaString;
     });
