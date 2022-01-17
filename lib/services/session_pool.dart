@@ -9,8 +9,8 @@ import 'package:kite/services/edu/edu_session.dart';
 import 'package:kite/services/library/library_session.dart';
 import 'package:kite/services/sso/sso.dart';
 
-const String? httpProxy = '10.3.0.13:8888';
-const bool allowBadCertificate = false;
+const String? httpProxy = null;
+const bool allowBadCertificate = true;
 
 class SessionPool {
   static const String defaultUaString = 'kite-app';
@@ -56,7 +56,7 @@ class SessionPool {
   static void initUserAgentString() {
     Future.delayed(Duration.zero, () async {
       await FlutterUserAgent.init();
-      uaString = FlutterUserAgent.webViewUserAgent! ?? defaultUaString;
+      uaString = FlutterUserAgent.webViewUserAgent ?? defaultUaString;
       // 更新 dio 设置的 user-agent 字符串
       dio.options.headers['User-Agent'] = uaString;
     });
