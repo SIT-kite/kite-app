@@ -20,7 +20,7 @@ class WelcomePage extends StatelessWidget {
               height: screenHeight,
               child: const Image(image: AssetImage("assets/welcome/background.jpg"), fit: BoxFit.cover)),
           // Transparent layer.
-          Container(color: Colors.black.withOpacity(0.6)),
+          Container(color: Colors.black.withOpacity(0.35)),
           // Front weights. Texts and buttons are on the left bottom of the screen.
           Container(
             width: screenWidth,
