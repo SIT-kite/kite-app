@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kite/service/weather.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'home/background.dart';
@@ -35,9 +36,9 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  List<Widget> buildFunctionWidgets() {
+  List<Widget> buildFunctionWidgets(Weather weather) {
     return [
-      const GreetingWidget(),
+      GreetingWidget(weather),
       const SizedBox(height: 20.0),
       const HomeItemGroup([
         HomeItem('/electricity', AssetImage('assets/home/icon_daily_report.png'), '电费查询'),
@@ -61,42 +62,55 @@ class HomePage extends StatelessWidget {
     ];
   }
 
+  Widget _buildBody(BuildContext context, Weather weather) {
+    final windowSize = MediaQuery.of(context).size;
+    final items = buildFunctionWidgets(weather);
+
+    return Stack(
+      children: [
+        HomeBackground(int.parse(weather.icon)),
+        SmartRefresher(
+          enablePullDown: true,
+          enablePullUp: false,
+          controller: _refreshController,
+          child: CustomScrollView(slivers: [
+            SliverAppBar(
+              // AppBar
+              automaticallyImplyLeading: false,
+              flexibleSpace: FlexibleSpaceBar(title: _buildTitleLine(context)),
+              expandedHeight: windowSize.height * 0.6,
+              backgroundColor: Colors.transparent,
+              centerTitle: false,
+              elevation: 0,
+              pinned: false,
+            ),
+            SliverList(
+              // Functions
+              delegate: SliverChildBuilderDelegate(
+                (_, index) => Padding(padding: const EdgeInsets.only(left: 10, right: 10), child: items[index]),
+                childCount: items.length,
+              ),
+            ),
+          ]),
+          onRefresh: _onHomeRefresh,
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final windowSize = MediaQuery.of(context).size;
-    final items = buildFunctionWidgets();
-
     return Scaffold(
       key: _scaffoldKey,
-      body: Stack(
-        children: [
-          const HomeBackground(),
-          SmartRefresher(
-            enablePullDown: true,
-            enablePullUp: false,
-            controller: _refreshController,
-            child: CustomScrollView(slivers: [
-              SliverAppBar(
-                // AppBar
-                automaticallyImplyLeading: false,
-                flexibleSpace: FlexibleSpaceBar(title: _buildTitleLine(context)),
-                expandedHeight: windowSize.height * 0.6,
-                backgroundColor: Colors.transparent,
-                centerTitle: false,
-                elevation: 0,
-                pinned: false,
-              ),
-              SliverList(
-                // Functions
-                delegate: SliverChildBuilderDelegate(
-                  (_, index) => Padding(padding: const EdgeInsets.only(left: 10, right: 10), child: items[index]),
-                  childCount: items.length,
-                ),
-              ),
-            ]),
-            onRefresh: _onHomeRefresh,
-          ),
-        ],
+      body: FutureBuilder<Weather>(
+        future: getCurrentWeather(1),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final weather = snapshot.data!;
+            return _buildBody(context, weather);
+          }
+          return const Center(child: CircularProgressIndicator());
+        },
       ),
       drawer: const KiteDrawer(),
     );

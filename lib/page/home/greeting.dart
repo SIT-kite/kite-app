@@ -10,27 +10,13 @@ int _calcStudyDays(int entranceYear) {
   return days;
 }
 
-class GreetingWidget extends StatefulWidget {
-  const GreetingWidget({Key? key}) : super(key: key);
-
-  @override
-  _GreetingWidgetState createState() => _GreetingWidgetState();
-}
-
-class _GreetingWidgetState extends State<GreetingWidget> {
+class GreetingWidget extends StatelessWidget {
   int studyDays = 1;
   int campus = 1;
-  late Weather currentWeather;
-
+  final Weather currentWeather;
   final textStyle = const TextStyle(color: Colors.white70, fontSize: 20);
 
-  @override
-  void initState() {
-    super.initState();
-
-    // 初始化在校天数
-    _getStudyDays().then((value) => setState(() => studyDays = value));
-  }
+  GreetingWidget(this.currentWeather, {Key? key}) : super(key: key);
 
   Future<int> _getStudyDays() async {
     final data = await SharedPreferences.getInstance();
@@ -49,20 +35,8 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   }
 
   Widget _buildWeatherIcon(String iconCode) {
-    return TextButton(
-      onPressed: () => setState(
-        () {
-          campus = campus == 1 ? 2 : 1;
-        },
-      ),
-      child: SvgPicture.asset(
-        'assets/weather/$iconCode.svg',
-        width: 60,
-        height: 60,
-        fit: BoxFit.fill,
-        color: Colors.white,
-      ),
-    );
+    return SvgPicture.asset('assets/weather/$iconCode.svg',
+        width: 60, height: 60, fit: BoxFit.fill, color: Colors.white);
   }
 
   Widget buildAll(BuildContext context) {
@@ -85,11 +59,11 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.centerLeft,
-      child: FutureBuilder<Weather>(
-        future: getCurrentWeather(campus),
-        builder: (BuildContext context, AsyncSnapshot<Weather> snapshot) {
+      child: FutureBuilder<int>(
+        future: _getStudyDays(),
+        builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
           if (snapshot.hasData) {
-            currentWeather = snapshot.data!;
+            studyDays = snapshot.data!;
             return Container(padding: const EdgeInsets.only(left: 12, right: 12), child: buildAll(context));
           }
 
