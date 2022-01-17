@@ -1,4 +1,8 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
+import 'package:kite/service/library.dart';
+import 'package:kite/service/session_pool.dart';
 
 class BookInfoPage extends StatefulWidget {
   final String bookId;
@@ -9,13 +13,39 @@ class BookInfoPage extends StatefulWidget {
 }
 
 class _BookInfoPageState extends State<BookInfoPage> {
+  LinkedHashMap detail = LinkedHashMap();
+  List<String> nearBookId = [];
+  @override
+  void initState() {
+    super.initState();
+    BookInfoService(SessionPool.librarySession).query(widget.bookId).then((value) {
+      setState(() {
+        detail = value.rawDetail;
+      });
+    });
+    HoldingInfoService(SessionPool.librarySession).searchNearBookIdList(widget.bookId).then((value) {
+      setState(() {
+        nearBookId = value;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('图书详情'),
       ),
-      body: Text(widget.bookId),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Text('图书详情'),
+            Text(detail.entries.map((e) => '${e.key}: ${e.value}').join('\n')),
+            Text('邻近的书'),
+            Text(nearBookId.join('\n')),
+          ],
+        ),
+      ),
     );
   }
 }
