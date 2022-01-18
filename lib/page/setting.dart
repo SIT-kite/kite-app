@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:kite/service/session_pool.dart';
 import 'package:kite/storage/setting/constants.dart';
 import 'package:kite/storage/storage_pool.dart';
 
@@ -58,12 +59,23 @@ class SettingPage extends StatelessWidget {
           title: '使用 HTTP 代理',
           subtitle: '当代理服务器正确配置后, 您无需 EasyConnect 便可连接校园网',
           leading: const Icon(Icons.vpn_key),
-          onChange: (value) {},
+          onChange: (value) {
+            if (value) {
+              StoragePool.network.useProxy = value;
+              SessionPool.initProxySettings();
+            }
+          },
           childrenIfEnabled: [
             TextInputSettingsTile(
               title: '代理地址',
               settingKey: '/network/proxy',
               initialValue: StoragePool.network.proxy,
+              onChange: (value) {
+                StoragePool.network.proxy = value;
+                if (StoragePool.network.useProxy) {
+                  SessionPool.initProxySettings();
+                }
+              },
             ),
             SimpleSettingsTile(title: '测试连接', subtitle: '检查校园网或网络代理的连接', onTap: () => {}),
           ],
