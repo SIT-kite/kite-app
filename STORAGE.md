@@ -16,6 +16,8 @@ sqflite 库。
 | /home/backgroundMode | 首页背景模式 | `weather` 表示显示天气, <br>`image` 表示显示图片 |
 | /theme/color | 主题色 | |
 | /library/searchHistory | 搜索记录 | 见 `SearchHistoryStorage` |
+| /network/proxy | 代理IP地址 | 格式如 `192.168.1.1:8000` |
+| /network/useProxy | 使用代理服务器 | bool |
 
 ## 关系型数据
 
