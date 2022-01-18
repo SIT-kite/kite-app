@@ -12,8 +12,9 @@ sqflite 库。
 | /auth/username | 用户名 （学号） | |
 | /auth/password | 密码 | |
 | /home/campus | 校区 | 用于显示天气<br>1 奉贤校区<br>2 徐汇区 |
-| /theme/background | 首页背景图片 | |
-| /theme/backgroundMode | 首页背景模式 | `weather` 表示显示天气, <br>`image` 表示显示图片 |
+| /home/background | 首页背景图片 | |
+| /home/backgroundMode | 首页背景模式 | `weather` 表示显示天气, <br>`image` 表示显示图片 |
+| /theme/color | 主题色 | |
 | /library/searchHistory | 搜索记录 | 见 `SearchHistoryStorage` |
 
 ## 关系型数据
