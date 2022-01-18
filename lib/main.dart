@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:kite/app.dart';
 import 'package:kite/storage/storage_pool.dart';
 import 'package:kite/util/logger.dart';
@@ -16,6 +17,7 @@ Future<void> init() async {
   await Future.wait([
     SessionPool.init(),
     StoragePool.init(),
+    Settings.init(),
   ]);
   Log.info('应用开启前初始化完成');
 }

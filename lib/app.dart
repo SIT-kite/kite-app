@@ -12,6 +12,7 @@ import 'package:kite/page/makert.dart';
 import 'package:kite/page/office.dart';
 import 'package:kite/page/report.dart';
 import 'package:kite/page/score.dart';
+import 'package:kite/page/setting.dart';
 import 'package:kite/page/timetable/timetable.dart';
 import 'package:kite/page/welcome.dart';
 import 'package:kite/page/wiki.dart';
@@ -39,6 +40,7 @@ class KiteApp extends StatelessWidget {
       '/library': (context) => const LibraryPage(),
       '/market': (context) => const MarketPage(),
       '/timetable': (context) => const TimetablePage(),
+      '/setting': (context) => const SettingPage(),
     };
 
     return MaterialApp(

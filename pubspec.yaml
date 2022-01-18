@@ -52,6 +52,7 @@ dependencies:
   flutter_bugly: ^0.4.3
   flutter_phoenix: ^1.0.0
   catcher: ^0.6.9
+  flutter_settings_screens: ^0.3.2-null-safety
 
 dev_dependencies:
   flutter_test:

@@ -46,15 +46,10 @@ class KiteDrawer extends Drawer {
             child: Text('用户信息区域'),
           ),
           ListTile(
-            title: const Text('主题'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
             title: const Text('设置'),
             onTap: () {
               Navigator.pop(context);
+              Navigator.of(context).pushNamed('/setting');
             },
           ),
           ListTile(
