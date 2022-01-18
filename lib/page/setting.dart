@@ -50,6 +50,14 @@ class SettingPage extends StatelessWidget {
           SimpleSettingsTile(title: '背景图片', subtitle: '设置首页的背景图片', onTap: () => {}),
         ],
       ),
+      SettingsGroup(title: '网络', children: <Widget>[
+        TextInputSettingsTile(
+          title: 'HTTP 代理',
+          settingKey: '/network/proxy',
+          initialValue: StoragePool.network.proxy,
+        ),
+        SimpleSettingsTile(title: '测试连接', subtitle: '检查校园网或网络代理的连接', onTap: () => {}),
+      ]),
       SettingsGroup(title: '账户', children: <Widget>[
         TextInputSettingsTile(
           title: '学号',
