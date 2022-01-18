@@ -171,6 +171,7 @@ class _LoginPageState extends State<LoginPage> {
         controller.dismiss();
 
         isProxySettingShown = false;
+        StoragePool.network.useProxy = true;
         StoragePool.network.proxy = inputText;
 
         SessionPool.init();

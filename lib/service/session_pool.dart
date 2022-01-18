@@ -51,7 +51,7 @@ class SessionPool {
         client.badCertificateCallback = (cert, host, port) => true;
       }
       // 设置代理. 优先设置配置文件中的, 便于调试.
-      if (StoragePool.network.proxy.isNotEmpty) {
+      if (StoragePool.network.useProxy && StoragePool.network.proxy.isNotEmpty) {
         client.findProxy = (_) => 'PROXY ${StoragePool.network.proxy}';
       } else if (httpProxy != null) {
         client.findProxy = (_) => 'PROXY $httpProxy';
