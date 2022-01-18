@@ -43,10 +43,11 @@ class StoragePool {
     await Hive.initFlutter();
 
     Hive.registerAdapter(SearchHistoryItemAdapter());
+    Hive.registerAdapter(AuthItemAdapter());
+
     final searchHistoryBox = await Hive.openBox<SearchHistoryItem>('library.search_history');
     _librarySearchHistory = SearchHistoryStorage(searchHistoryBox);
 
-    Hive.registerAdapter(AuthItemAdapter());
     final authBox = await Hive.openBox<AuthItem>('auth');
     _authPool = AuthPoolStorage(authBox);
 
