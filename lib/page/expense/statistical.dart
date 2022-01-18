@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:kite/page/expense/component/line_chart.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
 
-///测试数据s
-import 'component/false_data.dart';
+///测试数据
+import 'package:kite/mock/expense.dart';
+
+import 'line_chart.dart';
 
 var today = DateTime.now();
 List<FlSpot> daysData = [];
@@ -45,8 +46,7 @@ class _StatisticalPageState extends State<StatisticalPage> {
                 },
                 child: Text('${year}年', textScaleFactor: 1.5),
                 shape: RoundedRectangleBorder(
-                    side: BorderSide(width: 1, color: Colors.grey),
-                    borderRadius: BorderRadius.circular(10)),
+                    side: BorderSide(width: 1, color: Colors.grey), borderRadius: BorderRadius.circular(10)),
                 itemBuilder: (BuildContext context) {
                   List<PopupMenuItem<String>> widgets = [];
                   for (int i = today.year; i >= 2021; i--) {
@@ -67,8 +67,7 @@ class _StatisticalPageState extends State<StatisticalPage> {
                 },
                 child: Text('${month}月', textScaleFactor: 1.5),
                 shape: RoundedRectangleBorder(
-                    side: BorderSide(width: 1, color: Colors.grey),
-                    borderRadius: BorderRadius.circular(10)),
+                    side: BorderSide(width: 1, color: Colors.grey), borderRadius: BorderRadius.circular(10)),
                 itemBuilder: (BuildContext context) {
                   List<PopupMenuItem<String>> widgets = [];
                   int i = year == today.year ? month : 12;
@@ -93,15 +92,13 @@ class _StatisticalPageState extends State<StatisticalPage> {
             borderRadius: BorderRadius.circular(10),
           ),
           child: Padding(
-              padding:
-                  EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
+              padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
               child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     const Padding(
-                      padding: EdgeInsets.only(
-                          left: 0, right: 0, top: 0, bottom: 10),
+                      padding: EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 10),
                       child: Text('支出对比', textScaleFactor: 1.2),
                     ),
                     AspectRatio(
@@ -119,8 +116,7 @@ class _StatisticalPageState extends State<StatisticalPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding:
-                  EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
+              padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
               child: const Text('支出分类', textScaleFactor: 1.2),
             ),
             Column(
@@ -145,12 +141,10 @@ class _StatisticalPageState extends State<StatisticalPage> {
         icon = Icon(Icons.water_damage_outlined, size: 30);
       else if (CategoricalData[i]["label"] == 'shower')
         icon = Icon(Icons.shower_outlined, size: 30);
-      else if (CategoricalData[i]["label"] == 'store')
-        icon = Icon(Icons.storefront, size: 30);
+      else if (CategoricalData[i]["label"] == 'store') icon = Icon(Icons.storefront, size: 30);
       widgets.add(ListTile(
         leading: icon,
-        title:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text('${CategoricalData[i]["label"]}', textScaleFactor: 1.5),
           Text('${CategoricalData[i]["percentage"]}%'),
         ]),
@@ -194,13 +188,11 @@ class _StatisticalPageState extends State<StatisticalPage> {
 
   getDaysData(List monthData) {
     daysData = [];
-    var monthStartDate = DateTime(int.parse(monthData[0]['year']),
-            int.parse(monthData[0]['month']), 1)
-        .microsecondsSinceEpoch;
+    var monthStartDate =
+        DateTime(int.parse(monthData[0]['year']), int.parse(monthData[0]['month']), 1).microsecondsSinceEpoch;
 
-    var monthEndtDate = DateTime(int.parse(monthData[1]['year']),
-            int.parse(monthData[1]['month']) + 1, 1)
-        .microsecondsSinceEpoch;
+    var monthEndtDate =
+        DateTime(int.parse(monthData[1]['year']), int.parse(monthData[1]['month']) + 1, 1).microsecondsSinceEpoch;
     var index_day = 0;
     var dayTime = (monthEndtDate - monthStartDate) / (1000000 * 60 * 60 * 24);
     print('$dayTime');
@@ -224,11 +216,7 @@ class _StatisticalPageState extends State<StatisticalPage> {
     num sum = 0;
     List labels = ['hotWater', 'shower', 'coffee', 'canteen', 'store'];
     for (int i = 0; i < labels.length; i++) {
-      CategoricalData.add({
-        'label': labels[i],
-        'money': 0,
-        'percentage': sum == 0 ? 1 : monthData[i]['money'] / sum
-      });
+      CategoricalData.add({'label': labels[i], 'money': 0, 'percentage': sum == 0 ? 1 : monthData[i]['money'] / sum});
     }
     for (int i = 0; i < monthData.length; i++) {
       for (int j = 0; j < CategoricalData.length; j++) {
@@ -236,22 +224,17 @@ class _StatisticalPageState extends State<StatisticalPage> {
           sum += monthData[i]['money'];
 
           CategoricalData[j]['money'] += monthData[i]['money'];
-          CategoricalData[j]['percentage'] =
-              sum == 0 ? 1 : monthData[i]['money'] / sum;
+          CategoricalData[j]['percentage'] = sum == 0 ? 1 : monthData[i]['money'] / sum;
         }
       }
     }
     for (int i = 0; i < CategoricalData.length; i++) {
-      CategoricalData[i]['percentage'] =
-          sum == 0 ? 1 : CategoricalData[i]['money'] * 100 ~/ sum;
+      CategoricalData[i]['percentage'] = sum == 0 ? 1 : CategoricalData[i]['money'] * 100 ~/ sum;
     }
     CategoricalData.sort((a, b) => b['money'].compareTo(a['money']));
   }
 
   getSummation() {
-    return [
-      Text('支出 ${number} 笔 合计'),
-      Text('￥${Summation}', textScaleFactor: 1.8)
-    ];
+    return [Text('支出 ${number} 笔 合计'), Text('￥${Summation}', textScaleFactor: 1.8)];
   }
 }
