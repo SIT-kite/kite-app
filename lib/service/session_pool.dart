@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:cookie_jar/cookie_jar.dart';
-import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:fk_user_agent/fk_user_agent.dart';
@@ -38,34 +37,21 @@ class SessionPool {
     librarySession = LibrarySession(dio);
   }
 
-  static Dio _initDioInstance() {
-    Dio dio = Dio();
+  static void initProxySettings() {
+    HttpOverrides.global = KiteHttpOverrides();
+  }
 
+  static Dio _initDioInstance() {
+    // 设置 HTTP 代理
+    initProxySettings();
+
+    Dio dio = Dio();
     // 添加拦截器
     dio.interceptors.add(CookieManager(_cookieJar));
-
-    /// 创建 Http client 时的回调.
-    HttpClient onHttpClientCreate(HttpClient client) {
-      // 设置证书检查
-      if (allowBadCertificate || StoragePool.network.useProxy || httpProxy != null) {
-        client.badCertificateCallback = (cert, host, port) => true;
-      }
-      // 设置代理. 优先设置配置文件中的, 便于调试.
-      if (StoragePool.network.useProxy && StoragePool.network.proxy.isNotEmpty) {
-        client.findProxy = (_) => 'PROXY ${StoragePool.network.proxy}';
-      } else if (httpProxy != null) {
-        client.findProxy = (_) => 'PROXY $httpProxy';
-      }
-      return client;
-    }
-
-    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = onHttpClientCreate;
-
     // 设置默认 User-Agent 字符串.
     dio.options.headers = {
       'User-Agent': uaString,
     };
-
     // 设置默认超时时间
     dio.options.connectTimeout = 5 * 1000;
     dio.options.sendTimeout = 60 * 1000;
@@ -85,5 +71,24 @@ class SessionPool {
       // TODO: 自定义UA
       dio.options.headers['User-Agent'] = uaString;
     }
+  }
+}
+
+class KiteHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    final client = super.createHttpClient(context);
+
+    // 设置证书检查
+    if (allowBadCertificate || StoragePool.network.useProxy || httpProxy != null) {
+      client.badCertificateCallback = (cert, host, port) => true;
+    }
+    // 设置代理. 优先设置配置文件中的设置, 便于调试.
+    if (StoragePool.network.useProxy && StoragePool.network.proxy.isNotEmpty) {
+      client.findProxy = (_) => 'PROXY ${StoragePool.network.proxy}';
+    } else if (httpProxy != null) {
+      client.findProxy = (_) => 'PROXY $httpProxy';
+    }
+    return client;
   }
 }
