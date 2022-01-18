@@ -1,21 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kite/page/about.dart';
-import 'package:kite/page/campus_card.dart';
-import 'package:kite/page/connectivity.dart';
-import 'package:kite/page/electricity.dart';
-import 'package:kite/page/expense.dart';
-import 'package:kite/page/game.dart';
-import 'package:kite/page/home.dart';
-import 'package:kite/page/library/library.dart';
-import 'package:kite/page/login.dart';
-import 'package:kite/page/makert.dart';
-import 'package:kite/page/office.dart';
-import 'package:kite/page/report.dart';
-import 'package:kite/page/score.dart';
-import 'package:kite/page/setting.dart';
-import 'package:kite/page/timetable/timetable.dart';
-import 'package:kite/page/welcome.dart';
-import 'package:kite/page/wiki.dart';
+import 'package:kite/page/index.dart';
 import 'package:kite/storage/storage_pool.dart';
 
 class KiteApp extends StatelessWidget {
