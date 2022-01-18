@@ -11,7 +11,7 @@ import 'package:kite/service/sso.dart';
 import 'package:kite/storage/storage_pool.dart';
 import 'package:kite/util/logger.dart';
 
-const String? httpProxy = null;
+const String? httpProxy = '192.168.0.107:808';
 const bool allowBadCertificate = true;
 
 class SessionPool {

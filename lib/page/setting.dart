@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:kite/storage/setting/constants.dart';
 import 'package:kite/storage/storage_pool.dart';
 
 class SettingPage extends StatelessWidget {
@@ -37,14 +38,14 @@ class SettingPage extends StatelessWidget {
           DropDownSettingsTile<int>(
             title: '校区',
             subtitle: '用于显示对应校区的天气',
-            settingKey: '/home/campus',
+            settingKey: SettingKeyConstants.homeCampusKey,
             values: const <int, String>{
               1: '奉贤',
               2: '徐汇',
             },
             selected: 1,
             onChange: (value) {
-              StoragePool.home.campus = value;
+              StoragePool.homeSetting.campus = value;
             },
           ),
           SimpleSettingsTile(title: '背景图片', subtitle: '设置首页的背景图片', onTap: () => {}),
@@ -71,7 +72,7 @@ class SettingPage extends StatelessWidget {
         TextInputSettingsTile(
           title: '学号',
           settingKey: '/auth/username',
-          initialValue: StoragePool.auth.username,
+          initialValue: StoragePool.authSetting.currentUsername ?? '',
         ),
         TextInputSettingsTile(
           title: '密码',

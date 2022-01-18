@@ -31,7 +31,7 @@ class KiteApp extends StatelessWidget {
       title: '上应小风筝',
       theme: ThemeData.light(),
       debugShowCheckedModeBanner: false,
-      home: StoragePool.auth.hasUsername ? HomePage() : const WelcomePage(),
+      home: StoragePool.authSetting.currentUsername != null ? HomePage() : const WelcomePage(),
       routes: routes,
     );
   }

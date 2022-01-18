@@ -1,18 +1,31 @@
-import 'package:kite/util/path.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive/hive.dart';
+import 'package:kite/dao/auth_pool.dart';
+import 'package:kite/entity/auth_item.dart';
 
-class AuthStorage {
-  static final _namespace = Path().forward('auth');
-  static final _usernameKey = _namespace.forward('username').toString();
-  static final _passwordKey = _namespace.forward('password').toString();
+class AuthPoolStorage implements AuthPoolDao {
+  final Box<AuthItem> box;
+  const AuthPoolStorage(this.box);
 
-  final SharedPreferences prefs;
-  const AuthStorage(this.prefs);
+  @override
+  void add(AuthItem auth) {
+    box.put(auth.username, auth);
+  }
 
-  String get username => prefs.getString(_usernameKey) ?? '';
-  String get password => prefs.getString(_passwordKey) ?? '';
-  set username(String foo) => prefs.setString(_usernameKey, foo);
-  set password(String foo) => prefs.setString(_passwordKey, foo);
-  bool get hasUsername => prefs.containsKey(_usernameKey);
-  bool get hasPassword => prefs.containsKey(_passwordKey);
+  @override
+  List<AuthItem> get all => box.values.toList();
+
+  @override
+  void delete(String username) {
+    box.delete(username);
+  }
+
+  @override
+  void deleteAll() {
+    box.deleteAll(box.keys);
+  }
+
+  @override
+  AuthItem? get(String username) {
+    return box.get(username);
+  }
 }

@@ -1,42 +1,58 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:kite/dao/auth_pool.dart';
+import 'package:kite/dao/library/search_history.dart';
+import 'package:kite/dao/setting/auth.dart';
+import 'package:kite/dao/setting/home.dart';
+import 'package:kite/entity/auth_item.dart';
+import 'package:kite/entity/library/search_history.dart';
+import 'package:kite/storage/network.dart';
+import 'package:kite/storage/setting/auth.dart';
+import 'package:kite/storage/setting/home.dart';
+import 'package:kite/util/hive_cache_provider.dart';
 import 'package:kite/util/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'auth.dart';
-import 'home.dart';
-import 'network.dart';
 import 'search_history.dart';
 
 /// 本地持久化层
 class StoragePool {
-  static late SharedPreferences _prefs;
+  static late AuthPoolStorage _authPool;
+  static AuthPoolDao get authPool => _authPool;
 
-  static late AuthStorage _auth;
+  static late SearchHistoryStorage _librarySearchHistory;
+  static SearchHistoryDao get librarySearchHistory => _librarySearchHistory;
 
-  static AuthStorage get auth => _auth;
+  static late HomeSettingStorage _homeSetting;
+  static HomeSettingDao get homeSetting => _homeSetting;
 
-  static late SearchHistoryStorage _searchHistory;
-
-  static SearchHistoryStorage get searchHistory => _searchHistory;
-
-  static late HomeStorage _home;
-
-  static HomeStorage get home => _home;
+  static late AuthSettingDao _authSetting;
+  static AuthSettingDao get authSetting => _authSetting;
 
   static late NetworkStorage _network;
 
   static NetworkStorage get network => _network;
 
   static Future<void> init() async {
-    // SP初始化之前必须确保这个执行
-    WidgetsFlutterBinding.ensureInitialized();
-    Log.info('WidgetsFlutterBinding.ensureInitialized');
-
     Log.info("初始化StoragePool");
-    _prefs = await SharedPreferences.getInstance();
-    _auth = AuthStorage(_prefs);
-    _home = HomeStorage(_prefs);
+
+    final _prefs = await SharedPreferences.getInstance();
     _network = NetworkStorage(_prefs);
-    _searchHistory = SearchHistoryStorage(_prefs);
+
+    await Hive.initFlutter();
+
+    Hive.registerAdapter(SearchHistoryItemAdapter());
+    final searchHistoryBox = await Hive.openBox<SearchHistoryItem>('library.search_history');
+    _librarySearchHistory = SearchHistoryStorage(searchHistoryBox);
+
+    Hive.registerAdapter(AuthItemAdapter());
+    final authBox = await Hive.openBox<AuthItem>('auth');
+    _authPool = AuthPoolStorage(authBox);
+
+    final settingBox = await Hive.openBox<dynamic>('setting');
+    _authSetting = AuthSettingStorage(settingBox);
+    _homeSetting = HomeSettingStorage(settingBox);
+    Settings.init(cacheProvider: HiveCacheProvider(settingBox));
   }
 }

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kite/entity/office.dart';
 import 'package:kite/service/office.dart';
-import 'package:kite/storage/auth.dart';
+import 'package:kite/storage/storage_pool.dart';
 import 'package:kite/util/flash.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'office/detail.dart';
 import 'office/message.dart';
@@ -33,15 +32,13 @@ class OfficePage extends StatefulWidget {
 }
 
 class _OfficePageState extends State<OfficePage> {
-  AuthStorage? user;
   OfficeSession? session;
   bool enableFilter = true;
 
-  Future<AuthStorage> _queryLocalCredential() async => AuthStorage(await SharedPreferences.getInstance());
-
   Future<List<SimpleFunction>> _fetchFuncList() async {
-    user = await _queryLocalCredential();
-    session = await login(user!.username, user!.password);
+    final username = StoragePool.authSetting.currentUsername!;
+    final password = StoragePool.authPool.get(username)!.password;
+    session = await login(username, password);
     return await selectFunctionsByCountDesc(session!);
   }
 

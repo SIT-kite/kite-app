@@ -5,7 +5,7 @@ import 'package:kite/page/library/component/suggestion_item.dart';
 import 'package:kite/page/library/search_result.dart';
 import 'package:kite/service/library.dart';
 import 'package:kite/service/session_pool.dart';
-import 'package:kite/storage/search_history.dart';
+import 'package:kite/storage/storage_pool.dart';
 import 'package:kite/util/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -52,12 +52,11 @@ class SearchBarDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    SharedPreferences.getInstance().then((value) {
-      SearchHistoryStorage(value).add(SearchHistoryItem(
-        query,
-        DateTime.now(),
-      ));
-    });
+    StoragePool.librarySearchHistory.add(
+      SearchHistoryItem()
+        ..keyword = query
+        ..time = DateTime.now(),
+    );
     return BookSearchResultWidget(query);
   }
 
@@ -88,7 +87,7 @@ class SearchBarDelegate extends SearchDelegate<String> {
                 if (snapshot.connectionState == ConnectionState.done) {
                   SharedPreferences prefs = snapshot.data;
                   return SuggestionItemView(
-                    titleItems: SearchHistoryStorage(prefs).getAllByTimeDesc().itemList.map((e) => e.keyword).toList(),
+                    titleItems: StoragePool.librarySearchHistory.getAllByTimeDesc().map((e) => e.keyword).toList(),
                     onItemTap: (title) => _searchByGiving(title, context),
                   );
                 } else {
@@ -107,7 +106,7 @@ class SearchBarDelegate extends SearchDelegate<String> {
               ),
               onTap: () async {
                 var prefs = await SharedPreferences.getInstance();
-                SearchHistoryStorage(prefs).deleteAll();
+                StoragePool.librarySearchHistory.deleteAll();
                 close(context, '');
               },
             ),

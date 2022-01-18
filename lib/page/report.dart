@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kite/storage/auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:kite/storage/storage_pool.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class DailyReportPage extends StatefulWidget {
@@ -21,7 +20,7 @@ class _DailyReportPageState extends State<DailyReportPage> {
     await controller.reload();
   }
 
-  Future<String> _queryLocalUser() async => AuthStorage(await SharedPreferences.getInstance()).username;
+  String _queryLocalUser() => StoragePool.authSetting.currentUsername ?? '';
 
   static Future<String> _getInjectionJs(String userName) async {
     return (await rootBundle.loadString('assets/report/injection.js')).replaceFirst('{username}', userName);
@@ -32,7 +31,7 @@ class _DailyReportPageState extends State<DailyReportPage> {
       return;
     }
     final controller = await _controller.future;
-    final String user = await _queryLocalUser();
+    final String user = _queryLocalUser();
     final String js = await _getInjectionJs(user);
     controller.runJavascript(js);
   }

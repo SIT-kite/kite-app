@@ -8,5 +8,5 @@ abstract class SearchHistoryDao {
   // 删除所有搜索记录
   void deleteAll();
   // 按时间降序获取所有搜索记录
-  SearchHistory getAllByTimeDesc();
+  List<SearchHistoryItem> getAllByTimeDesc();
 }

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/service/weather.dart';
-import 'package:kite/storage/auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:kite/storage/storage_pool.dart';
 
 /// 计算入学时间, 默认按 9 月 1 日开学来算. 年份 entranceYear 是完整的年份, 如 2018.
 int _calcStudyDays(int entranceYear) {
@@ -19,8 +18,7 @@ class GreetingWidget extends StatelessWidget {
   GreetingWidget(this.currentWeather, {Key? key}) : super(key: key);
 
   Future<int> _getStudyDays() async {
-    final data = await SharedPreferences.getInstance();
-    final studentId = AuthStorage(data).username;
+    final studentId = StoragePool.authSetting.currentUsername!;
 
     if (studentId.isNotEmpty) {
       int entranceYear = 2000 + int.parse(studentId.substring(0, 2));

@@ -2,12 +2,11 @@ import 'package:flash/flash.dart';
 import 'package:flash/src/flash_helper.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:kite/entity/auth_item.dart';
 import 'package:kite/service/session_pool.dart';
-import 'package:kite/storage/auth.dart';
 import 'package:kite/storage/storage_pool.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/url_launcher.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // Rule of student id.
 RegExp reStudentId = RegExp(r'^((\d{9})|(\d{6}[YGHE\d]\d{3}))$');
@@ -56,20 +55,25 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    var auth = StoragePool.auth;
-    auth.username = _usernameController.text;
-    auth.password = _passwordController.text;
+    var auth = StoragePool.authPool;
+    auth.add(
+      AuthItem()
+        ..username = _usernameController.text
+        ..password = _passwordController.text,
+    );
+    StoragePool.authSetting.currentUsername = _usernameController.text;
     Navigator.pushReplacementNamed(context, '/home');
   }
 
   @override
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((prefs) {
-      var auth = AuthStorage(prefs);
-      _usernameController.text = auth.username;
-      _passwordController.text = auth.password;
-    });
+
+    String? username = StoragePool.authSetting.currentUsername;
+    if (username != null) {
+      _usernameController.text = username;
+      _passwordController.text = StoragePool.authPool.get(username)!.password;
+    }
   }
 
   static void onOpenUserLicense() {}
