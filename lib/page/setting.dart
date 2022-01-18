@@ -54,6 +54,7 @@ class SettingPage extends StatelessWidget {
       SettingsGroup(title: '网络', children: <Widget>[
         SwitchSettingsTile(
           settingKey: '/network/useProxy',
+          defaultValue: StoragePool.network.useProxy,
           title: '使用 HTTP 代理',
           subtitle: '当代理服务器正确配置后, 您无需 EasyConnect 便可连接校园网',
           leading: const Icon(Icons.vpn_key),
