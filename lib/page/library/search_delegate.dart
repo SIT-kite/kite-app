@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:kite/entity/library/hot_search.dart';
 import 'package:kite/entity/library/search_history.dart';
+import 'package:kite/global/session_pool.dart';
+import 'package:kite/global/storage_pool.dart';
 import 'package:kite/page/library/component/suggestion_item.dart';
 import 'package:kite/page/library/search_result.dart';
 import 'package:kite/service/library.dart';
-import 'package:kite/global/session_pool.dart';
-import 'package:kite/global/storage_pool.dart';
 import 'package:kite/util/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
