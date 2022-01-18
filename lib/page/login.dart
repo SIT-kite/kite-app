@@ -1,5 +1,8 @@
+import 'package:flash/flash.dart';
+import 'package:flash/src/flash_helper.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:kite/service/session_pool.dart';
 import 'package:kite/storage/auth.dart';
 import 'package:kite/storage/storage_pool.dart';
 import 'package:kite/util/flash.dart';
@@ -20,6 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   // Text field controllers.
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _proxyInputController = TextEditingController();
 
   final GlobalKey _formKey = GlobalKey<FormState>();
 
@@ -28,6 +32,7 @@ class _LoginPageState extends State<LoginPage> {
   // State
   bool isPasswordClear = false;
   bool isLicenseAccepted = false;
+  bool isProxySettingShown = false;
 
   static String? _usernameValidator(String? username) {
     if (username != null && username.isNotEmpty) {
@@ -159,34 +164,91 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  Widget _buildProxySetButton(BuildContext context, FlashController<dynamic> controller, _) {
+    return IconButton(
+      onPressed: () {
+        final String inputText = _proxyInputController.text;
+        controller.dismiss();
+
+        isProxySettingShown = false;
+        StoragePool.network.proxy = inputText;
+
+        SessionPool.init();
+      },
+      icon: const Icon(Icons.send),
+    );
+  }
+
+  void _showProxyInput() {
+    if (isProxySettingShown) {
+      return;
+    }
+    isProxySettingShown = true;
+    _proxyInputController.text = StoragePool.network.proxy;
+
+    context.showFlashBar(
+      persistent: true,
+      borderWidth: 3,
+      behavior: FlashBehavior.fixed,
+      forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+      title: const Text('设置代理服务'),
+      content: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('格式如 192.168.1.1:8000'),
+          Form(
+            child: TextFormField(
+              controller: _proxyInputController,
+              autofocus: true,
+            ),
+          ),
+        ],
+      ),
+      primaryActionBuilder: _buildProxySetButton,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      body: Center(
-        child:
-            // Create new container and make it center in vertical direction.
-            Container(
-          width: screenWidth,
-          padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Title field.
-              buildTitleLine(),
-              const Padding(padding: EdgeInsets.only(top: 40.0)),
-              // Form field: username and password.
-              buildLoginForm(),
-              const SizedBox(height: 10),
-              // User license check box.
-              buildUserLicenseCheckbox(),
-              const SizedBox(height: 25),
-              // Login button.
-              buildLoginButton(),
-            ],
+      body: Stack(
+        children: [
+          // Proxy setting
+          Positioned(
+            top: 40,
+            right: 10,
+            child: IconButton(
+              icon: const Icon(Icons.settings, size: 35),
+              onPressed: () => _showProxyInput(),
+            ),
           ),
-        ),
+          Center(
+            child:
+                // Create new container and make it center in vertical direction.
+                Container(
+              width: screenWidth,
+              padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Title field.
+                  buildTitleLine(),
+                  const Padding(padding: EdgeInsets.only(top: 40.0)),
+                  // Form field: username and password.
+                  buildLoginForm(),
+                  const SizedBox(height: 10),
+                  // User license check box.
+                  buildUserLicenseCheckbox(),
+                  const SizedBox(height: 25),
+                  // Login button.
+                  buildLoginButton(),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
