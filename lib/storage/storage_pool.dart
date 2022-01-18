@@ -13,7 +13,7 @@ import 'package:kite/util/hive_cache_provider.dart';
 import 'package:kite/util/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'auth.dart';
+import 'auth_pool.dart';
 import 'search_history.dart';
 
 /// 本地持久化层
