@@ -13,7 +13,7 @@ class KiteApp extends StatelessWidget {
       '/login': (context) => const LoginPage(),
       '/welcome': (context) => const WelcomePage(),
       '/about': (context) => const AboutPage(),
-      '/expense': (context) => ExpensePage(),
+      '/expense': (context) => const ExpensePage(),
       '/connectivity': (context) => ConnectivityPage(),
       '/campusCard': (context) => const CampusCardPage(),
       '/electricity': (context) => const ElectricityPage(),
