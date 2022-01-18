@@ -1,22 +1,20 @@
-import 'package:dio/dio.dart';
-import 'package:enough_convert/enough_convert.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kite/service/sso.dart';
+import 'package:kite/global/session_pool.dart';
+import 'package:kite/global/storage_pool.dart';
+import 'package:kite/service/expense.dart';
 import 'package:logger/logger.dart';
 
-void main() {
+void main() async {
   var logger = Logger();
+
+  await StoragePool.init();
+  await SessionPool.init();
   test('expense test', () async {
-    const cardUrl = 'http://card.sit.edu.cn/personalxiaofei.jsp';
     var username = '';
     var password = '';
-    var session = SsoSession();
+    var session = SessionPool.ssoSession;
     await session.login(username, password);
-    var response = await session.get(
-      cardUrl,
-      responseType: ResponseType.bytes,
-    );
-    var codec = const GbkCodec();
-    logger.i(codec.decode(response.data));
+    final expense = await ExpenseService(session).getExpensePage(1);
+    logger.i(expense);
   });
 }
