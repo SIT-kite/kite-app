@@ -8,8 +8,8 @@ import 'icon.dart';
 class BillPage extends StatelessWidget {
   const BillPage({Key? key}) : super(key: key);
 
-  Widget _buildBody(BuildContext context, List<ExpenseDetail> expenseData) {
-    return GroupedListView<ExpenseDetail, int>(
+  Widget _buildBody(BuildContext context, List<ExpenseRecord> expenseData) {
+    return GroupedListView<ExpenseRecord, int>(
       elements: expenseData,
       groupBy: (element) => element.ts.month,
       useStickyGroupSeparators: true,
@@ -30,7 +30,7 @@ class BillPage extends StatelessWidget {
         );
       },
       // 生成每一组的头部
-      groupHeaderBuilder: (ExpenseDetail firstGroupRecord) {
+      groupHeaderBuilder: (ExpenseRecord firstGroupRecord) {
         double total = 0;
         int month = firstGroupRecord.ts.month;
 
@@ -47,13 +47,13 @@ class BillPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<ExpenseDetail>>(
+    return FutureBuilder<ExpensePage>(
       // future: ExpenseService(SessionPool.ssoSession).getExpenseBill(1),
-      future: getMockedExpenseBill(),
+      future: ExpenseMock().getExpensePage(1),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          final data = snapshot.data!;
-          return _buildBody(context, data);
+          final ExpensePage data = snapshot.data!;
+          return _buildBody(context, data.records);
         } else if (snapshot.hasError) {
           return Center(child: Text(snapshot.error.toString()));
         }

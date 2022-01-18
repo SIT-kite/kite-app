@@ -17,7 +17,17 @@ class _StatisticsPageState extends State<StatisticsPage> {
   int month = DateTime.now().month;
 
   // TODO: Use actual data.
-  final List<ExpenseDetail> _expenseBill = mockedData;
+  List<ExpenseRecord> _expenseBill = [];
+
+  @override
+  void initState() {
+    super.initState();
+    ExpenseMock().getExpensePage(1).then((value) {
+      setState(() {
+        _expenseBill = value.records;
+      });
+    });
+  }
 
   List<Widget> _buildClassifiedStat() {
     // 各分类下消费的统计
@@ -79,7 +89,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   // TODO: 这个函数应该放在 DAO 或 service
-  List<ExpenseDetail> _filterExpense() {
+  List<ExpenseRecord> _filterExpense() {
     return _expenseBill.where((element) => element.ts.year == year && element.ts.month == month).toList();
   }
 
