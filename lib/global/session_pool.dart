@@ -4,13 +4,13 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:fk_user_agent/fk_user_agent.dart';
+import 'package:kite/global/storage_pool.dart';
 import 'package:kite/service/edu.dart';
 import 'package:kite/service/library/library_session.dart';
 import 'package:kite/service/sso.dart';
-import 'package:kite/global/storage_pool.dart';
 import 'package:kite/util/logger.dart';
 
-const String? httpProxy = '192.168.0.107:808';
+const String? httpProxy = null;
 const bool allowBadCertificate = true;
 
 class SessionPool {
