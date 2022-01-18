@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kite/entity/office.dart';
-import 'package:kite/page/office/message.dart';
 import 'package:kite/service/office.dart';
 import 'package:kite/storage/auth.dart';
+import 'package:kite/util/flash.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'office/detail.dart';
+import 'office/message.dart';
 
 // 本科生常用功能列表
 final Set<String> commonUse = <String>{
@@ -126,7 +127,11 @@ class _OfficePageState extends State<OfficePage> {
   }
 
   void _navigateMessagePage() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => MessagePage(session!)));
+    if (session != null) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => MessagePage(session!)));
+    } else {
+      showBasicFlash(context, const Text('办公模块还未登录，再试试？'));
+    }
   }
 
   @override
