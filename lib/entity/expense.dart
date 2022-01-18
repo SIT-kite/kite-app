@@ -40,5 +40,5 @@ const expenseTypeMapping = {
   ExpenseType.water: '热水',
   ExpenseType.shower: '洗浴',
   ExpenseType.store: '商店',
-  ExpenseType.unknown: '未知',
+  ExpenseType.unknown: '其他',
 };

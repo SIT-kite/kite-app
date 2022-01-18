@@ -9,7 +9,7 @@ class ExpenseChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final expenseMapping = dailyExpense.asMap();
-    final spots = expenseMapping.keys.map((i) => FlSpot(i + 1, expenseMapping[i]!)).toList();
+    final spots = expenseMapping.keys.map((i) => FlSpot((i + 1).toDouble(), expenseMapping[i] ?? 0.0)).toList();
 
     return LineChart(
       LineChartData(
@@ -19,6 +19,7 @@ class ExpenseChart extends StatelessWidget {
           ),
         ),
         lineBarsData: [
+          // 每一个 LineChartBarData 代表一条曲线.
           LineChartBarData(
             belowBarData: BarAreaData(
               show: true,

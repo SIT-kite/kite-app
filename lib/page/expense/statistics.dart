@@ -37,12 +37,13 @@ class _StatisticsPageState extends State<StatisticsPage> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(expenseTypeMapping[expenseType]!, textScaleFactor: 1.5),
-              Text('${(percentage * 100).toInt()} %'),
+              Text(expenseTypeMapping[expenseType]!, textScaleFactor: 1.2),
+              Text('  ${(percentage * 100).toInt()} %', textScaleFactor: 1.1),
             ],
           ),
           subtitle: LinearProgressIndicator(value: percentage),
-          trailing: Text('￥$sumInType', textScaleFactor: 1.5),
+          // 下方 SizedBox 用于限制文字宽度, 使左侧进度条的右端对齐.
+          trailing: SizedBox(width: 80, child: Text('￥$sumInType', textScaleFactor: 1.2)),
           dense: true,
         );
       },
@@ -58,19 +59,22 @@ class _StatisticsPageState extends State<StatisticsPage> {
     final yearWidgets = years.map((e) => PopupMenuItem(value: e, child: Text(e))).toList();
     final monthWidgets = months.map((e) => PopupMenuItem(value: e, child: Text(e))).toList();
 
-    return Row(
-      children: <Widget>[
-        PopupMenuButton(
-          onSelected: (String value) => setState(() => year = int.parse(value)),
-          child: Text('$year 年', textScaleFactor: 1.5),
-          itemBuilder: (_) => yearWidgets,
-        ),
-        PopupMenuButton(
-          onSelected: (String value) => setState(() => year = int.parse(value)),
-          child: Text('$month 月', textScaleFactor: 1.5),
-          itemBuilder: (_) => monthWidgets,
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Row(
+        children: <Widget>[
+          PopupMenuButton(
+            onSelected: (String value) => setState(() => year = int.parse(value)),
+            child: Text('$year 年', textScaleFactor: 1.5),
+            itemBuilder: (_) => yearWidgets,
+          ),
+          PopupMenuButton(
+            onSelected: (String value) => setState(() => month = int.parse(value)),
+            child: Text('$month 月', textScaleFactor: 1.5),
+            itemBuilder: (_) => monthWidgets,
+          ),
+        ],
+      ),
     );
   }
 
@@ -87,25 +91,31 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   Widget _buildChartView() {
     // 得到该年该月有多少天, 生成数组记录每一天的消费.
-    final List<double> daysAmount = List.filled(_getDayCountOfMonth(year, month), 0.0);
+    final List<double> daysAmount = List.filled(_getDayCountOfMonth(year, month), 0.001);
     // 便利该月消费情况, 加到上述统计列表中.
     _filterExpense().forEach((e) => daysAmount[e.ts.day - 1] += e.amount);
 
+    final width = MediaQuery.of(context).size.width - 70;
+
     return Card(
-      margin: const EdgeInsets.fromLTRB(10, 0, 10, 20),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          const Padding(
-            padding: EdgeInsets.only(bottom: 10),
-            child: Text('支出对比', textScaleFactor: 1.2),
-          ),
-          AspectRatio(
-            aspectRatio: 2.2,
-            child: ExpenseChart(daysAmount),
-          )
-        ],
+      margin: const EdgeInsets.fromLTRB(10, 10, 10, 20),
+      child: SizedBox(
+        width: double.infinity,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const Padding(
+              padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
+              child: Text('支出对比', textScaleFactor: 1.2),
+            ),
+            const SizedBox(height: 10),
+            Center(
+              child: SizedBox(height: width * 0.5, width: width, child: ExpenseChart(daysAmount)),
+            ),
+            const SizedBox(height: 14),
+          ],
+        ),
       ),
     );
   }
