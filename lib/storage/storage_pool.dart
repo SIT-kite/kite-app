@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'auth.dart';
 import 'home.dart';
+import 'network.dart';
 import 'search_history.dart';
 
 /// 本地持久化层
@@ -22,6 +23,10 @@ class StoragePool {
 
   static HomeStorage get home => _home;
 
+  static late NetworkStorage _network;
+
+  static NetworkStorage get network => _network;
+
   static Future<void> init() async {
     // SP初始化之前必须确保这个执行
     WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +35,8 @@ class StoragePool {
     Log.info("初始化StoragePool");
     _prefs = await SharedPreferences.getInstance();
     _auth = AuthStorage(_prefs);
+    _home = HomeStorage(_prefs);
+    _network = NetworkStorage(_prefs);
     _searchHistory = SearchHistoryStorage(_prefs);
   }
 }
