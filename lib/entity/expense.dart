@@ -1,3 +1,4 @@
+/// 消费类型
 enum ExpenseType {
   /// 食堂
   canteen,
@@ -18,22 +19,33 @@ enum ExpenseType {
   unknown,
 }
 
-class ExpenseDetail {
+/// 消费记录
+class ExpenseRecord {
+  /// 学号
+  String username = '';
+
+  /// 姓名
+  String name = '';
+
   /// 消费地点
-  final String place;
+  String place = '';
 
   /// 消费时间
-  final DateTime ts;
+  DateTime ts = DateTime.now();
 
   /// 消费金额
-  final double amount;
+  double amount = 0.0;
 
   /// 消费类型
-  final ExpenseType type;
+  ExpenseType type = ExpenseType.unknown;
 
-  const ExpenseDetail(this.place, this.ts, this.amount, this.type);
+  @override
+  String toString() {
+    return 'ExpenseRecord{username: $username, name: $name, place: $place, ts: $ts, amount: $amount, type: ${expenseTypeMapping[type]}}';
+  }
 }
 
+/// 消费类型枚举与文字的映射表
 const expenseTypeMapping = {
   ExpenseType.canteen: '食堂',
   ExpenseType.coffee: '咖啡吧',
@@ -42,3 +54,20 @@ const expenseTypeMapping = {
   ExpenseType.store: '商店',
   ExpenseType.unknown: '其他',
 };
+
+/// 爬虫获得的消费页
+class ExpensePage {
+  /// 当前页号
+  int currentPage = 1;
+
+  /// 总页数
+  int total = 10;
+
+  /// 该页的记录数
+  List<ExpenseRecord> records = [];
+
+  @override
+  String toString() {
+    return 'ExpensePage{currentPage: $currentPage, total: $total, records: $records}';
+  }
+}
