@@ -51,12 +51,21 @@ class SettingPage extends StatelessWidget {
         ],
       ),
       SettingsGroup(title: '网络', children: <Widget>[
-        TextInputSettingsTile(
-          title: 'HTTP 代理',
-          settingKey: '/network/proxy',
-          initialValue: StoragePool.network.proxy,
+        SwitchSettingsTile(
+          settingKey: '/network/useProxy',
+          title: '使用 HTTP 代理',
+          subtitle: '当代理服务器正确配置后, 您无需 EasyConnect 便可连接校园网',
+          leading: const Icon(Icons.vpn_key),
+          onChange: (value) {},
+          childrenIfEnabled: [
+            TextInputSettingsTile(
+              title: '代理地址',
+              settingKey: '/network/proxy',
+              initialValue: StoragePool.network.proxy,
+            ),
+            SimpleSettingsTile(title: '测试连接', subtitle: '检查校园网或网络代理的连接', onTap: () => {}),
+          ],
         ),
-        SimpleSettingsTile(title: '测试连接', subtitle: '检查校园网或网络代理的连接', onTap: () => {}),
       ]),
       SettingsGroup(title: '账户', children: <Widget>[
         TextInputSettingsTile(
