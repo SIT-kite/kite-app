@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/service/weather.dart';
-import 'package:kite/storage/storage_pool.dart';
+import 'package:kite/global/storage_pool.dart';
 
 /// 计算入学时间, 默认按 9 月 1 日开学来算. 年份 entranceYear 是完整的年份, 如 2018.
 int _calcStudyDays(int entranceYear) {

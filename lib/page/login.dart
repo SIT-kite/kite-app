@@ -3,8 +3,8 @@ import 'package:flash/src/flash_helper.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/entity/auth_item.dart';
-import 'package:kite/service/session_pool.dart';
-import 'package:kite/storage/storage_pool.dart';
+import 'package:kite/global/session_pool.dart';
+import 'package:kite/global/storage_pool.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/url_launcher.dart';
 

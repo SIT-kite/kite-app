@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kite/page/index.dart';
-import 'package:kite/storage/storage_pool.dart';
+import 'package:kite/global/storage_pool.dart';
 
 class KiteApp extends StatelessWidget {
   const KiteApp({Key? key}) : super(key: key);

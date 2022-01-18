@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kite/service/session_pool.dart';
+import 'package:kite/global/session_pool.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class BrowserPage extends StatelessWidget {

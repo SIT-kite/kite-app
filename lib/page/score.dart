@@ -4,7 +4,7 @@ import 'package:kite/entity/edu.dart';
 import 'package:kite/page/score/banner.dart';
 import 'package:kite/page/score/item.dart';
 import 'package:kite/service/edu.dart';
-import 'package:kite/service/session_pool.dart';
+import 'package:kite/global/session_pool.dart';
 
 List<int> _generateYearList(int entranceYear) {
   final date = DateTime.now();

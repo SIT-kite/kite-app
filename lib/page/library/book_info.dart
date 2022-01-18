@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:kite/service/library.dart';
-import 'package:kite/service/session_pool.dart';
+import 'package:kite/global/session_pool.dart';
 
 class BookInfoPage extends StatefulWidget {
   final String bookId;

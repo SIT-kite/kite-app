@@ -7,7 +7,7 @@ import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:kite/service/edu.dart';
 import 'package:kite/service/library/library_session.dart';
 import 'package:kite/service/sso.dart';
-import 'package:kite/storage/storage_pool.dart';
+import 'package:kite/global/storage_pool.dart';
 import 'package:kite/util/logger.dart';
 
 const String? httpProxy = '192.168.0.107:808';

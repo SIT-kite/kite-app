@@ -4,7 +4,7 @@ import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:kite/service/abstract_session.dart';
 
-import '../session_pool.dart';
+import '../../global/session_pool.dart';
 
 /// 应网办登录地址, POST 请求
 const String officeLogin = 'https://xgfy.sit.edu.cn/unifri-flow/login';

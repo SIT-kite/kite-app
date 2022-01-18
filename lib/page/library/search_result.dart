@@ -7,7 +7,7 @@ import 'package:kite/entity/library/book_image.dart';
 import 'package:kite/entity/library/holding_preview.dart';
 import 'package:kite/service/library.dart';
 import 'package:kite/service/library/holding_preview.dart';
-import 'package:kite/service/session_pool.dart';
+import 'package:kite/global/session_pool.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/library/search.dart';
 import 'package:kite/util/logger.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/entity/office.dart';
 import 'package:kite/service/office.dart';
-import 'package:kite/storage/storage_pool.dart';
+import 'package:kite/global/storage_pool.dart';
 import 'package:kite/util/flash.dart';
 
 import 'office/detail.dart';

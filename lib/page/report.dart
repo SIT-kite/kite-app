@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kite/storage/storage_pool.dart';
+import 'package:kite/global/storage_pool.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class DailyReportPage extends StatefulWidget {

@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:kite/app.dart';
-import 'package:kite/storage/storage_pool.dart';
+import 'package:kite/global/storage_pool.dart';
 import 'package:kite/util/logger.dart';
 
-import 'service/session_pool.dart';
+import 'global/session_pool.dart';
 
 /// 应用启动前需要的初始化
 Future<void> init() async {

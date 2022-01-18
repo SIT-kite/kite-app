@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
-import 'package:kite/service/session_pool.dart';
+import 'package:kite/global/session_pool.dart';
 import 'package:kite/storage/setting/constants.dart';
-import 'package:kite/storage/storage_pool.dart';
+import 'package:kite/global/storage_pool.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({Key? key}) : super(key: key);
