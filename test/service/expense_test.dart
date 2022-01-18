@@ -14,7 +14,7 @@ void main() async {
     var password = '';
     var session = SessionPool.ssoSession;
     await session.login(username, password);
-    final expense = await ExpenseService(session).getExpensePage(1);
+    final expense = await ExpenseRemoteService(session).getExpensePage(1);
     logger.i(expense);
   });
 }

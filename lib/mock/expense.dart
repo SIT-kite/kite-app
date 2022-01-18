@@ -19,7 +19,7 @@ List classificationData = [
   {'label': 'canteen', 'money': 100, 'percentage': 0.2},
 ];
 
-class ExpenseMock implements ExpenseDao {
+class ExpenseMock implements ExpenseRemoteDao {
   @override
   Future<ExpensePage> getExpensePage(int pageNum, {DateTime? start, DateTime? end}) async {
     await Future.delayed(const Duration(microseconds: 300));

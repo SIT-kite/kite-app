@@ -6,7 +6,7 @@ import 'package:kite/entity/expense.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/service/abstract_session.dart';
 
-class ExpenseService extends AService implements ExpenseDao {
+class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
   static const _expenseUrl = 'http://card.sit.edu.cn/personalxiaofei.jsp';
   static const _typeKeywords = {
     '热水': ExpenseType.water,
@@ -16,7 +16,7 @@ class ExpenseService extends AService implements ExpenseDao {
     '超市': ExpenseType.store,
   };
   static const _codec = GbkCodec();
-  ExpenseService(ASession session) : super(session);
+  ExpenseRemoteService(ASession session) : super(session);
 
   @override
   Future<ExpensePage> getExpensePage(int page, {DateTime? start, DateTime? end}) async {
