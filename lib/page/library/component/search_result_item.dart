@@ -4,7 +4,9 @@ import 'package:kite/util/logger.dart';
 
 class BookItemWidget extends StatelessWidget {
   final BookImageHolding bookImageHolding;
-  const BookItemWidget(this.bookImageHolding, {Key? key}) : super(key: key);
+
+  final GestureTapCallback? onAuthorTap;
+  const BookItemWidget(this.bookImageHolding, {Key? key, this.onAuthorTap}) : super(key: key);
 
   /// 构造图书封皮预览图片
   Widget buildBookCover(String? imageUrl) {
@@ -61,7 +63,20 @@ class BookItemWidget extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Text('作者:  ${book.author}'),
+              onAuthorTap == null
+                  ? Text('作者:  ${book.author}')
+                  : Row(
+                      children: [
+                        const Text('作者:  '),
+                        InkWell(
+                          child: Text(
+                            book.author,
+                            style: const TextStyle(color: Colors.blue),
+                          ),
+                          onTap: onAuthorTap,
+                        ),
+                      ],
+                    ),
               Text('索书号:  ${book.callNo}'),
               Text('ISBN:  ${book.isbn}'),
               Text('${book.publisher}  ${book.publishDate}'),
