@@ -1,12 +1,23 @@
 import 'dart:collection';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kite/dao/library/book_info.dart';
+import 'package:kite/dao/library/holding.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/service/library.dart';
+import 'package:kite/util/library/search.dart';
 
 class BookInfoPage extends StatefulWidget {
-  final String bookId;
-  const BookInfoPage(this.bookId, {Key? key}) : super(key: key);
+  /// 图书信息访问
+  final BookInfoDao bookInfoDao = BookInfoService(SessionPool.librarySession);
+
+  /// 馆藏信息访问
+  final HoldingInfoDao holdingInfoDao = HoldingInfoService(SessionPool.librarySession);
+
+  /// 上一层传递进来的数据
+  final BookImageHolding bookImageHolding;
+  BookInfoPage(this.bookImageHolding, {Key? key}) : super(key: key);
 
   @override
   _BookInfoPageState createState() => _BookInfoPageState();
@@ -15,19 +26,23 @@ class BookInfoPage extends StatefulWidget {
 class _BookInfoPageState extends State<BookInfoPage> {
   LinkedHashMap detail = LinkedHashMap();
   List<String> nearBookId = [];
-  @override
-  void initState() {
-    super.initState();
-    BookInfoService(SessionPool.librarySession).query(widget.bookId).then((value) {
-      setState(() {
-        detail = value.rawDetail;
-      });
-    });
-    HoldingInfoService(SessionPool.librarySession).searchNearBookIdList(widget.bookId).then((value) {
-      setState(() {
-        nearBookId = value;
-      });
-    });
+
+  Widget buildImage(String url) {
+    return Image.network(url);
+    // return const Icon(
+    //   Icons.book,
+    //   size: 150,
+    // );
+  }
+
+  Widget buildLink(String text, GestureTapCallback onTap) {
+    return GestureDetector(
+      child: Text(
+        text,
+        style: TextStyle(color: Colors.blueAccent),
+      ),
+      onTap: onTap,
+    );
   }
 
   @override
@@ -38,9 +53,44 @@ class _BookInfoPageState extends State<BookInfoPage> {
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('图书详情'),
-            Text(detail.entries.map((e) => '${e.key}: ${e.value}').join('\n')),
+            Row(
+              children: [
+                SizedBox(
+                  height: 150,
+                  width: 150,
+                  child: buildImage(widget.bookImageHolding.image?.coverLink ??
+                      'http://210.35.66.106/opac/media/images/book-default-small.gif'),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(widget.bookImageHolding.book.title),
+                    buildLink(widget.bookImageHolding.book.author, () {}),
+                    Text('ISBN: ${widget.bookImageHolding.book.isbn}'),
+                  ],
+                ),
+              ],
+            ),
+            Table(
+              columnWidths: {
+                0: FlexColumnWidth(1),
+                1: FlexColumnWidth(3),
+              },
+              border: TableBorder.all(
+                color: Colors.red,
+              ),
+              children: detail.entries
+                  .map((e) => TableRow(
+                        children: [
+                          Text(e.key),
+                          Text(e.value),
+                        ],
+                      ))
+                  .toList(),
+            ),
+            Text('馆藏'),
             Text('邻近的书'),
             Text(nearBookId.join('\n')),
           ],
