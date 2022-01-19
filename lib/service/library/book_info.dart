@@ -10,10 +10,10 @@ class BookInfoService extends AService {
   BookInfoService(ASession session) : super(session);
 
   Future<BookInfo> query(String bookId) async {
-    var response = await session.get(Constants.bookUrl + '/$bookId');
-    var html = response.data;
+    final response = await session.get(Constants.bookUrl + '/$bookId');
+    final html = response.data;
 
-    var detailItems = BeautifulSoup(html)
+    final detailItems = BeautifulSoup(html)
         .find('table', id: 'bookInfoTable')!
         .findAll('tr')
         .map(
@@ -31,7 +31,7 @@ class BookInfoService extends AService {
         }
         String e1 = element[0];
 
-        for (var keyword in ['分享', '相关', '随书']) {
+        for (final keyword in ['分享', '相关', '随书']) {
           if (e1.contains(keyword)) return false;
         }
 
@@ -39,7 +39,7 @@ class BookInfoService extends AService {
       },
     ).toList();
 
-    var rawDetail = LinkedHashMap.fromEntries(
+    final rawDetail = LinkedHashMap.fromEntries(
       detailItems.sublist(1).map(
             (e) => MapEntry(
               e[0].substring(0, e[0].length - 1),
@@ -47,11 +47,11 @@ class BookInfoService extends AService {
             ),
           ),
     );
-    var title = detailItems[0][0];
-    var isbnAndPriceStr = rawDetail['ISBN'];
-    var isbnAndPrice = isbnAndPriceStr!.split('价格：');
-    var isbn = isbnAndPrice[0];
-    var price = isbnAndPrice[1];
+    final title = detailItems[0][0];
+    final isbnAndPriceStr = rawDetail['ISBN'];
+    final isbnAndPrice = isbnAndPriceStr!.split('价格：');
+    final isbn = isbnAndPrice[0];
+    final price = isbnAndPrice[1];
     return BookInfo(title, isbn, price, rawDetail);
   }
 }
