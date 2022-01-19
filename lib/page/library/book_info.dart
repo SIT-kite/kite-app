@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/dao/library/book_info.dart';
 import 'package:kite/dao/library/holding.dart';
 import 'package:kite/global/session_pool.dart';
+import 'package:kite/page/library/search_delegate.dart';
 import 'package:kite/service/library.dart';
 import 'package:kite/util/library/search.dart';
 
@@ -28,24 +29,6 @@ class _BookInfoPageState extends State<BookInfoPage> {
   LinkedHashMap detail = LinkedHashMap();
   List<String> nearBookId = [];
 
-  Widget buildImage(String url) {
-    return Image.network(url);
-    // return const Icon(
-    //   Icons.book,
-    //   size: 150,
-    // );
-  }
-
-  Widget buildLink(String text, GestureTapCallback onTap) {
-    return GestureDetector(
-      child: Text(
-        text,
-        style: TextStyle(color: Colors.blueAccent),
-      ),
-      onTap: onTap,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +39,16 @@ class _BookInfoPageState extends State<BookInfoPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            BookItemWidget(widget.bookImageHolding),
+            BookItemWidget(
+              widget.bookImageHolding,
+              onAuthorTap: (String key) {
+                showSearch(
+                  context: context,
+                  delegate: SearchBarDelegate(),
+                  query: key,
+                );
+              },
+            ),
             Table(
               columnWidths: {
                 0: FlexColumnWidth(1),
