@@ -34,18 +34,21 @@ class StoragePool {
 
   static NetworkStorage get network => _network;
 
+  static Future<void> _registerAdapters() async {
+    await Hive.initFlutter();
+    Hive.registerAdapter(SearchHistoryItemAdapter());
+    Hive.registerAdapter(AuthItemAdapter());
+  }
+
   static Future<void> init() async {
     Log.info("初始化StoragePool");
 
     final _prefs = await SharedPreferences.getInstance();
     _network = NetworkStorage(_prefs);
 
-    await Hive.initFlutter();
+    await _registerAdapters();
 
-    Hive.registerAdapter(SearchHistoryItemAdapter());
-    Hive.registerAdapter(AuthItemAdapter());
-
-    final searchHistoryBox = await Hive.openBox<SearchHistoryItem>('library.search_history');
+    final searchHistoryBox = await Hive.openBox<LibrarySearchHistoryItem>('library.search_history');
     _librarySearchHistory = SearchHistoryStorage(searchHistoryBox);
 
     final authBox = await Hive.openBox<AuthItem>('auth');
