@@ -71,6 +71,7 @@ class SettingPage extends StatelessWidget {
               title: '代理地址',
               settingKey: '/network/proxy',
               initialValue: StoragePool.network.proxy,
+              validator: proxyValidator,
               onChange: (value) {
                 StoragePool.network.proxy = value;
                 if (StoragePool.network.useProxy) {

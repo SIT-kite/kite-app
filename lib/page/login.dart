@@ -1,5 +1,4 @@
 import 'package:flash/flash.dart';
-import 'package:flash/src/flash_helper.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/entity/auth_item.dart';
@@ -23,6 +22,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _proxyInputController = TextEditingController();
 
   final GlobalKey _formKey = GlobalKey<FormState>();
+  final GlobalKey _proxyFormKey = GlobalKey<FormState>();
 
   final TapGestureRecognizer _recognizer = TapGestureRecognizer()..onTap = onOpenUserLicense;
 
@@ -159,12 +159,15 @@ class _LoginPageState extends State<LoginPage> {
     return IconButton(
       onPressed: () {
         final String inputText = _proxyInputController.text;
-        controller.dismiss();
 
+        if (!(_proxyFormKey.currentState as FormState).validate()) {
+          return;
+        }
+        controller.dismiss();
         isProxySettingShown = false;
+
         StoragePool.network.useProxy = true;
         StoragePool.network.proxy = inputText;
-
         SessionPool.initProxySettings();
       },
       icon: const Icon(Icons.send),
@@ -191,6 +194,7 @@ class _LoginPageState extends State<LoginPage> {
           Form(
             child: TextFormField(
               controller: _proxyInputController,
+              validator: proxyValidator,
               autofocus: true,
             ),
           ),
