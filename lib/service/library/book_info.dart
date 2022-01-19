@@ -1,14 +1,29 @@
 import 'dart:collection';
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
+import 'package:kite/dao/library/book_info.dart';
 import 'package:kite/entity/library/book_info.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/service/abstract_session.dart';
 import 'package:kite/service/library/constant.dart';
 
-class BookInfoService extends AService {
+class BookInfoService extends AService implements BookInfoDao {
   BookInfoService(ASession session) : super(session);
 
+  BookInfo _createBookInfo(LinkedHashMap<String, String> rawDetail) {
+    final isbnAndPriceStr = rawDetail['ISBN']!;
+    final isbnAndPrice = isbnAndPriceStr.split('价格：');
+    final isbn = isbnAndPrice[0];
+    final price = isbnAndPrice[1];
+
+    return BookInfo()
+      ..title = rawDetail.entries.first.value
+      ..isbn = isbn
+      ..price = price
+      ..rawDetail = rawDetail;
+  }
+
+  @override
   Future<BookInfo> query(String bookId) async {
     final response = await session.get(Constants.bookUrl + '/$bookId');
     final html = response.data;
@@ -31,6 +46,7 @@ class BookInfoService extends AService {
         }
         String e1 = element[0];
 
+        // 过滤包含这些关键字的条目
         for (final keyword in ['分享', '相关', '随书']) {
           if (e1.contains(keyword)) return false;
         }
@@ -47,11 +63,6 @@ class BookInfoService extends AService {
             ),
           ),
     );
-    final title = detailItems[0][0];
-    final isbnAndPriceStr = rawDetail['ISBN'];
-    final isbnAndPrice = isbnAndPriceStr!.split('价格：');
-    final isbn = isbnAndPrice[0];
-    final price = isbnAndPrice[1];
-    return BookInfo(title, isbn, price, rawDetail);
+    return _createBookInfo(rawDetail);
   }
 }
