@@ -71,7 +71,7 @@ class ConditionDays {
       _$ConditionDaysFromJson(json);
 }
 
-Future<Balance> getBalance(String room) async {
+Future<Balance> fetchBalance(String room) async {
   final url = _getElectricityUrl(room, _Mode.balance);
   final response = await Dio().get(url);
   final balance = Balance.fromJson(response.data['data']);
@@ -79,7 +79,7 @@ Future<Balance> getBalance(String room) async {
   return balance;
 }
 
-Future<Rank> getRank(String room) async {
+Future<Rank> fetchRank(String room) async {
   final url = _getElectricityUrl(room, _Mode.rank);
   final response = await Dio().get(url);
   final rank = Rank.fromJson(response.data['data']);
@@ -87,7 +87,7 @@ Future<Rank> getRank(String room) async {
   return rank;
 }
 
-Future<List<ConditionHours>> getConditionHours(String room) async {
+Future<List<ConditionHours>> fetchConditionHours(String room) async {
   final url = _getElectricityUrl(room, _Mode.condition_hours);
   final response = await Dio().get(url);
   final list = response.data['data'].map((e) => ConditionHours.fromJson(e));
