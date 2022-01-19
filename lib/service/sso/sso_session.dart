@@ -73,13 +73,20 @@ class SsoSession extends ASession {
 
   /// 带异常的登录
   Future<Response> login(String username, String password) async {
-    var response = await _postLoginProcess(username, password);
-    var page = BeautifulSoup(response.data);
+    final response = await _postLoginProcess(username, password);
+    final page = BeautifulSoup(response.data);
 
-    var authError = page.find('span', class_: 'auth_error');
+    // 桌面端报错
+    final authError = page.find('span', class_: 'auth_error');
+    // 手机版报错
+    final mobileError = page.find('span', id: 'msgError');
     if (authError != null) {
       throw CredentialsInvalidException(authError.text.trim());
     }
+    if (mobileError != null) {
+      throw CredentialsInvalidException(mobileError.text.trim());
+    }
+
     isOnline = true;
     _username = username;
     _password = password;
