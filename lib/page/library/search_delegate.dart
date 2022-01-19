@@ -53,7 +53,7 @@ class SearchBarDelegate extends SearchDelegate<String> {
   @override
   Widget buildResults(BuildContext context) {
     StoragePool.librarySearchHistory.add(
-      SearchHistoryItem()
+      LibrarySearchHistoryItem()
         ..keyword = query
         ..time = DateTime.now(),
     );

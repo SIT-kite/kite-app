@@ -3,11 +3,11 @@ import 'package:kite/dao/library/search_history.dart';
 import 'package:kite/entity/library/search_history.dart';
 
 class SearchHistoryStorage implements SearchHistoryDao {
-  final Box<SearchHistoryItem> box;
+  final Box<LibrarySearchHistoryItem> box;
   const SearchHistoryStorage(this.box);
 
   @override
-  void add(SearchHistoryItem item) {
+  void add(LibrarySearchHistoryItem item) {
     box.put(item.keyword, item);
   }
 
@@ -22,7 +22,7 @@ class SearchHistoryStorage implements SearchHistoryDao {
   }
 
   @override
-  List<SearchHistoryItem> getAllByTimeDesc() {
+  List<LibrarySearchHistoryItem> getAllByTimeDesc() {
     var result = box.values.toList();
     result.sort((a, b) => b.time.compareTo(a.time));
     return result;
