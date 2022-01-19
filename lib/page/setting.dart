@@ -17,10 +17,10 @@ class SettingPage extends StatelessWidget {
             settingKey: '/theme/color',
             title: '主题色',
             defaultValue: Colors.blue,
-            onChange: (value) {
-              debugPrint('key-color-picker: $value');
+            onChange: (newColor) {
+              StoragePool.themeSetting.color = newColor;
             },
-          ),
+          )
         ],
       ),
       SettingsGroup(

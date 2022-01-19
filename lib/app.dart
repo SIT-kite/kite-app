@@ -27,9 +27,11 @@ class KiteApp extends StatelessWidget {
       '/setting': (context) => const SettingPage(),
     };
 
+    final themeData = ThemeData.light().copyWith(primaryColor: StoragePool.themeSetting.color);
+
     return MaterialApp(
       title: '上应小风筝',
-      theme: ThemeData.light(),
+      theme: themeData,
       debugShowCheckedModeBanner: false,
       home: StoragePool.authSetting.currentUsername != null ? HomePage() : const WelcomePage(),
       routes: routes,

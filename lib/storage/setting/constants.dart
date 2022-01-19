@@ -8,4 +8,7 @@ class SettingKeyConstants {
 
   static final authNamespace = Path().forward('auth');
   static final authCurrentUsername = authNamespace.forward('currentUsername').toString();
+
+  static final themeNamespace = Path().forward('theme');
+  static final themeColorKey = themeNamespace.forward('color').toString();
 }

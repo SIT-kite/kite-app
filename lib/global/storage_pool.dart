@@ -4,11 +4,13 @@ import 'package:kite/dao/auth_pool.dart';
 import 'package:kite/dao/library/search_history.dart';
 import 'package:kite/dao/setting/auth.dart';
 import 'package:kite/dao/setting/home.dart';
+import 'package:kite/dao/setting/theme.dart';
 import 'package:kite/entity/auth_item.dart';
 import 'package:kite/entity/library/search_history.dart';
 import 'package:kite/storage/network.dart';
 import 'package:kite/storage/setting/auth.dart';
 import 'package:kite/storage/setting/home.dart';
+import 'package:kite/storage/setting/theme.dart';
 import 'package:kite/util/hive_cache_provider.dart';
 import 'package:kite/util/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,15 +21,23 @@ import '../storage/library/search_history.dart';
 /// 本地持久化层
 class StoragePool {
   static late AuthPoolStorage _authPool;
+
   static AuthPoolDao get authPool => _authPool;
 
   static late SearchHistoryStorage _librarySearchHistory;
+
   static SearchHistoryDao get librarySearchHistory => _librarySearchHistory;
 
   static late HomeSettingStorage _homeSetting;
+
   static HomeSettingDao get homeSetting => _homeSetting;
 
+  static late ThemeSettingStorage _themeSetting;
+
+  static ThemeSettingDao get themeSetting => _themeSetting;
+
   static late AuthSettingDao _authSetting;
+
   static AuthSettingDao get authSetting => _authSetting;
 
   static late NetworkStorage _network;
