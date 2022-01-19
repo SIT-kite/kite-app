@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/service/weather.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../global/quick_button.dart';
 import 'home/background.dart';
 import 'home/drawer.dart';
 import 'home/greeting.dart';
@@ -100,6 +101,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    QuickButton.init(context);
+
     return Scaffold(
       key: _scaffoldKey,
       body: FutureBuilder<Weather>(
