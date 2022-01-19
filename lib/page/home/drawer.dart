@@ -1,6 +1,7 @@
-import 'package:flash/src/flash_helper.dart';
+import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class KiteDrawer extends Drawer {
@@ -28,6 +29,8 @@ class KiteDrawer extends Drawer {
                 // 清除本地 SharedPreference 数据
                 // TODO: 添加对 sqlite 的处理.
                 (await SharedPreferences.getInstance()).clear();
+                await Hive.close();
+                await Hive.deleteFromDisk();
                 // 重启应用
                 Phoenix.rebirth(context);
               },
