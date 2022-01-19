@@ -71,7 +71,7 @@ class BookSearchService extends AService implements BookSearchDao {
     String keyword = '',
     int rows = 10,
     int page = 1,
-    SearchWay searchWay = SearchWay.title,
+    SearchWay searchWay = SearchWay.any,
     SortWay sortWay = SortWay.matchScore,
     SortOrder sortOrder = SortOrder.desc,
   }) async {

@@ -7,14 +7,18 @@ import 'package:kite/page/library/component/search_result.dart';
 import 'package:kite/page/library/component/suggestion_item.dart';
 import 'package:kite/service/library.dart';
 import 'package:kite/util/logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchBarDelegate extends SearchDelegate<String> {
   Widget? _suggestionView;
 
   /// 给定一个关键词，开始搜索该关键词
-  void _searchByGiving(String title, BuildContext context) {
+  void _searchByGiving(String title, BuildContext context) async {
     query = title;
+
+    // 若已经显示过结果，这里无法直接再次显示结果
+    // 经测试，需要先返回搜索建议页，在等待若干时间后显示结果
+    showSuggestions(context);
+    await Future.delayed(const Duration(seconds: 1));
     showResults(context);
   }
 
@@ -57,7 +61,12 @@ class SearchBarDelegate extends SearchDelegate<String> {
         ..keyword = query
         ..time = DateTime.now(),
     );
-    return BookSearchResultWidget(query);
+    return BookSearchResultWidget(
+      query,
+      requestQueryKeyCallback: (String key) {
+        _searchByGiving(key, context);
+      },
+    );
   }
 
   @override
@@ -80,20 +89,9 @@ class SearchBarDelegate extends SearchDelegate<String> {
               '历史记录',
               style: TextStyle(fontSize: 16),
             ),
-            FutureBuilder<SharedPreferences>(
-              future: SharedPreferences.getInstance(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                // 请求已结束
-                if (snapshot.connectionState == ConnectionState.done) {
-                  SharedPreferences prefs = snapshot.data;
-                  return SuggestionItemView(
-                    titleItems: StoragePool.librarySearchHistory.getAllByTimeDesc().map((e) => e.keyword).toList(),
-                    onItemTap: (title) => _searchByGiving(title, context),
-                  );
-                } else {
-                  return const CircularProgressIndicator();
-                }
-              },
+            SuggestionItemView(
+              titleItems: StoragePool.librarySearchHistory.getAllByTimeDesc().map((e) => e.keyword).toList(),
+              onItemTap: (title) => _searchByGiving(title, context),
             ),
             const SizedBox(height: 20),
             InkWell(
@@ -105,7 +103,6 @@ class SearchBarDelegate extends SearchDelegate<String> {
                 ],
               ),
               onTap: () async {
-                var prefs = await SharedPreferences.getInstance();
                 StoragePool.librarySearchHistory.deleteAll();
                 close(context, '');
               },
