@@ -7,9 +7,7 @@ import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/url_launcher.dart';
-
-// Rule of student id.
-RegExp reStudentId = RegExp(r'^((\d{9})|(\d{6}[YGHE\d]\d{3}))$');
+import 'package:kite/util/validation.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -32,17 +30,6 @@ class _LoginPageState extends State<LoginPage> {
   bool isPasswordClear = false;
   bool isLicenseAccepted = false;
   bool isProxySettingShown = false;
-
-  static String? _usernameValidator(String? username) {
-    if (username != null && username.isNotEmpty) {
-      // When user complete his input, check it.
-      if (((username.length == 9 || username.length == 10) && !reStudentId.hasMatch(username)) ||
-          username.length > 10) {
-        return '学号格式不正确';
-      }
-    }
-    return null;
-  }
 
   /// 用户点击登录按钮后
   Future<void> onLogin() async {
@@ -94,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
             controller: _usernameController,
             autofocus: true,
             decoration: const InputDecoration(labelText: '学号', hintText: '输入你的学号', icon: Icon(Icons.person)),
-            validator: _usernameValidator,
+            validator: studentIdValidator,
           ),
           TextFormField(
             controller: _passwordController,
