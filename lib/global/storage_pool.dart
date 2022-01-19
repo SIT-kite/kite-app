@@ -36,7 +36,7 @@ class StoragePool {
 
   static Future<void> _registerAdapters() async {
     await Hive.initFlutter();
-    Hive.registerAdapter(SearchHistoryItemAdapter());
+    Hive.registerAdapter(LibrarySearchHistoryItemAdapter());
     Hive.registerAdapter(AuthItemAdapter());
   }
 
