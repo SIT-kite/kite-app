@@ -3,6 +3,7 @@ import 'package:kite/dao/library/book_search.dart';
 import 'package:kite/dao/library/holding_preview.dart';
 import 'package:kite/dao/library/image_search.dart';
 import 'package:kite/global/session_pool.dart';
+import 'package:kite/page/library/component/search_result_item.dart';
 import 'package:kite/service/library.dart';
 import 'package:kite/service/library/holding_preview.dart';
 import 'package:kite/util/flash.dart';
@@ -142,104 +143,21 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
     });
   }
 
-  /// 构造图书封皮预览图片
-  Widget buildBookCover(String? imageUrl) {
-    const def = Icon(
-      Icons.library_books_sharp,
-      size: 100,
-    );
-    if (imageUrl == null) {
-      return def;
-    }
-
-    return Image.network(
-      imageUrl,
-      // fit: BoxFit.fill,
-      errorBuilder: (
-        BuildContext context,
-        Object error,
-        StackTrace? stackTrace,
-      ) {
-        return def;
-      },
-    );
-  }
-
-  /// 构造一个图书项
-  Widget buildListTile(BookImageHolding bi) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    Log.info('屏幕高度: $screenHeight');
-    final book = bi.book;
-    final holding = bi.holding ?? [];
-    // 计算总共馆藏多少书
-    int copyCount = holding.map((e) => e.copyCount).reduce((value, element) => value + element);
-    // 计算总共可借多少书
-    int loanableCount = holding.map((e) => e.loanableCount).reduce((value, element) => value + element);
-    final row = Row(
-      children: [
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.all(5),
-            child: buildBookCover(bi.image?.resourceLink),
-            height: screenHeight / 5,
-          ),
-          flex: 3,
-        ),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                book.title,
-                style: const TextStyle(
-                  fontSize: 18.0,
-                  fontStyle: FontStyle.italic,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text('作者:  ${book.author}'),
-              Text('索书号:  ${book.callNo}'),
-              Text('ISBN:  ${book.isbn}'),
-              Text('${book.publisher}  ${book.publishDate}'),
-              Row(
-                children: [
-                  const Expanded(child: Text(' ')),
-                  ColoredBox(
-                    color: Colors.black12,
-                    child: Container(
-                      margin: const EdgeInsets.all(5),
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(100)),
-                      // width: 80,
-                      // height: 20,
-                      child: Text('馆藏($copyCount)/在馆($loanableCount)'),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          flex: 7,
-        ),
-      ],
-    );
-    return InkWell(
-      child: row,
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (BuildContext context) {
-            return BookInfoPage(bi);
-          }),
-        );
-      },
-    );
-  }
-
   Widget buildListView() {
     return ListView.builder(
       itemBuilder: (BuildContext context, int index) {
         return Column(children: [
           Container(
-            child: buildListTile(dataList[index]),
+            child: InkWell(
+              child: BookItemWidget(dataList[index]),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (BuildContext context) {
+                    return BookInfoPage(dataList[index]);
+                  }),
+                );
+              },
+            ),
             padding: const EdgeInsets.fromLTRB(10, 1, 10, 1),
           ),
           const Divider(color: Colors.black),
