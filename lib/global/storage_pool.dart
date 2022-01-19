@@ -67,6 +67,7 @@ class StoragePool {
     final settingBox = await Hive.openBox<dynamic>('setting');
     _authSetting = AuthSettingStorage(settingBox);
     _homeSetting = HomeSettingStorage(settingBox);
+    _themeSetting = ThemeSettingStorage(settingBox);
     Settings.init(cacheProvider: HiveCacheProvider(settingBox));
   }
 }
