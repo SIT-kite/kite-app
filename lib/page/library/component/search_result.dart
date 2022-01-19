@@ -91,7 +91,9 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
       });
     } catch (e) {
       setState(() {
+        firstPageLoaded = true;
         isLoading = false;
+        dataList = [];
       });
     }
   }
@@ -172,6 +174,12 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
     );
   }
 
+  Widget buildNotFound() {
+    return const Center(
+      child: Text('搜索结果为空'),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Log.info('初始化列表');
@@ -181,7 +189,7 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
         Text('总结果数: $searchResultCount  用时: $useTime  已加载: $currentPage/$totalPage'),
         Expanded(
           child: firstPageLoaded
-              ? buildListView()
+              ? (dataList.isEmpty ? buildNotFound() : buildListView())
               : const Center(
                   child: CircularProgressIndicator(),
                 ),
