@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:kite/util/library/search.dart';
 import 'package:kite/util/logger.dart';
 
+typedef KeyClickCallback = void Function(String key);
+
 class BookItemWidget extends StatelessWidget {
   final BookImageHolding bookImageHolding;
 
-  final GestureTapCallback? onAuthorTap;
+  final KeyClickCallback? onAuthorTap;
   const BookItemWidget(this.bookImageHolding, {Key? key, this.onAuthorTap}) : super(key: key);
 
   /// 构造图书封皮预览图片
@@ -73,7 +75,9 @@ class BookItemWidget extends StatelessWidget {
                             book.author,
                             style: const TextStyle(color: Colors.blue),
                           ),
-                          onTap: onAuthorTap,
+                          onTap: () {
+                            onAuthorTap!(book.author);
+                          },
                         ),
                       ],
                     ),
