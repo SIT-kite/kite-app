@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/entity/auth_item.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
+import 'package:kite/service/sso/sso_session.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/url_launcher.dart';
 import 'package:kite/util/validation.dart';
@@ -42,13 +43,21 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    var auth = StoragePool.authPool;
-    auth.add(
-      AuthItem()
-        ..username = _usernameController.text
-        ..password = _passwordController.text,
-    );
-    StoragePool.authSetting.currentUsername = _usernameController.text;
+    final auth = AuthItem()
+      ..username = _usernameController.text
+      ..password = _passwordController.text;
+    try {
+      await SessionPool.ssoSession.login(auth.username, auth.password);
+    } on CredentialsInvalidException catch (e) {
+      showBasicFlash(context, Text(e.msg));
+      return;
+    } catch (e) {
+      showBasicFlash(context, Text('未知错误: ' + e.toString()));
+      return;
+    }
+
+    StoragePool.authPool.add(auth);
+    StoragePool.authSetting.currentUsername = auth.username;
     Navigator.pushReplacementNamed(context, '/home');
   }
 
