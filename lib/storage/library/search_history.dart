@@ -8,19 +8,21 @@ class SearchHistoryStorage implements SearchHistoryDao {
 
   @override
   void add(LibrarySearchHistoryItem item) {
-    box.put(item.keyword, item);
+    box.put(item.keyword.hashCode, item);
   }
 
+  /// 根据搜索文字删除
   @override
   void delete(String record) {
-    box.delete(record);
+    box.delete(record.hashCode);
   }
 
   @override
   void deleteAll() {
-    box.deleteAll(box.keys);
+    box.deleteAll(box.keys.map((e) => e.hashCode));
   }
 
+  /// 按时间降序获取所有
   @override
   List<LibrarySearchHistoryItem> getAllByTimeDesc() {
     var result = box.values.toList();
