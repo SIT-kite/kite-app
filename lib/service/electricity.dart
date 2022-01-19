@@ -47,7 +47,17 @@ class Rank {
       _$RankFromJson(json);
 }
 
+@JsonSerializable()
+class ConditionHours {
+  double charge;
+  double consumption;
+  String time;
 
+  ConditionHours(this.charge, this.consumption, this.time);
+
+  factory ConditionHours.fromJson(Map<String, dynamic> json) =>
+      _$ConditionHoursFromJson(json);
+}
 
 Future<Balance> getBalance(String room) async {
   final url = _getElectricityUrl(room, _Mode.balance);
@@ -63,4 +73,12 @@ Future<Rank> getRank(String room) async {
   final rank = Rank.fromJson(response.data['data']);
 
   return rank;
+}
+
+Future<ConditionHours> getConditionHours(String room) async {
+  final url = _getElectricityUrl(room, _Mode.condition_hours);
+  final response = await Dio().get(url);
+  final conditionHours = ConditionHours.fromJson(response.data['data']);
+
+  return conditionHours;
 }
