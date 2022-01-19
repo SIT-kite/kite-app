@@ -3,6 +3,7 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/storage/setting/constants.dart';
+import 'package:kite/util/validation.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -86,6 +87,7 @@ class SettingPage extends StatelessWidget {
           title: '学号',
           settingKey: '/auth/username',
           initialValue: StoragePool.authSetting.currentUsername ?? '',
+          validator: studentIdValidator,
         ),
         TextInputSettingsTile(
           title: '密码',
