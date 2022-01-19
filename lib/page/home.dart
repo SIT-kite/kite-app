@@ -30,10 +30,7 @@ class HomePage extends StatelessWidget {
         onTap: () {
           _scaffoldKey.currentState?.openDrawer();
         },
-        child: Row(children: [
-          SvgPicture.asset('assets/home/kite.svg', width: 30, height: 30),
-          Image.asset('assets/home/title.png', height: 30),
-        ]),
+        child: Center(child: SvgPicture.asset('assets/home/kite.svg', width: 80, height: 80)),
       ),
     );
   }
