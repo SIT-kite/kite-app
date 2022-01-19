@@ -16,11 +16,8 @@ class SettingPage extends StatelessWidget {
         children: <Widget>[
           ColorPickerSettingsTile(
             settingKey: '/theme/color',
+            defaultValue: StoragePool.themeSetting.color,
             title: '主题色',
-            defaultValue: Colors.blue,
-            onChange: (newColor) {
-              StoragePool.themeSetting.color = newColor;
-            },
           )
         ],
       ),
