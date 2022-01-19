@@ -14,7 +14,7 @@ import 'package:kite/util/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../storage/auth_pool.dart';
-import '../storage/search_history.dart';
+import '../storage/library/search_history.dart';
 
 /// 本地持久化层
 class StoragePool {
