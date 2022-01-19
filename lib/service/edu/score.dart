@@ -76,8 +76,8 @@ class ScoreService extends AService implements ScoreDao {
     f1(s) => s.replaceAll("&nbsp;", "");
     f2(s) => s.replaceAll("【 ", "").replaceAll(" 】", "");
 
-    String type = (item.find(_scoreFormSelector)!.innerHtml ?? '').trim();
-    String percentage = (item.find(_scorePercentageSelector)!.innerHtml ?? '').trim();
+    String type = item.find(_scoreFormSelector)!.innerHtml.trim();
+    String percentage = item.find(_scorePercentageSelector)!.innerHtml.trim();
     double value = double.tryParse(item.find(_scoreValueSelector)!.innerHtml) ?? -1;
 
     return ScoreDetail(scoreType: f1(type), percentage: f2(percentage), value: value);
