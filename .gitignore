@@ -69,3 +69,6 @@ kite.iml
 
 generated_plugin*
 
+# 过滤 IDE 保存的程序运行日志
+**/*.log
+
