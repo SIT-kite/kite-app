@@ -1,4 +1,4 @@
-import 'package:dio/src/dio.dart';
+import 'package:dio/dio.dart';
 import 'package:kite/service/abstract_session.dart';
 import 'package:kite/util/logger.dart';
 
