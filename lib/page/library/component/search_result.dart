@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/dao/library/book_search.dart';
 import 'package:kite/dao/library/holding_preview.dart';
@@ -57,7 +56,7 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
 
   /// 获得搜索结果
   Future<List<BookImageHolding>> _get(int rows, int page) async {
-    var searchResult = await widget.bookSearchDao.search(
+    final searchResult = await widget.bookSearchDao.search(
       keyword: widget.keyword,
       rows: rows,
       page: page,
@@ -73,12 +72,12 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
     totalPage = searchResult.totalPages;
 
     Log.info(searchResult);
-    var imageHoldingPreview = await Future.wait([
+    final imageHoldingPreview = await Future.wait([
       widget.bookImageSearchDao.searchByBookList(searchResult.books),
       widget.holdingPreviewDao.getHoldingPreviews(searchResult.books.map((e) => e.bookId).toList()),
     ]);
-    var imageResult = imageHoldingPreview[0] as Map<String, BookImage>;
-    var holdingPreviewResult = imageHoldingPreview[1] as HoldingPreviews;
+    final imageResult = imageHoldingPreview[0] as Map<String, BookImage>;
+    final holdingPreviewResult = imageHoldingPreview[1] as HoldingPreviews;
     return BookImageHolding.build(
       searchResult.books,
       imageResult,
@@ -90,7 +89,7 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
   Future<void> getData() async {
     isLoading = true;
     try {
-      var firstPage = await _get(sizePerPage, currentPage);
+      final firstPage = await _get(sizePerPage, currentPage);
       setState(() {
         firstPageLoaded = true;
         isLoading = false;
@@ -122,7 +121,7 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
           ),
           duration: const Duration(seconds: 3));
       try {
-        var nextPage = await _get(sizePerPage, currentPage + 1);
+        final nextPage = await _get(sizePerPage, currentPage + 1);
         if (nextPage.isNotEmpty) {
           setState(() {
             dataList.addAll(nextPage);
@@ -176,15 +175,15 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
 
   /// 构造一个图书项
   Widget buildListTile(BookImageHolding bi) {
-    var screenHeight = MediaQuery.of(context).size.height;
+    final screenHeight = MediaQuery.of(context).size.height;
     Log.info('屏幕高度: $screenHeight');
-    var book = bi.book;
-    var holding = bi.holding ?? [];
+    final book = bi.book;
+    final holding = bi.holding ?? [];
     // 计算总共馆藏多少书
     int copyCount = holding.map((e) => e.copyCount).reduce((value, element) => value + element);
     // 计算总共可借多少书
     int loanableCount = holding.map((e) => e.loanableCount).reduce((value, element) => value + element);
-    var row = Row(
+    final row = Row(
       children: [
         Expanded(
           child: Container(
@@ -236,7 +235,7 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(builder: (BuildContext context) {
-            return BookInfoPage(bi.book.bookId);
+            return BookInfoPage(bi);
           }),
         );
       },
