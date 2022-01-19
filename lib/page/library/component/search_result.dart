@@ -12,7 +12,7 @@ import 'package:kite/util/flash.dart';
 import 'package:kite/util/library/search.dart';
 import 'package:kite/util/logger.dart';
 
-import 'book_info.dart';
+import '../book_info.dart';
 
 class BookSearchResultWidget extends StatefulWidget {
   /// 要搜索的关键字
