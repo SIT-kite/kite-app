@@ -1,1 +1,1 @@
-export 'bulletin/bulletin.dart';
+export 'bulletin/bulletin_detail.dart';
