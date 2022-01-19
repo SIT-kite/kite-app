@@ -29,20 +29,25 @@ class KiteApp extends StatelessWidget {
       '/timetable': (context) => const TimetablePage(),
       '/setting': (context) => const SettingPage(),
     };
-    // 初始化存储和网络.
-    init();
 
-    // primarySwatch should be set, by https://github.com/flutter/flutter/issues/82996.
-    final primaryColor = StoragePool.themeSetting.color;
-    final themeData = ThemeData(primaryColor: primaryColor, primarySwatch: createThemeSwatch(primaryColor));
+    return FutureBuilder(
+        future: init(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            // primarySwatch should be set, by https://github.com/flutter/flutter/issues/82996.
+            final primaryColor = StoragePool.themeSetting.color;
+            final themeData = ThemeData(primaryColor: primaryColor, primarySwatch: createThemeSwatch(primaryColor));
 
-    return MaterialApp(
-      title: '上应小风筝',
-      theme: themeData,
-      debugShowCheckedModeBanner: false,
-      home: StoragePool.authSetting.currentUsername != null ? HomePage() : const WelcomePage(),
-      routes: routes,
-    );
+            return MaterialApp(
+              title: '上应小风筝',
+              theme: themeData,
+              debugShowCheckedModeBanner: false,
+              home: StoragePool.authSetting.currentUsername != null ? HomePage() : const WelcomePage(),
+              routes: routes,
+            );
+          }
+          return Container();
+        });
   }
 }
 
