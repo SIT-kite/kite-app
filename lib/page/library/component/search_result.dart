@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:kite/dao/library/book_search.dart';
 import 'package:kite/dao/library/holding_preview.dart';
 import 'package:kite/dao/library/image_search.dart';
-import 'package:kite/entity/library/book_image.dart';
-import 'package:kite/entity/library/holding_preview.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/service/library.dart';
 import 'package:kite/service/library/holding_preview.dart';
@@ -72,16 +70,10 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
     totalPage = searchResult.totalPages;
 
     Log.info(searchResult);
-    final imageHoldingPreview = await Future.wait([
-      widget.bookImageSearchDao.searchByBookList(searchResult.books),
-      widget.holdingPreviewDao.getHoldingPreviews(searchResult.books.map((e) => e.bookId).toList()),
-    ]);
-    final imageResult = imageHoldingPreview[0] as Map<String, BookImage>;
-    final holdingPreviewResult = imageHoldingPreview[1] as HoldingPreviews;
-    return BookImageHolding.build(
+    return await BookImageHolding.simpleQuery(
+      widget.bookImageSearchDao,
+      widget.holdingPreviewDao,
       searchResult.books,
-      imageResult,
-      holdingPreviewResult.previews,
     );
   }
 
