@@ -1,51 +1,36 @@
 import 'dart:convert';
 
+import 'package:kite/dao/edu.dart';
 import 'package:kite/entity/edu.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/service/abstract_session.dart';
 
-class ExamRoomService extends AService {
+import 'util.dart';
+
+class ExamService extends AService implements ExamDao {
   static const _examRoomUrl = 'http://http://jwxt.sit.edu.cn/jwglxt/kwgl/kscx_cxXsksxxIndex.html';
 
-  ExamRoomService(ASession session) : super(session);
+  ExamService(ASession session) : super(session);
 
-  static String _semesterToRequestField(Semester semester) {
-    return {
-      Semester.all: '',
-      Semester.firstTerm: '3',
-      Semester.secondTerm: '12',
-    }[semester]!;
-  }
+  List<ExamRoom> _parseExamRoomPage(String page) {
+    final List<Map<String, dynamic>> examList = jsonDecode(page)['items'];
 
-  List<ExamRoom> parseExamRoomPage(String page) {
-    var jsonPage = jsonDecode(page);
-    List<ExamRoom> result = [];
-    for (var examRoom in jsonPage["items"]) {
-      ExamRoom newExamRoom = ExamRoom.fromJson(examRoom);
-      result.add(newExamRoom);
-    }
-    return result;
+    return examList.map(ExamRoom.fromJson).toList();
   }
 
   /// 获取考场信息
-  Future<List<ExamRoom>> getExamRoomList(
-    SchoolYear schoolYear,
-    Semester semester,
-  ) async {
+  @override
+  Future<List<ExamRoom>> getExamList(SchoolYear schoolYear, Semester semester) async {
     var response = await session.post(
       _examRoomUrl,
-      queryParameters: {
-        'gnmkdm': 'N358105',
-        // 实测以下被注释的字段根本无用，又提高了耦合
-        // 'su': _session.username!,
-      },
+      queryParameters: {'gnmkdm': 'N358105'},
       data: {
         // 学年名
         'xnm': schoolYear.toString(),
         // 学期名
-        'xqm': _semesterToRequestField(semester),
+        'xqm': semesterToFormField(semester),
       },
     );
-    return parseExamRoomPage(response.data);
+    return _parseExamRoomPage(response.data);
   }
 }

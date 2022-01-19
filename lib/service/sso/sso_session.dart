@@ -19,13 +19,14 @@ class SsoSession extends ASession {
   static const String _needCaptchaUrl = '$_authServerUrl/needCaptcha.html';
   static const String _captchaUrl = '$_authServerUrl/captcha.html';
 
-  // http客户端对象
+  // http客户端对象和缓存
   late Dio _dio;
-
-  // cookie缓存
   late CookieJar _jar;
 
-  // 如果登录成功，那么username与password将不为null
+  /// 登录状态
+  bool isOnline = false;
+
+  // 如果登录成功，那么 username 与 password 将不为 null
   String? _username;
   String? _password;
 
@@ -72,23 +73,71 @@ class SsoSession extends ASession {
 
   /// 带异常的登录
   Future<Response> login(String username, String password) async {
-    var response = await _login(username, password);
+    var response = await _postLoginProcess(username, password);
     var page = BeautifulSoup(response.data);
 
     var authError = page.find('span', class_: 'auth_error');
     if (authError != null) {
       throw CredentialsInvalidException(authError.text.trim());
     }
+    isOnline = true;
     _username = username;
     _password = password;
     return response;
   }
 
   Dio get dio => _dio;
+
   CookieJar get cookie => _jar;
 
   /// 登录流程
-  Future<Response> _login(String username, String password) async {
+  Future<Response> _postLoginProcess(String username, String password) async {
+    /// 提取认证页面中的加密盐
+    String _getSaltFromAuthHtml(String htmlText) {
+      var a = RegExp(r'var pwdDefaultEncryptSalt = "(.*?)";');
+      var matchResult = a.firstMatch(htmlText)!.group(0)!;
+      var salt = matchResult.substring(29, matchResult.length - 2);
+      return salt;
+    }
+
+    /// 提取认证页面中的Cas Ticket
+    String _getCasTicketFromAuthHtml(String htmlText) {
+      var a = RegExp(r'<input type="hidden" name="lt" value="(.*?)"');
+      var matchResult = a.firstMatch(htmlText)!.group(0)!;
+      var casTicket = matchResult.substring(38, matchResult.length - 1);
+      return casTicket;
+    }
+
+    /// 获取认证页面内容
+    Future<String> _getAuthServerHtml() async {
+      var response = await _dio.get(_loginUrl);
+      return response.data;
+    }
+
+    /// 判断是否需要验证码
+    Future<bool> _needCaptcha(String username) async {
+      var response = await _dio.get(
+        _needCaptchaUrl,
+        queryParameters: {
+          'username': username,
+          'pwdEncrypt2': 'pwdEncryptSalt',
+        },
+      );
+      return response.data == 'true';
+    }
+
+    /// 获取验证码
+    Future<String> _getCaptcha() async {
+      var response = await _dio.get(
+        _captchaUrl,
+        options: Options(
+          responseType: ResponseType.bytes,
+        ),
+      );
+      Uint8List captchaData = response.data;
+      return base64Encode(captchaData);
+    }
+
     // 首先获取AuthServer首页
     var html = await _getAuthServerHtml();
     // 获取首页验证码
@@ -110,11 +159,11 @@ class SsoSession extends ASession {
     // 加密密码
     var hashedPwd = hashPassword(salt, password);
     // 登录系统，获得cookie
-    return await _loginRaw(username, hashedPwd, captcha, casTicket);
+    return await _postLoginRequest(username, hashedPwd, captcha, casTicket);
   }
 
   /// 登录统一认证平台
-  Future<Response> _loginRaw(String username, String hashedPassword, String captcha, String casTicket) async {
+  Future<Response> _postLoginRequest(String username, String hashedPassword, String captcha, String casTicket) async {
     var requestBody = {
       'username': username,
       'password': hashedPassword,
@@ -129,52 +178,6 @@ class SsoSession extends ASession {
     var res = await _dio.post(_loginUrl, data: requestBody, options: DioUtils.NON_REDIRECT_OPTION_WITH_FORM_TYPE);
     // 处理重定向
     return await DioUtils.processRedirect(_dio, res);
-  }
-
-  /// 提取认证页面中的加密盐
-  String _getSaltFromAuthHtml(String htmlText) {
-    var a = RegExp(r'var pwdDefaultEncryptSalt = "(.*?)";');
-    var matchResult = a.firstMatch(htmlText)!.group(0)!;
-    var salt = matchResult.substring(29, matchResult.length - 2);
-    return salt;
-  }
-
-  /// 提取认证页面中的Cas Ticket
-  String _getCasTicketFromAuthHtml(String htmlText) {
-    var a = RegExp(r'<input type="hidden" name="lt" value="(.*?)"');
-    var matchResult = a.firstMatch(htmlText)!.group(0)!;
-    var casTicket = matchResult.substring(38, matchResult.length - 1);
-    return casTicket;
-  }
-
-  /// 获取认证页面内容
-  Future<String> _getAuthServerHtml() async {
-    var response = await _dio.get(_loginUrl);
-    return response.data;
-  }
-
-  /// 判断是否需要验证码
-  Future<bool> _needCaptcha(String username) async {
-    var response = await _dio.get(
-      _needCaptchaUrl,
-      queryParameters: {
-        'username': username,
-        'pwdEncrypt2': 'pwdEncryptSalt',
-      },
-    );
-    return response.data == 'true';
-  }
-
-  /// 获取验证码
-  Future<String> _getCaptcha() async {
-    var response = await _dio.get(
-      _captchaUrl,
-      options: Options(
-        responseType: ResponseType.bytes,
-      ),
-    );
-    Uint8List captchaData = response.data;
-    return base64Encode(captchaData);
   }
 }
 

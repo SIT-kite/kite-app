@@ -10,7 +10,7 @@ void main() {
     SsoSession session = SsoSession();
     await session.login('', '');
     var eduSession = EduSession(session);
-    var table = await ExamRoomService(eduSession).getExamRoomList(
+    var table = await ExamService(eduSession).getExamList(
       const SchoolYear(2021),
       Semester.firstTerm,
     );

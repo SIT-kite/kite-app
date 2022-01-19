@@ -21,7 +21,7 @@ void main() {
     SsoSession session = SsoSession();
     EduSession eduSession = EduSession(session);
     await session.login('', '');
-    var table = await ScoreDetailService(eduSession).getScoreDetail(
+    var table = await ScoreService(eduSession).getScoreDetail(
       "",
       const SchoolYear(2021),
       Semester.firstTerm,
