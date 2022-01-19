@@ -1,11 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:kite/app.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/util/logger.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 import 'global/session_pool.dart';
 
@@ -22,30 +21,20 @@ Future<void> init() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // 使用说明
-  // https://pub.dev/packages/flutter_bugly
-  Log.info('当前操作系统：' + Platform.operatingSystem);
-  try {
-    if (Platform.isAndroid || Platform.isIOS) {
-      // Android/IOS使用 Bugly
-      FlutterBugly.postCatchedException(() async {
-        Log.info('当前环境: Android/IOS');
-        await init();
-        runApp(Phoenix(child: const KiteApp()));
-        FlutterBugly.init(
-          androidAppId: "a83ed5243d",
-          iOSAppId: "7d8c9907b5",
-        );
-      });
-    } else {
-      // 桌面端不使用 Bugly
-      Log.info('当前环境: Desktop');
+
+  if (UniversalPlatform.isAndroid || UniversalPlatform.isIOS) {
+    // Android/IOS使用 Bugly
+    // 使用说明 https://pub.dev/packages/flutter_bugly
+    FlutterBugly.postCatchedException(() async {
       await init();
       runApp(Phoenix(child: const KiteApp()));
-    }
-  } on Error catch (_, __) {
-    // Web端不支持判定平台，也不使用 Bugly
-    Log.info('当前环境: Web');
+      FlutterBugly.init(
+        androidAppId: "a83ed5243d",
+        iOSAppId: "7d8c9907b5",
+      );
+    });
+  } else {
+    // 桌面端和 Web 端不使用 Bugly
     await init();
     runApp(Phoenix(child: const KiteApp()));
   }
