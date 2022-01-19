@@ -53,7 +53,7 @@ class SessionPool {
       'User-Agent': uaString,
     };
     // 设置默认超时时间
-    dio.options.connectTimeout = 5 * 1000;
+    dio.options.connectTimeout = 60 * 1000;
     dio.options.sendTimeout = 60 * 1000;
     dio.options.receiveTimeout = 60 * 1000;
     return dio;
