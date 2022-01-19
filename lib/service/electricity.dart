@@ -59,6 +59,18 @@ class ConditionHours {
       _$ConditionHoursFromJson(json);
 }
 
+@JsonSerializable()
+class ConditionDays {
+  double charge;
+  double consumption;
+  String date;
+
+  ConditionDays(this.charge, this.consumption, this.date);
+
+  factory ConditionDays.fromJson(Map<String, dynamic> json) =>
+      _$ConditionDaysFromJson(json);
+}
+
 Future<Balance> getBalance(String room) async {
   final url = _getElectricityUrl(room, _Mode.balance);
   final response = await Dio().get(url);
@@ -81,4 +93,12 @@ Future<ConditionHours> getConditionHours(String room) async {
   final conditionHours = ConditionHours.fromJson(response.data['data']);
 
   return conditionHours;
+}
+
+Future<ConditionDays> getConditionDays(String room) async {
+  final url = _getElectricityUrl(room, _Mode.condition_days);
+  final response = await Dio().get(url);
+  final conditionDays = ConditionDays.fromJson(response.data['data']);
+
+  return conditionDays;
 }
