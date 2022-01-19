@@ -1,12 +1,13 @@
 import 'dart:collection';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/dao/library/book_info.dart';
 import 'package:kite/dao/library/holding.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/service/library.dart';
 import 'package:kite/util/library/search.dart';
+
+import 'component/search_result_item.dart';
 
 class BookInfoPage extends StatefulWidget {
   /// 图书信息访问
@@ -55,24 +56,7 @@ class _BookInfoPageState extends State<BookInfoPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                SizedBox(
-                  height: 150,
-                  width: 150,
-                  child: buildImage(widget.bookImageHolding.image?.coverLink ??
-                      'http://210.35.66.106/opac/media/images/book-default-small.gif'),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(widget.bookImageHolding.book.title),
-                    buildLink(widget.bookImageHolding.book.author, () {}),
-                    Text('ISBN: ${widget.bookImageHolding.book.isbn}'),
-                  ],
-                ),
-              ],
-            ),
+            BookItemWidget(widget.bookImageHolding),
             Table(
               columnWidths: {
                 0: FlexColumnWidth(1),
