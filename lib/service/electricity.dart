@@ -94,19 +94,3 @@ Future<List<ConditionHours>> getConditionHours(String room) async {
 
   return list;
 }
-
-Future<ConditionDays> getConditionDays(String room) async {
-  final url = _getElectricityUrl(room, _Mode.condition_days);
-  final response = await Dio().get(url);
-  final list = response.data['data'].map((e) => ConditionDays.fromJson(e));
-
-  return list;
-}
-
-String getCharge(List<ConditionDays> list) {
-  double charge = 0.0;
-  list.forEach((item) {
-    charge = item.charge > charge ? item.charge : charge;
-  });
-  return charge.toStringAsFixed(2);
-}
