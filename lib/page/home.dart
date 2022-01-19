@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/service/weather.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 import '../global/quick_button.dart';
 import 'home/background.dart';
@@ -101,7 +102,9 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    QuickButton.init(context);
+    if (UniversalPlatform.isAndroid || UniversalPlatform.isIOS) {
+      QuickButton.init(context);
+    }
 
     return Scaffold(
       key: _scaffoldKey,
