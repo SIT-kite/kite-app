@@ -49,9 +49,9 @@ class Rank {
 
 @JsonSerializable()
 class ConditionHours {
-  double charge;
-  double consumption;
-  String time;
+  List<double> charge;
+  List<double> consumption;
+  List<String> time;
 
   ConditionHours(this.charge, this.consumption, this.time);
 
@@ -61,9 +61,9 @@ class ConditionHours {
 
 @JsonSerializable()
 class ConditionDays {
-  double charge;
-  double consumption;
-  String date;
+  List<double> charge;
+  List<double> consumption;
+  List<String> date;
 
   ConditionDays(this.charge, this.consumption, this.date);
 
@@ -102,3 +102,4 @@ Future<ConditionDays> getConditionDays(String room) async {
 
   return conditionDays;
 }
+
