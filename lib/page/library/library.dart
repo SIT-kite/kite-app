@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:kite/page/library/constant.dart';
 import 'package:kite/page/library/search_delegate.dart';
+import 'package:kite/util/flash.dart';
 
 class LibraryPage extends StatelessWidget {
   const LibraryPage({Key? key}) : super(key: key);
@@ -27,7 +28,9 @@ class LibraryPage extends StatelessWidget {
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            showBasicFlash(context, const Text('图书馆账户信息管理，敬请期待'));
+          },
           icon: const Icon(
             Icons.person,
           ),
