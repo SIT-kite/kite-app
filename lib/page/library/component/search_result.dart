@@ -25,7 +25,8 @@ class BookSearchResultWidget extends StatefulWidget {
   /// 馆藏检索服务
   final HoldingPreviewDao holdingPreviewDao = HoldingPreviewService(SessionPool.librarySession);
 
-  BookSearchResultWidget(this.keyword, {Key? key}) : super(key: key);
+  final KeyClickCallback? requestQueryKeyCallback;
+  BookSearchResultWidget(this.keyword, {Key? key, this.requestQueryKeyCallback}) : super(key: key);
 
   @override
   _BookSearchResultWidgetState createState() => _BookSearchResultWidgetState();
@@ -149,7 +150,10 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
         return Column(children: [
           Container(
             child: InkWell(
-              child: BookItemWidget(dataList[index]),
+              child: BookItemWidget(
+                dataList[index],
+                onAuthorTap: widget.requestQueryKeyCallback,
+              ),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (BuildContext context) {
