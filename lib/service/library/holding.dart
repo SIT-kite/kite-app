@@ -1,5 +1,6 @@
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:kite/dao/library/holding.dart';
 import 'package:kite/entity/library/holding.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/service/abstract_session.dart';
@@ -195,9 +196,10 @@ class _BookHoldingInfo {
   Map<String, dynamic> toJson() => _$BookHoldingInfoToJson(this);
 }
 
-class HoldingInfoService extends AService {
+class HoldingInfoService extends AService implements HoldingInfoDao {
   HoldingInfoService(ASession session) : super(session);
 
+  @override
   Future<HoldingInfo> queryByBookId(String bookId) async {
     var response = await session.get('${Constants.bookHoldingUrl}/$bookId');
 
@@ -239,6 +241,7 @@ class HoldingInfoService extends AService {
   }
 
   /// 搜索附近的书的id号
+  @override
   Future<List<String>> searchNearBookIdList(String bookId) async {
     var response = await session.get(
       Constants.virtualBookshelfUrl,
