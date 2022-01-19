@@ -49,9 +49,9 @@ class Rank {
 
 @JsonSerializable()
 class ConditionHours {
-  List<double> charge;
-  List<double> consumption;
-  List<String> time;
+  double charge;
+  double consumption;
+  String time;
 
   ConditionHours(this.charge, this.consumption, this.time);
 
@@ -61,9 +61,9 @@ class ConditionHours {
 
 @JsonSerializable()
 class ConditionDays {
-  List<double> charge;
-  List<double> consumption;
-  List<String> date;
+  double charge;
+  double consumption;
+  String date;
 
   ConditionDays(this.charge, this.consumption, this.date);
 
@@ -87,19 +87,20 @@ Future<Rank> getRank(String room) async {
   return rank;
 }
 
-Future<ConditionHours> getConditionHours(String room) async {
+Future<List<ConditionHours>> getConditionHours(String room) async {
   final url = _getElectricityUrl(room, _Mode.condition_hours);
   final response = await Dio().get(url);
-  final conditionHours = ConditionHours.fromJson(response.data['data']);
+  final list = response.data['data'].map((e) => ConditionHours.fromJson(e));
 
-  return conditionHours;
+  return list;
 }
 
 Future<ConditionDays> getConditionDays(String room) async {
   final url = _getElectricityUrl(room, _Mode.condition_days);
   final response = await Dio().get(url);
-  final conditionDays = ConditionDays.fromJson(response.data['data']);
+  final list = response.data['data'].map((e) => ConditionDays.fromJson(e));
 
-  return conditionDays;
+  return list;
 }
+
 
