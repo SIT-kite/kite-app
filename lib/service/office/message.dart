@@ -10,9 +10,10 @@ const String serviceMessageCount = 'https://xgfy.sit.edu.cn/unifri-flow/user/que
 Future<OfficeMessageCount> queryMessageCount(OfficeSession session) async {
   String payload = 'code=${session.userName}';
 
-  final response = await session.post(serviceMessageCount, data: payload, responseType: ResponseType.json);
+  final response = await session.post(serviceMessageCount,
+      data: payload, contentType: Headers.formUrlEncodedContentType, responseType: ResponseType.json);
   final Map<String, dynamic> data = response.data;
-  final OfficeMessageCount result = OfficeMessageCount.fromJson(data);
+  final OfficeMessageCount result = OfficeMessageCount.fromJson(data['data']);
   return result;
 }
 
