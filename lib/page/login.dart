@@ -23,7 +23,6 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _proxyInputController = TextEditingController();
 
   final GlobalKey _formKey = GlobalKey<FormState>();
-  final GlobalKey _proxyFormKey = GlobalKey<FormState>();
 
   final TapGestureRecognizer _recognizer = TapGestureRecognizer()..onTap = onOpenUserLicense;
 
@@ -169,7 +168,7 @@ class _LoginPageState extends State<LoginPage> {
       onPressed: () {
         final String inputText = _proxyInputController.text;
 
-        if (!(_proxyFormKey.currentState as FormState).validate()) {
+        if (proxyValidator(inputText) != null) {
           return;
         }
         controller.dismiss();
