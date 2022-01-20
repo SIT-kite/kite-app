@@ -7,14 +7,14 @@ import 'package:kite/service/abstract_session.dart';
 import '../../global/session_pool.dart';
 
 /// 应网办登录地址, POST 请求
-const String officeLogin = 'https://xgfy.sit.edu.cn/unifri-flow/login';
+const String _officeLoginUrl = 'https://xgfy.sit.edu.cn/unifri-flow/login';
 
-Future<OfficeSession> login(String username, String password) async {
+Future<OfficeSession> officeLogin(String username, String password) async {
   final dio = SessionPool.dio;
   final Map<String, String> credential = {'account': username, 'userPassword': password, 'remember': 'true'};
 
   final response =
-      await dio.post(officeLogin, data: credential, options: Options(contentType: Headers.jsonContentType));
+      await dio.post(_officeLoginUrl, data: credential, options: Options(contentType: Headers.jsonContentType));
   final int code = (response.data as Map)['code'];
 
   if (code != 0) {

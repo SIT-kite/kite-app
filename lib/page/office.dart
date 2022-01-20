@@ -38,7 +38,7 @@ class _OfficePageState extends State<OfficePage> {
   Future<List<SimpleFunction>> _fetchFuncList() async {
     final username = StoragePool.authSetting.currentUsername!;
     final password = StoragePool.authPool.get(username)!.password;
-    session = await login(username, password);
+    session = await officeLogin(username, password);
     return await selectFunctionsByCountDesc(session!);
   }
 
