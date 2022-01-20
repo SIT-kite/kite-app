@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kite/component/unsupported_platform_launch.dart';
 import 'package:kite/util/logger.dart';
 import 'package:universal_platform/universal_platform.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 const String _wikiUrl = 'https://kite.sunnysab.cn/wiki/';
@@ -46,12 +46,6 @@ class _WikiPageState extends State<WikiPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    launch(_wikiUrl);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -64,9 +58,7 @@ class _WikiPageState extends State<WikiPage> {
         ],
       ),
       body: UniversalPlatform.isDesktopOrWeb
-          ? const Center(
-              child: Text('请在弹出浏览器中查阅Wiki'),
-            )
+          ? const UnsupportedPlatformUrlLauncher(_wikiUrl)
           : WebView(
               initialUrl: _wikiUrl,
               javascriptMode: JavascriptMode.unrestricted,
