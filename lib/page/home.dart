@@ -25,7 +25,7 @@ class HomePage extends StatelessWidget {
   void _updateWeather() {
     Future.delayed(const Duration(milliseconds: 800), () async {
       try {
-        final weather = await getCurrentWeather(StoragePool.homeSetting.campus);
+        final weather = await WeatherService().getCurrentWeather(StoragePool.homeSetting.campus);
         eventBus.emit('onWeatherUpdate', weather);
       } catch (_) {}
     });
