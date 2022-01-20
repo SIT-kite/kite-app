@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kite/entity/weather.dart';
 import 'package:kite/service/weather.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:universal_platform/universal_platform.dart';

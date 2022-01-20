@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:kite/entity/weather.dart';
 
-part 'weather.g.dart';
-
 String _getWeatherUrl(int campus) {
   return 'https://kite.sunnysab.cn/api/v2/weather/$campus';
 }
