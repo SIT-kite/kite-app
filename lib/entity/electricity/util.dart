@@ -11,6 +11,6 @@ String getCharge(List<ConditionDays> list) {
 
 Future<Map<String, dynamic>> getRank(String room) =>
     fetchRank(room).then((res) {
-      final percentage = (res.rank / res.roomCount * 100).toStringAsFixed(2);
+      final percentage = ((res.roomCount - res.rank) / res.roomCount * 100).toStringAsFixed(2);
       return {'consumption': res.consumption, 'percentage': percentage};
     });
