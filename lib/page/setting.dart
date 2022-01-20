@@ -83,7 +83,8 @@ class SettingPage extends StatelessWidget {
             settingKey: SettingKeyConstants.homeBackgroundModeKey,
             values: const <int, String>{
               1: '实时天气',
-              2: '静态图片',
+              2: '纯色',
+              3: '静态图片',
             },
             selected: 1,
             onChange: (value) {},

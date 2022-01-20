@@ -9,9 +9,9 @@ abstract class HomeSettingDao {
 
   set background(String path);
 
-  String get backgroundMode;
+  int get backgroundMode;
 
-  set backgroundMode(String mode);
+  set backgroundMode(int mode);
 
   Weather get lastWeather;
 

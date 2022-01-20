@@ -13,10 +13,10 @@ class HomeSettingStorage implements HomeSettingDao {
   set background(String v) => box.put(SettingKeyConstants.homeBackgroundKey, v);
 
   @override
-  String get backgroundMode => box.get(SettingKeyConstants.homeBackgroundModeKey, defaultValue: 'weather');
+  int get backgroundMode => box.get(SettingKeyConstants.homeBackgroundModeKey, defaultValue: 1);
 
   @override
-  set backgroundMode(String v) => box.put(SettingKeyConstants.homeBackgroundModeKey, v);
+  set backgroundMode(int v) => box.put(SettingKeyConstants.homeBackgroundModeKey, v);
 
   @override
   int get campus => box.get(SettingKeyConstants.homeCampusKey, defaultValue: 1);

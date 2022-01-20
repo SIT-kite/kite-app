@@ -40,7 +40,7 @@ class _HomeBackgroundState extends State<HomeBackground> {
   void _onWeatherUpdate(dynamic newWeather) {
     Weather w = newWeather as Weather;
 
-    if (StoragePool.homeSetting.backgroundMode == 'weather') {
+    if (StoragePool.homeSetting.backgroundMode == 1) {
       setState(() => _weatherCode = int.parse(w.icon));
     } else {
       _weatherCode = int.parse(w.icon);
@@ -66,10 +66,10 @@ class _HomeBackgroundState extends State<HomeBackground> {
     late Widget bg;
 
     switch (StoragePool.homeSetting.backgroundMode) {
-      case 'weather':
+      case 1:
         bg = _buildWeatherBg();
         break;
-      case 'color':
+      case 2:
         bg = _buildColorBg();
         break;
     }
