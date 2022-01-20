@@ -7,6 +7,7 @@ import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/service/edu.dart';
 import 'package:kite/service/library/library_session.dart';
+import 'package:kite/service/office.dart';
 import 'package:kite/service/sso.dart';
 import 'package:kite/util/logger.dart';
 
@@ -18,11 +19,13 @@ class SessionPool {
   static String uaString = defaultUaString;
 
   static final DefaultCookieJar _cookieJar = DefaultCookieJar();
+
   static DefaultCookieJar get cookieJar => _cookieJar;
 
   static late Dio dio;
   static late SsoSession ssoSession;
   static late EduSession eduSession;
+  static OfficeSession? officeSession;
   static late LibrarySession librarySession;
 
   static Future<void> init() async {
