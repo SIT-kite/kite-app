@@ -17,7 +17,7 @@ Widget buildRank(String room, List<ConditionDays> list) {
         child: Column(
           children: [
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text(snapshot.data!['consumption'], style: const TextStyle(fontWeight: FontWeight.bold,
+              Text('${snapshot.data!['consumption']}', style: const TextStyle(fontWeight: FontWeight.bold,
                   fontSize: 32,
                   color: Colors.black)),
               const Text('元', style: TextStyle(fontWeight: FontWeight.bold,
