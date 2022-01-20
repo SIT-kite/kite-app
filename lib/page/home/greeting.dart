@@ -57,6 +57,8 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   }
 
   void _onWeatherUpdate(dynamic newWeather) {
+    StoragePool.homeSetting.lastWeather = newWeather;
+
     setState(() {
       currentWeather = newWeather as Weather;
     });
