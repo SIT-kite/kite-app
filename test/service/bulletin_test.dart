@@ -1,14 +1,15 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kite/global/session_pool.dart';
-import 'package:kite/global/storage_pool.dart';
 import 'package:kite/service/bulletin.dart';
 import 'package:kite/util/logger.dart';
 
+import 'mock.dart';
+
 void main() async {
-  await StoragePool.init();
-  await SessionPool.init();
+  await init();
+  await login();
+
   final session = SessionPool.ssoSession;
-  await session.login('', '');
   final dao = BulletinService(session);
   test('test bulletin', () async {
     final list = await dao.getAllCatalogues();
