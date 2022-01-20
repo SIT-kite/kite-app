@@ -34,8 +34,16 @@ Future<Rank> fetchRank(String room) async {
   return rank;
 }
 
-Future<List<ConditionHours>> fetchCondition(String room, Mode mode) async {
-  final url = _getElectricityUrl(room, mode);
+Future<List<ConditionHours>> fetchConditionHours(String room) async {
+  final url = _getElectricityUrl(room, Mode.condition_hours);
+  final response = await Dio().get(url);
+  final list = response.data['data'].map((e) => ConditionHours.fromJson(e));
+
+  return list;
+}
+
+Future<List<ConditionDays>> fetchConditionDays(String room) async {
+  final url = _getElectricityUrl(room, Mode.condition_days);
   final response = await Dio().get(url);
   final list = response.data['data'].map((e) => ConditionHours.fromJson(e));
 
