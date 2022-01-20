@@ -228,12 +228,14 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
                 ),
               ),
               onTap: () {
-                setState(() {
-                  currentSearchWay = e[1];
-                  firstPageLoaded = false;
-                  dataList = [];
-                  getData();
-                });
+                if (firstPageLoaded) {
+                  setState(() {
+                    currentSearchWay = e[1];
+                    firstPageLoaded = false;
+                    dataList = [];
+                    getData();
+                  });
+                }
               },
             ),
           );
