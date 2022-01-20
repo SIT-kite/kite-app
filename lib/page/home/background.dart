@@ -40,12 +40,16 @@ class _HomeBackgroundState extends State<HomeBackground> {
   void _onWeatherUpdate(dynamic newWeather) {
     Weather w = newWeather as Weather;
 
-    setState(() {
+    if (StoragePool.homeSetting.backgroundMode == 'weather') {
+      setState(() => _weatherCode = int.parse(w.icon));
+    } else {
       _weatherCode = int.parse(w.icon);
-    });
+    }
   }
 
-  Widget _buildWeatherBg(Size windowSize) {
+  Widget _buildWeatherBg() {
+    final windowSize = MediaQuery.of(context).size;
+
     return WeatherBg(
       weatherType: _getWeatherTypeByCode(_weatherCode),
       width: windowSize.width,
@@ -53,11 +57,23 @@ class _HomeBackgroundState extends State<HomeBackground> {
     );
   }
 
+  Widget _buildColorBg() {
+    return Container(color: Colors.white);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final windowSize = MediaQuery.of(context).size;
+    late Widget bg;
 
-    return _buildWeatherBg(windowSize);
+    switch (StoragePool.homeSetting.backgroundMode) {
+      case 'weather':
+        bg = _buildWeatherBg();
+        break;
+      case 'color':
+        bg = _buildColorBg();
+        break;
+    }
+    return bg;
   }
 }
 
