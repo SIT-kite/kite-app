@@ -66,6 +66,11 @@ class BulletinRecord {
 
   /// 发布部门
   String department = '';
+
+  @override
+  String toString() {
+    return 'BulletinRecord{title: $title, uuid: $uuid, bulletinCatalogueId: $bulletinCatalogueId, dateTime: $dateTime, department: $department}';
+  }
 }
 
 /// 获取到的通知页
@@ -73,4 +78,9 @@ class BulletinListPage {
   int currentPage = 1;
   int totalPage = 10;
   List<BulletinRecord> bulletinItems = [];
+
+  @override
+  String toString() {
+    return 'BulletinListPage{currentPage: $currentPage, totalPage: $totalPage, bulletinItems: $bulletinItems}';
+  }
 }

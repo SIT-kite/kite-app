@@ -16,7 +16,7 @@ class BulletinService extends AService implements BulletinDao {
     }).toList();
   }
 
-  BulletinDetail _noticeDetailMap(Bs4Element item) {
+  BulletinDetail _parsebulletinDetail(Bs4Element item) {
     final dateFormat = DateFormat('yyyy年MM月dd日 hh:mm');
 
     String metaHtml = item.find('div', class_: 'bulletin-info')?.innerHtml ?? '';
@@ -56,12 +56,45 @@ class BulletinService extends AService implements BulletinDao {
   @override
   Future<BulletinDetail> getBulletinDetail(String bulletinCatalogueId, String uuid) async {
     final response = await session.get(_buildBulletinUrl(bulletinCatalogueId, uuid));
-    return _noticeDetailMap(BeautifulSoup(response.data).html!);
+    return _parsebulletinDetail(BeautifulSoup(response.data).html!);
+  }
+
+  // 构造获取文章列表的url
+  static String _buildBulletinListUrl(int pageIndex, String bulletinCatalogueId) {
+    return 'https://myportal.sit.edu.cn/detach.portal?pageIndex=$pageIndex&groupid=&action=bulletinsMoreView&.ia=false&pageSize=&.pmn=view&.pen=$bulletinCatalogueId';
+  }
+
+  static BulletinListPage _parseBulletinListPage(Bs4Element element) {
+    final list = element.findAll('li').map((e) {
+      final departmentAndDate = e.find('span', class_: 'rss-time')!.text.trim();
+      final departmentAndDateLen = departmentAndDate.length;
+      final department = departmentAndDate.substring(0, departmentAndDateLen - 8);
+      final date = '20' + departmentAndDate.substring(departmentAndDateLen - 8, departmentAndDateLen);
+
+      final titleElement = e.find('a', class_: 'rss-title')!;
+      final uri = Uri.parse(titleElement.attributes['href']!);
+
+      return BulletinRecord()
+        ..title = titleElement.text.trim()
+        ..department = department
+        ..dateTime = DateFormat('yyyy-MM-dd').parse(date)
+        ..bulletinCatalogueId = uri.queryParameters['.pen']!
+        ..uuid = uri.queryParameters['bulletinId']!;
+    }).toList();
+
+    final currentElement = element.find('div', attrs: {'title': '当前页'})!;
+    final lastElement = element.find('a', attrs: {'title': '点击跳转到最后页'})!;
+    final lastElementHref = Uri.parse(lastElement.attributes['href']!);
+    final lastPageIndex = lastElementHref.queryParameters['pageIndex']!;
+    return BulletinListPage()
+      ..bulletinItems = list
+      ..currentPage = int.parse(currentElement.text)
+      ..totalPage = int.parse(lastPageIndex);
   }
 
   @override
-  Future<List<BulletinRecord>> queryBulletinList(int pageIndex, String bulletinCatalogueId) {
-    // TODO: implement queryBulletinList
-    throw UnimplementedError();
+  Future<BulletinListPage> queryBulletinList(int pageIndex, String bulletinCatalogueId) async {
+    final response = await session.get(_buildBulletinListUrl(pageIndex, bulletinCatalogueId));
+    return _parseBulletinListPage(BeautifulSoup(response.data).html!);
   }
 }

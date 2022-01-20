@@ -8,5 +8,5 @@ abstract class BulletinDao {
   Future<BulletinDetail> getBulletinDetail(String bulletinCatalogueId, String uuid);
 
   /// 检索文章列表
-  Future<List<BulletinRecord>> queryBulletinList(int pageIndex, String bulletinCatalogueId);
+  Future<BulletinListPage> queryBulletinList(int pageIndex, String bulletinCatalogueId);
 }
