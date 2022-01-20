@@ -2,10 +2,11 @@ import 'package:check_vpn_connection/check_vpn_connection.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kite/global/session_pool.dart';
 import 'package:kite/service/network.dart';
 
 class ConnectivityPage extends StatefulWidget {
-  ConnectivityPage({Key? key}) : super(key: key);
+  const ConnectivityPage({Key? key}) : super(key: key);
 
   @override
   _ConnectivityPageState createState() => _ConnectivityPageState();
@@ -23,9 +24,14 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
 
   Future<bool> checkConnectivity() async {
     try {
-      await Dio().get(
+      await SessionPool.ssoSession.get(
         'http://jwxt.sit.edu.cn/',
-        options: Options(followRedirects: false, sendTimeout: 3, receiveTimeout: 3, validateStatus: (code) => true),
+        options: Options(
+          followRedirects: false,
+          sendTimeout: 3,
+          receiveTimeout: 3,
+          validateStatus: (code) => true,
+        ),
       );
       return true;
     } catch (e) {
