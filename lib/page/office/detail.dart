@@ -50,13 +50,21 @@ class DetailPage extends StatelessWidget {
         break;
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(section.section, style: titleStyle),
-        bodyWidget,
-        const SizedBox(height: 25),
-      ],
+    return Card(
+      margin: const EdgeInsets.all(5),
+      child: SizedBox(
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(section.section, style: titleStyle),
+              bodyWidget,
+            ],
+          ),
+        ),
+      ),
     );
   }
 
