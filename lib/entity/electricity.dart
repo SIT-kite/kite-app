@@ -51,7 +51,7 @@ class Rank {
   double consumption = 0.0;
   @JsonKey(name: 'rank')
   // 排名
-  int rank = 0;
+  int rank = -1;
   @JsonKey(name: 'roomCount')
   // 房间总数
   int roomCount = -1;
