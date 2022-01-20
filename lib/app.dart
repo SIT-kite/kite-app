@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/page/index.dart';
-import 'package:kite/util/logger.dart';
-
-import 'global/session_pool.dart';
 
 class KiteApp extends StatelessWidget {
   const KiteApp({Key? key}) : super(key: key);
@@ -29,25 +26,15 @@ class KiteApp extends StatelessWidget {
       '/timetable': (context) => const TimetablePage(),
       '/setting': (context) => const SettingPage(),
     };
-
-    return FutureBuilder(
-        future: init(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            // primarySwatch should be set, by https://github.com/flutter/flutter/issues/82996.
-            final primaryColor = StoragePool.themeSetting.color;
-            final themeData = ThemeData(primaryColor: primaryColor, primarySwatch: createThemeSwatch(primaryColor));
-
-            return MaterialApp(
-              title: '上应小风筝',
-              theme: themeData,
-              debugShowCheckedModeBanner: false,
-              home: StoragePool.authSetting.currentUsername != null ? HomePage() : const WelcomePage(),
-              routes: routes,
-            );
-          }
-          return Container();
-        });
+    final primaryColor = StoragePool.themeSetting.color;
+    final themeData = ThemeData(primaryColor: primaryColor, primarySwatch: createThemeSwatch(primaryColor));
+    return MaterialApp(
+      title: '上应小风筝',
+      theme: themeData,
+      debugShowCheckedModeBanner: false,
+      home: StoragePool.authSetting.currentUsername != null ? HomePage() : const WelcomePage(),
+      routes: routes,
+    );
   }
 }
 
@@ -69,15 +56,4 @@ MaterialColor createThemeSwatch(Color color) {
     );
   });
   return MaterialColor(color.value, swatch);
-}
-
-/// 应用启动前需要的初始化
-Future<void> init() async {
-  // Future.wait可以使多个Future并发执行
-  Log.info('开始应用开启前的初始化');
-  await Future.wait([
-    SessionPool.init(),
-    StoragePool.init(),
-  ]);
-  Log.info('应用开启前初始化完成');
 }

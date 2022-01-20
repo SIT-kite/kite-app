@@ -2,6 +2,7 @@ import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:kite/global/init_util.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/storage/setting/constants.dart';
@@ -34,6 +35,8 @@ class SettingPage extends StatelessWidget {
 
                 StoragePool.authPool.delete(StoragePool.authSetting.currentUsername!);
                 StoragePool.authSetting.currentUsername = null;
+
+                await initBeforeRun();
                 // 重启应用
                 Phoenix.rebirth(context);
               },
