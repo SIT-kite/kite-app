@@ -45,8 +45,6 @@ class HomePage extends StatelessWidget {
         await _doLogin(context);
         showBasicFlash(context, const Text('登录成功'));
       } on Exception catch (e) {
-        print(e.toString());
-
         // 如果是认证相关问题, 弹出相应的错误信息.
         if (e is UnknownAuthException || e is CredentialsInvalidException) {
           showBasicFlash(context, Text('登录异常: $e'));
@@ -71,6 +69,9 @@ class HomePage extends StatelessWidget {
       eventBus.emit('onHomeRefresh');
     }
     _refreshController.refreshCompleted(resetFooterState: true);
+
+    // 下拉也要更新一下天气 :D
+    _updateWeather();
   }
 
   Widget _buildTitleLine(BuildContext context) {
