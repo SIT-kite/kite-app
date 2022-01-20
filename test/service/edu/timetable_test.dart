@@ -1,15 +1,13 @@
 import 'package:kite/dao/edu.dart';
 import 'package:kite/entity/edu.dart';
 import 'package:kite/service/edu.dart';
-import 'package:kite/service/sso.dart';
 
 import '../mock.dart';
 
 void main() async {
   await init();
   await login();
-  final session = SsoSession();
-  final eduSession = EduSession(session);
+  final eduSession = SessionPool.eduSession;
   TimetableDao timetableDao = TimetableService(eduSession);
   test('timetable test', () async {
     final table = await timetableDao.getTimetable(

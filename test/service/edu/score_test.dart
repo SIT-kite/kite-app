@@ -1,31 +1,27 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kite/entity/edu.dart';
 import 'package:kite/service/edu.dart';
-import 'package:kite/service/sso.dart';
-import 'package:logger/logger.dart';
 
-void main() {
-  var logger = Logger();
-  test('edu test', () async {
-    SsoSession session = SsoSession();
-    EduSession eduSession = EduSession(session);
-    await session.login('', '');
-    var table = await ScoreService(eduSession).getScoreList(
+import '../mock.dart';
+
+void main() async {
+  await init();
+  await login();
+  final eduSession = SessionPool.eduSession;
+  test('score test', () async {
+    final table = await ScoreService(eduSession).getScoreList(
       const SchoolYear(2021),
       Semester.firstTerm,
     );
-    logger.i(table);
+    Log.info(table);
   });
 
   test('edu detail test', () async {
-    SsoSession session = SsoSession();
-    EduSession eduSession = EduSession(session);
-    await session.login('', '');
-    var table = await ScoreService(eduSession).getScoreDetail(
+    final table = await ScoreService(eduSession).getScoreDetail(
       "",
       const SchoolYear(2021),
       Semester.firstTerm,
     );
-    logger.i(table);
+    Log.info(table);
   });
 }

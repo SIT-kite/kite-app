@@ -6,9 +6,9 @@ import 'mock.dart';
 
 void main() async {
   await init();
+  await login();
+  var session = SessionPool.ssoSession;
   test('test login', () async {
-    await login();
-    var session = SessionPool.ssoSession;
     var index = await session.get('https://myportal.sit.edu.cn/');
     var list = BeautifulSoup(index.data)
         .find('div', class_: 'composer')!
