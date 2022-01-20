@@ -44,7 +44,7 @@ class BulletinCatalogue {
   /// 分类名
   final String name;
 
-  /// 分类代号(OA上命名为pen)
+  /// 分类代号(OA上命名为pen，以pe打头)
   final String id;
 
   const BulletinCatalogue(this.name, this.id);
@@ -52,9 +52,20 @@ class BulletinCatalogue {
 
 /// 某篇通知的记录信息，根据该信息可寻找到对应文章
 class BulletinRecord {
+  /// 标题
   String title = '';
+
+  /// 文章id
   String uuid = '';
+
+  /// 目录id
   String bulletinCatalogueId = '';
+
+  /// 发布时间
+  DateTime dateTime = DateTime.now();
+
+  /// 发布部门
+  String department = '';
 }
 
 /// 获取到的通知页
