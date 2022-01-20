@@ -90,7 +90,7 @@ class SettingPage extends StatelessWidget {
         TextInputSettingsTile(
           title: '密码',
           settingKey: '/auth/password',
-          initialValue: '********',
+          initialValue: StoragePool.authPool.get(StoragePool.authSetting.currentUsername ?? '')?.password ?? '',
         ),
         SimpleSettingsTile(title: '测试连接', subtitle: '检查用户名密码是否正确', onTap: () => {}),
       ]),
