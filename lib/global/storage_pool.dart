@@ -46,14 +46,15 @@ class StoragePool {
   static NetworkStorage get network => _network;
 
   static Future<void> _registerAdapters() async {
-    // 下面放置各种TypeAdapter
-    final adapters = <TypeAdapter>[
-      LibrarySearchHistoryItemAdapter(),
-      AuthItemAdapter(),
-      WeatherAdapter(),
-    ];
-    // 先过滤出所有未注册过的adapter, 然后再批量注册
-    adapters.where((e) => !Hive.isAdapterRegistered(e.typeId)).forEach(Hive.registerAdapter);
+    void registerAdapter<T>(TypeAdapter<T> adapter) {
+      if (!Hive.isAdapterRegistered(adapter.typeId)) {
+        Hive.registerAdapter(adapter);
+      }
+    }
+
+    registerAdapter(LibrarySearchHistoryItemAdapter());
+    registerAdapter(AuthItemAdapter());
+    registerAdapter(WeatherAdapter());
   }
 
   static Future<void> init() async {
