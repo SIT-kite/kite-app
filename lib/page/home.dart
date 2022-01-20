@@ -40,22 +40,22 @@ class HomePage extends StatelessWidget {
       GreetingWidget(weather),
       const SizedBox(height: 20.0),
       const HomeItemGroup([
-        HomeItem('/electricity', AssetImage('assets/home/icon_daily_report.png'), '电费查询'),
-        HomeItem('/score', AssetImage('assets/home/icon_daily_report.png'), '成绩'),
-        HomeItem('/library', AssetImage('assets/home/icon_library.png'), '图书馆'),
-        HomeItem('/expense', AssetImage('assets/home/icon_consumption.png'), '消费查询'),
-        HomeItem("/timetable", AssetImage('assets/home/icon_timetable.png'), '课程表')
+        HomeItem(route: '/electricity', icon: AssetImage('assets/home/icon_daily_report.png'), title: '电费查询'),
+        HomeItem(route: '/score', icon: AssetImage('assets/home/icon_daily_report.png'), title: '成绩'),
+        HomeItem(route: '/library', icon: AssetImage('assets/home/icon_library.png'), title: '图书馆'),
+        HomeItem(route: '/expense', icon: AssetImage('assets/home/icon_consumption.png'), title: '消费查询'),
+        HomeItem(route: "/timetable", icon: AssetImage('assets/home/icon_timetable.png'), title: '课程表')
       ]),
       const SizedBox(height: 20.0),
       const HomeItemGroup([
-        HomeItem('/report', AssetImage('assets/home/icon_daily_report.png'), '体温上报'),
-        HomeItem('/office', AssetImage('assets/home/icon_library.png'), '办公')
+        HomeItem(route: '/report', icon: AssetImage('assets/home/icon_daily_report.png'), title: '体温上报'),
+        HomeItem(route: '/office', icon: AssetImage('assets/home/icon_library.png'), title: '办公')
       ]),
       const SizedBox(height: 20.0),
       const HomeItemGroup([
-        HomeItem('/game', AssetImage('assets/home/icon_library.png'), '小游戏'),
-        HomeItem('/wiki', AssetImage('assets/home/icon_library.png'), 'Wiki'),
-        HomeItem('/market', AssetImage('assets/home/icon_library.png'), '二手书广场'),
+        HomeItem(route: '/game', icon: AssetImage('assets/home/icon_library.png'), title: '小游戏'),
+        HomeItem(route: '/wiki', icon: AssetImage('assets/home/icon_library.png'), title: 'Wiki'),
+        HomeItem(route: '/market', icon: AssetImage('assets/home/icon_library.png'), title: '二手书广场'),
       ]),
       const SizedBox(height: 40),
     ];

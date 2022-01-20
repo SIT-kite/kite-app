@@ -1,32 +1,21 @@
 import 'package:flutter/material.dart';
 
-class HomeItem extends StatefulWidget {
+class HomeItem extends StatelessWidget {
   final String route;
   final AssetImage icon;
   final String title;
+  final Future<String?> Function()? callback;
 
-  const HomeItem(this.route, this.icon, this.title, {Key? key}) : super(key: key);
-
-  @override
-  _HomeItemState createState() => _HomeItemState(route, icon, title);
-}
-
-class _HomeItemState extends State<HomeItem> {
-  String routeName;
-  AssetImage icon;
-  String title;
-  String subtitle = "加载中";
-
-  _HomeItemState(this.routeName, this.icon, this.title);
+  const HomeItem({required this.route, required this.icon, required this.title, this.callback, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final titleStyle = const TextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.bold);
-    final subtitleStyle = const TextStyle().copyWith(fontSize: 15);
 
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).pushNamed(routeName);
+        Navigator.of(context).pushNamed(route);
       },
       child: Container(
         decoration: BoxDecoration(
@@ -35,7 +24,17 @@ class _HomeItemState extends State<HomeItem> {
         child: ListTile(
           leading: Image(image: icon, height: 30, width: 30),
           title: Text(title, style: titleStyle),
-          subtitle: Text(subtitle, style: subtitleStyle),
+          subtitle: callback != null
+              ? FutureBuilder(
+                  future: callback!(),
+                  builder: (BuildContext build, AsyncSnapshot snapshot) {
+                    if (snapshot.hasData) {
+                      return Text(snapshot.data ?? '');
+                    }
+                    return const Text('加载中…');
+                  },
+                )
+              : Container(),
           dense: true,
         ),
       ),
