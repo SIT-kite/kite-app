@@ -19,6 +19,6 @@ class _ElectricityItemState extends State<ElectricityItem> {
 
   @override
   Widget build(BuildContext context) {
-    return const HomeItem(route: '/electricity', icon: AssetImage('assets/home/icon_daily_report.png'), title: '查电费');
+    return const HomeItem(route: '/electricity', icon: 'assets/home/icon_electricity.svg', title: '查电费');
   }
 }

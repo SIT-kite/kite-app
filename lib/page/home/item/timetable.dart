@@ -19,6 +19,6 @@ class _TimetableItemState extends State<TimetableItem> {
 
   @override
   Widget build(BuildContext context) {
-    return const HomeItem(route: '/timetable', icon: AssetImage('assets/home/icon_daily_report.png'), title: '课程表');
+    return const HomeItem(route: '/timetable', icon: 'assets/home/icon_timetable.svg', title: '课程表');
   }
 }

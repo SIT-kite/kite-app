@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 export 'item/electricity.dart';
 export 'item/expense.dart';
@@ -10,7 +11,7 @@ export 'item/timetable.dart';
 
 class HomeItem extends StatelessWidget {
   final String route;
-  final AssetImage icon;
+  final String icon;
   final String title;
   final Future<String?> Function()? callback;
 
@@ -30,7 +31,7 @@ class HomeItem extends StatelessWidget {
           color: Colors.white.withOpacity(0.6),
         ),
         child: ListTile(
-          leading: Image(image: icon, height: 30, width: 30),
+          leading: SvgPicture.asset(icon, height: 30, width: 30, color: Theme.of(context).primaryColor),
           title: Text(title, style: titleStyle),
           subtitle: callback != null
               ? FutureBuilder(
