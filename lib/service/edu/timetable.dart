@@ -13,15 +13,15 @@ class TimetableService extends AService implements TimetableDao {
   TimetableService(ASession session) : super(session);
 
   static List<Course> _parseTimetable(Map<String, dynamic> json) {
-    final List<Map<String, dynamic>> courseList = json["kbList"];
+    final List<dynamic> courseList = json["kbList"];
 
-    return courseList.map(Course.fromJson).toList();
+    return courseList.map((e) => Course.fromJson(e)).toList();
   }
 
   /// 获取课表
   @override
   Future<List<Course>> getTimetable(SchoolYear schoolYear, Semester semester) async {
-    var response = await session.post(
+    final response = await session.post(
       _timeTableUrl,
       queryParameters: {'gnmkdm': 'N253508'},
       data: {
