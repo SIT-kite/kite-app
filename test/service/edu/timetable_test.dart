@@ -1,19 +1,21 @@
-import 'package:flutter_test/flutter_test.dart';
+import 'package:kite/dao/edu.dart';
 import 'package:kite/entity/edu.dart';
 import 'package:kite/service/edu.dart';
 import 'package:kite/service/sso.dart';
-import 'package:logger/logger.dart';
 
-void main() {
-  var logger = Logger();
+import '../mock.dart';
+
+void main() async {
+  await init();
+  await login();
+  final session = SsoSession();
+  final eduSession = EduSession(session);
+  TimetableDao timetableDao = TimetableService(eduSession);
   test('timetable test', () async {
-    SsoSession session = SsoSession();
-    await session.login('', '');
-    var eduSession = EduSession(session);
-    var table = await TimetableService(eduSession).getTimetable(
+    var table = await timetableDao.getTimetable(
       const SchoolYear(2021),
       Semester.firstTerm,
     );
-    logger.i(table);
+    Log.info(table);
   });
 }
