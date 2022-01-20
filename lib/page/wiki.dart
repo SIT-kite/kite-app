@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kite/util/logger.dart';
+import 'package:universal_platform/universal_platform.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 const String _wikiUrl = 'https://kite.sunnysab.cn/wiki/';
@@ -17,7 +20,7 @@ class _WikiPageState extends State<WikiPage> {
   final Completer<WebViewController> _controller = Completer<WebViewController>();
 
   void _onShare() async {
-    print('分享当前页');
+    Log.info('分享当前页');
   }
 
   static Future<String> _getInjectionJs() async {
@@ -34,12 +37,18 @@ class _WikiPageState extends State<WikiPage> {
   }
 
   void _onPageFinished(String url) async {
-    if (!url.startsWith('https://kite.sunnysab.cn/wiki/')) {
+    if (!url.startsWith(_wikiUrl)) {
       return;
     }
     final controller = await _controller.future;
     final String js = await _getInjectionJs();
     controller.runJavascript(js);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    launch(_wikiUrl);
   }
 
   @override
@@ -54,14 +63,18 @@ class _WikiPageState extends State<WikiPage> {
           ),
         ],
       ),
-      body: WebView(
-        initialUrl: _wikiUrl,
-        javascriptMode: JavascriptMode.unrestricted,
-        onWebViewCreated: (WebViewController webViewController) {
-          _controller.complete(webViewController);
-        },
-        onPageStarted: _onPageFinished,
-      ),
+      body: UniversalPlatform.isDesktopOrWeb
+          ? const Center(
+              child: Text('请在弹出浏览器中查阅Wiki'),
+            )
+          : WebView(
+              initialUrl: _wikiUrl,
+              javascriptMode: JavascriptMode.unrestricted,
+              onWebViewCreated: (WebViewController webViewController) {
+                _controller.complete(webViewController);
+              },
+              onPageStarted: _onPageFinished,
+            ),
       floatingActionButton: FloatingActionButton(child: const Icon(Icons.menu), onPressed: _onMenuClicked),
     );
   }
