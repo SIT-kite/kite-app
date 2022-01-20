@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kite/entity/office.dart';
+import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/service/office.dart';
 import 'package:kite/util/flash.dart';
@@ -32,14 +33,13 @@ class OfficePage extends StatefulWidget {
 }
 
 class _OfficePageState extends State<OfficePage> {
-  OfficeSession? session;
   bool enableFilter = true;
 
   Future<List<SimpleFunction>> _fetchFuncList() async {
     final username = StoragePool.authSetting.currentUsername!;
     final password = StoragePool.authPool.get(username)!.password;
-    session = await officeLogin(username, password);
-    return await selectFunctionsByCountDesc(session!);
+    SessionPool.officeSession ??= await officeLogin(username, password);
+    return await selectFunctionsByCountDesc(SessionPool.officeSession!);
   }
 
   Widget _buildFunctionList(List<SimpleFunction> functionList) {
@@ -92,7 +92,7 @@ class _OfficePageState extends State<OfficePage> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => DetailPage(session!, function)),
+          MaterialPageRoute(builder: (_) => DetailPage(SessionPool.officeSession!, function)),
         );
       },
     );
@@ -124,8 +124,8 @@ class _OfficePageState extends State<OfficePage> {
   }
 
   void _navigateMessagePage() {
-    if (session != null) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (_) => MessagePage(session!)));
+    if (SessionPool.officeSession != null) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => MessagePage(SessionPool.officeSession!)));
     } else {
       showBasicFlash(context, const Text('办公模块还未登录，再试试？'));
     }
