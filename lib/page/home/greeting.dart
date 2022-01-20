@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/entity/weather.dart';
+import 'package:kite/global/bus.dart';
 import 'package:kite/global/storage_pool.dart';
 
 /// 计算入学时间, 默认按 9 月 1 日开学来算. 年份 entranceYear 是完整的年份, 如 2018.
@@ -19,8 +20,21 @@ class GreetingWidget extends StatefulWidget {
 class _GreetingWidgetState extends State<GreetingWidget> {
   int studyDays = 1;
   int campus = StoragePool.homeSetting.campus;
-  final Weather currentWeather = StoragePool.homeSetting.lastWeather;
+  Weather currentWeather = StoragePool.homeSetting.lastWeather;
+
   final textStyle = const TextStyle(color: Colors.white70, fontSize: 20);
+
+  @override
+  void initState() {
+    super.initState();
+    eventBus.on('onWeatherUpdate', _onWeatherUpdate);
+  }
+
+  @override
+  void deactivate() {
+    super.deactivate();
+    eventBus.off('onWeatherUpdate', _onWeatherUpdate);
+  }
 
   Future<int> _getStudyDays() async {
     final studentId = StoragePool.authSetting.currentUsername!;
@@ -40,6 +54,12 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   Widget _buildWeatherIcon(String iconCode) {
     return SvgPicture.asset('assets/weather/$iconCode.svg',
         width: 60, height: 60, fit: BoxFit.fill, color: Colors.white);
+  }
+
+  void _onWeatherUpdate(dynamic newWeather) {
+    setState(() {
+      currentWeather = newWeather as Weather;
+    });
   }
 
   Widget buildAll(BuildContext context) {

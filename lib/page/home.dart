@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kite/global/bus.dart';
+import 'package:kite/global/storage_pool.dart';
+import 'package:kite/service/weather.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -15,6 +18,13 @@ class HomePage extends StatelessWidget {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
+
+  void _updateWeather() {
+    Future.delayed(const Duration(milliseconds: 800), () async {
+      final weather = await getCurrentWeather(StoragePool.homeSetting.campus);
+      eventBus.emit('onWeatherUpdate', weather);
+    });
+  }
 
   void _onHomeRefresh() {
     _refreshController.refreshCompleted(resetFooterState: true);
@@ -101,6 +111,7 @@ class HomePage extends StatelessWidget {
     if (UniversalPlatform.isAndroid || UniversalPlatform.isIOS) {
       QuickButton.init(context);
     }
+    _updateWeather();
 
     return Scaffold(
       key: _scaffoldKey,

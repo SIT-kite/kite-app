@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather_bg_null_safety/bg/weather_bg.dart';
 import 'package:flutter_weather_bg_null_safety/utils/weather_type.dart';
+import 'package:kite/entity/weather.dart';
+import 'package:kite/global/bus.dart';
 import 'package:kite/global/storage_pool.dart';
 
 class HomeBackground extends StatefulWidget {
@@ -19,8 +21,28 @@ class _HomeBackgroundState extends State<HomeBackground> {
     _weatherCode = initialWeatherCode ?? int.parse(StoragePool.homeSetting.lastWeather.icon);
   }
 
+  @override
+  void initState() {
+    super.initState();
+    eventBus.on('onWeatherUpdate', _onWeatherUpdate);
+  }
+
+  @override
+  void deactivate() {
+    super.deactivate();
+    eventBus.off('onWeatherUpdate', _onWeatherUpdate);
+  }
+
   WeatherType _getWeatherTypeByCode(int code) {
     return weatherCodeToType[code] ?? WeatherType.sunny;
+  }
+
+  void _onWeatherUpdate(dynamic newWeather) {
+    Weather w = newWeather as Weather;
+
+    setState(() {
+      _weatherCode = int.parse(w.icon);
+    });
   }
 
   Widget _buildWeatherBg(Size windowSize) {
