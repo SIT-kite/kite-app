@@ -18,5 +18,9 @@ class Weather extends HiveObject {
 
   Weather(this.weather, this.temperature, this.ts, this.icon);
 
+  static Weather defaultWeather() {
+    return Weather('晴', 20, DateTime.now().toString(), '100');
+  }
+
   factory Weather.fromJson(Map<String, dynamic> json) => _$WeatherFromJson(json);
 }

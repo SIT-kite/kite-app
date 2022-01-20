@@ -1,11 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather_bg_null_safety/bg/weather_bg.dart';
 import 'package:flutter_weather_bg_null_safety/utils/weather_type.dart';
+import 'package:kite/global/storage_pool.dart';
 
-class HomeBackground extends StatelessWidget {
-  final int _weatherCode;
+class HomeBackground extends StatefulWidget {
+  final int? initialWeatherCode;
 
-  const HomeBackground(this._weatherCode, {Key? key}) : super(key: key);
+  const HomeBackground({this.initialWeatherCode, Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _HomeBackgroundState(initialWeatherCode);
+}
+
+class _HomeBackgroundState extends State<HomeBackground> {
+  late int _weatherCode;
+
+  _HomeBackgroundState(int? initialWeatherCode) {
+    _weatherCode = initialWeatherCode ?? int.parse(StoragePool.homeSetting.lastWeather.icon);
+  }
 
   WeatherType _getWeatherTypeByCode(int code) {
     return weatherCodeToType[code] ?? WeatherType.sunny;

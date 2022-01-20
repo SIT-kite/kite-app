@@ -9,13 +9,18 @@ int _calcStudyDays(int entranceYear) {
   return days;
 }
 
-class GreetingWidget extends StatelessWidget {
-  int studyDays = 1;
-  int campus = 1;
-  final Weather currentWeather;
-  final textStyle = const TextStyle(color: Colors.white70, fontSize: 20);
+class GreetingWidget extends StatefulWidget {
+  const GreetingWidget({Key? key}) : super(key: key);
 
-  GreetingWidget(this.currentWeather, {Key? key}) : super(key: key);
+  @override
+  State<StatefulWidget> createState() => _GreetingWidgetState();
+}
+
+class _GreetingWidgetState extends State<GreetingWidget> {
+  int studyDays = 1;
+  int campus = StoragePool.homeSetting.campus;
+  final Weather currentWeather = StoragePool.homeSetting.lastWeather;
+  final textStyle = const TextStyle(color: Colors.white70, fontSize: 20);
 
   Future<int> _getStudyDays() async {
     final studentId = StoragePool.authSetting.currentUsername!;
@@ -29,7 +34,7 @@ class GreetingWidget extends StatelessWidget {
 
   String _getCampusName() {
     if (campus == 1) return "奉贤校区";
-    return "徐汇校区";
+    return "徐汇";
   }
 
   Widget _buildWeatherIcon(String iconCode) {

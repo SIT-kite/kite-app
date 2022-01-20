@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:kite/entity/weather.dart';
-import 'package:kite/global/storage_pool.dart';
-import 'package:kite/service/weather.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -37,9 +34,9 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  List<Widget> buildFunctionWidgets(Weather weather) {
+  List<Widget> buildFunctionWidgets() {
     return [
-      GreetingWidget(weather),
+      const GreetingWidget(),
       const SizedBox(height: 20.0),
       const HomeItemGroup([
         HomeItem(route: '/electricity', icon: AssetImage('assets/home/icon_daily_report.png'), title: '电费查询'),
@@ -63,13 +60,13 @@ class HomePage extends StatelessWidget {
     ];
   }
 
-  Widget _buildBody(BuildContext context, Weather weather) {
+  Widget _buildBody(BuildContext context) {
     final windowSize = MediaQuery.of(context).size;
-    final items = buildFunctionWidgets(weather);
+    final items = buildFunctionWidgets();
 
     return Stack(
       children: [
-        HomeBackground(int.parse(weather.icon)),
+        const HomeBackground(),
         SmartRefresher(
           enablePullDown: true,
           enablePullUp: false,
@@ -107,16 +104,7 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       key: _scaffoldKey,
-      body: FutureBuilder<Weather>(
-        future: getCurrentWeather(StoragePool.homeSetting.campus),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final weather = snapshot.data!;
-            return _buildBody(context, weather);
-          }
-          return _buildBody(context, StoragePool.homeSetting.lastWeather);
-        },
-      ),
+      body: _buildBody(context),
       drawer: const KiteDrawer(),
     );
   }

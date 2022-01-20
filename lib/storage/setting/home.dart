@@ -25,7 +25,7 @@ class HomeSettingStorage implements HomeSettingDao {
   set campus(int v) => box.put(SettingKeyConstants.homeCampusKey, v);
 
   @override
-  Weather get lastWeather => box.get(SettingKeyConstants.homeLastWeather);
+  Weather get lastWeather => box.get(SettingKeyConstants.homeLastWeather, defaultValue: Weather.defaultWeather());
 
   @override
   set lastWeather(Weather weather) => box.put(SettingKeyConstants.homeLastWeather, weather);
