@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:kite/dao/setting/home.dart';
+import 'package:kite/entity/weather.dart';
 import 'package:kite/storage/setting/constants.dart';
 
 class HomeSettingStorage implements HomeSettingDao {
@@ -13,11 +14,19 @@ class HomeSettingStorage implements HomeSettingDao {
 
   @override
   String get backgroundMode => box.get(SettingKeyConstants.homeBackgroundModeKey, defaultValue: 'weather');
+
   @override
   set backgroundMode(String v) => box.put(SettingKeyConstants.homeBackgroundModeKey, v);
 
   @override
   int get campus => box.get(SettingKeyConstants.homeCampusKey, defaultValue: 1);
+
   @override
   set campus(int v) => box.put(SettingKeyConstants.homeCampusKey, v);
+
+  @override
+  Weather get lastWeather => box.get(SettingKeyConstants.homeLastWeather);
+
+  @override
+  set lastWeather(Weather weather) => box.put(SettingKeyConstants.homeLastWeather, weather);
 }

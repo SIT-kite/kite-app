@@ -7,6 +7,7 @@ import 'package:kite/dao/setting/home.dart';
 import 'package:kite/dao/setting/theme.dart';
 import 'package:kite/entity/auth_item.dart';
 import 'package:kite/entity/library/search_history.dart';
+import 'package:kite/entity/weather.dart';
 import 'package:kite/storage/network.dart';
 import 'package:kite/storage/setting/auth.dart';
 import 'package:kite/storage/setting/home.dart';
@@ -49,6 +50,7 @@ class StoragePool {
     final adapters = <TypeAdapter>[
       LibrarySearchHistoryItemAdapter(),
       AuthItemAdapter(),
+      WeatherAdapter(),
     ];
     // 先过滤出所有未注册过的adapter, 然后再批量注册
     adapters.where((e) => !Hive.isAdapterRegistered(e.typeId)).forEach(Hive.registerAdapter);

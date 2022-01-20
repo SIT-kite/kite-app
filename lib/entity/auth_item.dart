@@ -4,7 +4,7 @@ import 'package:kite/global/hive_type_id_pool.dart';
 part 'auth_item.g.dart';
 
 /// 用于存放认证信息
-@HiveType(typeId: HiveTypeIdPool.authItemTypeId)
+@HiveType(typeId: HiveTypeIdPool.authItem)
 class AuthItem extends HiveObject {
   @HiveField(0, defaultValue: '')
   String username = '';
