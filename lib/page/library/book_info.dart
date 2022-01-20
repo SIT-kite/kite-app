@@ -101,12 +101,14 @@ class _BookInfoPageState extends State<BookInfoPage> {
     );
   }
 
+  /// 构造馆藏信息列表
   Widget buildHolding(List<HoldingPreviewItem> items) {
     return Column(
       children: items.map(buildHoldingItem).toList(),
     );
   }
 
+  /// 构造标题样式的文本
   Widget buildTitle(String text) {
     return Text(
       text,
@@ -117,6 +119,7 @@ class _BookInfoPageState extends State<BookInfoPage> {
     );
   }
 
+  /// 构造邻近的书
   Widget buildBookItem(String bookId) {
     Future<BookImageHolding> get() async {
       final result = await widget.bookSearchDao.search(
@@ -150,7 +153,7 @@ class _BookInfoPageState extends State<BookInfoPage> {
               },
             );
           } else if (snapshot.hasError) {
-            return Text(snapshot.error.toString());
+            return Container();
           }
           return const CircularProgressIndicator();
         });
