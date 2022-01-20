@@ -13,10 +13,9 @@ class HomeItem extends StatelessWidget {
   final String route;
   final String icon;
   final String title;
-  final Future<String?> Function()? callback;
+  String? subtitle;
 
-  const HomeItem({required this.route, required this.icon, required this.title, this.callback, Key? key})
-      : super(key: key);
+  HomeItem({required this.route, required this.icon, required this.title, this.subtitle, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,17 +32,7 @@ class HomeItem extends StatelessWidget {
         child: ListTile(
           leading: SvgPicture.asset(icon, height: 30, width: 30, color: Theme.of(context).primaryColor),
           title: Text(title, style: titleStyle),
-          subtitle: callback != null
-              ? FutureBuilder(
-                  future: callback!(),
-                  builder: (BuildContext build, AsyncSnapshot snapshot) {
-                    if (snapshot.hasData) {
-                      return Text(snapshot.data ?? '');
-                    }
-                    return const Text('加载中…');
-                  },
-                )
-              : Container(),
+          subtitle: Text(subtitle ?? ''),
           dense: true,
         ),
       ),

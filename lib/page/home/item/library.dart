@@ -19,6 +19,6 @@ class _LibraryItemState extends State<LibraryItem> {
 
   @override
   Widget build(BuildContext context) {
-    return const HomeItem(route: '/library', icon: 'assets/home/icon_library.svg', title: '图书馆');
+    return HomeItem(route: '/library', icon: 'assets/home/icon_library.svg', title: '图书馆');
   }
 }

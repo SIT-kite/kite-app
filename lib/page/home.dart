@@ -94,7 +94,7 @@ class HomePage extends StatelessWidget {
       const SizedBox(height: 20.0),
       const HomeItemGroup([ElectricityItem(), ExpenseItem(), ScoreItem(), LibraryItem(), OfficeItem()]),
       const SizedBox(height: 20.0),
-      const HomeItemGroup([
+      HomeItemGroup([
         HomeItem(route: '/game', icon: 'assets/home/icon_game.svg', title: '小游戏'),
         HomeItem(route: '/wiki', icon: 'assets/home/icon_wiki.svg', title: 'Wiki'),
         HomeItem(route: '/market', icon: 'assets/home/icon_market.svg', title: '二手书广场'),

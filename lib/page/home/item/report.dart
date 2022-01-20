@@ -19,6 +19,6 @@ class _ReportItemState extends State<ReportItem> {
 
   @override
   Widget build(BuildContext context) {
-    return const HomeItem(route: '/report', icon: 'assets/home/icon_report.svg', title: '体温上报');
+    return HomeItem(route: '/report', icon: 'assets/home/icon_report.svg', title: '体温上报');
   }
 }

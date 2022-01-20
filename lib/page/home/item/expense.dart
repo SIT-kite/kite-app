@@ -19,6 +19,6 @@ class _ExpenseItemState extends State<ExpenseItem> {
 
   @override
   Widget build(BuildContext context) {
-    return const HomeItem(route: '/expense', icon: 'assets/home/icon_expense.svg', title: '消费');
+    return HomeItem(route: '/expense', icon: 'assets/home/icon_expense.svg', title: '消费');
   }
 }
