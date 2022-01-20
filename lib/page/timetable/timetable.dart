@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kite/page/timetable/bottom_sheet.dart';
-import 'package:kite/entity/edu/timetable.dart';
 import 'package:kite/page/timetable/daily_timetable.dart';
 
 class TimetablePage extends StatefulWidget {
