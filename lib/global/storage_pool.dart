@@ -45,9 +45,14 @@ class StoragePool {
   static NetworkStorage get network => _network;
 
   static Future<void> _registerAdapters() async {
-    await Hive.initFlutter();
-    Hive.registerAdapter(LibrarySearchHistoryItemAdapter());
-    Hive.registerAdapter(AuthItemAdapter());
+    final librarySearchHistoryItemAdapter = LibrarySearchHistoryItemAdapter();
+    final authItemAdapter = AuthItemAdapter();
+    if (!Hive.isAdapterRegistered(librarySearchHistoryItemAdapter.typeId)) {
+      Hive.registerAdapter(librarySearchHistoryItemAdapter);
+    }
+    if (!Hive.isAdapterRegistered(authItemAdapter.typeId)) {
+      Hive.registerAdapter(AuthItemAdapter());
+    }
   }
 
   static Future<void> init() async {
@@ -56,6 +61,7 @@ class StoragePool {
     final _prefs = await SharedPreferences.getInstance();
     _network = NetworkStorage(_prefs);
 
+    await Hive.initFlutter();
     await _registerAdapters();
 
     final searchHistoryBox = await Hive.openBox<LibrarySearchHistoryItem>('library.search_history');
@@ -69,5 +75,13 @@ class StoragePool {
     _homeSetting = HomeSettingStorage(settingBox);
     _themeSetting = ThemeSettingStorage(settingBox);
     Settings.init(cacheProvider: HiveCacheProvider(settingBox));
+  }
+
+  static Future<void> clear() async {
+    await Hive.close();
+
+    await Hive.deleteBoxFromDisk('setting');
+    await Hive.deleteBoxFromDisk('auth');
+    await Hive.deleteBoxFromDisk('library.search_history');
   }
 }
