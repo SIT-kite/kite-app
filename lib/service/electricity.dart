@@ -4,16 +4,18 @@ import 'package:kite/entity/electricity.dart';
 
 // TODO: 错误处理
 String _getElectricityUrl(String room, Mode mode) {
+  String url = 'https://kite.sunnysab.cn/api/v2/electricity/room/';
   switch (mode) {
     case Mode.balance:
-      return 'https://kite.sunnysab.cn/api/v2/electricity/room/$room';
+      url += '$room';break;
     case Mode.rank:
-      return 'https://kite.sunnysab.cn/api/v2/electricity/room/$room/rank';
+      url += '$room/rank';break;
     case Mode.condition_hours:
-      return 'https://kite.sunnysab.cn/api/v2/electricity/room/$room/bill/hours';
+      url += '$room/bill/hours';break;
     case Mode.condition_days:
-      return 'https://kite.sunnysab.cn/api/v2/electricity/room/$room/bill/days';
+      url += '$room/bill/days';break;
   }
+  return url;
 }
 
 Future<Balance> fetchBalance(String room) async {
