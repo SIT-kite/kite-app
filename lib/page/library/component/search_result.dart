@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/dao/library/book_search.dart';
 import 'package:kite/dao/library/holding_preview.dart';
 import 'package:kite/dao/library/image_search.dart';
+import 'package:kite/entity/library/book_search.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/page/library/component/search_result_item.dart';
 import 'package:kite/service/library.dart';
@@ -16,6 +17,9 @@ class BookSearchResultWidget extends StatefulWidget {
   /// 要搜索的关键字
   final String keyword;
 
+  /// 检索方式
+  final SearchWay searchWay;
+
   /// 图书搜索服务
   final BookSearchDao bookSearchDao = BookSearchService(SessionPool.librarySession);
 
@@ -26,7 +30,12 @@ class BookSearchResultWidget extends StatefulWidget {
   final HoldingPreviewDao holdingPreviewDao = HoldingPreviewService(SessionPool.librarySession);
 
   final KeyClickCallback? requestQueryKeyCallback;
-  BookSearchResultWidget(this.keyword, {Key? key, this.requestQueryKeyCallback}) : super(key: key);
+  BookSearchResultWidget(
+    this.keyword, {
+    Key? key,
+    this.requestQueryKeyCallback,
+    this.searchWay = SearchWay.title,
+  }) : super(key: key);
 
   @override
   _BookSearchResultWidgetState createState() => _BookSearchResultWidgetState();
@@ -54,12 +63,16 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
   /// 是否是成功加载第一页
   bool firstPageLoaded = false;
 
+  /// 当前的搜索方式
+  late SearchWay currentSearchWay;
+
   /// 获得搜索结果
   Future<List<BookImageHolding>> _get(int rows, int page) async {
     final searchResult = await widget.bookSearchDao.search(
       keyword: widget.keyword,
       rows: rows,
       page: page,
+      searchWay: currentSearchWay,
     );
 
     // 页数越界
@@ -137,10 +150,13 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
   @override
   void initState() {
     super.initState();
+    currentSearchWay = widget.searchWay;
+    // 获取第一页数据
     getData();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         Log.info('页面滑动到底部');
+        // 获取下一页数据
         getMore();
       }
     });
@@ -180,12 +196,59 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
     );
   }
 
+  Widget buildSearchWaySelector() {
+    return Container(
+      margin: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        border: Border.all(),
+      ),
+      child: Row(
+        children: <List<dynamic>>[
+          ['任意词', SearchWay.any],
+          ['标题名', SearchWay.title],
+          ['作者名', SearchWay.author],
+          ['ISBN号', SearchWay.isbn],
+        ].map((e) {
+          return Expanded(
+            child: InkWell(
+              child: Container(
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: e[1] == currentSearchWay ? Colors.blue : Colors.white,
+                  // border: Border.all(),
+                ),
+                child: Center(
+                  child: Text(
+                    e[0],
+                    style: TextStyle(
+                      color: e[1] == currentSearchWay ? Colors.white : Colors.black,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ),
+              onTap: () {
+                setState(() {
+                  currentSearchWay = e[1];
+                  firstPageLoaded = false;
+                  dataList = [];
+                  getData();
+                });
+              },
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Log.info('初始化列表');
     return Column(
       // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        buildSearchWaySelector(),
         Text('总结果数: $searchResultCount  用时: $useTime  已加载: $currentPage/$totalPage'),
         Expanded(
           child: firstPageLoaded
