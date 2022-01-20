@@ -18,6 +18,7 @@ class SsoSession extends ASession {
   static const String _loginUrl = '$_authServerUrl/login';
   static const String _needCaptchaUrl = '$_authServerUrl/needCaptcha.html';
   static const String _captchaUrl = '$_authServerUrl/captcha.html';
+  static const String _loginSuccessUrl = 'https://authserver.sit.edu.cn/authserver/index.do';
 
   // http客户端对象和缓存
   late Dio _dio;
@@ -37,10 +38,10 @@ class SsoSession extends ASession {
     Log.info('初始化 SsoSession');
     _dio = dio ?? SessionPool.dio;
 
-    if (jar == null) {
-      // 使用全局 cookieJar
-      _jar = jar ?? SessionPool.cookieJar;
-      _dio.interceptors.add(CookieManager(_jar));
+    // 使用全局 cookieJar
+    _jar = jar ?? SessionPool.cookieJar;
+    if (jar != null) {
+      _dio.interceptors.add(CookieManager(jar));
     }
   }
 
@@ -73,18 +74,23 @@ class SsoSession extends ASession {
 
   /// 带异常的登录
   Future<Response> login(String username, String password) async {
+    // 在 OA 登录时, 服务端会记录同一 cookie 用户登录次数和输入错误次数,
+    // 所以需要在登录前清除所有 cookie, 避免用户重试时出错.
+    _jar.deleteAll();
     final response = await _postLoginProcess(username, password);
     final page = BeautifulSoup(response.data);
 
-    // 桌面端报错
-    final authError = page.find('span', class_: 'auth_error');
-    // 手机版报错
-    final mobileError = page.find('span', id: 'msgError');
-    if (authError != null) {
-      throw CredentialsInvalidException(authError.text.trim());
+    final emptyPage = BeautifulSoup('');
+    // 桌面端报错提示
+    final authError = (page.find('span', id: 'msg', class_: 'auth_error') ?? emptyPage).text.trim();
+    // TODO: 支持移动端报错提示
+    final mobileError = (page.find('span', id: 'errorMsg') ?? emptyPage).text.trim();
+    if (authError.isNotEmpty || mobileError.isNotEmpty) {
+      throw CredentialsInvalidException(authError + mobileError);
     }
-    if (mobileError != null) {
-      throw CredentialsInvalidException(mobileError.text.trim());
+
+    if (response.realUri.toString() != _loginSuccessUrl) {
+      throw UnknownAuthException('未知错误');
     }
 
     isOnline = true;
@@ -123,13 +129,8 @@ class SsoSession extends ASession {
 
     /// 判断是否需要验证码
     Future<bool> _needCaptcha(String username) async {
-      var response = await _dio.get(
-        _needCaptchaUrl,
-        queryParameters: {
-          'username': username,
-          'pwdEncrypt2': 'pwdEncryptSalt',
-        },
-      );
+      var response =
+          await _dio.get(_needCaptchaUrl, queryParameters: {'username': username, 'pwdEncrypt2': 'pwdEncryptSalt'});
       return response.data == 'true';
     }
 
@@ -137,9 +138,7 @@ class SsoSession extends ASession {
     Future<String> _getCaptcha() async {
       var response = await _dio.get(
         _captchaUrl,
-        options: Options(
-          responseType: ResponseType.bytes,
-        ),
+        options: Options(responseType: ResponseType.bytes),
       );
       Uint8List captchaData = response.data;
       return base64Encode(captchaData);
@@ -190,7 +189,19 @@ class SsoSession extends ASession {
 
 class CredentialsInvalidException implements Exception {
   String msg;
+
   CredentialsInvalidException([this.msg = '']);
+
+  @override
+  String toString() {
+    return msg;
+  }
+}
+
+class UnknownAuthException implements Exception {
+  String msg;
+
+  UnknownAuthException([this.msg = '']);
 
   @override
   String toString() {
