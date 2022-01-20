@@ -12,7 +12,7 @@ void main() async {
   final eduSession = EduSession(session);
   TimetableDao timetableDao = TimetableService(eduSession);
   test('timetable test', () async {
-    var table = await timetableDao.getTimetable(
+    final table = await timetableDao.getTimetable(
       const SchoolYear(2021),
       Semester.firstTerm,
     );
