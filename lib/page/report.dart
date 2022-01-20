@@ -2,8 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kite/component/unsupported_platform_launch.dart';
 import 'package:kite/global/storage_pool.dart';
+import 'package:universal_platform/universal_platform.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+const _reportIndexUrl = 'http://xgfy.sit.edu.cn/h5/#/pages/index/index';
 
 class DailyReportPage extends StatefulWidget {
   const DailyReportPage({Key? key}) : super(key: key);
@@ -48,14 +52,16 @@ class _DailyReportPageState extends State<DailyReportPage> {
           ),
         ],
       ),
-      body: WebView(
-        initialUrl: 'http://xgfy.sit.edu.cn/h5/#/pages/index/index',
-        javascriptMode: JavascriptMode.unrestricted,
-        onWebViewCreated: (WebViewController webViewController) {
-          _controller.complete(webViewController);
-        },
-        onPageFinished: _onPageFinished,
-      ),
+      body: UniversalPlatform.isDesktopOrWeb
+          ? const UnsupportedPlatformUrlLauncher(_reportIndexUrl)
+          : WebView(
+              initialUrl: _reportIndexUrl,
+              javascriptMode: JavascriptMode.unrestricted,
+              onWebViewCreated: (WebViewController webViewController) {
+                _controller.complete(webViewController);
+              },
+              onPageFinished: _onPageFinished,
+            ),
     );
   }
 }
