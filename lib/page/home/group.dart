@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'item.dart';
-
 class HomeItemGroup extends StatelessWidget {
-  final List<HomeItem> _items;
+  final List<Widget> _items;
 
   const HomeItemGroup(this._items, {Key? key}) : super(key: key);
 

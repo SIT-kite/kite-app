@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
 
+export 'item/electricity.dart';
+export 'item/expense.dart';
+export 'item/library.dart';
+export 'item/office.dart';
+export 'item/report.dart';
+export 'item/score.dart';
+export 'item/timetable.dart';
+
 class HomeItem extends StatelessWidget {
   final String route;
   final AssetImage icon;

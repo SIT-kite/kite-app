@@ -29,7 +29,7 @@ class HomePage extends StatelessWidget {
   void _onHomeRefresh() {
     _refreshController.refreshCompleted(resetFooterState: true);
 
-    // TODO: Signal all functions to refresh.
+    eventBus.emit('onHomeRefresh');
   }
 
   Widget _buildTitleLine(BuildContext context) {
@@ -48,18 +48,9 @@ class HomePage extends StatelessWidget {
     return [
       const GreetingWidget(),
       const SizedBox(height: 20.0),
-      const HomeItemGroup([
-        HomeItem(route: '/electricity', icon: AssetImage('assets/home/icon_daily_report.png'), title: '电费查询'),
-        HomeItem(route: '/score', icon: AssetImage('assets/home/icon_daily_report.png'), title: '成绩'),
-        HomeItem(route: '/library', icon: AssetImage('assets/home/icon_library.png'), title: '图书馆'),
-        HomeItem(route: '/expense', icon: AssetImage('assets/home/icon_consumption.png'), title: '消费查询'),
-        HomeItem(route: "/timetable", icon: AssetImage('assets/home/icon_timetable.png'), title: '课程表')
-      ]),
+      const HomeItemGroup([TimetableItem(), ReportItem()]),
       const SizedBox(height: 20.0),
-      const HomeItemGroup([
-        HomeItem(route: '/report', icon: AssetImage('assets/home/icon_daily_report.png'), title: '体温上报'),
-        HomeItem(route: '/office', icon: AssetImage('assets/home/icon_library.png'), title: '办公')
-      ]),
+      const HomeItemGroup([ElectricityItem(), ExpenseItem(), ScoreItem(), LibraryItem(), OfficeItem()]),
       const SizedBox(height: 20.0),
       const HomeItemGroup([
         HomeItem(route: '/game', icon: AssetImage('assets/home/icon_library.png'), title: '小游戏'),
