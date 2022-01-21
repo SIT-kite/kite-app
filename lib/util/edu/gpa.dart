@@ -6,8 +6,11 @@ double calcGPA(List<Score> scoreList) {
   double sum = 0.0;
 
   for (var s in scoreList) {
-    totalCredits += s.credit;
-    sum == s.credit * s.value;
+    // 跳过未评教的课程
+    if (s.value >= 0) {
+      totalCredits += s.credit;
+      sum += s.credit * s.value;
+    }
   }
   return sum / totalCredits / 10.0 - 5.0;
 }
