@@ -13,21 +13,23 @@ class OfficeItem extends StatefulWidget {
 }
 
 class _OfficeItemState extends State<OfficeItem> {
-  String content = ''; // TODO: 此处使用默认值.
-  bool _isStartup = true;
+  String content = '默认文字'; // TODO: 此处使用默认值.
 
   @override
   void initState() {
-    eventBus.on(
-      'onHomeRefresh',
-      (_) {
-        (() async {
-          final String result = await _buildContent();
-          setState(() => content = result);
-        })();
-      },
-    );
+    eventBus.on('onHomeRefresh', _onHomeRefresh);
     return super.initState();
+  }
+
+  @override
+  void dispose() {
+    eventBus.off('onHomeRefresh', _onHomeRefresh);
+    super.dispose();
+  }
+
+  void _onHomeRefresh(_) async {
+    final String result = await _buildContent();
+    setState(() => content = result);
   }
 
   Future<String> _buildContent() async {
@@ -54,22 +56,6 @@ class _OfficeItemState extends State<OfficeItem> {
 
   @override
   Widget build(BuildContext context) {
-    final item = HomeItem(route: '/office', icon: 'assets/home/icon_office.svg', title: '办公');
-
-    if (_isStartup) {
-      _isStartup = false;
-      return item..subtitle = content;
-    } else {
-      return FutureBuilder<String>(
-          future: _buildContent(),
-          builder: (context, snapshot) {
-            content = '加载中';
-
-            if (snapshot.hasData) {
-              content = snapshot.data!;
-            }
-            return item..subtitle = content;
-          });
-    }
+    return HomeItem(route: '/office', icon: 'assets/home/icon_office.svg', title: '办公', subtitle: content);
   }
 }
