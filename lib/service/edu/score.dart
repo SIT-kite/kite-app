@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:kite/dao/edu.dart';
@@ -33,7 +32,8 @@ class ScoreService extends AService implements ScoreDao {
   @override
   Future<List<Score>> getScoreList(SchoolYear schoolYear, Semester semester) async {
     final response = await session.post(_scoreUrl, queryParameters: {
-      'gnmkdm': 'N305005'
+      'gnmkdm': 'N305005',
+      'doType': 'query',
     }, data: {
       // 学年名
       'xnm': schoolYear.toString(),
@@ -61,15 +61,10 @@ class ScoreService extends AService implements ScoreDao {
     return _parseDetailPage(response.data);
   }
 
-  static List<Score> _parseScoreListPage(String page) {
-    var jsonPage = jsonDecode(page);
-    List<Score> result = [];
-    for (var score in jsonPage["items"]) {
-      Score newScore = Score();
-      newScore = Score.fromJson(score);
-      result.add(newScore);
-    }
-    return result;
+  static List<Score> _parseScoreListPage(Map<String, dynamic> jsonPage) {
+    final List scoreList = jsonPage['items'];
+
+    return scoreList.map((e) => Score.fromJson(e as Map<String, dynamic>)).toList();
   }
 
   static ScoreDetail _mapToDetailItem(Bs4Element item) {
