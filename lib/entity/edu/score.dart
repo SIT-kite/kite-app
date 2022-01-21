@@ -33,9 +33,9 @@ class Score {
 
   /// 学分
   @JsonKey(name: 'xf', fromJson: stringToDouble)
-  final double credit = 0.0;
+  final double credit;
 
-  const Score(this.value, this.course, this.courseId, this.classId, this.schoolYear, this.semester);
+  const Score(this.value, this.course, this.courseId, this.classId, this.schoolYear, this.semester, this.credit);
 
   factory Score.fromJson(Map<String, dynamic> json) => _$ScoreFromJson(json);
 }
