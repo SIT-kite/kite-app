@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/entity/electricity.dart';
+import 'dart:io';
 
 const List<Color> _gradientColors = [
   Color(0xff23b6e6),
@@ -31,6 +32,7 @@ class _ChartState extends State<Chart> {
       bottomTitles = daysList.map((item) => item.date).toList();
     else
       bottomTitles = hoursList.map((item) => item.time).toList();
+
     return bottomTitles;
   }
 
@@ -38,18 +40,17 @@ class _ChartState extends State<Chart> {
     List<FlSpot> axisYData;
 
     if (isShowDays) {
-      int count = -1;
+      int count = 0;
       axisYData = daysList.map((item) {
-        count++;
-        return FlSpot(count.toDouble(), item.consumption);
+        return FlSpot((count++).toDouble(), item.consumption);
       }).toList();
     } else {
-      int count = -1;
+      int count = 0;
       axisYData = hoursList.map((item) {
-        count++;
-        return FlSpot(count.toDouble(), item.consumption);
+        return FlSpot((count++).toDouble(), item.consumption);
       }).toList();
     }
+    stderr.writeln(axisYData);
     return axisYData;
   }
 
@@ -132,7 +133,7 @@ class _ChartState extends State<Chart> {
       minX: 0,
       maxX: isShowDays ? 7 : 24,
       minY: 0,
-      maxY: _getMaxY(),
+      maxY: _getMaxY() == 0? 1 : _getMaxY(),
       lineBarsData: [
         LineChartBarData(
           spots: _getAxisYData(),

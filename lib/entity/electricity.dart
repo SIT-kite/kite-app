@@ -95,7 +95,7 @@ class ConditionHours {
   static double _toConsumption(double consumption) =>
       double.parse(consumption.toStringAsFixed(2));
 
-  static String _toTime(String time) => time.substring(11, 16);
+  static String _toTime(String time) => time.substring(11, 13);
 }
 
 @JsonSerializable()

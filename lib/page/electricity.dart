@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:kite/entity/electricity/util.dart';
 import 'package:kite/page/electricity/balance.dart';
 import 'package:kite/page/electricity/rank.dart';
 import 'package:kite/page/electricity/model.dart';
 import 'package:kite/page/electricity/chart.dart';
 import 'package:kite/service/electricity.dart';
 import 'package:kite/entity/electricity.dart';
+import 'dart:io';
 
 class ElectricityPage extends StatefulWidget {
   const ElectricityPage({Key? key}) : super(key: key);
@@ -16,11 +18,13 @@ class ElectricityPage extends StatefulWidget {
 class _ElectricityPageState extends State<ElectricityPage> {
   String building = '';
   String room = '';
+  Balance balance = new Balance();
+  Map<String, double> rank = {};
   List<ConditionHours> hoursList = [];
   List<ConditionDays> daysList = [];
   bool isShowBalance = true;
 
-  String checkRoomValid() {
+  String _checkRoomValid() {
     int buildingInt = 0;
     int roomInt = 0;
     try {
@@ -41,7 +45,6 @@ class _ElectricityPageState extends State<ElectricityPage> {
       final result = '10${buildingInt}${roomInt}';
       return result;
     } else {
-      buildModel(context, '输入格式有误');
       return 'error';
     }
   }
@@ -95,29 +98,45 @@ class _ElectricityPageState extends State<ElectricityPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         _buildButton('查询余额', Color(0xFF2e62cd), () {
-          String result = checkRoomValid();
+          String result = _checkRoomValid();
           if (result != 'error') {
-            setState(() {
-              isShowBalance = true;
-            });
+            fetchBalance('10$building$room')
+                .then((res) => {
+                      setState(() {
+                        balance = res;
+                      })
+                    })
+                .then((res) => setState(() {
+                      isShowBalance = true;
+                    }));
+          } else {
+            buildModel(context, '输入格式有误');
           }
         }),
         _buildButton('查询使用情况', Color(0xFFf08c00), () {
-          String result = checkRoomValid();
+          String result = _checkRoomValid();
           if (result != 'error') {
-            setState(() {
-              isShowBalance = false;
-            });
-            fetchConditionHours(room).then((res) {
+            getRank('10$building$room').then((res) {
               setState(() {
-                hoursList = res;
+                rank = res;
+              });
+              fetchConditionHours('10$building$room').then((res) {
+                setState(() {
+                  hoursList = res;
+                });
+              }).then((res) {
+                setState(() {
+                  isShowBalance = false;
+                });
+              });
+              fetchConditionDays('10$building$room').then((res) {
+                setState(() {
+                  daysList = res;
+                });
               });
             });
-            fetchConditionDays(room).then((res) {
-              setState(() {
-                daysList = res;
-              });
-            });
+          } else {
+            buildModel(context, '输入格式有误');
           }
         }),
       ],
@@ -141,27 +160,27 @@ class _ElectricityPageState extends State<ElectricityPage> {
             Container(
                 margin: const EdgeInsets.only(left: 80, right: 80),
                 child: _buildButtonBox()),
-            isShowBalance
+            isShowBalance && balance.room != ''
                 ? Container(
                     width: double.infinity,
                     margin: const EdgeInsets.only(
-                      top: 30,
+                      top: 20,
                       left: 10,
                       right: 10,
                     ),
-                    child: buildBalance(context, '10$building$room'),
+                    child: buildBalance(context, balance),
                   )
                 : Container(),
             isShowBalance
                 ? Container()
                 : Container(
                     margin: const EdgeInsets.only(
-                      top: 40,
-                      bottom: 40,
+                      top: 20,
+                      bottom: 10,
                       left: 40,
                       right: 40,
                     ),
-                    child: buildRank('10$building$room', daysList),
+                    child: buildRank(rank, daysList),
                   ),
             isShowBalance ? Container() : Chart(hoursList, daysList),
           ]),
