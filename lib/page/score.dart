@@ -29,7 +29,6 @@ class ScorePage extends StatefulWidget {
 class _ScorePageState extends State<ScorePage> {
   int selectedYear = 2021;
   Semester selectedSemester = Semester.firstTerm; // todo: use proper value.
-  late List<Score> _scoreList;
 
   final Widget _notFoundPicture = SvgPicture.asset(
     'assets/score/not-found.svg',
@@ -116,8 +115,8 @@ class _ScorePageState extends State<ScorePage> {
     ]);
   }
 
-  Widget _buildListView() {
-    return ListView(children: _scoreList.map((e) => ScoreItem(e)).toList());
+  List<Widget> _buildListView(List<Score> scoreList) {
+    return scoreList.map((e) => ScoreItem(e)).toList();
   }
 
   Widget _buildNoResult() {
@@ -143,12 +142,7 @@ class _ScorePageState extends State<ScorePage> {
 
           if (scoreList.isNotEmpty) {
             return SingleChildScrollView(
-              child: Column(
-                children: [
-                  GpaBanner(selectedSemester, _scoreList),
-                  _buildListView(),
-                ],
-              ),
+              child: Column(children: <Widget>[GpaBanner(selectedSemester, scoreList)] + _buildListView(scoreList)),
             );
           } else {
             return _buildNoResult();
