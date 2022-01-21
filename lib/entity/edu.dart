@@ -1,3 +1,4 @@
+export 'edu/evaluation.dart';
 export 'edu/exam.dart';
 export 'edu/score.dart';
 export 'edu/timetable.dart';
