@@ -7,7 +7,6 @@ import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/storage/setting/constants.dart';
 import 'package:kite/util/validation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -53,7 +52,6 @@ class SettingPage extends StatelessWidget {
         positiveActionBuilder: (context, controller, _) {
           return TextButton(
               onPressed: () async {
-                (await SharedPreferences.getInstance()).clear();
                 await StoragePool.clear();
                 // 重启应用
                 Phoenix.rebirth(context);

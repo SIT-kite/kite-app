@@ -8,13 +8,12 @@ import 'package:kite/dao/setting/theme.dart';
 import 'package:kite/entity/auth_item.dart';
 import 'package:kite/entity/library/search_history.dart';
 import 'package:kite/entity/weather.dart';
-import 'package:kite/storage/network.dart';
 import 'package:kite/storage/setting/auth.dart';
 import 'package:kite/storage/setting/home.dart';
+import 'package:kite/storage/setting/network.dart';
 import 'package:kite/storage/setting/theme.dart';
 import 'package:kite/util/hive_cache_provider.dart';
 import 'package:kite/util/logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../storage/auth_pool.dart';
 import '../storage/library/search_history.dart';
@@ -41,9 +40,9 @@ class StoragePool {
 
   static AuthSettingDao get authSetting => _authSetting;
 
-  static late NetworkStorage _network;
+  static late NetworkSettingStorage _networkSetting;
 
-  static NetworkStorage get network => _network;
+  static NetworkSettingStorage get network => _networkSetting;
 
   static Future<void> _registerAdapters() async {
     void registerAdapter<T>(TypeAdapter<T> adapter) {
@@ -60,9 +59,6 @@ class StoragePool {
   static Future<void> init() async {
     Log.info("初始化StoragePool");
 
-    final _prefs = await SharedPreferences.getInstance();
-    _network = NetworkStorage(_prefs);
-
     await Hive.initFlutter();
     await _registerAdapters();
 
@@ -76,6 +72,7 @@ class StoragePool {
     _authSetting = AuthSettingStorage(settingBox);
     _homeSetting = HomeSettingStorage(settingBox);
     _themeSetting = ThemeSettingStorage(settingBox);
+    _networkSetting = NetworkSettingStorage(settingBox);
     Settings.init(cacheProvider: HiveCacheProvider(settingBox));
   }
 

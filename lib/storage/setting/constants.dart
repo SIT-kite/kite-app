@@ -12,4 +12,8 @@ class SettingKeyConstants {
 
   static final themeNamespace = Path().forward('theme');
   static final themeColorKey = themeNamespace.forward('color').toString();
+
+  static final networkNamespace = Path().forward('network');
+  static final networkProxyKey = networkNamespace.forward('proxy').toString();
+  static final networkUseProxyKey = networkNamespace.forward('useProxy').toString();
 }
