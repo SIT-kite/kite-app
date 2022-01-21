@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:kite/entity/edu/timetable.dart';
+import 'package:kite/entity/edu.dart';
+import 'package:kite/mock/edu/timetable.dart';
 import 'package:kite/page/timetable/bottom_sheet.dart';
+import 'package:kite/dao/edu/timetable.dart';
+import 'package:kite/global/session_pool.dart';
+import 'package:kite/page/timetable/constant.dart';
+import 'package:kite/service/edu.dart';
+
 
 class DailyTimetable extends StatefulWidget {
   const DailyTimetable({Key? key}) : super(key: key);
@@ -10,8 +16,17 @@ class DailyTimetable extends StatefulWidget {
 }
 
 class _DailyTimetableState extends State<DailyTimetable> {
+
+  TimetableDao timetableDao = TimetableMock();
+  final SchoolYear currSchoolYear = const SchoolYear(2021);
+  final Semester currSemester = Semester.firstTerm;
+
+  static const String courseIconPath = 'assets/timetable/course/';
+
   late Size _deviceSize;
-  List<Course> _currDayCourseList = <Course>[];
+  List<Course> courseList = <Course>[];
+  List<Course> currDayCourseList = <Course>[];
+  List<int> currDay = [0,0];
   final List<int> tapped = [1, 1];
   bool isInitialized = false;
 
@@ -32,27 +47,37 @@ class _DailyTimetableState extends State<DailyTimetable> {
     "日",
   ];
 
-  void initialize() {
+  void initialize() async{
     // TODO: 获取课程列表
     // TODO:获取起始日期
-    // TODO: 获取当前的课程列表
 
+    // 拉取课程数据
+    // courseList = await timetableDao.getTimetable(currSchoolYear, currSemester);
+    // print(courseList.toString());
+
+    // 解析当日课程列表
+    currDayCourseList = _getCourseListByWeekAndDay(currDay[0], currDay[1]);
+
+  }
+
+  List<Course> _getCourseListByWeekAndDay(int weekIndex, int dayIndex) {
     // 测试数据
     Map<String, dynamic> testData = {
-      "kcmc": "体育",
-      "xqjmc": "星期二",
+      "kcmc": "信息安全技术",
+      "xqjmc": "星期一",
       "jcs": "5-6",
-      "zcd": "1-9周",
-      "cdmc": "东操场",
-      "xm": "谢晴",
+      "zcd": "1-5周",
+      "cdmc": "二教F206",
+      "xm": "张成姝",
       "xqmc": "奉贤校区",
       "xf": "2",
-      "zxs": "24",
-      "jxbmc": "2202356",
-      "kch": "B4035126",
+      "zxs": "28",
+      "jxbmc": "2002356",
+      "kch": "B4045126",
     };
-    _currDayCourseList.add(Course.fromJson(testData));
-
+    List<Course> res = <Course>[Course.fromJson(testData)];
+    print(res);
+    return  res;
   }
 
   @override
@@ -63,6 +88,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
       initialize();
       isInitialized = true;
     }
+    print(currDayCourseList.toString());
     return PageView.builder(
       controller: PageController(viewportFraction: 1.0),
       scrollDirection: Axis.horizontal,
@@ -80,7 +106,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
               flex: 9,
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 15),
-                children: _currDayCourseList.map((e) => _buildClassCard(context, e)).toList(),
+                children: currDayCourseList.map((e) => _buildClassCard(context, e)).toList(),
               ),
             )
           ],
@@ -121,7 +147,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
                           setState(() {
                             tapped[0] = weekIndex + 1;
                             tapped[1] = index;
-                            _currDayCourseList = _getCourseListByWeekAndDay(weekIndex + 1, index);
+                            currDayCourseList = _getCourseListByWeekAndDay(weekIndex + 1, index);
                           });
                         },
                         child: Container(
@@ -170,10 +196,8 @@ class _DailyTimetableState extends State<DailyTimetable> {
             child: Column(
               children: [
                 ListTile(
-                    leading: const Icon(
-                      Icons.cabin,
-                      size: 50.0,
-                    ),
+                  leading: Image.asset(courseIconPath+
+                      CourseCategory.courseToCategory[course.courseName].toString()+'.png'),
                     title: Text(course.courseName.toString()),
                     subtitle: Column(
                       children: [
@@ -221,23 +245,4 @@ class _DailyTimetableState extends State<DailyTimetable> {
     );
   }
 
-  List<Course> _getCourseListByWeekAndDay(int weekIndex, int dayIndex) {
-
-    // 测试数据
-    Map<String, dynamic> testData = {
-      "kcmc": "信息安全技术",
-      "xqjmc": "星期一",
-      "jcs": "1-2",
-      "zcd": "1-5周",
-      "cdmc": "二教F206",
-      "xm": "张成姝",
-      "xqmc": "奉贤校区",
-      "xf": "2",
-      "zxs": "28",
-      "jxbmc": "2002356",
-      "kch": "B4045126",
-    };
-    List<Course> res = <Course>[Course.fromJson(testData)];
-    return  res;
-  }
 }
