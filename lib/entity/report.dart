@@ -6,7 +6,7 @@ part 'report.g.dart';
 class ReportHistory {
   /// 上报日期, 格式如 20220118.
   @JsonKey(name: 'batchno')
-  final String date;
+  final int date;
 
   /// 当前所在位置 "省-市-区县"
   @JsonKey(name: 'position')
@@ -14,7 +14,7 @@ class ReportHistory {
 
   /// 体温是否正常 （≤37.3℃）
   @JsonKey(name: 'wendu')
-  final bool isNormal;
+  final int isNormal;
 
   const ReportHistory(this.date, this.place, this.isNormal);
 
