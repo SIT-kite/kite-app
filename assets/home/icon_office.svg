@@ -2,9 +2,6 @@
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg class="icon" height="200" p-id="4332" t="1642685248527" version="1.1" viewBox="0 0 1024 1024"
   width="200" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <style type="text/css"></style>
-  </defs>
   <path
     d="M607.232 896a32 32 0 1 1 0 64H192a96 96 0 0 1-96-96V160a96 96 0 0 1 96-96h544a96 96 0 0 1 96 96 32 32 0 0 1-64 0 32 32 0 0 0-32-32H192a32 32 0 0 0-32 32v704a32 32 0 0 0 32 32h415.232zM832 585.76v146.656c0 42.656-64 42.656-64 0v-146.656c0-42.688 64-42.688 64 0z"
     p-id="4333"></path>
