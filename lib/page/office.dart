@@ -3,7 +3,6 @@ import 'package:kite/entity/office.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/service/office.dart';
-import 'package:kite/util/flash.dart';
 
 import 'office/detail.dart';
 import 'office/message.dart';
@@ -33,42 +32,56 @@ class OfficePage extends StatefulWidget {
 }
 
 class _OfficePageState extends State<OfficePage> {
-  bool enableFilter = true;
+  bool _isOfficeLogin = SessionPool.officeSession != null;
+  bool _enableFilter = true;
+  List<SimpleFunction> _allFunctions = [];
+  String? _lastError;
+
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () async {
+      try {
+        final functionList = await _fetchFuncList();
+        setState(() {
+          _allFunctions = functionList;
+          _lastError = null;
+        });
+      } on OfficeLoginException catch (e) {
+        setState(() {
+          _lastError = e.toString();
+        });
+      }
+    });
+    return super.initState();
+  }
 
   Future<List<SimpleFunction>> _fetchFuncList() async {
-    final username = StoragePool.authSetting.currentUsername!;
-    final password = StoragePool.authPool.get(username)!.password;
-    SessionPool.officeSession ??= await officeLogin(username, password);
+    if (!_isOfficeLogin) {
+      final username = StoragePool.authSetting.currentUsername!;
+      final password = StoragePool.authPool.get(username)!.password;
+      SessionPool.officeSession ??= await officeLogin(username, password);
+      _isOfficeLogin = true;
+    }
     return await selectFunctionsByCountDesc(SessionPool.officeSession!);
   }
 
   Widget _buildFunctionList(List<SimpleFunction> functionList) {
     return ListView(
       children: functionList
-          .where((element) => commonUse.contains(element.id) || !enableFilter)
+          .where((element) => commonUse.contains(element.id) || !_enableFilter)
           .map(buildFunctionItem)
           .toList(),
     );
   }
 
   Widget _buildBody() {
-    return FutureBuilder<List<SimpleFunction>>(
-      future: _fetchFuncList(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final List<SimpleFunction> result = snapshot.data!;
-          return _buildFunctionList(result);
-        } else if (snapshot.hasError) {
-          return Center(child: Text(snapshot.error.toString()));
-        }
-        return const Center(child: CircularProgressIndicator());
-      },
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
+    if (_lastError != null) {
+      return Center(child: Text(_lastError!));
+    } else if (_allFunctions.isNotEmpty) {
+      return _buildFunctionList(_allFunctions);
+    } else {
+      return const Center(child: CircularProgressIndicator());
+    }
   }
 
   Widget _buildNotice() {
@@ -107,10 +120,10 @@ class _OfficePageState extends State<OfficePage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Checkbox(
-                  value: enableFilter,
+                  value: _enableFilter,
                   onChanged: (bool? value) {
                     setState(() {
-                      enableFilter = value ?? true;
+                      _enableFilter = value ?? true;
                     });
                   },
                 ),
@@ -124,11 +137,7 @@ class _OfficePageState extends State<OfficePage> {
   }
 
   void _navigateMessagePage() {
-    if (SessionPool.officeSession != null) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (_) => MessagePage(SessionPool.officeSession!)));
-    } else {
-      showBasicFlash(context, const Text('办公模块还未登录，再试试？'));
-    }
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => MessagePage(SessionPool.officeSession!)));
   }
 
   @override
@@ -146,12 +155,14 @@ class _OfficePageState extends State<OfficePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _navigateMessagePage,
-        tooltip: '我的消息',
-        child: const Icon(Icons.mail_outline),
-        backgroundColor: Colors.blue,
-      ),
+      floatingActionButton: _isOfficeLogin
+          ? FloatingActionButton(
+              onPressed: _navigateMessagePage,
+              tooltip: '我的消息',
+              child: const Icon(Icons.mail_outline),
+              backgroundColor: Colors.blue,
+            )
+          : null,
     );
   }
 }
