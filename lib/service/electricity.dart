@@ -20,7 +20,12 @@ String _getElectricityUrl(String room, Mode mode) {
 Future<Balance> fetchBalance(String room) async {
   final url = _getElectricityUrl(room, Mode.balance);
   final response = await Dio().get(url);
-  final balance = Balance.fromJson(response.data['data']);
+  var balance;
+  try {
+    balance = Balance.fromJson(response.data['data']);
+  } catch(e) {
+    balance = new Balance();
+  }
 
   return balance;
 }

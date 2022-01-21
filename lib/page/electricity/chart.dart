@@ -1,7 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/entity/electricity.dart';
-import 'dart:io';
 
 const List<Color> _gradientColors = [
   Color(0xff23b6e6),
@@ -50,7 +49,6 @@ class _ChartState extends State<Chart> {
         return FlSpot((count++).toDouble(), item.consumption);
       }).toList();
     }
-    stderr.writeln(axisYData);
     return axisYData;
   }
 
@@ -166,7 +164,7 @@ class _ChartState extends State<Chart> {
             // ),
             child: Padding(
               padding: const EdgeInsets.only(
-                  right: 24, left: 24, top: 20, bottom: 0),
+                  right: 24, left: 24, top: 0, bottom: 0),
               child: _buildLineChart(_getBottomTitles()),
             ),
           ),

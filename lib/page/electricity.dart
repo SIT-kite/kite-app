@@ -6,7 +6,6 @@ import 'package:kite/page/electricity/model.dart';
 import 'package:kite/page/electricity/chart.dart';
 import 'package:kite/service/electricity.dart';
 import 'package:kite/entity/electricity.dart';
-import 'dart:io';
 
 class ElectricityPage extends StatefulWidget {
   const ElectricityPage({Key? key}) : super(key: key);
@@ -102,9 +101,11 @@ class _ElectricityPageState extends State<ElectricityPage> {
           if (result != 'error') {
             fetchBalance('10$building$room')
                 .then((res) => {
-                      setState(() {
-                        balance = res;
-                      })
+                      res.room != ''
+                          ? setState(() {
+                              balance = res;
+                            })
+                          : buildModel(context, '该房间不存在, 请重新输入!')
                     })
                 .then((res) => setState(() {
                       isShowBalance = true;
