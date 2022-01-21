@@ -9,9 +9,9 @@ class CourseEvaluationService extends AService implements CourseEvaluationDao {
   CourseEvaluationService(ASession session) : super(session);
 
   List<CourseToEvaluate> _parseEvaluationList(Map<String, dynamic> page) {
-    final List examList = page['items'];
+    final List evaluationList = page['items'];
 
-    return examList.map((e) => CourseToEvaluate.fromJson(e as Map<String, dynamic>)).toList();
+    return evaluationList.map((e) => CourseToEvaluate.fromJson(e as Map<String, dynamic>)).toList();
   }
 
   @override

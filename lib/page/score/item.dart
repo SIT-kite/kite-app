@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kite/entity/edu.dart';
 import 'package:kite/global/session_pool.dart';
+import 'package:kite/page/score/evaluation.dart';
 import 'package:kite/service/edu.dart';
+import 'package:kite/service/edu/evaluation.dart';
 
 class ScoreItem extends StatefulWidget {
   final Score _score;
@@ -50,6 +52,40 @@ class _ScoreItemState extends State<ScoreItem> {
     );
   }
 
+  Widget _buildScoreValueView() {
+    const style = TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.blue);
+
+    if (!_score.value.isNaN) {
+      return Text(_score.value.toString(), style: style);
+    } else {
+      // 获取评教列表. 然后找到与当前课程有关的, 将评教页面呈现给用户.
+      final future = CourseEvaluationService(SessionPool.eduSession).getEvaluationList();
+
+      return FutureBuilder<List<CourseToEvaluate>>(
+          future: future,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final coursesToEvaluate =
+                  (snapshot.data!).where((element) => element.dynClassId.startsWith(_score.classId)).toList();
+
+              if (coursesToEvaluate.isNotEmpty) {
+                return GestureDetector(
+                  child: const Text('去评教', style: style),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (_) => EvaluationPage(coursesToEvaluate)));
+                  },
+                );
+              } else {
+                return const Text('评教不可用');
+              }
+            } else if (snapshot.hasError) {
+              return Text(snapshot.error.runtimeType.toString());
+            }
+            return const CircularProgressIndicator();
+          });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -60,10 +96,7 @@ class _ScoreItemState extends State<ScoreItem> {
         ListTile(
           title: Text(_score.course, style: const TextStyle(fontWeight: FontWeight.bold)),
           subtitle: Text('${_score.courseId[0] != 'G' ? '必修' : '选修'} | 学分: ${_score.credit}'),
-          trailing: Text(
-            '${(!_score.value.isNaN) ? _score.value : '去评教'}',
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.blue),
-          ),
+          trailing: _buildScoreValueView(),
           onTap: () => setState(() {
             _isExpanded = !_isExpanded;
           }),

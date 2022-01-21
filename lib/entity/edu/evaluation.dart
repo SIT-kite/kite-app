@@ -29,7 +29,7 @@ class CourseToEvaluate {
   final String innerClassId;
 
   /// 评教编号
-  @JsonKey(name: 'pjmbmcb_id')
+  @JsonKey(name: 'pjmbmcb_id', defaultValue: '')
   final String evaluationId;
 
   /// 评教状态
