@@ -37,7 +37,7 @@ class _ScoreItemState extends State<ScoreItem> {
 
   Widget _buildScoreDetail() {
     final future =
-        ScoreService(SessionPool.eduSession).getScoreDetail(_score.classId, _score.schoolYear, _score.semester);
+        ScoreService(SessionPool.eduSession).getScoreDetail(_score.innerClassId, _score.schoolYear, _score.semester);
 
     return FutureBuilder(
       future: future,
@@ -66,7 +66,7 @@ class _ScoreItemState extends State<ScoreItem> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final coursesToEvaluate =
-                  (snapshot.data!).where((element) => element.dynClassId.startsWith(_score.classId)).toList();
+                  (snapshot.data!).where((element) => element.dynClassId.startsWith(_score.dynClassId)).toList();
 
               if (coursesToEvaluate.isNotEmpty) {
                 return GestureDetector(

@@ -19,9 +19,13 @@ class Score {
   @JsonKey(name: 'kch')
   final String courseId;
 
-  /// 班级
+  /// 班级 （正方内部使用）
   @JsonKey(name: 'jxb_id')
-  final String classId;
+  final String innerClassId;
+
+  /// 班级ID （数字）
+  @JsonKey(name: 'jxbmc')
+  final String dynClassId;
 
   /// 学年
   @JsonKey(name: 'xnmmc', fromJson: formFieldToSchoolYear, toJson: schoolYearToFormField)
@@ -35,7 +39,8 @@ class Score {
   @JsonKey(name: 'xf', fromJson: stringToDouble)
   final double credit;
 
-  const Score(this.value, this.course, this.courseId, this.classId, this.schoolYear, this.semester, this.credit);
+  const Score(this.value, this.course, this.courseId, this.innerClassId, this.schoolYear, this.semester, this.credit,
+      this.dynClassId);
 
   factory Score.fromJson(Map<String, dynamic> json) => _$ScoreFromJson(json);
 }

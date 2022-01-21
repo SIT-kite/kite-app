@@ -67,8 +67,7 @@ function post(path, params, method='post') {
   document.body.appendChild(form);
   form.submit();
 }
-post($path, $formString);
-    ''';
+post("$path", $formString);''';
   }
 
   List<WebViewCookie> _loadCookieFromCookieJar() {
@@ -102,6 +101,7 @@ post($path, $formString);
       ),
       body: WebView(
         initialCookies: _loadCookieFromCookieJar(),
+        javascriptMode: JavascriptMode.unrestricted,
         onWebViewCreated: (controller) async {
           String js = _generateJs(_evaluationPageUrl, _getForm(coursesToEvaluate[index]));
 
