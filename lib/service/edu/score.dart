@@ -67,14 +67,15 @@ class ScoreService extends AService implements ScoreDao {
   }
 
   static ScoreDetail _mapToDetailItem(Bs4Element item) {
-    f1(s) => s.replaceAll("&nbsp;", "");
-    f2(s) => s.replaceAll("【 ", "").replaceAll(" 】", "");
+    f1(s) => s.replaceAll('&nbsp;', '').replaceAll(' ', '');
+    f2(s) => s.replaceAll('【', '').replaceAll('】', '');
+    f(s) => f1(f2(s));
 
     String type = item.find(_scoreFormSelector)!.innerHtml.trim();
     String percentage = item.find(_scorePercentageSelector)!.innerHtml.trim();
-    double value = double.tryParse(item.find(_scoreValueSelector)!.innerHtml) ?? double.nan;
+    String value = item.find(_scoreValueSelector)!.innerHtml;
 
-    return ScoreDetail(scoreType: f1(type), percentage: f2(percentage), value: value);
+    return ScoreDetail(f(type), f(percentage), double.tryParse(f(value)) ?? double.nan);
   }
 
   static List<ScoreDetail> _parseDetailPage(String htmlPage) {

@@ -10,12 +10,12 @@ enum Semester {
 
 class SchoolYear {
   static const all = SchoolYear(null);
-  final int? _year;
+  final int? year;
 
-  const SchoolYear(this._year);
+  const SchoolYear(this.year);
 
   @override
   String toString() {
-    return (_year ?? '').toString();
+    return (year ?? '').toString();
   }
 }

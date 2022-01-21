@@ -1,46 +1,43 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:kite/service/edu/util.dart';
+
+import '../edu.dart';
 
 part 'score.g.dart';
 
 @JsonSerializable()
 class Score {
-  @JsonKey(name: 'cj', fromJson: _stringToDouble)
-  // 成绩
-  double value = 0.0;
-  @JsonKey(name: 'kcmc')
-  // 课程
-  String course = "";
-  @JsonKey(name: 'kch')
-  // 课程代码
-  String courseId = "";
-  @JsonKey(name: 'jxb_id')
-  // 班级
-  String classId = "";
-  @JsonKey(name: 'xnmmc')
-  // 学年
-  String schoolYear = "";
-  @JsonKey(name: 'xqm', fromJson: _stringToSemester)
-  // 学期
-  int semester = -1;
-  @JsonKey(name: 'xf', fromJson: _stringToDouble)
-  // 学分
-  double credit = 0.0;
+  /// 成绩
+  @JsonKey(name: 'cj', fromJson: stringToDouble)
+  final double value;
 
-  Score();
+  /// 课程
+  @JsonKey(name: 'kcmc')
+  final String course;
+
+  /// 课程代码
+  @JsonKey(name: 'kch')
+  final String courseId;
+
+  /// 班级
+  @JsonKey(name: 'jxb_id')
+  final String classId;
+
+  /// 学年
+  @JsonKey(name: 'xnmmc', fromJson: formFieldToSchoolYear, toJson: schoolYearToFormField)
+  final SchoolYear schoolYear;
+
+  /// 学期
+  @JsonKey(name: 'xqm', fromJson: formFieldToSemester)
+  final Semester semester;
+
+  /// 学分
+  @JsonKey(name: 'xf', fromJson: stringToDouble)
+  final double credit = 0.0;
+
+  const Score(this.value, this.course, this.courseId, this.classId, this.schoolYear, this.semester);
 
   factory Score.fromJson(Map<String, dynamic> json) => _$ScoreFromJson(json);
-
-  @override
-  String toString() {
-    return 'Score{score: $value, course: $course, courseId: $courseId, classId: $classId, schoolYear: $schoolYear, semester: $semester, credit: $credit}';
-  }
-
-  static int _stringToSemester(String s) {
-    Map<String, int> semester = {'': 0, '3': 1, '12': 2, '16': 3};
-    return semester[s] ?? -1;
-  }
-
-  static double _stringToDouble(String s) => double.tryParse(s) ?? double.nan;
 }
 
 class ScoreDetail {
@@ -53,9 +50,9 @@ class ScoreDetail {
   /// 成绩数值
   final double value;
 
-  const ScoreDetail({
-    this.scoreType = "",
-    this.percentage = "",
-    this.value = 0.0,
-  });
+  const ScoreDetail(
+    this.scoreType,
+    this.percentage,
+    this.value,
+  );
 }
