@@ -27,10 +27,11 @@ class _ChartState extends State<Chart> {
 
   List<String> _getBottomTitles() {
     List<String> bottomTitles;
-    if (isShowDays)
+    if (isShowDays) {
       bottomTitles = daysList.map((item) => item.date).toList();
-    else
+    } else {
       bottomTitles = hoursList.map((item) => item.time).toList();
+    }
 
     return bottomTitles;
   }
@@ -55,21 +56,21 @@ class _ChartState extends State<Chart> {
   double _getMaxY() {
     double maxY = 0;
     if (isShowDays) {
-      daysList.forEach((item) {
+      for (var item in daysList) {
         maxY = maxY > item.consumption ? maxY : item.consumption;
-      });
+      }
     } else {
-      hoursList.forEach((item) {
+      for (var item in hoursList) {
         maxY = maxY > item.consumption ? maxY : item.consumption;
-      });
+      }
     }
     return maxY;
   }
 
   LineChart _buildLineChart(bottomTitles) {
     return LineChart(LineChartData(
-      lineTouchData: LineTouchData(touchTooltipData: LineTouchTooltipData(
-          getTooltipItems: (List<LineBarSpot> touchedSpots) {
+      lineTouchData:
+          LineTouchData(touchTooltipData: LineTouchTooltipData(getTooltipItems: (List<LineBarSpot> touchedSpots) {
         return touchedSpots.map((LineBarSpot touchedSpot) {
           final textStyle = TextStyle(
             color: touchedSpot.bar.colors[0],
@@ -103,13 +104,9 @@ class _ChartState extends State<Chart> {
           showTitles: true,
           reservedSize: 20,
           interval: isShowDays ? 1 : 3,
-          getTextStyles: (context, value) => const TextStyle(
-              color: Color(0xff68737d),
-              fontWeight: FontWeight.bold,
-              fontSize: 14),
-          getTitles: (value) => bottomTitles.length == 8 && value.toInt() > 7
-              ? ''
-              : bottomTitles[value.toInt()],
+          getTextStyles: (context, value) =>
+              const TextStyle(color: Color(0xff68737d), fontWeight: FontWeight.bold, fontSize: 14),
+          getTitles: (value) => bottomTitles.length == 8 && value.toInt() > 7 ? '' : bottomTitles[value.toInt()],
           margin: 4,
         ),
         leftTitles: SideTitles(
@@ -125,13 +122,11 @@ class _ChartState extends State<Chart> {
           margin: 8,
         ),
       ),
-      borderData: FlBorderData(
-          show: true,
-          border: Border.all(color: const Color(0xff37434d), width: 1)),
+      borderData: FlBorderData(show: true, border: Border.all(color: const Color(0xff37434d), width: 1)),
       minX: 0,
       maxX: isShowDays ? 7 : 24,
       minY: 0,
-      maxY: _getMaxY() == 0? 1 : _getMaxY(),
+      maxY: _getMaxY() == 0 ? 1 : _getMaxY(),
       lineBarsData: [
         LineChartBarData(
           spots: _getAxisYData(),
@@ -144,8 +139,7 @@ class _ChartState extends State<Chart> {
           ),
           belowBarData: BarAreaData(
             show: true,
-            colors:
-                _gradientColors.map((color) => color.withOpacity(0.3)).toList(),
+            colors: _gradientColors.map((color) => color.withOpacity(0.3)).toList(),
           ),
         ),
       ],
@@ -158,45 +152,32 @@ class _ChartState extends State<Chart> {
       children: <Widget>[
         AspectRatio(
           aspectRatio: 1.70,
-          child: Container(
-            // decoration: const BoxDecoration(
-            //   color: Colors.white,
-            // ),
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  right: 24, left: 24, top: 0, bottom: 0),
-              child: _buildLineChart(_getBottomTitles()),
-            ),
+          child: Padding(
+            padding: const EdgeInsets.only(right: 24, left: 24, top: 0, bottom: 0),
+            child: _buildLineChart(_getBottomTitles()),
           ),
         ),
-        Container(
-          // color: Colors.white,
-          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            TextButton(
-              onPressed: () => setState(() {
-                isShowDays = !isShowDays;
-              }),
-              child: Row(children: [
-                Text(
-                  '过去一天',
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: isShowDays ? Colors.grey : Colors.blue),
-                ),
-                const Text(
-                  ' / ',
-                  style: TextStyle(fontSize: 20, color: Colors.black),
-                ),
-                Text(
-                  '过去一周',
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: isShowDays ? Colors.blue : Colors.grey),
-                )
-              ]),
-            ),
-          ]),
-        )
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          TextButton(
+            onPressed: () => setState(() {
+              isShowDays = !isShowDays;
+            }),
+            child: Row(children: [
+              Text(
+                '过去一天',
+                style: TextStyle(fontSize: 20, color: isShowDays ? Colors.grey : Colors.blue),
+              ),
+              const Text(
+                ' / ',
+                style: TextStyle(fontSize: 20, color: Colors.black),
+              ),
+              Text(
+                '过去一周',
+                style: TextStyle(fontSize: 20, color: isShowDays ? Colors.blue : Colors.grey),
+              )
+            ]),
+          ),
+        ])
       ],
     );
   }

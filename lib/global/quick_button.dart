@@ -6,7 +6,6 @@ class QuickButton {
   static const QuickActions _quickActions = QuickActions();
 
   static void quickActionHandler(String type) {
-    print('quickActionHandler');
     if (type == 'report') {
       Navigator.of(_context!).pushNamed('/report');
     } else if (type == 'timetable') {

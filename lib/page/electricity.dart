@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:kite/entity/electricity.dart';
 import 'package:kite/entity/electricity/util.dart';
 import 'package:kite/page/electricity/balance.dart';
-import 'package:kite/page/electricity/rank.dart';
-import 'package:kite/page/electricity/model.dart';
 import 'package:kite/page/electricity/chart.dart';
+import 'package:kite/page/electricity/model.dart';
+import 'package:kite/page/electricity/rank.dart';
 import 'package:kite/service/electricity.dart';
-import 'package:kite/entity/electricity.dart';
 
 class ElectricityPage extends StatefulWidget {
   const ElectricityPage({Key? key}) : super(key: key);
@@ -17,7 +17,7 @@ class ElectricityPage extends StatefulWidget {
 class _ElectricityPageState extends State<ElectricityPage> {
   String building = '';
   String room = '';
-  Balance balance = new Balance();
+  Balance balance = Balance();
   Map<String, double> rank = {};
   List<ConditionHours> hoursList = [];
   List<ConditionDays> daysList = [];
@@ -41,7 +41,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
         roomInt / 100 < 17 &&
         roomInt % 100 < 31 &&
         roomInt % 100 > 0) {
-      final result = '10${buildingInt}${roomInt}';
+      final result = '10$buildingInt$roomInt';
       return result;
     } else {
       return 'error';
@@ -96,7 +96,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _buildButton('查询余额', Color(0xFF2e62cd), () {
+        _buildButton('查询余额', const Color(0xFF2e62cd), () {
           String result = _checkRoomValid();
           if (result != 'error') {
             fetchBalance('10$building$room')
@@ -114,7 +114,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
             buildModel(context, '输入格式有误');
           }
         }),
-        _buildButton('查询使用情况', Color(0xFFf08c00), () {
+        _buildButton('查询使用情况', const Color(0xFFf08c00), () {
           String result = _checkRoomValid();
           if (result != 'error') {
             getRank('10$building$room').then((res) {
@@ -153,38 +153,32 @@ class _ElectricityPageState extends State<ElectricityPage> {
         ),
         body: SafeArea(
             child: SingleChildScrollView(
-                child: Container(
-          child: Column(children: [
-            Container(
-                margin: const EdgeInsets.only(top: 30),
-                child: _buildTextInputBox()),
-            Container(
-                margin: const EdgeInsets.only(left: 80, right: 80),
-                child: _buildButtonBox()),
-            isShowBalance && balance.room != ''
-                ? Container(
-                    width: double.infinity,
-                    margin: const EdgeInsets.only(
-                      top: 20,
-                      left: 10,
-                      right: 10,
-                    ),
-                    child: buildBalance(context, balance),
-                  )
-                : Container(),
-            isShowBalance
-                ? Container()
-                : Container(
-                    margin: const EdgeInsets.only(
-                      top: 20,
-                      bottom: 10,
-                      left: 40,
-                      right: 40,
-                    ),
-                    child: buildRank(rank, daysList),
+                child: Column(children: [
+          Container(margin: const EdgeInsets.only(top: 30), child: _buildTextInputBox()),
+          Container(margin: const EdgeInsets.only(left: 80, right: 80), child: _buildButtonBox()),
+          isShowBalance && balance.room != ''
+              ? Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.only(
+                    top: 20,
+                    left: 10,
+                    right: 10,
                   ),
-            isShowBalance ? Container() : Chart(hoursList, daysList),
-          ]),
-        ))));
+                  child: buildBalance(context, balance),
+                )
+              : Container(),
+          isShowBalance
+              ? Container()
+              : Container(
+                  margin: const EdgeInsets.only(
+                    top: 20,
+                    bottom: 10,
+                    left: 40,
+                    right: 40,
+                  ),
+                  child: buildRank(rank, daysList),
+                ),
+          isShowBalance ? Container() : Chart(hoursList, daysList),
+        ]))));
   }
 }

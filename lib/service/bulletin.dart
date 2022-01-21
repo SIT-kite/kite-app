@@ -16,7 +16,7 @@ class BulletinService extends AService implements BulletinDao {
     }).toList();
   }
 
-  BulletinDetail _parsebulletinDetail(Bs4Element item) {
+  BulletinDetail _parseBulletinDetail(Bs4Element item) {
     final dateFormat = DateFormat('yyyy年MM月dd日 hh:mm');
 
     String metaHtml = item.find('div', class_: 'bulletin-info')?.innerHtml ?? '';
@@ -56,7 +56,7 @@ class BulletinService extends AService implements BulletinDao {
   @override
   Future<BulletinDetail> getBulletinDetail(String bulletinCatalogueId, String uuid) async {
     final response = await session.get(_buildBulletinUrl(bulletinCatalogueId, uuid));
-    return _parsebulletinDetail(BeautifulSoup(response.data).html!);
+    return _parseBulletinDetail(BeautifulSoup(response.data).html!);
   }
 
   // 构造获取文章列表的url

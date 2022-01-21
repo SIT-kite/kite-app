@@ -6,13 +6,17 @@ String _getElectricityUrl(String room, Mode mode) {
   String url = 'https://kite.sunnysab.cn/api/v2/electricity/room/';
   switch (mode) {
     case Mode.balance:
-      url += '$room';break;
+      url += room;
+      break;
     case Mode.rank:
-      url += '$room/rank';break;
-    case Mode.condition_hours:
-      url += '$room/bill/hours';break;
-    case Mode.condition_days:
-      url += '$room/bill/days';break;
+      url += '$room/rank';
+      break;
+    case Mode.conditionHours:
+      url += '$room/bill/hours';
+      break;
+    case Mode.conditionDays:
+      url += '$room/bill/days';
+      break;
   }
   return url;
 }
@@ -20,11 +24,11 @@ String _getElectricityUrl(String room, Mode mode) {
 Future<Balance> fetchBalance(String room) async {
   final url = _getElectricityUrl(room, Mode.balance);
   final response = await Dio().get(url);
-  var balance;
+  Balance balance;
   try {
     balance = Balance.fromJson(response.data['data']);
-  } catch(e) {
-    balance = new Balance();
+  } catch (e) {
+    balance = Balance();
   }
 
   return balance;
@@ -39,7 +43,7 @@ Future<Rank> fetchRank(String room) async {
 }
 
 Future<List<ConditionHours>> fetchConditionHours(String room) async {
-  final url = _getElectricityUrl(room, Mode.condition_hours);
+  final url = _getElectricityUrl(room, Mode.conditionHours);
   final response = await Dio().get(url);
   List<ConditionHours> list = response.data['data'].map<ConditionHours>((e) => ConditionHours.fromJson(e)).toList();
 
@@ -47,7 +51,7 @@ Future<List<ConditionHours>> fetchConditionHours(String room) async {
 }
 
 Future<List<ConditionDays>> fetchConditionDays(String room) async {
-  final url = _getElectricityUrl(room, Mode.condition_days);
+  final url = _getElectricityUrl(room, Mode.conditionDays);
   final response = await Dio().get(url);
   List<ConditionDays> list = response.data['data'].map<ConditionDays>((e) => ConditionDays.fromJson(e)).toList();
 

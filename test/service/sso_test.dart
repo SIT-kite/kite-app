@@ -1,6 +1,4 @@
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:kite/global/session_pool.dart';
 
 import 'mock.dart';
 

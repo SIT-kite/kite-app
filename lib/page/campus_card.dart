@@ -94,7 +94,6 @@ class _CampusCardPageState extends State<CampusCardPage> {
       if (isNfcAvailable) {
         NfcManager.instance.startSession(onDiscovered: onNewCardDiscovered);
       }
-      print('$isNfcAvailable');
     });
   }
 

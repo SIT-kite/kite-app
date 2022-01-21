@@ -193,11 +193,11 @@ class Game {
 
   void randomEmptyCell(int cnt) {
     List<BoardCell> emptyCells = <BoardCell>[];
-    _boardCells.forEach((cells) {
+    for (var cells in _boardCells) {
       emptyCells.addAll(cells.where((cell) {
         return cell.isEmpty();
       }));
-    });
+    }
     if (emptyCells.isEmpty) {
       return;
     }
@@ -217,11 +217,11 @@ class Game {
   }
 
   void resetMergeStatus() {
-    _boardCells.forEach((cells) {
-      cells.forEach((cell) {
+    for (var cells in _boardCells) {
+      for (var cell in cells) {
         cell.isMerged = false;
-      });
-    });
+      }
+    }
   }
 }
 

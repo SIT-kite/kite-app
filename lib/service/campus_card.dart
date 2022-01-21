@@ -25,7 +25,7 @@ class CardInfo {
 String cardId2String(int cardId) {
   StringBuffer buffer = StringBuffer();
 
-  final r = (int n) => n.toRadixString(16);
+  r(int n) => n.toRadixString(16);
 
   buffer.write(r((cardId >> 24) & 0xFF));
   buffer.write(r((cardId >> 16) & 0xFF));

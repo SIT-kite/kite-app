@@ -40,7 +40,7 @@ class MarketPage extends StatelessWidget {
           IconButton(onPressed: () {}, icon: const Icon(Icons.upload))
         ],
       ),
-      body: Center(),
+      body: const Center(),
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.add),
         label: const Text("发布"),

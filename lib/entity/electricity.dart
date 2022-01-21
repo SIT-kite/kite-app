@@ -5,8 +5,8 @@ part 'electricity.g.dart';
 enum Mode {
   balance,
   rank,
-  condition_hours,
-  condition_days,
+  conditionHours,
+  conditionDays,
 }
 
 @JsonSerializable()
@@ -26,18 +26,14 @@ class Balance {
 
   Balance();
 
-  factory Balance.fromJson(Map<String, dynamic> json) =>
-      _$BalanceFromJson(json);
+  factory Balance.fromJson(Map<String, dynamic> json) => _$BalanceFromJson(json);
 
   @override
-  String toString() =>
-      'Balance{balance: $balance, course: $power, power: $room, classId: $room, ts: $ts}';
+  String toString() => 'Balance{balance: $balance, course: $power, power: $room, classId: $room, ts: $ts}';
 
-  static double _toBalance(double balance) =>
-      double.parse(balance.toStringAsFixed(2));
+  static double _toBalance(double balance) => double.parse(balance.toStringAsFixed(2));
 
-  static double _toPower(double power) =>
-      double.parse(power.toStringAsFixed(2));
+  static double _toPower(double power) => double.parse(power.toStringAsFixed(2));
 
   static String _intToRoom(int room) => room.toString();
 
@@ -61,11 +57,9 @@ class Rank {
   factory Rank.fromJson(Map<String, dynamic> json) => _$RankFromJson(json);
 
   @override
-  String toString() =>
-      'Rank{consumption: $consumption, rank: $rank, roomCount: $roomCount}';
+  String toString() => 'Rank{consumption: $consumption, rank: $rank, roomCount: $roomCount}';
 
-  static double _toConsumption(double consumption) =>
-      double.parse(consumption.toStringAsFixed(2));
+  static double _toConsumption(double consumption) => double.parse(consumption.toStringAsFixed(2));
 }
 
 @JsonSerializable()
@@ -82,18 +76,14 @@ class ConditionHours {
 
   ConditionHours();
 
-  factory ConditionHours.fromJson(Map<String, dynamic> json) =>
-      _$ConditionHoursFromJson(json);
+  factory ConditionHours.fromJson(Map<String, dynamic> json) => _$ConditionHoursFromJson(json);
 
   @override
-  String toString() =>
-      'ConditionHours{charge: $charge, consumption: $consumption, time: $time}';
+  String toString() => 'ConditionHours{charge: $charge, consumption: $consumption, time: $time}';
 
-  static double _toCharge(double charge) =>
-      double.parse(charge.toStringAsFixed(2));
+  static double _toCharge(double charge) => double.parse(charge.toStringAsFixed(2));
 
-  static double _toConsumption(double consumption) =>
-      double.parse(consumption.toStringAsFixed(2));
+  static double _toConsumption(double consumption) => double.parse(consumption.toStringAsFixed(2));
 
   static String _toTime(String time) => time.substring(11, 13);
 }
@@ -112,18 +102,14 @@ class ConditionDays {
 
   ConditionDays();
 
-  factory ConditionDays.fromJson(Map<String, dynamic> json) =>
-      _$ConditionDaysFromJson(json);
+  factory ConditionDays.fromJson(Map<String, dynamic> json) => _$ConditionDaysFromJson(json);
 
   @override
-  String toString() =>
-      'ConditionDays{charge: $charge, consumption: $consumption, date: $date}';
+  String toString() => 'ConditionDays{charge: $charge, consumption: $consumption, date: $date}';
 
-  static double _toCharge(double charge) =>
-      double.parse(charge.toStringAsFixed(2));
+  static double _toCharge(double charge) => double.parse(charge.toStringAsFixed(2));
 
-  static double _toConsumption(double consumption) =>
-      double.parse(consumption.toStringAsFixed(2));
+  static double _toConsumption(double consumption) => double.parse(consumption.toStringAsFixed(2));
 
   static String _toDate(String time) => time.substring(8, 10);
 }
