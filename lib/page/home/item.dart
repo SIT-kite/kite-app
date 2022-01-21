@@ -13,28 +13,26 @@ class HomeItem extends StatelessWidget {
   final String route;
   final String icon;
   final String title;
-  String? subtitle;
+  final String? subtitle;
 
-  HomeItem({required this.route, required this.icon, required this.title, this.subtitle, Key? key}) : super(key: key);
+  const HomeItem({required this.route, required this.icon, required this.title, this.subtitle, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final titleStyle = const TextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.bold);
 
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context).pushNamed(route);
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.6),
-        ),
-        child: ListTile(
-          leading: SvgPicture.asset(icon, height: 30, width: 30, color: Theme.of(context).primaryColor),
-          title: Text(title, style: titleStyle),
-          subtitle: Text(subtitle ?? ''),
-          dense: true,
-        ),
+    return Container(
+      decoration: BoxDecoration(color: Colors.white.withOpacity(0.6)),
+      child: ListTile(
+        leading: SvgPicture.asset(icon, height: 30, width: 30, color: Theme.of(context).primaryColor),
+        title: Text(title, style: titleStyle),
+        subtitle: Text(subtitle ?? ''),
+        // dense: true,
+        onTap: () {
+          Navigator.of(context).pushNamed(route);
+        },
+        style: ListTileStyle.list,
       ),
     );
   }
