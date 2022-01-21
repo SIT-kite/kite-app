@@ -167,18 +167,16 @@ class _ScorePageState extends State<ScorePage> {
         if (snapshot.hasData) {
           final scoreList = snapshot.data!;
 
-          if (scoreList.isNotEmpty) {
-            return Column(children: [
-              Expanded(child: _buildHeader(scoreList), flex: 1),
-              Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(children: <Widget>[] + _buildListView(scoreList)),
-                  ),
-                  flex: 10),
-            ]);
-          } else {
-            return _buildNoResult();
-          }
+          return Column(children: [
+            Expanded(child: _buildHeader(scoreList), flex: 1),
+            Expanded(
+                child: scoreList.isNotEmpty
+                    ? SingleChildScrollView(
+                        child: Column(children: <Widget>[] + _buildListView(scoreList)),
+                      )
+                    : _buildNoResult(),
+                flex: 10),
+          ]);
         } else if (snapshot.hasError) {
           return Center(child: Text(snapshot.error.toString()));
         }

@@ -14,10 +14,13 @@ class GpaBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final type = _getType();
+    final gpa = calcGPA(_scoreList);
+
     return Container(
       padding: const EdgeInsets.all(10),
       color: const Color(0xFFffe599),
-      child: Text('${_getType()}绩点 ${calcGPA(_scoreList).toStringAsPrecision(2)}', softWrap: true),
+      child: Text('$type绩点 ${gpa.isNaN ? 0.00 : gpa.toStringAsPrecision(2)}', softWrap: true),
     );
   }
 }
