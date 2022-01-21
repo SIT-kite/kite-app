@@ -17,7 +17,7 @@ class GpaBanner extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(10),
       color: const Color(0xFFffe599),
-      child: Text('该${_getType()}绩点为 ${calcGPA(_scoreList).toStringAsPrecision(2)}, 努力总会有回报!', softWrap: true),
+      child: Text('${_getType()}绩点 ${calcGPA(_scoreList).toStringAsPrecision(2)}', softWrap: true),
     );
   }
 }

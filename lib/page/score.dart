@@ -36,10 +36,16 @@ class _ScorePageState extends State<ScorePage> {
     height: 260,
   );
 
-  Widget _buildHeader() {
-    return Container(
-      margin: const EdgeInsets.only(left: 15),
-      child: _buildSelectorRow(),
+  Widget _buildHeader(List<Score> scoreList) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(
+          margin: const EdgeInsets.only(left: 15),
+          child: _buildSelectorRow(),
+        ),
+        GpaBanner(selectedSemester, scoreList),
+      ],
     );
   }
 
@@ -111,7 +117,7 @@ class _ScorePageState extends State<ScorePage> {
       Container(
         margin: const EdgeInsets.only(left: 15),
         child: buildSemesterSelector(),
-      )
+      ),
     ]);
   }
 
@@ -133,7 +139,7 @@ class _ScorePageState extends State<ScorePage> {
     ]);
   }
 
-  Widget _buildScoreResult() {
+  Widget _buildBody() {
     return FutureBuilder<List<Score>>(
       future: ScoreService(SessionPool.eduSession).getScoreList(SchoolYear(selectedYear), selectedSemester),
       builder: (context, snapshot) {
@@ -141,9 +147,14 @@ class _ScorePageState extends State<ScorePage> {
           final scoreList = snapshot.data!;
 
           if (scoreList.isNotEmpty) {
-            return SingleChildScrollView(
-              child: Column(children: <Widget>[GpaBanner(selectedSemester, scoreList)] + _buildListView(scoreList)),
-            );
+            return Column(children: [
+              Expanded(child: _buildHeader(scoreList), flex: 1),
+              Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(children: <Widget>[] + _buildListView(scoreList)),
+                  ),
+                  flex: 10),
+            ]);
           } else {
             return _buildNoResult();
           }
@@ -167,10 +178,7 @@ class _ScorePageState extends State<ScorePage> {
           )
         ],
       ),
-      body: Column(children: [
-        Expanded(child: _buildHeader(), flex: 1),
-        Expanded(child: _buildScoreResult(), flex: 10),
-      ]),
+      body: _buildBody(),
     );
   }
 }
