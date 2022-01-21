@@ -2,21 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/entity/edu.dart';
 import 'package:kite/global/session_pool.dart';
+import 'package:kite/global/storage_pool.dart';
 import 'package:kite/page/score/banner.dart';
 import 'package:kite/page/score/item.dart';
 import 'package:kite/service/edu.dart';
 
 List<int> _generateYearList(int entranceYear) {
   final date = DateTime.now();
-  final currentMonth = date.month;
-  final currentYear = date.year % 100;
-  final monthInterval = (currentYear - entranceYear) * 12 + currentMonth - 9;
+  final endYear = date.month >= 9 ? date.year : date.year - 1;
 
   List<int> yearItems = [];
-  for (int i = 0, year = entranceYear; i < monthInterval / 12 + 1; i++, year++) {
+  for (int year = entranceYear; year <= endYear; ++year) {
     yearItems.add(year);
   }
   return yearItems;
+}
+
+Semester indexToSemester(int index) {
+  return [Semester.all, Semester.firstTerm, Semester.secondTerm][index];
 }
 
 class ScorePage extends StatefulWidget {
@@ -27,8 +30,19 @@ class ScorePage extends StatefulWidget {
 }
 
 class _ScorePageState extends State<ScorePage> {
-  int selectedYear = 2021;
-  Semester selectedSemester = Semester.firstTerm; // todo: use proper value.
+  final date = DateTime.now();
+
+  /// 四位年份
+  late int selectedYear;
+
+  /// 要查询的学期
+  Semester selectedSemester = Semester.all;
+
+  @override
+  void initState() {
+    selectedYear = date.month >= 9 ? date.year : date.year - 1;
+    super.initState();
+  }
 
   final Widget _notFoundPicture = SvgPicture.asset(
     'assets/score/not-found.svg',
@@ -51,12 +65,12 @@ class _ScorePageState extends State<ScorePage> {
 
   Widget _buildSelectorRow() {
     String buildYearString(int startYear) {
-      return '20$startYear - 20${startYear + 1}';
+      return '$startYear - ${startYear + 1}';
     }
 
     /// 构建选择下拉框.
     /// alternatives 是一个字典, key 为实际值, value 为显示值.
-    Widget buildSelector(Map<int, String> alternatives, void Function(int?) callback) {
+    Widget buildSelector(Map<int, String> alternatives, int initialValue, void Function(int?) callback) {
       final items = alternatives.keys
           .map(
             (k) => DropdownMenuItem<int>(
@@ -67,7 +81,7 @@ class _ScorePageState extends State<ScorePage> {
           .toList();
 
       return DropdownButton<int>(
-        isDense: true,
+        value: initialValue,
         icon: const Icon(Icons.keyboard_arrow_down_outlined),
         style: const TextStyle(
           color: Color(0xFF002766),
@@ -82,10 +96,14 @@ class _ScorePageState extends State<ScorePage> {
     }
 
     Widget buildYearSelector() {
-      final List<int> yearList = _generateYearList(18).reversed.toList(); // TODO: Use actual year here.
+      // 得到入学年份
+      final grade = StoragePool.authSetting.currentUsername!.substring(0, 2);
+      // 生成经历过的学期并逆序（方便用户选择）
+      final List<int> yearList = _generateYearList(int.parse(grade) + 2000).reversed.toList();
       final mapping = yearList.map((e) => MapEntry(e, buildYearString(e)));
 
-      return buildSelector(Map.fromEntries(mapping), (int? selected) {
+      // 保证显示上初始选择年份、实际加载的年份、selectedYear 变量一致.
+      return buildSelector(Map.fromEntries(mapping), selectedYear, (int? selected) {
         if (selected != null && selected != selectedYear) {
           setState(() {
             selectedYear = selected;
@@ -101,10 +119,11 @@ class _ScorePageState extends State<ScorePage> {
         Semester.secondTerm: '第二学期',
       };
       final semesters = Semester.values.map((e) => MapEntry(e.index, semesterDescription[e]!));
-      return buildSelector(Map.fromEntries(semesters), (int? selected) {
-        if (selected != null && selected != (selectedSemester as int)) {
+      // 保证显示上初始选择学期、实际加载的学期、selectedSemester 变量一致.
+      return buildSelector(Map.fromEntries(semesters), selectedSemester.index, (int? selected) {
+        if (selected != null && selected != (selectedSemester.index)) {
           setState(() {
-            selectedSemester = selected as Semester;
+            selectedSemester = indexToSemester(selected);
           });
         }
       });
@@ -140,8 +159,10 @@ class _ScorePageState extends State<ScorePage> {
   }
 
   Widget _buildBody() {
+    final future = ScoreService(SessionPool.eduSession).getScoreList(SchoolYear(selectedYear), selectedSemester);
+
     return FutureBuilder<List<Score>>(
-      future: ScoreService(SessionPool.eduSession).getScoreList(SchoolYear(selectedYear), selectedSemester),
+      future: future,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final scoreList = snapshot.data!;
