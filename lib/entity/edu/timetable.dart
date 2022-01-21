@@ -52,15 +52,7 @@ class Course {
   }
 
   static int _transWeek(String weekDay) {
-    Map<String, int> weeks = {
-      '星期一': 1,
-      '星期二': 2,
-      '星期三': 3,
-      '星期四': 4,
-      '星期五': 5,
-      '星期六': 6,
-      '星期日': 7
-    };
+    Map<String, int> weeks = {'星期一': 1, '星期二': 2, '星期三': 3, '星期四': 4, '星期五': 5, '星期六': 6, '星期日': 7};
     return weeks[weekDay] ?? 0;
   }
 
@@ -137,12 +129,11 @@ class Course {
 
   static int _dayToInt(String days) => _transWeek(days);
 
-  static int _indexTimeToInt(String indexTime) =>
-      _listToInt(_expandTime(indexTime));
+  static int _indexTimeToInt(String indexTime) => _listToInt(_expandTime(indexTime));
 
   static List<String> _stringToVec(String s) => _splitToList(s);
 
-  static double _stringToDouble(String s) => double.tryParse(s) ?? -1.0;
+  static double _stringToDouble(String s) => double.tryParse(s) ?? double.nan;
 
   static int _stringToInt(String s) => int.tryParse(s) ?? 0;
 

@@ -40,7 +40,7 @@ class Score {
     return semester[s] ?? -1;
   }
 
-  static double _stringToDouble(String s) => double.tryParse(s) ?? -1.0;
+  static double _stringToDouble(String s) => double.tryParse(s) ?? double.nan;
 }
 
 class ScoreDetail {

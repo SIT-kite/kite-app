@@ -1,4 +1,3 @@
-
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:kite/dao/edu.dart';
 import 'package:kite/entity/edu.dart';
@@ -73,7 +72,7 @@ class ScoreService extends AService implements ScoreDao {
 
     String type = item.find(_scoreFormSelector)!.innerHtml.trim();
     String percentage = item.find(_scorePercentageSelector)!.innerHtml.trim();
-    double value = double.tryParse(item.find(_scoreValueSelector)!.innerHtml) ?? -1;
+    double value = double.tryParse(item.find(_scoreValueSelector)!.innerHtml) ?? double.nan;
 
     return ScoreDetail(scoreType: f1(type), percentage: f2(percentage), value: value);
   }
