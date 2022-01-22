@@ -152,8 +152,7 @@ class _ScorePageState extends State<ScorePage> {
       const Text('暂时还没有成绩', style: TextStyle(color: Colors.grey)),
       Container(
         margin: const EdgeInsets.only(left: 40, right: 40),
-        child:
-            const Text('如果成绩刚刚出炉，可点击右上角刷新按钮尝试刷新~', textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),
+        child: const Text('过会儿再来吧！', textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),
       )
     ]);
   }
@@ -172,7 +171,7 @@ class _ScorePageState extends State<ScorePage> {
             Expanded(
                 child: scoreList.isNotEmpty
                     ? SingleChildScrollView(
-                        child: Column(children: <Widget>[] + _buildListView(scoreList)),
+                        child: Column(children: _buildListView(scoreList)),
                       )
                     : _buildNoResult(),
                 flex: 10),
@@ -190,12 +189,6 @@ class _ScorePageState extends State<ScorePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('成绩查询'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () {},
-          )
-        ],
       ),
       body: _buildBody(),
     );
