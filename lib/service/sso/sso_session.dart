@@ -45,6 +45,11 @@ class SsoSession extends ASession {
     }
   }
 
+  /// 判断该请求是否为登录页
+  bool _isLoginPage(Response response) {
+    return response.realUri.toString().contains(_loginUrl);
+  }
+
   @override
   Future<Response> request(
     String url,
@@ -55,18 +60,38 @@ class SsoSession extends ASession {
     ResponseType? responseType,
     Options? options,
   }) async {
-    var res = await _dio.request(
-      url,
-      queryParameters: queryParameters,
-      options: DioUtils.NON_REDIRECT_OPTION_WITH_FORM_TYPE.copyWith(
-        method: method,
-        contentType: contentType,
-        responseType: responseType,
-      ),
-      data: data,
-    );
-    // // 处理重定向
-    return await DioUtils.processRedirect(_dio, res);
+    /// 正常地请求
+    Future<Response> requestNormally() async {
+      final response = await _dio.request(
+        url,
+        queryParameters: queryParameters,
+        options: DioUtils.NON_REDIRECT_OPTION_WITH_FORM_TYPE.copyWith(
+          method: method,
+          contentType: contentType,
+          responseType: responseType,
+        ),
+        data: data,
+      );
+      // 处理重定向
+      return await DioUtils.processRedirect(_dio, response);
+    }
+
+    // 第一次先正常请求
+    final firstResponse = await requestNormally();
+
+    // 如果跳转登录页，那就先登录
+    if (_isLoginPage(firstResponse)) {
+      isOnline = false;
+      // 只有用户名与密码均不为空时，才尝试重新登录，否则就抛异常
+      if (username != null && password != null) {
+        await login(_username!, _password!);
+        return await requestNormally();
+      } else {
+        throw NeedLoginException(url: url);
+      }
+    } else {
+      return firstResponse;
+    }
   }
 
   String? get username => _username;
@@ -86,11 +111,11 @@ class SsoSession extends ASession {
     // TODO: 支持移动端报错提示
     final mobileError = (page.find('span', id: 'errorMsg') ?? emptyPage).text.trim();
     if (authError.isNotEmpty || mobileError.isNotEmpty) {
-      throw CredentialsInvalidException(authError + mobileError);
+      throw CredentialsInvalidException(msg: authError + mobileError);
     }
 
     if (response.realUri.toString() != _loginSuccessUrl) {
-      throw UnknownAuthException('未知错误');
+      throw const UnknownAuthException();
     }
 
     isOnline = true;
@@ -145,25 +170,25 @@ class SsoSession extends ASession {
     }
 
     // 首先获取AuthServer首页
-    var html = await _getAuthServerHtml();
-    // 获取首页验证码
+    final html = await _getAuthServerHtml();
 
+    // 获取首页验证码
     var captcha = '';
     if (await _needCaptcha(username)) {
       // 识别验证码
       // 一定要让识别到的字符串长度为4
       // 如果不是4，那就再试一次
       do {
-        var captchaImage = await _getCaptcha();
+        final captchaImage = await _getCaptcha();
         captcha = await OcrServer.recognize(captchaImage);
       } while (captcha.length != 4);
     }
     // 获取casTicket
-    var casTicket = _getCasTicketFromAuthHtml(html);
+    final casTicket = _getCasTicketFromAuthHtml(html);
     // 获取salt
-    var salt = _getSaltFromAuthHtml(html);
+    final salt = _getSaltFromAuthHtml(html);
     // 加密密码
-    var hashedPwd = hashPassword(salt, password);
+    final hashedPwd = hashPassword(salt, password);
     // 登录系统，获得cookie
     return await _postLoginRequest(username, hashedPwd, captcha, casTicket);
   }
@@ -187,10 +212,11 @@ class SsoSession extends ASession {
   }
 }
 
+/// 认证失败
 class CredentialsInvalidException implements Exception {
-  String msg;
+  final String msg;
 
-  CredentialsInvalidException([this.msg = '']);
+  const CredentialsInvalidException({this.msg = ''});
 
   @override
   String toString() {
@@ -198,10 +224,23 @@ class CredentialsInvalidException implements Exception {
   }
 }
 
-class UnknownAuthException implements Exception {
-  String msg;
+/// 操作之前需要先登录
+class NeedLoginException implements Exception {
+  final String msg;
+  final String url;
+  const NeedLoginException({this.msg = '目标操作需要登录', this.url = ''});
 
-  UnknownAuthException([this.msg = '']);
+  @override
+  String toString() {
+    return msg;
+  }
+}
+
+/// 未知的验证错误
+class UnknownAuthException implements Exception {
+  final String msg;
+
+  const UnknownAuthException({this.msg = '未知验证错误'});
 
   @override
   String toString() {
