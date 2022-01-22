@@ -5,7 +5,8 @@ class SettingKeyConstants {
   static final homeCampusKey = homeNamespace.forward('campus').toString();
   static final homeBackgroundKey = homeNamespace.forward('background').toString();
   static final homeBackgroundModeKey = homeNamespace.forward('backgroundMode').toString();
-  static final homeLastWeather = homeNamespace.forward('lastWeather').toString();
+  static final homeLastWeatherKey = homeNamespace.forward('lastWeather').toString();
+  static final homeInstallTimeKey = homeNamespace.forward('installTime').toString();
 
   static final authNamespace = Path().forward('auth');
   static final authCurrentUsername = authNamespace.forward('currentUsername').toString();

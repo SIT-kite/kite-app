@@ -12,4 +12,7 @@ Future<void> initBeforeRun() async {
     StoragePool.init(),
   ]);
   Log.info('应用开启前初始化完成');
+
+  // 初始化用户首次使用时间
+  StoragePool.homeSetting.installTime ??= DateTime.now();
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kite/global/storage_pool.dart';
 
 class KiteDrawer extends Drawer {
   const KiteDrawer({Key? key}) : super(key: key);
@@ -9,9 +10,12 @@ class KiteDrawer extends Drawer {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(color: Colors.blue),
-            child: Text('用户信息区域'),
+          DrawerHeader(
+            decoration: BoxDecoration(color: StoragePool.themeSetting.color),
+            child: Align(
+                alignment: Alignment.bottomLeft,
+                child: Text('小风筝已陪伴你 ${DateTime.now().difference(StoragePool.homeSetting.installTime!).inDays} 天',
+                    style: const TextStyle(color: Colors.white, fontSize: 22))),
           ),
           ListTile(
             title: const Text('设置'),

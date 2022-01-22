@@ -16,4 +16,8 @@ abstract class HomeSettingDao {
   Weather get lastWeather;
 
   set lastWeather(Weather weather);
+
+  DateTime? get installTime;
+
+  set installTime(DateTime? dateTime);
 }
