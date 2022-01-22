@@ -17,7 +17,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
   final SchoolYear currSchoolYear = const SchoolYear(2021);
   final Semester currSemester = Semester.firstTerm;
 
-  static const String courseIconPath = 'assets/timetable/course/';
+  static const String courseIconPath = 'assets/course/';
 
   late Size _deviceSize;
   List<Course> courseList = <Course>[];
