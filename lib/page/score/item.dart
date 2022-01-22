@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kite/entity/edu.dart';
+import 'package:kite/global/bus.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/page/score/evaluation.dart';
 import 'package:kite/service/edu.dart';
@@ -18,6 +19,7 @@ class ScoreItem extends StatefulWidget {
 class _ScoreItemState extends State<ScoreItem> {
   final Score _score;
   bool _isExpanded = false;
+  bool _isSelected = false;
 
   @override
   _ScoreItemState(this._score);
@@ -53,7 +55,27 @@ class _ScoreItemState extends State<ScoreItem> {
     );
   }
 
-  Widget _buildScoreValueView() {
+  Widget _buildLeading() {
+    if (_isSelected) {
+      return SizedBox(
+        width: 30,
+        height: 30,
+        child: Center(
+          child: IconButton(
+            icon: const Icon(Icons.check),
+            onPressed: () {
+              eventBus.emit('onRemoveCourse', _score);
+              setState(() => _isSelected = false);
+            },
+          ),
+        ),
+      );
+    } else {
+      return Image.asset('assets/course/${CourseCategory.query(_score.course)}.png');
+    }
+  }
+
+  Widget _buildTrailing() {
     const style = TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.blue);
 
     if (!_score.value.isNaN) {
@@ -95,13 +117,22 @@ class _ScoreItemState extends State<ScoreItem> {
       ),
       child: Column(children: [
         ListTile(
-          leading: Image.asset('assets/course/${CourseCategory.query(_score.course)}.png'),
+          minLeadingWidth: 60,
+          leading: _buildLeading(),
           title: Text(_score.course, style: const TextStyle(fontWeight: FontWeight.bold)),
           subtitle: Text('${_score.courseId[0] != 'G' ? '必修' : '选修'} | 学分: ${_score.credit}'),
-          trailing: _buildScoreValueView(),
+          trailing: _buildTrailing(),
           onTap: () => setState(() {
             _isExpanded = !_isExpanded;
           }),
+          onLongPress: () {
+            if (_isSelected) {
+              eventBus.emit('onRemoveCourse', _score);
+            } else {
+              eventBus.emit('onSelectCourse', _score);
+            }
+            setState(() => _isSelected = !_isSelected);
+          },
         ),
         _isExpanded ? _buildScoreDetail() : Container()
       ]),
