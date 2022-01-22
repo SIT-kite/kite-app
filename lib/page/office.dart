@@ -160,7 +160,6 @@ class _OfficePageState extends State<OfficePage> {
               onPressed: _navigateMessagePage,
               tooltip: '我的消息',
               child: const Icon(Icons.mail_outline),
-              backgroundColor: Colors.blue,
             )
           : null,
     );
