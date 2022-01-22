@@ -30,6 +30,7 @@ class _OfficeItemState extends State<OfficeItem> {
 
   void _onHomeRefresh(_) async {
     final String result = await _buildContent();
+    StoragePool.homeSetting.lastOfficeStatus = result;
     setState(() => content = result);
   }
 
@@ -58,7 +59,7 @@ class _OfficeItemState extends State<OfficeItem> {
   @override
   Widget build(BuildContext context) {
     // 如果是首屏加载, 从缓存读
-    if (content != null) {
+    if (content == null) {
       final String? lastOfficeStatus = StoragePool.homeSetting.lastOfficeStatus;
       content = lastOfficeStatus ?? defaultContent;
     }
