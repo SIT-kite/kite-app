@@ -35,6 +35,13 @@ class KiteDrawer extends Drawer {
             },
           ),
           ListTile(
+            title: const Text('反馈'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context).pushNamed('/feedback');
+            },
+          ),
+          ListTile(
             title: const Text('关于'),
             onTap: () {
               Navigator.pop(context);
