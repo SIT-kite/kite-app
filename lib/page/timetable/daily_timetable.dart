@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:kite/dao/edu/timetable.dart';
 import 'package:kite/entity/edu.dart';
 import 'package:kite/mock/edu/timetable.dart';
 import 'package:kite/page/timetable/bottom_sheet.dart';
-import 'package:kite/dao/edu/timetable.dart';
-import 'package:kite/global/session_pool.dart';
-import 'package:kite/page/timetable/constant.dart';
-import 'package:kite/service/edu.dart';
-
+import 'package:kite/util/edu/icon.dart';
 
 class DailyTimetable extends StatefulWidget {
   const DailyTimetable({Key? key}) : super(key: key);
@@ -16,7 +13,6 @@ class DailyTimetable extends StatefulWidget {
 }
 
 class _DailyTimetableState extends State<DailyTimetable> {
-
   TimetableDao timetableDao = TimetableMock();
   final SchoolYear currSchoolYear = const SchoolYear(2021);
   final Semester currSemester = Semester.firstTerm;
@@ -26,7 +22,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
   late Size _deviceSize;
   List<Course> courseList = <Course>[];
   List<Course> currDayCourseList = <Course>[];
-  List<int> currDay = [0,0];
+  List<int> currDay = [0, 0];
   final List<int> tapped = [1, 1];
   bool isInitialized = false;
 
@@ -47,7 +43,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
     "日",
   ];
 
-  void initialize() async{
+  void initialize() async {
     // TODO: 获取课程列表
     // TODO:获取起始日期
 
@@ -57,7 +53,6 @@ class _DailyTimetableState extends State<DailyTimetable> {
 
     // 解析当日课程列表
     currDayCourseList = _getCourseListByWeekAndDay(currDay[0], currDay[1]);
-
   }
 
   List<Course> _getCourseListByWeekAndDay(int weekIndex, int dayIndex) {
@@ -77,13 +72,13 @@ class _DailyTimetableState extends State<DailyTimetable> {
     };
     List<Course> res = <Course>[Course.fromJson(testData)];
     print(res);
-    return  res;
+    return res;
   }
 
   @override
   Widget build(BuildContext context) {
     print("this is daily_timetable.dart");
-    if (isInitialized == false){
+    if (isInitialized == false) {
       _deviceSize = MediaQuery.of(context).size;
       initialize();
       isInitialized = true;
@@ -184,8 +179,8 @@ class _DailyTimetableState extends State<DailyTimetable> {
         showModalBottomSheet(
             backgroundColor: Colors.transparent,
             builder: (BuildContext context) {
-              return CourseBottomSheet(_deviceSize, course.courseName.toString(),
-                  course.courseId.toString(), course.dynClassId.toString(), detail);
+              return CourseBottomSheet(_deviceSize, course.courseName.toString(), course.courseId.toString(),
+                  course.dynClassId.toString(), detail);
             },
             context: context);
       },
@@ -196,8 +191,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
             child: Column(
               children: [
                 ListTile(
-                  leading: Image.asset(courseIconPath+
-                      CourseCategory.courseToCategory[course.courseName].toString()+'.png'),
+                    leading: Image.asset(courseIconPath + CourseCategory.query(course.courseName ?? '') + '.png'),
                     title: Text(course.courseName.toString()),
                     subtitle: Column(
                       children: [
@@ -244,5 +238,4 @@ class _DailyTimetableState extends State<DailyTimetable> {
       ),
     );
   }
-
 }
