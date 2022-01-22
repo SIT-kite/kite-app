@@ -4,6 +4,7 @@ import 'package:kite/global/session_pool.dart';
 import 'package:kite/page/score/evaluation.dart';
 import 'package:kite/service/edu.dart';
 import 'package:kite/service/edu/evaluation.dart';
+import 'package:kite/util/edu/icon.dart';
 
 class ScoreItem extends StatefulWidget {
   final Score _score;
@@ -94,6 +95,7 @@ class _ScoreItemState extends State<ScoreItem> {
       ),
       child: Column(children: [
         ListTile(
+          leading: Image.asset('assets/course/${CourseCategory.query(_score.course)}.png'),
           title: Text(_score.course, style: const TextStyle(fontWeight: FontWeight.bold)),
           subtitle: Text('${_score.courseId[0] != 'G' ? '必修' : '选修'} | 学分: ${_score.credit}'),
           trailing: _buildScoreValueView(),
