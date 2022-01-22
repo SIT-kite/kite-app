@@ -14,7 +14,8 @@ class ReportItem extends StatefulWidget {
 }
 
 class _ReportItemState extends State<ReportItem> {
-  String content = '默认文字';
+  static const String defaultContent = '记得上报哦';
+  String? content;
 
   @override
   void initState() {
@@ -34,6 +35,15 @@ class _ReportItemState extends State<ReportItem> {
     setState(() => content = result);
   }
 
+  String _generateContent(ReportHistory history) {
+    final today = DateTime.now();
+    if (history.date != (today.year * 10000 + today.month * 100 + today.day)) {
+      return '今日未上报';
+    }
+    final normal = history.isNormal == 0 ? '体温正常' : '体温异常';
+    return '今日已上报, $normal (${history.place})';
+  }
+
   Future<String> _buildContent() async {
     final username = StoragePool.authSetting.currentUsername!;
     late ReportHistory? history;
@@ -47,16 +57,23 @@ class _ReportItemState extends State<ReportItem> {
     if (history == null) {
       return '无上报记录';
     }
-    final today = DateTime.now();
-    if (history.date != (today.year * 10000 + today.month * 100 + today.day)) {
-      return '今日未上报';
-    }
-    final normal = history.isNormal == 0 ? '体温正常' : '体温异常';
-    return '今日已上报, $normal (${history.place})';
+    // 别忘了本地缓存更新一下.
+    StoragePool.homeSetting.lastReport = history;
+    return _generateContent(history);
   }
 
   @override
   Widget build(BuildContext context) {
+    // 如果是第一次加载 (非下拉导致的渲染), 加载缓存的上报记录.
+    if (content == null) {
+      final ReportHistory? lastReport = StoragePool.homeSetting.lastReport;
+      // 如果本地没有缓存记录, 加载默认文本. 否则加载记录.
+      if (lastReport == null) {
+        content = defaultContent;
+      } else {
+        content = _generateContent(lastReport);
+      }
+    }
     return HomeItem(route: '/report', icon: 'assets/home/icon_report.svg', title: '体温上报', subtitle: content);
   }
 }

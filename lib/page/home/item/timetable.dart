@@ -10,6 +10,8 @@ class TimetableItem extends StatefulWidget {
 }
 
 class _TimetableItemState extends State<TimetableItem> {
+  String content = '查看近期课程';
+
   @override
   void initState() {
     eventBus.on('onHomeRefresh', (arg) {});
@@ -19,6 +21,11 @@ class _TimetableItemState extends State<TimetableItem> {
 
   @override
   Widget build(BuildContext context) {
-    return const HomeItem(route: '/timetable', icon: 'assets/home/icon_timetable.svg', title: '课程表');
+    return const HomeItem(
+      route: '/timetable',
+      icon: 'assets/home/icon_timetable.svg',
+      title: '课程表',
+      subtitle: '查看近期课程',
+    );
   }
 }

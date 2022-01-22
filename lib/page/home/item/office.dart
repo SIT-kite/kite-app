@@ -13,7 +13,8 @@ class OfficeItem extends StatefulWidget {
 }
 
 class _OfficeItemState extends State<OfficeItem> {
-  String content = '默认文字'; // TODO: 此处使用默认值.
+  static const defaultContent = '通过应网办办理业务';
+  String? content;
 
   @override
   void initState() {
@@ -56,6 +57,11 @@ class _OfficeItemState extends State<OfficeItem> {
 
   @override
   Widget build(BuildContext context) {
+    // 如果是首屏加载, 从缓存读
+    if (content != null) {
+      final String? lastOfficeStatus = StoragePool.homeSetting.lastOfficeStatus;
+      content = lastOfficeStatus ?? defaultContent;
+    }
     return HomeItem(route: '/office', icon: 'assets/home/icon_office.svg', title: '办公', subtitle: content);
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/entity/library/hot_search.dart';
 import 'package:kite/global/bus.dart';
 import 'package:kite/global/session_pool.dart';
+import 'package:kite/global/storage_pool.dart';
 import 'package:kite/page/home/item.dart';
 import 'package:kite/service/library.dart';
 
@@ -15,7 +16,8 @@ class LibraryItem extends StatefulWidget {
 }
 
 class _LibraryItemState extends State<LibraryItem> {
-  String content = '默认文字';
+  static const String defaultContent = '馆藏书籍和借阅情况';
+  String? content;
 
   @override
   void initState() {
@@ -48,11 +50,18 @@ class _LibraryItemState extends State<LibraryItem> {
     final randomIndex = Random().nextInt(monthlyHot.length);
     final hotItem = monthlyHot[randomIndex];
 
-    return '热搜 ${hotItem.hotSearchWord} (${hotItem.count})';
+    final result = '热搜 ${hotItem.hotSearchWord} (${hotItem.count})';
+    StoragePool.homeSetting.lastHotSearch = result;
+    return result;
   }
 
   @override
   Widget build(BuildContext context) {
+    // 如果是首屏加载
+    if (content == null) {
+      final lastHotSearch = StoragePool.homeSetting.lastHotSearch;
+      content = lastHotSearch ?? defaultContent;
+    }
     return HomeItem(route: '/library', icon: 'assets/home/icon_library.svg', title: '图书馆', subtitle: content);
   }
 }

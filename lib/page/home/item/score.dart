@@ -10,6 +10,8 @@ class ScoreItem extends StatefulWidget {
 }
 
 class _ScoreItemState extends State<ScoreItem> {
+  static const defaultContent = '愿每一天都有收获';
+
   @override
   void initState() {
     eventBus.on('onHomeRefresh', (arg) {});
@@ -19,6 +21,11 @@ class _ScoreItemState extends State<ScoreItem> {
 
   @override
   Widget build(BuildContext context) {
-    return const HomeItem(route: '/score', icon: 'assets/home/icon_score.svg', title: '成绩');
+    return const HomeItem(
+      route: '/score',
+      icon: 'assets/home/icon_score.svg',
+      title: '成绩',
+      subtitle: defaultContent,
+    );
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kite/entity/electricity.dart';
 import 'package:kite/global/bus.dart';
+import 'package:kite/global/storage_pool.dart';
 import 'package:kite/page/home/item.dart';
 
 class ElectricityItem extends StatefulWidget {
@@ -10,6 +12,9 @@ class ElectricityItem extends StatefulWidget {
 }
 
 class _ElectricityItemState extends State<ElectricityItem> {
+  final Balance? lastBalance = StoragePool.homeSetting.lastBalance;
+  late String content = '宿舍电费余额和用电记录';
+
   @override
   void initState() {
     eventBus.on('onHomeRefresh', (arg) {});
@@ -19,6 +24,14 @@ class _ElectricityItemState extends State<ElectricityItem> {
 
   @override
   Widget build(BuildContext context) {
-    return const HomeItem(route: '/electricity', icon: 'assets/home/icon_electricity.svg', title: '查电费');
+    if (lastBalance != null) {
+      content = '寝室 ${lastBalance!.room} 上次余额 ${lastBalance!.balance.toStringAsPrecision(2)}';
+    }
+    return HomeItem(
+      route: '/electricity',
+      icon: 'assets/home/icon_electricity.svg',
+      title: '查电费',
+      subtitle: content,
+    );
   }
 }

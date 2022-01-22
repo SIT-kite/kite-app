@@ -1,3 +1,6 @@
+import 'package:kite/entity/electricity.dart';
+import 'package:kite/entity/expense.dart';
+import 'package:kite/entity/report.dart';
 import 'package:kite/entity/weather.dart';
 
 abstract class HomeSettingDao {
@@ -13,11 +16,32 @@ abstract class HomeSettingDao {
 
   set backgroundMode(int mode);
 
+  DateTime? get installTime;
+
+  set installTime(DateTime? dateTime);
+
   Weather get lastWeather;
 
   set lastWeather(Weather weather);
 
-  DateTime? get installTime;
+  // 首页在无网状态下加载的缓存
+  ReportHistory? get lastReport;
 
-  set installTime(DateTime? dateTime);
+  set lastReport(ReportHistory? reportHistory);
+
+  Balance? get lastBalance;
+
+  set lastBalance(Balance? lastBalance);
+
+  ExpenseRecord? get lastExpense;
+
+  set lastExpense(ExpenseRecord? expense);
+
+  String? get lastHotSearch;
+
+  set lastHotSearch(String? hotSearch);
+
+  String? get lastOfficeStatus;
+
+  set lastOfficeStatus(String? status);
 }

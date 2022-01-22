@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kite/entity/expense.dart';
 import 'package:kite/global/bus.dart';
+import 'package:kite/global/storage_pool.dart';
 import 'package:kite/page/home/item.dart';
 
 class ExpenseItem extends StatefulWidget {
@@ -10,6 +12,9 @@ class ExpenseItem extends StatefulWidget {
 }
 
 class _ExpenseItemState extends State<ExpenseItem> {
+  final ExpenseRecord? lastExpense = StoragePool.homeSetting.lastExpense;
+  late String content = '校园卡消费记录';
+
   @override
   void initState() {
     eventBus.on('onHomeRefresh', (arg) {});
@@ -19,6 +24,14 @@ class _ExpenseItemState extends State<ExpenseItem> {
 
   @override
   Widget build(BuildContext context) {
-    return const HomeItem(route: '/expense', icon: 'assets/home/icon_expense.svg', title: '消费');
+    if (lastExpense != null) {
+      content = '${lastExpense!.amount} 元 ${lastExpense!.place}';
+    }
+    return HomeItem(
+      route: '/expense',
+      icon: 'assets/home/icon_expense.svg',
+      title: '消费',
+      subtitle: content,
+    );
   }
 }
