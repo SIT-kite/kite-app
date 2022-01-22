@@ -40,7 +40,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
     return ExpenseType.values.map(
       (expenseType) {
         final double sumInType = sumByClassification[expenseType.index];
-        final double percentage = sumInType / sum;
+        // 此处产生除 0 问题.
+        final double percentage = sum != 0 ? sumInType / sum : 0;
 
         return ListTile(
           leading: buildIcon(expenseType),
