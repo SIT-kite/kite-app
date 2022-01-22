@@ -97,6 +97,12 @@ class SsoSession extends ASession {
   String? get username => _username;
   String? get password => _password;
 
+  /// 惰性登录，只有在第一次请求跳转到登录页时才开始尝试真正的登录
+  void lazyLogin(String username, String password) {
+    _username = username;
+    _password = password;
+  }
+
   /// 带异常的登录
   Future<Response> login(String username, String password) async {
     // 在 OA 登录时, 服务端会记录同一 cookie 用户登录次数和输入错误次数,
