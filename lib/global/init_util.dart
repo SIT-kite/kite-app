@@ -14,5 +14,14 @@ Future<void> initBeforeRun() async {
   Log.info('应用开启前初始化完成');
 
   // 初始化用户首次使用时间
+  // ??= 表示为空时候才赋值
   StoragePool.homeSetting.installTime ??= DateTime.now();
+
+  // 若本地存放了用户名与密码，那就惰性登录
+  String? currentUsername = StoragePool.authSetting.currentUsername;
+  if (currentUsername != null) {
+    // 惰性登录
+    String password = StoragePool.authPool.get(currentUsername)!.password;
+    SessionPool.ssoSession.lazyLogin(currentUsername, password);
+  }
 }
