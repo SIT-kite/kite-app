@@ -1,4 +1,6 @@
+import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:kite/global/hive_type_id_pool.dart';
 
 part 'electricity.g.dart';
 
@@ -10,30 +12,34 @@ enum Mode {
 }
 
 @JsonSerializable()
+@HiveType(typeId: HiveTypeIdPool.balanceItem)
 class Balance {
-  @JsonKey(name: 'balance', fromJson: _toBalance)
-  // 余额
-  double balance = 0.0;
-  @JsonKey(name: 'power', fromJson: _toPower)
-  // 余量
-  double power = 0.0;
-  @JsonKey(name: 'room', fromJson: _intToRoom)
-  // 房间号
-  String room = '';
-  @JsonKey(name: 'ts', fromJson: _toTs)
-  // 更新时间
-  String ts = '';
+  /// 余额
+  @JsonKey()
+  @HiveField(0)
+  final double balance;
 
-  Balance();
+  // 余量
+  @JsonKey()
+  @HiveField(1)
+  final double power;
+
+  // 房间号
+  @JsonKey(fromJson: _intToRoom)
+  @HiveField(2)
+  final String room;
+
+  // 更新时间
+  @JsonKey(fromJson: _toTs)
+  @HiveField(3)
+  final String ts;
+
+  Balance(this.balance, this.power, this.room, this.ts);
 
   factory Balance.fromJson(Map<String, dynamic> json) => _$BalanceFromJson(json);
 
   @override
   String toString() => 'Balance{balance: $balance, course: $power, power: $room, classId: $room, ts: $ts}';
-
-  static double _toBalance(double balance) => double.parse(balance.toStringAsFixed(2));
-
-  static double _toPower(double power) => double.parse(power.toStringAsFixed(2));
 
   static String _intToRoom(int room) => room.toString();
 

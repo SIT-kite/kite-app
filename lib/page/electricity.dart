@@ -17,7 +17,7 @@ class ElectricityPage extends StatefulWidget {
 class _ElectricityPageState extends State<ElectricityPage> {
   String building = '';
   String room = '';
-  Balance balance = Balance();
+  Balance balance = Balance(0, 0, '', ''); // TODO: Refactor
   Map<String, double> rank = {};
   List<ConditionHours> hoursList = [];
   List<ConditionDays> daysList = [];

@@ -28,7 +28,8 @@ Future<Balance> fetchBalance(String room) async {
   try {
     balance = Balance.fromJson(response.data['data']);
   } catch (e) {
-    balance = Balance();
+    // TODO: 临时过一下编译
+    balance = Balance(0, 0, '', '');
   }
 
   return balance;

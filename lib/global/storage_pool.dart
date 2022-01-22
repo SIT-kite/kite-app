@@ -6,7 +6,9 @@ import 'package:kite/dao/setting/auth.dart';
 import 'package:kite/dao/setting/home.dart';
 import 'package:kite/dao/setting/theme.dart';
 import 'package:kite/entity/auth_item.dart';
+import 'package:kite/entity/electricity.dart';
 import 'package:kite/entity/library/search_history.dart';
+import 'package:kite/entity/report.dart';
 import 'package:kite/entity/weather.dart';
 import 'package:kite/storage/setting/auth.dart';
 import 'package:kite/storage/setting/home.dart';
@@ -54,6 +56,8 @@ class StoragePool {
     registerAdapter(LibrarySearchHistoryItemAdapter());
     registerAdapter(AuthItemAdapter());
     registerAdapter(WeatherAdapter());
+    registerAdapter(ReportHistoryAdapter());
+    registerAdapter(BalanceAdapter());
   }
 
   static Future<void> init() async {
