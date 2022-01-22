@@ -1,12 +1,13 @@
 # 应用程序存储
 
-小风筝的本地存储有两部分组成，分别是 kv 存储和记录型数据存储，相关代码见 `lib/storage/`。两种存储类型均使用 hive 进行存储。
+小风筝的本地存储依赖 Hive 库，相关代码见 `lib/storage/`。
 
 ## Hive 的基本使用
 
-hive 是一种NoSQL类型的轻量级数据库，其中的数据以Box的形式组织，box 在一般 SQL 数据中可与表的概念相对应，但是它在结构组织上没有表那么严格，表只能按照表定义的结构进行存储，而 box 可以容纳任意支持的数据结构。
+hive 是一种 NoSQL 类型的轻量级数据库，其中的数据以 Box 的形式组织， box 在一般 SQL
+数据中可与表的概念相对应，但是它在结构组织上没有表那么严格，表只能按照表定义的结构进行存储，而 box 可以容纳任意支持的数据结构。
 
-在一个 box 中，每个数据项目都有其唯一的序号 index， 与键 key。使用序号与键都可以相当迅速地查找到目标结果，故项目中需要正确的应用序号与键，尽可能减少全表扫描的场景，以提高程序性能。
+在一个 box 中，每个数据项目都有其唯一的序号 `index`， 与键 key。使用序号与键都可以相当迅速地查找到目标结果，故项目中需要正确的应用序号与键，尽可能减少全表扫描的场景，以提高程序性能。
 
 使用 add 去添加元素时，序号开始按照0,1,2,... 增长，此时键等于序号。
 
@@ -26,13 +27,13 @@ void main() async {
 
   print(friends.getAt(0));
   print(friends.get(0));
-  
+
   print(friends.getAt(1));
   print(friends.get(1));
-  
+
   print(friends.getAt(2));
   print(friends.get(123));
-  
+
   print(friends.getAt(3));
   print(friends.get(124));
 }
@@ -44,15 +45,15 @@ void main() async {
 
 1. 编写一个目标实体类
 
-2. 使用HiveType(typeId: xxx) 标注实体类，xxx 代表一个唯一编号，hive 将该编号与不同数据类型进行区分，后续不应当再修改该编号，否则将出现数据错误。
+2. 使用 `HiveType(typeId: xxx)` 标注实体类，xxx 代表一个唯一编号，hive 将该编号与不同数据类型进行区分，后续不应当再修改该编号，否则将出现数据错误。
 
-3. 使用@HiveField 为该实体的所有字段添加标注，注意该注解需要传入一个数值，使得hive 对该实体的不同字段进行区分，该序号也不可修改，一般按序排列即可。
+3. 使用 `@HiveField` 为该实体的所有字段添加标注，注意该注解需要传入一个数值，使得 hive 对该实体的不同字段进行区分，该序号也不可修改，一般按序排列即可。
 
-4. 添加part '当前文件名.g.dart'; 声明
+4. 添加 `part '当前文件名.g.dart';` 声明。
 
-5. 运行 flutter pub run build_runner build 以生成TypeAdaptor类
+5. 运行 `flutter pub run build_runner build` 以生成 `TypeAdaptor` 类。
 
-6. 注册对应的适配器
+6. 注册对应的适配器。
 
 ```dart
 import 'package:hive/hive.dart';
@@ -75,7 +76,8 @@ class Person {
 
 ### ### 注意
 
-在该项目中，所有的适配器应当在global/storage_pool.dart文件中的_registerAdapters方法中完成注册，所有的自定义类型typeId应当在global/hive_type_id_pool.dart中完成对应常量定义。
+在该项目中，所有的适配器应当在 `global/storage_pool.dart` 文件中的 `_registerAdapters` 方法中完成注册，所有的自定义类型 `typeId`
+应当在 `global/hive_type_id_pool.dart` 中完成对应常量定义。
 
 ## 键值对数据
 
@@ -92,7 +94,3 @@ class Person {
 | /library/searchHistory | 搜索记录     | 见 `SearchHistoryStorage`             |
 | /network/proxy         | 代理IP地址   | 格式如 `192.168.1.1:8000`               |
 | /network/useProxy      | 使用代理服务器  | bool                                 |
-
-## 关系型数据
-
-TODO.
