@@ -24,7 +24,7 @@ class Score {
   final String innerClassId;
 
   /// 班级ID （数字）
-  @JsonKey(name: 'jxbmc')
+  @JsonKey(name: 'jxbmc', defaultValue: '无')
   final String dynClassId;
 
   /// 学年
