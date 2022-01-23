@@ -7,6 +7,7 @@ import 'package:kite/service/sso.dart';
 import 'package:kite/service/weather.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
+import 'package:kite/util/network.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -39,18 +40,19 @@ class HomePage extends StatelessWidget {
     await SessionPool.ssoSession.login(username, password);
   }
 
-  /// 显示请检查网络
-  void _showCheckNetwork(BuildContext context) {
+  /// 显示检查网络的flash
+  void _showCheckNetwork(BuildContext context, {Widget? title}) {
     showBasicFlash(
       context,
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        const Text('请检查网络连接'),
+        const Icon(Icons.dangerous),
+        title ?? const Text('请检查当前是否处于校园网环境'),
         TextButton(
           child: const Text('检查网络'),
           onPressed: () => Navigator.of(context).pushNamed('/connectivity'),
         )
       ]),
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 5),
     );
   }
 
@@ -66,7 +68,7 @@ class HomePage extends StatelessWidget {
           showBasicFlash(context, Text('登录异常: $e'));
         } else {
           // 如果是网络问题, 提示检查网络.
-          _showCheckNetwork(context);
+          _showCheckNetwork(context, title: Text('$e: 网络异常'));
         }
       }
     }
@@ -147,6 +149,29 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Future.delayed(Duration.zero, () {
+      showBasicFlash(
+        context,
+        const Text('正在检查网络连接'),
+        duration: const Duration(seconds: 3),
+      );
+    });
+    // 检查校园网情况
+    checkConnectivity().then((ok) {
+      if (!ok) {
+        _showCheckNetwork(
+          context,
+          title: const Text('无法连接校园网，部分功能不可用'),
+        );
+      } else {
+        showBasicFlash(
+          context,
+          const Text('当前已连接校园网环境'),
+          duration: const Duration(seconds: 3),
+        );
+      }
+    });
+
     if (UniversalPlatform.isAndroid || UniversalPlatform.isIOS) {
       QuickButton.init(context);
     }
