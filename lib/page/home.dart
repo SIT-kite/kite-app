@@ -6,6 +6,7 @@ import 'package:kite/global/storage_pool.dart';
 import 'package:kite/service/sso.dart';
 import 'package:kite/service/weather.dart';
 import 'package:kite/util/flash.dart';
+import 'package:kite/util/logger.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -150,6 +151,20 @@ class HomePage extends StatelessWidget {
       key: _scaffoldKey,
       body: _buildBody(context),
       drawer: const KiteDrawer(),
+      floatingActionButton: UniversalPlatform.isDesktopOrWeb
+          ? FloatingActionButton(
+              child: const Icon(Icons.refresh),
+              onPressed: () async {
+                // 刷新页面
+                Log.info('浮动按钮被点击');
+                // 触发下拉刷新
+                final pos = _refreshController.position!;
+                await pos.animateTo(-100, duration: const Duration(milliseconds: 800), curve: Curves.linear);
+
+                // pos.jumpTo(-20);
+              },
+            )
+          : null,
     );
   }
 }
