@@ -105,6 +105,7 @@ class SsoSession extends ASession {
 
   /// 带异常的登录
   Future<Response> login(String username, String password) async {
+    Log.info('尝试登录：$username');
     // 在 OA 登录时, 服务端会记录同一 cookie 用户登录次数和输入错误次数,
     // 所以需要在登录前清除所有 cookie, 避免用户重试时出错.
     _jar.deleteAll();
@@ -123,7 +124,7 @@ class SsoSession extends ASession {
     if (response.realUri.toString() != _loginSuccessUrl) {
       throw const UnknownAuthException();
     }
-
+    Log.info('登录成功：$username');
     isOnline = true;
     _username = username;
     _password = password;
