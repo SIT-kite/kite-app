@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:kite/component/unsupported_platform_launch.dart';
+import 'package:universal_platform/universal_platform.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebPageGamePage extends StatefulWidget {
@@ -17,13 +19,15 @@ class _WebPageGamePageState extends State<WebPageGamePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: WebView(
-        initialUrl: widget.url,
-        javascriptMode: JavascriptMode.unrestricted,
-        onWebViewCreated: (WebViewController webViewController) {
-          _controller.complete(webViewController);
-        },
-      ),
+      body: UniversalPlatform.isDesktopOrWeb
+          ? UnsupportedPlatformUrlLauncher(widget.url)
+          : WebView(
+              initialUrl: widget.url,
+              javascriptMode: JavascriptMode.unrestricted,
+              onWebViewCreated: (WebViewController webViewController) {
+                _controller.complete(webViewController);
+              },
+            ),
     );
   }
 }
