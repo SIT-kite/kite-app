@@ -72,3 +72,5 @@ generated_plugin*
 # 过滤 IDE 保存的程序运行日志
 **/*.log
 
+# 过滤cookie持久化的文件
+.cookies
