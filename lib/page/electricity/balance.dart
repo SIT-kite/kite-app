@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:kite/entity/electricity.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/service/electricity.dart';
@@ -16,7 +17,7 @@ class BalanceSection extends StatelessWidget {
         color: Colors.white,
         //设置四周圆角 角度
         borderRadius: const BorderRadius.all(Radius.circular(4.0)),
-        //设置四周边框
+        // 设置四周边框
         border: Border.all(width: 2, color: Colors.blue.shade400),
       ),
       child: Column(
@@ -31,12 +32,12 @@ class BalanceSection extends StatelessWidget {
             )
           ]),
           Text('房间号: ${balance.room}'),
-          Text('剩余金额: ${balance.balance}'),
-          Text('剩余电量: ${balance.power}'),
+          Text('剩余金额: ${balance.balance.toStringAsFixed(2)}'),
+          Text('剩余电量: ${balance.power.toStringAsFixed(2)}'),
           Container(
             margin: const EdgeInsets.only(top: 5),
             child: Text(
-              '更新时间: ${balance.ts}',
+              '更新时间: ${DateFormat('yyyy-MM-dd hh:mm').format(balance.ts)}',
               style: TextStyle(color: Colors.grey.shade500, fontSize: 12),
             ),
           ),
