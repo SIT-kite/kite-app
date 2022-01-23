@@ -41,6 +41,7 @@ class _TimetablePageState extends State<TimetablePage> {
     courseList = await timetableDao.getTimetable(currSchoolYear, currSemester);
     generateDailyTimetable();
     generateDateTable();
+    print(courseList);
     return Future.value(1);
   }
 
@@ -97,8 +98,6 @@ class _TimetablePageState extends State<TimetablePage> {
         courseList[i].week = courseList[i].week! >> 1;
       }
     }
-    print("123");
-
     print(dailyCourseList[0]);
     print(dailyCourseList[1]);
   }

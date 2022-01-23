@@ -42,6 +42,21 @@ class _DailyTimetableState extends State<DailyTimetable> {
     "六",
     "日",
   ];
+  Map<int?, String> timeIndex2Time = {
+    6: "8:20-9:55",
+    24: "10:15-11:50",
+    96: "13:00-14:35",
+    384: "14:55-16:30",
+    30: "8:20-11:50",
+    126: "8:20-11:50 13:00-14:35",
+    510: "8:20-11:50 13:00-16:30",
+    504: "10:15-11:50 13:00-16:30",
+    480: "13:00-16:30",
+    1536: "18:00-19:35",
+    3584: "18:00-20:25",
+    4064: "13:00-20:25",
+    null: "XXX"
+  };
 
   List<Course> _getCourseListByWeekAndDay(int weekIndex, int dayIndex) {
     List<Course> res = <Course>[];
@@ -191,8 +206,8 @@ class _DailyTimetableState extends State<DailyTimetable> {
                               child: Row(
                                 textDirection: TextDirection.ltr,
                                 // TODO: 解析timeIndex
-                                children: const [
-                                  Text("8:20" + "~" + "9:50"),
+                                children: [
+                                  Text(timeIndex2Time[course.timeIndex]!),
                                 ],
                               ),
                             ),
