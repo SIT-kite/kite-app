@@ -1,38 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:kite/dao/edu/timetable.dart';
 import 'package:kite/entity/edu.dart';
-import 'package:kite/mock/edu/timetable.dart';
 import 'package:kite/page/timetable/bottom_sheet.dart';
 import 'package:kite/util/edu/icon.dart';
 
 class DailyTimetable extends StatefulWidget {
-  const DailyTimetable({Key? key}) : super(key: key);
+  List<Course> courseList = <Course>[];
+  Map<int, List<List<int>>> dailyCourseList = {};
+  List<List<String>> dateTableList = [];
+
+  DailyTimetable({Key? key, required this.courseList, required this.dailyCourseList, required this.dateTableList})
+      : super(key: key);
 
   @override
-  _DailyTimetableState createState() => _DailyTimetableState();
+  // ignore: no_logic_in_create_state
+  _DailyTimetableState createState() =>
+      _DailyTimetableState(courseList: courseList, dailyCourseList: dailyCourseList, dateTableList: dateTableList);
 }
 
 class _DailyTimetableState extends State<DailyTimetable> {
-  TimetableDao timetableDao = TimetableMock();
-  final SchoolYear currSchoolYear = const SchoolYear(2021);
-  final Semester currSemester = Semester.firstTerm;
+  _DailyTimetableState({required this.courseList, required this.dailyCourseList, required this.dateTableList});
 
   static const String courseIconPath = 'assets/course/';
-
+  bool firstOpen = true;
   late Size _deviceSize;
+
+  // index1 -- 周数  index2 -- 天数
+  Map<int, List<List<int>>> dailyCourseList = {};
   List<Course> courseList = <Course>[];
   List<Course> currDayCourseList = <Course>[];
-  List<int> currDay = [0, 0];
-  final List<int> tapped = [1, 1];
+  final List<int> tapped = [0, 0];
   bool isInitialized = false;
 
   // 周次 日期x7 月份
-  final List<List<int>> dateTableList = [
-    [1, 6, 7, 8, 9, 10, 11, 12, 9],
-    [2, 13, 14, 15, 16, 17, 18, 19, 9],
-    [3, 20, 21, 22, 23, 24, 25, 26, 9],
-    [4, 27, 28, 29, 30, 1, 2, 3, 9]
-  ];
+  List<List<String>> dateTableList = [];
   final List<String> num2word = [
     "一",
     "二",
@@ -43,47 +43,25 @@ class _DailyTimetableState extends State<DailyTimetable> {
     "日",
   ];
 
-  void initialize() async {
-    // TODO: 获取课程列表
-    // TODO:获取起始日期
-
-    // 拉取课程数据
-    // courseList = await timetableDao.getTimetable(currSchoolYear, currSemester);
-    // print(courseList.toString());
-
-    // 解析当日课程列表
-    currDayCourseList = _getCourseListByWeekAndDay(currDay[0], currDay[1]);
-  }
-
   List<Course> _getCourseListByWeekAndDay(int weekIndex, int dayIndex) {
-    // 测试数据
-    Map<String, dynamic> testData = {
-      "kcmc": "信息安全技术",
-      "xqjmc": "星期一",
-      "jcs": "5-6",
-      "zcd": "1-5周",
-      "cdmc": "二教F206",
-      "xm": "张成姝",
-      "xqmc": "奉贤校区",
-      "xf": "2",
-      "zxs": "28",
-      "jxbmc": "2002356",
-      "kch": "B4045126",
-    };
-    List<Course> res = <Course>[Course.fromJson(testData)];
+    List<Course> res = <Course>[];
+    print(weekIndex);
+    print(dayIndex);
+    for (var i in dailyCourseList[weekIndex]![dayIndex]) {
+      res.add(courseList[i]);
+    }
+    print("this is getCourseListByWeekAndDay");
     print(res);
     return res;
   }
 
   @override
   Widget build(BuildContext context) {
-    print("this is daily_timetable.dart");
-    if (isInitialized == false) {
-      _deviceSize = MediaQuery.of(context).size;
-      initialize();
-      isInitialized = true;
+    if (firstOpen){
+      currDayCourseList = _getCourseListByWeekAndDay(0, 0);
+      firstOpen = false;
     }
-    print(currDayCourseList.toString());
+    _deviceSize = MediaQuery.of(context).size;
     return PageView.builder(
       controller: PageController(viewportFraction: 1.0),
       scrollDirection: Axis.horizontal,
@@ -100,9 +78,14 @@ class _DailyTimetableState extends State<DailyTimetable> {
             Expanded(
               flex: 9,
               child: ListView(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 15),
-                children: currDayCourseList.map((e) => _buildClassCard(context, e)).toList(),
-              ),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 15),
+                  children: currDayCourseList == []
+                      ? [
+                          const Center(
+                            child: Text("今天没有课哦"),
+                          )
+                        ]
+                      : currDayCourseList.map((e) => _buildClassCard(context, e)).toList()),
             )
           ],
         );
@@ -111,7 +94,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
   }
 
   Widget _buildDateTable(int weekIndex) {
-    List<int> currWeek = dateTableList[weekIndex];
+    List<String> currWeek = dateTableList[weekIndex];
     return ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: 8,
@@ -123,7 +106,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        currWeek[0].toString(),
+                        (weekIndex + 1).toString(),
                         style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                       ),
                       const Text(
@@ -137,17 +120,18 @@ class _DailyTimetableState extends State<DailyTimetable> {
                   child: Container(
                       padding: const EdgeInsets.fromLTRB(4, 4, 4, 4),
                       child: InkWell(
-                        onTap: () {},
-                        onTapDown: (TapDownDetails tapDownDetails) {
+                        onTap: () {
                           setState(() {
-                            tapped[0] = weekIndex + 1;
-                            tapped[1] = index;
-                            currDayCourseList = _getCourseListByWeekAndDay(weekIndex + 1, index);
+                            tapped[0] = weekIndex;
+                            tapped[1] = index - 1;
+                            print("tapped");
+                            currDayCourseList = _getCourseListByWeekAndDay(weekIndex, index - 1);
                           });
                         },
+                        onTapDown: (TapDownDetails tapDownDetails) {},
                         child: Container(
                             decoration: BoxDecoration(
-                              color: ((tapped[0] == currWeek[0]) && (tapped[1] == index))
+                              color: ((tapped[0] == weekIndex) && (tapped[1] == index - 1))
                                   ? Colors.blueAccent
                                   : Colors.white,
                               borderRadius: const BorderRadius.all(Radius.circular(12.0)),
@@ -160,7 +144,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
                                   style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                                 ),
                                 Text(
-                                  currWeek[8].toString() + "/" + currWeek[index].toString(),
+                                  currWeek[index - 1],
                                   style: const TextStyle(fontSize: 9),
                                 ),
                               ],
