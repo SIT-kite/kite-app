@@ -1,6 +1,7 @@
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kite/dao/auth_pool.dart';
+import 'package:kite/dao/electricity.dart';
 import 'package:kite/dao/library/search_history.dart';
 import 'package:kite/dao/setting/auth.dart';
 import 'package:kite/dao/setting/home.dart';
@@ -10,6 +11,7 @@ import 'package:kite/entity/electricity.dart';
 import 'package:kite/entity/library/search_history.dart';
 import 'package:kite/entity/report.dart';
 import 'package:kite/entity/weather.dart';
+import 'package:kite/storage/electricity.dart';
 import 'package:kite/storage/setting/auth.dart';
 import 'package:kite/storage/setting/home.dart';
 import 'package:kite/storage/setting/network.dart';
@@ -29,6 +31,10 @@ class StoragePool {
   static late SearchHistoryStorage _librarySearchHistory;
 
   static SearchHistoryDao get librarySearchHistory => _librarySearchHistory;
+
+  static late ElectricityStorage _electricity;
+
+  static ElectricityDao get electricity => _electricity;
 
   static late HomeSettingStorage _homeSetting;
 
@@ -68,6 +74,8 @@ class StoragePool {
 
     final searchHistoryBox = await Hive.openBox<LibrarySearchHistoryItem>('library.search_history');
     _librarySearchHistory = SearchHistoryStorage(searchHistoryBox);
+    final electricityBox = await Hive.openBox('electricity');
+    _electricity = ElectricityStorage(electricityBox);
 
     final authBox = await Hive.openBox<AuthItem>('auth');
     _authPool = AuthPoolStorage(authBox);

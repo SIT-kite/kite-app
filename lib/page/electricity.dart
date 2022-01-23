@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/entity/electricity.dart';
 import 'package:kite/entity/electricity/util.dart';
+import 'package:kite/global/storage_pool.dart';
 import 'package:kite/page/electricity/balance.dart';
 import 'package:kite/page/electricity/chart.dart';
 import 'package:kite/page/electricity/model.dart';
@@ -99,6 +100,8 @@ class _ElectricityPageState extends State<ElectricityPage> {
         _buildButton('查询余额', const Color(0xFF2e62cd), () {
           String result = _checkRoomValid();
           if (result != 'error') {
+            StoragePool.electricity.lastBuilding = building;
+            StoragePool.electricity.lastRoom = room;
             fetchBalance('10$building$room')
                 .then((res) => {
                       res.room != ''
@@ -117,6 +120,8 @@ class _ElectricityPageState extends State<ElectricityPage> {
         _buildButton('查询使用情况', const Color(0xFFf08c00), () {
           String result = _checkRoomValid();
           if (result != 'error') {
+            StoragePool.electricity.lastBuilding = building;
+            StoragePool.electricity.lastRoom = room;
             getRank('10$building$room').then((res) {
               setState(() {
                 rank = res;
