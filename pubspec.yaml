@@ -48,6 +48,7 @@ dependencies:
   hive_flutter: ^1.1.0
   quick_actions: ^0.6.0+9
   universal_platform: ^1.0.0+1
+  path_provider: ^2.0.8
 
   # Error handlers
   flutter_bugly: ^0.4.3

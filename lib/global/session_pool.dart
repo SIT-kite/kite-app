@@ -11,6 +11,7 @@ import 'package:kite/service/office.dart';
 import 'package:kite/service/report.dart';
 import 'package:kite/service/sso.dart';
 import 'package:kite/util/logger.dart';
+import 'package:path_provider/path_provider.dart';
 
 const String? httpProxy = null;
 const bool allowBadCertificate = true;
@@ -20,7 +21,8 @@ class SessionPool {
   static String uaString = defaultUaString;
 
   // 持久化的CookieJar
-  static final PersistCookieJar _cookieJar = PersistCookieJar();
+  static late final PersistCookieJar _cookieJar;
+
   static PersistCookieJar get cookieJar => _cookieJar;
 
   static late Dio dio;
@@ -32,7 +34,12 @@ class SessionPool {
 
   static Future<void> init() async {
     Log.info("初始化SessionPool");
+
     // 只有初始化完dio后才能初始化UA
+    final String homeDirectory = (await getApplicationDocumentsDirectory()).path;
+    final FileStorage cookieStorage = FileStorage(homeDirectory + '/cookies/');
+    // 初始化 cookie jar
+    _cookieJar = PersistCookieJar(storage: cookieStorage);
     dio = _initDioInstance();
     await _initUserAgentString();
 
