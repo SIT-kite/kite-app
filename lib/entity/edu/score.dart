@@ -43,6 +43,11 @@ class Score {
       this.dynClassId);
 
   factory Score.fromJson(Map<String, dynamic> json) => _$ScoreFromJson(json);
+
+  @override
+  String toString() {
+    return 'Score{value: $value, course: $course, courseId: $courseId, innerClassId: $innerClassId, dynClassId: $dynClassId, schoolYear: $schoolYear, semester: $semester, credit: $credit}';
+  }
 }
 
 class ScoreDetail {

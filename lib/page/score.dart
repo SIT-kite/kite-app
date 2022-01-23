@@ -6,6 +6,7 @@ import 'package:kite/global/storage_pool.dart';
 import 'package:kite/page/score/banner.dart';
 import 'package:kite/page/score/item.dart';
 import 'package:kite/service/edu.dart';
+import 'package:kite/util/logger.dart';
 
 List<int> _generateYearList(int entranceYear) {
   final date = DateTime.now();
@@ -163,21 +164,24 @@ class _ScorePageState extends State<ScorePage> {
     return FutureBuilder<List<Score>>(
       future: future,
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
+        Log.info('查询成绩:${snapshot.connectionState}');
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError) {
+            return Center(child: Text(snapshot.error.toString()));
+          }
           final scoreList = snapshot.data!;
 
+          Log.info(scoreList);
           return Column(children: [
             Expanded(child: _buildHeader(scoreList), flex: 1),
             Expanded(
                 child: scoreList.isNotEmpty
-                    ? SingleChildScrollView(
-                        child: Column(children: _buildListView(scoreList)),
+                    ? ListView(
+                        children: _buildListView(scoreList),
                       )
                     : _buildNoResult(),
                 flex: 10),
           ]);
-        } else if (snapshot.hasError) {
-          return Center(child: Text(snapshot.error.toString()));
         }
         return const Center(child: CircularProgressIndicator());
       },
