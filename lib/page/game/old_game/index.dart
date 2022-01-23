@@ -19,6 +19,11 @@ class _WebPageGamePageState extends State<WebPageGamePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: UniversalPlatform.isDesktopOrWeb
+          ? AppBar(
+              title: const Text('模拟器游戏'),
+            )
+          : null,
       body: UniversalPlatform.isDesktopOrWeb
           ? UnsupportedPlatformUrlLauncher(widget.url)
           : WebView(
