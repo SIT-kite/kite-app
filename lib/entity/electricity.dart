@@ -4,13 +4,6 @@ import 'package:kite/global/hive_type_id_pool.dart';
 
 part 'electricity.g.dart';
 
-enum Mode {
-  balance,
-  rank,
-  conditionHours,
-  conditionDays,
-}
-
 @JsonSerializable()
 @HiveType(typeId: HiveTypeIdPool.balanceItem)
 class Balance {
@@ -19,103 +12,79 @@ class Balance {
   @HiveField(0)
   final double balance;
 
-  // 余量
+  /// 余量
   @JsonKey()
   @HiveField(1)
   final double power;
 
-  // 房间号
-  @JsonKey(fromJson: _intToRoom)
+  /// 房间号
+  @JsonKey()
   @HiveField(2)
-  final String room;
+  final int room;
 
-  // 更新时间
-  @JsonKey(fromJson: _toTs)
+  /// 更新时间
+  @JsonKey()
   @HiveField(3)
-  final String ts;
+  final DateTime ts;
 
   Balance(this.balance, this.power, this.room, this.ts);
 
   factory Balance.fromJson(Map<String, dynamic> json) => _$BalanceFromJson(json);
-
-  @override
-  String toString() => 'Balance{balance: $balance, course: $power, power: $room, classId: $room, ts: $ts}';
-
-  static String _intToRoom(int room) => room.toString();
-
-  static String _toTs(String ts) => ts.replaceAll('T', ' ').substring(0, 16);
 }
 
 @JsonSerializable()
 class Rank {
-  @JsonKey(name: 'consumption', fromJson: _toConsumption)
-  // 消费
-  double consumption = 0.0;
-  @JsonKey(name: 'rank')
-  // 排名
-  int rank = -1;
-  @JsonKey(name: 'roomCount')
-  // 房间总数
-  int roomCount = -1;
+  /// 消费
+  @JsonKey()
+  final double consumption;
 
-  Rank();
+  /// 排名
+  @JsonKey()
+  final int rank;
+
+  /// 房间总数
+  @JsonKey()
+  final int roomCount;
+
+  Rank(this.consumption, this.rank, this.roomCount);
 
   factory Rank.fromJson(Map<String, dynamic> json) => _$RankFromJson(json);
-
-  @override
-  String toString() => 'Rank{consumption: $consumption, rank: $rank, roomCount: $roomCount}';
-
-  static double _toConsumption(double consumption) => double.parse(consumption.toStringAsFixed(2));
 }
 
 @JsonSerializable()
-class ConditionHours {
-  @JsonKey(name: 'charge', fromJson: _toCharge)
-  // 充值金额
-  double charge = 0.0;
-  @JsonKey(name: 'consumption', fromJson: _toConsumption)
-  // 消费金额
-  double consumption = 0.0;
-  @JsonKey(name: 'time', fromJson: _toTime)
-  // 时间
-  String time = '';
+class HourlyBill {
+  /// 充值金额
+  @JsonKey()
+  final double charge;
 
-  ConditionHours();
+  /// 消费金额
+  @JsonKey()
+  final double consumption;
 
-  factory ConditionHours.fromJson(Map<String, dynamic> json) => _$ConditionHoursFromJson(json);
+  /// 时间
+  @JsonKey()
+  final DateTime time;
 
-  @override
-  String toString() => 'ConditionHours{charge: $charge, consumption: $consumption, time: $time}';
+  HourlyBill(this.charge, this.consumption, this.time);
 
-  static double _toCharge(double charge) => double.parse(charge.toStringAsFixed(2));
-
-  static double _toConsumption(double consumption) => double.parse(consumption.toStringAsFixed(2));
-
-  static String _toTime(String time) => time.substring(11, 13);
+  factory HourlyBill.fromJson(Map<String, dynamic> json) => _$HourlyBillFromJson(json);
 }
 
 @JsonSerializable()
-class ConditionDays {
-  @JsonKey(name: 'charge', fromJson: _toCharge)
-  // 充值金额
-  double charge = 0.0;
-  @JsonKey(name: 'consumption', fromJson: _toConsumption)
-  // 消费金额
-  double consumption = 0.0;
-  @JsonKey(name: 'date', fromJson: _toDate)
-  // 日期
-  String date = '';
+class DailyBill {
+  /// 充值金额
+  @JsonKey()
+  final double charge;
 
-  ConditionDays();
+  /// 消费金额
+  @JsonKey()
+  final double consumption;
 
-  factory ConditionDays.fromJson(Map<String, dynamic> json) => _$ConditionDaysFromJson(json);
+  /// 日期
+  @JsonKey()
+  final DateTime date;
 
-  @override
-  String toString() => 'ConditionDays{charge: $charge, consumption: $consumption, date: $date}';
+  DailyBill(this.charge, this.consumption, this.date);
 
-  static double _toCharge(double charge) => double.parse(charge.toStringAsFixed(2));
-
-  static double _toConsumption(double consumption) => double.parse(consumption.toStringAsFixed(2));
-
-  static String _toDate(String time) => time.substring(8, 10);
+  factory DailyBill.fromJson(Map<String, dynamic> json) => _$DailyBillFromJson(json);
 }

@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:kite/page/electricity/model.dart';
 import 'package:kite/entity/electricity.dart';
+import 'package:kite/global/session_pool.dart';
+import 'package:kite/service/electricity.dart';
+import 'package:kite/util/flash.dart';
 
-Widget buildBalance(context, Balance balance) {
-  return Container(
-      padding: const EdgeInsets.only(
-        top: 5,
-        right: 10,
-        left: 10,
-        bottom: 10,
-      ),
+class BalanceSection extends StatelessWidget {
+  final String room;
+
+  const BalanceSection(this.room, {Key? key}) : super(key: key);
+
+  Widget _buildView(BuildContext context, Balance balance) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(5, 10, 10, 10),
       decoration: BoxDecoration(
         color: Colors.white,
         //设置四周圆角 角度
@@ -17,23 +19,48 @@ Widget buildBalance(context, Balance balance) {
         //设置四周边框
         border: Border.all(width: 2, color: Colors.blue.shade400),
       ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-          GestureDetector(
-            onTap: () {
-              buildModel(context, '此数据来源于校内在线电费查询平台。如有错误，请以充值机显示金额为准～');
-            },
-            // Change button text when light changes state.
-            child: Text('数据不一致?',
-                style: TextStyle(color: Colors.grey[400], fontSize: 12)),
-          )
-        ]),
-        Text('房间号: ${balance.room}'),
-        Text('剩余金额: ${balance.balance}'),
-        Text('剩余电量: ${balance.power}'),
-        Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+            TextButton(
+              onPressed: () {
+                showBasicFlash(context, const Text('此数据来源于校内在线电费查询平台。如有错误，请以充值机显示金额为准～'));
+              },
+              child: Text('数据不一致?', style: TextStyle(color: Colors.grey[400], fontSize: 12)),
+            )
+          ]),
+          Text('房间号: ${balance.room}'),
+          Text('剩余金额: ${balance.balance}'),
+          Text('剩余电量: ${balance.power}'),
+          Container(
             margin: const EdgeInsets.only(top: 5),
-            child: Text('更新时间: ${balance.ts}',
-                style: TextStyle(color: Colors.grey.shade500, fontSize: 12))),
-      ]));
+            child: Text(
+              '更新时间: ${balance.ts}',
+              style: TextStyle(color: Colors.grey.shade500, fontSize: 12),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final future = ElectricityService(SessionPool.ssoSession).getBalance(room);
+
+    return FutureBuilder<Balance>(
+      future: future,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasData) {
+            return _buildView(context, snapshot.data!);
+          } else if (snapshot.hasError) {
+            return Center(child: Text(snapshot.error.runtimeType.toString()));
+          }
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+  }
 }

@@ -34,7 +34,7 @@ class StoragePool {
 
   static late ElectricityStorage _electricity;
 
-  static ElectricityDao get electricity => _electricity;
+  static ElectricityStorageDao get electricity => _electricity;
 
   static late HomeSettingStorage _homeSetting;
 

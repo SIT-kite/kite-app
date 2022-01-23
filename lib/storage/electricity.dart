@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:kite/dao/electricity.dart';
 
-class ElectricityStorage implements ElectricityDao {
+class ElectricityStorage implements ElectricityStorageDao {
   final Box<dynamic> box;
 
   const ElectricityStorage(this.box);

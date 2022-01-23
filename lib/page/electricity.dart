@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kite/entity/electricity.dart';
-import 'package:kite/entity/electricity/util.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/page/electricity/balance.dart';
 import 'package:kite/page/electricity/chart.dart';
-import 'package:kite/page/electricity/model.dart';
-import 'package:kite/page/electricity/rank.dart';
-import 'package:kite/service/electricity.dart';
 
 class ElectricityPage extends StatefulWidget {
   const ElectricityPage({Key? key}) : super(key: key);
@@ -16,174 +11,134 @@ class ElectricityPage extends StatefulWidget {
 }
 
 class _ElectricityPageState extends State<ElectricityPage> {
-  String building = '';
-  String room = '';
-  Balance balance = Balance(0, 0, '', ''); // TODO: Refactor
-  Map<String, double> rank = {};
-  List<ConditionHours> hoursList = [];
-  List<ConditionDays> daysList = [];
-  bool isShowBalance = true;
+  int showType = 0; // 0: 不显示查询结果; 1: 查余额; 2: 查统计
 
-  String _checkRoomValid() {
-    int buildingInt = 0;
-    int roomInt = 0;
-    try {
-      buildingInt = int.parse(building);
-      roomInt = int.parse(room);
-    } catch (e) {
-      buildModel(context, '输入格式有误');
-      return 'error';
-    }
+  final GlobalKey _formKey = GlobalKey<FormState>();
+  final TextEditingController _buildingController = TextEditingController();
+  final TextEditingController _roomController = TextEditingController();
 
-    if (buildingInt >= 1 &&
-        buildingInt < 27 &&
-        roomInt > 100 &&
-        roomInt / 100 >= 0 &&
-        roomInt / 100 < 17 &&
-        roomInt % 100 < 31 &&
-        roomInt % 100 > 0) {
-      final result = '10$buildingInt$roomInt';
-      return result;
-    } else {
-      return 'error';
+  @override
+  void initState() {
+    _buildingController.text = StoragePool.electricity.lastBuilding ?? '楼号';
+    _roomController.text = StoragePool.electricity.lastRoom ?? '寝室号';
+    super.initState();
+  }
+
+  String? _roomValidation(String? room) {
+    int roomId = int.tryParse(room ?? '0') ?? 0;
+
+    if (!((roomId / 100 > 0 && roomId / 100 < 17) && (roomId % 100 > 0 && roomId % 100 < 31))) {
+      return '房间号格式有误';
     }
   }
 
-  Widget _buildTextInputBox() {
-    Widget _buildTextInput(String _hintText, int _maxLength, callBack) {
-      return Expanded(
-          child: TextField(
-              maxLength: _maxLength,
-              maxLines: 1,
-              textAlignVertical: const TextAlignVertical(y: 1),
-              keyboardType: const TextInputType.numberWithOptions(),
-              decoration: InputDecoration(
-                  alignLabelWithHint: true,
-                  border: const OutlineInputBorder(),
-                  hintText: _hintText,
-                  hintStyle: const TextStyle(color: Colors.grey)),
-              onChanged: (newValue) {
-                callBack(newValue);
-              }));
+  String? _buildingValidation(String? building) {
+    int buildingId = int.tryParse(building ?? '0') ?? 0;
+
+    if (!(buildingId > 0 && buildingId < 27)) {
+      return '楼号格式有误';
+    }
+  }
+
+  Widget _buildInputRow() {
+    Widget _buildInputBox(controller, String? Function(String?)? validator) {
+      return TextFormField(
+        controller: controller,
+        validator: validator,
+        maxLines: 1,
+        textAlignVertical: const TextAlignVertical(y: 1),
+        keyboardType: const TextInputType.numberWithOptions(),
+        decoration: const InputDecoration(
+          alignLabelWithHint: true,
+          border: OutlineInputBorder(),
+          hintStyle: TextStyle(color: Colors.grey),
+        ),
+      );
     }
 
     return SizedBox(
       width: 300,
       height: 60,
-      child: Row(children: [
-        _buildTextInput('楼号', 2, (newValue) {
-          setState(() {
-            building = newValue;
-          });
-        }),
-        _buildTextInput('房间号', 4, (newValue) {
-          setState(() {
-            room = newValue;
-          });
-        })
-      ]),
+      child: Form(
+        key: _formKey,
+        autovalidateMode: AutovalidateMode.always,
+        child: Row(children: [
+          _buildInputBox(_buildingController, _buildingValidation),
+          _buildInputBox(_roomController, _roomValidation),
+        ]),
+      ),
     );
   }
 
-  Widget _buildButtonBox() {
-    Widget _buildButton(String label, Color color, callBack) {
-      return ElevatedButton(
-        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(color)),
-        onPressed: callBack,
-        child: Text(label),
-      );
-    }
+  void _onQueryBalance() {
+    StoragePool.electricity.lastBuilding = _buildingController.text;
+    StoragePool.electricity.lastRoom = _roomController.text;
+    setState(() {
+      showType = 1;
+    });
+  }
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        _buildButton('查询余额', const Color(0xFF2e62cd), () {
-          String result = _checkRoomValid();
-          if (result != 'error') {
-            StoragePool.electricity.lastBuilding = building;
-            StoragePool.electricity.lastRoom = room;
-            fetchBalance('10$building$room')
-                .then((res) => {
-                      res.room != ''
-                          ? setState(() {
-                              balance = res;
-                            })
-                          : buildModel(context, '该房间不存在, 请重新输入!')
-                    })
-                .then((res) => setState(() {
-                      isShowBalance = true;
-                    }));
-          } else {
-            buildModel(context, '输入格式有误');
-          }
-        }),
-        _buildButton('查询使用情况', const Color(0xFFf08c00), () {
-          String result = _checkRoomValid();
-          if (result != 'error') {
-            StoragePool.electricity.lastBuilding = building;
-            StoragePool.electricity.lastRoom = room;
-            getRank('10$building$room').then((res) {
-              setState(() {
-                rank = res;
-              });
-              fetchConditionHours('10$building$room').then((res) {
-                setState(() {
-                  hoursList = res;
-                });
-              }).then((res) {
-                setState(() {
-                  isShowBalance = false;
-                });
-              });
-              fetchConditionDays('10$building$room').then((res) {
-                setState(() {
-                  daysList = res;
-                });
-              });
-            });
-          } else {
-            buildModel(context, '输入格式有误');
-          }
-        }),
-      ],
-    );
+  void _onQueryStatistics() {
+    StoragePool.electricity.lastBuilding = _buildingController.text;
+    StoragePool.electricity.lastRoom = _roomController.text;
+    setState(() {
+      showType = 1;
+    });
+  }
+
+  Widget _buildButtonRow() {
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      ElevatedButton(
+        child: const Text('查余额'),
+        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(const Color(0xFF2e62cd))),
+        onPressed: _onQueryBalance,
+      ),
+      ElevatedButton(
+        child: const Text('使用情况'),
+        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(const Color(0xFF2e62cd))),
+        onPressed: _onQueryStatistics,
+      )
+    ]);
+  }
+
+  Widget _buildBalanceResult() {
+    String building = _buildingController.text;
+    String room = _roomController.text;
+
+    return BalanceSection('$building$room');
+  }
+
+  Widget _buildStatisticsResult() {
+    String building = _buildingController.text;
+    String room = _roomController.text;
+
+    return ChartSection('$building$room');
+  }
+
+  Widget _buildResult() {
+    if (showType == 1) {
+      return _buildBalanceResult();
+    } else if (showType == 2) {
+      return _buildStatisticsResult();
+    }
+    return const Center(child: CircularProgressIndicator());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey[200],
-        appBar: AppBar(
-          title: const Text('电费余额查询'),
+      appBar: AppBar(
+        title: const Text('电费余额查询'),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(child: _buildInputRow()),
+            Container(child: _buildButtonRow()),
+            _buildResult(),
+          ],
         ),
-        body: SafeArea(
-            child: SingleChildScrollView(
-                child: Column(children: [
-          Container(margin: const EdgeInsets.only(top: 30), child: _buildTextInputBox()),
-          Container(margin: const EdgeInsets.only(left: 80, right: 80), child: _buildButtonBox()),
-          isShowBalance && balance.room != ''
-              ? Container(
-                  width: double.infinity,
-                  margin: const EdgeInsets.only(
-                    top: 20,
-                    left: 10,
-                    right: 10,
-                  ),
-                  child: buildBalance(context, balance),
-                )
-              : Container(),
-          isShowBalance
-              ? Container()
-              : Container(
-                  margin: const EdgeInsets.only(
-                    top: 20,
-                    bottom: 10,
-                    left: 40,
-                    right: 40,
-                  ),
-                  child: buildRank(rank, daysList),
-                ),
-          isShowBalance ? Container() : Chart(hoursList, daysList),
-        ]))));
+      ),
+    );
   }
 }
