@@ -1,6 +1,7 @@
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:dio/dio.dart';
 import 'package:enough_convert/gbk/gbk.dart';
+import 'package:intl/intl.dart';
 import 'package:kite/dao/expense.dart';
 import 'package:kite/entity/expense.dart';
 import 'package:kite/service/abstract_service.dart';
@@ -16,6 +17,7 @@ class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
     '超市': ExpenseType.store,
   };
   static const _codec = GbkCodec();
+
   ExpenseRemoteService(ASession session) : super(session);
 
   @override
@@ -26,8 +28,8 @@ class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
       _expenseUrl,
       queryParameters: {
         'page': page.toString(),
-        'from': _convert(start),
-        'to': _convert(end),
+        'from': _dateToString(start),
+        'to': _dateToString(end),
       },
       responseType: ResponseType.bytes,
     );
@@ -52,17 +54,8 @@ class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
       ..total = int.parse(totalPage);
   }
 
-  static String _convert(DateTime date) {
-    final year = date.year.toString();
-    var month = date.month.toString();
-    var day = date.day.toString();
-    if (month.length == 1) {
-      month = '0$month';
-    }
-    if (day.length == 1) {
-      day = '0$day';
-    }
-    return '$year$month$day';
+  static String _dateToString(DateTime date) {
+    return DateFormat('yyyyMMdd').format(date);
   }
 
   /// 根据某地点计算其消费类型
