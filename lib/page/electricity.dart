@@ -19,8 +19,8 @@ class _ElectricityPageState extends State<ElectricityPage> {
 
   @override
   void initState() {
-    _buildingController.text = StoragePool.electricity.lastBuilding ?? '楼号';
-    _roomController.text = StoragePool.electricity.lastRoom ?? '寝室号';
+    _buildingController.text = StoragePool.electricity.lastBuilding ?? '';
+    _roomController.text = StoragePool.electricity.lastRoom ?? '';
     super.initState();
   }
 
@@ -41,78 +41,91 @@ class _ElectricityPageState extends State<ElectricityPage> {
   }
 
   Widget _buildInputRow() {
-    Widget _buildInputBox(controller, String? Function(String?)? validator) {
-      return TextFormField(
-        controller: controller,
-        validator: validator,
-        maxLines: 1,
-        textAlignVertical: const TextAlignVertical(y: 1),
-        keyboardType: const TextInputType.numberWithOptions(),
-        decoration: const InputDecoration(
-          alignLabelWithHint: true,
-          border: OutlineInputBorder(),
-          hintStyle: TextStyle(color: Colors.grey),
+    Widget _buildInputBox(String label, TextEditingController controller, String? Function(String?)? validator) {
+      return ConstrainedBox(
+        constraints: const BoxConstraints(
+            // maxHeight: 60,
+            ),
+        child: TextFormField(
+          controller: controller,
+          validator: validator,
+          maxLines: 1,
+          keyboardType: const TextInputType.numberWithOptions(),
+          textAlign: TextAlign.center,
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            contentPadding: const EdgeInsets.symmetric(),
+            hintStyle: const TextStyle(color: Colors.grey),
+            hintText: label,
+          ),
         ),
       );
     }
 
     return SizedBox(
       width: 300,
-      height: 60,
+      height: 80,
       child: Form(
         key: _formKey,
-        autovalidateMode: AutovalidateMode.always,
-        child: Row(children: [
-          _buildInputBox(_buildingController, _buildingValidation),
-          _buildInputBox(_roomController, _roomValidation),
-        ]),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(child: _buildInputBox('楼号', _buildingController, _buildingValidation)),
+            Expanded(child: _buildInputBox('房间号', _roomController, _roomValidation)),
+          ],
+        ),
       ),
     );
   }
 
   void _onQueryBalance() {
+    if (!(_formKey.currentState as FormState).validate()) {
+      return;
+    }
     StoragePool.electricity.lastBuilding = _buildingController.text;
     StoragePool.electricity.lastRoom = _roomController.text;
-    setState(() {
-      showType = 1;
-    });
+    setState(() => showType = 1);
   }
 
   void _onQueryStatistics() {
+    if (!(_formKey.currentState as FormState).validate()) {
+      return;
+    }
     StoragePool.electricity.lastBuilding = _buildingController.text;
     StoragePool.electricity.lastRoom = _roomController.text;
-    setState(() {
-      showType = 1;
-    });
+    setState(() => showType = 1);
   }
 
   Widget _buildButtonRow() {
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      ElevatedButton(
-        child: const Text('查余额'),
-        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(const Color(0xFF2e62cd))),
-        onPressed: _onQueryBalance,
-      ),
-      ElevatedButton(
-        child: const Text('使用情况'),
-        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(const Color(0xFF2e62cd))),
-        onPressed: _onQueryStatistics,
-      )
-    ]);
+    return SizedBox(
+      width: 300,
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        ElevatedButton(
+          child: const Text('查余额'),
+          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.amber)),
+          onPressed: _onQueryBalance,
+        ),
+        ElevatedButton(
+          child: const Text('使用情况'),
+          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.amber)),
+          onPressed: _onQueryStatistics,
+        )
+      ]),
+    );
   }
 
   Widget _buildBalanceResult() {
     String building = _buildingController.text;
     String room = _roomController.text;
 
-    return BalanceSection('$building$room');
+    return BalanceSection('10$building$room');
   }
 
   Widget _buildStatisticsResult() {
     String building = _buildingController.text;
     String room = _roomController.text;
 
-    return ChartSection('$building$room');
+    return ChartSection('10$building$room');
   }
 
   Widget _buildResult() {
@@ -121,20 +134,21 @@ class _ElectricityPageState extends State<ElectricityPage> {
     } else if (showType == 2) {
       return _buildStatisticsResult();
     }
-    return const Center(child: CircularProgressIndicator());
+    return const Center();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('电费余额查询'),
+        title: const Text('查电费'),
       ),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.all(10),
         child: Column(
           children: [
-            Container(child: _buildInputRow()),
-            Container(child: _buildButtonRow()),
+            _buildInputRow(),
+            _buildButtonRow(),
             _buildResult(),
           ],
         ),
