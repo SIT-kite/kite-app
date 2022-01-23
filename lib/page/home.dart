@@ -39,6 +39,21 @@ class HomePage extends StatelessWidget {
     await SessionPool.ssoSession.login(username, password);
   }
 
+  /// 显示请检查网络
+  void _showCheckNetwork(BuildContext context) {
+    showBasicFlash(
+      context,
+      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        const Text('请检查网络连接'),
+        TextButton(
+          child: const Text('检查网络'),
+          onPressed: () => Navigator.of(context).pushNamed('/connectivity'),
+        )
+      ]),
+      duration: const Duration(seconds: 3),
+    );
+  }
+
   Future<void> _onHomeRefresh(BuildContext context) async {
     // 如果未登录 (老用户直接进入 Home 页不会处于登录状态, 但新用户经过 login 页时已登录)
     if (!SessionPool.ssoSession.isOnline) {
@@ -51,17 +66,7 @@ class HomePage extends StatelessWidget {
           showBasicFlash(context, Text('登录异常: $e'));
         } else {
           // 如果是网络问题, 提示检查网络.
-          showBasicFlash(
-            context,
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text('${e.runtimeType}, 请确认网络连接'),
-              TextButton(
-                child: const Text('检查网络'),
-                onPressed: () => Navigator.of(context).pushNamed('/connectivity'),
-              )
-            ]),
-            duration: const Duration(seconds: 3),
-          );
+          _showCheckNetwork(context);
         }
       }
     }
