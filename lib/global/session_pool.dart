@@ -19,9 +19,9 @@ class SessionPool {
   static const String defaultUaString = 'kite-app';
   static String uaString = defaultUaString;
 
-  static final DefaultCookieJar _cookieJar = DefaultCookieJar();
-
-  static DefaultCookieJar get cookieJar => _cookieJar;
+  // 持久化的CookieJar
+  static final PersistCookieJar _cookieJar = PersistCookieJar();
+  static PersistCookieJar get cookieJar => _cookieJar;
 
   static late Dio dio;
   static late SsoSession ssoSession;
