@@ -51,7 +51,7 @@ class SsoSession extends ASession {
   }
 
   @override
-  Future<Response<T>> request<T>(
+  Future<Response> request(
     String url,
     String method, {
     Map<String, String>? queryParameters,
@@ -61,8 +61,8 @@ class SsoSession extends ASession {
     Options? options,
   }) async {
     /// 正常地请求
-    Future<Response<T>> requestNormally() async {
-      final response = await _dio.request<T>(
+    Future<Response> requestNormally() async {
+      final response = await _dio.request(
         url,
         queryParameters: queryParameters,
         options: DioUtils.NON_REDIRECT_OPTION_WITH_FORM_TYPE.copyWith(
@@ -73,7 +73,7 @@ class SsoSession extends ASession {
         data: data,
       );
       // 处理重定向
-      return await DioUtils.processRedirect(_dio, response) as Response<T>;
+      return await DioUtils.processRedirect(_dio, response);
     }
 
     // 第一次先正常请求

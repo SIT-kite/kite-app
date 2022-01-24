@@ -26,7 +26,7 @@ class ReportSession extends ASession {
   }
 
   @override
-  Future<Response<T>> request<T>(
+  Future<Response> request(
     String url,
     String method, {
     Map<String, String>? queryParameters,
@@ -47,7 +47,7 @@ class ReportSession extends ASession {
     newOptions.contentType = contentType;
     newOptions.responseType = responseType;
 
-    return await _dio.request<T>(
+    return await _dio.request(
       url,
       queryParameters: queryParameters,
       data: data,
