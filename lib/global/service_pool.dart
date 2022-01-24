@@ -1,7 +1,5 @@
 import 'package:kite/dao/index.dart';
-import 'package:kite/service/edu/evaluation.dart';
-import 'package:kite/service/edu/index.dart';
-import 'package:kite/service/library/index.dart';
+import 'package:kite/service/index.dart';
 
 import 'session_pool.dart';
 
@@ -36,16 +34,29 @@ class ServicePool {
   static late TimetableDao timetable;
 
   /// 初始化教务相关的service
-  static _initEdu() {
+  static void _initEdu() {
     courseEvaluation = CourseEvaluationService(SessionPool.eduSession);
     exam = ExamService(SessionPool.eduSession);
     score = ScoreService(SessionPool.eduSession);
     timetable = TimetableService(SessionPool.eduSession);
   }
 
+  static late BulletinDao bulletin;
+  static late CampusCardDao campusCard;
+  static late ExpenseRemoteDao expenseRemote;
+  static late WeatherDao weather;
+
+  /// 初始化其他service
+  static void _initOther() {
+    bulletin = BulletinService(SessionPool.ssoSession);
+    campusCard = CampusCardService(SessionPool.ssoSession);
+    expenseRemote = ExpenseRemoteService(SessionPool.ssoSession);
+    weather = WeatherService();
+  }
+
   static void init() {
     _initLibrary();
     _initEdu();
-    // TODO 还有更多的初始化
+    _initOther();
   }
 }
