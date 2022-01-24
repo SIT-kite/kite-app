@@ -171,7 +171,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
 
   Widget _buildClassCard(BuildContext context, Course course) {
     // 测试数据
-    List<String> detail = [course.campus.toString()];
+    List<String> detail = [course.place.toString()];
     return InkWell(
       onTap: () {},
       onTapDown: (TapDownDetails tapDownDetails) {
