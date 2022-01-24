@@ -1,6 +1,6 @@
 import 'package:kite/dao/index.dart';
-import 'package:kite/service/edu.dart';
 import 'package:kite/service/edu/evaluation.dart';
+import 'package:kite/service/edu/index.dart';
 import 'package:kite/service/library/index.dart';
 
 import 'session_pool.dart';

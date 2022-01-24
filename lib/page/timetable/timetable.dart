@@ -3,10 +3,8 @@ import 'package:kite/dao/edu/timetable.dart';
 import 'package:kite/entity/edu.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:kite/mock/edu/timetable.dart';
 import 'package:kite/page/timetable/daily_timetable.dart';
-import 'package:kite/service/edu.dart';
-import 'package:kite/storage/timetable.dart';
+import 'package:kite/service/edu/index.dart';
 
 class TimetablePage extends StatefulWidget {
   const TimetablePage({Key? key}) : super(key: key);

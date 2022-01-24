@@ -1,6 +1,6 @@
 import 'package:kite/dao/edu/index.dart';
 import 'package:kite/entity/edu.dart';
-import 'package:kite/service/edu.dart';
+import 'package:kite/service/edu/index.dart';
 
 import '../mock.dart';
 

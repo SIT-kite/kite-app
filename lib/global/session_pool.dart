@@ -5,11 +5,11 @@ import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:kite/service/edu.dart';
+import 'package:kite/service/edu/index.dart';
 import 'package:kite/service/library/library_session.dart';
-import 'package:kite/service/office.dart';
-import 'package:kite/service/report.dart';
-import 'package:kite/service/sso.dart';
+import 'package:kite/service/office/index.dart';
+import 'package:kite/service/report/report.dart';
+import 'package:kite/service/sso/index.dart';
 import 'package:kite/util/logger.dart';
 import 'package:path_provider/path_provider.dart';
 

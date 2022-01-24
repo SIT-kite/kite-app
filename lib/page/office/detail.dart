@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:kite/entity/office.dart';
 import 'package:kite/page/office/browser.dart';
-import 'package:kite/service/office.dart';
+import 'package:kite/service/office/index.dart';
 import 'package:kite/util/url_launcher.dart';
 
 class DetailPage extends StatelessWidget {
