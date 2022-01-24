@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:kite/dao/campus_card.dart';
 import 'package:kite/entity/campus_card.dart';
 import 'package:kite/service/abstract_service.dart';
-import 'package:kite/service/abstract_session.dart';
+import 'package:kite/session/abstract_session.dart';
 
 const String _cardService = 'http://210.35.98.178:7101/LMWeb/WebApi/HYongHu.ashx';
 

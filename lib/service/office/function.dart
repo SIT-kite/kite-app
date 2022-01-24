@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:kite/entity/office.dart';
 
-import 'office_session.dart';
+import '../../session/office_session.dart';
 
 const String serviceFunctionList = 'https://xgfy.sit.edu.cn/app/public/queryAppManageJson';
 const String serviceFunctionDetail = 'https://xgfy.sit.edu.cn/app/public/queryAppFormJson';

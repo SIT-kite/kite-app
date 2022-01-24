@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:kite/dao/kite/jwt.dart';
-import 'package:kite/service/abstract_session.dart';
+import 'package:kite/session/abstract_session.dart';
 
 const String _baseUrl = 'https://kite.sunnysab.cn/api/v2';
 

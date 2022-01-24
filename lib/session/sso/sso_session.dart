@@ -6,12 +6,12 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:kite/global/session_pool.dart';
-import 'package:kite/service/abstract_session.dart';
+import 'package:kite/session/abstract_session.dart';
 import 'package:kite/service/ocr.dart';
 import 'package:kite/util/logger.dart';
 
 import 'encryption.dart';
-import 'utils.dart';
+import '../../util/dio_utils.dart';
 
 class SsoSession extends ASession {
   static const String _authServerUrl = 'https://authserver.sit.edu.cn/authserver';

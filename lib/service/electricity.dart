@@ -1,7 +1,7 @@
 import 'package:kite/dao/electricity.dart';
 import 'package:kite/entity/electricity.dart';
 import 'package:kite/service/abstract_service.dart';
-import 'package:kite/service/abstract_session.dart';
+import 'package:kite/session/abstract_session.dart';
 
 class ElectricityService extends AService implements ElectricityServiceDao {
   static const String _baseUrl = 'https://kite.sunnysab.cn/api/v2/electricity/room';

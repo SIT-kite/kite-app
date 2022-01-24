@@ -1,4 +1,4 @@
-import 'abstract_session.dart';
+import '../session/abstract_session.dart';
 
 abstract class AService {
   final ASession session;

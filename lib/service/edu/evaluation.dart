@@ -1,7 +1,7 @@
 import 'package:kite/dao/edu/evaluation.dart';
 import 'package:kite/entity/edu/evaluation.dart';
 import 'package:kite/service/abstract_service.dart';
-import 'package:kite/service/abstract_session.dart';
+import 'package:kite/session/abstract_session.dart';
 
 class CourseEvaluationService extends AService implements CourseEvaluationDao {
   static const _serviceUrl = 'http://jwxt.sit.edu.cn/jwglxt/xspjgl/xspj_cxXspjIndex.html?doType=query&gnmkdm=N401605';

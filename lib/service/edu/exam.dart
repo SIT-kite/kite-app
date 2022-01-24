@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:kite/dao/edu/index.dart';
 import 'package:kite/entity/edu.dart';
 import 'package:kite/service/abstract_service.dart';
-import 'package:kite/service/abstract_session.dart';
+import 'package:kite/session/abstract_session.dart';
 
 import 'util.dart';
 
