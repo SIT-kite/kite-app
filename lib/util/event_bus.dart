@@ -3,15 +3,6 @@ typedef EventCallback<T> = void Function(T arg);
 
 /// 事件总线工具类
 class EventBus {
-  // 私有构造函数
-  EventBus._internal();
-
-  // 保存单例
-  static final EventBus _singleton = EventBus._internal();
-
-  // 工厂构造函数
-  factory EventBus() => _singleton;
-
   // 保存事件订阅者队列，key:事件名(id)，value: 对应事件的订阅者队列
   final _eventMap = <String, List<EventCallback>?>{};
 
