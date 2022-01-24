@@ -19,14 +19,14 @@ class _ReportItemState extends State<ReportItem> {
 
   @override
   void initState() {
-    eventBus.on('onHomeRefresh', _onHomeRefresh);
+    eventBus.on(EventNameConstants.onHomeRefresh, _onHomeRefresh);
 
     return super.initState();
   }
 
   @override
   void dispose() {
-    eventBus.off('onHomeRefresh', _onHomeRefresh);
+    eventBus.off(EventNameConstants.onHomeRefresh, _onHomeRefresh);
     super.dispose();
   }
 

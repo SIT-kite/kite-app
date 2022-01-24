@@ -17,7 +17,7 @@ class _ElectricityItemState extends State<ElectricityItem> {
 
   @override
   void initState() {
-    eventBus.on('onHomeRefresh', (arg) {});
+    eventBus.on(EventNameConstants.onHomeRefresh, (arg) {});
 
     return super.initState();
   }

@@ -14,7 +14,7 @@ class _TimetableItemState extends State<TimetableItem> {
 
   @override
   void initState() {
-    eventBus.on('onHomeRefresh', (arg) {});
+    eventBus.on(EventNameConstants.onHomeRefresh, (arg) {});
 
     return super.initState();
   }

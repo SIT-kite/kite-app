@@ -1,7 +1,10 @@
 import 'package:kite/util/event_bus.dart';
 
-final eventBus = EventBus();
+final eventBus = EventBus<EventNameConstants>();
 
-class EventNameConstants {
-  static const onWeatherUpdate = 'onWeatherUpdate';
+enum EventNameConstants {
+  onWeatherUpdate,
+  onHomeRefresh,
+  onSelectCourse,
+  onRemoveCourse,
 }

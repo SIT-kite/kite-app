@@ -64,7 +64,7 @@ class _ScoreItemState extends State<ScoreItem> {
           child: IconButton(
             icon: const Icon(Icons.check),
             onPressed: () {
-              eventBus.emit('onRemoveCourse', _score);
+              eventBus.emit(EventNameConstants.onRemoveCourse, _score);
               setState(() => _isSelected = false);
             },
           ),
@@ -127,9 +127,9 @@ class _ScoreItemState extends State<ScoreItem> {
           }),
           onLongPress: () {
             if (_isSelected) {
-              eventBus.emit('onRemoveCourse', _score);
+              eventBus.emit(EventNameConstants.onRemoveCourse, _score);
             } else {
-              eventBus.emit('onSelectCourse', _score);
+              eventBus.emit(EventNameConstants.onSelectCourse, _score);
             }
             setState(() => _isSelected = !_isSelected);
           },

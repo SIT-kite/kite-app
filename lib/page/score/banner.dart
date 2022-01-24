@@ -24,15 +24,15 @@ class _GpaBannerState extends State<GpaBanner> {
 
   @override
   void initState() {
-    eventBus.on('onSelectCourse', _onSelectCourse);
-    eventBus.on('onRemoveCourse', _onRemoveCourse);
+    eventBus.on(EventNameConstants.onSelectCourse, _onSelectCourse);
+    eventBus.on(EventNameConstants.onRemoveCourse, _onRemoveCourse);
     super.initState();
   }
 
   @override
   void dispose() {
-    eventBus.off('onSelectCourse');
-    eventBus.off('onRemoveCourse');
+    eventBus.off(EventNameConstants.onSelectCourse);
+    eventBus.off(EventNameConstants.onRemoveCourse);
     super.dispose();
   }
 

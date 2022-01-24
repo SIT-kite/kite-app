@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     if (SessionPool.ssoSession.isOnline) {
-      eventBus.emit('onHomeRefresh');
+      eventBus.emit(EventNameConstants.onHomeRefresh);
     }
     _refreshController.refreshCompleted(resetFooterState: true);
 

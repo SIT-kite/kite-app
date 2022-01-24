@@ -17,7 +17,7 @@ class _ExpenseItemState extends State<ExpenseItem> {
 
   @override
   void initState() {
-    eventBus.on('onHomeRefresh', (arg) {});
+    eventBus.on(EventNameConstants.onHomeRefresh, (arg) {});
 
     return super.initState();
   }

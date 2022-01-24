@@ -24,13 +24,13 @@ class _HomeBackgroundState extends State<HomeBackground> {
   @override
   void initState() {
     super.initState();
-    eventBus.on('onWeatherUpdate', _onWeatherUpdate);
+    eventBus.on(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
   }
 
   @override
   void deactivate() {
     super.deactivate();
-    eventBus.off('onWeatherUpdate', _onWeatherUpdate);
+    eventBus.off(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
   }
 
   WeatherType _getWeatherTypeByCode(int code) {

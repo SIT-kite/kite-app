@@ -14,7 +14,7 @@ class _ScoreItemState extends State<ScoreItem> {
 
   @override
   void initState() {
-    eventBus.on('onHomeRefresh', (arg) {});
+    eventBus.on(EventNameConstants.onHomeRefresh, (arg) {});
 
     return super.initState();
   }

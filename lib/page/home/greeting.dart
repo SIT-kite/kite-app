@@ -27,13 +27,13 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   @override
   void initState() {
     super.initState();
-    eventBus.on('onWeatherUpdate', _onWeatherUpdate);
+    eventBus.on(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
   }
 
   @override
   void deactivate() {
     super.deactivate();
-    eventBus.off('onWeatherUpdate', _onWeatherUpdate);
+    eventBus.off(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
   }
 
   Future<int> _getStudyDays() async {
