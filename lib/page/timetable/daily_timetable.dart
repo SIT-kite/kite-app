@@ -91,19 +91,17 @@ class _DailyTimetableState extends State<DailyTimetable> {
                   child: _buildDateTable(index),
                 )),
             Expanded(
-                flex: 10,
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                  child: ListView(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 15),
-                      children: currDayCourseList == []
-                          ? [
-                              const Center(
-                                child: Text("今天没有课哦"),
-                              )
-                            ]
-                          : currDayCourseList.map((e) => _buildClassCard(context, e)).toList()),
-                ))
+              flex: 10,
+              child: ListView(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  children: currDayCourseList == []
+                      ? [
+                          const Center(
+                            child: Text("今天没有课哦"),
+                          )
+                        ]
+                      : currDayCourseList.map((e) => _buildClassCard(context, e)).toList()),
+            )
           ],
         );
       },
@@ -124,11 +122,11 @@ class _DailyTimetableState extends State<DailyTimetable> {
                     children: [
                       Text(
                         (weekIndex + 1).toString(),
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                       ),
                       const Text(
                         "周",
-                        style: TextStyle(fontSize: 14),
+                        style: TextStyle(fontSize: 12),
                       )
                     ],
                   ))
@@ -158,11 +156,11 @@ class _DailyTimetableState extends State<DailyTimetable> {
                               children: [
                                 Text(
                                   "周" + num2word[index - 1],
-                                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                                 ),
                                 Text(
                                   currWeek[index - 1],
-                                  style: const TextStyle(fontSize: 14),
+                                  style: const TextStyle(fontSize: 11),
                                 ),
                               ],
                             )),
@@ -187,7 +185,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
       },
       child: Column(
         children: [
-          const Padding(padding: EdgeInsets.all(5)),
+          const Padding(padding: EdgeInsets.all(4)),
           Card(
             child: Column(
               children: [
