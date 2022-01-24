@@ -1,27 +1,25 @@
-import 'package:kite/util/path.dart';
-
 class SettingKeyConstants {
-  static final homeNamespace = Path().forward('home');
-  static final homeCampusKey = homeNamespace.forward('campus').toString();
-  static final homeBackgroundKey = homeNamespace.forward('background').toString();
-  static final homeBackgroundModeKey = homeNamespace.forward('backgroundMode').toString();
-  static final homeInstallTimeKey = homeNamespace.forward('installTime').toString();
+  static const homeNamespace = '/home';
+  static const homeCampusKey = '$homeNamespace/campus';
+  static const homeBackgroundKey = '$homeNamespace/background';
+  static const homeBackgroundModeKey = '$homeNamespace/backgroundMode';
+  static const homeInstallTimeKey = '$homeNamespace/installTime';
 
   // 首页在无网状态下加载的缓存.
-  static final homeLastWeatherKey = homeNamespace.forward('lastWeather').toString();
-  static final homeLastReportKey = homeNamespace.forward('lastReport').toString();
-  static final homeLastBalanceKey = homeNamespace.forward('lastBalance').toString();
-  static final homeLastExpenseKey = homeNamespace.forward('lastExpense').toString();
-  static final homeLastHotSearchKey = homeNamespace.forward('lastHotSearch').toString();
-  static final homeLastOfficeStatusKey = homeNamespace.forward('lastOfficeStatus').toString();
+  static const homeLastWeatherKey = '$homeNamespace/lastWeather';
+  static const homeLastReportKey = '$homeNamespace/lastReport';
+  static const homeLastBalanceKey = '$homeNamespace/lastBalance';
+  static const homeLastExpenseKey = '$homeNamespace/lastExpense';
+  static const homeLastHotSearchKey = '$homeNamespace/lastHotSearch';
+  static const homeLastOfficeStatusKey = '$homeNamespace/lastOfficeStatus';
 
-  static final authNamespace = Path().forward('auth');
-  static final authCurrentUsername = authNamespace.forward('currentUsername').toString();
+  static const authNamespace = '/auth';
+  static const authCurrentUsername = '$authNamespace/currentUsername';
 
-  static final themeNamespace = Path().forward('theme');
-  static final themeColorKey = themeNamespace.forward('color').toString();
+  static const themeNamespace = '/theme';
+  static const themeColorKey = '$themeNamespace/color';
 
-  static final networkNamespace = Path().forward('network');
-  static final networkProxyKey = networkNamespace.forward('proxy').toString();
-  static final networkUseProxyKey = networkNamespace.forward('useProxy').toString();
+  static const networkNamespace = '/network';
+  static const networkProxyKey = '$networkNamespace/proxy';
+  static const networkUseProxyKey = '$networkNamespace/useProxy';
 }
