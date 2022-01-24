@@ -61,7 +61,8 @@ class CourseBottomSheet extends StatelessWidget {
                     children: [
                       _buildDetailItem('courseId.png', _courseId),
                       _buildDetailItem('dynClassId.png', _dynClassId),
-                      // _courseDetail.map((detail) => _buildDetailItem("s", detail)).toList(),
+                      _buildDetailItem('campus.png', _courseDetail[0]),
+
                     ],
                   )),
             ],
