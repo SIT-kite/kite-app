@@ -18,7 +18,7 @@ class EduSession extends ASession {
   }
 
   @override
-  Future<Response> request(
+  Future<Response<T>> request<T>(
     String url,
     String method, {
     Map<String, String>? queryParameters,
@@ -27,8 +27,8 @@ class EduSession extends ASession {
     ResponseType? responseType,
     Options? options,
   }) async {
-    Future<Response> fetch() async {
-      return await _session.request(
+    Future<Response<T>> fetch() async {
+      return await _session.request<T>(
         url,
         method,
         queryParameters: queryParameters,
@@ -38,7 +38,7 @@ class EduSession extends ASession {
       );
     }
 
-    Response response = await fetch();
+    Response<T> response = await fetch();
     // 如果返回值是登录页面，那就从 SSO 跳转一次以登录.
     if (_isRedirectedToLoginPage(response)) {
       await _refreshCookie();

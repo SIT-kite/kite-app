@@ -10,7 +10,7 @@ class KiteSession extends ASession {
   KiteSession(this.dio, this.jwtDao);
 
   @override
-  Future<Response> request(
+  Future<Response<T>> request<T>(
     String url,
     String method, {
     Map<String, String>? queryParameters,
@@ -19,7 +19,7 @@ class KiteSession extends ASession {
     String? contentType,
     ResponseType? responseType,
   }) async {
-    final response = await dio.request<Map<String, dynamic>>(
+    final response = await dio.request<T>(
       url,
       data: data,
       queryParameters: queryParameters,
@@ -29,7 +29,7 @@ class KiteSession extends ASession {
         responseType: responseType,
       ),
     );
-    response.data;
+    return response;
   }
 
   Future<bool> login(String username, String password) async {
