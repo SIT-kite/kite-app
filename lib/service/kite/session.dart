@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:kite/dao/kite/jwt.dart';
 import 'package:kite/service/abstract_session.dart';
+
+const String _baseUrl = 'https://kite.sunnysab.cn/api/v2';
 
 class KiteSession extends ASession {
   final Dio dio;
@@ -21,12 +24,12 @@ class KiteSession extends ASession {
   }) async {
     String? token = jwtDao.jwtToken;
     final response = await dio.request(
-      url,
+      _baseUrl + url,
       data: data,
       queryParameters: queryParameters,
       options: (options ?? Options()).copyWith(
         method: method,
-        contentType: contentType,
+        contentType: contentType ?? ContentType.json.value,
         responseType: responseType,
         headers: token == null ? null : {'Authorization': 'Bearer ' + token},
       ),
@@ -54,14 +57,22 @@ class KiteSession extends ASession {
     throw KiteApiFormatError(response.data);
   }
 
-  Future<bool> login(String username, String password) async {
-    // TODO
-    return true;
+  /// 用户登录
+  Future<void> login(String username, String password) async {
+    final response = await post('/session', data: {
+      'account': username,
+      'secret': password,
+    });
+    jwtDao.jwtToken = response.data['token'];
   }
 
-  Future<bool> createUser(String username, String password) async {
-    // TODO
-    return true;
+  /// 用户不存在时，创建用户
+  Future<void> createUser(String username, String password) async {
+    final response = await post('/user', data: {
+      'account': username,
+      'secret': password,
+    });
+    jwtDao.jwtToken = response.data['token'];
   }
 }
 
