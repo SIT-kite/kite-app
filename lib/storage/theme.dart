@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:kite/dao/setting/theme.dart';
-import 'package:kite/storage/setting/constants.dart';
+import 'package:kite/storage/constants.dart';
 
 class ThemeSettingStorage implements ThemeSettingDao {
   final Box<dynamic> box;

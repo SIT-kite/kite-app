@@ -4,7 +4,7 @@ import 'package:kite/entity/electricity.dart';
 import 'package:kite/entity/expense.dart';
 import 'package:kite/entity/report.dart';
 import 'package:kite/entity/weather.dart';
-import 'package:kite/storage/setting/constants.dart';
+import 'package:kite/storage/constants.dart';
 
 class HomeSettingStorage implements HomeSettingDao {
   final Box<dynamic> box;

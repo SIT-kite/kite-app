@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:kite/dao/setting/network.dart';
-import 'package:kite/storage/setting/constants.dart';
+import 'package:kite/storage/constants.dart';
 
 class NetworkSettingStorage implements NetworkSettingDao {
   final Box<dynamic> box;

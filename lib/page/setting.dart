@@ -5,7 +5,7 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:kite/global/init_util.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:kite/storage/setting/constants.dart';
+import 'package:kite/storage/constants.dart';
 import 'package:kite/util/validation.dart';
 
 class SettingPage extends StatelessWidget {
