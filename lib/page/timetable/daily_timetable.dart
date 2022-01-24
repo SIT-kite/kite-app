@@ -72,7 +72,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
 
   @override
   Widget build(BuildContext context) {
-    if (firstOpen){
+    if (firstOpen) {
       currDayCourseList = _getCourseListByWeekAndDay(0, 0);
       firstOpen = false;
     }
@@ -80,7 +80,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
     return PageView.builder(
       controller: PageController(viewportFraction: 1.0),
       scrollDirection: Axis.horizontal,
-      itemCount: 4,
+      itemCount: 20,
       // index 从0开始
       itemBuilder: (BuildContext context, int index) {
         return Column(
@@ -91,17 +91,19 @@ class _DailyTimetableState extends State<DailyTimetable> {
                   child: _buildDateTable(index),
                 )),
             Expanded(
-              flex: 9,
-              child: ListView(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 15),
-                  children: currDayCourseList == []
-                      ? [
-                          const Center(
-                            child: Text("今天没有课哦"),
-                          )
-                        ]
-                      : currDayCourseList.map((e) => _buildClassCard(context, e)).toList()),
-            )
+                flex: 10,
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                  child: ListView(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 15),
+                      children: currDayCourseList == []
+                          ? [
+                              const Center(
+                                child: Text("今天没有课哦"),
+                              )
+                            ]
+                          : currDayCourseList.map((e) => _buildClassCard(context, e)).toList()),
+                ))
           ],
         );
       },
@@ -122,11 +124,11 @@ class _DailyTimetableState extends State<DailyTimetable> {
                     children: [
                       Text(
                         (weekIndex + 1).toString(),
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
                       ),
                       const Text(
                         "周",
-                        style: TextStyle(fontSize: 9),
+                        style: TextStyle(fontSize: 14),
                       )
                     ],
                   ))
@@ -147,7 +149,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
                         child: Container(
                             decoration: BoxDecoration(
                               color: ((tapped[0] == weekIndex) && (tapped[1] == index - 1))
-                                  ? Colors.blueAccent
+                                  ? const Color.fromARGB(255, 228, 235, 245)
                                   : Colors.white,
                               borderRadius: const BorderRadius.all(Radius.circular(12.0)),
                             ),
@@ -156,11 +158,11 @@ class _DailyTimetableState extends State<DailyTimetable> {
                               children: [
                                 Text(
                                   "周" + num2word[index - 1],
-                                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
                                 ),
                                 Text(
                                   currWeek[index - 1],
-                                  style: const TextStyle(fontSize: 9),
+                                  style: const TextStyle(fontSize: 14),
                                 ),
                               ],
                             )),
@@ -230,8 +232,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
               borderRadius: BorderRadius.all(Radius.circular(10.0)),
             ),
             clipBehavior: Clip.antiAlias,
-            color: Colors.blueAccent,
-            elevation: 30.0,
+            color: const Color.fromARGB(255, 228, 235, 245),
           )
         ],
       ),
