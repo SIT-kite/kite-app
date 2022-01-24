@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/entity/auth_item.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:kite/service/sso/sso_session.dart';
+import 'package:kite/session/sso/sso_session.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/url_launcher.dart';
 import 'package:kite/util/validation.dart';
