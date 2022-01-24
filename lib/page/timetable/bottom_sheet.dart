@@ -8,7 +8,8 @@ class CourseBottomSheet extends StatelessWidget {
   final List<String> _courseDetail;
 
   CourseBottomSheet(this._deviceSize, this._courseName, this._courseId, this._dynClassId, this._courseDetail,
-      {Key? key})  : super(key: key);
+      {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +63,6 @@ class CourseBottomSheet extends StatelessWidget {
                       _buildDetailItem('courseId.png', _courseId),
                       _buildDetailItem('dynClassId.png', _dynClassId),
                       _buildDetailItem('campus.png', _courseDetail[0]),
-
                     ],
                   )),
             ],
@@ -84,14 +84,14 @@ class CourseBottomSheet extends StatelessWidget {
             Container(
               width: 15,
             ),
-            Text(detail,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w300,
-                )
-            ),
+            Expanded(
+                child: Text(detail,
+                    softWrap: true,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w300,
+                    ))),
           ],
-        )
-    );
+        ));
   }
 }
