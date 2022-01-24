@@ -21,10 +21,13 @@ import 'home/item.dart';
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
 
+  late BuildContext _context;
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   void _updateWeather() {
+    Log.info('更新天气');
     Future.delayed(const Duration(milliseconds: 800), () async {
       try {
         final weather = await WeatherService().getCurrentWeather(StoragePool.homeSetting.campus);
@@ -148,10 +151,11 @@ class HomePage extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  StatelessElement createElement() {
+    Log.info('开始加载首页');
     Future.delayed(Duration.zero, () {
       showBasicFlash(
-        context,
+        _context,
         const Text('正在检查网络连接'),
         duration: const Duration(seconds: 3),
       );
@@ -160,12 +164,12 @@ class HomePage extends StatelessWidget {
     checkConnectivity().then((ok) {
       if (!ok) {
         _showCheckNetwork(
-          context,
+          _context,
           title: const Text('无法连接校园网，部分功能不可用'),
         );
       } else {
         showBasicFlash(
-          context,
+          _context,
           const Text('当前已连接校园网环境'),
           duration: const Duration(seconds: 3),
         );
@@ -173,10 +177,16 @@ class HomePage extends StatelessWidget {
     });
 
     if (UniversalPlatform.isAndroid || UniversalPlatform.isIOS) {
-      QuickButton.init(context);
+      QuickButton.init(_context);
     }
     _updateWeather();
+    return super.createElement();
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    _context = context;
+    Log.info('Build Home');
     return Scaffold(
       key: _scaffoldKey,
       body: _buildBody(context),
