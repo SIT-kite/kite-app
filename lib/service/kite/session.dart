@@ -1,9 +1,14 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:kite/dao/kite/jwt.dart';
 import 'package:kite/service/abstract_session.dart';
 
 class KiteSession extends ASession {
+  final Dio dio;
+  final JwtDao jwtDao;
+  KiteSession(this.dio, this.jwtDao);
+
   @override
   Future<Response> request(
     String url,
@@ -14,7 +19,24 @@ class KiteSession extends ASession {
     String? contentType,
     ResponseType? responseType,
   }) async {
-    // TODO: implement request
-    throw UnimplementedError();
+    final response = await dio.request<Map<String, dynamic>>(
+      url,
+      data: data,
+      queryParameters: queryParameters,
+      options: (options ?? Options()).copyWith(
+        method: method,
+        contentType: contentType,
+        responseType: responseType,
+      ),
+    );
+    response.data;
+  }
+
+  Future<bool> login(String username, String password) async {
+    return true;
+  }
+
+  Future<bool> createUser(String username, String password) async {
+    return true;
   }
 }

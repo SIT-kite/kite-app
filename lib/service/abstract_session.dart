@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 abstract class ASession {
-  Future<Response> request(
+  Future<Response<T>> request<T>(
     String url,
     String method, {
     Map<String, String>? queryParameters,
@@ -11,14 +11,14 @@ abstract class ASession {
     ResponseType? responseType,
   });
 
-  Future<Response> get(
+  Future<Response<T>> get<T>(
     String url, {
     Map<String, String>? queryParameters,
     String? contentType,
     ResponseType? responseType,
     Options? options,
   }) {
-    return request(
+    return request<T>(
       url,
       'GET',
       queryParameters: queryParameters,
@@ -28,7 +28,7 @@ abstract class ASession {
     );
   }
 
-  Future<Response> post(
+  Future<Response<T>> post<T>(
     String url, {
     Map<String, String>? queryParameters,
     dynamic data,
@@ -36,7 +36,7 @@ abstract class ASession {
     ResponseType? responseType,
     Options? options,
   }) {
-    return request(
+    return request<T>(
       url,
       'POST',
       queryParameters: queryParameters,
@@ -52,7 +52,7 @@ class DefaultSession extends ASession {
   Dio dio;
   DefaultSession(this.dio);
   @override
-  Future<Response> request(
+  Future<Response<T>> request<T>(
     String url,
     String method, {
     Map<String, String>? queryParameters,
@@ -61,7 +61,7 @@ class DefaultSession extends ASession {
     String? contentType,
     ResponseType? responseType,
   }) {
-    return dio.request(
+    return dio.request<T>(
       url,
       data: data,
       queryParameters: queryParameters,
