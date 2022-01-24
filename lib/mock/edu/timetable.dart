@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:kite/dao/edu.dart';
+import 'package:kite/dao/edu/index.dart';
 import 'package:kite/entity/edu.dart';
 
 const _timetableJson = '''
