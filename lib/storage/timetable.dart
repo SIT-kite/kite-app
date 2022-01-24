@@ -9,13 +9,13 @@ class CourseStorage implements TimetableStorageDao {
 
   @override
   void add(Course item) {
-    box.put(item.courseName.hashCode, item);
+    box.put(item.courseId.toString()+item.week.toString()+item.timeIndex.toString(), item);
   }
 
   @override
   void addAll(List<Course> courseList) {
     courseList.forEach((item) {
-        box.put(item.courseName.hashCode, item);
+        box.put(item.courseId.toString()+item.week.toString()+item.timeIndex.toString(), item);
     });
   }
 
