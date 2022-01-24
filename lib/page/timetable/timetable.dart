@@ -16,7 +16,7 @@ class TimetablePage extends StatefulWidget {
 }
 
 class _TimetablePageState extends State<TimetablePage> {
-  TimetableDao timetableDaoService = TimetableService();
+  TimetableDao timetableDaoService = TimetableService(SessionPool.eduSession);
   final SchoolYear currSchoolYear = const SchoolYear(2021);
   final currSemester = Semester.firstTerm;
   Map<int, List<List<int>>> dailyCourseList = {};
