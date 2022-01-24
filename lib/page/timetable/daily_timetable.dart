@@ -213,12 +213,13 @@ class _DailyTimetableState extends State<DailyTimetable> {
                             ),
                             Expanded(
                                 flex: 1,
-                                child: Row(
-                                  textDirection: TextDirection.rtl,
-                                  children: [
-                                    Text(course.place.toString()),
-                                  ],
-                                )),
+                                child:Text(
+                                  course.place.toString(),
+                                  textAlign: TextAlign.right,
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                            ),
                           ],
                         ),
                       ],
