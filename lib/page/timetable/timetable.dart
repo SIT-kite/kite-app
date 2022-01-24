@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kite/dao/edu/timetable.dart';
 import 'package:kite/entity/edu.dart';
+import 'package:kite/global/session_pool.dart';
+import 'package:kite/global/storage_pool.dart';
 import 'package:kite/mock/edu/timetable.dart';
 import 'package:kite/page/timetable/daily_timetable.dart';
+import 'package:kite/service/edu.dart';
+import 'package:kite/storage/timetable.dart';
 
 class TimetablePage extends StatefulWidget {
   const TimetablePage({Key? key}) : super(key: key);
@@ -12,14 +16,15 @@ class TimetablePage extends StatefulWidget {
 }
 
 class _TimetablePageState extends State<TimetablePage> {
-  TimetableDao timetableDao = TimetableMock();
+  TimetableDao timetableDaoService = TimetableMock();
   final SchoolYear currSchoolYear = const SchoolYear(2021);
   final currSemester = Semester.firstTerm;
   Map<int, List<List<int>>> dailyCourseList = {};
   List<Course> courseList = <Course>[];
   List<List<String>> dateTableList = [];
-  DateTime startTime = DateTime(2020, 9, 6);
+  DateTime startTime = DateTime(2021, 9, 6);
   static const int maxWeekCount = 20;
+  bool isRefresh = false;
 
   @override
   Widget build(BuildContext context) {
@@ -37,12 +42,26 @@ class _TimetablePageState extends State<TimetablePage> {
     );
   }
 
-  Future<int> _getData() async {
-    courseList = await timetableDao.getTimetable(currSchoolYear, currSemester);
+  Future<void> _getData() async {
+    if (isRefresh) {
+      print("refresh");
+      StoragePool.course.clear();
+      courseList = await timetableDaoService.getTimetable(currSchoolYear, currSemester);
+      StoragePool.course.addAll(courseList);
+      isRefresh = false;
+    } else {
+      if (StoragePool.course.isEmpty() == true) {
+        print("get courseList from network");
+        courseList = await timetableDaoService.getTimetable(currSchoolYear, currSemester);
+        StoragePool.course.addAll(courseList);
+      } else {
+        print("read courseList from storage");
+        courseList = await StoragePool.course.getTimetable(currSchoolYear, currSemester);
+      }
+    }
+    // print(courseList);
     generateDailyTimetable();
     generateDateTable();
-    print(courseList);
-    return Future.value(1);
   }
 
   void generateDateTable() {
@@ -69,8 +88,7 @@ class _TimetablePageState extends State<TimetablePage> {
   }
 
   void generateDailyTimetable() {
-    print("this is generateDailyTimetable");
-    print("process data");
+    print("process courseList data");
     for (int weekIndex = 0; weekIndex < maxWeekCount; weekIndex++) {
       dailyCourseList[weekIndex] = [[], [], [], [], [], [], []];
     }
@@ -80,7 +98,7 @@ class _TimetablePageState extends State<TimetablePage> {
       int? week = courseList[i].week;
       week = (week! >> 1);
       while ((week as int) != 0) {
-        if ((week& 1) == 1) {
+        if ((week & 1) == 1) {
           dayIndex = courseList[i].day!.toInt() - 1;
           if (dailyCourseList[weekIndex] == null) {
             dailyCourseList[weekIndex] = [[], [], [], [], [], [], []];
@@ -88,11 +106,9 @@ class _TimetablePageState extends State<TimetablePage> {
           dailyCourseList[weekIndex]![dayIndex].add(i);
         }
         weekIndex++;
-        week = week>> 1;
+        week = week >> 1;
       }
     }
-    print(dailyCourseList[0]);
-    print(dailyCourseList[1]);
   }
 
   Widget _buildFuture(BuildContext context, AsyncSnapshot snapshot) {
@@ -136,9 +152,11 @@ class _TimetablePageState extends State<TimetablePage> {
   }
 
   // ignore: non_constant_identifier_names
-  bool _RefreshClassSchedule() {
-    print("refresh");
-    return true;
+  Future<void> _RefreshClassSchedule() async {
+    setState(() {
+      isRefresh = true;
+    });
+    print("get courseList from network");
   }
 
   // ignore: non_constant_identifier_names
