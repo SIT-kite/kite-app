@@ -1,25 +1,31 @@
-class SettingKeyConstants {
-  static const homeNamespace = '/home';
-  static const homeCampusKey = '$homeNamespace/campus';
-  static const homeBackgroundKey = '$homeNamespace/background';
-  static const homeBackgroundModeKey = '$homeNamespace/backgroundMode';
-  static const homeInstallTimeKey = '$homeNamespace/installTime';
+class HomeKeyKeys {
+  static const namespace = '/home';
+  static const campus = '$namespace/campus';
+  static const background = '$namespace/background';
+  static const backgroundMode = '$namespace/backgroundMode';
+  static const installTime = '$namespace/installTime';
 
   // 首页在无网状态下加载的缓存.
-  static const homeLastWeatherKey = '$homeNamespace/lastWeather';
-  static const homeLastReportKey = '$homeNamespace/lastReport';
-  static const homeLastBalanceKey = '$homeNamespace/lastBalance';
-  static const homeLastExpenseKey = '$homeNamespace/lastExpense';
-  static const homeLastHotSearchKey = '$homeNamespace/lastHotSearch';
-  static const homeLastOfficeStatusKey = '$homeNamespace/lastOfficeStatus';
+  static const lastWeather = '$namespace/lastWeather';
+  static const lastReport = '$namespace/lastReport';
+  static const lastBalance = '$namespace/lastBalance';
+  static const lastExpense = '$namespace/lastExpense';
+  static const lastHotSearch = '$namespace/lastHotSearch';
+  static const lastOfficeStatus = '$namespace/lastOfficeStatus';
+}
 
-  static const authNamespace = '/auth';
-  static const authCurrentUsername = '$authNamespace/currentUsername';
+class AuthKeys {
+  static const namespace = '/auth';
+  static const currentUsername = '$namespace/currentUsername';
+}
 
-  static const themeNamespace = '/theme';
-  static const themeColorKey = '$themeNamespace/color';
+class ThemeKeys {
+  static const namespace = '/theme';
+  static const themeColor = '$namespace/color';
+}
 
-  static const networkNamespace = '/network';
-  static const networkProxyKey = '$networkNamespace/proxy';
-  static const networkUseProxyKey = '$networkNamespace/useProxy';
+class NetworkKeys {
+  static const namespace = '/network';
+  static const networkProxy = '$namespace/proxy';
+  static const networkUseProxy = '$namespace/useProxy';
 }

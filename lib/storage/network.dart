@@ -8,14 +8,12 @@ class NetworkSettingStorage implements NetworkSettingDao {
   NetworkSettingStorage(this.box);
 
   @override
-  String get proxy => box.get(SettingKeyConstants.networkProxyKey, defaultValue: '');
+  String get proxy => box.get(NetworkKeys.networkProxy, defaultValue: '');
+  @override
+  set proxy(String foo) => box.put(NetworkKeys.networkProxy, foo);
 
   @override
-  bool get useProxy => box.get(SettingKeyConstants.networkUseProxyKey, defaultValue: false);
-
+  bool get useProxy => box.get(NetworkKeys.networkUseProxy, defaultValue: false);
   @override
-  set proxy(String foo) => box.put(SettingKeyConstants.networkProxyKey, foo);
-
-  @override
-  set useProxy(bool foo) => box.put(SettingKeyConstants.networkUseProxyKey, foo);
+  set useProxy(bool foo) => box.put(NetworkKeys.networkUseProxy, foo);
 }

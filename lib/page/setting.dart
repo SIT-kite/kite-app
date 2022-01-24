@@ -67,7 +67,7 @@ class SettingPage extends StatelessWidget {
         title: '个性化',
         children: <Widget>[
           ColorPickerSettingsTile(
-            settingKey: SettingKeyConstants.themeColorKey,
+            settingKey: ThemeKeys.themeColor,
             defaultValue: StoragePool.themeSetting.color,
             title: '主题色',
           )
@@ -78,7 +78,7 @@ class SettingPage extends StatelessWidget {
         children: <Widget>[
           RadioSettingsTile<int>(
             title: '首页背景模式',
-            settingKey: SettingKeyConstants.homeBackgroundModeKey,
+            settingKey: HomeKeyKeys.backgroundMode,
             values: const <int, String>{
               1: '实时天气',
               2: '纯色',
@@ -90,7 +90,7 @@ class SettingPage extends StatelessWidget {
           DropDownSettingsTile<int>(
             title: '校区',
             subtitle: '用于显示对应校区的天气',
-            settingKey: SettingKeyConstants.homeCampusKey,
+            settingKey: HomeKeyKeys.campus,
             values: const <int, String>{
               1: '奉贤',
               2: '徐汇',
@@ -136,7 +136,7 @@ class SettingPage extends StatelessWidget {
       SettingsGroup(title: '账户', children: <Widget>[
         TextInputSettingsTile(
           title: '学号',
-          settingKey: SettingKeyConstants.authCurrentUsername,
+          settingKey: AuthKeys.currentUsername,
           initialValue: StoragePool.authSetting.currentUsername ?? '',
           validator: studentIdValidator,
         ),

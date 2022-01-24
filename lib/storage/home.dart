@@ -12,62 +12,62 @@ class HomeSettingStorage implements HomeSettingDao {
   HomeSettingStorage(this.box);
 
   @override
-  String get background => box.get(SettingKeyConstants.homeBackgroundKey, defaultValue: '');
+  String get background => box.get(HomeKeyKeys.background, defaultValue: '');
 
   @override
-  set background(String v) => box.put(SettingKeyConstants.homeBackgroundKey, v);
+  set background(String v) => box.put(HomeKeyKeys.background, v);
 
   @override
-  int get backgroundMode => box.get(SettingKeyConstants.homeBackgroundModeKey, defaultValue: 1);
+  int get backgroundMode => box.get(HomeKeyKeys.backgroundMode, defaultValue: 1);
 
   @override
-  set backgroundMode(int v) => box.put(SettingKeyConstants.homeBackgroundModeKey, v);
+  set backgroundMode(int v) => box.put(HomeKeyKeys.backgroundMode, v);
 
   @override
-  int get campus => box.get(SettingKeyConstants.homeCampusKey, defaultValue: 1);
+  int get campus => box.get(HomeKeyKeys.campus, defaultValue: 1);
 
   @override
-  set campus(int v) => box.put(SettingKeyConstants.homeCampusKey, v);
+  set campus(int v) => box.put(HomeKeyKeys.campus, v);
 
   @override
-  DateTime? get installTime => box.get(SettingKeyConstants.homeInstallTimeKey);
+  DateTime? get installTime => box.get(HomeKeyKeys.installTime);
 
   @override
-  set installTime(DateTime? dateTime) => box.put(SettingKeyConstants.homeInstallTimeKey, dateTime);
+  set installTime(DateTime? dateTime) => box.put(HomeKeyKeys.installTime, dateTime);
 
   @override
-  Weather get lastWeather => box.get(SettingKeyConstants.homeLastWeatherKey, defaultValue: Weather.defaultWeather());
+  Weather get lastWeather => box.get(HomeKeyKeys.lastWeather, defaultValue: Weather.defaultWeather());
 
   @override
-  set lastWeather(Weather weather) => box.put(SettingKeyConstants.homeLastWeatherKey, weather);
+  set lastWeather(Weather weather) => box.put(HomeKeyKeys.lastWeather, weather);
 
   @override
-  ReportHistory? get lastReport => box.get(SettingKeyConstants.homeLastReportKey);
+  ReportHistory? get lastReport => box.get(HomeKeyKeys.lastReport);
 
   @override
-  set lastReport(ReportHistory? reportHistory) => box.put(SettingKeyConstants.homeLastReportKey, reportHistory);
+  set lastReport(ReportHistory? reportHistory) => box.put(HomeKeyKeys.lastReport, reportHistory);
 
   @override
-  Balance? get lastBalance => box.get(SettingKeyConstants.homeLastBalanceKey);
+  Balance? get lastBalance => box.get(HomeKeyKeys.lastBalance);
 
   @override
-  set lastBalance(Balance? lastBalance) => box.put(SettingKeyConstants.homeLastBalanceKey, lastBalance);
+  set lastBalance(Balance? lastBalance) => box.put(HomeKeyKeys.lastBalance, lastBalance);
 
   @override
-  ExpenseRecord? get lastExpense => box.get(SettingKeyConstants.homeLastExpenseKey);
+  ExpenseRecord? get lastExpense => box.get(HomeKeyKeys.lastExpense);
 
   @override
-  set lastExpense(ExpenseRecord? expense) => box.put(SettingKeyConstants.homeLastExpenseKey, expense);
+  set lastExpense(ExpenseRecord? expense) => box.put(HomeKeyKeys.lastExpense, expense);
 
   @override
-  String? get lastHotSearch => box.get(SettingKeyConstants.homeLastHotSearchKey);
+  String? get lastHotSearch => box.get(HomeKeyKeys.lastHotSearch);
 
   @override
-  set lastHotSearch(String? expense) => box.put(SettingKeyConstants.homeLastHotSearchKey, expense);
+  set lastHotSearch(String? expense) => box.put(HomeKeyKeys.lastHotSearch, expense);
 
   @override
-  String? get lastOfficeStatus => box.get(SettingKeyConstants.homeLastOfficeStatusKey);
+  String? get lastOfficeStatus => box.get(HomeKeyKeys.lastOfficeStatus);
 
   @override
-  set lastOfficeStatus(String? status) => box.put(SettingKeyConstants.homeLastOfficeStatusKey, status);
+  set lastOfficeStatus(String? status) => box.put(HomeKeyKeys.lastOfficeStatus, status);
 }

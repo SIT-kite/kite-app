@@ -10,7 +10,7 @@ class ThemeSettingStorage implements ThemeSettingDao {
 
   @override
   Color get color {
-    final String value = box.get(SettingKeyConstants.themeColorKey, defaultValue: 'ff2196f3');
+    final String value = box.get(ThemeKeys.themeColor, defaultValue: 'ff2196f3');
     final int color = int.parse(value.replaceFirst('#', ''), radix: 16);
     return Color(color);
   }
@@ -18,6 +18,6 @@ class ThemeSettingStorage implements ThemeSettingDao {
   @override
   set color(Color v) {
     final String value = v.value.toRadixString(16).padLeft(6, '0');
-    box.put(SettingKeyConstants.themeColorKey, value);
+    box.put(ThemeKeys.themeColor, value);
   }
 }
