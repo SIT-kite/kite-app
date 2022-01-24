@@ -5,7 +5,7 @@ import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/page/library/component/search_result.dart';
 import 'package:kite/page/library/component/suggestion_item.dart';
-import 'package:kite/service/library.dart';
+import 'package:kite/service/library/index.dart';
 import 'package:kite/util/logger.dart';
 
 class SearchBarDelegate extends SearchDelegate<String> {

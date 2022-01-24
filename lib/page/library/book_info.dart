@@ -1,37 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:kite/dao/library/book_info.dart';
-import 'package:kite/dao/library/book_search.dart';
-import 'package:kite/dao/library/holding.dart';
-import 'package:kite/dao/library/holding_preview.dart';
-import 'package:kite/dao/library/image_search.dart';
 import 'package:kite/entity/library/book_info.dart';
 import 'package:kite/entity/library/book_search.dart';
 import 'package:kite/entity/library/holding_preview.dart';
-import 'package:kite/global/session_pool.dart';
+import 'package:kite/global/service_pool.dart';
 import 'package:kite/page/library/search_delegate.dart';
-import 'package:kite/service/library.dart';
-import 'package:kite/service/library/holding_preview.dart';
 import 'package:kite/util/library/search.dart';
 
 import 'component/search_result_item.dart';
 
 class BookInfoPage extends StatefulWidget {
-  /// 图书信息访问
-  final BookInfoDao bookInfoDao = BookInfoService(SessionPool.librarySession);
-
-  /// 馆藏信息访问
-  final HoldingInfoDao holdingInfoDao = HoldingInfoService(SessionPool.librarySession);
-
-  /// 图书
-  final BookSearchDao bookSearchDao = BookSearchService(SessionPool.librarySession);
-
-  final BookImageSearchDao bookImageSearchDao = BookImageSearchService(SessionPool.librarySession);
-
-  final HoldingPreviewDao holdingPreviewDao = HoldingPreviewService(SessionPool.librarySession);
-
   /// 上一层传递进来的数据
   final BookImageHolding bookImageHolding;
-  BookInfoPage(this.bookImageHolding, {Key? key}) : super(key: key);
+  const BookInfoPage(this.bookImageHolding, {Key? key}) : super(key: key);
 
   @override
   _BookInfoPageState createState() => _BookInfoPageState();
@@ -41,7 +21,7 @@ class _BookInfoPageState extends State<BookInfoPage> {
   Widget buildBookDetail() {
     final bookId = widget.bookImageHolding.book.bookId;
     return FutureBuilder<BookInfo>(
-      future: widget.bookInfoDao.query(bookId),
+      future: ServicePool.bookInfoDao.query(bookId),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           final BookInfo bookInfo = snapshot.data;
@@ -122,14 +102,14 @@ class _BookInfoPageState extends State<BookInfoPage> {
   /// 构造邻近的书
   Widget buildBookItem(String bookId) {
     Future<BookImageHolding> get() async {
-      final result = await widget.bookSearchDao.search(
+      final result = await ServicePool.bookSearchDao.search(
         keyword: bookId,
         rows: 1,
         searchWay: SearchWay.ctrlNo,
       );
       final ret = await BookImageHolding.simpleQuery(
-        widget.bookImageSearchDao,
-        widget.holdingPreviewDao,
+        ServicePool.bookImageSearchDao,
+        ServicePool.holdingPreviewDao,
         result.books,
       );
       return ret[0];
@@ -161,7 +141,7 @@ class _BookInfoPageState extends State<BookInfoPage> {
 
   Widget buildNearBooks(String bookId) {
     return FutureBuilder(
-      future: widget.holdingInfoDao.searchNearBookIdList(bookId),
+      future: ServicePool.holdingInfoDao.searchNearBookIdList(bookId),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           List<String> bookIdList = snapshot.data;

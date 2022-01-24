@@ -6,7 +6,7 @@ import 'package:kite/global/bus.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/page/home/item.dart';
-import 'package:kite/service/library.dart';
+import 'package:kite/service/library/index.dart';
 
 class LibraryItem extends StatefulWidget {
   const LibraryItem({Key? key}) : super(key: key);
