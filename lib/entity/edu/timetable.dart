@@ -1,42 +1,56 @@
+import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:kite/global/hive_type_id_pool.dart';
 
 part 'timetable.g.dart';
 
+@HiveType(typeId: HiveTypeIdPool.courseItem)
 @JsonSerializable()
-class Course {
+class Course extends HiveObject {
   static RegExp weekRegex = RegExp(r"(\d{1,2})(:?-(\d{1,2}))?");
 
   @JsonKey(name: 'kcmc')
+  @HiveField(0)
   // 课程名称
   String? courseName;
   @JsonKey(name: 'xqjmc', fromJson: _dayToInt)
+  @HiveField(1)
   // 星期
   int? day;
   @JsonKey(name: 'jcs', fromJson: _indexTimeToInt)
+  @HiveField(2)
   // 节次
   int? timeIndex;
   @JsonKey(name: 'zcd', fromJson: _weeksToInt)
+  @HiveField(3)
   // 周次
   int? week;
   @JsonKey(name: 'cdmc')
+  @HiveField(4)
   // 教室
   String? place;
   @JsonKey(name: 'xm', fromJson: _stringToVec, defaultValue: ['空'])
+  @HiveField(5)
   // 教师
   List<String>? teacher;
   @JsonKey(name: 'xqmc')
+  @HiveField(6)
   // 校区
   String? campus;
   @JsonKey(name: 'xf', fromJson: _stringToDouble)
+  @HiveField(7)
   // 学分
   double credit = 0.0;
   @JsonKey(name: 'zxs', fromJson: _stringToInt)
+  @HiveField(8)
   // 学时
   int hour = 0;
   @JsonKey(name: 'jxbmc', fromJson: _trimString)
+  @HiveField(9)
   // 教学班
   String? dynClassId;
   @JsonKey(name: 'kch')
+  @HiveField(10)
   // 课程代码
   String? courseId;
 
