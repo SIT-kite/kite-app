@@ -3,6 +3,8 @@ import 'dart:typed_data';
 
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
+import 'package:kite/dao/campus_card.dart';
+import 'package:kite/global/session_pool.dart';
 import 'package:kite/service/campus_card.dart';
 import 'package:kite/util/flash.dart';
 import 'package:nfc_manager/nfc_manager.dart';
@@ -29,7 +31,8 @@ class CampusCardRecord {
 }
 
 class CampusCardPage extends StatefulWidget {
-  const CampusCardPage({Key? key}) : super(key: key);
+  final CampusCardDao campusCardDao = CampusCardService(SessionPool.ssoSession);
+  CampusCardPage({Key? key}) : super(key: key);
 
   @override
   _CampusCardPageState createState() => _CampusCardPageState();
@@ -66,7 +69,7 @@ class _CampusCardPageState extends State<CampusCardPage> {
     var completer = Completer();
     context.showBlockDialog(dismissCompleter: completer);
 
-    getCardInfo(cardUid).then((cardInfo) {
+    widget.campusCardDao.getCardInfo(cardUid).then((cardInfo) {
       completer.complete();
 
       setState(() {

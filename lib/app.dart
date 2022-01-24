@@ -9,14 +9,14 @@ class KiteApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final routes = {
-      '/home': (context) => HomePage(),
+      '/home': (context) => const HomePage(),
       '/report': (context) => const DailyReportPage(),
       '/login': (context) => const LoginPage(),
       '/welcome': (context) => const WelcomePage(),
       '/about': (context) => const AboutPage(),
       '/expense': (context) => const ExpensePage(),
       '/connectivity': (context) => const ConnectivityPage(),
-      '/campusCard': (context) => const CampusCardPage(),
+      '/campusCard': (context) => CampusCardPage(),
       '/electricity': (context) => const ElectricityPage(),
       '/score': (context) => const ScorePage(),
       '/office': (context) => const OfficePage(),
@@ -34,7 +34,7 @@ class KiteApp extends StatelessWidget {
       title: '上应小风筝',
       theme: themeData,
       debugShowCheckedModeBanner: false,
-      home: StoragePool.authSetting.currentUsername != null ? HomePage() : const WelcomePage(),
+      home: StoragePool.authSetting.currentUsername != null ? const HomePage() : const WelcomePage(),
       routes: routes,
     );
   }
