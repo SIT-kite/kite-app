@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kite/entity/edu.dart';
-import 'package:kite/global/bus.dart';
+import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/page/score/evaluation.dart';
 import 'package:kite/service/edu.dart';

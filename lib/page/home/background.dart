@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather_bg_null_safety/bg/weather_bg.dart';
 import 'package:flutter_weather_bg_null_safety/utils/weather_type.dart';
 import 'package:kite/entity/weather.dart';
-import 'package:kite/global/bus.dart';
+import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/storage_pool.dart';
 
 class HomeBackground extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kite/entity/edu.dart';
-import 'package:kite/global/bus.dart';
+import 'package:kite/global/event_bus.dart';
 import 'package:kite/util/edu/gpa.dart';
 
 class GpaBanner extends StatefulWidget {
