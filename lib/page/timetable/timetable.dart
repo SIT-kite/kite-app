@@ -46,7 +46,6 @@ class _TimetablePageState extends State<TimetablePage> {
   }
 
   void generateDateTable() {
-    print("dateTableList");
     int currYear = startTime.year;
     int currDay = startTime.day;
     int currMonth = startTime.month;
@@ -66,9 +65,7 @@ class _TimetablePageState extends State<TimetablePage> {
           currMonthDayCount = DateUtils.getDaysInMonth(currYear, currMonth);
         }
       }
-      // print(dateTableList[weekIndex]);
     }
-    // print(dateTableList);
   }
 
   void generateDailyTimetable() {
@@ -80,22 +77,18 @@ class _TimetablePageState extends State<TimetablePage> {
     for (int i = 0; i < courseList.length; i++) {
       int weekIndex = 0;
       int dayIndex = 0;
-      courseList[i].week = (courseList[i].week! >> 1);
-      // print(courseList[i]);
-      while ((courseList[i].week as int) != 0) {
-        // print(courseList[i].week);
-        if ((courseList[i].week! & 1) == 1) {
+      int? week = courseList[i].week;
+      week = (week! >> 1);
+      while ((week as int) != 0) {
+        if ((week& 1) == 1) {
           dayIndex = courseList[i].day!.toInt() - 1;
-          // print(weekIndex);
-          // print(dayIndex);
-          // print("\n");
           if (dailyCourseList[weekIndex] == null) {
             dailyCourseList[weekIndex] = [[], [], [], [], [], [], []];
           }
           dailyCourseList[weekIndex]![dayIndex].add(i);
         }
         weekIndex++;
-        courseList[i].week = courseList[i].week! >> 1;
+        week = week>> 1;
       }
     }
     print(dailyCourseList[0]);
