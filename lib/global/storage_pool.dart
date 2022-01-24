@@ -1,6 +1,7 @@
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kite/dao/auth_pool.dart';
+import 'package:kite/dao/edu/timetable.dart';
 import 'package:kite/dao/electricity.dart';
 import 'package:kite/dao/library/search_history.dart';
 import 'package:kite/dao/setting/auth.dart';
@@ -17,6 +18,7 @@ import 'package:kite/storage/setting/auth.dart';
 import 'package:kite/storage/setting/home.dart';
 import 'package:kite/storage/setting/network.dart';
 import 'package:kite/storage/setting/theme.dart';
+import 'package:kite/storage/timetable.dart';
 import 'package:kite/util/hive_cache_provider.dart';
 import 'package:kite/util/logger.dart';
 
@@ -53,6 +55,10 @@ class StoragePool {
 
   static NetworkSettingStorage get network => _networkSetting;
 
+  static late TimetableStorageDao _course;
+
+  static TimetableStorageDao get course => _course;
+
   static Future<void> _registerAdapters() async {
     void registerAdapter<T>(TypeAdapter<T> adapter) {
       if (!Hive.isAdapterRegistered(adapter.typeId)) {
@@ -88,6 +94,9 @@ class StoragePool {
     _themeSetting = ThemeSettingStorage(settingBox);
     _networkSetting = NetworkSettingStorage(settingBox);
     Settings.init(cacheProvider: HiveCacheProvider(settingBox));
+
+    final courseBox = await Hive.openBox<Course>('course');
+    _course = CourseStorage(courseBox);
   }
 
   static Future<void> clear() async {
@@ -96,5 +105,6 @@ class StoragePool {
     await Hive.deleteBoxFromDisk('setting');
     await Hive.deleteBoxFromDisk('auth');
     await Hive.deleteBoxFromDisk('library.search_history');
+    await Hive.deleteBoxFromDisk('course');
   }
 }

@@ -12,7 +12,13 @@ class CourseStorage implements TimetableStorageDao {
     box.put(item.courseName.hashCode, item);
   }
 
-  /// 根据搜索文字删除
+  @override
+  void addAll(List<Course> courseList) {
+    courseList.forEach((item) {
+        box.put(item.courseName.hashCode, item);
+    });
+  }
+
   @override
   void delete(String record) {
     box.delete(record.hashCode);
@@ -21,6 +27,17 @@ class CourseStorage implements TimetableStorageDao {
   @override
   void deleteAll() {
     box.deleteAll(box.keys.map((e) => e.hashCode));
+  }
+
+  @override
+  bool isEmpty() {
+    return box.isEmpty;
+  }
+
+  @override
+  bool clear() {
+    box.clear();
+    return true;
   }
 
   @override
