@@ -1,11 +1,11 @@
 export 'bulletin.dart';
 export 'campus_card.dart';
 export 'edu/index.dart';
-export 'electricity.dart';
 export 'expense.dart';
+export 'kite/electricity.dart';
+export 'kite/ocr.dart';
+export 'kite/weather.dart';
 export 'library/index.dart';
 export 'network.dart';
-export 'ocr.dart';
 export 'office/index.dart';
 export 'report/index.dart';
-export 'weather.dart';

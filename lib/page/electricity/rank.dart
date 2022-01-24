@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/entity/electricity.dart';
 import 'package:kite/global/session_pool.dart';
-import 'package:kite/service/electricity.dart';
+import 'package:kite/service/kite/electricity.dart';
 
 class RankView extends StatelessWidget {
   final String room;

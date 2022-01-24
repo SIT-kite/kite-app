@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:kite/service/weather.dart';
+import 'package:kite/service/kite/weather.dart';
 import 'package:kite/session/sso/sso_session.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
