@@ -21,7 +21,7 @@ class _BookInfoPageState extends State<BookInfoPage> {
   Widget buildBookDetail() {
     final bookId = widget.bookImageHolding.book.bookId;
     return FutureBuilder<BookInfo>(
-      future: ServicePool.bookInfoDao.query(bookId),
+      future: ServicePool.bookInfo.query(bookId),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           final BookInfo bookInfo = snapshot.data;
@@ -102,14 +102,14 @@ class _BookInfoPageState extends State<BookInfoPage> {
   /// 构造邻近的书
   Widget buildBookItem(String bookId) {
     Future<BookImageHolding> get() async {
-      final result = await ServicePool.bookSearchDao.search(
+      final result = await ServicePool.bookSearch.search(
         keyword: bookId,
         rows: 1,
         searchWay: SearchWay.ctrlNo,
       );
       final ret = await BookImageHolding.simpleQuery(
-        ServicePool.bookImageSearchDao,
-        ServicePool.holdingPreviewDao,
+        ServicePool.bookImageSearch,
+        ServicePool.holdingPreview,
         result.books,
       );
       return ret[0];
@@ -141,7 +141,7 @@ class _BookInfoPageState extends State<BookInfoPage> {
 
   Widget buildNearBooks(String bookId) {
     return FutureBuilder(
-      future: ServicePool.holdingInfoDao.searchNearBookIdList(bookId),
+      future: ServicePool.holdingInfo.searchNearBookIdList(bookId),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           List<String> bookIdList = snapshot.data;
