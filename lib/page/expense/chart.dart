@@ -9,7 +9,9 @@ class ExpenseChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final expenseMapping = dailyExpense.asMap();
-    final spots = expenseMapping.keys.map((i) => FlSpot((i + 1).toDouble(), expenseMapping[i] ?? 0.0)).toList();
+    final spots = expenseMapping.keys
+        .map((i) => FlSpot((i + 1).toDouble(), expenseMapping[i] ?? 0.0))
+        .toList();
 
     return LineChart(
       LineChartData(

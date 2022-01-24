@@ -6,6 +6,7 @@ import 'package:kite/dao/expense.dart';
 import 'package:kite/entity/expense.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/service/abstract_session.dart';
+import 'package:kite/global/storage_pool.dart';
 
 class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
   static const _expenseUrl = 'http://card.sit.edu.cn/personalxiaofei.jsp';
@@ -21,7 +22,8 @@ class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
   ExpenseRemoteService(ASession session) : super(session);
 
   @override
-  Future<ExpensePage> getExpensePage(int page, {DateTime? start, DateTime? end}) async {
+  Future<ExpensePage> getExpensePage(bool refresh, int page,
+      {DateTime? start, DateTime? end}) async {
     start = start ?? DateTime(2010);
     end = end ?? DateTime.now();
     final response = await session.get(
@@ -33,19 +35,35 @@ class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
       },
       responseType: ResponseType.bytes,
     );
-    return _parseExpenseDetail(_codec.decode(response.data));
+    return _parseExpenseDetail(refresh, _codec.decode(response.data));
   }
 
-  static ExpensePage _parseExpenseDetail(String htmlPage) {
+  static ExpensePage _parseExpenseDetail(bool refresh, String htmlPage) {
     const String recordSelector = 'table#table > tbody > tr';
 
     final BeautifulSoup soup = BeautifulSoup(htmlPage);
     // 先获取每一行,过滤首行
-    final records = soup.findAll(recordSelector).sublist(1).map(_parseExpenseItem).toList();
-
+    List<ExpenseRecord> records = [];
+    if (refresh) {
+      for (final bill in soup.findAll(recordSelector).sublist(1)) {
+        if (_parseExpenseItem(bill).ts !=
+            StoragePool.expenseRecordStorage.getAllByTimeDesc()[0].ts) {
+          records.add(_parseExpenseItem(bill));
+          StoragePool.expenseRecordStorage.add(_parseExpenseItem(bill));
+        } else {
+          break;
+        }
+      }
+    } else {
+      for (final bill in soup.findAll(recordSelector).sublist(1)) {
+        records.add(_parseExpenseItem(bill));
+        StoragePool.expenseRecordStorage.add(_parseExpenseItem(bill));
+      }
+    }
     // 页号信息
     final pageInfo = soup.findAll('div', id: 'listContent')[1].text;
-    String currentPage = RegExp(r'第(\S*)页').allMatches(pageInfo).first.group(1)!;
+    String currentPage =
+        RegExp(r'第(\S*)页').allMatches(pageInfo).first.group(1)!;
     String totalPage = RegExp(r'共(\S*)页').allMatches(pageInfo).first.group(1)!;
 
     return ExpensePage()

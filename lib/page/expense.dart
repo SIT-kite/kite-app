@@ -19,11 +19,13 @@ class _ExpensePageState extends State<ExpensePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("消费记录"),
-        actions: [
-          _currentIndex == 0 ? _buildPopupMenuItems() : const Padding(padding: EdgeInsets.all(0)),
-        ],
+        // actions: [
+        //   _currentIndex == 0
+        //        _buildPopupMenuItems()
+        //       : const Padding(padding: EdgeInsets.all(0)),
+        // ],
       ),
-      body: _currentIndex == 0 ? const BillPage() : const StatisticsPage(),
+      body: _currentIndex == 0 ? BillPage() : const StatisticsPage(),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(

@@ -6,4 +6,6 @@ class HiveTypeIdPool {
   static const reportHistoryItem = 4;
   static const balanceItem = 5;
   static const courseItem = 6;
+  static const expenseItem = 7;
+  static const expenseTypeItem = 8;
 }
