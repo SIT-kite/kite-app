@@ -1,3 +1,4 @@
+import 'package:kite/global/service_pool.dart';
 import 'package:kite/util/logger.dart';
 
 import 'session_pool.dart';
@@ -11,6 +12,7 @@ Future<void> initBeforeRun() async {
     SessionPool.init(),
     StoragePool.init(),
   ]);
+  ServicePool.init();
   Log.info('应用开启前初始化完成');
 
   // 初始化用户首次使用时间
