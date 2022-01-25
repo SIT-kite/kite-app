@@ -32,14 +32,21 @@ class SessionPool {
   static ReportSession? reportSession;
   static late LibrarySession librarySession;
 
+  // 是否初始化过
+  static bool _hasInit = false;
+  static bool hasInit() => _hasInit;
+
+  /// 初始化SessionPool
   static Future<void> init() async {
     Log.info("初始化SessionPool");
 
-    // 只有初始化完dio后才能初始化UA
-    final String homeDirectory = (await getApplicationDocumentsDirectory()).path;
-    final FileStorage cookieStorage = FileStorage(homeDirectory + '/cookies/');
-    // 初始化 cookie jar
-    _cookieJar = PersistCookieJar(storage: cookieStorage);
+    if (!_hasInit) {
+      // 只有初始化完dio后才能初始化UA
+      final String homeDirectory = (await getApplicationDocumentsDirectory()).path;
+      final FileStorage cookieStorage = FileStorage(homeDirectory + '/cookies/');
+      // 初始化 cookie jar
+      _cookieJar = PersistCookieJar(storage: cookieStorage);
+    }
     dio = _initDioInstance();
     await _initUserAgentString();
 
@@ -47,15 +54,12 @@ class SessionPool {
     ssoSession = SsoSession(dio: dio, jar: _cookieJar);
     eduSession = EduSession(ssoSession);
     librarySession = LibrarySession(dio);
-  }
-
-  static void initProxySettings() {
-    HttpOverrides.global = KiteHttpOverrides();
+    _hasInit = true;
   }
 
   static Dio _initDioInstance() {
     // 设置 HTTP 代理
-    initProxySettings();
+    HttpOverrides.global = KiteHttpOverrides();
 
     Dio dio = Dio();
     // 添加拦截器

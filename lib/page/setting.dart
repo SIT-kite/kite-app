@@ -113,7 +113,7 @@ class SettingPage extends StatelessWidget {
           onChange: (value) {
             if (value) {
               StoragePool.network.useProxy = value;
-              SessionPool.initProxySettings();
+              SessionPool.init();
             }
           },
           childrenIfEnabled: [
@@ -125,11 +125,16 @@ class SettingPage extends StatelessWidget {
               onChange: (value) {
                 StoragePool.network.proxy = value;
                 if (StoragePool.network.useProxy) {
-                  SessionPool.initProxySettings();
+                  SessionPool.init();
                 }
               },
             ),
-            SimpleSettingsTile(title: '测试连接', subtitle: '检查校园网或网络代理的连接', onTap: () => {}),
+            SimpleSettingsTile(
+                title: '测试连接',
+                subtitle: '检查校园网或网络代理的连接',
+                onTap: () {
+                  Navigator.pushNamed(context, '/connectivity');
+                }),
           ],
         ),
       ]),

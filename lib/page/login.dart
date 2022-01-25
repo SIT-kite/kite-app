@@ -176,7 +176,7 @@ class _LoginPageState extends State<LoginPage> {
 
         StoragePool.network.useProxy = true;
         StoragePool.network.proxy = inputText;
-        SessionPool.initProxySettings();
+        SessionPool.init();
       },
       icon: const Icon(Icons.send),
     );
