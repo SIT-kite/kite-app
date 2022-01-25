@@ -24,8 +24,8 @@ class _GpaBannerState extends State<GpaBanner> {
 
   @override
   void initState() {
-    eventBus.on(EventNameConstants.onSelectCourse, _onSelectCourse);
-    eventBus.on(EventNameConstants.onRemoveCourse, _onRemoveCourse);
+    eventBus.on<Score>(EventNameConstants.onSelectCourse, _onSelectCourse);
+    eventBus.on<Score>(EventNameConstants.onRemoveCourse, _onRemoveCourse);
     super.initState();
   }
 
@@ -40,15 +40,15 @@ class _GpaBannerState extends State<GpaBanner> {
     return (_semester == Semester.all) ? "学年" : "学期";
   }
 
-  void _onSelectCourse(dynamic score) {
+  void _onSelectCourse(Score? score) {
     setState(() {
-      _selectedSet.add(score as Score);
+      _selectedSet.add(score!);
     });
   }
 
-  void _onRemoveCourse(dynamic score) {
+  void _onRemoveCourse(Score? score) {
     setState(() {
-      _selectedSet.remove(score as Score);
+      _selectedSet.remove(score!);
     });
   }
 

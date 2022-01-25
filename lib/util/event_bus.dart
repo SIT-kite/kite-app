@@ -8,9 +8,10 @@ class EventBus<E> {
   final _eventMap = <E, List<EventCallback>?>{};
 
   // 添加订阅者
-  void on(E eventName, EventCallback f) {
+  void on<T>(E eventName, EventCallback<T> callback) {
     _eventMap[eventName] ??= <EventCallback>[];
-    _eventMap[eventName]!.add(f);
+    final list = _eventMap[eventName]!;
+    list.add((arg) => callback(arg));
   }
 
   // 移除订阅者
