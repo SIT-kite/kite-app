@@ -112,28 +112,29 @@ class _OfficePageState extends State<OfficePage> {
   }
 
   PopupMenuButton _buildMenuButton(BuildContext context) {
-    return PopupMenuButton(
+    final menuButton = PopupMenuButton(
       itemBuilder: (BuildContext context) {
         return [
           PopupMenuItem(
+            onTap: () {
+              setState(() {
+                _enableFilter = !_enableFilter;
+              });
+            },
             child: Row(
-              mainAxisSize: MainAxisSize.min,
               children: [
-                Checkbox(
-                  value: _enableFilter,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _enableFilter = value ?? true;
-                    });
-                  },
+                // 禁用checkbox自身的点击效果，点击由外部接管
+                AbsorbPointer(
+                  child: Checkbox(value: _enableFilter, onChanged: (bool? value) {}),
                 ),
-                const Text('过滤不常用功能')
+                const Text('过滤不常用功能'),
               ],
             ),
           ),
         ];
       },
     );
+    return menuButton;
   }
 
   void _navigateMessagePage() {
