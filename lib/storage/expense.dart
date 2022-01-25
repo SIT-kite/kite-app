@@ -1,9 +1,10 @@
+import 'package:hive/hive.dart';
 import 'package:kite/dao/expense.dart';
 import 'package:kite/entity/expense.dart';
-import 'package:hive/hive.dart';
 
 class ExpenseLocalStorage implements ExpenseLocalDao {
   final Box<ExpenseRecord> box;
+
   const ExpenseLocalStorage(this.box);
 
   @override
@@ -21,5 +22,12 @@ class ExpenseLocalStorage implements ExpenseLocalDao {
     var result = box.values.toList();
     result.sort((a, b) => b.ts.compareTo(a.ts));
     return result;
+  }
+
+  @override
+  ExpenseRecord? getLastOne() {
+    try {
+      return getAllByTimeDesc().first;
+    } catch (_) {}
   }
 }

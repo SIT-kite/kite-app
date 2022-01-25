@@ -12,7 +12,7 @@ class ExpenseItem extends StatefulWidget {
 }
 
 class _ExpenseItemState extends State<ExpenseItem> {
-  final ExpenseRecord? lastExpense = StoragePool.homeSetting.lastExpense;
+  final ExpenseRecord? lastExpense = StoragePool.expenseRecordStorage.getLastOne();
   late String content = '校园卡消费记录';
 
   @override
@@ -30,7 +30,7 @@ class _ExpenseItemState extends State<ExpenseItem> {
     return HomeItem(
       route: '/expense',
       icon: 'assets/home/icon_expense.svg',
-      title: '消费',
+      title: '查消费',
       subtitle: content,
     );
   }

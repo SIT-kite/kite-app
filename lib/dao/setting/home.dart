@@ -1,5 +1,4 @@
 import 'package:kite/entity/electricity.dart';
-import 'package:kite/entity/expense.dart';
 import 'package:kite/entity/report.dart';
 import 'package:kite/entity/weather.dart';
 
@@ -32,10 +31,6 @@ abstract class HomeSettingDao {
   Balance? get lastBalance;
 
   set lastBalance(Balance? lastBalance);
-
-  ExpenseRecord? get lastExpense;
-
-  set lastExpense(ExpenseRecord? expense);
 
   String? get lastHotSearch;
 

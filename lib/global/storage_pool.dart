@@ -41,6 +41,7 @@ class StoragePool {
   static late ElectricityStorage _electricity;
 
   static ElectricityStorageDao get electricity => _electricity;
+
   static late ExpenseLocalStorage _expenseRecord;
 
   static ExpenseLocalDao get expenseRecordStorage => _expenseRecord;

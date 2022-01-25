@@ -1,7 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:kite/dao/setting/home.dart';
 import 'package:kite/entity/electricity.dart';
-import 'package:kite/entity/expense.dart';
 import 'package:kite/entity/report.dart';
 import 'package:kite/entity/weather.dart';
 import 'package:kite/storage/constants.dart';
@@ -52,12 +51,6 @@ class HomeSettingStorage implements HomeSettingDao {
 
   @override
   set lastBalance(Balance? lastBalance) => box.put(HomeKeyKeys.lastBalance, lastBalance);
-
-  @override
-  ExpenseRecord? get lastExpense => box.get(HomeKeyKeys.lastExpense);
-
-  @override
-  set lastExpense(ExpenseRecord? expense) => box.put(HomeKeyKeys.lastExpense, expense);
 
   @override
   String? get lastHotSearch => box.get(HomeKeyKeys.lastHotSearch);
