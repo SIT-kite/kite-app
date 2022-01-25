@@ -4,17 +4,17 @@ typedef EventCallback<T> = void Function(T? arg);
 /// 事件总线工具类
 /// E为事件类型，一般使用枚举类型，也可使用其他类型
 class EventBus<E> {
-  // 保存事件订阅者队列，key:事件名(id)，value: 对应事件的订阅者队列
+  /// 保存事件订阅者队列，key:事件名(id)，value: 对应事件的订阅者队列
   final _eventMap = <E, List<EventCallback>?>{};
 
-  // 添加订阅者
+  /// 添加订阅者
   void on<T>(E eventName, EventCallback<T> callback) {
     _eventMap[eventName] ??= <EventCallback>[];
     final list = _eventMap[eventName]!;
     list.add((arg) => callback(arg));
   }
 
-  // 移除订阅者
+  /// 移除订阅者
   void off(E eventName, [EventCallback? f]) {
     final list = _eventMap[eventName];
     if (list == null) {
