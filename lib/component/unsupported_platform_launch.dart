@@ -3,7 +3,12 @@ import 'package:url_launcher/url_launcher.dart';
 
 class UnsupportedPlatformUrlLauncher extends StatelessWidget {
   final String url;
-  const UnsupportedPlatformUrlLauncher(this.url, {Key? key}) : super(key: key);
+  final String tip;
+  const UnsupportedPlatformUrlLauncher(
+    this.url, {
+    Key? key,
+    this.tip = '电脑端暂不支持直接查看',
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +16,7 @@ class UnsupportedPlatformUrlLauncher extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text('电脑端暂不支持直接查看'),
+          Text(tip),
           TextButton(
               onPressed: () {
                 launch(url);
