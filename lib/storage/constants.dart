@@ -29,3 +29,8 @@ class NetworkKeys {
   static const networkProxy = '$namespace/proxy';
   static const networkUseProxy = '$namespace/useProxy';
 }
+
+class JwtKeys {
+  static const namespace = '/kite';
+  static const jwt = '$namespace/jwt';
+}
