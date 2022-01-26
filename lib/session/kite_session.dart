@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:kite/dao/kite/jwt.dart';
+import 'package:kite/entity/kite/account.dart';
 import 'package:kite/session/abstract_session.dart';
 
 const String _baseUrl = 'https://kite.sunnysab.cn/api/v2';
@@ -10,6 +11,8 @@ const String _baseUrl = 'https://kite.sunnysab.cn/api/v2';
 class KiteSession extends ASession {
   final Dio dio;
   final JwtDao jwtDao;
+  KiteUser? profile;
+
   KiteSession(this.dio, this.jwtDao);
 
   @override
@@ -58,21 +61,15 @@ class KiteSession extends ASession {
   }
 
   /// 用户登录
-  Future<void> login(String username, String password) async {
+  /// 用户不存在时，将自动创建用户
+  Future<KiteUser> login(String username, String password) async {
     final response = await post('/session', data: {
       'account': username,
       'secret': password,
     });
     jwtDao.jwtToken = response.data['token'];
-  }
-
-  /// 用户不存在时，创建用户
-  Future<void> createUser(String username, String password) async {
-    final response = await post('/user', data: {
-      'account': username,
-      'secret': password,
-    });
-    jwtDao.jwtToken = response.data['token'];
+    profile = KiteUser.fromJson(response.data['profile']);
+    return profile!;
   }
 }
 
