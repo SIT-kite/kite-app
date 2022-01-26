@@ -4,6 +4,7 @@ import 'package:kite/dao/auth_pool.dart';
 import 'package:kite/dao/edu/timetable.dart';
 import 'package:kite/dao/electricity.dart';
 import 'package:kite/dao/expense.dart';
+import 'package:kite/dao/kite/jwt.dart';
 import 'package:kite/dao/library/search_history.dart';
 import 'package:kite/dao/setting/auth.dart';
 import 'package:kite/dao/setting/home.dart';
@@ -18,6 +19,7 @@ import 'package:kite/entity/weather.dart';
 import 'package:kite/storage/auth.dart';
 import 'package:kite/storage/electricity.dart';
 import 'package:kite/storage/home.dart';
+import 'package:kite/storage/jwt.dart';
 import 'package:kite/storage/network.dart';
 import 'package:kite/storage/theme.dart';
 import 'package:kite/storage/timetable.dart';
@@ -66,6 +68,10 @@ class StoragePool {
 
   static TimetableStorageDao get course => _course;
 
+  static late JwtDao _jwt;
+
+  static JwtDao get jwt => _jwt;
+
   static Future<void> _registerAdapters() async {
     void registerAdapter<T>(TypeAdapter<T> adapter) {
       if (!Hive.isAdapterRegistered(adapter.typeId)) {
@@ -103,6 +109,7 @@ class StoragePool {
     _homeSetting = HomeSettingStorage(settingBox);
     _themeSetting = ThemeSettingStorage(settingBox);
     _networkSetting = NetworkSettingStorage(settingBox);
+    _jwt = JwtStorage(settingBox);
     Settings.init(cacheProvider: HiveCacheProvider(settingBox));
 
     final courseBox = await Hive.openBox<Course>('course');
