@@ -8,6 +8,7 @@ import 'package:kite/global/storage_pool.dart';
 import 'package:kite/service/edu/index.dart';
 import 'package:kite/service/office/index.dart';
 import 'package:kite/service/report/report.dart';
+import 'package:kite/session/kite_session.dart';
 import 'package:kite/session/library_session.dart';
 import 'package:kite/session/sso/sso_session.dart';
 import 'package:kite/util/logger.dart';
@@ -22,15 +23,15 @@ class SessionPool {
 
   // 持久化的CookieJar
   static late final PersistCookieJar _cookieJar;
-
   static PersistCookieJar get cookieJar => _cookieJar;
 
   static late Dio dio;
-  static late SsoSession ssoSession;
-  static late EduSession eduSession;
   static OfficeSession? officeSession;
   static ReportSession? reportSession;
   static late LibrarySession librarySession;
+  static late SsoSession ssoSession;
+  static late EduSession eduSession;
+  static late KiteSession kiteSession;
 
   // 是否初始化过
   static bool _hasInit = false;
@@ -54,6 +55,7 @@ class SessionPool {
     ssoSession = SsoSession(dio: dio, jar: _cookieJar);
     eduSession = EduSession(ssoSession);
     librarySession = LibrarySession(dio);
+    kiteSession = KiteSession(dio, StoragePool.jwt);
     _hasInit = true;
   }
 
