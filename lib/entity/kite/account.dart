@@ -11,4 +11,9 @@ class KiteUser {
   bool isBlock = false;
   KiteUser();
   factory KiteUser.fromJson(Map<String, dynamic> json) => _$KiteUserFromJson(json);
+
+  @override
+  String toString() {
+    return 'KiteUser{uid: $uid, account: $account, createTime: $createTime, role: $role, isBlock: $isBlock}';
+  }
 }
