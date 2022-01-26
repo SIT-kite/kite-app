@@ -1,6 +1,6 @@
 import 'package:kite/service/expense.dart';
 
-import 'mock.dart';
+import 'mock_util.dart';
 
 void main() async {
   await init();

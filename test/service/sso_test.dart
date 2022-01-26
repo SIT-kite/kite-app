@@ -1,6 +1,6 @@
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 
-import 'mock.dart';
+import 'mock_util.dart';
 
 void main() async {
   await init();

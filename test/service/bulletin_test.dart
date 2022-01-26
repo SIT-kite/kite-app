@@ -1,6 +1,6 @@
 import 'package:kite/service/bulletin.dart';
 
-import 'mock.dart';
+import 'mock_util.dart';
 
 void main() async {
   await init();
