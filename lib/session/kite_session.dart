@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:kite/dao/kite/jwt.dart';
 import 'package:kite/entity/kite/account.dart';
 import 'package:kite/session/abstract_session.dart';
+import 'package:kite/util/logger.dart';
 
 const String _baseUrl = 'https://kite.sunnysab.cn/api/v2';
 
@@ -33,7 +34,7 @@ class KiteSession extends ASession {
       options: (options ?? Options()).copyWith(
         method: method,
         contentType: contentType ?? ContentType.json.value,
-        responseType: responseType,
+        responseType: responseType ?? ResponseType.json,
         headers: token == null ? null : {'Authorization': 'Bearer ' + token},
       ),
     );
@@ -50,13 +51,15 @@ class KiteSession extends ASession {
 
       // 存在code,但是不为0
       if (responseDataCode != null) {
-        throw KiteApiError(responseDataCode, responseData['msg']);
+        final errorMsg = responseData['msg'];
+        Log.info('请求出错: $errorMsg');
+        throw KiteApiError(responseDataCode, errorMsg);
       }
-    } catch (_) {
-      // api请求格式有误
-      throw KiteApiFormatError(response.data);
+    } on KiteApiError catch (e) {
+      // api请求有误
+      Log.info('请求出错: ${e.msg}');
+      rethrow;
     }
-    // api请求格式有误
     throw KiteApiFormatError(response.data);
   }
 
