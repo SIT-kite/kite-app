@@ -65,7 +65,7 @@ class KiteSession extends ASession {
   Future<KiteUser> login(String username, String password) async {
     final response = await post('/session', data: {
       'account': username,
-      'secret': password,
+      'password': password,
     });
     jwtDao.jwtToken = response.data['token'];
     profile = KiteUser.fromJson(response.data['profile']);
