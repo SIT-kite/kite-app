@@ -20,9 +20,7 @@ Future<void> init() async {
   await SessionPool.init();
   if (proxy.isNotEmpty) {
     /// 使用代理
-    StoragePool.network
-      ..useProxy = true
-      ..proxy = proxy;
+    SessionPool.httpProxy = proxy;
   }
 }
 
