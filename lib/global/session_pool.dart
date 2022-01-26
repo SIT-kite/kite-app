@@ -14,10 +14,10 @@ import 'package:kite/session/sso/sso_session.dart';
 import 'package:kite/util/logger.dart';
 import 'package:path_provider/path_provider.dart';
 
-const String? httpProxy = null;
-const bool allowBadCertificate = true;
-
 class SessionPool {
+  static String? httpProxy;
+  static bool allowBadCertificate = true;
+
   static const String defaultUaString = 'kite-app';
   static String uaString = defaultUaString;
 
@@ -98,14 +98,14 @@ class KiteHttpOverrides extends HttpOverrides {
     final client = super.createHttpClient(context);
 
     // 设置证书检查
-    if (allowBadCertificate || StoragePool.network.useProxy || httpProxy != null) {
+    if (SessionPool.allowBadCertificate || StoragePool.network.useProxy || SessionPool.httpProxy != null) {
       client.badCertificateCallback = (cert, host, port) => true;
     }
     // 设置代理. 优先设置配置文件中的设置, 便于调试.
-    if (StoragePool.network.useProxy && StoragePool.network.proxy.isNotEmpty) {
+    if (SessionPool.httpProxy != null) {
+      client.findProxy = (_) => 'PROXY ${SessionPool.httpProxy}';
+    } else if (StoragePool.network.useProxy && StoragePool.network.proxy.isNotEmpty) {
       client.findProxy = (_) => 'PROXY ${StoragePool.network.proxy}';
-    } else if (httpProxy != null) {
-      client.findProxy = (_) => 'PROXY $httpProxy';
     }
     return client;
   }
