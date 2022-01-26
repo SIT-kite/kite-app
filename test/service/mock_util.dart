@@ -16,8 +16,8 @@ const String proxy = '';
 
 /// 测试前调用该函数做初始化
 Future<void> init() async {
-  await SessionPool.init();
   await StoragePool.init();
+  await SessionPool.init();
   if (proxy.isNotEmpty) {
     /// 使用代理
     StoragePool.network
