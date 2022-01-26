@@ -101,10 +101,19 @@ class KiteHttpOverrides extends HttpOverrides {
     if (SessionPool.allowBadCertificate || StoragePool.network.useProxy || SessionPool.httpProxy != null) {
       client.badCertificateCallback = (cert, host, port) => true;
     }
+
     // 设置代理. 优先设置配置文件中的设置, 便于调试.
     if (SessionPool.httpProxy != null) {
-      client.findProxy = (_) => 'PROXY ${SessionPool.httpProxy}';
+      // 判断测试环境代理合法性
+      if (SessionPool.httpProxy!.isNotEmpty) {
+        Log.info('测试环境设置代理: ${SessionPool.httpProxy}');
+        client.findProxy = (_) => 'PROXY ${SessionPool.httpProxy}';
+      } else {
+        // 测试环境代理设置不合法
+        Log.info('测试环境代理服务器为空或不合法，将不使用代理服务器');
+      }
     } else if (StoragePool.network.useProxy && StoragePool.network.proxy.isNotEmpty) {
+      Log.info('线上设置代理: ${SessionPool.httpProxy}');
       client.findProxy = (_) => 'PROXY ${StoragePool.network.proxy}';
     }
     return client;
