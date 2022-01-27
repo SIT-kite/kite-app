@@ -33,18 +33,9 @@ class _NoticeItemState extends State<NoticeItem> {
     setState(() => content = result);
   }
 
-  /// 对通知排序, 优先放置置顶通知, 其次是新通知.
-  void _sort(List<KiteNotice> noticeList) {
-    noticeList.sort((a, b) {
-      // 相同优先级比发布序号
-      return ((a.top == b.top && a.id > b.id) || (a.top && !b.top)) ? 1 : -1;
-    });
-  }
-
   Future<String?> _buildContent() async {
     try {
       final List<KiteNotice> list = await NoticeService(SessionPool.kiteSession).getNoticeList();
-      _sort(list);
       return list.first.title;
     } catch (_) {}
   }
