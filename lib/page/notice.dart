@@ -15,21 +15,31 @@ class NoticePage extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // 标题, 注意遇到长标题时要折断
-                Text((notice.top ? '[置顶] ' : '') + notice.title,
-                    overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                Expanded(
+                  flex: 3,
+                  child: Text((notice.top ? '[置顶] ' : '') + notice.title,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                ),
                 // 日期
-                Text(dateFormat.format(notice.publishTime), style: const TextStyle(color: Colors.grey))
+                Expanded(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(minWidth: 90),
+                    child: Text(dateFormat.format(notice.publishTime), style: const TextStyle(color: Colors.grey)),
+                  ),
+                )
               ],
             ),
-            notice.content != null ? const SizedBox(height: 10) : Container(),
+            const SizedBox(height: 10),
             // 正文
-            notice.content != null ? Text(notice.content!) : Container()
+            Text(notice.content ?? notice.title)
           ],
         ),
       ),
@@ -37,8 +47,10 @@ class NoticePage extends StatelessWidget {
   }
 
   Widget _buildNoticeList(List<KiteNotice> noticeList) {
-    return Column(
-      children: noticeList.map(_buildNoticeItem).toList(),
+    return SingleChildScrollView(
+      child: Column(
+        children: noticeList.map(_buildNoticeItem).toList(),
+      ),
     );
   }
 
@@ -64,7 +76,7 @@ class NoticePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('公告')),
-      body: _buildBody(),
+      body: SafeArea(child: _buildBody()),
     );
   }
 }
