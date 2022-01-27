@@ -11,7 +11,7 @@ repository:    https://github.com/SIT-kite/kite-app
 issue_tracker: https://github.com/SIT-kite/kite-app/issues
 documentation: https://github.com/SIT-kite/kite-app#readme
 
-environment: { sdk: '>=2.15.0 <3.0.0', flutter: ^2.15.1 }
+environment: { sdk: '>=2.15.1 <3.0.0', flutter: ^2.8.1 }
 
 # ------------------------------------------------------------------------------
 
