@@ -4,13 +4,14 @@
 我们致力于将其打造为校内最现代、最实用的 App。欢迎同学们提出好的点子、参与开发~
 
 **主要功能**
-- [ ] 课程表
-- [ ] 消费记录
-- [ ] 成绩查询
+- [x] 公告
+- [x] 课程表
+- [x] 消费记录
+- [x] 成绩查询
 - [ ] 给分查询
-- [ ] 评教
-- [ ] 体温上报
-- [ ] 所谓 “一网通办“ 的支持
+- [x] 评教
+- [x] 体温上报
+- [x] 所谓 “一网通办“ 的支持
 - [ ] 第二课堂
 - [ ] 校园通知
 - [ ] 空教室查询
@@ -22,7 +23,8 @@
 
 在本应用的开发中，我们参考了一些优秀的开源项目，例如由复旦大学学生开发的[旦夕][DanXi] App，在此表示感谢。
 
-[kite-microapp]: https://github.com/SIT-Yiban/kite-microapp
+[kite-microapp]: https://github.com/SIT-kite/kite-microapp
+
 [migrate]: ./WHY_DO_WE_MIGRATE.md
 [DanXi]: https://github.com/DanXi-Dev/DanXi
 
@@ -74,25 +76,29 @@ flutter run
 | 项目                       | 说明 |
 | -------------------------- | ---- |
 | [kite-server][kite-server] | 后端 API 服务 |
-| kite-agent                 | 后端数据获取工具（在 App 场景下被废弃） |
-| kite-string                | 校园网网络工具 |
+| [kite-agent][kite-agent]   | 后端数据获取工具（在 App 场景下被废弃） |
+| [kite-string][kite-string] | 校园网网络工具 |
 
 部分项目已在 Gitee 上设立镜像，访问速度会快一些。
 
-[kite-server]: https://github.com/SIT-Yiban/kite-server
+[kite-server]: https://github.com/SIT-kite/kite-server
+
+[kite-agent]: https://github.com/SIT-kite/kite-agent
+
+[kite-string]: https://github.com/SIT-kite/kite-string
 
 ## 开源协议
 
 项目中的代码（程序源代码、配置文件等）采用 [GPL v3](LICENSE) 协议发布。
 
-注意，如果您修改并分发本项目，您应当同意，软件的“分发”或“发布”包括“为用户提供服务“。
-您修改并分发项目后，应当对用户和我们（即，上海应用技术大学校易班工作站）公开全部源代码。
+注意，如果您修改并分发本项目，您应当同意，软件的“分发”或“发布”包括“为用户提供服务“。 您修改并分发项目后，应当对用户和我们（即，上海应用技术大学校易班工作站）公开全部源代码。
 除此之外，您（非贡献者）也不能将本项目用于比赛、论文等活动。
 
 本项目的名称、标语、标志性图片等素材，仅限上海应用技术大学校易班工作站及原作者使用，或经其书面同意后使用，不对外授权。
 
-项目中以调用第三方库的形式引用的其他开源项目有：
+项目中使用了代码的其他开源项目有：
 
 - [Game2048](https://github.com/linuxsong/game2048.git)
+- [DanXi][DanXi]
 
 这些项目的开源协议详见其各自的 LICENSE 文件。在此表示感谢！
