@@ -26,12 +26,13 @@ class BalanceSection extends StatelessWidget {
           Row(mainAxisAlignment: MainAxisAlignment.end, children: [
             TextButton(
               onPressed: () {
-                showBasicFlash(context, const Text('此数据来源于校内在线电费查询平台。如有错误，请以充值机显示金额为准～'));
+                const String electricityHint = '数据来自校内在线电费查询平台。如有错误，请以充值机显示金额为准~';
+                showBasicFlash(context, const Text(electricityHint));
               },
               child: Text('数据不一致?', style: TextStyle(color: Colors.grey[400], fontSize: 12)),
             )
           ]),
-          Text('房间号: ${balance.room}'),
+          Text('　房间号: ${balance.room}'),
           Text('剩余金额: ${balance.balance.toStringAsFixed(2)}'),
           Text('剩余电量: ${balance.power.toStringAsFixed(2)}'),
           Container(

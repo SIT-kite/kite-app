@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
       context,
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         const Icon(Icons.dangerous),
-        title ?? const Text('请检查当前是否处于校园网环境'),
+        title ?? const Text('请检查当前是否处于校园网环境，例如已连接 EasyConnect'),
         TextButton(
           child: const Text('检查网络'),
           onPressed: () => Navigator.of(context).pushNamed('/connectivity'),
@@ -178,7 +178,7 @@ class _HomePageState extends State<HomePage> {
       if (!ok) {
         _showCheckNetwork(
           context,
-          title: const Text('无法连接校园网，部分功能不可用'),
+          title: const Text('无法连接校园网，部分功能暂不可用'),
         );
       } else {
         showBasicFlash(

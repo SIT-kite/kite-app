@@ -36,7 +36,7 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
 
   Widget buildConnectedBlock() {
     Widget buildConnectedByVpnBlock() => Text(
-          '当前已通过 VPN 连接校园网',
+          '目前已通过 VPN 连接校园网',
           textAlign: TextAlign.center,
           style: textStyle.copyWith(fontSize: 15),
         );
@@ -56,7 +56,7 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
             // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                '当前已通过 WLAN 登录',
+                '目前已通过 WLAN 登录',
                 style: textStyle.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
@@ -85,8 +85,8 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
     Widget buildErrorText() {
       return Text(
         '无法连接到校园网。\n'
-        '请连接 i-SIT, i-SIT-1x, eduroam 中的任意一个热点\n'
-        '或打开 EasyConnect App 以连接 VPN。',
+        '请连接学校内的 i-SIT, i-SIT-1x 或 eduroam 热点，\n'
+        '或打开 EasyConnect App 连接学校 VPN。',
         textAlign: TextAlign.center,
         style: textStyle.copyWith(fontSize: 15),
       );

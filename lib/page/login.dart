@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
     if (!isLicenseAccepted) {
-      showBasicFlash(context, const Text('请勾选用户协议'));
+      showBasicFlash(context, const Text('请阅读并同意用户协议'));
       return;
     }
 
@@ -88,15 +88,22 @@ class _LoginPageState extends State<LoginPage> {
           TextFormField(
             controller: _usernameController,
             autofocus: true,
-            decoration: const InputDecoration(labelText: '学号', hintText: '输入你的学号', icon: Icon(Icons.person)),
             validator: studentIdValidator,
+            decoration: const InputDecoration(
+              labelText: '学号',
+              hintText: '输入你的学号',
+              icon: Icon(Icons.person)
+            ),
           ),
           TextFormField(
             controller: _passwordController,
             autofocus: true,
             obscureText: !isPasswordClear,
             decoration: InputDecoration(
-              suffixIcon: IconButton(
+              labelText: '密码',
+              hintText: '输入你的密码',
+              icon: const Icon(Icons.lock),
+              suffixIcon: IconButton( // 切换密码明文显示状态的图标按钮
                 icon: Icon(isPasswordClear ? Icons.visibility_off : Icons.visibility),
                 onPressed: () {
                   setState(() {
@@ -104,9 +111,6 @@ class _LoginPageState extends State<LoginPage> {
                   });
                 },
               ),
-              labelText: '密码',
-              hintText: '输入你的密码',
-              icon: const Icon(Icons.lock),
             ),
           ),
         ],
@@ -138,6 +142,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget buildLoginButton() {
+    const String forgetPassword = 'https://authserver.sit.edu.cn/authserver/getBackPasswordMainPage.do?service=https%3A%2F%2Fmyportal.sit.edu.cn%3A443%2F';
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -155,8 +160,7 @@ class _LoginPageState extends State<LoginPage> {
             style: TextStyle(color: Colors.grey),
           ),
           onPressed: () {
-            launchInBrowser(
-                'https://authserver.sit.edu.cn/authserver/getBackPasswordMainPage.do?service=https%3A%2F%2Fmyportal.sit.edu.cn%3A443%2F');
+            launchInBrowser(forgetPassword);
           },
         ),
       ],

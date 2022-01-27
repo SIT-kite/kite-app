@@ -20,7 +20,7 @@ class _WikiPageState extends State<WikiPage> {
   final Completer<WebViewController> _controller = Completer<WebViewController>();
 
   void _onShare() async {
-    Log.info('分享当前页');
+    Log.info('分享当前页面');
   }
 
   static Future<String> _getInjectionJs() async {
@@ -31,7 +31,7 @@ class _WikiPageState extends State<WikiPage> {
     final controller = await _controller.future;
     const String js = '''
       menuButton = document.querySelector('label.md-header__button:nth-child(2)');
-      menuButton.click();
+      menuButton !== null && menuButton.click();
     ''';
     controller.runJavascript(js);
   }

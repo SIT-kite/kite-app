@@ -43,7 +43,7 @@ class MarketPage extends StatelessWidget {
       body: const Center(),
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.add),
-        label: const Text("发布"),
+        label: const Text('发布'),
         onPressed: () {},
       ),
     );

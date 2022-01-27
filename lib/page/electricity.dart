@@ -44,8 +44,8 @@ class _ElectricityPageState extends State<ElectricityPage> {
     Widget _buildInputBox(String label, TextEditingController controller, String? Function(String?)? validator) {
       return ConstrainedBox(
         constraints: const BoxConstraints(
-            // maxHeight: 60,
-            ),
+          // maxHeight: 60,
+        ),
         child: TextFormField(
           controller: controller,
           validator: validator,

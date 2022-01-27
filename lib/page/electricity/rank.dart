@@ -10,7 +10,7 @@ class RankView extends StatelessWidget {
 
   final _boxDecoration = BoxDecoration(
       color: Colors.white,
-      //设置四周圆角 角度
+      //设置四周圆角大小
       borderRadius: const BorderRadius.all(Radius.circular(4.0)),
       //设置四周边框
       border: Border.all(width: 2, color: Colors.blue.shade400));

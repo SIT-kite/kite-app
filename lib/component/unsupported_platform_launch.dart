@@ -21,7 +21,7 @@ class UnsupportedPlatformUrlLauncher extends StatelessWidget {
               onPressed: () {
                 launch(url);
               },
-              child: const Text('点击在弹出浏览器中打开')),
+              child: const Text('点击在默认浏览器中打开')),
         ],
       ),
     );

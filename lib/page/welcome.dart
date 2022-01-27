@@ -55,7 +55,7 @@ class WelcomePage extends StatelessWidget {
                 // Text button
                 TextButton(
                     style: TextButton.styleFrom(padding: const EdgeInsets.fromLTRB(0, 10, 0, 0)),
-                    child: const Text('我们为什么转做 App', style: textStyle),
+                    child: const Text('我们为什么转做 APP', style: textStyle),
                     onPressed: () {})
               ],
             ),

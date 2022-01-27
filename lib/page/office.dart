@@ -89,7 +89,7 @@ class _OfficePageState extends State<OfficePage> {
       alignment: Alignment.center,
       child: const Text(
         '本模块及子模块的内容来源于 "上应一网通办"。\n'
-        '对于绝大多数业务，您在平台完成申请后，仍然要去现场办理。',
+        '对于绝大多数业务，您在平台上完成申请后，仍然要去现场办理。',
         overflow: TextOverflow.visible,
       ),
       padding: const EdgeInsets.all(15),

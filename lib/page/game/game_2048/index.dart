@@ -150,10 +150,13 @@ class _GameWidgetState extends State<GameWidget> {
         _cellWidgets.add(CellWidget(_game.get(r, c), this));
       }
     }
+
     _queryData = MediaQuery.of(context);
+
     List<Widget> children = <Widget>[];
     children.add(BoardGridWidget(this));
     children.addAll(_cellWidgets);
+
     return Column(
       children: <Widget>[
         Container(
@@ -161,7 +164,7 @@ class _GameWidgetState extends State<GameWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Container(
+                Container( // 把这个组件拉出来吧，缩进要炸了
                   color: Colors.orange[100],
                   child: SizedBox(
                     width: 130.0,
@@ -170,37 +173,23 @@ class _GameWidgetState extends State<GameWidget> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text(
-                            "得分",
-                            style: TextStyle(
-                              color: Colors.grey[700],
-                            ),
-                          ),
+                          Text("得分", style: TextStyle(color: Colors.grey[700])),
                           Text(
                             _game.score.toString(),
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey[800],
-                            ),
+                            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.grey[800]),
                           ),
                         ],
                       ),
                     ),
                   ),
                 ),
-                TextButton(
+                TextButton( // 还有这个
                   child: Container(
-                      width: 130.0,
-                      height: 60.0,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey[400]!,
-                        ),
-                      ),
-                      child: const Center(
-                        child: Text("新游戏"),
-                      )),
+                    width: 130.0,
+                    height: 60.0,
+                    decoration: BoxDecoration(border: Border.all(color: Colors.grey[400]!)),
+                    child: const Center(child: Text("新游戏"))
+                  ),
                   onPressed: () {
                     newGame();
                   },
@@ -212,10 +201,7 @@ class _GameWidgetState extends State<GameWidget> {
           child: Opacity(
             opacity: _isGameOver ? 1.0 : 0.0,
             child: const Center(
-              child: Text("Game Over!",
-                  style: TextStyle(
-                    fontSize: 24.0,
-                  )),
+              child: Text("Game Over!", style: TextStyle(fontSize: 24.0)),
             ),
           ),
         ),
@@ -224,7 +210,7 @@ class _GameWidgetState extends State<GameWidget> {
             width: _queryData.size.width,
             height: _queryData.size.width,
             child: GestureDetector(
-              onVerticalDragUpdate: (detail) {
+              onVerticalDragUpdate: (detail) { // 把这几个函数提出来？
                 if (detail.delta.distance == 0 || _isDragging) {
                   return;
                 }
@@ -234,12 +220,6 @@ class _GameWidgetState extends State<GameWidget> {
                 } else {
                   moveUp();
                 }
-              },
-              onVerticalDragEnd: (detail) {
-                _isDragging = false;
-              },
-              onVerticalDragCancel: () {
-                _isDragging = false;
               },
               onHorizontalDragUpdate: (detail) {
                 if (detail.delta.distance == 0 || _isDragging) {
@@ -252,15 +232,19 @@ class _GameWidgetState extends State<GameWidget> {
                   moveRight();
                 }
               },
-              onHorizontalDragDown: (detail) {
+              onVerticalDragEnd: () {
+                _isDragging = false;
+              },
+              onVerticalDragCancel: () {
+                _isDragging = false;
+              },
+              onHorizontalDragDown: () {
                 _isDragging = false;
               },
               onHorizontalDragCancel: () {
                 _isDragging = false;
               },
-              child: Stack(
-                children: children,
-              ),
+              child: Stack(children: children),
             )),
       ],
     );
@@ -376,10 +360,7 @@ class CellBox extends StatelessWidget {
           width: size,
           height: size,
           padding: const EdgeInsets.symmetric(horizontal: 5),
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-          ),
+          decoration: BoxDecoration(color: color, borderRadius: const BorderRadius.all(Radius.circular(8.0))),
           child: Center(child: FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.center, child: text))),
     );
   }

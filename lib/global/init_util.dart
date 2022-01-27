@@ -7,15 +7,14 @@ import 'storage_pool.dart';
 /// 应用启动前需要的初始化
 Future<void> initBeforeRun() async {
   // Future.wait可以使多个Future并发执行
-  Log.info('开始应用开启前的初始化');
-  // 由于网络层需要依赖存储层的缓存
-  // 所以必须先初始化存储层，在初始化网络层
+  Log.info('应用初始化开始');
+  // 网络层依赖由存储层提供的缓存，必须先初始化存储层，再初始化网络层
   await StoragePool.init();
   await SessionPool.init();
   ServicePool.init();
-  Log.info('应用开启前初始化完成');
+  Log.info('应用初始化完成');
 
-  // 初始化用户首次使用时间
+  // 初始化用户首次打开时间（而不是应用安装时间）
   // ??= 表示为空时候才赋值
   StoragePool.homeSetting.installTime ??= DateTime.now();
 

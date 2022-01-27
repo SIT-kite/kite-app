@@ -18,7 +18,7 @@ class _ExpensePageState extends State<ExpensePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("消费记录"),
+        title: const Text('消费记录'),
         // actions: [
         //   _currentIndex == 0
         //        _buildPopupMenuItems()

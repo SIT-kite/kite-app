@@ -7,7 +7,7 @@ part 'report.g.dart';
 @JsonSerializable()
 @HiveType(typeId: HiveTypeIdPool.reportHistoryItem)
 class ReportHistory {
-  /// 上报日期, 格式如 20220118.
+  /// 上报日期 "yyyyMMdd"
   @JsonKey(name: 'batchno')
   @HiveField(0)
   final int date;

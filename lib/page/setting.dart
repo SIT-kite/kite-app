@@ -24,7 +24,7 @@ class SettingPage extends StatelessWidget {
     context.showFlashDialog(
         constraints: const BoxConstraints(maxWidth: 300),
         title: const Text('退出登录'),
-        content: const Text('您将要退出当前账号，是否继续？'),
+        content: const Text('您将会退出当前账号，是否继续？'),
         negativeActionBuilder: _negativeActionBuilder,
         positiveActionBuilder: (context, controller, _) {
           return TextButton(
@@ -47,14 +47,13 @@ class SettingPage extends StatelessWidget {
     context.showFlashDialog(
         constraints: const BoxConstraints(maxWidth: 300),
         title: const Text('清除数据'),
-        content: const Text('此操作将清除您本地的登录信息，但不包括网页缓存。如果你想清除所有数据， 请在手机的应用管理中找到 "上应小风筝" 并重置。'),
+        content: const Text('此操作将清除您本地的登录信息（不包括网页缓存），并重启本应用。如果你想清除所有数据，请在手机设置的应用管理界面中找到 "上应小风筝" 并重置。'),
         negativeActionBuilder: _negativeActionBuilder,
         positiveActionBuilder: (context, controller, _) {
           return TextButton(
               onPressed: () async {
-                await StoragePool.clear();
-                // 重启应用
-                Phoenix.rebirth(context);
+                await StoragePool.clear(); // 清除存储
+                Phoenix.rebirth(context); // 重启应用
               },
               child: const Text('继续'));
         });
@@ -108,7 +107,7 @@ class SettingPage extends StatelessWidget {
           settingKey: '/network/useProxy',
           defaultValue: StoragePool.network.useProxy,
           title: '使用 HTTP 代理',
-          subtitle: '当代理服务器正确配置后, 您无需 EasyConnect 便可连接校园网',
+          subtitle: '通过 HTTP 代理和其他设备上的 EasyConnect 来连接校园网',
           leading: const Icon(Icons.vpn_key),
           onChange: (value) {
             if (value) {

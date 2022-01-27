@@ -19,11 +19,11 @@ class Score {
   @JsonKey(name: 'kch')
   final String courseId;
 
-  /// 班级 （正方内部使用）
+  /// 班级（正方内部使用）
   @JsonKey(name: 'jxb_id')
   final String innerClassId;
 
-  /// 班级ID （数字）
+  /// 班级ID（数字）
   @JsonKey(name: 'jxbmc', defaultValue: '无')
   final String dynClassId;
 

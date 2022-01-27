@@ -112,7 +112,7 @@ class _CampusCardPageState extends State<CampusCardPage> {
   Widget buildFailedPrompt() {
     return const Center(
       child: Text(
-        '设备的 NFC 功能不可用',
+        '此设备不支持 NFC 或 NFC 功能不可用',
         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
     );
@@ -150,7 +150,7 @@ class _CampusCardPageState extends State<CampusCardPage> {
       const SizedBox(
           height: 30,
           child: Text(
-            '数据源缺少补办卡信息, 结果仅供参考.',
+            '数据源缺少补办卡信息，结果仅供参考。',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           )),
       ListView(

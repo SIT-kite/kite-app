@@ -42,12 +42,12 @@ class SessionPool {
     Log.info("初始化SessionPool");
 
     if (!_hasInit) {
-      // 只有初始化完dio后才能初始化UA
       final String homeDirectory = (await getApplicationDocumentsDirectory()).path;
       final FileStorage cookieStorage = FileStorage(homeDirectory + '/cookies/');
       // 初始化 cookie jar
       _cookieJar = PersistCookieJar(storage: cookieStorage);
     }
+    // di o初始化完成后，才能初始化 UA
     dio = _initDioInstance();
     await _initUserAgentString();
 
@@ -105,11 +105,13 @@ class KiteHttpOverrides extends HttpOverrides {
     // 设置代理. 优先设置配置文件中的设置, 便于调试.
     if (SessionPool.httpProxy != null) {
       // 判断测试环境代理合法性
+      // TODO: 检查代理格式
       if (SessionPool.httpProxy!.isNotEmpty) {
+        // 可以
         Log.info('测试环境设置代理: ${SessionPool.httpProxy}');
         client.findProxy = (_) => 'PROXY ${SessionPool.httpProxy}';
       } else {
-        // 测试环境代理设置不合法
+        // 不行
         Log.info('测试环境代理服务器为空或不合法，将不使用代理服务器');
       }
     } else if (StoragePool.network.useProxy && StoragePool.network.proxy.isNotEmpty) {
