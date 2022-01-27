@@ -17,7 +17,7 @@ class KiteNotice {
   final DateTime publishTime;
 
   /// 公告正文
-  final String content;
+  final String? content;
 
   const KiteNotice(this.id, this.top, this.title, this.publishTime, this.content);
 
