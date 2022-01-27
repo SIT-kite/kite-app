@@ -164,7 +164,8 @@ class _GameWidgetState extends State<GameWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Container( // 把这个组件拉出来吧，缩进要炸了
+                Container(
+                  // 把这个组件拉出来吧，缩进要炸了
                   color: Colors.orange[100],
                   child: SizedBox(
                     width: 130.0,
@@ -183,13 +184,13 @@ class _GameWidgetState extends State<GameWidget> {
                     ),
                   ),
                 ),
-                TextButton( // 还有这个
+                TextButton(
+                  // 还有这个
                   child: Container(
-                    width: 130.0,
-                    height: 60.0,
-                    decoration: BoxDecoration(border: Border.all(color: Colors.grey[400]!)),
-                    child: const Center(child: Text("新游戏"))
-                  ),
+                      width: 130.0,
+                      height: 60.0,
+                      decoration: BoxDecoration(border: Border.all(color: Colors.grey[400]!)),
+                      child: const Center(child: Text("新游戏"))),
                   onPressed: () {
                     newGame();
                   },
@@ -210,7 +211,8 @@ class _GameWidgetState extends State<GameWidget> {
             width: _queryData.size.width,
             height: _queryData.size.width,
             child: GestureDetector(
-              onVerticalDragUpdate: (detail) { // 把这几个函数提出来？
+              onVerticalDragUpdate: (detail) {
+                // 把这几个函数提出来？
                 if (detail.delta.distance == 0 || _isDragging) {
                   return;
                 }
@@ -232,13 +234,13 @@ class _GameWidgetState extends State<GameWidget> {
                   moveRight();
                 }
               },
-              onVerticalDragEnd: () {
+              onVerticalDragEnd: (_) {
                 _isDragging = false;
               },
               onVerticalDragCancel: () {
                 _isDragging = false;
               },
-              onHorizontalDragDown: () {
+              onHorizontalDragDown: (_) {
                 _isDragging = false;
               },
               onHorizontalDragCancel: () {
