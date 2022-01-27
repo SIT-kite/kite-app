@@ -25,6 +25,11 @@ class ExpenseLocalStorage implements ExpenseLocalDao {
   }
 
   @override
+  bool isEmpty(DateTime ts) {
+    return box.get(ts.hashCode) == null;
+  }
+
+  @override
   ExpenseRecord? getLastOne() {
     try {
       return getAllByTimeDesc().first;

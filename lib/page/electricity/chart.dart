@@ -30,9 +30,16 @@ class _ChartSectionState extends State<ChartSection> {
           }),
           child: Row(
             children: [
-              Text('过去一天', style: TextStyle(fontSize: 20, color: isShowDays ? Colors.grey : Colors.blue)),
-              const Text(' / ', style: TextStyle(fontSize: 20, color: Colors.black)),
-              Text('过去一周', style: TextStyle(fontSize: 20, color: isShowDays ? Colors.blue : Colors.grey))
+              Text('过去一天',
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: isShowDays ? Colors.grey : Colors.blue)),
+              const Text(' / ',
+                  style: TextStyle(fontSize: 20, color: Colors.black)),
+              Text('过去一周',
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: isShowDays ? Colors.blue : Colors.grey))
             ],
           ),
         ),
@@ -46,7 +53,8 @@ class _ChartSectionState extends State<ChartSection> {
         AspectRatio(
           aspectRatio: 1.70,
           child: Padding(
-            padding: const EdgeInsets.only(right: 24, left: 24, top: 0, bottom: 0),
+            padding:
+                const EdgeInsets.only(right: 24, left: 24, top: 0, bottom: 0),
             // child: _buildLineChart(_getBottomTitles()),
           ),
         ),

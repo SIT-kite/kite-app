@@ -36,7 +36,7 @@ List classificationData = [
 
 class ExpenseMock implements ExpenseRemoteDao {
   @override
-  Future<ExpensePage> getExpensePage(bool refresh, int pageNum,
+  Future<ExpensePage> getExpensePage(int pageNum,
       {DateTime? start, DateTime? end}) async {
     await Future.delayed(const Duration(microseconds: 300));
     return ExpensePage()

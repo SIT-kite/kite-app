@@ -15,6 +15,9 @@ class ExpenseChart extends StatelessWidget {
 
     return LineChart(
       LineChartData(
+        lineTouchData: LineTouchData(
+            touchTooltipData:
+                LineTouchTooltipData(tooltipBgColor: Colors.blue[100])),
         borderData: FlBorderData(
           border: const Border(
             bottom: BorderSide(width: 1.0),
@@ -23,6 +26,7 @@ class ExpenseChart extends StatelessWidget {
         lineBarsData: [
           // 每一个 LineChartBarData 代表一条曲线.
           LineChartBarData(
+            isStrokeCapRound: true,
             belowBarData: BarAreaData(
               show: true,
               colors: [
@@ -32,8 +36,8 @@ class ExpenseChart extends StatelessWidget {
             spots: spots,
             colors: [const Color.fromRGBO(49, 127, 227, 100)],
             preventCurveOverShooting: false,
-            isCurved: true,
-            barWidth: 3,
+            // isCurved: true,//我觉得折线图更好看一点
+            barWidth: 2,
             preventCurveOvershootingThreshold: 3.0,
           ),
         ],

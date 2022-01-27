@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/entity/expense.dart';
 
-Widget buildIcon(ExpenseType type) {
+Widget buildIcon(ExpenseType type, BuildContext context) {
   late final IconData icon;
 
   switch (type) {
@@ -24,5 +24,5 @@ Widget buildIcon(ExpenseType type) {
       icon = Icons.home;
       break;
   }
-  return Icon(icon, size: 30);
+  return Icon(icon, size: 30, color: Theme.of(context).primaryColor);
 }

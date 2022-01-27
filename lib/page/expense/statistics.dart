@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kite/entity/expense.dart';
-import 'package:kite/mock/expense.dart';
 import 'package:kite/page/expense/icon.dart';
 import 'package:kite/global/storage_pool.dart';
 
@@ -75,7 +74,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
         final double percentage = sum != 0 ? sumInType / sum : 0;
 
         return ListTile(
-          leading: buildIcon(expenseType),
+          leading: buildIcon(expenseType, context),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -167,7 +166,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
               child: Text('支出对比', textScaleFactor: 1.2),
             ),
-            const SizedBox(height: 10),
+            // const SizedBox(height: 5),
             Center(
               child: SizedBox(
                   height: width * 0.5,

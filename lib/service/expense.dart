@@ -6,12 +6,13 @@ import 'package:kite/dao/expense.dart';
 import 'package:kite/entity/expense.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/service/abstract_service.dart';
+import 'package:kite/global/session_pool.dart';
 import 'package:kite/session/abstract_session.dart';
 
 class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
   static const _expenseUrl = 'http://card.sit.edu.cn/personalxiaofei.jsp';
   static const _typeKeywords = {
-    '热水': ExpenseType.water,
+    '开水': ExpenseType.water,
     '浴室': ExpenseType.shower,
     '咖啡吧': ExpenseType.coffee,
     '食堂': ExpenseType.canteen,
@@ -22,7 +23,27 @@ class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
   ExpenseRemoteService(ASession session) : super(session);
 
   @override
-  Future<ExpensePage> getExpensePage(bool refresh, int page, {DateTime? start, DateTime? end}) async {
+  Future<bool> refreshExpenseRecord() async {
+    ExpenseRecord bill = StoragePool.expenseRecordStorage.getAllByTimeDesc()[0];
+    for (int i = 1; i < 20; i++) {
+      List<ExpensePage> expensePage = await Future.wait([
+        ExpenseRemoteService(session).getExpensePage(i),
+        ExpenseRemoteService(session).getExpensePage(i + 1),
+        ExpenseRemoteService(session).getExpensePage(i + 2),
+      ]);
+      for (ExpensePage page in expensePage) {
+        for (ExpenseRecord bills in page.records) {
+          if (!StoragePool.expenseRecordStorage.isEmpty(bills.ts)) {
+            return true;
+          }
+        }
+      }
+    }
+    return true;
+  }
+
+  Future<ExpensePage> getExpensePage(int page,
+      {DateTime? start, DateTime? end}) async {
     start = start ?? DateTime(2010);
     end = end ?? DateTime.now();
     final response = await session.get(
@@ -34,33 +55,24 @@ class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
       },
       responseType: ResponseType.bytes,
     );
-    return _parseExpenseDetail(refresh, _codec.decode(response.data));
+
+    return _parseExpenseDetail(_codec.decode(response.data));
   }
 
-  static ExpensePage _parseExpenseDetail(bool refresh, String htmlPage) {
+  static ExpensePage _parseExpenseDetail(String htmlPage) {
     const String recordSelector = 'table#table > tbody > tr';
 
     final BeautifulSoup soup = BeautifulSoup(htmlPage);
     // 先获取每一行,过滤首行
     List<ExpenseRecord> records = [];
-    if (refresh) {
-      for (final bill in soup.findAll(recordSelector).sublist(1)) {
-        if (_parseExpenseItem(bill).ts != StoragePool.expenseRecordStorage.getAllByTimeDesc()[0].ts) {
-          records.add(_parseExpenseItem(bill));
-          StoragePool.expenseRecordStorage.add(_parseExpenseItem(bill));
-        } else {
-          break;
-        }
-      }
-    } else {
-      for (final bill in soup.findAll(recordSelector).sublist(1)) {
-        records.add(_parseExpenseItem(bill));
-        StoragePool.expenseRecordStorage.add(_parseExpenseItem(bill));
-      }
+    for (final bill in soup.findAll(recordSelector).sublist(1)) {
+      records.add(_parseExpenseItem(bill));
+      StoragePool.expenseRecordStorage.add(_parseExpenseItem(bill));
     }
     // 页号信息
     final pageInfo = soup.findAll('div', id: 'listContent')[1].text;
-    String currentPage = RegExp(r'第(\S*)页').allMatches(pageInfo).first.group(1)!;
+    String currentPage =
+        RegExp(r'第(\S*)页').allMatches(pageInfo).first.group(1)!;
     String totalPage = RegExp(r'共(\S*)页').allMatches(pageInfo).first.group(1)!;
 
     return ExpensePage()
