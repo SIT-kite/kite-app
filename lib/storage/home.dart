@@ -63,4 +63,10 @@ class HomeSettingStorage implements HomeSettingDao {
 
   @override
   set lastOfficeStatus(String? status) => box.put(HomeKeyKeys.lastOfficeStatus, status);
+
+  @override
+  Set<int>? get readNotice => box.get(HomeKeyKeys.readNotice, defaultValue: <dynamic>{});
+
+  @override
+  set readNotice(Set<int>? noticeSet) => box.put(HomeKeyKeys.readNotice, noticeSet?.toList());
 }

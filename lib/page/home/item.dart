@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 export 'item/electricity.dart';
 export 'item/expense.dart';
 export 'item/library.dart';
+export 'item/notice.dart';
 export 'item/office.dart';
 export 'item/report.dart';
 export 'item/score.dart';

@@ -39,4 +39,8 @@ abstract class HomeSettingDao {
   String? get lastOfficeStatus;
 
   set lastOfficeStatus(String? status);
+
+  Set<int>? get readNotice;
+
+  set readNotice(Set<int>? noticeSet);
 }

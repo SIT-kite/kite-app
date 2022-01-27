@@ -12,6 +12,8 @@ class HomeKeyKeys {
   static const lastExpense = '$namespace/lastExpense';
   static const lastHotSearch = '$namespace/lastHotSearch';
   static const lastOfficeStatus = '$namespace/lastOfficeStatus';
+
+  static const readNotice = '$namespace/readNotice';
 }
 
 class AuthKeys {
