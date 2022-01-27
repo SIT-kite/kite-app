@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
         OfficeItem(),
       ]),
       const SizedBox(height: 20.0),
-      const HomeItemGroup([
+      HomeItemGroup([
         HomeItem(route: '/game', icon: 'assets/home/icon_game.svg', title: '小游戏', subtitle: '放松一下'),
         HomeItem(route: '/wiki', icon: 'assets/home/icon_wiki.svg', title: 'Wiki', subtitle: '上应大生存指南'),
         HomeItem(route: '/market', icon: 'assets/home/icon_market.svg', title: '二手书广场', subtitle: '买与卖都是收获'),

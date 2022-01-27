@@ -21,7 +21,7 @@ class _ScoreItemState extends State<ScoreItem> {
 
   @override
   Widget build(BuildContext context) {
-    return const HomeItem(
+    return HomeItem(
       route: '/score',
       icon: 'assets/home/icon_score.svg',
       title: '成绩',
