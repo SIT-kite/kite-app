@@ -12,11 +12,18 @@ export 'item/timetable.dart';
 class HomeItem extends StatelessWidget {
   final String route;
   final String icon;
+  final Widget? iconWidget;
   final String title;
   final String? subtitle;
 
-  const HomeItem({required this.route, required this.icon, required this.title, this.subtitle, Key? key})
-      : super(key: key);
+  const HomeItem({
+    required this.route,
+    required this.icon,
+    required this.title,
+    this.subtitle,
+    this.iconWidget,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +32,7 @@ class HomeItem extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(color: Colors.white.withOpacity(0.6)),
       child: ListTile(
-        leading: SvgPicture.asset(icon, height: 30, width: 30, color: Theme.of(context).primaryColor),
+        leading: iconWidget ?? SvgPicture.asset(icon, height: 30, width: 30, color: Theme.of(context).primaryColor),
         title: Text(title, style: titleStyle),
         subtitle: Text(subtitle ?? ''),
         // dense: true,
