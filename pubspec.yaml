@@ -1,68 +1,84 @@
+# The pubspec file
+# https://dart.dev/tools/pub/pubspec
+
 name: kite
-description: "上应小风筝 APP，基于 Flutter。"
 version: 1.0.0+1
 
-environment:
-  sdk: ">=2.15.0 <3.0.0"
+description: '上应小风筝 APP，基于 Flutter。'
+
+homepage:      https://github.com/SIT-kite/kite-app
+repository:    https://github.com/SIT-kite/kite-app
+issue_tracker: https://github.com/SIT-kite/kite-app/issues
+documentation: https://github.com/SIT-kite/kite-app#readme
+
+environment: { sdk: '>=2.15.0 <3.0.0', flutter: ^2.15.1 }
+
+# ------------------------------------------------------------------------------
+
+# View pub packages at: https://pub.dev/packages/{{package_name}}
+#               mirror: https://pub.flutter-io.cn/packages/{{package_name}}
 
 dependencies:
-  flutter:
-    sdk: flutter
 
-  # Web view and browser related
+  flutter: { sdk: flutter }
+
+  # Basic
+  enough_convert: ^1.4.0        # Character encoding
+  encrypt: ^5.0.1               # Encryption (AES)
+  crypto: ^3.0.1                # Hash (MD5)
+  json_serializable: ^6.1.3     # JSON
+  json_annotation: ^4.4.0       # JSON code generation
+  beautiful_soup_dart: ^0.2.0   # HTML parser
+
+  # hive (key-value database)
+  hive: ^2.0.5
+  hive_flutter: ^1.1.0
+
+  # Dio (http client)
+  dio: ^4.0.4
+  dio_log: ^2.0.2
+  dio_cookie_manager: ^2.0.0
+
+  # Error handlers
+  flutter_bugly: ^0.4.3         # Bugly
+  flutter_phoenix: ^1.0.0       # Restart app on error
+
+  # Webview and browser related
   webview_flutter: ^3.0.0
   url_launcher: ^6.0.17
   flutter_widget_from_html_core: ^0.8.4
   fk_user_agent: ^2.0.1
 
   # UI
-  pull_to_refresh: ^2.0.0
   flash: ^2.0.3+1
-  grouped_list: ^4.1.0
-  flutter_svg: ^1.0.0
   fl_chart: ^0.40.6
+  grouped_list: ^4.1.0
+  pull_to_refresh: ^2.0.0
+  flutter_svg: ^1.0.0
   flutter_native_splash: ^1.3.3
   flutter_weather_bg_null_safety: ^1.0.0
-
-  # Encryption
-  encrypt: ^5.0.1  # Used for AES
-  crypto: ^3.0.1   # Used for MD5
-
-  # JSON format, encoding and decoding, HTML parser.
-  json_serializable: ^6.1.3
-  json_annotation: ^4.4.0
-  enough_convert: ^1.4.0
-  beautiful_soup_dart: ^0.2.0
-
-  # Dio http client
-  dio: ^4.0.4
-  dio_cookie_manager: ^2.0.0
-  dio_log: ^2.0.2
+  flutter_settings_screens: ^0.3.2-null-safety
 
   # Utils
   intl: ^0.17.0
   logger: ^1.1.0
-  check_vpn_connection: ^0.0.2
   nfc_manager: ^3.1.0
-  hive: ^2.0.5
-  hive_flutter: ^1.1.0
+  path_provider: ^2.0.8
   quick_actions: ^0.6.0+9
   universal_platform: ^1.0.0+1
-  path_provider: ^2.0.8
+  check_vpn_connection: ^0.0.2
 
-  # Error handlers
-  flutter_bugly: ^0.4.3
-  flutter_phoenix: ^1.0.0
-  flutter_settings_screens: ^0.3.2-null-safety
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
+  flutter_test: { sdk: flutter }
   flutter_lints: ^1.0.0
   build_runner: ^2.1.7
   hive_generator: ^1.1.2
 
+# ------------------------------------------------------------------------------
+
 flutter:
+
   uses-material-design: true
 
   assets:
@@ -80,16 +96,15 @@ flutter:
     - assets/course/
 
   fonts:
-    # This iconfont file downloaded from ywb.sit.edu.cn
-    # which is imported for office module. So I named it office_iconfont.
+    # Iconfont for ywb.sit.edu.cn
+    # For office module. So I named it office_iconfont.
     - family: office_iconfont
       fonts:
         - asset: assets/fonts/office_iconfont.ttf
 
+# See: https://pub.flutter-io.cn/packages/flutter_native_splash
 flutter_native_splash:
-  # Details: https://pub.flutter-io.cn/packages/flutter_native_splash
-
-  color: "#FFFFFF"
-  #background_image: "assets/background.png"
-  image: assets/icon.png
   fullscreen: true
+  color: '#FFFFFF'
+  # background_image: 'assets/background.png'
+  image: assets/icon.png
