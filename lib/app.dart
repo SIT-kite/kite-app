@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:kite/page/feedback.dart';
 import 'package:kite/page/index.dart';
 
 class KiteApp extends StatelessWidget {
@@ -27,6 +26,7 @@ class KiteApp extends StatelessWidget {
       '/timetable': (context) => const TimetablePage(),
       '/setting': (context) => const SettingPage(),
       '/feedback': (context) => const FeedbackPage(),
+      '/notice': (context) => const NoticePage(),
     };
     final primaryColor = StoragePool.themeSetting.color;
     final themeData = ThemeData(primaryColor: primaryColor, primarySwatch: createThemeSwatch(primaryColor));
