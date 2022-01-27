@@ -106,16 +106,6 @@ class _HomePageState extends State<HomePage> {
       const GreetingWidget(),
       const SizedBox(height: 20.0),
       const HomeItemGroup([
-        HomeItem(
-          route: '/fu',
-          icon: '',
-          iconWidget: Icon(
-            Icons.info,
-            size: 30,
-          ),
-          title: '扫福',
-          subtitle: '新年活动',
-        ),
         TimetableItem(),
         ReportItem(),
       ]),
