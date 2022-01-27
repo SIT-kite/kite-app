@@ -105,9 +105,28 @@ class _HomePageState extends State<HomePage> {
     return [
       const GreetingWidget(),
       const SizedBox(height: 20.0),
-      const HomeItemGroup([TimetableItem(), ReportItem()]),
+      const HomeItemGroup([
+        HomeItem(
+          route: '/fu',
+          icon: '',
+          iconWidget: Icon(
+            Icons.info,
+            size: 30,
+          ),
+          title: '扫福',
+          subtitle: '新年活动',
+        ),
+        TimetableItem(),
+        ReportItem(),
+      ]),
       const SizedBox(height: 20.0),
-      const HomeItemGroup([ElectricityItem(), ExpenseItem(), ScoreItem(), LibraryItem(), OfficeItem()]),
+      const HomeItemGroup([
+        ElectricityItem(),
+        ExpenseItem(),
+        ScoreItem(),
+        LibraryItem(),
+        OfficeItem(),
+      ]),
       const SizedBox(height: 20.0),
       const HomeItemGroup([
         HomeItem(route: '/game', icon: 'assets/home/icon_game.svg', title: '小游戏', subtitle: '放松一下'),
