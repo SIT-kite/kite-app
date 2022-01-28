@@ -1,6 +1,7 @@
 import 'package:flash/flash.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/entity/auth_item.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
@@ -76,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget buildTitleLine() {
     return Container(
         alignment: Alignment.centerLeft,
-        child: const Text('欢迎登录', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)));
+        child: Text('欢迎登录', style: TextStyle(fontSize: 35.sp, fontWeight: FontWeight.bold)));
   }
 
   Widget buildLoginForm() {
@@ -89,11 +90,7 @@ class _LoginPageState extends State<LoginPage> {
             controller: _usernameController,
             autofocus: true,
             validator: studentIdValidator,
-            decoration: const InputDecoration(
-              labelText: '学号',
-              hintText: '输入你的学号',
-              icon: Icon(Icons.person)
-            ),
+            decoration: const InputDecoration(labelText: '学号', hintText: '输入你的学号', icon: Icon(Icons.person)),
           ),
           TextFormField(
             controller: _passwordController,
@@ -103,7 +100,8 @@ class _LoginPageState extends State<LoginPage> {
               labelText: '密码',
               hintText: '输入你的密码',
               icon: const Icon(Icons.lock),
-              suffixIcon: IconButton( // 切换密码明文显示状态的图标按钮
+              suffixIcon: IconButton(
+                // 切换密码明文显示状态的图标按钮
                 icon: Icon(isPasswordClear ? Icons.visibility_off : Icons.visibility),
                 onPressed: () {
                   setState(() {
@@ -129,12 +127,17 @@ class _LoginPageState extends State<LoginPage> {
             setState(() => isLicenseAccepted = _isLicenseAccepted!);
           },
         ),
-        Text.rich(
-          TextSpan(
-            children: [
-              const TextSpan(text: '我已阅读并同意'),
-              TextSpan(text: '《上应小风筝用户协议》', style: const TextStyle(color: Colors.blue), recognizer: _recognizer),
-            ],
+        Flexible(
+          child: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(text: '我已阅读并同意', style: TextStyle(fontSize: 12.sp)),
+                TextSpan(
+                    text: '《上应小风筝用户协议》',
+                    style: TextStyle(color: Colors.blue, fontSize: 12.sp),
+                    recognizer: _recognizer),
+              ],
+            ),
           ),
         ),
       ],
@@ -142,13 +145,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget buildLoginButton() {
-    const String forgetPassword = 'https://authserver.sit.edu.cn/authserver/getBackPasswordMainPage.do?service=https%3A%2F%2Fmyportal.sit.edu.cn%3A443%2F';
+    const String forgetPassword =
+        'https://authserver.sit.edu.cn/authserver/getBackPasswordMainPage.do?service=https%3A%2F%2Fmyportal.sit.edu.cn%3A443%2F';
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         SizedBox(
-          height: 40,
+          height: 40.h,
           child: ElevatedButton(
             onPressed: onLogin,
             child: const Text('进入风筝元宇宙'),
@@ -195,7 +199,7 @@ class _LoginPageState extends State<LoginPage> {
 
     context.showFlashBar(
       persistent: true,
-      borderWidth: 3,
+      borderWidth: 3.sm,
       behavior: FlashBehavior.fixed,
       forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
       title: const Text('设置代理服务'),
@@ -218,38 +222,36 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    var screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       body: Stack(
         children: [
           // Proxy setting
           Positioned(
-            top: 40,
-            right: 10,
+            top: 40.h,
+            right: 10.w,
             child: IconButton(
-              icon: const Icon(Icons.settings, size: 35),
-              onPressed: () => _showProxyInput(),
+              icon: Icon(Icons.settings, size: 35.sm),
+              onPressed: _showProxyInput,
             ),
           ),
           Center(
             child:
                 // Create new container and make it center in vertical direction.
                 Container(
-              width: screenWidth,
-              padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
+              width: 1.sw,
+              padding: EdgeInsets.fromLTRB(50.w, 0, 50.w, 0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   // Title field.
                   buildTitleLine(),
-                  const Padding(padding: EdgeInsets.only(top: 40.0)),
+                  Padding(padding: EdgeInsets.only(top: 40.h)),
                   // Form field: username and password.
                   buildLoginForm(),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10.h),
                   // User license check box.
                   buildUserLicenseCheckbox(),
-                  const SizedBox(height: 25),
+                  SizedBox(height: 25.h),
                   // Login button.
                   buildLoginButton(),
                 ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/entity/weather.dart';
 import 'package:kite/global/event_bus.dart';
@@ -22,7 +23,7 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   int campus = StoragePool.homeSetting.campus;
   Weather currentWeather = StoragePool.homeSetting.lastWeather;
 
-  final textStyle = const TextStyle(color: Colors.white70, fontSize: 20);
+  final textStyle = TextStyle(color: Colors.white70, fontSize: 20.sp);
 
   @override
   void initState() {
@@ -68,12 +69,14 @@ class _GreetingWidgetState extends State<GreetingWidget> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('今天是你在上应大的第 $studyDays 天', style: textStyle),
-            Text('${_getCampusName()}${currentWeather.weather}  ${currentWeather.temperature} °C', style: textStyle)
-          ],
+        Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('今天是你在上应大的第 $studyDays 天', style: textStyle),
+              Text('${_getCampusName()}${currentWeather.weather}  ${currentWeather.temperature} °C', style: textStyle)
+            ],
+          ),
         ),
         SizedBox(child: _buildWeatherIcon(currentWeather.icon)),
       ],
@@ -89,7 +92,7 @@ class _GreetingWidgetState extends State<GreetingWidget> {
         builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
           if (snapshot.hasData) {
             studyDays = snapshot.data!;
-            return Container(padding: const EdgeInsets.only(left: 12, right: 12), child: buildAll(context));
+            return Container(padding: EdgeInsets.only(left: 12.w, right: 12.w), child: buildAll(context));
           }
 
           return const Text("Loading……");

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/session_pool.dart';
@@ -96,7 +97,7 @@ class _HomePageState extends State<HomePage> {
         onTap: () {
           _scaffoldKey.currentState?.openDrawer();
         },
-        child: Center(child: SvgPicture.asset('assets/home/kite.svg', width: 80, height: 80)),
+        child: Center(child: SvgPicture.asset('assets/home/kite.svg', width: 80.w, height: 80.h)),
       ),
     );
   }
@@ -104,13 +105,13 @@ class _HomePageState extends State<HomePage> {
   List<Widget> buildFunctionWidgets() {
     return [
       const GreetingWidget(),
-      const SizedBox(height: 20.0),
+      SizedBox(height: 20.h),
       const HomeItemGroup([
         NoticeItem(),
         TimetableItem(),
         ReportItem(),
       ]),
-      const SizedBox(height: 20.0),
+      SizedBox(height: 20.h),
       const HomeItemGroup([
         ElectricityItem(),
         ExpenseItem(),
@@ -118,18 +119,17 @@ class _HomePageState extends State<HomePage> {
         LibraryItem(),
         OfficeItem(),
       ]),
-      const SizedBox(height: 20.0),
+      SizedBox(height: 20.h),
       HomeItemGroup([
         HomeItem(route: '/game', icon: 'assets/home/icon_game.svg', title: '小游戏', subtitle: '放松一下'),
         HomeItem(route: '/wiki', icon: 'assets/home/icon_wiki.svg', title: 'Wiki', subtitle: '上应大生存指南'),
         HomeItem(route: '/market', icon: 'assets/home/icon_market.svg', title: '二手书广场', subtitle: '买与卖都是收获'),
       ]),
-      const SizedBox(height: 40),
+      SizedBox(height: 40.h),
     ];
   }
 
   Widget _buildBody(BuildContext context) {
-    final windowSize = MediaQuery.of(context).size;
     final items = buildFunctionWidgets();
 
     return Stack(
@@ -144,7 +144,7 @@ class _HomePageState extends State<HomePage> {
               // AppBar
               automaticallyImplyLeading: false,
               flexibleSpace: FlexibleSpaceBar(title: _buildTitleLine(context)),
-              expandedHeight: windowSize.height * 0.6,
+              expandedHeight: 0.6.sh,
               backgroundColor: Colors.transparent,
               centerTitle: false,
               elevation: 0,
@@ -153,7 +153,7 @@ class _HomePageState extends State<HomePage> {
             SliverList(
               // Functions
               delegate: SliverChildBuilderDelegate(
-                (_, index) => Padding(padding: const EdgeInsets.only(left: 10, right: 10), child: items[index]),
+                (_, index) => Padding(padding: EdgeInsets.only(left: 10.w, right: 10.w), child: items[index]),
                 childCount: items.length,
               ),
             ),

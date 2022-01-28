@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/global/storage_pool.dart';
 
 class KiteDrawer extends Drawer {
@@ -15,7 +16,7 @@ class KiteDrawer extends Drawer {
             child: Align(
                 alignment: Alignment.bottomLeft,
                 child: Text('小风筝已陪伴你 ${DateTime.now().difference(StoragePool.homeSetting.installTime!).inDays} 天',
-                    style: const TextStyle(color: Colors.white, fontSize: 22))),
+                    style: TextStyle(color: Colors.white, fontSize: 22.sp))),
           ),
           ListTile(
             title: const Text('设置'),

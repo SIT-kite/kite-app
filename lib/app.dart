@@ -33,16 +33,18 @@ class KiteApp extends StatelessWidget {
     final themeData = ThemeData(primaryColor: primaryColor, primarySwatch: createThemeSwatch(primaryColor));
 
     final home = StoragePool.authSetting.currentUsername != null ? const HomePage() : const WelcomePage();
-    return MaterialApp(
-      title: '上应小风筝',
-      theme: themeData,
-      debugShowCheckedModeBanner: false,
-      home: ScreenUtilInit(builder: () => home),
-      routes: routes,
-      builder: (context, widget) {
-        ScreenUtil.setContext(context);
-        return widget!;
-      },
+    return ScreenUtilInit(
+      builder: () => MaterialApp(
+        title: '上应小风筝',
+        theme: themeData,
+        debugShowCheckedModeBanner: false,
+        home: home,
+        routes: routes,
+        builder: (context, widget) {
+          ScreenUtil.setContext(context);
+          return widget!;
+        },
+      ),
     );
   }
 }

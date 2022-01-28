@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 export 'item/electricity.dart';
@@ -30,12 +31,13 @@ class HomeItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final titleStyle = const TextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.bold);
+    final titleStyle = const TextStyle().copyWith(fontSize: 16.sp, fontWeight: FontWeight.bold);
 
     return Container(
       decoration: BoxDecoration(color: Colors.white.withOpacity(0.6)),
       child: ListTile(
-        leading: iconWidget ?? SvgPicture.asset(icon!, height: 30, width: 30, color: Theme.of(context).primaryColor),
+        leading:
+            iconWidget ?? SvgPicture.asset(icon!, height: 30.h, width: 30.w, color: Theme.of(context).primaryColor),
         title: Text(title, style: titleStyle),
         subtitle: Text(subtitle ?? ''),
         // dense: true,
