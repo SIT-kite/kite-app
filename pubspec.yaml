@@ -40,7 +40,6 @@ dependencies:
   dio_cookie_manager: ^2.0.0
 
   # Error handlers
-  flutter_bugly: ^0.4.3         # Bugly
   flutter_phoenix: ^1.0.0       # Restart app on error
 
   # Webview and browser related
