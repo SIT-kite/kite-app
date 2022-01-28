@@ -68,7 +68,7 @@ class ExpenseRecord extends HiveObject {
 const expenseTypeMapping = {
   ExpenseType.canteen: '食堂',
   ExpenseType.coffee: '咖啡吧',
-  ExpenseType.water: '热水',
+  ExpenseType.water: '开水',
   ExpenseType.shower: '洗浴',
   ExpenseType.store: '商店',
   ExpenseType.unknown: '其他',

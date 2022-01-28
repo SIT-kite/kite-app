@@ -19,9 +19,6 @@ class _ExpensePageState extends State<ExpensePage> {
   int _currentIndex = 0;
   int _stateindex = 1;
   String _expensetype = 'all';
-  // void refresh() {
-  //   return 0;
-  // }
 
   @override
   Widget build(BuildContext context) {

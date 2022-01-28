@@ -6,7 +6,6 @@ import 'package:kite/dao/expense.dart';
 import 'package:kite/entity/expense.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/service/abstract_service.dart';
-import 'package:kite/global/session_pool.dart';
 import 'package:kite/session/abstract_session.dart';
 
 class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
@@ -25,7 +24,7 @@ class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
   @override
   Future<bool> refreshExpenseRecord() async {
     ExpenseRecord bill = StoragePool.expenseRecordStorage.getAllByTimeDesc()[0];
-    for (int i = 1; i < 20; i++) {
+    for (int i = 1; i < 20; i += 3) {
       List<ExpensePage> expensePage = await Future.wait([
         ExpenseRemoteService(session).getExpensePage(i),
         ExpenseRemoteService(session).getExpensePage(i + 1),
