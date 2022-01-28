@@ -45,12 +45,14 @@ class ServicePool {
   static late CampusCardDao campusCard;
   static late ExpenseRemoteDao expenseRemote;
   static late WeatherDao weather;
+  static late ConstantRemoteDao contactData;
 
   /// 初始化其他service
   static void _initOther() {
     bulletin = BulletinService(SessionPool.ssoSession);
     campusCard = CampusCardService(SessionPool.ssoSession);
     expenseRemote = ExpenseRemoteService(SessionPool.ssoSession);
+    contactData = ContactRemoteService(SessionPool.ssoSession);
     weather = WeatherService();
   }
 

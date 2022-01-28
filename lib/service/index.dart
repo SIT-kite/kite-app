@@ -9,3 +9,4 @@ export 'library/index.dart';
 export 'network.dart';
 export 'office/index.dart';
 export 'report/index.dart';
+export 'contact.dart';
