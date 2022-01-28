@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/page/index.dart';
 
@@ -30,12 +31,18 @@ class KiteApp extends StatelessWidget {
     };
     final primaryColor = StoragePool.themeSetting.color;
     final themeData = ThemeData(primaryColor: primaryColor, primarySwatch: createThemeSwatch(primaryColor));
+
+    final home = StoragePool.authSetting.currentUsername != null ? const HomePage() : const WelcomePage();
     return MaterialApp(
       title: '上应小风筝',
       theme: themeData,
       debugShowCheckedModeBanner: false,
-      home: StoragePool.authSetting.currentUsername != null ? const HomePage() : const WelcomePage(),
+      home: ScreenUtilInit(builder: () => home),
       routes: routes,
+      builder: (context, widget) {
+        ScreenUtil.setContext(context);
+        return widget!;
+      },
     );
   }
 }

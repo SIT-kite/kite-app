@@ -67,6 +67,7 @@ dependencies:
   quick_actions: ^0.6.0+9
   universal_platform: ^1.0.0+1
   check_vpn_connection: ^0.0.2
+  flutter_screenutil: ^5.1.1
 
 
 dev_dependencies:
