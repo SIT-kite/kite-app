@@ -8,4 +8,5 @@ class HiveTypeIdPool {
   static const courseItem = 6;
   static const expenseItem = 7;
   static const expenseTypeItem = 8;
+  static const contactItem = 9;
 }

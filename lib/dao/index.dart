@@ -8,3 +8,4 @@ export 'library/index.dart';
 export 'report.dart';
 export 'setting/index.dart';
 export 'weatcher.dart';
+export 'contact.dart';

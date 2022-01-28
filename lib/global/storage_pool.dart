@@ -4,6 +4,7 @@ import 'package:kite/dao/auth_pool.dart';
 import 'package:kite/dao/edu/timetable.dart';
 import 'package:kite/dao/electricity.dart';
 import 'package:kite/dao/expense.dart';
+import 'package:kite/dao/contact.dart';
 import 'package:kite/dao/kite/jwt.dart';
 import 'package:kite/dao/library/search_history.dart';
 import 'package:kite/dao/setting/auth.dart';
@@ -16,9 +17,11 @@ import 'package:kite/entity/expense.dart';
 import 'package:kite/entity/library/search_history.dart';
 import 'package:kite/entity/report.dart';
 import 'package:kite/entity/weather.dart';
+import 'package:kite/entity/contact.dart';
 import 'package:kite/storage/auth.dart';
 import 'package:kite/storage/electricity.dart';
 import 'package:kite/storage/home.dart';
+import 'package:kite/storage/contact.dart';
 import 'package:kite/storage/jwt.dart';
 import 'package:kite/storage/network.dart';
 import 'package:kite/storage/theme.dart';
@@ -43,6 +46,10 @@ class StoragePool {
   static late ElectricityStorage _electricity;
 
   static ElectricityStorageDao get electricity => _electricity;
+
+  static late ContactDataStorage _contactData;
+
+  static ContactDataStorageDao get contactData => _contactData;
 
   static late ExpenseLocalStorage _expenseRecord;
 
@@ -87,6 +94,7 @@ class StoragePool {
     registerAdapter(CourseAdapter());
     registerAdapter(ExpenseRecordAdapter());
     registerAdapter(ExpenseTypeAdapter());
+    registerAdapter(ContactDataAdapter());
   }
 
   static Future<void> init() async {
@@ -94,13 +102,16 @@ class StoragePool {
 
     await Hive.initFlutter();
     await _registerAdapters();
-    final expenseRecordBox = await Hive.openBox<ExpenseRecord>('expenseSetting');
+    final expenseRecordBox =
+        await Hive.openBox<ExpenseRecord>('expenseSetting');
     _expenseRecord = ExpenseLocalStorage(expenseRecordBox);
-    final searchHistoryBox = await Hive.openBox<LibrarySearchHistoryItem>('library.search_history');
+    final searchHistoryBox =
+        await Hive.openBox<LibrarySearchHistoryItem>('library.search_history');
     _librarySearchHistory = SearchHistoryStorage(searchHistoryBox);
     final electricityBox = await Hive.openBox('electricity');
     _electricity = ElectricityStorage(electricityBox);
-
+    final contactDataBox = await Hive.openBox<ContactData>('contactSetting');
+    _contactData = ContactDataStorage(contactDataBox);
     final authBox = await Hive.openBox<AuthItem>('auth');
     _authPool = AuthPoolStorage(authBox);
 
@@ -122,6 +133,6 @@ class StoragePool {
     await Hive.deleteBoxFromDisk('auth');
     await Hive.deleteBoxFromDisk('library.search_history');
     await Hive.deleteBoxFromDisk('course');
-    await Hive.deleteBoxFromDisk('expenseSetting');
+    await Hive.deleteBoxFromDisk('expense');
   }
 }
