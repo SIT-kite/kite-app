@@ -1,3 +1,4 @@
+import 'package:catcher/core/catcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/global/storage_pool.dart';
@@ -35,6 +36,7 @@ class KiteApp extends StatelessWidget {
     final home = StoragePool.authSetting.currentUsername != null ? const HomePage() : const WelcomePage();
     return ScreenUtilInit(
       builder: () => MaterialApp(
+        navigatorKey: Catcher.navigatorKey,
         title: '上应小风筝',
         theme: themeData,
         debugShowCheckedModeBanner: false,

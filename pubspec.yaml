@@ -39,8 +39,8 @@ dependencies:
   dio_log: ^2.0.2
   dio_cookie_manager: ^2.0.0
 
-  # Error handlers
-  flutter_phoenix: ^1.0.0       # Restart app on error
+  # Error handler
+  catcher: ^0.6.9
 
   # Webview and browser related
   webview_flutter: ^3.0.0
@@ -67,6 +67,7 @@ dependencies:
   universal_platform: ^1.0.0+1
   check_vpn_connection: ^0.0.2
   flutter_screenutil: ^5.1.1
+  flutter_phoenix: ^1.0.0       # Restart app
 
 
 dev_dependencies:
