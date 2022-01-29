@@ -17,7 +17,11 @@ class UserEventStorage implements UserEventStorageDao {
   void append(UserEvent event) => box.add(event);
 
   @override
-  void clear() => box.clear();
+  void clear() {
+    final u = uuid;
+    box.clear();
+    uuid = u;
+  }
 
   @override
   int getEventCount() => box.length;
