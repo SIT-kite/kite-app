@@ -21,7 +21,7 @@ enum UserEventType {
 class UserEvent {
   /// 时间
   @HiveField(0)
-  late final DateTime ts;
+  final DateTime ts;
 
   /// 类型
   @HiveField(1)
@@ -32,9 +32,7 @@ class UserEvent {
   @HiveField(2)
   final Map<String, dynamic> params;
 
-  UserEvent(this.type, this.params) {
-    ts = DateTime.now();
-  }
+  const UserEvent(this.ts, this.type, this.params);
 
   Map<String, dynamic> toJson() => _$UserEventToJson(this);
 }

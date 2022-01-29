@@ -23,7 +23,8 @@ class UserEventStorage implements UserEventStorageDao {
   int getEventCount() => box.length;
 
   @override
-  List<UserEvent> getEvents() => box.values.toList() as List<UserEvent>;
+  List<UserEvent> getEvents() =>
+      box.values.where((element) => element.runtimeType == UserEvent).map((e) => e as UserEvent).toList();
 
   @override
   void appendAll(List<UserEvent> eventList) => box.addAll(eventList);
