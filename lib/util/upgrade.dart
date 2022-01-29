@@ -8,9 +8,8 @@ const String appVersionUrl = 'https://kite.sunnysab.cn/version.txt';
 class AppVersion {
   String platform;
   String version;
-  String? url;
 
-  AppVersion(this.platform, this.version, {this.url});
+  AppVersion(this.platform, this.version);
 }
 
 /// 获取当前 app 版本
@@ -27,8 +26,8 @@ Future<AppVersion?> getUpdate() async {
     return null;
   }
   // 文件格式. 苹果不支持直接下载 apk 升级.
-  // android|1.0.0+12|https://xxx\n
-  // ios|1.0.0+12|
+  // android|1.0.0+12
+  // ios|1.0.0+12
   final String data = (await Dio().get(appVersionUrl)).data;
   final List<String> lines = data.split('\n');
   final AppVersion current = await getCurrentVersion();
@@ -37,7 +36,11 @@ Future<AppVersion?> getUpdate() async {
     final target = lines.firstWhere((line) => line.startsWith(current.platform));
     final columns = target.split('|');
 
-    return AppVersion(columns[0], columns[1], url: (columns[2].isEmpty ? null : columns[2]));
+    final platform = columns[0];
+    final version = columns[1];
+    if (version != current.version) {
+      return AppVersion(platform, version);
+    }
   } catch (_) {}
 
   // 如果无匹配平台, 到这里返回 null.
