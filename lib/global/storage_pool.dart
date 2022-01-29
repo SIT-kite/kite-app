@@ -133,7 +133,7 @@ class StoragePool {
     final courseBox = await Hive.openBox<Course>('course');
     _course = CourseStorage(courseBox);
 
-    final userEventStorage = await Hive.openBox<UserEvent>('userEvent');
+    final userEventStorage = await Hive.openBox<dynamic>('userEvent');
     _userEvent = UserEventStorage(userEventStorage);
   }
 

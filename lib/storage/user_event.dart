@@ -3,9 +3,15 @@ import 'package:kite/dao/kite/user_event.dart';
 import 'package:kite/entity/kite/user_event.dart';
 
 class UserEventStorage implements UserEventStorageDao {
-  final Box<UserEvent> box;
+  final Box<dynamic> box;
 
   const UserEventStorage(this.box);
+
+  @override
+  String? get uuid => box.get('uuid');
+
+  @override
+  set uuid(String? uuid) => box.put('uuid', uuid);
 
   @override
   void append(UserEvent event) => box.add(event);
@@ -17,7 +23,7 @@ class UserEventStorage implements UserEventStorageDao {
   int getEventCount() => box.length;
 
   @override
-  List<UserEvent> getEvents() => box.values.toList();
+  List<UserEvent> getEvents() => box.values.toList() as List<UserEvent>;
 
   @override
   void appendAll(List<UserEvent> eventList) => box.addAll(eventList);

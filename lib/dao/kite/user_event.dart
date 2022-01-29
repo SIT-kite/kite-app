@@ -1,6 +1,10 @@
 import 'package:kite/entity/kite/user_event.dart';
 
 abstract class UserEventStorageDao {
+  String? get uuid;
+
+  set uuid(String? uuid);
+
   /// 获取本地事件总数
   int getEventCount();
 
