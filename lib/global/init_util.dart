@@ -1,5 +1,6 @@
 import 'package:kite/global/service_pool.dart';
 import 'package:kite/util/logger.dart';
+import 'package:kite/util/page_logger.dart';
 
 import 'session_pool.dart';
 import 'storage_pool.dart';
@@ -25,4 +26,5 @@ Future<void> initBeforeRun() async {
     String password = StoragePool.authPool.get(currentUsername)!.password;
     SessionPool.ssoSession.lazyLogin(currentUsername, password);
   }
+  pageLogger.startup();
 }

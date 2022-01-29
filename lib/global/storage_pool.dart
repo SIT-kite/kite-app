@@ -1,31 +1,34 @@
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kite/dao/auth_pool.dart';
+import 'package:kite/dao/contact.dart';
 import 'package:kite/dao/edu/timetable.dart';
 import 'package:kite/dao/electricity.dart';
 import 'package:kite/dao/expense.dart';
-import 'package:kite/dao/contact.dart';
 import 'package:kite/dao/kite/jwt.dart';
+import 'package:kite/dao/kite/user_event.dart';
 import 'package:kite/dao/library/search_history.dart';
 import 'package:kite/dao/setting/auth.dart';
 import 'package:kite/dao/setting/home.dart';
 import 'package:kite/dao/setting/theme.dart';
 import 'package:kite/entity/auth_item.dart';
+import 'package:kite/entity/contact.dart';
 import 'package:kite/entity/edu/timetable.dart';
 import 'package:kite/entity/electricity.dart';
 import 'package:kite/entity/expense.dart';
+import 'package:kite/entity/kite/user_event.dart';
 import 'package:kite/entity/library/search_history.dart';
 import 'package:kite/entity/report.dart';
 import 'package:kite/entity/weather.dart';
-import 'package:kite/entity/contact.dart';
 import 'package:kite/storage/auth.dart';
+import 'package:kite/storage/contact.dart';
 import 'package:kite/storage/electricity.dart';
 import 'package:kite/storage/home.dart';
-import 'package:kite/storage/contact.dart';
 import 'package:kite/storage/jwt.dart';
 import 'package:kite/storage/network.dart';
 import 'package:kite/storage/theme.dart';
 import 'package:kite/storage/timetable.dart';
+import 'package:kite/storage/user_event.dart';
 import 'package:kite/util/hive_cache_provider.dart';
 import 'package:kite/util/logger.dart';
 
@@ -75,6 +78,10 @@ class StoragePool {
 
   static TimetableStorageDao get course => _course;
 
+  static late UserEventStorage _userEvent;
+
+  static UserEventStorageDao get userEvent => _userEvent;
+
   static late JwtDao _jwt;
 
   static JwtDao get jwt => _jwt;
@@ -95,6 +102,8 @@ class StoragePool {
     registerAdapter(ExpenseRecordAdapter());
     registerAdapter(ExpenseTypeAdapter());
     registerAdapter(ContactDataAdapter());
+    registerAdapter(UserEventAdapter());
+    registerAdapter(UserEventTypeAdapter());
   }
 
   static Future<void> init() async {
@@ -102,11 +111,9 @@ class StoragePool {
 
     await Hive.initFlutter();
     await _registerAdapters();
-    final expenseRecordBox =
-        await Hive.openBox<ExpenseRecord>('expenseSetting');
+    final expenseRecordBox = await Hive.openBox<ExpenseRecord>('expenseSetting');
     _expenseRecord = ExpenseLocalStorage(expenseRecordBox);
-    final searchHistoryBox =
-        await Hive.openBox<LibrarySearchHistoryItem>('library.search_history');
+    final searchHistoryBox = await Hive.openBox<LibrarySearchHistoryItem>('library.search_history');
     _librarySearchHistory = SearchHistoryStorage(searchHistoryBox);
     final electricityBox = await Hive.openBox('electricity');
     _electricity = ElectricityStorage(electricityBox);
@@ -125,6 +132,9 @@ class StoragePool {
 
     final courseBox = await Hive.openBox<Course>('course');
     _course = CourseStorage(courseBox);
+
+    final userEventStorage = await Hive.openBox<UserEvent>('userEvent');
+    _userEvent = UserEventStorage(userEventStorage);
   }
 
   static Future<void> clear() async {

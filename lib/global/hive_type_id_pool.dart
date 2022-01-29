@@ -9,4 +9,6 @@ class HiveTypeIdPool {
   static const expenseItem = 7;
   static const expenseTypeItem = 8;
   static const contactItem = 9;
+  static const userEventTypeItem = 10;
+  static const userEventItem = 11;
 }
