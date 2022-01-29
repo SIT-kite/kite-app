@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+import 'logger.dart';
+
 const String appVersionUrl = 'https://kite.sunnysab.cn/version.txt';
 
 class AppVersion {
@@ -33,15 +35,17 @@ Future<AppVersion?> getUpdate() async {
   final AppVersion current = await getCurrentVersion();
 
   try {
-    final target = lines.firstWhere((line) => line.startsWith(current.platform));
+    final target = lines.firstWhere((line) => line.toLowerCase().startsWith(current.platform.toLowerCase()));
     final columns = target.split('|');
 
     final platform = columns[0];
     final version = columns[1];
     if (version != current.version) {
+      Log.info('检查到新版本 $version');
       return AppVersion(platform, version);
     }
   } catch (_) {}
 
   // 如果无匹配平台, 到这里返回 null.
+  Log.info('没有合适的更新.');
 }
