@@ -16,11 +16,11 @@ class TimetablePage extends StatefulWidget {
 class _TimetablePageState extends State<TimetablePage> {
   TimetableDao timetableDaoService = TimetableService(SessionPool.eduSession);
   final SchoolYear currSchoolYear = const SchoolYear(2021);
-  final currSemester = Semester.firstTerm;
+  final currSemester = Semester.secondTerm;
   Map<int, List<List<int>>> dailyCourseList = {};
   List<Course> courseList = <Course>[];
   List<List<String>> dateTableList = [];
-  DateTime startTime = DateTime(2021, 9, 6);
+  DateTime startTime = DateTime(2022, 2, 14);
   static const int maxWeekCount = 20;
   bool isRefresh = false;
 
