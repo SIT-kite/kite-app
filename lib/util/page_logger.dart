@@ -6,6 +6,8 @@ import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:uuid/uuid.dart';
 
+import 'logger.dart';
+
 const String reportEventUrl = "https://kite.sunnysab.cn/api/v2/report/event";
 const int maxCacheSize = 10;
 
@@ -40,10 +42,13 @@ class PageLogger {
       try {
         _dio.post(reportEventUrl, data: _generateBody(eventList), options: Options(sendTimeout: 10 * 1000));
       } catch (_) {
+        Log.info('用户日志上报出错.');
         // 由于网络原因上报失败, 再把日志加回存储区
         storage.appendAll(eventList);
         cachedCount += maxCacheSize;
+        return;
       }
+      Log.info('完成用户日志上报.');
     });
   }
 
@@ -58,7 +63,7 @@ class PageLogger {
   }
 
   void log(UserEventType type, [Map<String, String> params = const {}]) {
-    final event = UserEvent(type, params);
+    final event = UserEvent(DateTime.now(), type, params);
     storage.append(event);
 
     _uploadReport();
