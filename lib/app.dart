@@ -3,33 +3,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/page/index.dart';
+import 'package:kite/util/page_logger.dart';
+
+final _routes = {
+  '/home': (context) => const HomePage(),
+  '/report': (context) => const DailyReportPage(),
+  '/login': (context) => const LoginPage(),
+  '/welcome': (context) => const WelcomePage(),
+  '/about': (context) => const AboutPage(),
+  '/expense': (context) => const ExpensePage(),
+  '/connectivity': (context) => const ConnectivityPage(),
+  '/campusCard': (context) => CampusCardPage(),
+  '/electricity': (context) => const ElectricityPage(),
+  '/score': (context) => const ScorePage(),
+  '/office': (context) => const OfficePage(),
+  '/game': (context) => const GamePage(),
+  '/wiki': (context) => const WikiPage(),
+  '/library': (context) => const LibraryPage(),
+  '/market': (context) => const MarketPage(),
+  '/timetable': (context) => const TimetablePage(),
+  '/setting': (context) => const SettingPage(),
+  '/feedback': (context) => const FeedbackPage(),
+  '/notice': (context) => const NoticePage(),
+};
 
 class KiteApp extends StatelessWidget {
   const KiteApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final routes = {
-      '/home': (context) => const HomePage(),
-      '/report': (context) => const DailyReportPage(),
-      '/login': (context) => const LoginPage(),
-      '/welcome': (context) => const WelcomePage(),
-      '/about': (context) => const AboutPage(),
-      '/expense': (context) => const ExpensePage(),
-      '/connectivity': (context) => const ConnectivityPage(),
-      '/campusCard': (context) => CampusCardPage(),
-      '/electricity': (context) => const ElectricityPage(),
-      '/score': (context) => const ScorePage(),
-      '/office': (context) => const OfficePage(),
-      '/game': (context) => const GamePage(),
-      '/wiki': (context) => const WikiPage(),
-      '/library': (context) => const LibraryPage(),
-      '/market': (context) => const MarketPage(),
-      '/timetable': (context) => const TimetablePage(),
-      '/setting': (context) => const SettingPage(),
-      '/feedback': (context) => const FeedbackPage(),
-      '/notice': (context) => const NoticePage(),
-    };
     final primaryColor = StoragePool.themeSetting.color;
     final themeData = ThemeData(primaryColor: primaryColor, primarySwatch: createThemeSwatch(primaryColor));
 
@@ -41,7 +43,7 @@ class KiteApp extends StatelessWidget {
         theme: themeData,
         debugShowCheckedModeBanner: false,
         home: home,
-        routes: routes,
+        onGenerateRoute: onGenerateRoute,
         builder: (context, widget) {
           ScreenUtil.setContext(context);
           return widget!;
@@ -69,4 +71,12 @@ MaterialColor createThemeSwatch(Color color) {
     );
   }
   return MaterialColor(color.value, swatch);
+}
+
+Route<dynamic> onGenerateRoute(RouteSettings settings) {
+  pageLogger.page(settings.name ?? 'Unknown');
+  return MaterialPageRoute(
+    builder: (context) => _routes[settings.name]!(context),
+    settings: settings,
+  );
 }
