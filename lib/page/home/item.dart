@@ -10,16 +10,17 @@ export 'item/office.dart';
 export 'item/report.dart';
 export 'item/score.dart';
 export 'item/timetable.dart';
+export 'item/upgrade.dart';
 
 class HomeItem extends StatelessWidget {
-  final String route;
+  final String? route;
   final String? icon;
   final Widget? iconWidget;
   final String title;
   final String? subtitle;
 
   HomeItem({
-    required this.route,
+    this.route,
     required this.title,
     this.subtitle,
     this.icon,
@@ -41,9 +42,7 @@ class HomeItem extends StatelessWidget {
         title: Text(title, style: titleStyle),
         subtitle: Text(subtitle ?? ''),
         // dense: true,
-        onTap: () {
-          Navigator.of(context).pushNamed(route);
-        },
+        onTap: (route != null) ? () => Navigator.of(context).pushNamed(route!) : null,
         style: ListTileStyle.list,
       ),
     );
