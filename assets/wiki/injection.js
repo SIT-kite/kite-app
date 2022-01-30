@@ -2,7 +2,7 @@ if (typeof(runFlag) === 'undefined') {
   runFlag = true;
 
   document.addEventListener("DOMContentLoaded", (function () {
-    let index = 'https://kite.sunnysab.cn/wiki/';
+    let index = 'https://cdn.kite.sunnysab.cn/wiki/';
 
     console.info('Initializing injection.js');
     if (window.location.toString().startsWith(index)) {
