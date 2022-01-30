@@ -40,22 +40,18 @@ class WelcomePage extends StatelessWidget {
                 SizedBox(height: 40.h),
                 // Login button
                 OutlinedButton(
-                    autofocus: true,
-                    style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.r),
-                      ),
-                      side: BorderSide(width: 1.sm, color: Colors.white),
+                  autofocus: true,
+                  style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.r),
                     ),
-                    child: Text('登录', style: textStyle.copyWith(fontSize: 20.sp)),
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginPage()));
-                    }),
-                // Text button
-                TextButton(
-                    style: TextButton.styleFrom(padding: const EdgeInsets.fromLTRB(0, 10, 0, 0)),
-                    child: const Text('我们为什么转做 APP', style: textStyle),
-                    onPressed: () {})
+                    side: BorderSide(width: 1.sm, color: Colors.white),
+                  ),
+                  child: Text('登录', style: textStyle.copyWith(fontSize: 20.sp)),
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginPage()));
+                  },
+                ),
               ],
             ),
           )
