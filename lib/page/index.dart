@@ -17,3 +17,4 @@ export './setting.dart';
 export './timetable/timetable.dart';
 export './welcome.dart';
 export './wiki.dart';
+export './contact.dart';
