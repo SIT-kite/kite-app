@@ -3,7 +3,7 @@ import 'package:kite/page/home/item.dart';
 import 'package:kite/util/upgrade.dart';
 import 'package:kite/util/url_launcher.dart';
 
-const String appUpgradeUrl = 'https://kite.sunnysab.cn/upgrade';
+const String appUpgradeUrl = 'https://cdn.kite.sunnysab.cn/upgrade/';
 
 class UpgradeItem extends StatelessWidget {
   const UpgradeItem({Key? key}) : super(key: key);

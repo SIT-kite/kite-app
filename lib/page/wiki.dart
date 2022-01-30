@@ -7,7 +7,7 @@ import 'package:kite/util/logger.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-const String _wikiUrl = 'https://kite.sunnysab.cn/wiki/';
+const String _wikiUrl = 'https://cdn.kite.sunnysab.cn/wiki/';
 
 class WikiPage extends StatefulWidget {
   const WikiPage({Key? key}) : super(key: key);
