@@ -31,6 +31,7 @@ class _LoginPageState extends State<LoginPage> {
   bool isPasswordClear = false;
   bool isLicenseAccepted = false;
   bool isProxySettingShown = false;
+  bool disableLoginButton = false;
 
   /// 用户点击登录按钮后
   Future<void> onLogin() async {
@@ -43,6 +44,9 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
+    setState(() {
+      disableLoginButton = true;
+    });
     final auth = AuthItem()
       ..username = _usernameController.text
       ..password = _passwordController.text;
@@ -54,6 +58,10 @@ class _LoginPageState extends State<LoginPage> {
     } catch (e) {
       showBasicFlash(context, Text('未知错误: ' + e.toString()));
       return;
+    } finally {
+      setState(() {
+        disableLoginButton = false;
+      });
     }
 
     StoragePool.authPool.add(auth);
@@ -157,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
         SizedBox(
           height: 40.h,
           child: ElevatedButton(
-            onPressed: onLogin,
+            onPressed: disableLoginButton ? null : onLogin,
             child: const Text('进入风筝元宇宙'),
           ),
         ),
