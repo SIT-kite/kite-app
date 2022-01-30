@@ -72,7 +72,10 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  static void onOpenUserLicense() {}
+  static void onOpenUserLicense() {
+    const url = "https://cdn.kite.sunnysab.cn/license/";
+    launchInBrowser(url);
+  }
 
   Widget buildTitleLine() {
     return Container(
