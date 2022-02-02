@@ -6,6 +6,7 @@ export 'item/bulletin.dart';
 export 'item/electricity.dart';
 export 'item/expense.dart';
 export 'item/library.dart';
+export 'item/mail.dart';
 export 'item/notice.dart';
 export 'item/office.dart';
 export 'item/report.dart';

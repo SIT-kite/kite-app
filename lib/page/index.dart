@@ -10,6 +10,7 @@ export './game.dart';
 export './home.dart';
 export './library/library.dart';
 export './login.dart';
+export './mail/mail.dart';
 export './market.dart';
 export './notice.dart';
 export './office.dart';

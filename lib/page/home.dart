@@ -120,6 +120,7 @@ class _HomePageState extends State<HomePage> {
         LibraryItem(),
         OfficeItem(),
         BulletinItem(),
+        MailItem(),
       ]),
       SizedBox(height: 20.h),
       HomeItemGroup([

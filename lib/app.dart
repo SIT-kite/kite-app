@@ -28,6 +28,7 @@ final _routes = {
   '/notice': (context) => const NoticePage(),
   '/contact': (context) => const ContactPage(),
   '/bulletin': (context) => const BulletinPage(),
+  '/mail': (context) => MailPage(),
 };
 
 class KiteApp extends StatelessWidget {
