@@ -166,8 +166,8 @@ class SettingPage extends StatelessWidget {
       kDebugMode
           ? SettingsGroup(title: '开发者选项', children: <Widget>[
               SimpleSettingsTile(
-                title: '显示存储',
-                subtitle: '输出本地存储信息',
+                title: '显示本机存储内容',
+                subtitle: '包括首页和各模块存储的数据',
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => DebugStoragePage())),
               )
             ])
