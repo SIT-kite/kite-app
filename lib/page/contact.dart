@@ -5,6 +5,7 @@ import 'package:kite/entity/contact.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/service/contact.dart';
+import 'package:kite/util/url_launcher.dart';
 
 List<Color?> color = [
   Colors.red[50],
@@ -117,10 +118,23 @@ Widget _contactListview(BuildContext context, List<ContactData> contactData) {
         ),
         title: Text('${detail.description}'),
         subtitle: Text((detail.name == null || detail.name == '') ? detail.phone : '${detail.name} ' + detail.phone),
-        trailing: IconButton(
-          icon: const Icon(Icons.content_copy),
-          color: Theme.of(context).primaryColor,
-          onPressed: () => Clipboard.setData(ClipboardData(text: detail.phone)),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.content_copy),
+              color: Theme.of(context).primaryColor,
+              onPressed: () => Clipboard.setData(ClipboardData(text: detail.phone)),
+            ),
+            IconButton(
+              icon: const Icon(Icons.phone),
+              color: Theme.of(context).primaryColor,
+              onPressed: () {
+                final phone = detail.phone;
+                launchInBrowser('tel:${phone.startsWith('1') ? phone : '021' + phone}');
+              },
+            )
+          ],
         ),
       );
     },
