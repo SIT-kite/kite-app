@@ -20,4 +20,10 @@ class ThemeSettingStorage implements ThemeSettingDao {
     final String value = v.value.toRadixString(16).padLeft(6, '0');
     box.put(ThemeKeys.themeColor, value);
   }
+
+  @override
+  bool get isDarkMode => box.get(ThemeKeys.isDarkMode, defaultValue: false);
+
+  @override
+  set isDarkMode(value) => box.put(ThemeKeys.isDarkMode, value);
 }

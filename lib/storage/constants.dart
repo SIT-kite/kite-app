@@ -24,6 +24,7 @@ class AuthKeys {
 class ThemeKeys {
   static const namespace = '/theme';
   static const themeColor = '$namespace/color';
+  static const isDarkMode = '$namespace/isDarkMode';
 }
 
 class NetworkKeys {

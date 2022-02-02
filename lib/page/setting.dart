@@ -74,7 +74,15 @@ class SettingPage extends StatelessWidget {
               color: newColor,
               shouldSave: true, // saves it to shared preferences
             ),
-          )
+          ),
+          SwitchSettingsTile(
+            settingKey: '/theme/isDark',
+            defaultValue: StoragePool.themeSetting.isDarkMode,
+            title: '夜间模式',
+            subtitle: '开启黑暗模式以保护视力',
+            leading: const Icon(Icons.dark_mode),
+            onChange: (value) => DynamicColorTheme.of(context).setIsDark(isDark: value, shouldSave: false),
+          ),
         ],
       ),
       SettingsGroup(

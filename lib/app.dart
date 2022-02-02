@@ -61,15 +61,17 @@ class KiteApp extends StatelessWidget {
   }
 
   ThemeData _buildTheme(Color primaryColor, bool isDark) {
-    final ThemeData base = isDark ? ThemeData.dark() : ThemeData.light();
-    final themeData = ThemeData(primaryColor: primaryColor, primarySwatch: _createThemeSwatch(primaryColor));
-
-    return themeData;
+    if (isDark) {
+      return ThemeData.dark();
+    } else {
+      final themeData = ThemeData(primaryColor: primaryColor, primarySwatch: _createThemeSwatch(primaryColor));
+      return themeData;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    const isDark = false;
+    final isDark = StoragePool.themeSetting.isDarkMode;
     final primaryColor = StoragePool.themeSetting.color;
     final home = StoragePool.authSetting.currentUsername != null ? const HomePage() : const WelcomePage();
 
@@ -79,7 +81,7 @@ class KiteApp extends StatelessWidget {
           return _buildTheme(color, isDark);
         },
         defaultColor: primaryColor,
-        defaultIsDark: false,
+        defaultIsDark: isDark,
         themedWidgetBuilder: (BuildContext context, ThemeData theme) => MaterialApp(
           navigatorKey: Catcher.navigatorKey,
           title: '上应小风筝',
