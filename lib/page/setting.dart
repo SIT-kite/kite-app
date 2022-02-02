@@ -1,3 +1,4 @@
+import 'package:dynamic_color_theme/dynamic_color_theme.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -69,6 +70,10 @@ class SettingPage extends StatelessWidget {
             settingKey: ThemeKeys.themeColor,
             defaultValue: StoragePool.themeSetting.color,
             title: '主题色',
+            onChange: (newColor) => DynamicColorTheme.of(context).setColor(
+              color: newColor,
+              shouldSave: true, // saves it to shared preferences
+            ),
           )
         ],
       ),
