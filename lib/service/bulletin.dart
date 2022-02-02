@@ -37,7 +37,7 @@ class BulletinService extends AService implements BulletinDao {
   }
 
   @override
-  Future<List<BulletinCatalogue>> getAllCatalogues() async {
+  List<BulletinCatalogue> getAllCatalogues() {
     return const [
       BulletinCatalogue('学生事务', 'pe2362'),
       BulletinCatalogue('学习课堂', 'pe2364'),
@@ -96,5 +96,20 @@ class BulletinService extends AService implements BulletinDao {
   Future<BulletinListPage> queryBulletinList(int pageIndex, String bulletinCatalogueId) async {
     final response = await session.get(_buildBulletinListUrl(pageIndex, bulletinCatalogueId));
     return _parseBulletinListPage(BeautifulSoup(response.data).html!);
+  }
+
+  Future<List<BulletinRecord>> queryBulletinListInAllCategory(int page) async {
+    final catalogues = getAllCatalogues();
+    final futureResult = await Future.wait(catalogues.map((e) => queryBulletinList(page, e.id)));
+
+    final List<BulletinRecord> records = futureResult.fold(<BulletinRecord>[],
+        (List<BulletinRecord> previousValue, BulletinListPage page) => previousValue + page.bulletinItems).toList();
+    return records;
+  }
+
+  static void sortBulletinRecord(List<BulletinRecord> recordList) {
+    recordList.sort((a, b) {
+      return b.dateTime.difference(a.dateTime).inSeconds;
+    });
   }
 }
