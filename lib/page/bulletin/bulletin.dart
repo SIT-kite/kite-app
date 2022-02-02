@@ -3,6 +3,8 @@ import 'package:kite/entity/bulletin.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/service/bulletin.dart';
 
+import './detail.dart';
+
 class BulletinPage extends StatelessWidget {
   const BulletinPage({Key? key}) : super(key: key);
 
@@ -22,6 +24,7 @@ class BulletinPage extends StatelessWidget {
                   .map((e) => ListTile(
                         title: Text(e.title),
                         subtitle: Text(e.department + ' | ' + e.dateTime.toString()),
+                        onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailPage(e))),
                       ))
                   .toList();
               return SingleChildScrollView(
