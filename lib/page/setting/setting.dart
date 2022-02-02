@@ -1,11 +1,13 @@
 import 'package:dynamic_color_theme/dynamic_color_theme.dart';
 import 'package:flash/flash.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:kite/global/init_util.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
+import 'package:kite/page/setting/storage.dart';
 import 'package:kite/storage/constants.dart';
 import 'package:kite/util/validation.dart';
 
@@ -158,9 +160,18 @@ class SettingPage extends StatelessWidget {
           validator: studentIdValidator,
         ),
         SimpleSettingsTile(title: '测试连接', subtitle: '检查用户名密码是否正确', onTap: () => {}),
+        SimpleSettingsTile(title: '退出登录', subtitle: '退出当前账号', onTap: () => _onLogout(context)),
+        SimpleSettingsTile(title: '清除数据', subtitle: '清除应用程序保存的账号和设置，但不包括缓存', onTap: () => _onClearStorage(context)),
       ]),
-      SimpleSettingsTile(title: '退出登录', subtitle: '退出当前账号', onTap: () => _onLogout(context)),
-      SimpleSettingsTile(title: '清除数据', subtitle: '清除应用程序保存的账号和设置，但不包括缓存', onTap: () => _onClearStorage(context)),
+      kDebugMode
+          ? SettingsGroup(title: '开发者选项', children: <Widget>[
+              SimpleSettingsTile(
+                title: '显示存储',
+                subtitle: '输出本地存储信息',
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => DebugStoragePage())),
+              )
+            ])
+          : const SizedBox(height: 0),
     ]);
   }
 }

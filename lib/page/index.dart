@@ -1,6 +1,7 @@
 export './about.dart';
 export './campus_card.dart';
 export './connectivity.dart';
+export './contact.dart';
 export './electricity.dart';
 export './expense.dart';
 export './feedback.dart';
@@ -13,8 +14,7 @@ export './notice.dart';
 export './office.dart';
 export './report.dart';
 export './score.dart';
-export './setting.dart';
 export './timetable/timetable.dart';
 export './welcome.dart';
 export './wiki.dart';
-export './contact.dart';
+export 'setting/setting.dart';
