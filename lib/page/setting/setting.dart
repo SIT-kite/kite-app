@@ -78,7 +78,7 @@ class SettingPage extends StatelessWidget {
             ),
           ),
           SwitchSettingsTile(
-            settingKey: '/theme/isDark',
+            settingKey: ThemeKeys.isDarkMode,
             defaultValue: StoragePool.themeSetting.isDarkMode,
             title: '夜间模式',
             subtitle: '开启黑暗模式以保护视力',
