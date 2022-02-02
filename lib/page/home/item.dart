@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+export 'item/bulletin.dart';
 export 'item/electricity.dart';
 export 'item/expense.dart';
 export 'item/library.dart';

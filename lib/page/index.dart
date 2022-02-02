@@ -1,4 +1,5 @@
 export './about.dart';
+export './bulletin/bulletin.dart';
 export './campus_card.dart';
 export './connectivity.dart';
 export './contact.dart';
@@ -14,7 +15,7 @@ export './notice.dart';
 export './office.dart';
 export './report.dart';
 export './score.dart';
+export './setting/setting.dart';
 export './timetable/timetable.dart';
 export './welcome.dart';
 export './wiki.dart';
-export 'setting/setting.dart';
