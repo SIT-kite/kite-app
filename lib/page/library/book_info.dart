@@ -92,10 +92,7 @@ class _BookInfoPageState extends State<BookInfoPage> {
   Widget buildTitle(String text) {
     return Text(
       text,
-      style: const TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-      ),
+      style: Theme.of(context).textTheme.headline1,
     );
   }
 

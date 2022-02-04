@@ -11,12 +11,12 @@ class DetailPage extends StatelessWidget {
   final OfficeSession session;
   final SimpleFunction function;
 
-  final titleStyle = const TextStyle(fontSize: 25, fontWeight: FontWeight.bold);
-  final textStyle = const TextStyle(fontSize: 20);
-
   const DetailPage(this.session, this.function, {Key? key}) : super(key: key);
 
-  Widget buildSection(FunctionDetailSection section) {
+  Widget buildSection(BuildContext context, FunctionDetailSection section) {
+    final titleStyle = Theme.of(context).textTheme.headline2;
+    final textStyle = Theme.of(context).textTheme.bodyText2;
+
     Widget buildHtmlSection(String content) {
       final html = content.replaceAll('../app/files/', 'https://xgfy.sit.edu.cn/app/files/');
       return HtmlWidget(html, textStyle: textStyle, onTapUrl: (url) {
@@ -68,13 +68,13 @@ class DetailPage extends StatelessWidget {
     );
   }
 
-  Widget buildBody(List<FunctionDetailSection> sections) {
+  Widget buildBody(BuildContext context, List<FunctionDetailSection> sections) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
-        children: sections.map(buildSection).toList(),
+        children: sections.map((e) => buildSection(context, e)).toList(),
       ),
     );
   }
@@ -89,7 +89,7 @@ class DetailPage extends StatelessWidget {
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.hasData) {
               final FunctionDetail function = snapshot.data!;
-              return buildBody(function.sections);
+              return buildBody(context, function.sections);
             }
             return const Center(child: CircularProgressIndicator());
           },

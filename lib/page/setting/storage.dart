@@ -8,9 +8,7 @@ import 'package:kite/entity/library/search_history.dart';
 class DebugStoragePage extends StatelessWidget {
   const DebugStoragePage({Key? key}) : super(key: key);
 
-  final textStyle = const TextStyle(fontFamily: "monospace");
-
-  Widget _buildBoxSection<T>(String boxName) {
+  Widget _buildBoxSection<T>(BuildContext context, String boxName) {
     final box = Hive.box<T>(boxName);
     final items = box.keys.map((e) {
       final key = e.toString();
@@ -18,9 +16,9 @@ class DebugStoragePage extends StatelessWidget {
       final type = value.runtimeType.toString();
 
       return ListTile(
-          title: Text(key, style: textStyle),
-          subtitle: Text(value.toString(), style: textStyle),
-          trailing: Text(type, style: textStyle),
+          title: Text(key, style: Theme.of(context).textTheme.headline3),
+          subtitle: Text(value.toString(), style: Theme.of(context).textTheme.bodyText2),
+          trailing: Text(type, style: Theme.of(context).textTheme.bodyText1),
           dense: true);
     }).toList();
     final sectionBody = items.isNotEmpty ? items : [const Text('无内容')];
@@ -32,25 +30,23 @@ class DebugStoragePage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
-            children: <Widget>[Text(boxName, style: textStyle.copyWith(fontSize: 20, fontWeight: FontWeight.bold))] +
-                sectionBody,
+            children: <Widget>[Text(boxName, style: Theme.of(context).textTheme.headline3)] + sectionBody,
           ),
         ),
       ),
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(BuildContext context) {
     return Column(
       children: [
-        _buildBoxSection<dynamic>('setting'),
-        _buildBoxSection<AuthItem>('auth'),
-        _buildBoxSection<LibrarySearchHistoryItem>('library.search_history'),
-        _buildBoxSection<ContactData>('contactSetting'),
-        _buildBoxSection<Course>('course'),
-        _buildBoxSection<dynamic>('userEvent'),
+        _buildBoxSection<dynamic>(context, 'setting'),
+        _buildBoxSection<AuthItem>(context, 'auth'),
+        _buildBoxSection<LibrarySearchHistoryItem>(context, 'library.search_history'),
+        _buildBoxSection<ContactData>(context, 'contactSetting'),
+        _buildBoxSection<Course>(context, 'course'),
+        _buildBoxSection<dynamic>(context, 'userEvent'),
       ],
     );
   }
@@ -59,7 +55,7 @@ class DebugStoragePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('本机存储内容')),
-      body: SingleChildScrollView(child: _buildBody()),
+      body: SingleChildScrollView(child: _buildBody(context)),
     );
   }
 }

@@ -34,7 +34,8 @@ class HomeItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final titleStyle = const TextStyle().copyWith(fontSize: 16.sp, fontWeight: FontWeight.bold);
+    final titleStyle = Theme.of(context).textTheme.headline3;
+    final subtitleStyle = Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.black54);
 
     return Container(
       decoration: BoxDecoration(color: Colors.white.withOpacity(0.6)),
@@ -42,7 +43,7 @@ class HomeItem extends StatelessWidget {
         leading:
             iconWidget ?? SvgPicture.asset(icon!, height: 30.h, width: 30.w, color: Theme.of(context).primaryColor),
         title: Text(title, style: titleStyle),
-        subtitle: Text(subtitle ?? ''),
+        subtitle: Text(subtitle ?? '', style: subtitleStyle),
         // dense: true,
         onTap: (route != null) ? () => Navigator.of(context).pushNamed(route!) : null,
         style: ListTileStyle.list,

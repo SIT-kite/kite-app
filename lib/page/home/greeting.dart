@@ -23,8 +23,6 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   int campus = StoragePool.homeSetting.campus;
   Weather currentWeather = StoragePool.homeSetting.lastWeather;
 
-  final textStyle = TextStyle(color: Colors.white70, fontSize: 20.sp);
-
   @override
   void initState() {
     super.initState();
@@ -66,6 +64,8 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   }
 
   Widget buildAll(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme.headline3?.copyWith(color: Colors.white70);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

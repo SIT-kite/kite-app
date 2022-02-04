@@ -82,9 +82,7 @@ class Search extends SearchDelegate<String> {
   @override
   Widget buildSuggestions(BuildContext context) {
     return query.isEmpty
-        ? const Center(
-            child: Text('搜索', style: TextStyle(fontSize: 22)),
-          )
+        ? Container()
         : _contactListview(context, _contactData.where((e) => _search(query, e)).toList());
   }
 
@@ -110,10 +108,8 @@ Widget _contactListview(BuildContext context, List<ContactData> contactData) {
           child: Container(
               child: detail.name == '' || detail.name == null
                   ? Center(child: Icon(Icons.account_circle, size: 40, color: Colors.grey[50]))
-                  : Text(
-                      detail.name![0],
-                      style: TextStyle(color: Colors.grey[50], fontSize: 20, fontWeight: FontWeight.w500),
-                    )),
+                  : Text(detail.name![0],
+                      style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.grey[50]))),
           radius: 20,
         ),
         title: Text('${detail.description}'),

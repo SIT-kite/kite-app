@@ -62,9 +62,22 @@ class KiteApp extends StatelessWidget {
     );
   }
 
-  ThemeData _buildTheme(Color primaryColor, bool isDark) {
+  TextTheme _buildTextTheme(BuildContext context) {
+    return const TextTheme(
+      headline1: TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold),
+      headline2: TextStyle(fontSize: 26.0),
+      headline3: TextStyle(fontSize: 24.0),
+      headline4: TextStyle(fontSize: 22.0),
+      headline6: TextStyle(fontSize: 20.0),
+      bodyText1: TextStyle(fontSize: 18.0, fontWeight: FontWeight.normal),
+      bodyText2: TextStyle(fontSize: 16.0, color: Colors.black26, fontWeight: FontWeight.w600),
+    );
+  }
+
+  ThemeData _buildTheme(BuildContext context, Color primaryColor, bool isDark) {
     return ThemeData(
       colorSchemeSeed: primaryColor,
+      textTheme: _buildTextTheme(context),
       brightness: isDark ? Brightness.dark : Brightness.light,
       useMaterial3: true,
     );
@@ -79,7 +92,7 @@ class KiteApp extends StatelessWidget {
     return ScreenUtilInit(
       builder: () => DynamicColorTheme(
         data: (Color color, bool isDark) {
-          return _buildTheme(color, isDark);
+          return _buildTheme(context, color, isDark);
         },
         defaultColor: primaryColor,
         defaultIsDark: isDark,

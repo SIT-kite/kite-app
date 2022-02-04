@@ -87,8 +87,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget buildTitleLine() {
     return Container(
-        alignment: Alignment.centerLeft,
-        child: Text('欢迎登录', style: TextStyle(fontSize: 35.sp, fontWeight: FontWeight.bold)));
+        alignment: Alignment.centerLeft, child: Text('欢迎登录', style: Theme.of(context).textTheme.headline1));
   }
 
   Widget buildLoginForm() {
@@ -142,11 +141,8 @@ class _LoginPageState extends State<LoginPage> {
           child: Text.rich(
             TextSpan(
               children: [
-                TextSpan(text: '我已阅读并同意', style: TextStyle(fontSize: 12.sp)),
-                TextSpan(
-                    text: '《上应小风筝用户协议》',
-                    style: TextStyle(color: Colors.blue, fontSize: 12.sp),
-                    recognizer: _recognizer),
+                TextSpan(text: '我已阅读并同意', style: Theme.of(context).textTheme.bodyText1),
+                TextSpan(text: '《上应小风筝用户协议》', style: Theme.of(context).textTheme.bodyText2, recognizer: _recognizer),
               ],
             ),
           ),

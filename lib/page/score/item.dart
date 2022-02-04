@@ -3,7 +3,6 @@ import 'package:kite/entity/edu.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/page/score/evaluation.dart';
-import 'package:kite/service/edu/evaluation.dart';
 import 'package:kite/service/edu/index.dart';
 import 'package:kite/util/edu/icon.dart';
 
@@ -76,7 +75,7 @@ class _ScoreItemState extends State<ScoreItem> {
   }
 
   Widget _buildTrailing() {
-    const style = TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.blue);
+    final style = Theme.of(context).textTheme.headline4?.copyWith(color: Colors.blue);
 
     if (!_score.value.isNaN) {
       return Text(_score.value.toString(), style: style);
@@ -93,7 +92,7 @@ class _ScoreItemState extends State<ScoreItem> {
 
               if (coursesToEvaluate.isNotEmpty) {
                 return GestureDetector(
-                  child: const Text('去评教', style: style),
+                  child: Text('去评教', style: style),
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(builder: (_) => EvaluationPage(coursesToEvaluate)));
                   },

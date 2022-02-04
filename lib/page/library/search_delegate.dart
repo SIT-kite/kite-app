@@ -89,10 +89,7 @@ class SearchBarDelegate extends SearchDelegate<String> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const SizedBox(height: 20),
-            const Text(
-              '历史记录',
-              style: TextStyle(fontSize: 16),
-            ),
+            Text('历史记录', style: Theme.of(context).textTheme.bodyText1),
             SuggestionItemView(
               titleItems: StoragePool.librarySearchHistory.getAllByTimeDesc().map((e) => e.keyword).toList(),
               onItemTap: (title) => _searchByGiving(title, context),
@@ -101,9 +98,9 @@ class SearchBarDelegate extends SearchDelegate<String> {
             InkWell(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(Icons.clear_all),
-                  Text('清空搜索历史'),
+                children: [
+                  const Icon(Icons.clear_all),
+                  Text('清空搜索历史', style: Theme.of(context).textTheme.bodyText2),
                 ],
               ),
               onTap: () async {
@@ -112,10 +109,7 @@ class SearchBarDelegate extends SearchDelegate<String> {
               },
             ),
             const SizedBox(height: 20),
-            const Text(
-              '大家都在搜',
-              style: TextStyle(fontSize: 16),
-            ),
+            Text('大家都在搜', style: Theme.of(context).textTheme.bodyText1),
             FutureBuilder<HotSearch>(
               // future: HotSearchMock().getHotSearch(),
               future: HotSearchService(SessionPool.librarySession).getHotSearch(),

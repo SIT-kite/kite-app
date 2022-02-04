@@ -12,8 +12,6 @@ class ConnectivityPage extends StatefulWidget {
 }
 
 class _ConnectivityPageState extends State<ConnectivityPage> {
-  final TextStyle textStyle = const TextStyle().copyWith(fontSize: 20);
-
   final Widget disconnectedPicture =
       SvgPicture.asset('assets/connectivity/not-available.svg', width: 260, height: 260, color: Colors.grey);
   final Widget connectedPicture =
@@ -38,7 +36,7 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
     Widget buildConnectedByVpnBlock() => Text(
           '目前已通过 VPN 连接校园网',
           textAlign: TextAlign.center,
-          style: textStyle.copyWith(fontSize: 15),
+          style: Theme.of(context).textTheme.bodyText1,
         );
     Widget buildConnectedByWlanBlock() {
       return FutureBuilder(
@@ -55,10 +53,7 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
             mainAxisSize: MainAxisSize.min,
             // mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                '目前已通过 WLAN 登录',
-                style: textStyle.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
+              Text('目前已通过 WLAN 登录', style: Theme.of(context).textTheme.bodyText1),
               const SizedBox(height: 10),
               Text('登录用户: $studentId\n登录地址: $ip'),
             ],
@@ -84,12 +79,11 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
   Widget buildDisconnectedBlock() {
     Widget buildErrorText() {
       return Text(
-        '无法连接到校园网。\n'
-        '请连接学校内的 i-SIT, i-SIT-1x 或 eduroam 热点，\n'
-        '或打开 EasyConnect App 连接学校 VPN。',
-        textAlign: TextAlign.center,
-        style: textStyle.copyWith(fontSize: 15),
-      );
+          '无法连接到校园网。\n'
+          '请连接学校内的 i-SIT, i-SIT-1x 或 eduroam 热点，\n'
+          '或打开 EasyConnect App 连接学校 VPN。',
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodyText1);
     }
 
     return SizedBox(

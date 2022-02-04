@@ -8,8 +8,6 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const textStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.normal);
-
     return Scaffold(
       body: Stack(
         children: [
@@ -33,9 +31,9 @@ class WelcomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Title
-                Text('上应小风筝', style: textStyle.copyWith(fontWeight: FontWeight.bold, fontSize: 35.sp)),
+                Text('上应小风筝', style: Theme.of(context).textTheme.headline2?.copyWith(color: Colors.white)),
                 // Subtitle
-                Text('便利校园，一步到位', style: textStyle.copyWith(fontSize: 25.sp)),
+                Text('便利校园，一步到位', style: Theme.of(context).textTheme.headline3?.copyWith(color: Colors.white)),
                 // Space
                 SizedBox(height: 40.h),
                 // Login button
@@ -47,7 +45,7 @@ class WelcomePage extends StatelessWidget {
                     ),
                     side: BorderSide(width: 1.sm, color: Colors.white),
                   ),
-                  child: Text('登录', style: textStyle.copyWith(fontSize: 20.sp)),
+                  child: Text('登录', style: Theme.of(context).textTheme.headline5?.copyWith(color: Colors.white)),
                   onPressed: () {
                     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginPage()));
                   },

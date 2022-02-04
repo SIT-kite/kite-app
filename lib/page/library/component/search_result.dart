@@ -197,6 +197,9 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
   }
 
   Widget buildSearchWaySelector() {
+    final textStyle = Theme.of(context).textTheme.headline4;
+    final primaryColor = Theme.of(context).primaryColor;
+
     return Container(
       margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -220,13 +223,8 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
                   // border: Border.all(),
                 ),
                 child: Center(
-                  child: Text(
-                    searchWayName,
-                    style: TextStyle(
-                      color: searchWay == currentSearchWay ? Colors.white : Colors.black,
-                      fontSize: 18,
-                    ),
-                  ),
+                  child: Text(searchWayName,
+                      style: textStyle?.copyWith(color: e[1] == currentSearchWay ? Colors.white : Colors.black)),
                 ),
               ),
               onTap: () {

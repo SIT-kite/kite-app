@@ -7,7 +7,7 @@ import 'package:kite/service/kite/index.dart';
 class NoticePage extends StatelessWidget {
   const NoticePage({Key? key}) : super(key: key);
 
-  Widget _buildNoticeItem(KiteNotice notice) {
+  Widget _buildNoticeItem(BuildContext context, KiteNotice notice) {
     final dateFormat = DateFormat('yyyy / MM / dd');
 
     return Card(
@@ -25,8 +25,7 @@ class NoticePage extends StatelessWidget {
                 Expanded(
                   flex: 3,
                   child: Text((notice.top ? '[置顶] ' : '') + notice.title,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.headline3),
                 ),
                 // 日期
                 Expanded(
@@ -46,10 +45,10 @@ class NoticePage extends StatelessWidget {
     );
   }
 
-  Widget _buildNoticeList(List<KiteNotice> noticeList) {
+  Widget _buildNoticeList(BuildContext context, List<KiteNotice> noticeList) {
     return SingleChildScrollView(
       child: Column(
-        children: noticeList.map(_buildNoticeItem).toList(),
+        children: noticeList.map((e) => _buildNoticeItem(context, e)).toList(),
       ),
     );
   }
@@ -62,7 +61,7 @@ class NoticePage extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
-            return _buildNoticeList(snapshot.data!);
+            return _buildNoticeList(context, snapshot.data!);
           } else if (snapshot.hasError) {
             return Center(child: Text('加载失败: ${snapshot.error.runtimeType.toString()}'));
           }

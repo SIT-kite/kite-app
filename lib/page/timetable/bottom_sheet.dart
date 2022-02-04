@@ -38,13 +38,7 @@ class CourseBottomSheet extends StatelessWidget {
                         Radius.circular(5.0),
                       ),
                     ),
-                    child: Text(
-                      _courseName,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w300,
-                      ),
-                    ),
+                    child: Text(_courseName, style: Theme.of(context).textTheme.headline3),
                   )),
               Container(
                   decoration: const BoxDecoration(
@@ -60,9 +54,9 @@ class CourseBottomSheet extends StatelessWidget {
                     scrollDirection: Axis.vertical,
                     // children: _courseDetail.map((detail) => _buildDetailItem(detail)).toList(),
                     children: [
-                      _buildDetailItem('courseId.png', _courseId),
-                      _buildDetailItem('dynClassId.png', _dynClassId),
-                      _buildDetailItem('campus.png', _courseDetail[0]),
+                      _buildDetailItem(context, 'courseId.png', _courseId),
+                      _buildDetailItem(context, 'dynClassId.png', _dynClassId),
+                      _buildDetailItem(context, 'campus.png', _courseDetail[0]),
                     ],
                   )),
             ],
@@ -70,7 +64,7 @@ class CourseBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailItem(String iconName, String detail) {
+  Widget _buildDetailItem(BuildContext context, String iconName, String detail) {
     String iconPath = 'assets/timetable/' + iconName;
     return Container(
         padding: const EdgeInsets.fromLTRB(20, 10, 10, 0),
@@ -84,13 +78,7 @@ class CourseBottomSheet extends StatelessWidget {
             Container(
               width: 15,
             ),
-            Expanded(
-                child: Text(detail,
-                    softWrap: true,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w300,
-                    ))),
+            Expanded(child: Text(detail, softWrap: true, style: Theme.of(context).textTheme.headline3)),
           ],
         ));
   }

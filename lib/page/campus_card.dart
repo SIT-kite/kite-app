@@ -110,10 +110,10 @@ class _CampusCardPageState extends State<CampusCardPage> {
   }
 
   Widget buildFailedPrompt() {
-    return const Center(
+    return Center(
       child: Text(
         '此设备不支持 NFC 或 NFC 功能不可用',
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        style: Theme.of(context).textTheme.headline3!,
       ),
     );
   }
@@ -122,13 +122,13 @@ class _CampusCardPageState extends State<CampusCardPage> {
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: const [
+        children: [
           Text(
             '请将卡片贴合到手机背面 NFC 读卡器处',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.headline3!,
           ),
-          SizedBox(height: 40.0),
-          Image(image: AssetImage('assets/campus_card/illustration.png'), height: 300, width: 300),
+          const SizedBox(height: 40.0),
+          const Image(image: AssetImage('assets/campus_card/illustration.png'), height: 300, width: 300),
         ],
       ),
     );
@@ -147,11 +147,11 @@ class _CampusCardPageState extends State<CampusCardPage> {
 
   Widget buildCardRecord() {
     return Column(children: [
-      const SizedBox(
+      SizedBox(
           height: 30,
           child: Text(
             '数据源缺少补办卡信息，结果仅供参考。',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.bodyText1,
           )),
       ListView(
         shrinkWrap: true,
