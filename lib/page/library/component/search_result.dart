@@ -209,19 +209,21 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
           ['作者名', SearchWay.author],
           ['ISBN号', SearchWay.isbn],
         ].map((e) {
+          String searchWayName = e[0];
+          SearchWay searchWay = e[1];
           return Expanded(
             child: InkWell(
               child: Container(
                 padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
-                  color: e[1] == currentSearchWay ? Colors.blue : Colors.white,
+                  color: searchWay == currentSearchWay ? Colors.blue : Colors.white,
                   // border: Border.all(),
                 ),
                 child: Center(
                   child: Text(
-                    e[0],
+                    searchWayName,
                     style: TextStyle(
-                      color: e[1] == currentSearchWay ? Colors.white : Colors.black,
+                      color: searchWay == currentSearchWay ? Colors.white : Colors.black,
                       fontSize: 18,
                     ),
                   ),
