@@ -12,8 +12,7 @@ class BookImage {
 
   const BookImage(this.isbn, this.coverLink, this.resourceLink, this.status);
 
-  factory BookImage.fromJson(Map<String, dynamic> json) =>
-      _$BookImageFromJson(json);
+  factory BookImage.fromJson(Map<String, dynamic> json) => _$BookImageFromJson(json);
 
   Map<String, dynamic> toJson() => _$BookImageToJson(this);
 }

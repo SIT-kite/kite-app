@@ -95,6 +95,7 @@ class SsoSession extends ASession {
   }
 
   String? get username => _username;
+
   String? get password => _password;
 
   /// 惰性登录，只有在第一次请求跳转到登录页时才开始尝试真正的登录
@@ -235,6 +236,7 @@ class CredentialsInvalidException implements Exception {
 class NeedLoginException implements Exception {
   final String msg;
   final String url;
+
   const NeedLoginException({this.msg = '目标操作需要登录', this.url = ''});
 
   @override

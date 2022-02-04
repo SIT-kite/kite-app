@@ -9,15 +9,11 @@ class ExpenseChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final expenseMapping = dailyExpense.asMap();
-    final spots = expenseMapping.keys
-        .map((i) => FlSpot((i + 1).toDouble(), expenseMapping[i] ?? 0.0))
-        .toList();
+    final spots = expenseMapping.keys.map((i) => FlSpot((i + 1).toDouble(), expenseMapping[i] ?? 0.0)).toList();
 
     return LineChart(
       LineChartData(
-        lineTouchData: LineTouchData(
-            touchTooltipData:
-                LineTouchTooltipData(tooltipBgColor: Colors.blue[100])),
+        lineTouchData: LineTouchData(touchTooltipData: LineTouchTooltipData(tooltipBgColor: Colors.blue[100])),
         borderData: FlBorderData(
           border: const Border(
             bottom: BorderSide(width: 1.0),

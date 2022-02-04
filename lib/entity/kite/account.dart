@@ -9,7 +9,9 @@ class KiteUser {
   DateTime createTime = DateTime.now();
   int role = 0;
   bool isBlock = false;
+
   KiteUser();
+
   factory KiteUser.fromJson(Map<String, dynamic> json) => _$KiteUserFromJson(json);
 
   @override

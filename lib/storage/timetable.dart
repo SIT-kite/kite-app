@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:kite/dao/edu/timetable.dart';
-import 'package:kite/entity/edu.dart';
+import 'package:kite/entity/edu/index.dart';
 
 class CourseStorage implements TimetableStorageDao {
   final Box<Course> box;

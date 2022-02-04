@@ -23,6 +23,7 @@ class ExamRoom {
   @JsonKey(name: 'cxbj')
   // 是否重修
   String isRebuild = "";
+
   ExamRoom();
 
   factory ExamRoom.fromJson(Map<String, dynamic> json) => _$ExamRoomFromJson(json);

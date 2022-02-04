@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:kite/service/expense.dart';
-import 'package:kite/global/session_pool.dart';
 import 'package:kite/entity/expense.dart';
 import 'package:kite/page/expense/icon.dart';
 
-import 'expense/bill.dart';
-import 'expense/statistics.dart';
+import 'bill.dart';
+import 'statistics.dart';
 
 class ExpensePage extends StatefulWidget {
   const ExpensePage({Key? key}) : super(key: key);
@@ -27,14 +25,10 @@ class _ExpensePageState extends State<ExpensePage> {
         title: const Text("消费记录"),
         actions: [
           _onBillsRefresh(),
-          _currentIndex == 0
-              ? _buildPopupMenuItems()
-              : const Padding(padding: EdgeInsets.all(0)),
+          _currentIndex == 0 ? _buildPopupMenuItems() : const Padding(padding: EdgeInsets.all(0)),
         ],
       ),
-      body: _currentIndex == 0
-          ? BillPage(_stateindex, _expensetype)
-          : const StatisticsPage(),
+      body: _currentIndex == 0 ? BillPage(_stateindex, _expensetype) : const StatisticsPage(),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
@@ -65,19 +59,12 @@ class _ExpensePageState extends State<ExpensePage> {
         PopupMenuItem(
           value: 'canteen',
           child: Row(
-            children: [
-              Icon(Icons.local_mall,
-                  size: 30, color: Theme.of(context).primaryColor),
-              const Text('全部')
-            ],
+            children: [Icon(Icons.local_mall, size: 30, color: Theme.of(context).primaryColor), const Text('全部')],
           ),
         ),
         PopupMenuItem(
           value: 'canteen',
-          child: Row(children: [
-            buildIcon(ExpenseType.canteen, context),
-            const Text('食堂')
-          ]),
+          child: Row(children: [buildIcon(ExpenseType.canteen, context), const Text('食堂')]),
         ),
         PopupMenuItem(
           value: 'store',

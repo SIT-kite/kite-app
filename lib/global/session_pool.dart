@@ -23,6 +23,7 @@ class SessionPool {
 
   // 持久化的CookieJar
   static late final PersistCookieJar _cookieJar;
+
   static PersistCookieJar get cookieJar => _cookieJar;
 
   static late Dio dio;
@@ -35,6 +36,7 @@ class SessionPool {
 
   // 是否初始化过
   static bool _hasInit = false;
+
   static bool hasInit() => _hasInit;
 
   /// 初始化SessionPool

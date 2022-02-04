@@ -16,16 +16,19 @@ class HoldingItem {
 
   // 文献所属馆
   final String originLibrary;
+
   // 所属馆位置
   final String originLocation;
 
   // 文献所在馆
   final String currentLibrary;
+
   // 所在馆位置
   final String currentLocation;
 
   // 流通类型名称
   final String circulateTypeName;
+
   // 流通类型描述
   final String circulateTypeDescription;
 

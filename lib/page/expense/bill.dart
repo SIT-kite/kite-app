@@ -18,13 +18,12 @@ class BillPage extends StatelessWidget {
   };
   final int _stateindex;
   final String _expensetype;
+
   BillPage(this._stateindex, this._expensetype, {Key? key}) : super(key: key);
-  List<ExpenseRecord> expenseData =
-      StoragePool.expenseRecordStorage.getAllByTimeDesc();
+  List<ExpenseRecord> expenseData = StoragePool.expenseRecordStorage.getAllByTimeDesc();
 
   Future<List<ExpenseRecord>> _expenseBills() async {
-    ExpensePage firstPage =
-        await ExpenseRemoteService(SessionPool.ssoSession).getExpensePage(1);
+    ExpensePage firstPage = await ExpenseRemoteService(SessionPool.ssoSession).getExpensePage(1);
     List<Future<ExpensePage>> getPage = [];
     for (int i = 2; i <= firstPage.total; i++) {
       ExpenseRemoteService(SessionPool.ssoSession).getExpensePage(i);
@@ -39,15 +38,12 @@ class BillPage extends StatelessWidget {
           context,
           _expensetype == 'all'
               ? expenseData
-              : expenseData
-                  .where((e) => e.type == _typeKeywords[_expensetype])
-                  .toList());
+              : expenseData.where((e) => e.type == _typeKeywords[_expensetype]).toList());
     } else {
       return FutureBuilder(
         future: StoragePool.expenseRecordStorage.getAllByTimeDesc().isEmpty
             ? _expenseBills()
-            : ExpenseRemoteService(SessionPool.ssoSession)
-                .refreshExpenseRecord(),
+            : ExpenseRemoteService(SessionPool.ssoSession).refreshExpenseRecord(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             expenseData = StoragePool.expenseRecordStorage.getAllByTimeDesc();
@@ -55,19 +51,14 @@ class BillPage extends StatelessWidget {
                 context,
                 _expensetype == 'all'
                     ? expenseData
-                    : expenseData
-                        .where((e) => e.type == _typeKeywords[_expensetype])
-                        .toList());
+                    : expenseData.where((e) => e.type == _typeKeywords[_expensetype]).toList());
           } else if (snapshot.hasError) {
             return Center(child: Text(snapshot.error.toString()));
           }
           return Center(
               child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              CircularProgressIndicator(),
-              Text('数据来自学校所以速度你懂的~_~')
-            ],
+            children: const [CircularProgressIndicator(), Text('数据来自学校所以速度你懂的~_~')],
           ));
         },
       );
@@ -102,9 +93,7 @@ class BillPage extends StatelessWidget {
         int year = firstGroupRecord.ts.year;
 
         for (var element in expenseData) {
-          total += (element.ts.month == month && element.ts.year == year)
-              ? element.amount
-              : 0;
+          total += (element.ts.month == month && element.ts.year == year) ? element.amount : 0;
         }
         return ListTile(
           title: Text('$year 年$month 月 ', textScaleFactor: 1.3),

@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 class UnsupportedPlatformUrlLauncher extends StatelessWidget {
   final String url;
   final String tip;
+
   const UnsupportedPlatformUrlLauncher(
     this.url, {
     Key? key,

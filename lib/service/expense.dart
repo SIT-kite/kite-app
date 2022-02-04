@@ -41,8 +41,7 @@ class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
     return true;
   }
 
-  Future<ExpensePage> getExpensePage(int page,
-      {DateTime? start, DateTime? end}) async {
+  Future<ExpensePage> getExpensePage(int page, {DateTime? start, DateTime? end}) async {
     start = start ?? DateTime(2010);
     end = end ?? DateTime.now();
     final response = await session.get(
@@ -70,8 +69,7 @@ class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
     }
     // 页号信息
     final pageInfo = soup.findAll('div', id: 'listContent')[1].text;
-    String currentPage =
-        RegExp(r'第(\S*)页').allMatches(pageInfo).first.group(1)!;
+    String currentPage = RegExp(r'第(\S*)页').allMatches(pageInfo).first.group(1)!;
     String totalPage = RegExp(r'共(\S*)页').allMatches(pageInfo).first.group(1)!;
 
     return ExpensePage()

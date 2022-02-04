@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-export 'item/bulletin.dart';
-export 'item/electricity.dart';
-export 'item/expense.dart';
-export 'item/library.dart';
-export 'item/mail.dart';
-export 'item/notice.dart';
-export 'item/office.dart';
-export 'item/report.dart';
-export 'item/score.dart';
-export 'item/timetable.dart';
-export 'item/upgrade.dart';
+export 'bulletin.dart';
+export 'electricity.dart';
+export 'expense.dart';
+export 'library.dart';
+export 'mail.dart';
+export 'notice.dart';
+export 'office.dart';
+export 'report.dart';
+export 'score.dart';
+export 'timetable.dart';
+export 'upgrade.dart';
 
 class HomeItem extends StatelessWidget {
   final String? route;

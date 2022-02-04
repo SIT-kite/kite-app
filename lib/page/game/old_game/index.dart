@@ -7,6 +7,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class WebPageGamePage extends StatefulWidget {
   final String url;
+
   const WebPageGamePage(this.url, {Key? key}) : super(key: key);
 
   @override

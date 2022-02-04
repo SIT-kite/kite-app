@@ -19,6 +19,7 @@ class HoldingPreviewItem {
   // 文献所在馆
   @JsonKey(name: 'curlibName')
   final String currentLibrary;
+
   // 所在馆位置
   @JsonKey(name: 'curlocalName')
   final String currentLocation;
@@ -55,11 +56,13 @@ class HoldingPreviewItem {
 class HoldingPreviews {
   @JsonKey(name: 'previews')
   final Map<String, List<HoldingPreviewItem>> previews;
+
   const HoldingPreviews(this.previews);
 
   factory HoldingPreviews.fromJson(Map<String, dynamic> json) => _$HoldingPreviewsFromJson(json);
 
   Map<String, dynamic> toJson() => _$HoldingPreviewsToJson(this);
+
   @override
   String toString() {
     return 'HoldingPreviews{previews: $previews}';

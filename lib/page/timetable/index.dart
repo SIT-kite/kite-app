@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kite/dao/edu/timetable.dart';
-import 'package:kite/entity/edu.dart';
+import 'package:kite/entity/edu/index.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/page/timetable/daily_timetable.dart';

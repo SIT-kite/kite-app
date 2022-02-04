@@ -1,5 +1,6 @@
 export 'bulletin.dart';
 export 'campus_card.dart';
+export 'contact.dart';
 export 'edu/index.dart';
 export 'expense.dart';
 export 'kite/electricity.dart';
@@ -9,4 +10,3 @@ export 'library/index.dart';
 export 'network.dart';
 export 'office/index.dart';
 export 'report/index.dart';
-export 'contact.dart';

@@ -30,6 +30,7 @@ class BookSearchResultWidget extends StatefulWidget {
   final HoldingPreviewDao holdingPreviewDao = HoldingPreviewService(SessionPool.librarySession);
 
   final KeyClickCallback? requestQueryKeyCallback;
+
   BookSearchResultWidget(
     this.keyword, {
     Key? key,

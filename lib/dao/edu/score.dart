@@ -1,4 +1,4 @@
-import 'package:kite/entity/edu.dart';
+import 'package:kite/entity/edu/index.dart';
 
 abstract class ScoreDao {
   Future<List<Score>> getScoreList(SchoolYear year, Semester semester);

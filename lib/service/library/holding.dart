@@ -48,6 +48,7 @@ class _HoldState {
   const _HoldState(this.stateType, this.stateName);
 
   factory _HoldState.fromJson(Map<String, dynamic> json) => _$HoldStateFromJson(json);
+
   Map<String, dynamic> toJson() => _$HoldStateToJson(this);
 }
 
@@ -119,8 +120,10 @@ class _HoldingItem {
       this.inDate,
       this.singlePrice,
       this.totalPrice);
+
 // double totalLoanNum;
   factory _HoldingItem.fromJson(Map<String, dynamic> json) => _$HoldingItemFromJson(json);
+
   Map<String, dynamic> toJson() => _$HoldingItemToJson(this);
 }
 

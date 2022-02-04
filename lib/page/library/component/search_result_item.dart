@@ -8,6 +8,7 @@ class BookItemWidget extends StatelessWidget {
   final BookImageHolding bookImageHolding;
 
   final KeyClickCallback? onAuthorTap;
+
   const BookItemWidget(this.bookImageHolding, {Key? key, this.onAuthorTap}) : super(key: key);
 
   /// 构造图书封皮预览图片

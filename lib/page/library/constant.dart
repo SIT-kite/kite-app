@@ -3,6 +3,7 @@ class Saying {
   final String sayer;
 
   const Saying(this.text, this.sayer);
+
   static const List<Saying> sayings = [
     Saying('书籍是人类思想的宝库', '乌申斯基'),
     Saying('读书百遍，其义自见', '《三国志》'),

@@ -3,7 +3,7 @@ import 'package:kite/entity/report.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:kite/page/home/item.dart';
+import 'package:kite/page/home/item/item.dart';
 import 'package:kite/service/report/report.dart';
 
 class ReportItem extends StatefulWidget {

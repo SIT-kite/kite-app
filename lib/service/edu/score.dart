@@ -1,6 +1,6 @@
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:kite/dao/edu/index.dart';
-import 'package:kite/entity/edu.dart';
+import 'package:kite/entity/edu/index.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/session/abstract_session.dart';
 

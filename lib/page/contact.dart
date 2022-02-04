@@ -18,6 +18,7 @@ List<ContactData> _contactData = StoragePool.contactData.getAllBydepartmentDesc(
 
 class ContactPage extends StatefulWidget {
   const ContactPage({Key? key}) : super(key: key);
+
   @override
   _ContactPageState createState() => _ContactPageState();
 }

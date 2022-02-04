@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:kite/entity/office.dart';
+import 'package:kite/entity/office/index.dart';
 
 import '../../session/office_session.dart';
 

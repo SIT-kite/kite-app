@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kite/entity/edu.dart';
+import 'package:kite/entity/edu/index.dart';
 import 'package:kite/page/timetable/bottom_sheet.dart';
 import 'package:kite/util/edu/icon.dart';
 
@@ -212,13 +212,13 @@ class _DailyTimetableState extends State<DailyTimetable> {
                               ),
                             ),
                             Expanded(
-                                flex: 1,
-                                child:Text(
-                                  course.place.toString(),
-                                  textAlign: TextAlign.right,
-                                  softWrap: true,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
+                              flex: 1,
+                              child: Text(
+                                course.place.toString(),
+                                textAlign: TextAlign.right,
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                           ],
                         ),

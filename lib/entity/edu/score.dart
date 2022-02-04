@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kite/service/edu/util.dart';
 
-import '../edu.dart';
+import 'index.dart';
 
 part 'score.g.dart';
 

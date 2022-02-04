@@ -1,5 +1,5 @@
 import 'package:kite/dao/edu/timetable.dart';
-import 'package:kite/entity/edu.dart';
+import 'package:kite/entity/edu/index.dart';
 import 'package:kite/mock/edu/timetable.dart';
 
 import '../mock_util.dart';

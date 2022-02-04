@@ -4,6 +4,7 @@ import 'package:kite/entity/library/search_history.dart';
 
 class SearchHistoryStorage implements SearchHistoryDao {
   final Box<LibrarySearchHistoryItem> box;
+
   const SearchHistoryStorage(this.box);
 
   @override

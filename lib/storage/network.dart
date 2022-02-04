@@ -10,11 +10,13 @@ class NetworkSettingStorage implements NetworkSettingDao {
 
   @override
   String get proxy => box.get(NetworkKeys.networkProxy, defaultValue: '');
+
   @override
   set proxy(String foo) => box.put(NetworkKeys.networkProxy, foo);
 
   @override
   bool get useProxy => box.get(NetworkKeys.networkUseProxy, defaultValue: false);
+
   @override
   set useProxy(bool foo) {
     Log.info('使用代理：$foo');

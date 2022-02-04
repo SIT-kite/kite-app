@@ -32,6 +32,7 @@ class CampusCardRecord {
 
 class CampusCardPage extends StatefulWidget {
   final CampusCardDao campusCardDao = CampusCardService(SessionPool.ssoSession);
+
   CampusCardPage({Key? key}) : super(key: key);
 
   @override

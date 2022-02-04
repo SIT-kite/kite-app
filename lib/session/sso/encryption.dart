@@ -19,10 +19,12 @@ String rds(int num) {
 class MyEncrypt {
   Key? _key;
   IV? _iv;
+
   MyEncrypt(String key, String iv) {
     _key = Key.fromUtf8(key);
     _iv = IV.fromUtf8(iv);
   }
+
   String aesEncrypt(String content) {
     return Encrypter(
       AES(

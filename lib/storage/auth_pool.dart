@@ -4,6 +4,7 @@ import 'package:kite/entity/auth_item.dart';
 
 class AuthPoolStorage implements AuthPoolDao {
   final Box<AuthItem> box;
+
   const AuthPoolStorage(this.box);
 
   @override

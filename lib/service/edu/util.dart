@@ -1,4 +1,4 @@
-import 'package:kite/entity/edu.dart';
+import 'package:kite/entity/edu/index.dart';
 
 String semesterToFormField(Semester semester) {
   const mapping = {

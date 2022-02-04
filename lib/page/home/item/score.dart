@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kite/global/event_bus.dart';
-import 'package:kite/page/home/item.dart';
+import 'package:kite/page/home/item/item.dart';
 
 class ScoreItem extends StatefulWidget {
   const ScoreItem({Key? key}) : super(key: key);

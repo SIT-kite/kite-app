@@ -6,6 +6,7 @@ class SuggestionItemView extends StatefulWidget {
   final SuggestionItemTap? onItemTap;
   final List<String> titleItems;
   final int limitLength;
+
   const SuggestionItemView({
     Key? key,
     this.onItemTap,
@@ -19,6 +20,7 @@ class SuggestionItemView extends StatefulWidget {
 
 class _SuggestionItemViewState extends State<SuggestionItemView> {
   bool showMore = false;
+
   Widget buildExpandButton() {
     return InkWell(
       child: Row(
@@ -79,6 +81,7 @@ class _SuggestionItemViewState extends State<SuggestionItemView> {
 class SuggestionItem extends StatefulWidget {
   final String? title;
   final GestureTapCallback? onTap;
+
   const SuggestionItem({Key? key, this.title, this.onTap}) : super(key: key);
 
   @override

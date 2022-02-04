@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/entity/expense.dart';
-import 'package:kite/page/expense/icon.dart';
 import 'package:kite/global/storage_pool.dart';
+import 'package:kite/page/expense/icon.dart';
 
 import 'chart.dart';
 
@@ -14,6 +14,7 @@ class StatisticsPage extends StatefulWidget {
 
 class _StatisticsPageState extends State<StatisticsPage> {
   int year = DateTime.now().year;
+
   // int year = 2021;
   int month = DateTime.now().month;
 
@@ -30,16 +31,13 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   List<String> _getyear(List<ExpenseRecord> _expenseBill) {
     List<String> years = [];
-    for (int year = _expenseBill.last.ts.year;
-        year <= _expenseBill.first.ts.year;
-        year++) {
+    for (int year = _expenseBill.last.ts.year; year <= _expenseBill.first.ts.year; year++) {
       years.add(year.toString());
     }
     return years;
   }
 
-  List<String> _getmonth(
-      List<ExpenseRecord> _expenseBill, List<String> years, int year) {
+  List<String> _getmonth(List<ExpenseRecord> _expenseBill, List<String> years, int year) {
     List<String> months = [];
     print(years.first == year);
     if (years.last == year.toString()) {
@@ -60,13 +58,11 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   List<Widget> _buildClassifiedStat() {
     // 各分类下消费的统计
-    List<double> sumByClassification =
-        List.filled(ExpenseType.values.length, 0.0);
+    List<double> sumByClassification = List.filled(ExpenseType.values.length, 0.0);
     for (final line in _filterExpense()) {
       sumByClassification[line.type.index] += line.amount;
     }
-    double sum = sumByClassification.fold(
-        0.0, (previousValue, element) => previousValue += element);
+    double sum = sumByClassification.fold(0.0, (previousValue, element) => previousValue += element);
 
     return ExpenseType.values.map(
       (expenseType) {
@@ -79,16 +75,12 @@ class _StatisticsPageState extends State<StatisticsPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(expenseTypeMapping[expenseType]!, textScaleFactor: 1.2),
-              Text('  ${(percentage * 100).toStringAsFixed(2)} %',
-                  textScaleFactor: 1.1),
+              Text('  ${(percentage * 100).toStringAsFixed(2)} %', textScaleFactor: 1.1),
             ],
           ),
           subtitle: LinearProgressIndicator(value: percentage),
           // 下方 SizedBox 用于限制文字宽度, 使左侧进度条的右端对齐.
-          trailing: SizedBox(
-              width: 80,
-              child: Text('￥${sumInType.toStringAsFixed(2)}',
-                  textScaleFactor: 1.2)),
+          trailing: SizedBox(width: 80, child: Text('￥${sumInType.toStringAsFixed(2)}', textScaleFactor: 1.2)),
           dense: true,
         );
       },
@@ -101,26 +93,21 @@ class _StatisticsPageState extends State<StatisticsPage> {
     List<String> months = _getmonth(_expenseBill, years, year);
 
     // TODO: 年月不超过当前日期.
-    final yearWidgets =
-        years.map((e) => PopupMenuItem(value: e, child: Text(e))).toList();
-    final monthWidgets =
-        months.map((e) => PopupMenuItem(value: e, child: Text(e))).toList();
+    final yearWidgets = years.map((e) => PopupMenuItem(value: e, child: Text(e))).toList();
+    final monthWidgets = months.map((e) => PopupMenuItem(value: e, child: Text(e))).toList();
 
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Row(
         children: <Widget>[
           PopupMenuButton(
-            onSelected: (String value) =>
-                setState(() => year = int.parse(value)),
+            onSelected: (String value) => setState(() => year = int.parse(value)),
             child: Text('$year 年', textScaleFactor: 1.5),
             itemBuilder: (_) => yearWidgets,
           ),
           PopupMenuButton(
-            onSelected: (String value) => setState(() => {
-                  month = int.parse(value),
-                  months = _getmonth(_expenseBill, years, year)
-                }),
+            onSelected: (String value) =>
+                setState(() => {month = int.parse(value), months = _getmonth(_expenseBill, years, year)}),
             child: Text('$month 月', textScaleFactor: 1.5),
             itemBuilder: (_) => monthWidgets,
           ),
@@ -131,23 +118,18 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   // TODO: 这个函数应该放在 DAO 或 service
   List<ExpenseRecord> _filterExpense() {
-    return _expenseBill
-        .where(
-            (element) => element.ts.year == year && element.ts.month == month)
-        .toList();
+    return _expenseBill.where((element) => element.ts.year == year && element.ts.month == month).toList();
   }
 
   static int _getDayCountOfMonth(int year, int month) {
-    final int daysFeb =
-        (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)) ? 29 : 28;
+    final int daysFeb = (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)) ? 29 : 28;
     List<int> days = [31, daysFeb, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     return days[month - 1];
   }
 
   Widget _buildChartView() {
     // 得到该年该月有多少天, 生成数组记录每一天的消费.
-    final List<double> daysAmount =
-        List.filled(_getDayCountOfMonth(year, month), 0.00);
+    final List<double> daysAmount = List.filled(_getDayCountOfMonth(year, month), 0.00);
     // 便利该月消费情况, 加到上述统计列表中.
     _filterExpense().forEach((e) => daysAmount[e.ts.day - 1] += e.amount);
 
@@ -162,16 +144,12 @@ class _StatisticsPageState extends State<StatisticsPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const Padding(
-              padding:
-                  EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
+              padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
               child: Text('支出对比', textScaleFactor: 1.2),
             ),
             // const SizedBox(height: 5),
             Center(
-              child: SizedBox(
-                  height: width * 0.5,
-                  width: width,
-                  child: ExpenseChart(daysAmount)),
+              child: SizedBox(height: width * 0.5, width: width, child: ExpenseChart(daysAmount)),
             ),
             const SizedBox(height: 14),
           ],

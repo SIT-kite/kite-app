@@ -4,7 +4,9 @@ import 'package:hive/hive.dart';
 /// 实现Hive数据库到flutter_settings_screens库的兼容层
 class HiveCacheProvider implements CacheProvider {
   final Box<dynamic> box;
+
   const HiveCacheProvider(this.box);
+
   @override
   bool? containsKey(String key) {
     box.containsKey(key);

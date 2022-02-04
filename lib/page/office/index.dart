@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:kite/entity/office.dart';
+import 'package:kite/entity/office/index.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/service/office/index.dart';
 
-import 'office/detail.dart';
-import 'office/message.dart';
+import 'detail.dart';
+import 'message.dart';
 
 // 本科生常用功能列表
 final Set<String> commonUse = <String>{

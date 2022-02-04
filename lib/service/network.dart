@@ -10,6 +10,7 @@ class CheckStatusResult {
   // 1表示已登录
   // 0表示未登录
   final int result;
+
   // 当前的校园网ip
   @JsonKey(name: 'v46ip')
   final String ip;
@@ -18,26 +19,31 @@ class CheckStatusResult {
   String? uid;
 
   CheckStatusResult(this.result, this.ip, {this.uid});
-  factory CheckStatusResult.fromJson(Map<String, dynamic> json) =>
-      _$CheckStatusResultFromJson(json);
+
+  factory CheckStatusResult.fromJson(Map<String, dynamic> json) => _$CheckStatusResultFromJson(json);
+
   Map<String, dynamic> toJson() => _$CheckStatusResultToJson(this);
 }
 
 @JsonSerializable()
 class LogoutResult {
   final int result;
+
   LogoutResult(this.result);
-  factory LogoutResult.fromJson(Map<String, dynamic> json) =>
-      _$LogoutResultFromJson(json);
+
+  factory LogoutResult.fromJson(Map<String, dynamic> json) => _$LogoutResultFromJson(json);
+
   Map<String, dynamic> toJson() => _$LogoutResultToJson(this);
 }
 
 @JsonSerializable()
 class LoginResult {
   final int result;
+
   const LoginResult(this.result);
-  factory LoginResult.fromJson(Map<String, dynamic> json) =>
-      _$LoginResultFromJson(json);
+
+  factory LoginResult.fromJson(Map<String, dynamic> json) => _$LoginResultFromJson(json);
+
   Map<String, dynamic> toJson() => _$LoginResultToJson(this);
 }
 
@@ -48,8 +54,7 @@ class Network {
   static const _checkStatusUrl = _drcomUrl + '/chkstatus';
   static const _logoutUrl = _drcomUrl + '/logout';
 
-  static Future<Map<String, dynamic>> _get(String url,
-      {Map<String, dynamic>? queryParameters}) async {
+  static Future<Map<String, dynamic>> _get(String url, {Map<String, dynamic>? queryParameters}) async {
     var response = await Dio().get(
       url,
       queryParameters: queryParameters,

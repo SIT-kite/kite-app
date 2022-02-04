@@ -1,7 +1,7 @@
-export 'edu/evaluation.dart';
-export 'edu/exam.dart';
-export 'edu/score.dart';
-export 'edu/timetable.dart';
+export 'evaluation.dart';
+export 'exam.dart';
+export 'score.dart';
+export 'timetable.dart';
 
 enum Semester {
   all,

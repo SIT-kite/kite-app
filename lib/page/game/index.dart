@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kite/page/game/old_game/game_list.dart';
 
-import 'game/game_2048/index.dart';
-import 'game/old_game/game_list.dart';
+import 'game_2048/index.dart';
+import 'old_game/game_list.dart';
 
 class GamePage extends StatelessWidget {
   const GamePage({Key? key}) : super(key: key);

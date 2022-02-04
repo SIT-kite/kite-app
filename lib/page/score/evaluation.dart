@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kite/entity/edu.dart';
+import 'package:kite/entity/edu/index.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 

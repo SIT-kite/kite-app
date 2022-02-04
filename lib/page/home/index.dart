@@ -12,12 +12,12 @@ import 'package:kite/util/network.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-import '../global/quick_button.dart';
-import 'home/background.dart';
-import 'home/drawer.dart';
-import 'home/greeting.dart';
-import 'home/group.dart';
-import 'home/item.dart';
+import '../../global/quick_button.dart';
+import 'background.dart';
+import 'drawer.dart';
+import 'greeting.dart';
+import 'group.dart';
+import 'item/item.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

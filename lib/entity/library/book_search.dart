@@ -63,8 +63,8 @@ class Book {
   String publisher;
   String publishDate;
   String callNo;
-  Book(this.bookId, this.isbn, this.title, this.author, this.publisher,
-      this.publishDate, this.callNo);
+
+  Book(this.bookId, this.isbn, this.title, this.author, this.publisher, this.publishDate, this.callNo);
 
   @override
   String toString() {
@@ -79,8 +79,7 @@ class BookSearchResult {
   int totalPages;
   List<Book> books;
 
-  BookSearchResult(this.resultCount, this.useTime, this.currentPage,
-      this.totalPages, this.books);
+  BookSearchResult(this.resultCount, this.useTime, this.currentPage, this.totalPages, this.books);
 
   @override
   String toString() {

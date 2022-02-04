@@ -79,6 +79,7 @@ class KiteSession extends ASession {
 class KiteApiError implements Exception {
   final int code;
   final String? msg;
+
   const KiteApiError(this.code, this.msg);
 
   @override
@@ -90,6 +91,7 @@ class KiteApiError implements Exception {
 /// 服务器数据返回格式有误
 class KiteApiFormatError implements Exception {
   final dynamic responseData;
+
   const KiteApiFormatError(this.responseData);
 
   @override

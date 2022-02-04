@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kite/page/home/item.dart';
+import 'package:kite/page/home/item/item.dart';
 import 'package:kite/util/upgrade.dart';
 import 'package:kite/util/url_launcher.dart';
 

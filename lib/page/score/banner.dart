@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kite/entity/edu.dart';
+import 'package:kite/entity/edu/index.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/util/edu/gpa.dart';
 

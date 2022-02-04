@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/entity/kite/notice.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/session_pool.dart';
-import 'package:kite/page/home/item.dart';
+import 'package:kite/page/home/item/item.dart';
 import 'package:kite/service/kite/index.dart';
 
 class NoticeItem extends StatefulWidget {

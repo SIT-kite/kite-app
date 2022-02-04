@@ -30,15 +30,13 @@ class DioUtils {
   }
 
   // ignore: non_constant_identifier_names
-  static Options NON_REDIRECT_OPTION_WITH_FORM_TYPE_AND_HEADER(
-          Map<String, dynamic> header) =>
-      Options(
-          headers: header,
-          contentType: Headers.formUrlEncodedContentType,
-          followRedirects: false,
-          validateStatus: (status) {
-            return status! < 400;
-          });
+  static Options NON_REDIRECT_OPTION_WITH_FORM_TYPE_AND_HEADER(Map<String, dynamic> header) => Options(
+      headers: header,
+      contentType: Headers.formUrlEncodedContentType,
+      followRedirects: false,
+      validateStatus: (status) {
+        return status! < 400;
+      });
 
   static Future<Response> processRedirect(Dio dio, Response response) async {
     //Prevent the redirect being processed by HttpClient, with the 302 response caught manually.

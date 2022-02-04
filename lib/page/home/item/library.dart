@@ -5,7 +5,7 @@ import 'package:kite/entity/library/hot_search.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:kite/page/home/item.dart';
+import 'package:kite/page/home/item/item.dart';
 import 'package:kite/service/library/index.dart';
 
 class LibraryItem extends StatefulWidget {

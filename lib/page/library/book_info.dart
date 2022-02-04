@@ -11,6 +11,7 @@ import 'component/search_result_item.dart';
 class BookInfoPage extends StatefulWidget {
   /// 上一层传递进来的数据
   final BookImageHolding bookImageHolding;
+
   const BookInfoPage(this.bookImageHolding, {Key? key}) : super(key: key);
 
   @override

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class FakeSearchField extends StatefulWidget {
   final GestureTapCallback? onTap;
   final String suggestion;
+
   const FakeSearchField({
     Key? key,
     this.onTap,

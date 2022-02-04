@@ -4,7 +4,9 @@ import 'package:kite/storage/constants.dart';
 
 class AuthSettingStorage implements AuthSettingDao {
   final Box<dynamic> box;
+
   AuthSettingStorage(this.box);
+
   @override
   String? get currentUsername => box.get(AuthKeys.currentUsername);
 
