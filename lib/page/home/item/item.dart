@@ -24,6 +24,7 @@ export 'electricity.dart';
 export 'expense.dart';
 export 'library.dart';
 export 'mail.dart';
+export 'night.dart';
 export 'notice.dart';
 export 'office.dart';
 export 'report.dart';

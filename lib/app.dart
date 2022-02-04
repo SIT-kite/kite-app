@@ -46,6 +46,7 @@ final _routes = {
   '/contact': (context) => const ContactPage(),
   '/bulletin': (context) => const BulletinPage(),
   '/mail': (context) => MailPage(),
+  '/night': (context) => NightPage(),
 };
 
 class KiteApp extends StatelessWidget {

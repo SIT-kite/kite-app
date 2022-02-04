@@ -29,6 +29,7 @@ export 'library/index.dart';
 export 'login.dart';
 export 'mail/index.dart';
 export 'market.dart';
+export 'night/index.dart';
 export 'notice.dart';
 export 'office/index.dart';
 export 'report.dart';

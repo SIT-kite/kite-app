@@ -137,10 +137,10 @@ class _HomePageState extends State<HomePage> {
         LibraryItem(),
         OfficeItem(),
         BulletinItem(),
-        MailItem(),
       ]),
       SizedBox(height: 20.h),
       HomeItemGroup([
+        const NightItem(),
         HomeItem(route: '/contact', icon: 'assets/home/icon_contact.svg', title: '常用电话', subtitle: '学校和学院各部门电话'),
         HomeItem(route: '/game', icon: 'assets/home/icon_game.svg', title: '小游戏', subtitle: '放松一下'),
         HomeItem(route: '/wiki', icon: 'assets/home/icon_wiki.svg', title: 'Wiki', subtitle: '上应大生存指南'),
