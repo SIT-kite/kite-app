@@ -63,12 +63,11 @@ class KiteApp extends StatelessWidget {
   }
 
   ThemeData _buildTheme(Color primaryColor, bool isDark) {
-    if (isDark) {
-      return ThemeData.dark();
-    } else {
-      final themeData = ThemeData(primaryColor: primaryColor, primarySwatch: _createThemeSwatch(primaryColor));
-      return themeData;
-    }
+    return ThemeData(
+      colorSchemeSeed: primaryColor,
+      brightness: isDark ? Brightness.dark : Brightness.light,
+      useMaterial3: true,
+    );
   }
 
   @override
