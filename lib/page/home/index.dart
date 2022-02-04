@@ -132,6 +132,7 @@ class _HomePageState extends State<HomePage> {
       SizedBox(height: 20.h),
       const HomeItemGroup([
         ElectricityItem(),
+        EventItem(),
         ExpenseItem(),
         ScoreItem(),
         LibraryItem(),
