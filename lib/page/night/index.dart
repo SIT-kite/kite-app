@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'constant.dart';
+import 'publish.dart';
 
 class NightPage extends StatelessWidget {
   const NightPage({Key? key}) : super(key: key);
@@ -48,7 +49,9 @@ class NightPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.create),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const PublishPage()));
+        },
       ),
       body: Stack(children: [
         // Background image.

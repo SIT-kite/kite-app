@@ -15,3 +15,56 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import 'package:flutter/material.dart';
+
+class PublishPage extends StatefulWidget {
+  const PublishPage({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _PublishPageState();
+}
+
+class _PublishPageState extends State<PublishPage> {
+  Widget _buildTextField() {
+    final textSize = Theme.of(context).textTheme.headline1?.fontSize;
+    final textStyle = TextStyle(fontFamily: 'calligraphy', color: Colors.grey, fontSize: textSize);
+
+    return TextField(
+      maxLines: null,
+      expands: true,
+      style: textStyle,
+      maxLength: 100,
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        contentPadding: const EdgeInsets.all(10),
+        hintStyle: textStyle,
+        hintText: '这一刻，你有什么想说的',
+        filled: true,
+        fillColor: Colors.grey[200],
+      ),
+    );
+  }
+
+  Widget _buildButtonBar() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        IconButton(onPressed: () {}, icon: const Icon(Icons.send)),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('说两句')),
+      body: Column(
+        children: [
+          Expanded(child: _buildTextField()),
+          _buildButtonBar(),
+        ],
+      ),
+    );
+  }
+}
