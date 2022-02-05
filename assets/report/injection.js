@@ -1,24 +1,33 @@
-if (typeof(runFlag) === 'undefined') {
+if (typeof runFlag === 'undefined') {
+
   runFlag = true;
+  console.info('Initializing injection.js');
 
-  (function () {
-    let userName = '{username}';
-    let loginPage = 'http://xgfy.sit.edu.cn/h5/#/';
-    let homePage = 'http://xgfy.sit.edu.cn/h5/#/pages/index/index';
+  const userName = '{username}';
 
-    const goHome = () => window.location.href = homePage;
-    const isLogin = () => localStorage.getItem('loginIn') === '1';
-    const login = () => {
-        const info = {'code': userName};
-        localStorage.setItem('userInfo', JSON.stringify(info));
-        localStorage.setItem('loginIn', '1');
-        console.info('LocalStorage is set.');
-    };
+  // const prefix = 'http://xgfy.sit.edu.cn/h5/';
+  const routes = {
+    login: '#/',
+    home:  '#/pages/index/index'
+  }; /*
+    report:        "#/pages/index/jksb",
+    studentReport: "#/pages/index/studentReport",
+    yimiaon:       "#/pages/index/yimiaon",
+  */
 
-    console.info('Initializing injection.js');
-    if (window.location == loginPage && !isLogin()) {
-      login();
-      goHome();
-    }
-  })();
+  const goHome = () => location.hash = routes.home;
+  const isLoginPage = () => location.hash === routes.login;
+  const isLogin = () => localStorage.getItem('loginIn') === '1';
+  const login = () => {
+      const userInfo = JSON.stringify({ code: userName });
+      localStorage.setItem('userInfo', userInfo);
+      localStorage.setItem('loginIn', '1');
+      console.info('LocalStorage login set');
+  };
+
+  if (isLoginPage() && !isLogin()) {
+    login();
+    goHome();
+  }
+
 }

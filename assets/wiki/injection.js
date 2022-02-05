@@ -1,16 +1,27 @@
-if (typeof(runFlag) === 'undefined') {
+if (typeof runFlag === 'undefined') {
+
   runFlag = true;
+  console.info('Initializing injection.js');
 
-  document.addEventListener("DOMContentLoaded", (function () {
-    let index = 'https://cdn.kite.sunnysab.cn/wiki/';
+  const index = 'https://cdn.kite.sunnysab.cn/wiki/';
+  const primaryColor = 'blue';
 
-    console.info('Initializing injection.js');
-    if (window.location.toString().startsWith(index)) {
+  if (window.location.href.startsWith(index)) {
+
+    const onDOM = () => {
+
+      const style = document.head.appendChild(document.createElement("style"));
+
       // Hide navigation bar.
-      document.head.appendChild(document.createElement("style")).textContent = ".md-header { display: none; }";
+      style.textContent = ".md-header { display: none; }";
+
       // Set theme color.
-      var attr = 'blue';
-      document.body.setAttribute("data-md-color-primary", attr);
+      document.body.setAttribute("data-md-color-primary", primaryColor);
+
     }
-  }));
+
+    document.addEventListener("DOMContentLoaded", onDOM);
+
+  };
+
 }
