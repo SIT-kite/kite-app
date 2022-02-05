@@ -17,14 +17,38 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'constant.dart';
 
 class NightPage extends StatelessWidget {
+  const NightPage({Key? key}) : super(key: key);
+
+  Widget _buildMessage(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme.headline3?.copyWith(fontFamily: 'calligraphy');
+    return Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: 0.75.sw),
+        child: Text(getRandomly(), style: textStyle),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('晚安'),
-        ),
-        body: Stack());
+      appBar: AppBar(
+        title: const Text('晚安'),
+      ),
+      body: Stack(children: [
+        // Background image.
+        SizedBox(
+            width: 1.sw,
+            height: 1.sh,
+            child: const Image(image: AssetImage('assets/night/paper.jpg'), fit: BoxFit.cover)),
+        _buildMessage(context),
+      ]),
+    );
   }
 }

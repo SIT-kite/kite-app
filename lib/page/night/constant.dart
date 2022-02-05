@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:math';
+
 const text = [
   '缘起，在人群中，我看见你；缘灭，我看见你，在人群中。',
   '世间最珍贵的不是“得不到”和“已失去”，而是现在能把握的幸福。',
@@ -119,3 +121,8 @@ const text = [
   '当我们努力使自己变得比此时更好的时候，我们周围的一切，也会变得更好。',
   '努力做一个可爱的人。不埋怨谁，不嘲笑谁，也不羡慕谁，阳光下灿烂，风雨中奔跑，做自己的梦，走自己的路。',
 ];
+
+String getRandomly() {
+  final rand = Random().nextInt(text.length);
+  return text[rand];
+}
