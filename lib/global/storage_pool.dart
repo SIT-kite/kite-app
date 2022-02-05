@@ -49,8 +49,11 @@ import 'package:kite/storage/user_event.dart';
 import 'package:kite/util/hive_cache_provider.dart';
 import 'package:kite/util/logger.dart';
 
+import '../dao/game.dart';
+import '../entity/game.dart';
 import '../storage/auth_pool.dart';
 import '../storage/expense.dart';
+import '../storage/game.dart';
 import '../storage/library/search_history.dart';
 
 /// 本地持久化层
@@ -99,6 +102,10 @@ class StoragePool {
 
   static UserEventStorageDao get userEvent => _userEvent;
 
+  static late GameStorage _game;
+
+  static GameRecordStorageDao get gameRecord => _game;
+
   static late JwtDao _jwt;
 
   static JwtDao get jwt => _jwt;
@@ -121,6 +128,8 @@ class StoragePool {
     registerAdapter(ContactDataAdapter());
     registerAdapter(UserEventAdapter());
     registerAdapter(UserEventTypeAdapter());
+    registerAdapter(GameTypeAdapter());
+    registerAdapter(GameRecordAdapter());
   }
 
   static Future<void> init() async {
@@ -152,6 +161,9 @@ class StoragePool {
 
     final userEventStorage = await Hive.openBox<dynamic>('userEvent');
     _userEvent = UserEventStorage(userEventStorage);
+
+    final gameStorage = await Hive.openBox<dynamic>('game');
+    _game = GameStorage(gameStorage);
   }
 
   static Future<void> clear() async {
