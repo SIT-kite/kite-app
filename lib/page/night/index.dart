@@ -17,7 +17,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'constant.dart';
@@ -25,12 +24,18 @@ import 'constant.dart';
 class NightPage extends StatelessWidget {
   const NightPage({Key? key}) : super(key: key);
 
-  Widget _buildMessage(BuildContext context) {
-    final textStyle = Theme.of(context).textTheme.headline3?.copyWith(fontFamily: 'calligraphy');
+  Widget _buildMessage(BuildContext context, String content, [String author = '小风筝']) {
+    final contentStyle = Theme.of(context).textTheme.headline1?.copyWith(fontFamily: 'calligraphy');
+    final authorStyle = Theme.of(context).textTheme.headline6?.copyWith(fontFamily: 'calligraphy');
+
     return Center(
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 0.75.sw),
-        child: Text(getRandomly(), style: textStyle),
+        child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(content + '\n晚安！', style: contentStyle),
+          const SizedBox(height: 30),
+          Text(author, style: authorStyle),
+        ]),
       ),
     );
   }
@@ -41,13 +46,17 @@ class NightPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('晚安'),
       ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.create),
+        onPressed: () {},
+      ),
       body: Stack(children: [
         // Background image.
         SizedBox(
             width: 1.sw,
             height: 1.sh,
             child: const Image(image: AssetImage('assets/night/paper.jpg'), fit: BoxFit.cover)),
-        _buildMessage(context),
+        _buildMessage(context, getRandomly()),
       ]),
     );
   }
