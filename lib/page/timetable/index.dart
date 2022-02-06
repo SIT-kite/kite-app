@@ -64,15 +64,13 @@ class _TimetablePageState extends State<TimetablePage> {
           _MorePopupMenuButton(context),
         ],
       ),
-      floatingActionButton: isFloatingActionButtonShow
-          ? FloatingActionButton(
-              child: Icon(Icons.arrow_forward),
-              onPressed: () {
-                print("press goto button");
-                dailyTimeTableKey.currentState?.gotoCurrPage();
-              },
-            )
-          : null,
+      floatingActionButton: FloatingActionButton(
+        child: const Text("今", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500)),
+        onPressed: () {
+          print("press goto button");
+          dailyTimeTableKey.currentState?.gotoCurrPage();
+        },
+      ),
       body: FutureBuilder(
         builder: _buildFuture,
         future: _getData(),
