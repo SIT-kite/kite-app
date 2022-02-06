@@ -237,7 +237,7 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
               child: Container(
                 padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
-                  color: searchWay == currentSearchWay ? Colors.blue : Colors.white,
+                  color: searchWay == currentSearchWay ? primaryColor : Colors.white,
                   // border: Border.all(),
                 ),
                 child: Center(

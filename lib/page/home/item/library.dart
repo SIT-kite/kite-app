@@ -67,7 +67,7 @@ class _LibraryItemState extends State<LibraryItem> {
     final randomIndex = Random().nextInt(monthlyHot.length);
     final hotItem = monthlyHot[randomIndex];
 
-    final result = '热搜 ${hotItem.hotSearchWord} (${hotItem.count})';
+    final result = '热搜: ${hotItem.hotSearchWord} (${hotItem.count})';
     StoragePool.homeSetting.lastHotSearch = result;
     return result;
   }
