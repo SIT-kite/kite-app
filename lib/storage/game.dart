@@ -46,6 +46,11 @@ class GameStorage implements GameRecordStorageDao {
   @override
   void append(GameRecord newRecord) {
     final records = getAllRecords();
+    for (var r in records) {
+      if (r.ts == newRecord.ts) {
+        return;
+      }
+    }
     records.add(newRecord);
     box.put('record', records);
   }

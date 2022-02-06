@@ -39,7 +39,7 @@ class GameRecord {
   @HiveField(1)
   final int score;
 
-  /// 记录生成的日期
+  /// 游戏开始的时间
   @HiveField(2)
   final DateTime ts;
 

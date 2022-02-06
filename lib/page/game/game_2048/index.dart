@@ -166,13 +166,12 @@ class _GameWidgetState extends State<GameWidget> {
   }
 
   void checkGameOver() {
-    if (_game.isGameOver()) {
+    if (_game.isGameOver() && !_isGameOver) {
       _isGameOver = true;
 
       // 存储游戏记录
       final currentTime = DateTime.now();
-      final record =
-          GameRecord(GameType.game2048, _game.score, currentTime, currentTime.difference(startTime).inSeconds);
+      final record = GameRecord(GameType.game2048, _game.score, startTime, currentTime.difference(startTime).inSeconds);
       StoragePool.gameRecord.append(record);
     }
   }
