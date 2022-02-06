@@ -24,6 +24,7 @@ GlobalKey<_DailyTimetableState> dailyTimeTableKey = GlobalKey();
 
 class DailyTimetable extends StatefulWidget {
   List<Course> courseList = <Course>[];
+  // index1 -- 周数  index2 -- 天数
   Map<int, List<List<int>>> dailyCourseList = {};
   List<List<String>> dateTableList = [];
   final ValueChanged<bool> changeFloatingActionButtonShowState;
@@ -34,14 +35,13 @@ class DailyTimetable extends StatefulWidget {
   @override
   // ignore: no_logic_in_create_state
   _DailyTimetableState createState() =>
-      _DailyTimetableState(courseList: courseList, dailyCourseList: dailyCourseList, dateTableList: dateTableList, changeFloatingActionButtonShowState: changeFloatingActionButtonShowState);
+      _DailyTimetableState();
 }
 
 class _DailyTimetableState extends State<DailyTimetable> {
-  _DailyTimetableState({required this.courseList, required this.dailyCourseList, required this.dateTableList, required this.changeFloatingActionButtonShowState});
 
   PageController _pageController = PageController(initialPage: 0, viewportFraction: 1.0);
-  final ValueChanged<bool> changeFloatingActionButtonShowState;
+
 
   DateTime currTime = DateTime(2021, 12, 25);
   DateTime startTime = DateTime(2021, 9, 6);
@@ -52,16 +52,12 @@ class _DailyTimetableState extends State<DailyTimetable> {
 
   bool isShowReturnCurrDayButton = false;
 
-  // index1 -- 周数  index2 -- 天数
-  Map<int, List<List<int>>> dailyCourseList = {};
-  List<Course> courseList = <Course>[];
   List<Course> currDayCourseList = <Course>[];
   final List<int> tapped = [0, 0];
   int currTimeIndex = 0;
   bool isInitialized = false;
 
   // 周次 日期x7 月份
-  List<List<String>> dateTableList = [];
   final List<String> num2word = [
     "一",
     "二",
@@ -101,7 +97,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
           currTimeIndex = (days-6)~/7+1;
           if (_pageController.page!.toInt() != currTimeIndex){
             // 显示跳转按钮
-            changeFloatingActionButtonShowState(true);
+            widget.changeFloatingActionButtonShowState(true);
           }
         }
     });
@@ -130,8 +126,8 @@ class _DailyTimetableState extends State<DailyTimetable> {
   List<Course> _getCourseListByWeekAndDay(int weekIndex, int dayIndex) {
     print("this is getCourseListByWeekAndDay");
     List<Course> res = <Course>[];
-    for (var i in dailyCourseList[weekIndex]![dayIndex]) {
-      res.add(courseList[i]);
+    for (var i in widget.dailyCourseList[weekIndex]![dayIndex]) {
+      res.add(widget.courseList[i]);
     }
     return res;
   }
@@ -176,7 +172,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
   }
 
   Widget _buildDateTable(int weekIndex) {
-    List<String> currWeek = dateTableList[weekIndex];
+    List<String> currWeek = widget.dateTableList[weekIndex];
     return ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: 8,
