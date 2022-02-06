@@ -20,32 +20,44 @@ import 'package:kite/entity/edu/index.dart';
 import 'package:kite/page/timetable/bottom_sheet.dart';
 import 'package:kite/util/edu/icon.dart';
 
+GlobalKey<_DailyTimetableState> dailyTimeTableKey = GlobalKey();
+
 class DailyTimetable extends StatefulWidget {
   List<Course> courseList = <Course>[];
   Map<int, List<List<int>>> dailyCourseList = {};
   List<List<String>> dateTableList = [];
+  final ValueChanged<bool> changeFloatingActionButtonShowState;
 
-  DailyTimetable({Key? key, required this.courseList, required this.dailyCourseList, required this.dateTableList})
+  DailyTimetable({Key? key, required this.courseList, required this.dailyCourseList, required this.dateTableList, required this.changeFloatingActionButtonShowState})
       : super(key: key);
 
   @override
   // ignore: no_logic_in_create_state
   _DailyTimetableState createState() =>
-      _DailyTimetableState(courseList: courseList, dailyCourseList: dailyCourseList, dateTableList: dateTableList);
+      _DailyTimetableState(courseList: courseList, dailyCourseList: dailyCourseList, dateTableList: dateTableList, changeFloatingActionButtonShowState: changeFloatingActionButtonShowState);
 }
 
 class _DailyTimetableState extends State<DailyTimetable> {
-  _DailyTimetableState({required this.courseList, required this.dailyCourseList, required this.dateTableList});
+  _DailyTimetableState({required this.courseList, required this.dailyCourseList, required this.dateTableList, required this.changeFloatingActionButtonShowState});
+
+  PageController _pageController = PageController(initialPage: 0, viewportFraction: 1.0);
+  final ValueChanged<bool> changeFloatingActionButtonShowState;
+
+  DateTime currTime = DateTime(2021, 12, 25);
+  DateTime startTime = DateTime(2021, 9, 6);
 
   static const String courseIconPath = 'assets/course/';
   bool firstOpen = true;
   late Size _deviceSize;
+
+  bool isShowReturnCurrDayButton = false;
 
   // index1 -- 周数  index2 -- 天数
   Map<int, List<List<int>>> dailyCourseList = {};
   List<Course> courseList = <Course>[];
   List<Course> currDayCourseList = <Course>[];
   final List<int> tapped = [0, 0];
+  int currTimeIndex = 0;
   bool isInitialized = false;
 
   // 周次 日期x7 月份
@@ -75,15 +87,52 @@ class _DailyTimetableState extends State<DailyTimetable> {
     null: "XXX"
   };
 
+  @override
+  void initState() {
+    super.initState();
+    int days = currTime.difference(startTime).inDays;
+    currTimeIndex = (days-6)~/7+1;
+    // print(-2~/7);
+    //监听滚动事件，打印滚动位置
+    _pageController.addListener(() {
+        // 相差时间超过一周 就需要跳转
+        print(_pageController.page)                        ;
+        if (days > 5){
+          currTimeIndex = (days-6)~/7+1;
+          if (_pageController.page!.toInt() != currTimeIndex){
+            // 显示跳转按钮
+            changeFloatingActionButtonShowState(true);
+          }
+        }
+    });
+  }
+
+  void gotoCurrPage(){
+    print(currTimeIndex);
+    // _pageController.animateToPage(currTimeIndex,
+    //     duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
+    _pageController.jumpToPage(currTimeIndex);
+    setState(() {
+      tapped[0] = currTimeIndex;
+      tapped[1] = 0;
+      currDayCourseList = _getCourseListByWeekAndDay(tapped[0], tapped[1]);
+    });
+    // changeFloatingActionButtonShowState(false);
+  }
+
+  @override
+  void dispose() {
+    //为了避免内存泄露，需要调用_controller.dispose
+    _pageController.dispose();
+    super.dispose();
+  }
+
   List<Course> _getCourseListByWeekAndDay(int weekIndex, int dayIndex) {
+    print("this is getCourseListByWeekAndDay");
     List<Course> res = <Course>[];
-    print(weekIndex);
-    print(dayIndex);
     for (var i in dailyCourseList[weekIndex]![dayIndex]) {
       res.add(courseList[i]);
     }
-    print("this is getCourseListByWeekAndDay");
-    print(res);
     return res;
   }
 
@@ -94,8 +143,9 @@ class _DailyTimetableState extends State<DailyTimetable> {
       firstOpen = false;
     }
     _deviceSize = MediaQuery.of(context).size;
+    print("currDayCourseList");
     return PageView.builder(
-      controller: PageController(viewportFraction: 1.0),
+      controller: _pageController,
       scrollDirection: Axis.horizontal,
       itemCount: 20,
       // index 从0开始
@@ -156,7 +206,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
                           setState(() {
                             tapped[0] = weekIndex;
                             tapped[1] = index - 1;
-                            print("tapped");
+                            print("tapped on:"+tapped.toString());
                             currDayCourseList = _getCourseListByWeekAndDay(weekIndex, index - 1);
                           });
                         },

@@ -33,16 +33,30 @@ class TimetablePage extends StatefulWidget {
 class _TimetablePageState extends State<TimetablePage> {
   TimetableDao timetableDaoService = TimetableService(SessionPool.eduSession);
   final SchoolYear currSchoolYear = const SchoolYear(2021);
-  final currSemester = Semester.secondTerm;
+  final currSemester = Semester.firstTerm;
   Map<int, List<List<int>>> dailyCourseList = {};
   List<Course> courseList = <Course>[];
   List<List<String>> dateTableList = [];
-  DateTime startTime = DateTime(2022, 2, 14);
+  DateTime startTime = DateTime(2021, 9, 6);
   static const int maxWeekCount = 20;
   bool isRefresh = false;
+  bool isFloatingActionButtonShow = false;
+  DateTime currTime = DateTime(2022, 12, 25);
 
   @override
   Widget build(BuildContext context) {
+    int days = currTime.difference(startTime).inDays;
+    int currTimeIndex;
+    if (days > 5){
+      currTimeIndex = (days-6)~/7+1;
+      if (0 != currTimeIndex){
+        // 显示跳转按钮
+        print("changeFloatingActionButtonShowState");
+        setState(() {
+          isFloatingActionButtonShow = true;
+        });
+      }
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text("课程表"),
@@ -50,11 +64,26 @@ class _TimetablePageState extends State<TimetablePage> {
           _MorePopupMenuButton(context),
         ],
       ),
+      floatingActionButton: isFloatingActionButtonShow
+          ? FloatingActionButton(
+              child: Icon(Icons.arrow_forward),
+              onPressed: () {
+                print("press goto button");
+                dailyTimeTableKey.currentState?.gotoCurrPage();
+              },
+            )
+          : null,
       body: FutureBuilder(
         builder: _buildFuture,
         future: _getData(),
       ),
     );
+  }
+
+  void changeFloatingActionButtonShowState(bool isShow) {
+    setState(() {
+      isFloatingActionButtonShow = isShow;
+    });
   }
 
   Future<void> _getData() async {
@@ -133,7 +162,7 @@ class _TimetablePageState extends State<TimetablePage> {
         return Text("Error: ${snapshot.error}");
       } else {
         // 请求成功，显示数据
-        return DailyTimetable(courseList: courseList, dailyCourseList: dailyCourseList, dateTableList: dateTableList);
+        return DailyTimetable(key:dailyTimeTableKey, courseList: courseList, dailyCourseList: dailyCourseList, dateTableList: dateTableList, changeFloatingActionButtonShowState: changeFloatingActionButtonShowState);
       }
     } else {
       // 请求未结束，显示loading
