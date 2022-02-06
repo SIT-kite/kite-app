@@ -27,6 +27,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/entity/game.dart';
 import 'package:kite/global/storage_pool.dart';
 
+import 'history.dart';
 import 'logic.dart';
 
 final boxColors = <int, Color>{
@@ -50,6 +51,13 @@ class Game2048Page extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('2048'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HistoryPage()));
+              },
+              icon: const Icon(Icons.history))
+        ],
       ),
       body: const GameWidget(),
     );

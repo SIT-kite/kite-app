@@ -101,6 +101,7 @@ flutter:
     - assets/timetable/
     - assets/course/
     - assets/night/
+    - assets/game/
 
   fonts:
     # Iconfont for ywb.sit.edu.cn
