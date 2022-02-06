@@ -116,6 +116,9 @@ class BulletinService extends AService implements BulletinDao {
   }
 
   Future<List<BulletinRecord>> queryBulletinListInAllCategory(int page) async {
+    // Make sure login.
+    await session.get('https://myportal.sit.edu.cn/');
+
     final catalogues = getAllCatalogues();
     final futureResult = await Future.wait(catalogues.map((e) => queryBulletinList(page, e.id)));
 
