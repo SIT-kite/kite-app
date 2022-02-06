@@ -40,23 +40,10 @@ class _TimetablePageState extends State<TimetablePage> {
   DateTime startTime = DateTime(2021, 9, 6);
   static const int maxWeekCount = 20;
   bool isRefresh = false;
-  bool isFloatingActionButtonShow = false;
   DateTime currTime = DateTime(2022, 12, 25);
 
   @override
   Widget build(BuildContext context) {
-    int days = currTime.difference(startTime).inDays;
-    int currTimeIndex;
-    if (days > 5){
-      currTimeIndex = (days-6)~/7+1;
-      if (0 != currTimeIndex){
-        // 显示跳转按钮
-        print("changeFloatingActionButtonShowState");
-        setState(() {
-          isFloatingActionButtonShow = true;
-        });
-      }
-    }
     return Scaffold(
       appBar: AppBar(
         title: const Text("课程表"),
@@ -78,11 +65,6 @@ class _TimetablePageState extends State<TimetablePage> {
     );
   }
 
-  void changeFloatingActionButtonShowState(bool isShow) {
-    setState(() {
-      isFloatingActionButtonShow = isShow;
-    });
-  }
 
   Future<void> _getData() async {
     if (isRefresh) {
@@ -160,7 +142,11 @@ class _TimetablePageState extends State<TimetablePage> {
         return Text("Error: ${snapshot.error}");
       } else {
         // 请求成功，显示数据
-        return DailyTimetable(key:dailyTimeTableKey, courseList: courseList, dailyCourseList: dailyCourseList, dateTableList: dateTableList, changeFloatingActionButtonShowState: changeFloatingActionButtonShowState);
+        return DailyTimetable(
+            key: dailyTimeTableKey,
+            courseList: courseList,
+            dailyCourseList: dailyCourseList,
+            dateTableList: dateTableList);
       }
     } else {
       // 请求未结束，显示loading

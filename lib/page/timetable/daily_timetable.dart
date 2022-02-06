@@ -27,9 +27,8 @@ class DailyTimetable extends StatefulWidget {
   // index1 -- 周数  index2 -- 天数
   Map<int, List<List<int>>> dailyCourseList = {};
   List<List<String>> dateTableList = [];
-  final ValueChanged<bool> changeFloatingActionButtonShowState;
 
-  DailyTimetable({Key? key, required this.courseList, required this.dailyCourseList, required this.dateTableList, required this.changeFloatingActionButtonShowState})
+  DailyTimetable({Key? key, required this.courseList, required this.dailyCourseList, required this.dateTableList})
       : super(key: key);
 
   @override
@@ -88,19 +87,6 @@ class _DailyTimetableState extends State<DailyTimetable> {
     super.initState();
     int days = currTime.difference(startTime).inDays;
     currTimeIndex = (days-6)~/7+1;
-    // print(-2~/7);
-    //监听滚动事件，打印滚动位置
-    _pageController.addListener(() {
-        // 相差时间超过一周 就需要跳转
-        print(_pageController.page)                        ;
-        if (days > 5){
-          currTimeIndex = (days-6)~/7+1;
-          if (_pageController.page!.toInt() != currTimeIndex){
-            // 显示跳转按钮
-            widget.changeFloatingActionButtonShowState(true);
-          }
-        }
-    });
   }
 
   void gotoCurrPage(){
