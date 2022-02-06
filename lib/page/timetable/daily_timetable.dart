@@ -66,20 +66,34 @@ class _DailyTimetableState extends State<DailyTimetable> {
     "六",
     "日",
   ];
-  Map<int?, String> timeIndex2Time = {
-    6: "8:20-9:55",
-    24: "10:15-11:50",
-    96: "13:00-14:35",
-    384: "14:55-16:30",
-    30: "8:20-11:50",
-    126: "8:20-11:50 13:00-14:35",
-    510: "8:20-11:50 13:00-16:30",
-    504: "10:15-11:50 13:00-16:30",
-    480: "13:00-16:30",
-    1536: "18:00-19:35",
-    3584: "18:00-20:25",
-    4064: "13:00-20:25",
-    null: "XXX"
+
+  Map<int, String> courseStartTime={
+    1:"8:20",
+    2:"9:10",
+    3:"10:15",
+    // 由于疫情 没有课间的五分钟
+    4:"11:00",
+    5:"13:00",
+    6:"13:50",
+    7:"14:55",
+    8:"15:45",
+    9:"18:00",
+    10:"18:50",
+    11:"19:40"
+  };
+
+  Map<int, String> courseEndTime={
+    1:"9:05",
+    2:"9:55",
+    3:"11:00",
+    4:"11:45",
+    5:"13:45",
+    6:"14:35",
+    7:"15:40",
+    8:"16:30",
+    9:"18:45",
+    10:"19:35",
+    11:"20:25"
   };
 
   @override
@@ -99,7 +113,6 @@ class _DailyTimetableState extends State<DailyTimetable> {
       tapped[1] = 0;
       currDayCourseList = _getCourseListByWeekAndDay(tapped[0], tapped[1]);
     });
-    // changeFloatingActionButtonShowState(false);
   }
 
   @override
@@ -116,6 +129,32 @@ class _DailyTimetableState extends State<DailyTimetable> {
       res.add(widget.courseList[i]);
     }
     return res;
+  }
+
+  String parseCourseTimeIndex(int timeIndex){
+    // 除去首个0
+    timeIndex = timeIndex>>1;
+    int count = 1;
+    String parsedTime = "";
+    bool isConstant = false;
+    bool isAddEndTime = false;
+    while(timeIndex != 0){
+      // 当前最低位为1 并且为首次或者上一位为0
+      if ((timeIndex & 1) == 1 && isConstant == false) {
+        parsedTime += courseStartTime[count]!;
+        isConstant = true;
+      }else if (isConstant && (timeIndex & 1) == 0){
+        parsedTime += "-" + courseEndTime[count-1]! + " ";
+        isConstant = false;
+        isAddEndTime = true;
+      }
+      timeIndex = timeIndex >> 1;
+      count++;
+    }
+    if (!isAddEndTime){
+      parsedTime += "-" + courseEndTime[count-1]! + " ";
+    }
+    return parsedTime;
   }
 
   @override
@@ -220,6 +259,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
 
   Widget _buildClassCard(BuildContext context, Course course) {
     // 测试数据
+    print(course);
     List<String> detail = [course.place.toString()];
     return InkWell(
       onTap: () {},
@@ -256,7 +296,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
                                 textDirection: TextDirection.ltr,
                                 // TODO: 解析timeIndex
                                 children: [
-                                  Text(timeIndex2Time[course.timeIndex]!),
+                                  Text(parseCourseTimeIndex(course.timeIndex!)),
                                 ],
                               ),
                             ),
