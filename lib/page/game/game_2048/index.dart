@@ -24,6 +24,8 @@
 // 2022.1.14
 
 import 'package:flutter/material.dart';
+import 'package:kite/entity/game.dart';
+import 'package:kite/global/storage_pool.dart';
 
 import 'logic.dart';
 
@@ -113,6 +115,8 @@ class _GameWidgetState extends State<GameWidget> {
   final double cellPadding = 5.0;
   final EdgeInsets _gameMargin = const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 20.0);
 
+  final startTime = DateTime.now();
+
   @override
   void initState() {
     super.initState();
@@ -156,6 +160,12 @@ class _GameWidgetState extends State<GameWidget> {
   void checkGameOver() {
     if (_game.isGameOver()) {
       _isGameOver = true;
+
+      // 存储游戏记录
+      final currentTime = DateTime.now();
+      final record =
+          GameRecord(GameType.game2048, _game.score, currentTime, currentTime.difference(startTime).inSeconds);
+      StoragePool.gameRecord.append(record);
     }
   }
 
