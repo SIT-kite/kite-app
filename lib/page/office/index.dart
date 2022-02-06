@@ -15,7 +15,10 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/entity/office/index.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
@@ -25,7 +28,7 @@ import 'detail.dart';
 import 'message.dart';
 
 // 本科生常用功能列表
-final Set<String> commonUse = <String>{
+const Set<String> _commonUse = <String>{
   '121',
   '011',
   '047',
@@ -40,6 +43,19 @@ final Set<String> commonUse = <String>{
   '067',
   '059'
 };
+
+const List<Color> _iconColors = <Color>[
+  Colors.orange,
+  Colors.red,
+  Colors.blue,
+  Colors.grey,
+  Colors.black,
+  Colors.green,
+  Colors.yellow,
+  Colors.cyan,
+  Colors.purple,
+  Colors.teal,
+];
 
 class OfficePage extends StatefulWidget {
   const OfficePage({Key? key}) : super(key: key);
@@ -83,11 +99,12 @@ class _OfficePageState extends State<OfficePage> {
   }
 
   Widget _buildFunctionList(List<SimpleFunction> functionList) {
+    int count = 0;
     return ListView(
-      children: functionList
-          .where((element) => commonUse.contains(element.id) || !_enableFilter)
-          .map(buildFunctionItem)
-          .toList(),
+      children: functionList.where((element) => _commonUse.contains(element.id) || !_enableFilter).map((e) {
+        count++;
+        return buildFunctionItem(e, count <= 3);
+      }).toList(),
     );
   }
 
@@ -113,18 +130,30 @@ class _OfficePageState extends State<OfficePage> {
     );
   }
 
-  Widget buildFunctionItem(SimpleFunction function) {
-    return ListTile(
-      leading: SizedBox(height: 40, width: 40, child: Center(child: Icon(function.icon, size: 35))),
-      title: Text(function.name),
-      subtitle: Text(function.summary),
-      trailing: Text(function.count.toString()),
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => DetailPage(SessionPool.officeSession!, function)),
-        );
-      },
+  Widget buildFunctionItem(SimpleFunction function, bool hot) {
+    final colorIndex = Random().nextInt(_iconColors.length);
+    final color = _iconColors[colorIndex];
+    final trailing = hot
+        ? Row(mainAxisSize: MainAxisSize.min, children: [
+            Text(function.count.toString()),
+            SvgPicture.asset('assets/common/icon_flame.svg', width: 20, height: 20, color: Colors.orange),
+          ])
+        : Text(function.count.toString());
+
+    return Card(
+      margin: const EdgeInsets.all(8),
+      child: ListTile(
+        leading: SizedBox(height: 40, width: 40, child: Center(child: Icon(function.icon, size: 35, color: color))),
+        title: Text(function.name),
+        subtitle: Text(function.summary),
+        trailing: trailing,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => DetailPage(SessionPool.officeSession!, function)),
+          );
+        },
+      ),
     );
   }
 

@@ -102,6 +102,7 @@ flutter:
     - assets/course/
     - assets/night/
     - assets/game/
+    - assets/common/
 
   fonts:
     # Iconfont for ywb.sit.edu.cn
