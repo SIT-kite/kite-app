@@ -103,6 +103,7 @@ flutter:
     - assets/night/
     - assets/game/
     - assets/common/
+    - assets/mail/
 
   fonts:
     # Iconfont for ywb.sit.edu.cn
