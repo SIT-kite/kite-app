@@ -17,17 +17,51 @@
 */
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:intl/intl.dart';
 import 'package:kite/entity/bulletin.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/service/bulletin.dart';
 import 'package:kite/util/url_launcher.dart';
 
 class DetailPage extends StatelessWidget {
+  static final RegExp _phoneRegex = RegExp(r"(6087\d{4})");
+  static final RegExp _mobileRegex = RegExp(r"(\d{12})");
+  static final dateFormat = DateFormat('yyyy/MM/dd HH:mm');
+
   final BulletinRecord summary;
 
   const DetailPage(this.summary, {Key? key}) : super(key: key);
 
-  Widget _buildArticleBody(BulletinRecord summary) {
+  String _linkTel(String content) {
+    String t = content;
+    for (var phone in _phoneRegex.allMatches(t)) {
+      final num = phone.group(0).toString();
+      t = t.replaceAll(num, '<a href="tel://021$num">$num</a>');
+    }
+    for (var mobile in _mobileRegex.allMatches(content)) {
+      final num = mobile.group(0).toString();
+      t = t.replaceAll(num, '<a href="tel://$num">$num</a>');
+    }
+    return t;
+  }
+
+  Widget _buildArticle(BuildContext context, BulletinDetail article) {
+    final titleStyle = Theme.of(context).textTheme.headline2?.copyWith(fontWeight: FontWeight.bold);
+    final subtitleStyle = Theme.of(context).textTheme.headline4?.copyWith(color: Colors.black54);
+
+    return Column(
+      children: <Widget>[
+        Text(article.title, style: titleStyle),
+        Text('${article.department} | ${article.author}  ${dateFormat.format(article.dateTime)}', style: subtitleStyle),
+        HtmlWidget(_linkTel(article.content), onTapUrl: (url) {
+          launchInBrowser(url);
+          return true;
+        })
+      ],
+    );
+  }
+
+  Widget _buildBody(BulletinRecord summary) {
     final service = BulletinService(SessionPool.ssoSession);
     final future = service.getBulletinDetail(summary.bulletinCatalogueId, summary.uuid);
 
@@ -36,14 +70,7 @@ class DetailPage extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
-              final detail = snapshot.data!.content;
-
-              return SingleChildScrollView(
-                child: HtmlWidget(detail, onTapUrl: (url) {
-                  launchInBrowser(url);
-                  return true;
-                }),
-              );
+              return SingleChildScrollView(child: _buildArticle(context, snapshot.data!));
             } else if (snapshot.hasError) {
               return Text(snapshot.error.runtimeType.toString());
             }
@@ -55,8 +82,20 @@ class DetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('公告正文')),
-      body: Padding(padding: const EdgeInsets.all(12), child: _buildArticleBody(summary)),
+      appBar: AppBar(
+        title: const Text('公告正文'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              final url =
+                  'https://myportal.sit.edu.cn/detach.portal?action=bulletinBrowser&.ia=false&.pmn=view&.pen=${summary.bulletinCatalogueId}&bulletinId=${summary.uuid}';
+              launchInBrowser(url);
+            },
+            icon: const Icon(Icons.open_in_browser),
+          ),
+        ],
+      ),
+      body: Padding(padding: const EdgeInsets.all(12), child: _buildBody(summary)),
     );
   }
 }

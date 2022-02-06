@@ -16,6 +16,7 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:kite/entity/bulletin.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/service/bulletin.dart';
@@ -23,7 +24,26 @@ import 'package:kite/service/bulletin.dart';
 import './detail.dart';
 
 class BulletinPage extends StatelessWidget {
+  static final _dateFormat = DateFormat('yyyy/MM/dd hh:mm');
+
   const BulletinPage({Key? key}) : super(key: key);
+
+  Widget _buildBulletinItem(BuildContext context, BulletinRecord record) {
+    final titleStyle = Theme.of(context).textTheme.headline3;
+    final subtitleStyle = Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.black54);
+
+    return Card(
+      margin: const EdgeInsets.all(8),
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: ListTile(
+          title: Text(record.title, style: titleStyle),
+          subtitle: Text(record.department + ' | ' + _dateFormat.format(record.dateTime), style: subtitleStyle),
+          onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailPage(record))),
+        ),
+      ),
+    );
+  }
 
   Widget _buildBulletinList() {
     final service = BulletinService(SessionPool.ssoSession);
@@ -37,17 +57,12 @@ class BulletinPage extends StatelessWidget {
               final records = snapshot.data!;
               BulletinService.sortBulletinRecord(records);
 
-              final items = records
-                  .map((e) => ListTile(
-                        title: Text(e.title),
-                        subtitle: Text(e.department + ' | ' + e.dateTime.toString()),
-                        onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailPage(e))),
-                      ))
-                  .toList();
+              final items = records.map((e) => _buildBulletinItem(context, e)).toList();
               return SingleChildScrollView(
-                  child: Column(
-                children: items,
-              ));
+                child: Column(
+                  children: items,
+                ),
+              );
             } else if (snapshot.hasError) {
               return Center(child: Text('错误类型: ' + snapshot.error.runtimeType.toString()));
             }
