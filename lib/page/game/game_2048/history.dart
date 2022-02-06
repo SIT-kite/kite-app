@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/entity/game.dart';
 import 'package:kite/global/storage_pool.dart';
@@ -25,6 +26,19 @@ class HistoryPage extends StatelessWidget {
   static final dateFormat = DateFormat('yyyy-MM-dd hh:mm:ss');
 
   const HistoryPage({Key? key}) : super(key: key);
+
+  Widget _buildEmptyResult(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme.headline3;
+
+    return Center(
+        child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SvgPicture.asset('assets/game/empty.svg'),
+        Text('快去完成一局游戏放松一下吧~', style: textStyle),
+      ],
+    ));
+  }
 
   Widget _getGameIcon(GameType type) {
     String path;
@@ -57,13 +71,28 @@ class HistoryPage extends StatelessWidget {
     final history = StoragePool.gameRecord.getAllRecords().reversed.toList();
     final items = history.map((e) => _buildHistoryItem(context, e)).toList();
 
-    return ListView(children: items);
+    if (items.isNotEmpty) {
+      return ListView(children: items);
+    } else {
+      return _buildEmptyResult(context);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('我的记录')),
+      appBar: AppBar(
+        title: const Text('我的记录'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                StoragePool.gameRecord.deleteAll();
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(Icons.delete)),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.upload)),
+        ],
+      ),
       body: _buildHistory(context),
     );
   }
