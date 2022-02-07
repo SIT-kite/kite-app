@@ -50,6 +50,8 @@ class CourseBottomSheet extends StatelessWidget {
               Container(
                   padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
                   child: Container(
+                    alignment: const Alignment(0,0),
+                    width: _deviceSize.width * 0.82,
                     padding: const EdgeInsets.all(3),
                     decoration: const BoxDecoration(
                       color: Color.fromARGB(255, 228, 235, 245),
