@@ -38,7 +38,7 @@ class Course extends HiveObject {
   @HiveField(2)
   // 节次
   int? timeIndex;
-  @JsonKey(name: 'zcd', fromJson: _weeksToInt)
+  @JsonKey(name: 'zcd', ignore: true)
   @HiveField(3)
   // 周次
   int? week;
@@ -70,16 +70,24 @@ class Course extends HiveObject {
   @HiveField(10)
   // 课程代码
   String? courseId;
+  @JsonKey(name: 'zcd')
+  @HiveField(11)
+  // 周次
+  String? weekText;
 
   Course();
 
-  factory Course.fromJson(Map<String, dynamic> json) => _$CourseFromJson(json);
+  factory Course.fromJson(Map<String, dynamic> json){
+    Course tmpCourse = _$CourseFromJson(json);
+    tmpCourse.week = _weeksToInt(tmpCourse.weekText!);
+    return tmpCourse;
+  }
 
   Map<String, dynamic> toJson() => _$CourseToJson(this);
 
   @override
   String toString() {
-    return 'Course{courseName: $courseName, day: $day, timeIndex: $timeIndex, week: $week, place: $place, teacher: $teacher, campus: $campus, credit: $credit, hour: $hour, dynClassId: $dynClassId, courseId: $courseId}';
+    return 'Course{courseName: $courseName, day: $day, timeIndex: $timeIndex, week: $week, place: $place, teacher: $teacher, campus: $campus, credit: $credit, hour: $hour, dynClassId: $dynClassId, courseId: $courseId, weekText: $weekText}';
   }
 
   static int _transWeek(String weekDay) {
