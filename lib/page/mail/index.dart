@@ -48,7 +48,7 @@ class _MailPageState extends State<MailPage> {
 
   Future<FetchImapResult> _loadMailList() async {
     final String studentId = StoragePool.authSetting.currentUsername ?? '';
-    final String password = StoragePool.authPool.get(studentId)!.password;
+    final String password = StoragePool.mail.password ?? StoragePool.authPool.get(studentId)!.password;
 
     final email = studentId + '@mail.sit.edu.cn';
     final service = MailService(email, password);
@@ -94,6 +94,7 @@ class _MailPageState extends State<MailPage> {
             ),
             ElevatedButton(
                 onPressed: () {
+                  StoragePool.mail.password = _controller.text;
                   setState(() => _index = 0);
                 },
                 child: const Text('继续'))

@@ -25,6 +25,7 @@ import 'package:kite/dao/expense.dart';
 import 'package:kite/dao/kite/jwt.dart';
 import 'package:kite/dao/kite/user_event.dart';
 import 'package:kite/dao/library/search_history.dart';
+import 'package:kite/dao/mail.dart';
 import 'package:kite/dao/setting/auth.dart';
 import 'package:kite/dao/setting/home.dart';
 import 'package:kite/dao/setting/theme.dart';
@@ -42,6 +43,7 @@ import 'package:kite/storage/contact.dart';
 import 'package:kite/storage/electricity.dart';
 import 'package:kite/storage/home.dart';
 import 'package:kite/storage/jwt.dart';
+import 'package:kite/storage/mail.dart';
 import 'package:kite/storage/network.dart';
 import 'package:kite/storage/theme.dart';
 import 'package:kite/storage/timetable.dart';
@@ -106,6 +108,10 @@ class StoragePool {
 
   static GameRecordStorageDao get gameRecord => _game;
 
+  static late MailStorage _mail;
+
+  static MailStorageDao get mail => _mail;
+
   static late JwtDao _jwt;
 
   static JwtDao get jwt => _jwt;
@@ -164,6 +170,9 @@ class StoragePool {
 
     final gameStorage = await Hive.openBox<dynamic>('game');
     _game = GameStorage(gameStorage);
+
+    final mailStorage = await Hive.openBox<dynamic>('mail');
+    _mail = MailStorage(mailStorage);
   }
 
   static Future<void> clear() async {
@@ -173,5 +182,7 @@ class StoragePool {
     await Hive.deleteBoxFromDisk('library.search_history');
     await Hive.deleteBoxFromDisk('course');
     await Hive.deleteBoxFromDisk('expense');
+    await Hive.deleteBoxFromDisk('game');
+    await Hive.deleteBoxFromDisk('mail');
   }
 }
