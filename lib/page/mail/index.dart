@@ -22,6 +22,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/service/mail.dart';
 
+import 'item.dart';
+
 class MailPage extends StatefulWidget {
   const MailPage({Key? key}) : super(key: key);
 
@@ -57,14 +59,8 @@ class _MailPageState extends State<MailPage> {
   }
 
   Widget _buildMailList() {
-    final List<Widget> items = _messages!
-        .map(
-          (e) => ListTile(title: Text(e.decodeSubject() ?? '无主题')),
-        )
-        .toList();
-    return ListView(
-      children: items,
-    );
+    final List<Widget> items = _messages!.map((e) => MailItem(e)).toList();
+    return ListView(children: items);
   }
 
   Widget _buildInputPassword() {
