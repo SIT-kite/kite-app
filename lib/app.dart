@@ -48,6 +48,7 @@ final _routes = {
   '/mail': (context) => MailPage(),
   '/night': (context) => NightPage(),
   '/event': (context) => EventPage(),
+  '/lost-found': (context) => LostFoundPage(),
 };
 
 class KiteApp extends StatelessWidget {

@@ -28,6 +28,7 @@ export 'game/index.dart';
 export 'home/index.dart';
 export 'library/index.dart';
 export 'login.dart';
+export 'lost_found/index.dart';
 export 'mail/index.dart';
 export 'market.dart';
 export 'night/index.dart';
