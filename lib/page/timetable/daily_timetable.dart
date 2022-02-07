@@ -130,6 +130,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
     for (var i in widget.dailyCourseList[weekIndex]![dayIndex]) {
       res.add(widget.courseList[i]);
     }
+    res.sort((a, b) => (a.timeIndex!).compareTo(b.timeIndex!));
     return res;
   }
 
