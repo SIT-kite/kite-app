@@ -22,9 +22,11 @@ class CourseBottomSheet extends StatelessWidget {
   final String _courseName;
   final String _courseId;
   final String _dynClassId;
+  final String _campus;
   final List<String> _courseDetail;
 
-  CourseBottomSheet(this._deviceSize, this._courseName, this._courseId, this._dynClassId, this._courseDetail,
+  CourseBottomSheet(
+      this._deviceSize, this._courseName, this._courseId, this._dynClassId, this._campus, this._courseDetail,
       {Key? key})
       : super(key: key);
 
@@ -71,9 +73,16 @@ class CourseBottomSheet extends StatelessWidget {
                     scrollDirection: Axis.vertical,
                     // children: _courseDetail.map((detail) => _buildDetailItem(detail)).toList(),
                     children: [
-                      _buildDetailItem(context, 'courseId.png', _courseId),
-                      _buildDetailItem(context, 'dynClassId.png', _dynClassId),
-                      _buildDetailItem(context, 'campus.png', _courseDetail[0]),
+                      Column(
+                        children: [
+                          _buildDetailItem(context, 'courseId.png', _courseId),
+                          _buildDetailItem(context, 'dynClassId.png', _dynClassId),
+                          _buildDetailItem(context, 'campus.png', _campus),
+                        ],
+                      ),
+                      Column(
+                        children: _courseDetail.map((e) => _buildDetailItem(context, "day.png", e)).toList(),
+                      )
                     ],
                   )),
             ],

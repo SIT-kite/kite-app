@@ -20,6 +20,8 @@ import 'package:kite/entity/edu/index.dart';
 import 'package:kite/page/timetable/bottom_sheet.dart';
 import 'package:kite/util/edu/icon.dart';
 
+// TODO: 待测试晚上(18:00-20:25)课程渲染效果
+
 GlobalKey<_DailyTimetableState> dailyTimeTableKey = GlobalKey();
 
 class DailyTimetable extends StatefulWidget {
@@ -131,6 +133,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
     return res;
   }
 
+  // 解析出来的时间默认尾部有一个空格 eg:"13:00-16:30 "
   String parseCourseTimeIndex(int timeIndex){
     // 除去首个0
     timeIndex = timeIndex>>1;
@@ -157,8 +160,20 @@ class _DailyTimetableState extends State<DailyTimetable> {
     return parsedTime;
   }
 
+  List<String> parseCourseDetail(String courseId){
+    // 周数 星期 节次 地点
+    List<String> courseDetail = [];
+    for (Course course in widget.courseList){
+      if (course.courseId == courseId){
+        courseDetail.add(course.weekText!+" 周"+num2word[course.day!-1]+"\n"+parseCourseTimeIndex(course.timeIndex!)+course.place!);
+      }
+    }
+    return courseDetail;
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(widget.courseList);
     if (firstOpen) {
       currDayCourseList = _getCourseListByWeekAndDay(0, 0);
       firstOpen = false;
@@ -259,8 +274,13 @@ class _DailyTimetableState extends State<DailyTimetable> {
 
   Widget _buildClassCard(BuildContext context, Course course) {
     // 测试数据
+    print("buildClassCard");
     print(course);
-    List<String> detail = [course.place.toString()];
+    List<String> courseDetail = parseCourseDetail(course.courseId!);
+    // courseDetail.add("1-9周(双) 周二 13:00-16:30 一教E305");
+    // courseDetail.add("1-9周(双) 周四 8:20-9:55 综合实验楼A502");
+    // courseDetail.add("1-9周(双) 周四 8:20-9:55 奉贤实践基地");
+    // courseDetail.add("1-9周(单) 周一 13:00-16:30 一教E305(机电18中外合作专用)");
     return InkWell(
       onTap: () {},
       onTapDown: (TapDownDetails tapDownDetails) {
@@ -268,7 +288,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
             backgroundColor: Colors.transparent,
             builder: (BuildContext context) {
               return CourseBottomSheet(_deviceSize, course.courseName.toString(), course.courseId.toString(),
-                  course.dynClassId.toString(), detail);
+                  course.dynClassId.toString(), course.campus.toString(), courseDetail);
             },
             context: context);
       },
