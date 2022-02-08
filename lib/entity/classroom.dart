@@ -15,29 +15,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-export 'about.dart';
-export 'bulletin/index.dart';
-export 'campus_card.dart';
-export 'classroom/index.dart';
-export 'connectivity.dart';
-export 'contact.dart';
-export 'electricity/index.dart';
-export 'event/index.dart';
-export 'expense/index.dart';
-export 'feedback.dart';
-export 'game/index.dart';
-export 'home/index.dart';
-export 'library/index.dart';
-export 'login.dart';
-export 'lost_found/index.dart';
-export 'mail/index.dart';
-export 'market.dart';
-export 'night/index.dart';
-export 'notice.dart';
-export 'office/index.dart';
-export 'report.dart';
-export 'score/index.dart';
-export 'setting/index.dart';
-export 'timetable/index.dart';
-export 'welcome.dart';
-export 'wiki.dart';
+
+import 'package:json_annotation/json_annotation.dart';
+
+part 'classroom.g.dart';
+
+@JsonSerializable()
+class AvailableClassroom {
+  /// 空闲时间
+  final int busyTime;
+
+  /// 教室容量
+  final int? capacity;
+
+  /// 教室号
+  final String room;
+
+  AvailableClassroom(this.busyTime, this.capacity, this.room);
+
+  factory AvailableClassroom.fromJson(Map<String, dynamic> json) => _$AvailableClassroomFromJson(json);
+}

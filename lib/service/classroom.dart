@@ -15,29 +15,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-export 'about.dart';
-export 'bulletin/index.dart';
-export 'campus_card.dart';
-export 'classroom/index.dart';
-export 'connectivity.dart';
-export 'contact.dart';
-export 'electricity/index.dart';
-export 'event/index.dart';
-export 'expense/index.dart';
-export 'feedback.dart';
-export 'game/index.dart';
-export 'home/index.dart';
-export 'library/index.dart';
-export 'login.dart';
-export 'lost_found/index.dart';
-export 'mail/index.dart';
-export 'market.dart';
-export 'night/index.dart';
-export 'notice.dart';
-export 'office/index.dart';
-export 'report.dart';
-export 'score/index.dart';
-export 'setting/index.dart';
-export 'timetable/index.dart';
-export 'welcome.dart';
-export 'wiki.dart';
+
+import 'package:kite/dao/classroom.dart';
+import 'package:kite/entity/classroom.dart';
+import 'package:kite/service/abstract_service.dart';
+import 'package:kite/session/abstract_session.dart';
+
+class ClassRoomService extends AService implements ClassroomRemoteDao {
+  static const _classroomUrl = "/classroom/available";
+
+  ClassRoomService(ASession session) : super(session);
+
+  @override
+  Future<List<AvailableClassroom>> getClassRoomData(int campus, String date) async {
+    final response = await session.get('$_classroomUrl?campus=$campus&date=$date');
+    final List classrooms = response.data;
+
+    return classrooms.map((e) => AvailableClassroom.fromJson(e as Map<String, dynamic>)).toList();
+  }
+}
