@@ -18,9 +18,11 @@ class WeeklyTimetable extends StatefulWidget {
 
 class _WeeklyTimetableState extends State<WeeklyTimetable> {
   late Size _deviceSize;
-  static const double gridAspectRatioHeight = 1 / 2;
+  static const double gridAspectRatioHeight = 1 / 1.7;
   late double singleGridHeight;
   late double singleGridWidth;
+
+  final PageController _pageController = PageController(initialPage: 2, viewportFraction: 1.0);
 
   // 周次 日期x7 月份
   final List<String> num2word = [
@@ -38,27 +40,46 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
     _deviceSize = MediaQuery.of(context).size;
     singleGridHeight = _deviceSize.width * 2 / 23 / gridAspectRatioHeight;
     singleGridWidth = _deviceSize.width * 3 / 23;
-    return Column(
-      children: [
-        Expanded(flex: 1, child: _buildDateTable(1)),
-        Expanded(
-            flex: 10,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              controller: ScrollController(),
-              child: Row(
-                textDirection: TextDirection.ltr,
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: _buildLeftSectionColumn(),
-                  ),
-                  Expanded(flex: 21, child: _buildCourseGridView())
-                ],
-              ),
-            )),
-      ],
-    );
+    return PageView.builder(
+        controller: _pageController,
+        scrollDirection: Axis.horizontal,
+        itemCount: 20,
+        // index 从0开始
+        itemBuilder: (BuildContext context, int index) {
+          return Column(
+            children: [
+              Expanded(flex: 1, child: _buildDateTable(index)),
+              Expanded(
+                  flex: 10,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    controller: ScrollController(),
+                    child: Row(
+                      textDirection: TextDirection.ltr,
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: _buildLeftSectionColumn(),
+                        ),
+                        Expanded(flex: 21, child: _buildCourseGridView())
+                      ],
+                    ),
+                  )),
+            ],
+          );
+        });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    //为了避免内存泄露，需要调用_controller.dispose
+    _pageController.dispose();
+    super.dispose();
   }
 
   Widget _buildDateTable(int weekIndex) {
