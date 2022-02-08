@@ -39,5 +39,5 @@ void main() async {
   // 运行前初始化
   await initBeforeRun();
 
-  Catcher(rootWidget: Phoenix(child: const KiteApp()), debugConfig: catcherOptions, releaseConfig: catcherOptions);
+  Catcher(rootWidget: Phoenix(child: const KiteApp()), releaseConfig: catcherOptions);
 }
