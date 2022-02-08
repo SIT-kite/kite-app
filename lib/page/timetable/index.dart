@@ -21,7 +21,10 @@ import 'package:kite/entity/edu/index.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/page/timetable/daily_timetable.dart';
+import 'package:kite/page/timetable/weekly_timetable.dart';
 import 'package:kite/service/edu/index.dart';
+
+enum DisplayMode { daily, weekly }
 
 class TimetablePage extends StatefulWidget {
   const TimetablePage({Key? key}) : super(key: key);
@@ -31,9 +34,10 @@ class TimetablePage extends StatefulWidget {
 }
 
 class _TimetablePageState extends State<TimetablePage> {
+  DisplayMode displayMode = DisplayMode.weekly;
   TimetableDao timetableDaoService = TimetableService(SessionPool.eduSession);
-  final SchoolYear currSchoolYear = const SchoolYear(2021);
-  final currSemester = Semester.firstTerm;
+  final SchoolYear currSchoolYear = const SchoolYear(2020);
+  final currSemester = Semester.secondTerm;
   Map<int, List<List<int>>> dailyCourseList = {};
   List<Course> courseList = <Course>[];
   List<List<String>> dateTableList = [];
@@ -65,7 +69,6 @@ class _TimetablePageState extends State<TimetablePage> {
     );
   }
 
-
   Future<void> _getData() async {
     if (isRefresh) {
       print("refresh");
@@ -83,8 +86,8 @@ class _TimetablePageState extends State<TimetablePage> {
         courseList = await StoragePool.course.getTimetable(currSchoolYear, currSemester);
       }
     }
-    // print(courseList);
-    generateDailyTimetable();
+    print(courseList);
+    displayMode == DisplayMode.daily ? generateDailyCourse() : generateWeeklyCourse();
     generateDateTable();
   }
 
@@ -111,7 +114,7 @@ class _TimetablePageState extends State<TimetablePage> {
     }
   }
 
-  void generateDailyTimetable() {
+  void generateDailyCourse() {
     print("process courseList data");
     for (int weekIndex = 0; weekIndex < maxWeekCount; weekIndex++) {
       dailyCourseList[weekIndex] = [[], [], [], [], [], [], []];
@@ -135,6 +138,8 @@ class _TimetablePageState extends State<TimetablePage> {
     }
   }
 
+  void generateWeeklyCourse() {}
+
   Widget _buildFuture(BuildContext context, AsyncSnapshot snapshot) {
     if (snapshot.connectionState == ConnectionState.done) {
       if (snapshot.hasError) {
@@ -142,11 +147,13 @@ class _TimetablePageState extends State<TimetablePage> {
         return Text("Error: ${snapshot.error}");
       } else {
         // 请求成功，显示数据
-        return DailyTimetable(
-            key: dailyTimeTableKey,
-            courseList: courseList,
-            dailyCourseList: dailyCourseList,
-            dateTableList: dateTableList);
+        return displayMode == DisplayMode.daily
+            ? DailyTimetable(
+                key: dailyTimeTableKey,
+                courseList: courseList,
+                dailyCourseList: dailyCourseList,
+                dateTableList: dateTableList)
+            : WeeklyTimetable(courseList: courseList, dailyCourseList: dailyCourseList, dateTableList: dateTableList);
       }
     } else {
       // 请求未结束，显示loading
