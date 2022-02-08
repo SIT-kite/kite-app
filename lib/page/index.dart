@@ -18,6 +18,7 @@
 export 'about.dart';
 export 'bulletin/index.dart';
 export 'campus_card.dart';
+export 'classroom.dart';
 export 'connectivity.dart';
 export 'contact.dart';
 export 'electricity/index.dart';

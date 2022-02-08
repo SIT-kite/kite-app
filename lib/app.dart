@@ -49,6 +49,7 @@ final _routes = {
   '/night': (context) => NightPage(),
   '/event': (context) => EventPage(),
   '/lost-found': (context) => LostFoundPage(),
+  '/classroom': (context) => ClassroomPage(),
 };
 
 class KiteApp extends StatelessWidget {
