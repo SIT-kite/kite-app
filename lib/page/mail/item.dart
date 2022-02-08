@@ -20,6 +20,8 @@ import 'package:enough_mail/enough_mail.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'detail.dart';
+
 class MailItem extends StatelessWidget {
   static final dateFormat = DateFormat('MM-dd');
 
@@ -36,7 +38,7 @@ class MailItem extends StatelessWidget {
     final subjectText = _message.decodeSubject() ?? '无主题';
     final sender = _message.decodeSender();
     final senderText = sender[0].toString() + (sender.length > 1 ? '等' : '');
-    final contentText = _message.decodeTextPlainPart() ?? '无内容';
+    final contentText = _message.decodeTextPlainPart() ?? '';
     final date = _message.decodeDate();
     final dateText = date != null ? dateFormat.format(date) : '';
 
@@ -58,6 +60,9 @@ class MailItem extends StatelessWidget {
           Text(contentText, style: contentStyle, maxLines: 1, overflow: TextOverflow.ellipsis)
         ]),
         trailing: Text(dateText, style: subtitleStyle),
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (_) => DetailPage(_message)));
+        },
       ),
     );
   }
