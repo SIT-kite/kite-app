@@ -51,17 +51,20 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   List<int> _getMonth(List<ExpenseRecord> _expenseBill, List<int> years, int year) {
-    List<int> months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-    if (DateTime.now().year == year) {
-      for (int month = 1; month <= DateTime.now().month; month++) {
-        months.add(month);
+    final now = DateTime.now();
+    List<int> result = [];
+    if (now.year == year) {
+      for (int month = 1; month <= now.month; month++) {
+        result.add(month);
       }
     } else if (years.first == year) {
       for (int month = _expenseBill.last.ts.month; month <= 12; month++) {
-        months.add(month);
+        result.add(month);
       }
+    } else {
+      result = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     }
-    return months;
+    return result;
   }
 
   Widget _buildDateSelector() {
