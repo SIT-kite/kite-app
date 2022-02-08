@@ -1,20 +1,20 @@
 /*
- *    上应小风筝(SIT-kite)  便利校园，一步到位
- *    Copyright (C) 2022 上海应用技术大学 上应小风筝团队
+ * 上应小风筝(SIT-kite)  便利校园，一步到位
+ * Copyright (C) 2022 上海应用技术大学 上应小风筝团队
  *
- *    This program is free software: you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as published by
- *    the Free Software Foundation, either version 3 of the License, or
- *    (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *    You should have received a copy of the GNU General Public License
- *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 import 'package:flutter/material.dart';
 import 'package:kite/entity/edu/index.dart';
 import 'package:kite/global/event_bus.dart';
@@ -127,31 +127,26 @@ class _ScoreItemState extends State<ScoreItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: Colors.orange.shade300, width: 2)),
+    return Column(children: [
+      ListTile(
+        minLeadingWidth: 60,
+        leading: _buildLeading(),
+        title: Text(_score.course, style: const TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Text('${_score.courseId[0] != 'G' ? '必修' : '选修'} | 学分: ${_score.credit}'),
+        trailing: _buildTrailing(),
+        onTap: () => setState(() {
+          _isExpanded = !_isExpanded;
+        }),
+        onLongPress: () {
+          if (_isSelected) {
+            eventBus.emit(EventNameConstants.onRemoveCourse, _score);
+          } else {
+            eventBus.emit(EventNameConstants.onSelectCourse, _score);
+          }
+          setState(() => _isSelected = !_isSelected);
+        },
       ),
-      child: Column(children: [
-        ListTile(
-          minLeadingWidth: 60,
-          leading: _buildLeading(),
-          title: Text(_score.course, style: const TextStyle(fontWeight: FontWeight.bold)),
-          subtitle: Text('${_score.courseId[0] != 'G' ? '必修' : '选修'} | 学分: ${_score.credit}'),
-          trailing: _buildTrailing(),
-          onTap: () => setState(() {
-            _isExpanded = !_isExpanded;
-          }),
-          onLongPress: () {
-            if (_isSelected) {
-              eventBus.emit(EventNameConstants.onRemoveCourse, _score);
-            } else {
-              eventBus.emit(EventNameConstants.onSelectCourse, _score);
-            }
-            setState(() => _isSelected = !_isSelected);
-          },
-        ),
-        _isExpanded ? _buildScoreDetail() : Container()
-      ]),
-    );
+      _isExpanded ? _buildScoreDetail() : Container()
+    ]);
   }
 }

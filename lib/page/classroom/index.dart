@@ -161,9 +161,9 @@ class _ClassroomPageState extends State<ClassroomPage> {
       return ListView.separated(
         controller: ScrollController(),
         itemCount: items.length,
-        separatorBuilder: (BuildContext context, int index) =>
-            Divider(height: 1.0, color: Colors.green.withOpacity(0.4)),
-        itemBuilder: (_, int index) => items[index],
+        separatorBuilder: (context, index) =>
+            Divider(height: 1.0, color: Theme.of(context).primaryColor.withOpacity(0.4)),
+        itemBuilder: (_, index) => items[index],
       );
     }
 

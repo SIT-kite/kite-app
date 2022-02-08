@@ -1,20 +1,20 @@
 /*
- *    上应小风筝(SIT-kite)  便利校园，一步到位
- *    Copyright (C) 2022 上海应用技术大学 上应小风筝团队
+ * 上应小风筝(SIT-kite)  便利校园，一步到位
+ * Copyright (C) 2022 上海应用技术大学 上应小风筝团队
  *
- *    This program is free software: you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as published by
- *    the Free Software Foundation, either version 3 of the License, or
- *    (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *    You should have received a copy of the GNU General Public License
- *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/entity/edu/index.dart';
@@ -158,8 +158,13 @@ class _ScorePageState extends State<ScorePage> {
     ]);
   }
 
-  List<Widget> _buildListView(List<Score> scoreList) {
-    return scoreList.map((e) => ScoreItem(e)).toList();
+  Widget _buildListView(List<Score> scoreList) {
+    final list = scoreList.map((e) => ScoreItem(e)).toList();
+    return ListView.separated(
+      itemCount: list.length,
+      separatorBuilder: (context, _) => Divider(height: 2.0, color: Theme.of(context).primaryColor.withOpacity(0.4)),
+      itemBuilder: (_, index) => list[index],
+    );
   }
 
   Widget _buildNoResult() {
@@ -191,13 +196,7 @@ class _ScorePageState extends State<ScorePage> {
           Log.info(scoreList);
           return Column(children: [
             Expanded(child: _buildHeader(scoreList), flex: 1),
-            Expanded(
-                child: scoreList.isNotEmpty
-                    ? ListView(
-                        children: _buildListView(scoreList),
-                      )
-                    : _buildNoResult(),
-                flex: 10),
+            Expanded(child: scoreList.isNotEmpty ? _buildListView(scoreList) : _buildNoResult(), flex: 10),
           ]);
         }
         return const Center(child: CircularProgressIndicator());
