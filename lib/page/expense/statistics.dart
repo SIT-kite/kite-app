@@ -30,8 +30,8 @@ class StatisticsPage extends StatefulWidget {
 }
 
 class _StatisticsPageState extends State<StatisticsPage> {
-  int year = DateTime.now().year;
-  int month = DateTime.now().month;
+  int selectedYear = DateTime.now().year;
+  int selectedMonth = DateTime.now().month;
   List<ExpenseRecord> _expenseBill = [];
 
   @override
@@ -42,30 +42,109 @@ class _StatisticsPageState extends State<StatisticsPage> {
     });
   }
 
-  List<String> _getYear(List<ExpenseRecord> _expenseBill) {
-    List<String> years = [];
-    for (int year = _expenseBill.last.ts.year; year <= _expenseBill.first.ts.year; year++) {
-      years.add(year.toString());
+  List<int> _getYear(List<ExpenseRecord> _expenseBillDesc) {
+    List<int> years = [];
+    for (int year = _expenseBillDesc.last.ts.year; year <= DateTime.now().year; year++) {
+      years.add(year);
     }
     return years;
   }
 
-  List<String> _getMonth(List<ExpenseRecord> _expenseBill, List<String> years, int year) {
-    List<String> months = [];
-    if (years.last == year.toString()) {
-      for (int month = 1; month <= _expenseBill.first.ts.month; month++) {
-        months.add(month.toString());
+  List<int> _getMonth(List<ExpenseRecord> _expenseBill, List<int> years, int year) {
+    List<int> months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    if (DateTime.now().year == year) {
+      for (int month = 1; month <= DateTime.now().month; month++) {
+        months.add(month);
       }
-    } else if (years.first == year.toString()) {
-      for (int month = 12; month >= _expenseBill.last.ts.month; month--) {
-        months.add(month.toString());
-      }
-    } else {
-      for (int month = 1; month <= 12; month++) {
-        months.add(month.toString());
+    } else if (years.first == year) {
+      for (int month = _expenseBill.last.ts.month; month <= 12; month++) {
+        months.add(month);
       }
     }
     return months;
+  }
+
+  Widget _buildDateSelector() {
+    // TODO: 支持查看全年统计, 此时 chart line 也需要修改.
+    final List<int> years = _getYear(_expenseBill);
+    final List<int> months = _getMonth(_expenseBill, years, selectedYear);
+
+    // TODO: 年月不超过当前日期.
+    final yearWidgets = years.map((e) => PopupMenuItem<int>(value: e, child: Text(e.toString()))).toList();
+    final monthWidgets = months.map((e) => PopupMenuItem<int>(value: e, child: Text(e.toString()))).toList();
+
+    final titleStyle = Theme.of(context).textTheme.headline2;
+
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Row(
+        children: <Widget>[
+          PopupMenuButton(
+            onSelected: (int value) => setState(() {
+              selectedYear = value;
+              final monthList = _getMonth(_expenseBill, years, selectedYear);
+              if (!monthList.toSet().contains(selectedMonth)) {
+                selectedMonth = monthList[0];
+              }
+            }),
+            child: Text('$selectedYear 年', style: titleStyle),
+            itemBuilder: (_) => yearWidgets,
+          ),
+          PopupMenuButton(
+            onSelected: (int value) => setState(() => selectedMonth = value),
+            child: Text('$selectedMonth 月', style: titleStyle),
+            itemBuilder: (_) => monthWidgets,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // TODO: 这个函数应该放在 DAO 或 service
+  List<ExpenseRecord> _filterExpense() {
+    return _expenseBill
+        .where((element) => element.ts.year == selectedYear && element.ts.month == selectedMonth)
+        .toList();
+  }
+
+  static int _getDayCountOfMonth(int year, int month) {
+    final int daysFeb = (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)) ? 29 : 28;
+    List<int> days = [31, daysFeb, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    return days[month - 1];
+  }
+
+  Widget _buildChartView() {
+    // 得到该年该月有多少天, 生成数组记录每一天的消费.
+    final List<double> daysAmount = List.filled(_getDayCountOfMonth(selectedYear, selectedMonth), 0.00);
+    // 便利该月消费情况, 加到上述统计列表中.
+    _filterExpense().forEach((e) => daysAmount[e.ts.day - 1] += e.amount);
+
+    if (daysAmount.every((double e) => e.abs() < 0.01)) {
+      return const SizedBox(height: 70, child: Center(child: Text('该月无消费数据')));
+    }
+
+    final width = MediaQuery.of(context).size.width - 70;
+    return Card(
+      margin: const EdgeInsets.fromLTRB(10, 10, 10, 20),
+      child: SizedBox(
+        width: double.infinity,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const Padding(
+              padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
+              child: Text('支出对比', textScaleFactor: 1.2),
+            ),
+            // const SizedBox(height: 5),
+            Center(
+              child: SizedBox(height: width * 0.5, width: width, child: ExpenseChart(daysAmount)),
+            ),
+            const SizedBox(height: 14),
+          ],
+        ),
+      ),
+    );
   }
 
   List<Widget> _buildClassifiedStat() {
@@ -97,82 +176,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
         );
       },
     ).toList();
-  }
-
-  Widget _buildDateSelector() {
-    // TODO: 支持查看全年统计, 此时 chart line 也需要修改.
-    final List<String> years = _getYear(_expenseBill);
-    List<String> months = _getMonth(_expenseBill, years, year);
-
-    // TODO: 年月不超过当前日期.
-    final yearWidgets = years.map((e) => PopupMenuItem(value: e, child: Text(e))).toList();
-    final monthWidgets = months.map((e) => PopupMenuItem(value: e, child: Text(e))).toList();
-
-    final titleStyle = Theme.of(context).textTheme.headline2;
-
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Row(
-        children: <Widget>[
-          PopupMenuButton(
-            onSelected: (String value) => setState(() => year = int.parse(value)),
-            child: Text('$year 年', style: titleStyle),
-            itemBuilder: (_) => yearWidgets,
-          ),
-          PopupMenuButton(
-            onSelected: (String value) =>
-                setState(() => {month = int.parse(value), months = _getMonth(_expenseBill, years, year)}),
-            child: Text('$month 月', style: titleStyle),
-            itemBuilder: (_) => monthWidgets,
-          ),
-        ],
-      ),
-    );
-  }
-
-  // TODO: 这个函数应该放在 DAO 或 service
-  List<ExpenseRecord> _filterExpense() {
-    return _expenseBill.where((element) => element.ts.year == year && element.ts.month == month).toList();
-  }
-
-  static int _getDayCountOfMonth(int year, int month) {
-    final int daysFeb = (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)) ? 29 : 28;
-    List<int> days = [31, daysFeb, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    return days[month - 1];
-  }
-
-  Widget _buildChartView() {
-    // 得到该年该月有多少天, 生成数组记录每一天的消费.
-    final List<double> daysAmount = List.filled(_getDayCountOfMonth(year, month), 0.00);
-    // 便利该月消费情况, 加到上述统计列表中.
-    _filterExpense().forEach((e) => daysAmount[e.ts.day - 1] += e.amount);
-
-    if (daysAmount.every((double e) => e.abs() < 0.01)) {
-      return const SizedBox(height: 70, child: Center(child: Text('该月无消费数据')));
-    }
-
-    final width = MediaQuery.of(context).size.width - 70;
-    return Card(
-      margin: const EdgeInsets.fromLTRB(10, 10, 10, 20),
-      child: SizedBox(
-        width: double.infinity,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const Padding(
-              padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
-              child: Text('支出对比', textScaleFactor: 1.2),
-            ),
-            // const SizedBox(height: 5),
-            Center(
-              child: SizedBox(height: width * 0.5, width: width, child: ExpenseChart(daysAmount)),
-            ),
-            const SizedBox(height: 14),
-          ],
-        ),
-      ),
-    );
   }
 
   Widget _buildClassificationView() {
