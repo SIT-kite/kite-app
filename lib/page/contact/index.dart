@@ -71,14 +71,14 @@ class _ContactPageState extends State<ContactPage> {
           IconButton(
               onPressed: () => showSearch(context: context, delegate: Search(_contactData)),
               icon: const Icon(Icons.search)),
-          _onBillsRefresh(),
+          _buildRefreshButton(),
         ],
       ),
       body: _buildBody(),
     );
   }
 
-  _onBillsRefresh() {
+  Widget _buildRefreshButton() {
     return IconButton(
       tooltip: '刷新',
       icon: const Icon(Icons.refresh),
