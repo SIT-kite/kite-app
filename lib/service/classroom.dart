@@ -21,13 +21,13 @@ import 'package:kite/entity/classroom.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/session/abstract_session.dart';
 
-class ClassRoomService extends AService implements ClassroomRemoteDao {
+class ClassroomService extends AService implements ClassroomRemoteDao {
   static const _classroomUrl = "/classroom/available";
 
-  ClassRoomService(ASession session) : super(session);
+  ClassroomService(ASession session) : super(session);
 
   @override
-  Future<List<AvailableClassroom>> getClassRoomData(int campus, String date) async {
+  Future<List<AvailableClassroom>> queryAvailableClassroom(int campus, String date) async {
     final response = await session.get('$_classroomUrl?campus=$campus&date=$date');
     final List classrooms = response.data;
 

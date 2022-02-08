@@ -25,7 +25,7 @@ void main() async {
   await login();
   var session = SessionPool.ssoSession;
   test('class_room test', () async {
-    final classroom = await ClassRoomService(session).getClassRoomData(1, '2021-12-7');
+    final classroom = await ClassroomService(session).queryAvailableClassroom(1, '2021-12-7');
     Log.info(classroom);
   });
 }

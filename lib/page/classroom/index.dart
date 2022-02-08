@@ -181,7 +181,7 @@ class _ClassroomPageState extends State<ClassroomPage> {
     }
     // 注意：本地数组索引执行的是 奉贤 0, 徐汇 1；服务端执行的是：奉贤 1, 徐汇 2.
     final date = days[dayIndex];
-    final result = await ClassRoomService(SessionPool.kiteSession).getClassRoomData(_campusIndex + 1, date);
+    final result = await ClassroomService(SessionPool.kiteSession).queryAvailableClassroom(_campusIndex + 1, date);
     _cachedQueryResult[campusIndex][dayIndex] = result;
     return result;
   }

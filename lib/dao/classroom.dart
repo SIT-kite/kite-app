@@ -20,5 +20,5 @@ import 'package:kite/entity/classroom.dart';
 
 /// 远程的空教室数据访问层的接口
 abstract class ClassroomRemoteDao {
-  Future<List<AvailableClassroom>> getClassRoomData(int campus, String date);
+  Future<List<AvailableClassroom>> queryAvailableClassroom(int campus, String date);
 }
