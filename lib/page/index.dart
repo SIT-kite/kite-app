@@ -20,7 +20,7 @@ export 'bulletin/index.dart';
 export 'campus_card.dart';
 export 'classroom/index.dart';
 export 'connectivity.dart';
-export 'contact.dart';
+export 'contact/index.dart';
 export 'electricity/index.dart';
 export 'event/index.dart';
 export 'expense/index.dart';
