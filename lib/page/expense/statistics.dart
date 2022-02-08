@@ -108,19 +108,21 @@ class _StatisticsPageState extends State<StatisticsPage> {
     final yearWidgets = years.map((e) => PopupMenuItem(value: e, child: Text(e))).toList();
     final monthWidgets = months.map((e) => PopupMenuItem(value: e, child: Text(e))).toList();
 
+    final titleStyle = Theme.of(context).textTheme.headline2;
+
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Row(
         children: <Widget>[
           PopupMenuButton(
             onSelected: (String value) => setState(() => year = int.parse(value)),
-            child: Text('$year 年', textScaleFactor: 1.5),
+            child: Text('$year 年', style: titleStyle),
             itemBuilder: (_) => yearWidgets,
           ),
           PopupMenuButton(
             onSelected: (String value) =>
                 setState(() => {month = int.parse(value), months = _getMonth(_expenseBill, years, year)}),
-            child: Text('$month 月', textScaleFactor: 1.5),
+            child: Text('$month 月', style: titleStyle),
             itemBuilder: (_) => monthWidgets,
           ),
         ],

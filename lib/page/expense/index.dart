@@ -31,9 +31,37 @@ class ExpensePage extends StatefulWidget {
 
 class _ExpensePageState extends State<ExpensePage> {
   /// 底部导航键的标志位
-  int _currentIndex = 0;
-  int _stateIndex = 1;
-  String _expenseType = 'all';
+  int currentIndex = 0;
+  bool isRefreshing = false;
+  ExpenseType _filter = ExpenseType.all;
+
+  /// 筛选按钮
+  _buildPopupMenuItems() {
+    final itemMapping = expenseTypeMapping.map((type, display) {
+      final item = PopupMenuItem(
+        value: ExpenseType.all,
+        child: Row(children: [buildIcon(type, context), Text(display)]),
+      );
+      return MapEntry(type, item);
+    });
+
+    final List<PopupMenuItem<ExpenseType>> items = itemMapping.values.toList();
+    return PopupMenuButton(
+      tooltip: '筛选',
+      onSelected: (ExpenseType v) => setState(() => _filter = v),
+      itemBuilder: (_) => items,
+    );
+  }
+
+  _buildRefreshButton() {
+    return IconButton(
+      tooltip: '刷新',
+      icon: const Icon(Icons.refresh),
+      onPressed: () {
+        setState(() => isRefreshing = true);
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +69,11 @@ class _ExpensePageState extends State<ExpensePage> {
       appBar: AppBar(
         title: const Text("消费记录"),
         actions: [
-          _onBillsRefresh(),
-          _currentIndex == 0 ? _buildPopupMenuItems() : const Padding(padding: EdgeInsets.all(0)),
+          _buildRefreshButton(),
+          currentIndex == 0 ? _buildPopupMenuItems() : Container(),
         ],
       ),
-      body: _currentIndex == 0 ? BillPage(_stateIndex, _expenseType) : const StatisticsPage(),
+      body: currentIndex == 0 ? const BillPage(filter: ExpenseType.all) : const StatisticsPage(),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
@@ -57,78 +85,11 @@ class _ExpensePageState extends State<ExpensePage> {
             icon: Icon(Icons.data_saver_off),
           )
         ],
-        currentIndex: _currentIndex,
+        currentIndex: currentIndex,
         onTap: (int tapIndex) {
-          setState(() => {_currentIndex = tapIndex, _stateIndex = 0});
+          setState(() => {currentIndex = tapIndex, isRefreshing = false});
         },
       ),
-    );
-  }
-
-  ///筛选
-  _buildPopupMenuItems() {
-    return PopupMenuButton(
-      tooltip: '筛选',
-      onSelected: (String value) {
-        setState(() => _expenseType = value);
-      },
-      itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
-        PopupMenuItem(
-          value: 'canteen',
-          child: Row(
-            children: [Icon(Icons.local_mall, size: 30, color: Theme.of(context).primaryColor), const Text('全部')],
-          ),
-        ),
-        PopupMenuItem(
-          value: 'canteen',
-          child: Row(children: [buildIcon(ExpenseType.canteen, context), const Text('食堂')]),
-        ),
-        PopupMenuItem(
-          value: 'store',
-          child: Row(children: [
-            buildIcon(ExpenseType.store, context),
-            const Text('超市'),
-          ]),
-        ),
-        PopupMenuItem(
-          value: 'coffee',
-          child: Row(children: [
-            buildIcon(ExpenseType.coffee, context),
-            const Text('咖啡吧'),
-          ]),
-        ),
-        PopupMenuItem(
-          value: 'shower',
-          child: Row(children: [
-            buildIcon(ExpenseType.shower, context),
-            const Text('洗浴'),
-          ]),
-        ),
-        PopupMenuItem(
-          value: 'water',
-          child: Row(children: [
-            buildIcon(ExpenseType.water, context),
-            const Text('热水'),
-          ]),
-        ),
-        PopupMenuItem(
-          value: 'unknown',
-          child: Row(children: [
-            buildIcon(ExpenseType.unknown, context),
-            const Text('未知'),
-          ]),
-        )
-      ],
-    );
-  }
-
-  _onBillsRefresh() {
-    return IconButton(
-      tooltip: '刷新',
-      icon: const Icon(Icons.refresh),
-      onPressed: () {
-        setState(() => _stateIndex = 1);
-      },
     );
   }
 }

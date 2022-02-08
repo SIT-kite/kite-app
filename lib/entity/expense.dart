@@ -1,20 +1,20 @@
 /*
- *    上应小风筝(SIT-kite)  便利校园，一步到位
- *    Copyright (C) 2022 上海应用技术大学 上应小风筝团队
+ * 上应小风筝(SIT-kite)  便利校园，一步到位
+ * Copyright (C) 2022 上海应用技术大学 上应小风筝团队
  *
- *    This program is free software: you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as published by
- *    the Free Software Foundation, either version 3 of the License, or
- *    (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *    You should have received a copy of the GNU General Public License
- *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 import 'package:hive/hive.dart';
 import 'package:kite/global/hive_type_id_pool.dart';
 
@@ -46,6 +46,9 @@ enum ExpenseType {
   /// 未知
   @HiveField(5)
   unknown,
+
+  /// 全部. (用于消费展示页)
+  all,
 }
 
 /// 消费记录
@@ -83,6 +86,7 @@ class ExpenseRecord extends HiveObject {
 
 /// 消费类型枚举与文字的映射表
 const expenseTypeMapping = {
+  ExpenseType.all: '全部',
   ExpenseType.canteen: '食堂',
   ExpenseType.coffee: '咖啡吧',
   ExpenseType.water: '开水',
