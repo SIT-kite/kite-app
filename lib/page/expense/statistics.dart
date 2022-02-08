@@ -145,8 +145,11 @@ class _StatisticsPageState extends State<StatisticsPage> {
     // 便利该月消费情况, 加到上述统计列表中.
     _filterExpense().forEach((e) => daysAmount[e.ts.day - 1] += e.amount);
 
-    final width = MediaQuery.of(context).size.width - 70;
+    if (daysAmount.every((double e) => e.abs() < 0.01)) {
+      return const SizedBox(height: 70, child: Center(child: Text('该月无消费数据')));
+    }
 
+    final width = MediaQuery.of(context).size.width - 70;
     return Card(
       margin: const EdgeInsets.fromLTRB(10, 10, 10, 20),
       child: SizedBox(
