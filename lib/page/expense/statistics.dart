@@ -1,20 +1,20 @@
 /*
- *    上应小风筝(SIT-kite)  便利校园，一步到位
- *    Copyright (C) 2022 上海应用技术大学 上应小风筝团队
+ * 上应小风筝(SIT-kite)  便利校园，一步到位
+ * Copyright (C) 2022 上海应用技术大学 上应小风筝团队
  *
- *    This program is free software: you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as published by
- *    the Free Software Foundation, either version 3 of the License, or
- *    (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *    You should have received a copy of the GNU General Public License
- *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 import 'package:flutter/material.dart';
 import 'package:kite/entity/expense.dart';
 import 'package:kite/global/storage_pool.dart';
@@ -31,11 +31,7 @@ class StatisticsPage extends StatefulWidget {
 
 class _StatisticsPageState extends State<StatisticsPage> {
   int year = DateTime.now().year;
-
-  // int year = 2021;
   int month = DateTime.now().month;
-
-  // TODO: Use actual data.
   List<ExpenseRecord> _expenseBill = [];
 
   @override
@@ -46,7 +42,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
     });
   }
 
-  List<String> _getyear(List<ExpenseRecord> _expenseBill) {
+  List<String> _getYear(List<ExpenseRecord> _expenseBill) {
     List<String> years = [];
     for (int year = _expenseBill.last.ts.year; year <= _expenseBill.first.ts.year; year++) {
       years.add(year.toString());
@@ -54,9 +50,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
     return years;
   }
 
-  List<String> _getmonth(List<ExpenseRecord> _expenseBill, List<String> years, int year) {
+  List<String> _getMonth(List<ExpenseRecord> _expenseBill, List<String> years, int year) {
     List<String> months = [];
-    print(years.first == year);
     if (years.last == year.toString()) {
       for (int month = 1; month <= _expenseBill.first.ts.month; month++) {
         months.add(month.toString());
@@ -106,8 +101,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   Widget _buildDateSelector() {
     // TODO: 支持查看全年统计, 此时 chart line 也需要修改.
-    final List<String> years = _getyear(_expenseBill);
-    List<String> months = _getmonth(_expenseBill, years, year);
+    final List<String> years = _getYear(_expenseBill);
+    List<String> months = _getMonth(_expenseBill, years, year);
 
     // TODO: 年月不超过当前日期.
     final yearWidgets = years.map((e) => PopupMenuItem(value: e, child: Text(e))).toList();
@@ -124,7 +119,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
           ),
           PopupMenuButton(
             onSelected: (String value) =>
-                setState(() => {month = int.parse(value), months = _getmonth(_expenseBill, years, year)}),
+                setState(() => {month = int.parse(value), months = _getMonth(_expenseBill, years, year)}),
             child: Text('$month 月', textScaleFactor: 1.5),
             itemBuilder: (_) => monthWidgets,
           ),

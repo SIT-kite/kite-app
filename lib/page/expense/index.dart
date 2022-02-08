@@ -1,20 +1,20 @@
 /*
- *    上应小风筝(SIT-kite)  便利校园，一步到位
- *    Copyright (C) 2022 上海应用技术大学 上应小风筝团队
+ * 上应小风筝(SIT-kite)  便利校园，一步到位
+ * Copyright (C) 2022 上海应用技术大学 上应小风筝团队
  *
- *    This program is free software: you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as published by
- *    the Free Software Foundation, either version 3 of the License, or
- *    (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *    You should have received a copy of the GNU General Public License
- *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 import 'package:flutter/material.dart';
 import 'package:kite/entity/expense.dart';
 import 'package:kite/page/expense/icon.dart';
@@ -32,8 +32,8 @@ class ExpensePage extends StatefulWidget {
 class _ExpensePageState extends State<ExpensePage> {
   /// 底部导航键的标志位
   int _currentIndex = 0;
-  int _stateindex = 1;
-  String _expensetype = 'all';
+  int _stateIndex = 1;
+  String _expenseType = 'all';
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class _ExpensePageState extends State<ExpensePage> {
           _currentIndex == 0 ? _buildPopupMenuItems() : const Padding(padding: EdgeInsets.all(0)),
         ],
       ),
-      body: _currentIndex == 0 ? BillPage(_stateindex, _expensetype) : const StatisticsPage(),
+      body: _currentIndex == 0 ? BillPage(_stateIndex, _expenseType) : const StatisticsPage(),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
@@ -59,7 +59,7 @@ class _ExpensePageState extends State<ExpensePage> {
         ],
         currentIndex: _currentIndex,
         onTap: (int tapIndex) {
-          setState(() => {_currentIndex = tapIndex, _stateindex = 0});
+          setState(() => {_currentIndex = tapIndex, _stateIndex = 0});
         },
       ),
     );
@@ -70,7 +70,7 @@ class _ExpensePageState extends State<ExpensePage> {
     return PopupMenuButton(
       tooltip: '筛选',
       onSelected: (String value) {
-        setState(() => _expensetype = value);
+        setState(() => _expenseType = value);
       },
       itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
         PopupMenuItem(
@@ -127,7 +127,7 @@ class _ExpensePageState extends State<ExpensePage> {
       tooltip: '刷新',
       icon: const Icon(Icons.refresh),
       onPressed: () {
-        setState(() => _stateindex = 1);
+        setState(() => _stateIndex = 1);
       },
     );
   }
