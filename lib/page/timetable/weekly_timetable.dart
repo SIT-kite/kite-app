@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import '../../entity/edu/timetable.dart';
 
 class WeeklyTimetable extends StatefulWidget {
@@ -18,6 +18,9 @@ class WeeklyTimetable extends StatefulWidget {
 
 class _WeeklyTimetableState extends State<WeeklyTimetable> {
   late Size _deviceSize;
+  static const double gridAspectRatioHeight = 1 / 2;
+  late double singleGridHeight;
+  late double singleGridWidth;
 
   // 周次 日期x7 月份
   final List<String> num2word = [
@@ -33,6 +36,8 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
   @override
   Widget build(BuildContext context) {
     _deviceSize = MediaQuery.of(context).size;
+    singleGridHeight = _deviceSize.width * 2 / 23 / gridAspectRatioHeight;
+    singleGridWidth = _deviceSize.width * 3 / 23;
     return Column(
       children: [
         Expanded(flex: 1, child: _buildDateTable(1)),
@@ -64,52 +69,48 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
         itemBuilder: (BuildContext context, int index) {
           return index == 0
               ? SizedBox(
-              width: _deviceSize.width * 2 / 23,
-              child: Container(
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      border: Border(
-                          bottom:  BorderSide(color: Colors.black12, width: 0.8),
-                          right: BorderSide(color: Colors.black12, width: 0.8)
-                      )
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        (weekIndex + 1).toString(),
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
-                      ),
-                      const Text(
-                        "周",
-                        style: TextStyle(fontSize: 12),
-                      )
-                    ],
-                  )))
+                  width: _deviceSize.width * 2 / 23,
+                  child: Container(
+                      decoration: const BoxDecoration(
+                          color: Colors.white,
+                          border: Border(
+                              bottom: BorderSide(color: Colors.black12, width: 0.8),
+                              right: BorderSide(color: Colors.black12, width: 0.8))),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            (weekIndex + 1).toString(),
+                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                          ),
+                          const Text(
+                            "周",
+                            style: TextStyle(fontSize: 12),
+                          )
+                        ],
+                      )))
               : SizedBox(
-            width: _deviceSize.width * 3 / 23,
-            child: Container(
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    border: Border(
-                        bottom:  BorderSide(color: Colors.black12, width: 0.8),
-                        right: BorderSide(color: Colors.black12, width: 0.8)
-                    )
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "周" + num2word[index - 1],
-                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
-                    ),
-                    Text(
-                      currWeek[index - 1],
-                      style: const TextStyle(fontSize: 11),
-                    ),
-                  ],
-                )),
-          );
+                  width: _deviceSize.width * 3 / 23,
+                  child: Container(
+                      decoration: const BoxDecoration(
+                          color: Colors.white,
+                          border: Border(
+                              bottom: BorderSide(color: Colors.black12, width: 0.8),
+                              right: BorderSide(color: Colors.black12, width: 0.8))),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "周" + num2word[index - 1],
+                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                          ),
+                          Text(
+                            currWeek[index - 1],
+                            style: const TextStyle(fontSize: 11),
+                          ),
+                        ],
+                      )),
+                );
         });
   }
 
@@ -119,10 +120,8 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
         //  防止滚动超出边界
         // physics: const ClampingScrollPhysics(),
         itemCount: 11,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 1,
-            childAspectRatio: 1 / 1.5
-        ),
+        gridDelegate:
+            const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1, childAspectRatio: gridAspectRatioHeight),
         itemBuilder: (BuildContext context, int index) {
           return Container(
               child: Center(
@@ -142,26 +141,54 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
         });
   }
 
+  _getCourseListByWeek() {}
+
   Widget _buildCourseGridView() {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      scrollDirection: Axis.vertical,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 7, mainAxisExtent: 50, mainAxisSpacing: 20.0, childAspectRatio: 1),
-      itemCount: 77,
-      itemBuilder: (BuildContext context, int index) {
-        return Container(
-          padding: const EdgeInsets.all(10),
-          decoration: const BoxDecoration(
-            color: Color.fromARGB(255, 228, 235, 245),
-            borderRadius: BorderRadius.all(Radius.circular(12.0)),
-          ),
-          child: const Text("1231\n23"),
-        );
-      },
+    return SizedBox(
+      width: singleGridWidth * 7,
+      height: singleGridHeight * 11,
+      child: ListView.builder(
+        padding: const EdgeInsets.fromLTRB(1, 0, 0, 0),
+        scrollDirection: Axis.horizontal,
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemBuilder: (BuildContext context, int index) {
+          return SizedBox(
+              width: singleGridWidth,
+              height: singleGridHeight * 11,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: 5,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    width: singleGridWidth,
+                    height: singleGridHeight * 2,
+                    alignment: const Alignment(0, 0),
+                    child: InkWell(
+                      onTapDown: (TapDownDetails tapDownDetails) {},
+                      onTap: () {
+                        print("press");
+                      },
+                      child: Container(
+                        width: singleGridWidth - 3,
+                        height: singleGridHeight * 2 - 4,
+                        decoration: const BoxDecoration(
+                            color: Colors.blueAccent,
+                            borderRadius: BorderRadius.all(Radius.circular(3.0)),
+                            border: Border(
+                              top: BorderSide(color: Colors.lightBlueAccent, width: 1),
+                              right: BorderSide(color: Colors.lightBlueAccent, width: 1),
+                              left: BorderSide(color: Colors.lightBlueAccent, width: 1),
+                              bottom: BorderSide(color: Colors.lightBlueAccent, width: 1),
+                            )),
+                        child: const Text("123"),
+                      ),
+                    ),
+                  );
+                },
+              ));
+        },
+      ),
     );
   }
-
-
 }
