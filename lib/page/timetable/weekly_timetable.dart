@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:kite/page/timetable/index.dart';
 import '../../entity/edu/timetable.dart';
 import 'package:kite/page/timetable/bottom_sheet.dart';
 
@@ -24,7 +25,7 @@ GlobalKey<_WeeklyTimetableState> weeklyTimeTableKey = GlobalKey();
 
 class WeeklyTimetable extends StatefulWidget {
   List<Course> courseList = <Course>[];
-  late DateTime startTime;
+  late DateTime termBeginDate;
 
   // index1 -- 周数  index2 -- 天数
   Map<int, List<List<int>>> dailyCourseList = {};
@@ -35,7 +36,7 @@ class WeeklyTimetable extends StatefulWidget {
       required this.courseList,
       required this.dailyCourseList,
       required this.dateTableList,
-      required this.startTime})
+      required this.termBeginDate})
       : super(key: key);
 
   @override
@@ -44,11 +45,15 @@ class WeeklyTimetable extends StatefulWidget {
 
 class _WeeklyTimetableState extends State<WeeklyTimetable> {
   late Size _deviceSize;
+  // 左侧方块的宽高比
   static const double gridAspectRatioHeight = 1 / 1.7;
+  // 课程网格中每一小格的高度
   late double singleGridHeight;
+  // 课程网格中每一小格的宽度
   late double singleGridWidth;
 
-  static final DateTime currTime = DateTime(2021, 12, 25);
+  // TODO：将时间改为获取当前时间
+  DateTime currDate = DateTime(2021, 12, 25);
   int currTimePageIndex = 0;
 
   static final List<Color> colorList = [
@@ -86,7 +91,7 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
     return PageView.builder(
         controller: _pageController,
         scrollDirection: Axis.horizontal,
-        itemCount: 20,
+        itemCount: maxWeekCount,
         // index 从0开始
         itemBuilder: (BuildContext context, int index) {
           return Column(
@@ -116,7 +121,7 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
   @override
   void initState() {
     super.initState();
-    int days = currTime.difference(widget.startTime).inDays;
+    int days = currDate.difference(widget.termBeginDate).inDays;
     currTimePageIndex = (days - 6) ~/ 7 + 1;
     _pageController = PageController(initialPage: currTimePageIndex, viewportFraction: 1.0);
   }
@@ -152,7 +157,7 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
                           ),
                           const Text(
                             "周",
-                            style: TextStyle(fontSize: 12),
+                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                           )
                         ],
                       )))
@@ -173,7 +178,7 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
                           ),
                           Text(
                             currWeek[index - 1],
-                            style: const TextStyle(fontSize: 11),
+                            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w400),
                           ),
                         ],
                       )),
@@ -184,8 +189,6 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
   Widget _buildLeftSectionColumn() {
     return GridView.builder(
         shrinkWrap: true,
-        //  防止滚动超出边界
-        // physics: const ClampingScrollPhysics(),
         itemCount: 11,
         gridDelegate:
             const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1, childAspectRatio: gridAspectRatioHeight),
@@ -194,12 +197,11 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
               child: Center(
                 child: Text(
                   (index + 1).toInt().toString(),
-                  style: const TextStyle(fontSize: 15),
+                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
                 ),
               ),
               decoration: const BoxDecoration(
                 color: Colors.white,
-                // border: Border.all(color: Colors.black12, width: 0.5),
                 border: Border(
                   top: BorderSide(color: Colors.black12, width: 0.8),
                   right: BorderSide(color: Colors.black12, width: 0.8),

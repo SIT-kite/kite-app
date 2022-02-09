@@ -23,7 +23,12 @@ import 'package:kite/global/storage_pool.dart';
 import 'package:kite/page/timetable/daily_timetable.dart';
 import 'package:kite/page/timetable/weekly_timetable.dart';
 import 'package:kite/service/edu/index.dart';
+import 'package:kite/util/logger.dart';
 
+// 最大周数
+const int maxWeekCount = 20;
+// 课表模式
+// 周课表 日课表
 enum DisplayMode { daily, weekly }
 
 class TimetablePage extends StatefulWidget {
@@ -34,17 +39,24 @@ class TimetablePage extends StatefulWidget {
 }
 
 class _TimetablePageState extends State<TimetablePage> {
+  // 模式：周课表 日课表
   DisplayMode displayMode = DisplayMode.weekly;
   TimetableDao timetableDaoService = TimetableService(SessionPool.eduSession);
+
+  // TODO：更改为正确的学期
   final SchoolYear currSchoolYear = const SchoolYear(2020);
   final currSemester = Semester.secondTerm;
+
+  // TODO：更改为正确的开学日期
+  DateTime termBeginDate = DateTime(2021, 9, 6);
+
   Map<int, List<List<int>>> dailyCourseList = {};
   List<Course> courseList = <Course>[];
   List<List<String>> dateTableList = [];
-  DateTime startTime = DateTime(2021, 9, 6);
-  static const int maxWeekCount = 20;
+
+  // 当前学期开学时间
+  // 学期最大周数
   bool isRefresh = false;
-  DateTime currTime = DateTime(2022, 12, 25);
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +70,7 @@ class _TimetablePageState extends State<TimetablePage> {
       floatingActionButton: FloatingActionButton(
         child: const Text("今", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500)),
         onPressed: () {
-          print("press goto button");
+          Log.debug("press goto current day button");
           displayMode == DisplayMode.daily
               ? dailyTimeTableKey.currentState?.gotoCurrPage()
               : weeklyTimeTableKey.currentState?.gotoCurrPage();
@@ -73,30 +85,29 @@ class _TimetablePageState extends State<TimetablePage> {
 
   Future<void> _getData() async {
     if (isRefresh) {
-      print("refresh");
+      Log.debug("refresh");
       StoragePool.course.clear();
       courseList = await timetableDaoService.getTimetable(currSchoolYear, currSemester);
       StoragePool.course.addAll(courseList);
       isRefresh = false;
     } else {
       if (StoragePool.course.isEmpty() == true) {
-        print("get courseList from network");
+        Log.debug("get courseList from network");
         courseList = await timetableDaoService.getTimetable(currSchoolYear, currSemester);
         StoragePool.course.addAll(courseList);
       } else {
-        print("read courseList from storage");
+        Log.debug("read courseList from storage");
         courseList = await StoragePool.course.getTimetable(currSchoolYear, currSemester);
       }
     }
-    // print(courseList);
     generateDailyCourse();
     generateDateTable();
   }
 
   void generateDateTable() {
-    int currYear = startTime.year;
-    int currDay = startTime.day;
-    int currMonth = startTime.month;
+    int currYear = termBeginDate.year;
+    int currDay = termBeginDate.day;
+    int currMonth = termBeginDate.month;
     int currMonthDayCount = DateUtils.getDaysInMonth(currYear, currMonth);
     for (int weekIndex = 0; weekIndex < maxWeekCount; weekIndex++) {
       dateTableList.add([]);
@@ -117,7 +128,6 @@ class _TimetablePageState extends State<TimetablePage> {
   }
 
   void generateDailyCourse() {
-    print("process courseList data");
     for (int weekIndex = 0; weekIndex < maxWeekCount; weekIndex++) {
       dailyCourseList[weekIndex] = [[], [], [], [], [], [], []];
     }
@@ -153,14 +163,14 @@ class _TimetablePageState extends State<TimetablePage> {
                 courseList: courseList,
                 dailyCourseList: dailyCourseList,
                 dateTableList: dateTableList,
-                startTime: startTime,
+                termBeginDate: termBeginDate,
               )
             : WeeklyTimetable(
                 key: weeklyTimeTableKey,
                 courseList: courseList,
                 dailyCourseList: dailyCourseList,
                 dateTableList: dateTableList,
-                startTime: startTime,
+                termBeginDate: termBeginDate,
               );
       }
     } else {
@@ -199,18 +209,16 @@ class _TimetablePageState extends State<TimetablePage> {
     setState(() {
       isRefresh = true;
     });
-    print("get courseList from network");
   }
 
-  // ignore: non_constant_identifier_names
   bool _LoadClassSchedule() {
-    print("load class schedule");
+    // TODO：导入课表
     return true;
   }
 
   // ignore: non_constant_identifier_names
   bool _DeriveClassSchedule() {
-    print("derive class schedule");
+    // TODO：导出课表
     return true;
   }
 }

@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/entity/edu/index.dart';
 import 'package:kite/page/timetable/bottom_sheet.dart';
+import 'package:kite/page/timetable/index.dart';
 import 'package:kite/util/edu/icon.dart';
 
 // TODO: 待测试晚上(18:00-20:25)课程渲染效果
@@ -25,10 +26,13 @@ import 'package:kite/util/edu/icon.dart';
 GlobalKey<_DailyTimetableState> dailyTimeTableKey = GlobalKey();
 
 class DailyTimetable extends StatefulWidget {
-  late DateTime startTime;
+  // 当前学期开学时间
+  late DateTime termBeginDate;
+  // 教育系统拉取的课程数据（未经处理）
   List<Course> courseList = <Course>[];
 
-  // index1 -- 周数  index2 -- 天数
+  // index1 -- 周数  index2 -- 天数  list<int>存放课程在courseList的下标
+  // 解析出来的每周每天的对应的课程
   Map<int, List<List<int>>> dailyCourseList = {};
   List<List<String>> dateTableList = [];
 
@@ -37,7 +41,7 @@ class DailyTimetable extends StatefulWidget {
       required this.courseList,
       required this.dailyCourseList,
       required this.dateTableList,
-      required this.startTime})
+      required this.termBeginDate})
       : super(key: key);
 
   @override
@@ -46,14 +50,14 @@ class DailyTimetable extends StatefulWidget {
 
 class _DailyTimetableState extends State<DailyTimetable> {
   late PageController _pageController;
-  DateTime currTime = DateTime(2021, 11, 23);
+  // TODO：将时间改为获取当前时间
+  DateTime currDate = DateTime(2021, 11, 23);
 
   static const String courseIconPath = 'assets/course/';
   late Size _deviceSize;
 
-  bool isShowReturnCurrDayButton = false;
-
   List<Course> currDayCourseList = <Course>[];
+  // 当前点击的页数和天数
   final List<int> tapped = [0, 0];
   // 在当前时间下，课表应该显示的页数为currTimePageIndex
   int currTimePageIndex = 0;
@@ -71,39 +75,10 @@ class _DailyTimetableState extends State<DailyTimetable> {
     "日",
   ];
 
-  Map<int, String> courseStartTime = {
-    1: "8:20",
-    2: "9:10",
-    3: "10:15",
-    // 由于疫情 没有课间的五分钟
-    4: "11:00",
-    5: "13:00",
-    6: "13:50",
-    7: "14:55",
-    8: "15:45",
-    9: "18:00",
-    10: "18:50",
-    11: "19:40"
-  };
-
-  Map<int, String> courseEndTime = {
-    1: "9:05",
-    2: "9:55",
-    3: "11:00",
-    4: "11:45",
-    5: "13:45",
-    6: "14:35",
-    7: "15:40",
-    8: "16:30",
-    9: "18:45",
-    10: "19:35",
-    11: "20:25"
-  };
-
   @override
   void initState() {
     super.initState();
-    int days = currTime.difference(widget.startTime).inDays;
+    int days = currDate.difference(widget.termBeginDate).inDays;
     currTimePageIndex = (days - 6) ~/ 7 + 1;
     currDayInWeekIndex = days%7;
     _pageController =  PageController(initialPage: currTimePageIndex, viewportFraction: 1.0);
@@ -145,7 +120,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
     return PageView.builder(
       controller: _pageController,
       scrollDirection: Axis.horizontal,
-      itemCount: 20,
+      itemCount: maxWeekCount,
       // index 从0开始
       itemBuilder: (BuildContext context, int index) {
         return Column(
