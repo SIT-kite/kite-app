@@ -48,7 +48,7 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
   late double singleGridHeight;
   late double singleGridWidth;
 
-  DateTime currTime = DateTime(2021, 12, 25);
+  static final DateTime currTime = DateTime(2021, 12, 25);
   int currTimePageIndex = 0;
 
   static final List<Color> colorList = [
@@ -57,19 +57,13 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
     const Color.fromARGB(178, 116, 185, 255),
     const Color.fromARGB(178, 118, 126, 253),
     const Color.fromARGB(178, 245, 175, 77),
-    const Color.fromARGB(
-      178,
-      187,
-      137,
-      106,
-    ),
+    const Color.fromARGB(178, 187, 137, 106),
     const Color.fromARGB(178, 232, 67, 147),
     const Color.fromARGB(178, 188, 140, 240),
     const Color.fromARGB(178, 116, 185, 255)
   ];
 
-  final PageController _pageController =
-      PageController(initialPage: 0, viewportFraction: 1.0);
+  late PageController _pageController;
 
   List<Course?> parsedCurrDayCourseList = [];
 
@@ -124,6 +118,7 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
     super.initState();
     int days = currTime.difference(widget.startTime).inDays;
     currTimePageIndex = (days - 6) ~/ 7 + 1;
+    _pageController = PageController(initialPage: currTimePageIndex, viewportFraction: 1.0);
   }
 
   @override
@@ -146,17 +141,14 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
                       decoration: const BoxDecoration(
                           color: Colors.white,
                           border: Border(
-                              bottom:
-                                  BorderSide(color: Colors.black12, width: 0.8),
-                              right: BorderSide(
-                                  color: Colors.black12, width: 0.8))),
+                              bottom: BorderSide(color: Colors.black12, width: 0.8),
+                              right: BorderSide(color: Colors.black12, width: 0.8))),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             (weekIndex + 1).toString(),
-                            style: const TextStyle(
-                                fontSize: 12, fontWeight: FontWeight.w400),
+                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                           ),
                           const Text(
                             "周",
@@ -170,17 +162,14 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
                       decoration: const BoxDecoration(
                           color: Colors.white,
                           border: Border(
-                              bottom:
-                                  BorderSide(color: Colors.black12, width: 0.8),
-                              right: BorderSide(
-                                  color: Colors.black12, width: 0.8))),
+                              bottom: BorderSide(color: Colors.black12, width: 0.8),
+                              right: BorderSide(color: Colors.black12, width: 0.8))),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             "周" + num2word[index - 1],
-                            style: const TextStyle(
-                                fontSize: 12, fontWeight: FontWeight.w400),
+                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                           ),
                           Text(
                             currWeek[index - 1],
@@ -198,8 +187,8 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
         //  防止滚动超出边界
         // physics: const ClampingScrollPhysics(),
         itemCount: 11,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 1, childAspectRatio: gridAspectRatioHeight),
+        gridDelegate:
+            const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1, childAspectRatio: gridAspectRatioHeight),
         itemBuilder: (BuildContext context, int index) {
           return Container(
               child: Center(
@@ -230,10 +219,8 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemBuilder: (BuildContext context, int index) {
-          List<Course> currDayCourseList =
-              _getCourseListByWeekAndDay(weekIndex, index);
-          Map<int, Course> parsedCourseMap =
-              _parseCurrDayCourseList(currDayCourseList);
+          List<Course> currDayCourseList = _getCourseListByWeekAndDay(weekIndex, index);
+          Map<int, Course> parsedCourseMap = _parseCurrDayCourseList(currDayCourseList);
           List<double> parsedCardHeight = _getGridHeightList(parsedCourseMap);
           return SizedBox(
               width: singleGridWidth,
@@ -244,8 +231,7 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
                 scrollDirection: Axis.vertical,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
-                  return _buildCourseCard(
-                      parsedCardHeight, parsedCourseMap, index);
+                  return _buildCourseCard(parsedCardHeight, parsedCourseMap, index);
                 },
               ));
         },
@@ -253,8 +239,7 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
     );
   }
 
-  Widget _buildCourseCard(List<double> parsedCardHeight,
-      Map<int, Course> parsedCourseMap, int heightIndex) {
+  Widget _buildCourseCard(List<double> parsedCardHeight, Map<int, Course> parsedCourseMap, int heightIndex) {
     Course? course = parsedCurrDayCourseList[heightIndex];
     return Container(
       width: singleGridWidth,
@@ -266,13 +251,8 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
                 showModalBottomSheet(
                     backgroundColor: Colors.transparent,
                     builder: (BuildContext context) {
-                      return CourseBottomSheet(
-                          _deviceSize,
-                          widget.courseList,
-                          course.courseName.toString(),
-                          course.courseId.toString(),
-                          course.dynClassId.toString(),
-                          course.campus.toString());
+                      return CourseBottomSheet(_deviceSize, widget.courseList, course.courseName.toString(),
+                          course.courseId.toString(), course.dynClassId.toString(), course.campus.toString());
                     },
                     context: context);
               },
@@ -282,8 +262,7 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
                   height: parsedCardHeight[heightIndex] - 4,
                   decoration: BoxDecoration(
                       color: _getColor(course.courseId.hashCode),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(3.0)),
+                      borderRadius: const BorderRadius.all(Radius.circular(3.0)),
                       border: const Border(
                           // top: BorderSide(color: Colors.lightBlueAccent, width: 1),
                           // right: BorderSide(color: Colors.lightBlueAccent, width: 1),
@@ -298,30 +277,21 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
                         softWrap: true,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 3,
-                        style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white),
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Colors.white),
                       ),
                       Text(
                         course.place.toString(),
                         softWrap: true,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
-                        style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white),
+                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Colors.white),
                       ),
                       Text(
                         course.teacher.toString(),
                         softWrap: true,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
-                        style: const TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white),
+                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w400, color: Colors.white),
                       )
                     ],
                   )),
