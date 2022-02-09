@@ -25,4 +25,5 @@ enum EventNameConstants {
   onSelectCourse,
   onRemoveCourse,
   onCampusChange,
+  onBackgroundChange,
 }

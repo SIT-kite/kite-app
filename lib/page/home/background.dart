@@ -1,26 +1,30 @@
 /*
- *    上应小风筝(SIT-kite)  便利校园，一步到位
- *    Copyright (C) 2022 上海应用技术大学 上应小风筝团队
+ * 上应小风筝(SIT-kite)  便利校园，一步到位
+ * Copyright (C) 2022 上海应用技术大学 上应小风筝团队
  *
- *    This program is free software: you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as published by
- *    the Free Software Foundation, either version 3 of the License, or
- *    (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *    You should have received a copy of the GNU General Public License
- *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather_bg_null_safety/bg/weather_bg.dart';
 import 'package:flutter_weather_bg_null_safety/utils/weather_type.dart';
 import 'package:kite/entity/weather.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/storage_pool.dart';
+import 'package:path_provider/path_provider.dart';
 
 class HomeBackground extends StatefulWidget {
   final int? initialWeatherCode;
@@ -41,13 +45,15 @@ class _HomeBackgroundState extends State<HomeBackground> {
   @override
   void initState() {
     super.initState();
+    eventBus.on(EventNameConstants.onBackgroundChange, (_) => setState(() {}));
     eventBus.on(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
   }
 
   @override
   void deactivate() {
-    super.deactivate();
+    eventBus.off(EventNameConstants.onBackgroundChange);
     eventBus.off(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
+    super.deactivate();
   }
 
   WeatherType _getWeatherTypeByCode(int code) {
@@ -57,6 +63,7 @@ class _HomeBackgroundState extends State<HomeBackground> {
   void _onWeatherUpdate(dynamic newWeather) {
     Weather w = newWeather as Weather;
 
+    // 天气背景
     if (StoragePool.homeSetting.backgroundMode == 1) {
       setState(() => _weatherCode = int.parse(w.icon));
     } else {
@@ -74,8 +81,22 @@ class _HomeBackgroundState extends State<HomeBackground> {
     );
   }
 
-  Widget _buildColorBg() {
-    return Container(color: Colors.white);
+  Widget _buildImageBg() {
+    final directory = getApplicationDocumentsDirectory();
+
+    return FutureBuilder<Directory>(
+        future: directory,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasData) {
+              final path = snapshot.data!.path + '/background';
+              return Image.file(File(path), fit: BoxFit.fill);
+            } else if (snapshot.hasError) {
+              return Center(child: Text(snapshot.error.toString()));
+            }
+          }
+          return const Center(child: CircularProgressIndicator());
+        });
   }
 
   @override
@@ -87,7 +108,7 @@ class _HomeBackgroundState extends State<HomeBackground> {
         bg = _buildWeatherBg();
         break;
       case 2:
-        bg = _buildColorBg();
+        bg = _buildImageBg();
         break;
     }
     return bg;

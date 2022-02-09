@@ -21,13 +21,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/init_util.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/page/setting/storage.dart';
 import 'package:kite/storage/constants.dart';
+import 'package:kite/util/logger.dart';
 import 'package:kite/util/validation.dart';
+import 'package:path_provider/path_provider.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -113,11 +116,13 @@ class SettingPage extends StatelessWidget {
             settingKey: HomeKeyKeys.backgroundMode,
             values: const <int, String>{
               1: '实时天气',
-              2: '纯色',
-              3: '静态图片',
+              2: '静态图片',
             },
-            selected: 1,
-            onChange: (value) {},
+            selected: StoragePool.homeSetting.backgroundMode,
+            onChange: (value) {
+              StoragePool.homeSetting.backgroundMode = value;
+              eventBus.emit(EventNameConstants.onBackgroundChange);
+            },
           ),
           DropDownSettingsTile<int>(
             title: '校区',
@@ -133,7 +138,18 @@ class SettingPage extends StatelessWidget {
               eventBus.emit(EventNameConstants.onCampusChange);
             },
           ),
-          SimpleSettingsTile(title: '背景图片', subtitle: '设置首页的背景图片', onTap: () => {}),
+          SimpleSettingsTile(
+              title: '背景图片',
+              subtitle: '设置首页的背景图片',
+              onTap: () async {
+                final ImagePicker _picker = ImagePicker();
+                final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+                final savePath = (await getApplicationDocumentsDirectory()).path + '/background';
+
+                await image?.saveTo(savePath);
+                Log.info('保存文件至  $savePath');
+                eventBus.emit(EventNameConstants.onBackgroundChange);
+              }),
         ],
       ),
       SettingsGroup(title: '网络', children: <Widget>[
