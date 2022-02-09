@@ -18,6 +18,8 @@
 import 'package:check_vpn_connection/check_vpn_connection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kite/global/session_pool.dart';
+import 'package:kite/global/storage_pool.dart';
 import 'package:kite/service/network.dart';
 import 'package:kite/util/network.dart';
 
@@ -29,11 +31,6 @@ class ConnectivityPage extends StatefulWidget {
 }
 
 class _ConnectivityPageState extends State<ConnectivityPage> {
-  final Widget disconnectedPicture =
-      SvgPicture.asset('assets/connectivity/not-available.svg', width: 260, height: 260, color: Colors.grey);
-  final Widget connectedPicture =
-      SvgPicture.asset('assets/connectivity/not-available.svg', width: 260, height: 260, color: Colors.green[600]);
-
   bool isConnected = false;
 
   @override
@@ -47,14 +44,22 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
     });
   }
 
-  Widget buildFigure() => isConnected ? connectedPicture : disconnectedPicture;
+  Widget buildFigure(BuildContext context) {
+    final Color primaryColor = Theme.of(context).primaryColor;
+    final Color color = isConnected ? primaryColor : Colors.grey;
+    return SvgPicture.asset('assets/connectivity/not-available.svg', width: 260, height: 260, color: color);
+  }
 
   Widget buildConnectedBlock() {
-    Widget buildConnectedByVpnBlock() => Text(
-          '目前已通过 VPN 连接校园网',
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyText1,
-        );
+    final style = Theme.of(context).textTheme.bodyText1;
+
+    Widget buildConnectedByProxy() => Text(
+        '已通过 HTTP 代理连接校园网\n'
+        '地址：${SessionPool.httpProxy ?? StoragePool.network.proxy}',
+        textAlign: TextAlign.center,
+        style: style);
+
+    Widget buildConnectedByVpnBlock() => Text('已通过 VPN 连接校园网', textAlign: TextAlign.center, style: style);
     Widget buildConnectedByWlanBlock() {
       return FutureBuilder(
         future: Network.checkStatus(),
@@ -68,9 +73,8 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
           }
           return Column(
             mainAxisSize: MainAxisSize.min,
-            // mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('目前已通过 WLAN 登录', style: Theme.of(context).textTheme.bodyText1),
+              Text('目前已通过 WLAN 登录', style: style),
               const SizedBox(height: 10),
               Text('登录用户: $studentId\n登录地址: $ip'),
             ],
@@ -79,6 +83,9 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
       );
     }
 
+    if (StoragePool.network.useProxy || SessionPool.httpProxy != null) {
+      return buildConnectedByProxy();
+    }
     return FutureBuilder(
       future: CheckVpnConnection.isVpnActive(),
       builder: (context, snapshot) {
@@ -142,7 +149,7 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
         child: Column(
           children: [
             const Spacer(flex: 4),
-            Expanded(flex: 3, child: buildFigure()),
+            Expanded(flex: 3, child: buildFigure(context)),
             const Spacer(flex: 1),
             Expanded(flex: 3, child: isConnected ? buildConnectedBlock() : buildDisconnectedBlock()),
             const Spacer(flex: 4),
