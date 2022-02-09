@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../entity/edu/timetable.dart';
+import 'package:kite/page/timetable/bottom_sheet.dart';
 
 class WeeklyTimetable extends StatefulWidget {
   List<Course> courseList = <Course>[];
@@ -194,19 +195,14 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
   }
 
   Widget _buildCourseCard(List<double> parsedCardHeight, Map<int, Course> parsedCourseMap, int heightIndex) {
-    print(parsedCardHeight);
-    print(parsedCourseMap);
-    print(heightIndex);
-    print(parsedCurrDayCourseList);
+    Course? course = parsedCurrDayCourseList[heightIndex];
     return Container(
       width: singleGridWidth,
       height: parsedCardHeight[heightIndex],
       alignment: const Alignment(0, 0),
-      child: parsedCurrDayCourseList[heightIndex] != null
+      child: course != null
           ? InkWell(
-              onTapDown: (TapDownDetails tapDownDetails) {},
               onTap: () {
-                print("press");
               },
               child: Container(
                 width: singleGridWidth - 3,
@@ -220,7 +216,32 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
                       left: BorderSide(color: Colors.lightBlueAccent, width: 1),
                       bottom: BorderSide(color: Colors.lightBlueAccent, width: 1),
                     )),
-                child: Text(parsedCurrDayCourseList[heightIndex]!.courseName.toString()),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      course!.courseName.toString(),
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 3,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400,color: Colors.white),
+                    ),
+                    Text(
+                      course!.place.toString(),
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400,color: Colors.white),
+                    ),
+                    Text(
+                      course!.teacher.toString(),
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w400,color: Colors.white),
+                    )
+                  ],
+                )
               ),
             )
           : SizedBox(
