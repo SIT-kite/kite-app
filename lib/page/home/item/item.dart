@@ -22,6 +22,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 export 'bulletin.dart';
 export 'electricity.dart';
 export 'event.dart';
+export 'exam.dart';
 export 'expense.dart';
 export 'library.dart';
 export 'mail.dart';

@@ -15,30 +15,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-export 'about.dart';
-export 'bulletin/index.dart';
-export 'campus_card.dart';
-export 'classroom/index.dart';
-export 'connectivity.dart';
-export 'contact/index.dart';
-export 'electricity/index.dart';
-export 'event/index.dart';
-export 'exam.dart';
-export 'expense/index.dart';
-export 'feedback.dart';
-export 'game/index.dart';
-export 'home/index.dart';
-export 'library/index.dart';
-export 'login.dart';
-export 'lost_found/index.dart';
-export 'mail/index.dart';
-export 'market.dart';
-export 'night/index.dart';
-export 'notice.dart';
-export 'office/index.dart';
-export 'report.dart';
-export 'score/index.dart';
-export 'setting/index.dart';
-export 'timetable/index.dart';
-export 'welcome.dart';
-export 'wiki.dart';
+import 'package:flutter/material.dart';
+import 'package:kite/global/event_bus.dart';
+import 'package:kite/page/home/item/item.dart';
+
+class ExamItem extends StatefulWidget {
+  const ExamItem({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _ExamItemState();
+}
+
+class _ExamItemState extends State<ExamItem> {
+  late String content = '查看我最近的考试安排';
+
+  @override
+  void initState() {
+    eventBus.on(EventNameConstants.onHomeRefresh, (arg) {});
+
+    return super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return HomeItem(
+      route: '/exam',
+      icon: 'assets/home/icon_exam.svg',
+      title: '考试安排',
+      subtitle: content,
+    );
+  }
+}
