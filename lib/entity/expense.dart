@@ -96,7 +96,7 @@ const expenseTypeMapping = {
 };
 
 /// 爬虫获得的消费页
-class ExpensePage {
+class OaExpensePage {
   /// 当前页号
   int currentPage = 1;
 

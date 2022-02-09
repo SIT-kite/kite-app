@@ -20,13 +20,16 @@ import 'package:kite/entity/expense.dart';
 /// 远程的消费数据访问层的接口
 abstract class ExpenseRemoteDao {
   /// 获取消费
-  Future<ExpensePage> getExpensePage(int pageNum, {DateTime start, DateTime end});
+  Future<OaExpensePage> getExpensePage(int pageNum, {DateTime start, DateTime end});
 }
 
 /// 本地的消费数据访问接口
 abstract class ExpenseLocalDao {
   /// 添加消费记录
   void add(ExpenseRecord record);
+
+  /// 添加多条消费记录
+  void addAll(Iterable<ExpenseRecord> records);
 
   /// 获取最近一次消费记录 (首页)
   ExpenseRecord? getLastOne();
@@ -38,5 +41,5 @@ abstract class ExpenseLocalDao {
   List<ExpenseRecord> getAllByTimeDesc();
 
   /// 判断是否存在该记录
-  bool isEmpty(DateTime ts);
+  bool isExist(DateTime ts);
 }

@@ -42,14 +42,14 @@ class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
   Future<bool> refreshExpenseRecord() async {
     ExpenseRecord bill = StoragePool.expenseRecordStorage.getAllByTimeDesc()[0];
     for (int i = 1; i < 20; i += 3) {
-      List<ExpensePage> expensePage = await Future.wait([
+      List<OaExpensePage> expensePage = await Future.wait([
         ExpenseRemoteService(session).getExpensePage(i),
         ExpenseRemoteService(session).getExpensePage(i + 1),
         ExpenseRemoteService(session).getExpensePage(i + 2),
       ]);
-      for (ExpensePage page in expensePage) {
+      for (OaExpensePage page in expensePage) {
         for (ExpenseRecord bills in page.records) {
-          if (!StoragePool.expenseRecordStorage.isEmpty(bills.ts)) {
+          if (!StoragePool.expenseRecordStorage.isExist(bills.ts)) {
             return true;
           }
         }
@@ -58,7 +58,7 @@ class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
     return true;
   }
 
-  Future<ExpensePage> getExpensePage(int page, {DateTime? start, DateTime? end}) async {
+  Future<OaExpensePage> getExpensePage(int page, {DateTime? start, DateTime? end}) async {
     start = start ?? DateTime(2010);
     end = end ?? DateTime.now();
     final response = await session.get(
@@ -74,7 +74,7 @@ class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
     return _parseExpenseDetail(_codec.decode(response.data));
   }
 
-  static ExpensePage _parseExpenseDetail(String htmlPage) {
+  static OaExpensePage _parseExpenseDetail(String htmlPage) {
     const String recordSelector = 'table#table > tbody > tr';
 
     final BeautifulSoup soup = BeautifulSoup(htmlPage);
@@ -89,7 +89,7 @@ class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
     String currentPage = RegExp(r'第(\S*)页').allMatches(pageInfo).first.group(1)!;
     String totalPage = RegExp(r'共(\S*)页').allMatches(pageInfo).first.group(1)!;
 
-    return ExpensePage()
+    return OaExpensePage()
       ..records = records
       ..currentPage = int.parse(currentPage)
       ..total = int.parse(totalPage);

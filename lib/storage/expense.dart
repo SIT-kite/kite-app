@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'dart:math';
+
 import 'package:hive/hive.dart';
 import 'package:kite/dao/expense.dart';
 import 'package:kite/entity/expense.dart';
@@ -26,12 +28,19 @@ class ExpenseLocalStorage implements ExpenseLocalDao {
 
   @override
   void add(ExpenseRecord record) {
-    box.put(record.ts.hashCode, record);
+    box.put(record.ts.millisecondsSinceEpoch, record);
+  }
+
+  @override
+  void addAll(Iterable<ExpenseRecord> records) {
+    final Map<dynamic, ExpenseRecord> map = {};
+    records.forEach((e) => map[e.ts.millisecondsSinceEpoch] = e);
+    box.putAll(map);
   }
 
   @override
   void deleteAll() {
-    box.deleteAll(box.keys.map((e) => e.hashCode));
+    box.clear();
   }
 
   @override
@@ -42,14 +51,14 @@ class ExpenseLocalStorage implements ExpenseLocalDao {
   }
 
   @override
-  bool isEmpty(DateTime ts) {
-    return box.get(ts.hashCode) == null;
+  bool isExist(DateTime ts) {
+    return box.get(ts.millisecondsSinceEpoch) == null;
   }
 
   @override
   ExpenseRecord? getLastOne() {
-    try {
-      return getAllByTimeDesc().first;
-    } catch (_) {}
+    int maxTimeStamp = 0;
+    box.keys.where((e) => e.runtimeType == int).forEach((e) => maxTimeStamp = max(e, maxTimeStamp));
+    return box.get(maxTimeStamp);
   }
 }
