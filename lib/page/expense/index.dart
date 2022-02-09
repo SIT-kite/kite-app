@@ -17,7 +17,11 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/entity/expense.dart';
+import 'package:kite/global/session_pool.dart';
+import 'package:kite/global/storage_pool.dart';
 import 'package:kite/page/expense/icon.dart';
+import 'package:kite/service/expense.dart';
+import 'package:kite/util/flash.dart';
 
 import 'bill.dart';
 import 'statistics.dart';
@@ -32,7 +36,7 @@ class ExpensePage extends StatefulWidget {
 class _ExpensePageState extends State<ExpensePage> {
   /// 底部导航键的标志位
   int currentIndex = 0;
-  bool isRefreshing = false;
+  bool _isRefreshing = false;
   ExpenseType _filter = ExpenseType.all;
 
   /// 筛选按钮
@@ -53,13 +57,54 @@ class _ExpensePageState extends State<ExpensePage> {
     );
   }
 
-  _buildRefreshButton() {
+  /// 拉取数据并保存
+  Future<OaExpensePage> _fetchAndSave(ExpenseRemoteService service, int page, {DateTime? start, DateTime? end}) async {
+    final OaExpensePage billPage = await service.getExpensePage(page, start: start, end: end);
+    StoragePool.expenseRecordStorage.addAll(billPage.records);
+
+    return billPage;
+  }
+
+  /// 并发拉取数据
+  Future<List<ExpenseRecord>> _fetchBillConcurrently(ExpenseRemoteService service, int startPage, int count) async {
+    final List<Future> futures = [];
+    for (int i = 2; i <= count; i++) {
+      futures.add(_fetchAndSave(service, i));
+    }
+    final List<ExpenseRecord> result = (await Future.wait(futures)).fold(<ExpenseRecord>[], (l, e) => l + e);
+    return result;
+  }
+
+  void _onUpdateRecords(BuildContext context) async {
+    if (_isRefreshing) {
+      showBasicFlash(context, const Text('已经在刷新啦'));
+      return;
+    } else {
+      _isRefreshing = true;
+    }
+    showBasicFlash(context, const Text('正在更新消费数据, 速度受限于学校服务器, 请稍等'));
+
+    final DateTime? startDate = StoragePool.expenseRecordStorage.getLastOne()?.ts;
+    final ExpenseRemoteService service = ExpenseRemoteService(SessionPool.ssoSession);
+    final OaExpensePage firstPage = await _fetchAndSave(service, 1, start: startDate);
+
+    showBasicFlash(context, Text('已加载 1 页, 共 ${firstPage.total} 页'));
+    setState(() {});
+
+    _fetchBillConcurrently(service, 2, firstPage.total - 1);
+
+    showBasicFlash(context, const Text('加载完成'));
+    setState(() => _isRefreshing = false);
+  }
+
+  Widget _buildRefreshButton(BuildContext context) {
     return IconButton(
       tooltip: '刷新',
       icon: const Icon(Icons.refresh),
-      onPressed: () {
-        setState(() => isRefreshing = true);
-      },
+      onPressed: () => Future.delayed(Duration.zero, () => _onUpdateRecords(context)).catchError((e) {
+        _isRefreshing = false;
+        showBasicFlash(context, Text('错误信息: ${e.toString().split('\n')[0]}'), duration: const Duration(seconds: 3));
+      }),
     );
   }
 
@@ -69,7 +114,7 @@ class _ExpensePageState extends State<ExpensePage> {
       appBar: AppBar(
         title: const Text("消费记录"),
         actions: [
-          _buildRefreshButton(),
+          _buildRefreshButton(context),
           currentIndex == 0 ? _buildPopupMenuItems() : Container(),
         ],
       ),
@@ -87,7 +132,7 @@ class _ExpensePageState extends State<ExpensePage> {
         ],
         currentIndex: currentIndex,
         onTap: (int index) {
-          setState(() => {currentIndex = index, isRefreshing = false});
+          setState(() => {currentIndex = index, _isRefreshing = false});
         },
       ),
     );

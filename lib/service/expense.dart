@@ -38,26 +38,6 @@ class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
 
   ExpenseRemoteService(ASession session) : super(session);
 
-  @override
-  Future<bool> refreshExpenseRecord() async {
-    ExpenseRecord bill = StoragePool.expenseRecordStorage.getAllByTimeDesc()[0];
-    for (int i = 1; i < 20; i += 3) {
-      List<OaExpensePage> expensePage = await Future.wait([
-        ExpenseRemoteService(session).getExpensePage(i),
-        ExpenseRemoteService(session).getExpensePage(i + 1),
-        ExpenseRemoteService(session).getExpensePage(i + 2),
-      ]);
-      for (OaExpensePage page in expensePage) {
-        for (ExpenseRecord bills in page.records) {
-          if (!StoragePool.expenseRecordStorage.isExist(bills.ts)) {
-            return true;
-          }
-        }
-      }
-    }
-    return true;
-  }
-
   Future<OaExpensePage> getExpensePage(int page, {DateTime? start, DateTime? end}) async {
     start = start ?? DateTime(2010);
     end = end ?? DateTime.now();

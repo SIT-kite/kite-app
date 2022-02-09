@@ -42,4 +42,7 @@ abstract class ExpenseLocalDao {
 
   /// 判断是否存在该记录
   bool isExist(DateTime ts);
+
+  /// 判断本地存储是否为空
+  bool isEmpty();
 }
