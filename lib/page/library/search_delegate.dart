@@ -16,6 +16,7 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import 'package:flutter/material.dart';
+import 'package:kite/entity/library/book_search.dart';
 import 'package:kite/entity/library/hot_search.dart';
 import 'package:kite/entity/library/search_history.dart';
 import 'package:kite/global/session_pool.dart';
@@ -28,14 +29,19 @@ import 'package:kite/util/logger.dart';
 class SearchBarDelegate extends SearchDelegate<String> {
   Widget? _suggestionView;
 
+  /// 当前的搜索模式
+  SearchWay _searchWay = SearchWay.any;
+
   /// 给定一个关键词，开始搜索该关键词
-  void _searchByGiving(String title, BuildContext context) async {
-    query = title;
+  void _searchByGiving(BuildContext context, String key, {SearchWay searchWay = SearchWay.any}) async {
+    query = key;
 
     // 若已经显示过结果，这里无法直接再次显示结果
     // 经测试，需要先返回搜索建议页，在等待若干时间后显示结果
     showSuggestions(context);
     await Future.delayed(const Duration(seconds: 1));
+
+    _searchWay = searchWay;
     showResults(context);
   }
 
@@ -81,8 +87,13 @@ class SearchBarDelegate extends SearchDelegate<String> {
     return BookSearchResultWidget(
       query,
       requestQueryKeyCallback: (String key) {
-        _searchByGiving(key, context);
+        _searchByGiving(
+          context,
+          key,
+          searchWay: SearchWay.author,
+        );
       },
+      searchWay: _searchWay,
     );
   }
 
@@ -90,7 +101,7 @@ class SearchBarDelegate extends SearchDelegate<String> {
   Widget buildSuggestions(BuildContext context) {
     // 若发现不为空，则直接搜索
     if (query.isNotEmpty) {
-      _searchByGiving(query, context);
+      _searchByGiving(context, query);
     }
     // 第一次使用时，_suggestionView为空，那就构造，后面直接用
     _suggestionView ??= _buildSearchSuggestion(context);
@@ -109,7 +120,7 @@ class SearchBarDelegate extends SearchDelegate<String> {
             Text('历史记录', style: Theme.of(context).textTheme.bodyText1),
             SuggestionItemView(
               titleItems: StoragePool.librarySearchHistory.getAllByTimeDesc().map((e) => e.keyword).toList(),
-              onItemTap: (title) => _searchByGiving(title, context),
+              onItemTap: (title) => _searchByGiving(context, title),
             ),
             const SizedBox(height: 20),
             InkWell(
@@ -138,7 +149,7 @@ class SearchBarDelegate extends SearchDelegate<String> {
                   HotSearch hotSearch = snapshot.data!;
                   return SuggestionItemView(
                     titleItems: hotSearch.recentMonth.map((e) => e.hotSearchWord).toList(),
-                    onItemTap: (title) => _searchByGiving(title, context),
+                    onItemTap: (title) => _searchByGiving(context, title),
                   );
                 } else if (snapshot.hasError) {
                   return Center(child: Text(snapshot.error.toString()));
