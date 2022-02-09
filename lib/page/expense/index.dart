@@ -39,7 +39,7 @@ class _ExpensePageState extends State<ExpensePage> {
   _buildPopupMenuItems() {
     final itemMapping = expenseTypeMapping.map((type, display) {
       final item = PopupMenuItem(
-        value: ExpenseType.all,
+        value: type,
         child: Row(children: [buildIcon(type, context), Text(display)]),
       );
       return MapEntry(type, item);
@@ -73,7 +73,7 @@ class _ExpensePageState extends State<ExpensePage> {
           currentIndex == 0 ? _buildPopupMenuItems() : Container(),
         ],
       ),
-      body: currentIndex == 0 ? const BillPage(filter: ExpenseType.all) : const StatisticsPage(),
+      body: currentIndex == 0 ? BillPage(filter: _filter) : const StatisticsPage(),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
@@ -86,8 +86,8 @@ class _ExpensePageState extends State<ExpensePage> {
           )
         ],
         currentIndex: currentIndex,
-        onTap: (int tapIndex) {
-          setState(() => {currentIndex = tapIndex, isRefreshing = false});
+        onTap: (int index) {
+          setState(() => {currentIndex = index, isRefreshing = false});
         },
       ),
     );
