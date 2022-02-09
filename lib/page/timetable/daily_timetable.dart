@@ -28,6 +28,7 @@ GlobalKey<_DailyTimetableState> dailyTimeTableKey = GlobalKey();
 class DailyTimetable extends StatefulWidget {
   // 当前学期开学时间
   late DateTime termBeginDate;
+
   // 教育系统拉取的课程数据（未经处理）
   List<Course> courseList = <Course>[];
 
@@ -50,6 +51,7 @@ class DailyTimetable extends StatefulWidget {
 
 class _DailyTimetableState extends State<DailyTimetable> {
   late PageController _pageController;
+
   // TODO：将时间改为获取当前时间
   DateTime currDate = DateTime(2021, 11, 23);
 
@@ -57,10 +59,13 @@ class _DailyTimetableState extends State<DailyTimetable> {
   late Size _deviceSize;
 
   List<Course> currDayCourseList = <Course>[];
+
   // 当前点击的页数和天数
   final List<int> tapped = [0, 0];
+
   // 在当前时间下，课表应该显示的页数为currTimePageIndex
   int currTimePageIndex = 0;
+
   // 当前页应该显示的天为currDayInWeekIndex
   int currDayInWeekIndex = 0;
 
@@ -80,8 +85,8 @@ class _DailyTimetableState extends State<DailyTimetable> {
     super.initState();
     int days = currDate.difference(widget.termBeginDate).inDays;
     currTimePageIndex = (days - 6) ~/ 7 + 1;
-    currDayInWeekIndex = days%7;
-    _pageController =  PageController(initialPage: currTimePageIndex, viewportFraction: 1.0);
+    currDayInWeekIndex = days % 7;
+    _pageController = PageController(initialPage: currTimePageIndex, viewportFraction: 1.0);
     setState(() {
       tapped[0] = currTimePageIndex;
       tapped[1] = currDayInWeekIndex;
@@ -140,9 +145,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
                             child: Text("今天没有课哦"),
                           )
                         ]
-                      : currDayCourseList
-                          .map((e) => _buildClassCard(context, e))
-                          .toList()),
+                      : currDayCourseList.map((e) => _buildClassCard(context, e)).toList()),
             )
           ],
         );
@@ -162,15 +165,8 @@ class _DailyTimetableState extends State<DailyTimetable> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        (weekIndex + 1).toString(),
-                        style: const TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.w400),
-                      ),
-                      const Text(
-                        "周",
-                        style: TextStyle(fontSize: 12),
-                      )
+                      Text((weekIndex + 1).toString(), style: Theme.of(context).textTheme.bodyText2),
+                      Text("周", style: Theme.of(context).textTheme.bodyText2)
                     ],
                   ))
               : SizedBox(
@@ -182,33 +178,22 @@ class _DailyTimetableState extends State<DailyTimetable> {
                           setState(() {
                             tapped[0] = weekIndex;
                             tapped[1] = index - 1;
-                            currDayCourseList = _getCourseListByWeekAndDay(
-                                weekIndex, index - 1);
+                            currDayCourseList = _getCourseListByWeekAndDay(weekIndex, index - 1);
                           });
                         },
                         onTapDown: (TapDownDetails tapDownDetails) {},
                         child: Container(
                             decoration: BoxDecoration(
-                              color: ((tapped[0] == weekIndex) &&
-                                      (tapped[1] == index - 1))
+                              color: ((tapped[0] == weekIndex) && (tapped[1] == index - 1))
                                   ? const Color.fromARGB(255, 228, 235, 245)
                                   : Colors.white,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(12.0)),
+                              borderRadius: const BorderRadius.all(Radius.circular(12.0)),
                             ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  "周" + num2word[index - 1],
-                                  style: const TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                                Text(
-                                  currWeek[index - 1],
-                                  style: const TextStyle(fontSize: 11),
-                                ),
+                                Text("周" + num2word[index - 1], style: Theme.of(context).textTheme.bodyText2),
+                                Text(currWeek[index - 1], style: Theme.of(context).textTheme.bodyText2),
                               ],
                             )),
                       )),
@@ -223,13 +208,8 @@ class _DailyTimetableState extends State<DailyTimetable> {
         showModalBottomSheet(
             backgroundColor: Colors.transparent,
             builder: (BuildContext context) {
-              return CourseBottomSheet(
-                  _deviceSize,
-                  widget.courseList,
-                  course.courseName.toString(),
-                  course.courseId.toString(),
-                  course.dynClassId.toString(),
-                  course.campus.toString());
+              return CourseBottomSheet(_deviceSize, widget.courseList, course.courseName.toString(),
+                  course.courseId.toString(), course.dynClassId.toString(), course.campus.toString());
             },
             context: context);
       },
@@ -240,15 +220,13 @@ class _DailyTimetableState extends State<DailyTimetable> {
             child: Column(
               children: [
                 ListTile(
-                    leading: Image.asset(courseIconPath +
-                        CourseCategory.query(course.courseName ?? '') +
-                        '.png'),
-                    title: Text(course.courseName.toString()),
+                    leading: Image.asset(courseIconPath + CourseCategory.query(course.courseName ?? '') + '.png'),
+                    title: Text(course.courseName.toString(), style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.black54)),
                     subtitle: Column(
                       children: [
                         Row(
                           children: [
-                            Text(course.teacher.toString()),
+                            Text(course.teacher.toString(), style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.black54)),
                           ],
                         ),
                         Row(
@@ -258,18 +236,18 @@ class _DailyTimetableState extends State<DailyTimetable> {
                               child: Row(
                                 textDirection: TextDirection.ltr,
                                 children: [
-                                  Text(ParseCourse.parseCourseTimeIndex(course.timeIndex!)),
+                                  Text(ParseCourse.parseCourseTimeIndex(course.timeIndex!),
+                                      style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.black54)),
                                 ],
                               ),
                             ),
                             Expanded(
                               flex: 1,
-                              child: Text(
-                                course.place.toString(),
-                                textAlign: TextAlign.right,
-                                softWrap: true,
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                              child: Text(course.place.toString(),
+                                  textAlign: TextAlign.right,
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.black54)),
                             ),
                           ],
                         ),

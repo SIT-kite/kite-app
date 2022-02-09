@@ -46,14 +46,14 @@ class WeeklyTimetable extends StatefulWidget {
 class _WeeklyTimetableState extends State<WeeklyTimetable> {
   late Size _deviceSize;
   // 左侧方块的宽高比
-  static const double gridAspectRatioHeight = 1 / 1.7;
+  static const double gridAspectRatioHeight = 1 / 1.8;
   // 课程网格中每一小格的高度
   late double singleGridHeight;
   // 课程网格中每一小格的宽度
   late double singleGridWidth;
 
   // TODO：将时间改为获取当前时间
-  DateTime currDate = DateTime(2021, 12, 25);
+  DateTime currDate = DateTime(2021, 9, 8);
   int currTimePageIndex = 0;
 
   static final List<Color> colorList = [
@@ -153,11 +153,11 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
                         children: [
                           Text(
                             (weekIndex + 1).toString(),
-                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                            style: Theme.of(context).textTheme.bodyText2,
                           ),
-                          const Text(
+                          Text(
                             "周",
-                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                            style: Theme.of(context).textTheme.bodyText2,
                           )
                         ],
                       )))
@@ -174,11 +174,11 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
                         children: [
                           Text(
                             "周" + num2word[index - 1],
-                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                            style: Theme.of(context).textTheme.bodyText2,
                           ),
                           Text(
                             currWeek[index - 1],
-                            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w400),
+                            style: Theme.of(context).textTheme.bodyText2,
                           ),
                         ],
                       )),
@@ -197,7 +197,7 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
               child: Center(
                 child: Text(
                   (index + 1).toInt().toString(),
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                  style: Theme.of(context).textTheme.bodyText2,
                 ),
               ),
               decoration: const BoxDecoration(
@@ -266,10 +266,6 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
                       color: _getColor(course.courseId.hashCode),
                       borderRadius: const BorderRadius.all(Radius.circular(3.0)),
                       border: const Border(
-                          // top: BorderSide(color: Colors.lightBlueAccent, width: 1),
-                          // right: BorderSide(color: Colors.lightBlueAccent, width: 1),
-                          // left: BorderSide(color: Colors.lightBlueAccent, width: 1),
-                          // bottom: BorderSide(color: Colors.lightBlueAccent, width: 1),
                           )),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -279,21 +275,21 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
                         softWrap: true,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 3,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Colors.white),
+                        style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.white)
                       ),
                       Text(
                         course.place.toString(),
                         softWrap: true,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Colors.white),
+                        style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.white)
                       ),
                       Text(
                         course.teacher.toString(),
                         softWrap: true,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
-                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w400, color: Colors.white),
+                        style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.white)
                       )
                     ],
                   )),

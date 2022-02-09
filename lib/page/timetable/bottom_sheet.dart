@@ -45,8 +45,8 @@ class CourseBottomSheet extends StatelessWidget {
           decoration: const BoxDecoration(
             color: Color.fromARGB(252, 228, 235, 245),
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(50.0),
-              topRight: Radius.circular(50.0),
+              topLeft: Radius.circular(15.0),
+              topRight: Radius.circular(15.0),
             ),
           ),
           child: Column(
@@ -59,9 +59,6 @@ class CourseBottomSheet extends StatelessWidget {
                     padding: const EdgeInsets.all(3),
                     decoration: const BoxDecoration(
                       color: Color.fromARGB(255, 228, 235, 245),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(5.0),
-                      ),
                     ),
                     child: Text(_courseName, style: Theme.of(context).textTheme.headline3),
                   )),
@@ -69,7 +66,7 @@ class CourseBottomSheet extends StatelessWidget {
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.all(
-                      Radius.circular(20.0),
+                      Radius.circular(9.0),
                     ),
                   ),
                   height: _deviceSize.height * 0.43,
