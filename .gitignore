@@ -74,3 +74,6 @@ generated_plugin*
 
 # 过滤cookie持久化的文件
 .cookies
+
+# 过滤构建脚本生成的配置文件
+build.cfg
