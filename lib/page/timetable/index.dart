@@ -86,8 +86,8 @@ class _TimetablePageState extends State<TimetablePage> {
         courseList = await StoragePool.course.getTimetable(currSchoolYear, currSemester);
       }
     }
-    print(courseList);
-    displayMode == DisplayMode.daily ? generateDailyCourse() : generateWeeklyCourse();
+    // print(courseList);
+    generateDailyCourse();
     generateDateTable();
   }
 
@@ -137,8 +137,6 @@ class _TimetablePageState extends State<TimetablePage> {
       }
     }
   }
-
-  void generateWeeklyCourse() {}
 
   Widget _buildFuture(BuildContext context, AsyncSnapshot snapshot) {
     if (snapshot.connectionState == ConnectionState.done) {

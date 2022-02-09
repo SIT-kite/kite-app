@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../entity/edu/timetable.dart';
 
 class WeeklyTimetable extends StatefulWidget {
@@ -22,8 +21,9 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
   late double singleGridHeight;
   late double singleGridWidth;
 
-  final PageController _pageController = PageController(initialPage: 2, viewportFraction: 1.0);
+  final PageController _pageController = PageController(initialPage: 0, viewportFraction: 1.0);
 
+  List<Course?> parsedCurrDayCourseList = [];
   // 周次 日期x7 月份
   final List<String> num2word = [
     "一",
@@ -61,7 +61,7 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
                           flex: 2,
                           child: _buildLeftSectionColumn(),
                         ),
-                        Expanded(flex: 21, child: _buildCourseGridView())
+                        Expanded(flex: 21, child: _buildCourseGrid(index))
                       ],
                     ),
                   )),
@@ -162,54 +162,131 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
         });
   }
 
-  _getCourseListByWeek() {}
-
-  Widget _buildCourseGridView() {
+  Widget _buildCourseGrid(int weekIndex) {
     return SizedBox(
       width: singleGridWidth * 7,
       height: singleGridHeight * 11,
       child: ListView.builder(
+        itemCount: 7,
         padding: const EdgeInsets.fromLTRB(1, 0, 0, 0),
         scrollDirection: Axis.horizontal,
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemBuilder: (BuildContext context, int index) {
+          List<Course> currDayCourseList = _getCourseListByWeekAndDay(weekIndex, index);
+          Map<int, Course> parsedCourseMap = _parseCurrDayCourseList(currDayCourseList);
+          List<double> parsedCardHeight = _getGridHeightList(parsedCourseMap);
           return SizedBox(
               width: singleGridWidth,
               height: singleGridHeight * 11,
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: 5,
+                itemCount: parsedCardHeight.length,
+                scrollDirection: Axis.vertical,
+                physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    width: singleGridWidth,
-                    height: singleGridHeight * 2,
-                    alignment: const Alignment(0, 0),
-                    child: InkWell(
-                      onTapDown: (TapDownDetails tapDownDetails) {},
-                      onTap: () {
-                        print("press");
-                      },
-                      child: Container(
-                        width: singleGridWidth - 3,
-                        height: singleGridHeight * 2 - 4,
-                        decoration: const BoxDecoration(
-                            color: Colors.blueAccent,
-                            borderRadius: BorderRadius.all(Radius.circular(3.0)),
-                            border: Border(
-                              top: BorderSide(color: Colors.lightBlueAccent, width: 1),
-                              right: BorderSide(color: Colors.lightBlueAccent, width: 1),
-                              left: BorderSide(color: Colors.lightBlueAccent, width: 1),
-                              bottom: BorderSide(color: Colors.lightBlueAccent, width: 1),
-                            )),
-                        child: const Text("123"),
-                      ),
-                    ),
-                  );
+                  return _buildCourseCard(parsedCardHeight, parsedCourseMap, index);
                 },
               ));
         },
       ),
     );
+  }
+
+  Widget _buildCourseCard(List<double> parsedCardHeight, Map<int, Course> parsedCourseMap, int heightIndex) {
+    print(parsedCardHeight);
+    print(parsedCourseMap);
+    print(heightIndex);
+    print(parsedCurrDayCourseList);
+    return Container(
+      width: singleGridWidth,
+      height: parsedCardHeight[heightIndex],
+      alignment: const Alignment(0, 0),
+      child: parsedCurrDayCourseList[heightIndex] != null
+          ? InkWell(
+              onTapDown: (TapDownDetails tapDownDetails) {},
+              onTap: () {
+                print("press");
+              },
+              child: Container(
+                width: singleGridWidth - 3,
+                height: parsedCardHeight[heightIndex] - 4,
+                decoration: const BoxDecoration(
+                    color: Colors.blueAccent,
+                    borderRadius: BorderRadius.all(Radius.circular(3.0)),
+                    border: Border(
+                      top: BorderSide(color: Colors.lightBlueAccent, width: 1),
+                      right: BorderSide(color: Colors.lightBlueAccent, width: 1),
+                      left: BorderSide(color: Colors.lightBlueAccent, width: 1),
+                      bottom: BorderSide(color: Colors.lightBlueAccent, width: 1),
+                    )),
+                child: Text(parsedCurrDayCourseList[heightIndex]!.courseName.toString()),
+              ),
+            )
+          : SizedBox(
+              width: singleGridWidth - 3,
+              height: parsedCardHeight[heightIndex] - 4,
+            ),
+    );
+  }
+
+  List<Course> _getCourseListByWeekAndDay(int weekIndex, int dayIndex) {
+    print("this is getCourseListByWeekAndDay");
+    List<Course> res = <Course>[];
+    for (var i in widget.dailyCourseList[weekIndex]![dayIndex]) {
+      res.add(widget.courseList[i]);
+    }
+    res.sort((a, b) => (a.timeIndex!).compareTo(b.timeIndex!));
+    return res;
+  }
+
+  List<double> _getGridHeightList(Map<int, Course> parsedCurrCourseList) {
+    List<double> res = [];
+    parsedCurrDayCourseList.clear();
+    int i = 1;
+    while (i <= 11) {
+      if (parsedCurrCourseList.containsKey(i)) {
+        // 此处hour保存已经变为当前课程有几节
+        res.add(parsedCurrCourseList[i]!.hour * singleGridHeight);
+        parsedCurrDayCourseList.add(parsedCurrCourseList[i]!);
+        i += parsedCurrCourseList[i]!.hour;
+      } else {
+        res.add(singleGridHeight);
+        parsedCurrDayCourseList.add(null);
+        i++;
+      }
+    }
+    return res;
+  }
+
+  Map<int, Course> _parseCurrDayCourseList(List<Course> currDayCourseList) {
+    Map<int, Course> parsedCourseList = {};
+    for (Course course in currDayCourseList) {
+      int timeIndex = course.timeIndex!;
+      // 除去首个0
+      timeIndex = timeIndex >> 1;
+      int count = 1;
+      bool isConstant = false;
+      bool isAddSectionLength = false;
+      int startSection = 0;
+      while (timeIndex != 0) {
+        if ((timeIndex & 1) == 1 && isConstant == false) {
+          startSection = count;
+          parsedCourseList[startSection] = course;
+          isConstant = true;
+        } else if (isConstant && (timeIndex & 1) == 0) {
+          // hour里面放持续节次
+          parsedCourseList[startSection]!.hour = count - startSection;
+          isConstant = false;
+          isAddSectionLength = true;
+        }
+        timeIndex = timeIndex >> 1;
+        count++;
+      }
+      if (!isAddSectionLength) {
+        parsedCourseList[startSection]!.hour = count - startSection;
+      }
+    }
+    return parsedCourseList;
   }
 }
