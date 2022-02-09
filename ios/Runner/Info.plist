@@ -50,9 +50,5 @@
 		<false/>
 		<key>UIStatusBarHidden</key>
 		<true/>
-		<key>NSPhotoLibraryUsageDescription</key>
-		<String>设置自定义背景或上传二手书照片</String>
-		</key>NSCameraUsageDescription</key>
-		<String>扫描二手书条形码</String>
 	</dict>
 </plist>
