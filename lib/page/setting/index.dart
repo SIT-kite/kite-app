@@ -22,12 +22,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kite/entity/auth_item.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/init_util.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/page/setting/storage.dart';
 import 'package:kite/storage/constants.dart';
+import 'package:kite/util/flash.dart';
 import 'package:kite/util/validation.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -51,6 +53,24 @@ class SettingPage extends StatelessWidget {
     await image?.saveTo(savePath);
     StoragePool.homeSetting.background = savePath;
     eventBus.emit(EventNameConstants.onBackgroundChange);
+  }
+
+  void _testPassword(BuildContext context) async {
+    final user = StoragePool.authSetting.currentUsername!;
+    var userItem = StoragePool.authPool.get(user);
+    if (userItem == null) {
+      userItem = AuthItem()
+        ..username = user
+        ..password = '';
+      StoragePool.authPool.add(userItem);
+    }
+    final password = userItem.password;
+    try {
+      await SessionPool.ssoSession.login(user, password);
+      showBasicFlash(context, const Text('用户名和密码正确'));
+    } catch (e) {
+      showBasicFlash(context, Text('登录异常: ${e.toString().split('\n')[0]}'), duration: const Duration(seconds: 3));
+    }
   }
 
   void _onLogout(BuildContext context) {
@@ -192,7 +212,7 @@ class SettingPage extends StatelessWidget {
           initialValue: StoragePool.authSetting.currentUsername ?? '',
           validator: studentIdValidator,
         ),
-        SimpleSettingsTile(title: '测试连接', subtitle: '检查用户名密码是否正确', onTap: () => {}),
+        SimpleSettingsTile(title: '登录测试', subtitle: '检查用户名密码是否正确', onTap: () => _testPassword(context)),
         SimpleSettingsTile(title: '退出登录', subtitle: '退出当前账号', onTap: () => _onLogout(context)),
         SimpleSettingsTile(title: '清除数据', subtitle: '清除应用程序保存的账号和设置，但不包括缓存', onTap: () => _onClearStorage(context)),
       ]),
@@ -201,7 +221,8 @@ class SettingPage extends StatelessWidget {
               SimpleSettingsTile(
                 title: '显示本机存储内容',
                 subtitle: '包括首页和各模块存储的数据',
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => DebugStoragePage())),
+                onTap: () =>
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const DebugStoragePage())),
               )
             ])
           : const SizedBox(height: 0),
