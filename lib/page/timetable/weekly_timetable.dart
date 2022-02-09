@@ -229,21 +229,21 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      course!.courseName.toString(),
+                      course.courseName.toString(),
                       softWrap: true,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 3,
                       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400,color: Colors.white),
                     ),
                     Text(
-                      course!.place.toString(),
+                      course.place.toString(),
                       softWrap: true,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                       style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400,color: Colors.white),
                     ),
                     Text(
-                      course!.teacher.toString(),
+                      course.teacher.toString(),
                       softWrap: true,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
