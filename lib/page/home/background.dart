@@ -19,12 +19,13 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_weather_bg_null_safety/bg/weather_bg.dart';
 import 'package:flutter_weather_bg_null_safety/utils/weather_type.dart';
 import 'package:kite/entity/weather.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:kite/util/flash.dart';
 
 class HomeBackground extends StatefulWidget {
   final int? initialWeatherCode;
@@ -45,19 +46,27 @@ class _HomeBackgroundState extends State<HomeBackground> {
   @override
   void initState() {
     super.initState();
-    eventBus.on(EventNameConstants.onBackgroundChange, (_) => setState(() {}));
+    eventBus.on(EventNameConstants.onBackgroundChange, _onBackgroundUpdate);
     eventBus.on(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
   }
 
   @override
   void deactivate() {
-    eventBus.off(EventNameConstants.onBackgroundChange);
+    eventBus.off(EventNameConstants.onBackgroundChange, _onBackgroundUpdate);
     eventBus.off(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
     super.deactivate();
   }
 
   WeatherType _getWeatherTypeByCode(int code) {
-    return weatherCodeToType[code] ?? WeatherType.sunny;
+    return _weatherCodeToType[code] ?? WeatherType.sunny;
+  }
+
+  void _onBackgroundUpdate(_) {
+    if (StoragePool.homeSetting.background == null) {
+      showBasicFlash(context, const Text('你还没有设置背景图片'));
+      return;
+    }
+    setState(() {});
   }
 
   void _onWeatherUpdate(dynamic newWeather) {
@@ -72,50 +81,32 @@ class _HomeBackgroundState extends State<HomeBackground> {
   }
 
   Widget _buildWeatherBg() {
-    final windowSize = MediaQuery.of(context).size;
-
     return WeatherBg(
       weatherType: _getWeatherTypeByCode(_weatherCode),
-      width: windowSize.width,
-      height: windowSize.height,
+      width: 1.sw,
+      height: 1.sh,
     );
   }
 
   Widget _buildImageBg() {
-    final directory = getApplicationDocumentsDirectory();
-
-    return FutureBuilder<Directory>(
-        future: directory,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasData) {
-              final path = snapshot.data!.path + '/background';
-              return Image.file(File(path), fit: BoxFit.fill);
-            } else if (snapshot.hasError) {
-              return Center(child: Text(snapshot.error.toString()));
-            }
-          }
-          return const Center(child: CircularProgressIndicator());
-        });
+    final path = StoragePool.homeSetting.background!;
+    return Image.file(File(path), fit: BoxFit.fill);
   }
 
   @override
   Widget build(BuildContext context) {
-    late Widget bg;
-
-    switch (StoragePool.homeSetting.backgroundMode) {
-      case 1:
-        bg = _buildWeatherBg();
-        break;
-      case 2:
-        bg = _buildImageBg();
-        break;
+    if (StoragePool.homeSetting.backgroundMode == 2) {
+      if (StoragePool.homeSetting.background != null) {
+        return _buildImageBg();
+      } else {
+        Future.delayed(Duration.zero, () => showBasicFlash(context, const Text('你还没有设置背景图片')));
+      }
     }
-    return bg;
+    return _buildWeatherBg();
   }
 }
 
-const weatherCodeToType = {
+const _weatherCodeToType = {
   100: WeatherType.sunny, // 晴
   101: WeatherType.cloudy, // 多云
   102: WeatherType.sunny, // 少云
