@@ -49,7 +49,7 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
   late double singleGridWidth;
 
   DateTime currTime = DateTime(2021, 12, 25);
-  int currTimeIndex = 0;
+  int currTimePageIndex = 0;
 
   static final List<Color> colorList = [
     const Color.fromARGB(178, 251, 83, 82),
@@ -122,6 +122,8 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
   @override
   void initState() {
     super.initState();
+    int days = currTime.difference(widget.startTime).inDays;
+    currTimePageIndex = (days - 6) ~/ 7 + 1;
   }
 
   @override
@@ -394,5 +396,7 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
     return colorList[hashCode % colorList.length];
   }
 
-  void gotoCurrPage() {}
+  void gotoCurrPage() {
+    _pageController.jumpToPage(currTimePageIndex);
+  }
 }

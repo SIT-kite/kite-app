@@ -156,6 +156,7 @@ class _TimetablePageState extends State<TimetablePage> {
                 startTime: startTime,
               )
             : WeeklyTimetable(
+                key: weeklyTimeTableKey,
                 courseList: courseList,
                 dailyCourseList: dailyCourseList,
                 dateTableList: dateTableList,
