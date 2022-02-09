@@ -1,20 +1,20 @@
 /*
- *    上应小风筝(SIT-kite)  便利校园，一步到位
- *    Copyright (C) 2022 上海应用技术大学 上应小风筝团队
+ * 上应小风筝  便利校园，一步到位
+ * Copyright (C) 2022 上海应用技术大学 上应小风筝团队
  *
- *    This program is free software: you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as published by
- *    the Free Software Foundation, either version 3 of the License, or
- *    (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *    You should have received a copy of the GNU General Public License
- *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 import 'package:flutter/material.dart';
 import 'package:kite/entity/edu/index.dart';
 import 'package:kite/page/timetable/bottom_sheet.dart';
@@ -35,14 +35,11 @@ class DailyTimetable extends StatefulWidget {
 
   @override
   // ignore: no_logic_in_create_state
-  _DailyTimetableState createState() =>
-      _DailyTimetableState();
+  _DailyTimetableState createState() => _DailyTimetableState();
 }
 
 class _DailyTimetableState extends State<DailyTimetable> {
-
   PageController _pageController = PageController(initialPage: 0, viewportFraction: 1.0);
-
 
   DateTime currTime = DateTime(2021, 12, 25);
   DateTime startTime = DateTime(2021, 9, 6);
@@ -69,43 +66,43 @@ class _DailyTimetableState extends State<DailyTimetable> {
     "日",
   ];
 
-  Map<int, String> courseStartTime={
-    1:"8:20",
-    2:"9:10",
-    3:"10:15",
+  Map<int, String> courseStartTime = {
+    1: "8:20",
+    2: "9:10",
+    3: "10:15",
     // 由于疫情 没有课间的五分钟
-    4:"11:00",
-    5:"13:00",
-    6:"13:50",
-    7:"14:55",
-    8:"15:45",
-    9:"18:00",
-    10:"18:50",
-    11:"19:40"
+    4: "11:00",
+    5: "13:00",
+    6: "13:50",
+    7: "14:55",
+    8: "15:45",
+    9: "18:00",
+    10: "18:50",
+    11: "19:40"
   };
 
-  Map<int, String> courseEndTime={
-    1:"9:05",
-    2:"9:55",
-    3:"11:00",
-    4:"11:45",
-    5:"13:45",
-    6:"14:35",
-    7:"15:40",
-    8:"16:30",
-    9:"18:45",
-    10:"19:35",
-    11:"20:25"
+  Map<int, String> courseEndTime = {
+    1: "9:05",
+    2: "9:55",
+    3: "11:00",
+    4: "11:45",
+    5: "13:45",
+    6: "14:35",
+    7: "15:40",
+    8: "16:30",
+    9: "18:45",
+    10: "19:35",
+    11: "20:25"
   };
 
   @override
   void initState() {
     super.initState();
     int days = currTime.difference(startTime).inDays;
-    currTimeIndex = (days-6)~/7+1;
+    currTimeIndex = (days - 6) ~/ 7 + 1;
   }
 
-  void gotoCurrPage(){
+  void gotoCurrPage() {
     print(currTimeIndex);
     // _pageController.animateToPage(currTimeIndex,
     //     duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
@@ -205,7 +202,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
                           setState(() {
                             tapped[0] = weekIndex;
                             tapped[1] = index - 1;
-                            print("tapped on:"+tapped.toString());
+                            print("tapped on:" + tapped.toString());
                             currDayCourseList = _getCourseListByWeekAndDay(weekIndex, index - 1);
                           });
                         },
@@ -249,8 +246,8 @@ class _DailyTimetableState extends State<DailyTimetable> {
         showModalBottomSheet(
             backgroundColor: Colors.transparent,
             builder: (BuildContext context) {
-              return CourseBottomSheet(_deviceSize, widget.courseList, course.courseName.toString(), course.courseId.toString(),
-                  course.dynClassId.toString(), course.campus.toString());
+              return CourseBottomSheet(_deviceSize, widget.courseList, course.courseName.toString(),
+                  course.courseId.toString(), course.dynClassId.toString(), course.campus.toString());
             },
             context: context);
       },

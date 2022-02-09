@@ -1,5 +1,5 @@
 /*
- * 上应小风筝(SIT-kite)  便利校园，一步到位
+ * 上应小风筝  便利校园，一步到位
  * Copyright (C) 2022 上海应用技术大学 上应小风筝团队
  *
  * This program is free software: you can redistribute it and/or modify

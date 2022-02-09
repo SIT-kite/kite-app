@@ -1,3 +1,21 @@
+/*
+ * 上应小风筝  便利校园，一步到位
+ * Copyright (C) 2022 上海应用技术大学 上应小风筝团队
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import 'package:flutter/material.dart';
 import '../../entity/edu/timetable.dart';
 import 'package:kite/page/timetable/bottom_sheet.dart';
@@ -28,7 +46,12 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
     const Color.fromARGB(178, 116, 185, 255),
     const Color.fromARGB(178, 118, 126, 253),
     const Color.fromARGB(178, 245, 175, 77),
-    const Color.fromARGB(178, 187, 137, 106,),
+    const Color.fromARGB(
+      178,
+      187,
+      137,
+      106,
+    ),
     const Color.fromARGB(178, 232, 67, 147),
     const Color.fromARGB(178, 188, 140, 240),
     const Color.fromARGB(178, 116, 185, 255)
@@ -218,52 +241,50 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
                 showModalBottomSheet(
                     backgroundColor: Colors.transparent,
                     builder: (BuildContext context) {
-                      return CourseBottomSheet(_deviceSize, widget.courseList, course.courseName.toString(), course.courseId.toString(),
-                          course.dynClassId.toString(), course.campus.toString());
+                      return CourseBottomSheet(_deviceSize, widget.courseList, course.courseName.toString(),
+                          course.courseId.toString(), course.dynClassId.toString(), course.campus.toString());
                     },
                     context: context);
               },
-              onTap: () {
-              },
+              onTap: () {},
               child: Container(
-                width: singleGridWidth - 3,
-                height: parsedCardHeight[heightIndex] - 4,
-                decoration: BoxDecoration(
-                    color: _getColor(course.courseId.hashCode),
-                    borderRadius: const BorderRadius.all(Radius.circular(3.0)),
-                    border: const Border(
-                      // top: BorderSide(color: Colors.lightBlueAccent, width: 1),
-                      // right: BorderSide(color: Colors.lightBlueAccent, width: 1),
-                      // left: BorderSide(color: Colors.lightBlueAccent, width: 1),
-                      // bottom: BorderSide(color: Colors.lightBlueAccent, width: 1),
-                    )),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      course.courseName.toString(),
-                      softWrap: true,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 3,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400,color: Colors.white),
-                    ),
-                    Text(
-                      course.place.toString(),
-                      softWrap: true,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400,color: Colors.white),
-                    ),
-                    Text(
-                      course.teacher.toString(),
-                      softWrap: true,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w400,color: Colors.white),
-                    )
-                  ],
-                )
-              ),
+                  width: singleGridWidth - 3,
+                  height: parsedCardHeight[heightIndex] - 4,
+                  decoration: BoxDecoration(
+                      color: _getColor(course.courseId.hashCode),
+                      borderRadius: const BorderRadius.all(Radius.circular(3.0)),
+                      border: const Border(
+                          // top: BorderSide(color: Colors.lightBlueAccent, width: 1),
+                          // right: BorderSide(color: Colors.lightBlueAccent, width: 1),
+                          // left: BorderSide(color: Colors.lightBlueAccent, width: 1),
+                          // bottom: BorderSide(color: Colors.lightBlueAccent, width: 1),
+                          )),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        course.courseName.toString(),
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 3,
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Colors.white),
+                      ),
+                      Text(
+                        course.place.toString(),
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Colors.white),
+                      ),
+                      Text(
+                        course.teacher.toString(),
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w400, color: Colors.white),
+                      )
+                    ],
+                  )),
             )
           : SizedBox(
               width: singleGridWidth - 3,
@@ -331,7 +352,7 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
     return parsedCourseList;
   }
 
-  static Color _getColor(int hashCode){
-    return colorList[hashCode%colorList.length];
+  static Color _getColor(int hashCode) {
+    return colorList[hashCode % colorList.length];
   }
 }

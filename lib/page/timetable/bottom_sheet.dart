@@ -1,21 +1,22 @@
 /*
- *    上应小风筝(SIT-kite)  便利校园，一步到位
- *    Copyright (C) 2022 上海应用技术大学 上应小风筝团队
+ * 上应小风筝  便利校园，一步到位
+ * Copyright (C) 2022 上海应用技术大学 上应小风筝团队
  *
- *    This program is free software: you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as published by
- *    the Free Software Foundation, either version 3 of the License, or
- *    (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *    You should have received a copy of the GNU General Public License
- *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 import 'package:flutter/material.dart';
+
 import '../../entity/edu/timetable.dart';
 
 class CourseBottomSheet extends StatelessWidget {
@@ -27,8 +28,7 @@ class CourseBottomSheet extends StatelessWidget {
   late List<String> _courseDetail;
   final List<Course> courseList;
 
-  CourseBottomSheet(
-      this._deviceSize, this.courseList , this._courseName, this._courseId, this._dynClassId, this._campus,
+  CourseBottomSheet(this._deviceSize, this.courseList, this._courseName, this._courseId, this._dynClassId, this._campus,
       {Key? key})
       : super(key: key);
 
@@ -54,7 +54,7 @@ class CourseBottomSheet extends StatelessWidget {
               Container(
                   padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
                   child: Container(
-                    alignment: const Alignment(0,0),
+                    alignment: const Alignment(0, 0),
                     width: _deviceSize.width * 0.82,
                     padding: const EdgeInsets.all(3),
                     decoration: const BoxDecoration(
@@ -116,8 +116,7 @@ class CourseBottomSheet extends StatelessWidget {
   }
 }
 
-class ParseCourse{
-
+class ParseCourse {
   final List<Course> courseList;
 
   ParseCourse(this.courseList);
@@ -133,70 +132,75 @@ class ParseCourse{
     "日",
   ];
 
-  static Map<int, String> courseStartTime={
-    1:"8:20",
-    2:"9:10",
-    3:"10:15",
+  static Map<int, String> courseStartTime = {
+    1: "8:20",
+    2: "9:10",
+    3: "10:15",
     // 由于疫情 没有课间的五分钟
-    4:"11:00",
-    5:"13:00",
-    6:"13:50",
-    7:"14:55",
-    8:"15:45",
-    9:"18:00",
-    10:"18:50",
-    11:"19:40"
+    4: "11:00",
+    5: "13:00",
+    6: "13:50",
+    7: "14:55",
+    8: "15:45",
+    9: "18:00",
+    10: "18:50",
+    11: "19:40"
   };
 
-  static Map<int, String> courseEndTime={
-    1:"9:05",
-    2:"9:55",
-    3:"11:00",
-    4:"11:45",
-    5:"13:45",
-    6:"14:35",
-    7:"15:40",
-    8:"16:30",
-    9:"18:45",
-    10:"19:35",
-    11:"20:25"
+  static Map<int, String> courseEndTime = {
+    1: "9:05",
+    2: "9:55",
+    3: "11:00",
+    4: "11:45",
+    5: "13:45",
+    6: "14:35",
+    7: "15:40",
+    8: "16:30",
+    9: "18:45",
+    10: "19:35",
+    11: "20:25"
   };
 
   // 解析课程ID对应的不同时间段的课程信息
-  List<String> parseCourseDetail(String courseId){
+  List<String> parseCourseDetail(String courseId) {
     // 周数 星期 节次 地点
     List<String> courseDetail = [];
-    for (Course course in courseList){
-      if (course.courseId == courseId){
-        courseDetail.add(course.weekText!+" 周"+num2word[course.day!-1]+"\n"+parseCourseTimeIndex(course.timeIndex!)+course.place!);
+    for (Course course in courseList) {
+      if (course.courseId == courseId) {
+        courseDetail.add(course.weekText! +
+            " 周" +
+            num2word[course.day! - 1] +
+            "\n" +
+            parseCourseTimeIndex(course.timeIndex!) +
+            course.place!);
       }
     }
     return courseDetail;
   }
 
   // 解析出来的时间默认尾部有一个空格 eg:"13:00-16:30 "
-  static String parseCourseTimeIndex(int timeIndex){
+  static String parseCourseTimeIndex(int timeIndex) {
     // 除去首个0
-    timeIndex = timeIndex>>1;
+    timeIndex = timeIndex >> 1;
     int count = 1;
     String parsedTime = "";
     bool isConstant = false;
     bool isAddEndTime = false;
-    while(timeIndex != 0){
+    while (timeIndex != 0) {
       // 当前最低位为1 并且为首次或者上一位为0
       if ((timeIndex & 1) == 1 && isConstant == false) {
         parsedTime += courseStartTime[count]!;
         isConstant = true;
-      }else if (isConstant && (timeIndex & 1) == 0){
-        parsedTime += "-" + courseEndTime[count-1]! + " ";
+      } else if (isConstant && (timeIndex & 1) == 0) {
+        parsedTime += "-" + courseEndTime[count - 1]! + " ";
         isConstant = false;
         isAddEndTime = true;
       }
       timeIndex = timeIndex >> 1;
       count++;
     }
-    if (!isAddEndTime){
-      parsedTime += "-" + courseEndTime[count-1]! + " ";
+    if (!isAddEndTime) {
+      parsedTime += "-" + courseEndTime[count - 1]! + " ";
     }
     return parsedTime;
   }
