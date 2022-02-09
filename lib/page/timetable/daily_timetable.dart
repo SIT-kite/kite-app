@@ -25,12 +25,19 @@ import 'package:kite/util/edu/icon.dart';
 GlobalKey<_DailyTimetableState> dailyTimeTableKey = GlobalKey();
 
 class DailyTimetable extends StatefulWidget {
+  late DateTime startTime;
   List<Course> courseList = <Course>[];
+
   // index1 -- 周数  index2 -- 天数
   Map<int, List<List<int>>> dailyCourseList = {};
   List<List<String>> dateTableList = [];
 
-  DailyTimetable({Key? key, required this.courseList, required this.dailyCourseList, required this.dateTableList})
+  DailyTimetable(
+      {Key? key,
+      required this.courseList,
+      required this.dailyCourseList,
+      required this.dateTableList,
+      required this.startTime})
       : super(key: key);
 
   @override
@@ -39,10 +46,9 @@ class DailyTimetable extends StatefulWidget {
 }
 
 class _DailyTimetableState extends State<DailyTimetable> {
-  PageController _pageController = PageController(initialPage: 0, viewportFraction: 1.0);
-
+  PageController _pageController =
+      PageController(initialPage: 0, viewportFraction: 1.0);
   DateTime currTime = DateTime(2021, 12, 25);
-  DateTime startTime = DateTime(2021, 9, 6);
 
   static const String courseIconPath = 'assets/course/';
   bool firstOpen = true;
@@ -98,7 +104,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
   @override
   void initState() {
     super.initState();
-    int days = currTime.difference(startTime).inDays;
+    int days = currTime.difference(widget.startTime).inDays;
     currTimeIndex = (days - 6) ~/ 7 + 1;
   }
 
@@ -163,7 +169,9 @@ class _DailyTimetableState extends State<DailyTimetable> {
                             child: Text("今天没有课哦"),
                           )
                         ]
-                      : currDayCourseList.map((e) => _buildClassCard(context, e)).toList()),
+                      : currDayCourseList
+                          .map((e) => _buildClassCard(context, e))
+                          .toList()),
             )
           ],
         );
@@ -185,7 +193,8 @@ class _DailyTimetableState extends State<DailyTimetable> {
                     children: [
                       Text(
                         (weekIndex + 1).toString(),
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                        style: const TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.w400),
                       ),
                       const Text(
                         "周",
@@ -203,23 +212,28 @@ class _DailyTimetableState extends State<DailyTimetable> {
                             tapped[0] = weekIndex;
                             tapped[1] = index - 1;
                             print("tapped on:" + tapped.toString());
-                            currDayCourseList = _getCourseListByWeekAndDay(weekIndex, index - 1);
+                            currDayCourseList = _getCourseListByWeekAndDay(
+                                weekIndex, index - 1);
                           });
                         },
                         onTapDown: (TapDownDetails tapDownDetails) {},
                         child: Container(
                             decoration: BoxDecoration(
-                              color: ((tapped[0] == weekIndex) && (tapped[1] == index - 1))
+                              color: ((tapped[0] == weekIndex) &&
+                                      (tapped[1] == index - 1))
                                   ? const Color.fromARGB(255, 228, 235, 245)
                                   : Colors.white,
-                              borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(12.0)),
                             ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
                                   "周" + num2word[index - 1],
-                                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                                  style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400),
                                 ),
                                 Text(
                                   currWeek[index - 1],
@@ -246,8 +260,13 @@ class _DailyTimetableState extends State<DailyTimetable> {
         showModalBottomSheet(
             backgroundColor: Colors.transparent,
             builder: (BuildContext context) {
-              return CourseBottomSheet(_deviceSize, widget.courseList, course.courseName.toString(),
-                  course.courseId.toString(), course.dynClassId.toString(), course.campus.toString());
+              return CourseBottomSheet(
+                  _deviceSize,
+                  widget.courseList,
+                  course.courseName.toString(),
+                  course.courseId.toString(),
+                  course.dynClassId.toString(),
+                  course.campus.toString());
             },
             context: context);
       },
@@ -258,7 +277,9 @@ class _DailyTimetableState extends State<DailyTimetable> {
             child: Column(
               children: [
                 ListTile(
-                    leading: Image.asset(courseIconPath + CourseCategory.query(course.courseName ?? '') + '.png'),
+                    leading: Image.asset(courseIconPath +
+                        CourseCategory.query(course.courseName ?? '') +
+                        '.png'),
                     title: Text(course.courseName.toString()),
                     subtitle: Column(
                       children: [

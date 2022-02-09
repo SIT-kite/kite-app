@@ -59,7 +59,9 @@ class _TimetablePageState extends State<TimetablePage> {
         child: const Text("今", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500)),
         onPressed: () {
           print("press goto button");
-          dailyTimeTableKey.currentState?.gotoCurrPage();
+          displayMode == DisplayMode.daily
+              ? dailyTimeTableKey.currentState?.gotoCurrPage()
+              : weeklyTimeTableKey.currentState?.gotoCurrPage();
         },
       ),
       body: FutureBuilder(
@@ -150,8 +152,15 @@ class _TimetablePageState extends State<TimetablePage> {
                 key: dailyTimeTableKey,
                 courseList: courseList,
                 dailyCourseList: dailyCourseList,
-                dateTableList: dateTableList)
-            : WeeklyTimetable(courseList: courseList, dailyCourseList: dailyCourseList, dateTableList: dateTableList);
+                dateTableList: dateTableList,
+                startTime: startTime,
+              )
+            : WeeklyTimetable(
+                courseList: courseList,
+                dailyCourseList: dailyCourseList,
+                dateTableList: dateTableList,
+                startTime: startTime,
+              );
       }
     } else {
       // 请求未结束，显示loading
