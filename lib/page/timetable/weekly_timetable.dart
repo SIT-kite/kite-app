@@ -22,6 +22,18 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
   late double singleGridHeight;
   late double singleGridWidth;
 
+  static final List<Color> colorList = [
+    const Color.fromARGB(178, 251, 83, 82),
+    const Color.fromARGB(153, 115, 123, 250),
+    const Color.fromARGB(178, 116, 185, 255),
+    const Color.fromARGB(178, 118, 126, 253),
+    const Color.fromARGB(178, 245, 175, 77),
+    const Color.fromARGB(178, 187, 137, 106,),
+    const Color.fromARGB(178, 232, 67, 147),
+    const Color.fromARGB(178, 188, 140, 240),
+    const Color.fromARGB(178, 116, 185, 255)
+  ];
+
   final PageController _pageController = PageController(initialPage: 0, viewportFraction: 1.0);
 
   List<Course?> parsedCurrDayCourseList = [];
@@ -216,14 +228,14 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
               child: Container(
                 width: singleGridWidth - 3,
                 height: parsedCardHeight[heightIndex] - 4,
-                decoration: const BoxDecoration(
-                    color: Colors.blueAccent,
-                    borderRadius: BorderRadius.all(Radius.circular(3.0)),
-                    border: Border(
-                      top: BorderSide(color: Colors.lightBlueAccent, width: 1),
-                      right: BorderSide(color: Colors.lightBlueAccent, width: 1),
-                      left: BorderSide(color: Colors.lightBlueAccent, width: 1),
-                      bottom: BorderSide(color: Colors.lightBlueAccent, width: 1),
+                decoration: BoxDecoration(
+                    color: _getColor(course.courseId.hashCode),
+                    borderRadius: const BorderRadius.all(Radius.circular(3.0)),
+                    border: const Border(
+                      // top: BorderSide(color: Colors.lightBlueAccent, width: 1),
+                      // right: BorderSide(color: Colors.lightBlueAccent, width: 1),
+                      // left: BorderSide(color: Colors.lightBlueAccent, width: 1),
+                      // bottom: BorderSide(color: Colors.lightBlueAccent, width: 1),
                     )),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -261,7 +273,6 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
   }
 
   List<Course> _getCourseListByWeekAndDay(int weekIndex, int dayIndex) {
-    print("this is getCourseListByWeekAndDay");
     List<Course> res = <Course>[];
     for (var i in widget.dailyCourseList[weekIndex]![dayIndex]) {
       res.add(widget.courseList[i]);
@@ -318,5 +329,9 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
       }
     }
     return parsedCourseList;
+  }
+
+  static Color _getColor(int hashCode){
+    return colorList[hashCode%colorList.length];
   }
 }
