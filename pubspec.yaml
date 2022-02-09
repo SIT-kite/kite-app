@@ -60,6 +60,7 @@ dependencies:
   flutter_settings_screens: ^0.3.2-null-safety
   dynamic_color_theme: ^2.0.0
   image_picker: ^0.8.4+7
+  flutter_platform_widgets: ^1.12.1
 
   # Utils
   intl: ^0.17.0

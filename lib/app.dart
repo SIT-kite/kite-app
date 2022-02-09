@@ -18,6 +18,7 @@
 import 'package:catcher/core/catcher.dart';
 import 'package:dynamic_color_theme/dynamic_color_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/page/index.dart';
@@ -97,16 +98,21 @@ class KiteApp extends StatelessWidget {
         },
         defaultColor: primaryColor,
         defaultIsDark: isDark,
-        themedWidgetBuilder: (BuildContext context, ThemeData theme) => MaterialApp(
-          navigatorKey: Catcher.navigatorKey,
-          title: '上应小风筝',
-          theme: theme,
-          home: home,
-          onGenerateRoute: _onGenerateRoute,
-          builder: (context, widget) {
-            ScreenUtil.setContext(context);
-            return widget!;
-          },
+        themedWidgetBuilder: (BuildContext context, ThemeData theme) => Theme(
+          data: theme,
+          child: PlatformProvider(
+            settings: PlatformSettingsData(),
+            builder: (context) => PlatformApp(
+              navigatorKey: Catcher.navigatorKey,
+              title: '上应小风筝',
+              home: home,
+              onGenerateRoute: _onGenerateRoute,
+              builder: (context, widget) {
+                ScreenUtil.setContext(context);
+                return widget!;
+              },
+            ),
+          ),
         ),
       ),
     );
