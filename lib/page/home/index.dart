@@ -151,6 +151,7 @@ class _HomePageState extends State<HomePage> {
         HomeItem(route: '/wiki', icon: 'assets/home/icon_wiki.svg', title: 'Wiki', subtitle: '上应大生存指南'),
       ]),
       SizedBox(height: 40.h),
+      Image.asset('assets/home/bottom.png'),
     ];
   }
 
