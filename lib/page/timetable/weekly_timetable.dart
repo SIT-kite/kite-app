@@ -202,6 +202,15 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
       alignment: const Alignment(0, 0),
       child: course != null
           ? InkWell(
+              onTapDown: (TapDownDetails tapDownDetails) {
+                showModalBottomSheet(
+                    backgroundColor: Colors.transparent,
+                    builder: (BuildContext context) {
+                      return CourseBottomSheet(_deviceSize, widget.courseList, course.courseName.toString(), course.courseId.toString(),
+                          course.dynClassId.toString(), course.campus.toString());
+                    },
+                    context: context);
+              },
               onTap: () {
               },
               child: Container(
