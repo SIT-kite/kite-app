@@ -125,6 +125,12 @@ def call(script):
         stderr=sys.stderr,
     )
 
+def run_functions(functions: Iterable[Callable]):
+    """
+    一次性运行多个函数
+    """
+    for function in functions:
+        function()
 
 # ------------------以上为脚本运行所需的基本代码---------------
 # ------------------以下为脚本运行的真正构建命令---------------
@@ -186,7 +192,8 @@ if __name__ == '__main__':
         options=[
             MenuItem('获取所有依赖', get_all_dependencies),
             MenuItem('运行 build_runner (用于根据注解生成部分代码)', run_build_runner),
-            
+            MenuItem('获取依赖并生成代码', lambda:run_functions([get_all_dependencies,run_build_runner])),
+
             MenuItem('运行 android 平台构建向导', guide_build_for_android),
 
             MenuItem('构建 linux 平台应用程序', build_for_linux),
