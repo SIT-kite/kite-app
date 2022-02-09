@@ -219,7 +219,14 @@ class _HomePageState extends State<HomePage> {
       QuickButton.init(context);
     }
     _updateWeather();
+    eventBus.on(EventNameConstants.onCampusChange, (_) => _updateWeather());
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    eventBus.off(EventNameConstants.onCampusChange);
+    super.dispose();
   }
 
   @override

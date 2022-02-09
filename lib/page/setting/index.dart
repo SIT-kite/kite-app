@@ -21,6 +21,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/init_util.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
@@ -129,6 +130,7 @@ class SettingPage extends StatelessWidget {
             selected: StoragePool.homeSetting.campus,
             onChange: (value) {
               StoragePool.homeSetting.campus = value;
+              eventBus.emit(EventNameConstants.onCampusChange);
             },
           ),
           SimpleSettingsTile(title: '背景图片', subtitle: '设置首页的背景图片', onTap: () => {}),
