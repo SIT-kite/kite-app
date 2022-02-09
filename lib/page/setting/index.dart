@@ -34,7 +34,9 @@ import 'package:kite/util/validation.dart';
 import 'package:path_provider/path_provider.dart';
 
 class SettingPage extends StatelessWidget {
-  const SettingPage({Key? key}) : super(key: key);
+  final TextEditingController _passwordController = TextEditingController();
+
+  SettingPage({Key? key}) : super(key: key);
 
   Widget _negativeActionBuilder(context, controller, _) {
     return TextButton(
@@ -62,7 +64,7 @@ class SettingPage extends StatelessWidget {
       userItem = AuthItem()
         ..username = user
         ..password = '';
-      StoragePool.authPool.add(userItem);
+      StoragePool.authPool.put(userItem);
     }
     final password = userItem.password;
     try {
@@ -114,6 +116,9 @@ class SettingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _user = StoragePool.authSetting.currentUsername!;
+    _passwordController.text = StoragePool.authPool.get(_user)?.password ?? '';
+
     return SettingsScreen(title: '设置', children: [
       SettingsGroup(
         title: '个性化',
@@ -205,17 +210,38 @@ class SettingPage extends StatelessWidget {
           ],
         ),
       ]),
-      SettingsGroup(title: '账户', children: <Widget>[
-        TextInputSettingsTile(
-          title: '学号',
-          settingKey: AuthKeys.currentUsername,
-          initialValue: StoragePool.authSetting.currentUsername ?? '',
-          validator: studentIdValidator,
-        ),
-        SimpleSettingsTile(title: '登录测试', subtitle: '检查用户名密码是否正确', onTap: () => _testPassword(context)),
-        SimpleSettingsTile(title: '退出登录', subtitle: '退出当前账号', onTap: () => _onLogout(context)),
-        SimpleSettingsTile(title: '清除数据', subtitle: '清除应用程序保存的账号和设置，但不包括缓存', onTap: () => _onClearStorage(context)),
-      ]),
+      SettingsGroup(
+        title: '账户',
+        children: <Widget>[
+          TextInputSettingsTile(
+            title: '学号',
+            settingKey: AuthKeys.currentUsername,
+            initialValue: StoragePool.authSetting.currentUsername ?? '',
+            validator: studentIdValidator,
+          ),
+          ModalSettingsTile(
+            title: '密码',
+            subtitle: '修改小风筝上使用的 OA 密码',
+            showConfirmation: true,
+            onConfirm: () {
+              final user = StoragePool.authSetting.currentUsername!;
+              StoragePool.authPool.put(AuthItem()
+                ..username = user
+                ..password = _passwordController.text);
+              return true;
+            },
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: TextField(controller: _passwordController, obscureText: true),
+              ),
+            ],
+          ),
+        ],
+      ),
+      SimpleSettingsTile(title: '登录测试', subtitle: '检查用户名密码是否正确', onTap: () => _testPassword(context)),
+      SimpleSettingsTile(title: '退出登录', subtitle: '退出当前账号', onTap: () => _onLogout(context)),
+      SimpleSettingsTile(title: '清除数据', subtitle: '清除应用程序保存的账号和设置，但不包括缓存', onTap: () => _onClearStorage(context)),
       kDebugMode
           ? SettingsGroup(title: '开发者选项', children: <Widget>[
               SimpleSettingsTile(
