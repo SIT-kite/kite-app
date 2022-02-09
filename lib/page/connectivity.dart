@@ -15,6 +15,7 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+import 'package:app_settings/app_settings.dart';
 import 'package:check_vpn_connection/check_vpn_connection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -22,6 +23,7 @@ import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/service/network.dart';
 import 'package:kite/util/network.dart';
+import 'package:kite/util/url_launcher.dart';
 
 class ConnectivityPage extends StatefulWidget {
   const ConnectivityPage({Key? key}) : super(key: key);
@@ -119,11 +121,11 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 40,
                 child: ElevatedButton(
-                  child: const Text('打开 WLAN 设置'),
-                  onPressed: () {},
+                  child: Text('打开 WLAN 设置'),
+                  onPressed: AppSettings.openWIFISettings,
                 ),
               ),
               const SizedBox(width: 20),
@@ -131,7 +133,7 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
                 height: 40,
                 child: ElevatedButton(
                   child: const Text('打开 EasyConnect'),
-                  onPressed: () {},
+                  onPressed: () => launchInBrowser('sangfor://easyconnect'),
                 ),
               ),
             ],
