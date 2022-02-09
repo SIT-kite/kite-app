@@ -16,6 +16,7 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import 'package:flutter/material.dart';
+import '../../entity/edu/timetable.dart';
 
 class CourseBottomSheet extends StatelessWidget {
   final Size _deviceSize;
@@ -23,15 +24,18 @@ class CourseBottomSheet extends StatelessWidget {
   final String _courseId;
   final String _dynClassId;
   final String _campus;
-  final List<String> _courseDetail;
+  late List<String> _courseDetail;
+  final List<Course> courseList;
 
   CourseBottomSheet(
-      this._deviceSize, this._courseName, this._courseId, this._dynClassId, this._campus, this._courseDetail,
+      this._deviceSize, this.courseList , this._courseName, this._courseId, this._dynClassId, this._campus,
       {Key? key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    ParseCourse parseCourse = ParseCourse(courseList);
+    _courseDetail = parseCourse.parseCourseDetail(_courseId);
     return Container(
       constraints: const BoxConstraints(maxHeight: 600),
       color: Colors.transparent,
@@ -109,5 +113,91 @@ class CourseBottomSheet extends StatelessWidget {
             Expanded(child: Text(detail, softWrap: true, style: Theme.of(context).textTheme.headline3)),
           ],
         ));
+  }
+}
+
+class ParseCourse{
+
+  final List<Course> courseList;
+
+  ParseCourse(this.courseList);
+
+  // 周次 日期x7 月份
+  static final List<String> num2word = [
+    "一",
+    "二",
+    "三",
+    "四",
+    "五",
+    "六",
+    "日",
+  ];
+
+  static Map<int, String> courseStartTime={
+    1:"8:20",
+    2:"9:10",
+    3:"10:15",
+    // 由于疫情 没有课间的五分钟
+    4:"11:00",
+    5:"13:00",
+    6:"13:50",
+    7:"14:55",
+    8:"15:45",
+    9:"18:00",
+    10:"18:50",
+    11:"19:40"
+  };
+
+  static Map<int, String> courseEndTime={
+    1:"9:05",
+    2:"9:55",
+    3:"11:00",
+    4:"11:45",
+    5:"13:45",
+    6:"14:35",
+    7:"15:40",
+    8:"16:30",
+    9:"18:45",
+    10:"19:35",
+    11:"20:25"
+  };
+
+  // 解析课程ID对应的不同时间段的课程信息
+  List<String> parseCourseDetail(String courseId){
+    // 周数 星期 节次 地点
+    List<String> courseDetail = [];
+    for (Course course in courseList){
+      if (course.courseId == courseId){
+        courseDetail.add(course.weekText!+" 周"+num2word[course.day!-1]+"\n"+parseCourseTimeIndex(course.timeIndex!)+course.place!);
+      }
+    }
+    return courseDetail;
+  }
+
+  // 解析出来的时间默认尾部有一个空格 eg:"13:00-16:30 "
+  static String parseCourseTimeIndex(int timeIndex){
+    // 除去首个0
+    timeIndex = timeIndex>>1;
+    int count = 1;
+    String parsedTime = "";
+    bool isConstant = false;
+    bool isAddEndTime = false;
+    while(timeIndex != 0){
+      // 当前最低位为1 并且为首次或者上一位为0
+      if ((timeIndex & 1) == 1 && isConstant == false) {
+        parsedTime += courseStartTime[count]!;
+        isConstant = true;
+      }else if (isConstant && (timeIndex & 1) == 0){
+        parsedTime += "-" + courseEndTime[count-1]! + " ";
+        isConstant = false;
+        isAddEndTime = true;
+      }
+      timeIndex = timeIndex >> 1;
+      count++;
+    }
+    if (!isAddEndTime){
+      parsedTime += "-" + courseEndTime[count-1]! + " ";
+    }
+    return parsedTime;
   }
 }

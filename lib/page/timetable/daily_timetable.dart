@@ -134,44 +134,6 @@ class _DailyTimetableState extends State<DailyTimetable> {
     return res;
   }
 
-  // 解析出来的时间默认尾部有一个空格 eg:"13:00-16:30 "
-  String parseCourseTimeIndex(int timeIndex){
-    // 除去首个0
-    timeIndex = timeIndex>>1;
-    int count = 1;
-    String parsedTime = "";
-    bool isConstant = false;
-    bool isAddEndTime = false;
-    while(timeIndex != 0){
-      // 当前最低位为1 并且为首次或者上一位为0
-      if ((timeIndex & 1) == 1 && isConstant == false) {
-        parsedTime += courseStartTime[count]!;
-        isConstant = true;
-      }else if (isConstant && (timeIndex & 1) == 0){
-        parsedTime += "-" + courseEndTime[count-1]! + " ";
-        isConstant = false;
-        isAddEndTime = true;
-      }
-      timeIndex = timeIndex >> 1;
-      count++;
-    }
-    if (!isAddEndTime){
-      parsedTime += "-" + courseEndTime[count-1]! + " ";
-    }
-    return parsedTime;
-  }
-
-  List<String> parseCourseDetail(String courseId){
-    // 周数 星期 节次 地点
-    List<String> courseDetail = [];
-    for (Course course in widget.courseList){
-      if (course.courseId == courseId){
-        courseDetail.add(course.weekText!+" 周"+num2word[course.day!-1]+"\n"+parseCourseTimeIndex(course.timeIndex!)+course.place!);
-      }
-    }
-    return courseDetail;
-  }
-
   @override
   Widget build(BuildContext context) {
     print(widget.courseList);
@@ -277,7 +239,6 @@ class _DailyTimetableState extends State<DailyTimetable> {
     // 测试数据
     print("buildClassCard");
     print(course);
-    List<String> courseDetail = parseCourseDetail(course.courseId!);
     // courseDetail.add("1-9周(双) 周二 13:00-16:30 一教E305");
     // courseDetail.add("1-9周(双) 周四 8:20-9:55 综合实验楼A502");
     // courseDetail.add("1-9周(双) 周四 8:20-9:55 奉贤实践基地");
@@ -288,8 +249,8 @@ class _DailyTimetableState extends State<DailyTimetable> {
         showModalBottomSheet(
             backgroundColor: Colors.transparent,
             builder: (BuildContext context) {
-              return CourseBottomSheet(_deviceSize, course.courseName.toString(), course.courseId.toString(),
-                  course.dynClassId.toString(), course.campus.toString(), courseDetail);
+              return CourseBottomSheet(_deviceSize, widget.courseList, course.courseName.toString(), course.courseId.toString(),
+                  course.dynClassId.toString(), course.campus.toString());
             },
             context: context);
       },
@@ -315,9 +276,8 @@ class _DailyTimetableState extends State<DailyTimetable> {
                               flex: 1,
                               child: Row(
                                 textDirection: TextDirection.ltr,
-                                // TODO: 解析timeIndex
                                 children: [
-                                  Text(parseCourseTimeIndex(course.timeIndex!)),
+                                  Text(ParseCourse.parseCourseTimeIndex(course.timeIndex!)),
                                 ],
                               ),
                             ),
