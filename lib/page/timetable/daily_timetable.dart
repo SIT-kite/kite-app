@@ -41,25 +41,24 @@ class DailyTimetable extends StatefulWidget {
       : super(key: key);
 
   @override
-  // ignore: no_logic_in_create_state
   _DailyTimetableState createState() => _DailyTimetableState();
 }
 
 class _DailyTimetableState extends State<DailyTimetable> {
-  PageController _pageController =
-      PageController(initialPage: 0, viewportFraction: 1.0);
-  DateTime currTime = DateTime(2021, 12, 25);
+  late PageController _pageController;
+  DateTime currTime = DateTime(2021, 11, 23);
 
   static const String courseIconPath = 'assets/course/';
-  bool firstOpen = true;
   late Size _deviceSize;
 
   bool isShowReturnCurrDayButton = false;
 
   List<Course> currDayCourseList = <Course>[];
   final List<int> tapped = [0, 0];
-  int currTimeIndex = 0;
-  bool isInitialized = false;
+  // 在当前时间下，课表应该显示的页数为currTimePageIndex
+  int currTimePageIndex = 0;
+  // 当前页应该显示的天为currDayInWeekIndex
+  int currDayInWeekIndex = 0;
 
   // 周次 日期x7 月份
   final List<String> num2word = [
@@ -105,18 +104,22 @@ class _DailyTimetableState extends State<DailyTimetable> {
   void initState() {
     super.initState();
     int days = currTime.difference(widget.startTime).inDays;
-    currTimeIndex = (days - 6) ~/ 7 + 1;
+    currTimePageIndex = (days - 6) ~/ 7 + 1;
+    currDayInWeekIndex = days%7;
+    _pageController =  PageController(initialPage: currTimePageIndex, viewportFraction: 1.0);
+    setState(() {
+      tapped[0] = currTimePageIndex;
+      tapped[1] = currDayInWeekIndex;
+      currDayCourseList = _getCourseListByWeekAndDay(currTimePageIndex, currDayInWeekIndex);
+    });
   }
 
   void gotoCurrPage() {
-    print(currTimeIndex);
-    // _pageController.animateToPage(currTimeIndex,
-    //     duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
-    _pageController.jumpToPage(currTimeIndex);
+    _pageController.jumpToPage(currTimePageIndex);
     setState(() {
-      tapped[0] = currTimeIndex;
-      tapped[1] = 0;
-      currDayCourseList = _getCourseListByWeekAndDay(tapped[0], tapped[1]);
+      tapped[0] = currTimePageIndex;
+      tapped[1] = currDayInWeekIndex;
+      currDayCourseList = _getCourseListByWeekAndDay(currTimePageIndex, currDayInWeekIndex);
     });
   }
 
@@ -128,7 +131,6 @@ class _DailyTimetableState extends State<DailyTimetable> {
   }
 
   List<Course> _getCourseListByWeekAndDay(int weekIndex, int dayIndex) {
-    print("this is getCourseListByWeekAndDay");
     List<Course> res = <Course>[];
     for (var i in widget.dailyCourseList[weekIndex]![dayIndex]) {
       res.add(widget.courseList[i]);
@@ -139,13 +141,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.courseList);
-    if (firstOpen) {
-      currDayCourseList = _getCourseListByWeekAndDay(0, 0);
-      firstOpen = false;
-    }
     _deviceSize = MediaQuery.of(context).size;
-    print("currDayCourseList");
     return PageView.builder(
       controller: _pageController,
       scrollDirection: Axis.horizontal,
@@ -202,7 +198,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
                       )
                     ],
                   ))
-              : Container(
+              : SizedBox(
                   width: _deviceSize.width * 3 / 23,
                   child: Container(
                       padding: const EdgeInsets.fromLTRB(4, 4, 4, 4),
@@ -211,7 +207,6 @@ class _DailyTimetableState extends State<DailyTimetable> {
                           setState(() {
                             tapped[0] = weekIndex;
                             tapped[1] = index - 1;
-                            print("tapped on:" + tapped.toString());
                             currDayCourseList = _getCourseListByWeekAndDay(
                                 weekIndex, index - 1);
                           });
@@ -247,13 +242,6 @@ class _DailyTimetableState extends State<DailyTimetable> {
   }
 
   Widget _buildClassCard(BuildContext context, Course course) {
-    // 测试数据
-    print("buildClassCard");
-    print(course);
-    // courseDetail.add("1-9周(双) 周二 13:00-16:30 一教E305");
-    // courseDetail.add("1-9周(双) 周四 8:20-9:55 综合实验楼A502");
-    // courseDetail.add("1-9周(双) 周四 8:20-9:55 奉贤实践基地");
-    // courseDetail.add("1-9周(单) 周一 13:00-16:30 一教E305(机电18中外合作专用)");
     return InkWell(
       onTap: () {},
       onTapDown: (TapDownDetails tapDownDetails) {
