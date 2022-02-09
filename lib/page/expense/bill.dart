@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:kite/entity/expense.dart';
 import 'package:kite/global/storage_pool.dart';
@@ -68,10 +69,29 @@ class BillPage extends StatelessWidget {
     );
   }
 
+  Widget _buildEmptyResult(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme.headline3;
+
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // TODO: 不要跨模块使用资源文件.
+          SvgPicture.asset('assets/game/empty.svg'),
+          Text('这里空空的，\n快点击右上角的刷新按钮更新数据。', style: textStyle),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final records = StoragePool.expenseRecordStorage.getAllByTimeDesc();
     final recordsToShow = filter == ExpenseType.all ? records : records.where((e) => e.type == filter).toList();
-    return _buildBillList(context, recordsToShow);
+
+    if (recordsToShow.isNotEmpty) {
+      return _buildBillList(context, recordsToShow);
+    }
+    return _buildEmptyResult(context);
   }
 }
