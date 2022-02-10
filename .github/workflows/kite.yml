@@ -10,7 +10,6 @@ jobs:
   build-Android:
   
     runs-on: ubuntu-latest
-    continue-on-error: true
 
     steps:
       - uses: actions/checkout@v2
@@ -27,13 +26,12 @@ jobs:
         with:
           to: ${{ secrets.CHAT_ID }}
           token: ${{ secrets.BOT_TOKEN }}
-          message: ${{ github.head_ref }}.${{ github.sha }}
+          message: ${{ github.head }}.${{ github.sha }}
           document: build/app/outputs/flutter-apk/app-release.apk
       
   build-iOS:
   
     runs-on: macos-latest
-    continue-on-error: true
     
     steps:
     - uses: maxim-lobanov/setup-xcode@v1
