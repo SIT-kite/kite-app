@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/entity/edu/index.dart';
 import 'package:kite/global/session_pool.dart';
@@ -24,6 +25,7 @@ import 'package:kite/service/edu/index.dart';
 import 'package:kite/util/flash.dart';
 
 import 'daily.dart';
+import 'util.dart';
 
 /// 课表模式
 enum DisplayMode { daily, weekly }
@@ -48,10 +50,15 @@ class _TimetablePageState extends State<TimetablePage> {
 
   // TODO：更改为正确的开学日期
   DateTime termBeginDate = DateTime(2021, 9, 6);
-
-  List<Course> courseList = <Course>[];
+  late List<Course> timetable;
 
   bool isRefreshing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    timetable = StoragePool.course.getTimetable(currSchoolYear, currSemester);
+  }
 
   Future<void> _fetchTimetable() async {
     final service = TimetableService(SessionPool.eduSession);
@@ -78,9 +85,10 @@ class _TimetablePageState extends State<TimetablePage> {
     setState(() {});
   }
 
-  bool _onExport() {
-    // TODO：导出课表
-    return true;
+  void _onExport() {
+    timetable
+        .map(createEventFromCourse)
+        .fold<List<Event>>([], (p, e) => p + e).forEach((e) => Add2Calendar.addEvent2Cal(e));
   }
 
   PopupMenuButton _buildPopupMenu(BuildContext context) {
@@ -122,8 +130,6 @@ class _TimetablePageState extends State<TimetablePage> {
 
   @override
   Widget build(BuildContext context) {
-    final timetable = StoragePool.course.getTimetable(currSchoolYear, currSemester);
-
     return Scaffold(
       appBar: AppBar(title: const Text('课程表'), actions: <Widget>[
         _buildModeSwitchButton(),
