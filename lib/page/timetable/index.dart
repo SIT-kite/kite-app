@@ -40,7 +40,7 @@ class TimetablePage extends StatefulWidget {
 
 class _TimetablePageState extends State<TimetablePage> {
   // 模式：周课表 日课表
-  DisplayMode displayMode = DisplayMode.weekly;
+  DisplayMode displayMode = DisplayMode.daily;
   TimetableDao timetableDaoService = TimetableService(SessionPool.eduSession);
 
   // TODO：更改为正确的学期
@@ -62,13 +62,19 @@ class _TimetablePageState extends State<TimetablePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("课程表"),
+        title: Text(
+          "课程表",
+          style: Theme.of(context).textTheme.headline4?.copyWith(color: Colors.white),
+        ),
         actions: <Widget>[
           _MorePopupMenuButton(context),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        child: const Text("今", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500)),
+        child: Text(
+          "今",
+          style: Theme.of(context).textTheme.headline4?.copyWith(color: Colors.white),
+        ),
         onPressed: () {
           Log.debug("press goto current day button");
           displayMode == DisplayMode.daily
@@ -88,6 +94,7 @@ class _TimetablePageState extends State<TimetablePage> {
       Log.debug("refresh");
       StoragePool.course.clear();
       courseList = await timetableDaoService.getTimetable(currSchoolYear, currSemester);
+      print(courseList);
       StoragePool.course.addAll(courseList);
       isRefresh = false;
     } else {
@@ -134,11 +141,11 @@ class _TimetablePageState extends State<TimetablePage> {
     for (int i = 0; i < courseList.length; i++) {
       int weekIndex = 0;
       int dayIndex = 0;
-      int? week = courseList[i].week;
-      week = (week! >> 1);
+      int? week = courseList[i].weekIndex;
+      week = (week >> 1);
       while ((week as int) != 0) {
         if ((week & 1) == 1) {
-          dayIndex = courseList[i].day!.toInt() - 1;
+          dayIndex = courseList[i].dayIndex.toInt() - 1;
           if (dailyCourseList[weekIndex] == null) {
             dailyCourseList[weekIndex] = [[], [], [], [], [], [], []];
           }

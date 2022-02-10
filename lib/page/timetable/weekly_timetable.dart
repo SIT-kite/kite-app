@@ -17,9 +17,10 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:kite/page/timetable/index.dart';
-import '../../entity/edu/timetable.dart';
 import 'package:kite/page/timetable/bottom_sheet.dart';
+import 'package:kite/page/timetable/index.dart';
+
+import '../../entity/edu/timetable.dart';
 
 GlobalKey<_WeeklyTimetableState> weeklyTimeTableKey = GlobalKey();
 
@@ -45,15 +46,18 @@ class WeeklyTimetable extends StatefulWidget {
 
 class _WeeklyTimetableState extends State<WeeklyTimetable> {
   late Size _deviceSize;
+
   // 左侧方块的宽高比
-  static const double gridAspectRatioHeight = 1 / 1.7;
+  static const double gridAspectRatioHeight = 1 / 1.8;
+
   // 课程网格中每一小格的高度
   late double singleGridHeight;
+
   // 课程网格中每一小格的宽度
   late double singleGridWidth;
 
   // TODO：将时间改为获取当前时间
-  DateTime currDate = DateTime(2021, 12, 25);
+  DateTime currDate = DateTime(2021, 9, 8);
   int currTimePageIndex = 0;
 
   static final List<Color> colorList = [
@@ -153,11 +157,11 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
                         children: [
                           Text(
                             (weekIndex + 1).toString(),
-                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                            style: Theme.of(context).textTheme.bodyText2,
                           ),
-                          const Text(
+                          Text(
                             "周",
-                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                            style: Theme.of(context).textTheme.bodyText2,
                           )
                         ],
                       )))
@@ -174,11 +178,11 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
                         children: [
                           Text(
                             "周" + num2word[index - 1],
-                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                            style: Theme.of(context).textTheme.bodyText2,
                           ),
                           Text(
                             currWeek[index - 1],
-                            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w400),
+                            style: Theme.of(context).textTheme.bodyText2,
                           ),
                         ],
                       )),
@@ -197,7 +201,7 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
               child: Center(
                 child: Text(
                   (index + 1).toInt().toString(),
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                  style: Theme.of(context).textTheme.bodyText2,
                 ),
               ),
               decoration: const BoxDecoration(
@@ -223,6 +227,7 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
         itemBuilder: (BuildContext context, int index) {
           List<Course> currDayCourseList = _getCourseListByWeekAndDay(weekIndex, index);
           Map<int, Course> parsedCourseMap = _parseCurrDayCourseList(currDayCourseList);
+          print(parsedCourseMap);
           List<double> parsedCardHeight = _getGridHeightList(parsedCourseMap);
           return SizedBox(
               width: singleGridWidth,
@@ -265,36 +270,25 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
                   decoration: BoxDecoration(
                       color: _getColor(course.courseId.hashCode),
                       borderRadius: const BorderRadius.all(Radius.circular(3.0)),
-                      border: const Border(
-                          // top: BorderSide(color: Colors.lightBlueAccent, width: 1),
-                          // right: BorderSide(color: Colors.lightBlueAccent, width: 1),
-                          // left: BorderSide(color: Colors.lightBlueAccent, width: 1),
-                          // bottom: BorderSide(color: Colors.lightBlueAccent, width: 1),
-                          )),
+                      border: const Border()),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(
-                        course.courseName.toString(),
-                        softWrap: true,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Colors.white),
-                      ),
-                      Text(
-                        course.place.toString(),
-                        softWrap: true,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Colors.white),
-                      ),
-                      Text(
-                        course.teacher.toString(),
-                        softWrap: true,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w400, color: Colors.white),
-                      )
+                      Text(course.courseName.toString(),
+                          softWrap: true,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3,
+                          style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.white)),
+                      Text(course.place.toString(),
+                          softWrap: true,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.white)),
+                      Text(course.teacher.toString(),
+                          softWrap: true,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.white))
                     ],
                   )),
             )
@@ -310,7 +304,7 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
     for (var i in widget.dailyCourseList[weekIndex]![dayIndex]) {
       res.add(widget.courseList[i]);
     }
-    res.sort((a, b) => (a.timeIndex!).compareTo(b.timeIndex!));
+    res.sort((a, b) => (a.timeIndex).compareTo(b.timeIndex));
     return res;
   }
 
@@ -320,10 +314,9 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
     int i = 1;
     while (i <= 11) {
       if (parsedCurrCourseList.containsKey(i)) {
-        // 此处hour保存已经变为当前课程有几节
-        res.add(parsedCurrCourseList[i]!.hour * singleGridHeight);
+        res.add(parsedCurrCourseList[i]!.duration * singleGridHeight);
         parsedCurrDayCourseList.add(parsedCurrCourseList[i]!);
-        i += parsedCurrCourseList[i]!.hour;
+        i += parsedCurrCourseList[i]!.duration;
       } else {
         res.add(singleGridHeight);
         parsedCurrDayCourseList.add(null);
@@ -336,29 +329,19 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
   Map<int, Course> _parseCurrDayCourseList(List<Course> currDayCourseList) {
     Map<int, Course> parsedCourseList = {};
     for (Course course in currDayCourseList) {
-      int timeIndex = course.timeIndex!;
+      int timeIndex = course.timeIndex;
+      print(timeIndex);
       // 除去首个0
       timeIndex = timeIndex >> 1;
       int count = 1;
       bool isConstant = false;
-      bool isAddSectionLength = false;
-      int startSection = 0;
       while (timeIndex != 0) {
         if ((timeIndex & 1) == 1 && isConstant == false) {
-          startSection = count;
-          parsedCourseList[startSection] = course;
+          parsedCourseList[count] = course;
           isConstant = true;
-        } else if (isConstant && (timeIndex & 1) == 0) {
-          // hour里面放持续节次
-          parsedCourseList[startSection]!.hour = count - startSection;
-          isConstant = false;
-          isAddSectionLength = true;
         }
         timeIndex = timeIndex >> 1;
         count++;
-      }
-      if (!isAddSectionLength) {
-        parsedCourseList[startSection]!.hour = count - startSection;
       }
     }
     return parsedCourseList;
