@@ -99,6 +99,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
         child: ListTile(
           // 点击卡片打开课程详情.
           onTap: () => showModalBottomSheet(
+            isScrollControlled: true,
             backgroundColor: Colors.transparent,
             builder: (BuildContext context) => Sheet(course.courseId, allCourses),
             context: context,

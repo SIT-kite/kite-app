@@ -15,9 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/entity/edu/timetable.dart';
 
 import 'util.dart';
@@ -50,7 +48,6 @@ class Sheet extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(0, 25, 0, 5),
       child: Container(
-        width: 0.85.sh,
         decoration: const BoxDecoration(
           color: Colors.white,
         ),
@@ -87,20 +84,24 @@ class Sheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints(maxHeight: 600),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(15.0),
-          topRight: Radius.circular(15.0),
+    return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(15.0),
+            topRight: Radius.circular(15.0),
+          ),
         ),
-      ),
-      child: ListView(
-        padding: const EdgeInsets.only(left: 20, right: 20),
-        controller: ScrollController(),
-        scrollDirection: Axis.vertical,
-        children: [_buildTitle(context)] + _buildItems(context),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [_buildTitle(context)] + _buildItems(context),
+          ),
+        ),
       ),
     );
   }
