@@ -100,7 +100,7 @@ class Course extends HiveObject {
 
   @override
   String toString() {
-    return 'Course{courseName: $courseName, day: $dayIndex, timeIndex: $timeIndex, week: $weekIndex, place: $place, teacher: $teacher, campus: $campus, credit: $credit, hour: $hour, dynClassId: $dynClassId, courseId: $courseId, weekText: $weekText}';
+    return 'Course{courseName: $courseName, day: $dayIndex, timeIndex: $timeIndex, week: $weekIndex, place: $place, teacher: $teacher, campus: $campus, credit: $credit, hour: $hour, dynClassId: $dynClassId, courseId: $courseId, weekText: $weekText, duration: $duration}';
   }
 
   /// 将中文的星期转换为数字, 如 "星期四" -> 4. 如果出错, 返回 0
@@ -147,14 +147,14 @@ class Course extends HiveObject {
   /// 解析时间字符串, 如 1-2、3
   static int _time2Index(String text, [int step = 1]) {
     if (!text.contains('-')) {
-      return 2 << _parseInt(text);
+      return 1 << _parseInt(text);
     }
     int result = 0;
     final timeText = text.split('-');
     int min = _parseInt(timeText.first);
     int max = _parseInt(timeText.last);
     for (int i = min; i <= max; i += step) {
-      result |= 2 << i;
+      result |= 1 << i;
     }
     return result;
   }
