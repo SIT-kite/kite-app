@@ -183,21 +183,12 @@ String formatTimeIndex(List<CourseEnd> timetable, int timeIndex, String format) 
   final timeStart = timetable[indexStart - 1].start;
   final timeEnd = timetable[indexEnd - 1].end;
 
-  return format.replaceAllMapped(r'(([A-Za-z])\1)', (match) {
-    final s = match.toString();
-    switch (s) {
-      case 'ss':
-        return timeStart.toString();
-      case 'ee':
-        return timeEnd.toString();
-
-      case 'SS':
-        return indexStart.toString();
-      case 'EE':
-        return indexEnd.toString();
-    }
-    return '';
-  });
+  String result = format;
+  return format
+      .replaceAll('ss', timeStart.toString())
+      .replaceAll('ee', timeEnd.toString())
+      .replaceAll('SS', indexStart.toString())
+      .replaceAll('EE', indexEnd.toString());
 }
 
 List<Event> createEventFromCourse(Course course) {

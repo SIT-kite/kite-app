@@ -65,9 +65,7 @@ class _DateHeaderState extends State<DateHeader> {
     return Expanded(
       flex: 3,
       child: InkWell(
-        onTap: () => setState(() {
-          selectedDay = day;
-        }),
+        onTap: () => setState(() => selectedDay = day),
         child: Container(
           decoration: getDecoration(day),
           child: Text('周${weekWord[day - 1]}\n$dateString', style: style, textAlign: TextAlign.center),
@@ -85,6 +83,6 @@ class _DateHeaderState extends State<DateHeader> {
     for (int i = 1; i <= 7; ++i) {
       columns.add(_buildDayColumn(i));
     }
-    return ListView(scrollDirection: Axis.horizontal, children: columns);
+    return Row(children: columns);
   }
 }

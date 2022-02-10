@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/entity/edu/timetable.dart';
 
 import 'grid.dart';
@@ -36,9 +37,6 @@ class WeeklyTimetable extends StatefulWidget {
 }
 
 class _WeeklyTimetableState extends State<WeeklyTimetable> {
-  /// 左侧方块的宽高比
-  static const double gridAspectRatioHeight = 1 / 1.8;
-
   /// 教务系统课程列表
   final List<Course> allCourses;
 
@@ -83,9 +81,9 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
     return GridView.builder(
         shrinkWrap: true,
         itemCount: 11,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 1,
-          childAspectRatio: gridAspectRatioHeight,
+          childAspectRatio: 22 / 23 * (1.sw) / (1.sh),
         ),
         itemBuilder: buildGrid);
   }
@@ -94,10 +92,10 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
     _pageController.jumpToPage(currTimePageIndex);
   }
 
-  Widget _pageBuilder(int index) {
+  Widget _pageBuilder(int week) {
     return Column(
       children: [
-        Expanded(flex: 1, child: DateHeader(index, -1)),
+        Expanded(flex: 1, child: DateHeader(week, -1)),
         Expanded(
           flex: 10,
           child: SingleChildScrollView(
@@ -106,7 +104,7 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
               textDirection: TextDirection.ltr,
               children: [
                 Expanded(flex: 2, child: _buildLeftColumn()),
-                Expanded(flex: 21, child: TableGrids(allCourses, index))
+                Expanded(flex: 21, child: TableGrids(allCourses, week))
               ],
             ),
           ),
@@ -121,7 +119,7 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
       controller: _pageController,
       scrollDirection: Axis.horizontal,
       itemCount: 20,
-      itemBuilder: (BuildContext context, int index) => _pageBuilder(index),
+      itemBuilder: (BuildContext context, int index) => _pageBuilder(index + 1),
     );
   }
 }

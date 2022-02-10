@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/entity/edu/timetable.dart';
@@ -39,7 +40,7 @@ class Sheet extends StatelessWidget {
     return classes.map((e) {
       final timetable = getBuildingTimetable(e.campus, e.place);
 
-      return formatTimeIndex(timetable, e.timeIndex, '${e.weekText} 周 ${weekWord[e.dayIndex - 1]}\nSS - EE ${e.place}');
+      return formatTimeIndex(timetable, e.timeIndex, '${e.weekText} 周${weekWord[e.dayIndex - 1]}\nss - ee ${e.place}');
     }).toList();
   }
 
@@ -96,6 +97,7 @@ class Sheet extends StatelessWidget {
         ),
       ),
       child: ListView(
+        padding: const EdgeInsets.only(left: 20, right: 20),
         controller: ScrollController(),
         scrollDirection: Axis.vertical,
         children: [_buildTitle(context)] + _buildItems(context),

@@ -25,13 +25,13 @@ import 'util.dart';
 
 class TableGrids extends StatelessWidget {
   /// 课程网格中每一小格的高度
-  late double singleGridHeight;
+  late final double singleGridHeight;
 
   /// 课程网格中每一小格的宽度
-  late double singleGridWidth;
+  late final double singleGridWidth;
 
-  List<Course> allCourses;
-  int currentWeek;
+  final List<Course> allCourses;
+  final int currentWeek;
 
   TableGrids(this.allCourses, this.currentWeek, {Key? key}) : super(key: key);
 
@@ -53,7 +53,7 @@ class TableGrids extends StatelessWidget {
       );
 
       return InkWell(
-        onTapDown: (TapDownDetails tapDownDetails) {
+        onTap: () {
           showModalBottomSheet(
               backgroundColor: Colors.transparent,
               builder: (BuildContext context) => Sheet(course.courseId, allCourses),
@@ -64,6 +64,7 @@ class TableGrids extends StatelessWidget {
           height: singleGridHeight * course.duration - 4,
           decoration: decoration,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               buildText(course.courseName, 3),
@@ -96,11 +97,11 @@ class TableGrids extends StatelessWidget {
   /// 合并得：[duration = 2, null, null, duration = 2, duration = 2]
   List<Course?> _buildGrids(List<Course> dayCourseList) {
     // 使用列表, 将每一门课放到其开始的节次上.
-    final List<Course?> l = List.filled(11, null);
-    dayCourseList.forEach((e) => l[getIndexStart(e.timeIndex)] = e);
+    final List<Course?> l = List.filled(11, null, growable: true);
+    dayCourseList.forEach((e) => l[getIndexStart(e.timeIndex) - 1] = e);
 
     // 此时 l 为 [duration = 2, null, null, null, duration = 2, null, duration = 2, null]
-    for (int i = 0; i < l.length;) {
+    for (int i = 0; i < l.length; ++i) {
       if (l[i] != null) {
         l.removeRange(i + 1, i + l[i]!.duration);
       }
@@ -129,16 +130,20 @@ class TableGrids extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    singleGridWidth = size.width * 3 / 23;
+    singleGridHeight = size.height / 11;
+
     return SizedBox(
       width: singleGridWidth * 7,
-      height: singleGridHeight * 11,
+      height: size.height,
       child: ListView.builder(
         itemCount: 7,
         padding: const EdgeInsets.only(left: 1.0),
         scrollDirection: Axis.horizontal,
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
-        itemBuilder: (BuildContext context, int day) => _buildDay(context, day),
+        itemBuilder: (BuildContext context, int index) => _buildDay(context, index + 1),
       ),
     );
   }

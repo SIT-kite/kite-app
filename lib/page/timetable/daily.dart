@@ -88,11 +88,11 @@ class _DailyTimetableState extends State<DailyTimetable> {
   }
 
   Widget _buildCourseCard(Course course) {
-    final TextStyle? textStyle = Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.black54);
+    final TextStyle? textStyle = Theme.of(context).textTheme.bodyText2;
     final Widget courseIcon = Image.asset(_courseIconPath + CourseCategory.query(course.courseName) + '.png');
     final timetable = getBuildingTimetable(course.campus, course.place);
     final description = formatTimeIndex(
-        timetable, course.timeIndex, '${course.weekText} 周 ${weekWord[course.dayIndex - 1]}\nSS - EE ${course.place}');
+        timetable, course.timeIndex, '${course.weekText} 周${weekWord[course.dayIndex - 1]}\nss - ee ${course.place}');
 
     return Card(
         margin: const EdgeInsets.all(8),
@@ -104,8 +104,8 @@ class _DailyTimetableState extends State<DailyTimetable> {
             context: context,
           ),
           leading: courseIcon,
-          title: Text(course.courseName, style: textStyle),
-          subtitle: Column(children: [
+          title: Text(course.courseName, textScaleFactor: 1.1, style: textStyle?.copyWith(color: Colors.black54)),
+          subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(course.teacher.join(','), style: textStyle),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -117,7 +117,6 @@ class _DailyTimetableState extends State<DailyTimetable> {
           ]),
         ),
         shape: const RoundedRectangleBorder(
-          // ignore: prefer_const_constructors
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
         clipBehavior: Clip.antiAlias,
@@ -130,7 +129,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
   }
 
   Widget _pageBuilder(int index) {
-    final List<Course> todayCourse = TableCache.filterCourseOnDay(allCourses, _currentWeek, _currentDay);
+    final List<Course> todayCourse = TableCache.filterCourseOnDay(allCourses, index + 1, _currentDay);
 
     return Column(
       children: [
