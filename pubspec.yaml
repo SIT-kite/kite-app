@@ -75,6 +75,7 @@ dependencies:
   package_info_plus: ^1.3.0     # Get packet version
   enough_mail: ^1.3.6
   app_settings: ^4.1.1
+  add_2_calendar: ^2.1.2        # Export timetable to system
 
 
 dev_dependencies:
