@@ -10,6 +10,7 @@ jobs:
   build-Android:
   
     runs-on: ubuntu-latest
+    continue-on-error: true
 
     steps:
       - uses: actions/checkout@v2
@@ -24,6 +25,7 @@ jobs:
   build-iOS:
   
     runs-on: macos-latest
+    continue-on-error: true
     
     steps:
     - uses: maxim-lobanov/setup-xcode@v1
@@ -52,6 +54,6 @@ jobs:
       with:
         botToken: ${{ secrets.BOT_TOKEN }}
         chatId: ${{ secrets.CHAT_ID }}
-        jobStatus: ${{ job.status }}
+        jobStatus: ${{ env.WORKFLOW_CONCLUSION }}
         skipSuccess: false
 
