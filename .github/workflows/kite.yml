@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build-android:
+  build-Android:
   
     runs-on: ubuntu-latest
 
