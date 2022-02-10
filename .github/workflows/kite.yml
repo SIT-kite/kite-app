@@ -21,13 +21,7 @@ jobs:
       - run: flutter pub run flutter_native_splash:create
       - run: flutter build apk
       
-      - name: send apk
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.CHAT_ID }}
-          token: ${{ secrets.BOT_TOKEN }}
-          message: ${{ github.head }}.${{ github.sha }}
-          message_file: build/app/outputs/flutter-apk/app-release.apk
+
       
   build-iOS:
   
