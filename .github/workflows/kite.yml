@@ -1,0 +1,24 @@
+name: KiteApp
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable' # or: 'beta' or 'master'
+      - run: flutter pub get
+      - run: flutter pub run build_runner build
+      - run: flutter pub run flutter_native_splash:create
+      - run: flutter test
+      - run: flutter build apk
+      - run: flutter build ios --release --no-codesign
+
