@@ -49,7 +49,7 @@ jobs:
       - build-iOS
     steps:
     - name: telegram notification
-      if: cancelled() == false
+      if: always()
       uses: xinthink/action-telegram@v1.1
       with:
         botToken: ${{ secrets.BOT_TOKEN }}
