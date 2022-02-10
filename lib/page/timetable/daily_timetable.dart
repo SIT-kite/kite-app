@@ -115,7 +115,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
     for (var i in widget.dailyCourseList[weekIndex]![dayIndex]) {
       res.add(widget.courseList[i]);
     }
-    res.sort((a, b) => (a.timeIndex!).compareTo(b.timeIndex!));
+    res.sort((a, b) => (a.timeIndex).compareTo(b.timeIndex));
     return res;
   }
 
@@ -220,7 +220,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
             child: Column(
               children: [
                 ListTile(
-                    leading: Image.asset(courseIconPath + CourseCategory.query(course.courseName ?? '') + '.png'),
+                    leading: Image.asset(courseIconPath + CourseCategory.query(course.courseName) + '.png'),
                     title: Text(course.courseName.toString(), style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.black54)),
                     subtitle: Column(
                       children: [
@@ -236,7 +236,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
                               child: Row(
                                 textDirection: TextDirection.ltr,
                                 children: [
-                                  Text(ParseCourse.parseCourseTimeIndex(course.timeIndex!),
+                                  Text(ParseCourse.parseCourseTimeIndex(course.timeIndex),
                                       style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.black54)),
                                 ],
                               ),

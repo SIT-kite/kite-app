@@ -94,6 +94,7 @@ class _TimetablePageState extends State<TimetablePage> {
       Log.debug("refresh");
       StoragePool.course.clear();
       courseList = await timetableDaoService.getTimetable(currSchoolYear, currSemester);
+      print(courseList);
       StoragePool.course.addAll(courseList);
       isRefresh = false;
     } else {
@@ -141,10 +142,10 @@ class _TimetablePageState extends State<TimetablePage> {
       int weekIndex = 0;
       int dayIndex = 0;
       int? week = courseList[i].weekIndex;
-      week = (week! >> 1);
+      week = (week >> 1);
       while ((week as int) != 0) {
         if ((week & 1) == 1) {
-          dayIndex = courseList[i].dayIndex!.toInt() - 1;
+          dayIndex = courseList[i].dayIndex.toInt() - 1;
           if (dailyCourseList[weekIndex] == null) {
             dailyCourseList[weekIndex] = [[], [], [], [], [], [], []];
           }

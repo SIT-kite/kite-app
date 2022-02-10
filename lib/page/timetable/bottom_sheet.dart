@@ -171,12 +171,12 @@ class ParseCourse {
     List<String> courseDetail = [];
     for (Course course in courseList) {
       if (course.courseId == courseId) {
-        courseDetail.add(course.weekText! +
+        courseDetail.add(course.weekText +
             " 周" +
-            num2word[course.dayIndex! - 1] +
+            num2word[course.dayIndex - 1] +
             "\n" +
-            parseCourseTimeIndex(course.timeIndex!) +
-            course.place!);
+            parseCourseTimeIndex(course.timeIndex) +
+            course.place);
       }
     }
     return courseDetail;
