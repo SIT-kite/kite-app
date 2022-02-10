@@ -96,7 +96,7 @@ class StoragePool {
 
   static NetworkSettingStorage get network => _networkSetting;
 
-  static late TimetableStorageDao _course;
+  static late CourseStorage _course;
 
   static TimetableStorageDao get course => _course;
 

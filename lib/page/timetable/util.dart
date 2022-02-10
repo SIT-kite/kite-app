@@ -17,9 +17,30 @@
  */
 
 import 'package:add_2_calendar/add_2_calendar.dart';
+import 'package:flutter/material.dart';
 import 'package:kite/entity/edu/index.dart';
 
+// -- 基本常量
+
 final dateSemesterStart = DateTime(2022, 2, 14);
+
+final List<String> weekWord = ['一', '二', '三', '四', '五', '六', '日'];
+
+final List<Color> colorList = [
+  const Color.fromARGB(178, 251, 83, 82),
+  const Color.fromARGB(153, 115, 123, 250),
+  const Color.fromARGB(178, 116, 185, 255),
+  const Color.fromARGB(178, 118, 126, 253),
+  const Color.fromARGB(178, 245, 175, 77),
+  const Color.fromARGB(178, 187, 137, 106),
+  const Color.fromARGB(178, 232, 67, 147),
+  const Color.fromARGB(178, 188, 140, 240),
+  const Color.fromARGB(178, 116, 185, 255)
+];
+
+Color getBeautifulColor(int hashCode) {
+  return colorList[hashCode % colorList.length];
+}
 
 class Time {
   /// 小时
@@ -29,6 +50,9 @@ class Time {
   final int minute;
 
   const Time(this.hour, this.minute);
+
+  @override
+  String toString() => '$hour:$minute';
 }
 
 class CourseEnd {
@@ -145,6 +169,35 @@ List<CourseEnd> getBuildingTimetable(String campus, String place) {
 /// 将 "第几周、周几" 转换为日期. 如, 开学日期为 2021-9-1, 那么将第一周周一转换为 2021-9-1
 DateTime getDateFromWeekDay(DateTime semesterBegin, int week, int day) {
   return semesterBegin.add(Duration(days: (week - 1) * 7 + day - 1));
+}
+
+/// 将 timeIndex 转换为对应的字符串
+///
+/// ss: 开始时间
+/// ee: 结束时间
+/// SS: 开始的节次
+/// EE: 结束的节次
+String formatTimeIndex(List<CourseEnd> timetable, int timeIndex, String format) {
+  final indexStart = getIndexStart(timeIndex);
+  final indexEnd = getIndexEnd(indexStart, timeIndex);
+  final timeStart = timetable[indexStart - 1].start;
+  final timeEnd = timetable[indexEnd - 1].end;
+
+  return format.replaceAllMapped(r'(([A-Za-z])\1)', (match) {
+    final s = match.toString();
+    switch (s) {
+      case 'ss':
+        return timeStart.toString();
+      case 'ee':
+        return timeEnd.toString();
+
+      case 'SS':
+        return indexStart.toString();
+      case 'EE':
+        return indexEnd.toString();
+    }
+    return '';
+  });
 }
 
 List<Event> createEventFromCourse(Course course) {

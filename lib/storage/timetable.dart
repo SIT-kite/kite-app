@@ -58,8 +58,7 @@ class CourseStorage implements TimetableStorageDao {
   }
 
   @override
-  Future<List<Course>> getTimetable(SchoolYear schoolYear, Semester semester) async {
-    var result = box.values.toList();
-    return result;
+  List<Course> getTimetable(SchoolYear schoolYear, Semester semester) {
+    return box.values.toList();
   }
 }

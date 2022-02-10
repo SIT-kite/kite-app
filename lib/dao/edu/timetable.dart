@@ -21,7 +21,7 @@ abstract class TimetableDao {
   Future<List<Course>> getTimetable(SchoolYear schoolYear, Semester semester);
 }
 
-abstract class TimetableStorageDao extends TimetableDao {
+abstract class TimetableStorageDao {
   void add(Course item);
 
   void addAll(List<Course> courseList);
@@ -33,4 +33,6 @@ abstract class TimetableStorageDao extends TimetableDao {
   bool isEmpty();
 
   bool clear();
+
+  List<Course> getTimetable(SchoolYear schoolYear, Semester semester);
 }

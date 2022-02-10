@@ -25,7 +25,7 @@ import 'package:kite/session/abstract_session.dart';
 import 'util.dart';
 
 class TimetableService extends AService implements TimetableDao {
-  static const _timeTableUrl = 'http://jwxt.sit.edu.cn/jwglxt/kbcx/xskbcx_cxXsgrkb.html';
+  static const _timetableUrl = 'http://jwxt.sit.edu.cn/jwglxt/kbcx/xskbcx_cxXsgrkb.html';
 
   TimetableService(ASession session) : super(session);
 
@@ -39,7 +39,7 @@ class TimetableService extends AService implements TimetableDao {
   @override
   Future<List<Course>> getTimetable(SchoolYear schoolYear, Semester semester) async {
     final response = await session.post(
-      _timeTableUrl,
+      _timetableUrl,
       queryParameters: {'gnmkdm': 'N253508'},
       data: {
         // 学年名
