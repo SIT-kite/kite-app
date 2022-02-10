@@ -44,12 +44,12 @@ jobs:
     
   telegram:
     runs-on: ubuntu-latest
+    if: always()
     needs: 
       - build-Android
       - build-iOS
     steps:
     - name: telegram notification
-      if: always()
       uses: xinthink/action-telegram@v1.1
       with:
         botToken: ${{ secrets.BOT_TOKEN }}
