@@ -1,12 +1,12 @@
-/* 
+/*
   InfoPlist.strings
   小风筝info.plist国际化文件
 
   Created by peanuts on 2022/2/10.
-  
+
 */
 
-NSCalendarsUsageDescription = "小风筝需要获取你的日历权限"
-NSMicrophoneUsageDescription = "小风筝需要获取你的麦克风权限"
-NSCameraUsageDescription = "小风筝需要获取你的相机权限"
-NSPhotoLibraryUsageDescription = "小风筝需要获取你的图片库权限"
+NSCalendarsUsageDescription = "小风筝需要获取你的日历权限";
+NSMicrophoneUsageDescription = "小风筝需要获取你的麦克风权限";
+NSCameraUsageDescription = "小风筝需要获取你的相机权限";
+NSPhotoLibraryUsageDescription = "小风筝需要获取你的图片库权限";

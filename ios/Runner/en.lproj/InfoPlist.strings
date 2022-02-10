@@ -1,12 +1,12 @@
-/* 
+/*
   InfoPlist.strings
   Kite App info.plist localization file.
 
   Created by peanuts on 2022/2/10.
-  
+
 */
 
-NSCalendarsUsageDescription = "Kite needs to get your calendar access"
-NSMicrophoneUsageDescription = "Kite needs to get your microphone access"
-NSCameraUsageDescription = "Kite needs to get your camera access"
-NSPhotoLibraryUsageDescription = "Kite needs to get your photo access"
+NSCalendarsUsageDescription = "Kite needs to get your calendar access";
+NSMicrophoneUsageDescription = "Kite needs to get your microphone access";
+NSCameraUsageDescription = "Kite needs to get your camera access";
+NSPhotoLibraryUsageDescription = "Kite needs to get your photo access";
