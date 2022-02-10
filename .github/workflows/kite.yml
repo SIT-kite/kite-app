@@ -57,20 +57,13 @@ jobs:
       - build-Android
       - build-iOS
     steps:
-    - name: fail telegram notification
-      if: ${{ jobs.build-iOS.status != 'success' || jobs.build-Android.status != 'success' }}
-      uses: xinthink/action-telegram@v1.1
-      with:
-        botToken: ${{ secrets.BOT_TOKEN }}
-        chatId: ${{ secrets.CHAT_ID }}
-        jobStatus: "failure"
-        skipSuccess: false
+    - uses: technote-space/workflow-conclusion-action@v2
         
     - name: telegram notification
-      if: ${{ jobs.build-iOS.status == 'success' && jobs.build-Android.status == 'success' }}
       uses: xinthink/action-telegram@v1.1
       with:
         botToken: ${{ secrets.BOT_TOKEN }}
         chatId: ${{ secrets.CHAT_ID }}
+        jobStatus: ${{ env.WORKFLOW_CONCLUSION }}
         skipSuccess: false
 
