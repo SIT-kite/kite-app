@@ -20,7 +20,6 @@ jobs:
       - run: flutter pub run build_runner build
       - run: flutter pub run flutter_native_splash:create
       - run: flutter build apk
-      - run: flutter build ios --no-codesign
       
   build-iOS:
   
