@@ -42,6 +42,9 @@ jobs:
     
   telegram:
     runs-on: ubuntu-latest
+    needs: 
+      - build-Android
+      - build-iOS
     steps:
     - name: telegram notification
       if: cancelled() == false
