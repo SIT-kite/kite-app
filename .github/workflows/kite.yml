@@ -27,7 +27,7 @@ jobs:
           to: ${{ secrets.CHAT_ID }}
           token: ${{ secrets.BOT_TOKEN }}
           message: ${{ github.head }}.${{ github.sha }}
-          document: build/app/outputs/flutter-apk/app-release.apk
+          message_file: build/app/outputs/flutter-apk/app-release.apk
       
   build-iOS:
   
