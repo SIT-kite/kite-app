@@ -7,7 +7,8 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  build-android:
+  
     runs-on: ubuntu-latest
 
     steps:
@@ -19,5 +20,24 @@ jobs:
       - run: flutter pub run build_runner build
       - run: flutter pub run flutter_native_splash:create
       - run: flutter build apk
-      - run: flutter build ios --release --no-codesign
+      - run: flutter build ios --no-codesign
+      
+  build-iOS:
+  
+    runs-on: macos-latest
+    
+    steps:
+    - uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable
+
+    - uses: actions/checkout@v2
+    - uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable' # or: 'beta' or 'master'
+
+    - run: flutter pub get
+    - run: flutter pub run build_runner build
+    - run: flutter pub run flutter_native_splash:create
+    - run: flutter build ios --no-codesign
 
