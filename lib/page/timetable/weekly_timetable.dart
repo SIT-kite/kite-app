@@ -17,9 +17,10 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:kite/page/timetable/index.dart';
-import '../../entity/edu/timetable.dart';
 import 'package:kite/page/timetable/bottom_sheet.dart';
+import 'package:kite/page/timetable/index.dart';
+
+import '../../entity/edu/timetable.dart';
 
 GlobalKey<_WeeklyTimetableState> weeklyTimeTableKey = GlobalKey();
 
@@ -265,32 +266,25 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
                   decoration: BoxDecoration(
                       color: _getColor(course.courseId.hashCode),
                       borderRadius: const BorderRadius.all(Radius.circular(3.0)),
-                      border: const Border(
-                          )),
+                      border: const Border()),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(
-                        course.courseName.toString(),
-                        softWrap: true,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                        style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.white)
-                      ),
-                      Text(
-                        course.place.toString(),
-                        softWrap: true,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.white)
-                      ),
-                      Text(
-                        course.teacher.toString(),
-                        softWrap: true,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.white)
-                      )
+                      Text(course.courseName.toString(),
+                          softWrap: true,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3,
+                          style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.white)),
+                      Text(course.place.toString(),
+                          softWrap: true,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.white)),
+                      Text(course.teacher.toString(),
+                          softWrap: true,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.white))
                     ],
                   )),
             )
@@ -306,7 +300,7 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
     for (var i in widget.dailyCourseList[weekIndex]![dayIndex]) {
       res.add(widget.courseList[i]);
     }
-    res.sort((a, b) => (a.timeIndex!).compareTo(b.timeIndex!));
+    res.sort((a, b) => (a.timeIndex).compareTo(b.timeIndex));
     return res;
   }
 
@@ -332,7 +326,7 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
   Map<int, Course> _parseCurrDayCourseList(List<Course> currDayCourseList) {
     Map<int, Course> parsedCourseList = {};
     for (Course course in currDayCourseList) {
-      int timeIndex = course.timeIndex!;
+      int timeIndex = course.timeIndex;
       // 除去首个0
       timeIndex = timeIndex >> 1;
       int count = 1;

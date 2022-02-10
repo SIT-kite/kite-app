@@ -140,11 +140,11 @@ class _TimetablePageState extends State<TimetablePage> {
     for (int i = 0; i < courseList.length; i++) {
       int weekIndex = 0;
       int dayIndex = 0;
-      int? week = courseList[i].week;
+      int? week = courseList[i].weekIndex;
       week = (week! >> 1);
       while ((week as int) != 0) {
         if ((week & 1) == 1) {
-          dayIndex = courseList[i].day!.toInt() - 1;
+          dayIndex = courseList[i].dayIndex!.toInt() - 1;
           if (dailyCourseList[weekIndex] == null) {
             dailyCourseList[weekIndex] = [[], [], [], [], [], [], []];
           }

@@ -58,7 +58,11 @@ class CourseBottomSheet extends StatelessWidget {
                     decoration: const BoxDecoration(
                       color: Colors.white,
                     ),
-                    child: Text(_courseName, style: Theme.of(context).textTheme.headline2?.copyWith(color: Colors.black, fontWeight: FontWeight.w600)),
+                    child: Text(_courseName,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline2
+                            ?.copyWith(color: Colors.black, fontWeight: FontWeight.w600)),
                   )),
               Container(
                   decoration: const BoxDecoration(
@@ -104,7 +108,13 @@ class CourseBottomSheet extends StatelessWidget {
             Container(
               width: 15,
             ),
-            Expanded(child: Text(detail, softWrap: true, style: Theme.of(context).textTheme.headline4?.copyWith(color: Colors.black, fontWeight: FontWeight.w500))),
+            Expanded(
+                child: Text(detail,
+                    softWrap: true,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline4
+                        ?.copyWith(color: Colors.black, fontWeight: FontWeight.w500))),
           ],
         ));
   }
@@ -163,7 +173,7 @@ class ParseCourse {
       if (course.courseId == courseId) {
         courseDetail.add(course.weekText! +
             " 周" +
-            num2word[course.day! - 1] +
+            num2word[course.dayIndex! - 1] +
             "\n" +
             parseCourseTimeIndex(course.timeIndex!) +
             course.place!);
