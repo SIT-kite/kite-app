@@ -29,3 +29,7 @@ def call(script, no_pause = False):
                   env_dic=get_envs())
     if not no_pause:
         pause()
+
+def unimplementation():
+    print('暂未实现该功能')
+    pause()

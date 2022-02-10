@@ -21,7 +21,7 @@ def extend_envs(system_env: Dict[str, str], user_env: Dict[str, str]):
     return env
 
 
-def call_with_env(script, env_dic: Dict[str, str], pause_after):
+def call_with_env(script, env_dic: Dict[str, str]):
     """
     调用系统命令
     """

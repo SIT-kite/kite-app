@@ -35,6 +35,10 @@ def android_guide():
     from .android_guide import show_guide_build_for_android
     show_guide_build_for_android()
 
+def git_pull():
+    call('git stash push',True)
+    call('git pull --rebase',True)
+    call('git stash pop')
 
 def show_home_menu():
     menu = Menu(
@@ -69,7 +73,9 @@ def show_home_menu():
             MenuOption(keys=['we', 'web'],
                        title='构建 web 平台',
                        callback=build_for_web),
-
+            MenuOption(keys=['gp', 'pull'],
+                       title='git一键拉取最新更新',
+                       callback=git_pull),
         ],
         backward_text='退出构建脚本'
     )
