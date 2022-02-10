@@ -180,7 +180,7 @@ class SettingPage extends StatelessWidget {
           settingKey: '/network/useProxy',
           defaultValue: StoragePool.network.useProxy,
           title: '使用 HTTP 代理',
-          subtitle: '通过 HTTP 代理和其他设备上的 EasyConnect 来连接校园网',
+          subtitle: '通过 HTTP 代理连接校园网',
           leading: const Icon(Icons.vpn_key),
           onChange: (value) {
             if (value) {
