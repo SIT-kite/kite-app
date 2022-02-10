@@ -128,13 +128,16 @@ class _DailyTimetableState extends State<DailyTimetable> {
     return const Center(child: Text("今天没有课哦"));
   }
 
+  /// 构建第 index 页视图
   Widget _pageBuilder(int index) {
-    final List<Course> todayCourse = TableCache.filterCourseOnDay(allCourses, index + 1, _currentDay);
+    _currentWeek = index ~/ 7 + 1;
+    _currentDay = index % 7 + 1;
+    final List<Course> todayCourse = TableCache.filterCourseOnDay(allCourses, _currentWeek, _currentDay);
 
     return Column(
       children: [
         // 翻页不影响选择的星期, 因此沿用 _currentDay.
-        Expanded(child: DateHeader(index, _currentDay)),
+        Expanded(child: DateHeader(_currentWeek, _currentDay)),
         Expanded(
           flex: 10,
           child: todayCourse.isNotEmpty
@@ -153,8 +156,8 @@ class _DailyTimetableState extends State<DailyTimetable> {
       controller: _pageController,
       scrollDirection: Axis.horizontal,
       // TODO: 存储
-      itemCount: 20,
-      itemBuilder: (_, int index) => _pageBuilder(index + 1),
+      itemCount: 20 * 7,
+      itemBuilder: (_, int index) => _pageBuilder(index),
     );
   }
 }
