@@ -24,6 +24,8 @@ def config():
     return __config_manager.config
 
 
-def call(script):
+def call(script, no_pause = False):
     call_with_env(script=script,
                   env_dic=get_envs())
+    if not no_pause:
+        pause()

@@ -12,6 +12,11 @@ def get_all_dependencies():
 def build_for_linux():
     call('flutter build linux')
 
+def run_linux_release():
+    put_envs({
+      'LC_ALL':'en_US.UTF-8'
+    })
+    call('./build/linux/x64/release/bundle/kite')
 
 def build_for_windows():
     call('flutter build windows')
@@ -55,6 +60,9 @@ def show_home_menu():
             MenuOption(keys=['l'],
                        title='构建 linux 平台应用程序',
                        callback=build_for_linux),
+            MenuOption(keys=['rl'],
+                     title='运行 linux release',
+                     callback=run_linux_release),
             MenuOption(keys=['w', 'wi'],
                        title='构建 windows 平台',
                        callback=build_for_windows),

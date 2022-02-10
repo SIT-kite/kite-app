@@ -21,19 +21,23 @@ def extend_envs(system_env: Dict[str, str], user_env: Dict[str, str]):
     return env
 
 
-def call_with_env(script, env_dic: Dict[str, str]):
+def call_with_env(script, env_dic: Dict[str, str], pause_after):
     """
     调用系统命令
     """
-    print('运行命令: ', script)
+    print(f'运行命令: {script}')
 
-    subprocess.call(
+    try:
+        subprocess.call(
         script.split(' '),
         stdin=sys.stdin,
         stdout=sys.stdout,
         stderr=sys.stderr,
         env=env_dic,
     )
+    except KeyboardInterrupt as ki:
+        print(f'\n强制结束命令 {script}')
+    
 
 
 def run_functions(functions: Iterable[Callable]):
@@ -42,3 +46,6 @@ def run_functions(functions: Iterable[Callable]):
     """
     for function in functions:
         function()
+
+def pause():
+    input('按回车键继续')
