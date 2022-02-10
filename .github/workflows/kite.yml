@@ -39,4 +39,15 @@ jobs:
     - run: flutter pub run build_runner build
     - run: flutter pub run flutter_native_splash:create
     - run: flutter build ios --no-codesign
+    
+  telegram:
+    runs-on: ubuntu-latest
+    steps:
+    - name: telegram notification
+      if: cancelled() == false
+      uses: xinthink/action-telegram@v1.1
+      with:
+        botToken: ${{ secrets.BOT_TOKEN }}
+        chatId: ${{ secrets.CHAT_ID }}
+        jobStatus: ${{ job.status }}
 
