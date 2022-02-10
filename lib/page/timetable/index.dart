@@ -23,6 +23,8 @@ import 'package:kite/page/timetable/weekly.dart';
 import 'package:kite/service/edu/index.dart';
 import 'package:kite/util/flash.dart';
 
+import 'daily.dart';
+
 /// 课表模式
 enum DisplayMode { daily, weekly }
 
@@ -100,6 +102,19 @@ class _TimetablePageState extends State<TimetablePage> {
 
   void _onPressJumpToday() {}
 
+  Widget _buildModeSwitchButton() {
+    return IconButton(
+      icon: const Icon(Icons.swap_horiz),
+      onPressed: () {
+        if (displayMode == DisplayMode.daily) {
+          setState(() => displayMode = DisplayMode.weekly);
+        } else {
+          setState(() => displayMode = DisplayMode.daily);
+        }
+      },
+    );
+  }
+
   Widget _buildFloatingButton() {
     final textStyle = Theme.of(context).textTheme.headline2?.copyWith(color: Colors.white);
     return FloatingActionButton(child: Text('今', style: textStyle), onPressed: _onPressJumpToday);
@@ -107,12 +122,16 @@ class _TimetablePageState extends State<TimetablePage> {
 
   @override
   Widget build(BuildContext context) {
+    final timetable = StoragePool.course.getTimetable(currSchoolYear, currSemester);
+
     return Scaffold(
-      appBar: AppBar(title: const Text('课程表'), actions: <Widget>[_buildPopupMenu(context)]),
+      appBar: AppBar(title: const Text('课程表'), actions: <Widget>[
+        _buildModeSwitchButton(),
+        _buildPopupMenu(context),
+      ]),
       floatingActionButton: _buildFloatingButton(),
       // TODO: 记住上一次查看的页面.
-      // body: DailyTimetable(StoragePool.course.getTimetable(currSchoolYear, currSemester)),
-      body: WeeklyTimetable(StoragePool.course.getTimetable(currSchoolYear, currSemester)),
+      body: displayMode == DisplayMode.daily ? DailyTimetable(timetable) : WeeklyTimetable(timetable),
     );
   }
 }
