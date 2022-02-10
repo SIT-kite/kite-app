@@ -46,10 +46,13 @@ class WeeklyTimetable extends StatefulWidget {
 
 class _WeeklyTimetableState extends State<WeeklyTimetable> {
   late Size _deviceSize;
+
   // 左侧方块的宽高比
   static const double gridAspectRatioHeight = 1 / 1.8;
+
   // 课程网格中每一小格的高度
   late double singleGridHeight;
+
   // 课程网格中每一小格的宽度
   late double singleGridWidth;
 
@@ -224,6 +227,7 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
         itemBuilder: (BuildContext context, int index) {
           List<Course> currDayCourseList = _getCourseListByWeekAndDay(weekIndex, index);
           Map<int, Course> parsedCourseMap = _parseCurrDayCourseList(currDayCourseList);
+          print(parsedCourseMap);
           List<double> parsedCardHeight = _getGridHeightList(parsedCourseMap);
           return SizedBox(
               width: singleGridWidth,
@@ -274,7 +278,7 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
                           softWrap: true,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 3,
-                          style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.white)),
+                          style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.white)),
                       Text(course.place.toString(),
                           softWrap: true,
                           overflow: TextOverflow.ellipsis,
@@ -310,10 +314,9 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
     int i = 1;
     while (i <= 11) {
       if (parsedCurrCourseList.containsKey(i)) {
-        // 此处hour保存已经变为当前课程有几节
-        res.add(parsedCurrCourseList[i]!.hour * singleGridHeight);
+        res.add(parsedCurrCourseList[i]!.duration * singleGridHeight);
         parsedCurrDayCourseList.add(parsedCurrCourseList[i]!);
-        i += parsedCurrCourseList[i]!.hour;
+        i += parsedCurrCourseList[i]!.duration;
       } else {
         res.add(singleGridHeight);
         parsedCurrDayCourseList.add(null);
@@ -327,28 +330,18 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
     Map<int, Course> parsedCourseList = {};
     for (Course course in currDayCourseList) {
       int timeIndex = course.timeIndex;
+      print(timeIndex);
       // 除去首个0
       timeIndex = timeIndex >> 1;
       int count = 1;
       bool isConstant = false;
-      bool isAddSectionLength = false;
-      int startSection = 0;
       while (timeIndex != 0) {
         if ((timeIndex & 1) == 1 && isConstant == false) {
-          startSection = count;
-          parsedCourseList[startSection] = course;
+          parsedCourseList[count] = course;
           isConstant = true;
-        } else if (isConstant && (timeIndex & 1) == 0) {
-          // hour里面放持续节次
-          parsedCourseList[startSection]!.hour = count - startSection;
-          isConstant = false;
-          isAddSectionLength = true;
         }
         timeIndex = timeIndex >> 1;
         count++;
-      }
-      if (!isAddSectionLength) {
-        parsedCourseList[startSection]!.hour = count - startSection;
       }
     }
     return parsedCourseList;
