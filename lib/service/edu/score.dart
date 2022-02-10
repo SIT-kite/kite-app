@@ -54,7 +54,9 @@ class ScoreService extends AService implements ScoreDao {
       // 学年名
       'xnm': schoolYear.toString(),
       // 学期名
-      'xqm': semesterToFormField(semester)
+      'xqm': semesterToFormField(semester),
+      // 获取成绩最大数量
+      'queryModel.showCount': 100,
     });
     return _parseScoreListPage(response.data);
   }
