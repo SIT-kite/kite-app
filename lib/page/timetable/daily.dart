@@ -154,7 +154,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
       scrollDirection: Axis.horizontal,
       // TODO: 存储
       itemCount: 20,
-      itemBuilder: (_, i) => _pageBuilder(i),
+      itemBuilder: (_, int index) => _pageBuilder(index + 1),
     );
   }
 }
