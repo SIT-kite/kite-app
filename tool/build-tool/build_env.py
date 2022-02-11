@@ -24,7 +24,9 @@ def config():
     return __config_manager.config
 
 
-def call(script, no_pause = False):
+def call(script, no_pause = True, no_print_cmd = False):
+    if not no_print_cmd:
+        print(f'运行命令: {script}')
     call_with_env(script=script,
                   env_dic=get_envs())
     if not no_pause:
