@@ -17,9 +17,11 @@
  */
 
 import 'package:enough_mail/enough_mail.dart';
+import 'package:enough_mail_html/enough_mail_html.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:intl/intl.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:kite/util/url_launcher.dart';
 
 class DetailPage extends StatelessWidget {
   static final dateFormat = DateFormat('yyyy/MM/dd HH:mm');
@@ -28,8 +30,15 @@ class DetailPage extends StatelessWidget {
 
   const DetailPage(this._message, {Key? key}) : super(key: key);
 
+  String _generateHtml(MimeMessage mimeMessage) {
+    return mimeMessage.transformToHtml(
+      blockExternalImages: false,
+      emptyMessageText: '无邮件内容',
+    );
+  }
+
   Widget _buildBody(BuildContext context) {
-    final html = _message.decodeTextHtmlPart() ?? '';
+    // final html = _message.decodeContentText() ?? '';
     final titleStyle = Theme.of(context).textTheme.headline2?.copyWith(fontWeight: FontWeight.bold);
     final subtitleStyle = Theme.of(context).textTheme.headline4?.copyWith(color: Colors.black54);
 
@@ -47,8 +56,14 @@ class DetailPage extends StatelessWidget {
           Text(subjectText, style: titleStyle),
           Text('$senderText\n$dateText', style: subtitleStyle),
           Expanded(
-            child: WebView(
-              onWebViewCreated: (controller) => controller.loadHtmlString(html),
+            child: HtmlWidget(
+              _generateHtml(_message),
+              renderMode: RenderMode.listView,
+              onTapUrl: (url) {
+                launchInBrowser(url);
+                return true;
+              },
+              isSelectable: true,
             ),
           ),
         ],
