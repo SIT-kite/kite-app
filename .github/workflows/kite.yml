@@ -76,6 +76,12 @@ jobs:
       with:
         to: ${{ secrets.CHAT_ID }}
         token: ${{ secrets.BOT_TOKEN }}
-        message: apk-${{ github.ref }}-${{ github.sha }}
+        message: |
+          ${{ github.actor }} created commit:
+          Commit message: ${{ github.event.commits[0].message }}
+
+          Repository: ${{ github.repository }}
+
+          See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
         document: build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
 
