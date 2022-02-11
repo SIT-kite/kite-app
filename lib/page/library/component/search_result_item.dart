@@ -79,7 +79,7 @@ class BookItemWidget extends StatelessWidget {
                 book.title,
                 style: const TextStyle(
                   fontSize: 18.0,
-                  fontStyle: FontStyle.italic,
+                  fontStyle: FontStyle.normal,
                   fontWeight: FontWeight.bold,
                 ),
               ),
