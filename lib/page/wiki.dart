@@ -40,8 +40,8 @@ class _WikiPageState extends State<WikiPage> {
     Log.info('分享当前页面');
   }
 
-  static Future<String> _getInjectionJs() async {
-    return (await rootBundle.loadString('assets/wiki/injection.js'));
+  static Future<String> _getInjectJs() async {
+    return (await rootBundle.loadString('assets/wiki/inject.js'));
   }
 
   void _onMenuClicked() async {
@@ -58,7 +58,7 @@ class _WikiPageState extends State<WikiPage> {
       return;
     }
     final controller = await _controller.future;
-    final String js = await _getInjectionJs();
+    final String js = await _getInjectJs();
     controller.runJavascript(js);
   }
 

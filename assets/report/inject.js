@@ -1,7 +1,7 @@
 if (typeof runFlag === 'undefined') {
 
 runFlag = true;
-console.info('Initializing injection.js');
+console.info('Initializing inject.js');
 
 const userName = '{username}';
 
@@ -9,7 +9,7 @@ const userName = '{username}';
 const routes = {
   login:  '#/',
   home:   '#/pages/index/index',
-  report: '#/pages/index/jksb', 
+  report: '#/pages/index/jksb',
   studentReport: '#/pages/index/studentReport',
   yimiaon:       '#/pages/index/yimiaon'
 };
@@ -44,8 +44,9 @@ Document.prototype.addEventListener = new Proxy(
 
 // allowReport
 const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-if (
-  Object.prototype.hasOwnProperty.call(userInfo, "allowReport") &&
+if ( // if userInfo matches { allowReport: 0 }
+  typeof userInfo === "object" &&
+  userInfo !== null &&
   userInfo.allowReport === 0
 ) {
   userInfo.allowReport = 1;
@@ -63,7 +64,8 @@ window.addEventListener("load", () => {
 
 // css
 const style = document.head.appendChild(document.createElement("style"));
-style.textContent = `/* Global */
+style.textContent =
+`/* Global */
 
 
 /* font */
@@ -99,7 +101,7 @@ uni-image > img { object-fit: contain; }
 /* layout */
 
 
-uni-page-body, 
+uni-page-body,
 uni-page-body > uni-view:only-child,
 .nav + uni-scroll-view {
 	height: 100%;

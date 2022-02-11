@@ -1,7 +1,7 @@
 if (typeof runFlag === 'undefined') {
 
   runFlag = true;
-  console.info('Initializing injection.js');
+  console.info('Initializing inject.js');
 
   const index = 'https://cdn.kite.sunnysab.cn/wiki/';
   const primaryColor = 'blue';

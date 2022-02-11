@@ -43,8 +43,9 @@ class _DailyReportPageState extends State<DailyReportPage> {
 
   String _queryLocalUser() => StoragePool.authSetting.currentUsername ?? '';
 
-  static Future<String> _getInjectionJs(String userName) async {
-    return (await rootBundle.loadString('assets/report/injection.js')).replaceFirst('{username}', userName);
+  static Future<String> _getInjectJs(String userName) async {
+    var js = await rootBundle.loadString('assets/report/inject.js');
+    return js.replaceFirst('{{username}}', userName);
   }
 
   void _onPageFinished(String url) async {
@@ -53,7 +54,7 @@ class _DailyReportPageState extends State<DailyReportPage> {
     }
     final controller = await _controller.future;
     final String user = _queryLocalUser();
-    final String js = await _getInjectionJs(user);
+    final String js = await _getInjectJs(user);
     controller.runJavascript(js);
   }
 
