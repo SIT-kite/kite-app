@@ -17,7 +17,10 @@
  */
 import 'package:url_launcher/url_launcher.dart';
 
+import 'logger.dart';
+
 Future<void> launchInBrowser(String url) async {
+  Log.info('开启浏览器加载URL: $url');
   if (!await launch(
     url,
     forceSafariVC: false,
