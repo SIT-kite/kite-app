@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/entity/edu/index.dart';
 import 'package:kite/global/event_bus.dart';
@@ -26,7 +25,6 @@ import 'package:kite/util/flash.dart';
 
 import 'cache.dart';
 import 'daily.dart';
-import 'util.dart';
 import 'weekly.dart';
 
 /// 课表模式
@@ -87,12 +85,6 @@ class _TimetablePageState extends State<TimetablePage> {
     // 刷新界面
   }
 
-  void _onExport() {
-    timetable
-        .map(createEventFromCourse)
-        .fold<List<Event>>([], (p, e) => p + e).forEach((e) => Add2Calendar.addEvent2Cal(e));
-  }
-
   PopupMenuButton _buildPopupMenu(BuildContext context) {
     return PopupMenuButton(
       itemBuilder: (BuildContext context) {
@@ -100,10 +92,6 @@ class _TimetablePageState extends State<TimetablePage> {
           PopupMenuItem(
             child: const Text('刷新'),
             onTap: _onRefresh,
-          ),
-          PopupMenuItem(
-            child: const Text('导出课表'),
-            onTap: _onExport,
           ),
         ];
       },

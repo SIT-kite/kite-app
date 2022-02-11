@@ -15,10 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/entity/edu/index.dart';
 
 // -- 基本常量
 
@@ -189,35 +186,4 @@ String formatTimeIndex(List<CourseEnd> timetable, int timeIndex, String format) 
       .replaceAll('ee', timeEnd.toString())
       .replaceAll('SS', indexStart.toString())
       .replaceAll('EE', indexEnd.toString());
-}
-
-List<Event> createEventFromCourse(Course course) {
-  final timetable = getBuildingTimetable(course.campus, course.place);
-  final indexStart = getIndexStart(course.timeIndex);
-  final indexEnd = getIndexEnd(indexStart, course.timeIndex);
-  final timeStart = timetable[indexStart - 1].start;
-  final timeEnd = timetable[indexEnd - 1].end;
-
-  final description = '第 ${timeStart == timeEnd ? timeStart : "$timeStart-$timeEnd"} 节\n'
-      '${course.place}\n'
-      '${course.teacher.join(', ')}';
-
-  final List<Event> result = [];
-  // 一学期最多有 20 周
-  for (int currentWeek = 1; currentWeek < 20; ++currentWeek) {
-    // 本周没课, 跳过
-    if ((1 << currentWeek) & course.weekIndex == 0) continue;
-
-    final date = getDateFromWeekDay(dateSemesterStart, currentWeek, course.dayIndex);
-    final Event event = Event(
-      title: course.courseName,
-      description: '第 ${course.teacher.join(', ')} | ',
-      location: description,
-      startDate: date.add(Duration(hours: timeStart.hour, minutes: timeStart.minute)),
-      endDate: date.add(Duration(hours: timeEnd.hour, minutes: timeEnd.minute)),
-      timeZone: 'Asia/Shanghai',
-    );
-    result.add(event);
-  }
-  return result;
 }
