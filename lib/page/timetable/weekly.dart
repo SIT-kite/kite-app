@@ -47,7 +47,7 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
 
   int _currentWeek = 1;
 
-  final PageController _pageController = PageController();
+  late final PageController _pageController;
 
   _WeeklyTimetableState(this.allCourses, this.initialDate);
 
@@ -57,6 +57,7 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
     eventBus.on(EventNameConstants.onTimetableReset, _onTimetableReset);
     eventBus.on(EventNameConstants.onJumpTodayTimetable, _onJumpToday);
     _setDate(DateTime.now());
+    _pageController = PageController(initialPage: _currentWeek-1);
   }
 
   @override
