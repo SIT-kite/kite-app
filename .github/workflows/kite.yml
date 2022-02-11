@@ -20,6 +20,12 @@ jobs:
       - run: flutter pub run build_runner build
       - run: flutter pub run flutter_native_splash:create
       - run: flutter build apk --split-per-abi
+      - name: 📌 Cache build apk
+        uses: actions/cache@v2
+        with:
+          path: |
+            build/
+          key: apk-${{ github.ref }}-${{ github.sha }}
 
       
   build-iOS:
@@ -49,6 +55,13 @@ jobs:
       - build-iOS
     steps:
     - uses: technote-space/workflow-conclusion-action@v2
+    
+    - name: 📌 Get cache build apk
+      uses: actions/cache@v2
+      with:
+        path: |
+          build/
+        key: apk-${{ github.ref }}-${{ github.sha }}
         
     - name: 💡 Telegram Notification
       uses: xinthink/action-telegram@v1.1
