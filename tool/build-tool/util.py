@@ -25,8 +25,6 @@ def call_with_env(script, env_dic: Dict[str, str]):
     """
     调用系统命令
     """
-    print(f'运行命令: {script}')
-
     try:
         subprocess.call(
             script.split(' '),
