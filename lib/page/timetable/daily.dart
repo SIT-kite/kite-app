@@ -74,29 +74,32 @@ class _DailyTimetableState extends State<DailyTimetable> {
     super.dispose();
   }
 
+  void _setWeekDay(int week, int day) {
+    _currentWeek = week;
+    _currentDay = day;
+  }
+
   /// 设置页面为对应日期页.
   void _setDate(DateTime theDay) {
     int days = theDay.difference(dateSemesterStart).inDays;
 
     int week = days ~/ 7 + 1, day = days % 7 + 1;
     if (days >= 0 && 1 <= week && week <= 20 && 1 <= day && day <= 7) {
-      _currentWeek = week;
-      _currentDay = day;
+      _setWeekDay(week, day);
     } else {
-      _currentWeek = 1;
-      _currentDay = 1;
+      _setWeekDay(1, 1);
     }
   }
 
   void _onJumpToday(_) {
-    _jumpToday();
+    _setDate(DateTime.now());
+    _jumpToDay(_currentWeek, _currentDay);
   }
 
-  /// 跳转到今天
-  void _jumpToday() {
-    _setDate(DateTime.now());
+  /// 跳转到指定星期与天
+  void _jumpToDay(int week, int day) {
     if (_pageController.hasClients) {
-      _pageController.jumpToPage((_currentWeek - 1) * 7 + _currentDay - 1);
+      _pageController.jumpToPage((week - 1) * 7 + day - 1);
     }
   }
 
@@ -151,7 +154,16 @@ class _DailyTimetableState extends State<DailyTimetable> {
     return Column(
       children: [
         // 翻页不影响选择的星期, 因此沿用 _currentDay.
-        Expanded(child: DateHeader(_currentWeek, _currentDay)),
+        Expanded(
+          child: DateHeader(
+            _currentWeek,
+            _currentDay,
+            onTap: (selectedDay) {
+              _currentDay = selectedDay;
+              _jumpToDay(_currentWeek, _currentDay);
+            },
+          ),
+        ),
         Expanded(
           flex: 10,
           child: todayCourse.isNotEmpty

@@ -24,13 +24,16 @@ class DateHeader extends StatefulWidget {
   /// 当前显示的周次
   int currentWeek;
 
-  /// 当前选中的日
+  /// 当前选中的日 (1-7)
   int selectedDay;
 
-  DateHeader(this.currentWeek, this.selectedDay, {Key? key}) : super(key: key);
+  /// 点击的回调
+  final Function(int)? onTap;
+
+  DateHeader(this.currentWeek, this.selectedDay, {this.onTap, Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _DateHeaderState(dateSemesterStart, currentWeek, selectedDay);
+  State<StatefulWidget> createState() => _DateHeaderState(dateSemesterStart, currentWeek, selectedDay, onTap);
 }
 
 class _DateHeaderState extends State<DateHeader> {
@@ -40,14 +43,16 @@ class _DateHeaderState extends State<DateHeader> {
   /// 当前显示的周次
   int currentWeek;
 
-  /// 当前选中的日
+  /// 当前选中的日 (1-7)
   int selectedDay = 0;
 
-  _DateHeaderState(this.semesterBegin, this.currentWeek, this.selectedDay);
+  final Function(int)? onTap;
+
+  _DateHeaderState(this.semesterBegin, this.currentWeek, this.selectedDay, this.onTap);
 
   BoxDecoration getDecoration(int day) {
     return BoxDecoration(
-      color: selectedDay == day ? const Color(0x0ff4ebf5) : Colors.white,
+      color: selectedDay == day ? Theme.of(context).primaryColor.withOpacity(0.7) : Colors.white,
       borderRadius: const BorderRadius.all(Radius.circular(12.0)),
     );
   }
@@ -61,14 +66,25 @@ class _DateHeaderState extends State<DateHeader> {
     final date = getDateFromWeekDay(dateSemesterStart, currentWeek, day);
     final dateString = '${date.month}/${date.day}';
 
-    final style = Theme.of(context).textTheme.bodyText2;
+    TextStyle? style = Theme.of(context).textTheme.bodyText2;
+    if (day == selectedDay) {
+      style = style?.copyWith(color: Colors.white);
+    }
+    final onTapCallback = onTap != null
+        ? () {
+            setState(() => selectedDay = day);
+            onTap!(selectedDay);
+          }
+        : null;
     return Expanded(
       flex: 3,
       child: InkWell(
-        onTap: () => setState(() => selectedDay = day),
+        onTap: onTapCallback,
         child: Container(
           decoration: getDecoration(day),
-          child: Text('周${weekWord[day - 1]}\n$dateString', style: style, textAlign: TextAlign.center),
+          child: Padding(
+              padding: const EdgeInsets.only(top: 5, bottom: 5),
+              child: Text('周${weekWord[day - 1]}\n$dateString', style: style, textAlign: TextAlign.center)),
         ),
       ),
     );
