@@ -17,6 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/entity/edu/index.dart';
+import 'package:kite/global/event_bus.dart';
 import 'package:kite/page/timetable/sheet.dart';
 import 'package:kite/util/edu/icon.dart';
 
@@ -46,10 +47,10 @@ class _DailyTimetableState extends State<DailyTimetable> {
   /// 初始日期
   final DateTime initialDate;
 
-  /// 在当前时间下，课表应该显示的页数为currTimePageIndex
+  /// 课表应该显示的周（页数 + 1）
   int _currentWeek = 0;
 
-  /// 当前页应该显示的天为currDayInWeekIndex
+  /// 当前页应显示的星期几
   int _currentDay = 0;
 
   /// 翻页控制
@@ -60,31 +61,43 @@ class _DailyTimetableState extends State<DailyTimetable> {
   @override
   void initState() {
     super.initState();
-
+    eventBus.on(EventNameConstants.onJumpTodayTimetable, _onJumpToday);
     // 跳转到初始页
-    setDate(initialDate);
+    _setDate(initialDate);
     _pageController = PageController(initialPage: _currentWeek);
-  }
-
-  /// 设置当前页参数为置顶日期.
-  void setDate(DateTime theDay) {
-    int days = theDay.difference(dateSemesterStart).inDays;
-
-    _currentWeek = (days - 6) ~/ 7 + 1;
-    _currentDay = days % 7;
-  }
-
-  /// 跳转到今天
-  void jumpToday() {
-    setDate(DateTime.now());
-    _pageController.jumpToPage(_currentWeek);
   }
 
   @override
   void dispose() {
-    /// 为了避免内存泄露，需要调用_controller.dispose
+    eventBus.off(EventNameConstants.onJumpTodayTimetable, _onJumpToday);
     _pageController.dispose();
     super.dispose();
+  }
+
+  /// 设置页面为对应日期页.
+  void _setDate(DateTime theDay) {
+    int days = theDay.difference(dateSemesterStart).inDays;
+
+    int week = days ~/ 7 + 1, day = days % 7 + 1;
+    if (days >= 0 && 1 <= week && week <= 20 && 1 <= day && day <= 7) {
+      _currentWeek = week;
+      _currentDay = day;
+    } else {
+      _currentWeek = 1;
+      _currentDay = 1;
+    }
+  }
+
+  void _onJumpToday(_) {
+    _jumpToday();
+  }
+
+  /// 跳转到今天
+  void _jumpToday() {
+    _setDate(DateTime.now());
+    if (_pageController.hasClients) {
+      _pageController.jumpToPage((_currentWeek - 1) * 7 + _currentDay - 1);
+    }
   }
 
   Widget _buildCourseCard(Course course) {

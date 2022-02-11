@@ -19,9 +19,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/entity/edu/timetable.dart';
+import 'package:kite/global/event_bus.dart';
 
 import 'grid.dart';
 import 'header.dart';
+import 'util.dart';
 
 class WeeklyTimetable extends StatefulWidget {
   /// 教务系统课程列表
@@ -43,22 +45,28 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
   /// 初始日期
   final DateTime? initialDate;
 
-  int currTimePageIndex = 0;
+  int _currentWeek = 1;
 
-  late PageController _pageController;
+  final PageController _pageController = PageController();
 
   _WeeklyTimetableState(this.allCourses, this.initialDate);
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: currTimePageIndex, viewportFraction: 1.0);
+    eventBus.on(EventNameConstants.onJumpTodayTimetable, _onJumpToday);
+    _setDate(DateTime.now());
   }
 
   @override
   void dispose() {
+    eventBus.off(EventNameConstants.onJumpTodayTimetable, _onJumpToday);
     _pageController.dispose();
     super.dispose();
+  }
+
+  void _onJumpToday(_) {
+    _jumpToday();
   }
 
   /// 布局左侧边栏, 显示节次
@@ -88,8 +96,23 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
         itemBuilder: buildGrid);
   }
 
-  void gotoCurrPage() {
-    _pageController.jumpToPage(currTimePageIndex);
+  /// 设置页面为对应日期页.
+  void _setDate(DateTime theDay) {
+    int days = theDay.difference(dateSemesterStart).inDays;
+
+    int week = days ~/ 7 + 1;
+    if (days >= 0 && 1 <= week && week <= 20) {
+      _currentWeek = week;
+    } else {
+      _currentWeek = 1;
+    }
+  }
+
+  void _jumpToday() {
+    _setDate(DateTime.now());
+    if (_pageController.hasClients) {
+      _pageController.jumpToPage(_currentWeek - 1);
+    }
   }
 
   Widget _pageBuilder(int week) {

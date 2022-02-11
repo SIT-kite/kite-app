@@ -26,4 +26,5 @@ enum EventNameConstants {
   onRemoveCourse,
   onCampusChange,
   onBackgroundChange,
+  onJumpTodayTimetable,
 }

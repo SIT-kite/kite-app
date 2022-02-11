@@ -18,6 +18,7 @@
 import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/entity/edu/index.dart';
+import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/page/timetable/weekly.dart';
@@ -110,7 +111,9 @@ class _TimetablePageState extends State<TimetablePage> {
     );
   }
 
-  void _onPressJumpToday() {}
+  void _onPressJumpToday() {
+    eventBus.emit(EventNameConstants.onJumpTodayTimetable);
+  }
 
   Widget _buildModeSwitchButton() {
     return IconButton(
