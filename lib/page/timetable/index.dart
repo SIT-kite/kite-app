@@ -57,15 +57,16 @@ class _TimetablePageState extends State<TimetablePage> {
   @override
   void initState() {
     super.initState();
-    timetable = StoragePool.course.getTimetable(currSchoolYear, currSemester);
+    timetable = StoragePool.course.getTimetable();
   }
 
-  Future<void> _fetchTimetable() async {
+  Future<List<Course>> _fetchTimetable() async {
     final service = TimetableService(SessionPool.eduSession);
     final timetable = await service.getTimetable(currSchoolYear, currSemester);
 
-    StoragePool.course.clear();
+    await StoragePool.course.clear();
     StoragePool.course.addAll(timetable);
+    return timetable;
   }
 
   Future<void> _onRefresh() async {
@@ -74,15 +75,16 @@ class _TimetablePageState extends State<TimetablePage> {
     }
     isRefreshing = true;
     try {
-      await _fetchTimetable();
       showBasicFlash(context, const Text('加载成功'));
+
+      timetable = await _fetchTimetable();
+      setState(() {});
     } catch (e) {
       showBasicFlash(context, Text('加载失败: ${e.toString().split('\n')[0]}'));
     } finally {
       isRefreshing = false;
     }
     // 刷新界面
-    setState(() {});
   }
 
   void _onExport() {

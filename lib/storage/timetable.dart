@@ -19,31 +19,33 @@ import 'package:hive/hive.dart';
 import 'package:kite/dao/edu/timetable.dart';
 import 'package:kite/entity/edu/index.dart';
 
-class CourseStorage implements TimetableStorageDao {
-  final Box<Course> box;
+class TimetableStorage implements TimetableStorageDao {
+  final Box<dynamic> box;
 
-  const CourseStorage(this.box);
+  const TimetableStorage(this.box);
 
   @override
   void add(Course item) {
-    box.put(item.courseId.toString() + item.weekIndex.toString() + item.timeIndex.toString(), item);
+    final List<Course> timetable = getTimetable();
+    timetable.add(item);
+    box.put('timetable', timetable);
   }
 
   @override
   void addAll(List<Course> courseList) {
-    courseList.forEach((item) {
-      box.put(item.courseId.toString() + item.weekIndex.toString() + item.timeIndex.toString(), item);
-    });
+    box.put('timetable', courseList);
   }
 
   @override
-  void delete(String record) {
-    box.delete(record.hashCode);
+  void delete(Course courseToDelete) {
+    final List<Course> timetable = getTimetable();
+    timetable.remove(courseToDelete);
+    box.put('timetable', timetable);
   }
 
   @override
   void deleteAll() {
-    box.deleteAll(box.keys.map((e) => e.hashCode));
+    box.delete('timetable');
   }
 
   @override
@@ -52,13 +54,12 @@ class CourseStorage implements TimetableStorageDao {
   }
 
   @override
-  bool clear() {
-    box.clear();
-    return true;
+  Future<void> clear() async {
+    await box.clear();
   }
 
   @override
-  List<Course> getTimetable(SchoolYear schoolYear, Semester semester) {
-    return box.values.toList();
+  List<Course> getTimetable() {
+    return box.get('timetable', defaultValue: []);
   }
 }

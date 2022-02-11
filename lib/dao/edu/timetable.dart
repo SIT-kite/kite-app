@@ -26,13 +26,13 @@ abstract class TimetableStorageDao {
 
   void addAll(List<Course> courseList);
 
-  void delete(String record);
+  void delete(Course courseToDelete);
 
   void deleteAll();
 
   bool isEmpty();
 
-  bool clear();
+  Future<void> clear();
 
-  List<Course> getTimetable(SchoolYear schoolYear, Semester semester);
+  List<Course> getTimetable();
 }

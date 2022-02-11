@@ -96,7 +96,7 @@ class StoragePool {
 
   static NetworkSettingStorage get network => _networkSetting;
 
-  static late CourseStorage _course;
+  static late TimetableStorage _course;
 
   static TimetableStorageDao get course => _course;
 
@@ -162,8 +162,8 @@ class StoragePool {
     _jwt = JwtStorage(settingBox);
     Settings.init(cacheProvider: HiveCacheProvider(settingBox));
 
-    final courseBox = await Hive.openBox<Course>('course');
-    _course = CourseStorage(courseBox);
+    final courseBox = await Hive.openBox<dynamic>('course');
+    _course = TimetableStorage(courseBox);
 
     final userEventStorage = await Hive.openBox<dynamic>('userEvent');
     _userEvent = UserEventStorage(userEventStorage);
