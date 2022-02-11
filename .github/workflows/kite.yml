@@ -88,6 +88,6 @@ jobs:
           
           Message: ${{ github.event.head_commit.message }}
 
-          See changes: https://github.com/${{ github.repository }}/commit/${{ steps.vars.outputs.short_sha }}
+          See changes: https://github.com/${{ github.repository }}/commit/${{ env.SHA }}
         document: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
 
