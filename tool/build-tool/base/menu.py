@@ -14,8 +14,10 @@ def search(keyword: str, target_pool: Iterable[str]):
     """
     搜索keyword能够匹配到的所有字符串
     """
-    return list(filter(lambda x: match(keyword, x),
+    result = list(filter(lambda x: match(keyword, x),
                        target_pool))
+    result.sort(key=lambda x:len(x))
+    return result
 
 
 @dataclass
@@ -89,7 +91,7 @@ class Menu:
         else:
             return self.__options()
 
-    def __select_option_menu(self):
+    def __select_option_menu(self)->Optional[MenuOption]:
         """
         选择菜单项
         """
@@ -99,14 +101,31 @@ class Menu:
 
         while True:
             key = input('请选择: ')
+            if len(key) == 0:
+                return None
             print()
+
             results = search(key,self.__menu_item_dict.keys())
+
+            # 若找不到搜索结果
+            if len(results) == 0:
+                print('输入错误', f'找不到 {key}')
+                return None
+
+            # 若搜索结果为一条
             if len(results) == 1:
+                # 直接执行
                 break
-            elif len(results) == 0:
-                print('input error', f'cannot found {key}')
+
+            # 否则搜索结果不止一条
             else:
-                print('input is amphibolous, do you want to use',results, '?')
+                print(f"输入模棱两可, {results} 均为合法的目标。你想执行最佳匹配 {results[0]} 吗?")
+                if input('请确认 Y/(N): ') in ['Y','y']:
+                    # 直接执行
+                    break
+                else:
+                    # 直接退出
+                    return None
         option: MenuOption = self.__menu_item_dict[results[0]]
         print(f'您选择了{results[0]}: {option.title}')
         return option
@@ -120,7 +139,8 @@ class Menu:
             self.__display_title()
             self.__display_content()
             select_option = self.__select_option_menu()
-            select_option.callback()
+            if select_option is not None:
+                select_option.callback()
 
         except KeyboardInterrupt as _:
             print()
