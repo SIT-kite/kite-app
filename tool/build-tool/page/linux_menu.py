@@ -24,6 +24,9 @@ def build_x64():
 
 
 def run_hot_load():
+    put_envs({
+        'LC_ALL': 'en_US.UTF-8'
+    })
     call('flutter run -d linux')
 
 
@@ -42,7 +45,7 @@ def show_linux_menu():
                        callback=run_linux_release),
             MenuOption(keys=['build && run'],
                        title='编译并运行 linux-x64 应用(release)',
-                       callback=run_functions([
+                       callback=lambda:run_functions([
                            build_x64,
                            run_linux_release
                        ])),
