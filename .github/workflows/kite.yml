@@ -71,6 +71,14 @@ jobs:
         jobStatus: ${{ env.WORKFLOW_CONCLUSION }}
         skipSuccess: false
         
+    - name: Set output
+      id: vars
+      run: |
+        echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}
+        echo ::set-output name=short_sha::$(git rev-parse --short HEAD)
+
+      
+    - run: cd build/app/outputs/flutter-apk/ && mv app-arm64-v8a-release.apk ${{ steps.vars.outputs.short_ref }}-${{ steps.vars.outputs.short_sha }}-arm64-v8a-release.apk
     - name: 🚀 Upload Apk by Bot
       uses: appleboy/telegram-action@master
       with:
@@ -83,5 +91,5 @@ jobs:
           Repository: ${{ github.repository }}
 
           See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
-        document: build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+        document: build/app/outputs/flutter-apk/${{ steps.vars.outputs.short_ref }}-${{ steps.vars.outputs.short_sha }}-arm64-v8a-release.apk
 
