@@ -72,7 +72,7 @@ class KiteApp extends StatelessWidget {
       headline4: TextStyle(fontSize: 22.0),
       headline6: TextStyle(fontSize: 20.0),
       bodyText1: TextStyle(fontSize: 18.0, fontWeight: FontWeight.normal),
-      bodyText2: TextStyle(fontSize: 16.0, color: Colors.black26, fontWeight: FontWeight.w600),
+      bodyText2: TextStyle(fontSize: 16.0, color: Colors.black54, fontWeight: FontWeight.w600),
     );
   }
 
