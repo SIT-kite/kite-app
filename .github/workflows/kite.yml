@@ -26,7 +26,7 @@ jobs:
         with:
           to: ${{ secrets.CHAT_ID }}
           token: ${{ secrets.BOT_TOKEN }}
-          message: release-${{ github.head_ref }}-${{ github.sha }}
+          message: release-${{ github.ref }}-${{ github.sha }}
           document: build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
       
       
