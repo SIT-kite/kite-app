@@ -65,12 +65,12 @@ jobs:
           key: apk-${{ github.ref }}-${{ github.sha }}
 
       - run: cd build/app/outputs/flutter-apk/ && mv app-arm64-v8a-release.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
-      - name: 📌 Upload build apk
-        uses: actions/upload-artifact@v2
+      - name: 🤖 Upload Apk by Bot
+        uses: appleboy/telegram-action@master
         with:
-          path: |
-            build/
-          name: ${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
+          to: ${{ secrets.CHAT_ID }}
+          token: ${{ secrets.BOT_TOKEN }}
+          document: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
 
   notification:
     runs-on: ubuntu-latest
@@ -83,7 +83,7 @@ jobs:
         id: short-sha
         with: { length: 7 }
 
-      - name: 🎯 Telegram Notification
+      - name: 🤖 Telegram Notification
         if: env.WORKFLOW_CONCLUSION == 'failure'
         uses: appleboy/telegram-action@master
         with:
@@ -97,9 +97,9 @@ jobs:
 
             Message: *${{ github.event.head_commit.message }}*
 
-            View [changes](https://github.com/${{ github.repository }}/commit/${{ env.SHA }})
+            Commit: [${{ env.SHA }}](https://github.com/${{ github.repository }}/commit/${{ env.SHA }})
 
-      - name: 🎯 Telegram Notification
+      - name: 🤖 Telegram Notification
         if: env.WORKFLOW_CONCLUSION != 'failure'
         uses: appleboy/telegram-action@master
         with:
@@ -113,4 +113,4 @@ jobs:
 
             Message: *${{ github.event.head_commit.message }}*
 
-            View [changes](https://github.com/${{ github.repository }}/commit/${{ env.SHA }})
+            Commit: [${{ env.SHA }}](https://github.com/${{ github.repository }}/commit/${{ env.SHA }})
