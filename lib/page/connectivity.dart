@@ -18,6 +18,7 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:check_vpn_connection/check_vpn_connection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
@@ -112,34 +113,35 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
           style: Theme.of(context).textTheme.bodyText1);
     }
 
-    return SizedBox(
-      height: 50,
-      child: Column(
-        children: [
-          buildErrorText(),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(
-                height: 40,
-                child: ElevatedButton(
-                  child: Text('打开 WLAN 设置'),
-                  onPressed: AppSettings.openWIFISettings,
-                ),
+    return Column(
+      children: [
+        buildErrorText(),
+        const SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(
+              height: 40,
+              child: ElevatedButton(
+                child: Text('打开 WLAN 设置'),
+                onPressed: AppSettings.openWIFISettings,
               ),
-              const SizedBox(width: 20),
-              SizedBox(
-                height: 40,
-                child: ElevatedButton(
-                  child: const Text('打开 EasyConnect'),
-                  onPressed: () => launchInBrowser('sangfor://easyconnect'),
-                ),
+            ),
+            const SizedBox(width: 20),
+            SizedBox(
+              height: 40,
+              child: ElevatedButton(
+                child: const Text('打开 EasyConnect'),
+                onPressed: () => launchInBrowser('sangfor://easyconnect'),
               ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+        TextButton(
+          onPressed: () => launchInBrowser('https://www.sit.edu.cn/xxfw/list.htm'),
+          child: const Text('点此下载 EasyConnect'),
+        ),
+      ],
     );
   }
 
@@ -148,14 +150,15 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
     return Scaffold(
       appBar: AppBar(title: const Text('网络工具')),
       body: Center(
-        child: Column(
-          children: [
-            const Spacer(flex: 4),
-            Expanded(flex: 3, child: buildFigure(context)),
-            const Spacer(flex: 1),
-            Expanded(flex: 3, child: isConnected ? buildConnectedBlock() : buildDisconnectedBlock()),
-            const Spacer(flex: 4),
-          ],
+        child: SizedBox(
+          height: 0.7.sh,
+          child: Column(
+            children: [
+              Expanded(flex: 3, child: buildFigure(context)),
+              const Spacer(flex: 1),
+              Expanded(flex: 3, child: isConnected ? buildConnectedBlock() : buildDisconnectedBlock()),
+            ],
+          ),
         ),
       ),
     );
