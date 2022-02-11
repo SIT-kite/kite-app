@@ -67,15 +67,6 @@ jobs:
         path: |
           build/
         key: apk-${{ github.ref }}-${{ github.sha }}
-        
-    - name: 💡 Telegram Notification
-      uses: xinthink/action-telegram@v1.1
-      with:
-        botToken: ${{ secrets.BOT_TOKEN }}
-        chatId: ${{ secrets.CHAT_ID }}
-        jobStatus: ${{ env.WORKFLOW_CONCLUSION }}
-        skipSuccess: false
-
       
     - run: cd build/app/outputs/flutter-apk/ && mv app-arm64-v8a-release.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
     - name: 🚀 Upload Apk by Bot
@@ -91,3 +82,10 @@ jobs:
           See changes: https://github.com/${{ github.repository }}/commit/${{ env.SHA }}
         document: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
 
+    - name: 💡 Telegram Notification
+      uses: xinthink/action-telegram@v1.1
+      with:
+        botToken: ${{ secrets.BOT_TOKEN }}
+        chatId: ${{ secrets.CHAT_ID }}
+        jobStatus: ${{ env.WORKFLOW_CONCLUSION }}
+        skipSuccess: false
