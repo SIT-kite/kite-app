@@ -21,7 +21,7 @@ import 'package:enough_mail_html/enough_mail_html.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/util/url_launcher.dart';
+import 'package:kite/component/html_widget.dart';
 
 class DetailPage extends StatelessWidget {
   static final dateFormat = DateFormat('yyyy/MM/dd HH:mm');
@@ -56,14 +56,9 @@ class DetailPage extends StatelessWidget {
           Text(subjectText, style: titleStyle),
           Text('$senderText\n$dateText', style: subtitleStyle),
           Expanded(
-            child: HtmlWidget(
+            child: MyHtmlWidget(
               _generateHtml(_message),
               renderMode: RenderMode.listView,
-              onTapUrl: (url) {
-                launchInBrowser(url);
-                return true;
-              },
-              isSelectable: true,
             ),
           ),
         ],
