@@ -84,7 +84,7 @@ jobs:
         with: { length: 7 }
 
       - name: 🤖 Telegram Notification
-        if: env.WORKFLOW_CONCLUSION == 'failure'
+        if: env.WORKFLOW_CONCLUSION != 'success'
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.CHAT_ID }}
@@ -100,7 +100,7 @@ jobs:
             Commit: [${{ env.SHA }}](https://github.com/${{ github.repository }}/commit/${{ env.SHA }})
 
       - name: 🤖 Telegram Notification
-        if: env.WORKFLOW_CONCLUSION != 'failure'
+        if: env.WORKFLOW_CONCLUSION == 'success'
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.CHAT_ID }}
