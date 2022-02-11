@@ -60,6 +60,7 @@ class TimetableStorage implements TimetableStorageDao {
 
   @override
   List<Course> getTimetable() {
-    return box.get('timetable', defaultValue: []);
+    final List<dynamic> list = box.get('timetable', defaultValue: <Course>[]);
+    return list.map((e) => e as Course).toList();
   }
 }
