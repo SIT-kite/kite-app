@@ -41,11 +41,11 @@ class DailyTimetable extends StatefulWidget {
 class _DailyTimetableState extends State<DailyTimetable> {
   static const String _courseIconPath = 'assets/course/';
 
-  /// 教务系统课程列表
-  final List<Course> allCourses;
-
   /// 初始日期
   final DateTime initialDate;
+
+  /// 教务系统课程列表
+  List<Course> allCourses;
 
   /// 课表应该显示的周（页数 + 1）
   int _currentWeek = 0;
@@ -61,6 +61,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
   @override
   void initState() {
     super.initState();
+    eventBus.on(EventNameConstants.onTimetableReset, _onTimetableReset);
     eventBus.on(EventNameConstants.onJumpTodayTimetable, _onJumpToday);
     // 跳转到初始页
     _setDate(initialDate);
@@ -69,6 +70,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
 
   @override
   void dispose() {
+    eventBus.off(EventNameConstants.onTimetableReset, _onTimetableReset);
     eventBus.off(EventNameConstants.onJumpTodayTimetable, _onJumpToday);
     _pageController.dispose();
     super.dispose();
@@ -89,6 +91,10 @@ class _DailyTimetableState extends State<DailyTimetable> {
     } else {
       _setWeekDay(1, 1);
     }
+  }
+
+  void _onTimetableReset(dynamic _timetable) {
+    setState(() => allCourses = _timetable as List<Course>);
   }
 
   void _onJumpToday(_) {

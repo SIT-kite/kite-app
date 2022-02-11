@@ -39,11 +39,11 @@ class WeeklyTimetable extends StatefulWidget {
 }
 
 class _WeeklyTimetableState extends State<WeeklyTimetable> {
-  /// 教务系统课程列表
-  final List<Course> allCourses;
-
   /// 初始日期
   final DateTime? initialDate;
+
+  /// 教务系统课程列表
+  List<Course> allCourses;
 
   int _currentWeek = 1;
 
@@ -54,12 +54,14 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
   @override
   void initState() {
     super.initState();
+    eventBus.on(EventNameConstants.onTimetableReset, _onTimetableReset);
     eventBus.on(EventNameConstants.onJumpTodayTimetable, _onJumpToday);
     _setDate(DateTime.now());
   }
 
   @override
   void dispose() {
+    eventBus.off(EventNameConstants.onTimetableReset, _onTimetableReset);
     eventBus.off(EventNameConstants.onJumpTodayTimetable, _onJumpToday);
     _pageController.dispose();
     super.dispose();
@@ -106,6 +108,10 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
     } else {
       _currentWeek = 1;
     }
+  }
+
+  void _onTimetableReset(dynamic _timetable) {
+    setState(() => allCourses = _timetable as List<Course>);
   }
 
   void _jumpToday() {

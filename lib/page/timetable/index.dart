@@ -21,12 +21,13 @@ import 'package:kite/entity/edu/index.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:kite/page/timetable/weekly.dart';
 import 'package:kite/service/edu/index.dart';
 import 'package:kite/util/flash.dart';
 
+import 'cache.dart';
 import 'daily.dart';
 import 'util.dart';
+import 'weekly.dart';
 
 /// 课表模式
 enum DisplayMode { daily, weekly }
@@ -44,16 +45,12 @@ class _TimetablePageState extends State<TimetablePage> {
 
   // 模式：周课表 日课表
   DisplayMode displayMode = DisplayMode.daily;
+  bool isRefreshing = false;
 
-  // TODO：更改为正确的学期
-  final SchoolYear currSchoolYear = const SchoolYear(2020);
+  final SchoolYear currSchoolYear = const SchoolYear(2021);
   final currSemester = Semester.secondTerm;
 
-  // TODO：更改为正确的开学日期
-  DateTime termBeginDate = DateTime(2021, 9, 6);
-  late List<Course> timetable;
-
-  bool isRefreshing = false;
+  List<Course> timetable = [];
 
   @override
   void initState() {
@@ -78,8 +75,10 @@ class _TimetablePageState extends State<TimetablePage> {
     try {
       showBasicFlash(context, const Text('加载成功'));
 
-      timetable = await _fetchTimetable();
-      setState(() {});
+      final newTimetable = await _fetchTimetable();
+      TableCache.clear();
+      timetable = newTimetable;
+      eventBus.emit(EventNameConstants.onTimetableReset, timetable);
     } catch (e) {
       showBasicFlash(context, Text('加载失败: ${e.toString().split('\n')[0]}'));
     } finally {
