@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/entity/bulletin.dart';
 import 'package:kite/global/session_pool.dart';
@@ -53,10 +53,14 @@ class DetailPage extends StatelessWidget {
       children: <Widget>[
         Text(article.title, style: titleStyle),
         Text('${article.department} | ${article.author}  ${dateFormat.format(article.dateTime)}', style: subtitleStyle),
-        HtmlWidget(_linkTel(article.content), onTapUrl: (url) {
-          launchInBrowser(url);
-          return true;
-        })
+        HtmlWidget(
+          _linkTel(article.content),
+          isSelectable: true,
+          onTapUrl: (url) {
+            launchInBrowser(url);
+            return true;
+          },
+        )
       ],
     );
   }
