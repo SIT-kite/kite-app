@@ -64,7 +64,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
     eventBus.on(EventNameConstants.onTimetableReset, _onTimetableReset);
     eventBus.on(EventNameConstants.onJumpTodayTimetable, _onJumpToday);
     // 跳转到初始页
-    _setDate(initialDate);
+    _setDate(DateTime.now());
     _pageController = PageController(initialPage: (_currentWeek - 1) * 7 + _currentDay - 1);
   }
 
