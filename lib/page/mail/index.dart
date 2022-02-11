@@ -37,15 +37,13 @@ class _MailPageState extends State<MailPage> {
 
   final TextEditingController _controller = TextEditingController();
 
-  void _updateMailList() {
-    Future.delayed(Duration.zero, () async {
-      try {
-        final messages = (await _loadMailList()).messages;
-        setState(() => _messages = messages);
-      } catch (_) {
-        setState(() => _index = 1);
-      }
-    });
+  Future<void> _updateMailList() async {
+    try {
+      final messages = (await _loadMailList()).messages;
+      setState(() => _messages = messages);
+    } catch (_) {
+      setState(() => _index = 1);
+    }
   }
 
   Future<FetchImapResult> _loadMailList() async {
@@ -55,7 +53,7 @@ class _MailPageState extends State<MailPage> {
     final email = studentId + '@mail.sit.edu.cn';
     final service = MailService(email, password);
 
-    return await service.getInboxMessage(1);
+    return await service.getInboxMessage(30);
   }
 
   Widget _buildMailList() {
