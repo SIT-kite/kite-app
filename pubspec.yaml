@@ -26,10 +26,10 @@ dependencies:
   enough_convert: ^1.4.0        # Character encoding
   encrypt: ^5.0.1               # Encryption (AES)
   crypto: ^3.0.1                # Hash (MD5)
+  uuid: ^3.0.5                  # UUID generator
   json_serializable: ^6.1.3     # JSON
   json_annotation: ^4.4.0       # JSON code generation
   beautiful_soup_dart: ^0.2.0   # HTML parser
-  uuid: ^3.0.5                  # UUID generator
 
   # hive (key-value database)
   hive: ^2.0.5
@@ -46,36 +46,36 @@ dependencies:
   # Webview and browser related
   webview_flutter: ^3.0.0
   url_launcher: ^6.0.17
-  flutter_widget_from_html_core: ^0.8.4
   fk_user_agent: ^2.0.1
+  flutter_widget_from_html_core: ^0.8.4
 
   # UI
   flash: ^2.0.3+1
   fl_chart: ^0.40.6
   grouped_list: ^4.1.0
+  image_picker: ^0.8.4+7
   pull_to_refresh: ^2.0.0
+  dynamic_color_theme: ^2.0.0
   flutter_svg: ^1.0.0
   flutter_native_splash: ^1.3.3
-  flutter_weather_bg_null_safety: ^1.0.0
-  flutter_settings_screens: ^0.3.2-null-safety
-  dynamic_color_theme: ^2.0.0
-  image_picker: ^0.8.4+7
   flutter_platform_widgets: ^1.12.1
+  flutter_settings_screens: ^0.3.2-null-safety
+  flutter_weather_bg_null_safety: ^1.0.0
 
   # Utils
   intl: ^0.17.0
   logger: ^1.1.0
   nfc_manager: ^3.1.0
-  path_provider: ^2.0.8
-  quick_actions: ^0.6.0+9
-  universal_platform: ^1.0.0+1
-  check_vpn_connection: ^0.0.2
-  flutter_screenutil: ^5.1.1
-  flutter_phoenix: ^1.0.0       # Restart app
-  package_info_plus: ^1.3.0     # Get packet version
   enough_mail: ^1.3.6
   app_settings: ^4.1.1
-  add_2_calendar: ^2.1.2        # Export timetable to system
+  path_provider: ^2.0.8
+  quick_actions: ^0.6.0+9
+  add_2_calendar: ^2.1.2       # Export timetable to system
+  flutter_phoenix: ^1.0.0      # Restart app
+  package_info_plus: ^1.3.0    # Get packet version
+  flutter_screenutil: ^5.1.1
+  universal_platform: ^1.0.0+1
+  check_vpn_connection: ^0.0.2
 
 
 dev_dependencies:
@@ -91,6 +91,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/common/
     - assets/home/
     - assets/welcome/
     - assets/connectivity/
@@ -105,24 +106,21 @@ flutter:
     - assets/course/
     - assets/night/
     - assets/game/
-    - assets/common/
     - assets/mail/
 
   fonts:
     # Iconfont for ywb.sit.edu.cn
     # For office module. So I named it office_iconfont.
     - family: office_iconfont
-      fonts:
-        - asset: assets/fonts/office_iconfont.ttf
+      fonts: [{ asset: assets/fonts/office_iconfont.ttf }]
 
     # Good night module
     - family: calligraphy
-      fonts:
-        - asset: assets/fonts/calligraphy.ttf
+      fonts: [{ asset: assets/fonts/calligraphy.ttf }]
 
 # See: https://pub.flutter-io.cn/packages/flutter_native_splash
 flutter_native_splash:
   fullscreen: true
   color: '#FFFFFF'
-  # background_image: 'assets/background.png'
   image: assets/icon.png
+  # background_image: 'assets/background.png'
