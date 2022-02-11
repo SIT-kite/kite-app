@@ -29,15 +29,14 @@ def call_with_env(script, env_dic: Dict[str, str]):
 
     try:
         subprocess.call(
-        script.split(' '),
-        stdin=sys.stdin,
-        stdout=sys.stdout,
-        stderr=sys.stderr,
-        env=env_dic,
-    )
+            script.split(' '),
+            stdin=sys.stdin,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+            env=env_dic,
+        )
     except KeyboardInterrupt as ki:
         print(f'\n强制结束命令 {script}')
-    
 
 
 def run_functions(functions: Iterable[Callable]):
@@ -46,6 +45,7 @@ def run_functions(functions: Iterable[Callable]):
     """
     for function in functions:
         function()
+
 
 def pause():
     input('按回车键继续')
