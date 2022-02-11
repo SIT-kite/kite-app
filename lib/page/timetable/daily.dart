@@ -64,7 +64,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
     eventBus.on(EventNameConstants.onJumpTodayTimetable, _onJumpToday);
     // 跳转到初始页
     _setDate(initialDate);
-    _pageController = PageController(initialPage: _currentWeek);
+    _pageController = PageController(initialPage: (_currentWeek - 1) * 7 + _currentDay - 1);
   }
 
   @override
@@ -147,22 +147,18 @@ class _DailyTimetableState extends State<DailyTimetable> {
 
   /// 构建第 index 页视图
   Widget _pageBuilder(int index) {
-    _currentWeek = index ~/ 7 + 1;
-    _currentDay = index % 7 + 1;
-    final List<Course> todayCourse = TableCache.filterCourseOnDay(allCourses, _currentWeek, _currentDay);
+    int week = index ~/ 7 + 1;
+    int day = index % 7 + 1;
+    final List<Course> todayCourse = TableCache.filterCourseOnDay(allCourses, week, day);
 
     return Column(
       children: [
         // 翻页不影响选择的星期, 因此沿用 _currentDay.
         Expanded(
-          child: DateHeader(
-            _currentWeek,
-            _currentDay,
-            onTap: (selectedDay) {
-              _currentDay = selectedDay;
-              _jumpToDay(_currentWeek, _currentDay);
-            },
-          ),
+          child: DateHeader(week, day, onTap: (selectedDay) {
+            day = selectedDay;
+            _jumpToDay(week, day);
+          }),
         ),
         Expanded(
           flex: 10,
