@@ -69,6 +69,10 @@ class _LoginPageState extends State<LoginPage> {
       ..password = _passwordController.text;
     try {
       await SessionPool.ssoSession.login(auth.username, auth.password);
+      StoragePool.authPool.put(auth);
+      StoragePool.authSetting.currentUsername = auth.username;
+      Navigator.pushReplacementNamed(context, '/home');
+      launchInBrowser('https://cdn.kite.sunnysab.cn/wiki/kite-app/feature/');
     } on CredentialsInvalidException catch (e) {
       showBasicFlash(context, Text(e.msg));
       return;
@@ -80,10 +84,6 @@ class _LoginPageState extends State<LoginPage> {
         disableLoginButton = false;
       });
     }
-
-    StoragePool.authPool.put(auth);
-    StoragePool.authSetting.currentUsername = auth.username;
-    Navigator.pushReplacementNamed(context, '/home');
   }
 
   @override
