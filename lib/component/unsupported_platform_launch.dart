@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:kite/util/url_launcher.dart';
 
 class UnsupportedPlatformUrlLauncher extends StatelessWidget {
   final String url;
@@ -37,7 +37,7 @@ class UnsupportedPlatformUrlLauncher extends StatelessWidget {
           Text(tip),
           TextButton(
               onPressed: () {
-                launch(url);
+                launchInBrowser(url);
               },
               child: const Text('点击在默认浏览器中打开')),
         ],
