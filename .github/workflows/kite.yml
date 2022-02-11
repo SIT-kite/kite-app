@@ -75,7 +75,7 @@ jobs:
       id: vars
       run: |
         echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}
-        echo ::set-output name=short_sha::$(git rev-parse --short HEAD)
+        echo "::set-output name=short_sha::$(git rev-parse --short HEAD)"
 
       
     - run: cd build/app/outputs/flutter-apk/ && mv app-arm64-v8a-release.apk ${{ steps.vars.outputs.short_ref }}-${{ steps.vars.outputs.short_sha }}-arm64-v8a-release.apk
@@ -85,11 +85,10 @@ jobs:
         to: ${{ secrets.CHAT_ID }}
         token: ${{ secrets.BOT_TOKEN }}
         message: |
-          ${{ github.actor }} created commit:
-          Commit message: ${{ github.event.commits[0].message }}
+          Author: ${{ github.actor }}
+          
+          Message: ${{ github.event.commits[0].message }}
 
-          Repository: ${{ github.repository }}
-
-          See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
+          See changes: https://github.com/${{ github.repository }}/commit/${{ steps.vars.outputs.short_sha }}
         document: build/app/outputs/flutter-apk/${{ steps.vars.outputs.short_ref }}-${{ steps.vars.outputs.short_sha }}-arm64-v8a-release.apk
 
