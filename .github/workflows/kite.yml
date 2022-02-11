@@ -19,7 +19,7 @@ jobs:
       - run: flutter pub get
       - run: flutter pub run build_runner build
       - run: flutter pub run flutter_native_splash:create
-      - run: flutter build apk —target-platform=android-arm64
+      - run: flutter build apk --split-per-abi
         
       - name: 🚀 Upload Apk by Bot
         uses: appleboy/telegram-action@master
@@ -27,7 +27,7 @@ jobs:
           to: ${{ secrets.CHAT_ID }}
           token: ${{ secrets.BOT_TOKEN }}
           message: release-${{ github.head_ref }}-${{ github.sha }}
-          document: build/app/outputs/flutter-apk/app-release.apk
+          document: build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
       
       
 
