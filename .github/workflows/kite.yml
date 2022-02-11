@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-Android:
-  
+
     runs-on: ubuntu-latest
 
     steps:
@@ -27,11 +27,11 @@ jobs:
             build/
           key: apk-${{ github.ref }}-${{ github.sha }}
 
-      
+
   build-iOS:
-  
+
     runs-on: macos-latest
-    
+
     steps:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
@@ -46,46 +46,71 @@ jobs:
     - run: flutter pub run build_runner build
     - run: flutter pub run flutter_native_splash:create
     - run: flutter build ios --no-codesign
-    
-  telegram:
+
+  upload:
     runs-on: ubuntu-latest
-    if: always()
-    needs: 
+    needs:
       - build-Android
       - build-iOS
     steps:
-    - uses: technote-space/workflow-conclusion-action@v2
-    - uses: nelonoel/branch-name@v1.0.1
-    - uses: benjlevesque/short-sha@v1.2
-      id: short-sha
-      with:
-        length: 7
-    
-    - name: 📌 Get cache build apk
-      uses: actions/cache@v2
-      with:
-        path: |
-          build/
-        key: apk-${{ github.ref }}-${{ github.sha }}
-      
-    - run: cd build/app/outputs/flutter-apk/ && mv app-arm64-v8a-release.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
-    - name: 🚀 Upload Apk by Bot
-      uses: appleboy/telegram-action@master
-      with:
-        to: ${{ secrets.CHAT_ID }}
-        token: ${{ secrets.BOT_TOKEN }}
-        message: |
-          Author: ${{ github.actor }}
-          
-          Message: ${{ github.event.head_commit.message }}
+      - uses: nelonoel/branch-name@v1.0.1
+      - uses: benjlevesque/short-sha@v1.2
+        id: short-sha
+        with: { length: 7 }
+      - name: 📌 Get cache build apk
+        uses: actions/cache@v2
+        with:
+          path: |
+            build/
+          key: apk-${{ github.ref }}-${{ github.sha }}
 
-          See changes: https://github.com/${{ github.repository }}/commit/${{ env.SHA }}
-        document: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
+      - run: cd build/app/outputs/flutter-apk/ && mv app-arm64-v8a-release.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
+      - name: 📌 Upload build apk
+        uses: actions/upload-artifact@v2
+        with:
+          path: |
+            build/
+          name: ${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
 
-    - name: 💡 Telegram Notification
-      uses: xinthink/action-telegram@v1.1
-      with:
-        botToken: ${{ secrets.BOT_TOKEN }}
-        chatId: ${{ secrets.CHAT_ID }}
-        jobStatus: ${{ env.WORKFLOW_CONCLUSION }}
-        skipSuccess: false
+  notification:
+    runs-on: ubuntu-latest
+    needs:
+      - upload
+    if: always()
+    steps:
+      - uses: technote-space/workflow-conclusion-action@v2
+      - uses: benjlevesque/short-sha@v1.2
+        id: short-sha
+        with: { length: 7 }
+
+      - name: 🎯 Telegram Notification
+        if: env.WORKFLOW_CONCLUSION == 'failure'
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.CHAT_ID }}
+          token: ${{ secrets.BOT_TOKEN }}
+          format: markdown
+          message: |
+            🔴 [KiteApp](https://github.com/SIT-kite/kite-app)  Build  *${{ env.WORKFLOW_CONCLUSION }}*
+
+            Author: *${{ github.actor }}*
+
+            Message: *${{ github.event.head_commit.message }}*
+
+            View [changes](https://github.com/${{ github.repository }}/commit/${{ env.SHA }})
+
+      - name: 🎯 Telegram Notification
+        if: env.WORKFLOW_CONCLUSION != 'failure'
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.CHAT_ID }}
+          token: ${{ secrets.BOT_TOKEN }}
+          format: markdown
+          message: |
+            🎉 [KiteApp](https://github.com/SIT-kite/kite-app)  Build  *${{ env.WORKFLOW_CONCLUSION }}*
+
+            Author: *${{ github.actor }}*
+
+            Message: *${{ github.event.head_commit.message }}*
+
+            View [changes](https://github.com/${{ github.repository }}/commit/${{ env.SHA }})
