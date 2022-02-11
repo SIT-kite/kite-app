@@ -1,6 +1,22 @@
 from dataclasses import dataclass
 from typing import *
 
+def match(keyword: str, target: str):
+    """
+    source 是否能够模糊匹配 target 算法
+    """
+    src_chars = set(keyword)
+    return keyword in ''.join(filter(lambda x: x in src_chars,
+                                     target))
+
+
+def search(keyword: str, target_pool: Iterable[str]):
+    """
+    搜索keyword能够匹配到的所有字符串
+    """
+    return list(filter(lambda x: match(keyword, x),
+                       target_pool))
+
 
 @dataclass
 class MenuOption:
@@ -83,12 +99,17 @@ class Menu:
 
         while True:
             key = input('请选择: ')
-            if key in self.__menu_item_dict.keys():
+            print()
+            results = search(key,self.__menu_item_dict.keys())
+            if len(results) == 1:
                 break
+            elif len(results) == 0:
+                print('input error', f'cannot found {key}')
             else:
-                print('select error', f'cannot found {key}')
-
-        return self.__menu_item_dict[key]
+                print('input is amphibolous, do you want to use',results, '?')
+        option: MenuOption = self.__menu_item_dict[results[0]]
+        print(f'您选择了{results[0]}: {option.title}')
+        return option
 
     def __show_once(self):
         """
