@@ -21,6 +21,7 @@ import 'package:kite/component/html_widget.dart';
 import 'package:kite/entity/bulletin.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/service/bulletin.dart';
+import 'package:kite/util/flash.dart';
 import 'package:kite/util/url_launcher.dart';
 
 class DetailPage extends StatelessWidget {
@@ -54,7 +55,20 @@ class DetailPage extends StatelessWidget {
         Text(article.title, style: titleStyle),
         Text('${article.department} | ${article.author}  ${dateFormat.format(article.dateTime)}', style: subtitleStyle),
         MyHtmlWidget(_linkTel(article.content)),
-        //TODO: 附件
+        const SizedBox(height: 30),
+        Column(
+          children: article.attachments.map((e) {
+            return TextButton(
+              onPressed: () async {
+                showBasicFlash(context, const Text('请在开启的浏览器中登录将直接开始下载'));
+                await Future.delayed(const Duration(seconds: 1));
+                //TODO: 未来需要写个下载管理器
+                launchInBrowser(e.url);
+              },
+              child: Text(e.name),
+            );
+          }).toList(),
+        ),
       ],
     );
   }
