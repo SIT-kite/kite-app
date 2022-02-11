@@ -20,16 +20,6 @@ jobs:
       - run: flutter pub run build_runner build
       - run: flutter pub run flutter_native_splash:create
       - run: flutter build apk --split-per-abi
-        
-      - name: 🚀 Upload Apk by Bot
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.CHAT_ID }}
-          token: ${{ secrets.BOT_TOKEN }}
-          message: release-${{ github.ref }}-${{ github.sha }}
-          document: build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
-      
-      
 
       
   build-iOS:
@@ -60,11 +50,19 @@ jobs:
     steps:
     - uses: technote-space/workflow-conclusion-action@v2
         
-    - name: telegram notification
+    - name: 💡 Telegram Notification
       uses: xinthink/action-telegram@v1.1
       with:
         botToken: ${{ secrets.BOT_TOKEN }}
         chatId: ${{ secrets.CHAT_ID }}
         jobStatus: ${{ env.WORKFLOW_CONCLUSION }}
         skipSuccess: false
+        
+    - name: 🚀 Upload Apk by Bot
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.CHAT_ID }}
+        token: ${{ secrets.BOT_TOKEN }}
+        message: apk-${{ github.ref }}-${{ github.sha }}
+        document: build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
 
