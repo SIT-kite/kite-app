@@ -14,26 +14,21 @@ jobs:
       - uses: subosito/flutter-action@v2
         with: { channel: stable, cache: true } # channel: 'stable', 'beta' or 'master'
 
+
       - name: 📌 Flutter Code Generate
         run: |
           flutter pub get
-          flutter pub run build_runner build
+          flutter pub run build_runner build --delete-conflicting-outputs
           flutter pub run flutter_native_splash:create
 
       - name: 📌 Flutter Analysis
         run: flutter analyze --no-fatal-infos
 
-  #      - name: 📌 Cache dependencies
-#        uses: actions/cache@v2
-#        with:
-#          path: |
-#            ~/.pub-cache/
-#            .dart_tool/
-#            .flutter-plugins
-#            .flutter-plugins-dependencies
-#            .packages
-#            pubspec.lock
-#          key: build-${{ runner.os }}-${{ github.sha }}
+      - name: 📌 Cache Workspace
+      uses: actions/cache@v2
+      with:
+        path: .
+        key: app-${{ github.ref }}-${{ github.sha }}
 
 
   build-Android:
@@ -47,31 +42,19 @@ jobs:
       - uses: subosito/flutter-action@v2
         with: { channel: stable, cache: true } # channel: 'stable', 'beta' or 'master'
 
-#      - name: 📌 Restore dependencies
-#        uses: actions/cache@v2
-#        with:
-#          path: |
-#            ~/.pub-cache/
-#            .dart_tool/
-#            build/
-#            .flutter-plugins
-#            .flutter-plugins-dependencies
-#            .packages
-#            pubspec.lock
-#          key: build-${{ runner.os }}-${{ github.sha }}
-
-      - name: 🏗️ Build Apk (arm64 only)
-        run: |
-          flutter pub get
-          flutter pub run build_runner build
-          flutter pub run flutter_native_splash:create
-          flutter build apk --split-per-abi --target-platform android-arm64
-
-      - name: 📌 Cache outputs
+      - name: 📌 Restore Workspace
         uses: actions/cache@v2
         with:
-          path: |
-            build/
+          path: .
+          key: app-${{ github.ref }}-${{ github.sha }}
+
+      - name: 🏗️ Build Apk (arm64 only)
+        run: flutter build apk --split-per-abi --target-platform android-arm64
+
+      - name: 📌 Cache Build
+        uses: actions/cache@v2
+        with:
+          path: build/
           key: apk-${{ github.ref }}-${{ github.sha }}
 
 
@@ -89,12 +72,14 @@ jobs:
     - uses: subosito/flutter-action@v2
       with: { channel: 'stable', cache: true } # or: 'beta' or 'master'
 
+    - name: 📌 Restore Workspace
+      uses: actions/cache@v2
+      with:
+        path: .
+        key: app-${{ github.ref }}-${{ github.sha }}
+
     - name: 🏗️ Build iOS
-      run: |
-        flutter pub get
-        flutter pub run build_runner build
-        flutter pub run flutter_native_splash:create
-        flutter build ios --no-codesign
+      run: flutter build ios --no-codesign
 
   upload:
     runs-on: ubuntu-latest
