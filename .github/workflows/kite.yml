@@ -15,6 +15,9 @@ jobs:
       - uses: subosito/flutter-action@v2
         with: { channel: 'stable' } # or: 'beta' or 'master'
 
+      - name: List current working directory
+        run: ls -ash --group-directories-first
+
       - run: flutter pub get
       - run: flutter pub run build_runner build
       - run: flutter pub run flutter_native_splash:create
@@ -22,13 +25,13 @@ jobs:
       - name: 🏗️ Build apk (arm64 only)
         run: flutter build apk --split-per-abi --target-platform android-arm64
 
-      - name: List build files
-        run: tree -ah --filelimit 99 ./build/
+      - name: List current working directory
+        run: ls -ash --group-directories-first
 
-      - name: 📌 Cache apk
+      - name: 📌 Cache outputs
         uses: actions/cache@v2
         with:
-          path: build/
+          path: build/app/outputs/
           key: apk-${{ github.ref }}-${{ github.sha }}
 
   build-iOS:
@@ -63,18 +66,18 @@ jobs:
       - name: 📌 Get apk from cache
         uses: actions/cache@v2
         with:
-          path: build/
+          path: outputs/
           key: apk-${{ github.ref }}-${{ github.sha }}
 
       - name: ✏️ Rename apk file
-        run: cd build/app/outputs/flutter-apk/ && mv app-arm64-v8a-release.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
+        run: cd outputs/flutter-apk/ && mv app-arm64-v8a-release.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
 
       - name: 🤖 Upload apk by bot
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.CHAT_ID }}
           token: ${{ secrets.BOT_TOKEN }}
-          document: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
+          document: outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
           message: "🚀 Apk Build by Github Actions"
 
   notification:
