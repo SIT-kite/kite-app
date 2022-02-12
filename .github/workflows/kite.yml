@@ -27,7 +27,8 @@ jobs:
             .packages
             pubspec.lock
           key: build-${{ runner.os }}-${{ github.sha }}
-          restore-keys: [ build-${{ runner.os }}- ]
+          restore-keys:
+            build-${{ runner.os }}-
 
       - run: flutter pub get
       - run: flutter pub run build_runner build
