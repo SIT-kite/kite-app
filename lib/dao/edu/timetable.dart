@@ -22,7 +22,7 @@ abstract class TimetableDao {
 }
 
 abstract class TimetableStorageDao {
-  void add(Course item);
+  void append(Course item);
 
   void addAll(List<Course> courseList);
 

@@ -25,7 +25,7 @@ class TimetableStorage implements TimetableStorageDao {
   const TimetableStorage(this.box);
 
   @override
-  void add(Course item) {
+  void append(Course item) {
     final List<Course> timetable = getTimetable();
     timetable.add(item);
     box.put('timetable', timetable);
@@ -50,12 +50,12 @@ class TimetableStorage implements TimetableStorageDao {
 
   @override
   bool isEmpty() {
-    return box.isEmpty;
+    return getTimetable().isEmpty;
   }
 
   @override
   Future<void> clear() async {
-    await box.clear();
+    await box.put('timetable', <Course>[]);
   }
 
   @override
