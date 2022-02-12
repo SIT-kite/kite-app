@@ -61,7 +61,7 @@ jobs:
 #          key: build-${{ runner.os }}-${{ github.sha }}
 
       - name: 🏗️ Build Apk (arm64 only)
-        run: ｜
+        run: |
           flutter pub get
           flutter pub run build_runner build
           flutter pub run flutter_native_splash:create
@@ -90,7 +90,7 @@ jobs:
       with: { channel: 'stable', cache: true } # or: 'beta' or 'master'
 
     - name: 🏗️ Build iOS
-      run: ｜
+      run: |
         flutter pub get
         flutter pub run build_runner build
         flutter pub run flutter_native_splash:create
