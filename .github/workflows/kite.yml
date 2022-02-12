@@ -23,7 +23,7 @@ jobs:
         run: flutter build apk --split-per-abi --target-platform android-arm64
 
       - name: List build files
-        run: tree -ah --filelimit 9
+        run: tree -ah --filelimit 99
 
       - name: 📌 Cache apk
         uses: actions/cache@v2
