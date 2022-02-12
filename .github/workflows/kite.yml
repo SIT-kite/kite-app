@@ -106,7 +106,7 @@ jobs:
       - name: 📌 Get apk from cache
         uses: actions/cache@v2
         with:
-          path: outputs/
+          path: build/
           key: apk-${{ github.ref }}-${{ github.sha }}
 
       - name: ✏️ Rename apk file
