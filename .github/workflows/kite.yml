@@ -75,8 +75,7 @@ jobs:
           to: ${{ secrets.CHAT_ID }}
           token: ${{ secrets.BOT_TOKEN }}
           document: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
-          # uncomment this when message and document won't be seperated anymore
-          message: ""
+          message: "🚀 Apk Build by Github Actions"
 
   notification:
     runs-on: ubuntu-latest
