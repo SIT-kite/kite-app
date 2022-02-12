@@ -48,9 +48,9 @@ class WelcomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Title
-                Text('上应小风筝', style: Theme.of(context).textTheme.headline2?.copyWith(color: Colors.white)),
+                Text('上应小风筝', style: Theme.of(context).textTheme.headline1?.copyWith(color: Colors.white)),
                 // Subtitle
-                Text('便利校园，一步到位', style: Theme.of(context).textTheme.headline3?.copyWith(color: Colors.white)),
+                Text('便利校园，一步到位', style: Theme.of(context).textTheme.headline4?.copyWith(color: Colors.white)),
                 // Space
                 SizedBox(height: 40.h),
                 // Login button
