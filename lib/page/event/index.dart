@@ -18,6 +18,8 @@
 
 import 'package:flutter/material.dart';
 
+import 'card.dart';
+
 class EventPage extends StatelessWidget {
   const EventPage({Key? key}) : super(key: key);
 
@@ -25,7 +27,9 @@ class EventPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('活动')),
-      body: Container(),
+      body: ListView(
+        children: [EventCard(), EventCard(), EventCard()],
+      ),
     );
   }
 }
