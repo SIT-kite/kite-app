@@ -26,7 +26,14 @@ jobs:
       - name: 📌 Cache Workspace
         uses: actions/cache@v2
         with:
-          path: .
+          path: |
+            ~/.pub-cache/
+            .dart_tool/
+            .flutter-plugins
+            .flutter-plugins-dependencies
+            .packages
+            pubspec.lock
+            lib/
           key: app-${{ github.ref }}-${{ github.sha }}
 
 
@@ -44,7 +51,14 @@ jobs:
       - name: 📌 Restore Workspace
         uses: actions/cache@v2
         with:
-          path: .
+          path: |
+            ~/.pub-cache/
+            .dart_tool/
+            .flutter-plugins
+            .flutter-plugins-dependencies
+            .packages
+            pubspec.lock
+            lib/
           key: app-${{ github.ref }}-${{ github.sha }}
 
       - name: 🏗️ Build Apk (arm64 only)
