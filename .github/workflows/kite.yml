@@ -1,10 +1,8 @@
 name: KiteApp
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  push:         { branches: [ master ] }
+  pull_request: { branches: [ master ] }
 
 jobs:
 
@@ -69,8 +67,7 @@ jobs:
           key: apk-${{ github.ref }}-${{ github.sha }}
 
       - name: ✏️ Rename apk file
-        run: |-
-        cd build/app/outputs/flutter-apk/ && mv app-arm64-v8a-release.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
+        run: cd build/app/outputs/flutter-apk/ && mv app-arm64-v8a-release.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
 
       - name: 🤖 Upload apk by bot
         uses: appleboy/telegram-action@master
