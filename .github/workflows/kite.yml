@@ -18,7 +18,7 @@ jobs:
       - name: 📌 Restore pub & build cache
         uses: actions/cache@v2
         with:
-          path: &cache_build_path |
+          path: |
             ~/.pub-cache/
             .dart_tool/
             build/
@@ -26,7 +26,7 @@ jobs:
             .flutter-plugins-dependencies
             .packages
             pubspec.lock
-          key: &cache_build_key build-${{ runner.os }}-${{ github.sha }}
+          key: build-${{ runner.os }}-${{ github.sha }}
           restore-key: build-${{ runner.os }}-
 
       - run: flutter pub get
@@ -44,14 +44,21 @@ jobs:
       - name: 📌 Cache outputs
         uses: actions/cache@v2
         with:
-          path: &cache_outputs_path build/app/outputs/
-          key: &cache_outputs_key apk-${{ github.ref }}-${{ github.sha }}
+          path: build/app/outputs/
+          key: apk-${{ github.ref }}-${{ github.sha }}
 
       - name: 📌 Cache pub & build
         uses: actions/cache@v2
         with:
-          path: *cache_build_path
-          key:  *cache_build_key
+          path: |
+            ~/.pub-cache/
+            .dart_tool/
+            build/
+            .flutter-plugins
+            .flutter-plugins-dependencies
+            .packages
+            pubspec.lock
+          key: build-${{ runner.os }}-${{ github.sha }}
 
   build-iOS:
     runs-on: macos-latest
@@ -86,8 +93,8 @@ jobs:
       - name: 📌 Get apk from cache
         uses: actions/cache@v2
         with:
-          path: *cache_outputs_path # build/app/outputs/
-          key: *cache_outputs_key
+          path: build/app/outputs/
+          key: apk-${{ github.ref }}-${{ github.sha }}
 
       - name: ✏️ Rename apk file
         run: |
