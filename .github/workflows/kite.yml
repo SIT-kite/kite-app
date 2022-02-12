@@ -14,12 +14,6 @@ jobs:
       - uses: subosito/flutter-action@v2
         with: { channel: stable, cache: true } # channel: 'stable', 'beta' or 'master'
 
-      - name: 📌 Flutter Code Generate
-        run: |
-          flutter pub get
-          flutter pub run build_runner build
-          flutter pub run flutter_native_splash:create
-
       - name: 📌 Flutter Analysis
         run: flutter analyze --no-fatal-infos
 
