@@ -44,7 +44,7 @@ jobs:
       - name: 📌 Cache outputs
         uses: actions/cache@v2
         with:
-          path: build/app/outputs/
+          path: outputs/
           key: apk-${{ github.ref }}-${{ github.sha }}
 
       - name: 📌 Cache pub & build
@@ -93,12 +93,12 @@ jobs:
       - name: 📌 Get apk from cache
         uses: actions/cache@v2
         with:
-          path: build/app/outputs/
+          path: outputs/
           key: apk-${{ github.ref }}-${{ github.sha }}
 
       - name: ✏️ Rename apk file
         run: |
-          cd build/app/outputs/flutter-apk/
+          cd outputs/flutter-apk/
           mv app-arm64-v8a-release.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
 
       - name: 🤖 Upload apk by bot
@@ -106,7 +106,7 @@ jobs:
         with:
           to: ${{ secrets.CHAT_ID }}
           token: ${{ secrets.BOT_TOKEN }}
-          document: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
+          document: outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
           message: "🚀 Apk Build by Github Actions"
 
   notification:
