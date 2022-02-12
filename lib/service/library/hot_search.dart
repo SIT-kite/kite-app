@@ -28,10 +28,10 @@ class HotSearchService extends AService implements HotSearchDao {
 
   HotSearchItem _parse(String rawText) {
     final texts = rawText.split('(').map((e) => e.trim()).toList();
-    final title = texts.sublist(0,texts.length-1).join('(');
-    final numWithRight = texts[texts.length-1];
-    final numText = numWithRight.substring(0,numWithRight.length - 1);
-    return HotSearchItem(texts[0], int.parse(numText));
+    final title = texts.sublist(0, texts.length - 1).join('(');
+    final numWithRight = texts[texts.length - 1];
+    final numText = numWithRight.substring(0, numWithRight.length - 1);
+    return HotSearchItem(title, int.parse(numText));
   }
 
   @override
