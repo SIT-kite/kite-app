@@ -114,8 +114,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
     final Widget courseIcon = Image.asset(_courseIconPath + CourseCategory.query(course.courseName) + '.png');
     final timetable = getBuildingTimetable(course.campus, course.place);
     final description = formatTimeIndex(
-        timetable, course.timeIndex, '${course.weekText} 周${weekWord[course.dayIndex - 1]}\nss - ee ${course.place}');
-
+        timetable, course.timeIndex, '${course.weekText} 周${weekWord[course.dayIndex - 1]}\nss-ee');
     return Card(
         margin: const EdgeInsets.all(8),
         child: ListTile(

@@ -49,7 +49,7 @@ class Time {
   const Time(this.hour, this.minute);
 
   @override
-  String toString() => '$hour:$minute';
+  String toString() => '$hour:'+'$minute'.padLeft(2,'0');
 }
 
 class CourseEnd {
@@ -143,8 +143,8 @@ int getIndexStart(int index) {
 /// 解析 timeIndex, 得到最后一节小课的序号. 如给出 1~4, 返回 4
 int getIndexEnd(int start, int index) {
   int i = start;
-  index >>= start;
-  while (index & 1 == 1) {
+  index >>= start+1;
+  while (index & 1 != 0) {
     i++;
     index >>= 1;
   }
@@ -180,7 +180,6 @@ String formatTimeIndex(List<CourseEnd> timetable, int timeIndex, String format) 
   final timeStart = timetable[indexStart - 1].start;
   final timeEnd = timetable[indexEnd - 1].end;
 
-  String result = format;
   return format
       .replaceAll('ss', timeStart.toString())
       .replaceAll('ee', timeEnd.toString())
