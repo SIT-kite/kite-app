@@ -7,40 +7,42 @@ on:
     branches: [ master ]
 
 jobs:
+
   build-Android:
-
     runs-on: ubuntu-latest
-
     steps:
+
       - uses: actions/checkout@v2
+
       - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable' # or: 'beta' or 'master'
+        with: { channel: 'stable' } # or: 'beta' or 'master'
+
       - run: flutter pub get
       - run: flutter pub run build_runner build
-      - run: flutter pub run flutter_native_splash:create
-      - run: flutter build apk --split-per-abi
-      - name: 📌 Cache build apk
+        run: flutter pub run flutter_native_splash:create
+
+      - name: 🏗️ Build apk (arm64 only)
+        run: flutter build apk --split-per-abi --target-platform android-arm64
+
+      - name: List build files
+        run: tree -ah --filelimit 9
+
+      - name: 📌 Cache apk
         uses: actions/cache@v2
         with:
-          path: |
-            build/
+          path: build/
           key: apk-${{ github.ref }}-${{ github.sha }}
 
-
   build-iOS:
-
     runs-on: macos-latest
-
     steps:
+
     - uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: latest-stable
+      with: { xcode-version: latest-stable }
 
     - uses: actions/checkout@v2
     - uses: subosito/flutter-action@v2
-      with:
-        channel: 'stable' # or: 'beta' or 'master'
+      with: { channel: 'stable' } # or: 'beta' or 'master'
 
     - run: flutter pub get
     - run: flutter pub run build_runner build
@@ -53,52 +55,43 @@ jobs:
       - build-Android
       - build-iOS
     steps:
+
       - uses: nelonoel/branch-name@v1.0.1
+
       - uses: benjlevesque/short-sha@v1.2
         id: short-sha
         with: { length: 7 }
-      - name: 📌 Get cache build apk
+
+      - name: 📌 Get apk from cache
         uses: actions/cache@v2
         with:
-          path: |
-            build/
+          path: build/
           key: apk-${{ github.ref }}-${{ github.sha }}
 
-      - run: cd build/app/outputs/flutter-apk/ && mv app-arm64-v8a-release.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
-      - name: 🤖 Upload Apk by Bot
+      - name: ✏️ Rename apk file
+        run: |-
+        cd build/app/outputs/flutter-apk/ && mv app-arm64-v8a-release.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
+
+      - name: 🤖 Upload apk by bot
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.CHAT_ID }}
           token: ${{ secrets.BOT_TOKEN }}
           document: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
-          message: "🚀 Apk Build by Github Actions"
+          # uncomment this when message and document won't be seperated anymore
+          # message: "🚀 Apk Build by Github Actions"
 
   notification:
     runs-on: ubuntu-latest
-    needs:
-      - upload
+    needs: [ upload ]
     if: always()
     steps:
+
       - uses: technote-space/workflow-conclusion-action@v2
+
       - uses: benjlevesque/short-sha@v1.2
         id: short-sha
         with: { length: 7 }
-
-      - name: 🤖 Telegram Notification
-        if: env.WORKFLOW_CONCLUSION != 'success'
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.CHAT_ID }}
-          token: ${{ secrets.BOT_TOKEN }}
-          format: markdown
-          message: |
-            🔴 [KiteApp](https://github.com/SIT-kite/kite-app)  Build  *${{ env.WORKFLOW_CONCLUSION }}*
-
-            Author: *${{ github.actor }}*
-
-            Message: *${{ github.event.head_commit.message }}*
-
-            Commit: [${{ env.SHA }}](https://github.com/${{ github.repository }}/commit/${{ env.SHA }})
 
       - name: 🤖 Telegram Notification
         if: env.WORKFLOW_CONCLUSION == 'success'
@@ -109,6 +102,22 @@ jobs:
           format: markdown
           message: |
             🎉 [KiteApp](https://github.com/SIT-kite/kite-app)  Build  *${{ env.WORKFLOW_CONCLUSION }}*
+
+            Author: *${{ github.actor }}*
+
+            Message: *${{ github.event.head_commit.message }}*
+
+            Commit: [${{ env.SHA }}](https://github.com/${{ github.repository }}/commit/${{ env.SHA }})
+
+      - name: 🤖 Telegram Notification
+        if: env.WORKFLOW_CONCLUSION != 'success'
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.CHAT_ID }}
+          token: ${{ secrets.BOT_TOKEN }}
+          format: markdown
+          message: |
+            🔴 [KiteApp](https://github.com/SIT-kite/kite-app)  Build  *${{ env.WORKFLOW_CONCLUSION }}*
 
             Author: *${{ github.actor }}*
 
