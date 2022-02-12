@@ -22,7 +22,7 @@ jobs:
           flutter pub run flutter_native_splash:create
 
       - name: 📌 Flutter Analysis
-        run: flutter analyze --no-fatal-infos
+        run: flutter analyze --no-fatal-infos --no-pub
 
       - name: 📌 Cache Workspace
       uses: actions/cache@v2
