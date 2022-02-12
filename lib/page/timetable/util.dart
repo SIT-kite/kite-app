@@ -49,7 +49,7 @@ class Time {
   const Time(this.hour, this.minute);
 
   @override
-  String toString() => '$hour:'+'$minute'.padLeft(2,'0');
+  String toString() => '$hour:' + '$minute'.padLeft(2, '0');
 }
 
 class CourseEnd {
@@ -143,7 +143,7 @@ int getIndexStart(int index) {
 /// 解析 timeIndex, 得到最后一节小课的序号. 如给出 1~4, 返回 4
 int getIndexEnd(int start, int index) {
   int i = start;
-  index >>= start+1;
+  index >>= start + 1;
   while (index & 1 != 0) {
     i++;
     index >>= 1;
@@ -185,4 +185,14 @@ String formatTimeIndex(List<CourseEnd> timetable, int timeIndex, String format) 
       .replaceAll('ee', timeEnd.toString())
       .replaceAll('SS', indexStart.toString())
       .replaceAll('EE', indexEnd.toString());
+}
+
+/// 删去 place 括号里的描述信息. 如, 二教F301（机电18中外合作专用）
+String formatPlace(String place) {
+  int indexOfBucket = place.indexOf('（');
+  if (indexOfBucket != -1) {
+    return place.substring(0, indexOfBucket);
+  }
+  indexOfBucket = place.indexOf('(');
+  return indexOfBucket != -1 ? place.substring(0, indexOfBucket) : place;
 }

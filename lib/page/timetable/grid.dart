@@ -68,7 +68,7 @@ class TableGrids extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               buildText(course.courseName, 3),
-              buildText(course.place, 2),
+              buildText(formatPlace(course.place), 2),
               buildText(course.teacher.join(','), 2),
             ],
           ),

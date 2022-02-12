@@ -133,7 +133,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(description, style: textStyle),
-                Text(course.place, softWrap: true, overflow: TextOverflow.ellipsis, style: textStyle),
+                Text(formatPlace(course.place), softWrap: true, overflow: TextOverflow.ellipsis, style: textStyle),
               ],
             ),
           ]),
