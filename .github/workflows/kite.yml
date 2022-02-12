@@ -135,7 +135,7 @@ jobs:
           token: ${{ secrets.BOT_TOKEN }}
           format: markdown
           message: |
-            🎉 [KiteApp](https://github.com/SIT-kite/kite-app)  Build  *${{ env.WORKFLOW_CONCLUSION }}*
+            🔴 [KiteApp](https://github.com/SIT-kite/kite-app)  Build  *${{ env.WORKFLOW_CONCLUSION }}*
 
             Author: *${{ github.actor }}*
 
@@ -151,7 +151,7 @@ jobs:
           token: ${{ secrets.BOT_TOKEN }}
           format: markdown
           message: |
-            🔴 [KiteApp](https://github.com/SIT-kite/kite-app)  Build  *${{ env.WORKFLOW_CONCLUSION }}*
+            🎉 [KiteApp](https://github.com/SIT-kite/kite-app)  Build  *${{ env.WORKFLOW_CONCLUSION }}*
 
             Author: *${{ github.actor }}*
 

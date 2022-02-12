@@ -27,7 +27,6 @@ class HotSearchService extends AService implements HotSearchDao {
   HotSearchService(ASession session) : super(session);
 
   HotSearchItem _parse(String rawText) {
-    final rawText = '数据通信与网络(第 4 版 (1)';
     final texts = rawText.split('(').map((e) => e.trim()).toList();
     final title = texts.sublist(0,texts.length-1).join('(');
     final numWithRight = texts[texts.length-1];
