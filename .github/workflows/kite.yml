@@ -17,7 +17,7 @@ jobs:
 
       - run: flutter pub get
       - run: flutter pub run build_runner build
-        run: flutter pub run flutter_native_splash:create
+      - run: flutter pub run flutter_native_splash:create
 
       - name: 🏗️ Build apk (arm64 only)
         run: flutter build apk --split-per-abi --target-platform android-arm64
