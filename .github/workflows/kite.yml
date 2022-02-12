@@ -30,13 +30,14 @@ jobs:
           restore-keys:
             build-${{ runner.os }}-
 
-      - name: 📌 Flutter Analysis
-        run: flutter analyze
-
       - name: 📌 Flutter Code Generate
         run: |
+          flutter pub get
           flutter pub run build_runner build
           flutter pub run flutter_native_splash:create
+
+      - name: 📌 Flutter Analysis
+        run: flutter analyze
 
       - name: 🏗️ Build apk (arm64 only)
         run: flutter build apk --split-per-abi --target-platform android-arm64
