@@ -35,4 +35,8 @@ abstract class TimetableStorageDao {
   Future<void> clear();
 
   List<Course> getTimetable();
+
+  int? get lastMode;
+
+  set lastMode(int? displayMode);
 }

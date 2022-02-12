@@ -98,7 +98,7 @@ class StoragePool {
 
   static late TimetableStorage _course;
 
-  static TimetableStorageDao get course => _course;
+  static TimetableStorageDao get timetable => _course;
 
   static late UserEventStorage _userEvent;
 

@@ -63,4 +63,10 @@ class TimetableStorage implements TimetableStorageDao {
     final List<dynamic> list = box.get('timetable', defaultValue: <Course>[]);
     return list.map((e) => e as Course).toList();
   }
+
+  @override
+  int? get lastMode => box.get('lastMode');
+
+  @override
+  set lastMode(int? mode) => box.put('lastMode', mode);
 }

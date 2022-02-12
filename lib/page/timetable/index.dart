@@ -28,7 +28,8 @@ import 'daily.dart';
 import 'weekly.dart';
 
 /// 课表模式
-enum DisplayMode { daily, weekly }
+const displayModeDaily = 0;
+const displayModeWeekly = 1;
 
 class TimetablePage extends StatefulWidget {
   const TimetablePage({Key? key}) : super(key: key);
@@ -42,26 +43,19 @@ class _TimetablePageState extends State<TimetablePage> {
   static const int maxWeekCount = 20;
 
   // 模式：周课表 日课表
-  DisplayMode displayMode = DisplayMode.daily;
+  int displayMode = StoragePool.timetable.lastMode ?? displayModeDaily;
   bool isRefreshing = false;
 
   final SchoolYear currSchoolYear = const SchoolYear(2021);
   final currSemester = Semester.secondTerm;
-
-  List<Course> timetable = [];
-
-  @override
-  void initState() {
-    super.initState();
-    timetable = StoragePool.course.getTimetable();
-  }
+  List<Course> timetable = StoragePool.timetable.getTimetable();
 
   Future<List<Course>> _fetchTimetable() async {
     final service = TimetableService(SessionPool.eduSession);
     final timetable = await service.getTimetable(currSchoolYear, currSemester);
 
-    await StoragePool.course.clear();
-    StoragePool.course.addAll(timetable);
+    await StoragePool.timetable.clear();
+    StoragePool.timetable.addAll(timetable);
     return timetable;
   }
 
@@ -79,6 +73,7 @@ class _TimetablePageState extends State<TimetablePage> {
       eventBus.emit(EventNameConstants.onTimetableReset, timetable);
     } catch (e) {
       showBasicFlash(context, Text('加载失败: ${e.toString().split('\n')[0]}'));
+      rethrow;
     } finally {
       isRefreshing = false;
     }
@@ -106,11 +101,12 @@ class _TimetablePageState extends State<TimetablePage> {
     return IconButton(
       icon: const Icon(Icons.swap_horiz),
       onPressed: () {
-        if (displayMode == DisplayMode.daily) {
-          setState(() => displayMode = DisplayMode.weekly);
+        if (displayMode == displayModeDaily) {
+          setState(() => displayMode = displayModeWeekly);
         } else {
-          setState(() => displayMode = DisplayMode.daily);
+          setState(() => displayMode = displayModeDaily);
         }
+        StoragePool.timetable.lastMode = displayMode;
       },
     );
   }
@@ -128,8 +124,7 @@ class _TimetablePageState extends State<TimetablePage> {
         _buildPopupMenu(context),
       ]),
       floatingActionButton: _buildFloatingButton(),
-      // TODO: 记住上一次查看的页面.
-      body: displayMode == DisplayMode.daily ? DailyTimetable(timetable) : WeeklyTimetable(timetable),
+      body: displayMode == displayModeDaily ? DailyTimetable(timetable) : WeeklyTimetable(timetable),
     );
   }
 }
