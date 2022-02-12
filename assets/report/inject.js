@@ -1,41 +1,31 @@
 if (typeof runFlag === 'undefined') {
 
 runFlag = true;
-console.info('Initializing inject.js');
+console.info('Initializing report/inject.js');
 
-const userName = '{username}';
+const userName = '{{username}}';
 
 // const prefix = 'http://xgfy.sit.edu.cn/h5/';
-const routes = {
-  login:  '#/',
-  home:   '#/pages/index/index',
-  report: '#/pages/index/jksb',
-  studentReport: '#/pages/index/studentReport',
-  yimiaon:       '#/pages/index/yimiaon'
-};
+// const routes = [ 'guide', 'news', 'index', 'studentReport', 'jksb', 'yimiaon', 'view' ];
+
+const getRoute = name => name === 'guide' ? '#/' ? `#/pages/index/${name}`;
 
 const route = {
-  is: route => location.hash === route,
-  go: route => location.reload(route)
+  is: name => location.hash === getRoute(name),
+  go: name => location.reload(getRoute(name))
 };
 
 // login
-if (
-  route.is(routes.login) &&
-  localStorage.getItem('loginIn') === '1'
-) {
-  const userInfo = JSON.stringify({ code: userName });
-  localStorage.setItem('userInfo', userInfo);
-  localStorage.setItem('loginIn', '1');
-  console.info('LocalStorage login set');
-  route.go(routes.home);
+if (route.is('guide')) {
+  localStorage.setItem('userInfo', JSON.stringify({ code: userName }));
+  route.go(routes.index);
 }
 
 // visibilitychange
 Document.prototype.addEventListener = new Proxy(
   Document.prototype.addEventListener, {
     apply: (target, _this, args) => (
-      args[0] === "visibilitychange"
+      args[0] === 'visibilitychange'
       ? undefined
       : Reflect.apply(target, _this, args)
     )
@@ -43,27 +33,27 @@ Document.prototype.addEventListener = new Proxy(
 );
 
 // allowReport
-const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+const userInfo = JSON.parse(localStorage.getItem('userInfo'));
 if ( // if userInfo matches { allowReport: 0 }
-  typeof userInfo === "object" &&
+  typeof userInfo === 'object' &&
   userInfo !== null &&
   userInfo.allowReport === 0
 ) {
   userInfo.allowReport = 1;
-  localStorage.setItem("userInfo", JSON.stringify(userInfo));
+  localStorage.setItem('userInfo', JSON.stringify(userInfo));
 }
 
 // checklist
-route.is(routes.report) &&
-window.addEventListener("load", () => {
+route.is('jksb') &&
+window.addEventListener('load', () => {
   const checklist = document.querySelector('.checklist-box');
   checklist !== null &&
-  checklist.textContent === "本人承诺:上述填写内容真实、准确、无误！" &&
+  checklist.textContent === '本人承诺:上述填写内容真实、准确、无误！' &&
   checklist.click();
 });
 
 // css
-const style = document.head.appendChild(document.createElement("style"));
+const style = document.head.appendChild(document.createElement('style'));
 style.textContent =
 `/* Global */
 
