@@ -5,8 +5,7 @@ on:
   pull_request: { branches: [ master ] }
 
 jobs:
-
-  build-Android:
+  lint:
     runs-on: ubuntu-latest
     steps:
 
@@ -14,21 +13,6 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with: { channel: stable, cache: true } # channel: 'stable', 'beta' or 'master'
-
-      - name: 📌 Restore pub & build cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.pub-cache/
-            .dart_tool/
-            build/
-            .flutter-plugins
-            .flutter-plugins-dependencies
-            .packages
-            pubspec.lock
-          key: build-${{ runner.os }}-${{ github.sha }}
-          restore-keys:
-            build-${{ runner.os }}-
 
       - name: 📌 Flutter Code Generate
         run: |
@@ -39,37 +23,64 @@ jobs:
       - name: 📌 Flutter Analysis
         run: flutter analyze
 
-      - name: 🏗️ Build apk (arm64 only)
-        run: flutter build apk --split-per-abi --target-platform android-arm64
+#      - name: 📌 Cache dependencies
+#        uses: actions/cache@v2
+#        with:
+#          path: |
+#            ~/.pub-cache/
+#            .dart_tool/
+#            .flutter-plugins
+#            .flutter-plugins-dependencies
+#            .packages
+#            pubspec.lock
+#          key: build-${{ runner.os }}-${{ github.sha }}
 
-      - name: 🚚 Move outputs
-        run: |
-          mv ./build/app/outputs/ ./outputs/
-          mv ./build/app/reports/ ./outputs/reports/
+
+  build-Android:
+    needs:
+      - lint
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - uses: subosito/flutter-action@v2
+        with: { channel: stable, cache: true } # channel: 'stable', 'beta' or 'master'
+
+#      - name: 📌 Restore dependencies
+#        uses: actions/cache@v2
+#        with:
+#          path: |
+#            ~/.pub-cache/
+#            .dart_tool/
+#            build/
+#            .flutter-plugins
+#            .flutter-plugins-dependencies
+#            .packages
+#            pubspec.lock
+#          key: build-${{ runner.os }}-${{ github.sha }}
+
+      - name: 🏗️ Build Apk (arm64 only)
+        run: ｜
+          flutter pub get
+          flutter pub run build_runner build
+          flutter pub run flutter_native_splash:create
+          flutter build apk --split-per-abi --target-platform android-arm64
 
       - name: 📌 Cache outputs
         uses: actions/cache@v2
         with:
-          path: outputs/
+          path: |
+            build/
           key: apk-${{ github.ref }}-${{ github.sha }}
 
-      - name: 📌 Cache pub & build
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.pub-cache/
-            .dart_tool/
-            build/
-            .flutter-plugins
-            .flutter-plugins-dependencies
-            .packages
-            pubspec.lock
-          key: build-${{ runner.os }}-${{ github.sha }}
+
 
   build-iOS:
     runs-on: macos-latest
+    needs:
+      - lint
     steps:
-
     - uses: actions/checkout@v2
 
     - uses: maxim-lobanov/setup-xcode@v1
@@ -78,10 +89,12 @@ jobs:
     - uses: subosito/flutter-action@v2
       with: { channel: 'stable', cache: true } # or: 'beta' or 'master'
 
-    - run: flutter pub get
-    - run: flutter pub run build_runner build
-    - run: flutter pub run flutter_native_splash:create
-    - run: flutter build ios --no-codesign
+    - name: 🏗️ Build iOS
+      run: ｜
+        flutter pub get
+        flutter pub run build_runner build
+        flutter pub run flutter_native_splash:create
+        flutter build ios --no-codesign
 
   upload:
     runs-on: ubuntu-latest
@@ -104,7 +117,7 @@ jobs:
 
       - name: ✏️ Rename apk file
         run: |
-          cd outputs/flutter-apk/
+          cd build/app/outputs/flutter-apk/
           mv app-arm64-v8a-release.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
 
       - name: 🤖 Upload apk by bot
