@@ -5,8 +5,8 @@ console.info('Initializing report/inject.js');
 
 const userName = '{{username}}';
 
-// const prefix = 'http://xgfy.sit.edu.cn/h5/';
-// const routes = [ 'guide', 'news', 'index', 'studentReport', 'jksb', 'yimiaon', 'view' ];
+const prefix = 'http://xgfy.sit.edu.cn/h5/';
+const routes = [ 'guide', 'news', 'index', 'studentReport', 'jksb', 'yimiaon', 'view' ];
 
 const getRoute = name => name === 'guide' ? '#/' : `#/pages/index/${name}`;
 
