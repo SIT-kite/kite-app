@@ -44,9 +44,6 @@ def show_git_menu():
             MenuOption(keys=['proxy'],
                        title='配置 git 代理',
                        callback=proxy),
-            MenuOption(keys=['water'],
-                       title='一键水commit',
-                       callback=lambda:print('成功水commit')),
         ],
         backward_text='返回主菜单'
     )

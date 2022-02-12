@@ -196,13 +196,3 @@ String formatPlace(String place) {
   indexOfBucket = place.indexOf('(');
   return indexOfBucket != -1 ? place.substring(0, indexOfBucket) : place;
 }
-
-/// 删去 place 括号里的描述信息. 如, 二教F301（机电18中外合作专用）
-String formatPlace(String place) {
-  int indexOfBucket = place.indexOf('（');
-  if (indexOfBucket != -1) {
-    return place.substring(0, indexOfBucket);
-  }
-  indexOfBucket = place.indexOf('(');
-  return indexOfBucket != -1 ? place.substring(0, indexOfBucket) : place;
-}

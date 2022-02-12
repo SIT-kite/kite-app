@@ -11,4 +11,3 @@ NSMicrophoneUsageDescription = "小风筝需要获取你的麦克风权限";
 NSCameraUsageDescription = "小风筝需要获取你的相机权限";
 NSPhotoLibraryUsageDescription = "小风筝需要获取你的图片库权限";
 CFBundleDisplayName = "上应小风筝";
-CFBundleDisplayName = "上应小风筝";
