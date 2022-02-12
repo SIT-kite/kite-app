@@ -189,7 +189,7 @@ class _ScorePageState extends State<ScorePage> {
         Log.info('查询成绩:${snapshot.connectionState}');
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
-            return Center(child: Text(snapshot.error.toString()));
+            return Center(child: Text(snapshot.error.toString().split('\n')[0]));
           }
           final scoreList = snapshot.data!;
 
