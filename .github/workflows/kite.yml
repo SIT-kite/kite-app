@@ -191,3 +191,9 @@ jobs:
           format: markdown
           message: |
             🎉 [KiteApp](https://github.com/SIT-kite/kite-app)  PR [#${{github.event.number}}](https://github.com/SIT-kite/kite-app/pull/${{github.event.number}}) Merged!
+
+            Author: *${{ github.actor }}*
+
+            Message: *${{ github.event.pull_request.title }}*
+
+            Branch: *${{ env.BRANCH_NAME }}*
