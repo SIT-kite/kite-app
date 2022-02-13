@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from typing import *
+import os
 
 def match(keyword: str, target: str):
     """
@@ -159,4 +160,5 @@ class Menu:
         """
         self.__generate_option_key()
         while self.__has_next_loop:
+            os.system('clear')
             self.__show_once()

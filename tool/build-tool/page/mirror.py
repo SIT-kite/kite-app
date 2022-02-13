@@ -43,7 +43,7 @@ PUB_MIRRORS = [
 ]
 
 
-def show_change_pub_menu():
+def show_mirror_menu():
     """
     一键换源
     """

@@ -16,12 +16,15 @@ def open_credential_cache():
 
 
 def proxy():
+    """
+    为当前项目配置gii代理(局部代理，仅针对当前仓库生效)
+    """
     print('当前Git代理: ')
     print('http_proxy: ', end='', flush=True)
     call('git config http.proxy', no_print_cmd=True)
     print('https_proxy: ', end='', flush=True)
     call('git config https.proxy', no_print_cmd=True)
-    
+
     input_proxy = input('请输入新代理: ').strip()
     call(f'git config http.proxy {input_proxy}')
     call(f'git config https.proxy {input_proxy}')
