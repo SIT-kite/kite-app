@@ -1,15 +1,8 @@
 from . import *
-from .linux_menu import show_linux_menu
+from .linux import show_linux_menu
 from .git import show_git_menu
-
-def change_pub():
-    from .change_pub import show_change_pub_menu
-    show_change_pub_menu()
-
-
-def android_guide():
-    from .android_guide import show_guide_build_for_android
-    show_guide_build_for_android()
+from .android import show_android_menu
+from .mirror import show_mirror_menu
 
 def show_home_menu():
     menu = Menu(
@@ -17,7 +10,7 @@ def show_home_menu():
         options=[
             MenuOption(keys=['mirror'],
                        title='换源',
-                       callback=change_pub),
+                       callback=show_mirror_menu),
 
             MenuOption(keys=['dependence'],
                        title='依赖管理',
@@ -34,7 +27,7 @@ def show_home_menu():
 
             MenuOption(keys=['android'],
                        title='Android 开发',
-                       callback=android_guide),
+                       callback=show_android_menu),
 
             MenuOption(keys=['linux'],
                        title='Linux 开发',

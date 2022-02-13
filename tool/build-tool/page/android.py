@@ -1,7 +1,7 @@
 from . import *
 
 
-def show_guide_build_for_android():
+def show_android_menu():
     def build_apk(target_platform: Optional[str] = None,
                   split_per_abi: bool = False,
                   release: bool = True,
