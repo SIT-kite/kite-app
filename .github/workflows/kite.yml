@@ -162,6 +162,8 @@ jobs:
 
             Commit: [${{ env.SHA }}](https://github.com/${{ github.repository }}/commit/${{ env.SHA }})
 
+            Branch: *${{ env.BRANCH_NAME }}*
+
       - name: 🤖 Telegram Notification
         if: env.WORKFLOW_CONCLUSION != 'success'
         uses: appleboy/telegram-action@master
@@ -177,3 +179,5 @@ jobs:
             Message: *${{ github.event.head_commit.message }}*
 
             Commit: [${{ env.SHA }}](https://github.com/${{ github.repository }}/commit/${{ env.SHA }})
+
+            Branch: *${{ env.BRANCH_NAME }}*
