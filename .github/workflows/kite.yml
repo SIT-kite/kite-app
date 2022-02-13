@@ -126,6 +126,7 @@ jobs:
           mv app-arm64-v8a-release.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
 
       - name: 🤖 Upload apk by bot
+        if: ${{ env.BRANCH_NAME }} == master
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.CHAT_ID }}
