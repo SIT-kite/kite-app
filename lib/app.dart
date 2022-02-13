@@ -98,17 +98,19 @@ class KiteApp extends StatelessWidget {
         },
         defaultColor: primaryColor,
         defaultIsDark: isDark,
-        themedWidgetBuilder: (BuildContext context, ThemeData theme) => MaterialApp(
-          navigatorKey: Catcher.navigatorKey,
-          title: '上应小风筝',
-          theme: theme,
-          home: home,
-          onGenerateRoute: _onGenerateRoute,
-          builder: (context, widget) {
-            ScreenUtil.setContext(context);
-            return widget!;
-          },
-        ),
+        themedWidgetBuilder: (BuildContext context, ThemeData theme) {
+          return MaterialApp(
+            navigatorKey: Catcher.navigatorKey,
+            title: '上应小风筝',
+            theme: theme,
+            home: home,
+            onGenerateRoute: _onGenerateRoute,
+            builder: (context, widget) {
+              ScreenUtil.setContext(context);
+              return widget!;
+            },
+          );
+        },
       ),
     );
   }
