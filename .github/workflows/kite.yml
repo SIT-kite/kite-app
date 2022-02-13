@@ -146,8 +146,8 @@ jobs:
         id: short-sha
         with: { length: 7 }
 
-      - name: 🤖 Telegram Notification
-        if: env.WORKFLOW_CONCLUSION == 'success'
+      - name: 🤖 Build Success Notification
+        if: github.event.pull_request.merged != true && env.WORKFLOW_CONCLUSION == 'success'
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.CHAT_ID }}
@@ -164,8 +164,8 @@ jobs:
 
             Branch: *${{ env.BRANCH_NAME }}*
 
-      - name: 🤖 Telegram Notification
-        if: env.WORKFLOW_CONCLUSION != 'success'
+      - name: 🤖 Build Fail Notification
+        if: github.event.pull_request.merged != true && env.WORKFLOW_CONCLUSION != 'success'
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.CHAT_ID }}
@@ -179,5 +179,21 @@ jobs:
             Message: *${{ github.event.head_commit.message }}*
 
             Commit: [${{ env.SHA }}](https://github.com/${{ github.repository }}/commit/${{ env.SHA }})
+
+            Branch: *${{ env.BRANCH_NAME }}*
+
+      - name: 🤖 PR Merged Notification
+        if: github.event.pull_request.merged == true && env.WORKFLOW_CONCLUSION == 'success'
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.CHAT_ID }}
+          token: ${{ secrets.BOT_TOKEN }}
+          format: markdown
+          message: |
+            🎉 [KiteApp](https://github.com/SIT-kite/kite-app)  PR [#${{github.event.number}}](https://github.com/SIT-kite/kite-app/pull/${{github.event.number}}) Merged!
+
+            Author: *${{ github.actor }}*
+
+            Message: *${{ github.event.pull_request.title }}*
 
             Branch: *${{ env.BRANCH_NAME }}*
