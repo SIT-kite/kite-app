@@ -1,0 +1,36 @@
+name: PR Merge Notify
+
+# only trigger on pull request closed events
+on:
+  pull_request:
+    types: [ closed ]
+
+jobs:
+  merge:
+    # this job will only run if the PR has been merged
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo PR #${{ github.event.number }} has been merged
+
+      - uses: nelonoel/branch-name@v1.0.1
+      - uses: benjlevesque/short-sha@v1.2
+        id: short-sha
+        with: { length: 7 }
+
+      - name: 🤖 PR Merged Notification
+        if: github.event.pull_request.merged == true
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.CHAT_ID }}
+          token: ${{ secrets.BOT_TOKEN }}
+          format: markdown
+          message: |
+            🎉 [KiteApp](https://github.com/SIT-kite/kite-app)  *PR* [#${{github.event.number}}](https://github.com/SIT-kite/kite-app/pull/${{github.event.number}}) Merged!
+
+            Author: *${{ github.actor }}*
+
+            Message: *${{ github.event.pull_request.title }}*
+
+            Branch: *${{ env.BRANCH_NAME }}*
