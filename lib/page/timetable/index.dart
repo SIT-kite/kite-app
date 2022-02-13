@@ -15,16 +15,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:ical/serializer.dart';
 import 'package:kite/entity/edu/index.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/service/edu/index.dart';
 import 'package:kite/util/flash.dart';
+import 'package:kite/util/logger.dart';
+import 'package:kite/util/permission.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'cache.dart';
 import 'daily.dart';
+import 'util.dart';
 import 'weekly.dart';
 
 /// 课表模式
@@ -80,6 +89,36 @@ class _TimetablePageState extends State<TimetablePage> {
     // 刷新界面
   }
 
+  Future<void> _onExport() async {
+    if (timetable.isEmpty) {
+      showBasicFlash(context, const Text('你咋没课呢？？'));
+      // return;
+    }
+    final isPermissionGranted = await ensurePermission(Permission.storage);
+    if (!isPermissionGranted) {
+      showBasicFlash(context, const Text('无写入文件权限'));
+      return;
+    }
+
+    final ICalendar iCal = ICalendar(
+      company: 'Kite Team, Yiban WorkStation of Shanghai Institute of Technology',
+      product: 'kite',
+      lang: 'ZH',
+    );
+    timetable.forEach((c) => addEventForCourse(iCal, c));
+
+    final String iCalContent = iCal.serialize();
+    final String path = (await getExternalCacheDirectories())![0].path + '/calendar.ics';
+    final File file = File(path);
+
+    if (!file.existsSync()) {
+      file.createSync(recursive: true);
+    }
+    file.writeAsStringSync(iCalContent);
+    Log.info('保存日历文件到 $path');
+    OpenFile.open(path, type: 'text/calendar');
+  }
+
   PopupMenuButton _buildPopupMenu(BuildContext context) {
     return PopupMenuButton(
       itemBuilder: (BuildContext context) {
@@ -87,6 +126,10 @@ class _TimetablePageState extends State<TimetablePage> {
           PopupMenuItem(
             child: const Text('刷新'),
             onTap: _onRefresh,
+          ),
+          PopupMenuItem(
+            child: const Text('导出日历文件'),
+            onTap: _onExport,
           ),
         ];
       },
