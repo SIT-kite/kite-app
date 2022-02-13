@@ -141,7 +141,7 @@ jobs:
     steps:
 
       - uses: technote-space/workflow-conclusion-action@v2
-
+      - uses: nelonoel/branch-name@v1.0.1
       - uses: benjlevesque/short-sha@v1.2
         id: short-sha
         with: { length: 7 }
