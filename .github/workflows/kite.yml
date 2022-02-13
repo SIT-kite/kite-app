@@ -1,7 +1,7 @@
 name: KiteApp
 
 on:
-  push:         { branches: [ master ] }
+  push:
   pull_request: { branches: [ master ] }
 
 jobs:
@@ -103,6 +103,7 @@ jobs:
 
   upload:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
     needs:
       - build-Android
       - build-iOS
@@ -136,11 +137,11 @@ jobs:
   notification:
     runs-on: ubuntu-latest
     needs: [ upload ]
-    if: always()
+    if:  github.event_name != 'pull_request' && always()
     steps:
 
       - uses: technote-space/workflow-conclusion-action@v2
-
+      - uses: nelonoel/branch-name@v1.0.1
       - uses: benjlevesque/short-sha@v1.2
         id: short-sha
         with: { length: 7 }
@@ -161,6 +162,8 @@ jobs:
 
             Commit: [${{ env.SHA }}](https://github.com/${{ github.repository }}/commit/${{ env.SHA }})
 
+            Branch: *${{ env.BRANCH_NAME }}*
+
       - name: 🤖 Telegram Notification
         if: env.WORKFLOW_CONCLUSION != 'success'
         uses: appleboy/telegram-action@master
@@ -176,3 +179,5 @@ jobs:
             Message: *${{ github.event.head_commit.message }}*
 
             Commit: [${{ env.SHA }}](https://github.com/${{ github.repository }}/commit/${{ env.SHA }})
+
+            Branch: *${{ env.BRANCH_NAME }}*
