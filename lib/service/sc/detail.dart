@@ -7,7 +7,7 @@ import 'package:kite/dao/sc/detail.dart';
 import 'package:kite/entity/sc/detail.dart';
 import 'package:kite/session/abstract_session.dart';
 
-class ScDetailService extends AService implements ScDetailDao {
+class ScActivityDetailService extends AService implements ScActivityDetailDao {
   static const _scDetailUrl = "";
 
   static RegExp reSpaces = RegExp(r"\s{2}\s+");
@@ -16,7 +16,7 @@ class ScDetailService extends AService implements ScDetailDao {
   static String selectorBanner = "div[style=\" color:#7a7a7a; text-align:center\"]";
   static String selectorDescription = 'div[style=\"padding:30px 50px; font-size:14px;\"]';
 
-  ScDetailService(ASession session) : super(session);
+  ScActivityDetailService(ASession session) : super(session);
 
   /// 获取第二课堂活动详情
   @override
