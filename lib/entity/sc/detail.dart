@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+
 class ActivityDetail {
   /// Activity id
   final int id;
@@ -35,28 +37,26 @@ class ActivityDetail {
   final DateTime signEndTime;
 
   /// Place
-  final String place;
+  final String? place;
 
   /// Duration
-  final String duration;
+  final String? duration;
 
   /// Activity manager
-  final String manager;
+  final String? manager;
 
   /// Manager contact(phone)
-  final String contact;
+  final String? contact;
 
   /// Activity organizer
-  final String organizer;
+  final String? organizer;
 
   /// Activity undertaker
-  final String undertaker;
+  final String? undertaker;
 
   /// Description in text[]
-  final String description;
+  final String? description;
 
-  /// Image attachment
-  final List<ScImages> images;
 
   const ActivityDetail(
       this.id,
@@ -71,8 +71,7 @@ class ActivityDetail {
       this.contact,
       this.organizer,
       this.undertaker,
-      this.description,
-      this.images);
+      this.description);
 
   @override
   String toString() {
@@ -80,24 +79,6 @@ class ActivityDetail {
         'startTime: $startTime, signStartTime: $signStartTime, '
         'signEndTime: $signEndTime, place: $place, duration: $duration,'
         'manager: $manager, contact: $contact, organizer: $organizer,'
-        ' undertaker: $undertaker, description: $description, images: $images}';
-  }
-}
-
-class ScImages {
-  /// New image name
-  final String newName;
-
-  /// Old image name
-  final String oldName;
-
-  /// Image content
-  final List<int> content;
-
-  const ScImages(this.newName, this.oldName, this.content);
-
-  @override
-  String toString() {
-    return 'ScImages{newName: $newName, oldName: $oldName, content: $content}';
+        ' undertaker: $undertaker, description: $description}';
   }
 }
