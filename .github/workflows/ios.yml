@@ -1,0 +1,86 @@
+name: iOS push to testflight
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  push:
+    runs-on: macos-latest
+    environment: apple-connect
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Import Keys
+        run: |
+          echo -n "${{ secrets.MATCH_SSH_KEY_BASE64 }}" | base64 -d -o $HOME/.ssh/id_rsa
+          chmod 400 $HOME/.ssh/id_rsa
+          export MATCH_GIT_PRIVATE_KEY=$HOME/.ssh/id_rsa
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '2.10.1'
+          channel: 'stable'
+
+      - name: Bump Flutter Build Number
+        run: |
+          flutter pub get
+          flutter pub run build_runner build  --delete-conflicting-outputs
+          flutter pub run flutter_native_splash:create
+          flutter pub global activate cider
+          flutter pub global run cider bump build
+
+      - name: Get Flutter Version
+        id: get_flutter_version
+        uses: its404/get-flutter-version@v1.0.0
+
+      - name: Update Xcode Build Number
+        uses: yanamura/ios-bump-version@v1
+        with:
+          version: ${{ steps.get_flutter_version.outputs.version_number }}
+          build-number: ${{ steps.get_flutter_version.outputs.build_number }}
+          project-path: ios
+
+      - name: Get Flutter Version
+        id: lastest_flutter_version
+        uses: its404/get-flutter-version@v1.0.0
+
+      - name: Build iOS
+        run: flutter build ios --release --config-only
+
+      - run: cd ios && fastlane ios beta
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY }}
+          APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
+      - name: Push Build Number Update
+        run: |
+          git add pubspec.yaml
+          git commit -m "Update: Bump Build Number to ${{ steps.lastest_flutter_version.outputs.build_number }}"
+          git push origin
+  notify:
+    runs-on: ubuntu-latest
+    needs:
+      - push
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Get Lastest Flutter Version
+        id: lastest_flutter_version
+        uses: its404/get-flutter-version@v1.0.0
+
+      - name: 🤖 Telegram Notification
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.CHAT_ID }}
+          token: ${{ secrets.BOT_TOKEN }}
+          format: markdown
+          message: |
+            🏷️ [KiteApp](https://github.com/SIT-kite/kite-app) Build Number Update to *${{ steps.lastest_flutter_version.outputs.build_number }}*
+
+            📱 iOS New Version *${{ steps.lastest_flutter_version.outputs.version_number }}(${{ steps.lastest_flutter_version.outputs.build_number }})* has been pushed to TestFlight!
