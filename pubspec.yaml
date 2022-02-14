@@ -2,7 +2,7 @@
 # https://dart.dev/tools/pub/pubspec
 
 name: kite
-version: 1.0.0+10
+version: 1.0.0+11
 
 description: '上应小风筝 APP，基于 Flutter。'
 
