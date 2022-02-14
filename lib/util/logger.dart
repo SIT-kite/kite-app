@@ -44,4 +44,8 @@ class Log {
   static void debug(dynamic m) {
     _log('DEBUG', m);
   }
+
+  static void error(dynamic m) {
+    _log('ERROR', m);
+  }
 }
