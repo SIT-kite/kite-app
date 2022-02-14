@@ -1,6 +1,5 @@
 name: iOS push to testflight
 on:
-  push:
   workflow_dispatch:
 
 jobs:
