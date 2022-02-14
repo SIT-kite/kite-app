@@ -20,6 +20,7 @@ import 'package:kite/dao/library/image_search.dart';
 import 'package:kite/entity/library/book_image.dart';
 import 'package:kite/entity/library/book_search.dart';
 import 'package:kite/entity/library/holding_preview.dart';
+import 'package:kite/util/logger.dart';
 
 class BookImageHolding {
   Book book;
@@ -49,21 +50,26 @@ class BookImageHolding {
     HoldingPreviewDao holdingPreviewDao, // 馆藏检索服务
     List<Book> books, // 图书搜索结果
   ) async {
-    final isbnList = books.map((e) => e.bookId).toList();
     Future<Map<String, BookImage>> searchBookImages() async {
       try {
+        Log.info('批量查询图书图片信息');
+        final isbnList = books.map((e) => e.isbn).toList();
         return await bookImageSearchDao.searchByIsbnList(isbnList);
       } catch (e) {
         // 查询出错
+        Log.error('查询图书图片信息错误: $e');
         return {};
       }
     }
 
     Future<HoldingPreviews> getHoldingPreviews() async {
       try {
-        return await holdingPreviewDao.getHoldingPreviews(isbnList);
+        Log.info('批量获取馆藏信息');
+        final bookIdList = books.map((e) => e.bookId).toList();
+        return await holdingPreviewDao.getHoldingPreviews(bookIdList);
       } catch (e) {
         // 查询出错
+        Log.error('获取馆藏信息出错: $e');
         return const HoldingPreviews({});
       }
     }
