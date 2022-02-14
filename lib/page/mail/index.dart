@@ -40,6 +40,10 @@ class _MailPageState extends State<MailPage> {
   Future<void> _updateMailList() async {
     try {
       final messages = (await _loadMailList()).messages;
+      // 日期越大的越靠前
+      messages.sort((a, b) {
+        return a.decodeDate()!.isAfter(b.decodeDate()!) ? -1 : 1;
+      });
       setState(() => _messages = messages);
     } catch (_) {
       setState(() => _index = 1);
