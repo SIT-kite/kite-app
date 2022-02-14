@@ -1,7 +1,7 @@
 name: iOS push to testflight
 on:
   push:
-#  workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   push:
@@ -49,7 +49,7 @@ jobs:
       - name: Build iOS
         run: flutter build ios --release --config-only
 
-      - run: cd ios && fastlane ios beta --verbose
+      - run: cd ios && fastlane ios beta
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
