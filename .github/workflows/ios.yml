@@ -94,7 +94,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          fetch_depth: 0
+          ref: master
 
       - name: Get Lastest Flutter Version
         id: lastest_flutter_version
