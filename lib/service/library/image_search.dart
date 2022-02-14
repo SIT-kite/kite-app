@@ -22,7 +22,6 @@ import 'package:kite/dao/library/image_search.dart';
 import 'package:kite/entity/library/book_image.dart';
 import 'package:kite/service/library/constant.dart';
 import 'package:kite/session/abstract_session.dart';
-import 'package:kite/util/logger.dart';
 
 import '../abstract_service.dart';
 
@@ -48,7 +47,7 @@ class BookImageSearchService extends AService implements BookImageSearchDao {
     );
     var responseStr = (response.data as String).trim();
     responseStr = responseStr.substring(1, responseStr.length - 1);
-    Log.info(responseStr);
+    // Log.info(responseStr);
     var result = <String, BookImage>{};
     (jsonDecode(responseStr)['result'] as List<dynamic>).map((e) => BookImage.fromJson(e)).forEach(
       (e) {
