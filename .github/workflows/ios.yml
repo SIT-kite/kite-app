@@ -6,6 +6,31 @@ on:
   workflow_dispatch:
 
 jobs:
+  start:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Get Lastest Flutter Version
+        id: lastest_flutter_version
+        uses: its404/get-flutter-version@v1.0.0
+
+      - name: 🤖 Telegram Notification
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.CHAT_ID }}
+          token: ${{ secrets.BOT_TOKEN }}
+          format: markdown
+          message: |
+            🏷️ [KiteApp](https://github.com/SIT-kite/kite-app) Prepare to push Beta Build to TestFlight
+
+            Please request for @sunnysab or @peanut996's  approval.
+
+            ⚠️ Freeze master branch more than 20 minutes.
+
+
+
   push:
     runs-on: macos-latest
     environment: apple-connect
