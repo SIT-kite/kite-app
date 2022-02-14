@@ -56,7 +56,7 @@ jobs:
           APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
       - name: Push Build Number Update
         run: |
-          git add .
+          git add pubspec.yaml
           git commit -m "Update: Bump Build Number to ${{ steps.lastest_flutter_version.outputs.build_number }}"
           git push origin
   notify:
