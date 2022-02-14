@@ -1,0 +1,8 @@
+app_identifier("cn.edu.sit.kite") # The bundle identifier of your app
+apple_id("kite@sunnysab.cn") # Your Apple email address
+
+itc_team_id("124032104") # App Store Connect Team ID
+team_id("LUAVQGHQ98") # Developer Portal Team ID
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile
