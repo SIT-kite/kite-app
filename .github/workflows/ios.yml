@@ -77,7 +77,7 @@ jobs:
         run: flutter build ios --release --config-only
 
       - name: Push to TestFlight
-      - run: cd ios && fastlane ios beta
+        run: cd ios && fastlane ios beta
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
