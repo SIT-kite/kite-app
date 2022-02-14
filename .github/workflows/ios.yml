@@ -81,4 +81,4 @@ jobs:
           message: |
             🏷️ [KiteApp](https://github.com/SIT-kite/kite-app) Build Number Update to *${{ steps.lastest_flutter_version.outputs.build_number }}*
 
-            📱 iOS New Version *${{ steps.get_flutter_version.outputs.version_number }}(${{ steps.lastest_flutter_version.outputs.build_number }})* has been pushed to TestFlight!
+            📱 iOS New Version *${{ steps.lastest_flutter_version.outputs.version_number }}(${{ steps.lastest_flutter_version.outputs.build_number }})* has been pushed to TestFlight!
