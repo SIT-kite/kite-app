@@ -43,15 +43,34 @@ class BookImageHolding {
     }).toList();
   }
 
-  /// 可以很简单地查询一批书的图片与馆藏信息
+  /// 可以很简单地并发查询一批书的图片与馆藏信息并join出结果
   static Future<List<BookImageHolding>> simpleQuery(
-    BookImageSearchDao bookImageSearchDao,
-    HoldingPreviewDao holdingPreviewDao,
-    List<Book> books,
+    BookImageSearchDao bookImageSearchDao, // 图片搜索服务
+    HoldingPreviewDao holdingPreviewDao, // 馆藏检索服务
+    List<Book> books, // 图书搜索结果
   ) async {
+    final isbnList = books.map((e) => e.bookId).toList();
+    Future<Map<String, BookImage>> searchBookImages() async {
+      try {
+        return await bookImageSearchDao.searchByIsbnList(isbnList);
+      } catch (e) {
+        // 查询出错
+        return {};
+      }
+    }
+
+    Future<HoldingPreviews> getHoldingPreviews() async {
+      try {
+        return await holdingPreviewDao.getHoldingPreviews(isbnList);
+      } catch (e) {
+        // 查询出错
+        return const HoldingPreviews({});
+      }
+    }
+
     final imageHoldingPreview = await Future.wait([
-      bookImageSearchDao.searchByBookList(books),
-      holdingPreviewDao.getHoldingPreviews(books.map((e) => e.bookId).toList()),
+      searchBookImages(),
+      getHoldingPreviews(),
     ]);
     final imageResult = imageHoldingPreview[0] as Map<String, BookImage>;
     final holdingPreviewResult = imageHoldingPreview[1] as HoldingPreviews;
