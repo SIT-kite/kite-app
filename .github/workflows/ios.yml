@@ -53,8 +53,8 @@ jobs:
       - name: Bump Flutter Build Number
         run: |
           flutter pub get
-          flutter pub run build_runner build  --delete-conflicting-outputs
-          flutter pub run flutter_native_splash:create
+#          flutter pub run build_runner build  --delete-conflicting-outputs
+#          flutter pub run flutter_native_splash:create
           flutter pub global activate cider
           flutter pub global run cider bump build
 
@@ -73,8 +73,8 @@ jobs:
         id: lastest_flutter_version
         uses: its404/get-flutter-version@v1.0.0
 
-      - name: Build iOS
-        run: flutter build ios --release --config-only
+#      - name: Build iOS
+#        run: flutter build ios --release --config-only
 
 #      - name: Push to TestFlight
 #      - run: cd ios && fastlane ios beta
@@ -96,7 +96,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          fetch_depth: 1
+          fetch_depth: 0
 
       - name: Get Lastest Flutter Version
         id: lastest_flutter_version
