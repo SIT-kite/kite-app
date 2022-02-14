@@ -8,7 +8,7 @@ void main() {
   var session = SessionPool.librarySession;
   test('search test', () async {
     var books = await BookSearchService(session).search(keyword: 'Java');
-    var result = await BookImageSearchService(session).searchByBookList(books.books);
+    var result = await BookImageSearchService(session).searchByIsbnList(books.books.map((e) => e.isbn).toList());
     logger.d(result);
   });
 }
