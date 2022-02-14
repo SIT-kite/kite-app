@@ -11,6 +11,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Import Keys
+        run: |
+          echo -n "${{ secrets.MATCH_SSH_KEY_BASE64 }}" | base64 -d -o $HOME/.ssh/id_rsa
+          chmod 400 $HOME/.ssh/id_rsa
+          export MATCH_GIT_PRIVATE_KEY=$HOME/.ssh/id_rsa
+
       - run: cd ios && fastlane beta
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
