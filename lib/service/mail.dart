@@ -35,7 +35,7 @@ class MailService {
       await login();
     }
 
-    final boxes = await _client.listMailboxes();
+    // final boxes = await _client.listMailboxes();
     await _client.selectInbox();
     return await _client.fetchRecentMessages(messageCount: count);
   }
