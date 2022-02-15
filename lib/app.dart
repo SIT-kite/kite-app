@@ -100,6 +100,7 @@ class KiteApp extends StatelessWidget {
         defaultIsDark: isDark,
         themedWidgetBuilder: (BuildContext context, ThemeData theme) {
           return MaterialApp(
+            debugShowCheckedModeBanner: false,
             navigatorKey: Catcher.navigatorKey,
             title: '上应小风筝',
             theme: theme,
