@@ -11,3 +11,4 @@ NSMicrophoneUsageDescription = "Kite needs to get your microphone access";
 NSCameraUsageDescription = "Kite needs to get your camera access";
 NSPhotoLibraryUsageDescription = "Kite needs to get your photo access";
 CFBundleDisplayName = "Kite";
+NFCReaderUsageDescription = "Kite needs to get your NFC access";
