@@ -33,6 +33,9 @@ class RuleCross<T> implements Rule<T> {
   @override
   bool accept(T object) {
     for (final rule in rules) {
+      /// 规则交集为要求每个规则都能够接受
+      /// 即不存在一个规则，使他不能接受
+      /// 即如果存在一个不能接受的对象，那么传入值一定不符合规则交集
       if (!rule.accept(object)) {
         return false;
       }
@@ -49,7 +52,8 @@ class RuleSum<T> implements Rule<T> {
   @override
   bool accept(T object) {
     for (final rule in rules) {
-      if (!rule.accept(object)) {
+      // 只要存在一个能接受，那就整体接受
+      if (rule.accept(object)) {
         return true;
       }
     }
@@ -141,5 +145,17 @@ class ChainRule<T> implements Rule<T> {
   @override
   bool accept(T object) {
     return currentRule.accept(object);
+  }
+}
+
+typedef RuleFunction<T> = bool Function(T object);
+
+/// 函数式规则
+class FunctionalRule<T> implements Rule<T> {
+  final RuleFunction<T> ruleFunction;
+  const FunctionalRule(this.ruleFunction);
+  @override
+  bool accept(T object) {
+    return ruleFunction(object);
   }
 }
