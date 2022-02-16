@@ -17,6 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/global/storage_pool.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 class KiteDrawer extends Drawer {
   const KiteDrawer({Key? key}) : super(key: key);
@@ -48,13 +49,15 @@ class KiteDrawer extends Drawer {
               Navigator.of(context).pushNamed('/connectivity');
             },
           ),
-          ListTile(
-            title: const Text('校园卡工具'),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.of(context).pushNamed('/campusCard');
-            },
-          ),
+          UniversalPlatform.isAndroid
+              ? ListTile(
+                  title: const Text('校园卡工具'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.of(context).pushNamed('/campusCard');
+                  },
+                )
+              : const SizedBox(height: 0),
           ListTile(
             title: const Text('反馈'),
             onTap: () {
