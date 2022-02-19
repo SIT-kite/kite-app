@@ -83,6 +83,7 @@ dependencies:
   ical: ^0.2.2
   permission_handler: ^8.3.0
   open_file: ^3.2.1
+  format: ^1.1.1
 
 
 dev_dependencies:
