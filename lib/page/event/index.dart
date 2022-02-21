@@ -17,6 +17,9 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:kite/entity/sc/list.dart';
+import 'package:kite/global/session_pool.dart';
+import 'package:kite/service/sc/list.dart';
 
 import 'card.dart';
 import 'profile.dart';
@@ -30,10 +33,30 @@ class EventPage extends StatelessWidget {
     return TabBar(isScrollable: true, tabs: tabs.map((e) => Tab(text: e)).toList());
   }
 
+  Widget _buildEventResult(List<Activity> activities) {
+    return ListView(children: activities.map((e) => EventCard(e)).toList());
+  }
+
+  Widget _buildEventList() {
+    final future = ScActivityListService(SessionPool.ssoSession).getActivityList(ActivityType.campus, 1);
+
+    return FutureBuilder<List<Activity>>(
+      future: future,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasData) {
+            return _buildEventResult(snapshot.data!);
+          } else if (snapshot.hasError) {
+            return Center(child: Text(snapshot.error.toString()));
+          }
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final card = EventCard('这是活动标题', '大活', DateTime.now());
-
     return DefaultTabController(
       length: 6,
       child: Scaffold(
@@ -42,16 +65,16 @@ class EventPage extends StatelessWidget {
           bottom: _buildBarHeader(),
           actions: [
             IconButton(
-                icon: const Icon(Icons.search), onPressed: () => showSearch(context: context, delegate: SearchBar())),
+              icon: const Icon(Icons.search),
+              onPressed: () => showSearch(context: context, delegate: SearchBar()),
+            ),
             IconButton(
               icon: const Icon(Icons.person),
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => ProfilePage())),
             )
           ],
         ),
-        body: ListView(
-          children: [card, card, card],
-        ),
+        body: _buildEventList(),
       ),
     );
   }
