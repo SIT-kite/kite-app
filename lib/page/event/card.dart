@@ -21,13 +21,15 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:geopattern_flutter/geopattern_flutter.dart';
 import 'package:geopattern_flutter/patterns/overlapping_circles.dart';
+import 'package:intl/intl.dart';
+import 'package:kite/entity/sc/list.dart';
 
 class EventCard extends StatelessWidget {
-  final DateTime ts;
-  final String place;
-  final String title;
+  static final dateFormat = DateFormat('yyyy-mm-dd');
 
-  const EventCard(this.title, this.place, this.ts, {Key? key}) : super(key: key);
+  final Activity activity;
+
+  const EventCard(this.activity, {Key? key}) : super(key: key);
 
   Widget _buildBg(BuildContext context) {
     return LayoutBuilder(
@@ -61,16 +63,15 @@ class EventCard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(padding: const EdgeInsets.all(4), child: Text(title, style: titleStyle)),
+        Padding(padding: const EdgeInsets.all(4), child: Text(activity.title, style: titleStyle)),
         Container(
           decoration: const BoxDecoration(color: Colors.white),
           child: Padding(
             padding: const EdgeInsets.all(4),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text(place, style: subtitleStyle),
-                Text(ts.toString(), style: subtitleStyle),
+                Text(dateFormat.format(activity.ts), style: subtitleStyle),
               ],
             ),
           ),
