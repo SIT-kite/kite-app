@@ -19,16 +19,39 @@
 import 'package:flutter/material.dart';
 
 import 'card.dart';
+import 'profile.dart';
+import 'search.dart';
 
 class EventPage extends StatelessWidget {
   const EventPage({Key? key}) : super(key: key);
 
+  TabBar _buildBarHeader() {
+    final tabs = ['讲座报告', '主题教育', '三创', '校园文化', '社会实践', '志愿公益'];
+    return TabBar(isScrollable: true, tabs: tabs.map((e) => Tab(text: e)).toList());
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('活动')),
-      body: ListView(
-        children: [EventCard(), EventCard(), EventCard()],
+    final card = EventCard('这是活动标题', '大活', DateTime.now());
+
+    return DefaultTabController(
+      length: 6,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('活动'),
+          bottom: _buildBarHeader(),
+          actions: [
+            IconButton(
+                icon: const Icon(Icons.search), onPressed: () => showSearch(context: context, delegate: SearchBar())),
+            IconButton(
+              icon: const Icon(Icons.person),
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => ProfilePage())),
+            )
+          ],
+        ),
+        body: ListView(
+          children: [card, card, card],
+        ),
       ),
     );
   }

@@ -23,7 +23,11 @@ import 'package:geopattern_flutter/geopattern_flutter.dart';
 import 'package:geopattern_flutter/patterns/overlapping_circles.dart';
 
 class EventCard extends StatelessWidget {
-  const EventCard({Key? key}) : super(key: key);
+  final DateTime ts;
+  final String place;
+  final String title;
+
+  const EventCard(this.title, this.place, this.ts, {Key? key}) : super(key: key);
 
   Widget _buildBg(BuildContext context) {
     return LayoutBuilder(
@@ -49,20 +53,45 @@ class EventCard extends StatelessWidget {
     );
   }
 
+  Widget _buildBasicInfo(BuildContext context) {
+    final titleStyle = Theme.of(context).textTheme.headline2?.copyWith(color: Colors.white);
+    final subtitleStyle = Theme.of(context).textTheme.headline5?.copyWith(color: Colors.grey);
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(padding: const EdgeInsets.all(4), child: Text(title, style: titleStyle)),
+        Container(
+          decoration: const BoxDecoration(color: Colors.white),
+          child: Padding(
+            padding: const EdgeInsets.all(4),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(place, style: subtitleStyle),
+                Text(ts.toString(), style: subtitleStyle),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: AspectRatio(
-        aspectRatio: 1.8,
-        child: Card(
-          margin: const EdgeInsets.all(10),
-          child: Stack(
-            children: [
-              // Background
-              _buildBg(context),
-            ],
-          ),
+    return AspectRatio(
+      aspectRatio: 1.8,
+      child: Card(
+        margin: const EdgeInsets.all(10),
+        child: Stack(
+          children: [
+            // Background
+            _buildBg(context),
+            // Title
+            _buildBasicInfo(context),
+          ],
         ),
       ),
     );
