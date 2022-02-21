@@ -63,3 +63,23 @@ class ScScoreItem {
   }
 
 }
+
+class ScActivityItem {
+  /// 活动编号
+  final int activityId;
+
+  /// 活动时间
+  final DateTime time;
+
+  /// 活动状态
+  final String status;
+
+  ScActivityItem(this.activityId, this.time, this.status);
+
+  @override
+  String toString() {
+    return 'ScActivityItem{activityId: $activityId, time: $time, '
+        'status: $status}';
+  }
+
+}

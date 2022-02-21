@@ -1,6 +1,7 @@
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:format/format.dart';
+import 'package:intl/intl.dart';
 import 'package:kite/entity/sc/score.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/session/abstract_session.dart';
@@ -25,6 +26,12 @@ class ScScoreService extends AService implements ScScoreDao {
   static String idDetail = "td:nth-child(7)";
   static String categoryDetail = "td:nth-child(5)";
   static String scoreDetail = "td:nth-child(11) > span";
+  static String activityDetail = "#content-box > div:nth-child(23) > div.table_style_4 > form > table > tbody > tr";
+  static String activityIdDetail = "td:nth-child(3)";
+  static String timeDetail = "td:nth-child(7)";
+  static String statusDetail = "td:nth-child(9)";
+
+  static RegExp activityIdRe = RegExp(r"activityId=(\d+)");
 
   ScScoreService(ASession session) : super(session);
 
@@ -33,13 +40,6 @@ class ScScoreService extends AService implements ScScoreDao {
   Future<ScScoreSummary> getScScoreSummary() async {
     final response = await session.post(_scScoreUrl);
     return _parseScScoreSummary(response.data);
-  }
-
-  /// 获取我的得分列表
-  @override
-  Future<List<ScScoreItem>> getMyScoreList() async {
-    final response = await session.post(_scScoreUrl);
-    return _parseMyScoreList(response.data);
   }
 
   static ScScoreSummary _from(List<String> fields) {
@@ -81,6 +81,13 @@ class ScScoreService extends AService implements ScScoreDao {
     return _from(displayScoreList);
   }
 
+  /// 获取我的得分列表
+  @override
+  Future<List<ScScoreItem>> getMyScoreList() async {
+    final response = await session.post(_scScoreUrl);
+    return _parseMyScoreList(response.data);
+  }
+
   static int _transCategoryToInt(String x) {
     switch (x) {
       case "校园文化活动": return 8;
@@ -107,11 +114,51 @@ class ScScoreService extends AService implements ScScoreDao {
     return ScScoreItem(id, category, addScore);
   }
 
+  static bool _filterZeroScore(ScScoreItem x) {
+    return (x.amount > 0.01);
+  }
+
   static List<ScScoreItem> _parseMyScoreList(String htmlPage) {
     final BeautifulSoup soup = BeautifulSoup(htmlPage);
     var scoreItems = soup.findAll(scoreDetailPage)
-        .map((e) => _scoreMapDetail(e)).toList();
+        .map((e) => _scoreMapDetail(e))
+        .where((element) => _filterZeroScore(element)).toList();
 
     return scoreItems;
+  }
+
+  /// 获取我的活动列表
+  @override
+  Future<List<ScActivityItem>> getMyActivityList() async {
+    final response = await session.post(_scScoreUrl);
+    return _parseMyActivityList(response.data);
+  }
+
+  static ScActivityItem _activityMapDetail(Bs4Element item) {
+    var dateformat = DateFormat('yyyy-MM-dd hh:mm:ss');
+    var activityId = item.findAll(activityIdDetail)
+        .map((e) =>e.innerHtml.trim()).elementAt(0);
+    var reId = activityIdRe.firstMatch(activityId);
+    int id = 0;
+    if (reId != null) {
+      id = int.parse(reId.group(1).toString());
+    }
+    DateTime time = item.findAll(timeDetail)
+        .map((e) => dateformat.parse(e.innerHtml.trim())).elementAt(0);
+
+    String status = item.findAll(statusDetail).map((e) => e.innerHtml.trim()).elementAt(0);
+
+    return ScActivityItem(id, time, status);
+  }
+
+  static bool _filterDeleteActivity(ScActivityItem x) {
+    return (x.activityId != 0);
+  }
+
+  static List<ScActivityItem> _parseMyActivityList(String htmlPage) {
+    final BeautifulSoup soup = BeautifulSoup(htmlPage);
+    var result = soup.findAll(activityDetail).map((e) => _activityMapDetail(e))
+        .where((element) => _filterDeleteActivity(element)).toList();
+    return result;
   }
 }
