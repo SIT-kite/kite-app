@@ -124,7 +124,27 @@ class ScScoreService extends AService implements ScScoreDao {
         .map((e) => _scoreMapDetail(e))
         .where((element) => _filterZeroScore(element)).toList();
 
-    return scoreItems;
+    Map<int, int> map1 = {};
+    Map<int, double> map2 = {};
+
+    for (var s in scoreItems) {
+      map1[s.activityId] = s.category;
+      if (map2.containsKey(s.activityId)) {
+        var old = map2[s.activityId]!;
+        var newAmount  = old + s.amount;
+        map2[s.activityId] = newAmount;
+      } else {
+        map2[s.activityId] = s.amount;
+      }
+    }
+
+    List<ScScoreItem> newScoreItems = [];
+    map2.forEach((key, value) {
+      var newItem = ScScoreItem(key, map1[key]!, value);
+      newScoreItems.add(newItem);
+    });
+
+    return newScoreItems;
   }
 
   /// 获取我的活动列表
