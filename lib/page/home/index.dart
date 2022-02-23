@@ -128,7 +128,7 @@ class _HomePageState extends State<HomePage> {
         NoticeItem(),
         TimetableItem(),
         ReportItem(),
-        // ExamItem(),
+        ExamItem(),
       ]),
       SizedBox(height: 20.h),
       HomeItemGroup([
@@ -148,6 +148,7 @@ class _HomePageState extends State<HomePage> {
         HomeItem(route: '/contact', icon: 'assets/home/icon_contact.svg', title: '常用电话', subtitle: '学校和学院各部门电话'),
         // HomeItem(route: '/lost-found', icon: 'assets/home/icon_lost_found.svg', title: '失物 & 招领', subtitle: '物归原主是一种美'),
         // HomeItem(route: '/market', icon: 'assets/home/icon_market.svg', title: '二手书广场', subtitle: '买与卖都是收获'),
+        // HomeItem(route: '/event', icon: 'assets/home/icon_market.svg', title: '第二课堂', subtitle: '买与卖都是收获'),
         HomeItem(route: '/game', icon: 'assets/home/icon_game.svg', title: '小游戏', subtitle: '放松一下'),
         HomeItem(route: '/wiki', icon: 'assets/home/icon_wiki.svg', title: 'Wiki', subtitle: '上应大生存指南'),
       ]),

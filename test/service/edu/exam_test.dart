@@ -12,6 +12,7 @@ void main() async {
       const SchoolYear(2021),
       Semester.firstTerm,
     );
-    Log.info(table);
+    // Log.info(table);
+    print(table);
   });
 }

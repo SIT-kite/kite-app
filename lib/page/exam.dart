@@ -17,15 +17,65 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:kite/component/future_builder.dart';
+import 'package:kite/entity/edu/index.dart';
+import 'package:kite/global/service_pool.dart';
 
 class ExamTimePage extends StatelessWidget {
   const ExamTimePage({Key? key}) : super(key: key);
 
+  Widget buildExamItem(ExamRoom examItem) {
+    final name = examItem.courseName;
+    final startTime = examItem.time[0];
+    final endTime = examItem.time[1];
+    final place = examItem.place;
+    final campus = examItem.campus;
+    final seatNumber = examItem.seatNumber;
+    final isRebuild = examItem.isRebuild;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('课程名称: $name'),
+        Text('考试地点: $campus  $place'),
+        Text('座位号: $seatNumber'),
+        Text('开始时间: $startTime'),
+        Text('结束时间: $endTime'),
+        Text('是否重修: $isRebuild'),
+      ],
+    );
+  }
+
+  Widget buildExamItems(List<ExamRoom> examItems) {
+    return ListView(
+      children: examItems
+          .map(
+            (e) => Card(
+              margin: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                child: buildExamItem(e),
+              ),
+            ),
+          )
+          .toList(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('考试安排')),
-      body: Container(),
-    );
+        appBar: AppBar(title: const Text('考试安排')),
+        body: MyFutureBuilder<List<ExamRoom>>(
+          future: ServicePool.exam.getExamList(
+            const SchoolYear(2021),
+            Semester.firstTerm,
+          ),
+          builder: (context, data) {
+            data.sort((a, b) {
+              return a.time[0].isAfter(b.time[0]) ? 1 : -1;
+            });
+            return buildExamItems(data);
+          },
+        ));
   }
 }
