@@ -25,11 +25,30 @@ import 'package:intl/intl.dart';
 import 'package:kite/entity/sc/list.dart';
 
 class EventCard extends StatelessWidget {
-  static final dateFormat = DateFormat('yyyy-mm-dd');
+  static final dateFormat = DateFormat('yyyy-MM-dd');
 
   final Activity activity;
 
   const EventCard(this.activity, {Key? key}) : super(key: key);
+
+  List<String> _extractTitle(String fullTitle) {
+    List<String> result = [];
+
+    int lastPos = 0;
+    for (int i = 0; i < fullTitle.length; ++i) {
+      if (fullTitle[i] == '[' || fullTitle[i] == '【') {
+        lastPos = i + 1;
+      } else if (fullTitle[i] == ']' || fullTitle[i] == '】') {
+        final newTag = fullTitle.substring(lastPos, i);
+        if (newTag.isNotEmpty) {
+          result.add(newTag);
+        }
+        lastPos = i + 1;
+      }
+    }
+    result.add(fullTitle.substring(lastPos));
+    return result;
+  }
 
   Widget _buildBg(BuildContext context) {
     return LayoutBuilder(
@@ -55,22 +74,41 @@ class EventCard extends StatelessWidget {
     );
   }
 
+  Widget _buildTagRow(BuildContext context, List<String> tags) {
+    final backgroundColor = Theme.of(context).primaryColor.withAlpha(128);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      decoration: BoxDecoration(color: backgroundColor, borderRadius: BorderRadius.circular(4)),
+      child: Text(tags.join('  ')),
+    );
+  }
+
   Widget _buildBasicInfo(BuildContext context) {
     final titleStyle = Theme.of(context).textTheme.headline2?.copyWith(color: Colors.white);
     final subtitleStyle = Theme.of(context).textTheme.headline5?.copyWith(color: Colors.grey);
+
+    final titleList = _extractTitle(activity.title);
+    final title = titleList.last;
+
+    titleList.removeLast();
+    final tags = titleList;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(padding: const EdgeInsets.all(4), child: Text(activity.title, style: titleStyle)),
+        Padding(
+            padding: const EdgeInsets.all(4),
+            child: Text(title, style: titleStyle, maxLines: 1, overflow: TextOverflow.ellipsis)),
         Container(
           decoration: const BoxDecoration(color: Colors.white),
           child: Padding(
             padding: const EdgeInsets.all(4),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                _buildTagRow(context, tags),
                 Text(dateFormat.format(activity.ts), style: subtitleStyle),
               ],
             ),
