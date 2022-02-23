@@ -25,20 +25,45 @@ import 'card.dart';
 import 'profile.dart';
 import 'search.dart';
 
-class EventPage extends StatelessWidget {
+class EventPage extends StatefulWidget {
   const EventPage({Key? key}) : super(key: key);
 
+  @override
+  State<StatefulWidget> createState() => _EventPageState();
+}
+
+class _EventPageState extends State<EventPage> with SingleTickerProviderStateMixin {
+  static Map<ActivityType, String> categoryMapping = {
+    ActivityType.lecture: '讲座报告',
+    ActivityType.creation: '三创',
+    ActivityType.theme: '主题教育',
+    ActivityType.campus: '校园文化',
+    ActivityType.practice: '社会实践',
+    ActivityType.voluntary: '志愿公益',
+  };
+
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    _tabController = TabController(length: categoryMapping.length, vsync: this);
+    super.initState();
+  }
+
   TabBar _buildBarHeader() {
-    final tabs = ['讲座报告', '主题教育', '三创', '校园文化', '社会实践', '志愿公益'];
-    return TabBar(isScrollable: true, tabs: tabs.map((e) => Tab(text: e)).toList());
+    return TabBar(
+      isScrollable: true,
+      controller: _tabController,
+      tabs: categoryMapping.values.map((e) => Tab(text: e)).toList(),
+    );
   }
 
   Widget _buildEventResult(List<Activity> activities) {
     return ListView(children: activities.map((e) => EventCard(e)).toList());
   }
 
-  Widget _buildEventList() {
-    final future = ScActivityListService(SessionPool.scSession).getActivityList(ActivityType.campus, 1);
+  Widget _buildEventList(ActivityType type) {
+    final future = ScActivityListService(SessionPool.scSession).getActivityList(type, 1);
 
     return FutureBuilder<List<Activity>>(
       future: future,
@@ -74,7 +99,10 @@ class EventPage extends StatelessWidget {
             )
           ],
         ),
-        body: _buildEventList(),
+        body: TabBarView(
+          controller: _tabController,
+          children: categoryMapping.keys.map((e) => _buildEventList(e)).toList(),
+        ),
       ),
     );
   }
