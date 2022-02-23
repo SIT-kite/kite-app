@@ -99,10 +99,6 @@ class SearchBarDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    // 若发现不为空，则直接搜索
-    if (query.isNotEmpty) {
-      _searchByGiving(context, query);
-    }
     // 第一次使用时，_suggestionView为空，那就构造，后面直接用
     _suggestionView ??= _buildSearchSuggestion(context);
     return _suggestionView!;
