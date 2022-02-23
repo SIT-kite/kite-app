@@ -25,10 +25,10 @@ import 'util.dart';
 
 class TableGrids extends StatelessWidget {
   /// 课程网格中每一小格的高度
-  late final double singleGridHeight;
+  late double singleGridHeight;
 
   /// 课程网格中每一小格的宽度
-  late final double singleGridWidth;
+  late double singleGridWidth;
 
   final List<Course> allCourses;
   final int currentWeek;
@@ -98,7 +98,9 @@ class TableGrids extends StatelessWidget {
   List<Course?> _buildGrids(List<Course> dayCourseList) {
     // 使用列表, 将每一门课放到其开始的节次上.
     final List<Course?> l = List.filled(11, null, growable: true);
-    dayCourseList.forEach((e) => l[getIndexStart(e.timeIndex) - 1] = e);
+    for (final course in dayCourseList) {
+      l[getIndexStart(course.timeIndex) - 1] = course;
+    }
 
     // 此时 l 为 [duration = 2, null, null, null, duration = 2, null, duration = 2, null]
     for (int i = 0; i < l.length; ++i) {

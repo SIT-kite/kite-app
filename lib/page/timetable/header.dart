@@ -22,33 +22,28 @@ import 'util.dart';
 
 class DateHeader extends StatefulWidget {
   /// 当前显示的周次
-  int currentWeek;
+  final int currentWeek;
 
-  /// 当前选中的日 (1-7)
-  int selectedDay;
+  /// 当前初始选中的日 (1-7)
+  final int selectedDay;
 
   /// 点击的回调
   final Function(int)? onTap;
 
-  DateHeader(this.currentWeek, this.selectedDay, {this.onTap, Key? key}) : super(key: key);
+  const DateHeader(this.currentWeek, this.selectedDay, {this.onTap, Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _DateHeaderState(dateSemesterStart, currentWeek, selectedDay, onTap);
+  State<StatefulWidget> createState() => _DateHeaderState();
 }
 
 class _DateHeaderState extends State<DateHeader> {
-  /// 学期开始日期
-  final DateTime semesterBegin;
+  late int selectedDay;
 
-  /// 当前显示的周次
-  int currentWeek;
-
-  /// 当前选中的日 (1-7)
-  int selectedDay = 0;
-
-  final Function(int)? onTap;
-
-  _DateHeaderState(this.semesterBegin, this.currentWeek, this.selectedDay, this.onTap);
+  @override
+  void initState() {
+    selectedDay = widget.selectedDay;
+    super.initState();
+  }
 
   BoxDecoration getDecoration(int day) {
     return BoxDecoration(
@@ -59,21 +54,23 @@ class _DateHeaderState extends State<DateHeader> {
 
   Widget _buildWeekColumn() {
     final style = Theme.of(context).textTheme.bodyText2;
-    return Expanded(flex: 2, child: Text('$currentWeek\n周', style: style, textAlign: TextAlign.center));
+    return Expanded(flex: 2, child: Text('${widget.currentWeek}\n周', style: style, textAlign: TextAlign.center));
   }
 
   Widget _buildDayColumn(int day) {
-    final date = getDateFromWeekDay(dateSemesterStart, currentWeek, day);
+    final date = getDateFromWeekDay(dateSemesterStart, widget.currentWeek, day);
     final dateString = '${date.month}/${date.day}';
 
     TextStyle? style = Theme.of(context).textTheme.bodyText2;
     if (day == selectedDay) {
       style = style?.copyWith(color: Colors.white);
     }
-    final onTapCallback = onTap != null
+    final onTapCallback = widget.onTap != null
         ? () {
-            setState(() => selectedDay = day);
-            onTap!(selectedDay);
+            setState(() {
+              selectedDay = day;
+            });
+            widget.onTap!(selectedDay);
           }
         : null;
     return Expanded(

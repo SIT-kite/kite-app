@@ -30,34 +30,30 @@ class WeeklyTimetable extends StatefulWidget {
   final List<Course> allCourses;
 
   /// 初始日期
+  /// TODO 暂时还没用上？
   final DateTime? initialDate;
 
-  WeeklyTimetable(this.allCourses, {Key? key, this.initialDate}) : super(key: key);
+  const WeeklyTimetable(this.allCourses, {Key? key, this.initialDate}) : super(key: key);
 
   @override
-  _WeeklyTimetableState createState() => _WeeklyTimetableState(allCourses, initialDate);
+  _WeeklyTimetableState createState() => _WeeklyTimetableState();
 }
 
 class _WeeklyTimetableState extends State<WeeklyTimetable> {
-  /// 初始日期
-  final DateTime? initialDate;
-
-  /// 教务系统课程列表
-  List<Course> allCourses;
+  late final List<Course> allCourses;
 
   int _currentWeek = 1;
 
   late final PageController _pageController;
 
-  _WeeklyTimetableState(this.allCourses, this.initialDate);
-
   @override
   void initState() {
     super.initState();
+    allCourses = widget.allCourses;
     eventBus.on(EventNameConstants.onTimetableReset, _onTimetableReset);
     eventBus.on(EventNameConstants.onJumpTodayTimetable, _onJumpToday);
     _setDate(DateTime.now());
-    _pageController = PageController(initialPage: _currentWeek-1);
+    _pageController = PageController(initialPage: _currentWeek - 1);
   }
 
   @override
@@ -112,7 +108,9 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
   }
 
   void _onTimetableReset(dynamic _timetable) {
-    setState(() => allCourses = _timetable as List<Course>);
+    setState(() {
+      allCourses = _timetable as List<Course>;
+    });
   }
 
   void _jumpToday() {

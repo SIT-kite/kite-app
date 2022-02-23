@@ -49,6 +49,7 @@ class TimetablePage extends StatefulWidget {
 
 class _TimetablePageState extends State<TimetablePage> {
   /// 最大周数
+  /// TODO 还没用上？
   static const int maxWeekCount = 20;
 
   // 模式：周课表 日课表
@@ -105,7 +106,9 @@ class _TimetablePageState extends State<TimetablePage> {
       product: 'kite',
       lang: 'ZH',
     );
-    timetable.forEach((c) => addEventForCourse(iCal, c));
+    for (final course in timetable) {
+      addEventForCourse(iCal, course);
+    }
 
     final String iCalContent = iCal.serialize();
     final String path = (await getExternalCacheDirectories())![0].path + '/calendar.ics';

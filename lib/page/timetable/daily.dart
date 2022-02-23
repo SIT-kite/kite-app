@@ -35,17 +35,17 @@ class DailyTimetable extends StatefulWidget {
   const DailyTimetable(this.allCourses, {Key? key, this.initialDate}) : super(key: key);
 
   @override
-  _DailyTimetableState createState() => _DailyTimetableState(allCourses, initialDate ?? DateTime.now());
+  _DailyTimetableState createState() => _DailyTimetableState();
 }
 
 class _DailyTimetableState extends State<DailyTimetable> {
   static const String _courseIconPath = 'assets/course/';
 
   /// 初始日期
-  final DateTime initialDate;
+  late final DateTime initialDate;
 
   /// 教务系统课程列表
-  List<Course> allCourses;
+  late List<Course> allCourses;
 
   /// 课表应该显示的周（页数 + 1）
   int _currentWeek = 0;
@@ -56,16 +56,17 @@ class _DailyTimetableState extends State<DailyTimetable> {
   /// 翻页控制
   late final PageController _pageController;
 
-  _DailyTimetableState(this.allCourses, this.initialDate);
-
   @override
   void initState() {
-    super.initState();
+    allCourses = widget.allCourses;
+    initialDate = widget.initialDate ?? DateTime.now();
+
     eventBus.on(EventNameConstants.onTimetableReset, _onTimetableReset);
     eventBus.on(EventNameConstants.onJumpTodayTimetable, _onJumpToday);
     // 跳转到初始页
     _setDate(DateTime.now());
     _pageController = PageController(initialPage: (_currentWeek - 1) * 7 + _currentDay - 1);
+    super.initState();
   }
 
   @override
@@ -113,8 +114,8 @@ class _DailyTimetableState extends State<DailyTimetable> {
     final TextStyle? textStyle = Theme.of(context).textTheme.bodyText2;
     final Widget courseIcon = Image.asset(_courseIconPath + CourseCategory.query(course.courseName) + '.png');
     final timetable = getBuildingTimetable(course.campus, course.place);
-    final description = formatTimeIndex(
-        timetable, course.timeIndex, '${course.weekText} 周${weekWord[course.dayIndex - 1]}\nss-ee');
+    final description =
+        formatTimeIndex(timetable, course.timeIndex, '${course.weekText} 周${weekWord[course.dayIndex - 1]}\nss-ee');
     return Card(
         margin: const EdgeInsets.all(8),
         child: ListTile(
