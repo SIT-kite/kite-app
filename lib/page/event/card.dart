@@ -19,10 +19,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:geopattern_flutter/geopattern_flutter.dart';
-import 'package:geopattern_flutter/patterns/overlapping_circles.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/entity/sc/list.dart';
+
+import 'background.dart';
+import 'detail.dart';
+import 'util.dart';
 
 class EventCard extends StatelessWidget {
   static final dateFormat = DateFormat('yyyy-MM-dd');
@@ -30,49 +32,6 @@ class EventCard extends StatelessWidget {
   final Activity activity;
 
   const EventCard(this.activity, {Key? key}) : super(key: key);
-
-  List<String> _extractTitle(String fullTitle) {
-    List<String> result = [];
-
-    int lastPos = 0;
-    for (int i = 0; i < fullTitle.length; ++i) {
-      if (fullTitle[i] == '[' || fullTitle[i] == '【') {
-        lastPos = i + 1;
-      } else if (fullTitle[i] == ']' || fullTitle[i] == '】') {
-        final newTag = fullTitle.substring(lastPos, i);
-        if (newTag.isNotEmpty) {
-          result.add(newTag);
-        }
-        lastPos = i + 1;
-      }
-    }
-    result.add(fullTitle.substring(lastPos));
-    return result;
-  }
-
-  Widget _buildBg(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final gen = Random();
-        final pattern = OverlappingCircles(
-          radius: 60,
-          nx: 6,
-          ny: 6,
-          fillColors: List.generate(
-              36,
-              (_) => Color.fromARGB(10 + (gen.nextDouble() * 100).round(), 50 + gen.nextInt(2) * 150,
-                  50 + gen.nextInt(2) * 150, 50 + gen.nextInt(2) * 150)),
-        );
-        return ClipRect(
-          child: CustomPaint(
-            willChange: true,
-            painter: FullPainter(pattern: pattern, background: Colors.yellow),
-            child: SizedBox(width: constraints.maxWidth, height: constraints.maxHeight),
-          ),
-        );
-      },
-    );
-  }
 
   Widget _buildTagRow(BuildContext context, List<String> tags) {
     final backgroundColor = Theme.of(context).primaryColor.withAlpha(128);
@@ -88,7 +47,7 @@ class EventCard extends StatelessWidget {
     final titleStyle = Theme.of(context).textTheme.headline2?.copyWith(color: Colors.white);
     final subtitleStyle = Theme.of(context).textTheme.headline5?.copyWith(color: Colors.grey);
 
-    final titleList = _extractTitle(activity.title);
+    final titleList = extractTitle(activity.title);
     final title = titleList.last;
 
     titleList.removeLast();
@@ -121,18 +80,22 @@ class EventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 1.8,
-      child: Card(
-        margin: const EdgeInsets.all(10),
-        child: Stack(
-          children: [
-            // Background
-            _buildBg(context),
-            // Title
-            _buildBasicInfo(context),
-          ],
-        ),
-      ),
-    );
+        aspectRatio: 1.8,
+        child: GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (_) => DetailPage(activity)));
+          },
+          child: Card(
+            margin: const EdgeInsets.all(10),
+            child: Stack(
+              children: [
+                // Background
+                Background(),
+                // Title
+                _buildBasicInfo(context),
+              ],
+            ),
+          ),
+        ));
   }
 }

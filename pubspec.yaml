@@ -65,6 +65,7 @@ dependencies:
   geopattern_flutter:
     git:
       url: https://gitee.com/sit-yiban/geopattern
+  text_scroll: ^0.0.3
 
   # Utils
   intl: ^0.17.0
