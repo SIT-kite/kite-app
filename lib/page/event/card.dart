@@ -80,7 +80,7 @@ class EventCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(color: backgroundColor, borderRadius: BorderRadius.circular(4)),
-      child: Text(tags.join('  ')),
+      child: Text(tags.sublist(0, min(2, tags.length)).join('  ')),
     );
   }
 
