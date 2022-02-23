@@ -4,7 +4,7 @@
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
+ * the Free ;Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -17,10 +17,12 @@
  */
 import 'package:catcher/core/catcher.dart';
 import 'package:dynamic_color_theme/dynamic_color_theme.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/page/index.dart';
+import 'package:kite/util/logger.dart';
 import 'package:kite/util/page_logger.dart';
 
 final _routes = {
@@ -45,18 +47,19 @@ final _routes = {
   '/notice': (context) => const NoticePage(),
   '/contact': (context) => const ContactPage(),
   '/bulletin': (context) => const BulletinPage(),
-  '/mail': (context) => MailPage(),
-  '/night': (context) => NightPage(),
-  '/event': (context) => EventPage(),
-  '/lost-found': (context) => LostFoundPage(),
-  '/classroom': (context) => ClassroomPage(),
-  '/exam': (context) => ExamTimePage(),
+  '/mail': (context) => const MailPage(),
+  '/night': (context) => const NightPage(),
+  '/event': (context) => const EventPage(),
+  '/lost-found': (context) => const LostFoundPage(),
+  '/classroom': (context) => const ClassroomPage(),
+  '/exam': (context) => const ExamTimePage(),
 };
 
 class KiteApp extends StatelessWidget {
   const KiteApp({Key? key}) : super(key: key);
 
   Route<dynamic> _onGenerateRoute(RouteSettings settings) {
+    Log.info('跳转路由: ${settings.name}');
     pageLogger.page(settings.name ?? 'Unknown');
     return MaterialPageRoute(
       builder: (context) => _routes[settings.name]!(context),
@@ -100,6 +103,14 @@ class KiteApp extends StatelessWidget {
         defaultIsDark: isDark,
         themedWidgetBuilder: (BuildContext context, ThemeData theme) {
           return MaterialApp(
+            scrollBehavior: const MaterialScrollBehavior().copyWith(
+              dragDevices: {
+                PointerDeviceKind.mouse,
+                PointerDeviceKind.touch,
+                PointerDeviceKind.stylus,
+                PointerDeviceKind.unknown
+              },
+            ),
             debugShowCheckedModeBanner: false,
             navigatorKey: Catcher.navigatorKey,
             title: '上应小风筝',
