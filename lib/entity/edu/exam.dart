@@ -56,13 +56,13 @@ class ExamRoom {
 
   static List<DateTime> _stringToList(String s) {
     List<DateTime> result = [];
-    var dateformat = DateFormat('yyyy-MM-dd hh:mm');
+    var dateFormat = DateFormat('yyyy-MM-dd hh:mm');
     var date = s.split('(')[0];
     var time = s.split('(')[1].replaceAll(')', '');
     String start = date + ' ' + time.split('-')[0];
     String end = date + ' ' + time.split('-')[1];
-    var startTime = dateformat.parse(start);
-    var endTime = dateformat.parse(end);
+    var startTime = dateFormat.parse(start);
+    var endTime = dateFormat.parse(end);
     result.add(startTime);
     result.add(endTime);
     return result;

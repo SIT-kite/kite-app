@@ -1,4 +1,3 @@
-
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:format/format.dart';
 import 'package:intl/intl.dart';
@@ -9,29 +8,22 @@ import 'package:kite/session/abstract_session.dart';
 import '../../dao/sc/score.dart';
 
 class ScScoreService extends AService implements ScScoreDao {
-  static const _scScoreUrl = "";
+  static const _scScoreUrl = '';
 
-  static List<String> classification= [
-    "主题报告",
-    "社会实践",
-    "创新创业创意",
-    "校园安全文明",
-    "公益志愿",
-    "校园文化"
-  ];
+  static List<String> classification = ['主题报告', '社会实践', '创新创业创意', '校园安全文明', '公益志愿', '校园文化'];
 
-  static String totalScore = "#content-box > div.user-info > div:nth-child(3) > font";
-  static String spanScore = "#span_score";
-  static String scoreDetailPage = "#div1 > div.table_style_4 > form > table:nth-child(7) > tbody > tr";
-  static String idDetail = "td:nth-child(7)";
-  static String categoryDetail = "td:nth-child(5)";
-  static String scoreDetail = "td:nth-child(11) > span";
-  static String activityDetail = "#content-box > div:nth-child(23) > div.table_style_4 > form > table > tbody > tr";
-  static String activityIdDetail = "td:nth-child(3)";
-  static String timeDetail = "td:nth-child(7)";
-  static String statusDetail = "td:nth-child(9)";
+  static String totalScore = '#content-box > div.user-info > div:nth-child(3) > font';
+  static String spanScore = '#span_score';
+  static String scoreDetailPage = '#div1 > div.table_style_4 > form > table:nth-child(7) > tbody > tr';
+  static String idDetail = 'td:nth-child(7)';
+  static String categoryDetail = 'td:nth-child(5)';
+  static String scoreDetail = 'td:nth-child(11) > span';
+  static String activityDetail = '#content-box > div:nth-child(23) > div.table_style_4 > form > table > tbody > tr';
+  static String activityIdDetail = 'td:nth-child(3)';
+  static String timeDetail = 'td:nth-child(7)';
+  static String statusDetail = 'td:nth-child(9)';
 
-  static RegExp activityIdRe = RegExp(r"activityId=(\d+)");
+  static RegExp activityIdRe = RegExp(r'activityId=(\d+)');
 
   ScScoreService(ASession session) : super(session);
 
@@ -48,15 +40,14 @@ class ScScoreService extends AService implements ScScoreDao {
       var elementD = double.parse(element);
       mappedList.add(elementD);
     }
-    return ScScoreSummary(mappedList[0], mappedList[1], mappedList[2],
-        mappedList[3], mappedList[4], mappedList[5],
+    return ScScoreSummary(mappedList[0], mappedList[1], mappedList[2], mappedList[3], mappedList[4], mappedList[5],
         mappedList[6], mappedList[7], mappedList[8]);
   }
 
   static List<RegExp> _getScoreSummaryRegex() {
     List<RegExp> result = [];
     for (var classes in classification) {
-      var reg = format("(\\d+\\.\\d{0,2})\\({}\\)", classes);
+      var reg = format('(\\d+\\.\\d{0,2})\\({}\\)', classes);
       var newRegex = RegExp(reg);
       result.add(newRegex);
     }
@@ -90,26 +81,33 @@ class ScScoreService extends AService implements ScScoreDao {
 
   static int _transCategoryToInt(String x) {
     switch (x) {
-      case "校园文化活动": return 8;
-      case "创新创业创意": return 3;
-      case "主题教育": return 7;
-      case "讲座报告": return 1;
-      case "志愿公益": return 5;
-      case "安全教育网络教学": return 9;
-      case "社会实践": return 2;
-      case "校园文明": return 4;
-      case "社团社区易班、学院活动": return 8;
-      default: return 0;
+      case '校园文化活动':
+        return 8;
+      case '创新创业创意':
+        return 3;
+      case '主题教育':
+        return 7;
+      case '讲座报告':
+        return 1;
+      case '志愿公益':
+        return 5;
+      case '安全教育网络教学':
+        return 9;
+      case '社会实践':
+        return 2;
+      case '校园文明':
+        return 4;
+      case '社团社区易班、学院活动':
+        return 8;
+      default:
+        return 0;
     }
   }
 
   static ScScoreItem _scoreMapDetail(Bs4Element item) {
-    int id = item.findAll(idDetail)
-        .map((e) => int.parse(e.innerHtml.trim())).elementAt(0);
-    int category = item.findAll(categoryDetail)
-        .map((e) => _transCategoryToInt(e.innerHtml.trim())).elementAt(0);
-    double addScore = item.findAll(scoreDetail)
-        .map((e) => double.parse(e.innerHtml.trim())).elementAt(0);
+    int id = item.findAll(idDetail).map((e) => int.parse(e.innerHtml.trim())).elementAt(0);
+    int category = item.findAll(categoryDetail).map((e) => _transCategoryToInt(e.innerHtml.trim())).elementAt(0);
+    double addScore = item.findAll(scoreDetail).map((e) => double.parse(e.innerHtml.trim())).elementAt(0);
 
     return ScScoreItem(id, category, addScore);
   }
@@ -120,9 +118,11 @@ class ScScoreService extends AService implements ScScoreDao {
 
   static List<ScScoreItem> _parseMyScoreList(String htmlPage) {
     final BeautifulSoup soup = BeautifulSoup(htmlPage);
-    var scoreItems = soup.findAll(scoreDetailPage)
+    var scoreItems = soup
+        .findAll(scoreDetailPage)
         .map((e) => _scoreMapDetail(e))
-        .where((element) => _filterZeroScore(element)).toList();
+        .where((element) => _filterZeroScore(element))
+        .toList();
 
     Map<int, int> map1 = {};
     Map<int, double> map2 = {};
@@ -131,7 +131,7 @@ class ScScoreService extends AService implements ScScoreDao {
       map1[s.activityId] = s.category;
       if (map2.containsKey(s.activityId)) {
         var old = map2[s.activityId]!;
-        var newAmount  = old + s.amount;
+        var newAmount = old + s.amount;
         map2[s.activityId] = newAmount;
       } else {
         map2[s.activityId] = s.amount;
@@ -155,16 +155,14 @@ class ScScoreService extends AService implements ScScoreDao {
   }
 
   static ScActivityItem _activityMapDetail(Bs4Element item) {
-    var dateformat = DateFormat('yyyy-MM-dd hh:mm:ss');
-    var activityId = item.findAll(activityIdDetail)
-        .map((e) =>e.innerHtml.trim()).elementAt(0);
+    var dateFormat = DateFormat('yyyy-MM-dd hh:mm:ss');
+    var activityId = item.findAll(activityIdDetail).map((e) => e.innerHtml.trim()).elementAt(0);
     var reId = activityIdRe.firstMatch(activityId);
     int id = 0;
     if (reId != null) {
       id = int.parse(reId.group(1).toString());
     }
-    DateTime time = item.findAll(timeDetail)
-        .map((e) => dateformat.parse(e.innerHtml.trim())).elementAt(0);
+    DateTime time = item.findAll(timeDetail).map((e) => dateFormat.parse(e.innerHtml.trim())).elementAt(0);
 
     String status = item.findAll(statusDetail).map((e) => e.innerHtml.trim()).elementAt(0);
 
@@ -177,8 +175,11 @@ class ScScoreService extends AService implements ScScoreDao {
 
   static List<ScActivityItem> _parseMyActivityList(String htmlPage) {
     final BeautifulSoup soup = BeautifulSoup(htmlPage);
-    var result = soup.findAll(activityDetail).map((e) => _activityMapDetail(e))
-        .where((element) => _filterDeleteActivity(element)).toList();
+    var result = soup
+        .findAll(activityDetail)
+        .map((e) => _activityMapDetail(e))
+        .where((element) => _filterDeleteActivity(element))
+        .toList();
     return result;
   }
 }
