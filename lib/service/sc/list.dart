@@ -17,7 +17,7 @@ class ScActivityListService extends AService implements ScActivityListDao {
 
   static RegExp re = RegExp(r"(\d){7}");
   static String selector = ".ul_7 li > a";
-  static DateFormat dateFormatParser = DateFormat('yyyy-mm-dd hh:mm:ss');
+  static DateFormat dateFormatParser = DateFormat('yyyy-MM-dd hh:mm:ss');
 
   ScActivityListService(ASession session) : super(session);
 

@@ -2,9 +2,9 @@ import 'dart:collection';
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/service/abstract_service.dart';
 import 'package:kite/dao/sc/detail.dart';
 import 'package:kite/entity/sc/detail.dart';
+import 'package:kite/service/abstract_service.dart';
 import 'package:kite/session/abstract_session.dart';
 
 class ScActivityDetailService extends AService implements ScActivityDetailDao {
@@ -43,25 +43,19 @@ class ScActivityDetailService extends AService implements ScActivityDetailDao {
   }
 
   static DateTime _parseDateTime(String dateTime) {
-    var dateformat = DateFormat('yyyy-mm-dd hh:mm:ss');
+    var dateformat = DateFormat('yyyy-MM-dd hh:mm:ss');
     return dateformat.parse(dateTime);
   }
 
   static List<DateTime> _parseSignTime(String value) {
     List<String> time = value.split("  --至--  ");
-    return [_parseDateTime(time[0]),
-      _parseDateTime(time[1])];
+    return [_parseDateTime(time[0]), _parseDateTime(time[1])];
   }
 
   static ActivityDetail _parseProperties(Bs4Element item) {
-    String title = item.findAll(selectorTitle)
-        .map((e) => e.innerHtml.trim())
-        .elementAt(0);
-    String description = item.findAll(selectorDescription).map((e) =>
-        e.innerHtml.trim()).elementAt(0);
-    String banner = item.findAll(selectorBanner)
-        .map((e) => e.innerHtml.trim())
-        .elementAt(0);
+    String title = item.findAll(selectorTitle).map((e) => e.innerHtml.trim()).elementAt(0);
+    String description = item.findAll(selectorDescription).map((e) => e.innerHtml.trim()).elementAt(0);
+    String banner = item.findAll(selectorBanner).map((e) => e.innerHtml.trim()).elementAt(0);
     var properties = _splitActivityProperties(banner);
     var signTime = _parseSignTime(properties["刷卡时间段"]!);
     return ActivityDetail(
@@ -77,8 +71,7 @@ class ScActivityDetailService extends AService implements ScActivityDetailDao {
         properties["负责人电话"],
         properties["主办方"],
         properties["承办方"],
-        description
-    );
+        description);
   }
 
   static List<ActivityDetail> _parseActivityDetail(String htmlPage) {
