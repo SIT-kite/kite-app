@@ -89,10 +89,28 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
     );
   }
 
+  Widget _buildBody(BuildContext context) {
+    return FutureBuilder(
+      future: SessionPool.scSession.get('http://sc.sit.edu.cn/'),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return TabBarView(
+            controller: _tabController,
+            children: categoryMapping.keys.map((e) => _buildEventList(e)).toList(),
+          );
+        } else if (snapshot.hasError) {
+          return Text(snapshot.error.toString().split('\n')[0]);
+        }
+
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 6,
+      length: categoryMapping.length,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('活动'),
@@ -108,10 +126,7 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
             )
           ],
         ),
-        body: TabBarView(
-          controller: _tabController,
-          children: categoryMapping.keys.map((e) => _buildEventList(e)).toList(),
-        ),
+        body: _buildBody(context),
       ),
     );
   }
