@@ -43,11 +43,19 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
   };
 
   late TabController _tabController;
+  late ScActivityListService _service;
 
   @override
   void initState() {
     _tabController = TabController(length: categoryMapping.length, vsync: this);
+    _service = ScActivityListService(SessionPool.scSession);
+
     super.initState();
+  }
+
+  static bool _filterActivity(Activity activity) {
+    const List<String> blackList = ['补录'];
+    return !blackList.any((element) => activity.title.contains(element));
   }
 
   TabBar _buildBarHeader() {
@@ -63,14 +71,15 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
   }
 
   Widget _buildEventList(ActivityType type) {
-    final future = ScActivityListService(SessionPool.scSession).getActivityList(type, 1);
+    final future = _service.getActivityList(type, 1);
 
     return FutureBuilder<List<Activity>>(
       future: future,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
-            return _buildEventResult(snapshot.data!);
+            final result = snapshot.data!.where(_filterActivity).toList();
+            return _buildEventResult(result);
           } else if (snapshot.hasError) {
             return Center(child: Text(snapshot.error.toString()));
           }
