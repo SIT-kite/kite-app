@@ -38,7 +38,7 @@ class EventPage extends StatelessWidget {
   }
 
   Widget _buildEventList() {
-    final future = ScActivityListService(SessionPool.ssoSession).getActivityList(ActivityType.campus, 1);
+    final future = ScActivityListService(SessionPool.scSession).getActivityList(ActivityType.campus, 1);
 
     return FutureBuilder<List<Activity>>(
       future: future,
