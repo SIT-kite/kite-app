@@ -21,15 +21,23 @@ class ScActivityListService extends AService implements ScActivityListDao {
 
   ScActivityListService(ASession session) : super(session);
 
-  String _generateUrl(ActivityType category, int page, [int pageSize = 20]) {
-    return 'http://sc.sit.edu.cn/public/activity/activityList.action?pageNo=$page&pageSize=$pageSize&categoryId=${_scActivityType[category]}';
-  }
-
   /// 获取第二课堂活动列表date
   @override
   Future<List<Activity>> getActivityList(ActivityType type, int page) async {
+    String _generateUrl(ActivityType category, int page, [int pageSize = 20]) {
+      return 'http://sc.sit.edu.cn/public/activity/activityList.action?pageNo=$page&pageSize=$pageSize&categoryId=${_scActivityType[category]}';
+    }
+
     final url = _generateUrl(type, page);
     final response = await session.get(url);
+
+    return _parseActivityList(response.data);
+  }
+
+  @override
+  Future<List<Activity>> query(String queryString) async {
+    const String url = 'http://sc.sit.edu.cn/public/activity/activityList.action';
+    final response = await session.post(url, data: {'activityName': queryString});
 
     return _parseActivityList(response.data);
   }

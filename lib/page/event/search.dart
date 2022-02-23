@@ -17,6 +17,11 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:kite/entity/sc/list.dart';
+import 'package:kite/global/session_pool.dart';
+import 'package:kite/service/sc/list.dart';
+
+import 'card.dart';
 
 class SearchBar extends SearchDelegate<String> {
   @override
@@ -29,17 +34,35 @@ class SearchBar extends SearchDelegate<String> {
     return null;
   }
 
-  @override
-  Widget buildResults(BuildContext context) {
-    return const Center(
-      child: Text('text'),
+  Widget _buildEventResult(List<Activity> activities) {
+    return ListView(children: activities.map((e) => EventCard(e)).toList());
+  }
+
+  Widget _buildSearch() {
+    final future = ScActivityListService(SessionPool.scSession).query(query);
+
+    return FutureBuilder<List<Activity>>(
+      future: future,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasData) {
+            return _buildEventResult(snapshot.data!);
+          } else if (snapshot.hasError) {
+            return Center(child: Text(snapshot.error.toString()));
+          }
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
     );
   }
 
   @override
+  Widget buildResults(BuildContext context) {
+    return _buildSearch();
+  }
+
+  @override
   Widget buildSuggestions(BuildContext context) {
-    return const Center(
-      child: Text('suggestions'),
-    );
+    return query.isNotEmpty ? _buildSearch() : Container();
   }
 }
