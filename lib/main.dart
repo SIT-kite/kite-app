@@ -18,8 +18,9 @@
 import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:kite/app.dart';
 import 'package:kite/global/init_util.dart';
+
+import 'app.dart';
 
 const exceptionLogUrl = "https://kite.sunnysab.cn/api/v2/report/exception";
 
@@ -39,5 +40,9 @@ void main() async {
   // 运行前初始化
   await initBeforeRun();
 
-  Catcher(rootWidget: Phoenix(child: const KiteApp()), releaseConfig: catcherOptions);
+  Catcher(
+      rootWidget: Phoenix(
+        child: const KiteApp(),
+      ),
+      releaseConfig: catcherOptions);
 }
