@@ -63,7 +63,7 @@ class HomeItem extends StatelessWidget {
         leading:
             iconWidget ?? SvgPicture.asset(icon!, height: 30.h, width: 30.w, color: Theme.of(context).primaryColor),
         title: Text(title, style: titleStyle),
-        subtitle: Text(subtitle ?? '', style: subtitleStyle),
+        subtitle: Text(subtitle ?? '', style: subtitleStyle, maxLines: 1, overflow: TextOverflow.ellipsis),
         // dense: true,
         onTap: (route != null) ? () => Navigator.of(context).pushNamed(route!) : null,
         style: ListTileStyle.list,
