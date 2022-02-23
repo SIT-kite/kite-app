@@ -1,4 +1,5 @@
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
+import 'package:intl/intl.dart';
 import 'package:kite/dao/sc/list.dart';
 import 'package:kite/entity/sc/list.dart';
 import 'package:kite/service/abstract_service.dart';
@@ -16,6 +17,7 @@ class ScActivityListService extends AService implements ScActivityListDao {
 
   static RegExp re = RegExp(r"(\d){7}");
   static String selector = ".ul_7 li > a";
+  static DateFormat dateFormatParser = DateFormat('yyyy-mm-dd hh:mm:ss');
 
   ScActivityListService(ASession session) : super(session);
 
@@ -43,7 +45,7 @@ class ScActivityListService extends AService implements ScActivityListDao {
         final String? x = re.firstMatch(link)?.group(0).toString();
         final int id = int.parse(x!);
 
-        return Activity(id, ActivityType.unknown, title, DateTime.parse(date));
+        return Activity(id, ActivityType.unknown, title, dateFormatParser.parse(date));
       },
     ).toList();
     return result;
