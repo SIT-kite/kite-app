@@ -47,7 +47,7 @@ class ScActivityListService extends AService implements ScActivityListDao {
     List<Activity> result = soup.findAll(selector).map(
       (element) {
         final date = element.nextSibling!.text;
-        final String title = element.text;
+        final String title = element.text.substring(2);
         final String link = element.attributes['href']!;
 
         final String? x = re.firstMatch(link)?.group(0).toString();

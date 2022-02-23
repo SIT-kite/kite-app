@@ -8,7 +8,7 @@ import 'package:kite/service/abstract_service.dart';
 import 'package:kite/session/abstract_session.dart';
 
 class ScActivityDetailService extends AService implements ScActivityDetailDao {
-  static const _scDetailUrl = "";
+  static const _scDetailUrlBase = "http://sc.sit.edu.cn/public/activity/activityDetail.action?activityId=";
 
   static RegExp reSpaces = RegExp(r"\s{2}\s+");
   static String selectorFrame = ".box-1";
@@ -20,8 +20,8 @@ class ScActivityDetailService extends AService implements ScActivityDetailDao {
 
   /// 获取第二课堂活动详情
   @override
-  Future<List<ActivityDetail>> getActivityDetail() async {
-    final response = await session.post(_scDetailUrl);
+  Future<ActivityDetail> getActivityDetail(int activityId) async {
+    final response = await session.post(_scDetailUrlBase + activityId.toString());
     return _parseActivityDetail(response.data);
   }
 
@@ -74,14 +74,11 @@ class ScActivityDetailService extends AService implements ScActivityDetailDao {
         description);
   }
 
-  static List<ActivityDetail> _parseActivityDetail(String htmlPage) {
+  static ActivityDetail _parseActivityDetail(String htmlPage) {
     final BeautifulSoup soup = BeautifulSoup(htmlPage);
-    List<ActivityDetail> result = [];
-    var frames = soup.findAll(selectorFrame);
-    for (var frame in frames) {
-      var detail = _parseProperties(frame);
-      result.add(detail);
-    }
-    return result;
+    final frame = soup.find(selectorFrame);
+    final detail = _parseProperties(frame!);
+
+    return detail;
   }
 }
