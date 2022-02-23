@@ -27,6 +27,7 @@ import 'package:kite/service/office/index.dart';
 import 'package:kite/service/report/report.dart';
 import 'package:kite/session/kite_session.dart';
 import 'package:kite/session/library_session.dart';
+import 'package:kite/session/sc_session.dart';
 import 'package:kite/session/sso/sso_session.dart';
 import 'package:kite/util/logger.dart';
 import 'package:path_provider/path_provider.dart';
@@ -49,6 +50,7 @@ class SessionPool {
   static late LibrarySession librarySession;
   static late SsoSession ssoSession;
   static late EduSession eduSession;
+  static late ScSession scSession;
   static late KiteSession kiteSession;
 
   // 是否初始化过
@@ -72,6 +74,7 @@ class SessionPool {
 
     // 下面初始化一大堆session
     ssoSession = SsoSession(dio: dio, jar: _cookieJar);
+    scSession = ScSession(ssoSession);
     eduSession = EduSession(ssoSession);
     librarySession = LibrarySession(dio);
     kiteSession = KiteSession(dio, StoragePool.jwt);

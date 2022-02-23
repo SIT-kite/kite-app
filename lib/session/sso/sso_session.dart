@@ -63,8 +63,19 @@ class SsoSession extends ASession {
   }
 
   /// 判断该请求是否为登录页
-  bool _isLoginPage(Response response) {
+  bool isLoginPage(Response response) {
     return response.realUri.toString().contains(_loginUrl);
+  }
+
+  /// 进行登录操作
+  Future<void> makeSureLogin(Response _, String url) async {
+    isOnline = false;
+    // 只有用户名与密码均不为空时，才尝试重新登录，否则就抛异常
+    if (username != null && password != null) {
+      await login(_username!, _password!);
+    } else {
+      throw NeedLoginException(url: url);
+    }
   }
 
   @override
@@ -97,15 +108,9 @@ class SsoSession extends ASession {
     final firstResponse = await requestNormally();
 
     // 如果跳转登录页，那就先登录
-    if (_isLoginPage(firstResponse)) {
-      isOnline = false;
-      // 只有用户名与密码均不为空时，才尝试重新登录，否则就抛异常
-      if (username != null && password != null) {
-        await login(_username!, _password!);
-        return await requestNormally();
-      } else {
-        throw NeedLoginException(url: url);
-      }
+    if (isLoginPage(firstResponse)) {
+      makeSureLogin(firstResponse, url);
+      return await requestNormally();
     } else {
       return firstResponse;
     }
