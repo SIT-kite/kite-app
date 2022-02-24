@@ -1,15 +1,14 @@
 name: Bump Build Numer
 
 on:
-  push:
-    tags:
-      - '*'
+  push: { tags: [ '*' ] }
   workflow_dispatch:
 
 jobs:
   bump:
     runs-on: macos-latest
     steps:
+
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -18,6 +17,7 @@ jobs:
         with:
           flutter-version: '2.10.1'
           channel: 'stable'
+          cache: true
 
       - name: Bump Flutter Build Number
         run: |
@@ -48,9 +48,9 @@ jobs:
 
   notify:
     runs-on: ubuntu-latest
-    needs:
-      - bump
+    needs: bump
     steps:
+
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -59,7 +59,7 @@ jobs:
         uses: its404/get-flutter-version@v1.0.0
 
       - name: 🤖 Telegram Notification
-        uses: appleboy/telegram-action@master
+        uses: appleboy/telegram-action@v0.1.1
         with:
           to: ${{ secrets.CHAT_ID }}
           token: ${{ secrets.BOT_TOKEN }}

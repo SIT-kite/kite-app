@@ -2,15 +2,16 @@ name: PR Merge Notify
 
 # only trigger on pull request closed events
 on:
-  pull_request:
-    types: [ closed ]
+  pull_request: { types: [ closed ] }
 
 jobs:
+
   merge:
     # this job will only run if the PR has been merged
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
+
       - run: |
           echo PR #${{ github.event.number }} has been merged
 
@@ -21,7 +22,7 @@ jobs:
 
       - name: 🤖 PR Merged Notification
         if: github.event.pull_request.merged == true
-        uses: appleboy/telegram-action@master
+        uses: appleboy/telegram-action@v0.1.1
         with:
           to: ${{ secrets.CHAT_ID }}
           token: ${{ secrets.BOT_TOKEN }}

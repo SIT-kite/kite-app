@@ -5,14 +5,30 @@ on:
   pull_request: { branches: [ master ] }
 
 jobs:
+
+  # flutter pub get + flutter analyze
   lint:
     runs-on: ubuntu-latest
     steps:
+
       - uses: actions/checkout@v2
 
       - uses: subosito/flutter-action@v2
         with: { channel: stable, cache: true } # channel: 'stable', 'beta' or 'master'
 
+      - name: 📌 Restore pub cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.pub-cache/
+            .dart_tool/
+            .packages
+            .flutter-plugins
+            .flutter-plugins-dependencies
+            pubspec.lock
+          key: pub-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+          restore-keys: |
+            pub-${{ runner.os }}-
 
       - name: 📌 Flutter Code Generate
         run: |
@@ -23,23 +39,28 @@ jobs:
       - name: 📌 Flutter Analysis
         run: flutter analyze --no-fatal-infos --no-pub
 
-      - name: 📌 Cache Workspace
+      - name: 📌 Cache pub
         uses: actions/cache@v2
         with:
           path: |
             ~/.pub-cache/
             .dart_tool/
+            .packages
             .flutter-plugins
             .flutter-plugins-dependencies
-            .packages
             pubspec.lock
+          key: pub-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+
+      - name: 📌 Cache Workspace
+        uses: actions/cache@v2
+        with:
+          path: |
             lib/
           key: app-${{ github.ref }}-${{ github.sha }}
 
-
+  # flutter build apk, cache build/
   build-Android:
-    needs:
-      - lint
+    needs: lint
     runs-on: ubuntu-latest
     steps:
 
@@ -48,16 +69,22 @@ jobs:
       - uses: subosito/flutter-action@v2
         with: { channel: stable, cache: true } # channel: 'stable', 'beta' or 'master'
 
-      - name: 📌 Restore Workspace
+      - name: 📌 Restore pub cache
         uses: actions/cache@v2
         with:
           path: |
             ~/.pub-cache/
             .dart_tool/
+            .packages
             .flutter-plugins
             .flutter-plugins-dependencies
-            .packages
             pubspec.lock
+          key: pub-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+
+      - name: 📌 Restore Workspace
+        uses: actions/cache@v2
+        with:
+          path: |
             lib/
           key: app-${{ github.ref }}-${{ github.sha }}
 
@@ -71,12 +98,12 @@ jobs:
           key: apk-${{ github.ref }}-${{ github.sha }}
 
 
-
+  # flutter build ios
   build-iOS:
     runs-on: macos-latest
-    needs:
-      - lint
+    needs: lint
     steps:
+
     - uses: actions/checkout@v2
 
     - uses: maxim-lobanov/setup-xcode@v1
@@ -85,22 +112,29 @@ jobs:
     - uses: subosito/flutter-action@v2
       with: { channel: 'stable', cache: true } # or: 'beta' or 'master'
 
-    - name: 📌 Restore Workspace
+    - name: 📌 Restore pub cache
       uses: actions/cache@v2
       with:
         path: |
           ~/.pub-cache/
           .dart_tool/
+          .packages
           .flutter-plugins
           .flutter-plugins-dependencies
-          .packages
           pubspec.lock
+        key: pub-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+
+    - name: 📌 Restore Workspace
+      uses: actions/cache@v2
+      with:
+        path: |
           lib/
         key: app-${{ github.ref }}-${{ github.sha }}
 
     - name: 🏗️ Build iOS
       run: flutter build ios --no-codesign
 
+  # Upload apk
   upload:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
@@ -127,13 +161,14 @@ jobs:
           mv app-arm64-v8a-release.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
 
       - name: 🤖 Upload apk by bot
-        uses: appleboy/telegram-action@master
+        uses: appleboy/telegram-action@v0.1.1
         with:
           to: ${{ secrets.CHAT_ID }}
           token: ${{ secrets.BOT_TOKEN }}
           document: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
           message: "🚀 Apk Build by Github Actions"
 
+  # Send notification
   notification:
     runs-on: ubuntu-latest
     needs: [ upload ]
@@ -148,7 +183,7 @@ jobs:
 
       - name: 🤖 Build Success Notification
         if: env.WORKFLOW_CONCLUSION == 'success'
-        uses: appleboy/telegram-action@master
+        uses: appleboy/telegram-action@v0.1.1
         with:
           to: ${{ secrets.CHAT_ID }}
           token: ${{ secrets.BOT_TOKEN }}
@@ -166,7 +201,7 @@ jobs:
 
       - name: 🤖 Build Fail Notification
         if:  env.WORKFLOW_CONCLUSION != 'success'
-        uses: appleboy/telegram-action@master
+        uses: appleboy/telegram-action@v0.1.1
         with:
           to: ${{ secrets.CHAT_ID }}
           token: ${{ secrets.BOT_TOKEN }}
@@ -184,7 +219,7 @@ jobs:
 
       - name: 🤖 PR Merged Notification
         if: github.event.pull_request.merged == true && env.WORKFLOW_CONCLUSION == 'success'
-        uses: appleboy/telegram-action@master
+        uses: appleboy/telegram-action@v0.1.1
         with:
           to: ${{ secrets.CHAT_ID }}
           token: ${{ secrets.BOT_TOKEN }}

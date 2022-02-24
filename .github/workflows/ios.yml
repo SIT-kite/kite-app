@@ -1,14 +1,14 @@
 name: iOS push to testflight
 on:
-  push:
-    tags:
-      - '*'
+  push: [ tags: [ '*' ] ]
   workflow_dispatch:
 
 jobs:
+
   start:
     runs-on: ubuntu-latest
     steps:
+
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -17,7 +17,7 @@ jobs:
         uses: its404/get-flutter-version@v1.0.0
 
       - name: 🤖 Telegram Notification
-        uses: appleboy/telegram-action@master
+        uses: appleboy/telegram-action@v0.1.1
         with:
           to: ${{ secrets.CHAT_ID }}
           token: ${{ secrets.BOT_TOKEN }}
@@ -30,11 +30,11 @@ jobs:
             ⚠️ Freeze master branch more than 20 minutes.
 
 
-
   push:
     runs-on: macos-latest
     environment: apple-connect
     steps:
+
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -90,22 +90,22 @@ jobs:
           git commit -m "Update: Bump Build Number to ${{ steps.lastest_flutter_version.outputs.build_number }}"
           git push origin
 
+
   notify:
     runs-on: ubuntu-latest
-    needs:
-      - push
+    needs: push
     steps:
+
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          ref: master
+        with: { ref: master }
 
       - name: Get Lastest Flutter Version
         id: lastest_flutter_version
         uses: its404/get-flutter-version@v1.0.0
 
       - name: 🤖 Telegram Notification
-        uses: appleboy/telegram-action@master
+        uses: appleboy/telegram-action@v0.1.1
         with:
           to: ${{ secrets.CHAT_ID }}
           token: ${{ secrets.BOT_TOKEN }}
