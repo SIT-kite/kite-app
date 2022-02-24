@@ -13,7 +13,7 @@ class ScActivityDetailService extends AService implements ScActivityDetailDao {
   static RegExp reSpaces = RegExp(r'\s{2}\s+');
   static String selectorFrame = '.box-1';
   static String selectorTitle = 'h1';
-  static String selectorBanner = 'div[style=\" color:#7a7a7a; text-align:center"]';
+  static String selectorBanner = 'div[style=" color:#7a7a7a; text-align:center"]';
   static String selectorDescription = 'div[style="padding:30px 50px; font-size:14px;"]';
 
   ScActivityDetailService(ASession session) : super(session);

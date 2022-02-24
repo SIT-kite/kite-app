@@ -54,7 +54,9 @@ class _NoticeItemState extends State<NoticeItem> {
     try {
       final List<KiteNotice> list = await NoticeService(SessionPool.kiteSession).getNoticeList();
       return list.first.title;
-    } catch (_) {}
+    } catch (_) {
+      return null;
+    }
   }
 
   @override

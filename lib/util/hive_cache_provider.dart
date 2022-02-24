@@ -26,7 +26,7 @@ class HiveCacheProvider implements CacheProvider {
 
   @override
   bool? containsKey(String key) {
-    box.containsKey(key);
+    return box.containsKey(key);
   }
 
   @override

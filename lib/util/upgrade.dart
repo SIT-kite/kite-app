@@ -65,4 +65,5 @@ Future<AppVersion?> getUpdate() async {
 
   // 如果无匹配平台, 到这里返回 null.
   Log.info('没有合适的更新.');
+  return null;
 }

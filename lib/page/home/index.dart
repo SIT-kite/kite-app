@@ -123,7 +123,7 @@ class _HomePageState extends State<HomePage> {
     return [
       const GreetingWidget(),
       SizedBox(height: 20.h),
-      HomeItemGroup([
+      HomeItemGroup(const [
         UpgradeItem(),
         NoticeItem(),
         TimetableItem(),
@@ -135,12 +135,12 @@ class _HomePageState extends State<HomePage> {
         // ElectricityItem(),
         HomeItem(route: '/classroom', icon: 'assets/home/icon_classroom.svg', title: '空教室', subtitle: '查看教学楼当前空闲的教室'),
         // EventItem(),
-        ExpenseItem(),
-        ScoreItem(),
-        LibraryItem(),
-        OfficeItem(),
-        MailItem(),
-        BulletinItem(),
+        const ExpenseItem(),
+        const ScoreItem(),
+        const LibraryItem(),
+        const OfficeItem(),
+        const MailItem(),
+        const BulletinItem(),
       ]),
       SizedBox(height: 20.h),
       HomeItemGroup([
