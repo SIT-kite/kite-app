@@ -22,23 +22,28 @@ part 'exam.g.dart';
 
 @JsonSerializable()
 class ExamRoom {
+  /// 课程名称
   @JsonKey(name: 'kcmc')
-  // 课程名称
   String courseName = "";
+
+  /// 考试时间
   @JsonKey(name: 'kssj', fromJson: _stringToList)
-  // 考试时间
   List<DateTime> time = [];
+
+  /// 考试地点
   @JsonKey(name: 'cdmc')
-  // 考试地点
   String place = "";
+
+  /// 考试校区
   @JsonKey(name: 'cdxqmc')
-  // 考试校区
   String campus = "";
+
+  /// 考试座号
   @JsonKey(name: 'zwh', fromJson: _stringToInt)
-  // 考试座号
   int seatNumber = 0;
+
+  /// 是否重修
   @JsonKey(name: 'cxbj')
-  // 是否重修
   String isRebuild = "";
 
   ExamRoom();
@@ -56,15 +61,17 @@ class ExamRoom {
 
   static List<DateTime> _stringToList(String s) {
     List<DateTime> result = [];
-    var dateFormat = DateFormat('yyyy-MM-dd hh:mm');
-    var date = s.split('(')[0];
-    var time = s.split('(')[1].replaceAll(')', '');
+    final dateFormat = DateFormat('yyyy-MM-dd hh:mm');
+    final date = s.split('(')[0];
+    final time = s.split('(')[1].replaceAll(')', '');
     String start = date + ' ' + time.split('-')[0];
     String end = date + ' ' + time.split('-')[1];
-    var startTime = dateFormat.parse(start);
-    var endTime = dateFormat.parse(end);
+    final startTime = dateFormat.parse(start);
+    final endTime = dateFormat.parse(end);
+
     result.add(startTime);
     result.add(endTime);
+
     return result;
   }
 }
