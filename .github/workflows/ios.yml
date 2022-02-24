@@ -1,6 +1,6 @@
 name: iOS push to testflight
 on:
-  push: [ tags: [ '*' ] ]
+  push: { tags: [ '*' ] }
   workflow_dispatch:
 
 jobs:
