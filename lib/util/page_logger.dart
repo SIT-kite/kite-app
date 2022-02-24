@@ -65,7 +65,7 @@ class PageLogger {
         cachedCount += maxCacheSize;
         return;
       }
-      Log.info('完成用户日志上报.');
+      Log.info('用户日志上报完成.');
     });
   }
 

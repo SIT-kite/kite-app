@@ -1,25 +1,19 @@
-if (typeof runFlag === 'undefined') {
+if (typeof runFlag === "undefined") {
 
-runFlag = true;
-console.info('Initializing report/inject.js');
+var runFlag = true;
+console.info('Initializing report/inject.js on:', location.href);
 
-const userName = '{{username}}';
+const userName = '{{username}}'.trim();
 
 const prefix = 'http://xgfy.sit.edu.cn/h5/';
-const routes = [ 'guide', 'news', 'index', 'studentReport', 'jksb', 'yimiaon', 'view' ];
+// const routes = [ 'guide', 'news', 'index', 'studentReport', 'jksb', 'yimiaon', 'view' ];
 
 const getRoute = name => name === 'guide' ? '#/' : `#/pages/index/${name}`;
 
 const route = {
   is: name => location.hash === getRoute(name),
-  go: name => location.reload(getRoute(name))
+  go: name => location.assign(getRoute(name))
 };
-
-// login
-if (route.is('guide')) {
-  localStorage.setItem('userInfo', JSON.stringify({ code: userName }));
-  route.go('index');
-}
 
 // visibilitychange
 Document.prototype.addEventListener = new Proxy(
@@ -31,6 +25,15 @@ Document.prototype.addEventListener = new Proxy(
     )
   }
 );
+
+// load
+window.addEventListener('load', () => {
+
+// login
+if (route.is('guide') && userName !== '') {
+  localStorage.setItem('userInfo', JSON.stringify({ code: userName }));
+  route.go('index');
+}
 
 // allowReport
 const userInfo = JSON.parse(localStorage.getItem('userInfo'));
@@ -44,21 +47,23 @@ if ( // if userInfo matches { allowReport: 0 }
 }
 
 // checklist
-route.is('jksb') &&
-window.addEventListener('load', () => {
-  const checklist = document.querySelector('.checklist-box');
-  console.log(checklist);
-  checklist !== null && console.log(`"${checklist.textContent}"`);
-  checklist !== null &&
-  checklist.textContent.trim() === '本人承诺:上述填写内容真实、准确、无误！' &&
-  checklist.click();
-});
+const intervalId = setInterval(() => {
+  if (route.is('jksb')) {
+    const checklist = document.querySelector('.checklist-box');
+    if (
+      checklist !== null &&
+      checklist.textContent.trim() === '本人承诺:上述填写内容真实、准确、无误！'
+    ) {
+      checklist.click();
+      clearInterval(intervalId);
+    }
+  }
+}, 500);
 
 // css
 const style = document.head.appendChild(document.createElement('style'));
 style.textContent =
 `/* Global */
-
 
 /* font */
 uni-input, uni-textarea { font-size: inherit; }
@@ -89,9 +94,7 @@ uni-image > img { object-fit: contain; }
 	z-index: 1;
 }
 
-
 /* layout */
-
 
 uni-page-body,
 uni-page-body > uni-view:only-child,
@@ -121,7 +124,8 @@ uni-page-body > uni-view:only-child,
 .nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child > .cu-list.menu:only-child {
 	height: 100%;
 }
-.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child > .cu-list.menu:only-child > uni-view[style="margin-left: 5%;"],
+.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child >
+.cu-list.menu:only-child > uni-view[style="margin-left: 5%;"],
 .nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child > .cu-list.menu:only-child > .foot,
 .nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child > .foot {
 	position: sticky;
@@ -135,14 +139,16 @@ uni-page-body > uni-view:only-child,
 	bottom: 0;
 	height: 4em;
 }
-.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child > .cu-list.menu:only-child > uni-view[style="margin-left: 5%;"] {
+.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child >
+.cu-list.menu:only-child > uni-view[style="margin-left: 5%;"] {
 	bottom: 4em;
 	margin-left: 0 !important;
 	padding: .25em .5em 0;
 }
 
 /* border-top */
-.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child > .cu-list.menu:only-child > uni-view[style="margin-left: 5%;"],
+.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child >
+.cu-list.menu:only-child > uni-view[style="margin-left: 5%;"],
 .nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child > .foot {
 	border-top: 1px solid rgba(0, 0, 0, .1);
 	box-shadow:
@@ -150,5 +156,9 @@ uni-page-body > uni-view:only-child,
 		0 4px 5px  0   rgba(0, 0, 0, .14),
 		0 1px 10px 0   rgba(0, 0, 0, .12);
 }`;
+
+
+});
+
 
 }

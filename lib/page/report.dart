@@ -24,7 +24,8 @@ import 'package:kite/global/storage_pool.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-const _reportIndexUrl = 'http://xgfy.sit.edu.cn/h5/#/pages/index/index';
+const _reportUrlPrefix = 'http://xgfy.sit.edu.cn/h5/#/';
+const _reportIndexUrl = _reportUrlPrefix + 'pages/index/index';
 
 class DailyReportPage extends StatefulWidget {
   const DailyReportPage({Key? key}) : super(key: key);
@@ -37,7 +38,7 @@ class _DailyReportPageState extends State<DailyReportPage> {
   final Completer<WebViewController> _controller = Completer<WebViewController>();
 
   void _onRefresh() async {
-    var controller = await _controller.future;
+    final controller = await _controller.future;
     await controller.reload();
   }
 
@@ -49,13 +50,12 @@ class _DailyReportPageState extends State<DailyReportPage> {
   }
 
   void _onPageFinished(String url) async {
-    if (url != 'http://xgfy.sit.edu.cn/h5/#/') {
-      return;
+    if (url.startsWith(_reportUrlPrefix)) {
+      final controller = await _controller.future;
+      final String user = _queryLocalUser();
+      final String js = await _getInjectJs(user);
+      controller.runJavascript(js);
     }
-    final controller = await _controller.future;
-    final String user = _queryLocalUser();
-    final String js = await _getInjectJs(user);
-    controller.runJavascript(js);
   }
 
   @override
