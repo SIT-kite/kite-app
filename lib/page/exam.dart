@@ -24,7 +24,20 @@ import 'package:kite/global/service_pool.dart';
 class ExamTimePage extends StatelessWidget {
   const ExamTimePage({Key? key}) : super(key: key);
 
-  Widget buildExamItem(ExamRoom examItem) {
+  Widget _buildItem(BuildContext context, String icon, String text) {
+    final itemStyle = Theme.of(context).textTheme.headline4;
+    final iconImage = AssetImage('assets/' + icon);
+    return Row(
+      children: [
+        icon.isEmpty ? Container() : Image(image: iconImage, width: 35, height: 35),
+        Container(width: 15),
+        Expanded(child: Text(text, softWrap: true, style: itemStyle))
+      ],
+    );
+  }
+
+  Widget buildExamItem(BuildContext context, ExamRoom examItem) {
+    final itemStyle = Theme.of(context).textTheme.headline4;
     final name = examItem.courseName;
     final startTime = examItem.time[0];
     final endTime = examItem.time[1];
@@ -32,20 +45,39 @@ class ExamTimePage extends StatelessWidget {
     final campus = examItem.campus;
     final seatNumber = examItem.seatNumber;
     final isRebuild = examItem.isRebuild;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+
+    TableRow buildRow(String icon, String title, String content) {
+      return TableRow(
+          children: [
+        _buildItem(context, icon, title),
+        Text(content, style: itemStyle),
+      ]
+              .map(
+                (e) => Container(
+                  child: e,
+                  padding: const EdgeInsets.all(5),
+                ),
+              )
+              .toList());
+    }
+
+    return Table(
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      columnWidths: const {
+        0: FlexColumnWidth(2),
+        1: FlexColumnWidth(3),
+      },
       children: [
-        Text('课程名称: $name'),
-        Text('考试地点: $campus  $place'),
-        Text('座位号: $seatNumber'),
-        Text('开始时间: $startTime'),
-        Text('结束时间: $endTime'),
-        Text('是否重修: $isRebuild'),
+        buildRow('timetable/campus.png', '考试地点: ', '$campus  $place'),
+        buildRow('timetable/courseId.png', '座位号:', '$seatNumber'),
+        buildRow('timetable/day.png', '开始时间:', '$startTime'),
+        buildRow('timetable/day.png', '结束时间:', '$endTime'),
+        buildRow('', '是否重修: ', isRebuild),
       ],
     );
   }
 
-  Widget buildExamItems(List<ExamRoom> examItems) {
+  Widget buildExamItems(BuildContext context, List<ExamRoom> examItems) {
     return ListView(
       children: examItems
           .map(
@@ -53,7 +85,7 @@ class ExamTimePage extends StatelessWidget {
               margin: const EdgeInsets.fromLTRB(20, 5, 20, 5),
               child: Container(
                 padding: const EdgeInsets.all(20),
-                child: buildExamItem(e),
+                child: buildExamItem(context, e),
               ),
             ),
           )
@@ -74,7 +106,7 @@ class ExamTimePage extends StatelessWidget {
             data.sort((a, b) {
               return a.time[0].isAfter(b.time[0]) ? 1 : -1;
             });
-            return buildExamItems(data);
+            return buildExamItems(context, data);
           },
         ));
   }
