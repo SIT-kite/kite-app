@@ -26,9 +26,10 @@ jobs:
             .flutter-plugins
             .flutter-plugins-dependencies
             pubspec.lock
-          key: pub-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+          key: pub-${{ github.ref }}-${{ github.sha }} # use ${{ hashFiles('pubspec.lock') }} when available
           restore-keys: |
-            pub-${{ runner.os }}-
+            pub-${{ github.ref }}-
+            pub-
 
       - name: 📌 Flutter Code Generate
         run: |
@@ -49,7 +50,7 @@ jobs:
             .flutter-plugins
             .flutter-plugins-dependencies
             pubspec.lock
-          key: pub-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+          key: pub-${{ github.ref }}-${{ github.sha }}
 
       - name: 📌 Cache Workspace
         uses: actions/cache@v2
@@ -57,6 +58,7 @@ jobs:
           path: |
             lib/
           key: app-${{ github.ref }}-${{ github.sha }}
+
 
   # flutter build apk, cache build/
   build-Android:
@@ -79,7 +81,7 @@ jobs:
             .flutter-plugins
             .flutter-plugins-dependencies
             pubspec.lock
-          key: pub-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+          key: pub-${{ github.ref }}-${{ github.sha }}
 
       - name: 📌 Restore Workspace
         uses: actions/cache@v2
@@ -104,35 +106,36 @@ jobs:
     needs: lint
     steps:
 
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - uses: maxim-lobanov/setup-xcode@v1
-      with: { xcode-version: latest-stable }
+      - uses: maxim-lobanov/setup-xcode@v1
+        with: { xcode-version: latest-stable }
 
-    - uses: subosito/flutter-action@v2
-      with: { channel: 'stable', cache: true } # or: 'beta' or 'master'
+      - uses: subosito/flutter-action@v2
+        with: { channel: 'stable', cache: true } # or: 'beta' or 'master'
 
-    - name: 📌 Restore pub cache
-      uses: actions/cache@v2
-      with:
-        path: |
-          ~/.pub-cache/
-          .dart_tool/
-          .packages
-          .flutter-plugins
-          .flutter-plugins-dependencies
-          pubspec.lock
-        key: pub-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+      - name: 📌 Restore pub cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.pub-cache/
+            .dart_tool/
+            .packages
+            .flutter-plugins
+            .flutter-plugins-dependencies
+            pubspec.lock
+          key: pub-${{ github.ref }}-${{ github.sha }}
 
-    - name: 📌 Restore Workspace
-      uses: actions/cache@v2
-      with:
-        path: |
-          lib/
-        key: app-${{ github.ref }}-${{ github.sha }}
+      - name: 📌 Restore Workspace
+        uses: actions/cache@v2
+        with:
+          path: |
+            lib/
+          key: app-${{ github.ref }}-${{ github.sha }}
 
-    - name: 🏗️ Build iOS
-      run: flutter build ios --no-codesign
+      - name: 🏗️ Build iOS
+        run: flutter build ios --no-codesign
+
 
   # Upload apk
   upload:
@@ -167,6 +170,7 @@ jobs:
           token: ${{ secrets.BOT_TOKEN }}
           document: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
           message: "🚀 Apk Build by Github Actions"
+
 
   # Send notification
   notification:
