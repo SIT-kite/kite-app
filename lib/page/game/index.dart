@@ -23,6 +23,7 @@
 // sunnysab (sunnysab.cn)
 // 2022.1.14
 
+import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/entity/game.dart';
 import 'package:kite/global/storage_pool.dart';
@@ -44,23 +45,59 @@ final boxColors = <int, Color>{
 };
 
 class Game2048Page extends StatelessWidget {
-  const Game2048Page({Key? key}) : super(key: key);
+  bool flashShown = false;
+
+  Game2048Page({Key? key}) : super(key: key);
+
+  Future<bool> _willPopFlash(BuildContext context) async {
+    bool want = false;
+
+    if (flashShown) {
+      return false;
+    }
+
+    flashShown = true;
+    await context.showFlashBar(
+      persistent: true,
+      behavior: FlashBehavior.fixed,
+      title: const Text('你确定要返回吗？'),
+      content: const Text('这将会导致你的游戏状态丢失'),
+      positiveActionBuilder: (context, controller, callback) => TextButton(
+          onPressed: () {
+            want = true;
+            controller.dismiss();
+          },
+          child: const Text('是')),
+      negativeActionBuilder: (context, controller, callback) => TextButton(
+          onPressed: () {
+            want = false;
+            controller.dismiss();
+          },
+          child: const Text('否')),
+    );
+    flashShown = false;
+    return want;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('2048'),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HistoryPage()));
-              },
-              icon: const Icon(Icons.history))
-        ],
-      ),
-      body: const GameWidget(),
-    );
+    return WillPopScope(
+        onWillPop: () async {
+          return await _willPopFlash(context);
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('2048'),
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HistoryPage()));
+                  },
+                  icon: const Icon(Icons.history))
+            ],
+          ),
+          body: const GameWidget(),
+        ));
   }
 }
 
