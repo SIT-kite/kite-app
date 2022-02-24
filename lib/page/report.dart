@@ -42,11 +42,9 @@ class _DailyReportPageState extends State<DailyReportPage> {
     await controller.reload();
   }
 
-  String _queryLocalUser() => StoragePool.authSetting.currentUsername ?? '';
-
   static Future<String> _getInjectJs() async {
     // TODO: 把 replace 完的 JS 缓存了
-    final String username = _queryLocalUser();
+    final String username = StoragePool.authSetting.currentUsername ?? '';
     final String css = await rootBundle.loadString('assets/report/inject.css');
     final String js = await rootBundle.loadString('assets/report/inject.js');
     return js.replaceFirst('{{username}}', username).replaceFirst('{{injectCSS}}', css);
@@ -55,7 +53,7 @@ class _DailyReportPageState extends State<DailyReportPage> {
   void _onPageFinished(String url) async {
     if (url.startsWith(_reportUrlPrefix)) {
       final controller = await _controller.future;
-      final String js = await _getInjectJs(user);
+      final String js = await _getInjectJs();
       controller.runJavascript(js);
     }
   }
@@ -73,7 +71,7 @@ class _DailyReportPageState extends State<DailyReportPage> {
         ],
       ),
       body: UniversalPlatform.isDesktopOrWeb
-          ? const UnsupportedPlatformUrlLauncher(_reportIndexUrl)
+          ? const UnsupportedPlatformUrlLauncher(_reportUrlIndex)
           : WebView(
               initialUrl: _reportUrlIndex,
               javascriptMode: JavascriptMode.unrestricted,
