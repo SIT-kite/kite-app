@@ -123,7 +123,7 @@ class _HomePageState extends State<HomePage> {
     return [
       const GreetingWidget(),
       SizedBox(height: 20.h),
-      HomeItemGroup(const [
+      const HomeItemGroup([
         UpgradeItem(),
         NoticeItem(),
         TimetableItem(),

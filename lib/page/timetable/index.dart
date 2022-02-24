@@ -49,8 +49,8 @@ class TimetablePage extends StatefulWidget {
 
 class _TimetablePageState extends State<TimetablePage> {
   /// 最大周数
-  /// TODO 还没用上？
-  static const int maxWeekCount = 20;
+  /// TODO 还没用上
+  // static const int maxWeekCount = 20;
 
   // 模式：周课表 日课表
   int displayMode = StoragePool.timetable.lastMode ?? displayModeDaily;

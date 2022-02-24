@@ -22,7 +22,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('我的第二课堂')),
+      appBar: AppBar(title: const Text('我的第二课堂')),
       body: Container(),
     );
   }

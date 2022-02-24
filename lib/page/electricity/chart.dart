@@ -17,10 +17,10 @@
  */
 import 'package:flutter/material.dart';
 
-const List<Color> _gradientColors = [
+/* const List<Color> _gradientColors = [
   Color(0xff23b6e6),
   Color(0xff02d39a),
-];
+]; */
 
 class ChartSection extends StatefulWidget {
   final String room;
@@ -60,7 +60,7 @@ class _ChartSectionState extends State<ChartSection> {
   Widget _buildView() {
     return Column(
       children: <Widget>[
-        AspectRatio(
+        const AspectRatio(
           aspectRatio: 1.70,
           child: Padding(
             padding: const EdgeInsets.only(right: 24, left: 24, top: 0, bottom: 0),

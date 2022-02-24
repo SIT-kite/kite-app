@@ -17,14 +17,14 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/dao/library/book_search.dart';
-/// The import of 'package:kite/service/library/holding_preview.dart' is unnecessary because all of
-/// the used elements are also provided by the import of 'package:kite/service/library/index.dart'
-// import 'package:kite/dao/library/holding_preview.dart';
+import 'package:kite/dao/library/holding_preview.dart';
 import 'package:kite/dao/library/image_search.dart';
 import 'package:kite/entity/library/book_search.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/page/library/component/search_result_item.dart';
-import 'package:kite/service/library/holding_preview.dart';
+/// The import of 'package:kite/service/library/holding_preview.dart' is unnecessary because all of
+/// the used elements are also provided by the import of 'package:kite/service/library/index.dart'
+// import 'package:kite/service/library/holding_preview.dart';
 import 'package:kite/service/library/index.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/library/search.dart';

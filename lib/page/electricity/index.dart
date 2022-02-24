@@ -46,6 +46,8 @@ class _ElectricityPageState extends State<ElectricityPage> {
 
     if (!((roomId / 100 > 0 && roomId / 100 < 17) && (roomId % 100 > 0 && roomId % 100 < 31))) {
       return '房间号格式有误';
+    } else {
+      return null;
     }
   }
 
@@ -54,6 +56,8 @@ class _ElectricityPageState extends State<ElectricityPage> {
 
     if (!(buildingId > 0 && buildingId < 27)) {
       return '楼号格式有误';
+    } else {
+      return null;
     }
   }
 

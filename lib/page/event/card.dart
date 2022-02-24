@@ -90,7 +90,7 @@ class EventCard extends StatelessWidget {
             child: Stack(
               children: [
                 // Background
-                Background(),
+                const Background(),
                 // Title
                 _buildBasicInfo(context),
               ],
