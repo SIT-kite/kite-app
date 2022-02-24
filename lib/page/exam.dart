@@ -17,11 +17,14 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/entity/edu/index.dart';
 import 'package:kite/global/service_pool.dart';
 
 class ExamTimePage extends StatelessWidget {
+  static final dateFormat = DateFormat('MM月dd日 HH:mm');
+
   const ExamTimePage({Key? key}) : super(key: key);
 
   Widget _buildItem(BuildContext context, String icon, String text) {
@@ -29,8 +32,8 @@ class ExamTimePage extends StatelessWidget {
     final iconImage = AssetImage('assets/' + icon);
     return Row(
       children: [
-        icon.isEmpty ? Container() : Image(image: iconImage, width: 35, height: 35),
-        Container(width: 15),
+        icon.isEmpty ? const SizedBox(height: 35, width: 35) : Image(image: iconImage, width: 35, height: 35),
+        Container(width: 8),
         Expanded(child: Text(text, softWrap: true, style: itemStyle))
       ],
     );
@@ -42,37 +45,33 @@ class ExamTimePage extends StatelessWidget {
     final startTime = examItem.time[0];
     final endTime = examItem.time[1];
     final place = examItem.place;
-    final campus = examItem.campus;
     final seatNumber = examItem.seatNumber;
     final isRebuild = examItem.isRebuild;
 
     TableRow buildRow(String icon, String title, String content) {
-      return TableRow(
-          children: [
+      return TableRow(children: [
         _buildItem(context, icon, title),
         Text(content, style: itemStyle),
-      ]
-              .map(
-                (e) => Container(
-                  child: e,
-                  padding: const EdgeInsets.all(5),
-                ),
-              )
-              .toList());
+      ]);
     }
 
-    return Table(
-      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-      columnWidths: const {
-        0: FlexColumnWidth(2),
-        1: FlexColumnWidth(3),
-      },
+    return Column(
       children: [
-        buildRow('timetable/campus.png', '考试地点: ', '$campus  $place'),
-        buildRow('timetable/courseId.png', '座位号:', '$seatNumber'),
-        buildRow('timetable/day.png', '开始时间:', '$startTime'),
-        buildRow('timetable/day.png', '结束时间:', '$endTime'),
-        buildRow('', '是否重修: ', isRebuild),
+        Text(name, style: Theme.of(context).textTheme.headline1),
+        Table(
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          columnWidths: const {
+            0: FlexColumnWidth(8),
+            1: FlexColumnWidth(10),
+          },
+          children: [
+            buildRow('timetable/campus.png', '考试地点', place),
+            buildRow('timetable/courseId.png', '座位号', '$seatNumber'),
+            buildRow('timetable/day.png', '开始时间', dateFormat.format(startTime)),
+            buildRow('timetable/day.png', '结束时间', dateFormat.format(endTime)),
+            buildRow('', '是否重修', isRebuild),
+          ],
+        )
       ],
     );
   }
