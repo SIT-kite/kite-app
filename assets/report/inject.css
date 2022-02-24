@@ -1,0 +1,168 @@
+/* Global */
+
+/* font */
+uni-input, uni-textarea { font-size: inherit; }
+
+/* user-select */
+html, body { -webkit-user-select: initial; user-select: initial; }
+
+/* uni-image */
+uni-image > div { background-size: contain !important; background-position: center !important; }
+uni-image > img { object-fit: contain; }
+
+/* .uni-textarea-textarea */
+.uni-textarea-textarea, .uni-textarea-placeholder { box-sizing: border-box; padding: .5em; }
+/* shadow */
+.shadow, .shadow-blur {
+	box-shadow:
+		0 3px 1px -2px rgba(0, 0, 0, 0.2),
+		0 2px 2px  0   rgba(0, 0, 0, 0.14),
+		0 1px 5px  0   rgba(0, 0, 0, 0.12) !important;
+}
+
+.shadow-blur::before { content: unset; display: none; }
+
+/* solid */
+.solid::after, .solid-top::after, .solid-right::after, .solid-bottom::after, .solid-left::after,
+.solids::after, .solids-top::after, .solids-right::after, .solids-bottom::after, .solids-left::after,
+.dashed::after, .dashed-top::after, .dashed-right::after, .dashed-bottom::after, .dashed-left::after {
+	z-index: 1;
+}
+
+/* -----------------------------------------------------------------------------
+	Layout
+----------------------------------------------------------------------------- */
+
+uni-page-body,
+uni-page-body > uni-view:only-child,
+.nav + uni-scroll-view {
+	height: 100%;
+}
+.nav + uni-scroll-view,
+.nav + uni-scroll-view .uni-scroll-view-content > uni-view,
+.cu-bar ~ .cu-list.menu-avatar,
+.cu-list:only-child {
+	overflow-y: auto;
+}
+uni-page-body > uni-view:only-child,
+.nav + uni-scroll-view .uni-scroll-view-content,
+.nav + uni-scroll-view .uni-scroll-view-content > uni-view {
+	display: flex;
+	flex-direction: column;
+}
+
+/* -----------------------------------------------------------------------------
+	Sticky report button
+----------------------------------------------------------------------------- */
+
+.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child {
+	position: relative;
+}
+.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child > .cu-list.menu:only-child {
+	height: 100%;
+}
+.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child >
+.cu-list.menu:only-child > uni-view[style="margin-left: 5%;"],
+.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child > .cu-list.menu:only-child > .foot,
+.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child > .foot {
+	position: sticky;
+	z-index: 1000;
+	box-sizing: border-box;
+	width: 100%;
+	background-color: white;
+}
+.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child > .cu-list.menu:only-child > .foot,
+.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child > .foot {
+	bottom: 0;
+	height: 4em;
+}
+.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child >
+.cu-list.menu:only-child > uni-view[style="margin-left: 5%;"] {
+	bottom: 4em;
+	margin-left: 0 !important;
+	padding: .25em .5em 0;
+}
+
+/* border-top */
+.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child >
+.cu-list.menu:only-child > uni-view[style="margin-left: 5%;"],
+.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child > .foot {
+	border-top: 1px solid rgba(0, 0, 0, .1);
+	box-shadow:
+		0 2px 4px -1px rgba(0, 0, 0, .2),
+		0 4px 5px  0   rgba(0, 0, 0, .14),
+		0 1px 10px 0   rgba(0, 0, 0, .12);
+}
+
+/* -----------------------------------------------------------------------------
+	Compact
+----------------------------------------------------------------------------- */
+
+/* margin */
+.cu-list.menu:only-child,
+.cu-bar.margin-top { margin: 0; }
+.cu-list.menu > .cu-list.menu { margin: 1em 0; }
+
+/* .cu-bar */
+.cu-bar { min-height: 2.5em; padding: .5em; line-height: 1; }
+.cu-bar > .action { margin: 0 !important; }
+
+.cu-bar > .action:only-child,
+.cu-bar > .action:only-child > uni-radio-group:only-child,
+.cu-bar > .action:only-child > uni-checkbox-group:only-child { flex-grow: 1; justify-content: start; }
+.cu-bar > .action:only-child > uni-radio-group:only-child { justify-content: space-evenly; }
+
+.cu-bar > .action > uni-checkbox-group:only-child { display: flex; }
+
+/* .cu-list > .cu-item */
+.cu-list > .cu-item { transition: none; transform: none; }
+.cu-list.menu > .cu-item,
+.cu-list.menu-avatar > .cu-item {
+	justify-content: start;
+	height: auto; min-height: auto;
+	padding: .5em; gap: .5em;
+}
+
+/* .cu-list.menu */
+.cu-list.menu > .cu-item > .content { font: inherit; }
+.cu-list.menu > .cu-item > .action[style="width: 40%;"] { flex-grow: 1; }
+.cu-list.menu > .cu-item > .action[style="width: 40%;"] + .action > .grid { justify-content: flex-end; }
+
+/* .cu-list.menu-avatar */
+.cu-list.menu-avatar > .cu-item { line-height: 16px; }
+.cu-list.menu-avatar > .cu-item > .cu-avatar,
+.cu-list.menu-avatar > .cu-item > .content,
+.cu-list.menu-avatar > .cu-item > .action { position: static; width: auto; }
+.cu-list.menu-avatar > .cu-item > .cu-avatar { height: auto; font-size: 1.25em; }
+.cu-list.menu-avatar > .cu-item > .content { flex-grow: 1; line-height: inherit; }
+.cu-list.menu-avatar > .cu-item > .content > uni-view:first-child { font-size: inherit; }
+.cu-list.menu-avatar > .cu-item > .action { margin: 0 !important; }
+.cu-list.menu-avatar > .cu-item > .action > .bg-red,
+.cu-list.menu-avatar > .cu-item > .action > .bg-green { padding: .25em; border-radius: 2px; }
+
+/* .cu-list.menu > .action > uni-textarea */
+.cu-list.menu > .action > uni-textarea[style="width: 80%; margin-left: 5%; height: 65px;"] {
+	width: auto !important; height: auto !important; min-height: 6em; margin: auto !important;
+}
+.cu-list.menu > .action > uni-textarea[style="width: 80%; margin-left: 5%; height: 65px;"] .uni-textarea-textarea,
+.cu-list.menu > .action > uni-textarea[style="width: 80%; margin-left: 5%; height: 65px;"] .uni-textarea-placeholder {
+	padding: .5em 1.5em; background-color: rgba(0, 0, 0, .02);
+}
+
+/* .cu-list + .padding */
+.cu-list + .padding,
+.cu-list + [style="margin-left: 5%;"] + .padding { padding: .5em; }
+.cu-list + .padding > .cu-btn,
+.cu-list + [style="margin-left: 5%;"] + .padding > .cu-btn { margin: 0; }
+
+/* radio */
+.uni-label-pointer { padding: 0 !important; }
+.uni-label-pointer > uni-text { margin-left: 4px !important; }
+uni-radio-group { gap: .5em; }
+uni-label { display: flex; align-items: center; }
+uni-label > uni-text { line-height: 1; }
+uni-radio .uni-radio-wrapper { display: block; }
+uni-radio .wx-radio-input,
+uni-radio .uni-radio-input { box-sizing: border-box; width: 14px; height: 14px; }
+uni-radio.radio .uni-radio-input-checked::after { width: 6px; height: 6px; border-width: 2px !important; }
+uni-radio.radio .uni-radio-input-checked { border: none; }

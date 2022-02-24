@@ -25,7 +25,7 @@ import 'package:universal_platform/universal_platform.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 const _reportUrlPrefix = 'http://xgfy.sit.edu.cn/h5/#/';
-const _reportIndexUrl = _reportUrlPrefix + 'pages/index/index';
+const _reportUrlIndex = _reportUrlPrefix + 'pages/index/index';
 
 class DailyReportPage extends StatefulWidget {
   const DailyReportPage({Key? key}) : super(key: key);
@@ -44,15 +44,17 @@ class _DailyReportPageState extends State<DailyReportPage> {
 
   String _queryLocalUser() => StoragePool.authSetting.currentUsername ?? '';
 
-  static Future<String> _getInjectJs(String userName) async {
-    var js = await rootBundle.loadString('assets/report/inject.js');
-    return js.replaceFirst('{{username}}', userName);
+  static Future<String> _getInjectJs() async {
+    // TODO: 把 replace 完的 JS 缓存了
+    final String username = _queryLocalUser();
+    final String css = await rootBundle.loadString('assets/report/inject.css');
+    final String js = await rootBundle.loadString('assets/report/inject.js');
+    return js.replaceFirst('{{username}}', username).replaceFirst('{{injectCSS}}', css);
   }
 
   void _onPageFinished(String url) async {
     if (url.startsWith(_reportUrlPrefix)) {
       final controller = await _controller.future;
-      final String user = _queryLocalUser();
       final String js = await _getInjectJs(user);
       controller.runJavascript(js);
     }
@@ -73,7 +75,7 @@ class _DailyReportPageState extends State<DailyReportPage> {
       body: UniversalPlatform.isDesktopOrWeb
           ? const UnsupportedPlatformUrlLauncher(_reportIndexUrl)
           : WebView(
-              initialUrl: _reportIndexUrl,
+              initialUrl: _reportUrlIndex,
               javascriptMode: JavascriptMode.unrestricted,
               onWebViewCreated: (WebViewController webViewController) {
                 _controller.complete(webViewController);
