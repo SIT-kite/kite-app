@@ -15,23 +15,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/html_widget.dart';
 import 'package:kite/entity/bulletin.dart';
+import 'package:kite/global/service_pool.dart';
 import 'package:kite/global/session_pool.dart';
-import 'package:kite/service/bulletin.dart';
 import 'package:kite/util/flash.dart';
+import 'package:kite/util/logger.dart';
 import 'package:kite/util/url_launcher.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 
-class DetailPage extends StatelessWidget {
+class DetailPage extends StatefulWidget {
+  final BulletinRecord summary;
+  const DetailPage(this.summary, {Key? key}) : super(key: key);
+
+  @override
+  _DetailPageState createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
   static final RegExp _phoneRegex = RegExp(r"(6087\d{4})");
   static final RegExp _mobileRegex = RegExp(r"(\d{12})");
   static final dateFormat = DateFormat('yyyy/MM/dd HH:mm');
-
-  final BulletinRecord summary;
-
-  const DetailPage(this.summary, {Key? key}) : super(key: key);
 
   String _linkTel(String content) {
     String t = content;
@@ -60,10 +69,41 @@ class DetailPage extends StatelessWidget {
           children: article.attachments.map((e) {
             return TextButton(
               onPressed: () async {
-                showBasicFlash(context, const Text('请在开启的浏览器中登录将直接开始下载'));
-                await Future.delayed(const Duration(seconds: 1));
-                //TODO: 未来需要写个下载管理器
-                launchInBrowser(e.url);
+                showBasicFlash(context, const Text('开始下载'), duration: const Duration(seconds: 1));
+                Log.info('下载文件: [${e.name}](${e.url})');
+                String targetPath = (await getApplicationDocumentsDirectory()).path + '/kite/downloads/${e.name}';
+                // 如果文件不存在，那么下载文件
+                if (!await File(targetPath).exists()) {
+                  await SessionPool.ssoSession.download(
+                    e.url,
+                    savePath: targetPath,
+                    onReceiveProgress: (int count, int total) {
+                      Log.info('已下载: ${count / (1024 * 1024)}MB');
+                    },
+                  );
+                }
+
+                showBasicFlash(
+                  context,
+                  Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('下载完毕'),
+                          Text(e.name),
+                        ],
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          OpenFile.open(targetPath);
+                        },
+                        child: const Text('打开文件'),
+                      ),
+                    ],
+                  ),
+                  duration: const Duration(seconds: 5),
+                );
               },
               child: Text(e.name),
             );
@@ -73,12 +113,22 @@ class DetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildBody(BulletinRecord summary) {
-    final service = BulletinService(SessionPool.ssoSession);
-    final future = service.getBulletinDetail(summary.bulletinCatalogueId, summary.uuid);
+  BulletinDetail? article;
+  Future<BulletinDetail> getBulletinDetail() async {
+    if (article == null) {
+      Log.info('开始加载OA公告文章');
+      article = await ServicePool.bulletin.getBulletinDetail(widget.summary.bulletinCatalogueId, widget.summary.uuid);
+      Log.info('加载OA公告文章完毕');
+    } else {
+      Log.info('使用已获取的OA公告文章');
+    }
 
+    return article!;
+  }
+
+  Widget _buildBody(BulletinRecord summary) {
     return FutureBuilder<BulletinDetail>(
-        future: future,
+        future: getBulletinDetail(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
@@ -100,14 +150,14 @@ class DetailPage extends StatelessWidget {
           IconButton(
             onPressed: () {
               final url =
-                  'https://myportal.sit.edu.cn/detach.portal?action=bulletinBrowser&.ia=false&.pmn=view&.pen=${summary.bulletinCatalogueId}&bulletinId=${summary.uuid}';
+                  'https://myportal.sit.edu.cn/detach.portal?action=bulletinBrowser&.ia=false&.pmn=view&.pen=${widget.summary.bulletinCatalogueId}&bulletinId=${widget.summary.uuid}';
               launchInBrowser(url);
             },
             icon: const Icon(Icons.open_in_browser),
           ),
         ],
       ),
-      body: Padding(padding: const EdgeInsets.all(12), child: _buildBody(summary)),
+      body: Padding(padding: const EdgeInsets.all(12), child: _buildBody(widget.summary)),
     );
   }
 }
