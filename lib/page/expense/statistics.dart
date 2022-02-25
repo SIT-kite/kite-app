@@ -30,28 +30,32 @@ class StatisticsPage extends StatefulWidget {
 }
 
 class _StatisticsPageState extends State<StatisticsPage> {
-  int selectedYear = DateTime.now().year;
-  int selectedMonth = DateTime.now().month;
+  final now = DateTime.now();
+
+  late int selectedYear;
+  late int selectedMonth;
   List<ExpenseRecord> _expenseBill = [];
 
   @override
   void initState() {
+    selectedYear = now.year;
+    selectedMonth = now.month;
+    _expenseBill = StoragePool.expenseRecordStorage.getAllByTimeDesc();
     super.initState();
-    setState(() {
-      _expenseBill = StoragePool.expenseRecordStorage.getAllByTimeDesc();
-    });
   }
 
   List<int> _getYear(List<ExpenseRecord> _expenseBillDesc) {
     List<int> years = [];
-    for (int year = _expenseBillDesc.last.ts.year; year <= DateTime.now().year; year++) {
+
+    final currentYear = now.year;
+    final int startYear = _expenseBillDesc.isNotEmpty ? _expenseBillDesc.last.ts.year : currentYear;
+    for (int year = startYear; year <= currentYear; year++) {
       years.add(year);
     }
     return years;
   }
 
   List<int> _getMonth(List<ExpenseRecord> _expenseBill, List<int> years, int year) {
-    final now = DateTime.now();
     List<int> result = [];
     if (now.year == year) {
       for (int month = 1; month <= now.month; month++) {
