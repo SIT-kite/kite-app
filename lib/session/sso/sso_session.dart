@@ -30,7 +30,7 @@ import 'package:kite/util/logger.dart';
 import '../../util/dio_utils.dart';
 import 'encryption.dart';
 
-class SsoSession extends ASession {
+class SsoSession extends ASession with Downloader {
   static const String _authServerUrl = 'https://authserver.sit.edu.cn/authserver';
   static const String _loginUrl = '$_authServerUrl/login';
   static const String _needCaptchaUrl = '$_authServerUrl/needCaptcha.html';
@@ -239,6 +239,11 @@ class SsoSession extends ASession {
     var res = await _dio.post(_loginUrl, data: requestBody, options: DioUtils.NON_REDIRECT_OPTION_WITH_FORM_TYPE);
     // 处理重定向
     return await DioUtils.processRedirect(_dio, res);
+  }
+
+  @override
+  Dio getDio() {
+    return dio;
   }
 }
 

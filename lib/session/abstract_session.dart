@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:dio/dio.dart';
+import 'package:path_provider/path_provider.dart';
 
 abstract class ASession {
   Future<Response> request(
@@ -65,7 +66,41 @@ abstract class ASession {
   }
 }
 
-class DefaultSession extends ASession {
+mixin Downloader on ASession {
+  Dio getDio();
+
+  Future<Response> download(
+    String url, {
+    String? savePath,
+    ProgressCallback? onReceiveProgress,
+    Map<String, String>? queryParameters,
+    data,
+    String? contentType,
+    Options? options,
+  }) async {
+    String parentDir = (await getApplicationDocumentsDirectory()).path + '/kite/downloads';
+    String targetPath = parentDir;
+    if (savePath != null) {
+      // 绝对路径
+      if (savePath.startsWith('/')) {
+        targetPath = savePath;
+      } else {
+        // 相对路径
+        targetPath += '/' + savePath;
+      }
+    }
+    return await getDio().download(
+      url,
+      targetPath,
+      onReceiveProgress: onReceiveProgress,
+      queryParameters: queryParameters,
+      data: data,
+      options: (options ?? Options()).copyWith(contentType: contentType),
+    );
+  }
+}
+
+class DefaultSession extends ASession with Downloader {
   Dio dio;
 
   DefaultSession(this.dio);
@@ -90,5 +125,10 @@ class DefaultSession extends ASession {
         responseType: responseType,
       ),
     );
+  }
+
+  @override
+  Dio getDio() {
+    return dio;
   }
 }
