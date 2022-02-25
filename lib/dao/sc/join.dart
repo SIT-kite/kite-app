@@ -1,5 +1,3 @@
-import 'package:kite/entity/sc/join.dart';
-
 abstract class ScJoinActivityDao {
-  Future<String> process(ScJoinActivity item);
+  Future<String> join(int activityId, [bool force = false]);
 }
