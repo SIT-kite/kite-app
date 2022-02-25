@@ -194,13 +194,11 @@ class _OfficePageState extends State<OfficePage> {
         title: const Text('办公'),
         actions: [_buildMenuButton(context)],
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(child: _buildNotice(), flex: 1),
-            Expanded(child: _buildBody(), flex: 10),
-          ],
-        ),
+      body: Column(
+        children: [
+          _buildNotice(),
+          Expanded(child: _buildBody()),
+        ],
       ),
       floatingActionButton: _isOfficeLogin
           ? FloatingActionButton(
