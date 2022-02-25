@@ -71,14 +71,16 @@ class _DetailPageState extends State<DetailPage> {
               onPressed: () async {
                 showBasicFlash(context, const Text('开始下载'), duration: const Duration(seconds: 1));
                 Log.info('下载文件: [${e.name}](${e.url})');
-                String targetPath = (await getApplicationDocumentsDirectory()).path + '/kite/downloads/${e.name}';
+
+                String targetPath = (await getTemporaryDirectory()).path + '/kite/downloads/${e.name}';
+                Log.info('下载到：' + targetPath);
                 // 如果文件不存在，那么下载文件
                 if (!await File(targetPath).exists()) {
                   await SessionPool.ssoSession.download(
                     e.url,
                     savePath: targetPath,
                     onReceiveProgress: (int count, int total) {
-                      Log.info('已下载: ${count / (1024 * 1024)}MB');
+                      // Log.info('已下载: ${count / (1024 * 1024)}MB');
                     },
                   );
                 }
@@ -86,6 +88,7 @@ class _DetailPageState extends State<DetailPage> {
                 showBasicFlash(
                   context,
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
