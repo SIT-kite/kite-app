@@ -17,11 +17,15 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:kite/entity/sc/detail.dart';
 import 'package:kite/entity/sc/list.dart';
 import 'package:kite/global/session_pool.dart';
+import 'package:kite/page/event/background.dart';
 import 'package:kite/service/sc/detail.dart';
+
+import 'util.dart';
 
 class DetailPage extends StatelessWidget {
   final Activity summary;
@@ -35,52 +39,85 @@ class DetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildBasicInfo(ActivityDetail detail) {
+  Widget _buildBasicInfo(BuildContext context, ActivityDetail detail) {
+    final valueStyle = Theme.of(context).textTheme.headline5;
+    final keyStyle = valueStyle?.copyWith(fontWeight: FontWeight.bold);
+
     buildRow(String key, String value) => TableRow(
           children: [
-            Text(key),
-            Text(value),
+            Text(key, style: keyStyle),
+            Text(value, style: valueStyle),
           ],
         );
 
+    final titleStyle = Theme.of(context).textTheme.headline2;
+    final titleSections = extractTitle(detail.title);
+    final title = titleSections.last;
+    titleSections.removeLast();
+
     return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(1),
-          1: FlexColumnWidth(3),
-        },
+      padding: const EdgeInsets.all(10),
+      child: Column(
         children: [
-          buildRow('标题', detail.title),
-          buildRow('活动编号', detail.id.toString()),
-          buildRow('地点', detail.place.toString()),
-          buildRow('负责人', detail.undertaker.toString()),
-          buildRow('管理方', detail.manager.toString()),
-          buildRow('联系方式', detail.contact.toString()),
-          buildRow('开始时间', detail.startTime.toString()),
-          buildRow('时长', detail.duration.toString()),
+          Padding(padding: const EdgeInsets.all(10), child: Text(title, style: titleStyle, softWrap: true)),
+          Table(
+            columnWidths: const {
+              0: FlexColumnWidth(1),
+              1: FlexColumnWidth(3),
+            },
+            children: [
+              buildRow('活动编号', detail.id.toString()),
+              buildRow('地点', detail.place.toString()),
+              buildRow('负责人', detail.undertaker.toString()),
+              buildRow('管理方', detail.manager.toString()),
+              buildRow('联系方式', detail.contact.toString()),
+              buildRow('开始时间', detail.startTime.toString()),
+              buildRow('时长', detail.duration.toString()),
+              buildRow('标签', titleSections.join('\n')),
+            ],
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildArticle(String html) {
-    return HtmlWidget(html);
+  Widget _buildInfoCard(BuildContext context, ActivityDetail detail) {
+    return Stack(
+      children: [
+        const AspectRatio(
+          aspectRatio: 1.8,
+          child: Background(),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: Card(margin: const EdgeInsets.all(8), child: _buildBasicInfo(context, detail)),
+        )
+      ],
+    );
   }
 
-  Widget _buildDetail(ActivityDetail detail) {
-    final List<Widget> items = [_buildBasicInfo(detail), _buildArticle(detail.description ?? '暂无信息')];
-    return Column(children: items);
+  Widget _buildArticle(BuildContext context, String html) {
+    final textStyle = Theme.of(context).textTheme.headline4;
+
+    return Padding(
+        padding: const EdgeInsets.all(20), child: HtmlWidget(html, isSelectable: true, textStyle: textStyle));
   }
 
-  Widget _buildBody() {
+  Widget _buildDetail(BuildContext context, ActivityDetail detail) {
+    final List<Widget> items = [_buildInfoCard(context, detail), _buildArticle(context, detail.description ?? '暂无信息')];
+    return SingleChildScrollView(
+      child: Column(mainAxisSize: MainAxisSize.min, children: items),
+    );
+  }
+
+  Widget _buildBody(BuildContext context) {
     final future = ScActivityDetailService(SessionPool.scSession).getActivityDetail(summary.id);
 
     return FutureBuilder<ActivityDetail>(
         future: future,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return _buildDetail(snapshot.data!);
+            return _buildDetail(context, snapshot.data!);
           }
           return const Center(child: CircularProgressIndicator());
         });
@@ -90,7 +127,7 @@ class DetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
-      body: _buildBody(),
+      body: _buildBody(context),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {},
         icon: const Icon(Icons.person_add),
