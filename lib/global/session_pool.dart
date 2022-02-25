@@ -118,15 +118,11 @@ class SessionPool {
 class KiteHttpOverrides extends HttpOverrides {
   String getProxyPolicyByUrl(Uri url, String httpProxy) {
     // 使用代理访问的网站规则
-    final rule = ChainRule(
-      FunctionalRule((String url) {
-        // 所有以sit.edu.cn结尾的网址都走代理
-        return url.endsWith('sit.edu.cn');
-      }),
-    )
-        .exclude(const EqualRule('authserver.sit.edu.cn')) // 除了authserver
-
-        // 外加如下规则
+    final rule = const ChainRule(ConstRule())
+        .sum(const EqualRule('jwxt.sit.edu.cn'))
+        .sum(const EqualRule('sc.sit.edu.cn'))
+        .sum(const EqualRule('card.sit.edu.cn'))
+        .sum(const EqualRule('myportal.sit.edu.cn'))
         .sum(const EqualRule('210.35.66.106')) // 图书馆
         .sum(const EqualRule('210.35.98.178')); // 门禁
 
