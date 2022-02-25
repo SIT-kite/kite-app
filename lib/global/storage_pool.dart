@@ -140,8 +140,7 @@ class StoragePool {
 
   static Future<void> init() async {
     Log.info("初始化StoragePool");
-
-    await Hive.initFlutter();
+    await Hive.initFlutter('kite/hive');
     await _registerAdapters();
     final expenseRecordBox = await Hive.openBox<ExpenseRecord>('expenseSetting');
     _expenseRecord = ExpenseLocalStorage(expenseRecordBox);

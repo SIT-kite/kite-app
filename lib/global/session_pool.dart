@@ -64,7 +64,7 @@ class SessionPool {
 
     if (!_hasInit) {
       final String homeDirectory = (await getApplicationDocumentsDirectory()).path;
-      final FileStorage cookieStorage = FileStorage(homeDirectory + '/cookies/');
+      final FileStorage cookieStorage = FileStorage(homeDirectory + '/kite/cookies/');
       // 初始化 cookie jar
       _cookieJar = PersistCookieJar(storage: cookieStorage);
     }
