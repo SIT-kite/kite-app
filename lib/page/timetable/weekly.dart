@@ -116,7 +116,11 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
   void _jumpToday() {
     _setDate(DateTime.now());
     if (_pageController.hasClients) {
-      _pageController.jumpToPage(_currentWeek - 1);
+      _pageController.animateToPage(
+        _currentWeek - 1,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.linearToEaseOut,
+      );
     }
   }
 

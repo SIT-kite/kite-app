@@ -106,7 +106,11 @@ class _DailyTimetableState extends State<DailyTimetable> {
   /// 跳转到指定星期与天
   void _jumpToDay(int week, int day) {
     if (_pageController.hasClients) {
-      _pageController.jumpToPage((week - 1) * 7 + day - 1);
+      _pageController.animateToPage(
+        (week - 1) * 7 + day - 1,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.linearToEaseOut,
+      );
     }
   }
 
