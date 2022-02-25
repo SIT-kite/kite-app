@@ -30,6 +30,7 @@ import 'package:kite/session/library_session.dart';
 import 'package:kite/session/sc_session.dart';
 import 'package:kite/session/sso/sso_session.dart';
 import 'package:kite/util/logger.dart';
+import 'package:kite/util/rule.dart';
 import 'package:path_provider/path_provider.dart';
 
 class SessionPool {
@@ -115,6 +116,30 @@ class SessionPool {
 }
 
 class KiteHttpOverrides extends HttpOverrides {
+  String getProxyPolicyByUrl(Uri url, String httpProxy) {
+    // 使用代理访问的网站规则
+    final rule = ChainRule(
+      FunctionalRule((String url) {
+        // 所有以sit.edu.cn结尾的网址都走代理
+        return url.endsWith('sit.edu.cn');
+      }),
+    )
+        .exclude(const EqualRule('authserver.sit.edu.cn')) // 除了authserver
+
+        // 外加如下规则
+        .sum(const EqualRule('210.35.66.106')) // 图书馆
+        .sum(const EqualRule('210.35.98.178')); // 门禁
+
+    final host = url.host;
+    if (rule.accept(host)) {
+      Log.info('使用代理访问 $url');
+      return 'PROXY $httpProxy';
+    } else {
+      Log.info('直连访问 $url');
+      return 'DIRECT';
+    }
+  }
+
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     final client = super.createHttpClient(context);
@@ -131,14 +156,14 @@ class KiteHttpOverrides extends HttpOverrides {
       if (SessionPool.httpProxy!.isNotEmpty) {
         // 可以
         Log.info('测试环境设置代理: ${SessionPool.httpProxy}');
-        client.findProxy = (_) => 'PROXY ${SessionPool.httpProxy}';
+        client.findProxy = (url) => getProxyPolicyByUrl(url, SessionPool.httpProxy!);
       } else {
         // 不行
         Log.info('测试环境代理服务器为空或不合法，将不使用代理服务器');
       }
     } else if (StoragePool.network.useProxy && StoragePool.network.proxy.isNotEmpty) {
       Log.info('线上设置代理: ${SessionPool.httpProxy}');
-      client.findProxy = (_) => 'PROXY ${StoragePool.network.proxy}';
+      client.findProxy = (url) => getProxyPolicyByUrl(url, StoragePool.network.proxy);
     }
     return client;
   }
