@@ -17,13 +17,14 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:kite/entity/sc/detail.dart';
 import 'package:kite/entity/sc/list.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/page/event/background.dart';
 import 'package:kite/service/sc/detail.dart';
+import 'package:kite/service/sc/join.dart';
+import 'package:kite/util/flash.dart';
 
 import 'util.dart';
 
@@ -123,15 +124,36 @@ class DetailPage extends StatelessWidget {
         });
   }
 
+  Future<void> _sendRequest(BuildContext context, bool force) async {
+    try {
+      final response = await ScJoinActivityService(SessionPool.scSession).join(summary.id, force);
+      showBasicFlash(context, Text(response));
+    } catch (e) {
+      showBasicFlash(context, Text('错误: ' + e.runtimeType.toString()), duration: const Duration(seconds: 3));
+      rethrow;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
       body: _buildBody(context),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
-        icon: const Icon(Icons.person_add),
-        label: const Text('报名'),
+      floatingActionButton: InkWell(
+        splashColor: Colors.blue,
+        onTap: () async {
+          // 常规模式报名活动
+          _sendRequest(context, false);
+        },
+        onDoubleTap: () {
+          // 报名活动（强制模式）
+          _sendRequest(context, true);
+        },
+        child: const FloatingActionButton.extended(
+          icon: Icon(Icons.person_add),
+          label: Text('报名'),
+          onPressed: null,
+        ),
       ),
     );
   }
