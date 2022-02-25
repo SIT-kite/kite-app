@@ -69,13 +69,14 @@ class KiteApp extends StatelessWidget {
 
   TextTheme _buildTextTheme(BuildContext context) {
     return const TextTheme(
-      headline1: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
-      headline2: TextStyle(fontSize: 26.0),
-      headline3: TextStyle(fontSize: 24.0),
-      headline4: TextStyle(fontSize: 22.0),
+      headline1: TextStyle(fontSize: 32.0),
+      headline2: TextStyle(fontSize: 28.0),
+      headline3: TextStyle(fontSize: 26.0),
+      headline4: TextStyle(fontSize: 24.0),
+      headline5: TextStyle(fontSize: 22.0),
       headline6: TextStyle(fontSize: 20.0),
-      bodyText1: TextStyle(fontSize: 18.0, fontWeight: FontWeight.normal),
-      bodyText2: TextStyle(fontSize: 16.0, color: Colors.black54, fontWeight: FontWeight.w600),
+      bodyText1: TextStyle(fontSize: 20.0, fontWeight: FontWeight.normal),
+      bodyText2: TextStyle(fontSize: 20.0, color: Colors.black54, fontWeight: FontWeight.w300),
     );
   }
 

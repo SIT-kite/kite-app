@@ -63,7 +63,7 @@ class _ClassroomPageState extends State<ClassroomPage> {
 
   Widget _buildHeaderLine() {
     final primaryColor = Theme.of(context).primaryColor;
-    final textStyle = Theme.of(context).textTheme.headline5?.copyWith(color: primaryColor);
+    final textStyle = Theme.of(context).textTheme.headline6?.copyWith(color: primaryColor);
 
     return Container(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),

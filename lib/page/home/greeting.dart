@@ -80,7 +80,7 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   }
 
   Widget buildAll(BuildContext context) {
-    final textStyle = Theme.of(context).textTheme.headline3?.copyWith(color: Colors.white70);
+    final textStyle = Theme.of(context).textTheme.headline5?.copyWith(color: Colors.white70);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

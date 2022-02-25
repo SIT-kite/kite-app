@@ -54,7 +54,7 @@ class HomeItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final titleStyle = Theme.of(context).textTheme.headline3;
+    final titleStyle = Theme.of(context).textTheme.headline5?.copyWith(color: Colors.black54);
     final subtitleStyle = Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.black54);
 
     return Container(

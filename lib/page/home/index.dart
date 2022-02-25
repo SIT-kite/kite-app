@@ -134,7 +134,7 @@ class _HomePageState extends State<HomePage> {
       HomeItemGroup([
         // ElectricityItem(),
         HomeItem(route: '/classroom', icon: 'assets/home/icon_classroom.svg', title: '空教室', subtitle: '查看教学楼当前空闲的教室'),
-        // EventItem(),
+        const EventItem(),
         const ExpenseItem(),
         const ScoreItem(),
         const LibraryItem(),
