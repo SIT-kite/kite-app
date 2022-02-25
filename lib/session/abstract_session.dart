@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:dio/dio.dart';
-import 'package:path_provider/path_provider.dart';
 
 abstract class ASession {
   Future<Response> request(
@@ -78,20 +77,9 @@ mixin Downloader on ASession {
     String? contentType,
     Options? options,
   }) async {
-    String parentDir = (await getApplicationDocumentsDirectory()).path + '/kite/downloads';
-    String targetPath = parentDir;
-    if (savePath != null) {
-      // 绝对路径
-      if (savePath.startsWith('/')) {
-        targetPath = savePath;
-      } else {
-        // 相对路径
-        targetPath += '/' + savePath;
-      }
-    }
     return await getDio().download(
       url,
-      targetPath,
+      savePath,
       onReceiveProgress: onReceiveProgress,
       queryParameters: queryParameters,
       data: data,
