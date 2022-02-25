@@ -25,6 +25,7 @@ import 'package:kite/page/event/background.dart';
 import 'package:kite/service/sc/detail.dart';
 import 'package:kite/service/sc/join.dart';
 import 'package:kite/util/flash.dart';
+import 'package:kite/util/url_launcher.dart';
 
 import 'util.dart';
 
@@ -36,7 +37,13 @@ class DetailPage extends StatelessWidget {
   AppBar _buildAppBar() {
     return AppBar(
       title: const Text('活动详情'),
-      actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.open_in_browser))],
+      actions: [
+        IconButton(
+            icon: const Icon(Icons.open_in_browser),
+            onPressed: () {
+              launchInBrowser('http://sc.sit.edu.cn/public/activity/activityDetail.action?activityId=${summary.id}');
+            },)
+      ],
     );
   }
 
