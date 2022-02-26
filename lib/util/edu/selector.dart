@@ -24,11 +24,13 @@ class SemesterSelector extends StatefulWidget {
   final int? initialYear;
   final Semester? initialSemester;
 
+  /// 是否显示整个学年
+  final bool? showEntireYear;
   final Function(int) yearSelectCallback;
   final Function(Semester) semesterSelectCallback;
 
   const SemesterSelector(this.yearSelectCallback, this.semesterSelectCallback,
-      {this.initialYear, this.initialSemester, Key? key})
+      {this.initialYear, this.initialSemester, this.showEntireYear, Key? key})
       : super(key: key);
 
   @override
@@ -42,12 +44,13 @@ class _SemesterSelectorState extends State<SemesterSelector> {
   late int selectedYear;
 
   /// 要查询的学期
-  Semester selectedSemester = Semester.all;
+  late Semester selectedSemester;
 
   @override
   void initState() {
     now = DateTime.now();
-    selectedYear = now.month >= 9 ? now.year : now.year - 1;
+    selectedYear = widget.initialYear ?? (now.month >= 9 ? now.year : now.year - 1);
+    selectedSemester = widget.initialSemester ?? Semester.all;
     super.initState();
   }
 

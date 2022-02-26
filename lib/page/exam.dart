@@ -21,11 +21,32 @@ import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/entity/edu/index.dart';
 import 'package:kite/global/service_pool.dart';
+import 'package:kite/util/edu/selector.dart';
 
-class ExamTimePage extends StatelessWidget {
+class ExamPage extends StatefulWidget {
+  const ExamPage({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _ExamPageState();
+}
+
+class _ExamPageState extends State<ExamPage> {
   static final dateFormat = DateFormat('MM月dd日 HH:mm');
 
-  const ExamTimePage({Key? key}) : super(key: key);
+  /// 四位年份
+  late int selectedYear;
+
+  /// 要查询的学期
+  late Semester selectedSemester;
+
+  @override
+  void initState() {
+    final DateTime now = DateTime.now();
+    selectedYear = (now.month >= 9 ? now.year : now.year - 1);
+    selectedSemester = (now.month >= 3 && now.month <= 7) ? Semester.secondTerm : Semester.firstTerm;
+
+    super.initState();
+  }
 
   Widget _buildItem(BuildContext context, String icon, String text) {
     final itemStyle = Theme.of(context).textTheme.headline4;
@@ -93,21 +114,44 @@ class ExamTimePage extends StatelessWidget {
     );
   }
 
+  Widget buildBody(BuildContext context) {
+    return MyFutureBuilder<List<ExamRoom>>(
+      future: ServicePool.exam.getExamList(
+        SchoolYear(selectedYear),
+        selectedSemester,
+      ),
+      builder: (context, data) {
+        data.sort((a, b) {
+          return a.time[0].isAfter(b.time[0]) ? 1 : -1;
+        });
+        return Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(left: 15),
+              child: SemesterSelector(
+                (year) {
+                  setState(() => selectedYear = year);
+                },
+                (semester) {
+                  setState(() => selectedSemester = semester);
+                },
+                initialYear: selectedYear,
+                initialSemester: selectedSemester,
+                showEntireYear: false,
+              ),
+            ),
+            Expanded(child: buildExamItems(context, data)),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('考试安排')),
-        body: MyFutureBuilder<List<ExamRoom>>(
-          future: ServicePool.exam.getExamList(
-            const SchoolYear(2021),
-            Semester.firstTerm,
-          ),
-          builder: (context, data) {
-            data.sort((a, b) {
-              return a.time[0].isAfter(b.time[0]) ? 1 : -1;
-            });
-            return buildExamItems(context, data);
-          },
-        ));
+      appBar: AppBar(title: const Text('考试安排')),
+      body: buildBody(context),
+    );
   }
 }
