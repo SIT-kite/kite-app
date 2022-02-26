@@ -32,7 +32,7 @@ class ExpenseChart extends StatelessWidget {
 
     return LineChart(
       LineChartData(
-        lineTouchData: LineTouchData(touchTooltipData: LineTouchTooltipData(tooltipBgColor: primaryColor)),
+        lineTouchData: LineTouchData(touchTooltipData: LineTouchTooltipData(tooltipBgColor: Colors.transparent)),
         borderData: FlBorderData(
           border: const Border(
             bottom: BorderSide(width: 1.0),
@@ -54,17 +54,6 @@ class ExpenseChart extends StatelessWidget {
             preventCurveOvershootingThreshold: 3.0,
           ),
         ],
-        gridData: FlGridData(
-          show: true,
-          drawVerticalLine: false,
-          getDrawingHorizontalLine: (value) {
-            return FlLine(
-              color: primaryColor,
-              strokeWidth: 1,
-              dashArray: [20, 10],
-            );
-          },
-        ),
         titlesData: FlTitlesData(
           show: true,
           rightTitles: SideTitles(showTitles: false),

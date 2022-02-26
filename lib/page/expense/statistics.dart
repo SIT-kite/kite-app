@@ -139,9 +139,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const Padding(
-              padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
-              child: Text('支出对比', textScaleFactor: 1.2),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
+              child: Text('支出对比', style: Theme.of(context).textTheme.headline2),
             ),
             // const SizedBox(height: 5),
             Center(
@@ -162,7 +162,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
     }
     double sum = sumByClassification.fold(0.0, (previousValue, element) => previousValue += element);
 
-    return ExpenseType.values.map(
+    return ExpenseType.values.where((element) => element != ExpenseType.all).map(
       (expenseType) {
         final double sumInType = sumByClassification[expenseType.index];
         final double percentage = sum != 0 ? sumInType / sum : 0;
@@ -172,13 +172,13 @@ class _StatisticsPageState extends State<StatisticsPage> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(expenseTypeMapping[expenseType]!, textScaleFactor: 1.2),
-              Text('  ${(percentage * 100).toStringAsFixed(2)} %', textScaleFactor: 1.1),
+              Text(expenseTypeMapping[expenseType]!, style: Theme.of(context).textTheme.headline5),
+              Text('  ${(percentage * 100).toStringAsFixed(2)} %'),
             ],
           ),
           subtitle: LinearProgressIndicator(value: percentage),
           // 下方 SizedBox 用于限制文字宽度, 使左侧进度条的右端对齐.
-          trailing: SizedBox(width: 80, child: Text('￥${sumInType.toStringAsFixed(2)}', textScaleFactor: 1.2)),
+          trailing: SizedBox(width: 80, child: Text('￥${sumInType.toStringAsFixed(2)}')),
           dense: true,
         );
       },
@@ -192,9 +192,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
-            child: Text('支出分类', textScaleFactor: 1.2),
+          Padding(
+            padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
+            child: Text('支出分类', style: Theme.of(context).textTheme.headline2),
           ),
           Column(
             children: _buildClassifiedStat(),
