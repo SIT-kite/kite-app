@@ -18,7 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:kite/entity/contact.dart';
-import 'package:kite/page/contact/list_view.dart';
+import 'package:kite/page/contact/list.dart';
 
 class Search extends SearchDelegate<String> {
   final List<ContactData> contacts;

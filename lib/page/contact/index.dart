@@ -21,7 +21,7 @@ import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/service/contact.dart';
 
-import 'list_view.dart';
+import 'list.dart';
 import 'search.dart';
 
 class ContactPage extends StatefulWidget {
