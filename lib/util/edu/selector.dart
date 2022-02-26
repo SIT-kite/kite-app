@@ -50,7 +50,12 @@ class _SemesterSelectorState extends State<SemesterSelector> {
   void initState() {
     now = DateTime.now();
     selectedYear = widget.initialYear ?? (now.month >= 9 ? now.year : now.year - 1);
-    selectedSemester = widget.initialSemester ?? Semester.all;
+    if (widget.showEntireYear ?? true) {
+      selectedSemester = widget.initialSemester ?? Semester.all;
+    } else {
+      selectedSemester =
+          widget.initialSemester ?? ((now.month >= 3 && now.month <= 7) ? Semester.secondTerm : Semester.firstTerm);
+    }
     super.initState();
   }
 
@@ -64,27 +69,23 @@ class _SemesterSelectorState extends State<SemesterSelector> {
     return yearItems;
   }
 
-  Semester indexToSemester(int index) {
-    return [Semester.all, Semester.firstTerm, Semester.secondTerm][index];
-  }
-
   String buildYearString(int startYear) {
     return '$startYear - ${startYear + 1}';
   }
 
   /// 构建选择下拉框.
   /// alternatives 是一个字典, key 为实际值, value 为显示值.
-  Widget buildSelector(Map<int, String> alternatives, int initialValue, void Function(int?) callback) {
+  Widget buildSelector<T>(Map<T, String> alternatives, T initialValue, void Function(T?) callback) {
     final items = alternatives.keys
         .map(
-          (k) => DropdownMenuItem<int>(
+          (k) => DropdownMenuItem<T>(
             value: k,
             child: Text(alternatives[k]!),
           ),
         )
         .toList();
 
-    return DropdownButton<int>(
+    return DropdownButton<T>(
       value: initialValue,
       icon: const Icon(Icons.keyboard_arrow_down_outlined),
       style: const TextStyle(
@@ -107,7 +108,7 @@ class _SemesterSelectorState extends State<SemesterSelector> {
     final mapping = yearList.map((e) => MapEntry(e, buildYearString(e)));
 
     // 保证显示上初始选择年份、实际加载的年份、selectedYear 变量一致.
-    return buildSelector(Map.fromEntries(mapping), selectedYear, (int? selected) {
+    return buildSelector<int>(Map.fromEntries(mapping), selectedYear, (int? selected) {
       if (selected != null && selected != selectedYear) {
         setState(() => selectedYear = selected);
         widget.yearSelectCallback(selectedYear);
@@ -121,11 +122,18 @@ class _SemesterSelectorState extends State<SemesterSelector> {
       Semester.firstTerm: '第一学期',
       Semester.secondTerm: '第二学期',
     };
-    final semesters = Semester.values.map((e) => MapEntry(e.index, semesterDescription[e]!));
+    List<Semester> semesters;
+    // 不显示学年
+    if (!(widget.showEntireYear ?? true)) {
+      semesters = [Semester.firstTerm, Semester.secondTerm];
+    } else {
+      semesters = [Semester.all, Semester.firstTerm, Semester.secondTerm];
+    }
+    final semesterItems = Map.fromEntries(semesters.map((e) => MapEntry(e, semesterDescription[e]!)));
     // 保证显示上初始选择学期、实际加载的学期、selectedSemester 变量一致.
-    return buildSelector(Map.fromEntries(semesters), selectedSemester.index, (int? selected) {
-      if (selected != null && selected != (selectedSemester.index)) {
-        setState(() => selectedSemester = indexToSemester(selected));
+    return buildSelector<Semester>(semesterItems, selectedSemester, (Semester? selected) {
+      if (selected != null && selected != selectedSemester) {
+        setState(() => selectedSemester = selected);
         widget.semesterSelectCallback(selectedSemester);
       }
     });
