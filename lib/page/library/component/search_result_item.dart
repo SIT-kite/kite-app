@@ -17,7 +17,6 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/util/library/search.dart';
-import 'package:kite/util/logger.dart';
 
 typedef KeyClickCallback = void Function(String key);
 
@@ -54,7 +53,6 @@ class BookItemWidget extends StatelessWidget {
   /// 构造一个图书项
   Widget buildListTile(BuildContext context, BookImageHolding bi) {
     final screenHeight = MediaQuery.of(context).size.height;
-    Log.info('屏幕高度: $screenHeight');
     final book = bi.book;
     final holding = bi.holding ?? [];
     // 计算总共馆藏多少书
@@ -75,14 +73,7 @@ class BookItemWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                book.title,
-                style: const TextStyle(
-                  fontSize: 18.0,
-                  fontStyle: FontStyle.normal,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              Text(book.title, style: Theme.of(context).textTheme.headline3, softWrap: true),
               onAuthorTap == null
                   ? Text('作者:  ${book.author}')
                   : Row(

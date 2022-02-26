@@ -40,7 +40,7 @@ class ExamTimePage extends StatelessWidget {
   }
 
   Widget buildExamItem(BuildContext context, ExamRoom examItem) {
-    final itemStyle = Theme.of(context).textTheme.headline4;
+    final itemStyle = Theme.of(context).textTheme.bodyText2;
     final name = examItem.courseName;
     final startTime = examItem.time[0];
     final endTime = examItem.time[1];
@@ -56,6 +56,7 @@ class ExamTimePage extends StatelessWidget {
     }
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(name, style: Theme.of(context).textTheme.headline1),
         Table(

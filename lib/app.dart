@@ -67,23 +67,23 @@ class KiteApp extends StatelessWidget {
     );
   }
 
-  TextTheme _buildTextTheme(BuildContext context) {
+  TextTheme _buildTextTheme(Color primaryColor) {
     return const TextTheme(
-      headline1: TextStyle(fontSize: 32.0),
-      headline2: TextStyle(fontSize: 28.0),
-      headline3: TextStyle(fontSize: 26.0),
-      headline4: TextStyle(fontSize: 24.0),
-      headline5: TextStyle(fontSize: 22.0),
-      headline6: TextStyle(fontSize: 20.0),
-      bodyText1: TextStyle(fontSize: 20.0, fontWeight: FontWeight.normal),
-      bodyText2: TextStyle(fontSize: 20.0, color: Colors.black54, fontWeight: FontWeight.w300),
+      headline1: TextStyle(fontSize: 28.0, color: Colors.black54, fontWeight: FontWeight.w500),
+      headline2: TextStyle(fontSize: 26.0, color: Colors.black54, fontWeight: FontWeight.w500),
+      headline3: TextStyle(fontSize: 24.0, color: Colors.black54, fontWeight: FontWeight.w400),
+      headline4: TextStyle(fontSize: 22.0, color: Colors.black54, fontWeight: FontWeight.w400),
+      headline5: TextStyle(fontSize: 20.0, color: Colors.black54, fontWeight: FontWeight.w300),
+      headline6: TextStyle(fontSize: 18.0, color: Colors.black54, fontWeight: FontWeight.w300),
+      bodyText1: TextStyle(fontSize: 18.0, color: Colors.black45, fontWeight: FontWeight.normal),
+      bodyText2: TextStyle(fontSize: 16.0, color: Colors.black45, fontWeight: FontWeight.w300),
     );
   }
 
   ThemeData _buildTheme(BuildContext context, Color primaryColor, bool isDark) {
     return ThemeData(
       colorSchemeSeed: primaryColor,
-      textTheme: _buildTextTheme(context),
+      textTheme: _buildTextTheme(primaryColor),
       brightness: isDark ? Brightness.dark : Brightness.light,
       useMaterial3: true,
     );
@@ -120,7 +120,11 @@ class KiteApp extends StatelessWidget {
             onGenerateRoute: _onGenerateRoute,
             builder: (context, widget) {
               ScreenUtil.setContext(context);
-              return widget!;
+              return MediaQuery(
+                // 设置文字大小不随系统设置改变
+                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                child: widget!,
+              );
             },
           );
         },

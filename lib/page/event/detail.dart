@@ -39,16 +39,17 @@ class DetailPage extends StatelessWidget {
       title: const Text('活动详情'),
       actions: [
         IconButton(
-            icon: const Icon(Icons.open_in_browser),
-            onPressed: () {
-              launchInBrowser('http://sc.sit.edu.cn/public/activity/activityDetail.action?activityId=${summary.id}');
-            },)
+          icon: const Icon(Icons.open_in_browser),
+          onPressed: () {
+            launchInBrowser('http://sc.sit.edu.cn/public/activity/activityDetail.action?activityId=${summary.id}');
+          },
+        )
       ],
     );
   }
 
   Widget _buildBasicInfo(BuildContext context, ActivityDetail detail) {
-    final valueStyle = Theme.of(context).textTheme.headline5;
+    final valueStyle = Theme.of(context).textTheme.bodyText2;
     final keyStyle = valueStyle?.copyWith(fontWeight: FontWeight.bold);
 
     buildRow(String key, String value) => TableRow(
@@ -105,7 +106,7 @@ class DetailPage extends StatelessWidget {
   }
 
   Widget _buildArticle(BuildContext context, String html) {
-    final textStyle = Theme.of(context).textTheme.headline4;
+    final textStyle = Theme.of(context).textTheme.bodyText1;
 
     return Padding(
         padding: const EdgeInsets.all(20), child: HtmlWidget(html, isSelectable: true, textStyle: textStyle));

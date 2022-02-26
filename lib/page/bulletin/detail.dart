@@ -58,6 +58,7 @@ class _DetailPageState extends State<DetailPage> {
   Widget _buildArticle(BuildContext context, BulletinDetail article) {
     final titleStyle = Theme.of(context).textTheme.headline2?.copyWith(fontWeight: FontWeight.bold);
     final subtitleStyle = Theme.of(context).textTheme.headline4?.copyWith(color: Colors.black54);
+    final textStyle = Theme.of(context).textTheme.bodyText2;
 
     return Column(
       children: <Widget>[

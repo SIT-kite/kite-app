@@ -42,6 +42,7 @@ class _MyHtmlWidgetState extends State<MyHtmlWidget> {
       widget.html,
       isSelectable: widget.isSelectable,
       renderMode: widget.renderMode,
+      textStyle: Theme.of(context).textTheme.bodyText2,
       onTapUrl: (url) {
         launchInBrowser(url);
         return true;

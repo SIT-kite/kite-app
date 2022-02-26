@@ -29,8 +29,10 @@ class BillPage extends StatelessWidget {
   const BillPage({required this.filter, Key? key}) : super(key: key);
 
   Widget _buildBillList(BuildContext context, List<ExpenseRecord> expenseData) {
-    final titleStyle = Theme.of(context).textTheme.headline2;
-    final subtitleStyle = Theme.of(context).textTheme.headline6;
+    final groupTitleStyle = Theme.of(context).textTheme.headline2;
+    final groupSubtitleStyle = Theme.of(context).textTheme.headline6;
+    final itemTitleStyle = Theme.of(context).textTheme.bodyText1;
+    final itemSubtitleStyle = Theme.of(context).textTheme.bodyText2;
 
     return GroupedListView<ExpenseRecord, int>(
       elements: expenseData,
@@ -44,8 +46,8 @@ class BillPage extends StatelessWidget {
 
         return ListTile(
           leading: icon,
-          title: Text(detail.place),
-          trailing: Text(detail.amount.toString(), textScaleFactor: 1.5),
+          title: Text(detail.place, style: itemTitleStyle),
+          trailing: Text(detail.amount.toString(), textScaleFactor: 1.5, style: itemSubtitleStyle),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[Text(detail.ts.toString())],
@@ -62,8 +64,8 @@ class BillPage extends StatelessWidget {
           total += (element.ts.month == month && element.ts.year == year) ? element.amount : 0;
         }
         return ListTile(
-          title: Text('$year 年$month 月 ', style: titleStyle),
-          subtitle: Text('支出: ${total.toStringAsFixed(2)} 元', style: subtitleStyle),
+          title: Text('$year 年$month 月 ', style: groupTitleStyle),
+          subtitle: Text('支出: ${total.toStringAsFixed(2)} 元', style: groupSubtitleStyle),
         );
       },
     );

@@ -53,15 +53,8 @@ class _BookInfoPageState extends State<BookInfoPage> {
                 .map(
                   (e) => TableRow(
                     children: [
-                      Text(
-                        e.key,
-                      ),
-                      SelectableText(
-                        e.value,
-                        style: const TextStyle(
-                          color: Colors.black54,
-                        ),
-                      ),
+                      Text(e.key, style: Theme.of(context).textTheme.headline5),
+                      SelectableText(e.value, style: Theme.of(context).textTheme.bodyText2),
                     ],
                   ),
                 )

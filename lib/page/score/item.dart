@@ -127,12 +127,15 @@ class _ScoreItemState extends State<ScoreItem> {
 
   @override
   Widget build(BuildContext context) {
+    final titleStyle = Theme.of(context).textTheme.headline4;
+    final subtitleStyle = Theme.of(context).textTheme.bodyText1;
+
     return Column(children: [
       ListTile(
         minLeadingWidth: 60,
         leading: _buildLeading(),
-        title: Text(_score.course, style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text('${_score.courseId[0] != 'G' ? '必修' : '选修'} | 学分: ${_score.credit}'),
+        title: Text(_score.course, style: titleStyle),
+        subtitle: Text('${_score.courseId[0] != 'G' ? '必修' : '选修'} | 学分: ${_score.credit}', style: subtitleStyle),
         trailing: _buildTrailing(),
         onTap: () => setState(() {
           _isExpanded = !_isExpanded;
