@@ -54,7 +54,7 @@ class ContactList extends StatelessWidget {
             color: Theme.of(context).primaryColor,
             onPressed: () {
               final phone = contact.phone;
-              launchInBrowser('tel:${phone.length == 8 ? '021' : '' + phone}');
+              launchInBrowser('tel:${(phone.length == 8 ? '021' : '') + phone}');
             },
           )
         ],
