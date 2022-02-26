@@ -15,12 +15,52 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
+import 'package:encrypt/encrypt.dart';
 import 'package:kite/session/abstract_session.dart';
+import 'package:kite/util/dio_utils.dart';
 import 'package:kite/util/logger.dart';
+import 'package:pointycastle/asymmetric/api.dart';
 
 class LibrarySession extends DefaultSession {
+  static const _opacUrl = 'http://210.35.66.106/opac';
+  static const _pemUrl = _opacUrl + '/certificate/pem';
+  static const _doLoginUrl = _opacUrl + '/reader/doLogin';
   LibrarySession(Dio dio) : super(dio) {
     Log.info('初始化LibrarySession');
+  }
+
+  Future<Response> login(String username, String password) async {
+    String hashedPwd = md5.convert(const Utf8Encoder().convert(password)).toString();
+    final pk = await getRSAPublicKey();
+    final encrypter = Encrypter(RSA(publicKey: pk));
+    final String encryptedPwd = encrypter.encrypt(hashedPwd).base64;
+    final response = await post(
+      _doLoginUrl,
+      data: {
+        'vToken': '',
+        'rdLoginId': username,
+        'p': '',
+        'rdPasswd': encryptedPwd,
+        'returnUrl': '',
+        'password': '',
+      },
+      options: DioUtils.NON_REDIRECT_OPTION_WITH_FORM_TYPE.copyWith(
+        contentType: 'application/x-www-form-urlencoded',
+      ),
+    );
+    return DioUtils.processRedirect(dio, response);
+  }
+
+  Future<RSAPublicKey> getRSAPublicKey() async {
+    final pemResponse = await get(_pemUrl);
+    String publicKeyStr = pemResponse.data;
+    final pemFileContent = '-----BEGIN PUBLIC KEY-----\n' + publicKeyStr + '\n-----END PUBLIC KEY-----';
+
+    final parser = RSAKeyParser();
+    return parser.parse(pemFileContent) as RSAPublicKey;
   }
 }
