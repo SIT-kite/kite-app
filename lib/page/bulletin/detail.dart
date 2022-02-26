@@ -18,7 +18,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/html_widget.dart';
 import 'package:kite/entity/bulletin.dart';
@@ -47,11 +46,11 @@ class _DetailPageState extends State<DetailPage> {
     String t = content;
     for (var phone in _phoneRegex.allMatches(t)) {
       final num = phone.group(0).toString();
-      t = t.replaceAll(num, '<a href="tel://021$num">$num</a>');
+      t = t.replaceAll(num, '<a href="tel:021$num">$num</a>');
     }
     for (var mobile in _mobileRegex.allMatches(content)) {
       final num = mobile.group(0).toString();
-      t = t.replaceAll(num, '<a href="tel://$num">$num</a>');
+      t = t.replaceAll(num, '<a href="tel:$num">$num</a>');
     }
     return t;
   }
