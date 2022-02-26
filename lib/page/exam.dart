@@ -49,7 +49,7 @@ class _ExamPageState extends State<ExamPage> {
   }
 
   Widget _buildItem(BuildContext context, String icon, String text) {
-    final itemStyle = Theme.of(context).textTheme.headline4;
+    final itemStyle = Theme.of(context).textTheme.headline5;
     final iconImage = AssetImage('assets/' + icon);
     return Row(
       children: [
