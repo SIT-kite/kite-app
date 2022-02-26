@@ -18,6 +18,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/html_widget.dart';
 import 'package:kite/entity/bulletin.dart';
@@ -55,60 +56,86 @@ class _DetailPageState extends State<DetailPage> {
     return t;
   }
 
+  Future<void> _onDownloadFile(Attachment attachment) async {
+    showBasicFlash(context, const Text('开始下载'), duration: const Duration(seconds: 1));
+    Log.info('下载文件: [${attachment.name}](${attachment.url})');
+
+    String targetPath = (await getTemporaryDirectory()).path + '/kite/downloads/${attachment.name}';
+    Log.info('下载到：' + targetPath);
+    // 如果文件不存在，那么下载文件
+    if (!await File(targetPath).exists()) {
+      await SessionPool.ssoSession.download(
+        attachment.url,
+        savePath: targetPath,
+        onReceiveProgress: (int count, int total) {
+          // Log.info('已下载: ${count / (1024 * 1024)}MB');
+        },
+      );
+    }
+
+    showBasicFlash(
+      context,
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const Text('下载完毕'),
+            Text(attachment.name),
+          ]),
+          TextButton(
+            onPressed: () => OpenFile.open(targetPath),
+            child: const Text('打开'),
+          ),
+        ],
+      ),
+      duration: const Duration(seconds: 5),
+    );
+  }
+
+  Widget _buildCard(BulletinDetail article) {
+    final valueStyle = Theme.of(context).textTheme.bodyText2;
+    final keyStyle = valueStyle?.copyWith(fontWeight: FontWeight.bold);
+
+    TableRow buildRow(String key, String value) => TableRow(
+          children: [
+            Text(key, style: keyStyle),
+            Text(value, style: valueStyle),
+          ],
+        );
+
+    return Card(
+      margin: const EdgeInsets.all(10),
+      child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Table(
+            columnWidths: const {
+              0: FlexColumnWidth(1),
+              1: FlexColumnWidth(3),
+            },
+            children: [
+              buildRow('发布部门', article.department),
+              buildRow('作者', article.author),
+              buildRow('发布时间', article.dateTime.toString()),
+            ],
+          )),
+    );
+  }
+
   Widget _buildArticle(BuildContext context, BulletinDetail article) {
-    final titleStyle = Theme.of(context).textTheme.headline2?.copyWith(fontWeight: FontWeight.bold);
-    final subtitleStyle = Theme.of(context).textTheme.headline4?.copyWith(color: Colors.black54);
-    final textStyle = Theme.of(context).textTheme.bodyText2;
+    final titleStyle = Theme.of(context).textTheme.headline2;
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(article.title, style: titleStyle),
-        Text('${article.department} | ${article.author}  ${dateFormat.format(article.dateTime)}', style: subtitleStyle),
+        _buildCard(article),
+        const SizedBox(height: 30),
         MyHtmlWidget(_linkTel(article.content)),
         const SizedBox(height: 30),
         Column(
           children: article.attachments.map((e) {
             return TextButton(
-              onPressed: () async {
-                showBasicFlash(context, const Text('开始下载'), duration: const Duration(seconds: 1));
-                Log.info('下载文件: [${e.name}](${e.url})');
-
-                String targetPath = (await getTemporaryDirectory()).path + '/kite/downloads/${e.name}';
-                Log.info('下载到：' + targetPath);
-                // 如果文件不存在，那么下载文件
-                if (!await File(targetPath).exists()) {
-                  await SessionPool.ssoSession.download(
-                    e.url,
-                    savePath: targetPath,
-                    onReceiveProgress: (int count, int total) {
-                      // Log.info('已下载: ${count / (1024 * 1024)}MB');
-                    },
-                  );
-                }
-
-                showBasicFlash(
-                  context,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('下载完毕'),
-                          Text(e.name),
-                        ],
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          OpenFile.open(targetPath);
-                        },
-                        child: const Text('打开文件'),
-                      ),
-                    ],
-                  ),
-                  duration: const Duration(seconds: 5),
-                );
-              },
+              onPressed: () async => _onDownloadFile(e),
               child: Text(e.name),
             );
           }).toList(),
