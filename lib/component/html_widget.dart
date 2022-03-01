@@ -45,7 +45,7 @@ class _MyHtmlWidgetState extends State<MyHtmlWidget> {
       textStyle: Theme.of(context).textTheme.bodyText2,
       onTapUrl: (url) {
         launchInBrowser(url);
-        // return true;
+        return true;
       },
     );
   }
