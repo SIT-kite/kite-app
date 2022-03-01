@@ -25,6 +25,8 @@ import 'package:kite/page/index.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/page_logger.dart';
 
+import 'page/egg/index.dart';
+
 final _routes = {
   '/home': (context) => const HomePage(),
   '/report': (context) => const DailyReportPage(),
@@ -53,6 +55,7 @@ final _routes = {
   '/lost-found': (context) => const LostFoundPage(),
   '/classroom': (context) => const ClassroomPage(),
   '/exam': (context) => const ExamPage(),
+  '/egg': (context) => const EggPage(),
 };
 
 class KiteApp extends StatelessWidget {
@@ -69,14 +72,22 @@ class KiteApp extends StatelessWidget {
 
   TextTheme _buildTextTheme(Color primaryColor) {
     return const TextTheme(
-      headline1: TextStyle(fontSize: 28.0, color: Colors.black54, fontWeight: FontWeight.w500),
-      headline2: TextStyle(fontSize: 26.0, color: Colors.black54, fontWeight: FontWeight.w500),
-      headline3: TextStyle(fontSize: 24.0, color: Colors.black54, fontWeight: FontWeight.w400),
-      headline4: TextStyle(fontSize: 22.0, color: Colors.black54, fontWeight: FontWeight.w400),
-      headline5: TextStyle(fontSize: 20.0, color: Colors.black54, fontWeight: FontWeight.w300),
-      headline6: TextStyle(fontSize: 18.0, color: Colors.black54, fontWeight: FontWeight.w300),
-      bodyText1: TextStyle(fontSize: 18.0, color: Colors.black45, fontWeight: FontWeight.normal),
-      bodyText2: TextStyle(fontSize: 16.0, color: Colors.black45, fontWeight: FontWeight.w300),
+      headline1: TextStyle(
+          fontSize: 28.0, color: Colors.black54, fontWeight: FontWeight.w500),
+      headline2: TextStyle(
+          fontSize: 26.0, color: Colors.black54, fontWeight: FontWeight.w500),
+      headline3: TextStyle(
+          fontSize: 24.0, color: Colors.black54, fontWeight: FontWeight.w400),
+      headline4: TextStyle(
+          fontSize: 22.0, color: Colors.black54, fontWeight: FontWeight.w400),
+      headline5: TextStyle(
+          fontSize: 20.0, color: Colors.black54, fontWeight: FontWeight.w300),
+      headline6: TextStyle(
+          fontSize: 18.0, color: Colors.black54, fontWeight: FontWeight.w300),
+      bodyText1: TextStyle(
+          fontSize: 18.0, color: Colors.black45, fontWeight: FontWeight.normal),
+      bodyText2: TextStyle(
+          fontSize: 16.0, color: Colors.black45, fontWeight: FontWeight.w300),
     );
   }
 
@@ -93,7 +104,9 @@ class KiteApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = StoragePool.themeSetting.isDarkMode;
     final primaryColor = StoragePool.themeSetting.color;
-    final home = StoragePool.authSetting.currentUsername != null ? const HomePage() : const WelcomePage();
+    final home = StoragePool.authSetting.currentUsername != null
+        ? const HomePage()
+        : const WelcomePage();
 
     return ScreenUtilInit(
       builder: () => DynamicColorTheme(
