@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'package:draw_test/digit_model.dart';
 import 'package:flutter/material.dart';
 
+import 'digit_model.dart';
 import 'simple_world.dart';
 
 class MultiProtuberance extends MovableObject {
