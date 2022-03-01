@@ -119,7 +119,8 @@ class _TimeWidgetState extends State<TimeWidget> {
     double hue =
         ((currentTimeMs / 10000 * 360 + position.dx / width * 360) % 360)
             .toDouble();
-    if (hue > 360 || hue < 0) {
+
+    if (!(hue <= 360 && hue >= 0)) {
       hue = 0;
     }
     // 该行常数控制了小球真实半径与小球包围盒之间的内边距padding
