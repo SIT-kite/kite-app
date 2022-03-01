@@ -120,6 +120,7 @@ class _TimeWidgetState extends State<TimeWidget> {
         ((currentTimeMs / 10000 * 360 + position.dx / width * 360) % 360)
             .toDouble();
 
+    // android端刚启动时hue值可能为NaN导致程序异常（暂时未知原因）
     if (!(hue <= 360 && hue >= 0)) {
       hue = 0;
     }
