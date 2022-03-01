@@ -17,6 +17,13 @@ const route = {
   go: name => location.assign(getRoute(name))
 };
 
+const click = (selector, text) => {
+  const element = document.querySelector(selector);
+  element !== null &&
+  element.textContent === text &&
+  element.click();
+}
+
 // visibilitychange
 Document.prototype.addEventListener = new Proxy(
   Document.prototype.addEventListener, {
@@ -31,40 +38,58 @@ Document.prototype.addEventListener = new Proxy(
 // load
 window.addEventListener('load', () => {
 
-// login
-if (route.is('guide') && userName !== '') {
-  localStorage.setItem('userInfo', JSON.stringify({ code: userName }));
-  route.go('index');
-}
-
-// allowReport
-const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-if ( // if userInfo matches { allowReport: 0 }
-  typeof userInfo === 'object' &&
-  userInfo !== null &&
-  userInfo.allowReport === 0
-) {
-  userInfo.allowReport = 1;
-  localStorage.setItem('userInfo', JSON.stringify(userInfo));
-}
-
-// checklist
-const intervalId = setInterval(() => {
-  if (route.is('jksb')) {
-    const checklist = document.querySelector('.checklist-box');
-    if (
-      checklist !== null &&
-      checklist.textContent.trim() === '本人承诺:上述填写内容真实、准确、无误！'
-    ) {
-      checklist.click();
-      clearInterval(intervalId);
-    }
+  // login
+  if (route.is('guide') && userName !== '') {
+    localStorage.setItem('userInfo', JSON.stringify({ code: userName }));
+    localStorage.setItem('version', '2.0');
+    localStorage.setItem('loginIn', '2');
+    // localStorage.setItem('isApp', '1');
+    route.go('index');
   }
-}, 500);
 
-// css
-const style = document.head.appendChild(document.createElement('style'));
-style.textContent = css;
+  // allowReport
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+  if ( // if userInfo matches { allowReport: 0 }
+    typeof userInfo === 'object' &&
+    userInfo !== null &&
+    userInfo.allowReport === 0
+  ) {
+    userInfo.allowReport = 1;
+    localStorage.setItem('userInfo', JSON.stringify(userInfo));
+  }
+
+  // checklist
+  const checkChecklist = () => (
+    route.is('jksb') &&
+    click('.checklist-box', '本人承诺:上述填写内容真实、准确、无误！')
+  );
+
+  checkChecklist();
+
+  uni.navigateTo = new Proxy(
+    uni.navigateTo, {
+      apply: (target, _this, args) => {
+        setTimeout(checkChecklist, 200);
+        return Reflect.apply(target, _this, args);
+      }
+    }
+  );
+
+  // redirect
+  uni.redirectTo = new Proxy(
+    uni.navigateTo, {
+      apply: (target, _this, args) => (
+        route.is('jksb') &&
+        args[0]?.url === './index'
+        ? click('.nav .cu-item[data-id=1]', '历史')
+        : Reflect.apply(target, _this, args)
+      )
+    }
+  );
+
+  // css
+  const style = document.head.appendChild(document.createElement('style'));
+  style.textContent = css;
 
 });
 
