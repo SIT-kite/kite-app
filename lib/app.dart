@@ -27,6 +27,8 @@ import 'package:kite/util/page_logger.dart';
 
 import 'page/egg/index.dart';
 
+const title = '上应小风筝';
+
 final _routes = {
   '/home': (context) => const HomePage(),
   '/report': (context) => const DailyReportPage(),
@@ -72,22 +74,24 @@ class KiteApp extends StatelessWidget {
 
   TextTheme _buildTextTheme(Color primaryColor) {
     return const TextTheme(
-      headline1: TextStyle(
-          fontSize: 28.0, color: Colors.black54, fontWeight: FontWeight.w500),
-      headline2: TextStyle(
-          fontSize: 26.0, color: Colors.black54, fontWeight: FontWeight.w500),
-      headline3: TextStyle(
-          fontSize: 24.0, color: Colors.black54, fontWeight: FontWeight.w400),
-      headline4: TextStyle(
-          fontSize: 22.0, color: Colors.black54, fontWeight: FontWeight.w400),
-      headline5: TextStyle(
-          fontSize: 20.0, color: Colors.black54, fontWeight: FontWeight.w300),
-      headline6: TextStyle(
-          fontSize: 18.0, color: Colors.black54, fontWeight: FontWeight.w300),
-      bodyText1: TextStyle(
-          fontSize: 18.0, color: Colors.black45, fontWeight: FontWeight.normal),
-      bodyText2: TextStyle(
-          fontSize: 16.0, color: Colors.black45, fontWeight: FontWeight.w300),
+
+      headline1: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w500),
+      headline2: TextStyle(fontSize: 24.0, color: Colors.black87),
+      headline3: TextStyle(fontSize: 24.0, color: Colors.black54),
+      headline4: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w500),
+      headline5: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w400),
+      headline6: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300),
+      bodyText1: TextStyle(fontSize: 16.0, color: Colors.black87),
+      bodyText2: TextStyle(fontSize: 14.0, color: Colors.black54),
+
+      // https://www.mdui.org/design/style/typography.html
+      // 12、14、16、20
+      title: /*     */ TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
+      subheading: /**/ TextStyle(fontSize: 16.0, color: Colors.black87)),
+      body1: /*     */ TextStyle(fontSize: 14.0),
+      body2: /*     */ TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500),
+      caption: /*   */ TextStyle(fontSize: 12.0, color: Colors.black87),
+
     );
   }
 
@@ -110,26 +114,18 @@ class KiteApp extends StatelessWidget {
 
     return ScreenUtilInit(
       builder: () => DynamicColorTheme(
+        defaultColor: primaryColor,
+        defaultIsDark: isDark,
         data: (Color color, bool isDark) {
           return _buildTheme(context, color, isDark);
         },
-        defaultColor: primaryColor,
-        defaultIsDark: isDark,
         themedWidgetBuilder: (BuildContext context, ThemeData theme) {
           return MaterialApp(
-            scrollBehavior: const MaterialScrollBehavior().copyWith(
-              dragDevices: {
-                PointerDeviceKind.mouse,
-                PointerDeviceKind.touch,
-                PointerDeviceKind.stylus,
-                PointerDeviceKind.unknown
-              },
-            ),
-            debugShowCheckedModeBanner: false,
-            navigatorKey: Catcher.navigatorKey,
-            title: '上应小风筝',
+            title: title,
             theme: theme,
             home: home,
+            debugShowCheckedModeBanner: false,
+            navigatorKey: Catcher.navigatorKey,
             onGenerateRoute: _onGenerateRoute,
             builder: (context, widget) {
               ScreenUtil.setContext(context);
@@ -139,6 +135,14 @@ class KiteApp extends StatelessWidget {
                 child: widget!,
               );
             },
+            scrollBehavior: const MaterialScrollBehavior().copyWith(
+              dragDevices: {
+                PointerDeviceKind.mouse,
+                PointerDeviceKind.touch,
+                PointerDeviceKind.stylus,
+                PointerDeviceKind.unknown
+              },
+            ),
           );
         },
       ),

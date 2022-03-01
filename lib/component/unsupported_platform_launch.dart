@@ -38,10 +38,11 @@ class UnsupportedPlatformUrlLauncher extends StatelessWidget {
         children: [
           Text(tip),
           TextButton(
-            child: const Text('点击在默认浏览器中打开')),
+            child: const Text('点击在默认浏览器中打开'),
             onPressed: () {
               launchInBrowser(url);
             },
+          )
         ],
       ),
     );
