@@ -200,6 +200,7 @@ class _TimeWidgetState extends State<TimeWidget> {
           final cl = e.clone();
           // 设置时钟不透明
           cl.paint.color = HSVColor.fromColor(cl.paint.color)
+              .withAlpha(1)
               .withSaturation(1)
               .withValue(1)
               .toColor();
