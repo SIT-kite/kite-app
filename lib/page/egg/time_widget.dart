@@ -116,6 +116,12 @@ class _TimeWidgetState extends State<TimeWidget> {
   List<int> showDigitIndexes = [];
 
   Circle generateCircle(Offset position) {
+    double hue =
+        ((currentTimeMs / 10000 * 360 + position.dx / width * 360) % 360)
+            .toDouble();
+    if (hue > 360 || hue < 0) {
+      hue = 0;
+    }
     // 该行常数控制了小球真实半径与小球包围盒之间的内边距padding
     return Circle(world.worldRule, circleBoundWidth - 0.6)
       ..position = position
@@ -127,8 +133,7 @@ class _TimeWidgetState extends State<TimeWidget> {
       ..paint = (Paint()
         ..color = HSVColor.fromAHSV(
           Random.secure().nextDouble() * 0.2 + 0.8,
-          ((currentTimeMs / 10000 * 360 + position.dx / width * 360) % 360)
-              .toDouble(),
+          hue,
           Random.secure().nextDouble() * 0.2 + 0.8,
           Random.secure().nextDouble() * 0.2 + 0.8,
         ).toColor());
