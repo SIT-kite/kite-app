@@ -28,12 +28,13 @@ class OcrServer {
   static const _ocrServerUrl = 'https://kite.sunnysab.cn/api/ocr/captcha';
 
   static recognize(String imageBase64) async {
-    var response = await Dio().post(_ocrServerUrl, data: imageBase64);
-    var result = response.data;
-    var code = result['code'];
+    final response = await Dio().post(_ocrServerUrl, data: imageBase64);
+    final result = response.data;
+    final code = result['code'];
     if (result['code'] == 0) {
       return result['data'];
+    } else {
+      throw OcrRecognizeException(code, result['msg']);
     }
-    throw OcrRecognizeException(code, result['msg']);
   }
 }

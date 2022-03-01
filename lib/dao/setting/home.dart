@@ -20,23 +20,23 @@ import 'package:kite/entity/report.dart';
 import 'package:kite/entity/weather.dart';
 
 abstract class HomeSettingDao {
-  int get campus;
+  int get campus; // 校区
 
   set campus(int value);
 
-  String? get background;
+  String? get background; // 背景图片 path
 
   set background(String? path);
 
-  int get backgroundMode;
+  int get backgroundMode; // 背景模式
 
   set backgroundMode(int mode);
 
-  DateTime? get installTime;
+  DateTime? get installTime; // 安装时间
 
   set installTime(DateTime? dateTime);
 
-  Weather get lastWeather;
+  Weather get lastWeather; // 天气
 
   set lastWeather(Weather weather);
 

@@ -30,7 +30,7 @@ class ReportService extends AService implements ReportDao {
 
   @override
   Future<List<ReportHistory>> getHistoryList(String userId) async {
-    final payload = '{"usercode":"$userId","batchno":""}';
+    final payload = '{"usercode":"$userId","batchno":""}'; // TODO：batchno 填入今天日期？yyyyMMdd
     final response = await session.post(_historyUrl,
         data: payload, contentType: Headers.jsonContentType, responseType: ResponseType.json);
 
@@ -46,8 +46,7 @@ class ReportService extends AService implements ReportDao {
   Future<ReportHistory?> getRecentHistory(String userId) async {
     final historyList = await getHistoryList(userId);
     ReportHistory? result;
-    try {
-      // 当元素不存在时 first getter 会抛出异常.
+    try { // 元素不存在时，first getter 会抛出异常.
       result = historyList.first;
     } catch (_) {}
     return result;

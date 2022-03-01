@@ -24,8 +24,8 @@ part 'network.g.dart';
 
 @JsonSerializable()
 class CheckStatusResult {
-  // 1表示已登录
-  // 0表示未登录
+  // 1：已登录
+  // 0：未登录
   final int result;
 
   // 当前的校园网ip
