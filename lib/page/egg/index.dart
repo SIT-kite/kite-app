@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 import 'time_widget.dart';
 
@@ -7,9 +8,11 @@ class EggPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RotatedBox(
-      quarterTurns: 1,
-      child: TimeWidget(),
-    );
+    return UniversalPlatform.isDesktopOrWeb
+        ? TimeWidget()
+        : RotatedBox(
+            quarterTurns: 1,
+            child: TimeWidget(),
+          );
   }
 }
