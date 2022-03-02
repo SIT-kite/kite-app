@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'dart:async';
+
 /// 订阅者回调签名
 typedef EventCallback<T> = void Function(T? arg);
 
@@ -23,6 +25,19 @@ typedef EventCallback<T> = void Function(T? arg);
 class EventBus<E> {
   /// 保存事件订阅者队列，key:事件名(id)，value: 对应事件的订阅者队列
   final _eventMap = <E, List<EventCallback>?>{};
+
+  /// 监听事件
+  Future<T?> listen<T>(E eventName) {
+    final completer = Completer<T>();
+
+    void subscriber(T? arg) {
+      completer.complete(arg);
+      off(eventName, subscriber);
+    }
+
+    on<T>(eventName, subscriber);
+    return completer.future;
+  }
 
   /// 添加订阅者
   void on<T>(E eventName, EventCallback<T> callback) {
@@ -33,7 +48,7 @@ class EventBus<E> {
   }
 
   /// 移除订阅者
-  void off(E eventName, [EventCallback? f]) {
+  void off<T>(E eventName, [EventCallback<T>? f]) {
     // 获取队列，若该事件不存在，那直接退出函数
     final list = _eventMap[eventName];
     if (list == null) {
