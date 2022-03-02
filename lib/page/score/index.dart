@@ -35,7 +35,7 @@ class ScorePage extends StatefulWidget {
 
 class _ScorePageState extends State<ScorePage> {
   /// 四位年份
-  int selectedYear = DateTime.now().year;
+  late int selectedYear;
 
   /// 要查询的学期
   Semester selectedSemester = Semester.all;
@@ -45,6 +45,13 @@ class _ScorePageState extends State<ScorePage> {
     width: 260,
     height: 260,
   );
+
+  @override
+  void initState() {
+    final now = DateTime.now();
+    selectedYear = (now.month >= 9 ? now.year : now.year - 1);
+    super.initState();
+  }
 
   Widget _buildHeader(List<Score> scoreList) {
     return Row(
