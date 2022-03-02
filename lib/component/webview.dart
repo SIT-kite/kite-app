@@ -88,9 +88,7 @@ class _MyWebViewState extends State<MyWebView> {
             },
             onPageFinished: (String url) async {
               Log.info('url加载完毕: $url');
-
-              final rules = widget.injectJsRules
-                  ?.where((injectJsRule) => injectJsRule.rule.accept(url));
+              final rules = widget.injectJsRules?.where((injectJsRule) => injectJsRule.rule.accept(url));
               if (rules != null) {
                 for (final injectJsRule in rules) {
                   Log.info('执行js注入');
