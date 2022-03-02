@@ -21,6 +21,7 @@ import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:encrypt/encrypt.dart';
 import 'package:kite/session/abstract_session.dart';
+import 'package:kite/session/exception.dart';
 import 'package:kite/util/dio_utils.dart';
 import 'package:kite/util/logger.dart';
 import 'package:pointycastle/asymmetric/api.dart';
@@ -34,6 +35,15 @@ class LibrarySession extends DefaultSession {
   }
 
   Future<Response> login(String username, String password) async {
+    final response = await _login(username, password);
+    if (response.data.toString().contains('用户名或密码错误')) {
+      throw const CredentialsInvalidException(msg: '用户名或密码错误');
+    }
+    // TODO: 还有其他错误处理
+    return response;
+  }
+
+  Future<Response> _login(String username, String password) async {
     String hashedPwd = md5.convert(const Utf8Encoder().convert(password)).toString();
     final pk = await getRSAPublicKey();
     final encrypter = Encrypter(RSA(publicKey: pk));
