@@ -27,11 +27,18 @@ class SimpleWebViewPage extends StatefulWidget {
   /// 显示在浏览器中打开按钮(默认不显示)
   final bool showLoadInBrowser;
 
+  /// 浮动按钮控件
+  final Widget? floatingActionButton;
+
+  /// WebView创建完毕时的回调
+  final WebViewCreatedCallback? onWebViewCreated;
   const SimpleWebViewPage(
     this.initialUrl, {
     Key? key,
     this.fixedTitle,
     this.injectJsRules,
+    this.floatingActionButton,
+    this.onWebViewCreated,
     this.showSharedButton = false,
     this.showRefreshButton = true,
     this.showLoadInBrowser = false,
@@ -86,10 +93,14 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
         title: Text(widget.fixedTitle == null ? title : widget.fixedTitle!),
         actions: actions,
       ),
+      floatingActionButton: widget.floatingActionButton,
       body: MyWebView(
         initialUrl: widget.initialUrl,
         onWebViewCreated: (controller) async {
           _controllerCompleter.complete(controller);
+          if (widget.onWebViewCreated != null) {
+            widget.onWebViewCreated!(controller);
+          }
         },
         injectJsRules: widget.injectJsRules,
         onPageFinished: (url) async {
