@@ -14,11 +14,20 @@ class SimpleWebViewPage extends StatefulWidget {
 
   /// js注入规则
   final List<InjectJsRuleItem>? injectJsRules;
+
+  /// 显示分享按钮(默认不显示)
+  final bool showSharedButton;
+
+  /// 显示刷新按钮(默认显示)
+  final bool showRefreshButton;
+
   const SimpleWebViewPage(
     this.initialUrl, {
     Key? key,
     this.fixedTitle,
     this.injectJsRules,
+    this.showSharedButton = false,
+    this.showRefreshButton = true,
   }) : super(key: key);
 
   @override
@@ -41,19 +50,23 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
 
   @override
   Widget build(BuildContext context) {
+    final actions = <Widget>[];
+    if (widget.showSharedButton) {
+      actions.add(IconButton(
+        onPressed: _onShared,
+        icon: const Icon(Icons.share),
+      ));
+    }
+    if (widget.showRefreshButton) {
+      actions.add(IconButton(
+        onPressed: _onRefresh,
+        icon: const Icon(Icons.refresh),
+      ));
+    }
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
-        actions: [
-          IconButton(
-            onPressed: _onShared,
-            icon: const Icon(Icons.share),
-          ),
-          IconButton(
-            onPressed: _onRefresh,
-            icon: const Icon(Icons.refresh),
-          ),
-        ],
+        title: Text(widget.fixedTitle == null ? title : widget.fixedTitle!),
+        actions: actions,
       ),
       body: MyWebView(
         initialUrl: widget.initialUrl,
@@ -62,9 +75,11 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
         },
         injectJsRules: widget.injectJsRules,
         onPageFinished: (url) async {
-          final controller = await _controllerCompleter.future;
-          title = (await controller.getTitle()) ?? '无标题页面';
-          setState(() {});
+          if (widget.fixedTitle == null) {
+            final controller = await _controllerCompleter.future;
+            title = (await controller.getTitle()) ?? '无标题页面';
+            setState(() {});
+          }
         },
       ),
     );
