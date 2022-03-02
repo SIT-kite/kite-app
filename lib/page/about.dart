@@ -16,9 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/component/unsupported_platform_launch.dart';
-import 'package:universal_platform/universal_platform.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:kite/page/webview/index.dart';
 
 const String _aboutUrl = 'https://cdn.kite.sunnysab.cn/about/';
 
@@ -27,13 +25,9 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('关于'),
-      ),
-      body: UniversalPlatform.isDesktopOrWeb
-          ? const UnsupportedPlatformUrlLauncher(_aboutUrl)
-          : const WebView(initialUrl: _aboutUrl),
+    return const SimpleWebViewPage(
+      _aboutUrl,
+      fixedTitle: '关于',
     );
   }
 }
