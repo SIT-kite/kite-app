@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:kite/component/webview.dart';
 import 'package:kite/util/logger.dart';
+import 'package:kite/util/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class SimpleWebViewPage extends StatefulWidget {
@@ -21,6 +22,9 @@ class SimpleWebViewPage extends StatefulWidget {
   /// 显示刷新按钮(默认显示)
   final bool showRefreshButton;
 
+  /// 显示在浏览器中打开按钮(默认不显示)
+  final bool showLoadInBrowser;
+
   const SimpleWebViewPage(
     this.initialUrl, {
     Key? key,
@@ -28,6 +32,7 @@ class SimpleWebViewPage extends StatefulWidget {
     this.injectJsRules,
     this.showSharedButton = false,
     this.showRefreshButton = true,
+    this.showLoadInBrowser = false,
   }) : super(key: key);
 
   @override
@@ -61,6 +66,12 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
       actions.add(IconButton(
         onPressed: _onRefresh,
         icon: const Icon(Icons.refresh),
+      ));
+    }
+    if (widget.showLoadInBrowser) {
+      actions.add(IconButton(
+        onPressed: () => launchInBrowser(widget.initialUrl),
+        icon: const Icon(Icons.open_in_browser),
       ));
     }
     return Scaffold(
