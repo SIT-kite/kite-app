@@ -32,12 +32,8 @@ class KiteDrawer extends Drawer {
             decoration: BoxDecoration(color: StoragePool.themeSetting.color),
             child: Align(
                 alignment: Alignment.bottomLeft,
-                child: Text(
-                    '小风筝已陪伴你 ${DateTime.now().difference(StoragePool.homeSetting.installTime!).inDays} 天',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline4
-                        ?.copyWith(color: Colors.white70))),
+                child: Text('小风筝已陪伴你 ${DateTime.now().difference(StoragePool.homeSetting.installTime!).inDays} 天',
+                    style: Theme.of(context).textTheme.headline4?.copyWith(color: Colors.white70))),
           ),
           ListTile(
             title: const Text('设置'),
@@ -74,13 +70,6 @@ class KiteDrawer extends Drawer {
             onTap: () {
               Navigator.pop(context);
               Navigator.of(context).pushNamed('/about');
-            },
-          ),
-          ListTile(
-            title: const Text('彩蛋'),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.of(context).pushNamed('/egg');
             },
           ),
         ],
