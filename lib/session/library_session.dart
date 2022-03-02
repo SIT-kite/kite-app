@@ -44,17 +44,13 @@ class LibrarySession extends DefaultSession {
   }
 
   Future<Response> _login(String username, String password) async {
-    String hashedPwd = md5.convert(const Utf8Encoder().convert(password)).toString();
-    final pk = await getRSAPublicKey();
-    final encrypter = Encrypter(RSA(publicKey: pk));
-    final String encryptedPwd = encrypter.encrypt(hashedPwd).base64;
     final response = await post(
       _doLoginUrl,
       data: {
         'vToken': '',
         'rdLoginId': username,
         'p': '',
-        'rdPasswd': encryptedPwd,
+        'rdPasswd': await _encryptPassword(password),
         'returnUrl': '',
         'password': '',
       },
@@ -65,7 +61,15 @@ class LibrarySession extends DefaultSession {
     return DioUtils.processRedirect(dio, response);
   }
 
-  Future<RSAPublicKey> getRSAPublicKey() async {
+  Future<String> _encryptPassword(String password) async {
+    String hashedPwd = md5.convert(const Utf8Encoder().convert(password)).toString();
+    final pk = await _getRSAPublicKey();
+    final encrypter = Encrypter(RSA(publicKey: pk));
+    final String encryptedPwd = encrypter.encrypt(hashedPwd).base64;
+    return encryptedPwd;
+  }
+
+  Future<RSAPublicKey> _getRSAPublicKey() async {
     final pemResponse = await get(_pemUrl);
     String publicKeyStr = pemResponse.data;
     final pemFileContent = '-----BEGIN PUBLIC KEY-----\n' + publicKeyStr + '\n-----END PUBLIC KEY-----';
