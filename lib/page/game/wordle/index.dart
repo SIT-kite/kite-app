@@ -10,6 +10,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../action.dart';
 import 'models/board_model.dart';
 import 'widgets/alert_dialog.dart';
 import 'widgets/board.dart';
@@ -24,19 +25,22 @@ class WordlePage extends StatefulWidget {
 class _WordlePageState extends State<WordlePage> {
   Future<String> getRandomWord() async {
     final words = jsonDecode(
-      await rootBundle.loadString("assets/game/words.json"),
-    )["5"];
+      await rootBundle.loadString('assets/game/words.json'),
+    )['5'];
     return words[Random().nextInt(words.length)];
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Wordle")),
+      appBar: AppBar(
+        title: const Text('Wordle'),
+        actions: [helpButton(context)],
+      ),
       body: FutureBuilder(
           future: getRandomWord().then((word) => BoardModel(word, rows: word.length + 1)),
           builder: (context, AsyncSnapshot<BoardModel> snapshot) {
-            if (snapshot.data == null) return const Text("Cannot load game");
+            if (snapshot.data == null) return const Text('Cannot load game');
 
             final board = snapshot.data!;
             return Column(
@@ -47,8 +51,8 @@ class _WordlePageState extends State<WordlePage> {
                     board: board,
                     onWin: () => showAlertDialog(
                       context,
-                      title: "You Guessed The Word!",
-                      actionText: "Start New Game?",
+                      title: 'You Guessed The Word!',
+                      actionText: 'Start New Game?',
                       onAction: () => setState(board.reset),
                       content: [
                         Text(
@@ -60,13 +64,13 @@ class _WordlePageState extends State<WordlePage> {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        Text("in ${board.currentRow + 1}/${board.rows} guesses"),
+                        Text('in ${board.currentRow + 1}/${board.rows} guesses'),
                       ],
                     ),
                     onLose: () => showAlertDialog(
                       context,
-                      title: "The Secret Word was",
-                      actionText: "Try Another Word?",
+                      title: 'The Secret Word was',
+                      actionText: 'Try Another Word?',
                       onAction: () => setState(board.reset),
                       content: [
                         Text(
@@ -85,7 +89,7 @@ class _WordlePageState extends State<WordlePage> {
                 ElevatedButton.icon(
                   onPressed: () => setState(board.reset),
                   icon: const Icon(Icons.play_arrow_rounded),
-                  label: const Text("New Game"),
+                  label: const Text('New Game'),
                 ),
               ],
             );

@@ -28,6 +28,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/entity/game.dart';
 import 'package:kite/global/storage_pool.dart';
 
+import '../action.dart';
 import 'logic.dart';
 
 final boxColors = <int, Color>{
@@ -85,7 +86,10 @@ class Game2048Page extends StatelessWidget {
         return await _willPopFlash(context);
       },
       child: Scaffold(
-        appBar: AppBar(title: const Text('2048')),
+        appBar: AppBar(
+          title: const Text('2048'),
+          actions: [helpButton(context)],
+        ),
         body: const GameWidget(),
       ),
     );

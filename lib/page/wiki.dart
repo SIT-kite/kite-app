@@ -24,20 +24,22 @@ import 'package:kite/page/webview/index.dart';
 import 'package:kite/util/rule.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-const String _wikiUrl = 'https://cdn.kite.sunnysab.cn/wiki/';
+const String _defaultWikiUrl = 'https://cdn.kite.sunnysab.cn/wiki/';
 
 class WikiPage extends StatelessWidget {
   final _controller = Completer<WebViewController>();
-  WikiPage({Key? key}) : super(key: key);
+  final String? customWikiUrl;
+
+  WikiPage({this.customWikiUrl, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SimpleWebViewPage(
-      _wikiUrl,
+      customWikiUrl ?? _defaultWikiUrl,
       fixedTitle: '上应 Wiki',
       injectJsRules: [
         InjectJsRuleItem(
-          rule: FunctionalRule((url) => url.startsWith(_wikiUrl)),
+          rule: FunctionalRule((url) => url.startsWith(_defaultWikiUrl)),
           asyncJavascript: rootBundle.loadString('assets/wiki/inject.js'),
           injectTime: InjectJsTime.onPageStarted,
         ),

@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 
+import 'action.dart';
 import 'history.dart';
 
 enum GameType {
@@ -96,7 +97,8 @@ class _GamePageState extends State<GamePage> with SingleTickerProviderStateMixin
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HistoryPage()));
                 },
-                icon: const Icon(Icons.history))
+                icon: const Icon(Icons.history)),
+            helpButton(context),
           ],
         ),
         body: TabBarView(
