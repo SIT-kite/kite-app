@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/component/future_builder.dart';
 import 'package:kite/component/unsupported_platform_launch.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -27,16 +28,16 @@ class BrowserPage extends StatelessWidget {
 
   const BrowserPage(this.functionName, this.url, {Key? key}) : super(key: key);
 
-  List<WebViewCookie> _loadCookieFromCookieJar() {
+  Future<List<WebViewCookie>> _loadCookie() async {
     final cookieJar = SessionPool.cookieJar;
-    final cookies = cookieJar.hostCookies['xgfy.sit.edu.cn']!['/unifri-flow/'];
-    if (cookies != null) {
-      List<WebViewCookie> cookieList = [];
-      cookies.forEach((key, value) =>
-          cookieList.add(WebViewCookie(name: key, value: value.cookie.value, domain: 'xgfy.sit.edu.cn')));
-      return cookieList;
-    }
-    return [];
+    final cookies = await cookieJar.loadForRequest(Uri.parse('http://xgfy.sit.edu.cn/unifri-flow/'));
+    return cookies.map((cookie) {
+      return WebViewCookie(
+        name: cookie.name,
+        value: cookie.value,
+        domain: 'xgfy.sit.edu.cn',
+      );
+    }).toList();
   }
 
   @override
@@ -46,10 +47,18 @@ class BrowserPage extends StatelessWidget {
         title: Text(functionName),
       ),
       body: UniversalPlatform.isDesktopOrWeb
-          ? const UnsupportedPlatformUrlLauncher('http://ywb.sit.edu.cn/v1/#/', tip: '电脑端请连接校园网后在下方的浏览器中启动网页版')
-          : WebView(
-              initialUrl: url,
-              initialCookies: _loadCookieFromCookieJar(),
+          ? const UnsupportedPlatformUrlLauncher(
+              'http://ywb.sit.edu.cn/v1/#/',
+              tip: '电脑端请连接校园网后在下方的浏览器中启动网页版',
+            )
+          : MyFutureBuilder<List<WebViewCookie>>(
+              future: _loadCookie(),
+              builder: (context, data) {
+                return WebView(
+                  initialUrl: url,
+                  initialCookies: data,
+                );
+              },
             ),
     );
   }
