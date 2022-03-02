@@ -14,13 +14,13 @@ _点[GitHub项目主页](https://github.com/SIT-kite/kite-app)上方 "issues" �
 - [x] 成绩查询
 - [ ] 给分查询
 - [x] 评教
-- [ ] 第二课堂
+- [x] 第二课堂
 - [x] 一网通办业务
 - [x] 公告
-- [ ] 校园通知
-- [ ] 空教室查询
+- [x] 校园通知
+- [x] 空教室查询
 - [x] 上应 Wiki
-- [ ] 常用电话
+- [x] 常用电话
 - [ ] 风景墙
 - [ ] 二手书中介
 
@@ -118,6 +118,6 @@ flutter run
 - [Wordle](https://github.com/nimone/wordle)
 - [DanXi][DanXi]
 
-这些项目的开源协议详见其各自的 LICENSE 文件。
+这些项目的开源协议详见其各自的 LICENSE, 版权归原作者所有.
 
 在此表示感谢！
