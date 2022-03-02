@@ -19,6 +19,7 @@ import 'package:catcher/core/catcher.dart';
 import 'package:dynamic_color_theme/dynamic_color_theme.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/page/index.dart';
@@ -118,28 +119,42 @@ class KiteApp extends StatelessWidget {
           return _buildTheme(context, color, isDark);
         },
         themedWidgetBuilder: (BuildContext context, ThemeData theme) {
-          return MaterialApp(
-            title: title,
-            theme: theme,
-            home: home,
-            debugShowCheckedModeBanner: false,
-            navigatorKey: Catcher.navigatorKey,
-            onGenerateRoute: _onGenerateRoute,
-            builder: (context, widget) {
-              ScreenUtil.setContext(context);
-              return MediaQuery(
-                // 设置文字大小不随系统设置改变
-                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                child: widget!,
-              );
+          return KeyboardListener(
+            onKeyEvent: (event) {
+              Log.info('按键事件: ${event.logicalKey}');
+
+              if (event is KeyUpEvent && LogicalKeyboardKey.escape == event.logicalKey) {
+                Log.info('松开返回键');
+                final ctx = Catcher.navigatorKey?.currentContext;
+                if (ctx != null && Navigator.canPop(ctx)) {
+                  Navigator.pop(ctx);
+                }
+              }
             },
-            scrollBehavior: const MaterialScrollBehavior().copyWith(
-              dragDevices: {
-                PointerDeviceKind.mouse,
-                PointerDeviceKind.touch,
-                PointerDeviceKind.stylus,
-                PointerDeviceKind.unknown
+            focusNode: FocusNode(),
+            child: MaterialApp(
+              title: title,
+              theme: theme,
+              home: home,
+              debugShowCheckedModeBanner: false,
+              navigatorKey: Catcher.navigatorKey,
+              onGenerateRoute: _onGenerateRoute,
+              builder: (context, widget) {
+                ScreenUtil.setContext(context);
+                return MediaQuery(
+                  // 设置文字大小不随系统设置改变
+                  data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                  child: widget!,
+                );
               },
+              scrollBehavior: const MaterialScrollBehavior().copyWith(
+                dragDevices: {
+                  PointerDeviceKind.mouse,
+                  PointerDeviceKind.touch,
+                  PointerDeviceKind.stylus,
+                  PointerDeviceKind.unknown
+                },
+              ),
             ),
           );
         },
