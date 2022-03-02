@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:kite/util/logger.dart';
+import 'package:kite/util/rule.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -22,9 +25,27 @@ import 'unsupported_platform_launch.dart';
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+class InjectJsRuleItem {
+  Rule<String> rule;
+
+  /// 若为空，则表示不注入
+  String? javascript;
+
+  /// 异步js字符串，若为空，则表示不注入
+  Future<String?>? asyncJavascript;
+  InjectJsRuleItem({
+    required this.rule,
+    this.javascript,
+    this.asyncJavascript,
+  });
+}
+
 class MyWebView extends StatefulWidget {
   final String? initialUrl;
-  final String? injectJs;
+
+  /// js注入规则，判定某个url需要注入何种js代码
+  final List<InjectJsRuleItem>? injectJsRules;
   final WebViewCreatedCallback? onWebViewCreated;
   final PageStartedCallback? onPageStarted;
   final PageFinishedCallback? onPageFinished;
@@ -32,7 +53,7 @@ class MyWebView extends StatefulWidget {
   const MyWebView({
     Key? key,
     this.initialUrl,
-    this.injectJs,
+    this.injectJsRules,
     this.onWebViewCreated,
     this.onPageStarted,
     this.onPageFinished,
@@ -44,6 +65,7 @@ class MyWebView extends StatefulWidget {
 }
 
 class _MyWebViewState extends State<MyWebView> {
+  final _controllerCompleter = Completer<WebViewController>();
   @override
   Widget build(BuildContext context) {
     return UniversalPlatform.isDesktopOrWeb
@@ -53,10 +75,7 @@ class _MyWebViewState extends State<MyWebView> {
             javascriptMode: widget.javascriptMode,
             onWebViewCreated: (WebViewController webViewController) {
               Log.info('WebView已创建，已获取到controller');
-
-              if (widget.injectJs != null) {
-                webViewController.runJavascript(widget.injectJs!);
-              }
+              _controllerCompleter.complete(webViewController);
               if (widget.onWebViewCreated != null) {
                 widget.onWebViewCreated!(webViewController);
               }
@@ -67,8 +86,29 @@ class _MyWebViewState extends State<MyWebView> {
                 widget.onPageStarted!(url);
               }
             },
-            onPageFinished: (String url) {
+            onPageFinished: (String url) async {
               Log.info('url加载完毕: $url');
+
+              final rules = widget.injectJsRules
+                  ?.where((injectJsRule) => injectJsRule.rule.accept(url));
+              if (rules != null) {
+                for (final injectJsRule in rules) {
+                  Log.info('执行js注入');
+                  final controller = await _controllerCompleter.future;
+                  // 同步获取js代码
+                  if (injectJsRule.javascript != null) {
+                    controller.runJavascript(injectJsRule.javascript!);
+                  }
+                  // 异步获取js代码
+                  if (injectJsRule.asyncJavascript != null) {
+                    String? js = await injectJsRule.asyncJavascript;
+                    if (js != null) {
+                      controller.runJavascript(js);
+                    }
+                  }
+                }
+              }
+
               if (widget.onPageFinished != null) {
                 widget.onPageFinished!(url);
               }
