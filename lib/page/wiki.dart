@@ -39,6 +39,7 @@ class WikiPage extends StatelessWidget {
         InjectJsRuleItem(
           rule: FunctionalRule((url) => url.startsWith(_wikiUrl)),
           asyncJavascript: rootBundle.loadString('assets/wiki/inject.js'),
+          injectTime: InjectJsTime.onPageStarted,
         ),
       ],
       onWebViewCreated: (WebViewController webViewController) {
