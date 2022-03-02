@@ -39,23 +39,28 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _buildEventList() {
-    return Container();
-  }
+    Widget joinedActivityMapper(ScJoinedActivity activity) {
+      return ListTile(title: Text(activity.title));
+    }
 
-  Widget _buildBody() {
-    return Column(
-      children: [
-        _buildSummaryCard(),
-        Expanded(child: _buildEventList()),
-      ],
+    return MyFutureBuilder<List<ScJoinedActivity>>(
+      future: service.getMyActivityListJoinScore(),
+      builder: (context, eventList) {
+        return ListView(children: eventList.map(joinedActivityMapper).toList());
+      },
     );
   }
 
-  // @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('我的第二课堂')),
-      body: _buildBody(),
+      body: Column(
+        children: [
+          _buildSummaryCard(),
+          Expanded(child: _buildEventList()),
+        ],
+      ),
     );
   }
 }

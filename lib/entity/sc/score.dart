@@ -53,21 +53,17 @@ class ScScoreItem {
   /// 活动编号
   final int activityId;
 
-  /// 活动标题
-  final String title;
-
   /// 活动类型
   final ActivityType type;
 
   /// 分数
   final double amount;
 
-  ScScoreItem(this.activityId, this.title, this.type, this.amount);
+  ScScoreItem(this.activityId, this.type, this.amount);
 
   @override
   String toString() {
-    return 'ScScoreItem{activityId: $activityId, category: $type, '
-        'amount: $amount}';
+    return 'ScScoreItem{activityId: $activityId, category: $type, amount: $amount}';
   }
 }
 
@@ -75,18 +71,20 @@ class ScActivityItem {
   /// 活动编号
   final int activityId;
 
+  /// 活动标题
+  final String title;
+
   /// 申请时间
   final DateTime time;
 
   /// 活动状态
   final String status;
 
-  ScActivityItem(this.activityId, this.time, this.status);
+  ScActivityItem(this.activityId, this.title, this.time, this.status);
 
   @override
   String toString() {
-    return 'ScActivityItem{activityId: $activityId, time: $time, '
-        'status: $status}';
+    return 'ScActivityItem{activityId: $activityId, time: $time, status: $status}';
   }
 }
 
@@ -97,7 +95,7 @@ class ScJoinedActivity {
   /// 活动标题
   final String title;
 
-  /// 活动时间
+  /// 申请时间
   final DateTime time;
 
   /// 活动状态

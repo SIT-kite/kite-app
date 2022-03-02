@@ -70,12 +70,12 @@ class SummaryCard extends StatelessWidget {
 
   Widget _buildChart() {
     final scoreValues = [
-      summary.campusCulture,
-      summary.charity,
-      summary.creativity,
-      summary.safetyCivilization,
-      summary.socialPractice,
-      summary.themeReport
+      summary.campus,
+      summary.voluntary,
+      summary.creation,
+      summary.safetyEdu,
+      summary.practice,
+      summary.lecture
     ];
     final totals = [2, 2, 2, 2, 2, 2];
     const scoreTitles = ['校园\n文化', '志愿', '三创', '安全\n教育', '社会\n实践', '讲座'];

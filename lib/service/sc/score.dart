@@ -28,17 +28,17 @@ import '../../dao/sc/score.dart';
 class ScScoreService extends AService implements ScScoreDao {
   static const _scHomeUrl = 'http://sc.sit.edu.cn/public/init/index.action';
   static const _scScoreUrl = 'http://sc.sit.edu.cn/public/pcenter/scoreDetail.action';
-  static const _scMyEventUrl = 'http://sc.sit.edu.cn/public/pcenter/activityOrderList.action';
+  static const _scMyEventUrl = 'http://sc.sit.edu.cn/public/pcenter/activityOrderList.action?pageSize=999';
 
   static const totalScore = '#content-box > div.user-info > div:nth-child(3) > font';
   static const spanScore = '#span_score';
   static const scoreDetailPage = '#div1 > div.table_style_4 > form > table:nth-child(7) > tbody > tr';
   static const idDetail = 'td:nth-child(7)';
-  static const titleDetail = 'td:nth-child(1)';
+  static const titleDetail = 'td:nth-child(3)';
   static const categoryDetail = 'td:nth-child(5)';
   static const scoreDetail = 'td:nth-child(11) > span';
   static const activityDetail = '#content-box > div:nth-child(23) > div.table_style_4 > form > table > tbody > tr';
-  static const activityIdDetail = 'td:nth-child(3)';
+  static const activityIdDetail = 'td:nth-child(1)';
   static const timeDetail = 'td:nth-child(7)';
   static const statusDetail = 'td:nth-child(9)';
 
@@ -59,15 +59,15 @@ class ScScoreService extends AService implements ScScoreDao {
     final displayScoreList = soup.findAll(totalScore).map((e) => e.innerHtml).toList();
 
     // 学分=1.5(主题报告)+2.0(社会实践)+1.5(创新创业创意)+1.0(校园安全文明)+0.0(公益志愿)+2.0(校园文化)
-    final String scoreText = soup.find(spanScore)!.innerHtml.toString();
-    final regExp = RegExp(r'(\d+\.\d{0,2})(\w)');
+    final String scoreText = soup.find(spanScore)!.text.toString();
+    final regExp = RegExp(r'([\d.]+)\(([\u4e00-\u9fa5]+)\)');
 
-    final matches = regExp.firstMatch(scoreText)!.groups([1, 2]);
+    final matches = regExp.allMatches(scoreText);
     late final double lecture, practice, creation, safetyEdu, voluntary, campus;
 
     for (final item in matches) {
-      final score = double.parse(item![0]);
-      final type = stringToActivityScoreType[item[1].trim()]!;
+      final score = double.parse(item.group(1) ?? '0.0');
+      final type = stringToActivityScoreType[item.group(2)]!;
 
       switch (type) {
         case ActivityScoreType.lecture:
@@ -103,12 +103,11 @@ class ScScoreService extends AService implements ScScoreDao {
   static List<ScScoreItem> _parseMyScoreList(String htmlPage) {
     ScScoreItem nodeToScoreItem(Bs4Element item) {
       final int id = int.parse(item.find(idDetail)!.innerHtml.trim());
-      final String title = item.find(titleDetail)!.innerHtml.trim();
       // 注意：“我的成绩” 页面中，成绩条目显示的是活动类型，而非加分类型, 因此使用 ActivityType.
       final ActivityType category = stringToActivityType[item.find(categoryDetail)!.innerHtml.trim()]!;
       final double amount = double.parse(item.find(scoreDetail)!.innerHtml.trim());
 
-      return ScScoreItem(id, title, category, amount);
+      return ScScoreItem(id, category, amount);
     }
 
     // 得分列表里面，有一些条目加诚信分，此时常规得分为 0, 要把这些条目过滤掉。
@@ -126,16 +125,14 @@ class ScScoreService extends AService implements ScScoreDao {
 
   static List<ScActivityItem> _parseMyActivityList(String htmlPage) {
     ScActivityItem _activityMapDetail(Bs4Element item) {
-      // 如：activityId=10000
-      final activityIdText = item.find(activityIdDetail)!.innerHtml.trim();
-      // 如：10000
-      final activityIdString = activityIdRe.firstMatch(activityIdText)!.group(1)!;
-      final activtiyId = int.parse(activityIdString);
+      final activityIdText = item.find(activityIdDetail)!.text.trim();
+      final activityId = int.parse(activityIdText);
 
-      final DateTime time = dateFormatParser.parse(item.find(timeDetail)!.innerHtml.trim());
-      final String status = item.find(statusDetail)!.innerHtml.trim();
+      final String title = item.find(titleDetail)!.text.trim();
+      final DateTime time = dateFormatParser.parse(item.find(timeDetail)!.text.trim());
+      final String status = item.find(statusDetail)!.text.trim();
 
-      return ScActivityItem(activtiyId, time, status);
+      return ScActivityItem(activityId, title, time, status);
     }
 
     bool _filterDeletedActivity(ScActivityItem x) => x.activityId != 0;
@@ -145,5 +142,19 @@ class ScScoreService extends AService implements ScScoreDao {
         .map((e) => _activityMapDetail(e))
         .where((element) => _filterDeletedActivity(element))
         .toList();
+  }
+
+  Future<List<ScJoinedActivity>> getMyActivityListJoinScore() async {
+    final activities = await getMyActivityList();
+    final scores = await getMyScoreList();
+
+    return activities.map((application) {
+      // 对于每一次申请, 找到对应的加分信息
+      final totalScore = scores
+          .where((e) => e.activityId == application.activityId)
+          .fold<double>(0.0, (double p, ScScoreItem e) => p + e.amount);
+      return ScJoinedActivity(
+          application.activityId, application.title, application.time, application.status, totalScore);
+    }).toList();
   }
 }

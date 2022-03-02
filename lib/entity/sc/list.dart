@@ -24,7 +24,7 @@ const Map<String, ActivityScoreType> stringToActivityScoreType = {
   '主题报告': ActivityScoreType.lecture,
   '社会实践': ActivityScoreType.practice,
   '创新创业创意': ActivityScoreType.creation,
-  '校园文明': ActivityScoreType.campus,
+  '校园文化': ActivityScoreType.campus,
   '公益志愿': ActivityScoreType.voluntary,
   '校园安全文明': ActivityScoreType.safetyEdu,
 };
