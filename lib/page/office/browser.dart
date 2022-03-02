@@ -28,18 +28,6 @@ class BrowserPage extends StatelessWidget {
 
   const BrowserPage(this.functionName, this.url, {Key? key}) : super(key: key);
 
-  Future<List<WebViewCookie>> _loadCookie() async {
-    final cookieJar = SessionPool.cookieJar;
-    final cookies = await cookieJar.loadForRequest(Uri.parse('http://xgfy.sit.edu.cn/unifri-flow/'));
-    return cookies.map((cookie) {
-      return WebViewCookie(
-        name: cookie.name,
-        value: cookie.value,
-        domain: 'xgfy.sit.edu.cn',
-      );
-    }).toList();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,8 +40,9 @@ class BrowserPage extends StatelessWidget {
               tip: '电脑端请连接校园网后在下方的浏览器中启动网页版',
             )
           : MyFutureBuilder<List<WebViewCookie>>(
-              future: _loadCookie(),
+              future: SessionPool.loadCookieAsWebViewCookie(Uri.parse('http://xgfy.sit.edu.cn/unifri-flow/')),
               builder: (context, data) {
+                print(data);
                 return WebView(
                   initialUrl: url,
                   initialCookies: data,

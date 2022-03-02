@@ -32,6 +32,7 @@ import 'package:kite/session/sso/sso_session.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/rule.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:webview_flutter/webview_flutter.dart' hide CookieManager;
 
 class SessionPool {
   static String? httpProxy;
@@ -40,10 +41,9 @@ class SessionPool {
   static const String defaultUaString = 'kite-app';
   static String uaString = defaultUaString;
 
-  // 持久化的CookieJar
-  static late final PersistCookieJar _cookieJar;
+  static late final CookieJar _cookieJar;
 
-  static PersistCookieJar get cookieJar => _cookieJar;
+  static CookieJar get cookieJar => _cookieJar;
 
   static late Dio dio;
   static OfficeSession? officeSession;
@@ -59,6 +59,19 @@ class SessionPool {
 
   static bool hasInit() => _hasInit;
 
+  static Future<List<WebViewCookie>> loadCookieAsWebViewCookie(Uri uri) async {
+    final cookieJar = SessionPool.cookieJar;
+    final cookies = await cookieJar.loadForRequest(uri);
+    return cookies.map((cookie) {
+      print('获取cookie $cookie');
+      return WebViewCookie(
+        name: cookie.name,
+        value: cookie.value,
+        domain: cookie.domain ?? uri.host,
+      );
+    }).toList();
+  }
+
   /// 初始化SessionPool
   static Future<void> init() async {
     Log.info("初始化SessionPool");
@@ -66,7 +79,7 @@ class SessionPool {
     if (!_hasInit) {
       final String homeDirectory = (await getApplicationDocumentsDirectory()).path;
       final FileStorage cookieStorage = FileStorage(homeDirectory + '/kite/cookies/');
-      // 初始化 cookie jar
+      // 初始化持久化的 cookieJar
       _cookieJar = PersistCookieJar(storage: cookieStorage);
     }
     // di o初始化完成后，才能初始化 UA

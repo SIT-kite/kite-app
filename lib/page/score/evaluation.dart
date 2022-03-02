@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/component/future_builder.dart';
 import 'package:kite/entity/edu/index.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -87,18 +88,6 @@ function post(path, params, method='post') {
 post("$path", $formString);''';
   }
 
-  List<WebViewCookie> _loadCookieFromCookieJar() {
-    final cookieJar = SessionPool.cookieJar;
-    final cookies = cookieJar.hostCookies['jwxt.sit.edu.cn']!['/jwglxt/'];
-    if (cookies != null) {
-      List<WebViewCookie> cookieList = [];
-      cookies.forEach((key, value) =>
-          cookieList.add(WebViewCookie(name: key, value: value.cookie.value, domain: 'jwxt.sit.edu.cn')));
-      return cookieList;
-    }
-    return [];
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,15 +105,19 @@ post("$path", $formString);''';
           }
         },
       ),
-      body: WebView(
-        initialCookies: _loadCookieFromCookieJar(),
-        javascriptMode: JavascriptMode.unrestricted,
-        onWebViewCreated: (controller) async {
-          String js = _generateJs(_evaluationPageUrl, _getForm(coursesToEvaluate[index]));
+      body: MyFutureBuilder<List<WebViewCookie>>(
+          future: SessionPool.loadCookieAsWebViewCookie(Uri.parse('http://jwxt.sit.edu.cn/jwglxt/')),
+          builder: (context, data) {
+            return WebView(
+              initialCookies: data,
+              javascriptMode: JavascriptMode.unrestricted,
+              onWebViewCreated: (controller) async {
+                String js = _generateJs(_evaluationPageUrl, _getForm(coursesToEvaluate[index]));
 
-          controller.runJavascript(js);
-        },
-      ),
+                controller.runJavascript(js);
+              },
+            );
+          }),
     );
   }
 }
