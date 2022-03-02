@@ -21,9 +21,9 @@ import 'package:kite/entity/sc/list.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/service/sc/list.dart';
 
-import 'card.dart';
+import 'component/card.dart';
+import 'component/search.dart';
 import 'profile.dart';
-import 'search.dart';
 
 class EventPage extends StatefulWidget {
   const EventPage({Key? key}) : super(key: key);

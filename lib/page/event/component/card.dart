@@ -22,9 +22,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/entity/sc/list.dart';
 
-import 'background.dart';
-import 'detail.dart';
+import '../detail.dart';
 import 'util.dart';
+import 'background.dart';
 
 class EventCard extends StatelessWidget {
   static final dateFormat = DateFormat('yyyy-MM-dd');

@@ -21,13 +21,13 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:kite/entity/sc/detail.dart';
 import 'package:kite/entity/sc/list.dart';
 import 'package:kite/global/session_pool.dart';
-import 'package:kite/page/event/background.dart';
 import 'package:kite/service/sc/detail.dart';
 import 'package:kite/service/sc/join.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/url_launcher.dart';
 
-import 'util.dart';
+import 'component/background.dart';
+import 'component/util.dart';
 
 class DetailPage extends StatelessWidget {
   final Activity summary;
