@@ -17,14 +17,17 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/entity/sc/score.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/service/sc/score.dart';
 
 import 'component/summary.dart';
+import 'detail.dart';
 
 class ProfilePage extends StatelessWidget {
+  final displayDateFormat = DateFormat('yyyy-MM-dd hh:mm');
   final ScScoreService service = ScScoreService(SessionPool.scSession);
 
   ProfilePage({Key? key}) : super(key: key);
@@ -38,15 +41,37 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildEventList() {
+  Widget _buildEventList(BuildContext context) {
+    final titleStyle = Theme.of(context).textTheme.headline5;
+    final subtitleStyle = Theme.of(context).textTheme.bodyText2;
+    TextStyle? trailingStyle = Theme.of(context).textTheme.headline5;
+
     Widget joinedActivityMapper(ScJoinedActivity activity) {
-      return ListTile(title: Text(activity.title));
+      final color = activity.status == '通过' ? Colors.green : Theme.of(context).primaryColor;
+      trailingStyle = trailingStyle?.copyWith(color: color);
+
+      return ListTile(
+        title: Text(activity.title, style: titleStyle, maxLines: 2, overflow: TextOverflow.ellipsis),
+        subtitle: Text(
+            '申请时间: ${displayDateFormat.format(activity.time)}\n'
+            '申请编号: ${activity.applyId}',
+            style: subtitleStyle),
+        trailing:
+            Text(activity.amount.abs() > 0.01 ? activity.amount.toString() : activity.status, style: trailingStyle),
+        onTap: activity.activityId != -1
+            ? () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => DetailPage(activity.activityId, hideApplyButton: true)),
+                );
+              }
+            : null,
+      );
     }
 
     return MyFutureBuilder<List<ScJoinedActivity>>(
       future: service.getMyActivityListJoinScore(),
       builder: (context, eventList) {
-        return ListView(children: eventList.map(joinedActivityMapper).toList());
+        return ListView(children: [_buildSummaryCard()] + eventList.map(joinedActivityMapper).toList());
       },
     );
   }
@@ -55,12 +80,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('我的第二课堂')),
-      body: Column(
-        children: [
-          _buildSummaryCard(),
-          Expanded(child: _buildEventList()),
-        ],
-      ),
+      body: _buildEventList(context),
     );
   }
 }

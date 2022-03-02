@@ -38,7 +38,8 @@ class ScScoreService extends AService implements ScScoreDao {
   static const categoryDetail = 'td:nth-child(5)';
   static const scoreDetail = 'td:nth-child(11) > span';
   static const activityDetail = '#content-box > div:nth-child(23) > div.table_style_4 > form > table > tbody > tr';
-  static const activityIdDetail = 'td:nth-child(1)';
+  static const applyIdDetail = 'td:nth-child(1)';
+  static const activityIdDetail = 'td:nth-child(3)';
   static const timeDetail = 'td:nth-child(7)';
   static const statusDetail = 'td:nth-child(9)';
 
@@ -56,7 +57,6 @@ class ScScoreService extends AService implements ScScoreDao {
 
   static ScScoreSummary _parseScScoreSummary(String htmlPage) {
     final BeautifulSoup soup = BeautifulSoup(htmlPage);
-    final displayScoreList = soup.findAll(totalScore).map((e) => e.innerHtml).toList();
 
     // 学分=1.5(主题报告)+2.0(社会实践)+1.5(创新创业创意)+1.0(校园安全文明)+0.0(公益志愿)+2.0(校园文化)
     final String scoreText = soup.find(spanScore)!.text.toString();
@@ -118,24 +118,26 @@ class ScScoreService extends AService implements ScScoreDao {
 
   /// 获取我的活动列表
   @override
-  Future<List<ScActivityItem>> getMyActivityList() async {
+  Future<List<ScActivityApplication>> getMyActivityList() async {
     final response = await session.post(_scMyEventUrl);
     return _parseMyActivityList(response.data);
   }
 
-  static List<ScActivityItem> _parseMyActivityList(String htmlPage) {
-    ScActivityItem _activityMapDetail(Bs4Element item) {
-      final activityIdText = item.find(activityIdDetail)!.text.trim();
-      final activityId = int.parse(activityIdText);
-
+  static List<ScActivityApplication> _parseMyActivityList(String htmlPage) {
+    ScActivityApplication _activityMapDetail(Bs4Element item) {
+      final applyIdText = item.find(applyIdDetail)!.text.trim();
+      final applyId = int.parse(applyIdText);
+      final activityIdText = item.find(activityIdDetail)!.innerHtml.trim();
+      // 部分取消了的活动，活动链接不存在，这里将活动 id 记为 -1.
+      final activityId = int.parse(activityIdRe.firstMatch(activityIdText)?.group(1) ?? '-1');
       final String title = item.find(titleDetail)!.text.trim();
       final DateTime time = dateFormatParser.parse(item.find(timeDetail)!.text.trim());
       final String status = item.find(statusDetail)!.text.trim();
 
-      return ScActivityItem(activityId, title, time, status);
+      return ScActivityApplication(applyId, activityId, title, time, status);
     }
 
-    bool _filterDeletedActivity(ScActivityItem x) => x.activityId != 0;
+    bool _filterDeletedActivity(ScActivityApplication x) => x.activityId != 0;
 
     return BeautifulSoup(htmlPage)
         .findAll(activityDetail)
@@ -153,8 +155,9 @@ class ScScoreService extends AService implements ScScoreDao {
       final totalScore = scores
           .where((e) => e.activityId == application.activityId)
           .fold<double>(0.0, (double p, ScScoreItem e) => p + e.amount);
-      return ScJoinedActivity(
-          application.activityId, application.title, application.time, application.status, totalScore);
+      // TODO: 潜在的 BUG，可能导致得分页面出现重复项。
+      return ScJoinedActivity(application.applyId, application.activityId, application.title, application.time,
+          application.status, totalScore);
     }).toList();
   }
 }

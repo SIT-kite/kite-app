@@ -23,5 +23,5 @@ abstract class ScScoreDao {
 
   Future<List<ScScoreItem>> getMyScoreList();
 
-  Future<List<ScActivityItem>> getMyActivityList();
+  Future<List<ScActivityApplication>> getMyActivityList();
 }

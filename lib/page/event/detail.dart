@@ -19,7 +19,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:kite/entity/sc/detail.dart';
-import 'package:kite/entity/sc/list.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/service/sc/detail.dart';
 import 'package:kite/service/sc/join.dart';
@@ -30,9 +29,10 @@ import 'component/background.dart';
 import 'component/util.dart';
 
 class DetailPage extends StatelessWidget {
-  final Activity summary;
+  final int activityId;
+  final bool hideApplyButton;
 
-  const DetailPage(this.summary, {Key? key}) : super(key: key);
+  const DetailPage(this.activityId, {this.hideApplyButton = false, Key? key}) : super(key: key);
 
   AppBar _buildAppBar() {
     return AppBar(
@@ -41,7 +41,7 @@ class DetailPage extends StatelessWidget {
         IconButton(
           icon: const Icon(Icons.open_in_browser),
           onPressed: () {
-            launchInBrowser('http://sc.sit.edu.cn/public/activity/activityDetail.action?activityId=${summary.id}');
+            launchInBrowser('http://sc.sit.edu.cn/public/activity/activityDetail.action?activityId=$activityId');
           },
         )
       ],
@@ -120,7 +120,7 @@ class DetailPage extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
-    final future = ScActivityDetailService(SessionPool.scSession).getActivityDetail(summary.id);
+    final future = ScActivityDetailService(SessionPool.scSession).getActivityDetail(activityId);
 
     return FutureBuilder<ActivityDetail>(
         future: future,
@@ -134,7 +134,7 @@ class DetailPage extends StatelessWidget {
 
   Future<void> _sendRequest(BuildContext context, bool force) async {
     try {
-      final response = await ScJoinActivityService(SessionPool.scSession).join(summary.id, force);
+      final response = await ScJoinActivityService(SessionPool.scSession).join(activityId, force);
       showBasicFlash(context, Text(response));
     } catch (e) {
       showBasicFlash(context, Text('错误: ' + e.runtimeType.toString()), duration: const Duration(seconds: 3));
@@ -147,22 +147,24 @@ class DetailPage extends StatelessWidget {
     return Scaffold(
       appBar: _buildAppBar(),
       body: _buildBody(context),
-      floatingActionButton: InkWell(
-        splashColor: Colors.blue,
-        onTap: () async {
-          // 常规模式报名活动
-          _sendRequest(context, false);
-        },
-        onDoubleTap: () {
-          // 报名活动（强制模式）
-          _sendRequest(context, true);
-        },
-        child: const FloatingActionButton.extended(
-          icon: Icon(Icons.person_add),
-          label: Text('报名'),
-          onPressed: null,
-        ),
-      ),
+      floatingActionButton: !hideApplyButton
+          ? InkWell(
+              splashColor: Colors.blue,
+              onTap: () async {
+                // 常规模式报名活动
+                _sendRequest(context, false);
+              },
+              onDoubleTap: () {
+                // 报名活动（强制模式）
+                _sendRequest(context, true);
+              },
+              child: const FloatingActionButton.extended(
+                icon: Icon(Icons.person_add),
+                label: Text('报名'),
+                onPressed: null,
+              ),
+            )
+          : null,
     );
   }
 }

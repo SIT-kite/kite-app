@@ -83,7 +83,7 @@ class EventCard extends StatelessWidget {
         aspectRatio: 1.8,
         child: GestureDetector(
           onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (_) => DetailPage(activity)));
+            Navigator.of(context).push(MaterialPageRoute(builder: (_) => DetailPage(activity.id)));
           },
           child: Card(
             margin: const EdgeInsets.all(10),

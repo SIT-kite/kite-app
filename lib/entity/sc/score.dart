@@ -67,7 +67,10 @@ class ScScoreItem {
   }
 }
 
-class ScActivityItem {
+class ScActivityApplication {
+  /// 申请编号
+  final int applyId;
+
   /// 活动编号
   final int activityId;
 
@@ -80,7 +83,7 @@ class ScActivityItem {
   /// 活动状态
   final String status;
 
-  ScActivityItem(this.activityId, this.title, this.time, this.status);
+  ScActivityApplication(this.applyId, this.activityId, this.title, this.time, this.status);
 
   @override
   String toString() {
@@ -89,6 +92,9 @@ class ScActivityItem {
 }
 
 class ScJoinedActivity {
+  /// 申请编号
+  final int applyId;
+
   /// 活动编号
   final int activityId;
 
@@ -104,5 +110,5 @@ class ScJoinedActivity {
   /// 总得分
   final double amount;
 
-  ScJoinedActivity(this.activityId, this.title, this.time, this.status, this.amount);
+  ScJoinedActivity(this.applyId, this.activityId, this.title, this.time, this.status, this.amount);
 }
