@@ -20,7 +20,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kite/component/unsupported_platform_launch.dart';
+import 'package:kite/component/webview.dart';
 import 'package:kite/util/logger.dart';
+import 'package:kite/util/rule.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -34,14 +36,10 @@ class WikiPage extends StatefulWidget {
 }
 
 class _WikiPageState extends State<WikiPage> {
-  final Completer<WebViewController> _controller = Completer<WebViewController>();
+  final _controller = Completer<WebViewController>();
 
   void _onShare() async {
     Log.info('分享当前页面');
-  }
-
-  static Future<String> _getInjectJs() async {
-    return (await rootBundle.loadString('assets/wiki/inject.js'));
   }
 
   void _onMenuClicked() async {
@@ -50,15 +48,6 @@ class _WikiPageState extends State<WikiPage> {
       menuButton = document.querySelector('label.md-header__button:nth-child(2)');
       menuButton !== null && menuButton.click();
     ''';
-    controller.runJavascript(js);
-  }
-
-  void _onPageFinished(String url) async {
-    if (!url.startsWith(_wikiUrl)) {
-      return;
-    }
-    final controller = await _controller.future;
-    final String js = await _getInjectJs();
     controller.runJavascript(js);
   }
 
@@ -76,15 +65,22 @@ class _WikiPageState extends State<WikiPage> {
       ),
       body: UniversalPlatform.isDesktopOrWeb
           ? const UnsupportedPlatformUrlLauncher(_wikiUrl)
-          : WebView(
+          : MyWebView(
               initialUrl: _wikiUrl,
               javascriptMode: JavascriptMode.unrestricted,
+              injectJsRules: [
+                InjectJsRuleItem(
+                  rule: FunctionalRule((url) => url.startsWith(_wikiUrl)),
+                  asyncJavascript:
+                      rootBundle.loadString('assets/wiki/inject.js'),
+                ),
+              ],
               onWebViewCreated: (WebViewController webViewController) {
                 _controller.complete(webViewController);
               },
-              onPageStarted: _onPageFinished,
             ),
-      floatingActionButton: FloatingActionButton(child: const Icon(Icons.menu), onPressed: _onMenuClicked),
+      floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.menu), onPressed: _onMenuClicked),
     );
   }
 }
