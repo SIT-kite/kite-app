@@ -19,28 +19,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kite/component/unsupported_platform_launch.dart';
+import 'package:kite/component/webview.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:universal_platform/universal_platform.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:kite/page/webview/index.dart';
+import 'package:kite/util/rule.dart';
 
 const _reportUrlPrefix = 'http://xgfy.sit.edu.cn/h5/#/';
 const _reportUrlIndex = _reportUrlPrefix + 'pages/index/index';
 
-class DailyReportPage extends StatefulWidget {
+class DailyReportPage extends StatelessWidget {
   const DailyReportPage({Key? key}) : super(key: key);
-
-  @override
-  _DailyReportPageState createState() => _DailyReportPageState();
-}
-
-class _DailyReportPageState extends State<DailyReportPage> {
-  final Completer<WebViewController> _controller = Completer<WebViewController>();
-
-  void _onRefresh() async {
-    final controller = await _controller.future;
-    await controller.reload();
-  }
 
   static Future<String> _getInjectJs() async {
     // TODO: 把 replace 完的 JS 缓存了
@@ -50,36 +38,17 @@ class _DailyReportPageState extends State<DailyReportPage> {
     return js.replaceFirst('{{username}}', username).replaceFirst('{{injectCSS}}', css);
   }
 
-  void _onPageFinished(String url) async {
-    if (url.startsWith(_reportUrlPrefix)) {
-      final controller = await _controller.future;
-      final String js = await _getInjectJs();
-      controller.runJavascript(js);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('体温上报'),
-        actions: [
-          IconButton(
-            onPressed: _onRefresh,
-            icon: const Icon(Icons.refresh),
-          ),
-        ],
-      ),
-      body: UniversalPlatform.isDesktopOrWeb
-          ? const UnsupportedPlatformUrlLauncher(_reportUrlIndex)
-          : WebView(
-              initialUrl: _reportUrlIndex,
-              javascriptMode: JavascriptMode.unrestricted,
-              onWebViewCreated: (WebViewController webViewController) {
-                _controller.complete(webViewController);
-              },
-              onPageFinished: _onPageFinished,
-            ),
+    return SimpleWebViewPage(
+      _reportUrlIndex,
+      fixedTitle: '体温上报',
+      injectJsRules: [
+        InjectJsRuleItem(
+          rule: FunctionalRule((url) => url.startsWith(_reportUrlPrefix)),
+          asyncJavascript: _getInjectJs(),
+        ),
+      ],
     );
   }
 }
