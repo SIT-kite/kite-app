@@ -27,6 +27,7 @@ class FeedbackPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const SimpleWebViewPage(
       _feedbackUrl,
+      showLoadInBrowser: true,
       fixedTitle: '反馈',
     );
   }
