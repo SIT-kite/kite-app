@@ -19,68 +19,42 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kite/component/unsupported_platform_launch.dart';
 import 'package:kite/component/webview.dart';
-import 'package:kite/util/logger.dart';
+import 'package:kite/page/webview/index.dart';
 import 'package:kite/util/rule.dart';
-import 'package:universal_platform/universal_platform.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 const String _wikiUrl = 'https://cdn.kite.sunnysab.cn/wiki/';
 
-class WikiPage extends StatefulWidget {
-  const WikiPage({Key? key}) : super(key: key);
-
-  @override
-  _WikiPageState createState() => _WikiPageState();
-}
-
-class _WikiPageState extends State<WikiPage> {
+class WikiPage extends StatelessWidget {
   final _controller = Completer<WebViewController>();
-
-  void _onShare() async {
-    Log.info('分享当前页面');
-  }
-
-  void _onMenuClicked() async {
-    final controller = await _controller.future;
-    const String js = '''
-      menuButton = document.querySelector('label.md-header__button:nth-child(2)');
-      menuButton !== null && menuButton.click();
-    ''';
-    controller.runJavascript(js);
-  }
+  WikiPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('上应 Wiki'),
-        actions: [
-          IconButton(
-            onPressed: _onShare,
-            icon: const Icon(Icons.share),
-          ),
-        ],
-      ),
-      body: UniversalPlatform.isDesktopOrWeb
-          ? const UnsupportedPlatformUrlLauncher(_wikiUrl)
-          : MyWebView(
-              initialUrl: _wikiUrl,
-              javascriptMode: JavascriptMode.unrestricted,
-              injectJsRules: [
-                InjectJsRuleItem(
-                  rule: FunctionalRule((url) => url.startsWith(_wikiUrl)),
-                  asyncJavascript:
-                      rootBundle.loadString('assets/wiki/inject.js'),
-                ),
-              ],
-              onWebViewCreated: (WebViewController webViewController) {
-                _controller.complete(webViewController);
-              },
-            ),
+    return SimpleWebViewPage(
+      _wikiUrl,
+      fixedTitle: '上应 Wiki',
+      injectJsRules: [
+        InjectJsRuleItem(
+          rule: FunctionalRule((url) => url.startsWith(_wikiUrl)),
+          asyncJavascript: rootBundle.loadString('assets/wiki/inject.js'),
+        ),
+      ],
+      onWebViewCreated: (WebViewController webViewController) {
+        _controller.complete(webViewController);
+      },
       floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.menu), onPressed: _onMenuClicked),
+        child: const Icon(Icons.menu),
+        onPressed: () async {
+          final controller = await _controller.future;
+          const String js = '''
+            menuButton = document.querySelector('label.md-header__button:nth-child(2)');
+            menuButton !== null && menuButton.click();
+          ''';
+          controller.runJavascript(js);
+        },
+      ),
     );
   }
 }
