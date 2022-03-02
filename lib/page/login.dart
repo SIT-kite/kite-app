@@ -22,7 +22,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/entity/auth_item.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:kite/session/sso/sso_session.dart';
+import 'package:kite/session/exception.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/url_launcher.dart';
 import 'package:kite/util/validation.dart';
@@ -42,8 +42,7 @@ class _LoginPageState extends State<LoginPage> {
 
   final GlobalKey _formKey = GlobalKey<FormState>();
 
-  final TapGestureRecognizer _recognizer = TapGestureRecognizer()
-    ..onTap = onOpenUserLicense;
+  final TapGestureRecognizer _recognizer = TapGestureRecognizer()..onTap = onOpenUserLicense;
 
   // State
   bool isPasswordClear = false;
@@ -108,8 +107,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget buildTitleLine() {
     return Container(
-        alignment: Alignment.centerLeft,
-        child: Text('欢迎登录', style: Theme.of(context).textTheme.headline1));
+        alignment: Alignment.centerLeft, child: Text('欢迎登录', style: Theme.of(context).textTheme.headline1));
   }
 
   Widget buildLoginForm() {
@@ -122,8 +120,7 @@ class _LoginPageState extends State<LoginPage> {
             controller: _usernameController,
             autofocus: true,
             validator: studentIdValidator,
-            decoration: const InputDecoration(
-                labelText: '学号', hintText: '输入你的学号', icon: Icon(Icons.person)),
+            decoration: const InputDecoration(labelText: '学号', hintText: '输入你的学号', icon: Icon(Icons.person)),
           ),
           TextFormField(
             controller: _passwordController,
@@ -135,8 +132,7 @@ class _LoginPageState extends State<LoginPage> {
               icon: const Icon(Icons.lock),
               suffixIcon: IconButton(
                 // 切换密码明文显示状态的图标按钮
-                icon: Icon(
-                    isPasswordClear ? Icons.visibility_off : Icons.visibility),
+                icon: Icon(isPasswordClear ? Icons.visibility_off : Icons.visibility),
                 onPressed: () {
                   setState(() {
                     isPasswordClear = !isPasswordClear;
@@ -165,13 +161,8 @@ class _LoginPageState extends State<LoginPage> {
           child: Text.rich(
             TextSpan(
               children: [
-                TextSpan(
-                    text: '我已阅读并同意',
-                    style: Theme.of(context).textTheme.bodyText1),
-                TextSpan(
-                    text: '《上应小风筝用户协议》',
-                    style: Theme.of(context).textTheme.bodyText2,
-                    recognizer: _recognizer),
+                TextSpan(text: '我已阅读并同意', style: Theme.of(context).textTheme.bodyText1),
+                TextSpan(text: '《上应小风筝用户协议》', style: Theme.of(context).textTheme.bodyText2, recognizer: _recognizer),
               ],
             ),
           ),
@@ -207,8 +198,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildProxySetButton(
-      BuildContext context, FlashController<dynamic> controller, _) {
+  Widget _buildProxySetButton(BuildContext context, FlashController<dynamic> controller, _) {
     return IconButton(
       onPressed: () {
         final String inputText = _proxyInputController.text;
