@@ -41,7 +41,8 @@ final _routes = {
   '/electricity': (context) => const ElectricityPage(),
   '/score': (context) => const ScorePage(),
   '/office': (context) => const OfficePage(),
-  '/game': (context) => Game2048Page(),
+  '/game': (context) => GamePage(),
+  '/game/2048': (context) => Game2048Page(),
   '/wiki': (context) => const WikiPage(),
   '/library': (context) => const LibraryPage(),
   '/market': (context) => const MarketPage(),
@@ -74,7 +75,6 @@ class KiteApp extends StatelessWidget {
 
   TextTheme _buildTextTheme(Color primaryColor) {
     return const TextTheme(
-
       headline1: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w500),
       headline2: TextStyle(fontSize: 24.0, color: Colors.black87),
       headline3: TextStyle(fontSize: 24.0, color: Colors.black54),
@@ -91,7 +91,6 @@ class KiteApp extends StatelessWidget {
       // body1: /*     */ TextStyle(fontSize: 14.0),
       // body2: /*     */ TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500),
       // caption: /*   */ TextStyle(fontSize: 12.0, color: Colors.black87),
-
     );
   }
 
@@ -108,9 +107,7 @@ class KiteApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = StoragePool.themeSetting.isDarkMode;
     final primaryColor = StoragePool.themeSetting.color;
-    final home = StoragePool.authSetting.currentUsername != null
-        ? const HomePage()
-        : const WelcomePage();
+    final home = StoragePool.authSetting.currentUsername != null ? const HomePage() : const WelcomePage();
 
     return ScreenUtilInit(
       builder: () => DynamicColorTheme(

@@ -26,6 +26,7 @@ export 'event/index.dart';
 export 'exam.dart';
 export 'expense/index.dart';
 export 'feedback.dart';
+export 'game/2048/index.dart';
 export 'game/index.dart';
 export 'home/index.dart';
 export 'library/index.dart';
