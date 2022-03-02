@@ -23,8 +23,8 @@ import 'package:intl/intl.dart';
 import 'package:kite/entity/sc/list.dart';
 
 import '../detail.dart';
-import 'util.dart';
 import 'background.dart';
+import 'util.dart';
 
 class EventCard extends StatelessWidget {
   static final dateFormat = DateFormat('yyyy-MM-dd');

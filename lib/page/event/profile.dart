@@ -17,13 +17,45 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:kite/component/future_builder.dart';
+import 'package:kite/entity/sc/score.dart';
+import 'package:kite/global/session_pool.dart';
+import 'package:kite/service/sc/score.dart';
+
+import 'component/summary.dart';
 
 class ProfilePage extends StatelessWidget {
-  @override
+  final ScScoreService service = ScScoreService(SessionPool.scSession);
+
+  ProfilePage({Key? key}) : super(key: key);
+
+  Widget _buildSummaryCard() {
+    return MyFutureBuilder<ScScoreSummary>(
+      future: service.getScScoreSummary(),
+      builder: (context, summary) {
+        return Padding(padding: const EdgeInsets.all(20), child: SummaryCard(summary));
+      },
+    );
+  }
+
+  Widget _buildEventList() {
+    return Container();
+  }
+
+  Widget _buildBody() {
+    return Column(
+      children: [
+        _buildSummaryCard(),
+        Expanded(child: _buildEventList()),
+      ],
+    );
+  }
+
+  // @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('我的第二课堂')),
-      body: Container(),
+      body: _buildBody(),
     );
   }
 }
