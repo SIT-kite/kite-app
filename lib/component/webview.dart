@@ -25,8 +25,13 @@ import 'unsupported_platform_launch.dart';
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+enum InjectJsTime {
+  onPageStarted,
+  onPageFinished,
+}
 
 class InjectJsRuleItem {
+  /// js注入的url匹配规则
   Rule<String> rule;
 
   /// 若为空，则表示不注入
@@ -34,10 +39,15 @@ class InjectJsRuleItem {
 
   /// 异步js字符串，若为空，则表示不注入
   Future<String?>? asyncJavascript;
+
+  /// js注入时机
+  InjectJsTime injectTime;
+
   InjectJsRuleItem({
     required this.rule,
     this.javascript,
     this.asyncJavascript,
+    this.injectTime = InjectJsTime.onPageFinished,
   });
 }
 
@@ -67,6 +77,31 @@ class MyWebView extends StatefulWidget {
 
 class _MyWebViewState extends State<MyWebView> {
   final _controllerCompleter = Completer<WebViewController>();
+
+  /// 获取该url匹配的所有注入项
+  Iterable<InjectJsRuleItem> getAllMatchJs(String url, InjectJsTime injectTime) {
+    final rules = widget.injectJsRules
+        ?.where((injectJsRule) => injectJsRule.rule.accept(url) && injectJsRule.injectTime == injectTime);
+    return rules ?? [];
+  }
+
+  /// 根据当前url筛选所有符合条件的js脚本，执行js注入
+  Future<void> injectJs(InjectJsRuleItem injectJsRule) async {
+    final controller = await _controllerCompleter.future;
+    // 同步获取js代码
+    if (injectJsRule.javascript != null) {
+      Log.info('执行了js注入');
+      controller.runJavascript(injectJsRule.javascript!);
+    }
+    // 异步获取js代码
+    if (injectJsRule.asyncJavascript != null) {
+      String? js = await injectJsRule.asyncJavascript;
+      if (js != null) {
+        controller.runJavascript(js);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return UniversalPlatform.isDesktopOrWeb
@@ -81,33 +116,16 @@ class _MyWebViewState extends State<MyWebView> {
                 widget.onWebViewCreated!(webViewController);
               }
             },
-            onPageStarted: (String url) {
+            onPageStarted: (String url) async {
               Log.info('开始加载url: $url');
+              await Future.wait(getAllMatchJs(url, InjectJsTime.onPageStarted).map(injectJs));
               if (widget.onPageStarted != null) {
                 widget.onPageStarted!(url);
               }
             },
             onPageFinished: (String url) async {
               Log.info('url加载完毕: $url');
-              final rules = widget.injectJsRules?.where((injectJsRule) => injectJsRule.rule.accept(url));
-              if (rules != null) {
-                for (final injectJsRule in rules) {
-                  Log.info('执行js注入');
-                  final controller = await _controllerCompleter.future;
-                  // 同步获取js代码
-                  if (injectJsRule.javascript != null) {
-                    controller.runJavascript(injectJsRule.javascript!);
-                  }
-                  // 异步获取js代码
-                  if (injectJsRule.asyncJavascript != null) {
-                    String? js = await injectJsRule.asyncJavascript;
-                    if (js != null) {
-                      controller.runJavascript(js);
-                    }
-                  }
-                }
-              }
-
+              await Future.wait(getAllMatchJs(url, InjectJsTime.onPageFinished).map(injectJs));
               if (widget.onPageFinished != null) {
                 widget.onPageFinished!(url);
               }
