@@ -15,6 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:kite/page/webview/index.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'logger.dart';
@@ -28,4 +31,11 @@ Future<void> launchInBrowser(String url) async {
   )) {
     throw 'Could not launch $url';
   }
+}
+
+Future<void> launchInBuiltinWebView(BuildContext context, String url) async {
+  Log.info('开启内置WebView加载URL: $url');
+  await Navigator.of(context).push(
+    MaterialPageRoute(builder: (_) => SimpleWebViewPage(url)),
+  );
 }
