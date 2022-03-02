@@ -28,6 +28,7 @@ export 'expense/index.dart';
 export 'feedback.dart';
 export 'game/2048/index.dart';
 export 'game/index.dart';
+export 'game/wordle/index.dart';
 export 'home/index.dart';
 export 'library/index.dart';
 export 'login.dart';

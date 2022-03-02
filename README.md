@@ -115,6 +115,7 @@ flutter run
 本项目中使用的其他开源项目有：
 
 - [Game2048](https://github.com/linuxsong/game2048)
+- [Wordle](https://github.com/nimone/wordle)
 - [DanXi][DanXi]
 
 这些项目的开源协议详见其各自的 LICENSE 文件。

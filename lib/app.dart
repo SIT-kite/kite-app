@@ -43,6 +43,7 @@ final _routes = {
   '/office': (context) => const OfficePage(),
   '/game': (context) => GamePage(),
   '/game/2048': (context) => Game2048Page(),
+  '/game/wordle': (context) => WordlePage(),
   '/wiki': (context) => const WikiPage(),
   '/library': (context) => const LibraryPage(),
   '/market': (context) => const MarketPage(),

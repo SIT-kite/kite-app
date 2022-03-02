@@ -34,7 +34,7 @@ class GameMeta {
 
 const Map<GameType, GameMeta> gameMapping = {
   GameType.game2048: GameMeta('2048', '/game/2048', 'assets/game/icon_2048.png'),
-  // GameType.wordle: GameMeta(),
+  GameType.wordle: GameMeta('Wordle', '/game/wordle', 'assets/game/icon_wordle.png'),
 };
 
 class GamePage extends StatefulWidget {
@@ -67,6 +67,7 @@ class _GamePageState extends State<GamePage> with SingleTickerProviderStateMixin
       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
       child: ListTile(
         leading: Image.asset(game.icon, height: 64, width: 64),
+        trailing: const Icon(Icons.chevron_right),
         title: Text(game.name),
         onTap: () => Navigator.of(context).pushNamed(game.route),
       ),
