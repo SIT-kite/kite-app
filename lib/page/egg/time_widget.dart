@@ -10,8 +10,7 @@ class MultiProtuberance extends MovableObject {
   double radius;
   late double rotate;
   double count;
-  MultiProtuberance(WorldRule worldRule, this.radius, this.count)
-      : super(worldRule) {
+  MultiProtuberance(WorldRule worldRule, this.radius, this.count) : super(worldRule) {
     primaryRadius = radius;
     rotate = Random.secure().nextDouble();
   }
@@ -19,8 +18,7 @@ class MultiProtuberance extends MovableObject {
   @override
   void tick() {
     super.tick();
-    radius = primaryRadius +
-        primaryRadius * 3 * (position.dy / worldRule.bound.height);
+    radius = primaryRadius + primaryRadius * 3 * (position.dy / worldRule.bound.height);
   }
 
   @override
@@ -57,8 +55,7 @@ class Circle extends MovableObject {
   @override
   void tick() {
     super.tick();
-    radius = primaryRadius +
-        primaryRadius * 2 * (position.dy / worldRule.bound.height);
+    radius = primaryRadius + primaryRadius * 2 * (position.dy / worldRule.bound.height);
   }
 
   @override
@@ -84,7 +81,7 @@ class Circle extends MovableObject {
     }
     // 撞到下墙壁了
     if (position.dy + radius > size.height) {
-      position = position.translate(0, -0.01);
+      position = position.translate(0, -1);
       velocity = velocity.scale(1, -0.7);
     }
   }
@@ -111,14 +108,11 @@ class _TimeWidgetState extends State<TimeWidget> {
   double get height => world.worldRule.bound.height;
 
   /// 每个小球的盒半径
-  double get circleBoundWidth =>
-      width / (2 * (showDigitIndexes.length + 2) * 10) * 1.2;
+  double get circleBoundWidth => width / (2 * (showDigitIndexes.length + 2) * 10) * 1.2;
   List<int> showDigitIndexes = [];
 
   Circle generateCircle(Offset position) {
-    double hue =
-        ((currentTimeMs / 10000 * 360 + position.dx / width * 360) % 360)
-            .toDouble();
+    double hue = ((currentTimeMs / 10000 * 360 + position.dx / width * 360) % 360).toDouble();
 
     // android端刚启动时hue值可能为NaN导致程序异常（暂时未知原因）
     if (!(hue <= 360 && hue >= 0)) {
@@ -129,9 +123,9 @@ class _TimeWidgetState extends State<TimeWidget> {
       ..position = position
       ..velocity = Offset(
         Random.secure().nextDouble() * 100,
-        Random.secure().nextDouble() * 20 + 200,
+        Random.secure().nextDouble() * 20 + 500,
       )
-      ..acceleration = Offset(Random.secure().nextDouble() * 10 - 5, 100)
+      ..acceleration = Offset(Random.secure().nextDouble() * 10 - 5, 500)
       ..paint = (Paint()
         ..color = HSVColor.fromAHSV(
           Random.secure().nextDouble() * 0.2 + 0.8,
@@ -176,9 +170,7 @@ class _TimeWidgetState extends State<TimeWidget> {
                 // 控制这一行的常数可改变字体间距
                 1.5 * circleBoundWidth * showDigitIndexes.length * i +
                 circleBoundWidth * showDigitIndexes.length;
-            double y = circleBoundWidth * r * 2 +
-                height / 2 -
-                circleBoundWidth * 8 * 2;
+            double y = circleBoundWidth * r * 2 + height / 2 - circleBoundWidth * 8 * 2;
 
             balls.add(generateCircle(Offset(x, y)));
           }
@@ -199,16 +191,11 @@ class _TimeWidgetState extends State<TimeWidget> {
         back = MultiDrawable(circles.map((e) {
           final cl = e.clone();
           // 设置时钟不透明
-          cl.paint.color = HSVColor.fromColor(cl.paint.color)
-              .withAlpha(1)
-              .withSaturation(1)
-              .withValue(1)
-              .toColor();
+          cl.paint.color = HSVColor.fromColor(cl.paint.color).withAlpha(1).withSaturation(1).withValue(1).toColor();
           return cl;
         }).toList());
 
-        currentTimeMs = DateTime.now().millisecondsSinceEpoch -
-            firstTime.millisecondsSinceEpoch;
+        currentTimeMs = DateTime.now().millisecondsSinceEpoch - firstTime.millisecondsSinceEpoch;
         await Future.delayed(const Duration(milliseconds: 16));
         update();
       }
@@ -216,9 +203,7 @@ class _TimeWidgetState extends State<TimeWidget> {
 
     Future.delayed(Duration.zero, () async {
       while (!hasDispose) {
-        circles
-            .where((_) => Random.secure().nextDouble() < 0.001)
-            .forEach(world.pushMovableObject);
+        circles.where((_) => Random.secure().nextDouble() < 0.001).forEach(world.pushMovableObject);
         await Future.delayed(const Duration(seconds: 1));
       }
     });
