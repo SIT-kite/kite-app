@@ -16,7 +16,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-enum ActivityType { lecture, theme, creation, campus, practice, voluntary, unknown }
+enum ActivityType { lecture, theme, creation, campus, practice, voluntary, safetyEdu, unknown }
+
+enum ActivityScoreType { lecture, creation, campus, practice, voluntary, safetyEdu }
+
+const Map<String, ActivityScoreType> stringToActivityScoreType = {
+  '主题报告': ActivityScoreType.lecture,
+  '社会实践': ActivityScoreType.practice,
+  '创新创业创意': ActivityScoreType.creation,
+  '校园文明': ActivityScoreType.campus,
+  '公益志愿': ActivityScoreType.voluntary,
+  '校园安全文明': ActivityScoreType.safetyEdu,
+};
+
+const Map<String, ActivityType> stringToActivityType = {
+  '讲座报告': ActivityType.lecture,
+  '主题教育': ActivityType.theme,
+  '校园文化活动': ActivityType.campus,
+  '创新创业创意': ActivityType.creation,
+  '社会实践': ActivityType.practice,
+  '志愿公益': ActivityType.voluntary,
+  '安全教育网络教学': ActivityType.safetyEdu,
+  '校园文明': ActivityType.campus,
+};
+
+const Map<ActivityType, String> activityTypeToString = {
+  ActivityType.lecture: '讲座报告',
+  ActivityType.campus: '校园文化',
+  ActivityType.unknown: '未知',
+  ActivityType.creation: '创新创业创意',
+  ActivityType.safetyEdu: '校园安全',
+  ActivityType.theme: '主题教育',
+  ActivityType.practice: '社会实践',
+  ActivityType.voluntary: '公益志愿',
+};
 
 class Activity {
   /// Activity id

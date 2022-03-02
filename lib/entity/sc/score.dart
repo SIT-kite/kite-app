@@ -18,43 +18,34 @@
 
 import 'dart:core';
 
+import 'package:kite/entity/sc/list.dart';
+
 class ScScoreSummary {
-  /// Effective score
-  final double effect;
-
-  /// Total score
-  final double total;
-
-  /// Integrity score
-  final double integrity;
-
   /// Subject report (主题报告)
-  final double themeReport;
+  final double lecture;
 
   /// Social practice (社会实践)
-  final double socialPractice;
+  final double practice;
 
   /// Innovation, entrepreneurship and creativity.(创新创业创意)
-  final double creativity;
+  final double creation;
 
   /// Campus safety and civilization.(校园安全文明)
-  final double safetyCivilization;
+  final double safetyEdu;
 
   /// Charity and Volunteer.(公益志愿)
-  final double charity;
+  final double voluntary;
 
   /// Campus culture.(校园文化)
-  final double campusCulture;
+  final double campus;
 
-  ScScoreSummary(this.effect, this.total, this.integrity, this.themeReport, this.socialPractice, this.creativity,
-      this.safetyCivilization, this.charity, this.campusCulture);
+  ScScoreSummary(this.lecture, this.practice, this.creation, this.safetyEdu, this.voluntary, this.campus);
 
   @override
   String toString() {
-    return 'ScScoreSummary{effect: $effect, total: $total, integrity: $integrity, '
-        'themeReport: $themeReport, socialPractice: $socialPractice, '
-        'creativity: $creativity, safetyCivilization: $safetyCivilization, '
-        'charity: $charity, campusCulture: $campusCulture}';
+    return 'ScScoreSummary{themeReport: $lecture, socialPractice: $practice, '
+        'creativity: $creation, safetyCivilization: $safetyEdu, '
+        'charity: $voluntary, campusCulture: $campus}';
   }
 }
 
@@ -62,17 +53,20 @@ class ScScoreItem {
   /// 活动编号
   final int activityId;
 
+  /// 活动标题
+  final String title;
+
   /// 活动类型
-  final int category;
+  final ActivityType type;
 
   /// 分数
   final double amount;
 
-  ScScoreItem(this.activityId, this.category, this.amount);
+  ScScoreItem(this.activityId, this.title, this.type, this.amount);
 
   @override
   String toString() {
-    return 'ScScoreItem{activityId: $activityId, category: $category, '
+    return 'ScScoreItem{activityId: $activityId, category: $type, '
         'amount: $amount}';
   }
 }
@@ -81,7 +75,7 @@ class ScActivityItem {
   /// 活动编号
   final int activityId;
 
-  /// 活动时间
+  /// 申请时间
   final DateTime time;
 
   /// 活动状态
@@ -94,4 +88,23 @@ class ScActivityItem {
     return 'ScActivityItem{activityId: $activityId, time: $time, '
         'status: $status}';
   }
+}
+
+class ScJoinedActivity {
+  /// 活动编号
+  final int activityId;
+
+  /// 活动标题
+  final String title;
+
+  /// 活动时间
+  final DateTime time;
+
+  /// 活动状态
+  final String status;
+
+  /// 总得分
+  final double amount;
+
+  ScJoinedActivity(this.activityId, this.title, this.time, this.status, this.amount);
 }
