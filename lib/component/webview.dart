@@ -50,6 +50,7 @@ class MyWebView extends StatefulWidget {
   final PageStartedCallback? onPageStarted;
   final PageFinishedCallback? onPageFinished;
   final JavascriptMode javascriptMode;
+
   const MyWebView({
     Key? key,
     this.initialUrl,
