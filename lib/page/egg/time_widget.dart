@@ -82,7 +82,7 @@ class Circle extends MovableObject {
     // 撞到下墙壁了
     if (position.dy + radius > size.height) {
       position = position.translate(0, -1);
-      velocity = velocity.scale(1, -0.7);
+      velocity = velocity.scale(1, -0.9);
     }
   }
 }
@@ -118,17 +118,20 @@ class _TimeWidgetState extends State<TimeWidget> {
     if (!(hue <= 360 && hue >= 0)) {
       hue = 0;
     }
+
+    // 水平初速度置为+-100
+    final vx = Random.secure().nextDouble() * 200 - 100;
+    const vy = 0.0;
+    final ax = (vy < 0 ? -1 : 1) * Random.secure().nextDouble() * 50;
+    const ay = 2000.0;
     // 该行常数控制了小球真实半径与小球包围盒之间的内边距padding
     return Circle(world.worldRule, circleBoundWidth - 0.6)
       ..position = position
-      ..velocity = Offset(
-        Random.secure().nextDouble() * 100,
-        Random.secure().nextDouble() * 20 + 500,
-      )
-      ..acceleration = Offset(Random.secure().nextDouble() * 10 - 5, 500)
+      ..velocity = Offset(vx, vy)
+      ..acceleration = Offset(ax, ay)
       ..paint = (Paint()
         ..color = HSVColor.fromAHSV(
-          Random.secure().nextDouble() * 0.2 + 0.8,
+          Random.secure().nextDouble() * 0.4 + 0.6,
           hue,
           Random.secure().nextDouble() * 0.2 + 0.8,
           Random.secure().nextDouble() * 0.2 + 0.8,
@@ -191,7 +194,8 @@ class _TimeWidgetState extends State<TimeWidget> {
         back = MultiDrawable(circles.map((e) {
           final cl = e.clone();
           // 设置时钟不透明
-          cl.paint.color = HSVColor.fromColor(cl.paint.color).withAlpha(1).withSaturation(1).withValue(1).toColor();
+          final hue = HSVColor.fromColor(cl.paint.color).hue;
+          cl.paint.color = HSVColor.fromAHSV(1, hue, 1, 1).toColor();
           return cl;
         }).toList());
 
