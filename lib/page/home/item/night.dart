@@ -30,7 +30,7 @@ class NightItem extends StatelessWidget {
     final now = DateTime.now();
 
     if (now.hour >= 21 || now.hour < 6) {
-      return HomeItem(
+      return HomeFunctionButton(
         route: '/night',
         icon: 'assets/home/icon_night.svg',
         title: '晚安',

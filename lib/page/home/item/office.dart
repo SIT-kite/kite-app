@@ -19,8 +19,9 @@ import 'package:flutter/material.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:kite/page/home/item/item.dart';
 import 'package:kite/service/office/index.dart';
+
+import 'item.dart';
 
 class OfficeItem extends StatefulWidget {
   const OfficeItem({Key? key}) : super(key: key);
@@ -80,6 +81,6 @@ class _OfficeItemState extends State<OfficeItem> {
       final String? lastOfficeStatus = StoragePool.homeSetting.lastOfficeStatus;
       content = lastOfficeStatus ?? defaultContent;
     }
-    return HomeItem(route: '/office', icon: 'assets/home/icon_office.svg', title: '办公', subtitle: content);
+    return HomeFunctionButton(route: '/office', icon: 'assets/home/icon_office.svg', title: '办公', subtitle: content);
   }
 }

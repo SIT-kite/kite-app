@@ -17,7 +17,8 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/global/event_bus.dart';
-import 'package:kite/page/home/item/item.dart';
+
+import 'item.dart';
 
 class MailItem extends StatefulWidget {
   const MailItem({Key? key}) : super(key: key);
@@ -46,7 +47,7 @@ class _MailItemState extends State<MailItem> {
 
   @override
   Widget build(BuildContext context) {
-    return HomeItem(
+    return HomeFunctionButton(
       route: '/mail',
       icon: 'assets/home/icon_mail.svg',
       title: 'Edu 邮箱',

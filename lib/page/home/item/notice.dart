@@ -67,7 +67,7 @@ class _NoticeItemState extends State<NoticeItem> {
         if (snapshot.connectionState == ConnectionState.done) {
           content = snapshot.data ?? defaultContent;
         }
-        return HomeItem(
+        return HomeFunctionButton(
           route: '/notice',
           icon: 'assets/home/icon_notice.svg',
           title: '公告',

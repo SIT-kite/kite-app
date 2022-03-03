@@ -19,7 +19,8 @@ import 'package:flutter/material.dart';
 import 'package:kite/entity/electricity.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:kite/page/home/item/item.dart';
+
+import 'item.dart';
 
 class ElectricityItem extends StatefulWidget {
   const ElectricityItem({Key? key}) : super(key: key);
@@ -44,7 +45,7 @@ class _ElectricityItemState extends State<ElectricityItem> {
     if (lastBalance != null) {
       content = '寝室 ${lastBalance!.room} 上次余额 ${lastBalance!.balance.toStringAsPrecision(2)}';
     }
-    return HomeItem(
+    return HomeFunctionButton(
       route: '/electricity',
       icon: 'assets/home/icon_electricity.svg',
       title: '查电费',

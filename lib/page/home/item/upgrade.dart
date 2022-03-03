@@ -15,10 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 import 'package:flutter/material.dart';
-import 'package:kite/page/home/item/item.dart';
 import 'package:kite/util/upgrade.dart';
 import 'package:kite/util/url_launcher.dart';
+
+import 'item.dart';
 
 const String appUpgradeUrl = 'https://cdn.kite.sunnysab.cn/upgrade/';
 
@@ -40,7 +42,7 @@ class UpgradeItem extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done && snapshot.hasData && snapshot.data != null) {
           return GestureDetector(
             onTap: () => onTapUpdate(snapshot.data!),
-            child: HomeItem(
+            child: HomeFunctionButton(
               title: '更新',
               subtitle: '小风筝有新的版本了，点击更新',
               icon: 'assets/home/icon_upgrade.svg',

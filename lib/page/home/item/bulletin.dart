@@ -17,7 +17,8 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/global/event_bus.dart';
-import 'package:kite/page/home/item/item.dart';
+
+import 'item.dart';
 
 class BulletinItem extends StatefulWidget {
   const BulletinItem({Key? key}) : super(key: key);
@@ -38,7 +39,7 @@ class _BulletinItemState extends State<BulletinItem> {
 
   @override
   Widget build(BuildContext context) {
-    return HomeItem(
+    return HomeFunctionButton(
       route: '/bulletin',
       icon: 'assets/home/icon_bulletin.svg',
       title: 'OA 公告',

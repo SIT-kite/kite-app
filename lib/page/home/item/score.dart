@@ -17,7 +17,8 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/global/event_bus.dart';
-import 'package:kite/page/home/item/item.dart';
+
+import 'item.dart';
 
 class ScoreItem extends StatefulWidget {
   const ScoreItem({Key? key}) : super(key: key);
@@ -38,7 +39,7 @@ class _ScoreItemState extends State<ScoreItem> {
 
   @override
   Widget build(BuildContext context) {
-    return HomeItem(
+    return HomeFunctionButton(
       route: '/score',
       icon: 'assets/home/icon_score.svg',
       title: '成绩',

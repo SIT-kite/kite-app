@@ -19,7 +19,8 @@ import 'package:flutter/material.dart';
 import 'package:kite/entity/expense.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:kite/page/home/item/item.dart';
+
+import 'item.dart';
 
 class ExpenseItem extends StatefulWidget {
   const ExpenseItem({Key? key}) : super(key: key);
@@ -44,7 +45,7 @@ class _ExpenseItemState extends State<ExpenseItem> {
     if (lastExpense != null) {
       content = '${lastExpense!.amount} 元 ${lastExpense!.place}';
     }
-    return HomeItem(
+    return HomeFunctionButton(
       route: '/expense',
       icon: 'assets/home/icon_expense.svg',
       title: '查消费',

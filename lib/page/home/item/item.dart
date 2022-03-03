@@ -34,14 +34,14 @@ export 'score.dart';
 export 'timetable.dart';
 export 'upgrade.dart';
 
-class HomeItem extends StatelessWidget {
+class HomeFunctionButton extends StatelessWidget {
   final String? route;
   final String? icon;
   final Widget? iconWidget;
   final String title;
   final String? subtitle;
 
-  HomeItem({
+  HomeFunctionButton({
     this.route,
     required this.title,
     this.subtitle,

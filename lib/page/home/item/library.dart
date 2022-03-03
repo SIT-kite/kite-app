@@ -22,8 +22,9 @@ import 'package:kite/entity/library/hot_search.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:kite/page/home/item/item.dart';
-import 'package:kite/service/library/index.dart';
+import 'package:kite/service/library/hot_search.dart';
+
+import 'item.dart';
 
 class LibraryItem extends StatefulWidget {
   const LibraryItem({Key? key}) : super(key: key);
@@ -79,6 +80,6 @@ class _LibraryItemState extends State<LibraryItem> {
       final lastHotSearch = StoragePool.homeSetting.lastHotSearch;
       content = lastHotSearch ?? defaultContent;
     }
-    return HomeItem(route: '/library', icon: 'assets/home/icon_library.svg', title: '图书馆', subtitle: content);
+    return HomeFunctionButton(route: '/library', icon: 'assets/home/icon_library.svg', title: '图书馆', subtitle: content);
   }
 }

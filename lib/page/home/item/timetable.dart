@@ -17,7 +17,8 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/global/event_bus.dart';
-import 'package:kite/page/home/item/item.dart';
+
+import 'item.dart';
 
 class TimetableItem extends StatefulWidget {
   const TimetableItem({Key? key}) : super(key: key);
@@ -38,7 +39,7 @@ class _TimetableItemState extends State<TimetableItem> {
 
   @override
   Widget build(BuildContext context) {
-    return HomeItem(
+    return HomeFunctionButton(
       route: '/timetable',
       icon: 'assets/home/icon_timetable.svg',
       title: '课程表',

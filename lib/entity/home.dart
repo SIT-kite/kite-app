@@ -15,34 +15,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:flutter/material.dart';
-import 'package:kite/global/event_bus.dart';
-import 'package:kite/page/home/item/item.dart';
 
-class EventItem extends StatefulWidget {
-  const EventItem({Key? key}) : super(key: key);
+enum FunctionType {
+  /// 公告
+  notice,
+  /// 课程表
+  timetable,
+  /// 体温上报
+  report,
+  /// 考试安排
+  exam,
+  /// 空教室
+  classroom,
+  /// 活动
+  event,
+  /// 消费查询
+  expense,
+  /// 成绩查询
+  score,
+  /// 图书馆
+  library,
+  /// 办公
+  office,
 
-  @override
-  State<StatefulWidget> createState() => _EventItemState();
 }
 
-class _EventItemState extends State<EventItem> {
-  late String content = '看看最近有哪些活动';
-
-  @override
-  void initState() {
-    eventBus.on(EventNameConstants.onHomeRefresh, (arg) {});
-
-    return super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return HomeFunctionButton(
-      route: '/event',
-      icon: 'assets/home/icon_event.svg',
-      title: '活动',
-      subtitle: content,
-    );
-  }
-}
+final

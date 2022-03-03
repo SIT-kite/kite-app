@@ -17,7 +17,8 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/global/event_bus.dart';
-import 'package:kite/page/home/item/item.dart';
+
+import 'item.dart';
 
 class ExamItem extends StatefulWidget {
   const ExamItem({Key? key}) : super(key: key);
@@ -38,7 +39,7 @@ class _ExamItemState extends State<ExamItem> {
 
   @override
   Widget build(BuildContext context) {
-    return HomeItem(
+    return HomeFunctionButton(
       route: '/exam',
       icon: 'assets/home/icon_exam.svg',
       title: '考试安排',
