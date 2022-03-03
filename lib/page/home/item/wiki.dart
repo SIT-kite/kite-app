@@ -26,7 +26,7 @@ class WikiItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return HomeFunctionButton(
       route: '/wiki',
-      icon: 'assets/home/icon_icon.svg',
+      icon: 'assets/home/icon_wiki.svg',
       title: 'Wiki',
       subtitle: '上应大生存指南',
     );
