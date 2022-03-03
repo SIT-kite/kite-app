@@ -123,21 +123,19 @@ class _TimetablePageState extends State<TimetablePage> {
   }
 
   PopupMenuButton _buildPopupMenu(BuildContext context) {
+    final List<Function()> callback = [
+      () => Navigator.of(context).pushNamed('/timetable/import'),
+      _onRefresh,
+      _onExport,
+    ];
+
     return PopupMenuButton(
-      itemBuilder: (BuildContext context) {
-        return <PopupMenuEntry>[
-          PopupMenuItem(
-            child: const Text('导入'),
-            onTap: () => Navigator.of(context).pushNamed('/timetable/import'),
-          ),
-          PopupMenuItem(
-            child: const Text('刷新'),
-            onTap: _onRefresh,
-          ),
-          PopupMenuItem(
-            child: const Text('导出日历文件'),
-            onTap: _onExport,
-          ),
+      onSelected: (index) => callback[index](),
+      itemBuilder: (BuildContext ctx) {
+        return const <PopupMenuEntry>[
+          PopupMenuItem(value: 0, child: Text('导入')),
+          PopupMenuItem(value: 1, child: Text('刷新')),
+          PopupMenuItem(value: 2, child: Text('导出日历')),
         ];
       },
     );
