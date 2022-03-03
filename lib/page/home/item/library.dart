@@ -24,7 +24,7 @@ import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/service/library/hot_search.dart';
 
-import 'item.dart';
+import 'index.dart';
 
 class LibraryItem extends StatefulWidget {
   const LibraryItem({Key? key}) : super(key: key);

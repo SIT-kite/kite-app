@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:kite/page/home/item/item.dart';
+import 'package:kite/page/home/item/index.dart';
 
 class WikiItem extends StatelessWidget {
   const WikiItem({Key? key}) : super(key: key);

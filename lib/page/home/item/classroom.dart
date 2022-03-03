@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:kite/page/home/item/item.dart';
+import 'package:kite/page/home/item/index.dart';
 
 class ClassroomItem extends StatelessWidget {
   const ClassroomItem({Key? key}) : super(key: key);

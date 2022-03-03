@@ -20,7 +20,7 @@ import 'package:kite/entity/electricity.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/storage_pool.dart';
 
-import 'item.dart';
+import 'index.dart';
 
 class ElectricityItem extends StatefulWidget {
   const ElectricityItem({Key? key}) : super(key: key);

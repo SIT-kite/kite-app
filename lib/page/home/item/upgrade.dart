@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/util/upgrade.dart';
 import 'package:kite/util/url_launcher.dart';
 
-import 'item.dart';
+import 'index.dart';
 
 const String appUpgradeUrl = 'https://cdn.kite.sunnysab.cn/upgrade/';
 

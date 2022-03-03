@@ -23,7 +23,7 @@ import 'package:kite/global/storage_pool.dart';
 import 'package:kite/service/report/report.dart';
 import 'package:kite/session/report_session.dart';
 
-import 'item.dart';
+import 'index.dart';
 
 class ReportItem extends StatefulWidget {
   const ReportItem({Key? key}) : super(key: key);

@@ -18,7 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/global/event_bus.dart';
 
-import 'item.dart';
+import 'index.dart';
 
 class TimetableItem extends StatefulWidget {
   const TimetableItem({Key? key}) : super(key: key);

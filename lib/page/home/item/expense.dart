@@ -20,7 +20,7 @@ import 'package:kite/entity/expense.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/storage_pool.dart';
 
-import 'item.dart';
+import 'index.dart';
 
 class ExpenseItem extends StatefulWidget {
   const ExpenseItem({Key? key}) : super(key: key);

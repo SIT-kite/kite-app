@@ -21,7 +21,7 @@ import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/service/office/index.dart';
 
-import 'item.dart';
+import 'index.dart';
 
 class OfficeItem extends StatefulWidget {
   const OfficeItem({Key? key}) : super(key: key);
