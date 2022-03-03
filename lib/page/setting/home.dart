@@ -16,44 +16,95 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// class HomeSettingPage extends StatefulWidget {
-//   const HomeSettingPage({Key? key}) : super(key: key);
-//
-//   @override
-//   State<StatefulWidget> createState() => _HomeSettingPageState();
-// }
-//
-// class _HomeSettingPageState extends State<HomeSettingPage> {
-//   List<HomeFunctionButton> homeItems;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return ReorderableListView(
-//       header: Container(
-//         alignment: const Alignment(-0.9, 0),
-//         height: 45,
-//         padding: const EdgeInsets.only(top: 15),
-//         child: const Text('例子'),
-//       ),
-//       children: list.map((item) {
-//         return Container(
-//             key: Key(item.toString()),
-//             height: 45,
-//             width: double.infinity,
-//             margin: EdgeInsets.only(top: 5),
-//             color: Colors.white,
-//             child: Text(item.toString()));
-//       }).toList(),
-//       onReorder: (int oldIndex, int newIndex) {
-//         setState(() {
-//           //交换数据
-//           if (newIndex > oldIndex) {
-//             newIndex -= 1;
-//           }
-//           final int item = list.removeAt(oldIndex);
-//           list.insert(newIndex, item);
-//         });
-//       },
-//     );
-//   }
-// }
+import 'package:flutter/material.dart';
+import 'package:kite/entity/home.dart';
+
+String functionTypeToString(FunctionType type) {
+  switch (type) {
+    case FunctionType.upgrade:
+      return '更新';
+    case FunctionType.notice:
+      return '公告';
+    case FunctionType.timetable:
+      return '课程表';
+    case FunctionType.report:
+      return '体温上报';
+    case FunctionType.exam:
+      return '考试信息';
+    case FunctionType.classroom:
+      return '课程表';
+    case FunctionType.event:
+      return '活动';
+    case FunctionType.expense:
+      return '消费';
+    case FunctionType.score:
+      return '查成绩';
+    case FunctionType.library:
+      return '图书馆';
+    case FunctionType.office:
+      return '办公';
+    case FunctionType.mail:
+      return '邮件';
+    case FunctionType.bulletin:
+      return 'OA 公告';
+    case FunctionType.contact:
+      return '常用电话';
+    case FunctionType.game:
+      return '小游戏';
+    case FunctionType.wiki:
+      return 'Wiki';
+    case FunctionType.separator:
+      return '分隔符';
+  }
+}
+
+class HomeSettingPage extends StatefulWidget {
+  const HomeSettingPage({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _HomeSettingPageState();
+}
+
+class _HomeSettingPageState extends State<HomeSettingPage> {
+  List<FunctionType> homeItems = defaultFunctionList.toList();
+
+  void _onReorder(int oldIndex, int newIndex) {
+    setState(() {
+      // 交换数据
+      if (newIndex > oldIndex) {
+        newIndex -= 1;
+      }
+      final item = homeItems.removeAt(oldIndex);
+      homeItems.insert(newIndex, item);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> buildWidgetItems(List<FunctionType> homeItems) {
+      final List<Widget> listItems = [];
+      for (int i = 0; i < homeItems.length; ++i) {
+        listItems.add(
+          ListTile(
+            key: Key(i.toString()),
+            dense: true,
+            trailing: const Icon(Icons.menu),
+            title: Text(
+              functionTypeToString(homeItems[i]),
+              style: homeItems[i] == FunctionType.separator ? const TextStyle(color: Colors.cyan) : null,
+            ),
+          ),
+        );
+      }
+      return listItems;
+    }
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('首页菜单')),
+      body: ReorderableListView(
+        children: buildWidgetItems(homeItems),
+        onReorder: _onReorder,
+      ),
+    );
+  }
+}

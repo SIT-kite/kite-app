@@ -33,6 +33,8 @@ import 'package:kite/util/flash.dart';
 import 'package:kite/util/validation.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'home.dart';
+
 class SettingPage extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
 
@@ -173,6 +175,11 @@ class SettingPage extends StatelessWidget {
             },
           ),
           SimpleSettingsTile(title: '背景图片', subtitle: '设置首页的背景图片', onTap: _onChangeBgImage),
+          SimpleSettingsTile(
+            title: '功能顺序',
+            subtitle: '设置首页各个功能分组与顺序',
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeSettingPage())),
+          ),
         ],
       ),
       SettingsGroup(title: '网络', children: <Widget>[
