@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kite/entity/home.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
@@ -119,41 +120,21 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Widget> buildFunctionWidgets() {
-    return [
-      const GreetingWidget(),
-      SizedBox(height: 20.h),
-      HomeItemGroup([
-        UpgradeItem(),
-        NoticeItem(),
-        TimetableItem(),
-        ReportItem(),
-        ExamItem(),
-      ]),
-      SizedBox(height: 20.h),
-      HomeItemGroup([
-        // ElectricityItem(),
-        ClassroomItem(),
-        EventItem(),
-        ExpenseItem(),
-        ScoreItem(),
-        LibraryItem(),
-        OfficeItem(),
-        MailItem(),
-        BulletinItem(),
-      ]),
-      SizedBox(height: 20.h),
-      HomeItemGroup([
-        // const NightItem(),
-        ContactItem(),
-        // HomeItem(route: '/lost-found', icon: 'assets/home/icon_lost_found.svg', title: '失物 & 招领', subtitle: '物归原主是一种美'),
-        // HomeItem(route: '/market', icon: 'assets/home/icon_market.svg', title: '二手书广场', subtitle: '买与卖都是收获'),
-        // HomeItem(route: '/event', icon: 'assets/home/icon_market.svg', title: '第二课堂', subtitle: '买与卖都是收获'),
-        GameItem(),
-        WikiItem(),
-      ]),
-      SizedBox(height: 40.h),
-      Image.asset('assets/home/bottom.png'),
-    ];
+    const list = defaultFunctionList;
+
+    final separator = SizedBox(height: 20.h);
+    final List<Widget> result = [];
+    List<Widget> currentGroup = [];
+
+    for (final item in list) {
+      if (item == FunctionType.separator) {
+        result.addAll([HomeItemGroup(currentGroup), separator]);
+        currentGroup = [];
+      } else {
+        currentGroup.add(FunctionButtonFactory.createFunctionButton(item));
+      }
+    }
+    return [const GreetingWidget(), separator] + result + [separator, Image.asset('assets/home/bottom.png')];
   }
 
   Widget _buildBody(BuildContext context) {

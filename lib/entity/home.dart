@@ -17,27 +17,77 @@
  */
 
 enum FunctionType {
+  /// 升级
+  upgrade,
+
   /// 公告
   notice,
+
   /// 课程表
   timetable,
+
   /// 体温上报
   report,
+
   /// 考试安排
   exam,
+
   /// 空教室
   classroom,
+
   /// 活动
   event,
+
   /// 消费查询
   expense,
+
   /// 成绩查询
   score,
+
   /// 图书馆
   library,
+
   /// 办公
   office,
 
+  /// Edu 邮箱
+  mail,
+
+  /// OA 公告
+  bulletin,
+
+  /// 常用电话
+  contact,
+
+  /// 小游戏
+  game,
+
+  /// wiki
+  wiki,
+
+  /// 分隔符
+  separator,
 }
 
-final
+/// 默认首页布局, 千万不能漏
+const defaultFunctionList = <FunctionType>[
+  FunctionType.upgrade,
+  FunctionType.notice,
+  FunctionType.timetable,
+  FunctionType.report,
+  FunctionType.separator,
+  FunctionType.exam,
+  FunctionType.classroom,
+  FunctionType.event,
+  FunctionType.expense,
+  FunctionType.score,
+  FunctionType.library,
+  FunctionType.office,
+  FunctionType.mail,
+  FunctionType.bulletin,
+  FunctionType.separator,
+  FunctionType.contact,
+  FunctionType.game,
+  FunctionType.wiki,
+  FunctionType.separator,
+];

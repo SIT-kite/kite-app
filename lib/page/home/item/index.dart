@@ -19,12 +19,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/entity/home.dart';
-import 'package:kite/page/home/item/exam.dart';
 
 import 'bulletin.dart';
 import 'classroom.dart';
 import 'contact.dart';
 import 'event.dart';
+import 'exam.dart';
 import 'expense.dart';
 import 'game.dart';
 import 'library.dart';
@@ -93,5 +93,46 @@ class HomeFunctionButton extends StatelessWidget {
         style: ListTileStyle.list,
       ),
     );
+  }
+}
+
+class FunctionButtonFactory {
+  static Widget createFunctionButton(FunctionType type) {
+    switch (type) {
+      case FunctionType.upgrade:
+        return const UpgradeItem();
+      case FunctionType.notice:
+        return const NoticeItem();
+      case FunctionType.timetable:
+        return const TimetableItem();
+      case FunctionType.report:
+        return const ReportItem();
+      case FunctionType.exam:
+        return const ExamItem();
+      case FunctionType.classroom:
+        return const ClassroomItem();
+      case FunctionType.event:
+        return const EventItem();
+      case FunctionType.expense:
+        return const ExpenseItem();
+      case FunctionType.score:
+        return const ScoreItem();
+      case FunctionType.library:
+        return const LibraryItem();
+      case FunctionType.office:
+        return const OfficeItem();
+      case FunctionType.mail:
+        return const MailItem();
+      case FunctionType.bulletin:
+        return const BulletinItem();
+      case FunctionType.contact:
+        return const ContactItem();
+      case FunctionType.game:
+        return const GameItem();
+      case FunctionType.wiki:
+        return const WikiItem();
+      case FunctionType.separator:
+        return Container();
+    }
   }
 }
