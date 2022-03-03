@@ -49,6 +49,7 @@ final _routes = {
   '/library': (context) => const LibraryPage(),
   '/market': (context) => const MarketPage(),
   '/timetable': (context) => const TimetablePage(),
+  '/timetable/import': (context) => const TimetableImportPage(),
   '/setting': (context) => SettingPage(),
   '/feedback': (context) => const FeedbackPage(),
   '/notice': (context) => const NoticePage(),

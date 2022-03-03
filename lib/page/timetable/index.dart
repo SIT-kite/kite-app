@@ -127,6 +127,10 @@ class _TimetablePageState extends State<TimetablePage> {
       itemBuilder: (BuildContext context) {
         return <PopupMenuEntry>[
           PopupMenuItem(
+            child: const Text('导入'),
+            onTap: () => Navigator.of(context).pushNamed('/timetable/import'),
+          ),
+          PopupMenuItem(
             child: const Text('刷新'),
             onTap: _onRefresh,
           ),

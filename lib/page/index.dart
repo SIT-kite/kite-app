@@ -41,6 +41,7 @@ export 'office/index.dart';
 export 'report.dart';
 export 'score/index.dart';
 export 'setting/index.dart';
+export 'timetable/import.dart';
 export 'timetable/index.dart';
 export 'welcome.dart';
 export 'wiki.dart';
