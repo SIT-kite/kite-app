@@ -17,6 +17,7 @@
  */
 
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -24,6 +25,7 @@ import 'package:kite/entity/sc/list.dart';
 
 import '../detail.dart';
 import 'background.dart';
+import 'blur.dart';
 import 'util.dart';
 
 class EventCard extends StatelessWidget {
@@ -44,7 +46,8 @@ class EventCard extends StatelessWidget {
   }
 
   Widget _buildBasicInfo(BuildContext context) {
-    final titleStyle = Theme.of(context).textTheme.headline2?.copyWith(color: Colors.white);
+    final titleStyle =
+        Theme.of(context).textTheme.headline2?.copyWith(color: Colors.white, fontWeight: FontWeight.w500);
     final subtitleStyle = Theme.of(context).textTheme.headline5?.copyWith(color: Colors.grey);
 
     final titleList = extractTitle(activity.title);
@@ -54,12 +57,30 @@ class EventCard extends StatelessWidget {
     final tags = titleList;
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Padding(
-            padding: const EdgeInsets.all(4),
-            child: Text(title, style: titleStyle, maxLines: 1, overflow: TextOverflow.ellipsis)),
+        AspectRatio(
+          aspectRatio: 2.2,
+          child: Stack(
+            children: [
+              const BlurRectWidget(
+                Background(),
+                sigmaX: 10,
+                sigmaY: 10,
+                opacity: 0.75,
+              ),
+              Center(
+                child: Text(
+                  title,
+                  style: titleStyle,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+        ),
         Container(
           decoration: const BoxDecoration(color: Colors.white),
           child: Padding(
@@ -79,23 +100,14 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-        aspectRatio: 1.8,
-        child: GestureDetector(
-          onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (_) => DetailPage(activity.id)));
-          },
-          child: Card(
-            margin: const EdgeInsets.all(10),
-            child: Stack(
-              children: [
-                // Background
-                const Background(),
-                // Title
-                _buildBasicInfo(context),
-              ],
-            ),
-          ),
-        ));
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => DetailPage(activity.id)));
+      },
+      child: Card(
+        margin: const EdgeInsets.all(10),
+        child: _buildBasicInfo(context),
+      ),
+    );
   }
 }
