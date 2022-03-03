@@ -28,5 +28,4 @@ enum EventNameConstants {
   onCampusChange,
   onBackgroundChange,
   onJumpTodayTimetable,
-  onTimetableReset,
 }

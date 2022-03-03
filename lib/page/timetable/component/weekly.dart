@@ -19,13 +19,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/entity/edu/timetable.dart';
-import 'package:kite/global/event_bus.dart';
 
 import '../util.dart';
 import 'grid.dart';
 import 'header.dart';
 
-class WeeklyTimetable extends StatefulWidget {
+class WeeklyTimetable extends StatelessWidget {
   /// 教务系统课程列表
   final List<Course> allCourses;
 
@@ -33,40 +32,11 @@ class WeeklyTimetable extends StatefulWidget {
   /// TODO 暂时还没用上？
   final DateTime? initialDate;
 
-  const WeeklyTimetable(this.allCourses, {Key? key, this.initialDate}) : super(key: key);
-
-  @override
-  _WeeklyTimetableState createState() => _WeeklyTimetableState();
-}
-
-class _WeeklyTimetableState extends State<WeeklyTimetable> {
-  late final List<Course> allCourses;
+  late final PageController _pageController;
 
   int _currentWeek = 1;
 
-  late final PageController _pageController;
-
-  @override
-  void initState() {
-    super.initState();
-    allCourses = widget.allCourses;
-    eventBus.on(EventNameConstants.onTimetableReset, _onTimetableReset);
-    eventBus.on(EventNameConstants.onJumpTodayTimetable, _onJumpToday);
-    _setDate(DateTime.now());
-    _pageController = PageController(initialPage: _currentWeek - 1);
-  }
-
-  @override
-  void dispose() {
-    eventBus.off(EventNameConstants.onTimetableReset, _onTimetableReset);
-    eventBus.off(EventNameConstants.onJumpTodayTimetable, _onJumpToday);
-    _pageController.dispose();
-    super.dispose();
-  }
-
-  void _onJumpToday(_) {
-    _jumpToday();
-  }
+  WeeklyTimetable(this.allCourses, {Key? key, this.initialDate}) : super(key: key);
 
   /// 布局左侧边栏, 显示节次
   Widget _buildLeftColumn() {
@@ -107,23 +77,6 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
     }
   }
 
-  void _onTimetableReset(dynamic _timetable) {
-    setState(() {
-      allCourses = _timetable as List<Course>;
-    });
-  }
-
-  void _jumpToday() {
-    _setDate(DateTime.now());
-    if (_pageController.hasClients) {
-      _pageController.animateToPage(
-        _currentWeek - 1,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.linearToEaseOut,
-      );
-    }
-  }
-
   Widget _pageBuilder(int week) {
     return Column(
       children: [
@@ -147,6 +100,9 @@ class _WeeklyTimetableState extends State<WeeklyTimetable> {
 
   @override
   Widget build(BuildContext context) {
+    _setDate(DateTime.now());
+    _pageController = PageController(initialPage: _currentWeek - 1, keepPage: false);
+
     return PageView.builder(
       controller: _pageController,
       scrollDirection: Axis.horizontal,

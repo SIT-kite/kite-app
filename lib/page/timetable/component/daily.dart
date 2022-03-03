@@ -17,7 +17,6 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/entity/edu/index.dart';
-import 'package:kite/global/event_bus.dart';
 import 'package:kite/page/timetable/component/sheet.dart';
 import 'package:kite/util/edu/icon.dart';
 
@@ -25,27 +24,14 @@ import '../cache.dart';
 import '../util.dart';
 import 'header.dart';
 
-class DailyTimetable extends StatefulWidget {
+class DailyTimetable extends StatelessWidget {
+  static const String _courseIconPath = 'assets/course/';
+
   /// 教务系统课程列表
   final List<Course> allCourses;
 
   /// 初始日期
   final DateTime? initialDate;
-
-  const DailyTimetable(this.allCourses, {Key? key, this.initialDate}) : super(key: key);
-
-  @override
-  _DailyTimetableState createState() => _DailyTimetableState();
-}
-
-class _DailyTimetableState extends State<DailyTimetable> {
-  static const String _courseIconPath = 'assets/course/';
-
-  /// 初始日期
-  late final DateTime initialDate;
-
-  /// 教务系统课程列表
-  late List<Course> allCourses;
 
   /// 课表应该显示的周（页数 + 1）
   int _currentWeek = 0;
@@ -56,26 +42,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
   /// 翻页控制
   late final PageController _pageController;
 
-  @override
-  void initState() {
-    allCourses = widget.allCourses;
-    initialDate = widget.initialDate ?? DateTime.now();
-
-    eventBus.on(EventNameConstants.onTimetableReset, _onTimetableReset);
-    eventBus.on(EventNameConstants.onJumpTodayTimetable, _onJumpToday);
-    // 跳转到初始页
-    _setDate(DateTime.now());
-    _pageController = PageController(initialPage: (_currentWeek - 1) * 7 + _currentDay - 1);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    eventBus.off(EventNameConstants.onTimetableReset, _onTimetableReset);
-    eventBus.off(EventNameConstants.onJumpTodayTimetable, _onJumpToday);
-    _pageController.dispose();
-    super.dispose();
-  }
+  DailyTimetable(this.allCourses, {Key? key, this.initialDate}) : super(key: key);
 
   void _setWeekDay(int week, int day) {
     _currentWeek = week;
@@ -94,15 +61,6 @@ class _DailyTimetableState extends State<DailyTimetable> {
     }
   }
 
-  void _onTimetableReset(dynamic _timetable) {
-    setState(() => allCourses = _timetable as List<Course>);
-  }
-
-  void _onJumpToday(_) {
-    _setDate(DateTime.now());
-    _jumpToDay(_currentWeek, _currentDay);
-  }
-
   /// 跳转到指定星期与天
   void _jumpToDay(int week, int day) {
     if (_pageController.hasClients) {
@@ -114,7 +72,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
     }
   }
 
-  Widget _buildCourseCard(Course course) {
+  Widget _buildCourseCard(BuildContext context, Course course) {
     final TextStyle? textStyle = Theme.of(context).textTheme.bodyText2;
     final Widget courseIcon = Image.asset(_courseIconPath + CourseCategory.query(course.courseName) + '.png');
     final timetable = getBuildingTimetable(course.campus, course.place);
@@ -156,7 +114,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
   }
 
   /// 构建第 index 页视图
-  Widget _pageBuilder(int index) {
+  Widget _pageBuilder(BuildContext context, int index) {
     int week = index ~/ 7 + 1;
     int day = index % 7 + 1;
     final List<Course> todayCourse = TableCache.filterCourseOnDay(allCourses, week, day);
@@ -175,7 +133,7 @@ class _DailyTimetableState extends State<DailyTimetable> {
           child: todayCourse.isNotEmpty
               ? ListView(
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  children: todayCourse.map(_buildCourseCard).toList())
+                  children: todayCourse.map((e) => _buildCourseCard(context, e)).toList())
               : _buildEmptyPage(),
         )
       ],
@@ -184,12 +142,15 @@ class _DailyTimetableState extends State<DailyTimetable> {
 
   @override
   Widget build(BuildContext context) {
+    _setDate(DateTime.now());
+    _pageController = PageController(initialPage: (_currentWeek - 1) * 7 + _currentDay - 1, keepPage: false);
+
     return PageView.builder(
       controller: _pageController,
       scrollDirection: Axis.horizontal,
       // TODO: 存储
       itemCount: 20 * 7,
-      itemBuilder: (_, int index) => _pageBuilder(index),
+      itemBuilder: (_, int index) => _pageBuilder(context, index),
     );
   }
 }

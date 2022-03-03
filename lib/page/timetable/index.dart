@@ -79,8 +79,8 @@ class _TimetablePageState extends State<TimetablePage> {
 
       final newTimetable = await _fetchTimetable();
       TableCache.clear();
-      timetable = newTimetable;
-      eventBus.emit(EventNameConstants.onTimetableReset, timetable);
+
+      setState(() => timetable = newTimetable);
     } catch (e) {
       showBasicFlash(context, Text('加载失败: ${e.toString().split('\n')[0]}'));
       rethrow;
