@@ -25,10 +25,10 @@ class ContactItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return HomeFunctionButton(
-      route: '/event',
-      icon: 'assets/home/icon_event.svg',
-      title: '活动',
-      subtitle: '看看最近有哪些活动',
+      route: '/contact',
+      icon: 'assets/home/icon_contact.svg',
+      title: '常用电话',
+      subtitle: '查找学校部门的联系方式',
     );
   }
 }
