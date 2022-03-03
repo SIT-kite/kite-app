@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:kite/entity/electricity.dart';
+import 'package:kite/entity/home.dart';
 import 'package:kite/entity/report.dart';
 import 'package:kite/entity/weather.dart';
 
@@ -60,4 +61,8 @@ abstract class HomeSettingDao {
   Set<int>? get readNotice;
 
   set readNotice(Set<int>? noticeSet);
+
+  List<FunctionType>? get homeItems;
+
+  set homeItems(List<FunctionType>? newButtonList);
 }

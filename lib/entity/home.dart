@@ -16,56 +16,80 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:kite/global/hive_type_id_pool.dart';
+
+part 'home.g.dart';
+
+@HiveType(typeId: HiveTypeIdPool.functionTypeItem)
 enum FunctionType {
   /// 升级
+  @HiveField(0)
   upgrade,
 
   /// 公告
+  @HiveField(1)
   notice,
 
   /// 课程表
+
+  @HiveField(2)
   timetable,
 
   /// 体温上报
+  @HiveField(3)
   report,
 
   /// 考试安排
+  @HiveField(4)
   exam,
 
   /// 空教室
+  @HiveField(5)
   classroom,
 
   /// 活动
+  @HiveField(6)
   event,
 
   /// 消费查询
+  @HiveField(7)
   expense,
 
   /// 成绩查询
+  @HiveField(8)
   score,
 
   /// 图书馆
+  @HiveField(9)
   library,
 
   /// 办公
+  @HiveField(10)
   office,
 
   /// Edu 邮箱
+  @HiveField(11)
   mail,
 
   /// OA 公告
+  @HiveField(12)
   bulletin,
 
   /// 常用电话
+  @HiveField(13)
   contact,
 
   /// 小游戏
+  @HiveField(14)
   game,
 
   /// wiki
+  @HiveField(15)
   wiki,
 
   /// 分隔符
+  @HiveField(16)
   separator,
 }
 

@@ -18,6 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:kite/entity/home.dart';
+import 'package:kite/global/event_bus.dart';
+import 'package:kite/global/storage_pool.dart';
 
 String functionTypeToString(FunctionType type) {
   switch (type) {
@@ -66,7 +68,7 @@ class HomeSettingPage extends StatefulWidget {
 }
 
 class _HomeSettingPageState extends State<HomeSettingPage> {
-  List<FunctionType> homeItems = defaultFunctionList.toList();
+  List<FunctionType> homeItems = StoragePool.homeSetting.homeItems ?? defaultFunctionList.toList();
 
   void _onReorder(int oldIndex, int newIndex) {
     setState(() {
@@ -77,6 +79,11 @@ class _HomeSettingPageState extends State<HomeSettingPage> {
       final item = homeItems.removeAt(oldIndex);
       homeItems.insert(newIndex, item);
     });
+    _onSave();
+  }
+
+  void _onSave() {
+    StoragePool.homeSetting.homeItems = homeItems;
   }
 
   @override
@@ -99,12 +106,18 @@ class _HomeSettingPageState extends State<HomeSettingPage> {
       return listItems;
     }
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('首页菜单')),
-      body: ReorderableListView(
-        children: buildWidgetItems(homeItems),
-        onReorder: _onReorder,
+    return WillPopScope(
+      child: Scaffold(
+        appBar: AppBar(title: const Text('首页菜单')),
+        body: ReorderableListView(
+          children: buildWidgetItems(homeItems),
+          onReorder: _onReorder,
+        ),
       ),
+      onWillPop: () async {
+        eventBus.emit(EventNameConstants.onHomeItemReorder);
+        return true;
+      },
     );
   }
 }

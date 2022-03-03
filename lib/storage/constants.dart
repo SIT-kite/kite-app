@@ -21,6 +21,7 @@ class HomeKeyKeys {
   static const background = '$namespace/background';
   static const backgroundMode = '$namespace/backgroundMode';
   static const installTime = '$namespace/installTime';
+  static const homeItems = '$namespace/homeItems';
 
   // 首页在无网状态下加载的缓存.
   static const lastWeather = '$namespace/lastWeather';

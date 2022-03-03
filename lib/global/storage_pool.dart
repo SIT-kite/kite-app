@@ -34,6 +34,7 @@ import 'package:kite/entity/contact.dart';
 import 'package:kite/entity/edu/timetable.dart';
 import 'package:kite/entity/electricity.dart';
 import 'package:kite/entity/expense.dart';
+import 'package:kite/entity/home.dart';
 import 'package:kite/entity/kite/user_event.dart';
 import 'package:kite/entity/library/search_history.dart';
 import 'package:kite/entity/report.dart';
@@ -136,6 +137,7 @@ class StoragePool {
     registerAdapter(UserEventTypeAdapter());
     registerAdapter(GameTypeAdapter());
     registerAdapter(GameRecordAdapter());
+    registerAdapter(FunctionTypeAdapter());
   }
 
   static Future<void> init() async {

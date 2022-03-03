@@ -120,7 +120,18 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Widget> buildFunctionWidgets() {
-    const list = defaultFunctionList;
+    List<FunctionType> list = StoragePool.homeSetting.homeItems ?? defaultFunctionList.toList();
+
+    // 先遍历一遍，过滤相邻重复元素
+    FunctionType lastItem = list.first;
+    for (int i = 1; i < list.length; ++i) {
+      if (lastItem == list[i]) {
+        list.removeAt(i);
+        i -= 1;
+      } else {
+        lastItem = list[i];
+      }
+    }
 
     final separator = SizedBox(height: 20.h);
     final List<Widget> result = [];
@@ -203,12 +214,14 @@ class _HomePageState extends State<HomePage> {
     }
     _updateWeather();
     eventBus.on(EventNameConstants.onCampusChange, (_) => _updateWeather());
+    eventBus.on(EventNameConstants.onHomeItemReorder, (_) => setState(() {}));
     super.initState();
   }
 
   @override
   void dispose() {
     eventBus.off(EventNameConstants.onCampusChange);
+    eventBus.off(EventNameConstants.onHomeItemReorder);
     super.dispose();
   }
 

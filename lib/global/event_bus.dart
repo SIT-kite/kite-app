@@ -22,6 +22,7 @@ final eventBus = EventBus<EventNameConstants>();
 enum EventNameConstants {
   onWeatherUpdate,
   onHomeRefresh,
+  onHomeItemReorder,
   onSelectCourse,
   onRemoveCourse,
   onCampusChange,

@@ -18,6 +18,7 @@
 import 'package:hive/hive.dart';
 import 'package:kite/dao/setting/home.dart';
 import 'package:kite/entity/electricity.dart';
+import 'package:kite/entity/home.dart';
 import 'package:kite/entity/report.dart';
 import 'package:kite/entity/weather.dart';
 import 'package:kite/storage/constants.dart';
@@ -86,4 +87,13 @@ class HomeSettingStorage implements HomeSettingDao {
 
   @override
   set readNotice(Set<int>? noticeSet) => box.put(HomeKeyKeys.readNotice, noticeSet?.toList());
+
+  @override
+  List<FunctionType>? get homeItems {
+    final List items = box.get(HomeKeyKeys.homeItems) ?? <dynamic>[];
+    return items.map((e) => e as FunctionType).toList();
+  }
+
+  @override
+  set homeItems(List<FunctionType>? items) => box.put(HomeKeyKeys.homeItems, items);
 }

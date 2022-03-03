@@ -30,4 +30,5 @@ class HiveTypeIdPool {
   static const userEventItem = 11;
   static const gameTypeItem = 12;
   static const gameRecordItem = 13;
+  static const functionTypeItem = 14;
 }
