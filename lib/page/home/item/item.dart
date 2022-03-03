@@ -18,12 +18,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kite/entity/home.dart';
 
 export 'bulletin.dart';
+export 'contact.dart';
 export 'electricity.dart';
 export 'event.dart';
 export 'exam.dart';
 export 'expense.dart';
+export 'game.dart';
 export 'library.dart';
 export 'mail.dart';
 export 'night.dart';
@@ -33,6 +36,7 @@ export 'report.dart';
 export 'score.dart';
 export 'timetable.dart';
 export 'upgrade.dart';
+export 'wiki.dart';
 
 class HomeFunctionButton extends StatelessWidget {
   final String? route;
