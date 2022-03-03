@@ -38,7 +38,11 @@ class Sheet extends StatelessWidget {
     return classes.map((e) {
       final timetable = getBuildingTimetable(e.campus, e.place);
 
-      return formatTimeIndex(timetable, e.timeIndex, '${e.weekText} 周${weekWord[e.dayIndex - 1]}\nss - ee ${e.place}');
+      return formatTimeIndex(
+        timetable,
+        e.timeIndex,
+        '第${e.weekText} 周${weekWord[e.dayIndex - 1]}\nss - ee ${e.place}',
+      );
     }).toList();
   }
 
@@ -57,7 +61,7 @@ class Sheet extends StatelessWidget {
   }
 
   Widget _buildItem(BuildContext context, String icon, String text) {
-    final itemStyle = Theme.of(context).textTheme.headline4;
+    final itemStyle = Theme.of(context).textTheme.bodyText2;
     final iconImage = AssetImage('assets/timetable/' + icon);
 
     return Padding(
