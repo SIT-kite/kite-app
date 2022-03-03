@@ -21,9 +21,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/entity/edu/timetable.dart';
 import 'package:kite/global/event_bus.dart';
 
+import '../util.dart';
 import 'grid.dart';
 import 'header.dart';
-import 'util.dart';
 
 class WeeklyTimetable extends StatefulWidget {
   /// 教务系统课程列表

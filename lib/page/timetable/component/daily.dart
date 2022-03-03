@@ -18,12 +18,12 @@
 import 'package:flutter/material.dart';
 import 'package:kite/entity/edu/index.dart';
 import 'package:kite/global/event_bus.dart';
-import 'package:kite/page/timetable/sheet.dart';
+import 'package:kite/page/timetable/component/sheet.dart';
 import 'package:kite/util/edu/icon.dart';
 
-import 'cache.dart';
+import '../cache.dart';
+import '../util.dart';
 import 'header.dart';
-import 'util.dart';
 
 class DailyTimetable extends StatefulWidget {
   /// 教务系统课程列表

@@ -18,7 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/entity/edu/timetable.dart';
 
-import 'util.dart';
+import '../util.dart';
 
 class Sheet extends StatelessWidget {
   final String courseId;

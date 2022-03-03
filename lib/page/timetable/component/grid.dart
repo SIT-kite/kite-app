@@ -19,9 +19,9 @@
 import 'package:flutter/material.dart';
 import 'package:kite/entity/edu/index.dart';
 
-import 'cache.dart';
+import '../cache.dart';
+import '../util.dart';
 import 'sheet.dart';
-import 'util.dart';
 
 class TableGrids extends StatelessWidget {
   /// 课程网格中每一小格的高度

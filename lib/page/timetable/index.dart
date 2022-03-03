@@ -32,9 +32,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'cache.dart';
-import 'daily.dart';
+import 'component/daily.dart';
+import 'component/weekly.dart';
 import 'util.dart';
-import 'weekly.dart';
 
 /// 课表模式
 const displayModeDaily = 0;
