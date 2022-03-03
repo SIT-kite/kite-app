@@ -117,11 +117,19 @@ class _MailPageState extends State<MailPage> {
     return _buildInputPassword();
   }
 
+  Widget _buildPopupMenu() {
+    final String studentId = StoragePool.authSetting.currentUsername ?? '';
+    final email = studentId + '@mail.sit.edu.cn';
+
+    return PopupMenuButton(itemBuilder: (_) => [PopupMenuItem(child: Text(email))]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('我的邮件'),
+        actions: [_buildPopupMenu()],
       ),
       body: _buildBody(context),
     );
