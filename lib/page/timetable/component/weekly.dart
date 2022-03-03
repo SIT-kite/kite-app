@@ -77,6 +77,17 @@ class WeeklyTimetable extends StatelessWidget {
     }
   }
 
+  void jumpToday() {
+    _setDate(DateTime.now());
+    if (_pageController.hasClients) {
+      _pageController.animateToPage(
+        _currentWeek - 1,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.linearToEaseOut,
+      );
+    }
+  }
+
   Widget _pageBuilder(int week) {
     return Column(
       children: [

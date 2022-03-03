@@ -62,7 +62,7 @@ class DailyTimetable extends StatelessWidget {
   }
 
   /// 跳转到指定星期与天
-  void _jumpToDay(int week, int day) {
+  void jumpToDay(int week, int day) {
     if (_pageController.hasClients) {
       _pageController.animateToPage(
         (week - 1) * 7 + day - 1,
@@ -70,6 +70,12 @@ class DailyTimetable extends StatelessWidget {
         curve: Curves.linearToEaseOut,
       );
     }
+  }
+
+  /// 跳转到今天
+  void jumpToday() {
+    _setDate(DateTime.now());
+    jumpToDay(_currentWeek, _currentDay);
   }
 
   Widget _buildCourseCard(BuildContext context, Course course) {
@@ -125,7 +131,7 @@ class DailyTimetable extends StatelessWidget {
         Expanded(
           child: DateHeader(week, day, onTap: (selectedDay) {
             day = selectedDay;
-            _jumpToDay(week, day);
+            jumpToDay(week, day);
           }),
         ),
         Expanded(

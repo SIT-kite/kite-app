@@ -20,7 +20,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:ical/serializer.dart';
 import 'package:kite/entity/edu/index.dart';
-import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/service/edu/index.dart';
@@ -55,6 +54,7 @@ class _TimetablePageState extends State<TimetablePage> {
   // 模式：周课表 日课表
   int displayMode = StoragePool.timetable.lastMode ?? displayModeDaily;
   bool isRefreshing = false;
+  final currentKey = GlobalKey();
 
   final SchoolYear currSchoolYear = const SchoolYear(2021);
   final currSemester = Semester.secondTerm;
@@ -144,7 +144,11 @@ class _TimetablePageState extends State<TimetablePage> {
   }
 
   void _onPressJumpToday() {
-    eventBus.emit(EventNameConstants.onJumpTodayTimetable);
+    if (displayMode == displayModeDaily) {
+      (currentKey.currentWidget as DailyTimetable).jumpToday();
+    } else {
+      (currentKey.currentWidget as WeeklyTimetable).jumpToday();
+    }
   }
 
   Widget _buildModeSwitchButton() {
@@ -174,7 +178,9 @@ class _TimetablePageState extends State<TimetablePage> {
         _buildPopupMenu(context),
       ]),
       floatingActionButton: _buildFloatingButton(),
-      body: displayMode == displayModeDaily ? DailyTimetable(timetable) : WeeklyTimetable(timetable),
+      body: displayMode == displayModeDaily
+          ? DailyTimetable(timetable, key: currentKey)
+          : WeeklyTimetable(timetable, key: currentKey),
     );
   }
 }
