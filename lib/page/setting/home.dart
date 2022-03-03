@@ -108,7 +108,17 @@ class _HomeSettingPageState extends State<HomeSettingPage> {
 
     return WillPopScope(
       child: Scaffold(
-        appBar: AppBar(title: const Text('首页菜单')),
+        appBar: AppBar(
+          title: const Text('首页菜单'),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  setState(() => homeItems = defaultFunctionList);
+                  _onSave();
+                },
+                icon: const Icon(Icons.restore_page_outlined))
+          ],
+        ),
         body: ReorderableListView(
           children: buildWidgetItems(homeItems),
           onReorder: _onReorder,
