@@ -17,6 +17,7 @@
  */
 import 'dart:async';
 
+import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kite/component/webview.dart';
@@ -47,6 +48,7 @@ class WikiPage extends StatelessWidget {
       onWebViewCreated: (WebViewController webViewController) {
         _controller.complete(webViewController);
       },
+      userAgent: '${FkUserAgent.webViewUserAgent ?? ''} KiteApp',
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.menu),
         onPressed: () async {
