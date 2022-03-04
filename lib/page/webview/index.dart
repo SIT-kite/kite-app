@@ -30,6 +30,9 @@ class SimpleWebViewPage extends StatefulWidget {
   /// 浮动按钮控件
   final Widget? floatingActionButton;
 
+  /// 自定义 UA
+  final String? userAgent;
+
   /// WebView创建完毕时的回调
   final WebViewCreatedCallback? onWebViewCreated;
   const SimpleWebViewPage(
@@ -42,6 +45,7 @@ class SimpleWebViewPage extends StatefulWidget {
     this.showSharedButton = false,
     this.showRefreshButton = true,
     this.showLoadInBrowser = false,
+    this.userAgent,
   }) : super(key: key);
 
   @override
@@ -110,6 +114,7 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
             setState(() {});
           }
         },
+        userAgent: widget.userAgent,
       ),
     );
   }

@@ -61,6 +61,8 @@ class MyWebView extends StatefulWidget {
   final PageFinishedCallback? onPageFinished;
   final JavascriptMode javascriptMode;
 
+  /// 自定义 UA
+  final String? userAgent;
   const MyWebView({
     Key? key,
     this.initialUrl,
@@ -69,6 +71,7 @@ class MyWebView extends StatefulWidget {
     this.onPageStarted,
     this.onPageFinished,
     this.javascriptMode = JavascriptMode.unrestricted, // js支持默认启用
+    this.userAgent,
   }) : super(key: key);
 
   @override
@@ -116,6 +119,7 @@ class _MyWebViewState extends State<MyWebView> {
                 widget.onWebViewCreated!(webViewController);
               }
             },
+            userAgent: widget.userAgent,
             onPageStarted: (String url) async {
               Log.info('开始加载url: $url');
               await Future.wait(getAllMatchJs(url, InjectJsTime.onPageStarted).map(injectJs));
