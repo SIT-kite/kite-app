@@ -49,6 +49,9 @@ class BorrowBookItem {
 
 /// 历史借书记录
 class HistoryBorrowBookItem {
+  /// 图书号
+  String bookId = '';
+
   /// 操作类型
   String operateType = '';
 
@@ -58,8 +61,10 @@ class HistoryBorrowBookItem {
   /// 题名
   String title = '';
 
-  /// 索书号
   String isbn = '';
+
+  /// 索书号
+  String callNo = '';
 
   /// 馆藏地点
   String location = '';
@@ -72,4 +77,9 @@ class HistoryBorrowBookItem {
 
   /// 处理日期
   DateTime processDate = DateTime.now();
+
+  @override
+  String toString() {
+    return 'HistoryBorrowBookItem{bookId: $bookId, operateType: $operateType, barcode: $barcode, title: $title, isbn: $isbn, callNo: $callNo, location: $location, type: $type, author: $author, processDate: $processDate}';
+  }
 }
