@@ -18,12 +18,19 @@
  *
  */
 
+import 'package:kite/service/library/borrow.dart';
+
 import '../mock_util.dart';
 
 void main() async {
   await init();
+  await loginLibrary();
   final session = SessionPool.librarySession;
+  final service = LibraryBorrowService(session);
   test('library login test', () async {
-    print(await session.login('', ''));
+    final result = await service.getHistoryBorrowBookList(1, 10);
+    for (final item in result) {
+      print(item);
+    }
   });
 }
