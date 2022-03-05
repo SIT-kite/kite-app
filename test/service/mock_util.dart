@@ -28,3 +28,8 @@ Future<void> init() async {
 Future<void> login() async {
   await SessionPool.ssoSession.login(username, password);
 }
+
+/// 图书馆登陆
+Future<void> loginLibrary() async {
+  await SessionPool.librarySession.login(username, password);
+}
