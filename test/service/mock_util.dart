@@ -31,5 +31,5 @@ Future<void> login() async {
 
 /// 图书馆登陆
 Future<void> loginLibrary() async {
-  await SessionPool.librarySession.login(username, password);
+  await SessionPool.librarySession.login(username, libraryPassword);
 }
