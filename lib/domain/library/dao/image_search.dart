@@ -15,27 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/dao/library/hot_search.dart';
-import 'package:kite/entity/library/hot_search.dart';
+import '../entity/book_image.dart';
 
-class HotSearchMock implements HotSearchDao {
-  @override
-  Future<HotSearch> getHotSearch() async {
-    // 模拟需要1s才能拿到数据的场景
-    await Future.delayed(const Duration(seconds: 1));
-    return HotSearch(
-      recentMonth: [
-        HotSearchItem('hotSearch1', 99),
-        HotSearchItem('hotSearch2', 98),
-        HotSearchItem('hotSearch3', 97),
-        HotSearchItem('hotSearch4', 96),
-      ],
-      totalTime: [
-        HotSearchItem('hotSearch1', 99),
-        HotSearchItem('hotSearch2', 98),
-        HotSearchItem('hotSearch3', 97),
-        HotSearchItem('hotSearch4', 96),
-      ],
-    );
-  }
+abstract class BookImageSearchDao {
+  Future<Map<String, BookImage>> searchByIsbnList(List<String> isbnList);
 }

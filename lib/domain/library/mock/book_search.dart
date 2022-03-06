@@ -15,9 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/entity/library/book_search.dart';
+import 'dart:math';
 
-abstract class BookSearchDao {
+import 'package:kite/domain/library/dao/book_search.dart';
+
+import '../entity/book_search.dart';
+
+class BookSearchMock implements BookSearchDao {
+  @override
   Future<BookSearchResult> search({
     String keyword = '',
     int rows = 10,
@@ -25,5 +30,20 @@ abstract class BookSearchDao {
     SearchWay searchWay = SearchWay.title,
     SortWay sortWay = SortWay.matchScore,
     SortOrder sortOrder = SortOrder.desc,
-  });
+  }) async {
+    await Future.delayed(const Duration(microseconds: 300));
+    var length = 100;
+    return BookSearchResult(
+        length,
+        Random.secure().nextDouble(),
+        page,
+        length ~/ rows,
+        List.generate(
+          length,
+          (index) {
+            var i = index;
+            return Book('id$i', 'isbn$i', 'title$i', 'author$i', 'publisher$i', 'pubDate$i', 'callNo$i');
+          },
+        ));
+  }
 }

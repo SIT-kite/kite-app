@@ -26,8 +26,6 @@ import 'package:kite/page/index.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/page_logger.dart';
 
-import 'page/egg/index.dart';
-
 const title = '上应小风筝';
 
 final _routes = {

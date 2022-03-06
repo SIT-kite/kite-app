@@ -16,14 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/entity/library/book_info.dart';
-import 'package:kite/entity/library/book_search.dart';
-import 'package:kite/entity/library/holding_preview.dart';
+import 'package:kite/domain/library/entity/book_info.dart';
+import 'package:kite/domain/library/entity/book_search.dart';
+import 'package:kite/domain/library/entity/holding_preview.dart';
 import 'package:kite/global/service_pool.dart';
-import 'package:kite/page/library/search_delegate.dart';
 import 'package:kite/util/library/search.dart';
 
 import 'component/search_result_item.dart';
+import 'search_delegate.dart';
 
 class BookInfoPage extends StatefulWidget {
   /// 上一层传递进来的数据

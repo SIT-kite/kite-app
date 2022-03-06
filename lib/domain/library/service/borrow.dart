@@ -1,10 +1,10 @@
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/dao/library/borrow.dart';
-import 'package:kite/entity/library/borrow.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/session/abstract_session.dart';
 
+import '../dao/borrow.dart';
+import '../entity/borrow.dart';
 import 'constant.dart';
 
 class LibraryBorrowService extends AService implements LibraryBorrowDao {

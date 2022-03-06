@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/dao/library/holding_preview.dart';
-import 'package:kite/dao/library/image_search.dart';
-import 'package:kite/entity/library/book_image.dart';
-import 'package:kite/entity/library/book_search.dart';
-import 'package:kite/entity/library/holding_preview.dart';
+import 'package:kite/domain/library/dao/holding_preview.dart';
+import 'package:kite/domain/library/dao/image_search.dart';
+import 'package:kite/domain/library/entity/book_image.dart';
+import 'package:kite/domain/library/entity/book_search.dart';
+import 'package:kite/domain/library/entity/holding_preview.dart';
 import 'package:kite/util/logger.dart';
 
 class BookImageHolding {

@@ -15,14 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-export '../domain/library/dao/index.dart';
-export 'auth_pool.dart';
-export 'bulletin.dart';
-export 'campus_card.dart';
-export 'contact.dart';
-export 'edu/index.dart';
-export 'electricity.dart';
-export 'expense.dart';
-export 'report.dart';
-export 'setting/index.dart';
-export 'weatcher.dart';
+import '../entity/holding.dart';
+
+abstract class HoldingInfoDao {
+  Future<HoldingInfo> queryByBookId(String bookId);
+
+  Future<List<String>> searchNearBookIdList(String bookId);
+}

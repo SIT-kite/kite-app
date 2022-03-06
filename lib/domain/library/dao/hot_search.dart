@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/entity/library/hot_search.dart';
+import '../entity/hot_search.dart';
 
 /// 热搜的数据访问接口
 abstract class HotSearchDao {

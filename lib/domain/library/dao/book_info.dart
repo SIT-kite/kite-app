@@ -15,8 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/entity/library/holding_preview.dart';
+import '../entity/book_info.dart';
 
-abstract class HoldingPreviewDao {
-  Future<HoldingPreviews> getHoldingPreviews(List<String> bookIdList);
+abstract class BookInfoDao {
+  /// 根据图书id查询图书详情信息
+  Future<BookInfo> query(String bookId);
 }

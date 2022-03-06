@@ -15,9 +15,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/entity/library/book_info.dart';
+import 'package:kite/domain/library/dao/hot_search.dart';
 
-abstract class BookInfoDao {
-  /// 根据图书id查询图书详情信息
-  Future<BookInfo> query(String bookId);
+import '../entity/hot_search.dart';
+
+class HotSearchMock implements HotSearchDao {
+  @override
+  Future<HotSearch> getHotSearch() async {
+    // 模拟需要1s才能拿到数据的场景
+    await Future.delayed(const Duration(seconds: 1));
+    return HotSearch(
+      recentMonth: [
+        HotSearchItem('hotSearch1', 99),
+        HotSearchItem('hotSearch2', 98),
+        HotSearchItem('hotSearch3', 97),
+        HotSearchItem('hotSearch4', 96),
+      ],
+      totalTime: [
+        HotSearchItem('hotSearch1', 99),
+        HotSearchItem('hotSearch2', 98),
+        HotSearchItem('hotSearch3', 97),
+        HotSearchItem('hotSearch4', 96),
+      ],
+    );
+  }
 }

@@ -18,11 +18,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:kite/entity/library/hot_search.dart';
+import 'package:kite/domain/library/entity/hot_search.dart';
+import 'package:kite/domain/library/service/hot_search.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:kite/service/library/hot_search.dart';
 
 import 'index.dart';
 

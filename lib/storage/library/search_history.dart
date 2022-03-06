@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:hive/hive.dart';
-import 'package:kite/dao/library/search_history.dart';
-import 'package:kite/entity/library/search_history.dart';
+import 'package:kite/domain/library/dao/search_history.dart';
+import 'package:kite/domain/library/entity/search_history.dart';
 
 class SearchHistoryStorage implements SearchHistoryDao {
   final Box<LibrarySearchHistoryItem> box;

@@ -15,27 +15,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/dao/library/holding_preview.dart';
-import 'package:kite/entity/library/holding_preview.dart';
-import 'package:kite/service/abstract_service.dart';
-import 'package:kite/session/abstract_session.dart';
+import '../entity/search_history.dart';
 
-import 'constant.dart';
+abstract class SearchHistoryDao {
+  // 添加搜索记录
+  void add(LibrarySearchHistoryItem item);
 
-class HoldingPreviewService extends AService implements HoldingPreviewDao {
-  HoldingPreviewService(ASession session) : super(session);
+  // 删除指定搜索记录
+  void delete(String record);
 
-  @override
-  Future<HoldingPreviews> getHoldingPreviews(List<String> bookIdList) async {
-    var response = await session.get(
-      Constants.bookHoldingPreviewsUrl,
-      queryParameters: {
-        'bookrecnos': bookIdList.join(","),
-        'curLibcodes': '',
-        'return_fmt': 'json',
-      },
-    );
+  // 删除所有搜索记录
+  void deleteAll();
 
-    return HoldingPreviews.fromJson(response.data);
-  }
+  // 按时间降序获取所有搜索记录
+  List<LibrarySearchHistoryItem> getAllByTimeDesc();
 }

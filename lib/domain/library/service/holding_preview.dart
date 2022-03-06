@@ -15,8 +15,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/entity/library/book_image.dart';
+import 'package:kite/service/abstract_service.dart';
+import 'package:kite/session/abstract_session.dart';
 
-abstract class BookImageSearchDao {
-  Future<Map<String, BookImage>> searchByIsbnList(List<String> isbnList);
+import '../dao/holding_preview.dart';
+import '../entity/holding_preview.dart';
+import 'constant.dart';
+
+class HoldingPreviewService extends AService implements HoldingPreviewDao {
+  HoldingPreviewService(ASession session) : super(session);
+
+  @override
+  Future<HoldingPreviews> getHoldingPreviews(List<String> bookIdList) async {
+    var response = await session.get(
+      Constants.bookHoldingPreviewsUrl,
+      queryParameters: {
+        'bookrecnos': bookIdList.join(","),
+        'curLibcodes': '',
+        'return_fmt': 'json',
+      },
+    );
+
+    return HoldingPreviews.fromJson(response.data);
+  }
 }

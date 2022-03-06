@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+export '../domain/library/service/index.dart';
 export 'bulletin.dart';
 export 'campus_card.dart';
 export 'contact.dart';
@@ -23,7 +24,6 @@ export 'expense.dart';
 export 'kite/electricity.dart';
 export 'kite/ocr.dart';
 export 'kite/weather.dart';
-export 'library/index.dart';
 export 'network.dart';
 export 'office/index.dart';
 export 'report/index.dart';

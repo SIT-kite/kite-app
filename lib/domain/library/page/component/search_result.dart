@@ -16,21 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/dao/library/book_search.dart';
-import 'package:kite/dao/library/holding_preview.dart';
-import 'package:kite/dao/library/image_search.dart';
-import 'package:kite/entity/library/book_search.dart';
-import 'package:kite/global/session_pool.dart';
-import 'package:kite/page/library/component/search_result_item.dart';
+import 'package:kite/domain/library/dao/book_search.dart';
+import 'package:kite/domain/library/dao/holding_preview.dart';
+import 'package:kite/domain/library/dao/image_search.dart';
+import 'package:kite/domain/library/entity/book_search.dart';
+
 /// The import of 'package:kite/service/library/holding_preview.dart' is unnecessary because all of
 /// the used elements are also provided by the import of 'package:kite/service/library/index.dart'
-// import 'package:kite/service/library/holding_preview.dart';
-import 'package:kite/service/library/index.dart';
+import 'package:kite/domain/library/service/index.dart';
+import 'package:kite/global/session_pool.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/library/search.dart';
 import 'package:kite/util/logger.dart';
 
 import '../book_info.dart';
+import 'search_result_item.dart';
 
 class BookSearchResultWidget extends StatefulWidget {
   /// 要搜索的关键字

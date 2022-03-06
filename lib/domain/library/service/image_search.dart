@@ -18,12 +18,12 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:kite/dao/library/image_search.dart';
-import 'package:kite/entity/library/book_image.dart';
-import 'package:kite/service/library/constant.dart';
 import 'package:kite/session/abstract_session.dart';
 
-import '../abstract_service.dart';
+import '../../../service/abstract_service.dart';
+import '../dao/image_search.dart';
+import '../entity/book_image.dart';
+import '../service/constant.dart';
 
 /// 本类提供了一系列，通过查询图书图片的方法，返回结果类型为字典，以ISBN为键
 class BookImageSearchService extends AService implements BookImageSearchDao {
