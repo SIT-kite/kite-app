@@ -25,7 +25,10 @@ abstract class LibraryBorrowDao {
   Future<List<BorrowBookItem>> getMyBorrowBookList(int page, int rows);
 
   /// 续借图书
-  Future<void> renewBook(String barcode);
+  Future<String> renewBook({
+    required List<String> barcodeList,
+    bool renewAll = false,
+  });
 
   /// 用户的历史借阅情况
   Future<List<HistoryBorrowBookItem>> getHistoryBorrowBookList(int page, int rows);
