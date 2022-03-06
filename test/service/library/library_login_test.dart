@@ -27,8 +27,14 @@ void main() async {
   await loginLibrary();
   final session = SessionPool.librarySession;
   final service = LibraryBorrowService(session);
-  test('library login test', () async {
+  test('get history borrow book list', () async {
     final result = await service.getHistoryBorrowBookList(1, 10);
+    for (final item in result) {
+      print(item);
+    }
+  });
+  test('get current borrow book list', () async {
+    final result = await service.getMyBorrowBookList(1, 10);
     for (final item in result) {
       print(item);
     }
