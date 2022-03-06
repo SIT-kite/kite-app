@@ -19,8 +19,15 @@
  */
 /// 借书记录
 class BorrowBookItem {
+  /// 图书号
+  String bookId = '';
+
   /// 条码号
   String barcode = '';
+
+  String isbn = '';
+
+  String author = '';
 
   /// 题名
   String title = '';
@@ -34,17 +41,16 @@ class BorrowBookItem {
   /// 图书类型
   String type = '';
 
-  /// 卷册信息
-  String volume = '';
-
   /// 借出日期
   DateTime borrowDate = DateTime.now();
 
   /// 应还日期
   DateTime expireDate = DateTime.now();
 
-  /// 续借次数
-  int renewCount = 0;
+  @override
+  String toString() {
+    return 'BorrowBookItem{bookId: $bookId, barcode: $barcode, isbn: $isbn, author: $author, title: $title, callNo: $callNo, location: $location, type: $type, borrowDate: $borrowDate, expireDate: $expireDate}';
+  }
 }
 
 /// 历史借书记录
