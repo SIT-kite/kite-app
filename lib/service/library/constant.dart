@@ -24,9 +24,11 @@ class Constants {
   static const apiUrl = opacUrl + '/api';
   static const bookUrl = opacUrl + '/book';
 
-  static const loanListUrl = opacUrl + '/loan';
-  static const currentLoanListUrl = loanListUrl + '/currentLoanList';
-  static const historyLoanListUrl = loanListUrl + '/historyLoanList';
+  static const loanUrl = opacUrl + '/loan';
+  static const currentLoanListUrl = loanUrl + '/currentLoanList';
+  static const historyLoanListUrl = loanUrl + '/historyLoanList';
+  static const renewList = loanUrl + '/renewList';
+  static const doRenewUrl = loanUrl + '/doRenew';
 
   static const bookHoldingUrl = apiUrl + '/holding';
   static const bookHoldingPreviewsUrl = bookUrl + '/holdingPreviews';
