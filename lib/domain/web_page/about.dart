@@ -16,7 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/page/webview/index.dart';
+
+import 'webview/page/index.dart';
 
 const String _aboutUrl = 'https://cdn.kite.sunnysab.cn/about/';
 

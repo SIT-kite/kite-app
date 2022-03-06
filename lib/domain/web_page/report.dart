@@ -21,8 +21,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kite/component/webview.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:kite/page/webview/index.dart';
 import 'package:kite/util/rule.dart';
+
+import 'webview/page/index.dart';
 
 const _reportUrlPrefix = 'http://xgfy.sit.edu.cn/h5/#/';
 const _reportUrlIndex = _reportUrlPrefix + 'pages/index/index';

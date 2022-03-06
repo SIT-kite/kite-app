@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:kite/page/wiki.dart';
+import 'package:kite/domain/web_page/wiki.dart';
 
 helpButton(BuildContext context) => IconButton(
       onPressed: () {

@@ -21,9 +21,10 @@ import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kite/component/webview.dart';
-import 'package:kite/page/webview/index.dart';
 import 'package:kite/util/rule.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+import 'webview/page/index.dart';
 
 const String _defaultWikiUrl = 'https://cdn.kite.sunnysab.cn/wiki/';
 

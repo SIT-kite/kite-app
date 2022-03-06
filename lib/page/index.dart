@@ -15,9 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-export '../domain/egg/page/index.dart';
-export '../domain/library/page/index.dart';
-export 'about.dart';
+export '../domain/index.dart';
 export 'bulletin/index.dart';
 export 'campus_card.dart';
 export 'classroom/index.dart';
@@ -27,7 +25,6 @@ export 'electricity/index.dart';
 export 'event/index.dart';
 export 'exam.dart';
 export 'expense/index.dart';
-export 'feedback.dart';
 export 'game/2048/index.dart';
 export 'game/index.dart';
 export 'game/wordle/index.dart';
@@ -39,10 +36,8 @@ export 'market.dart';
 export 'night/index.dart';
 export 'notice.dart';
 export 'office/index.dart';
-export 'report.dart';
 export 'score/index.dart';
 export 'setting/index.dart';
 export 'timetable/import.dart';
 export 'timetable/index.dart';
 export 'welcome.dart';
-export 'wiki.dart';
