@@ -39,14 +39,62 @@ class LibraryBorrowService extends AService implements LibraryBorrowDao {
   }
 
   @override
-  Future<List<BorrowBookItem>> getMyBorrowBookList(int page, int rows) {
-    // TODO: implement getMyBorrowBookList
-    throw UnimplementedError();
+  Future<List<BorrowBookItem>> getMyBorrowBookList(int page, int rows) async {
+    final response = await session.get(
+      Constants.currentLoanListUrl,
+      queryParameters: {
+        'page': page.toString(),
+        'rows': rows.toString(),
+      },
+    );
+    final String html = response.data;
+    final table = BeautifulSoup(html).find('table', id: 'contentTable')!;
+    return table.findAll('tr').where((e) => e.id != 'contentHeader').map((e) {
+      final columns = e.findAll('td');
+      final columnsText = columns.map((e) => e.text.trim()).toList();
+      final dataFormat = DateFormat('yyyy-MM-dd');
+      return BorrowBookItem()
+        ..bookId = columns[0].find('input')!.attributes['value']!
+        ..barcode = columnsText[0]
+        ..title = columnsText[1]
+        ..isbn = columnsText[2]
+        ..author = columnsText[3]
+        ..callNo = columnsText[4]
+        ..location = columnsText[5]
+        ..type = columnsText[6]
+        ..borrowDate = dataFormat.parse(columnsText[7])
+        ..expireDate = dataFormat.parse(columnsText[8]);
+    }).toList();
+  }
+
+  Future<String> _doRenew({
+    required String pdsToken,
+    required List<String> barcodeList,
+    bool renewAll = false,
+  }) async {
+    final response = await session.post(
+      Constants.doRenewUrl,
+      data: {
+        'pdsToken': pdsToken,
+        'barcodeList': barcodeList.join(','),
+        'furl': '/opac/loan/renewList',
+        'renewAll': renewAll ? 'all' : '',
+      },
+    );
+    return BeautifulSoup(response.data).find('div', id: 'content')!.text;
   }
 
   @override
-  Future<void> renewBook(String barcode) {
-    // TODO: implement renewBook
-    throw UnimplementedError();
+  Future<String> renewBook({
+    required List<String> barcodeList,
+    bool renewAll = false,
+  }) async {
+    final response = await session.get(Constants.renewList);
+    final pdsToken = BeautifulSoup(response.data).find('input', attrs: {'name': 'pdsToken'})!.attributes['value'] ?? '';
+    return await _doRenew(
+      pdsToken: pdsToken,
+      barcodeList: barcodeList,
+      renewAll: renewAll,
+    );
   }
 }
