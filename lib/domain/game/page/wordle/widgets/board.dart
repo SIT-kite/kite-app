@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
  */
 
 import '../models/board_model.dart';
-import '../widgets/character_box.dart';
+import 'character_box.dart';
 
 class GameBoard extends StatefulWidget {
   final BoardModel board;
