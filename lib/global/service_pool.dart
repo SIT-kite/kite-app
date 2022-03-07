@@ -28,12 +28,11 @@ import 'session_pool.dart';
 class ServicePool {
   static late CampusCardDao campusCard;
   static late WeatherDao weather;
-  static late ContactRemoteDao contactData;
 
   /// 初始化其他service
   static void _initOther() {
     campusCard = CampusCardService(SessionPool.ssoSession);
-    contactData = ContactRemoteService(SessionPool.ssoSession);
+
     weather = WeatherService();
   }
 

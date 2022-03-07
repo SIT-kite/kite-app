@@ -17,7 +17,7 @@
  */
 export 'auth_pool.dart';
 export 'campus_card.dart';
-export 'contact.dart';
+export '../domain/contact/dao/contact.dart';
 export 'electricity.dart';
 export 'report.dart';
 export 'setting/index.dart';

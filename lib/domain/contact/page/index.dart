@@ -18,8 +18,6 @@
 import 'package:flutter/material.dart';
 import 'package:kite/domain/contact/entity/contact.dart';
 import 'package:kite/domain/contact/init.dart';
-import 'package:kite/domain/contact/service/contact.dart';
-import 'package:kite/global/session_pool.dart';
 
 import 'list.dart';
 import 'search.dart';
@@ -32,14 +30,14 @@ class ContactPage extends StatefulWidget {
 }
 
 class _ContactPageState extends State<ContactPage> {
-  final List<ContactData> _contactData = ContactInitializer.contactData.getAllContacts();
+  final List<ContactData> _contactData = ContactInitializer.contactStorageDao.getAllContacts();
 
   Future<List<ContactData>> _fetchContactList() async {
-    final service = ContactRemoteService(SessionPool.kiteSession);
+    final service = ContactInitializer.contactRemoteDao;
     final contacts = await service.getAllContacts();
 
-    ContactInitializer.contactData.clear();
-    ContactInitializer.contactData.addAll(contacts);
+    ContactInitializer.contactStorageDao.clear();
+    ContactInitializer.contactStorageDao.addAll(contacts);
     return contacts;
   }
 
