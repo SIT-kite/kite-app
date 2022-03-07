@@ -20,7 +20,7 @@ export 'auth_pool.dart';
 export '../domain/bulletin/dao/bulletin.dart';
 export 'campus_card.dart';
 export 'contact.dart';
-export 'edu/index.dart';
+export '../domain/edu/dao/index.dart';
 export 'electricity.dart';
 export 'expense.dart';
 export 'report.dart';

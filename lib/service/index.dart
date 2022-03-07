@@ -15,15 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-export '../domain/library/service/index.dart';
 export '../domain/bulletin/service/bulletin.dart';
+export '../domain/library/service/index.dart';
+export '../domain/office/service/index.dart';
 export 'campus_card.dart';
 export 'contact.dart';
-export 'edu/index.dart';
 export 'expense.dart';
 export 'kite/electricity.dart';
 export 'kite/ocr.dart';
 export 'kite/weather.dart';
 export 'network.dart';
-export '../domain/office/service/index.dart';
 export 'report/index.dart';

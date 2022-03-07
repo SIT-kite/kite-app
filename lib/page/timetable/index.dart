@@ -22,7 +22,7 @@ import 'package:ical/serializer.dart';
 import 'package:kite/entity/edu/index.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:kite/service/edu/index.dart';
+import 'package:kite/domain/edu/service/index.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/permission.dart';

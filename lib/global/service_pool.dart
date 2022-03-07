@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:kite/dao/index.dart';
+import 'package:kite/domain/edu/init.dart';
 import 'package:kite/domain/library/init.dart';
 import 'package:kite/service/index.dart';
 
@@ -23,19 +24,6 @@ import 'session_pool.dart';
 
 /// 网络服务请求池
 class ServicePool {
-  static late CourseEvaluationDao courseEvaluation;
-  static late ExamDao exam;
-  static late ScoreDao score;
-  static late TimetableDao timetable;
-
-  /// 初始化教务相关的service
-  static void _initEdu() {
-    courseEvaluation = CourseEvaluationService(SessionPool.eduSession);
-    exam = ExamService(SessionPool.eduSession);
-    score = ScoreService(SessionPool.eduSession);
-    timetable = TimetableService(SessionPool.eduSession);
-  }
-
   static late BulletinDao bulletin;
   static late CampusCardDao campusCard;
   static late ExpenseRemoteDao expenseRemote;
@@ -53,7 +41,7 @@ class ServicePool {
 
   static void init() {
     LibraryInitializer.init(SessionPool.librarySession);
-    _initEdu();
+    EduInitializer.init(SessionPool.eduSession);
     _initOther();
   }
 }

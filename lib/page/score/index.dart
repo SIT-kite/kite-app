@@ -20,7 +20,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:kite/entity/edu/index.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/page/score/item.dart';
-import 'package:kite/service/edu/index.dart';
+import 'package:kite/domain/edu/service/index.dart';
 import 'package:kite/util/edu/selector.dart';
 import 'package:kite/util/logger.dart';
 

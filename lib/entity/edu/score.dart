@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:json_annotation/json_annotation.dart';
-import 'package:kite/service/edu/util.dart';
+import 'package:kite/domain/edu/service/util.dart';
 
 import 'index.dart';
 

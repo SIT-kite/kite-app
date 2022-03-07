@@ -22,7 +22,7 @@ import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:kite/service/edu/index.dart';
+import 'package:kite/domain/edu/service/index.dart';
 import 'package:kite/domain/office/service/index.dart';
 import 'package:kite/service/report/report.dart';
 import 'package:kite/session/kite_session.dart';

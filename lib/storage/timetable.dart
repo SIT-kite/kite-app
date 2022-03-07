@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:hive/hive.dart';
-import 'package:kite/dao/edu/timetable.dart';
+import 'package:kite/domain/edu/dao/timetable.dart';
 import 'package:kite/entity/edu/index.dart';
 
 class TimetableStorage implements TimetableStorageDao {

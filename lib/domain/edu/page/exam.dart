@@ -19,8 +19,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
+import 'package:kite/domain/edu/init.dart';
 import 'package:kite/entity/edu/index.dart';
-import 'package:kite/global/service_pool.dart';
 import 'package:kite/util/edu/selector.dart';
 
 class ExamPage extends StatefulWidget {
@@ -116,7 +116,7 @@ class _ExamPageState extends State<ExamPage> {
 
   Widget buildBody(BuildContext context) {
     return MyFutureBuilder<List<ExamRoom>>(
-      future: ServicePool.exam.getExamList(
+      future: EduInitializer.exam.getExamList(
         SchoolYear(selectedYear),
         selectedSemester,
       ),

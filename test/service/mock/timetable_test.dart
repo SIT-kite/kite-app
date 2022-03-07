@@ -1,4 +1,4 @@
-import 'package:kite/dao/edu/timetable.dart';
+import 'package:kite/domain/edu/dao/timetable.dart';
 import 'package:kite/entity/edu/index.dart';
 import 'package:kite/mock/edu/timetable.dart';
 

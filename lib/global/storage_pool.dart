@@ -19,7 +19,7 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kite/dao/auth_pool.dart';
 import 'package:kite/dao/contact.dart';
-import 'package:kite/dao/edu/timetable.dart';
+import 'package:kite/domain/edu/dao/timetable.dart';
 import 'package:kite/dao/electricity.dart';
 import 'package:kite/dao/expense.dart';
 import 'package:kite/dao/kite/jwt.dart';
