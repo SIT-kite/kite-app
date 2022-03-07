@@ -49,7 +49,13 @@ class WikiPage extends StatelessWidget {
       onWebViewCreated: (WebViewController webViewController) {
         _controller.complete(webViewController);
       },
-      userAgent: '${FkUserAgent.webViewUserAgent ?? ''} KiteApp',
+      userAgent: '${(() {
+            try {
+              return FkUserAgent.webViewUserAgent;
+            } catch (e) {
+              return '';
+            }
+          })() ?? ''} KiteApp',
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.menu),
         onPressed: () async {
