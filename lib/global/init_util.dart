@@ -29,7 +29,7 @@ Future<void> initBeforeRun() async {
   // 网络层依赖由存储层提供的缓存，必须先初始化存储层，再初始化网络层
   await StoragePool.init();
   await SessionPool.init();
-  ServicePool.init();
+  await ServicePool.init();
   Log.info('应用初始化完成');
 
   // 初始化用户首次打开时间（而不是应用安装时间）

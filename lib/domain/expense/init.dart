@@ -8,9 +8,9 @@ import 'storage/expense.dart';
 
 class ExpenseInitializer {
   static late ExpenseRemoteDao expenseRemote;
-
   static late ExpenseLocalStorage expenseRecord;
-  static init(ASession session) async {
+
+  static Future<void> init(ASession session) async {
     final expenseRecordBox = await Hive.openBox<ExpenseRecord>('expenseSetting');
     expenseRecord = ExpenseLocalStorage(expenseRecordBox);
 

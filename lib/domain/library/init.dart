@@ -24,7 +24,7 @@ class LibraryInitializer {
   static late SearchHistoryDao librarySearchHistory;
 
   /// 初始化图书馆相关的service
-  static init(ASession session) async {
+  static Future<void> init(ASession session) async {
     // 图书馆初始化
     bookInfo = BookInfoService(session);
     holdingInfo = HoldingInfoService(session);

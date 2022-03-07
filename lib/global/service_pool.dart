@@ -17,6 +17,7 @@
  */
 import 'package:kite/dao/index.dart';
 import 'package:kite/domain/bulletin/init.dart';
+import 'package:kite/domain/contact/init.dart';
 import 'package:kite/domain/edu/init.dart';
 import 'package:kite/domain/expense/init.dart';
 import 'package:kite/domain/library/init.dart';
@@ -36,11 +37,12 @@ class ServicePool {
     weather = WeatherService();
   }
 
-  static void init() {
-    LibraryInitializer.init(SessionPool.librarySession);
+  static Future<void> init() async {
+    await LibraryInitializer.init(SessionPool.librarySession);
     EduInitializer.init(SessionPool.eduSession);
     BulletinInitializer.init(SessionPool.ssoSession);
-    ExpenseInitializer.init(SessionPool.ssoSession);
+    await ExpenseInitializer.init(SessionPool.ssoSession);
+    await ContactInitializer.init(SessionPool.kiteSession);
     _initOther();
   }
 }

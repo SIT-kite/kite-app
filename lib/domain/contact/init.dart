@@ -10,7 +10,7 @@ class ContactInitializer {
   static late ContactStorageDao contactStorageDao;
   static late ContactRemoteDao contactRemoteDao;
 
-  static init(ASession session) async {
+  static Future<void> init(ASession session) async {
     final contactDataBox = await Hive.openBox<ContactData>('contactSetting');
     contactStorageDao = ContactDataStorage(contactDataBox);
     contactRemoteDao = ContactRemoteService(session);
