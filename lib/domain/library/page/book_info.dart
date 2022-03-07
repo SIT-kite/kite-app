@@ -16,12 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/domain/library/entity/book_info.dart';
-import 'package:kite/domain/library/entity/book_search.dart';
-import 'package:kite/domain/library/entity/holding_preview.dart';
+import 'package:kite/component/future_builder.dart';
 import 'package:kite/global/service_pool.dart';
 import 'package:kite/util/library/search.dart';
 
+import '../entity/book_info.dart';
+import '../entity/book_search.dart';
+import '../entity/holding_preview.dart';
 import 'component/search_result_item.dart';
 import 'search_delegate.dart';
 
@@ -38,33 +39,23 @@ class BookInfoPage extends StatefulWidget {
 class _BookInfoPageState extends State<BookInfoPage> {
   Widget buildBookDetail() {
     final bookId = widget.bookImageHolding.book.bookId;
-    return FutureBuilder<BookInfo>(
+    return MyFutureBuilder<BookInfo>(
       future: ServicePool.bookInfo.query(bookId),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.hasData) {
-          final BookInfo bookInfo = snapshot.data;
-          return Table(
-            columnWidths: const {
-              0: FlexColumnWidth(1),
-              1: FlexColumnWidth(3),
-            },
-            // border: TableBorder.all(color: Colors.red),
-            children: bookInfo.rawDetail.entries
-                .map(
-                  (e) => TableRow(
+      builder: (BuildContext context, BookInfo data) {
+        return Table(
+          columnWidths: const {
+            0: FlexColumnWidth(1),
+            1: FlexColumnWidth(3),
+          },
+          // border: TableBorder.all(color: Colors.red),
+          children: data.rawDetail.entries
+              .map((e) => TableRow(
                     children: [
                       Text(e.key, style: Theme.of(context).textTheme.headline5),
                       SelectableText(e.value, style: Theme.of(context).textTheme.bodyText2),
                     ],
-                  ),
-                )
-                .toList(),
-          );
-        } else if (snapshot.hasError) {
-          return Text(snapshot.error.toString());
-        }
-        return const Center(
-          child: CircularProgressIndicator(),
+                  ))
+              .toList(),
         );
       },
     );
@@ -123,47 +114,36 @@ class _BookInfoPageState extends State<BookInfoPage> {
       return ret[0];
     }
 
-    return FutureBuilder<BookImageHolding>(
-        future: get(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData) {
-            final BookImageHolding data = snapshot.data;
-            return InkWell(
-              child: Card(
-                child: BookItemWidget(data),
-              ),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (BuildContext context) {
-                    return BookInfoPage(data);
-                  }),
-                );
-              },
+    return MyFutureBuilder<BookImageHolding>(
+      future: get(),
+      builder: (BuildContext context, BookImageHolding data) {
+        return InkWell(
+          child: Card(
+            child: BookItemWidget(data),
+          ),
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (BuildContext context) {
+                return BookInfoPage(data);
+              }),
             );
-          } else if (snapshot.hasError) {
-            return Container();
-          }
-          return const CircularProgressIndicator();
-        });
+          },
+        );
+      },
+    );
   }
 
   Widget buildNearBooks(String bookId) {
-    return FutureBuilder(
+    return MyFutureBuilder<List<String>>(
       future: ServicePool.holdingInfo.searchNearBookIdList(bookId),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.hasData) {
-          List<String> bookIdList = snapshot.data;
-          return Column(
-            children: bookIdList.sublist(0, 5).map((bookId) {
-              return Container(
-                child: buildBookItem(bookId),
-              );
-            }).toList(),
-          );
-        } else if (snapshot.hasError) {
-          return Text(snapshot.error.toString());
-        }
-        return const CircularProgressIndicator();
+      builder: (BuildContext context, List<String> data) {
+        return Column(
+          children: data.sublist(0, 5).map((bookId) {
+            return Container(
+              child: buildBookItem(bookId),
+            );
+          }).toList(),
+        );
       },
     );
   }

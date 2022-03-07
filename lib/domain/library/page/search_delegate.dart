@@ -16,14 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/domain/library/entity/book_search.dart';
-import 'package:kite/domain/library/entity/hot_search.dart';
-import 'package:kite/domain/library/entity/search_history.dart';
-import 'package:kite/domain/library/service/index.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/util/logger.dart';
 
+import '../entity/book_search.dart';
+import '../entity/hot_search.dart';
+import '../entity/search_history.dart';
+import '../service/index.dart';
 import 'component/search_result.dart';
 import 'component/suggestion_item.dart';
 
