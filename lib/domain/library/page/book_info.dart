@@ -17,11 +17,11 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
-import 'package:kite/global/service_pool.dart';
 
 import '../entity/book_info.dart';
 import '../entity/book_search.dart';
 import '../entity/holding_preview.dart';
+import '../init.dart';
 import '../util/search.dart';
 import 'component/search_result_item.dart';
 import 'search_delegate.dart';
@@ -40,7 +40,7 @@ class _BookInfoPageState extends State<BookInfoPage> {
   Widget buildBookDetail() {
     final bookId = widget.bookImageHolding.book.bookId;
     return MyFutureBuilder<BookInfo>(
-      future: ServicePool.bookInfo.query(bookId),
+      future: LibraryInitializer.bookInfo.query(bookId),
       builder: (BuildContext context, BookInfo data) {
         return Table(
           columnWidths: const {
@@ -101,14 +101,14 @@ class _BookInfoPageState extends State<BookInfoPage> {
   /// 构造邻近的书
   Widget buildBookItem(String bookId) {
     Future<BookImageHolding> get() async {
-      final result = await ServicePool.bookSearch.search(
+      final result = await LibraryInitializer.bookSearch.search(
         keyword: bookId,
         rows: 1,
         searchWay: SearchWay.ctrlNo,
       );
       final ret = await BookImageHolding.simpleQuery(
-        ServicePool.bookImageSearch,
-        ServicePool.holdingPreview,
+        LibraryInitializer.bookImageSearch,
+        LibraryInitializer.holdingPreview,
         result.books,
       );
       return ret[0];
@@ -135,7 +135,7 @@ class _BookInfoPageState extends State<BookInfoPage> {
 
   Widget buildNearBooks(String bookId) {
     return MyFutureBuilder<List<String>>(
-      future: ServicePool.holdingInfo.searchNearBookIdList(bookId),
+      future: LibraryInitializer.holdingInfo.searchNearBookIdList(bookId),
       builder: (BuildContext context, List<String> data) {
         return Column(
           children: data.sublist(0, 5).map((bookId) {
