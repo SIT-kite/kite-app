@@ -68,11 +68,6 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
 
   @override
   Widget build(BuildContext context) {
-    // 桌面端兼容
-    if (UniversalPlatform.isDesktopOrWeb) {
-      return UnsupportedPlatformUrlLauncher(widget.initialUrl);
-    }
-
     final actions = <Widget>[];
     if (widget.showSharedButton) {
       actions.add(IconButton(
