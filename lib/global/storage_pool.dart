@@ -19,22 +19,20 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kite/dao/auth_pool.dart';
 import 'package:kite/dao/contact.dart';
-import 'package:kite/domain/edu/dao/timetable.dart';
 import 'package:kite/dao/electricity.dart';
-import 'package:kite/domain/expense/dao/expense.dart';
 import 'package:kite/dao/kite/jwt.dart';
 import 'package:kite/dao/kite/user_event.dart';
-import 'package:kite/domain/library/dao/search_history.dart';
 import 'package:kite/dao/mail.dart';
 import 'package:kite/dao/setting/auth.dart';
 import 'package:kite/dao/setting/home.dart';
 import 'package:kite/dao/setting/theme.dart';
-import 'package:kite/domain/library/entity/search_history.dart';
+import 'package:kite/domain/edu/dao/timetable.dart';
+import 'package:kite/domain/edu/entity/timetable.dart';
+import 'package:kite/domain/expense/dao/expense.dart';
+import 'package:kite/domain/expense/entity/expense.dart';
 import 'package:kite/entity/auth_item.dart';
 import 'package:kite/entity/contact.dart';
-import 'package:kite/domain/edu/entity/timetable.dart';
 import 'package:kite/entity/electricity.dart';
-import 'package:kite/domain/expense/entity/expense.dart';
 import 'package:kite/entity/home.dart';
 import 'package:kite/entity/kite/user_event.dart';
 import 'package:kite/entity/report.dart';
@@ -50,6 +48,7 @@ import 'package:kite/storage/theme.dart';
 import 'package:kite/storage/timetable.dart';
 import 'package:kite/storage/user_event.dart';
 import 'package:kite/util/hive_cache_provider.dart';
+import 'package:kite/util/hive_register_adapter.dart';
 import 'package:kite/util/logger.dart';
 
 import '../dao/game.dart';
@@ -57,17 +56,12 @@ import '../entity/game.dart';
 import '../storage/auth_pool.dart';
 import '../storage/expense.dart';
 import '../storage/game.dart';
-import '../domain/library/storage/search_history.dart';
 
 /// 本地持久化层
 class StoragePool {
   static late AuthPoolStorage _authPool;
 
   static AuthPoolDao get authPool => _authPool;
-
-  static late SearchHistoryStorage _librarySearchHistory;
-
-  static SearchHistoryDao get librarySearchHistory => _librarySearchHistory;
 
   static late ElectricityStorage _electricity;
 
@@ -118,13 +112,6 @@ class StoragePool {
   static JwtDao get jwt => _jwt;
 
   static Future<void> _registerAdapters() async {
-    void registerAdapter<T>(TypeAdapter<T> adapter) {
-      if (!Hive.isAdapterRegistered(adapter.typeId)) {
-        Hive.registerAdapter(adapter);
-      }
-    }
-
-    registerAdapter(LibrarySearchHistoryItemAdapter());
     registerAdapter(AuthItemAdapter());
     registerAdapter(WeatherAdapter());
     registerAdapter(ReportHistoryAdapter());
@@ -146,8 +133,7 @@ class StoragePool {
     await _registerAdapters();
     final expenseRecordBox = await Hive.openBox<ExpenseRecord>('expenseSetting');
     _expenseRecord = ExpenseLocalStorage(expenseRecordBox);
-    final searchHistoryBox = await Hive.openBox<LibrarySearchHistoryItem>('library.search_history');
-    _librarySearchHistory = SearchHistoryStorage(searchHistoryBox);
+
     final electricityBox = await Hive.openBox('electricity');
     _electricity = ElectricityStorage(electricityBox);
     final contactDataBox = await Hive.openBox<ContactData>('contactSetting');

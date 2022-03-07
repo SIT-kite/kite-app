@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/domain/library/init.dart';
 import 'package:kite/global/session_pool.dart';
-import 'package:kite/global/storage_pool.dart';
 import 'package:kite/util/logger.dart';
 
 import '../entity/book_search.dart';
@@ -80,7 +80,7 @@ class SearchBarDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    StoragePool.librarySearchHistory.add(
+    LibraryInitializer.librarySearchHistory.add(
       LibrarySearchHistoryItem()
         ..keyword = query
         ..time = DateTime.now(),
@@ -116,7 +116,7 @@ class SearchBarDelegate extends SearchDelegate<String> {
             const SizedBox(height: 20),
             Text('历史记录', style: Theme.of(context).textTheme.bodyText1),
             SuggestionItemView(
-              titleItems: StoragePool.librarySearchHistory.getAllByTimeDesc().map((e) => e.keyword).toList(),
+              titleItems: LibraryInitializer.librarySearchHistory.getAllByTimeDesc().map((e) => e.keyword).toList(),
               onItemTap: (title) => _searchByGiving(context, title),
             ),
             const SizedBox(height: 20),
@@ -129,7 +129,7 @@ class SearchBarDelegate extends SearchDelegate<String> {
                 ],
               ),
               onTap: () async {
-                StoragePool.librarySearchHistory.deleteAll();
+                LibraryInitializer.librarySearchHistory.deleteAll();
                 close(context, '');
               },
             ),
