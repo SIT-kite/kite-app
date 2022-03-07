@@ -19,10 +19,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kite/domain/office/service/index.dart';
 import 'package:kite/entity/office/index.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:kite/service/office/index.dart';
 
 import 'detail.dart';
 import 'message.dart';

@@ -20,7 +20,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:kite/entity/office/index.dart';
 
-import '../../session/office_session.dart';
+import '../../../session/office_session.dart';
 
 const String serviceMessageCount = 'https://xgfy.sit.edu.cn/unifri-flow/user/queryFlowCount';
 

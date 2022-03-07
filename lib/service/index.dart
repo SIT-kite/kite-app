@@ -25,5 +25,5 @@ export 'kite/electricity.dart';
 export 'kite/ocr.dart';
 export 'kite/weather.dart';
 export 'network.dart';
-export 'office/index.dart';
+export '../domain/office/service/index.dart';
 export 'report/index.dart';
