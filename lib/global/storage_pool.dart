@@ -18,7 +18,6 @@
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kite/dao/auth_pool.dart';
-import 'package:kite/dao/contact.dart';
 import 'package:kite/dao/electricity.dart';
 import 'package:kite/dao/kite/jwt.dart';
 import 'package:kite/dao/kite/user_event.dart';
@@ -26,19 +25,18 @@ import 'package:kite/dao/mail.dart';
 import 'package:kite/dao/setting/auth.dart';
 import 'package:kite/dao/setting/home.dart';
 import 'package:kite/dao/setting/theme.dart';
+import 'package:kite/domain/contact/entity/contact.dart';
 import 'package:kite/domain/edu/dao/timetable.dart';
 import 'package:kite/domain/edu/entity/timetable.dart';
 import 'package:kite/domain/expense/dao/expense.dart';
 import 'package:kite/domain/expense/entity/expense.dart';
 import 'package:kite/entity/auth_item.dart';
-import 'package:kite/entity/contact.dart';
 import 'package:kite/entity/electricity.dart';
 import 'package:kite/entity/home.dart';
 import 'package:kite/entity/kite/user_event.dart';
 import 'package:kite/entity/report.dart';
 import 'package:kite/entity/weather.dart';
 import 'package:kite/storage/auth.dart';
-import 'package:kite/storage/contact.dart';
 import 'package:kite/storage/electricity.dart';
 import 'package:kite/storage/home.dart';
 import 'package:kite/storage/jwt.dart';
@@ -63,10 +61,6 @@ class StoragePool {
   static late ElectricityStorage _electricity;
 
   static ElectricityStorageDao get electricity => _electricity;
-
-  static late ContactDataStorage _contactData;
-
-  static ContactStorageDao get contactData => _contactData;
 
   static late ExpenseLocalStorage _expenseRecord;
 
@@ -127,8 +121,7 @@ class StoragePool {
 
     final electricityBox = await Hive.openBox('electricity');
     _electricity = ElectricityStorage(electricityBox);
-    final contactDataBox = await Hive.openBox<ContactData>('contactSetting');
-    _contactData = ContactDataStorage(contactDataBox);
+
     final authBox = await Hive.openBox<AuthItem>('auth');
     _authPool = AuthPoolStorage(authBox);
 

@@ -19,7 +19,7 @@ export '../domain/bulletin/service/bulletin.dart';
 export '../domain/library/service/index.dart';
 export '../domain/office/service/index.dart';
 export 'campus_card.dart';
-export 'contact.dart';
+export '../domain/contact/service/contact.dart';
 export '../domain/expense/service/expense.dart';
 export 'kite/electricity.dart';
 export 'kite/ocr.dart';

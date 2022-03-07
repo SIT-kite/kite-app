@@ -29,7 +29,7 @@ export '../domain/office/page/index.dart';
 export 'campus_card.dart';
 export 'classroom/index.dart';
 export 'connectivity.dart';
-export 'contact/index.dart';
+export '../domain/contact/page/index.dart';
 export 'electricity/index.dart';
 export 'event/index.dart';
 export 'home/index.dart';

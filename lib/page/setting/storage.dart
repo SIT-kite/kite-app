@@ -18,7 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:kite/entity/auth_item.dart';
-import 'package:kite/entity/contact.dart';
+import 'package:kite/domain/contact/entity/contact.dart';
 import 'package:kite/domain/library/entity/search_history.dart';
 
 class DebugStoragePage extends StatelessWidget {

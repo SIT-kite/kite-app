@@ -17,7 +17,7 @@
  */
 import 'package:hive/hive.dart';
 import 'package:kite/dao/contact.dart';
-import 'package:kite/entity/contact.dart';
+import 'package:kite/domain/contact/entity/contact.dart';
 
 class ContactDataStorage implements ContactStorageDao {
   final Box<ContactData> box;

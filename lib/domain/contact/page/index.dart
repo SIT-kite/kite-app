@@ -16,10 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/entity/contact.dart';
+import 'package:kite/domain/contact/entity/contact.dart';
+import 'package:kite/domain/contact/init.dart';
+import 'package:kite/domain/contact/service/contact.dart';
 import 'package:kite/global/session_pool.dart';
-import 'package:kite/global/storage_pool.dart';
-import 'package:kite/service/contact.dart';
 
 import 'list.dart';
 import 'search.dart';
@@ -32,14 +32,14 @@ class ContactPage extends StatefulWidget {
 }
 
 class _ContactPageState extends State<ContactPage> {
-  final List<ContactData> _contactData = StoragePool.contactData.getAllContacts();
+  final List<ContactData> _contactData = ContactInitializer.contactData.getAllContacts();
 
   Future<List<ContactData>> _fetchContactList() async {
     final service = ContactRemoteService(SessionPool.kiteSession);
     final contacts = await service.getAllContacts();
 
-    StoragePool.contactData.clear();
-    StoragePool.contactData.addAll(contacts);
+    ContactInitializer.contactData.clear();
+    ContactInitializer.contactData.addAll(contacts);
     return contacts;
   }
 

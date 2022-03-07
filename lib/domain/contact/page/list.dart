@@ -19,7 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grouped_list/grouped_list.dart';
-import 'package:kite/entity/contact.dart';
+import 'package:kite/domain/contact/entity/contact.dart';
 import 'package:kite/util/url_launcher.dart';
 
 class ContactList extends StatelessWidget {
