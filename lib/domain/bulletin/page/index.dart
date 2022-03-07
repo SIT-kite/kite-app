@@ -17,11 +17,11 @@
  */
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/entity/bulletin.dart';
+import 'package:kite/domain/bulletin/entity/bulletin.dart';
 import 'package:kite/global/session_pool.dart';
-import 'package:kite/service/bulletin.dart';
+import 'package:kite/domain/bulletin/service/bulletin.dart';
 
-import './detail.dart';
+import 'detail.dart';
 
 class BulletinPage extends StatelessWidget {
   static final _dateFormat = DateFormat('yyyy/MM/dd hh:mm');

@@ -17,7 +17,7 @@
  */
 export '../domain/index.dart';
 export '../domain/office/page/index.dart';
-export 'bulletin/index.dart';
+export '../domain/bulletin/page/index.dart';
 export 'campus_card.dart';
 export 'classroom/index.dart';
 export 'connectivity.dart';

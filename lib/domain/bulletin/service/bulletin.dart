@@ -17,8 +17,8 @@
  */
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/dao/bulletin.dart';
-import 'package:kite/entity/bulletin.dart';
+import 'package:kite/domain/bulletin/dao/bulletin.dart';
+import 'package:kite/domain/bulletin/entity/bulletin.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/session/abstract_session.dart';
 

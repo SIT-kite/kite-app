@@ -20,7 +20,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/html_widget.dart';
-import 'package:kite/entity/bulletin.dart';
+import 'package:kite/domain/bulletin/entity/bulletin.dart';
 import 'package:kite/global/service_pool.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/util/flash.dart';

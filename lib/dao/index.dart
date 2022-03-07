@@ -17,7 +17,7 @@
  */
 export '../domain/library/dao/index.dart';
 export 'auth_pool.dart';
-export 'bulletin.dart';
+export '../domain/bulletin/dao/bulletin.dart';
 export 'campus_card.dart';
 export 'contact.dart';
 export 'edu/index.dart';
