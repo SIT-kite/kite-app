@@ -22,6 +22,6 @@ export 'connectivity.dart';
 export 'event/index.dart';
 export 'home/index.dart';
 export 'login.dart';
-export 'mail/index.dart';
+export '../domain/mail/page/index.dart';
 export 'setting/index.dart';
 export 'welcome.dart';

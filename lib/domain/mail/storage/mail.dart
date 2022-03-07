@@ -18,7 +18,7 @@
 
 import 'package:hive/hive.dart';
 
-import '../dao/mail.dart';
+import '../../../dao/mail.dart';
 
 class MailStorage implements MailStorageDao {
   final Box<dynamic> box;

@@ -39,7 +39,7 @@ import 'package:kite/storage/auth.dart';
 import 'package:kite/storage/electricity.dart';
 import 'package:kite/storage/home.dart';
 import 'package:kite/storage/jwt.dart';
-import 'package:kite/storage/mail.dart';
+import 'package:kite/domain/mail/storage/mail.dart';
 import 'package:kite/storage/network.dart';
 import 'package:kite/storage/theme.dart';
 import 'package:kite/storage/timetable.dart';

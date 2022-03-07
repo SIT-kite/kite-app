@@ -20,7 +20,7 @@ import 'package:enough_mail/mime_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:kite/service/mail.dart';
+import 'package:kite/domain/mail/service/mail.dart';
 
 import 'item.dart';
 
