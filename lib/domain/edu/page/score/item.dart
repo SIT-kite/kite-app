@@ -20,7 +20,7 @@ import 'package:kite/domain/edu/service/index.dart';
 import 'package:kite/domain/edu/entity/index.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/session_pool.dart';
-import 'package:kite/util/edu/icon.dart';
+import 'package:kite/domain/edu/util/icon.dart';
 
 import 'evaluation.dart';
 

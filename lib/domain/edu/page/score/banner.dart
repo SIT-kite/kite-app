@@ -18,7 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/domain/edu/entity/index.dart';
 import 'package:kite/global/event_bus.dart';
-import 'package:kite/util/edu/gpa.dart';
+import 'package:kite/domain/edu/util/gpa.dart';
 
 class GpaBanner extends StatefulWidget {
   final Semester _semester; // 学期 or 学年

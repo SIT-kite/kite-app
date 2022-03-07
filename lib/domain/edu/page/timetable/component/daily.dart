@@ -17,7 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/domain/edu/entity/index.dart';
-import 'package:kite/util/edu/icon.dart';
+import 'package:kite/domain/edu/util/icon.dart';
 
 import '../cache.dart';
 import '../util.dart';

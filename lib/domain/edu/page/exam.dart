@@ -21,7 +21,7 @@ import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/domain/edu/init.dart';
 import 'package:kite/domain/edu/entity/index.dart';
-import 'package:kite/util/edu/selector.dart';
+import 'package:kite/domain/edu/util/selector.dart';
 
 class ExamPage extends StatefulWidget {
   const ExamPage({Key? key}) : super(key: key);
