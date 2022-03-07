@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/entity/electricity.dart';
 import 'package:kite/global/session_pool.dart';
-import 'package:kite/service/kite/electricity.dart';
+import 'package:kite/domain/kite/service/electricity.dart';
 import 'package:kite/util/flash.dart';
 
 class BalanceSection extends StatelessWidget {

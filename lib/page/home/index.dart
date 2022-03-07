@@ -22,7 +22,7 @@ import 'package:kite/entity/home.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:kite/service/kite/weather.dart';
+import 'package:kite/domain/kite/service/weather.dart';
 import 'package:kite/session/exception.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';

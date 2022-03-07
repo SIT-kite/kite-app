@@ -17,8 +17,9 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:kite/page/electricity/balance.dart';
-import 'package:kite/page/electricity/chart.dart';
+
+import 'balance.dart';
+import 'chart.dart';
 
 class ElectricityPage extends StatefulWidget {
   const ElectricityPage({Key? key}) : super(key: key);

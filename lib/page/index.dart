@@ -15,29 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-export '../domain/bulletin/page/index.dart';
-export '../domain/edu/page/exam.dart';
-export '../domain/edu/page/score/index.dart';
-export '../domain/edu/page/timetable/import.dart';
-export '../domain/edu/page/timetable/index.dart';
-export '../domain/expense/page/index.dart';
-export '../domain/game/page/2048/index.dart';
-export '../domain/game/page/index.dart';
-export '../domain/game/page/wordle/index.dart';
+
 export '../domain/index.dart';
-export '../domain/office/page/index.dart';
 export 'campus_card.dart';
-export 'classroom/index.dart';
 export 'connectivity.dart';
-export '../domain/contact/page/index.dart';
-export 'electricity/index.dart';
 export 'event/index.dart';
 export 'home/index.dart';
 export 'login.dart';
-export 'lost_found/index.dart';
 export 'mail/index.dart';
-export 'market.dart';
-export 'night/index.dart';
-export 'notice.dart';
 export 'setting/index.dart';
 export 'welcome.dart';
