@@ -18,11 +18,11 @@
 import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/global/service_pool.dart';
-import 'package:kite/util/library/search.dart';
 
 import '../entity/book_info.dart';
 import '../entity/book_search.dart';
 import '../entity/holding_preview.dart';
+import '../util/search.dart';
 import 'component/search_result_item.dart';
 import 'search_delegate.dart';
 

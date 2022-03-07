@@ -19,13 +19,13 @@ import 'package:flutter/material.dart';
 import 'package:kite/domain/library/service/index.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/util/flash.dart';
-import 'package:kite/util/library/search.dart';
 import 'package:kite/util/logger.dart';
 
 import '../../dao/book_search.dart';
 import '../../dao/holding_preview.dart';
 import '../../dao/image_search.dart';
 import '../../entity/book_search.dart';
+import '../../util/search.dart';
 import '../book_info.dart';
 import 'search_result_item.dart';
 
