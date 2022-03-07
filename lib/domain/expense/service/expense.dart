@@ -21,7 +21,7 @@ import 'package:enough_convert/gbk/gbk.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/domain/expense/dao/expense.dart';
 import 'package:kite/domain/expense/entity/expense.dart';
-import 'package:kite/global/storage_pool.dart';
+import 'package:kite/domain/expense/init.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/session/abstract_session.dart';
 
@@ -62,7 +62,7 @@ class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
     List<ExpenseRecord> records = [];
     for (final bill in soup.findAll(recordSelector).sublist(1)) {
       records.add(_parseExpenseItem(bill));
-      StoragePool.expenseRecordStorage.add(_parseExpenseItem(bill));
+      ExpenseInitializer.expenseRecord.add(_parseExpenseItem(bill));
     }
     // 页号信息
     final pageInfo = soup.findAll('div', id: 'listContent')[1].text;

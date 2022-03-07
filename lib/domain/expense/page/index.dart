@@ -17,10 +17,10 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/domain/expense/entity/expense.dart';
-import 'package:kite/global/session_pool.dart';
-import 'package:kite/global/storage_pool.dart';
+import 'package:kite/domain/expense/init.dart';
 import 'package:kite/domain/expense/page/icon.dart';
 import 'package:kite/domain/expense/service/expense.dart';
+import 'package:kite/global/session_pool.dart';
 import 'package:kite/util/flash.dart';
 
 import 'bill.dart';
@@ -60,7 +60,7 @@ class _ExpensePageState extends State<ExpensePage> {
   /// 拉取数据并保存
   Future<OaExpensePage> _fetchAndSave(ExpenseRemoteService service, int page, {DateTime? start, DateTime? end}) async {
     final OaExpensePage billPage = await service.getExpensePage(page, start: start, end: end);
-    StoragePool.expenseRecordStorage.addAll(billPage.records);
+    ExpenseInitializer.expenseRecord.addAll(billPage.records);
 
     return billPage;
   }
@@ -84,7 +84,7 @@ class _ExpensePageState extends State<ExpensePage> {
     }
     showBasicFlash(context, const Text('正在更新消费数据, 速度受限于学校服务器, 请稍等'));
 
-    final DateTime? startDate = StoragePool.expenseRecordStorage.getLastOne()?.ts;
+    final DateTime? startDate = ExpenseInitializer.expenseRecord.getLastOne()?.ts;
     final ExpenseRemoteService service = ExpenseRemoteService(SessionPool.ssoSession);
     final OaExpensePage firstPage = await _fetchAndSave(service, 1, start: startDate);
 

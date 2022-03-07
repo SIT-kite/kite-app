@@ -1,11 +1,19 @@
+import 'package:hive/hive.dart';
 import 'package:kite/domain/expense/service/expense.dart';
 import 'package:kite/session/abstract_session.dart';
 
 import 'dao/expense.dart';
+import 'entity/expense.dart';
+import 'storage/expense.dart';
 
 class ExpenseInitializer {
   static late ExpenseRemoteDao expenseRemote;
-  static init(ASession session) {
+
+  static late ExpenseLocalStorage expenseRecord;
+  static init(ASession session) async {
+    final expenseRecordBox = await Hive.openBox<ExpenseRecord>('expenseSetting');
+    expenseRecord = ExpenseLocalStorage(expenseRecordBox);
+
     expenseRemote = ExpenseRemoteService(session);
   }
 }

@@ -17,8 +17,8 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/domain/expense/entity/expense.dart';
+import 'package:kite/domain/expense/init.dart';
 import 'package:kite/global/event_bus.dart';
-import 'package:kite/global/storage_pool.dart';
 
 import 'index.dart';
 
@@ -30,7 +30,7 @@ class ExpenseItem extends StatefulWidget {
 }
 
 class _ExpenseItemState extends State<ExpenseItem> {
-  final ExpenseRecord? lastExpense = StoragePool.expenseRecordStorage.getLastOne();
+  final ExpenseRecord? lastExpense = ExpenseInitializer.expenseRecord.getLastOne();
   late String content = '校园卡消费记录';
 
   @override

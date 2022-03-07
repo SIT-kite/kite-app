@@ -28,7 +28,6 @@ import 'package:kite/dao/setting/theme.dart';
 import 'package:kite/domain/contact/entity/contact.dart';
 import 'package:kite/domain/edu/dao/timetable.dart';
 import 'package:kite/domain/edu/entity/timetable.dart';
-import 'package:kite/domain/expense/dao/expense.dart';
 import 'package:kite/domain/expense/entity/expense.dart';
 import 'package:kite/entity/auth_item.dart';
 import 'package:kite/entity/electricity.dart';
@@ -50,7 +49,6 @@ import 'package:kite/util/hive_register_adapter.dart';
 import 'package:kite/util/logger.dart';
 
 import '../storage/auth_pool.dart';
-import '../storage/expense.dart';
 
 /// 本地持久化层
 class StoragePool {
@@ -61,10 +59,6 @@ class StoragePool {
   static late ElectricityStorage _electricity;
 
   static ElectricityStorageDao get electricity => _electricity;
-
-  static late ExpenseLocalStorage _expenseRecord;
-
-  static ExpenseLocalDao get expenseRecordStorage => _expenseRecord;
 
   static late HomeSettingStorage _homeSetting;
 
@@ -116,8 +110,6 @@ class StoragePool {
     Log.info("初始化StoragePool");
     await Hive.initFlutter('kite/hive');
     await _registerAdapters();
-    final expenseRecordBox = await Hive.openBox<ExpenseRecord>('expenseSetting');
-    _expenseRecord = ExpenseLocalStorage(expenseRecordBox);
 
     final electricityBox = await Hive.openBox('electricity');
     _electricity = ElectricityStorage(electricityBox);

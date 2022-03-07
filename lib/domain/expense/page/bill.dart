@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:kite/domain/expense/entity/expense.dart';
-import 'package:kite/global/storage_pool.dart';
+import 'package:kite/domain/expense/init.dart';
 
 import 'icon.dart';
 
@@ -88,7 +88,7 @@ class BillPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final records = StoragePool.expenseRecordStorage.getAllByTimeDesc();
+    final records = ExpenseInitializer.expenseRecord.getAllByTimeDesc();
     final recordsToShow = filter == ExpenseType.all ? records : records.where((e) => e.type == filter).toList();
 
     if (recordsToShow.isNotEmpty) {
