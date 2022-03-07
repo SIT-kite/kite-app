@@ -17,35 +17,44 @@
  */
 
 import 'package:hive/hive.dart';
+import 'package:kite/domain/game/entity/game.dart';
 
-import '../global/hive_type_id_pool.dart';
+import '../../../dao/game.dart';
 
-part 'game.g.dart';
+class GameStorage implements GameRecordStorageDao {
+  final Box<dynamic> box;
 
-@HiveType(typeId: HiveTypeIdPool.gameTypeItem)
-enum GameType {
-  /// 2048 游戏
-  @HiveField(0)
-  game2048,
-}
+  const GameStorage(this.box);
 
-@HiveType(typeId: HiveTypeIdPool.gameRecordItem)
-class GameRecord {
-  /// 游戏类型
-  @HiveField(0)
-  final GameType type;
+  @override
+  void append(GameRecord newRecord) {
+    final records = getAllRecords();
+    for (var r in records) {
+      if (r.ts == newRecord.ts) {
+        return;
+      }
+    }
+    records.add(newRecord);
+    box.put('record', records);
+  }
 
-  /// 得分
-  @HiveField(1)
-  final int score;
+  @override
+  void deleteAll() {
+    box.delete('record');
+  }
 
-  /// 游戏开始的时间
-  @HiveField(2)
-  final DateTime ts;
+  @override
+  List<GameRecord> getAllRecords() {
+    final List<GameRecord> recordList = box.get('record') ?? [];
+    return recordList;
+  }
 
-  /// 该局用时 （秒）
-  @HiveField(3)
-  final int timeCost;
-
-  const GameRecord(this.type, this.score, this.ts, this.timeCost);
+  @override
+  GameRecord? getLastOne() {
+    try {
+      return getAllRecords().last;
+    } catch (_) {
+      return null;
+    }
+  }
 }

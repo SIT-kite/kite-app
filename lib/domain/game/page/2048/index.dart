@@ -25,8 +25,8 @@
 
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/entity/game.dart';
-import 'package:kite/global/storage_pool.dart';
+import 'package:kite/domain/game/entity/game.dart';
+import 'package:kite/domain/game/init.dart';
 
 import '../action.dart';
 import 'logic.dart';
@@ -204,7 +204,7 @@ class _GameWidgetState extends State<GameWidget> {
       // 存储游戏记录
       final currentTime = DateTime.now();
       final record = GameRecord(GameType.game2048, _game.score, startTime, currentTime.difference(startTime).inSeconds);
-      StoragePool.gameRecord.append(record);
+      GameInitializer.gameRecord.append(record);
     }
   }
 

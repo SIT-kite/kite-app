@@ -19,8 +19,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/entity/game.dart';
-import 'package:kite/global/storage_pool.dart';
+import 'package:kite/domain/game/entity/game.dart';
+import 'package:kite/domain/game/init.dart';
 
 class HistoryPage extends StatelessWidget {
   static final dateFormat = DateFormat('yyyy-MM-dd hh:mm:ss');
@@ -68,7 +68,7 @@ class HistoryPage extends StatelessWidget {
   }
 
   Widget _buildHistory(BuildContext context) {
-    final history = StoragePool.gameRecord.getAllRecords().reversed.toList();
+    final history = GameInitializer.gameRecord.getAllRecords().reversed.toList();
     final items = history.map((e) => _buildHistoryItem(context, e)).toList();
 
     if (items.isNotEmpty) {
@@ -86,7 +86,7 @@ class HistoryPage extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
-                StoragePool.gameRecord.deleteAll();
+                GameInitializer.gameRecord.deleteAll();
                 Navigator.of(context).pop();
               },
               icon: const Icon(Icons.delete)),
