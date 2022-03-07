@@ -17,7 +17,7 @@
  */
 import 'package:hive/hive.dart';
 import 'package:kite/domain/edu/dao/timetable.dart';
-import 'package:kite/entity/edu/index.dart';
+import 'package:kite/domain/edu/entity/index.dart';
 
 class TimetableStorage implements TimetableStorageDao {
   final Box<dynamic> box;

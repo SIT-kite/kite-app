@@ -1,4 +1,4 @@
-import 'package:kite/entity/edu/index.dart';
+import 'package:kite/domain/edu/entity/index.dart';
 import 'package:kite/domain/edu/service/index.dart';
 
 import '../mock_util.dart';

@@ -18,7 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/domain/edu/init.dart';
-import 'package:kite/entity/edu/index.dart';
+import 'package:kite/domain/edu/entity/index.dart';
 import 'package:kite/util/edu/selector.dart';
 import 'package:kite/util/logger.dart';
 

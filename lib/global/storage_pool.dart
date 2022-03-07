@@ -32,7 +32,7 @@ import 'package:kite/dao/setting/theme.dart';
 import 'package:kite/domain/library/entity/search_history.dart';
 import 'package:kite/entity/auth_item.dart';
 import 'package:kite/entity/contact.dart';
-import 'package:kite/entity/edu/timetable.dart';
+import 'package:kite/domain/edu/entity/timetable.dart';
 import 'package:kite/entity/electricity.dart';
 import 'package:kite/domain/expense/entity/expense.dart';
 import 'package:kite/entity/home.dart';

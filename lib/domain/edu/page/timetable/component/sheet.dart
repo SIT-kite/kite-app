@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/entity/edu/timetable.dart';
+import 'package:kite/domain/edu/entity/timetable.dart';
 
 import '../util.dart';
 

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/entity/edu/index.dart';
+import 'package:kite/domain/edu/entity/index.dart';
 
 String semesterToFormField(Semester semester) {
   const mapping = {

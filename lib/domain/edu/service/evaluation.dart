@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:kite/domain/edu/dao/evaluation.dart';
-import 'package:kite/entity/edu/evaluation.dart';
+import 'package:kite/domain/edu/entity/evaluation.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/session/abstract_session.dart';
 

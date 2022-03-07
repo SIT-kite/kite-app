@@ -17,7 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:ical/serializer.dart';
-import 'package:kite/entity/edu/timetable.dart';
+import 'package:kite/domain/edu/entity/timetable.dart';
 
 // -- 基本常量
 
