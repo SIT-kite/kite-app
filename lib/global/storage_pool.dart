@@ -57,7 +57,7 @@ import '../entity/game.dart';
 import '../storage/auth_pool.dart';
 import '../storage/expense.dart';
 import '../storage/game.dart';
-import '../storage/library/search_history.dart';
+import '../domain/library/storage/search_history.dart';
 
 /// 本地持久化层
 class StoragePool {
