@@ -34,7 +34,7 @@ import 'package:kite/entity/auth_item.dart';
 import 'package:kite/entity/contact.dart';
 import 'package:kite/entity/edu/timetable.dart';
 import 'package:kite/entity/electricity.dart';
-import 'package:kite/entity/expense.dart';
+import 'package:kite/domain/expense/entity/expense.dart';
 import 'package:kite/entity/home.dart';
 import 'package:kite/entity/kite/user_event.dart';
 import 'package:kite/entity/report.dart';

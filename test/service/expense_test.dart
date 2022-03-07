@@ -1,4 +1,4 @@
-import 'package:kite/service/expense.dart';
+import 'package:kite/domain/expense/service/expense.dart';
 
 import 'mock_util.dart';
 

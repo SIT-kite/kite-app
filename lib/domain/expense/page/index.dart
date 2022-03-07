@@ -16,11 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/entity/expense.dart';
+import 'package:kite/domain/expense/entity/expense.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:kite/page/expense/icon.dart';
-import 'package:kite/service/expense.dart';
+import 'package:kite/domain/expense/page/icon.dart';
+import 'package:kite/domain/expense/service/expense.dart';
 import 'package:kite/util/flash.dart';
 
 import 'bill.dart';

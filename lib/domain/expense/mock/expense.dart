@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:kite/dao/expense.dart';
-import 'package:kite/entity/expense.dart';
+import 'package:kite/domain/expense/entity/expense.dart';
 
 /// 测试数据
 List<List<dynamic>> mockedData = [

@@ -20,7 +20,7 @@ import 'package:dio/dio.dart';
 import 'package:enough_convert/gbk/gbk.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/dao/expense.dart';
-import 'package:kite/entity/expense.dart';
+import 'package:kite/domain/expense/entity/expense.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/session/abstract_session.dart';

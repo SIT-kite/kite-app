@@ -26,7 +26,7 @@ export 'connectivity.dart';
 export 'contact/index.dart';
 export 'electricity/index.dart';
 export 'event/index.dart';
-export 'expense/index.dart';
+export '../domain/expense/page/index.dart';
 export 'game/2048/index.dart';
 export 'game/index.dart';
 export 'game/wordle/index.dart';

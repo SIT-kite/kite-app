@@ -17,7 +17,7 @@
  */
 import 'package:hive/hive.dart';
 import 'package:kite/dao/expense.dart';
-import 'package:kite/entity/expense.dart';
+import 'package:kite/domain/expense/entity/expense.dart';
 
 class ExpenseLocalStorage implements ExpenseLocalDao {
   final Box<ExpenseRecord> box;
