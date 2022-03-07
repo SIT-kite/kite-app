@@ -16,12 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/domain/edu/service/index.dart';
 import 'package:kite/entity/edu/index.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/session_pool.dart';
-import 'package:kite/page/score/evaluation.dart';
-import 'package:kite/domain/edu/service/index.dart';
 import 'package:kite/util/edu/icon.dart';
+
+import 'evaluation.dart';
 
 class ScoreItem extends StatefulWidget {
   final Score _score;
@@ -29,16 +30,13 @@ class ScoreItem extends StatefulWidget {
   const ScoreItem(this._score, {Key? key}) : super(key: key);
 
   @override
-  _ScoreItemState createState() => _ScoreItemState(_score);
+  _ScoreItemState createState() => _ScoreItemState();
 }
 
 class _ScoreItemState extends State<ScoreItem> {
-  final Score _score;
+  late Score _score;
   bool _isExpanded = false;
   bool _isSelected = false;
-
-  @override
-  _ScoreItemState(this._score);
 
   Widget _buildScoreDetailView(List<ScoreDetail> scoreDetails) {
     return Container(
@@ -127,6 +125,7 @@ class _ScoreItemState extends State<ScoreItem> {
 
   @override
   Widget build(BuildContext context) {
+    _score = widget._score;
     final titleStyle = Theme.of(context).textTheme.headline4;
     final subtitleStyle = Theme.of(context).textTheme.bodyText1;
 

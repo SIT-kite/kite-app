@@ -17,14 +17,13 @@
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kite/domain/edu/init.dart';
 import 'package:kite/entity/edu/index.dart';
-import 'package:kite/global/session_pool.dart';
-import 'package:kite/page/score/item.dart';
-import 'package:kite/domain/edu/service/index.dart';
 import 'package:kite/util/edu/selector.dart';
 import 'package:kite/util/logger.dart';
 
 import 'banner.dart';
+import 'item.dart';
 
 class ScorePage extends StatefulWidget {
   const ScorePage({Key? key}) : super(key: key);
@@ -98,7 +97,7 @@ class _ScorePageState extends State<ScorePage> {
   }
 
   Widget _buildBody() {
-    final future = ScoreService(SessionPool.eduSession).getScoreList(SchoolYear(selectedYear), selectedSemester);
+    final future = EduInitializer.score.getScoreList(SchoolYear(selectedYear), selectedSemester);
 
     return FutureBuilder<List<Score>>(
       future: future,
