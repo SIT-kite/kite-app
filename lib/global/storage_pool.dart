@@ -21,7 +21,7 @@ import 'package:kite/dao/auth_pool.dart';
 import 'package:kite/dao/contact.dart';
 import 'package:kite/domain/edu/dao/timetable.dart';
 import 'package:kite/dao/electricity.dart';
-import 'package:kite/dao/expense.dart';
+import 'package:kite/domain/expense/dao/expense.dart';
 import 'package:kite/dao/kite/jwt.dart';
 import 'package:kite/dao/kite/user_event.dart';
 import 'package:kite/domain/library/dao/search_history.dart';

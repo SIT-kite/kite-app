@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:hive/hive.dart';
-import 'package:kite/dao/expense.dart';
+import 'package:kite/domain/expense/dao/expense.dart';
 import 'package:kite/domain/expense/entity/expense.dart';
 
 class ExpenseLocalStorage implements ExpenseLocalDao {

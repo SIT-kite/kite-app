@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/dao/expense.dart';
+import 'package:kite/domain/expense/dao/expense.dart';
 import 'package:kite/domain/expense/entity/expense.dart';
 
 /// 测试数据

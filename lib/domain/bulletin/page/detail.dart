@@ -21,7 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/html_widget.dart';
 import 'package:kite/domain/bulletin/entity/bulletin.dart';
-import 'package:kite/global/service_pool.dart';
+import 'package:kite/domain/bulletin/init.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
@@ -147,7 +147,8 @@ class _DetailPageState extends State<DetailPage> {
   Future<BulletinDetail> getBulletinDetail() async {
     if (article == null) {
       Log.info('开始加载OA公告文章');
-      article = await ServicePool.bulletin.getBulletinDetail(widget.summary.bulletinCatalogueId, widget.summary.uuid);
+      article =
+          await BulletinInitializer.bulletin.getBulletinDetail(widget.summary.bulletinCatalogueId, widget.summary.uuid);
       Log.info('加载OA公告文章完毕');
     } else {
       Log.info('使用已获取的OA公告文章');
