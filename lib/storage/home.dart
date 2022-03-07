@@ -90,8 +90,8 @@ class HomeSettingStorage implements HomeSettingDao {
 
   @override
   List<FunctionType>? get homeItems {
-    final List items = box.get(HomeKeyKeys.homeItems) ?? <dynamic>[];
-    return items.map((e) => e as FunctionType).toList();
+    final List? items = box.get(HomeKeyKeys.homeItems);
+    return items?.map((e) => e as FunctionType).toList();
   }
 
   @override
