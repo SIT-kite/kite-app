@@ -8,10 +8,11 @@ import 'storage.dart';
 class UserEventInitializer {
   static late UserEventStorageDao userEventStorage;
 
-  static Future<void> init({String hiveBoxName = 'userEvent'}) async {
+  static Future<void> init({
+    required Box<dynamic> userEventBox,
+  }) async {
     registerAdapter(UserEventAdapter());
     registerAdapter(UserEventTypeAdapter());
-    final userEventBox = await Hive.openBox<dynamic>(hiveBoxName);
     userEventStorage = UserEventStorage(userEventBox);
   }
 }

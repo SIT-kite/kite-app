@@ -1,10 +1,8 @@
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:hive/hive.dart';
 import 'package:kite/abstract/abstract_session.dart';
-import 'package:kite/util/hive_register_adapter.dart';
 
 import 'dao/index.dart';
-import 'entity/timetable.dart';
 import 'service/index.dart';
 import 'storage/timetable.dart';
 
@@ -16,22 +14,22 @@ class EduInitializer {
   static late TimetableStorageDao timetableStorage;
 
   static late CookieJar cookieJar;
+  static late EduSession eduSession;
 
   /// 初始化教务相关的service
   static Future<void> init({
     required ASession ssoSession,
     required CookieJar cookieJar,
+    required Box<dynamic> timetableBox,
   }) async {
     EduInitializer.cookieJar = cookieJar;
+    eduSession = EduSession(ssoSession);
 
-    registerAdapter(CourseAdapter());
+    courseEvaluation = CourseEvaluationService(eduSession);
+    exam = ExamService(eduSession);
+    score = ScoreService(eduSession);
+    timetable = TimetableService(eduSession);
 
-    courseEvaluation = CourseEvaluationService(ssoSession);
-    exam = ExamService(ssoSession);
-    score = ScoreService(ssoSession);
-    timetable = TimetableService(ssoSession);
-
-    final courseBox = await Hive.openBox<dynamic>('course');
-    timetableStorage = TimetableStorage(courseBox);
+    timetableStorage = TimetableStorage(timetableBox);
   }
 }

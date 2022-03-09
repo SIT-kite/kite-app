@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:hive/hive.dart';
-import 'package:kite/util/hive_register_adapter.dart';
 
 import 'dao/index.dart';
 import 'entity/search_history.dart';
@@ -28,7 +27,10 @@ class LibraryInitializer {
   static late LibrarySession session;
 
   /// 初始化图书馆相关的service
-  static Future<void> init({required Dio dio}) async {
+  static Future<void> init({
+    required Dio dio,
+    required Box<LibrarySearchHistoryItem> searchHistoryBox,
+  }) async {
     // 图书馆初始化
 
     session = LibrarySession(dio);
@@ -38,9 +40,6 @@ class LibraryInitializer {
     bookImageSearch = BookImageSearchService(session);
     holdingPreview = HoldingPreviewService(session);
     hotSearchService = HotSearchService(session);
-
-    registerAdapter(LibrarySearchHistoryItemAdapter());
-    final searchHistoryBox = await Hive.openBox<LibrarySearchHistoryItem>('librarySearchHistory');
 
     librarySearchHistory = SearchHistoryStorage(searchHistoryBox);
   }

@@ -17,14 +17,15 @@
  */
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:kite/component/future_builder.dart';
 import 'package:kite/domain/contact/entity/contact.dart';
 import 'package:kite/domain/library/entity/search_history.dart';
 
 class DebugStoragePage extends StatelessWidget {
   const DebugStoragePage({Key? key}) : super(key: key);
 
-  Widget _buildBoxSection<T>(BuildContext context, String boxName) {
-    final box = Hive.box<T>(boxName);
+  Future<Widget> _buildBoxSection<T>(BuildContext context, String boxName) async {
+    final box = await Hive.openBox<T>(boxName);
     final items = box.keys.map((e) {
       final key = e.toString();
       final value = box.get(e);
@@ -54,14 +55,20 @@ class DebugStoragePage extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
-    return Column(
-      children: [
-        _buildBoxSection<dynamic>(context, 'setting'),
-        _buildBoxSection<LibrarySearchHistoryItem>(context, 'library.search_history'),
-        _buildBoxSection<ContactData>(context, 'contactSetting'),
-        _buildBoxSection<dynamic>(context, 'course'),
-        _buildBoxSection<dynamic>(context, 'userEvent'),
-      ],
+    final futures = [
+      _buildBoxSection<dynamic>(context, 'setting'),
+      _buildBoxSection<LibrarySearchHistoryItem>(context, 'librarySearchHistory'),
+      _buildBoxSection<ContactData>(context, 'contactSetting'),
+      _buildBoxSection<dynamic>(context, 'course'),
+      _buildBoxSection<dynamic>(context, 'userEvent'),
+    ];
+    return MyFutureBuilder<List<Widget>>(
+      future: Future.wait(futures),
+      builder: (context, data) {
+        return Column(
+          children: data,
+        );
+      },
     );
   }
 

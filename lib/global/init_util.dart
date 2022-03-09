@@ -32,39 +32,76 @@ class Initializer {
   static Future<void> init() async {
     // 初始化Hive数据库
     await Hive.initFlutter('kite/hive');
-    await UserEventInitializer.init();
-    await SettingInitializer.init();
+    registerAdapters();
 
+    await UserEventInitializer.init(
+      userEventBox: await Hive.openBox('userEvent'),
+    );
+    await SettingInitializer.init();
     await Global.init(
       userEventStorage: UserEventInitializer.userEventStorage,
       authSetting: SettingInitializer.auth,
     );
+    // 初始化用户首次打开时间（而不是应用安装时间）
+    // ??= 表示为空时候才赋值
+    SettingInitializer.home.installTime ??= DateTime.now();
 
     final ssoSession = Global.ssoSession;
     BulletinInitializer.init(ssoSession: ssoSession);
     CampusCardInitializer.init(session: ssoSession);
     ConnectivityInitializer.init(ssoSession: ssoSession);
 
-    final kiteSession = KiteSession(Global.dio, SettingInitializer.jwt);
-    await ContactInitializer.init(kiteSession: kiteSession);
-    await EduInitializer.init(ssoSession: ssoSession, cookieJar: Global.cookieJar);
-    await ExpenseInitializer.init(ssoSession: ssoSession);
-    await GameInitializer.init();
-    await KiteInitializer.init(dio: Global.dio, kiteSession: kiteSession);
-    await HomeInitializer.init(ssoSession: ssoSession, noticeService: KiteInitializer.noticeService);
-    await LibraryInitializer.init(dio: Global.dio);
+    final kiteSession = KiteSession(
+      Global.dio,
+      SettingInitializer.jwt,
+    );
+
+    await ContactInitializer.init(
+      kiteSession: kiteSession,
+      contactDataBox: await Hive.openBox('contactSetting'),
+    );
+    await EduInitializer.init(
+      ssoSession: ssoSession,
+      cookieJar: Global.cookieJar,
+      timetableBox: await Hive.openBox<dynamic>('course'),
+    );
+    await ExpenseInitializer.init(
+      ssoSession: ssoSession,
+      expenseRecordBox: await Hive.openBox('expenseSetting'),
+    );
+    await GameInitializer.init(
+      gameBox: await Hive.openBox<dynamic>('game'),
+    );
+    await KiteInitializer.init(
+      dio: Global.dio,
+      kiteSession: kiteSession,
+      electricityBox: await Hive.openBox('electricity'),
+    );
+    await HomeInitializer.init(
+      ssoSession: ssoSession,
+      noticeService: KiteInitializer.noticeService,
+    );
+    await LibraryInitializer.init(
+      dio: Global.dio,
+      searchHistoryBox: await Hive.openBox('librarySearchHistory'),
+    );
     await MailInitializer.init();
-    await OfficeInitializer.init(dio: Global.dio, cookieJar: Global.cookieJar);
+    await OfficeInitializer.init(
+      dio: Global.dio,
+      cookieJar: Global.cookieJar,
+    );
     ReportInitializer.init(dio: Global.dio);
     ScInitializer.init(ssoSession: ssoSession);
-    await UserEventInitializer.init();
+    await UserEventInitializer.init(
+      userEventBox: await Hive.openBox('userEvent'),
+    );
   }
 
   static Future<void> clear() async {
     await Hive.close();
     await Hive.deleteBoxFromDisk('setting');
     await Hive.deleteBoxFromDisk('auth');
-    await Hive.deleteBoxFromDisk('library.search_history');
+    await Hive.deleteBoxFromDisk('librarySearchHistory');
     await Hive.deleteBoxFromDisk('course');
     await Hive.deleteBoxFromDisk('expense');
     await Hive.deleteBoxFromDisk('game');

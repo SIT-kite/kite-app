@@ -13,7 +13,7 @@ class SettingInitializer {
   static late HomeSettingDao home;
 
   static Future<void> init() async {
-    final settingBox = await Hive.openBox<dynamic>('setting');
+    final settingBox = await Hive.openBox('setting');
 
     auth = AuthSettingStorage(settingBox);
     home = HomeSettingStorage(settingBox);
