@@ -15,25 +15,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/domain/bulletin/init.dart';
-import 'package:kite/domain/contact/init.dart';
-import 'package:kite/domain/edu/init.dart';
-import 'package:kite/domain/expense/init.dart';
-import 'package:kite/domain/library/init.dart';
+import 'package:kite/domain/initializer_index.dart';
 
 import 'session_pool.dart';
 
-/// 网络服务请求池
-class ServicePool {
-  /// 初始化其他service
-  static void _initOther() {}
-
+class Initializer {
   static Future<void> init() async {
     await LibraryInitializer.init(SessionPool.librarySession);
     EduInitializer.init(SessionPool.eduSession);
     BulletinInitializer.init(SessionPool.ssoSession);
     await ExpenseInitializer.init(SessionPool.ssoSession);
     await ContactInitializer.init(SessionPool.kiteSession);
-    _initOther();
+    CampusCardInitializer.init(SessionPool.ssoSession);
+    ReportInitializer.init();
+    ScInitializer.init();
   }
 }
