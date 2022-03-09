@@ -19,7 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/domain/home/entity/home.dart';
 import 'package:kite/global/event_bus.dart';
-import 'package:kite/global/storage_pool.dart';
+import 'package:kite/setting/init.dart';
 
 String functionTypeToString(FunctionType type) {
   switch (type) {
@@ -68,7 +68,7 @@ class HomeSettingPage extends StatefulWidget {
 }
 
 class _HomeSettingPageState extends State<HomeSettingPage> {
-  List<FunctionType> homeItems = StoragePool.homeSetting.homeItems ?? defaultFunctionList.toList();
+  List<FunctionType> homeItems = SettingInitializer.home.homeItems ?? defaultFunctionList.toList();
 
   void _onReorder(int oldIndex, int newIndex) {
     setState(() {
@@ -83,7 +83,7 @@ class _HomeSettingPageState extends State<HomeSettingPage> {
   }
 
   void _onSave() {
-    StoragePool.homeSetting.homeItems = homeItems;
+    SettingInitializer.home.homeItems = homeItems;
   }
 
   @override

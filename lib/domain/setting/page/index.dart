@@ -24,8 +24,8 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/init_util.dart';
+import 'package:kite/global/service_pool.dart';
 import 'package:kite/global/session_pool.dart';
-import 'package:kite/global/storage_pool.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/setting/storage/index.dart';
 import 'package:kite/util/flash.dart';
@@ -103,7 +103,7 @@ class SettingPage extends StatelessWidget {
         positiveActionBuilder: (context, controller, _) {
           return TextButton(
               onPressed: () async {
-                await StoragePool.clear(); // 清除存储
+                await Initializer.clear(); // 清除存储
                 Phoenix.rebirth(context); // 重启应用
               },
               child: const Text('继续'));

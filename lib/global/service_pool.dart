@@ -15,12 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kite/domain/initializer_index.dart';
+import 'package:kite/util/logger.dart';
 
 import 'session_pool.dart';
 
 class Initializer {
   static Future<void> init() async {
+    Log.info("初始化StoragePool");
+    await Hive.initFlutter('kite/hive');
     await LibraryInitializer.init(SessionPool.librarySession);
     EduInitializer.init(SessionPool.eduSession);
     BulletinInitializer.init(SessionPool.ssoSession);
@@ -29,5 +33,16 @@ class Initializer {
     CampusCardInitializer.init(SessionPool.ssoSession);
     ReportInitializer.init();
     ScInitializer.init();
+  }
+
+  static Future<void> clear() async {
+    await Hive.close();
+    await Hive.deleteBoxFromDisk('setting');
+    await Hive.deleteBoxFromDisk('auth');
+    await Hive.deleteBoxFromDisk('library.search_history');
+    await Hive.deleteBoxFromDisk('course');
+    await Hive.deleteBoxFromDisk('expense');
+    await Hive.deleteBoxFromDisk('game');
+    await Hive.deleteBoxFromDisk('mail');
   }
 }

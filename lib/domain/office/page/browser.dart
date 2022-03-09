@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/component/unsupported_platform_launch.dart';
 import 'package:kite/global/session_pool.dart';
+import 'package:kite/util/cookie_util.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -40,7 +41,7 @@ class BrowserPage extends StatelessWidget {
               tip: '电脑端请连接校园网后在下方的浏览器中启动网页版',
             )
           : MyFutureBuilder<List<WebViewCookie>>(
-              future: SessionPool.loadCookieAsWebViewCookie(Uri.parse('http://xgfy.sit.edu.cn/unifri-flow/')),
+              future: SessionPool.cookieJar.loadAsWebViewCookie(Uri.parse('http://xgfy.sit.edu.cn/unifri-flow/')),
               builder: (context, data) {
                 print(data);
                 return WebView(

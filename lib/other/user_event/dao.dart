@@ -15,43 +15,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:hive/hive.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'entity.dart';
 
-part 'user_event.g.dart';
+abstract class UserEventStorageDao {
+  String? get uuid;
 
-@HiveType(typeId: 10)
-enum UserEventType {
-  @HiveField(0)
-  page,
-  @HiveField(1)
-  startup,
-  @HiveField(2)
-  exit,
-  @HiveField(3)
-  button,
+  set uuid(String? uuid);
+
+  /// 获取本地事件总数
+  int getEventCount();
+
+  /// 获取事件列表
+  List<UserEvent> getEvents();
+
+  /// 清除本地所有事件
+  void clear();
+
+  /// 追加事件记录
+  void append(UserEvent event);
+
+  /// 追加多条事件记录
+  void appendAll(List<UserEvent> eventList);
 }
-
-/// 用户行为类
-@HiveType(typeId: 11)
-@JsonSerializable()
-class UserEvent {
-  /// 时间
-  @HiveField(0)
-  final DateTime ts;
-
-  /// 类型
-  @HiveField(1)
-  @JsonKey(toJson: userEventTypeIndex)
-  final UserEventType type;
-
-  /// 参数
-  @HiveField(2)
-  final Map<String, dynamic> params;
-
-  const UserEvent(this.ts, this.type, this.params);
-
-  Map<String, dynamic> toJson() => _$UserEventToJson(this);
-}
-
-int userEventTypeIndex(UserEventType type) => type.index;

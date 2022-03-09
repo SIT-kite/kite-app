@@ -18,7 +18,6 @@
 import 'package:flutter/material.dart';
 import 'package:kite/domain/expense/entity/expense.dart';
 import 'package:kite/domain/expense/init.dart';
-import 'package:kite/global/storage_pool.dart';
 import 'package:kite/domain/expense/page/icon.dart';
 
 import 'chart.dart';

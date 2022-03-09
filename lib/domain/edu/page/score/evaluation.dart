@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/domain/edu/entity/index.dart';
 import 'package:kite/global/session_pool.dart';
+import 'package:kite/util/cookie_util.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 const _evaluationPageUrl = 'http://jwxt.sit.edu.cn/jwglxt/xspjgl/xspj_cxXspjDisplay.html?gnmkdm=N401605';
@@ -106,7 +107,7 @@ post("$path", $formString);''';
         },
       ),
       body: MyFutureBuilder<List<WebViewCookie>>(
-          future: SessionPool.loadCookieAsWebViewCookie(Uri.parse('http://jwxt.sit.edu.cn/jwglxt/')),
+          future: SessionPool.cookieJar.loadAsWebViewCookie(Uri.parse('http://jwxt.sit.edu.cn/jwglxt/')),
           builder: (context, data) {
             return WebView(
               initialCookies: data,

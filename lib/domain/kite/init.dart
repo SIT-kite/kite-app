@@ -9,14 +9,12 @@ import 'entity/index.dart';
 class KiteInitializer {
   static late ElectricityStorageDao electricityStorage;
   static late WeatherDao weatherService;
+
   static Future<void> init() async {
-    registerAdapter(UserEventAdapter());
-    registerAdapter(UserEventTypeAdapter());
     registerAdapter(BalanceAdapter());
     registerAdapter(WeatherAdapter());
     final electricityBox = await Hive.openBox('electricity');
     electricityStorage = ElectricityStorage(electricityBox);
-
     weatherService = WeatherService();
   }
 }

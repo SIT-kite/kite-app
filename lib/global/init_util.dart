@@ -20,14 +20,12 @@ import 'package:kite/util/logger.dart';
 import 'package:kite/util/page_logger.dart';
 
 import 'session_pool.dart';
-import 'storage_pool.dart';
 
 /// 应用启动前需要的初始化
 Future<void> initBeforeRun() async {
   // Future.wait可以使多个Future并发执行
   Log.info('应用初始化开始');
   // 网络层依赖由存储层提供的缓存，必须先初始化存储层，再初始化网络层
-  await StoragePool.init();
   await SessionPool.init();
   Log.info('应用初始化完成');
 

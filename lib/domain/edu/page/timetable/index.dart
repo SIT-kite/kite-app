@@ -20,9 +20,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:ical/serializer.dart';
 import 'package:kite/domain/edu/entity/index.dart';
-import 'package:kite/global/session_pool.dart';
-import 'package:kite/global/storage_pool.dart';
+import 'package:kite/domain/edu/init.dart';
 import 'package:kite/domain/edu/service/index.dart';
+import 'package:kite/global/session_pool.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/permission.dart';
@@ -52,20 +52,20 @@ class _TimetablePageState extends State<TimetablePage> {
   // static const int maxWeekCount = 20;
 
   // 模式：周课表 日课表
-  int displayMode = StoragePool.timetable.lastMode ?? displayModeDaily;
+  int displayMode = EduInitializer.timetableStorage.lastMode ?? displayModeDaily;
   bool isRefreshing = false;
   final currentKey = GlobalKey();
 
   final SchoolYear currSchoolYear = const SchoolYear(2021);
   final currSemester = Semester.secondTerm;
-  List<Course> timetable = StoragePool.timetable.getTimetable();
+  List<Course> timetable = EduInitializer.timetableStorage.getTimetable();
 
   Future<List<Course>> _fetchTimetable() async {
     final service = TimetableService(SessionPool.eduSession);
     final timetable = await service.getTimetable(currSchoolYear, currSemester);
 
-    await StoragePool.timetable.clear();
-    StoragePool.timetable.addAll(timetable);
+    await EduInitializer.timetableStorage.clear();
+    EduInitializer.timetableStorage.addAll(timetable);
     return timetable;
   }
 
@@ -158,7 +158,7 @@ class _TimetablePageState extends State<TimetablePage> {
         } else {
           setState(() => displayMode = displayModeDaily);
         }
-        StoragePool.timetable.lastMode = displayMode;
+        EduInitializer.timetableStorage.lastMode = displayMode;
       },
     );
   }

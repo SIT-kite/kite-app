@@ -18,9 +18,9 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:kite/domain/kite/entity/user_event.dart';
 import 'package:kite/global/session_pool.dart';
-import 'package:kite/global/storage_pool.dart';
+import 'package:kite/other/user_event/entity.dart';
+import 'package:kite/other/user_event/init.dart';
 import 'package:uuid/uuid.dart';
 
 import 'logger.dart';
@@ -29,16 +29,15 @@ const String reportEventUrl = "https://kite.sunnysab.cn/api/v2/report/event";
 const int maxCacheSize = 10;
 
 class PageLogger {
-  var cachedCount = StoragePool.userEvent.getEventCount();
+  var cachedCount = UserEventInitializer.userEventStorage.getEventCount();
   final Dio _dio = SessionPool.dio;
-  final storage = StoragePool.userEvent;
 
   /// 为每个用户生成唯一的 UUID 并存储, 用于匿名地区别不同用户.
   String _uuid() {
-    String? uuid = StoragePool.userEvent.uuid;
+    String? uuid = UserEventInitializer.userEventStorage.uuid;
     if (uuid == null) {
       uuid = const Uuid().v4();
-      StoragePool.userEvent.uuid = uuid;
+      UserEventInitializer.userEventStorage.uuid = uuid;
     }
     return uuid;
   }
@@ -61,7 +60,7 @@ class PageLogger {
       } catch (_) {
         Log.info('用户日志上报出错.');
         // 由于网络原因上报失败, 再把日志加回存储区
-        storage.appendAll(eventList);
+        UserEventInitializer.userEventStorage.appendAll(eventList);
         cachedCount += maxCacheSize;
         return;
       }
@@ -73,15 +72,15 @@ class PageLogger {
     if (cachedCount <= maxCacheSize) {
       return;
     }
-    final tmp = storage.getEvents();
-    storage.clear();
+    final tmp = UserEventInitializer.userEventStorage.getEvents();
+    UserEventInitializer.userEventStorage.clear();
     cachedCount = 0;
     _postReport(tmp);
   }
 
   void log(UserEventType type, [Map<String, String> params = const {}]) {
     final event = UserEvent(DateTime.now(), type, params);
-    storage.append(event);
+    UserEventInitializer.userEventStorage.append(event);
 
     _uploadReport();
   }

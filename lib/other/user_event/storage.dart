@@ -15,25 +15,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/domain/kite/entity/user_event.dart';
+import 'package:hive/hive.dart';
 
-abstract class UserEventStorageDao {
-  String? get uuid;
+import 'dao.dart';
+import 'entity.dart';
 
-  set uuid(String? uuid);
+class UserEventStorage implements UserEventStorageDao {
+  final Box<dynamic> box;
 
-  /// 获取本地事件总数
-  int getEventCount();
+  const UserEventStorage(this.box);
 
-  /// 获取事件列表
-  List<UserEvent> getEvents();
+  @override
+  String? get uuid => box.get('uuid');
 
-  /// 清除本地所有事件
-  void clear();
+  @override
+  set uuid(String? uuid) => box.put('uuid', uuid);
 
-  /// 追加事件记录
-  void append(UserEvent event);
+  @override
+  void append(UserEvent event) => box.add(event);
 
-  /// 追加多条事件记录
-  void appendAll(List<UserEvent> eventList);
+  @override
+  void clear() {
+    final u = uuid;
+    box.clear();
+    uuid = u;
+  }
+
+  @override
+  int getEventCount() => box.length;
+
+  @override
+  List<UserEvent> getEvents() =>
+      box.values.where((element) => element.runtimeType == UserEvent).map((e) => e as UserEvent).toList();
+
+  @override
+  void appendAll(List<UserEvent> eventList) => box.addAll(eventList);
 }

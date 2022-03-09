@@ -17,7 +17,6 @@
  */
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:kite/entity/auth_item.dart';
 import 'package:kite/domain/contact/entity/contact.dart';
 import 'package:kite/domain/library/entity/search_history.dart';
 
@@ -58,7 +57,6 @@ class DebugStoragePage extends StatelessWidget {
     return Column(
       children: [
         _buildBoxSection<dynamic>(context, 'setting'),
-        _buildBoxSection<AuthItem>(context, 'auth'),
         _buildBoxSection<LibrarySearchHistoryItem>(context, 'library.search_history'),
         _buildBoxSection<ContactData>(context, 'contactSetting'),
         _buildBoxSection<dynamic>(context, 'course'),

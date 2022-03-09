@@ -16,37 +16,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:hive/hive.dart';
-import 'package:kite/domain/kite/dao/user_event.dart';
-import 'package:kite/domain/kite/entity/user_event.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class UserEventStorage implements UserEventStorageDao {
-  final Box<dynamic> box;
+part 'entity.g.dart';
 
-  const UserEventStorage(this.box);
-
-  @override
-  String? get uuid => box.get('uuid');
-
-  @override
-  set uuid(String? uuid) => box.put('uuid', uuid);
-
-  @override
-  void append(UserEvent event) => box.add(event);
-
-  @override
-  void clear() {
-    final u = uuid;
-    box.clear();
-    uuid = u;
-  }
-
-  @override
-  int getEventCount() => box.length;
-
-  @override
-  List<UserEvent> getEvents() =>
-      box.values.where((element) => element.runtimeType == UserEvent).map((e) => e as UserEvent).toList();
-
-  @override
-  void appendAll(List<UserEvent> eventList) => box.addAll(eventList);
+@HiveType(typeId: 10)
+enum UserEventType {
+  @HiveField(0)
+  page,
+  @HiveField(1)
+  startup,
+  @HiveField(2)
+  exit,
+  @HiveField(3)
+  button,
 }
+
+/// 用户行为类
+@HiveType(typeId: 11)
+@JsonSerializable()
+class UserEvent {
+  /// 时间
+  @HiveField(0)
+  final DateTime ts;
+
+  /// 类型
+  @HiveField(1)
+  @JsonKey(toJson: userEventTypeIndex)
+  final UserEventType type;
+
+  /// 参数
+  @HiveField(2)
+  final Map<String, dynamic> params;
+
+  const UserEvent(this.ts, this.type, this.params);
+
+  Map<String, dynamic> toJson() => _$UserEventToJson(this);
+}
+
+int userEventTypeIndex(UserEventType type) => type.index;

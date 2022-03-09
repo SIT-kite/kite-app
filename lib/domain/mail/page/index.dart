@@ -19,8 +19,8 @@ import 'package:enough_mail/imap/response.dart';
 import 'package:enough_mail/mime_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kite/domain/mail/init.dart';
 import 'package:kite/domain/mail/service/mail.dart';
-import 'package:kite/global/storage_pool.dart';
 import 'package:kite/setting/init.dart';
 
 import 'item.dart';
@@ -53,7 +53,7 @@ class _MailPageState extends State<MailPage> {
 
   Future<FetchImapResult> _loadMailList() async {
     final String studentId = SettingInitializer.auth.currentUsername ?? '';
-    final String password = StoragePool.mail.password ?? (SettingInitializer.auth.ssoPassword ?? '');
+    final String password = MailInitializer.mail.password ?? (SettingInitializer.auth.ssoPassword ?? '');
 
     final email = studentId + '@mail.sit.edu.cn';
     final service = MailService(email, password);
@@ -93,7 +93,7 @@ class _MailPageState extends State<MailPage> {
             ),
             ElevatedButton(
                 onPressed: () {
-                  StoragePool.mail.password = _controller.text;
+                  MailInitializer.mail.password = _controller.text;
                   setState(() => _index = 0);
                 },
                 child: const Text('继续'))

@@ -59,19 +59,6 @@ class SessionPool {
 
   static bool hasInit() => _hasInit;
 
-  static Future<List<WebViewCookie>> loadCookieAsWebViewCookie(Uri uri) async {
-    final cookieJar = SessionPool.cookieJar;
-    final cookies = await cookieJar.loadForRequest(uri);
-    return cookies.map((cookie) {
-      Log.info('获取cookie $cookie');
-      return WebViewCookie(
-        name: cookie.name,
-        value: cookie.value,
-        domain: cookie.domain ?? uri.host,
-      );
-    }).toList();
-  }
-
   /// 初始化SessionPool
   static Future<void> init() async {
     Log.info("初始化SessionPool");
