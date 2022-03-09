@@ -18,7 +18,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:kite/entity/office/index.dart';
+import 'package:kite/domain/office/entity/index.dart';
 
 import '../../../session/office_session.dart';
 
