@@ -21,7 +21,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/domain/index.dart';
+import 'package:kite/domain/page_index.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/util/logger.dart';
