@@ -16,22 +16,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:dio/dio.dart';
-import 'package:kite/global/session_pool.dart';
+import 'package:kite/abstract/abstract_session.dart';
 
 /// 检查网络连接情况
-Future<bool> checkConnectivity() async {
-  try {
-    await SessionPool.ssoSession.get(
-      'http://jwxt.sit.edu.cn/',
-      options: Options(
-        followRedirects: false,
-        sendTimeout: 3,
-        receiveTimeout: 3,
-        validateStatus: (code) => true,
-      ),
-    );
-    return true;
-  } catch (e) {
-    return false;
+extension CheckSessionConnectivity on ASession {
+  Future<bool> checkConnectivity({
+    String url = 'http://jwxt.sit.edu.cn/',
+  }) async {
+    try {
+      await get(
+        url,
+        options: Options(
+          followRedirects: false,
+          sendTimeout: 3,
+          receiveTimeout: 3,
+          validateStatus: (code) => true,
+        ),
+      );
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }

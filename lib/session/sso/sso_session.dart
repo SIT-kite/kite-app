@@ -21,11 +21,9 @@ import 'dart:typed_data';
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/domain/kite/service/ocr.dart';
 import 'package:kite/exception/session.dart';
-import 'package:kite/global/session_pool.dart';
 import 'package:kite/util/logger.dart';
 
 import '../../util/dio_utils.dart';
@@ -39,8 +37,8 @@ class SsoSession extends ASession with Downloader {
   static const String _loginSuccessUrl = 'https://authserver.sit.edu.cn/authserver/index.do';
 
   // http客户端对象和缓存
-  late Dio _dio;
-  late CookieJar _jar;
+  final Dio dio;
+  CookieJar cookieJar;
 
   /// 登录状态
   bool isOnline = false;
@@ -50,18 +48,9 @@ class SsoSession extends ASession with Downloader {
   String? _password;
 
   SsoSession({
-    Dio? dio,
-    CookieJar? jar,
-  }) {
-    Log.info('初始化 SsoSession');
-    _dio = dio ?? SessionPool.dio;
-
-    // 使用全局 cookieJar
-    _jar = jar ?? SessionPool.cookieJar;
-    if (jar != null) {
-      _dio.interceptors.add(CookieManager(jar));
-    }
-  }
+    required this.dio,
+    required this.cookieJar,
+  });
 
   /// 判断该请求是否为登录页
   bool isLoginPage(Response response) {
@@ -91,7 +80,7 @@ class SsoSession extends ASession with Downloader {
   }) async {
     /// 正常地请求
     Future<Response> requestNormally() async {
-      final response = await _dio.request(
+      final response = await dio.request(
         url,
         queryParameters: queryParameters,
         options: DioUtils.NON_REDIRECT_OPTION_WITH_FORM_TYPE.copyWith(
@@ -102,7 +91,7 @@ class SsoSession extends ASession with Downloader {
         data: data,
       );
       // 处理重定向
-      return await DioUtils.processRedirect(_dio, response);
+      return await DioUtils.processRedirect(dio, response);
     }
 
     // 第一次先正常请求
@@ -132,7 +121,7 @@ class SsoSession extends ASession with Downloader {
     Log.info('尝试登录：$username');
     // 在 OA 登录时, 服务端会记录同一 cookie 用户登录次数和输入错误次数,
     // 所以需要在登录前清除所有 cookie, 避免用户重试时出错.
-    _jar.deleteAll();
+    cookieJar.deleteAll();
     final response = await _postLoginProcess(username, password);
     final page = BeautifulSoup(response.data);
 
@@ -155,10 +144,6 @@ class SsoSession extends ASession with Downloader {
     return response;
   }
 
-  Dio get dio => _dio;
-
-  CookieJar get cookie => _jar;
-
   /// 登录流程
   Future<Response> _postLoginProcess(String username, String password) async {
     /// 提取认证页面中的加密盐
@@ -179,20 +164,20 @@ class SsoSession extends ASession with Downloader {
 
     /// 获取认证页面内容
     Future<String> _getAuthServerHtml() async {
-      var response = await _dio.get(_loginUrl);
+      final response = await dio.get(_loginUrl);
       return response.data;
     }
 
     /// 判断是否需要验证码
     Future<bool> _needCaptcha(String username) async {
-      var response =
-          await _dio.get(_needCaptchaUrl, queryParameters: {'username': username, 'pwdEncrypt2': 'pwdEncryptSalt'});
+      final response =
+          await dio.get(_needCaptchaUrl, queryParameters: {'username': username, 'pwdEncrypt2': 'pwdEncryptSalt'});
       return response.data == 'true';
     }
 
     /// 获取验证码
     Future<String> _getCaptcha() async {
-      var response = await _dio.get(
+      final response = await dio.get(
         _captchaUrl,
         options: Options(responseType: ResponseType.bytes),
       );
@@ -226,7 +211,7 @@ class SsoSession extends ASession with Downloader {
 
   /// 登录统一认证平台
   Future<Response> _postLoginRequest(String username, String hashedPassword, String captcha, String casTicket) async {
-    var requestBody = {
+    final requestBody = {
       'username': username,
       'password': hashedPassword,
       'captchaResponse': captcha,
@@ -237,9 +222,9 @@ class SsoSession extends ASession with Downloader {
       'rmShown': '1',
     };
     // 登录系统
-    var res = await _dio.post(_loginUrl, data: requestBody, options: DioUtils.NON_REDIRECT_OPTION_WITH_FORM_TYPE);
+    final res = await dio.post(_loginUrl, data: requestBody, options: DioUtils.NON_REDIRECT_OPTION_WITH_FORM_TYPE);
     // 处理重定向
-    return await DioUtils.processRedirect(_dio, res);
+    return await DioUtils.processRedirect(dio, res);
   }
 
   @override

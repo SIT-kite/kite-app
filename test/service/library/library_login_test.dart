@@ -18,6 +18,7 @@
  *
  */
 
+import 'package:kite/domain/library/init.dart';
 import 'package:kite/domain/library/service/borrow.dart';
 
 import '../mock_util.dart';
@@ -25,7 +26,7 @@ import '../mock_util.dart';
 void main() async {
   await init();
   await loginLibrary();
-  final session = SessionPool.librarySession;
+  final session = LibraryInitializer.session;
   final service = LibraryBorrowService(session);
   test('get history borrow book list', () async {
     final result = await service.getHistoryBorrowBookList(1, 10);

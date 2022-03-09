@@ -19,7 +19,7 @@ import 'package:kite/setting/init.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/page_logger.dart';
 
-import 'session_pool.dart';
+import 'dio_initializer.dart';
 
 /// 应用启动前需要的初始化
 Future<void> initBeforeRun() async {

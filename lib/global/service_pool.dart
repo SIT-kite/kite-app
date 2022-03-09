@@ -19,13 +19,11 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kite/domain/initializer_index.dart';
 import 'package:kite/util/logger.dart';
 
-import 'session_pool.dart';
-
 class Initializer {
   static Future<void> init() async {
     Log.info("初始化StoragePool");
     await Hive.initFlutter('kite/hive');
-    await LibraryInitializer.init(SessionPool.librarySession);
+    await LibraryInitializer.init();
     EduInitializer.init(SessionPool.eduSession);
     BulletinInitializer.init(SessionPool.ssoSession);
     await ExpenseInitializer.init(SessionPool.ssoSession);

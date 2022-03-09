@@ -1,8 +1,9 @@
-import 'package:kite/global/session_pool.dart';
+import 'package:kite/domain/library/init.dart';
+import 'package:kite/global/dio_initializer.dart';
 
 // 导出一些测试环境下常用的东西
 export 'package:flutter_test/flutter_test.dart';
-export 'package:kite/global/session_pool.dart';
+export 'package:kite/global/dio_initializer.dart';
 export 'package:kite/util/logger.dart';
 
 // 这里填写用于测试的用户名密码
@@ -31,5 +32,5 @@ Future<void> login() async {
 
 /// 图书馆登陆
 Future<void> loginLibrary() async {
-  await SessionPool.librarySession.login(username, libraryPassword);
+  await LibraryInitializer.session.login(username, libraryPassword);
 }

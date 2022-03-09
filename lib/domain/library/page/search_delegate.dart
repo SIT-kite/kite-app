@@ -17,13 +17,11 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/domain/library/init.dart';
-import 'package:kite/global/session_pool.dart';
 import 'package:kite/util/logger.dart';
 
 import '../entity/book_search.dart';
 import '../entity/hot_search.dart';
 import '../entity/search_history.dart';
-import '../service/index.dart';
 import 'component/search_result.dart';
 import 'component/suggestion_item.dart';
 
@@ -137,7 +135,7 @@ class SearchBarDelegate extends SearchDelegate<String> {
             Text('大家都在搜', style: Theme.of(context).textTheme.bodyText1),
             FutureBuilder<HotSearch>(
               // future: HotSearchMock().getHotSearch(),
-              future: HotSearchService(SessionPool.librarySession).getHotSearch(),
+              future: LibraryInitializer.hotSearchService.getHotSearch(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 Log.info('获取热搜状态: ${snapshot.connectionState}');
 

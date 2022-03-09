@@ -18,8 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/domain/bulletin/entity/bulletin.dart';
-import 'package:kite/global/session_pool.dart';
-import 'package:kite/domain/bulletin/service/bulletin.dart';
+import 'package:kite/domain/bulletin/init.dart';
 
 import 'detail.dart';
 
@@ -45,9 +44,27 @@ class BulletinPage extends StatelessWidget {
     );
   }
 
+  Future<List<BulletinRecord>> _queryBulletinListInAllCategory(int page) async {
+    // Make sure login.
+    await BulletinInitializer.session.get('https://myportal.sit.edu.cn/');
+
+    final service = BulletinInitializer.bulletin;
+    final catalogues = service.getAllCatalogues();
+    final futureResult = await Future.wait(catalogues.map((e) => service.queryBulletinList(page, e.id)));
+
+    final List<BulletinRecord> records = futureResult.fold(<BulletinRecord>[],
+        (List<BulletinRecord> previousValue, BulletinListPage page) => previousValue + page.bulletinItems).toList();
+    return records;
+  }
+
+  static void _sortBulletinRecord(List<BulletinRecord> recordList) {
+    recordList.sort((a, b) {
+      return b.dateTime.difference(a.dateTime).inSeconds;
+    });
+  }
+
   Widget _buildBulletinList() {
-    final service = BulletinService(SessionPool.ssoSession);
-    final future = service.queryBulletinListInAllCategory(1);
+    final future = _queryBulletinListInAllCategory(1);
 
     return FutureBuilder<List<BulletinRecord>>(
         future: future,
@@ -55,7 +72,7 @@ class BulletinPage extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               final records = snapshot.data!;
-              BulletinService.sortBulletinRecord(records);
+              _sortBulletinRecord(records);
 
               final items = records.map((e) => _buildBulletinItem(context, e)).toList();
               return SingleChildScrollView(

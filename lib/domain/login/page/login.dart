@@ -20,7 +20,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/exception/session.dart';
-import 'package:kite/global/session_pool.dart';
+import 'package:kite/global/dio_initializer.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/url_launcher.dart';

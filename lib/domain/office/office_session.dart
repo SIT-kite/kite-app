@@ -21,7 +21,7 @@ import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
-import '../../global/session_pool.dart';
+import '../../global/dio_initializer.dart';
 
 /// 应网办登录地址, POST 请求
 const String _officeLoginUrl = 'https://xgfy.sit.edu.cn/unifri-flow/login';

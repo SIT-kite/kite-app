@@ -19,8 +19,8 @@ import 'package:flutter/material.dart';
 import 'package:kite/domain/report/entity/report.dart';
 import 'package:kite/domain/report/report_session.dart';
 import 'package:kite/domain/report/service/report.dart';
+import 'package:kite/global/dio_initializer.dart';
 import 'package:kite/global/event_bus.dart';
-import 'package:kite/global/session_pool.dart';
 import 'package:kite/setting/init.dart';
 
 import 'index.dart';

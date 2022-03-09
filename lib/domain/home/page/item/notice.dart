@@ -18,8 +18,8 @@
 import 'package:flutter/material.dart';
 import 'package:kite/domain/kite/entity/notice.dart';
 import 'package:kite/domain/kite/service/index.dart';
+import 'package:kite/global/dio_initializer.dart';
 import 'package:kite/global/event_bus.dart';
-import 'package:kite/global/session_pool.dart';
 
 import 'index.dart';
 

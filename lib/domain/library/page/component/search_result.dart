@@ -16,15 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/domain/library/service/index.dart';
-import 'package:kite/global/session_pool.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
 
-import '../../dao/book_search.dart';
-import '../../dao/holding_preview.dart';
-import '../../dao/image_search.dart';
 import '../../entity/book_search.dart';
+import '../../init.dart';
 import '../../util/search.dart';
 import '../book_info.dart';
 import 'search_result_item.dart';
@@ -36,18 +32,9 @@ class BookSearchResultWidget extends StatefulWidget {
   /// 检索方式
   final SearchWay searchWay;
 
-  /// 图书搜索服务
-  final BookSearchDao bookSearchDao = BookSearchService(SessionPool.librarySession);
-
-  /// 图书图片搜索服务
-  final BookImageSearchDao bookImageSearchDao = BookImageSearchService(SessionPool.librarySession);
-
-  /// 馆藏检索服务
-  final HoldingPreviewDao holdingPreviewDao = HoldingPreviewService(SessionPool.librarySession);
-
   final KeyClickCallback? requestQueryKeyCallback;
 
-  BookSearchResultWidget(
+  const BookSearchResultWidget(
     this.keyword, {
     Key? key,
     this.requestQueryKeyCallback,
@@ -85,7 +72,7 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
 
   /// 获得搜索结果
   Future<List<BookImageHolding>> _get(int rows, int page) async {
-    final searchResult = await widget.bookSearchDao.search(
+    final searchResult = await LibraryInitializer.bookSearch.search(
       keyword: widget.keyword,
       rows: rows,
       page: page,
@@ -103,8 +90,8 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
 
     Log.info(searchResult);
     return await BookImageHolding.simpleQuery(
-      widget.bookImageSearchDao,
-      widget.holdingPreviewDao,
+      LibraryInitializer.bookImageSearch,
+      LibraryInitializer.holdingPreview,
       searchResult.books,
     );
   }

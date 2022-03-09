@@ -21,78 +21,42 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:fk_user_agent/fk_user_agent.dart';
-import 'package:kite/domain/edu/service/index.dart';
-import 'package:kite/domain/kite/kite_session.dart';
-import 'package:kite/domain/library/library_session.dart';
-import 'package:kite/domain/office/service/index.dart';
-import 'package:kite/domain/report/report_session.dart';
-import 'package:kite/domain/sc/sc_session.dart';
-import 'package:kite/session/sso/sso_session.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/rule.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:webview_flutter/webview_flutter.dart' hide CookieManager;
 
-class SessionPool {
-  static String? httpProxy;
-  static bool allowBadCertificate = true;
+const String _defaultUaString = 'kite-app';
 
-  static const String defaultUaString = 'kite-app';
-  static String uaString = defaultUaString;
+class DioConfig {
+  String? uaString;
+  String? httpProxy;
+  bool allowBadCertificate = true;
+  CookieJar cookieJar = DefaultCookieJar();
+}
 
-  static late final CookieJar _cookieJar;
-
-  static CookieJar get cookieJar => _cookieJar;
-
-  static late Dio dio;
-  static OfficeSession? officeSession;
-  static ReportSession? reportSession;
-  static late LibrarySession librarySession;
-  static late SsoSession ssoSession;
-  static late EduSession eduSession;
-  static late ScSession scSession;
-  static late KiteSession kiteSession;
-
-  // 是否初始化过
-  static bool _hasInit = false;
-
-  static bool hasInit() => _hasInit;
-
+/// 用于初始化Dio,全局只有一份dio对象
+class DioInitializer {
   /// 初始化SessionPool
-  static Future<void> init() async {
-    Log.info("初始化SessionPool");
+  static Future<Dio> init({required DioConfig config}) async {
+    Log.info("初始化Dio");
+    // dio初始化完成后，才能初始化 UA
+    final dio = _initDioInstance(config: config);
+    await _initUserAgentString(
+      dio: dio,
+      config: config,
+    );
 
-    if (!_hasInit) {
-      final String homeDirectory = (await getApplicationDocumentsDirectory()).path;
-      final FileStorage cookieStorage = FileStorage(homeDirectory + '/kite/cookies/');
-      // 初始化持久化的 cookieJar
-      _cookieJar = PersistCookieJar(storage: cookieStorage);
-    }
-    // di o初始化完成后，才能初始化 UA
-    dio = _initDioInstance();
-    await _initUserAgentString();
-
-    // 下面初始化一大堆session
-    ssoSession = SsoSession(dio: dio, jar: _cookieJar);
-    scSession = ScSession(ssoSession);
-    eduSession = EduSession(ssoSession);
-    librarySession = LibrarySession(dio);
-    kiteSession = KiteSession(dio, SettingInitializer.jwt);
-    _hasInit = true;
+    return dio;
   }
 
-  static Dio _initDioInstance() {
+  static Dio _initDioInstance({required DioConfig config}) {
     // 设置 HTTP 代理
-    HttpOverrides.global = KiteHttpOverrides();
+    HttpOverrides.global = KiteHttpOverrides(config: config);
 
     Dio dio = Dio();
     // 添加拦截器
-    dio.interceptors.add(CookieManager(_cookieJar));
-    // 设置默认 User-Agent 字符串.
-    dio.options.headers = {
-      'User-Agent': uaString,
-    };
+    dio.interceptors.add(CookieManager(config.cookieJar));
+
     // 设置默认超时时间
     dio.options.connectTimeout = 20 * 1000;
     dio.options.sendTimeout = 60 * 1000;
@@ -100,22 +64,28 @@ class SessionPool {
     return dio;
   }
 
-  static Future<void> _initUserAgentString() async {
+  static Future<void> _initUserAgentString({
+    required Dio dio,
+    required DioConfig config,
+  }) async {
     try {
       // 如果非IOS/Android，则该函数将抛异常
       await FkUserAgent.init();
-      uaString = FkUserAgent.webViewUserAgent ?? defaultUaString;
+      config.uaString = FkUserAgent.webViewUserAgent ?? _defaultUaString;
       // 更新 dio 设置的 user-agent 字符串
-      dio.options.headers['User-Agent'] = uaString;
+      dio.options.headers['User-Agent'] = config.uaString;
     } catch (e) {
       // Desktop端将进入该异常
       // TODO: 自定义UA
-      dio.options.headers['User-Agent'] = uaString;
+      dio.options.headers['User-Agent'] = config.uaString;
     }
   }
 }
 
 class KiteHttpOverrides extends HttpOverrides {
+  final DioConfig config;
+  KiteHttpOverrides({required this.config});
+
   String getProxyPolicyByUrl(Uri url, String httpProxy) {
     // 使用代理访问的网站规则
     final rule = const ChainRule(ConstRule())
@@ -141,24 +111,24 @@ class KiteHttpOverrides extends HttpOverrides {
     final client = super.createHttpClient(context);
 
     // 设置证书检查
-    if (SessionPool.allowBadCertificate || SettingInitializer.network.useProxy || SessionPool.httpProxy != null) {
+    if (config.allowBadCertificate || SettingInitializer.network.useProxy || config.httpProxy != null) {
       client.badCertificateCallback = (cert, host, port) => true;
     }
 
     // 设置代理. 优先使用代码中的设置, 便于调试.
-    if (SessionPool.httpProxy != null) {
+    if (config.httpProxy != null) {
       // 判断测试环境代理合法性
       // TODO: 检查代理格式
-      if (SessionPool.httpProxy!.isNotEmpty) {
+      if (config.httpProxy!.isNotEmpty) {
         // 可以
-        Log.info('测试环境设置代理: ${SessionPool.httpProxy}');
-        client.findProxy = (url) => getProxyPolicyByUrl(url, SessionPool.httpProxy!);
+        Log.info('测试环境设置代理: ${config.httpProxy}');
+        client.findProxy = (url) => getProxyPolicyByUrl(url, config.httpProxy!);
       } else {
         // 不行
         Log.info('测试环境代理服务器为空或不合法，将不使用代理服务器');
       }
     } else if (SettingInitializer.network.useProxy && SettingInitializer.network.proxy.isNotEmpty) {
-      Log.info('线上设置代理: ${SessionPool.httpProxy}');
+      Log.info('线上设置代理: ${config.httpProxy}');
       client.findProxy = (url) => getProxyPolicyByUrl(url, SettingInitializer.network.proxy);
     }
     return client;

@@ -17,8 +17,8 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/domain/office/service/index.dart';
+import 'package:kite/global/dio_initializer.dart';
 import 'package:kite/global/event_bus.dart';
-import 'package:kite/global/session_pool.dart';
 import 'package:kite/setting/init.dart';
 
 import 'index.dart';

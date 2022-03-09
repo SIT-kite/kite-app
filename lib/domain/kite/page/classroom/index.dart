@@ -19,8 +19,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/domain/kite/entity/classroom.dart';
-import 'package:kite/global/session_pool.dart';
 import 'package:kite/domain/kite/service/classroom.dart';
+import 'package:kite/global/dio_initializer.dart';
 
 import 'item.dart';
 

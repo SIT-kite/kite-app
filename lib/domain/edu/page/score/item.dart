@@ -16,11 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/domain/edu/service/index.dart';
 import 'package:kite/domain/edu/entity/index.dart';
-import 'package:kite/global/event_bus.dart';
-import 'package:kite/global/session_pool.dart';
+import 'package:kite/domain/edu/service/index.dart';
 import 'package:kite/domain/edu/util/icon.dart';
+import 'package:kite/global/dio_initializer.dart';
+import 'package:kite/global/event_bus.dart';
 
 import 'evaluation.dart';
 

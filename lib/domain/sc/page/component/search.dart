@@ -18,8 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:kite/domain/sc/entity/list.dart';
-import 'package:kite/global/session_pool.dart';
 import 'package:kite/domain/sc/service/list.dart';
+import 'package:kite/global/dio_initializer.dart';
 
 import 'card.dart';
 

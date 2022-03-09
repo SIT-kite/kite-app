@@ -21,7 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/domain/office/entity/index.dart';
 import 'package:kite/domain/office/service/index.dart';
-import 'package:kite/global/session_pool.dart';
+import 'package:kite/global/dio_initializer.dart';
 import 'package:kite/setting/init.dart';
 
 import 'detail.dart';

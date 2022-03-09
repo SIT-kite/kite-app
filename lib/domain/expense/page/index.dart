@@ -20,7 +20,7 @@ import 'package:kite/domain/expense/entity/expense.dart';
 import 'package:kite/domain/expense/init.dart';
 import 'package:kite/domain/expense/page/icon.dart';
 import 'package:kite/domain/expense/service/expense.dart';
-import 'package:kite/global/session_pool.dart';
+import 'package:kite/global/dio_initializer.dart';
 import 'package:kite/util/flash.dart';
 
 import 'bill.dart';

@@ -21,7 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/domain/connectivity/service/network.dart';
-import 'package:kite/global/session_pool.dart';
+import 'package:kite/global/dio_initializer.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/util/network.dart';
 import 'package:kite/util/url_launcher.dart';

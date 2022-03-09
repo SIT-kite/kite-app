@@ -18,10 +18,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:kite/domain/initializer_index.dart';
 import 'package:kite/domain/library/entity/hot_search.dart';
-import 'package:kite/domain/library/service/hot_search.dart';
 import 'package:kite/global/event_bus.dart';
-import 'package:kite/global/session_pool.dart';
 import 'package:kite/setting/init.dart';
 
 import 'index.dart';
@@ -56,11 +55,10 @@ class _LibraryItemState extends State<LibraryItem> {
   }
 
   Future<String> _buildContent() async {
-    final librarySession = SessionPool.librarySession;
     late HotSearch hotSearch;
 
     try {
-      hotSearch = await HotSearchService(librarySession).getHotSearch();
+      hotSearch = await LibraryInitializer.hotSearchService.getHotSearch();
     } catch (e) {
       return e.runtimeType.toString();
     }

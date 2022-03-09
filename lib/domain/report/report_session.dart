@@ -21,7 +21,7 @@ import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
-import '../../global/session_pool.dart';
+import '../../global/dio_initializer.dart';
 
 class ReportSession extends ASession {
   late final Dio _dio;

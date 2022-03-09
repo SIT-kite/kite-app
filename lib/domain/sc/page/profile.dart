@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/domain/sc/service/score.dart';
-import 'package:kite/global/session_pool.dart';
+import 'package:kite/global/dio_initializer.dart';
 
 import '../entity/score.dart';
 import 'component/summary.dart';

@@ -18,7 +18,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:kite/global/session_pool.dart';
+import 'package:kite/global/dio_initializer.dart';
 import 'package:kite/other/user_event/entity.dart';
 import 'package:kite/other/user_event/init.dart';
 import 'package:uuid/uuid.dart';
