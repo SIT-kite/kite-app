@@ -1,4 +1,6 @@
 export 'bulletin/page/index.dart';
+export 'campus_card/page/campus_card.dart';
+export 'connectivity/page/connectivity.dart';
 export 'contact/page/index.dart';
 export 'edu/page/exam.dart';
 export 'edu/page/score/index.dart';
@@ -16,6 +18,7 @@ export 'kite/page/market.dart';
 export 'kite/page/night/index.dart';
 export 'kite/page/notice.dart';
 export 'library/page/index.dart';
+export 'mail/page/index.dart';
 export 'office/page/index.dart';
 export 'web_page/about.dart';
 export 'web_page/feedback.dart';

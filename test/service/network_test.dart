@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kite/service/network.dart';
+import 'package:kite/domain/connectivity/service/network.dart';
 import 'package:logger/logger.dart';
 
 void main() {

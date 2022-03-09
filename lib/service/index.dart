@@ -24,5 +24,5 @@ export '../domain/expense/service/expense.dart';
 export '../domain/kite/service/electricity.dart';
 export '../domain/kite/service/ocr.dart';
 export '../domain/kite/service/weather.dart';
-export 'network.dart';
+export '../domain/connectivity/service/network.dart';
 export '../domain/report/service/index.dart';
