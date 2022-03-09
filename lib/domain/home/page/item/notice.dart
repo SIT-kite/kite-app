@@ -17,7 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/domain/kite/entity/notice.dart';
-import 'package:kite/global/event_bus.dart';
+import 'package:kite/global/global.dart';
 
 import '../../init.dart';
 import 'index.dart';
@@ -35,13 +35,13 @@ class _NoticeItemState extends State<NoticeItem> {
 
   @override
   void initState() {
-    eventBus.on(EventNameConstants.onHomeRefresh, _onHomeRefresh);
+    Global.eventBus.on(EventNameConstants.onHomeRefresh, _onHomeRefresh);
     super.initState();
   }
 
   @override
   void dispose() {
-    eventBus.off(EventNameConstants.onHomeRefresh, _onHomeRefresh);
+    Global.eventBus.off(EventNameConstants.onHomeRefresh, _onHomeRefresh);
     super.dispose();
   }
 

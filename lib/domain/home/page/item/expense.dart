@@ -18,7 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/domain/expense/entity/expense.dart';
 import 'package:kite/domain/expense/init.dart';
-import 'package:kite/global/event_bus.dart';
+import 'package:kite/global/global.dart';
 
 import 'index.dart';
 
@@ -35,7 +35,7 @@ class _ExpenseItemState extends State<ExpenseItem> {
 
   @override
   void initState() {
-    eventBus.on(EventNameConstants.onHomeRefresh, (arg) {});
+    Global.eventBus.on(EventNameConstants.onHomeRefresh, (arg) {});
 
     return super.initState();
   }

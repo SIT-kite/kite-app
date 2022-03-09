@@ -18,7 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/domain/office/init.dart';
 import 'package:kite/exception/session.dart';
-import 'package:kite/global/event_bus.dart';
+import 'package:kite/global/global.dart';
 import 'package:kite/setting/init.dart';
 
 import 'index.dart';
@@ -36,13 +36,13 @@ class _OfficeItemState extends State<OfficeItem> {
 
   @override
   void initState() {
-    eventBus.on(EventNameConstants.onHomeRefresh, _onHomeRefresh);
+    Global.eventBus.on(EventNameConstants.onHomeRefresh, _onHomeRefresh);
     return super.initState();
   }
 
   @override
   void dispose() {
-    eventBus.off(EventNameConstants.onHomeRefresh, _onHomeRefresh);
+    Global.eventBus.off(EventNameConstants.onHomeRefresh, _onHomeRefresh);
     super.dispose();
   }
 

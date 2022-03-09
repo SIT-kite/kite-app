@@ -17,6 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/global/event_bus.dart';
+import 'package:kite/global/global.dart';
 
 import 'index.dart';
 
@@ -33,13 +34,13 @@ class _MailItemState extends State<MailItem> {
 
   @override
   void initState() {
-    eventBus.on(EventNameConstants.onHomeRefresh, _onHomeRefresh);
+    Global.eventBus.on(EventNameConstants.onHomeRefresh, _onHomeRefresh);
     super.initState();
   }
 
   @override
   void dispose() {
-    eventBus.off(EventNameConstants.onHomeRefresh, _onHomeRefresh);
+    Global.eventBus.off(EventNameConstants.onHomeRefresh, _onHomeRefresh);
     super.dispose();
   }
 

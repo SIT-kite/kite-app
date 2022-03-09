@@ -17,7 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/domain/kite/entity/electricity.dart';
-import 'package:kite/global/event_bus.dart';
+import 'package:kite/global/global.dart';
 import 'package:kite/setting/init.dart';
 
 import 'index.dart';
@@ -35,7 +35,7 @@ class _ElectricityItemState extends State<ElectricityItem> {
 
   @override
   void initState() {
-    eventBus.on(EventNameConstants.onHomeRefresh, (arg) {});
+    Global.eventBus.on(EventNameConstants.onHomeRefresh, (arg) {});
 
     return super.initState();
   }

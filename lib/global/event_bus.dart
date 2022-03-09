@@ -15,17 +15,3 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/util/event_bus.dart';
-
-final eventBus = EventBus<EventNameConstants>();
-
-enum EventNameConstants {
-  onWeatherUpdate,
-  onHomeRefresh,
-  onHomeItemReorder,
-  onSelectCourse,
-  onRemoveCourse,
-  onCampusChange,
-  onBackgroundChange,
-  onJumpTodayTimetable,
-}

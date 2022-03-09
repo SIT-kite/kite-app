@@ -22,10 +22,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:kite/global/dio_initializer.dart';
-import 'package:kite/global/event_bus.dart';
+import 'package:kite/global/global.dart';
 import 'package:kite/global/init_util.dart';
-import 'package:kite/global/service_pool.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/setting/storage/index.dart';
 import 'package:kite/util/flash.dart';
@@ -56,14 +54,14 @@ class SettingPage extends StatelessWidget {
 
     await image?.saveTo(savePath);
     SettingInitializer.home.background = savePath;
-    eventBus.emit(EventNameConstants.onBackgroundChange);
+    Global.eventBus.emit(EventNameConstants.onBackgroundChange);
   }
 
   void _testPassword(BuildContext context) async {
     final user = SettingInitializer.auth.currentUsername;
     final password = SettingInitializer.auth.ssoPassword;
     try {
-      await SessionPool.ssoSession.login(user!, password!);
+      await SettingInitializer.ssoSession.login(user!, password!);
       showBasicFlash(context, const Text('用户名和密码正确'));
     } catch (e) {
       showBasicFlash(context, Text('登录异常: ${e.toString().split('\n')[0]}'), duration: const Duration(seconds: 3));
@@ -149,7 +147,7 @@ class SettingPage extends StatelessWidget {
             selected: SettingInitializer.home.backgroundMode,
             onChange: (value) {
               SettingInitializer.home.backgroundMode = value;
-              eventBus.emit(EventNameConstants.onBackgroundChange);
+              Global.eventBus.emit(EventNameConstants.onBackgroundChange);
             },
           ),
           DropDownSettingsTile<int>(
@@ -163,7 +161,7 @@ class SettingPage extends StatelessWidget {
             selected: SettingInitializer.home.campus,
             onChange: (value) {
               SettingInitializer.home.campus = value;
-              eventBus.emit(EventNameConstants.onCampusChange);
+              Global.eventBus.emit(EventNameConstants.onCampusChange);
             },
           ),
           SimpleSettingsTile(title: '背景图片', subtitle: '设置首页的背景图片', onTap: _onChangeBgImage),
@@ -184,7 +182,8 @@ class SettingPage extends StatelessWidget {
           onChange: (value) {
             if (value) {
               SettingInitializer.network.useProxy = value;
-              SessionPool.init();
+              // TODO
+              // SessionPool.init();
             }
           },
           childrenIfEnabled: [
@@ -196,7 +195,8 @@ class SettingPage extends StatelessWidget {
               onChange: (value) {
                 SettingInitializer.network.proxy = value;
                 if (SettingInitializer.network.useProxy) {
-                  SessionPool.init();
+                  // TODO
+                  // SessionPool.init();
                 }
               },
             ),

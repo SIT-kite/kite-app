@@ -17,44 +17,39 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/domain/edu/entity/index.dart';
-import 'package:kite/global/event_bus.dart';
 import 'package:kite/domain/edu/util/gpa.dart';
+import 'package:kite/global/global.dart';
 
 class GpaBanner extends StatefulWidget {
   final Semester _semester; // 学期 or 学年
   final List<Score> _scoreList;
 
-  const GpaBanner(this._semester, this._scoreList);
+  const GpaBanner(this._semester, this._scoreList, {Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _GpaBannerState(_semester, _scoreList);
+  State<StatefulWidget> createState() => _GpaBannerState();
 }
 
 class _GpaBannerState extends State<GpaBanner> {
-  final Semester _semester; // 学期 or 学年
-  final List<Score> _scoreList;
-
   // 当前绩点计算支持用户自己选择课程. selectedList 即为用户选择课程, 当其不为空时, 表示进入自定义选择模式.
-  Set<Score> _selectedSet = {};
-
-  _GpaBannerState(this._semester, this._scoreList, {Key? key});
+  final Set<Score> _selectedSet = {};
 
   @override
   void initState() {
-    eventBus.on<Score>(EventNameConstants.onSelectCourse, _onSelectCourse);
-    eventBus.on<Score>(EventNameConstants.onRemoveCourse, _onRemoveCourse);
+    Global.eventBus.on<Score>(EventNameConstants.onSelectCourse, _onSelectCourse);
+    Global.eventBus.on<Score>(EventNameConstants.onRemoveCourse, _onRemoveCourse);
     super.initState();
   }
 
   @override
   void dispose() {
-    eventBus.off(EventNameConstants.onSelectCourse);
-    eventBus.off(EventNameConstants.onRemoveCourse);
+    Global.eventBus.off(EventNameConstants.onSelectCourse);
+    Global.eventBus.off(EventNameConstants.onRemoveCourse);
     super.dispose();
   }
 
   String _getType() {
-    return (_semester == Semester.all) ? "学年" : "学期";
+    return (widget._semester == Semester.all) ? "学年" : "学期";
   }
 
   void _onSelectCourse(Score? score) {
@@ -81,7 +76,7 @@ class _GpaBannerState extends State<GpaBanner> {
       );
     } else {
       final type = _getType();
-      final gpa = calcGPA(_scoreList);
+      final gpa = calcGPA(widget._scoreList);
 
       return Container(
         padding: const EdgeInsets.all(10),

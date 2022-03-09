@@ -22,9 +22,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/domain/index.dart';
+import 'package:kite/global/global.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/util/logger.dart';
-import 'package:kite/util/page_logger.dart';
+
+import 'setting/page/index.dart';
 
 const title = '上应小风筝';
 
@@ -67,7 +69,7 @@ class KiteApp extends StatelessWidget {
 
   Route<dynamic> _onGenerateRoute(RouteSettings settings) {
     Log.info('跳转路由: ${settings.name}');
-    pageLogger.page(settings.name ?? 'Unknown');
+    Global.pageLogger.page(settings.name ?? 'Unknown');
     return MaterialPageRoute(
       builder: (context) => _routes[settings.name]!(context),
       settings: settings,

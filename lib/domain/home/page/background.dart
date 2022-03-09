@@ -23,7 +23,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_weather_bg_null_safety/bg/weather_bg.dart';
 import 'package:flutter_weather_bg_null_safety/utils/weather_type.dart';
 import 'package:kite/domain/kite/entity/weather.dart';
-import 'package:kite/global/event_bus.dart';
+import 'package:kite/global/global.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/util/flash.dart';
 
@@ -43,14 +43,14 @@ class _HomeBackgroundState extends State<HomeBackground> {
   void initState() {
     _weatherCode = widget.initialWeatherCode ?? int.parse(SettingInitializer.home.lastWeather.icon);
     super.initState();
-    eventBus.on(EventNameConstants.onBackgroundChange, _onBackgroundUpdate);
-    eventBus.on(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
+    Global.eventBus.on(EventNameConstants.onBackgroundChange, _onBackgroundUpdate);
+    Global.eventBus.on(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
   }
 
   @override
   void deactivate() {
-    eventBus.off(EventNameConstants.onBackgroundChange, _onBackgroundUpdate);
-    eventBus.off(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
+    Global.eventBus.off(EventNameConstants.onBackgroundChange, _onBackgroundUpdate);
+    Global.eventBus.off(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
     super.deactivate();
   }
 

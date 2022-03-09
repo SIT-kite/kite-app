@@ -23,7 +23,6 @@ export 'login/page/login.dart';
 export 'mail/page/index.dart';
 export 'office/page/index.dart';
 export 'sc/page/index.dart';
-export 'setting/page/index.dart';
 export 'web_page/about.dart';
 export 'web_page/feedback.dart';
 export 'web_page/report.dart';

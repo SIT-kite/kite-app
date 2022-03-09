@@ -18,7 +18,6 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:kite/global/dio_initializer.dart';
 import 'package:kite/other/user_event/entity.dart';
 import 'package:kite/other/user_event/init.dart';
 import 'package:uuid/uuid.dart';
@@ -30,7 +29,8 @@ const int maxCacheSize = 10;
 
 class PageLogger {
   var cachedCount = UserEventInitializer.userEventStorage.getEventCount();
-  final Dio _dio = SessionPool.dio;
+  final Dio dio;
+  PageLogger(this.dio);
 
   /// 为每个用户生成唯一的 UUID 并存储, 用于匿名地区别不同用户.
   String _uuid() {
@@ -56,7 +56,7 @@ class PageLogger {
     // _portReport 不能阻塞, 故使用异步方法.
     Future.delayed(Duration.zero, () async {
       try {
-        _dio.post(reportEventUrl, data: _generateBody(eventList), options: Options(sendTimeout: 10 * 1000));
+        dio.post(reportEventUrl, data: _generateBody(eventList), options: Options(sendTimeout: 10 * 1000));
       } catch (_) {
         Log.info('用户日志上报出错.');
         // 由于网络原因上报失败, 再把日志加回存储区
@@ -102,5 +102,3 @@ class PageLogger {
     log(UserEventType.exit);
   }
 }
-
-final pageLogger = PageLogger();

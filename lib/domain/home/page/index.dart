@@ -22,7 +22,7 @@ import 'package:kite/domain/home/init.dart';
 import 'package:kite/domain/kite/service/weather.dart';
 import 'package:kite/domain/quick_button/init.dart';
 import 'package:kite/exception/session.dart';
-import 'package:kite/global/event_bus.dart';
+import 'package:kite/global/global.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
     Future.delayed(const Duration(milliseconds: 800), () async {
       try {
         final weather = await WeatherService().getCurrentWeather(SettingInitializer.home.campus);
-        eventBus.emit(EventNameConstants.onWeatherUpdate, weather);
+        Global.eventBus.emit(EventNameConstants.onWeatherUpdate, weather);
       } catch (_) {}
     });
   }
@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     if (HomeInitializer.ssoSession.isOnline) {
-      eventBus.emit(EventNameConstants.onHomeRefresh);
+      Global.eventBus.emit(EventNameConstants.onHomeRefresh);
     }
     _refreshController.refreshCompleted(resetFooterState: true);
 
@@ -213,15 +213,15 @@ class _HomePageState extends State<HomePage> {
       QuickButton.init(context);
     }
     _updateWeather();
-    eventBus.on(EventNameConstants.onCampusChange, (_) => _updateWeather());
-    eventBus.on(EventNameConstants.onHomeItemReorder, (_) => setState(() {}));
+    Global.eventBus.on(EventNameConstants.onCampusChange, (_) => _updateWeather());
+    Global.eventBus.on(EventNameConstants.onHomeItemReorder, (_) => setState(() {}));
     super.initState();
   }
 
   @override
   void dispose() {
-    eventBus.off(EventNameConstants.onCampusChange);
-    eventBus.off(EventNameConstants.onHomeItemReorder);
+    Global.eventBus.off(EventNameConstants.onCampusChange);
+    Global.eventBus.off(EventNameConstants.onHomeItemReorder);
     super.dispose();
   }
 

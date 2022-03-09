@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/domain/edu/entity/index.dart';
 import 'package:kite/domain/edu/init.dart';
 import 'package:kite/domain/edu/util/icon.dart';
-import 'package:kite/global/event_bus.dart';
+import 'package:kite/global/global.dart';
 
 import 'evaluation.dart';
 
@@ -76,7 +76,7 @@ class _ScoreItemState extends State<ScoreItem> {
           child: IconButton(
             icon: const Icon(Icons.check),
             onPressed: () {
-              eventBus.emit(EventNameConstants.onRemoveCourse, _score);
+              Global.eventBus.emit(EventNameConstants.onRemoveCourse, _score);
               setState(() => _isSelected = false);
             },
           ),
@@ -137,9 +137,9 @@ class _ScoreItemState extends State<ScoreItem> {
         }),
         onLongPress: () {
           if (_isSelected) {
-            eventBus.emit(EventNameConstants.onRemoveCourse, _score);
+            Global.eventBus.emit(EventNameConstants.onRemoveCourse, _score);
           } else {
-            eventBus.emit(EventNameConstants.onSelectCourse, _score);
+            Global.eventBus.emit(EventNameConstants.onSelectCourse, _score);
           }
           setState(() => _isSelected = !_isSelected);
         },

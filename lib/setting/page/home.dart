@@ -18,7 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:kite/domain/home/entity/home.dart';
-import 'package:kite/global/event_bus.dart';
+import 'package:kite/global/global.dart';
 import 'package:kite/setting/init.dart';
 
 String functionTypeToString(FunctionType type) {
@@ -125,7 +125,7 @@ class _HomeSettingPageState extends State<HomeSettingPage> {
         ),
       ),
       onWillPop: () async {
-        eventBus.emit(EventNameConstants.onHomeItemReorder);
+        Global.eventBus.emit(EventNameConstants.onHomeItemReorder);
         return true;
       },
     );

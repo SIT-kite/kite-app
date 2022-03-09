@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/domain/kite/entity/weather.dart';
-import 'package:kite/global/event_bus.dart';
+import 'package:kite/global/global.dart';
 import 'package:kite/setting/init.dart';
 
 /// 计算入学时间, 默认按 9 月 1 日开学来算. 年份 entranceYear 是完整的年份, 如 2018.
@@ -43,13 +43,13 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   @override
   void initState() {
     super.initState();
-    eventBus.on(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
+    Global.eventBus.on(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
   }
 
   @override
   void deactivate() {
     super.deactivate();
-    eventBus.off(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
+    Global.eventBus.off(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
   }
 
   Future<int> _getStudyDays() async {

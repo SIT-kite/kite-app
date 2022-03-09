@@ -20,7 +20,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:kite/domain/initializer_index.dart';
 import 'package:kite/domain/library/entity/hot_search.dart';
-import 'package:kite/global/event_bus.dart';
+import 'package:kite/global/global.dart';
 import 'package:kite/setting/init.dart';
 
 import 'index.dart';
@@ -38,14 +38,14 @@ class _LibraryItemState extends State<LibraryItem> {
 
   @override
   void initState() {
-    eventBus.on(EventNameConstants.onHomeRefresh, _onHomeRefresh);
+    Global.eventBus.on(EventNameConstants.onHomeRefresh, _onHomeRefresh);
 
     return super.initState();
   }
 
   @override
   void dispose() {
-    eventBus.off(EventNameConstants.onHomeRefresh, _onHomeRefresh);
+    Global.eventBus.off(EventNameConstants.onHomeRefresh, _onHomeRefresh);
     super.dispose();
   }
 
