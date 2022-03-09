@@ -16,12 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+export '../domain/campus_card/page/campus_card.dart';
 export '../domain/index.dart';
-export 'campus_card.dart';
+export '../domain/mail/page/index.dart';
 export 'connectivity.dart';
 export 'event/index.dart';
 export 'home/index.dart';
 export 'login.dart';
-export '../domain/mail/page/index.dart';
 export 'setting/index.dart';
 export 'welcome.dart';

@@ -21,7 +21,7 @@ import 'package:kite/entity/report.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/session/abstract_session.dart';
 
-export '../../session/report_session.dart';
+export '../../../session/report_session.dart';
 
 class ReportService extends AService implements ReportDao {
   ReportService(ASession session) : super(session);

@@ -18,11 +18,11 @@
 export '../domain/bulletin/service/bulletin.dart';
 export '../domain/library/service/index.dart';
 export '../domain/office/service/index.dart';
-export 'campus_card.dart';
+export '../domain/campus_card/service/campus_card.dart';
 export '../domain/contact/service/contact.dart';
 export '../domain/expense/service/expense.dart';
 export '../domain/kite/service/electricity.dart';
 export '../domain/kite/service/ocr.dart';
 export '../domain/kite/service/weather.dart';
 export 'network.dart';
-export 'report/index.dart';
+export '../domain/report/service/index.dart';

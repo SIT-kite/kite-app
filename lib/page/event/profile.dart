@@ -21,7 +21,7 @@ import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/entity/sc/score.dart';
 import 'package:kite/global/session_pool.dart';
-import 'package:kite/service/sc/score.dart';
+import 'package:kite/domain/sc/service/score.dart';
 
 import 'component/summary.dart';
 import 'detail.dart';

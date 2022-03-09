@@ -24,7 +24,7 @@ import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/domain/edu/service/index.dart';
 import 'package:kite/domain/office/service/index.dart';
-import 'package:kite/service/report/report.dart';
+import 'package:kite/domain/report/service/report.dart';
 import 'package:kite/session/kite_session.dart';
 import 'package:kite/session/library_session.dart';
 import 'package:kite/session/sc_session.dart';

@@ -19,7 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/entity/sc/list.dart';
 import 'package:kite/global/session_pool.dart';
-import 'package:kite/service/sc/list.dart';
+import 'package:kite/domain/sc/service/list.dart';
 
 import 'component/card.dart';
 import 'component/search.dart';
