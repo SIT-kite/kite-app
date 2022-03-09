@@ -22,7 +22,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:kite/entity/auth_item.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/init_util.dart';
 import 'package:kite/global/session_pool.dart';
@@ -61,17 +60,10 @@ class SettingPage extends StatelessWidget {
   }
 
   void _testPassword(BuildContext context) async {
-    final user = SettingInitializer.auth.currentUsername!;
-    var userItem = StoragePool.authPool.get(user);
-    if (userItem == null) {
-      userItem = AuthItem()
-        ..username = user
-        ..password = '';
-      StoragePool.authPool.put(userItem);
-    }
-    final password = userItem.password;
+    final user = SettingInitializer.auth.currentUsername;
+    final password = SettingInitializer.auth.ssoPassword;
     try {
-      await SessionPool.ssoSession.login(user, password);
+      await SessionPool.ssoSession.login(user!, password!);
       showBasicFlash(context, const Text('用户名和密码正确'));
     } catch (e) {
       showBasicFlash(context, Text('登录异常: ${e.toString().split('\n')[0]}'), duration: const Duration(seconds: 3));
@@ -90,8 +82,9 @@ class SettingPage extends StatelessWidget {
                 // dismiss 函数会异步地执行动画, 但动画在应用重启时会被打断从而产生报错. 因此此处不需要 dismiss.
                 // controller.dismiss();
 
-                StoragePool.authPool.delete(SettingInitializer.auth.currentUsername!);
-                SettingInitializer.auth.currentUsername = null;
+                SettingInitializer.auth
+                  ..currentUsername = null
+                  ..ssoPassword = null;
 
                 await initBeforeRun();
                 // 重启应用
@@ -119,9 +112,7 @@ class SettingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _user = SettingInitializer.auth.currentUsername!;
-    _passwordController.text = StoragePool.authPool.get(_user)?.password ?? '';
-
+    _passwordController.text = SettingInitializer.auth.ssoPassword ?? '';
     return SettingsScreen(title: '设置', children: [
       SettingsGroup(
         title: '个性化',
@@ -232,10 +223,7 @@ class SettingPage extends StatelessWidget {
             subtitle: '修改小风筝上使用的 OA 密码',
             showConfirmation: true,
             onConfirm: () {
-              final user = SettingInitializer.auth.currentUsername!;
-              StoragePool.authPool.put(AuthItem()
-                ..username = user
-                ..password = _passwordController.text);
+              SettingInitializer.auth.ssoPassword = _passwordController.text;
               return true;
             },
             children: [

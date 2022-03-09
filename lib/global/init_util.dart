@@ -36,11 +36,10 @@ Future<void> initBeforeRun() async {
   SettingInitializer.home.installTime ??= DateTime.now();
 
   // 若本地存放了用户名与密码，那就惰性登录
-  String? currentUsername = SettingInitializer.auth.currentUsername;
-  if (currentUsername != null) {
+  final auth = SettingInitializer.auth;
+  if (auth.currentUsername != null && auth.ssoPassword != null) {
     // 惰性登录
-    String password = StoragePool.authPool.get(currentUsername)!.password;
-    SessionPool.ssoSession.lazyLogin(currentUsername, password);
+    SessionPool.ssoSession.lazyLogin(auth.currentUsername!, auth.ssoPassword!);
   }
   pageLogger.startup();
 }

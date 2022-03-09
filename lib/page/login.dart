@@ -19,9 +19,7 @@ import 'package:flash/flash.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/entity/auth_item.dart';
 import 'package:kite/global/session_pool.dart';
-import 'package:kite/global/storage_pool.dart';
 import 'package:kite/session/exception.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/util/flash.dart';
@@ -65,13 +63,14 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       disableLoginButton = true;
     });
-    final auth = AuthItem()
-      ..username = _usernameController.text
-      ..password = _passwordController.text;
+    final username = _usernameController.text;
+    final password = _passwordController.text;
     try {
-      await SessionPool.ssoSession.login(auth.username, auth.password);
-      StoragePool.authPool.put(auth);
-      SettingInitializer.auth.currentUsername = auth.username;
+      await SessionPool.ssoSession.login(username, password);
+      SettingInitializer.auth
+        ..currentUsername = username
+        ..ssoPassword = password;
+
       Navigator.pushReplacementNamed(context, '/home');
       launchInBuiltinWebView(
         context,
@@ -95,9 +94,10 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
 
     String? username = SettingInitializer.auth.currentUsername;
+    String? password = SettingInitializer.auth.ssoPassword;
     if (username != null) {
       _usernameController.text = username;
-      _passwordController.text = StoragePool.authPool.get(username)!.password;
+      _passwordController.text = password ?? '';
     }
   }
 

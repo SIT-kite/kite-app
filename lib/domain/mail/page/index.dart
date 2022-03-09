@@ -53,7 +53,7 @@ class _MailPageState extends State<MailPage> {
 
   Future<FetchImapResult> _loadMailList() async {
     final String studentId = SettingInitializer.auth.currentUsername ?? '';
-    final String password = StoragePool.mail.password ?? StoragePool.authPool.get(studentId)!.password;
+    final String password = StoragePool.mail.password ?? (SettingInitializer.auth.ssoPassword ?? '');
 
     final email = studentId + '@mail.sit.edu.cn';
     final service = MailService(email, password);

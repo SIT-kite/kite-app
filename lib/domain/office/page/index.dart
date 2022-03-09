@@ -22,7 +22,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/domain/office/entity/index.dart';
 import 'package:kite/domain/office/service/index.dart';
 import 'package:kite/global/session_pool.dart';
-import 'package:kite/global/storage_pool.dart';
 import 'package:kite/setting/init.dart';
 
 import 'detail.dart';
@@ -92,7 +91,7 @@ class _OfficePageState extends State<OfficePage> {
   Future<List<SimpleFunction>> _fetchFuncList() async {
     if (!_isOfficeLogin) {
       final username = SettingInitializer.auth.currentUsername!;
-      final password = StoragePool.authPool.get(username)!.password;
+      final password = SettingInitializer.auth.ssoPassword!;
       SessionPool.officeSession ??= await officeLogin(username, password);
       _isOfficeLogin = true;
     }

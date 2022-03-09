@@ -19,7 +19,6 @@ import 'package:flutter/material.dart';
 import 'package:kite/domain/office/service/index.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/session_pool.dart';
-import 'package:kite/global/storage_pool.dart';
 import 'package:kite/setting/init.dart';
 
 import 'index.dart';
@@ -55,7 +54,7 @@ class _OfficeItemState extends State<OfficeItem> {
 
   Future<String> _buildContent() async {
     final username = SettingInitializer.auth.currentUsername!;
-    final password = StoragePool.authPool.get(username)!.password;
+    final password = SettingInitializer.auth.ssoPassword!;
 
     if (SessionPool.officeSession == null) {
       try {

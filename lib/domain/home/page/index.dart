@@ -22,7 +22,6 @@ import 'package:kite/domain/home/entity/home.dart';
 import 'package:kite/domain/kite/service/weather.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/session_pool.dart';
-import 'package:kite/global/storage_pool.dart';
 import 'package:kite/session/exception.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/util/flash.dart';
@@ -62,7 +61,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _doLogin(BuildContext context) async {
     final String username = SettingInitializer.auth.currentUsername!;
-    final String password = StoragePool.authPool.get(username)!.password;
+    final String password = SettingInitializer.auth.ssoPassword!;
 
     await SessionPool.ssoSession.login(username, password);
   }
