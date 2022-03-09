@@ -16,8 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/entity/sc/detail.dart';
+import 'package:kite/domain/sc/entity/list.dart';
 
-abstract class ScActivityDetailDao {
-  Future<ActivityDetail> getActivityDetail(int activityId);
+abstract class ScActivityListDao {
+  Future<List<Activity>> getActivityList(ActivityType type, int page);
+
+  Future<List<Activity>> query(String queryString);
 }

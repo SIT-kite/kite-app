@@ -18,8 +18,8 @@
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/dao/sc/list.dart';
-import 'package:kite/entity/sc/list.dart';
+import 'package:kite/domain/sc/dao/list.dart';
+import 'package:kite/domain/sc/entity/list.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/session/abstract_session.dart';
 

@@ -20,8 +20,8 @@ import 'dart:collection';
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/dao/sc/detail.dart';
-import 'package:kite/entity/sc/detail.dart';
+import 'package:kite/domain/sc/dao/detail.dart';
+import 'package:kite/domain/sc/entity/detail.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/session/abstract_session.dart';
 

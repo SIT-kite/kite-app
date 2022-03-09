@@ -16,12 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/entity/sc/score.dart';
+import 'package:kite/domain/sc/entity/detail.dart';
 
-abstract class ScScoreDao {
-  Future<ScScoreSummary> getScScoreSummary();
-
-  Future<List<ScScoreItem>> getMyScoreList();
-
-  Future<List<ScActivityApplication>> getMyActivityList();
+abstract class ScActivityDetailDao {
+  Future<ActivityDetail> getActivityDetail(int activityId);
 }

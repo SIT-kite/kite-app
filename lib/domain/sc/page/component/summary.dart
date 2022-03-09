@@ -18,7 +18,8 @@
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/entity/sc/score.dart';
+
+import '../../entity/score.dart';
 
 class SummaryCard extends StatelessWidget {
   final ScScoreSummary summary;

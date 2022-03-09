@@ -17,11 +17,10 @@
  */
 
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/entity/sc/list.dart';
+import 'package:kite/domain/sc/entity/list.dart';
 
 import '../detail.dart';
 import 'background.dart';

@@ -18,12 +18,12 @@
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/entity/sc/list.dart';
-import 'package:kite/entity/sc/score.dart';
+import 'package:kite/domain/sc/entity/list.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/session/abstract_session.dart';
 
-import '../../../dao/sc/score.dart';
+import '../dao/score.dart';
+import '../entity/score.dart';
 
 class ScScoreService extends AService implements ScScoreDao {
   static const _scHomeUrl = 'http://sc.sit.edu.cn/public/init/index.action';

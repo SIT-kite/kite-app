@@ -17,7 +17,7 @@
  */
 
 export '../domain/index.dart';
-export 'event/index.dart';
+export '../domain/sc/page/index.dart';
 export 'home/index.dart';
 export 'login.dart';
 export 'setting/index.dart';

@@ -18,10 +18,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:kite/entity/sc/detail.dart';
-import 'package:kite/global/session_pool.dart';
+import 'package:kite/domain/sc/entity/detail.dart';
 import 'package:kite/domain/sc/service/detail.dart';
 import 'package:kite/domain/sc/service/join.dart';
+import 'package:kite/global/session_pool.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/url_launcher.dart';
 

@@ -17,7 +17,7 @@
  */
 import 'package:hive/hive.dart';
 import 'package:kite/dao/kite/user_event.dart';
-import 'package:kite/entity/kite/user_event.dart';
+import 'package:kite/domain/kite/entity/user_event.dart';
 
 class UserEventStorage implements UserEventStorageDao {
   final Box<dynamic> box;

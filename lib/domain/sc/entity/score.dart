@@ -18,7 +18,7 @@
 
 import 'dart:core';
 
-import 'package:kite/entity/sc/list.dart';
+import 'package:kite/domain/sc/entity/list.dart';
 
 class ScScoreSummary {
   /// Subject report (主题报告)

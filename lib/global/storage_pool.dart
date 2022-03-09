@@ -29,17 +29,16 @@ import 'package:kite/domain/contact/entity/contact.dart';
 import 'package:kite/domain/edu/dao/timetable.dart';
 import 'package:kite/domain/edu/entity/timetable.dart';
 import 'package:kite/domain/expense/entity/expense.dart';
+import 'package:kite/domain/mail/storage/mail.dart';
 import 'package:kite/entity/auth_item.dart';
 import 'package:kite/entity/electricity.dart';
 import 'package:kite/entity/home.dart';
-import 'package:kite/entity/kite/user_event.dart';
 import 'package:kite/entity/report.dart';
 import 'package:kite/entity/weather.dart';
 import 'package:kite/storage/auth.dart';
 import 'package:kite/storage/electricity.dart';
 import 'package:kite/storage/home.dart';
 import 'package:kite/storage/jwt.dart';
-import 'package:kite/domain/mail/storage/mail.dart';
 import 'package:kite/storage/network.dart';
 import 'package:kite/storage/theme.dart';
 import 'package:kite/storage/timetable.dart';
@@ -101,8 +100,7 @@ class StoragePool {
     registerAdapter(ExpenseRecordAdapter());
     registerAdapter(ExpenseTypeAdapter());
     registerAdapter(ContactDataAdapter());
-    registerAdapter(UserEventAdapter());
-    registerAdapter(UserEventTypeAdapter());
+
     registerAdapter(FunctionTypeAdapter());
   }
 
