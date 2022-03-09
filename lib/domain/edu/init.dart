@@ -19,17 +19,17 @@ class EduInitializer {
 
   /// 初始化教务相关的service
   static Future<void> init({
-    required ASession session,
+    required ASession ssoSession,
     required CookieJar cookieJar,
   }) async {
     EduInitializer.cookieJar = cookieJar;
 
     registerAdapter(CourseAdapter());
 
-    courseEvaluation = CourseEvaluationService(session);
-    exam = ExamService(session);
-    score = ScoreService(session);
-    timetable = TimetableService(session);
+    courseEvaluation = CourseEvaluationService(ssoSession);
+    exam = ExamService(ssoSession);
+    score = ScoreService(ssoSession);
+    timetable = TimetableService(ssoSession);
 
     final courseBox = await Hive.openBox<dynamic>('course');
     timetableStorage = TimetableStorage(courseBox);
