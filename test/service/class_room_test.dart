@@ -17,13 +17,14 @@
  */
 
 import 'package:kite/domain/kite/service/classroom.dart';
+import 'package:kite/global/global.dart';
 
 import 'mock_util.dart';
 
 void main() async {
   await init();
   await login();
-  var session = SessionPool.ssoSession;
+  var session = Global.ssoSession;
   test('class_room test', () async {
     final classroom = await ClassroomService(session).queryAvailableClassroom(1, '2021-12-7');
     Log.info(classroom);

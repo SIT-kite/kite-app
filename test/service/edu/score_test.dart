@@ -1,14 +1,13 @@
 import 'package:kite/domain/edu/entity/index.dart';
-import 'package:kite/domain/edu/service/index.dart';
+import 'package:kite/domain/edu/init.dart';
 
 import '../mock_util.dart';
 
 void main() async {
   await init();
   await login();
-  final eduSession = SessionPool.eduSession;
   test('score test', () async {
-    final table = await ScoreService(eduSession).getScoreList(
+    final table = await EduInitializer.score.getScoreList(
       const SchoolYear(2021),
       Semester.firstTerm,
     );
@@ -16,7 +15,7 @@ void main() async {
   });
 
   test('edu detail test', () async {
-    final table = await ScoreService(eduSession).getScoreDetail(
+    final table = await EduInitializer.score.getScoreDetail(
       "",
       const SchoolYear(2021),
       Semester.firstTerm,

@@ -1,11 +1,12 @@
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
+import 'package:kite/global/global.dart';
 
 import 'mock_util.dart';
 
 void main() async {
   await init();
   await login();
-  var session = SessionPool.ssoSession;
+  var session = Global.ssoSession;
   test('test login', () async {
     var index = await session.get('https://myportal.sit.edu.cn/');
     var list = BeautifulSoup(index.data)

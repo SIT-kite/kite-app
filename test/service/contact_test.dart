@@ -17,13 +17,14 @@
  */
 
 import 'package:kite/domain/contact/service/contact.dart';
+import 'package:kite/domain/initializer_index.dart';
 
 import 'mock_util.dart';
 
 void main() async {
   await init();
   await login();
-  var session = SessionPool.ssoSession;
+  var session = KiteInitializer.kiteSession;
   test('expense test', () async {
     final contact = await ContactRemoteService(session).getAllContacts();
     Log.info(contact);

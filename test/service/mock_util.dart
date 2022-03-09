@@ -18,16 +18,16 @@ const String proxy = '';
 
 /// 测试前调用该函数做初始化
 Future<void> init() async {
-  await SessionPool.init();
+  // await SessionPool.init();
   if (proxy.isNotEmpty) {
     /// 使用代理
-    SessionPool.httpProxy = proxy;
+    // SessionPool.httpProxy = proxy;
   }
 }
 
 /// 如果需要登录，调用该函数
 Future<void> login() async {
-  await SessionPool.ssoSession.login(username, ssoPassword);
+  // await SessionPool.ssoSession.login(username, ssoPassword);
 }
 
 /// 图书馆登陆

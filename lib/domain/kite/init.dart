@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:hive/hive.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/domain/kite/kite_session.dart';
 import 'package:kite/domain/kite/service/classroom.dart';
 import 'package:kite/domain/kite/service/index.dart';
 import 'package:kite/domain/kite/storage/electricity.dart';
@@ -15,10 +15,10 @@ class KiteInitializer {
   static late ElectricityServiceDao electricityService;
   static late NoticeServiceDao noticeService;
 
-  static late ASession kiteSession;
+  static late KiteSession kiteSession;
   static Future<void> init({
     required Dio dio,
-    required ASession kiteSession,
+    required KiteSession kiteSession,
     required Box<dynamic> electricityBox,
   }) async {
     KiteInitializer.kiteSession = kiteSession;

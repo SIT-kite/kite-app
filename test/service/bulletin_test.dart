@@ -1,4 +1,4 @@
-import 'package:kite/domain/bulletin/service/bulletin.dart';
+import 'package:kite/domain/bulletin/init.dart';
 
 import 'mock_util.dart';
 
@@ -6,8 +6,7 @@ void main() async {
   await init();
   await login();
 
-  final session = SessionPool.ssoSession;
-  final dao = BulletinService(session);
+  final dao = BulletinInitializer.bulletin;
   test('test bulletin', () async {
     final list = dao.getAllCatalogues();
     Log.info(list);
