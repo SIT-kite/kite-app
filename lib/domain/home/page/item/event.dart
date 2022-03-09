@@ -17,7 +17,8 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/global/event_bus.dart';
-import 'package:kite/page/home/item/index.dart';
+
+import 'index.dart';
 
 class EventItem extends StatefulWidget {
   const EventItem({Key? key}) : super(key: key);

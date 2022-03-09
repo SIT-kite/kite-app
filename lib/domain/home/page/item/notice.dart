@@ -20,7 +20,8 @@ import 'package:kite/domain/kite/entity/notice.dart';
 import 'package:kite/domain/kite/service/index.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/session_pool.dart';
-import 'package:kite/page/home/item/index.dart';
+
+import 'index.dart';
 
 class NoticeItem extends StatefulWidget {
   const NoticeItem({Key? key}) : super(key: key);

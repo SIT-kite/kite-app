@@ -17,18 +17,19 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:kite/page/home/item/index.dart';
 
-class ContactItem extends StatelessWidget {
-  const ContactItem({Key? key}) : super(key: key);
+import 'index.dart';
+
+class GameItem extends StatelessWidget {
+  const GameItem({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return HomeFunctionButton(
-      route: '/contact',
-      icon: 'assets/home/icon_contact.svg',
-      title: '常用电话',
-      subtitle: '查找学校部门的联系方式',
+      route: '/game',
+      icon: 'assets/home/icon_game.svg',
+      title: '小游戏',
+      subtitle: '来放松一下吧',
     );
   }
 }
