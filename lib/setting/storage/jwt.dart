@@ -15,7 +15,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-export 'auth.dart';
-export 'home.dart';
-export 'network.dart';
-export 'theme.dart';
+import 'package:hive/hive.dart';
+
+import '../dao/jwt.dart';
+
+class JwtKeys {
+  static const namespace = '/kite';
+  static const jwt = '$namespace/jwt';
+}
+
+class JwtStorage implements JwtDao {
+  final Box<dynamic> box;
+
+  JwtStorage(this.box);
+
+  @override
+  String? get jwtToken => box.get(JwtKeys.jwt, defaultValue: null);
+
+  @override
+  set jwtToken(String? jwt) => box.put(JwtKeys.jwt, jwt);
+}

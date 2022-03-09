@@ -17,11 +17,11 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/domain/report/entity/report.dart';
+import 'package:kite/domain/report/report_session.dart';
 import 'package:kite/domain/report/service/report.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/session_pool.dart';
-import 'package:kite/global/storage_pool.dart';
-import 'package:kite/domain/report/report_session.dart';
+import 'package:kite/setting/init.dart';
 
 import 'index.dart';
 
@@ -64,7 +64,7 @@ class _ReportItemState extends State<ReportItem> {
   }
 
   Future<String> _buildContent() async {
-    final username = StoragePool.authSetting.currentUsername!;
+    final username = SettingInitializer.auth.currentUsername!;
     late ReportHistory? history;
 
     SessionPool.reportSession ??= ReportSession(username, dio: SessionPool.dio);
@@ -77,7 +77,7 @@ class _ReportItemState extends State<ReportItem> {
       return '无上报记录';
     }
     // 别忘了本地缓存更新一下.
-    StoragePool.homeSetting.lastReport = history;
+    SettingInitializer.home.lastReport = history;
     return _generateContent(history);
   }
 
@@ -85,7 +85,7 @@ class _ReportItemState extends State<ReportItem> {
   Widget build(BuildContext context) {
     // 如果是第一次加载 (非下拉导致的渲染), 加载缓存的上报记录.
     if (content == null) {
-      final ReportHistory? lastReport = StoragePool.homeSetting.lastReport;
+      final ReportHistory? lastReport = SettingInitializer.home.lastReport;
       // 如果本地没有缓存记录, 加载默认文本. 否则加载记录.
       if (lastReport == null) {
         content = defaultContent;

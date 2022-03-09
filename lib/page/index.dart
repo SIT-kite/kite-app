@@ -16,9 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+export '../domain/home/page/index.dart';
 export '../domain/index.dart';
 export '../domain/sc/page/index.dart';
-export '../domain/home/page/index.dart';
 export 'login.dart';
-export 'setting/index.dart';
 export 'welcome.dart';

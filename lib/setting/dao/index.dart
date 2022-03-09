@@ -15,18 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:hive/hive.dart';
-import 'package:kite/dao/setting/auth.dart';
-import 'package:kite/storage/constants.dart';
-
-class AuthSettingStorage implements AuthSettingDao {
-  final Box<dynamic> box;
-
-  AuthSettingStorage(this.box);
-
-  @override
-  String? get currentUsername => box.get(AuthKeys.currentUsername);
-
-  @override
-  set currentUsername(String? foo) => box.put(AuthKeys.currentUsername, foo);
-}
+export 'auth.dart';
+export 'home.dart';
+export 'jwt.dart';
+export 'network.dart';
+export 'theme.dart';

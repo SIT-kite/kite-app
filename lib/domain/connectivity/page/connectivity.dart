@@ -20,9 +20,9 @@ import 'package:check_vpn_connection/check_vpn_connection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:kite/global/session_pool.dart';
-import 'package:kite/global/storage_pool.dart';
 import 'package:kite/domain/connectivity/service/network.dart';
+import 'package:kite/global/session_pool.dart';
+import 'package:kite/setting/init.dart';
 import 'package:kite/util/network.dart';
 import 'package:kite/util/url_launcher.dart';
 
@@ -58,7 +58,7 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
 
     Widget buildConnectedByProxy() => Text(
         '已通过 HTTP 代理连接校园网\n'
-        '地址：${SessionPool.httpProxy ?? StoragePool.network.proxy}',
+        '地址：${SessionPool.httpProxy ?? SettingInitializer.network.proxy}',
         textAlign: TextAlign.center,
         style: style);
 
@@ -86,7 +86,7 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
       );
     }
 
-    if (StoragePool.network.useProxy || SessionPool.httpProxy != null) {
+    if (SettingInitializer.network.useProxy || SessionPool.httpProxy != null) {
       return buildConnectedByProxy();
     }
     return FutureBuilder(

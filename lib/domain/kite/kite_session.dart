@@ -19,9 +19,9 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:kite/domain/kite/dao/jwt.dart';
 import 'package:kite/domain/kite/entity/account.dart';
 import 'package:kite/session/abstract_session.dart';
+import 'package:kite/setting/dao/jwt.dart';
 import 'package:kite/util/logger.dart';
 
 const String _baseUrl = 'https://kite.sunnysab.cn/api/v2';

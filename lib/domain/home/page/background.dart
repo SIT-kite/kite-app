@@ -24,7 +24,7 @@ import 'package:flutter_weather_bg_null_safety/bg/weather_bg.dart';
 import 'package:flutter_weather_bg_null_safety/utils/weather_type.dart';
 import 'package:kite/domain/kite/entity/weather.dart';
 import 'package:kite/global/event_bus.dart';
-import 'package:kite/global/storage_pool.dart';
+import 'package:kite/setting/init.dart';
 import 'package:kite/util/flash.dart';
 
 class HomeBackground extends StatefulWidget {
@@ -33,18 +33,15 @@ class HomeBackground extends StatefulWidget {
   const HomeBackground({this.initialWeatherCode, Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _HomeBackgroundState(initialWeatherCode);
+  State<StatefulWidget> createState() => _HomeBackgroundState();
 }
 
 class _HomeBackgroundState extends State<HomeBackground> {
   late int _weatherCode;
 
-  _HomeBackgroundState(int? initialWeatherCode) {
-    _weatherCode = initialWeatherCode ?? int.parse(StoragePool.homeSetting.lastWeather.icon);
-  }
-
   @override
   void initState() {
+    _weatherCode = widget.initialWeatherCode ?? int.parse(SettingInitializer.home.lastWeather.icon);
     super.initState();
     eventBus.on(EventNameConstants.onBackgroundChange, _onBackgroundUpdate);
     eventBus.on(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
@@ -62,7 +59,7 @@ class _HomeBackgroundState extends State<HomeBackground> {
   }
 
   void _onBackgroundUpdate(_) {
-    if (StoragePool.homeSetting.background == null) {
+    if (SettingInitializer.home.background == null) {
       showBasicFlash(context, const Text('你还没有设置背景图片'));
       return;
     }
@@ -73,7 +70,7 @@ class _HomeBackgroundState extends State<HomeBackground> {
     Weather w = newWeather as Weather;
 
     // 天气背景
-    if (StoragePool.homeSetting.backgroundMode == 1) {
+    if (SettingInitializer.home.backgroundMode == 1) {
       setState(() => _weatherCode = int.parse(w.icon));
     } else {
       _weatherCode = int.parse(w.icon);
@@ -89,14 +86,14 @@ class _HomeBackgroundState extends State<HomeBackground> {
   }
 
   Widget _buildImageBg() {
-    final path = StoragePool.homeSetting.background!;
+    final path = SettingInitializer.home.background!;
     return Image.file(File(path), fit: BoxFit.fill);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (StoragePool.homeSetting.backgroundMode == 2) {
-      if (StoragePool.homeSetting.background != null) {
+    if (SettingInitializer.home.backgroundMode == 2) {
+      if (SettingInitializer.home.background != null) {
         return _buildImageBg();
       } else {
         Future.delayed(Duration.zero, () => showBasicFlash(context, const Text('你还没有设置背景图片')));

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/global/storage_pool.dart';
+import 'package:kite/setting/init.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 class KiteDrawer extends Drawer {
@@ -29,10 +29,10 @@ class KiteDrawer extends Drawer {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: BoxDecoration(color: StoragePool.themeSetting.color),
+            decoration: BoxDecoration(color: SettingInitializer.theme.color),
             child: Align(
                 alignment: Alignment.bottomLeft,
-                child: Text('小风筝已陪伴你 ${DateTime.now().difference(StoragePool.homeSetting.installTime!).inDays} 天',
+                child: Text('小风筝已陪伴你 ${DateTime.now().difference(SettingInitializer.home.installTime!).inDays} 天',
                     style: Theme.of(context).textTheme.headline4?.copyWith(color: Colors.white70))),
           ),
           ListTile(

@@ -15,32 +15,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:kite/dao/setting/theme.dart';
-import 'package:kite/storage/constants.dart';
 
-class ThemeSettingStorage implements ThemeSettingDao {
+import '../dao/auth.dart';
+
+class AuthKeys {
+  static const namespace = '/auth';
+  static const currentUsername = '$namespace/currentUsername';
+}
+
+class AuthSettingStorage implements AuthSettingDao {
   final Box<dynamic> box;
 
-  ThemeSettingStorage(this.box);
+  AuthSettingStorage(this.box);
 
   @override
-  Color get color {
-    final String value = box.get(ThemeKeys.themeColor, defaultValue: 'ff2196f3');
-    final int color = int.parse(value.replaceFirst('#', ''), radix: 16);
-    return Color(color);
-  }
+  String? get currentUsername => box.get(AuthKeys.currentUsername);
 
   @override
-  set color(Color v) {
-    final String value = v.value.toRadixString(16).padLeft(6, '0');
-    box.put(ThemeKeys.themeColor, value);
-  }
-
-  @override
-  bool get isDarkMode => box.get(ThemeKeys.isDarkMode, defaultValue: false);
-
-  @override
-  set isDarkMode(value) => box.put(ThemeKeys.isDarkMode, value);
+  set currentUsername(String? foo) => box.put(AuthKeys.currentUsername, foo);
 }

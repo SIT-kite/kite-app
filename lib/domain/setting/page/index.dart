@@ -27,13 +27,14 @@ import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/init_util.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
-import 'package:kite/page/setting/storage.dart';
-import 'package:kite/storage/constants.dart';
+import 'package:kite/setting/init.dart';
+import 'package:kite/setting/storage/index.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/validation.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'home.dart';
+import 'storage.dart';
 
 class SettingPage extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
@@ -55,12 +56,12 @@ class SettingPage extends StatelessWidget {
     final savePath = (await getApplicationDocumentsDirectory()).path + '/background';
 
     await image?.saveTo(savePath);
-    StoragePool.homeSetting.background = savePath;
+    SettingInitializer.home.background = savePath;
     eventBus.emit(EventNameConstants.onBackgroundChange);
   }
 
   void _testPassword(BuildContext context) async {
-    final user = StoragePool.authSetting.currentUsername!;
+    final user = SettingInitializer.auth.currentUsername!;
     var userItem = StoragePool.authPool.get(user);
     if (userItem == null) {
       userItem = AuthItem()
@@ -89,8 +90,8 @@ class SettingPage extends StatelessWidget {
                 // dismiss 函数会异步地执行动画, 但动画在应用重启时会被打断从而产生报错. 因此此处不需要 dismiss.
                 // controller.dismiss();
 
-                StoragePool.authPool.delete(StoragePool.authSetting.currentUsername!);
-                StoragePool.authSetting.currentUsername = null;
+                StoragePool.authPool.delete(SettingInitializer.auth.currentUsername!);
+                SettingInitializer.auth.currentUsername = null;
 
                 await initBeforeRun();
                 // 重启应用
@@ -118,7 +119,7 @@ class SettingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _user = StoragePool.authSetting.currentUsername!;
+    final _user = SettingInitializer.auth.currentUsername!;
     _passwordController.text = StoragePool.authPool.get(_user)?.password ?? '';
 
     return SettingsScreen(title: '设置', children: [
@@ -127,7 +128,7 @@ class SettingPage extends StatelessWidget {
         children: <Widget>[
           ColorPickerSettingsTile(
             settingKey: ThemeKeys.themeColor,
-            defaultValue: StoragePool.themeSetting.color,
+            defaultValue: SettingInitializer.theme.color,
             title: '主题色',
             onChange: (newColor) => DynamicColorTheme.of(context).setColor(
               color: newColor,
@@ -136,7 +137,7 @@ class SettingPage extends StatelessWidget {
           ),
           SwitchSettingsTile(
             settingKey: ThemeKeys.isDarkMode,
-            defaultValue: StoragePool.themeSetting.isDarkMode,
+            defaultValue: SettingInitializer.theme.isDarkMode,
             title: '夜间模式',
             subtitle: '开启黑暗模式以保护视力',
             leading: const Icon(Icons.dark_mode),
@@ -154,9 +155,9 @@ class SettingPage extends StatelessWidget {
               1: '实时天气',
               2: '静态图片',
             },
-            selected: StoragePool.homeSetting.backgroundMode,
+            selected: SettingInitializer.home.backgroundMode,
             onChange: (value) {
-              StoragePool.homeSetting.backgroundMode = value;
+              SettingInitializer.home.backgroundMode = value;
               eventBus.emit(EventNameConstants.onBackgroundChange);
             },
           ),
@@ -168,9 +169,9 @@ class SettingPage extends StatelessWidget {
               1: '奉贤',
               2: '徐汇',
             },
-            selected: StoragePool.homeSetting.campus,
+            selected: SettingInitializer.home.campus,
             onChange: (value) {
-              StoragePool.homeSetting.campus = value;
+              SettingInitializer.home.campus = value;
               eventBus.emit(EventNameConstants.onCampusChange);
             },
           ),
@@ -185,13 +186,13 @@ class SettingPage extends StatelessWidget {
       SettingsGroup(title: '网络', children: <Widget>[
         SwitchSettingsTile(
           settingKey: '/network/useProxy',
-          defaultValue: StoragePool.network.useProxy,
+          defaultValue: SettingInitializer.network.useProxy,
           title: '使用 HTTP 代理',
           subtitle: '通过 HTTP 代理连接校园网',
           leading: const Icon(Icons.vpn_key),
           onChange: (value) {
             if (value) {
-              StoragePool.network.useProxy = value;
+              SettingInitializer.network.useProxy = value;
               SessionPool.init();
             }
           },
@@ -199,11 +200,11 @@ class SettingPage extends StatelessWidget {
             TextInputSettingsTile(
               title: '代理地址',
               settingKey: '/network/proxy',
-              initialValue: StoragePool.network.proxy,
+              initialValue: SettingInitializer.network.proxy,
               validator: proxyValidator,
               onChange: (value) {
-                StoragePool.network.proxy = value;
-                if (StoragePool.network.useProxy) {
+                SettingInitializer.network.proxy = value;
+                if (SettingInitializer.network.useProxy) {
                   SessionPool.init();
                 }
               },
@@ -223,7 +224,7 @@ class SettingPage extends StatelessWidget {
           TextInputSettingsTile(
             title: '学号',
             settingKey: AuthKeys.currentUsername,
-            initialValue: StoragePool.authSetting.currentUsername ?? '',
+            initialValue: SettingInitializer.auth.currentUsername ?? '',
             validator: studentIdValidator,
           ),
           ModalSettingsTile(
@@ -231,7 +232,7 @@ class SettingPage extends StatelessWidget {
             subtitle: '修改小风筝上使用的 OA 密码',
             showConfirmation: true,
             onConfirm: () {
-              final user = StoragePool.authSetting.currentUsername!;
+              final user = SettingInitializer.auth.currentUsername!;
               StoragePool.authPool.put(AuthItem()
                 ..username = user
                 ..password = _passwordController.text);

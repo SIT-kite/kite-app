@@ -21,8 +21,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/global/storage_pool.dart';
 import 'package:kite/page/index.dart';
+import 'package:kite/setting/init.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/page_logger.dart';
 
@@ -40,9 +40,9 @@ final _routes = {
   '/electricity': (context) => const ElectricityPage(),
   '/score': (context) => const ScorePage(),
   '/office': (context) => const OfficePage(),
-  '/game': (context) => GamePage(),
+  '/game': (context) => const GamePage(),
   '/game/2048': (context) => Game2048Page(),
-  '/game/wordle': (context) => WordlePage(),
+  '/game/wordle': (context) => const WordlePage(),
   '/wiki': (context) => WikiPage(),
   '/library': (context) => const LibraryPage(),
   '/market': (context) => const MarketPage(),
@@ -106,9 +106,9 @@ class KiteApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = StoragePool.themeSetting.isDarkMode;
-    final primaryColor = StoragePool.themeSetting.color;
-    final home = StoragePool.authSetting.currentUsername != null ? const HomePage() : const WelcomePage();
+    final isDark = SettingInitializer.theme.isDarkMode;
+    final primaryColor = SettingInitializer.theme.color;
+    final home = SettingInitializer.auth.currentUsername != null ? const HomePage() : const WelcomePage();
 
     return ScreenUtilInit(
       builder: () => DynamicColorTheme(

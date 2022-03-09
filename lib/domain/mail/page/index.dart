@@ -19,8 +19,9 @@ import 'package:enough_mail/imap/response.dart';
 import 'package:enough_mail/mime_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/global/storage_pool.dart';
 import 'package:kite/domain/mail/service/mail.dart';
+import 'package:kite/global/storage_pool.dart';
+import 'package:kite/setting/init.dart';
 
 import 'item.dart';
 
@@ -51,7 +52,7 @@ class _MailPageState extends State<MailPage> {
   }
 
   Future<FetchImapResult> _loadMailList() async {
-    final String studentId = StoragePool.authSetting.currentUsername ?? '';
+    final String studentId = SettingInitializer.auth.currentUsername ?? '';
     final String password = StoragePool.mail.password ?? StoragePool.authPool.get(studentId)!.password;
 
     final email = studentId + '@mail.sit.edu.cn';
@@ -118,7 +119,7 @@ class _MailPageState extends State<MailPage> {
   }
 
   Widget _buildPopupMenu() {
-    final String studentId = StoragePool.authSetting.currentUsername ?? '';
+    final String studentId = SettingInitializer.auth.currentUsername ?? '';
     final email = studentId + '@mail.sit.edu.cn';
 
     return PopupMenuButton(itemBuilder: (_) => [PopupMenuItem(child: Text(email))]);

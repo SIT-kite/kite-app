@@ -23,6 +23,7 @@ import 'package:kite/entity/auth_item.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/session/exception.dart';
+import 'package:kite/setting/init.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/url_launcher.dart';
 import 'package:kite/util/validation.dart';
@@ -70,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
     try {
       await SessionPool.ssoSession.login(auth.username, auth.password);
       StoragePool.authPool.put(auth);
-      StoragePool.authSetting.currentUsername = auth.username;
+      SettingInitializer.auth.currentUsername = auth.username;
       Navigator.pushReplacementNamed(context, '/home');
       launchInBuiltinWebView(
         context,
@@ -93,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
 
-    String? username = StoragePool.authSetting.currentUsername;
+    String? username = SettingInitializer.auth.currentUsername;
     if (username != null) {
       _usernameController.text = username;
       _passwordController.text = StoragePool.authPool.get(username)!.password;
@@ -209,8 +210,8 @@ class _LoginPageState extends State<LoginPage> {
         controller.dismiss();
         isProxySettingShown = false;
 
-        StoragePool.network.useProxy = true;
-        StoragePool.network.proxy = inputText;
+        SettingInitializer.network.useProxy = true;
+        SettingInitializer.network.proxy = inputText;
         SessionPool.init();
       },
       icon: const Icon(Icons.send),
@@ -222,7 +223,7 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
     isProxySettingShown = true;
-    _proxyInputController.text = StoragePool.network.proxy;
+    _proxyInputController.text = SettingInitializer.network.proxy;
 
     context.showFlashBar(
       persistent: true,

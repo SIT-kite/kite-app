@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'package:kite/setting/init.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/page_logger.dart';
 
@@ -32,10 +33,10 @@ Future<void> initBeforeRun() async {
 
   // 初始化用户首次打开时间（而不是应用安装时间）
   // ??= 表示为空时候才赋值
-  StoragePool.homeSetting.installTime ??= DateTime.now();
+  SettingInitializer.home.installTime ??= DateTime.now();
 
   // 若本地存放了用户名与密码，那就惰性登录
-  String? currentUsername = StoragePool.authSetting.currentUsername;
+  String? currentUsername = SettingInitializer.auth.currentUsername;
   if (currentUsername != null) {
     // 惰性登录
     String password = StoragePool.authPool.get(currentUsername)!.password;

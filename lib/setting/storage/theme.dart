@@ -15,23 +15,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:kite/domain/kite/dao/jwt.dart';
-import 'package:kite/storage/constants.dart';
 
-class JwtKeys {
-  static const namespace = '/kite';
-  static const jwt = '$namespace/jwt';
+import '../dao/theme.dart';
+
+class ThemeKeys {
+  static const namespace = '/theme';
+  static const themeColor = '$namespace/color';
+  static const isDarkMode = '$namespace/isDarkMode';
 }
 
-class JwtStorage implements JwtDao {
+class ThemeSettingStorage implements ThemeSettingDao {
   final Box<dynamic> box;
 
-  JwtStorage(this.box);
+  ThemeSettingStorage(this.box);
 
   @override
-  String? get jwtToken => box.get(JwtKeys.jwt, defaultValue: null);
+  Color get color {
+    final String value = box.get(ThemeKeys.themeColor, defaultValue: 'ff2196f3');
+    final int color = int.parse(value.replaceFirst('#', ''), radix: 16);
+    return Color(color);
+  }
 
   @override
-  set jwtToken(String? jwt) => box.put(JwtKeys.jwt, jwt);
+  set color(Color v) {
+    final String value = v.value.toRadixString(16).padLeft(6, '0');
+    box.put(ThemeKeys.themeColor, value);
+  }
+
+  @override
+  bool get isDarkMode => box.get(ThemeKeys.isDarkMode, defaultValue: false);
+
+  @override
+  set isDarkMode(value) => box.put(ThemeKeys.isDarkMode, value);
 }

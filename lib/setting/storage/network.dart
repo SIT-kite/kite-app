@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:hive/hive.dart';
-import 'package:kite/dao/setting/network.dart';
-import 'package:kite/storage/constants.dart';
 import 'package:kite/util/logger.dart';
+
+import '../dao/network.dart';
 
 class NetworkKeys {
   static const namespace = '/network';

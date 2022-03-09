@@ -24,6 +24,7 @@ import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
 import 'package:kite/session/exception.dart';
+import 'package:kite/setting/init.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/network.dart';
@@ -53,14 +54,14 @@ class _HomePageState extends State<HomePage> {
     Log.info('更新天气');
     Future.delayed(const Duration(milliseconds: 800), () async {
       try {
-        final weather = await WeatherService().getCurrentWeather(StoragePool.homeSetting.campus);
+        final weather = await WeatherService().getCurrentWeather(SettingInitializer.home.campus);
         eventBus.emit(EventNameConstants.onWeatherUpdate, weather);
       } catch (_) {}
     });
   }
 
   Future<void> _doLogin(BuildContext context) async {
-    final String username = StoragePool.authSetting.currentUsername!;
+    final String username = SettingInitializer.auth.currentUsername!;
     final String password = StoragePool.authPool.get(username)!.password;
 
     await SessionPool.ssoSession.login(username, password);
@@ -120,7 +121,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Widget> buildFunctionWidgets() {
-    List<FunctionType> list = StoragePool.homeSetting.homeItems ?? defaultFunctionList.toList();
+    List<FunctionType> list = SettingInitializer.home.homeItems ?? defaultFunctionList.toList();
 
     // 先遍历一遍，过滤相邻重复元素
     FunctionType lastItem = list.first;

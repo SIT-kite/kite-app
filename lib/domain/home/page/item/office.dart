@@ -20,6 +20,7 @@ import 'package:kite/domain/office/service/index.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
+import 'package:kite/setting/init.dart';
 
 import 'index.dart';
 
@@ -48,12 +49,12 @@ class _OfficeItemState extends State<OfficeItem> {
 
   void _onHomeRefresh(_) async {
     final String result = await _buildContent();
-    StoragePool.homeSetting.lastOfficeStatus = result;
+    SettingInitializer.home.lastOfficeStatus = result;
     setState(() => content = result);
   }
 
   Future<String> _buildContent() async {
-    final username = StoragePool.authSetting.currentUsername!;
+    final username = SettingInitializer.auth.currentUsername!;
     final password = StoragePool.authPool.get(username)!.password;
 
     if (SessionPool.officeSession == null) {
@@ -78,7 +79,7 @@ class _OfficeItemState extends State<OfficeItem> {
   Widget build(BuildContext context) {
     // 如果是首屏加载, 从缓存读
     if (content == null) {
-      final String? lastOfficeStatus = StoragePool.homeSetting.lastOfficeStatus;
+      final String? lastOfficeStatus = SettingInitializer.home.lastOfficeStatus;
       content = lastOfficeStatus ?? defaultContent;
     }
     return HomeFunctionButton(route: '/office', icon: 'assets/home/icon_office.svg', title: '办公', subtitle: content);

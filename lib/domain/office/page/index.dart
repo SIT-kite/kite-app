@@ -23,6 +23,7 @@ import 'package:kite/domain/office/entity/index.dart';
 import 'package:kite/domain/office/service/index.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/global/storage_pool.dart';
+import 'package:kite/setting/init.dart';
 
 import 'detail.dart';
 import 'message.dart';
@@ -90,7 +91,7 @@ class _OfficePageState extends State<OfficePage> {
 
   Future<List<SimpleFunction>> _fetchFuncList() async {
     if (!_isOfficeLogin) {
-      final username = StoragePool.authSetting.currentUsername!;
+      final username = SettingInitializer.auth.currentUsername!;
       final password = StoragePool.authPool.get(username)!.password;
       SessionPool.officeSession ??= await officeLogin(username, password);
       _isOfficeLogin = true;

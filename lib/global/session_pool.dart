@@ -22,13 +22,13 @@ import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:kite/domain/edu/service/index.dart';
-import 'package:kite/domain/office/service/index.dart';
-import 'package:kite/global/storage_pool.dart';
 import 'package:kite/domain/kite/kite_session.dart';
 import 'package:kite/domain/library/library_session.dart';
+import 'package:kite/domain/office/service/index.dart';
 import 'package:kite/domain/report/report_session.dart';
 import 'package:kite/domain/sc/sc_session.dart';
 import 'package:kite/session/sso/sso_session.dart';
+import 'package:kite/setting/init.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/rule.dart';
 import 'package:path_provider/path_provider.dart';
@@ -63,7 +63,7 @@ class SessionPool {
     final cookieJar = SessionPool.cookieJar;
     final cookies = await cookieJar.loadForRequest(uri);
     return cookies.map((cookie) {
-      print('获取cookie $cookie');
+      Log.info('获取cookie $cookie');
       return WebViewCookie(
         name: cookie.name,
         value: cookie.value,
@@ -91,7 +91,7 @@ class SessionPool {
     scSession = ScSession(ssoSession);
     eduSession = EduSession(ssoSession);
     librarySession = LibrarySession(dio);
-    kiteSession = KiteSession(dio, StoragePool.jwt);
+    kiteSession = KiteSession(dio, SettingInitializer.jwt);
     _hasInit = true;
   }
 
@@ -154,7 +154,7 @@ class KiteHttpOverrides extends HttpOverrides {
     final client = super.createHttpClient(context);
 
     // 设置证书检查
-    if (SessionPool.allowBadCertificate || StoragePool.network.useProxy || SessionPool.httpProxy != null) {
+    if (SessionPool.allowBadCertificate || SettingInitializer.network.useProxy || SessionPool.httpProxy != null) {
       client.badCertificateCallback = (cert, host, port) => true;
     }
 
@@ -170,9 +170,9 @@ class KiteHttpOverrides extends HttpOverrides {
         // 不行
         Log.info('测试环境代理服务器为空或不合法，将不使用代理服务器');
       }
-    } else if (StoragePool.network.useProxy && StoragePool.network.proxy.isNotEmpty) {
+    } else if (SettingInitializer.network.useProxy && SettingInitializer.network.proxy.isNotEmpty) {
       Log.info('线上设置代理: ${SessionPool.httpProxy}');
-      client.findProxy = (url) => getProxyPolicyByUrl(url, StoragePool.network.proxy);
+      client.findProxy = (url) => getProxyPolicyByUrl(url, SettingInitializer.network.proxy);
     }
     return client;
   }

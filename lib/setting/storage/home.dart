@@ -16,12 +16,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:hive/hive.dart';
-import 'package:kite/dao/setting/home.dart';
 import 'package:kite/domain/home/entity/home.dart';
 import 'package:kite/domain/kite/entity/electricity.dart';
 import 'package:kite/domain/kite/entity/weather.dart';
 import 'package:kite/domain/report/entity/report.dart';
-import 'package:kite/storage/constants.dart';
+
+import '../dao/home.dart';
+
+class HomeKeyKeys {
+  static const namespace = '/home';
+  static const campus = '$namespace/campus';
+  static const background = '$namespace/background';
+  static const backgroundMode = '$namespace/backgroundMode';
+  static const installTime = '$namespace/installTime';
+  static const homeItems = '$namespace/homeItems';
+
+  // 首页在无网状态下加载的缓存.
+  static const lastWeather = '$namespace/lastWeather';
+  static const lastReport = '$namespace/lastReport';
+  static const lastBalance = '$namespace/lastBalance';
+  static const lastExpense = '$namespace/lastExpense';
+  static const lastHotSearch = '$namespace/lastHotSearch';
+  static const lastOfficeStatus = '$namespace/lastOfficeStatus';
+
+  static const readNotice = '$namespace/readNotice';
+}
 
 class HomeSettingStorage implements HomeSettingDao {
   final Box<dynamic> box;

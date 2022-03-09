@@ -22,7 +22,7 @@ import 'package:kite/domain/library/entity/hot_search.dart';
 import 'package:kite/domain/library/service/hot_search.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/global/session_pool.dart';
-import 'package:kite/global/storage_pool.dart';
+import 'package:kite/setting/init.dart';
 
 import 'index.dart';
 
@@ -69,7 +69,7 @@ class _LibraryItemState extends State<LibraryItem> {
     final hotItem = monthlyHot[randomIndex];
 
     final result = '热搜: ${hotItem.hotSearchWord} (${hotItem.count})';
-    StoragePool.homeSetting.lastHotSearch = result;
+    SettingInitializer.home.lastHotSearch = result;
     return result;
   }
 
@@ -77,7 +77,7 @@ class _LibraryItemState extends State<LibraryItem> {
   Widget build(BuildContext context) {
     // 如果是首屏加载
     if (content == null) {
-      final lastHotSearch = StoragePool.homeSetting.lastHotSearch;
+      final lastHotSearch = SettingInitializer.home.lastHotSearch;
       content = lastHotSearch ?? defaultContent;
     }
     return HomeFunctionButton(route: '/library', icon: 'assets/home/icon_library.svg', title: '图书馆', subtitle: content);
