@@ -19,7 +19,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:kite/dao/campus_card.dart';
-import 'package:kite/entity/campus_card.dart';
+import 'package:kite/domain/campus_card/entity/campus_card.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/session/abstract_session.dart';
 

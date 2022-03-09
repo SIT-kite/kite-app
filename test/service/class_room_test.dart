@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/service/classroom.dart';
+import 'package:kite/domain/kite/service/classroom.dart';
 
 import 'mock_util.dart';
 

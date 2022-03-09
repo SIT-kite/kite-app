@@ -17,7 +17,7 @@
  */
 import 'package:dio/dio.dart';
 import 'package:kite/dao/weatcher.dart';
-import 'package:kite/entity/weather.dart';
+import 'package:kite/domain/kite/entity/weather.dart';
 
 class WeatherService implements WeatherDao {
   static String _getWeatherUrl(int campus) => 'https://kite.sunnysab.cn/api/v2/weather/$campus';

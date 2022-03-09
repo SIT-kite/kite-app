@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/entity/classroom.dart';
+import 'package:kite/domain/kite/entity/classroom.dart';
 
 /// 远程的空教室数据访问层的接口
 abstract class ClassroomRemoteDao {

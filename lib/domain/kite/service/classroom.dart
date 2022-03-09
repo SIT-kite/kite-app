@@ -17,7 +17,7 @@
  */
 
 import 'package:kite/dao/classroom.dart';
-import 'package:kite/entity/classroom.dart';
+import 'package:kite/domain/kite/entity/classroom.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/session/abstract_session.dart';
 

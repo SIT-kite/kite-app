@@ -31,7 +31,6 @@ import 'package:kite/domain/expense/entity/expense.dart';
 import 'package:kite/domain/mail/storage/mail.dart';
 import 'package:kite/entity/auth_item.dart';
 import 'package:kite/entity/home.dart';
-import 'package:kite/entity/weather.dart';
 import 'package:kite/storage/auth.dart';
 import 'package:kite/storage/home.dart';
 import 'package:kite/storage/jwt.dart';
@@ -85,7 +84,6 @@ class StoragePool {
 
   static Future<void> _registerAdapters() async {
     registerAdapter(AuthItemAdapter());
-    registerAdapter(WeatherAdapter());
     registerAdapter(CourseAdapter());
     registerAdapter(ExpenseRecordAdapter());
     registerAdapter(ExpenseTypeAdapter());

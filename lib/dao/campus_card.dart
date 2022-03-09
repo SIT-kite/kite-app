@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/entity/campus_card.dart';
+import 'package:kite/domain/campus_card/entity/campus_card.dart';
 
 abstract class CampusCardDao {
   /// 根据校园卡id获取身份信息

@@ -11,7 +11,7 @@ class KiteInitializer {
     registerAdapter(UserEventAdapter());
     registerAdapter(UserEventTypeAdapter());
     registerAdapter(BalanceAdapter());
-
+    registerAdapter(WeatherAdapter());
     final electricityBox = await Hive.openBox('electricity');
     electricityStorage = ElectricityStorage(electricityBox);
   }

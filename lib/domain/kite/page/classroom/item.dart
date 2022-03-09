@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:kite/entity/classroom.dart';
+import 'package:kite/domain/kite/entity/classroom.dart';
 
 class ClassroomItem extends StatelessWidget {
   final AvailableClassroom _classroom;
