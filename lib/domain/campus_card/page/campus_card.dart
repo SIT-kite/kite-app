@@ -20,7 +20,7 @@ import 'dart:typed_data';
 
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/dao/campus_card.dart';
+import 'package:kite/domain/campus_card/dao/campus_card.dart';
 import 'package:kite/global/session_pool.dart';
 import 'package:kite/domain/campus_card/service/campus_card.dart';
 import 'package:kite/util/flash.dart';

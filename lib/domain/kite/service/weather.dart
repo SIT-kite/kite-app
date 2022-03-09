@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:dio/dio.dart';
-import 'package:kite/dao/weatcher.dart';
+import 'package:kite/domain/kite/dao/weatcher.dart';
 import 'package:kite/domain/kite/entity/weather.dart';
 
 class WeatherService implements WeatherDao {

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:hive/hive.dart';
-import 'package:kite/dao/electricity.dart';
+import 'package:kite/domain/kite/dao/electricity.dart';
 
 class ElectricityStorage implements ElectricityStorageDao {
   final Box<dynamic> box;

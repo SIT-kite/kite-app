@@ -1,6 +1,6 @@
-import 'package:kite/dao/index.dart';
 import 'package:kite/session/abstract_session.dart';
 
+import 'dao/campus_card.dart';
 import 'service/campus_card.dart';
 
 class CampusCardInitializer {

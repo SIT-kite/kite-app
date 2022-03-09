@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:dio/dio.dart';
-import 'package:kite/dao/report.dart';
+import 'package:kite/domain/report/dao/report.dart';
 import 'package:kite/domain/report/entity/report.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/session/abstract_session.dart';
