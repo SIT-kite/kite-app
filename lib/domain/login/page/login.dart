@@ -20,7 +20,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/exception/session.dart';
-import 'package:kite/global/dio_initializer.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/url_launcher.dart';
@@ -66,7 +65,8 @@ class _LoginPageState extends State<LoginPage> {
     final username = _usernameController.text;
     final password = _passwordController.text;
     try {
-      await SessionPool.ssoSession.login(username, password);
+      // TODO
+      // await SessionPool.ssoSession.login(username, password);
       SettingInitializer.auth
         ..currentUsername = username
         ..ssoPassword = password;
@@ -210,9 +210,11 @@ class _LoginPageState extends State<LoginPage> {
         controller.dismiss();
         isProxySettingShown = false;
 
-        SettingInitializer.network.useProxy = true;
-        SettingInitializer.network.proxy = inputText;
-        SessionPool.init();
+        SettingInitializer.network
+          ..useProxy = true
+          ..proxy = inputText;
+        // TODO
+        // SessionPool.init();
       },
       icon: const Icon(Icons.send),
     );
