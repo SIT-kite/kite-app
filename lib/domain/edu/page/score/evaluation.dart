@@ -18,7 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/domain/edu/entity/index.dart';
-import 'package:kite/global/dio_initializer.dart';
+import 'package:kite/domain/edu/init.dart';
 import 'package:kite/util/cookie_util.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -30,14 +30,11 @@ class EvaluationPage extends StatefulWidget {
   const EvaluationPage(this.coursesToEvaluate, {Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _EvaluationPageState(coursesToEvaluate);
+  State<StatefulWidget> createState() => _EvaluationPageState();
 }
 
 class _EvaluationPageState extends State<EvaluationPage> {
-  final List<CourseToEvaluate> coursesToEvaluate;
   int index = 0;
-
-  _EvaluationPageState(this.coursesToEvaluate);
 
   Map _getForm(CourseToEvaluate coursesToEvaluate) {
     return {
@@ -91,6 +88,7 @@ post("$path", $formString);''';
 
   @override
   Widget build(BuildContext context) {
+    final coursesToEvaluate = widget.coursesToEvaluate;
     return Scaffold(
       appBar: AppBar(title: const Text('评教')),
       floatingActionButton: FloatingActionButton(
@@ -107,7 +105,7 @@ post("$path", $formString);''';
         },
       ),
       body: MyFutureBuilder<List<WebViewCookie>>(
-          future: SessionPool.cookieJar.loadAsWebViewCookie(Uri.parse('http://jwxt.sit.edu.cn/jwglxt/')),
+          future: EduInitializer.cookieJar.loadAsWebViewCookie(Uri.parse('http://jwxt.sit.edu.cn/jwglxt/')),
           builder: (context, data) {
             return WebView(
               initialCookies: data,

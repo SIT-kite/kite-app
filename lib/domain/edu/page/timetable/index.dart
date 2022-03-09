@@ -21,8 +21,6 @@ import 'package:flutter/material.dart';
 import 'package:ical/serializer.dart';
 import 'package:kite/domain/edu/entity/index.dart';
 import 'package:kite/domain/edu/init.dart';
-import 'package:kite/domain/edu/service/index.dart';
-import 'package:kite/global/dio_initializer.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/permission.dart';
@@ -61,8 +59,7 @@ class _TimetablePageState extends State<TimetablePage> {
   List<Course> timetable = EduInitializer.timetableStorage.getTimetable();
 
   Future<List<Course>> _fetchTimetable() async {
-    final service = TimetableService(SessionPool.eduSession);
-    final timetable = await service.getTimetable(currSchoolYear, currSemester);
+    final timetable = await EduInitializer.timetable.getTimetable(currSchoolYear, currSemester);
 
     await EduInitializer.timetableStorage.clear();
     EduInitializer.timetableStorage.addAll(timetable);

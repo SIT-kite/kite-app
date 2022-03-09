@@ -17,9 +17,8 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/domain/edu/entity/index.dart';
-import 'package:kite/domain/edu/service/index.dart';
+import 'package:kite/domain/edu/init.dart';
 import 'package:kite/domain/edu/util/icon.dart';
-import 'package:kite/global/dio_initializer.dart';
 import 'package:kite/global/event_bus.dart';
 
 import 'evaluation.dart';
@@ -53,8 +52,7 @@ class _ScoreItemState extends State<ScoreItem> {
   }
 
   Widget _buildScoreDetail() {
-    final future =
-        ScoreService(SessionPool.eduSession).getScoreDetail(_score.innerClassId, _score.schoolYear, _score.semester);
+    final future = EduInitializer.score.getScoreDetail(_score.innerClassId, _score.schoolYear, _score.semester);
 
     return FutureBuilder(
       future: future,
@@ -96,10 +94,8 @@ class _ScoreItemState extends State<ScoreItem> {
       return Text(_score.value.toString(), style: style);
     } else {
       // 获取评教列表. 然后找到与当前课程有关的, 将评教页面呈现给用户.
-      final future = CourseEvaluationService(SessionPool.eduSession).getEvaluationList();
-
       return FutureBuilder<List<CourseToEvaluate>>(
-          future: future,
+          future: EduInitializer.courseEvaluation.getEvaluationList(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final coursesToEvaluate =

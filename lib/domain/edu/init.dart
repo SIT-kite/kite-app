@@ -1,3 +1,4 @@
+import 'package:cookie_jar/cookie_jar.dart';
 import 'package:hive/hive.dart';
 import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/util/hive_register_adapter.dart';
@@ -12,11 +13,17 @@ class EduInitializer {
   static late ExamDao exam;
   static late ScoreDao score;
   static late TimetableDao timetable;
-
   static late TimetableStorageDao timetableStorage;
 
+  static late CookieJar cookieJar;
+
   /// 初始化教务相关的service
-  static Future<void> init(ASession session) async {
+  static Future<void> init({
+    required ASession session,
+    required CookieJar cookieJar,
+  }) async {
+    EduInitializer.cookieJar = cookieJar;
+
     registerAdapter(CourseAdapter());
 
     courseEvaluation = CourseEvaluationService(session);
