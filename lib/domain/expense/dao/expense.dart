@@ -20,7 +20,11 @@ import 'package:kite/domain/expense/entity/expense.dart';
 /// 远程的消费数据访问层的接口
 abstract class ExpenseRemoteDao {
   /// 获取消费
-  Future<OaExpensePage> getExpensePage(int pageNum, {DateTime start, DateTime end});
+  Future<OaExpensePage> getExpensePage(
+    int pageNum, {
+    required DateTime start,
+    required DateTime end,
+  });
 }
 
 /// 本地的消费数据访问接口

@@ -19,10 +19,9 @@ import 'package:flutter/material.dart';
 import 'package:kite/domain/expense/entity/expense.dart';
 import 'package:kite/domain/expense/init.dart';
 import 'package:kite/domain/expense/page/icon.dart';
-import 'package:kite/domain/expense/service/expense.dart';
-import 'package:kite/global/dio_initializer.dart';
 import 'package:kite/util/flash.dart';
 
+import '../dao/expense.dart';
 import 'bill.dart';
 import 'statistics.dart';
 
@@ -58,7 +57,10 @@ class _ExpensePageState extends State<ExpensePage> {
   }
 
   /// 拉取数据并保存
-  Future<OaExpensePage> _fetchAndSave(ExpenseRemoteService service, int page, {DateTime? start, DateTime? end}) async {
+  Future<OaExpensePage> _fetchAndSave(ExpenseRemoteDao service, int page, {DateTime? start, DateTime? end}) async {
+    start = start ?? DateTime(2010);
+    end = end ?? DateTime.now();
+
     final OaExpensePage billPage = await service.getExpensePage(page, start: start, end: end);
     ExpenseInitializer.expenseRecord.addAll(billPage.records);
 
@@ -66,7 +68,7 @@ class _ExpensePageState extends State<ExpensePage> {
   }
 
   /// 并发拉取数据
-  Future<List<ExpenseRecord>> _fetchBillConcurrently(ExpenseRemoteService service, int startPage, int count) async {
+  Future<List<ExpenseRecord>> _fetchBillConcurrently(ExpenseRemoteDao service, int startPage, int count) async {
     final List<Future> futures = [];
     for (int i = 2; i <= count; i++) {
       futures.add(_fetchAndSave(service, i));
@@ -85,7 +87,8 @@ class _ExpensePageState extends State<ExpensePage> {
     showBasicFlash(context, const Text('正在更新消费数据, 速度受限于学校服务器, 请稍等'));
 
     final DateTime? startDate = ExpenseInitializer.expenseRecord.getLastOne()?.ts;
-    final ExpenseRemoteService service = ExpenseRemoteService(SessionPool.ssoSession);
+    final service = ExpenseInitializer.expenseRemote;
+
     final OaExpensePage firstPage = await _fetchAndSave(service, 1, start: startDate);
 
     showBasicFlash(context, Text('已加载 1 页, 共 ${firstPage.total} 页'));

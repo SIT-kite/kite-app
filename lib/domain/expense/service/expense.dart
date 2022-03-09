@@ -38,9 +38,12 @@ class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
 
   ExpenseRemoteService(ASession session) : super(session);
 
-  Future<OaExpensePage> getExpensePage(int page, {DateTime? start, DateTime? end}) async {
-    start = start ?? DateTime(2010);
-    end = end ?? DateTime.now();
+  @override
+  Future<OaExpensePage> getExpensePage(
+    int page, {
+    required DateTime start,
+    required DateTime end,
+  }) async {
     final response = await session.get(
       _expenseUrl,
       queryParameters: {
