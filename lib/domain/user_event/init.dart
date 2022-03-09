@@ -1,8 +1,6 @@
 import 'package:hive/hive.dart';
-import 'package:kite/util/hive_register_adapter.dart';
 
 import 'dao.dart';
-import 'entity.dart';
 import 'storage.dart';
 
 class UserEventInitializer {
@@ -11,8 +9,6 @@ class UserEventInitializer {
   static Future<void> init({
     required Box<dynamic> userEventBox,
   }) async {
-    registerAdapter(UserEventAdapter());
-    registerAdapter(UserEventTypeAdapter());
     userEventStorage = UserEventStorage(userEventBox);
   }
 }

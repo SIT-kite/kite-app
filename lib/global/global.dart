@@ -2,11 +2,12 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:kite/global/cookie_initializer.dart';
 import 'package:kite/global/dio_initializer.dart';
-import 'package:kite/other/user_event/dao.dart';
 import 'package:kite/session/sso/index.dart';
 import 'package:kite/setting/dao/auth.dart';
 import 'package:kite/util/event_bus.dart';
 import 'package:kite/util/page_logger.dart';
+
+import '../domain/user_event/dao.dart';
 
 enum EventNameConstants {
   onWeatherUpdate,

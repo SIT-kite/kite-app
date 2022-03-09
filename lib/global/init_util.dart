@@ -25,7 +25,6 @@ import 'package:kite/domain/kite/kite_session.dart';
 import 'package:kite/domain/mail/init.dart';
 import 'package:kite/domain/office/init.dart';
 import 'package:kite/global/global.dart';
-import 'package:kite/other/user_event/init.dart';
 import 'package:kite/setting/init.dart';
 
 class Initializer {

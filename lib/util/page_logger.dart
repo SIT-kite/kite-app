@@ -18,11 +18,11 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:kite/other/user_event/dao.dart';
-import 'package:kite/other/user_event/entity.dart';
-import 'package:kite/other/user_event/init.dart';
 import 'package:uuid/uuid.dart';
 
+import '../domain/user_event/dao.dart';
+import '../domain/user_event/entity.dart';
+import '../domain/user_event/init.dart';
 import 'logger.dart';
 
 const String reportEventUrl = "https://kite.sunnysab.cn/api/v2/report/event";

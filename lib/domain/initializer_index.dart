@@ -8,6 +8,7 @@ import 'home/entity/home.dart';
 import 'kite/entity/electricity.dart';
 import 'kite/entity/weather.dart';
 import 'library/entity/search_history.dart';
+import 'user_event/entity.dart';
 
 export 'bulletin/init.dart';
 export 'campus_card/init.dart';
@@ -17,6 +18,7 @@ export 'expense/init.dart';
 export 'library/init.dart';
 export 'report/init.dart';
 export 'sc/init.dart';
+export 'user_event/init.dart';
 
 void registerAdapters() {
   registerAdapter(ContactDataAdapter());
@@ -29,4 +31,6 @@ void registerAdapters() {
   registerAdapter(BalanceAdapter());
   registerAdapter(WeatherAdapter());
   registerAdapter(LibrarySearchHistoryItemAdapter());
+  registerAdapter(UserEventAdapter());
+  registerAdapter(UserEventTypeAdapter());
 }
