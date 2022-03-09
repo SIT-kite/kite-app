@@ -17,9 +17,9 @@
  */
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:kite/component/future_builder.dart';
 import 'package:kite/domain/kite/entity/notice.dart';
-import 'package:kite/domain/kite/service/index.dart';
-import 'package:kite/global/dio_initializer.dart';
+import 'package:kite/domain/kite/init.dart';
 
 class NoticePage extends StatelessWidget {
   const NoticePage({Key? key}) : super(key: key);
@@ -71,19 +71,10 @@ class NoticePage extends StatelessWidget {
   }
 
   Widget _buildBody() {
-    final future = NoticeService(SessionPool.kiteSession).getNoticeList();
-
-    return FutureBuilder<List<KiteNotice>>(
-      future: future,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasData) {
-            return _buildNoticeList(context, snapshot.data!);
-          } else if (snapshot.hasError) {
-            return Center(child: Text('加载失败: ${snapshot.error.runtimeType.toString()}'));
-          }
-        }
-        return const Center(child: CircularProgressIndicator());
+    return MyFutureBuilder<List<KiteNotice>>(
+      future: KiteInitializer.noticeService.getNoticeList(),
+      builder: (context, data) {
+        return _buildNoticeList(context, data);
       },
     );
   }

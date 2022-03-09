@@ -18,10 +18,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:kite/domain/home/entity/home.dart';
+import 'package:kite/domain/home/init.dart';
 import 'package:kite/domain/kite/service/weather.dart';
+import 'package:kite/domain/quick_button/init.dart';
 import 'package:kite/exception/session.dart';
-import 'package:kite/global/dio_initializer.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/util/flash.dart';
@@ -30,7 +30,7 @@ import 'package:kite/util/network.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-import '../../../global/quick_button.dart';
+import '../entity/home.dart';
 import 'background.dart';
 import 'drawer.dart';
 import 'greeting.dart';
@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
     final String username = SettingInitializer.auth.currentUsername!;
     final String password = SettingInitializer.auth.ssoPassword!;
 
-    await SessionPool.ssoSession.login(username, password);
+    await HomeInitializer.ssoSession.login(username, password);
   }
 
   /// 显示检查网络的flash
@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _onHomeRefresh(BuildContext context) async {
     // 如果未登录 (老用户直接进入 Home 页不会处于登录状态, 但新用户经过 login 页时已登录)
-    if (!SessionPool.ssoSession.isOnline) {
+    if (!HomeInitializer.ssoSession.isOnline) {
       try {
         await _doLogin(context);
         showBasicFlash(context, const Text('登录成功'));
@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
       }
     }
 
-    if (SessionPool.ssoSession.isOnline) {
+    if (HomeInitializer.ssoSession.isOnline) {
       eventBus.emit(EventNameConstants.onHomeRefresh);
     }
     _refreshController.refreshCompleted(resetFooterState: true);
@@ -194,7 +194,7 @@ class _HomePageState extends State<HomePage> {
       );
     });
     // 检查校园网情况
-    checkConnectivity().then((ok) {
+    HomeInitializer.ssoSession.checkConnectivity().then((ok) {
       if (!ok) {
         _showCheckNetwork(
           context,

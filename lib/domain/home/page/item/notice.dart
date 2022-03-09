@@ -17,10 +17,9 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/domain/kite/entity/notice.dart';
-import 'package:kite/domain/kite/service/index.dart';
-import 'package:kite/global/dio_initializer.dart';
 import 'package:kite/global/event_bus.dart';
 
+import '../../init.dart';
 import 'index.dart';
 
 class NoticeItem extends StatefulWidget {
@@ -53,7 +52,7 @@ class _NoticeItemState extends State<NoticeItem> {
 
   Future<String?> _buildContent() async {
     try {
-      final List<KiteNotice> list = await NoticeService(SessionPool.kiteSession).getNoticeList();
+      final List<KiteNotice> list = await HomeInitializer.noticeService.getNoticeList();
       return list.first.title;
     } catch (_) {
       return null;

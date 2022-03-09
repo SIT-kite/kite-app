@@ -21,13 +21,14 @@ import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
-import '../../global/dio_initializer.dart';
-
 /// 应网办登录地址, POST 请求
 const String _officeLoginUrl = 'https://xgfy.sit.edu.cn/unifri-flow/login';
 
-Future<OfficeSession> officeLogin(String username, String password) async {
-  final dio = SessionPool.dio;
+Future<OfficeSession> officeLogin({
+  required Dio dio,
+  required String username,
+  required String password,
+}) async {
   final Map<String, String> credential = {'account': username, 'userPassword': password, 'remember': 'true'};
 
   final response =
@@ -39,19 +40,23 @@ Future<OfficeSession> officeLogin(String username, String password) async {
     throw OfficeLoginException('($code) $errMessage');
   }
   final String jwt = ((response.data as Map)['data'])['authorization'];
-  return OfficeSession(username, jwt);
+  return OfficeSession(
+    username: username,
+    jwtToken: jwt,
+    dio: dio,
+  );
 }
 
 class OfficeSession extends ASession {
-  final String _userName;
-  final String _jwtToken;
-  late final Dio _dio;
+  final String username;
+  final String jwtToken;
+  final Dio dio;
 
-  OfficeSession(this._userName, this._jwtToken, {Dio? dio}) {
-    _dio = dio ?? SessionPool.dio;
-  }
-
-  String get userName => _userName;
+  OfficeSession({
+    required this.username,
+    required this.jwtToken,
+    required this.dio,
+  });
 
   /// 获取当前以毫秒为单位的时间戳.
   static String _getTimestamp() => DateTime.now().millisecondsSinceEpoch.toString();
@@ -77,14 +82,18 @@ class OfficeSession extends ASession {
     // Make default options.
     final String ts = _getTimestamp();
     final String sign = _sign(ts);
-    final Map<String, dynamic> newHeaders = {'timestamp': ts, 'signature': sign, 'Authorization': _jwtToken};
+    final Map<String, dynamic> newHeaders = {
+      'timestamp': ts,
+      'signature': sign,
+      'Authorization': jwtToken,
+    };
 
     newOptions.headers == null ? newOptions.headers = newHeaders : newOptions.headers?.addAll(newHeaders);
     newOptions.method = method;
     newOptions.contentType = contentType;
     newOptions.responseType = responseType;
 
-    return await _dio.request(
+    return await dio.request(
       url,
       queryParameters: queryParameters,
       data: data,

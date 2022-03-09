@@ -17,9 +17,9 @@
  */
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:kite/component/future_builder.dart';
 import 'package:kite/domain/kite/entity/electricity.dart';
-import 'package:kite/domain/kite/service/electricity.dart';
-import 'package:kite/global/dio_initializer.dart';
+import 'package:kite/domain/kite/init.dart';
 import 'package:kite/util/flash.dart';
 
 class BalanceSection extends StatelessWidget {
@@ -64,19 +64,10 @@ class BalanceSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final future = ElectricityService(SessionPool.ssoSession).getBalance(room);
-
-    return FutureBuilder<Balance>(
-      future: future,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasData) {
-            return _buildView(context, snapshot.data!);
-          } else if (snapshot.hasError) {
-            return Center(child: Text(snapshot.error.runtimeType.toString()));
-          }
-        }
-        return const Center(child: CircularProgressIndicator());
+    return MyFutureBuilder<Balance>(
+      future: KiteInitializer.electricityService.getBalance(room),
+      builder: (context, data) {
+        return _buildView(context, data);
       },
     );
   }

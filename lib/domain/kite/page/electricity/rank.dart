@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/component/future_builder.dart';
 import 'package:kite/domain/kite/entity/electricity.dart';
-import 'package:kite/domain/kite/service/electricity.dart';
-import 'package:kite/global/dio_initializer.dart';
+import 'package:kite/domain/kite/init.dart';
 
 class RankView extends StatelessWidget {
   final String room;
@@ -54,19 +54,10 @@ class RankView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final future = ElectricityService(SessionPool.ssoSession).getRank(room);
-
-    return FutureBuilder<Rank>(
-      future: future,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasData) {
-            return _buildView(snapshot.data!);
-          } else if (snapshot.hasError) {
-            return Center(child: Text(snapshot.error.runtimeType.toString()));
-          }
-        }
-        return const Center(child: CircularProgressIndicator());
+    return MyFutureBuilder<Rank>(
+      future: KiteInitializer.electricityService.getRank(room),
+      builder: (context, data) {
+        return _buildView(data);
       },
     );
   }

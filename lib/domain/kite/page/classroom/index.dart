@@ -19,8 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/domain/kite/entity/classroom.dart';
-import 'package:kite/domain/kite/service/classroom.dart';
-import 'package:kite/global/dio_initializer.dart';
+import 'package:kite/domain/kite/init.dart';
 
 import 'item.dart';
 
@@ -181,7 +180,7 @@ class _ClassroomPageState extends State<ClassroomPage> {
     }
     // 注意：本地数组索引执行的是 奉贤 0, 徐汇 1；服务端执行的是：奉贤 1, 徐汇 2.
     final date = days[dayIndex];
-    final result = await ClassroomService(SessionPool.kiteSession).queryAvailableClassroom(_campusIndex + 1, date);
+    final result = await KiteInitializer.classroomService.queryAvailableClassroom(_campusIndex + 1, date);
     _cachedQueryResult[campusIndex][dayIndex] = result;
     return result;
   }
