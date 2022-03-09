@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:kite/domain/expense/service/expense.dart';
-import 'package:kite/session/abstract_session.dart';
+import 'package:kite/abstract/abstract_session.dart';
 
 import 'dao/expense.dart';
 import 'entity/expense.dart';

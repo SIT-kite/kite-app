@@ -18,9 +18,9 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:kite/session/abstract_session.dart';
+import 'package:kite/abstract/abstract_session.dart';
 
-import '../../../service/abstract_service.dart';
+import '../../../abstract/abstract_service.dart';
 import '../dao/image_search.dart';
 import '../entity/book_image.dart';
 import '../service/constant.dart';

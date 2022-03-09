@@ -16,10 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:dio/dio.dart';
+import 'package:kite/abstract/abstract_service.dart';
+import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/domain/report/dao/report.dart';
 import 'package:kite/domain/report/entity/report.dart';
-import 'package:kite/service/abstract_service.dart';
-import 'package:kite/session/abstract_session.dart';
 
 class ReportService extends AService implements ReportDao {
   ReportService(ASession session) : super(session);

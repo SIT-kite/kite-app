@@ -19,7 +19,7 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
-import 'package:kite/session/abstract_session.dart';
+import 'package:kite/abstract/abstract_session.dart';
 
 import '../../global/session_pool.dart';
 

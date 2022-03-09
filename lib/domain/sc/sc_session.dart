@@ -18,7 +18,7 @@
 
 import 'package:dio/dio.dart';
 
-import '../../session/abstract_session.dart';
+import '../../abstract/abstract_session.dart';
 import '../../util/logger.dart';
 
 class ScSession extends ASession {

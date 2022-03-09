@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import '../session/abstract_session.dart';
+import 'abstract_session.dart';
 
 abstract class AService {
   final ASession session;

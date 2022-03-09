@@ -20,10 +20,10 @@ import 'dart:collection';
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:intl/intl.dart';
+import 'package:kite/abstract/abstract_service.dart';
+import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/domain/sc/dao/detail.dart';
 import 'package:kite/domain/sc/entity/detail.dart';
-import 'package:kite/service/abstract_service.dart';
-import 'package:kite/session/abstract_session.dart';
 
 class ScActivityDetailService extends AService implements ScActivityDetailDao {
   static const _scDetailUrlBase = 'http://sc.sit.edu.cn/public/activity/activityDetail.action?activityId=';

@@ -17,8 +17,8 @@
  */
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:kite/service/abstract_service.dart';
-import 'package:kite/session/abstract_session.dart';
+import 'package:kite/abstract/abstract_service.dart';
+import 'package:kite/abstract/abstract_session.dart';
 
 import '../dao/holding.dart';
 import '../entity/holding.dart';

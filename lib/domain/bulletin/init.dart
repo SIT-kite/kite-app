@@ -1,4 +1,4 @@
-import 'package:kite/session/abstract_session.dart';
+import 'package:kite/abstract/abstract_session.dart';
 
 import 'dao/bulletin.dart';
 import 'service/bulletin.dart';

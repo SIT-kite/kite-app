@@ -18,10 +18,10 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/domain/campus_card/dao/campus_card.dart';
 import 'package:kite/domain/campus_card/entity/campus_card.dart';
-import 'package:kite/service/abstract_service.dart';
-import 'package:kite/session/abstract_session.dart';
+import 'package:kite/abstract/abstract_session.dart';
 
 const String _cardService = 'http://210.35.98.178:7101/LMWeb/WebApi/HYongHu.ashx';
 

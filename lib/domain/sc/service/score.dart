@@ -18,9 +18,9 @@
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:intl/intl.dart';
+import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/domain/sc/entity/list.dart';
-import 'package:kite/service/abstract_service.dart';
-import 'package:kite/session/abstract_session.dart';
+import 'package:kite/abstract/abstract_session.dart';
 
 import '../dao/score.dart';
 import '../entity/score.dart';

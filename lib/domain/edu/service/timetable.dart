@@ -17,10 +17,10 @@
  */
 import 'dart:core';
 
+import 'package:kite/abstract/abstract_service.dart';
+import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/domain/edu/dao/index.dart';
 import 'package:kite/domain/edu/entity/index.dart';
-import 'package:kite/service/abstract_service.dart';
-import 'package:kite/session/abstract_session.dart';
 
 import 'util.dart';
 
