@@ -17,10 +17,10 @@
  */
 import 'package:hive/hive.dart';
 import 'package:kite/dao/setting/home.dart';
+import 'package:kite/domain/home/entity/home.dart';
 import 'package:kite/domain/kite/entity/electricity.dart';
 import 'package:kite/domain/kite/entity/weather.dart';
 import 'package:kite/domain/report/entity/report.dart';
-import 'package:kite/entity/home.dart';
 import 'package:kite/storage/constants.dart';
 
 class HomeSettingStorage implements HomeSettingDao {
