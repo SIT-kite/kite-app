@@ -19,8 +19,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
-import 'package:kite/domain/sc/service/score.dart';
-import 'package:kite/global/dio_initializer.dart';
+import 'package:kite/domain/initializer_index.dart';
+import 'package:kite/domain/sc/dao/index.dart';
 
 import '../entity/score.dart';
 import 'component/summary.dart';
@@ -28,17 +28,31 @@ import 'detail.dart';
 
 class ProfilePage extends StatelessWidget {
   final displayDateFormat = DateFormat('yyyy-MM-dd hh:mm');
-  final ScScoreService service = ScScoreService(SessionPool.scSession);
 
   ProfilePage({Key? key}) : super(key: key);
 
   Widget _buildSummaryCard() {
     return MyFutureBuilder<ScScoreSummary>(
-      future: service.getScScoreSummary(),
+      future: ScInitializer.scScoreService.getScScoreSummary(),
       builder: (context, summary) {
         return Padding(padding: const EdgeInsets.all(20), child: SummaryCard(summary));
       },
     );
+  }
+
+  Future<List<ScJoinedActivity>> getMyActivityListJoinScore(ScScoreDao scScoreDao) async {
+    final activities = await scScoreDao.getMyActivityList();
+    final scores = await scScoreDao.getMyScoreList();
+
+    return activities.map((application) {
+      // 对于每一次申请, 找到对应的加分信息
+      final totalScore = scores
+          .where((e) => e.activityId == application.activityId)
+          .fold<double>(0.0, (double p, ScScoreItem e) => p + e.amount);
+      // TODO: 潜在的 BUG，可能导致得分页面出现重复项。
+      return ScJoinedActivity(application.applyId, application.activityId, application.title, application.time,
+          application.status, totalScore);
+    }).toList();
   }
 
   Widget _buildEventList(BuildContext context) {
@@ -69,7 +83,7 @@ class ProfilePage extends StatelessWidget {
     }
 
     return MyFutureBuilder<List<ScJoinedActivity>>(
-      future: service.getMyActivityListJoinScore(),
+      future: getMyActivityListJoinScore(ScInitializer.scScoreService),
       builder: (context, eventList) {
         return ListView(children: [_buildSummaryCard()] + eventList.map(joinedActivityMapper).toList());
       },

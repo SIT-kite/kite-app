@@ -17,9 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:kite/domain/initializer_index.dart';
 import 'package:kite/domain/sc/entity/list.dart';
-import 'package:kite/domain/sc/service/list.dart';
-import 'package:kite/global/dio_initializer.dart';
 
 import 'card.dart';
 
@@ -39,7 +38,7 @@ class SearchBar extends SearchDelegate<String> {
   }
 
   Widget _buildSearch() {
-    final future = ScActivityListService(SessionPool.scSession).query(query);
+    final future = ScInitializer.scActivityListService.query(query);
 
     return FutureBuilder<List<Activity>>(
       future: future,

@@ -18,10 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:kite/domain/initializer_index.dart';
 import 'package:kite/domain/sc/entity/detail.dart';
-import 'package:kite/domain/sc/service/detail.dart';
-import 'package:kite/domain/sc/service/join.dart';
-import 'package:kite/global/dio_initializer.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/url_launcher.dart';
 
@@ -120,10 +118,8 @@ class DetailPage extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
-    final future = ScActivityDetailService(SessionPool.scSession).getActivityDetail(activityId);
-
     return FutureBuilder<ActivityDetail>(
-        future: future,
+        future: ScInitializer.scActivityDetailService.getActivityDetail(activityId),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return _buildDetail(context, snapshot.data!);
@@ -134,7 +130,7 @@ class DetailPage extends StatelessWidget {
 
   Future<void> _sendRequest(BuildContext context, bool force) async {
     try {
-      final response = await ScJoinActivityService(SessionPool.scSession).join(activityId, force);
+      final response = await ScInitializer.scJoinActivityService.join(activityId, force);
       showBasicFlash(context, Text(response));
     } catch (e) {
       showBasicFlash(context, Text('错误: ' + e.runtimeType.toString()), duration: const Duration(seconds: 3));

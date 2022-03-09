@@ -17,9 +17,9 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:kite/component/future_builder.dart';
+import 'package:kite/domain/initializer_index.dart';
 import 'package:kite/domain/sc/entity/list.dart';
-import 'package:kite/domain/sc/service/list.dart';
-import 'package:kite/global/dio_initializer.dart';
 
 import 'component/card.dart';
 import 'component/search.dart';
@@ -43,12 +43,10 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
   };
 
   late TabController _tabController;
-  late ScActivityListService _service;
 
   @override
   void initState() {
     _tabController = TabController(length: categoryMapping.length, vsync: this);
-    _service = ScActivityListService(SessionPool.scSession);
 
     super.initState();
   }
@@ -71,10 +69,8 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
   }
 
   Widget _buildEventList(ActivityType type) {
-    final future = _service.getActivityList(type, 1);
-
     return FutureBuilder<List<Activity>>(
-      future: future,
+      future: ScInitializer.scActivityListService.getActivityList(type, 1),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
@@ -90,19 +86,13 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
   }
 
   Widget _buildBody(BuildContext context) {
-    return FutureBuilder(
-      future: SessionPool.scSession.get('http://sc.sit.edu.cn/'),
+    return MyFutureBuilder(
+      future: ScInitializer.session.get('http://sc.sit.edu.cn/'),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return TabBarView(
-            controller: _tabController,
-            children: categoryMapping.keys.map((e) => _buildEventList(e)).toList(),
-          );
-        } else if (snapshot.hasError) {
-          return Text(snapshot.error.toString().split('\n')[0]);
-        }
-
-        return const Center(child: CircularProgressIndicator());
+        return TabBarView(
+          controller: _tabController,
+          children: categoryMapping.keys.map((e) => _buildEventList(e)).toList(),
+        );
       },
     );
   }
