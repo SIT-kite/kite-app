@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:kite/dao/index.dart';
 import 'package:kite/domain/kite/service/index.dart';
-import 'package:kite/storage/electricity.dart';
+import 'package:kite/domain/kite/storage/electricity.dart';
 import 'package:kite/util/hive_register_adapter.dart';
 
 import 'entity/index.dart';
