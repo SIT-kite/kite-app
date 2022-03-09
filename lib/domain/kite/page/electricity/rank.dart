@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/entity/electricity.dart';
-import 'package:kite/global/session_pool.dart';
+import 'package:kite/domain/kite/entity/electricity.dart';
 import 'package:kite/domain/kite/service/electricity.dart';
+import 'package:kite/global/session_pool.dart';
 
 class RankView extends StatelessWidget {
   final String room;

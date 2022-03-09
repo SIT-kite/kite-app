@@ -18,7 +18,6 @@
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kite/dao/auth_pool.dart';
-import 'package:kite/dao/electricity.dart';
 import 'package:kite/dao/kite/jwt.dart';
 import 'package:kite/dao/kite/user_event.dart';
 import 'package:kite/dao/mail.dart';
@@ -31,12 +30,9 @@ import 'package:kite/domain/edu/entity/timetable.dart';
 import 'package:kite/domain/expense/entity/expense.dart';
 import 'package:kite/domain/mail/storage/mail.dart';
 import 'package:kite/entity/auth_item.dart';
-import 'package:kite/entity/electricity.dart';
 import 'package:kite/entity/home.dart';
-import 'package:kite/entity/report.dart';
 import 'package:kite/entity/weather.dart';
 import 'package:kite/storage/auth.dart';
-import 'package:kite/storage/electricity.dart';
 import 'package:kite/storage/home.dart';
 import 'package:kite/storage/jwt.dart';
 import 'package:kite/storage/network.dart';
@@ -54,10 +50,6 @@ class StoragePool {
   static late AuthPoolStorage _authPool;
 
   static AuthPoolDao get authPool => _authPool;
-
-  static late ElectricityStorage _electricity;
-
-  static ElectricityStorageDao get electricity => _electricity;
 
   static late HomeSettingStorage _homeSetting;
 
@@ -94,8 +86,6 @@ class StoragePool {
   static Future<void> _registerAdapters() async {
     registerAdapter(AuthItemAdapter());
     registerAdapter(WeatherAdapter());
-    registerAdapter(ReportHistoryAdapter());
-    registerAdapter(BalanceAdapter());
     registerAdapter(CourseAdapter());
     registerAdapter(ExpenseRecordAdapter());
     registerAdapter(ExpenseTypeAdapter());
@@ -108,9 +98,6 @@ class StoragePool {
     Log.info("初始化StoragePool");
     await Hive.initFlutter('kite/hive');
     await _registerAdapters();
-
-    final electricityBox = await Hive.openBox('electricity');
-    _electricity = ElectricityStorage(electricityBox);
 
     final authBox = await Hive.openBox<AuthItem>('auth');
     _authPool = AuthPoolStorage(authBox);

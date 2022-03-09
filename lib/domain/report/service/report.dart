@@ -17,11 +17,9 @@
  */
 import 'package:dio/dio.dart';
 import 'package:kite/dao/report.dart';
-import 'package:kite/entity/report.dart';
+import 'package:kite/domain/report/entity/report.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/session/abstract_session.dart';
-
-export '../../../session/report_session.dart';
 
 class ReportService extends AService implements ReportDao {
   ReportService(ASession session) : super(session);
@@ -46,7 +44,8 @@ class ReportService extends AService implements ReportDao {
   Future<ReportHistory?> getRecentHistory(String userId) async {
     final historyList = await getHistoryList(userId);
     ReportHistory? result;
-    try { // 元素不存在时，first getter 会抛出异常.
+    try {
+      // 元素不存在时，first getter 会抛出异常.
       result = historyList.first;
     } catch (_) {}
     return result;

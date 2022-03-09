@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/global/storage_pool.dart';
+import 'package:kite/domain/kite/init.dart';
 
 import 'balance.dart';
 import 'chart.dart';
@@ -37,8 +37,8 @@ class _ElectricityPageState extends State<ElectricityPage> {
 
   @override
   void initState() {
-    _buildingController.text = StoragePool.electricity.lastBuilding ?? '';
-    _roomController.text = StoragePool.electricity.lastRoom ?? '';
+    _buildingController.text = KiteInitializer.electricityStorage.lastBuilding ?? '';
+    _roomController.text = KiteInitializer.electricityStorage.lastRoom ?? '';
     super.initState();
   }
 
@@ -104,8 +104,8 @@ class _ElectricityPageState extends State<ElectricityPage> {
     if (!(_formKey.currentState as FormState).validate()) {
       return;
     }
-    StoragePool.electricity.lastBuilding = _buildingController.text;
-    StoragePool.electricity.lastRoom = _roomController.text;
+    KiteInitializer.electricityStorage.lastBuilding = _buildingController.text;
+    KiteInitializer.electricityStorage.lastRoom = _roomController.text;
     setState(() => showType = 1);
   }
 
@@ -113,8 +113,8 @@ class _ElectricityPageState extends State<ElectricityPage> {
     if (!(_formKey.currentState as FormState).validate()) {
       return;
     }
-    StoragePool.electricity.lastBuilding = _buildingController.text;
-    StoragePool.electricity.lastRoom = _roomController.text;
+    KiteInitializer.electricityStorage.lastBuilding = _buildingController.text;
+    KiteInitializer.electricityStorage.lastRoom = _roomController.text;
     setState(() => showType = 1);
   }
 

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/entity/report.dart';
+import 'package:kite/domain/report/entity/report.dart';
 
 abstract class ReportDao {
   // 获取所有历史

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:kite/dao/electricity.dart';
-import 'package:kite/entity/electricity.dart';
+import 'package:kite/domain/kite/entity/electricity.dart';
 import 'package:kite/service/abstract_service.dart';
 import 'package:kite/session/abstract_session.dart';
 
