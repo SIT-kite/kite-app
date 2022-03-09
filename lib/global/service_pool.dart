@@ -15,27 +15,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/dao/index.dart';
 import 'package:kite/domain/bulletin/init.dart';
 import 'package:kite/domain/contact/init.dart';
 import 'package:kite/domain/edu/init.dart';
 import 'package:kite/domain/expense/init.dart';
 import 'package:kite/domain/library/init.dart';
-import 'package:kite/service/index.dart';
 
 import 'session_pool.dart';
 
 /// 网络服务请求池
 class ServicePool {
-  static late CampusCardDao campusCard;
-  static late WeatherDao weather;
-
   /// 初始化其他service
-  static void _initOther() {
-    campusCard = CampusCardService(SessionPool.ssoSession);
-
-    weather = WeatherService();
-  }
+  static void _initOther() {}
 
   static Future<void> init() async {
     await LibraryInitializer.init(SessionPool.librarySession);
