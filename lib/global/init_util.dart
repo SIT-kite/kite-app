@@ -15,14 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:kite/domain/bulletin/init.dart';
-import 'package:kite/domain/campus_card/init.dart';
 import 'package:kite/domain/connectivity/init.dart';
-import 'package:kite/domain/contact/init.dart';
-import 'package:kite/domain/edu/init.dart';
-import 'package:kite/domain/expense/init.dart';
 import 'package:kite/domain/game/init.dart';
 import 'package:kite/domain/home/init.dart';
 import 'package:kite/domain/initializer_index.dart';
@@ -31,18 +25,25 @@ import 'package:kite/domain/kite/kite_session.dart';
 import 'package:kite/domain/mail/init.dart';
 import 'package:kite/domain/office/init.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/other/user_event/init.dart';
 import 'package:kite/setting/init.dart';
 
 class Initializer {
   static Future<void> init() async {
     // 初始化Hive数据库
     await Hive.initFlutter('kite/hive');
-    await Global.init();
+    await UserEventInitializer.init();
+    await SettingInitializer.init();
+
+    await Global.init(
+      userEventStorage: UserEventInitializer.userEventStorage,
+      authSetting: SettingInitializer.auth,
+    );
+
     final ssoSession = Global.ssoSession;
     BulletinInitializer.init(ssoSession: ssoSession);
     CampusCardInitializer.init(session: ssoSession);
     ConnectivityInitializer.init(ssoSession: ssoSession);
-    await SettingInitializer.init(ssoSession: ssoSession);
 
     final kiteSession = KiteSession(Global.dio, SettingInitializer.jwt);
     await ContactInitializer.init(kiteSession: kiteSession);
@@ -56,6 +57,7 @@ class Initializer {
     await OfficeInitializer.init(dio: Global.dio, cookieJar: Global.cookieJar);
     ReportInitializer.init(dio: Global.dio);
     ScInitializer.init(ssoSession: ssoSession);
+    await UserEventInitializer.init();
   }
 
   static Future<void> clear() async {

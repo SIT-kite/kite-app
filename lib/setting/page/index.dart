@@ -61,7 +61,7 @@ class SettingPage extends StatelessWidget {
     final user = SettingInitializer.auth.currentUsername;
     final password = SettingInitializer.auth.ssoPassword;
     try {
-      await SettingInitializer.ssoSession.login(user!, password!);
+      await Global.ssoSession.login(user!, password!);
       showBasicFlash(context, const Text('用户名和密码正确'));
     } catch (e) {
       showBasicFlash(context, Text('登录异常: ${e.toString().split('\n')[0]}'), duration: const Duration(seconds: 3));

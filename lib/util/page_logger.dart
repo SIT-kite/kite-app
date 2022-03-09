@@ -18,6 +18,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:kite/other/user_event/dao.dart';
 import 'package:kite/other/user_event/entity.dart';
 import 'package:kite/other/user_event/init.dart';
 import 'package:uuid/uuid.dart';
@@ -28,9 +29,11 @@ const String reportEventUrl = "https://kite.sunnysab.cn/api/v2/report/event";
 const int maxCacheSize = 10;
 
 class PageLogger {
-  var cachedCount = UserEventInitializer.userEventStorage.getEventCount();
+  var cachedCount = 0;
   final Dio dio;
-  PageLogger(this.dio);
+  PageLogger({required this.dio, required UserEventStorageDao userEventStorage}) {
+    userEventStorage.getEventCount();
+  }
 
   /// 为每个用户生成唯一的 UUID 并存储, 用于匿名地区别不同用户.
   String _uuid() {

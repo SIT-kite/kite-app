@@ -2,8 +2,9 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:kite/global/cookie_initializer.dart';
 import 'package:kite/global/dio_initializer.dart';
+import 'package:kite/other/user_event/dao.dart';
 import 'package:kite/session/sso/index.dart';
-import 'package:kite/setting/init.dart';
+import 'package:kite/setting/dao/auth.dart';
 import 'package:kite/util/event_bus.dart';
 import 'package:kite/util/page_logger.dart';
 
@@ -27,18 +28,21 @@ class Global {
   static late Dio dio;
   static late SsoSession ssoSession;
 
-  static Future<void> init() async {
+  static Future<void> init({
+    required UserEventStorageDao userEventStorage,
+    required AuthSettingDao authSetting,
+  }) async {
     dio = await DioInitializer.init(config: DioConfig());
     cookieJar = await CookieInitializer.init();
     ssoSession = SsoSession(dio: dio, cookieJar: cookieJar);
-    pageLogger = PageLogger(dio);
+    pageLogger = PageLogger(dio: dio, userEventStorage: userEventStorage);
+    pageLogger.startup();
 
     // 若本地存放了用户名与密码，那就惰性登录
-    final auth = SettingInitializer.auth;
+    final auth = authSetting;
     if (auth.currentUsername != null && auth.ssoPassword != null) {
       // 惰性登录
       ssoSession.lazyLogin(auth.currentUsername!, auth.ssoPassword!);
     }
-    pageLogger.startup();
   }
 }
