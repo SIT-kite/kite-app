@@ -16,47 +16,44 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:dio/dio.dart';
+import 'package:kite/abstract/abstract_service.dart';
+import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/domain/office/entity/index.dart';
-
-import '../office_session.dart';
 
 const String serviceFunctionList = 'https://xgfy.sit.edu.cn/app/public/queryAppManageJson';
 const String serviceFunctionDetail = 'https://xgfy.sit.edu.cn/app/public/queryAppFormJson';
 
-Future<List<SimpleFunction>> selectFunctions(OfficeSession session) async {
-  String payload = '{"appObject":"student","appName":null}';
+class OfficeFunctionService extends AService {
+  OfficeFunctionService(ASession session) : super(session);
 
-  final Response response = await session.post(serviceFunctionList, data: payload, responseType: ResponseType.json);
+  Future<List<SimpleFunction>> selectFunctions() async {
+    String payload = '{"appObject":"student","appName":null}';
 
-  final Map<String, dynamic> data = response.data;
-  final List<SimpleFunction> functionList = (data['value'] as List<dynamic>)
-      .map((e) => SimpleFunction.fromJson(e))
-      .where((element) => element.status == 1) // Filter functions unavailable.
-      .toList();
+    final Response response = await session.post(serviceFunctionList, data: payload, responseType: ResponseType.json);
 
-  return functionList;
-}
+    final Map<String, dynamic> data = response.data;
+    final List<SimpleFunction> functionList = (data['value'] as List<dynamic>)
+        .map((e) => SimpleFunction.fromJson(e))
+        .where((element) => element.status == 1) // Filter functions unavailable.
+        .toList();
 
-Future<List<SimpleFunction>> selectFunctionsByCountDesc(OfficeSession session) async {
-  final functions = await selectFunctions(session);
-  functions.sort((a, b) => b.count.compareTo(a.count));
-  return functions;
-}
+    return functionList;
+  }
 
-class FunctionDetail {
-  final String id;
-  final List<FunctionDetailSection> sections;
+  Future<List<SimpleFunction>> selectFunctionsByCountDesc() async {
+    final functions = await selectFunctions();
+    functions.sort((a, b) => b.count.compareTo(a.count));
+    return functions;
+  }
 
-  const FunctionDetail(this.id, this.sections);
-}
+  Future<FunctionDetail> getFunctionDetail(String functionId) async {
+    final String payload = '{"appID":"$functionId"}';
 
-Future<FunctionDetail> getFunctionDetail(OfficeSession session, String functionId) async {
-  final String payload = '{"appID":"$functionId"}';
+    final response = await session.post(serviceFunctionDetail, data: payload, responseType: ResponseType.json);
+    final Map<String, dynamic> data = response.data;
+    final List<FunctionDetailSection> sections =
+        (data['value'] as List<dynamic>).map((e) => FunctionDetailSection.fromJson(e)).toList();
 
-  final response = await session.post(serviceFunctionDetail, data: payload, responseType: ResponseType.json);
-  final Map<String, dynamic> data = response.data;
-  final List<FunctionDetailSection> sections =
-      (data['value'] as List<dynamic>).map((e) => FunctionDetailSection.fromJson(e)).toList();
-
-  return FunctionDetail(functionId, sections);
+    return FunctionDetail(functionId, sections);
+  }
 }

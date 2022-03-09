@@ -20,43 +20,39 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/exception/session.dart';
 
 /// 应网办登录地址, POST 请求
 const String _officeLoginUrl = 'https://xgfy.sit.edu.cn/unifri-flow/login';
 
-Future<OfficeSession> officeLogin({
-  required Dio dio,
-  required String username,
-  required String password,
-}) async {
-  final Map<String, String> credential = {'account': username, 'userPassword': password, 'remember': 'true'};
-
-  final response =
-      await dio.post(_officeLoginUrl, data: credential, options: Options(contentType: Headers.jsonContentType));
-  final int code = (response.data as Map)['code'];
-
-  if (code != 0) {
-    final String errMessage = (response.data as Map)['msg'];
-    throw OfficeLoginException('($code) $errMessage');
-  }
-  final String jwt = ((response.data as Map)['data'])['authorization'];
-  return OfficeSession(
-    username: username,
-    jwtToken: jwt,
-    dio: dio,
-  );
-}
-
 class OfficeSession extends ASession {
-  final String username;
-  final String jwtToken;
+  bool isLogin = false;
+  String? username;
+  String? jwtToken;
   final Dio dio;
 
   OfficeSession({
-    required this.username,
-    required this.jwtToken,
     required this.dio,
   });
+
+  Future<void> login({
+    required String username,
+    required String password,
+  }) async {
+    final Map<String, String> credential = {'account': username, 'userPassword': password, 'remember': 'true'};
+
+    final response =
+        await dio.post(_officeLoginUrl, data: credential, options: Options(contentType: Headers.jsonContentType));
+    final int code = (response.data as Map)['code'];
+
+    if (code != 0) {
+      final String errMessage = (response.data as Map)['msg'];
+      throw CredentialsInvalidException(msg: '($code) $errMessage');
+    }
+    jwtToken = ((response.data as Map)['data'])['authorization'];
+    this.username = username;
+    isLogin = true;
+  }
 
   /// 获取当前以毫秒为单位的时间戳.
   static String _getTimestamp() => DateTime.now().millisecondsSinceEpoch.toString();
@@ -99,16 +95,5 @@ class OfficeSession extends ASession {
       data: data,
       options: newOptions,
     );
-  }
-}
-
-class OfficeLoginException implements Exception {
-  String msg;
-
-  OfficeLoginException([this.msg = '']);
-
-  @override
-  String toString() {
-    return msg;
   }
 }

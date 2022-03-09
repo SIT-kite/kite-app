@@ -19,16 +19,16 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:kite/component/future_builder.dart';
 import 'package:kite/domain/office/entity/index.dart';
+import 'package:kite/domain/office/init.dart';
 import 'package:kite/domain/office/page/browser.dart';
-import 'package:kite/domain/office/service/index.dart';
 import 'package:kite/util/url_launcher.dart';
 
 class DetailPage extends StatelessWidget {
-  final OfficeSession session;
   final SimpleFunction function;
 
-  const DetailPage(this.session, this.function, {Key? key}) : super(key: key);
+  const DetailPage(this.function, {Key? key}) : super(key: key);
 
   Widget buildSection(BuildContext context, FunctionDetailSection section) {
     final titleStyle = Theme.of(context).textTheme.headline2;
@@ -101,14 +101,10 @@ class DetailPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(function.name)),
       body: SafeArea(
-        child: FutureBuilder<FunctionDetail>(
-          future: getFunctionDetail(session, function.id),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.hasData) {
-              final FunctionDetail function = snapshot.data!;
-              return buildBody(context, function.sections);
-            }
-            return const Center(child: CircularProgressIndicator());
+        child: MyFutureBuilder<FunctionDetail>(
+          future: OfficeInitializer.functionService.getFunctionDetail(function.id),
+          builder: (context, data) {
+            return buildBody(context, data.sections);
           },
         ),
       ),

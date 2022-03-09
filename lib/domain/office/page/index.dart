@@ -20,8 +20,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/domain/office/entity/index.dart';
-import 'package:kite/domain/office/service/index.dart';
-import 'package:kite/global/dio_initializer.dart';
+import 'package:kite/domain/office/init.dart';
+import 'package:kite/exception/session.dart';
 import 'package:kite/setting/init.dart';
 
 import 'detail.dart';
@@ -65,7 +65,6 @@ class OfficePage extends StatefulWidget {
 }
 
 class _OfficePageState extends State<OfficePage> {
-  bool _isOfficeLogin = SessionPool.officeSession != null;
   bool _enableFilter = true;
   List<SimpleFunction> _allFunctions = [];
   String? _lastError;
@@ -79,7 +78,7 @@ class _OfficePageState extends State<OfficePage> {
           _allFunctions = functionList;
           _lastError = null;
         });
-      } on OfficeLoginException catch (e) {
+      } on CredentialsInvalidException catch (e) {
         setState(() {
           _lastError = e.toString();
         });
@@ -89,13 +88,15 @@ class _OfficePageState extends State<OfficePage> {
   }
 
   Future<List<SimpleFunction>> _fetchFuncList() async {
-    if (!_isOfficeLogin) {
+    if (!OfficeInitializer.session.isLogin) {
       final username = SettingInitializer.auth.currentUsername!;
       final password = SettingInitializer.auth.ssoPassword!;
-      SessionPool.officeSession ??= await officeLogin(username, password);
-      _isOfficeLogin = true;
+      await OfficeInitializer.session.login(
+        username: username,
+        password: password,
+      );
     }
-    return await selectFunctionsByCountDesc(SessionPool.officeSession!);
+    return await OfficeInitializer.functionService.selectFunctionsByCountDesc();
   }
 
   Widget _buildFunctionList(List<SimpleFunction> functionList) {
@@ -150,7 +151,7 @@ class _OfficePageState extends State<OfficePage> {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => DetailPage(SessionPool.officeSession!, function)),
+            MaterialPageRoute(builder: (_) => DetailPage(function)),
           );
         },
       ),
@@ -184,7 +185,7 @@ class _OfficePageState extends State<OfficePage> {
   }
 
   void _navigateMessagePage() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => MessagePage(SessionPool.officeSession!)));
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MessagePage()));
   }
 
   @override
@@ -200,7 +201,7 @@ class _OfficePageState extends State<OfficePage> {
           Expanded(child: _buildBody()),
         ],
       ),
-      floatingActionButton: _isOfficeLogin
+      floatingActionButton: OfficeInitializer.session.isLogin
           ? FloatingActionButton(
               onPressed: _navigateMessagePage,
               tooltip: '我的消息',

@@ -16,10 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/domain/initializer_index.dart';
 import 'package:kite/domain/report/entity/report.dart';
-import 'package:kite/domain/report/report_session.dart';
-import 'package:kite/domain/report/service/report.dart';
-import 'package:kite/global/dio_initializer.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/setting/init.dart';
 
@@ -64,12 +62,10 @@ class _ReportItemState extends State<ReportItem> {
   }
 
   Future<String> _buildContent() async {
-    final username = SettingInitializer.auth.currentUsername!;
     late ReportHistory? history;
 
-    SessionPool.reportSession ??= ReportSession(username, dio: SessionPool.dio);
     try {
-      history = await ReportService(SessionPool.reportSession!).getRecentHistory(username);
+      history = await ReportInitializer.reportService.getRecentHistory(SettingInitializer.auth.currentUsername ?? '');
     } catch (e) {
       return '获取状态失败, ${e.runtimeType}';
     }

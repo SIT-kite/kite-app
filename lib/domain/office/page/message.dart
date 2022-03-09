@@ -16,15 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/component/future_builder.dart';
 import 'package:kite/domain/office/entity/index.dart';
-import 'package:kite/domain/office/service/index.dart';
+import 'package:kite/domain/office/init.dart';
 
 import 'browser.dart';
 
 class MessagePage extends StatelessWidget {
-  final OfficeSession session;
-
-  const MessagePage(this.session, {Key? key}) : super(key: key);
+  const MessagePage({Key? key}) : super(key: key);
 
   Widget _buildMessageList(BuildContext context, List<OfficeMessageSummary> messageList) {
     return ListView(
@@ -50,14 +49,10 @@ class MessagePage extends StatelessWidget {
   }
 
   Widget _buildBody() {
-    return FutureBuilder<OfficeMessagePage>(
-      future: getAllMessage(session),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final OfficeMessagePage page = snapshot.data!;
-          return _buildMessageList(context, page.msgList);
-        }
-        return const Center(child: CircularProgressIndicator());
+    return MyFutureBuilder<OfficeMessagePage>(
+      future: OfficeInitializer.messageService.getAllMessage(),
+      builder: (context, data) {
+        return _buildMessageList(context, data.msgList);
       },
     );
   }

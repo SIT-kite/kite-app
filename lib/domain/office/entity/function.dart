@@ -53,3 +53,10 @@ class FunctionDetailSection {
 
   factory FunctionDetailSection.fromJson(Map<String, dynamic> json) => _$FunctionDetailSectionFromJson(json);
 }
+
+class FunctionDetail {
+  final String id;
+  final List<FunctionDetailSection> sections;
+
+  const FunctionDetail(this.id, this.sections);
+}

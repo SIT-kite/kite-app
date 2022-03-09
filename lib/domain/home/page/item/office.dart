@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/domain/office/service/index.dart';
-import 'package:kite/global/dio_initializer.dart';
+import 'package:kite/domain/office/init.dart';
+import 'package:kite/exception/session.dart';
 import 'package:kite/global/event_bus.dart';
 import 'package:kite/setting/init.dart';
 
@@ -56,17 +56,20 @@ class _OfficeItemState extends State<OfficeItem> {
     final username = SettingInitializer.auth.currentUsername!;
     final password = SettingInitializer.auth.ssoPassword!;
 
-    if (SessionPool.officeSession == null) {
+    if (!OfficeInitializer.session.isLogin) {
       try {
-        SessionPool.officeSession = await officeLogin(username, password);
-      } on OfficeLoginException catch (e) {
+        await OfficeInitializer.session.login(
+          username: username,
+          password: password,
+        );
+      } on CredentialsInvalidException catch (e) {
         return e.msg;
       } catch (e) {
         return e.runtimeType.toString();
       }
     }
     format(s, x) => x > 0 ? '$s ($x)' : '';
-    final totalMessage = await queryMessageCount(SessionPool.officeSession!);
+    final totalMessage = await OfficeInitializer.messageService.queryMessageCount();
     final draftBlock = format('草稿', totalMessage.inDraft);
     final doingBlock = format('在办', totalMessage.inProgress);
     final completedBlock = format('完成', totalMessage.completed);

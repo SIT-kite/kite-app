@@ -20,24 +20,22 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_session.dart';
-
-import '../../global/dio_initializer.dart';
+import 'package:kite/setting/init.dart';
 
 class ReportSession extends ASession {
-  late final Dio _dio;
-  final String userId;
+  final Dio dio;
 
-  ReportSession(this.userId, {Dio? dio}) {
-    _dio = dio ?? SessionPool.dio;
-  }
+  ReportSession({
+    required this.dio,
+  });
 
   /// 获取当前以毫秒为单位的时间戳.
   static String _getTimestamp() => DateTime.now().millisecondsSinceEpoch.toString();
 
   /// 为时间戳生成签名. 此方案是联鹏习惯的反爬方式.
-  _md5(s) => md5.convert(const Utf8Encoder().convert(s)).toString();
+  String _md5(String s) => md5.convert(const Utf8Encoder().convert(s)).toString();
 
-  _sign(u, t) {
+  String _sign(String u, String t) {
     final hash = _md5('${u}Unifrinew$t').toString().toUpperCase();
     return hash.substring(16, 32) + hash.substring(0, 16);
   }
@@ -56,7 +54,7 @@ class ReportSession extends ASession {
 
     // Make default options.
     final String ts = _getTimestamp();
-    final String sign = _sign(userId, ts);
+    final String sign = _sign(SettingInitializer.auth.currentUsername ?? '', ts);
     final Map<String, dynamic> newHeaders = {'ts': ts, 'decodes': sign};
 
     newOptions.headers == null ? newOptions.headers = newHeaders : newOptions.headers?.addAll(newHeaders);
@@ -64,7 +62,7 @@ class ReportSession extends ASession {
     newOptions.contentType = contentType;
     newOptions.responseType = responseType;
 
-    return await _dio.request(
+    return await dio.request(
       url,
       queryParameters: queryParameters,
       data: data,
