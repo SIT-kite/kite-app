@@ -18,7 +18,7 @@
 import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:kite/global/init_util.dart';
+import 'package:kite/global/init.dart';
 
 import 'app.dart';
 
@@ -41,8 +41,9 @@ void main() async {
   await Initializer.init();
 
   Catcher(
-      rootWidget: Phoenix(
-        child: const KiteApp(),
-      ),
-      releaseConfig: catcherOptions);
+    rootWidget: Phoenix(
+      child: const KiteApp(),
+    ),
+    releaseConfig: catcherOptions,
+  );
 }
