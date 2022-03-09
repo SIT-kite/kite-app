@@ -11,12 +11,12 @@ class ExpenseInitializer {
   static late ExpenseRemoteDao expenseRemote;
   static late ExpenseLocalStorage expenseRecord;
 
-  static Future<void> init(ASession session) async {
+  static Future<void> init({required ASession ssoSession}) async {
     registerAdapter(ExpenseRecordAdapter());
     registerAdapter(ExpenseTypeAdapter());
     final expenseRecordBox = await Hive.openBox<ExpenseRecord>('expenseSetting');
     expenseRecord = ExpenseLocalStorage(expenseRecordBox);
 
-    expenseRemote = ExpenseRemoteService(session);
+    expenseRemote = ExpenseRemoteService(ssoSession);
   }
 }

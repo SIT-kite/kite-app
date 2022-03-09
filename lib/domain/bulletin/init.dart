@@ -7,7 +7,7 @@ import 'service/bulletin.dart';
 class BulletinInitializer {
   static late BulletinDao bulletin;
   static late SsoSession session;
-  static init({required ASession ssoSession}) {
+  static void init({required ASession ssoSession}) {
     BulletinInitializer.session = session;
     bulletin = BulletinService(session);
   }

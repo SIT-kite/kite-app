@@ -84,7 +84,7 @@ class SettingPage extends StatelessWidget {
                   ..currentUsername = null
                   ..ssoPassword = null;
 
-                await initBeforeRun();
+                await Initializer.init();
                 // 重启应用
                 Phoenix.rebirth(context);
               },

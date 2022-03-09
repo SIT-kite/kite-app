@@ -38,7 +38,7 @@ void main() async {
   );
 
   // 运行前初始化
-  await initBeforeRun();
+  await Initializer.init();
 
   Catcher(
       rootWidget: Phoenix(

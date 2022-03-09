@@ -17,24 +17,45 @@
  */
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:kite/domain/bulletin/init.dart';
+import 'package:kite/domain/campus_card/init.dart';
+import 'package:kite/domain/connectivity/init.dart';
+import 'package:kite/domain/contact/init.dart';
+import 'package:kite/domain/edu/init.dart';
+import 'package:kite/domain/expense/init.dart';
+import 'package:kite/domain/game/init.dart';
+import 'package:kite/domain/home/init.dart';
+import 'package:kite/domain/initializer_index.dart';
+import 'package:kite/domain/kite/init.dart';
+import 'package:kite/domain/kite/kite_session.dart';
+import 'package:kite/domain/mail/init.dart';
+import 'package:kite/domain/office/init.dart';
+import 'package:kite/global/global.dart';
 import 'package:kite/setting/init.dart';
-import 'package:kite/util/logger.dart';
-import 'package:kite/util/page_logger.dart';
-
-import 'dio_initializer.dart';
 
 class Initializer {
   static Future<void> init() async {
-    Log.info("初始化StoragePool");
+    // 初始化Hive数据库
     await Hive.initFlutter('kite/hive');
-    await LibraryInitializer.init();
-    EduInitializer.init(SessionPool.eduSession);
-    BulletinInitializer.init(SessionPool.ssoSession);
-    await ExpenseInitializer.init(SessionPool.ssoSession);
-    await ContactInitializer.init(SessionPool.kiteSession);
-    CampusCardInitializer.init(SessionPool.ssoSession);
-    ReportInitializer.init();
-    ScInitializer.init();
+    await Global.init();
+    final ssoSession = Global.ssoSession;
+    BulletinInitializer.init(ssoSession: ssoSession);
+    CampusCardInitializer.init(session: ssoSession);
+    ConnectivityInitializer.init(ssoSession: ssoSession);
+    await SettingInitializer.init(ssoSession: ssoSession);
+
+    final kiteSession = KiteSession(Global.dio, SettingInitializer.jwt);
+    await ContactInitializer.init(kiteSession: kiteSession);
+    await EduInitializer.init(ssoSession: ssoSession, cookieJar: Global.cookieJar);
+    await ExpenseInitializer.init(ssoSession: ssoSession);
+    await GameInitializer.init();
+    await KiteInitializer.init(dio: Global.dio, kiteSession: kiteSession);
+    await HomeInitializer.init(ssoSession: ssoSession, noticeService: KiteInitializer.noticeService);
+    await LibraryInitializer.init(dio: Global.dio);
+    await MailInitializer.init();
+    await OfficeInitializer.init(dio: Global.dio, cookieJar: Global.cookieJar);
+    ReportInitializer.init(dio: Global.dio);
+    ScInitializer.init(ssoSession: ssoSession);
   }
 
   static Future<void> clear() async {
@@ -47,25 +68,4 @@ class Initializer {
     await Hive.deleteBoxFromDisk('game');
     await Hive.deleteBoxFromDisk('mail');
   }
-}
-
-/// 应用启动前需要的初始化
-Future<void> initBeforeRun() async {
-  // Future.wait可以使多个Future并发执行
-  Log.info('应用初始化开始');
-  // 网络层依赖由存储层提供的缓存，必须先初始化存储层，再初始化网络层
-  await SessionPool.init();
-  Log.info('应用初始化完成');
-
-  // 初始化用户首次打开时间（而不是应用安装时间）
-  // ??= 表示为空时候才赋值
-  SettingInitializer.home.installTime ??= DateTime.now();
-
-  // 若本地存放了用户名与密码，那就惰性登录
-  final auth = SettingInitializer.auth;
-  if (auth.currentUsername != null && auth.ssoPassword != null) {
-    // 惰性登录
-    SessionPool.ssoSession.lazyLogin(auth.currentUsername!, auth.ssoPassword!);
-  }
-  pageLogger.startup();
 }

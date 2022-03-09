@@ -11,10 +11,13 @@ class ContactInitializer {
   static late ContactStorageDao contactStorageDao;
   static late ContactRemoteDao contactRemoteDao;
 
-  static Future<void> init({required ASession ssoSession}) async {
+  static Future<void> init({
+    required ASession kiteSession,
+    String hiveBoxName = 'contactSetting',
+  }) async {
     registerAdapter(ContactDataAdapter());
-    final contactDataBox = await Hive.openBox<ContactData>('contactSetting');
+    final contactDataBox = await Hive.openBox<ContactData>(hiveBoxName);
     contactStorageDao = ContactDataStorage(contactDataBox);
-    contactRemoteDao = ContactRemoteService(ssoSession);
+    contactRemoteDao = ContactRemoteService(kiteSession);
   }
 }
