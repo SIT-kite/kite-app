@@ -44,14 +44,3 @@ class ThemeKeys {
   static const themeColor = '$namespace/color';
   static const isDarkMode = '$namespace/isDarkMode';
 }
-
-class NetworkKeys {
-  static const namespace = '/network';
-  static const networkProxy = '$namespace/proxy';
-  static const networkUseProxy = '$namespace/useProxy';
-}
-
-class JwtKeys {
-  static const namespace = '/kite';
-  static const jwt = '$namespace/jwt';
-}

@@ -20,6 +20,12 @@ import 'package:kite/dao/setting/network.dart';
 import 'package:kite/storage/constants.dart';
 import 'package:kite/util/logger.dart';
 
+class NetworkKeys {
+  static const namespace = '/network';
+  static const networkProxy = '$namespace/proxy';
+  static const networkUseProxy = '$namespace/useProxy';
+}
+
 class NetworkSettingStorage implements NetworkSettingDao {
   final Box<dynamic> box;
 

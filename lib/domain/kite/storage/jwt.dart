@@ -19,6 +19,11 @@ import 'package:hive/hive.dart';
 import 'package:kite/domain/kite/dao/jwt.dart';
 import 'package:kite/storage/constants.dart';
 
+class JwtKeys {
+  static const namespace = '/kite';
+  static const jwt = '$namespace/jwt';
+}
+
 class JwtStorage implements JwtDao {
   final Box<dynamic> box;
 

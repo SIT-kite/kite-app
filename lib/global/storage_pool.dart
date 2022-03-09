@@ -33,7 +33,7 @@ import 'package:kite/entity/auth_item.dart';
 import 'package:kite/entity/home.dart';
 import 'package:kite/storage/auth.dart';
 import 'package:kite/storage/home.dart';
-import 'package:kite/storage/jwt.dart';
+import 'package:kite/domain/kite/storage/jwt.dart';
 import 'package:kite/domain/connectivity/storage/network.dart';
 import 'package:kite/storage/theme.dart';
 import 'package:kite/domain/edu/storage/timetable.dart';
