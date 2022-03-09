@@ -18,8 +18,8 @@
 
 import 'package:dio/dio.dart';
 
-import '../util/logger.dart';
-import 'abstract_session.dart';
+import '../../session/abstract_session.dart';
+import '../../util/logger.dart';
 
 class ScSession extends ASession {
   final ASession _session;

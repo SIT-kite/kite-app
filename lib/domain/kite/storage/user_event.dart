@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:hive/hive.dart';
-import 'package:kite/dao/kite/user_event.dart';
+import 'package:kite/domain/kite/dao/user_event.dart';
 import 'package:kite/domain/kite/entity/user_event.dart';
 
 class UserEventStorage implements UserEventStorageDao {

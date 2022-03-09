@@ -18,8 +18,8 @@
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kite/dao/auth_pool.dart';
-import 'package:kite/dao/kite/jwt.dart';
-import 'package:kite/dao/kite/user_event.dart';
+import 'package:kite/domain/kite/dao/jwt.dart';
+import 'package:kite/domain/kite/dao/user_event.dart';
 import 'package:kite/dao/mail.dart';
 import 'package:kite/dao/setting/auth.dart';
 import 'package:kite/dao/setting/home.dart';

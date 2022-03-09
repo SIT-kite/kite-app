@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-export '../../../session/edu_session.dart';
+export '../edu_session.dart';
 export 'evaluation.dart';
 export 'exam.dart';
 export 'score.dart';

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:hive/hive.dart';
-import 'package:kite/dao/kite/jwt.dart';
+import 'package:kite/domain/kite/dao/jwt.dart';
 import 'package:kite/storage/constants.dart';
 
 class JwtStorage implements JwtDao {

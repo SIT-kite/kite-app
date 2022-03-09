@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-export '../../../session/library_session.dart';
+export '../library_session.dart';
 export 'book_info.dart';
 export 'book_search.dart';
 export 'holding.dart';

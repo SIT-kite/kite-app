@@ -21,45 +21,25 @@ import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:kite/session/abstract_session.dart';
 
-import '../global/session_pool.dart';
+import '../../global/session_pool.dart';
 
-/// 应网办登录地址, POST 请求
-const String _officeLoginUrl = 'https://xgfy.sit.edu.cn/unifri-flow/login';
-
-Future<OfficeSession> officeLogin(String username, String password) async {
-  final dio = SessionPool.dio;
-  final Map<String, String> credential = {'account': username, 'userPassword': password, 'remember': 'true'};
-
-  final response =
-      await dio.post(_officeLoginUrl, data: credential, options: Options(contentType: Headers.jsonContentType));
-  final int code = (response.data as Map)['code'];
-
-  if (code != 0) {
-    final String errMessage = (response.data as Map)['msg'];
-    throw OfficeLoginException('($code) $errMessage');
-  }
-  final String jwt = ((response.data as Map)['data'])['authorization'];
-  return OfficeSession(username, jwt);
-}
-
-class OfficeSession extends ASession {
-  final String _userName;
-  final String _jwtToken;
+class ReportSession extends ASession {
   late final Dio _dio;
+  final String userId;
 
-  OfficeSession(this._userName, this._jwtToken, {Dio? dio}) {
+  ReportSession(this.userId, {Dio? dio}) {
     _dio = dio ?? SessionPool.dio;
   }
-
-  String get userName => _userName;
 
   /// 获取当前以毫秒为单位的时间戳.
   static String _getTimestamp() => DateTime.now().millisecondsSinceEpoch.toString();
 
   /// 为时间戳生成签名. 此方案是联鹏习惯的反爬方式.
-  static String _sign(String ts) {
-    final content = const Utf8Encoder().convert('unifri.com' + ts);
-    return md5.convert(content).toString();
+  _md5(s) => md5.convert(const Utf8Encoder().convert(s)).toString();
+
+  _sign(u, t) {
+    final hash = _md5('${u}Unifrinew$t').toString().toUpperCase();
+    return hash.substring(16, 32) + hash.substring(0, 16);
   }
 
   @override
@@ -76,8 +56,8 @@ class OfficeSession extends ASession {
 
     // Make default options.
     final String ts = _getTimestamp();
-    final String sign = _sign(ts);
-    final Map<String, dynamic> newHeaders = {'timestamp': ts, 'signature': sign, 'Authorization': _jwtToken};
+    final String sign = _sign(userId, ts);
+    final Map<String, dynamic> newHeaders = {'ts': ts, 'decodes': sign};
 
     newOptions.headers == null ? newOptions.headers = newHeaders : newOptions.headers?.addAll(newHeaders);
     newOptions.method = method;
@@ -93,10 +73,10 @@ class OfficeSession extends ASession {
   }
 }
 
-class OfficeLoginException implements Exception {
+class ReportException implements Exception {
   String msg;
 
-  OfficeLoginException([this.msg = '']);
+  ReportException([this.msg = '']);
 
   @override
   String toString() {
