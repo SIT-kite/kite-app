@@ -21,7 +21,7 @@ final RegExp reStudentId = RegExp(r'^((\d{9})|(\d{6}[YGHE\d]\d{3}))$');
 String? studentIdValidator(String? username) {
   if (username != null && username.isNotEmpty) {
     // 仅允许学生学号登录, 并且屏蔽
-    if (((username.length < 9 || username.length > 10) || !reStudentId.hasMatch(username))) {
+    if (((username.length < 9 || username.length > 10) || !reStudentId.hasMatch(username.toUpperCase()))) {
       return '学号格式不正确';
     }
   }
