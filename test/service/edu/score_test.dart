@@ -1,5 +1,5 @@
-import 'package:kite/domain/edu/entity/index.dart';
-import 'package:kite/domain/edu/init.dart';
+import 'package:kite/feature/edu/entity/index.dart';
+import 'package:kite/feature/edu/init.dart';
 
 import '../mock_util.dart';
 

@@ -1,4 +1,4 @@
-import 'package:kite/domain/library/init.dart';
+import 'package:kite/feature/library/init.dart';
 import 'package:kite/global/dio_initializer.dart';
 
 // 导出一些测试环境下常用的东西

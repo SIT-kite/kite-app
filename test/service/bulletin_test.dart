@@ -1,4 +1,4 @@
-import 'package:kite/domain/bulletin/init.dart';
+import 'package:kite/feature/bulletin/init.dart';
 
 import 'mock_util.dart';
 

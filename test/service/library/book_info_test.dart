@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kite/domain/initializer_index.dart';
+import 'package:kite/feature/initializer_index.dart';
 import 'package:logger/logger.dart';
 
 void main() {

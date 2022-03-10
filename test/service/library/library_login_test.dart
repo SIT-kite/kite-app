@@ -18,8 +18,8 @@
  *
  */
 
-import 'package:kite/domain/library/init.dart';
-import 'package:kite/domain/library/service/borrow.dart';
+import 'package:kite/feature/library/init.dart';
+import 'package:kite/feature/library/service/borrow.dart';
 
 import '../mock_util.dart';
 
