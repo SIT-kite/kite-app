@@ -31,14 +31,14 @@ class Range<T extends num> extends Iterable<T> {
   Iterator<T> get iterator => RangeIterator<T>(this);
 }
 
-Range range<T extends num>(
+Range<T> range<T extends num>(
   T arg1, [
   num? arg2,
   num? arg3,
 ]) {
   if (arg2 == null) {
     // 有一个参数，arg1代表长度
-    return Range(arg1 is int ? 0 : 0.0, arg1, 1);
+    return Range((arg1 is int ? 0 : 0.0) as T, arg1, 1);
   } else if (arg3 == null) {
     // 有两个参数
     return Range(arg1, arg2, 1);
