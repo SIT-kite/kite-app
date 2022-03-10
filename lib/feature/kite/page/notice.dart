@@ -26,7 +26,7 @@ class NoticePage extends StatelessWidget {
   const NoticePage({Key? key}) : super(key: key);
 
   Widget _buildNoticeItem(BuildContext context, KiteNotice notice) {
-    final dateFormat = DateFormat('yyyy / MM / dd');
+    final dateFormat = DateFormat('yyyy/MM/dd');
 
     return Card(
       margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -41,17 +41,11 @@ class NoticePage extends StatelessWidget {
               children: [
                 // 标题, 注意遇到长标题时要折断
                 Expanded(
-                  flex: 3,
                   child: Text((notice.top ? '[置顶] ' : '') + notice.title,
                       overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.headline3),
                 ),
                 // 日期
-                Expanded(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(minWidth: 90),
-                    child: Text(dateFormat.format(notice.publishTime), style: const TextStyle(color: Colors.grey)),
-                  ),
-                )
+                Text(dateFormat.format(notice.publishTime), style: const TextStyle(color: Colors.grey)),
               ],
             ),
             const SizedBox(height: 10),
