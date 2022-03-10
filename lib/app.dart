@@ -76,23 +76,27 @@ class KiteApp extends StatelessWidget {
     );
   }
 
-  TextTheme _buildTextTheme(Color primaryColor) {
-    return const TextTheme(
-      headline1: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w500),
-      headline2: TextStyle(fontSize: 24.0, color: Colors.black87),
-      headline3: TextStyle(fontSize: 24.0, color: Colors.black54),
-      headline4: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w500),
-      headline5: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w400),
-      headline6: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300),
-      bodyText1: TextStyle(fontSize: 16.0, color: Colors.black87),
-      bodyText2: TextStyle(fontSize: 14.0, color: Colors.black54),
+  TextTheme _buildTextTheme(bool isDark, Color primaryColor) {
+    final color1 = isDark ? Colors.white : Colors.black;
+    final color2 = isDark ? Colors.white70 : Colors.black87;
+    final color3 = isDark ? Colors.white60 : Colors.black54;
+
+    return TextTheme(
+      headline1: TextStyle(fontSize: 24.0, color: color1, fontWeight: FontWeight.w500),
+      headline2: TextStyle(fontSize: 24.0, color: color1),
+      headline3: TextStyle(fontSize: 24.0, color: color2),
+      headline4: TextStyle(fontSize: 22.0, color: color2, fontWeight: FontWeight.w500),
+      headline5: TextStyle(fontSize: 20.0, color: color3, fontWeight: FontWeight.w400),
+      headline6: TextStyle(fontSize: 18.0, color: color3, fontWeight: FontWeight.w300),
+      bodyText1: TextStyle(fontSize: 16.0, color: color3),
+      bodyText2: TextStyle(fontSize: 14.0, color: color3),
 
       // https://www.mdui.org/design/style/typography.html
       // 12、14、16、20
       // title: /*     */ TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
       // subheading: /**/ TextStyle(fontSize: 16.0, color: Colors.black87),
       // body1: /*     */ TextStyle(fontSize: 14.0),
-      // body2: /*     */ TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500),
+      // body2: /*     */ TextStyle(fontSize: 14.0, fontWeight: FontWeight_buildTextTheme.w500),
       // caption: /*   */ TextStyle(fontSize: 12.0, color: Colors.black87),
     );
   }
@@ -100,7 +104,7 @@ class KiteApp extends StatelessWidget {
   ThemeData _buildTheme(BuildContext context, Color primaryColor, bool isDark) {
     return ThemeData(
       colorSchemeSeed: primaryColor,
-      textTheme: _buildTextTheme(primaryColor),
+      textTheme: _buildTextTheme(isDark, primaryColor),
       brightness: isDark ? Brightness.dark : Brightness.light,
       useMaterial3: true,
     );
