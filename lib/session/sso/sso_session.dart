@@ -22,8 +22,8 @@ import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_session.dart';
-import 'package:kite/feature/kite/service/ocr.dart';
 import 'package:kite/exception/session.dart';
+import 'package:kite/feature/kite/service/ocr.dart';
 import 'package:kite/util/logger.dart';
 
 import '../../util/dio_utils.dart';
@@ -119,6 +119,7 @@ class SsoSession extends ASession with Downloader {
   /// 带异常的登录
   Future<Response> login(String username, String password) async {
     Log.info('尝试登录：$username');
+    Log.debug('当前登录UA: ${dio.options.headers['User-Agent']}');
     // 在 OA 登录时, 服务端会记录同一 cookie 用户登录次数和输入错误次数,
     // 所以需要在登录前清除所有 cookie, 避免用户重试时出错.
     cookieJar.deleteAll();
@@ -135,6 +136,7 @@ class SsoSession extends ASession with Downloader {
     }
 
     if (response.realUri.toString() != _loginSuccessUrl) {
+      Log.error('未知验证错误,此时url为: ${response.realUri}');
       throw const UnknownAuthException();
     }
     Log.info('登录成功：$username');
@@ -146,19 +148,23 @@ class SsoSession extends ASession with Downloader {
 
   /// 登录流程
   Future<Response> _postLoginProcess(String username, String password) async {
+    debug(m) => Log.debug(m);
+
     /// 提取认证页面中的加密盐
     String _getSaltFromAuthHtml(String htmlText) {
-      var a = RegExp(r'var pwdDefaultEncryptSalt = "(.*?)";');
-      var matchResult = a.firstMatch(htmlText)!.group(0)!;
-      var salt = matchResult.substring(29, matchResult.length - 2);
+      final a = RegExp(r'var pwdDefaultEncryptSalt = "(.*?)";');
+      final matchResult = a.firstMatch(htmlText)!.group(0)!;
+      final salt = matchResult.substring(29, matchResult.length - 2);
+      debug('当前页面加密盐: $salt');
       return salt;
     }
 
     /// 提取认证页面中的Cas Ticket
     String _getCasTicketFromAuthHtml(String htmlText) {
-      var a = RegExp(r'<input type="hidden" name="lt" value="(.*?)"');
-      var matchResult = a.firstMatch(htmlText)!.group(0)!;
-      var casTicket = matchResult.substring(38, matchResult.length - 1);
+      final a = RegExp(r'<input type="hidden" name="lt" value="(.*?)"');
+      final matchResult = a.firstMatch(htmlText)!.group(0)!;
+      final casTicket = matchResult.substring(38, matchResult.length - 1);
+      debug('当前页面CAS Ticket: $casTicket');
       return casTicket;
     }
 
@@ -170,9 +176,16 @@ class SsoSession extends ASession with Downloader {
 
     /// 判断是否需要验证码
     Future<bool> _needCaptcha(String username) async {
-      final response =
-          await dio.get(_needCaptchaUrl, queryParameters: {'username': username, 'pwdEncrypt2': 'pwdEncryptSalt'});
-      return response.data == 'true';
+      final response = await dio.get(
+        _needCaptchaUrl,
+        queryParameters: {
+          'username': username,
+          'pwdEncrypt2': 'pwdEncryptSalt',
+        },
+      );
+      final needCaptcha = response.data == 'true';
+      debug('当前账户: $username, 是否需要验证码: $needCaptcha');
+      return needCaptcha;
     }
 
     /// 获取验证码
@@ -182,7 +195,8 @@ class SsoSession extends ASession with Downloader {
         options: Options(responseType: ResponseType.bytes),
       );
       Uint8List captchaData = response.data;
-      return base64Encode(captchaData);
+      final b64 = base64Encode(captchaData);
+      return b64;
     }
 
     // 首先获取AuthServer首页
@@ -197,6 +211,7 @@ class SsoSession extends ASession with Downloader {
       do {
         final captchaImage = await _getCaptcha();
         captcha = await OcrServer.recognize(captchaImage);
+        debug('识别验证码结果: $captcha');
       } while (captcha.length != 4);
     }
     // 获取casTicket
