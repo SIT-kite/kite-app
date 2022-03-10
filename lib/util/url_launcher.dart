@@ -33,9 +33,18 @@ Future<void> launchInBrowser(String url) async {
   }
 }
 
-Future<void> launchInBuiltinWebView(BuildContext context, String url) async {
+Future<void> launchInBuiltinWebView(
+  BuildContext context,
+  String url, {
+  String? fixedTitle,
+}) async {
   Log.info('开启内置WebView加载URL: $url');
   await Navigator.of(context).push(
-    MaterialPageRoute(builder: (_) => SimpleWebViewPage(url)),
+    MaterialPageRoute(
+      builder: (_) => SimpleWebViewPage(
+        url,
+        fixedTitle: fixedTitle,
+      ),
+    ),
   );
 }
