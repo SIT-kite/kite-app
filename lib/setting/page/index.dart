@@ -179,11 +179,10 @@ class SettingPage extends StatelessWidget {
           title: '使用 HTTP 代理',
           subtitle: '通过 HTTP 代理连接校园网',
           leading: const Icon(Icons.vpn_key),
-          onChange: (value) {
+          onChange: (value) async {
             if (value) {
               SettingInitializer.network.useProxy = value;
-              // TODO
-              // SessionPool.init();
+              await Initializer.init();
             }
           },
           childrenIfEnabled: [
