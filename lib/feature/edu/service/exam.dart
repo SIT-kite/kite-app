@@ -18,9 +18,9 @@
 
 import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
+
 import '../dao/index.dart';
 import '../entity/index.dart';
-
 import 'util.dart';
 
 class ExamService extends AService implements ExamDao {
