@@ -33,8 +33,10 @@ class Global {
     required UserEventStorageDao userEventStorage,
     required AuthSettingDao authSetting,
   }) async {
-    dio = await DioInitializer.init(config: DioConfig());
     cookieJar = await CookieInitializer.init();
+    dio = await DioInitializer.init(
+      config: DioConfig()..cookieJar = cookieJar,
+    );
     ssoSession = SsoSession(dio: dio, cookieJar: cookieJar);
     pageLogger = PageLogger(dio: dio, userEventStorage: userEventStorage);
     pageLogger.startup();
