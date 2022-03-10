@@ -18,9 +18,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:grouped_list/grouped_list.dart';
+
 import '../entity/expense.dart';
 import '../init.dart';
-
 import 'icon.dart';
 
 class BillPage extends StatelessWidget {
@@ -72,7 +72,7 @@ class BillPage extends StatelessWidget {
   }
 
   Widget _buildEmptyResult(BuildContext context) {
-    final textStyle = Theme.of(context).textTheme.headline3;
+    final textStyle = Theme.of(context).textTheme.headline4;
 
     return Center(
       child: Column(
@@ -80,7 +80,7 @@ class BillPage extends StatelessWidget {
         children: [
           // TODO: 不要跨模块使用资源文件.
           SvgPicture.asset('assets/game/empty.svg'),
-          Text('这里空空的，\n快点击右上角的刷新按钮更新数据。', style: textStyle),
+          Text('这里空空的，\n快点击右上角的刷新按钮更新数据', style: textStyle),
         ],
       ),
     );
