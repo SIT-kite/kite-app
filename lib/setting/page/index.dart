@@ -128,7 +128,7 @@ class SettingPage extends StatelessWidget {
             settingKey: ThemeKeys.isDarkMode,
             defaultValue: SettingInitializer.theme.isDarkMode,
             title: '夜间模式',
-            subtitle: '开启黑暗模式以保护视力',
+            subtitle: '开启夜间模式以保护视力，部分颜色显示可能异常',
             leading: const Icon(Icons.dark_mode),
             onChange: (value) => DynamicColorTheme.of(context).setIsDark(isDark: value, shouldSave: false),
           ),
@@ -152,7 +152,7 @@ class SettingPage extends StatelessWidget {
           ),
           DropDownSettingsTile<int>(
             title: '校区',
-            subtitle: '用于显示对应校区的天气',
+            subtitle: '显示对应校区的天气',
             settingKey: HomeKeyKeys.campus,
             values: const <int, String>{
               1: '奉贤',
@@ -164,10 +164,10 @@ class SettingPage extends StatelessWidget {
               Global.eventBus.emit(EventNameConstants.onCampusChange);
             },
           ),
-          SimpleSettingsTile(title: '背景图片', subtitle: '设置首页的背景图片', onTap: _onChangeBgImage),
+          SimpleSettingsTile(title: '背景图片', subtitle: '自定义首页背景图片', onTap: _onChangeBgImage),
           SimpleSettingsTile(
             title: '功能顺序',
-            subtitle: '设置首页各个功能分组与顺序',
+            subtitle: '自定义首页功能的分组与顺序',
             onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeSettingPage())),
           ),
         ],
@@ -219,7 +219,7 @@ class SettingPage extends StatelessWidget {
           ),
           ModalSettingsTile(
             title: '密码',
-            subtitle: '修改小风筝上使用的 OA 密码',
+            subtitle: '修改小风筝使用的 OA 密码',
             showConfirmation: true,
             onConfirm: () {
               SettingInitializer.auth.ssoPassword = _passwordController.text;
@@ -241,7 +241,7 @@ class SettingPage extends StatelessWidget {
           ? SettingsGroup(title: '开发者选项', children: <Widget>[
               SimpleSettingsTile(
                 title: '显示本机存储内容',
-                subtitle: '包括首页和各模块存储的数据',
+                subtitle: '含首页及各模块存储的数据',
                 onTap: () =>
                     Navigator.of(context).push(MaterialPageRoute(builder: (context) => const DebugStoragePage())),
               )
