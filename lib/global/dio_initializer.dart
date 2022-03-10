@@ -25,10 +25,9 @@ import 'package:kite/setting/init.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/rule.dart';
 
-const String _defaultUaString = 'kite-app';
+const String _defaultUaString = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:46.0) Gecko/20100101 Firefox/46.0';
 
 class DioConfig {
-  String? uaString;
   String? httpProxy;
   bool allowBadCertificate = true;
   CookieJar cookieJar = DefaultCookieJar();
@@ -41,10 +40,7 @@ class DioInitializer {
     Log.info("初始化Dio");
     // dio初始化完成后，才能初始化 UA
     final dio = _initDioInstance(config: config);
-    await _initUserAgentString(
-      dio: dio,
-      config: config,
-    );
+    await _initUserAgentString(dio: dio);
 
     return dio;
   }
@@ -66,18 +62,16 @@ class DioInitializer {
 
   static Future<void> _initUserAgentString({
     required Dio dio,
-    required DioConfig config,
   }) async {
     try {
       // 如果非IOS/Android，则该函数将抛异常
       await FkUserAgent.init();
-      config.uaString = FkUserAgent.webViewUserAgent ?? _defaultUaString;
       // 更新 dio 设置的 user-agent 字符串
-      dio.options.headers['User-Agent'] = config.uaString;
+      dio.options.headers['User-Agent'] = FkUserAgent.webViewUserAgent ?? _defaultUaString;
     } catch (e) {
       // Desktop端将进入该异常
       // TODO: 自定义UA
-      dio.options.headers['User-Agent'] = config.uaString;
+      dio.options.headers['User-Agent'] = _defaultUaString;
     }
   }
 }
