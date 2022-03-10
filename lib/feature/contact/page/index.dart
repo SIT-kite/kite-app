@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+
 import '../entity/contact.dart';
 import '../init.dart';
-
 import 'list.dart';
 import 'search.dart';
 

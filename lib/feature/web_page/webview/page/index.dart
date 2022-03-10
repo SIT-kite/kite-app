@@ -1,11 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:kite/component/unsupported_platform_launch.dart';
 import 'package:kite/component/webview.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/url_launcher.dart';
-import 'package:universal_platform/universal_platform.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class SimpleWebViewPage extends StatefulWidget {

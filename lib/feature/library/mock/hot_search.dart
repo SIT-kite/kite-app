@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import '../dao/hot_search.dart';
-
 import '../entity/hot_search.dart';
 
 class HotSearchMock implements HotSearchDao {

@@ -16,12 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import '../entity/expense.dart';
-import '../init.dart';
-import '../page/icon.dart';
 import 'package:kite/util/flash.dart';
 
 import '../dao/expense.dart';
+import '../entity/expense.dart';
+import '../init.dart';
+import '../page/icon.dart';
 import 'bill.dart';
 import 'statistics.dart';
 

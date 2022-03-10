@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
+
 import '../entity/list.dart';
 import '../init.dart';
 import 'component/card.dart';

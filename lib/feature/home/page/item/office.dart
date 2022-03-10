@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/feature/office/init.dart';
 import 'package:kite/exception/session.dart';
+import 'package:kite/feature/office/init.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/setting/init.dart';
 

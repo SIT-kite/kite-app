@@ -17,8 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
-import '../../../entity/index.dart';
 
+import '../../../entity/index.dart';
 import '../cache.dart';
 import '../util.dart';
 import 'sheet.dart';
