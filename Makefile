@@ -17,3 +17,5 @@ build_android:
 # 构建Linux版本应用
 build_linux:
 	flutter build linux
+
+all: clean get generate build_android build_linux
