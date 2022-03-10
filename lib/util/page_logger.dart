@@ -20,9 +20,9 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:uuid/uuid.dart';
 
-import '../domain/user_event/dao.dart';
-import '../domain/user_event/entity.dart';
-import '../domain/user_event/init.dart';
+import '../feature/user_event/dao.dart';
+import '../feature/user_event/entity.dart';
+import '../feature/user_event/init.dart';
 import 'logger.dart';
 
 const String reportEventUrl = "https://kite.sunnysab.cn/api/v2/report/event";

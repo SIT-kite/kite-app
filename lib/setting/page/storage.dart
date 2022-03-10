@@ -18,8 +18,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:kite/component/future_builder.dart';
-import 'package:kite/domain/contact/entity/contact.dart';
-import 'package:kite/domain/library/entity/search_history.dart';
+import 'package:kite/feature/contact/entity/contact.dart';
+import 'package:kite/feature/library/entity/search_history.dart';
 
 class DebugStoragePage extends StatelessWidget {
   const DebugStoragePage({Key? key}) : super(key: key);

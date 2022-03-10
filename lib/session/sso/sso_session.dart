@@ -22,7 +22,7 @@ import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_session.dart';
-import 'package:kite/domain/kite/service/ocr.dart';
+import 'package:kite/feature/kite/service/ocr.dart';
 import 'package:kite/exception/session.dart';
 import 'package:kite/util/logger.dart';
 

@@ -7,7 +7,7 @@ import 'package:kite/setting/dao/auth.dart';
 import 'package:kite/util/event_bus.dart';
 import 'package:kite/util/page_logger.dart';
 
-import '../domain/user_event/dao.dart';
+import '../feature/user_event/dao.dart';
 
 enum EventNameConstants {
   onWeatherUpdate,

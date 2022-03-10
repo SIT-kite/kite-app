@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:kite/domain/initializer_index.dart';
-import 'package:kite/domain/kite/kite_session.dart';
+import 'package:kite/feature/initializer_index.dart';
+import 'package:kite/feature/kite/kite_session.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/setting/init.dart';
 
