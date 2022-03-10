@@ -21,6 +21,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:kite/feature/kite/entity/weather.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/setting/init.dart';
+import 'package:kite/util/url_launcher.dart';
 
 /// 计算入学时间, 默认按 9 月 1 日开学来算. 年份 entranceYear 是完整的年份, 如 2018.
 int _calcStudyDays(int entranceYear) {
@@ -74,8 +75,7 @@ class _GreetingWidgetState extends State<GreetingWidget> {
         final location = campus == 1 ? '101021000' : '101021200';
         final url =
             'https://widget-page.qweather.net/h5/index.html?md=0123456&bg=1&lc=$location&key=f96261862c08497c90c0dea53467f511';
-
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) => SimpleWebViewPage(url, fixedTitle: title)));
+        launchInBuiltinWebView(context, url, fixedTitle: title);
       },
       child: SvgPicture.asset('assets/weather/$iconCode.svg',
           width: 60, height: 60, fit: BoxFit.fill, color: Colors.white),
