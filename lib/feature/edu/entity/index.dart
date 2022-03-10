@@ -19,6 +19,7 @@ export 'evaluation.dart';
 export 'exam.dart';
 export 'score.dart';
 export 'timetable.dart';
+export 'util.dart';
 
 enum Semester {
   all,

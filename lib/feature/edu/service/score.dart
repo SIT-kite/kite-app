@@ -21,7 +21,6 @@ import 'package:kite/abstract/abstract_session.dart';
 import '../dao/index.dart';
 import '../entity/index.dart';
 
-import 'util.dart';
 
 class ScoreService extends AService implements ScoreDao {
   static const _scoreUrl = 'http://jwxt.sit.edu.cn/jwglxt/cjcx/cjcx_cxDgXscj.html';

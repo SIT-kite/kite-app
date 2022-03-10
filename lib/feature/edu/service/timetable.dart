@@ -19,10 +19,9 @@ import 'dart:core';
 
 import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
+
 import '../dao/index.dart';
 import '../entity/index.dart';
-
-import 'util.dart';
 
 class TimetableService extends AService implements TimetableDao {
   static const _timetableUrl = 'http://jwxt.sit.edu.cn/jwglxt/kbcx/xskbcx_cxXsgrkb.html';

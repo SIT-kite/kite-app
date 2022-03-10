@@ -21,7 +21,6 @@ import 'package:kite/abstract/abstract_session.dart';
 
 import '../dao/index.dart';
 import '../entity/index.dart';
-import 'util.dart';
 
 class ExamService extends AService implements ExamDao {
   static const _examRoomUrl = 'http://jwxt.sit.edu.cn/jwglxt/kwgl/kscx_cxXsksxxIndex.html';
