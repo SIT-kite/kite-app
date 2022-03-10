@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/domain/kite/entity/weather.dart';
+import 'package:kite/domain/web_page/webview/page/index.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/setting/init.dart';
 
@@ -68,8 +69,18 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   }
 
   Widget _buildWeatherIcon(String iconCode) {
-    return SvgPicture.asset('assets/weather/$iconCode.svg',
-        width: 60, height: 60, fit: BoxFit.fill, color: Colors.white);
+    return GestureDetector(
+      onTap: () {
+        final title = _getCampusName() + '天气';
+        final location = campus == 1 ? '101021000' : '101021200';
+        final url =
+            'https://widget-page.qweather.net/h5/index.html?md=0123456&bg=1&lc=$location&key=f96261862c08497c90c0dea53467f511';
+
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => SimpleWebViewPage(url, fixedTitle: title)));
+      },
+      child: SvgPicture.asset('assets/weather/$iconCode.svg',
+          width: 60, height: 60, fit: BoxFit.fill, color: Colors.white),
+    );
   }
 
   void _onWeatherUpdate(dynamic newWeather) {
