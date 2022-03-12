@@ -58,6 +58,7 @@ class EduSession extends ASession {
     Response response = await fetch();
     // 如果返回值是登录页面，那就从 SSO 跳转一次以登录.
     if (_isRedirectedToLoginPage(response)) {
+      Log.info('EduSession需要登录');
       await _refreshCookie();
       response = await fetch();
     }
