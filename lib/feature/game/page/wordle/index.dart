@@ -10,6 +10,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../entity/game.dart';
+import '../../init.dart';
 import '../action.dart';
 import 'models/board_model.dart';
 import 'widgets/alert_dialog.dart';
@@ -43,6 +45,7 @@ class _WordlePageState extends State<WordlePage> {
             if (snapshot.data == null) return const Text('Cannot load game');
 
             final board = snapshot.data!;
+            final startTime = DateTime.now();
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -53,7 +56,18 @@ class _WordlePageState extends State<WordlePage> {
                       context,
                       title: 'You Guessed The Word!',
                       actionText: 'Start New Game?',
-                      onAction: () => setState(board.reset),
+                      onAction: () {
+                        final costTime = DateTime.now().difference(startTime).inSeconds;
+                        final score = costTime > 10 * 60 ? 0 : -costTime + 600;
+
+                        // 存储游戏记录
+                        final currentTime = DateTime.now();
+                        final record =
+                            GameRecord(GameType.wordle, score, startTime, currentTime.difference(startTime).inSeconds);
+                        GameInitializer.gameRecord.append(record);
+
+                        setState(board.reset);
+                      },
                       content: [
                         Text(
                           board.targetWord.toUpperCase(),
@@ -89,7 +103,7 @@ class _WordlePageState extends State<WordlePage> {
                 ElevatedButton.icon(
                   onPressed: () => setState(board.reset),
                   icon: const Icon(Icons.play_arrow_rounded),
-                  label: const Text('New Game'),
+                  label: Text(board.targetWord),
                 ),
               ],
             );

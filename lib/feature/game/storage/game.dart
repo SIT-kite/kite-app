@@ -45,8 +45,8 @@ class GameStorage implements GameRecordStorageDao {
 
   @override
   List<GameRecord> getAllRecords() {
-    final List<GameRecord> recordList = box.get('record') ?? [];
-    return recordList;
+    final List? recordList = box.get('record');
+    return recordList?.map((e) => e as GameRecord).toList() ?? <GameRecord>[];
   }
 
   @override

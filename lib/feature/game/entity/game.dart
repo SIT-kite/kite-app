@@ -27,6 +27,10 @@ enum GameType {
   /// 2048 游戏
   @HiveField(0)
   game2048,
+
+  /// Wordle 游戏
+  @HiveField(1)
+  wordle,
 }
 
 @HiveType(typeId: HiveTypeIdPool.gameRecordItem)
