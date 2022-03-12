@@ -54,9 +54,9 @@ class DioInitializer {
     dio.interceptors.add(CookieManager(config.cookieJar));
 
     // 设置默认超时时间
-    dio.options.connectTimeout = 20 * 1000;
-    dio.options.sendTimeout = 60 * 1000;
-    dio.options.receiveTimeout = 60 * 1000;
+    dio.options.connectTimeout = 3 * 1000;
+    dio.options.sendTimeout = 3 * 1000;
+    dio.options.receiveTimeout = 3 * 1000;
     return dio;
   }
 
