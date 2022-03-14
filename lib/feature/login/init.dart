@@ -1,13 +1,14 @@
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/session/sso/index.dart';
 
 import 'service/authserver.dart';
 
 class LoginInitializer {
   static late AuthServerService authServerService;
-
+  static late SsoSession ssoSession;
   static void init({
-    required ASession ssoSession,
+    required SsoSession ssoSession,
   }) {
+    LoginInitializer.ssoSession = ssoSession;
     authServerService = AuthServerService(ssoSession);
   }
 }

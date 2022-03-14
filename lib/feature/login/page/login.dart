@@ -20,11 +20,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/exception/session.dart';
-import 'package:kite/global/global.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/url_launcher.dart';
 import 'package:kite/util/validation.dart';
+
+import '../init.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -66,10 +67,12 @@ class _LoginPageState extends State<LoginPage> {
     final username = _usernameController.text;
     final password = _passwordController.text;
     try {
-      await Global.ssoSession.login(username, password);
+      await LoginInitializer.ssoSession.login(username, password);
+      final personName = await LoginInitializer.authServerService.getPersonName();
       SettingInitializer.auth
         ..currentUsername = username
-        ..ssoPassword = password;
+        ..ssoPassword = password
+        ..personName = personName;
 
       Navigator.pushReplacementNamed(context, '/home');
       launchInBuiltinWebView(
