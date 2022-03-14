@@ -61,6 +61,12 @@ class MyWebView extends StatefulWidget {
   final PageFinishedCallback? onPageFinished;
   final JavascriptMode javascriptMode;
 
+  /// 若该字段不为null，则表示使用post请求打开网页
+  final Map<String, String>? postData;
+
+  /// 注入cookies
+  final List<WebViewCookie> initialCookies;
+
   /// 自定义 UA
   final String? userAgent;
   const MyWebView({
@@ -72,6 +78,8 @@ class MyWebView extends StatefulWidget {
     this.onPageFinished,
     this.javascriptMode = JavascriptMode.unrestricted, // js支持默认启用
     this.userAgent,
+    this.postData,
+    this.initialCookies = const <WebViewCookie>[],
   }) : super(key: key);
 
   @override
@@ -105,35 +113,49 @@ class _MyWebViewState extends State<MyWebView> {
     }
   }
 
+  String _buildFormHtml() {
+    if (widget.postData == null) {
+      return '';
+    }
+    return '''
+    <form method="post" action="${widget.initialUrl}">
+      ${widget.postData!.entries.map((e) => '''<input type="hidden" name="${e.key}" value="${e.value}">''').join('\n')}
+      <button type="submit">
+    </form>
+    ''';
+  }
+
   @override
   Widget build(BuildContext context) {
-    return UniversalPlatform.isDesktopOrWeb
-        ? UnsupportedPlatformUrlLauncher(widget.initialUrl ?? '')
-        : WebView(
-            initialUrl: widget.initialUrl,
-            javascriptMode: widget.javascriptMode,
-            onWebViewCreated: (WebViewController webViewController) {
-              Log.info('WebView已创建，已获取到controller');
-              _controllerCompleter.complete(webViewController);
-              if (widget.onWebViewCreated != null) {
-                widget.onWebViewCreated!(webViewController);
-              }
-            },
-            userAgent: widget.userAgent,
-            onPageStarted: (String url) async {
-              Log.info('开始加载url: $url');
-              await Future.wait(getAllMatchJs(url, InjectJsTime.onPageStarted).map(injectJs));
-              if (widget.onPageStarted != null) {
-                widget.onPageStarted!(url);
-              }
-            },
-            onPageFinished: (String url) async {
-              Log.info('url加载完毕: $url');
-              await Future.wait(getAllMatchJs(url, InjectJsTime.onPageFinished).map(injectJs));
-              if (widget.onPageFinished != null) {
-                widget.onPageFinished!(url);
-              }
-            },
-          );
+    if (!UniversalPlatform.isDesktopOrWeb) {
+      return UnsupportedPlatformUrlLauncher(widget.initialUrl ?? '');
+    }
+    return WebView(
+      initialUrl: widget.initialUrl,
+      initialCookies: widget.initialCookies,
+      javascriptMode: widget.javascriptMode,
+      onWebViewCreated: (WebViewController webViewController) {
+        Log.info('WebView已创建，已获取到controller');
+        _controllerCompleter.complete(webViewController);
+        if (widget.onWebViewCreated != null) {
+          widget.onWebViewCreated!(webViewController);
+        }
+      },
+      userAgent: widget.userAgent,
+      onPageStarted: (String url) async {
+        Log.info('开始加载url: $url');
+        await Future.wait(getAllMatchJs(url, InjectJsTime.onPageStarted).map(injectJs));
+        if (widget.onPageStarted != null) {
+          widget.onPageStarted!(url);
+        }
+      },
+      onPageFinished: (String url) async {
+        Log.info('url加载完毕: $url');
+        await Future.wait(getAllMatchJs(url, InjectJsTime.onPageFinished).map(injectJs));
+        if (widget.onPageFinished != null) {
+          widget.onPageFinished!(url);
+        }
+      },
+    );
   }
 }
