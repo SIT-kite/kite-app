@@ -20,20 +20,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/feature/kite/init.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../entity/game.dart';
 import '../service/ranking.dart';
 
-class GameRanking extends StatelessWidget {
+class GameRanking extends StatefulWidget {
   static const _colorMapping = [Colors.red, Colors.deepOrange, Colors.orange];
 
   final GameType gameType;
 
-  const GameRanking(this.gameType, {Key? key}) : super(key: key);
+  GameRanking(this.gameType, {Key? key}) : super(key: key);
+
+  @override
+  State<GameRanking> createState() => _GameRankingState();
+}
+
+class _GameRankingState extends State<GameRanking> {
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   /// 构建排行榜行, 下标从 1 开始
   Widget _buildItem(BuildContext context, int index, GameRankingItem item) {
-    final color = index > 3 ? Colors.yellow : _colorMapping[index - 1];
+    final color = index > 3 ? Colors.yellow : GameRanking._colorMapping[index - 1];
 
     return ListTile(
       leading: CircleAvatar(
@@ -64,23 +72,43 @@ class GameRanking extends StatelessWidget {
   }
 
   @override
+  void dispose() {
+    _refreshController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final service = RankingService(KiteInitializer.kiteSession);
-    final future = service.getGameRanking(gameType.index);
+    final future = service.getGameRanking(widget.gameType.index);
 
-    return MyFutureBuilder<List<GameRankingItem>>(
-      future: future,
-      builder: (context, list) {
-        if (list.isEmpty) {
-          return emptyRanking(context);
+    return SmartRefresher(
+      enablePullDown: true,
+      enablePullUp: false,
+      controller: _refreshController,
+      onRefresh: () {
+        if (mounted) {
+          setState(() {});
+          Future.delayed(
+            const Duration(milliseconds: 500),
+            () => _refreshController.refreshCompleted(resetFooterState: true),
+          );
         }
-        final widgets = <Widget>[];
-        list.sort((a, b) => b.score - a.score);
-        for (int i = 0; i < list.length; ++i) {
-          widgets.add(_buildItem(context, i + 1, list[i]));
-        }
-        return Column(mainAxisSize: MainAxisSize.min, children: widgets);
       },
+      child: MyFutureBuilder<List<GameRankingItem>>(
+        future: future,
+        builder: (context, list) {
+          if (list.isEmpty) {
+            return emptyRanking(context);
+          }
+          final widgets = <Widget>[];
+          list.sort((a, b) => b.score - a.score);
+          for (int i = 0; i < list.length; ++i) {
+            widgets.add(_buildItem(context, i + 1, list[i]));
+          }
+          return Column(mainAxisSize: MainAxisSize.min, children: widgets);
+        },
+      ),
     );
   }
 }
