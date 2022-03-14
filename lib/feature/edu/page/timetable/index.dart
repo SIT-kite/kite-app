@@ -72,12 +72,11 @@ class _TimetablePageState extends State<TimetablePage> {
     }
     isRefreshing = true;
     try {
-      showBasicFlash(context, const Text('加载成功'));
-
       final newTimetable = await _fetchTimetable();
       TableCache.clear();
 
       setState(() => timetable = newTimetable);
+      showBasicFlash(context, const Text('加载成功'));
     } catch (e) {
       showBasicFlash(context, Text('加载失败: ${e.toString().split('\n')[0]}'));
       rethrow;

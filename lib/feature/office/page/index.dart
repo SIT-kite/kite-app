@@ -141,20 +141,17 @@ class _OfficePageState extends State<OfficePage> {
           ])
         : Text(function.count.toString());
 
-    return Card(
-      margin: const EdgeInsets.all(8),
-      child: ListTile(
-        leading: SizedBox(height: 40, width: 40, child: Center(child: Icon(function.icon, size: 35, color: color))),
-        title: Text(function.name),
-        subtitle: Text(function.summary),
-        trailing: trailing,
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => DetailPage(function)),
-          );
-        },
-      ),
+    return ListTile(
+      leading: SizedBox(height: 40, width: 40, child: Center(child: Icon(function.icon, size: 35, color: color))),
+      title: Text(function.name),
+      subtitle: Text(function.summary),
+      trailing: trailing,
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => DetailPage(function)),
+        );
+      },
     );
   }
 

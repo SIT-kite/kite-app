@@ -28,18 +28,15 @@ class BulletinPage extends StatelessWidget {
   const BulletinPage({Key? key}) : super(key: key);
 
   Widget _buildBulletinItem(BuildContext context, BulletinRecord record) {
-    final titleStyle = Theme.of(context).textTheme.headline3;
+    final titleStyle = Theme.of(context).textTheme.headline5;
     final subtitleStyle = Theme.of(context).textTheme.bodyText2;
 
-    return Card(
-      margin: const EdgeInsets.all(8),
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: ListTile(
-          title: Text(record.title, style: titleStyle, overflow: TextOverflow.ellipsis),
-          subtitle: Text(record.department + ' | ' + _dateFormat.format(record.dateTime), style: subtitleStyle),
-          onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailPage(record))),
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: ListTile(
+        title: Text(record.title, style: titleStyle, overflow: TextOverflow.ellipsis),
+        subtitle: Text(record.department + ' | ' + _dateFormat.format(record.dateTime), style: subtitleStyle),
+        onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailPage(record))),
       ),
     );
   }

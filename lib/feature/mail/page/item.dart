@@ -31,9 +31,9 @@ class MailItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final titleStyle = Theme.of(context).textTheme.headline3;
-    final subtitleStyle = Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.black54);
-    final contentStyle = Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.grey);
+    final titleStyle = Theme.of(context).textTheme.headline5;
+    final subtitleStyle = Theme.of(context).textTheme.bodyText2;
+    final contentStyle = Theme.of(context).textTheme.bodyText2;
 
     final subjectText = _message.decodeSubject() ?? '无主题';
     final sender = _message.decodeSender();
@@ -42,28 +42,25 @@ class MailItem extends StatelessWidget {
     final date = _message.decodeDate();
     final dateText = date != null ? dateFormat.format(date) : '';
 
-    return Card(
-      margin: const EdgeInsets.all(8),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Theme.of(context).primaryColor,
-          child: Text(
-            subjectText[0],
-            style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.grey[50]),
-          ),
-          radius: 20,
+    return ListTile(
+      leading: CircleAvatar(
+        backgroundColor: Theme.of(context).primaryColor,
+        child: Text(
+          subjectText[0],
+          style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.grey[50]),
         ),
-        isThreeLine: true,
-        title: Text(subjectText, style: titleStyle),
-        subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(senderText, style: subtitleStyle),
-          Text(contentText, style: contentStyle, maxLines: 1, overflow: TextOverflow.ellipsis)
-        ]),
-        trailing: Text(dateText, style: subtitleStyle),
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (_) => DetailPage(_message)));
-        },
+        radius: 20,
       ),
+      isThreeLine: true,
+      title: Text(subjectText, style: titleStyle, maxLines: 2, overflow: TextOverflow.ellipsis),
+      subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(senderText, style: subtitleStyle),
+        Text(contentText, style: contentStyle, maxLines: 1, overflow: TextOverflow.ellipsis)
+      ]),
+      trailing: Text(dateText, style: subtitleStyle),
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => DetailPage(_message)));
+      },
     );
   }
 }

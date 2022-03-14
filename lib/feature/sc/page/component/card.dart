@@ -47,7 +47,7 @@ class EventCard extends StatelessWidget {
   Widget _buildBasicInfo(BuildContext context) {
     final titleStyle =
         Theme.of(context).textTheme.headline2?.copyWith(color: Colors.white, fontWeight: FontWeight.w500);
-    final subtitleStyle = Theme.of(context).textTheme.headline5?.copyWith(color: Colors.grey);
+    final subtitleStyle = Theme.of(context).textTheme.headline6?.copyWith(color: Colors.grey);
 
     final titleList = extractTitle(activity.title);
     final title = titleList.last;

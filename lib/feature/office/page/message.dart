@@ -29,19 +29,16 @@ class MessagePage extends StatelessWidget {
     return ListView(
       children: messageList
           .map(
-            (e) => Card(
-              margin: const EdgeInsets.all(8),
-              child: ListTile(
-                title: Text(e.functionName),
-                subtitle: Text('最近更新: ' + e.recentStep),
-                trailing: Text(e.status),
-                onTap: () {
-                  // 跳转到详情页面
-                  final String resultUrl =
-                      'https://xgfy.sit.edu.cn/unifri-flow/WF/mobile/index.html?ismobile=1&FK_Flow=${e.functionId}&WorkID=${e.flowId}&IsReadonly=1&IsView=1';
-                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => BrowserPage(e.functionName, resultUrl)));
-                },
-              ),
+            (e) => ListTile(
+              title: Text(e.functionName),
+              subtitle: Text('最近更新: ' + e.recentStep),
+              trailing: Text(e.status),
+              onTap: () {
+                // 跳转到详情页面
+                final String resultUrl =
+                    'https://xgfy.sit.edu.cn/unifri-flow/WF/mobile/index.html?ismobile=1&FK_Flow=${e.functionId}&WorkID=${e.flowId}&IsReadonly=1&IsView=1';
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => BrowserPage(e.functionName, resultUrl)));
+              },
             ),
           )
           .toList(),

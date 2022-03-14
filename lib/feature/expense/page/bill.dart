@@ -72,7 +72,7 @@ class BillPage extends StatelessWidget {
   }
 
   Widget _buildEmptyResult(BuildContext context) {
-    final textStyle = Theme.of(context).textTheme.headline4;
+    final textStyle = Theme.of(context).textTheme.headline5;
 
     return Center(
       child: Column(
