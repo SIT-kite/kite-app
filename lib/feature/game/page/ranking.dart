@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/feature/kite/init.dart';
 
@@ -47,6 +48,21 @@ class GameRanking extends StatelessWidget {
     );
   }
 
+  Widget emptyRanking(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SvgPicture.asset('assets/game/no_content.svg'),
+          Text(
+            '今日还没有人上榜\n快来一局吧！',
+            style: Theme.of(context).textTheme.headline5,
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final service = RankingService(KiteInitializer.kiteSession);
@@ -55,9 +71,11 @@ class GameRanking extends StatelessWidget {
     return MyFutureBuilder<List<GameRankingItem>>(
       future: future,
       builder: (context, list) {
-        list.sort((a, b) => b.score - a.score);
-
+        if (list.isEmpty) {
+          return emptyRanking(context);
+        }
         final widgets = <Widget>[];
+        list.sort((a, b) => b.score - a.score);
         for (int i = 0; i < list.length; ++i) {
           widgets.add(_buildItem(context, i + 1, list[i]));
         }

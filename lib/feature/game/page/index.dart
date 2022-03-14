@@ -62,7 +62,7 @@ class _GamePageState extends State<GamePage> with SingleTickerProviderStateMixin
 
   Widget _gameButtonLine(BuildContext context, GameMeta game) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
       child: ListTile(
         leading: Image.asset(game.icon, height: 64, width: 64),
         trailing: const Icon(Icons.chevron_right),
@@ -75,8 +75,7 @@ class _GamePageState extends State<GamePage> with SingleTickerProviderStateMixin
   Widget _buildContent(BuildContext context, GameType gameType) {
     return Column(
       children: [
-        GameRanking(gameType),
-        const Spacer(),
+        Expanded(child: GameRanking(gameType)),
         _gameButtonLine(context, gameMapping[gameType]!),
       ],
     );
