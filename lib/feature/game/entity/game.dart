@@ -39,13 +39,14 @@ enum GameType {
 }
 
 int _getGameIndex(GameType type) => type.index;
+GameType _fromGameIndex(int index) => GameType.values[index];
 
 @HiveType(typeId: HiveTypeIdPool.gameRecordItem)
 @JsonSerializable()
 class GameRecord {
   /// 游戏类型
   @HiveField(0)
-  @JsonKey(name: 'game', toJson: _getGameIndex)
+  @JsonKey(name: 'game', toJson: _getGameIndex, fromJson: _fromGameIndex)
   final GameType type;
 
   /// 得分
@@ -55,15 +56,21 @@ class GameRecord {
   /// 游戏开始的时间
   @HiveField(2)
   @JsonKey(name: 'dateTime')
-  final DateTime ts;
+  DateTime ts;
 
   /// 该局用时 （秒）
   @HiveField(3)
   final int timeCost;
 
-  const GameRecord(this.type, this.score, this.ts, this.timeCost);
+  GameRecord(this.type, this.score, this.ts, this.timeCost);
 
   Map<String, dynamic> toJson() => _$GameRecordToJson(this);
+  factory GameRecord.fromJson(Map<String, dynamic> json) => _$GameRecordFromJson(json);
+
+  @override
+  String toString() {
+    return 'GameRecord{type: $type, score: $score, ts: $ts, timeCost: $timeCost}';
+  }
 }
 
 @JsonSerializable()

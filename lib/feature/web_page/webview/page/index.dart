@@ -40,6 +40,9 @@ class SimpleWebViewPage extends StatefulWidget {
   /// 异步注入cookie
   final Future<List<WebViewCookie>>? initialAsyncCookies;
 
+  /// 暴露dart回调到js接口
+  final Set<JavascriptChannel>? javascriptChannels;
+
   const SimpleWebViewPage({
     Key? key,
     required this.initialUrl,
@@ -53,6 +56,7 @@ class SimpleWebViewPage extends StatefulWidget {
     this.userAgent,
     this.postData,
     this.initialAsyncCookies,
+    this.javascriptChannels,
   }) : super(key: key);
 
   @override
@@ -131,6 +135,7 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
               setState(() {});
             }
           },
+          javascriptChannels: widget.javascriptChannels,
           userAgent: widget.userAgent,
           postData: widget.postData,
           initialAsyncCookies: widget.initialAsyncCookies,

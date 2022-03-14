@@ -18,6 +18,7 @@
 
 import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/util/logger.dart';
 
 import '../dao/game.dart';
 import '../entity/game.dart';
@@ -38,7 +39,7 @@ class RankingService extends AService implements RankingServiceDao {
 
   @override
   Future<void> postScore(GameRecord record) async {
-    print(record.toJson());
+    Log.info(record.toJson());
     await session.post(_scoreUploading, data: record.toJson());
   }
 }
