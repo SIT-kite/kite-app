@@ -52,35 +52,35 @@ class _WordlePageState extends State<WordlePage> {
                 SingleChildScrollView(
                   child: GameBoard(
                     board: board,
-                    onWin: () => showAlertDialog(
-                      context,
-                      title: '猜中了!',
-                      actionText: '再来一局?',
-                      onAction: () {
-                        final costTime = DateTime.now().difference(startTime).inSeconds;
-                        final score = costTime > 10 * 60 ? 0 : -costTime + 600;
+                    onWin: () {
+                      final costTime = DateTime.now().difference(startTime).inSeconds;
+                      final score = costTime > 10 * 60 ? 0 : -costTime + 600;
 
-                        // 存储游戏记录
-                        final currentTime = DateTime.now();
-                        final record =
-                            GameRecord(GameType.wordle, score, startTime, currentTime.difference(startTime).inSeconds);
-                        GameInitializer.gameRecord.append(record);
+                      // 存储游戏记录
+                      final currentTime = DateTime.now();
+                      final record =
+                          GameRecord(GameType.wordle, score, startTime, currentTime.difference(startTime).inSeconds);
+                      GameInitializer.gameRecord.append(record);
 
-                        setState(board.reset);
-                      },
-                      content: [
-                        Text(
-                          board.targetWord.toUpperCase(),
-                          style: const TextStyle(
-                            fontSize: 32,
-                            color: Colors.green,
-                            fontWeight: FontWeight.bold,
+                      showAlertDialog(
+                        context,
+                        title: '猜中了!',
+                        actionText: '再来一局?',
+                        onAction: () => setState(board.reset),
+                        content: [
+                          Text(
+                            board.targetWord.toUpperCase(),
+                            style: const TextStyle(
+                              fontSize: 32,
+                              color: Colors.green,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text('猜测 ${board.currentRow + 1}/${board.rows} 次'),
-                      ],
-                    ),
+                          const SizedBox(height: 10),
+                          Text('猜测 ${board.currentRow + 1}/${board.rows} 次'),
+                        ],
+                      );
+                    },
                     onLose: () => showAlertDialog(
                       context,
                       title: '答案是',
