@@ -128,8 +128,11 @@ class _MyWebViewState extends State<MyWebView> {
     return '''
     <form method="post" action="${widget.initialUrl}">
       ${widget.postData!.entries.map((e) => '''<input type="hidden" name="${e.key}" value="${e.value}">''').join('\n')}
-      <button type="submit">
+      <button hidden type="submit">
     </form>
+    <script>
+      document.getElementsByTagName('form')[0].submit();
+    </script>
     ''';
   }
 
@@ -147,8 +150,6 @@ class _MyWebViewState extends State<MyWebView> {
         if (widget.postData != null) {
           Log.info('通过post请求打开页面: ${widget.initialUrl}');
           await webViewController.loadHtmlString(_buildFormHtml());
-          await webViewController.runJavascript("document.getElementsByTagName('form')[0].submit()");
-          return;
         }
         _controllerCompleter.complete(webViewController);
         if (widget.onWebViewCreated != null) {
