@@ -16,25 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:kite/abstract/abstract_service.dart';
+import 'package:kite/abstract/abstract_session.dart';
+
+import '../dao/game.dart';
 import '../entity/game.dart';
 
-/// 游戏记录访问接口
-abstract class GameRecordStorageDao {
-  /// 添加游戏记录
-  void append(GameRecord record);
+class RankingService extends AService implements RankingServiceDao {
+  static const _rankingPrefix = '/game/ranking/';
 
-  /// 获取最近一次游戏记录 (首页)
-  GameRecord? getLastOne();
+  RankingService(ASession session) : super(session);
 
-  /// 清空游戏记录存储
-  void deleteAll();
+  @override
+  Future<List<GameRankingItem>> getGameRanking(int gameId) async {
+    final response = await session.get(_rankingPrefix + gameId.toString());
+    final List person = response.data;
 
-  /// 获取所有游戏成绩记录
-  List<GameRecord> getAllRecords();
-}
-
-// 远程
-abstract class RankingServiceDao {
-  /// 获取游戏排名
-  Future<List<GameRankingItem>> getGameRanking(int gameId);
+    return person.map((e) => GameRankingItem.fromJson(e as Map<String, dynamic>)).toList();
+  }
 }

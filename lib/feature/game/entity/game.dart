@@ -17,6 +17,7 @@
  */
 
 import 'package:hive/hive.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 import '../../../global/hive_type_id_pool.dart';
 
@@ -52,4 +53,17 @@ class GameRecord {
   final int timeCost;
 
   const GameRecord(this.type, this.score, this.ts, this.timeCost);
+}
+
+@JsonSerializable()
+class GameRankingItem {
+  /// 成绩值
+  final int score;
+
+  /// 学号
+  final String studentId;
+
+  const GameRankingItem(this.score, this.studentId);
+
+  factory GameRankingItem.fromJson(Map<String, dynamic> json) => _$GameRankingItemFromJson(json);
 }

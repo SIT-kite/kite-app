@@ -18,13 +18,10 @@
 
 import 'package:flutter/material.dart';
 
+import '../entity/game.dart';
 import 'action.dart';
 import 'history.dart';
-
-enum GameType {
-  game2048,
-  wordle,
-}
+import 'ranking.dart';
 
 class GameMeta {
   final String name;
@@ -78,6 +75,7 @@ class _GamePageState extends State<GamePage> with SingleTickerProviderStateMixin
   Widget _buildContent(BuildContext context, GameType gameType) {
     return Column(
       children: [
+        GameRanking(gameType),
         const Spacer(),
         _gameButtonLine(context, gameMapping[gameType]!),
       ],
