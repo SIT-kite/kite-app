@@ -57,15 +57,12 @@ class HistoryPage extends StatelessWidget {
     final titleStyle = Theme.of(context).textTheme.headline3?.copyWith(color: Colors.redAccent);
     final subtitleStyle = Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.orangeAccent);
 
-    return Card(
-      margin: const EdgeInsets.all(8),
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: ListTile(
-          leading: _getGameIcon(record.type),
-          title: Text(record.score.toString(), style: titleStyle),
-          subtitle: Text('${dateFormat.format(record.ts)}  用时 ${record.timeCost} 秒', style: subtitleStyle),
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: ListTile(
+        leading: _getGameIcon(record.type),
+        title: Text(record.score.toString(), style: titleStyle),
+        subtitle: Text('${dateFormat.format(record.ts)}  用时 ${record.timeCost} 秒', style: subtitleStyle),
       ),
     );
   }
@@ -88,12 +85,12 @@ class HistoryPage extends StatelessWidget {
         title: const Text('我的记录'),
         actions: [
           IconButton(
-              onPressed: () {
-                GameInitializer.gameRecord.deleteAll();
-                Navigator.of(context).pop();
-              },
-              icon: const Icon(Icons.delete)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.upload)),
+            onPressed: () {
+              GameInitializer.gameRecord.deleteAll();
+              Navigator.of(context).pop();
+            },
+            icon: const Icon(Icons.delete),
+          ),
         ],
       ),
       body: _buildHistory(context),
