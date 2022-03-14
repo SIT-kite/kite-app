@@ -16,9 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/component/future_builder.dart';
+import 'package:kite/feature/web_page/webview/page/index.dart';
 import 'package:kite/util/cookie_util.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../entity/index.dart';
 import '../../init.dart';
@@ -37,7 +36,7 @@ class EvaluationPage extends StatefulWidget {
 class _EvaluationPageState extends State<EvaluationPage> {
   int index = 0;
 
-  Map _getForm(CourseToEvaluate coursesToEvaluate) {
+  Map<String, String> _getForm(CourseToEvaluate coursesToEvaluate) {
     return {
       'jxb_id': coursesToEvaluate.innerClassId,
       'kch_id': coursesToEvaluate.courseId,
@@ -49,49 +48,15 @@ class _EvaluationPageState extends State<EvaluationPage> {
     };
   }
 
-  String _generateJs(String path, Map params) {
-    String formString = '{';
-    for (var param in params.entries) {
-      formString += '${param.key}: \'${param.value}\',';
-    }
-    formString += '}';
-
-    // See: https://stackoverflow.com/questions/66396219/how-to-post-data-to-url-in-flutter-webview
-    return '''
-/**
- * sends a request to the specified url from a form. this will change the window location.
- * @param {string} path the path to send the post request to
- * @param {object} params the parameters to add to the url
- * @param {string} [method=post] the method to use on the form
- */
-function post(path, params, method='post') {
-  // The rest of this code assumes you are not using a library.
-  // It can be made less verbose if you use one.
-  const form = document.createElement('form');
-  form.method = method;
-  form.action = path;
-
-  for (const key in params) {
-    if (params.hasOwnProperty(key)) {
-      const hiddenField = document.createElement('input');
-      hiddenField.type = 'hidden';
-      hiddenField.name = key;
-      hiddenField.value = params[key];
-
-      form.appendChild(hiddenField);
-    }
-  }
-  document.body.appendChild(form);
-  form.submit();
-}
-post("$path", $formString);''';
-  }
-
   @override
   Widget build(BuildContext context) {
     final coursesToEvaluate = widget.coursesToEvaluate;
-    return Scaffold(
-      appBar: AppBar(title: const Text('评教')),
+    return SimpleWebViewPage(
+      _evaluationPageUrl,
+      fixedTitle: '评教',
+      initialAsyncCookies: EduInitializer.cookieJar.loadAsWebViewCookie(
+        Uri.parse('http://jwxt.sit.edu.cn/jwglxt/'),
+      ),
       floatingActionButton: FloatingActionButton(
         child: index == coursesToEvaluate.length - 1 ? const Icon(Icons.check) : const Icon(Icons.east),
         onPressed: () {
@@ -105,19 +70,7 @@ post("$path", $formString);''';
           }
         },
       ),
-      body: MyFutureBuilder<List<WebViewCookie>>(
-          future: EduInitializer.cookieJar.loadAsWebViewCookie(Uri.parse('http://jwxt.sit.edu.cn/jwglxt/')),
-          builder: (context, data) {
-            return WebView(
-              initialCookies: data,
-              javascriptMode: JavascriptMode.unrestricted,
-              onWebViewCreated: (controller) async {
-                String js = _generateJs(_evaluationPageUrl, _getForm(coursesToEvaluate[index]));
-
-                controller.runJavascript(js);
-              },
-            );
-          }),
+      postData: _getForm(coursesToEvaluate[index]),
     );
   }
 }
