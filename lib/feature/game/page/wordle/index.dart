@@ -42,7 +42,7 @@ class _WordlePageState extends State<WordlePage> {
       body: FutureBuilder(
           future: getRandomWord().then((word) => BoardModel(word, rows: word.length + 1)),
           builder: (context, AsyncSnapshot<BoardModel> snapshot) {
-            if (snapshot.data == null) return const Text('Cannot load game');
+            if (snapshot.data == null) return const Text('加载游戏文件失败');
 
             final board = snapshot.data!;
             final startTime = DateTime.now();
@@ -54,8 +54,8 @@ class _WordlePageState extends State<WordlePage> {
                     board: board,
                     onWin: () => showAlertDialog(
                       context,
-                      title: 'You Guessed The Word!',
-                      actionText: 'Start New Game?',
+                      title: '猜中了!',
+                      actionText: '再来一局?',
                       onAction: () {
                         final costTime = DateTime.now().difference(startTime).inSeconds;
                         final score = costTime > 10 * 60 ? 0 : -costTime + 600;
@@ -78,13 +78,13 @@ class _WordlePageState extends State<WordlePage> {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        Text('in ${board.currentRow + 1}/${board.rows} guesses'),
+                        Text('猜测 ${board.currentRow + 1}/${board.rows} 次'),
                       ],
                     ),
                     onLose: () => showAlertDialog(
                       context,
-                      title: 'The Secret Word was',
-                      actionText: 'Try Another Word?',
+                      title: '答案是',
+                      actionText: '继续?',
                       onAction: () => setState(board.reset),
                       content: [
                         Text(
