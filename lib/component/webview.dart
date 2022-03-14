@@ -135,7 +135,7 @@ class _MyWebViewState extends State<MyWebView> {
 
   @override
   Widget build(BuildContext context) {
-    if (!UniversalPlatform.isDesktopOrWeb) {
+    if (UniversalPlatform.isDesktopOrWeb) {
       return UnsupportedPlatformUrlLauncher(widget.initialUrl ?? '');
     }
     return WebView(
