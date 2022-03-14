@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/rule.dart';
+import 'package:kite/util/url_launcher.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -141,6 +142,12 @@ class _MyWebViewState extends State<MyWebView> {
     ''';
   }
 
+  void onResourceError(WebResourceError error) {
+    if (!(error.failingUrl?.startsWith('http') ?? true)) {
+      launchInBrowser(error.failingUrl!);
+    }
+  }
+
   Widget buildWebView(List<WebViewCookie> initialCookies) {
     return WebView(
       initialUrl: widget.initialUrl,
@@ -157,6 +164,7 @@ class _MyWebViewState extends State<MyWebView> {
           widget.onWebViewCreated!(webViewController);
         }
       },
+      onWebResourceError: onResourceError,
       userAgent: widget.userAgent,
       onPageStarted: (String url) async {
         Log.info('开始加载url: $url');
