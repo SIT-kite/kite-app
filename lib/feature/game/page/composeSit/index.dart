@@ -8,6 +8,7 @@ class ComposeSitPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const SimpleWebViewPage(
       initialUrl: 'https://cdn.kite.sunnysab.cn/game/composeSit',
+      showLoadInBrowser: true,
     );
   }
 }
