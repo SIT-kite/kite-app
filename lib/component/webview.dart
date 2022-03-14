@@ -56,9 +56,12 @@ class MyWebView extends StatefulWidget {
 
   /// js注入规则，判定某个url需要注入何种js代码
   final List<InjectJsRuleItem>? injectJsRules;
+
+  /// 各种callback
   final WebViewCreatedCallback? onWebViewCreated;
   final PageStartedCallback? onPageStarted;
   final PageFinishedCallback? onPageFinished;
+
   final JavascriptMode javascriptMode;
 
   /// 若该字段不为null，则表示使用post请求打开网页
