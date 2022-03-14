@@ -1,5 +1,6 @@
 import 'package:kite/feature/library/init.dart';
-import 'package:kite/global/dio_initializer.dart';
+import 'package:kite/global/global.dart';
+import 'package:kite/global/init.dart';
 
 // 导出一些测试环境下常用的东西
 export 'package:flutter_test/flutter_test.dart';
@@ -18,7 +19,7 @@ const String proxy = '';
 
 /// 测试前调用该函数做初始化
 Future<void> init() async {
-  // await SessionPool.init();
+  await Initializer.init();
   if (proxy.isNotEmpty) {
     /// 使用代理
     // SessionPool.httpProxy = proxy;
@@ -27,7 +28,7 @@ Future<void> init() async {
 
 /// 如果需要登录，调用该函数
 Future<void> login() async {
-  // await SessionPool.ssoSession.login(username, ssoPassword);
+  await Global.ssoSession.login(username, ssoPassword);
 }
 
 /// 图书馆登陆
