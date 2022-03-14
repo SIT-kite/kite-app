@@ -24,7 +24,7 @@ import 'package:kite/setting/init.dart';
 class Initializer {
   static Future<void> init() async {
     // 初始化Hive数据库
-    await Hive.initFlutter('kite/hive');
+    await Hive.initFlutter('kite1/hive');
     registerAdapters();
 
     await UserEventInitializer.init(

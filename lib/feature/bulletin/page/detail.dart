@@ -58,7 +58,7 @@ class _DetailPageState extends State<DetailPage> {
     showBasicFlash(context, const Text('开始下载'), duration: const Duration(seconds: 1));
     Log.info('下载文件: [${attachment.name}](${attachment.url})');
 
-    String targetPath = (await getTemporaryDirectory()).path + '/kite/downloads/${attachment.name}';
+    String targetPath = (await getTemporaryDirectory()).path + '/kite1/downloads/${attachment.name}';
     Log.info('下载到：' + targetPath);
     // 如果文件不存在，那么下载文件
     if (!await File(targetPath).exists()) {
