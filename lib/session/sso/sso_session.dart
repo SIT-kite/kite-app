@@ -79,16 +79,20 @@ class SsoSession extends ASession with Downloader {
     ResponseType? responseType,
     Options? options,
   }) async {
+    options ??= Options();
+
     /// 正常地请求
     Future<Response> requestNormally() async {
       final response = await dio.request(
         url,
         queryParameters: queryParameters,
-        options: DioUtils.NON_REDIRECT_OPTION_WITH_FORM_TYPE.copyWith(
-          method: method,
-          contentType: contentType,
-          responseType: responseType,
-        ),
+        options: DioUtils.NON_REDIRECT_OPTION_WITH_FORM_TYPE
+            .copyWith(
+              method: method,
+              contentType: contentType,
+              responseType: responseType,
+            )
+            .copyWith(headers: options!.headers),
         data: data,
       );
       // 处理重定向
