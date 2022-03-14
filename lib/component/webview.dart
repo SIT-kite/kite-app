@@ -72,6 +72,10 @@ class MyWebView extends StatefulWidget {
 
   /// 自定义 UA
   final String? userAgent;
+
+  /// 暴露dart回调到js接口
+  final Set<JavascriptChannel>? javascriptChannels;
+
   const MyWebView({
     Key? key,
     this.initialUrl,
@@ -83,6 +87,7 @@ class MyWebView extends StatefulWidget {
     this.userAgent,
     this.postData,
     this.initialCookies = const <WebViewCookie>[],
+    this.javascriptChannels,
   }) : super(key: key);
 
   @override
@@ -152,6 +157,7 @@ class _MyWebViewState extends State<MyWebView> {
           widget.onPageStarted!(url);
         }
       },
+      javascriptChannels: widget.javascriptChannels,
       onPageFinished: (String url) async {
         Log.info('url加载完毕: $url');
         await Future.wait(getAllMatchJs(url, InjectJsTime.onPageFinished).map(injectJs));
