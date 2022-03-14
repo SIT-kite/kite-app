@@ -89,30 +89,46 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
         icon: const Icon(Icons.open_in_browser),
       ));
     }
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.fixedTitle == null ? title : widget.fixedTitle!),
-        actions: actions,
-      ),
-      floatingActionButton: widget.floatingActionButton,
-      body: MyWebView(
-        initialUrl: widget.initialUrl,
-        onWebViewCreated: (controller) async {
-          _controllerCompleter.complete(controller);
-          if (widget.onWebViewCreated != null) {
-            widget.onWebViewCreated!(controller);
-          }
-        },
-        injectJsRules: widget.injectJsRules,
-        onPageFinished: (url) async {
-          if (widget.fixedTitle == null) {
-            final controller = await _controllerCompleter.future;
-            title = (await controller.getTitle()) ?? '无标题页面';
-            setState(() {});
-          }
-        },
-        userAgent: widget.userAgent,
-        postData: widget.postData,
+    return WillPopScope(
+      onWillPop: () async {
+        final controller = await _controllerCompleter.future;
+        if (await controller.canGoBack()) {
+          controller.goBack();
+          return false;
+        }
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.fixedTitle == null ? title : widget.fixedTitle!),
+          actions: actions,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_outlined),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
+        floatingActionButton: widget.floatingActionButton,
+        body: MyWebView(
+          initialUrl: widget.initialUrl,
+          onWebViewCreated: (controller) async {
+            _controllerCompleter.complete(controller);
+            if (widget.onWebViewCreated != null) {
+              widget.onWebViewCreated!(controller);
+            }
+          },
+          injectJsRules: widget.injectJsRules,
+          onPageFinished: (url) async {
+            if (widget.fixedTitle == null) {
+              final controller = await _controllerCompleter.future;
+              title = (await controller.getTitle()) ?? '无标题页面';
+              setState(() {});
+            }
+          },
+          userAgent: widget.userAgent,
+          postData: widget.postData,
+        ),
       ),
     );
   }
