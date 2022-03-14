@@ -142,8 +142,14 @@ class _MyWebViewState extends State<MyWebView> {
       initialUrl: widget.initialUrl,
       initialCookies: widget.initialCookies,
       javascriptMode: widget.javascriptMode,
-      onWebViewCreated: (WebViewController webViewController) {
+      onWebViewCreated: (WebViewController webViewController) async {
         Log.info('WebView已创建，已获取到controller');
+        if (widget.postData != null) {
+          Log.info('通过post请求打开页面: ${widget.initialUrl}');
+          await webViewController.loadHtmlString(_buildFormHtml());
+          await webViewController.runJavascript("document.getElementsByTagName('form')[0].submit()");
+          return;
+        }
         _controllerCompleter.complete(webViewController);
         if (widget.onWebViewCreated != null) {
           widget.onWebViewCreated!(webViewController);
