@@ -176,8 +176,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget buildLoginButton() {
-    const String forgetPassword =
-        'https://authserver.sit.edu.cn/authserver/getBackPasswordMainPage.do?service=https%3A%2F%2Fmyportal.sit.edu.cn%3A443%2F';
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -188,25 +186,6 @@ class _LoginPageState extends State<LoginPage> {
             onPressed: disableLoginButton ? null : onLogin,
             child: const Text('进入风筝元宇宙'),
           ),
-        ),
-        TextButton(
-          child: const Text(
-            '忘记密码?',
-            style: TextStyle(color: Colors.grey),
-          ),
-          onPressed: () {
-            launchInBrowser(forgetPassword);
-          },
-        ),
-        const Spacer(),
-        TextButton(
-          child: const Text(
-            '遇到问题?',
-            style: TextStyle(color: Colors.grey),
-          ),
-          onPressed: () {
-            Navigator.of(context).pushNamed('/feedback');
-          },
         ),
       ],
     );
@@ -297,6 +276,37 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(height: 25.h),
                   // Login button.
                   buildLoginButton(),
+                ],
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 20),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextButton(
+                    child: const Text(
+                      '忘记密码',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    onPressed: () {
+                      const String forgetPassword =
+                          'https://authserver.sit.edu.cn/authserver/getBackPasswordMainPage.do?service=https%3A%2F%2Fmyportal.sit.edu.cn%3A443%2F';
+                      launchInBrowser(forgetPassword);
+                    },
+                  ),
+                  TextButton(
+                    child: const Text(
+                      '遇到问题',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/feedback');
+                    },
+                  ),
                 ],
               ),
             ),

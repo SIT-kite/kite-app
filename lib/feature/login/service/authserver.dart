@@ -14,7 +14,6 @@ class AuthServerService extends AService {
         },
       ),
     );
-    print(response.requestOptions.headers['User-Agent']);
     final result = BeautifulSoup(response.data).find('div', class_: 'auth_username')?.text;
     if (result != null) {
       return result.trim();
