@@ -195,6 +195,16 @@ class _LoginPageState extends State<LoginPage> {
             launchInBrowser(forgetPassword);
           },
         ),
+        const Spacer(),
+        TextButton(
+          child: const Text(
+            '遇到问题?',
+            style: TextStyle(color: Colors.grey),
+          ),
+          onPressed: () {
+            Navigator.of(context).pushNamed('/feedback');
+          },
+        ),
       ],
     );
   }
