@@ -36,6 +36,10 @@ class SimpleWebViewPage extends StatefulWidget {
 
   /// WebView创建完毕时的回调
   final WebViewCreatedCallback? onWebViewCreated;
+
+  /// 异步注入cookie
+  final Future<List<WebViewCookie>>? initialAsyncCookies;
+
   const SimpleWebViewPage(
     this.initialUrl, {
     Key? key,
@@ -48,6 +52,7 @@ class SimpleWebViewPage extends StatefulWidget {
     this.showLoadInBrowser = false,
     this.userAgent,
     this.postData,
+    this.initialAsyncCookies,
   }) : super(key: key);
 
   @override
@@ -128,6 +133,7 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
           },
           userAgent: widget.userAgent,
           postData: widget.postData,
+          initialAsyncCookies: widget.initialAsyncCookies,
         ),
       ),
     );
