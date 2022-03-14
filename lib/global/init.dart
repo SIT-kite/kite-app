@@ -88,10 +88,10 @@ class Initializer {
     await UserEventInitializer.init(
       userEventBox: await Hive.openBox('userEvent'),
     );
+    LoginInitializer.init(ssoSession: ssoSession);
   }
 
   static Future<void> clear() async {
-    await Hive.close();
     await Hive.deleteBoxFromDisk('setting');
     await Hive.deleteBoxFromDisk('auth');
     await Hive.deleteBoxFromDisk('librarySearchHistory');
@@ -99,5 +99,6 @@ class Initializer {
     await Hive.deleteBoxFromDisk('expense');
     await Hive.deleteBoxFromDisk('game');
     await Hive.deleteBoxFromDisk('mail');
+    await Hive.close();
   }
 }
