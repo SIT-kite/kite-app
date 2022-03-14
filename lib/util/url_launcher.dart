@@ -42,7 +42,7 @@ Future<void> launchInBuiltinWebView(
   await Navigator.of(context).push(
     MaterialPageRoute(
       builder: (_) => SimpleWebViewPage(
-        url,
+        initialUrl: url,
         fixedTitle: fixedTitle,
       ),
     ),

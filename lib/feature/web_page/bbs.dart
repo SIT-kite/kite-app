@@ -7,7 +7,7 @@ class BbsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const SimpleWebViewPage(
-      'https://support.qq.com/products/386124',
+      initialUrl: 'https://support.qq.com/products/386124',
       postData: {
         'openid': 'tucao_123',
         'nickname': 'tucao_test',

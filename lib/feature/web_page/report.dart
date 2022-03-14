@@ -42,7 +42,7 @@ class DailyReportPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SimpleWebViewPage(
-      _reportUrlIndex,
+      initialUrl: _reportUrlIndex,
       fixedTitle: '体温上报',
       injectJsRules: [
         InjectJsRuleItem(

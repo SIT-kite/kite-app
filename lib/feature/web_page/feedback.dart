@@ -27,7 +27,7 @@ class FeedbackPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const SimpleWebViewPage(
-      _feedbackUrl,
+      initialUrl: _feedbackUrl,
       showLoadInBrowser: true,
       fixedTitle: '反馈',
     );

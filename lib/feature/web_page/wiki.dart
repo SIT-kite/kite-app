@@ -37,7 +37,7 @@ class WikiPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SimpleWebViewPage(
-      customWikiUrl ?? _defaultWikiUrl,
+      initialUrl: customWikiUrl ?? _defaultWikiUrl,
       fixedTitle: '上应 Wiki',
       injectJsRules: [
         InjectJsRuleItem(

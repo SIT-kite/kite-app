@@ -27,7 +27,7 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const SimpleWebViewPage(
-      _aboutUrl,
+      initialUrl: _aboutUrl,
       fixedTitle: '关于',
     );
   }

@@ -52,7 +52,7 @@ class _EvaluationPageState extends State<EvaluationPage> {
   Widget build(BuildContext context) {
     final coursesToEvaluate = widget.coursesToEvaluate;
     return SimpleWebViewPage(
-      _evaluationPageUrl,
+      initialUrl: _evaluationPageUrl,
       fixedTitle: '评教',
       initialAsyncCookies: EduInitializer.cookieJar.loadAsWebViewCookie(
         Uri.parse('http://jwxt.sit.edu.cn/jwglxt/'),

@@ -40,9 +40,9 @@ class SimpleWebViewPage extends StatefulWidget {
   /// 异步注入cookie
   final Future<List<WebViewCookie>>? initialAsyncCookies;
 
-  const SimpleWebViewPage(
-    this.initialUrl, {
+  const SimpleWebViewPage({
     Key? key,
+    required this.initialUrl,
     this.fixedTitle,
     this.injectJsRules,
     this.floatingActionButton,
