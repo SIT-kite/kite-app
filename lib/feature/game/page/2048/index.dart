@@ -28,6 +28,7 @@ import 'package:flutter/material.dart';
 
 import '../../entity/game.dart';
 import '../../init.dart';
+import '../../util/upload.dart';
 import '../action.dart';
 import 'logic.dart';
 
@@ -205,6 +206,8 @@ class _GameWidgetState extends State<GameWidget> {
       final currentTime = DateTime.now();
       final record = GameRecord(GameType.game2048, _game.score, startTime, currentTime.difference(startTime).inSeconds);
       GameInitializer.gameRecord.append(record);
+
+      uploadGameRecord(context, record);
     }
   }
 

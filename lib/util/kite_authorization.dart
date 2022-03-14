@@ -28,11 +28,11 @@ class AuthorizationDialog extends StatelessWidget {
     return AlertDialog(
       title: const Text('授权'),
       content: Text(
-        '“上应小风筝”将使用您的登录信息，在上应小风筝的服务器中为您分配一个账户，以：\n'
+        '“上应小风筝”将使用您的登录信息，在小风筝服务中为您分配一个账户，以：\n'
         '\n'
         '- $msg\n'
         '\n'
-        '小风筝团队会遵循《用户协议》与《隐私政策》，不会存储您的密码。',
+        '开发团队会遵循《用户协议》与《隐私政策》，不会存储您的密码。',
       ),
       actions: [
         TextButton(

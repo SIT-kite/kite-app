@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 
 import '../../entity/game.dart';
 import '../../init.dart';
+import '../../util/upload.dart';
 import '../action.dart';
 import 'models/board_model.dart';
 import 'widgets/alert_dialog.dart';
@@ -52,7 +53,7 @@ class _WordlePageState extends State<WordlePage> {
                 SingleChildScrollView(
                   child: GameBoard(
                     board: board,
-                    onWin: () {
+                    onWin: () async {
                       final costTime = DateTime.now().difference(startTime).inSeconds;
                       final score = costTime > 10 * 60 ? 0 : -costTime + 600;
 
@@ -62,7 +63,7 @@ class _WordlePageState extends State<WordlePage> {
                           GameRecord(GameType.wordle, score, startTime, currentTime.difference(startTime).inSeconds);
                       GameInitializer.gameRecord.append(record);
 
-                      showAlertDialog(
+                      await showAlertDialog(
                         context,
                         title: '猜中了!',
                         actionText: '再来一局?',
@@ -80,6 +81,8 @@ class _WordlePageState extends State<WordlePage> {
                           Text('猜测 ${board.currentRow + 1}/${board.rows} 次'),
                         ],
                       );
+
+                      uploadGameRecord(context, record);
                     },
                     onLose: () => showAlertDialog(
                       context,
