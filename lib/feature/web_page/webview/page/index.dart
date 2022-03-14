@@ -31,6 +31,9 @@ class SimpleWebViewPage extends StatefulWidget {
   /// 自定义 UA
   final String? userAgent;
 
+  /// 若该字段不为null，则表示使用post请求打开网页
+  final Map<String, String>? postData;
+
   /// WebView创建完毕时的回调
   final WebViewCreatedCallback? onWebViewCreated;
   const SimpleWebViewPage(
@@ -44,6 +47,7 @@ class SimpleWebViewPage extends StatefulWidget {
     this.showRefreshButton = true,
     this.showLoadInBrowser = false,
     this.userAgent,
+    this.postData,
   }) : super(key: key);
 
   @override
@@ -108,6 +112,7 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
           }
         },
         userAgent: widget.userAgent,
+        postData: widget.postData,
       ),
     );
   }
