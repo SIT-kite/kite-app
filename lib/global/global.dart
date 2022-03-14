@@ -27,17 +27,22 @@ class Global {
 
   static late CookieJar cookieJar;
   static late Dio dio;
+  static late Dio dio2; // 消费查询连接池
   static late SsoSession ssoSession;
+  static late SsoSession ssoSession2;
 
   static Future<void> init({
     required UserEventStorageDao userEventStorage,
     required AuthSettingDao authSetting,
   }) async {
     cookieJar = await CookieInitializer.init();
-    dio = await DioInitializer.init(
-      config: DioConfig()..cookieJar = cookieJar,
-    );
+    dio = await DioInitializer.init(config: DioConfig()..cookieJar = cookieJar);
+    dio2 = await DioInitializer.init(
+        config: DioConfig()
+          ..cookieJar = cookieJar
+          ..connectTimeout = 30 * 1000);
     ssoSession = SsoSession(dio: dio, cookieJar: cookieJar);
+    ssoSession2 = SsoSession(dio: dio2, cookieJar: cookieJar);
     pageLogger = PageLogger(dio: dio, userEventStorage: userEventStorage);
     pageLogger.startup();
 

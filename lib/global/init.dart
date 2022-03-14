@@ -59,7 +59,7 @@ class Initializer {
       timetableBox: await Hive.openBox<dynamic>('course'),
     );
     await ExpenseInitializer.init(
-      ssoSession: ssoSession,
+      ssoSession: Global.ssoSession2,
       expenseRecordBox: await Hive.openBox('expenseSetting'),
     );
     await GameInitializer.init(
