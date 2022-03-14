@@ -23,6 +23,7 @@ class AuthKeys {
   static const namespace = '/auth';
   static const currentUsername = '$namespace/currentUsername';
   static const ssoPassword = '$namespace/ssoPassword';
+  static const personName = '$namespace/personName';
 }
 
 class AuthSettingStorage implements AuthSettingDao {
@@ -41,4 +42,10 @@ class AuthSettingStorage implements AuthSettingDao {
 
   @override
   set ssoPassword(String? foo) => box.put(AuthKeys.ssoPassword, foo);
+
+  @override
+  String? get personName => box.get(AuthKeys.personName);
+
+  @override
+  set personName(String? foo) => box.put(AuthKeys.personName, foo);
 }
