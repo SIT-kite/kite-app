@@ -32,6 +32,10 @@ enum GameType {
   /// Wordle 游戏
   @HiveField(1)
   wordle,
+
+  /// 合成上应大游戏
+  @HiveField(2)
+  composeSit,
 }
 
 int _getGameIndex(GameType type) => type.index;

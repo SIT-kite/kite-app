@@ -49,6 +49,9 @@ class HistoryPage extends StatelessWidget {
       case GameType.wordle:
         path = 'assets/game/icon_wordle.png';
         break;
+      case GameType.composeSit:
+        path = 'assets/game/icon_sit.png';
+        break;
     }
     return Image(image: AssetImage(path));
   }

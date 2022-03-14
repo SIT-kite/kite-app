@@ -7,6 +7,7 @@ export 'edu/page_index.dart';
 export 'egg/page/index.dart';
 export 'expense/page/index.dart';
 export 'game/page/2048/index.dart';
+export 'game/page/composeSit/index.dart';
 export 'game/page/index.dart';
 export 'game/page/wordle/index.dart';
 export 'home/page/index.dart';

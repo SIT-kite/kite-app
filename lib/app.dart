@@ -45,6 +45,7 @@ final _routes = {
   '/game': (context) => const GamePage(),
   '/game/2048': (context) => Game2048Page(),
   '/game/wordle': (context) => const WordlePage(),
+  '/game/composeSit': (context) => const ComposeSitPage(),
   '/wiki': (context) => WikiPage(),
   '/library': (context) => const LibraryPage(),
   '/market': (context) => const MarketPage(),
