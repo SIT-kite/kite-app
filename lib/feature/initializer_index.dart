@@ -1,7 +1,7 @@
 import 'package:kite/util/hive_register_adapter.dart';
 
 import 'contact/entity/contact.dart';
-import 'edu/entity/timetable.dart';
+import 'edu/timetable/entity/timetable.dart';
 import 'expense/entity/expense.dart';
 import 'game/entity/game.dart';
 import 'home/entity/home.dart';

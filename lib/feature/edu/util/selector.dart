@@ -19,7 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/setting/init.dart';
 
-import '../entity/index.dart';
+import '../common/entity/index.dart';
 
 class SemesterSelector extends StatefulWidget {
   final int? initialYear;

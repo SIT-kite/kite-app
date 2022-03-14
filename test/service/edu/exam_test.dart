@@ -1,5 +1,5 @@
-import 'package:kite/feature/edu/entity/index.dart';
-import 'package:kite/feature/edu/init.dart';
+import 'package:kite/feature/edu/common/entity/index.dart';
+import 'package:kite/feature/edu/exam/init.dart';
 
 import '../mock_util.dart';
 
@@ -7,7 +7,7 @@ void main() async {
   await init();
   await login();
   test('exam test', () async {
-    var table = await EduInitializer.exam.getExamList(
+    var table = await ExamInitializer.examService.getExamList(
       const SchoolYear(2021),
       Semester.firstTerm,
     );
