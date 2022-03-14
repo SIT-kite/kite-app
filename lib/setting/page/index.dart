@@ -27,6 +27,7 @@ import 'package:kite/global/init.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/setting/storage/index.dart';
 import 'package:kite/util/flash.dart';
+import 'package:kite/util/logger.dart';
 import 'package:kite/util/validation.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -79,7 +80,7 @@ class SettingPage extends StatelessWidget {
               onPressed: () async {
                 // dismiss 函数会异步地执行动画, 但动画在应用重启时会被打断从而产生报错. 因此此处不需要 dismiss.
                 // controller.dismiss();
-
+                Log.info('退出登录');
                 SettingInitializer.auth
                   ..currentUsername = null
                   ..ssoPassword = null;
@@ -87,6 +88,7 @@ class SettingPage extends StatelessWidget {
                 await Initializer.init();
                 // 重启应用
                 Phoenix.rebirth(context);
+                Log.info('重启成功');
               },
               child: const Text('继续'));
         });
