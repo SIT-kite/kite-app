@@ -10,6 +10,7 @@ import 'kite/entity/weather.dart';
 import 'library/entity/search_history.dart';
 import 'user_event/entity.dart';
 
+export 'activity/init.dart';
 export 'bulletin/init.dart';
 export 'campus_card/init.dart';
 export 'connectivity/init.dart';
@@ -23,7 +24,6 @@ export 'library/init.dart';
 export 'mail/init.dart';
 export 'office/init.dart';
 export 'report/init.dart';
-export 'sc/init.dart';
 export 'user_event/init.dart';
 
 void registerAdapters() {

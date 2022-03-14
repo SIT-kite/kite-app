@@ -1,3 +1,4 @@
+export 'activity/page/index.dart';
 export 'bulletin/page/index.dart';
 export 'campus_card/page/campus_card.dart';
 export 'connectivity/page/connectivity.dart';
@@ -22,7 +23,6 @@ export 'library/page/index.dart';
 export 'login/page/login.dart';
 export 'mail/page/index.dart';
 export 'office/page/index.dart';
-export 'sc/page/index.dart';
 export 'web_page/about.dart';
 export 'web_page/feedback.dart';
 export 'web_page/report.dart';
