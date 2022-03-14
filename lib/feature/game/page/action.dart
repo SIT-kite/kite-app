@@ -19,13 +19,15 @@
 import 'package:flutter/material.dart';
 import 'package:kite/feature/web_page/wiki.dart';
 
-helpButton(BuildContext context) => IconButton(
-      onPressed: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => WikiPage(customWikiUrl: 'https://cdn.kite.sunnysab.cn/wiki/kite-app/game/'),
-          ),
-        );
-      },
-      icon: const Icon(Icons.help_outline),
-    );
+IconButton helpButton(BuildContext context) {
+  return IconButton(
+    onPressed: () {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => WikiPage(customWikiUrl: 'https://cdn.kite.sunnysab.cn/wiki/kite-app/game/'),
+        ),
+      );
+    },
+    icon: const Icon(Icons.help_outline),
+  );
+}
