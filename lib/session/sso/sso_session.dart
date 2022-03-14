@@ -30,6 +30,7 @@ import '../../util/dio_utils.dart';
 import 'encryption.dart';
 
 class SsoSession extends ASession with Downloader {
+  static const int _maxRetryCount = 5;
   static const String _authServerUrl = 'https://authserver.sit.edu.cn/authserver';
   static const String _loginUrl = '$_authServerUrl/login';
   static const String _needCaptchaUrl = '$_authServerUrl/needCaptcha.html';
@@ -116,8 +117,8 @@ class SsoSession extends ASession with Downloader {
     _password = password;
   }
 
-  /// 带异常的登录
-  Future<Response> login(String username, String password) async {
+  /// 带异常的登录, 但不处理验证码识别错误问题.
+  Future<Response> loginWithoutRetry(String username, String password) async {
     Log.info('尝试登录：$username');
     Log.debug('当前登录UA: ${dio.options.headers['User-Agent']}');
     // 在 OA 登录时, 服务端会记录同一 cookie 用户登录次数和输入错误次数,
@@ -144,6 +145,24 @@ class SsoSession extends ASession with Downloader {
     _username = username;
     _password = password;
     return response;
+  }
+
+  Future<Response> login(String username, String password) async {
+    int count = 0;
+    Exception lastException;
+
+    while (count < _maxRetryCount) {
+      try {
+        return await loginWithoutRetry(username, password);
+      } catch (e) {
+        if (e.runtimeType == CredentialsInvalidException && e.toString().contains('无效的验证码')) {
+          count++;
+          continue;
+        }
+        rethrow;
+      }
+    }
+    throw const MaxRetryExceedException(msg: '登录超过最大重试次数 ($_maxRetryCount 次)');
   }
 
   /// 登录流程

@@ -34,3 +34,15 @@ class UnknownAuthException implements Exception {
     return msg;
   }
 }
+
+/// 超过最大重试次数
+class MaxRetryExceedException implements Exception {
+  final String msg;
+
+  const MaxRetryExceedException({this.msg = '未知验证错误'});
+
+  @override
+  String toString() {
+    return msg;
+  }
+}
