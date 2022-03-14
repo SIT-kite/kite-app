@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:kite/component/future_builder.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/rule.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -70,6 +71,9 @@ class MyWebView extends StatefulWidget {
   /// 注入cookies
   final List<WebViewCookie> initialCookies;
 
+  /// 异步注入cookie
+  final Future<List<WebViewCookie>>? initialAsyncCookies;
+
   /// 自定义 UA
   final String? userAgent;
 
@@ -87,6 +91,7 @@ class MyWebView extends StatefulWidget {
     this.userAgent,
     this.postData,
     this.initialCookies = const <WebViewCookie>[],
+    this.initialAsyncCookies,
     this.javascriptChannels,
   }) : super(key: key);
 
@@ -136,14 +141,10 @@ class _MyWebViewState extends State<MyWebView> {
     ''';
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (UniversalPlatform.isDesktopOrWeb) {
-      return UnsupportedPlatformUrlLauncher(widget.initialUrl ?? '');
-    }
+  Widget buildWebView(List<WebViewCookie> initialCookies) {
     return WebView(
       initialUrl: widget.initialUrl,
-      initialCookies: widget.initialCookies,
+      initialCookies: initialCookies,
       javascriptMode: widget.javascriptMode,
       onWebViewCreated: (WebViewController webViewController) async {
         Log.info('WebView已创建，已获取到controller');
@@ -171,6 +172,22 @@ class _MyWebViewState extends State<MyWebView> {
         if (widget.onPageFinished != null) {
           widget.onPageFinished!(url);
         }
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (UniversalPlatform.isDesktopOrWeb) {
+      return UnsupportedPlatformUrlLauncher(widget.initialUrl ?? '');
+    }
+    if (widget.initialAsyncCookies == null) {
+      return buildWebView(widget.initialCookies);
+    }
+    return MyFutureBuilder<List<WebViewCookie>>(
+      future: widget.initialAsyncCookies,
+      builder: (context, data) {
+        return buildWebView([...widget.initialCookies, ...data]);
       },
     );
   }
