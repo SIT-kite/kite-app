@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kite/feature/home/page/item/bbs.dart';
 
 import '../../entity/home.dart';
 import 'bulletin.dart';
@@ -37,6 +38,7 @@ import 'timetable.dart';
 import 'upgrade.dart';
 import 'wiki.dart';
 
+export 'bbs.dart';
 export 'bulletin.dart';
 export 'classroom.dart';
 export 'contact.dart';
@@ -133,6 +135,8 @@ class FunctionButtonFactory {
         return const WikiItem();
       case FunctionType.separator:
         return Container();
+      case FunctionType.bbs:
+        return const BbsItem();
     }
   }
 }

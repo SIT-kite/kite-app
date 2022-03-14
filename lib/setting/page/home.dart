@@ -57,6 +57,8 @@ String functionTypeToString(FunctionType type) {
       return 'Wiki';
     case FunctionType.separator:
       return '分隔符';
+    case FunctionType.bbs:
+      return '上应互助';
   }
 }
 

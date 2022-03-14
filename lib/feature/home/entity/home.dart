@@ -91,6 +91,10 @@ enum FunctionType {
   /// 分隔符
   @HiveField(16)
   separator,
+
+  /// 上应互助
+  @HiveField(17)
+  bbs,
 }
 
 /// 默认首页布局, 千万不能漏
@@ -110,6 +114,7 @@ const defaultFunctionList = <FunctionType>[
   FunctionType.mail,
   FunctionType.bulletin,
   FunctionType.separator,
+  FunctionType.bbs,
   FunctionType.contact,
   FunctionType.game,
   FunctionType.wiki,

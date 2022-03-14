@@ -62,6 +62,7 @@ final _routes = {
   '/classroom': (context) => const ClassroomPage(),
   '/exam': (context) => const ExamPage(),
   '/egg': (context) => const EggPage(),
+  '/bbs': (context) => const BbsPage(),
 };
 
 class KiteApp extends StatelessWidget {

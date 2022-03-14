@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kite/feature/web_page/webview/page/index.dart';
 
-class BBSPage extends StatelessWidget {
-  const BBSPage({Key? key}) : super(key: key);
+class BbsPage extends StatelessWidget {
+  const BbsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
