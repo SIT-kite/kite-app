@@ -8,6 +8,7 @@ import 'home/entity/home.dart';
 import 'kite/entity/electricity.dart';
 import 'kite/entity/weather.dart';
 import 'library/entity/search_history.dart';
+import 'report/entity/report.dart';
 import 'user_event/entity.dart';
 
 export 'activity/init.dart';
@@ -37,6 +38,7 @@ void registerAdapters() {
   registerAdapter(FunctionTypeAdapter());
   registerAdapter(BalanceAdapter());
   registerAdapter(WeatherAdapter());
+  registerAdapter(ReportHistoryAdapter());
   registerAdapter(LibrarySearchHistoryItemAdapter());
   registerAdapter(UserEventAdapter());
   registerAdapter(UserEventTypeAdapter());
