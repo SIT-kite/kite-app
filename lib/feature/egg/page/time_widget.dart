@@ -222,7 +222,9 @@ class _TimeWidgetState extends State<TimeWidget> {
 
   void update() {
     world.tick();
-    setState(() {});
+    if (!hasDispose) {
+      setState(() {});
+    }
   }
 
   Drawable buildRect() {
