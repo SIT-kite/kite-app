@@ -241,8 +241,6 @@ class _HomePageState extends State<HomePage> {
                 // 触发下拉刷新
                 final pos = _refreshController.position!;
                 await pos.animateTo(-100, duration: const Duration(milliseconds: 800), curve: Curves.linear);
-
-                // pos.jumpTo(-20);
               },
             )
           : null,

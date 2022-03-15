@@ -18,11 +18,17 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kite/feature/initializer_index.dart';
 import 'package:kite/feature/kite/kite_session.dart';
+import 'package:kite/global/desktop_initializer.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/setting/init.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 class Initializer {
   static Future<void> init() async {
+    if (UniversalPlatform.isDesktop) {
+      await DesktopInitializer.init();
+    }
+
     // 初始化Hive数据库
     await Hive.initFlutter('kite1/hive');
     registerAdapters();
