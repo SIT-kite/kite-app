@@ -130,6 +130,9 @@ class _BookInfoPageState extends State<BookInfoPage> {
           },
         );
       },
+      onErrorBuilder: (context, error) {
+        return const SizedBox();
+      },
     );
   }
 
