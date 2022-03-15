@@ -22,6 +22,7 @@ class DesktopInitializer {
   static Future<void> init() async {
     DesktopInitializer.eventBus = EventBus<WindowEvent>();
     windowListener = MyWindowListener(eventBus: eventBus);
+    windowManager.addListener(windowListener);
     // 必须加上这一行。
     await windowManager.ensureInitialized();
     windowManager.waitUntilReadyToShow().then((_) async {
