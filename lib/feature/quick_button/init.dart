@@ -31,6 +31,7 @@ class QuickButton {
   }
 
   static void init(BuildContext context) {
+    _context = context;
     _quickActions.initialize(quickActionHandler);
 
     _quickActions.setShortcutItems(<ShortcutItem>[
