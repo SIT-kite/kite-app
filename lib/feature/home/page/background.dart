@@ -63,7 +63,13 @@ class _HomeBackgroundState extends State<HomeBackground> {
   }
 
   void _onWindowResize(Size? size) {
-    setState(() {});
+    // Windows端这里必须等一会儿才能使setState生效
+    Future.delayed(
+      const Duration(milliseconds: 500),
+      () {
+        setState(() {});
+      },
+    );
   }
 
   WeatherType _getWeatherTypeByCode(int code) {

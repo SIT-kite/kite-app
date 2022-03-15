@@ -25,10 +25,6 @@ import 'package:universal_platform/universal_platform.dart';
 
 class Initializer {
   static Future<void> init() async {
-    if (UniversalPlatform.isDesktop) {
-      await DesktopInitializer.init();
-    }
-
     // 初始化Hive数据库
     await Hive.initFlutter('kite1/hive');
     registerAdapters();
@@ -95,6 +91,10 @@ class Initializer {
       userEventBox: await Hive.openBox('userEvent'),
     );
     LoginInitializer.init(ssoSession: ssoSession);
+
+    if (UniversalPlatform.isDesktop) {
+      await DesktopInitializer.init();
+    }
   }
 
   static Future<void> clear() async {
