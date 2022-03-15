@@ -27,6 +27,7 @@ import 'package:kite/global/desktop_initializer.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/util/flash.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 class HomeBackground extends StatefulWidget {
   final int? initialWeatherCode;
@@ -46,14 +47,18 @@ class _HomeBackgroundState extends State<HomeBackground> {
     super.initState();
     Global.eventBus.on(EventNameConstants.onBackgroundChange, _onBackgroundUpdate);
     Global.eventBus.on(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
-    DesktopInitializer.eventBus.on<Size>(WindowEvent.onWindowResize, _onWindowResize);
+    if (UniversalPlatform.isDesktop) {
+      DesktopInitializer.eventBus.on<Size>(WindowEvent.onWindowResize, _onWindowResize);
+    }
   }
 
   @override
   void deactivate() {
     Global.eventBus.off(EventNameConstants.onBackgroundChange, _onBackgroundUpdate);
     Global.eventBus.off(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
-    DesktopInitializer.eventBus.off(WindowEvent.onWindowResize, _onWindowResize);
+    if (UniversalPlatform.isDesktop) {
+      DesktopInitializer.eventBus.off(WindowEvent.onWindowResize, _onWindowResize);
+    }
     super.deactivate();
   }
 
