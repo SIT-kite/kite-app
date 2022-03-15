@@ -66,7 +66,7 @@ dependencies:
   flutter_settings_screens: ^0.3.2-null-safety
 
   # Platform
-  permission_handler: ^9.2.0        # Android / iOS / Windows Permission
+  permission_handler: ^8.3.0        # Android / iOS / Windows Permission
   quick_actions: ^0.6.0+9           # Android / iOS Home screen quick actions
 
   # Open with other APP/programs
