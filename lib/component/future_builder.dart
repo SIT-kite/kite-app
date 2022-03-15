@@ -23,33 +23,34 @@ typedef MyWidgetBuilder<T> = Widget Function(BuildContext context, T data);
 class MyFutureBuilder<T> extends StatelessWidget {
   final Future<T>? future;
   final MyWidgetBuilder<T>? builder;
-  const MyFutureBuilder({ Key? key, this.future, this.builder }) : super(key: key);
+  final MyWidgetBuilder? onErrorBuilder;
+  const MyFutureBuilder({
+    Key? key,
+    this.future,
+    this.builder,
+    this.onErrorBuilder,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<T>(
       future: future,
       builder: (context, snapshot) {
-
         if (snapshot.connectionState == ConnectionState.done) {
-
           if (snapshot.hasData) {
-
             final data = snapshot.data;
-            return builder == null
-              ? Text(data.toString())
-              : builder!(context, snapshot.data!);
-
+            return builder == null ? Text(data.toString()) : builder!(context, snapshot.data!);
           } else if (snapshot.hasError) {
+            if (onErrorBuilder != null) {
+              return onErrorBuilder!(context, snapshot.error);
+            }
             return Center(child: Text(snapshot.error.toString()));
           } else {
             throw Exception('snapshot has no data or error');
           }
-
         }
 
         return const Center(child: CircularProgressIndicator());
-
       },
     );
   }
