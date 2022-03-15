@@ -17,17 +17,18 @@
  */
 import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/session/sso/index.dart';
 import 'package:kite/util/logger.dart';
 
 class EduSession extends ASession {
-  final ASession _session;
+  final SsoSession ssoSession;
 
-  EduSession(this._session) {
+  EduSession(this.ssoSession) {
     Log.info('初始化 EduSession');
   }
 
   Future<void> _refreshCookie() async {
-    await _session.get('http://jwxt.sit.edu.cn/sso/jziotlogin');
+    await ssoSession.get('http://jwxt.sit.edu.cn/sso/jziotlogin');
   }
 
   bool _isRedirectedToLoginPage(Response response) {
@@ -45,7 +46,7 @@ class EduSession extends ASession {
     Options? options,
   }) async {
     Future<Response> fetch() async {
-      return await _session.request(
+      return await ssoSession.request(
         url,
         method,
         queryParameters: queryParameters,
@@ -59,6 +60,13 @@ class EduSession extends ASession {
     // 如果返回值是登录页面，那就从 SSO 跳转一次以登录.
     if (_isRedirectedToLoginPage(response)) {
       Log.info('EduSession需要登录');
+      await _refreshCookie();
+      response = await fetch();
+    }
+    // 如果还是需要登录
+    if (_isRedirectedToLoginPage(response)) {
+      Log.info('SsoSession需要登录');
+      await ssoSession.makeSureLogin(response, url);
       await _refreshCookie();
       response = await fetch();
     }

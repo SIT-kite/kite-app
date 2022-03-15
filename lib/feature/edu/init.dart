@@ -1,9 +1,9 @@
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:hive/hive.dart';
-import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/feature/edu/exam/init.dart';
 import 'package:kite/feature/edu/score/init.dart';
 import 'package:kite/feature/edu/timetable/init.dart';
+import 'package:kite/session/sso/index.dart';
 
 import 'edu_session.dart';
 
@@ -13,7 +13,7 @@ class EduInitializer {
 
   /// 初始化教务相关的service
   static Future<void> init({
-    required ASession ssoSession,
+    required SsoSession ssoSession,
     required CookieJar cookieJar,
     required Box<dynamic> timetableBox,
   }) async {
