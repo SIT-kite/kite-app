@@ -43,7 +43,7 @@ class SummaryCard extends StatelessWidget {
             int rodIndex,
           ) {
             return BarTooltipItem(
-              rod.y.round().toString(),
+              rod.toY.round().toString(),
               const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -83,7 +83,12 @@ class SummaryCard extends StatelessWidget {
 
     List<BarChartGroupData> values = [];
     for (int i = 0; i < scoreValues.length; ++i) {
-      values.add(BarChartGroupData(x: i, barRods: [BarChartRodData(y: scoreValues[i] / totals[i], width: 12)]));
+      values.add(BarChartGroupData(x: i, barRods: [
+        BarChartRodData(
+          toY: scoreValues[i] / totals[i],
+          width: 12,
+        )
+      ]));
     }
     return BarChart(
       BarChartData(
