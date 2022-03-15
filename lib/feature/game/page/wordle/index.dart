@@ -106,7 +106,7 @@ class _WordlePageState extends State<WordlePage> {
                 ElevatedButton.icon(
                   onPressed: () => setState(board.reset),
                   icon: const Icon(Icons.play_arrow_rounded),
-                  label: Text(board.targetWord),
+                  label: const Text('新游戏'),
                 ),
               ],
             );
