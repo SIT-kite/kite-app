@@ -24,6 +24,7 @@ class DesktopInitializer {
     windowListener = MyWindowListener(eventBus: eventBus);
     // 必须加上这一行。
     await windowManager.ensureInitialized();
+    // 桌面端初始尺寸
     await windowManager.setSize(const Size(600, 800));
     windowManager.addListener(windowListener);
     await windowManager.show();
