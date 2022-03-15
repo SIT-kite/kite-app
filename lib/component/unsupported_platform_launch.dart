@@ -18,16 +18,14 @@
 import 'package:flutter/material.dart';
 import 'package:kite/util/url_launcher.dart';
 
-const tipPC = '电脑端暂不支持直接查看';
-
 class UnsupportedPlatformUrlLauncher extends StatelessWidget {
   final String url;
-  final String tip;
+  final String? tip;
   final bool showLaunchButton;
   const UnsupportedPlatformUrlLauncher(
     this.url, {
     Key? key,
-    this.tip = tipPC,
+    this.tip,
     this.showLaunchButton = true,
   }) : super(key: key);
 
@@ -37,7 +35,9 @@ class UnsupportedPlatformUrlLauncher extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(tip),
+          tip == null
+              ? Text(showLaunchButton ? '桌面端暂不支持直接查看该页面，请点击下方按钮打开系统默认浏览器查看该页面' : '桌面端暂不支持查看该页面，请在手机端打开')
+              : Text(tip!),
           if (showLaunchButton)
             TextButton(
               child: const Text('点击在默认浏览器中打开'),

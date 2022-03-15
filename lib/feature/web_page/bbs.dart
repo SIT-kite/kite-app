@@ -23,6 +23,7 @@ class BbsPage extends StatelessWidget {
         'avatar': 'https://txc.qq.com/static/desktop/img/products/def-product-logo.png',
       },
       fixedTitle: '问答',
+      showLaunchButtonIfUnsupported: false,
     );
   }
 }
