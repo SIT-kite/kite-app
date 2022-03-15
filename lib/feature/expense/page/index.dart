@@ -69,11 +69,11 @@ class _ExpensePageState extends State<ExpensePage> {
 
   /// 并发拉取数据
   Future<List<ExpenseRecord>> _fetchBillConcurrently(ExpenseRemoteDao service, int startPage, int count) async {
-    final List<Future> futures = [];
+    final List<Future<OaExpensePage>> futures = [];
     for (int i = 2; i <= count; i++) {
       futures.add(_fetchAndSave(service, i));
     }
-    final List<ExpenseRecord> result = (await Future.wait(futures)).fold(<ExpenseRecord>[], (l, e) => l + e);
+    final List<ExpenseRecord> result = (await Future.wait(futures)).fold(<ExpenseRecord>[], (l, e) => l + e.records);
     return result;
   }
 
