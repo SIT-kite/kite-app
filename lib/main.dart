@@ -38,8 +38,11 @@ void main() async {
   );
 
   // 运行前初始化
-  await Initializer.init();
-
+  try {
+    await Initializer.init();
+  } on Exception catch (error, stackTrace) {
+    Catcher.reportCheckedError(error, stackTrace);
+  }
   Catcher(
     rootWidget: Phoenix(
       child: const KiteApp(),
