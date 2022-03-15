@@ -46,6 +46,7 @@ class _NoticeItemState extends State<NoticeItem> {
   }
 
   void _onHomeRefresh(_) async {
+    if (!mounted) return;
     final String result = await _buildContent() ?? defaultContent;
     setState(() => content = result);
   }

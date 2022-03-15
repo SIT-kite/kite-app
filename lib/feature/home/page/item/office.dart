@@ -47,6 +47,7 @@ class _OfficeItemState extends State<OfficeItem> {
   }
 
   void _onHomeRefresh(_) async {
+    if (!mounted) return;
     final String result = await _buildContent();
     SettingInitializer.home.lastOfficeStatus = result;
     setState(() => content = result);
