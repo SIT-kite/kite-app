@@ -81,6 +81,9 @@ class MyWebView extends StatefulWidget {
   /// 暴露dart回调到js接口
   final Set<JavascriptChannel>? javascriptChannels;
 
+  /// 如果不支持webview，是否显示浏览器打开按钮
+  final bool showLaunchButtonIfUnsupported;
+
   const MyWebView({
     Key? key,
     this.initialUrl,
@@ -94,6 +97,7 @@ class MyWebView extends StatefulWidget {
     this.initialCookies = const <WebViewCookie>[],
     this.initialAsyncCookies,
     this.javascriptChannels,
+    this.showLaunchButtonIfUnsupported = true,
   }) : super(key: key);
 
   @override
@@ -188,7 +192,10 @@ class _MyWebViewState extends State<MyWebView> {
   @override
   Widget build(BuildContext context) {
     if (UniversalPlatform.isDesktopOrWeb) {
-      return UnsupportedPlatformUrlLauncher(widget.initialUrl ?? '');
+      return UnsupportedPlatformUrlLauncher(
+        widget.initialUrl ?? '',
+        showLaunchButton: widget.showLaunchButtonIfUnsupported,
+      );
     }
     if (widget.initialAsyncCookies == null) {
       return buildWebView(widget.initialCookies);

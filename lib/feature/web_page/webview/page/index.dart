@@ -43,6 +43,9 @@ class SimpleWebViewPage extends StatefulWidget {
   /// 暴露dart回调到js接口
   final Set<JavascriptChannel>? javascriptChannels;
 
+  /// 如果不支持webview，是否显示浏览器打开按钮
+  final bool showLaunchButtonIfUnsupported;
+
   const SimpleWebViewPage({
     Key? key,
     required this.initialUrl,
@@ -57,6 +60,7 @@ class SimpleWebViewPage extends StatefulWidget {
     this.postData,
     this.initialAsyncCookies,
     this.javascriptChannels,
+    this.showLaunchButtonIfUnsupported = true,
   }) : super(key: key);
 
   @override
@@ -139,6 +143,7 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
           userAgent: widget.userAgent,
           postData: widget.postData,
           initialAsyncCookies: widget.initialAsyncCookies,
+          showLaunchButtonIfUnsupported: widget.showLaunchButtonIfUnsupported,
         ),
       ),
     );

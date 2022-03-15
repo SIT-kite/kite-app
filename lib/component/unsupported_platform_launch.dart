@@ -23,11 +23,12 @@ const tipPC = '电脑端暂不支持直接查看';
 class UnsupportedPlatformUrlLauncher extends StatelessWidget {
   final String url;
   final String tip;
-
+  final bool showLaunchButton;
   const UnsupportedPlatformUrlLauncher(
     this.url, {
     Key? key,
     this.tip = tipPC,
+    this.showLaunchButton = true,
   }) : super(key: key);
 
   @override
@@ -37,12 +38,13 @@ class UnsupportedPlatformUrlLauncher extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(tip),
-          TextButton(
-            child: const Text('点击在默认浏览器中打开'),
-            onPressed: () {
-              launchInBrowser(url);
-            },
-          )
+          if (showLaunchButton)
+            TextButton(
+              child: const Text('点击在默认浏览器中打开'),
+              onPressed: () {
+                launchInBrowser(url);
+              },
+            )
         ],
       ),
     );
