@@ -20,10 +20,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kite/component/webview.dart';
+import 'package:kite/component/webview_page.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/util/rule.dart';
-
-import 'webview/page/index.dart';
 
 const _reportUrlPrefix = 'http://xgfy.sit.edu.cn/h5/#/';
 const _reportUrlIndex = _reportUrlPrefix + 'pages/index/index';

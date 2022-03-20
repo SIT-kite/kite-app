@@ -17,7 +17,7 @@
  */
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/feature/web_page/webview/page/index.dart';
+import 'package:kite/component/webview_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'logger.dart';

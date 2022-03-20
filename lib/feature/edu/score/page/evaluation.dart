@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/feature/web_page/webview/page/index.dart';
+import 'package:kite/component/webview_page.dart';
 import 'package:kite/util/cookie_util.dart';
 
 import '../../init.dart';

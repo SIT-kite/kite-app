@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:kite/component/webview.dart';
+import 'package:kite/component/webview_page.dart';
 import 'package:kite/feature/game/util/upload.dart';
-import 'package:kite/feature/web_page/webview/page/index.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/rule.dart';
 import 'package:webview_flutter/webview_flutter.dart';

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kite/component/webview_page.dart';
 import 'package:kite/setting/init.dart';
-
-import 'webview/page/index.dart';
 
 const _bbsUrl = 'https://support.qq.com/products/386124';
 

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-
-import 'webview/page/index.dart';
+import 'package:kite/component/webview_page.dart';
 
 const String _feedbackUrl = 'https://support.qq.com/product/377648';
 
