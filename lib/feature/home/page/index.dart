@@ -183,6 +183,21 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// 如果登录信息过期，那么自动刷新一次
+  void _refreshIfOutdated() async {
+    DateTime? lastLoginTime = SettingInitializer.loginTime.sso;
+    if (lastLoginTime == null) {
+      await _onHomeRefresh(context);
+      return;
+    }
+    DateTime now = DateTime.now();
+    final duration = now.difference(lastLoginTime);
+    if (duration.inSeconds > 3600) {
+      await _onHomeRefresh(context);
+      return;
+    }
+  }
+
   @override
   void initState() {
     Log.info('开始加载首页');
@@ -206,6 +221,7 @@ class _HomePageState extends State<HomePage> {
           const Text('当前已连接校园网环境'),
           duration: const Duration(seconds: 3),
         );
+        _refreshIfOutdated();
       }
     });
 
