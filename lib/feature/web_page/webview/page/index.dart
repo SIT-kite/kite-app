@@ -46,6 +46,9 @@ class SimpleWebViewPage extends StatefulWidget {
   /// 如果不支持webview，是否显示浏览器打开按钮
   final bool showLaunchButtonIfUnsupported;
 
+  /// 是否显示顶部进度条
+  final bool showTopProgressIndicator;
+
   const SimpleWebViewPage({
     Key? key,
     required this.initialUrl,
@@ -56,6 +59,7 @@ class SimpleWebViewPage extends StatefulWidget {
     this.showSharedButton = false,
     this.showRefreshButton = true,
     this.showLoadInBrowser = false,
+    this.showTopProgressIndicator = true,
     this.userAgent,
     this.postData,
     this.initialAsyncCookies,
@@ -70,7 +74,7 @@ class SimpleWebViewPage extends StatefulWidget {
 class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
   final _controllerCompleter = Completer<WebViewController>();
   String title = '无标题页面';
-
+  int progress = 0;
   void _onRefresh() async {
     final controller = await _controllerCompleter.future;
     await controller.reload();
@@ -115,6 +119,16 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
         appBar: AppBar(
           title: Text(widget.fixedTitle == null ? title : widget.fixedTitle!),
           actions: actions,
+          bottom: widget.showTopProgressIndicator
+              ? PreferredSize(
+                  child: LinearProgressIndicator(
+                    backgroundColor: Colors.white70.withOpacity(0),
+                    value: progress / 100,
+                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+                  ),
+                  preferredSize: const Size.fromHeight(3.0),
+                )
+              : null,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_outlined),
             onPressed: () {
@@ -132,6 +146,12 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
             }
           },
           injectJsRules: widget.injectJsRules,
+          onProgress: (value) {
+            print(value);
+            setState(() {
+              progress = value % 100;
+            });
+          },
           onPageFinished: (url) async {
             if (widget.fixedTitle == null) {
               final controller = await _controllerCompleter.future;

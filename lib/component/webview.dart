@@ -63,6 +63,7 @@ class MyWebView extends StatefulWidget {
   final WebViewCreatedCallback? onWebViewCreated;
   final PageStartedCallback? onPageStarted;
   final PageFinishedCallback? onPageFinished;
+  final PageLoadingCallback? onProgress;
 
   final JavascriptMode javascriptMode;
 
@@ -91,6 +92,7 @@ class MyWebView extends StatefulWidget {
     this.onWebViewCreated,
     this.onPageStarted,
     this.onPageFinished,
+    this.onProgress,
     this.javascriptMode = JavascriptMode.unrestricted, // js支持默认启用
     this.userAgent,
     this.postData,
@@ -186,6 +188,7 @@ class _MyWebViewState extends State<MyWebView> {
           widget.onPageFinished!(url);
         }
       },
+      onProgress: widget.onProgress,
     );
   }
 
