@@ -85,6 +85,18 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
     Log.info('分享页面: ${controller.currentUrl()}');
   }
 
+  /// 构造进度条
+  PreferredSizeWidget buildTopIndicator() {
+    return PreferredSize(
+      child: LinearProgressIndicator(
+        backgroundColor: Colors.white70.withOpacity(0),
+        value: progress / 100,
+        valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+      ),
+      preferredSize: const Size.fromHeight(3.0),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final actions = <Widget>[];
@@ -119,16 +131,7 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
         appBar: AppBar(
           title: Text(widget.fixedTitle == null ? title : widget.fixedTitle!),
           actions: actions,
-          bottom: widget.showTopProgressIndicator
-              ? PreferredSize(
-                  child: LinearProgressIndicator(
-                    backgroundColor: Colors.white70.withOpacity(0),
-                    value: progress / 100,
-                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
-                  ),
-                  preferredSize: const Size.fromHeight(3.0),
-                )
-              : null,
+          bottom: widget.showTopProgressIndicator ? buildTopIndicator() : null,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_outlined),
             onPressed: () {
@@ -147,7 +150,6 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
           },
           injectJsRules: widget.injectJsRules,
           onProgress: (value) {
-            print(value);
             setState(() {
               progress = value % 100;
             });
