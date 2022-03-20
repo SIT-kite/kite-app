@@ -1,5 +1,7 @@
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:hive/hive.dart';
+import 'package:kite/setting/dao/login.dart';
+import 'package:kite/setting/storage/login.dart';
 import 'package:kite/util/hive_cache_provider.dart';
 
 import 'dao/index.dart';
@@ -11,6 +13,7 @@ class SettingInitializer {
   static late NetworkSettingDao network;
   static late JwtDao jwt;
   static late HomeSettingDao home;
+  static late LoginTimeDao loginTime;
 
   static Future<void> init() async {
     final settingBox = await Hive.openBox('setting');
@@ -20,6 +23,7 @@ class SettingInitializer {
     theme = ThemeSettingStorage(settingBox);
     network = NetworkSettingStorage(settingBox);
     jwt = JwtStorage(settingBox);
+    loginTime = LoginTimeStorage(settingBox);
     Settings.init(cacheProvider: HiveCacheProvider(settingBox));
   }
 }
