@@ -24,6 +24,7 @@ import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/exception/session.dart';
 import 'package:kite/feature/kite/service/ocr.dart';
+import 'package:kite/setting/init.dart';
 import 'package:kite/util/logger.dart';
 
 import '../../util/dio_utils.dart';
@@ -148,6 +149,7 @@ class SsoSession extends ASession with Downloader {
     isOnline = true;
     _username = username;
     _password = password;
+    SettingInitializer.loginTime.sso = DateTime.now();
     return response;
   }
 
