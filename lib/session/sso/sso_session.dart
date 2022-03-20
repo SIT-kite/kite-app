@@ -161,11 +161,9 @@ class SsoSession extends ASession with Downloader {
       try {
         return await loginWithoutRetry(username, password);
       } catch (e) {
-        if (e.runtimeType == CredentialsInvalidException && e.toString().contains('无效的验证码')) {
-          count++;
-          continue;
-        }
-        rethrow;
+        // 只要是异常，就再重试
+        count++;
+        continue;
       }
     }
     throw const MaxRetryExceedException(msg: '登录超过最大重试次数 ($_maxRetryCount 次)');
