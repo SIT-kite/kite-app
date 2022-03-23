@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
 
 typedef MyWidgetBuilder<T> = Widget Function(BuildContext context, T data);
@@ -41,6 +42,7 @@ class MyFutureBuilder<T> extends StatelessWidget {
             final data = snapshot.data;
             return builder == null ? Text(data.toString()) : builder!(context, snapshot.data!);
           } else if (snapshot.hasError) {
+            Catcher.reportCheckedError(snapshot.error, snapshot.stackTrace);
             if (onErrorBuilder != null) {
               return onErrorBuilder!(context, snapshot.error);
             }
