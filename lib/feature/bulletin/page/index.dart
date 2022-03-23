@@ -28,11 +28,11 @@ class BulletinPage extends StatelessWidget {
   const BulletinPage({Key? key}) : super(key: key);
 
   Widget _buildBulletinItem(BuildContext context, BulletinRecord record) {
-    final titleStyle = Theme.of(context).textTheme.headline5;
-    final subtitleStyle = Theme.of(context).textTheme.bodyText2;
+    final titleStyle = Theme.of(context).textTheme.subtitle1;
+    final subtitleStyle = Theme.of(context).textTheme.bodyText1;
 
     return Padding(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(4),
       child: ListTile(
         title: Text(record.title, style: titleStyle, overflow: TextOverflow.ellipsis),
         subtitle: Text(record.department + ' | ' + _dateFormat.format(record.dateTime), style: subtitleStyle),
@@ -72,11 +72,7 @@ class BulletinPage extends StatelessWidget {
               _sortBulletinRecord(records);
 
               final items = records.map((e) => _buildBulletinItem(context, e)).toList();
-              return SingleChildScrollView(
-                child: Column(
-                  children: items,
-                ),
-              );
+              return SingleChildScrollView(child: Column(children: items));
             } else if (snapshot.hasError) {
               return Center(child: Text('错误类型: ' + snapshot.error.runtimeType.toString()));
             }
@@ -88,9 +84,7 @@ class BulletinPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('OA 公告'),
-      ),
+      appBar: AppBar(title: const Text('OA 公告')),
       body: _buildBulletinList(),
     );
   }

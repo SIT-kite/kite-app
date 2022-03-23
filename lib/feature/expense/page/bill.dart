@@ -72,7 +72,7 @@ class BillPage extends StatelessWidget {
   }
 
   Widget _buildEmptyResult(BuildContext context) {
-    final textStyle = Theme.of(context).textTheme.headline5;
+    final textStyle = Theme.of(context).textTheme.headline6;
 
     return Center(
       child: Column(
@@ -80,7 +80,7 @@ class BillPage extends StatelessWidget {
         children: [
           // TODO: 不要跨模块使用资源文件.
           SvgPicture.asset('assets/game/empty.svg'),
-          Text('这里空空的，\n快点击右上角的刷新按钮更新数据', style: textStyle),
+          Text('这里空空的\n快点击右上角刷新按钮更新数据', style: textStyle, textAlign: TextAlign.center),
         ],
       ),
     );

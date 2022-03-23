@@ -79,27 +79,34 @@ class KiteApp extends StatelessWidget {
   }
 
   TextTheme _buildTextTheme(bool isDark, Color primaryColor) {
-    final color1 = isDark ? Colors.white : Colors.black;
-    final color2 = isDark ? Colors.white70 : Colors.black87;
-    final color3 = isDark ? Colors.white60 : Colors.black54;
+    final fullColor = isDark ? Colors.white : Colors.black;
+    final halfColor = isDark ? Colors.white70 : Colors.black87;
+    // final lightColor = isDark ? Colors.white60 : Colors.black54;
 
     return TextTheme(
-      headline1: TextStyle(fontSize: 30.0, color: color1, fontWeight: FontWeight.w500),
-      headline2: TextStyle(fontSize: 28.0, color: color1),
-      headline3: TextStyle(fontSize: 24.0, color: color2),
-      headline4: TextStyle(fontSize: 22.0, color: color2, fontWeight: FontWeight.w500),
-      headline5: TextStyle(fontSize: 20.0, color: color3, fontWeight: FontWeight.w400),
-      headline6: TextStyle(fontSize: 18.0, color: color3, fontWeight: FontWeight.w300),
-      bodyText1: TextStyle(fontSize: 16.0, color: color3),
-      bodyText2: TextStyle(fontSize: 14.0, color: color3),
-
+      // https://material.io/design/typography/the-type-system.html
       // https://www.mdui.org/design/style/typography.html
       // 12、14、16、20
-      // title: /*     */ TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
-      // subheading: /**/ TextStyle(fontSize: 16.0, color: Colors.black87),
-      // body1: /*     */ TextStyle(fontSize: 14.0),
-      // body2: /*     */ TextStyle(fontSize: 14.0, fontWeight: FontWeight_buildTextTheme.w500),
-      // caption: /*   */ TextStyle(fontSize: 12.0, color: Colors.black87),
+      headline1: TextStyle(fontSize: 24.0, color: fullColor, fontWeight: FontWeight.w500),
+      headline2: TextStyle(fontSize: 20.0, color: fullColor),
+      headline3: TextStyle(fontSize: 20.0, color: halfColor, fontWeight: FontWeight.w500),
+      headline4: TextStyle(fontSize: 20.0, color: halfColor),
+      headline5: TextStyle(fontSize: 24.0, color: fullColor),
+      headline6: TextStyle(fontSize: 20.0, color: fullColor, fontWeight: FontWeight.w500),
+      subtitle1: TextStyle(fontSize: 18.0, color: halfColor, fontWeight: FontWeight.w500),
+      subtitle2: TextStyle(fontSize: 16.0, color: halfColor, fontWeight: FontWeight.w500),
+      bodyText1: TextStyle(fontSize: 16.0, color: fullColor),
+      bodyText2: TextStyle(fontSize: 14.0, color: fullColor),
+      caption: TextStyle(fontSize: 12.0, color: halfColor),
+
+      // headline1: TextStyle(fontSize: 30.0, color: fullColor, fontWeight: FontWeight.w500),
+      // headline2: TextStyle(fontSize: 28.0, color: fullColor),
+      // headline3: TextStyle(fontSize: 24.0, color: halfColor),
+      // headline4: TextStyle(fontSize: 22.0, color: halfColor, fontWeight: FontWeight.w500),
+      // headline5: TextStyle(fontSize: 20.0, color: lightColor, fontWeight: FontWeight.w400),
+      // headline6: TextStyle(fontSize: 18.0, color: lightColor, fontWeight: FontWeight.w500),
+      // bodyText1: TextStyle(fontSize: 16.0, color: lightColor),
+      // bodyText2: TextStyle(fontSize: 14.0, color: lightColor),
     );
   }
 

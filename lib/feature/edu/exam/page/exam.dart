@@ -51,12 +51,12 @@ class _ExamPageState extends State<ExamPage> {
   }
 
   Widget _buildItem(BuildContext context, String icon, String text) {
-    final itemStyle = Theme.of(context).textTheme.headline5;
+    final itemStyle = Theme.of(context).textTheme.bodyText1;
     final iconImage = AssetImage('assets/' + icon);
     return Row(
       children: [
-        icon.isEmpty ? const SizedBox(height: 35, width: 35) : Image(image: iconImage, width: 35, height: 35),
-        Container(width: 8),
+        icon.isEmpty ? const SizedBox(height: 24, width: 24) : Image(image: iconImage, width: 24, height: 24),
+        const SizedBox(width: 8, height: 32),
         Expanded(child: Text(text, softWrap: true, style: itemStyle))
       ],
     );
@@ -69,7 +69,7 @@ class _ExamPageState extends State<ExamPage> {
     final endTime = examItem.time[1];
     final place = examItem.place;
     final seatNumber = examItem.seatNumber;
-    final isRebuild = examItem.isRebuild;
+    final isSecondExam = examItem.isSecondExam;
 
     TableRow buildRow(String icon, String title, String content) {
       return TableRow(children: [
@@ -81,19 +81,19 @@ class _ExamPageState extends State<ExamPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(name, style: Theme.of(context).textTheme.headline1),
+        Padding(
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 12),
+          child: Text(name, style: Theme.of(context).textTheme.headline6),
+        ),
         Table(
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          columnWidths: const {
-            0: FlexColumnWidth(8),
-            1: FlexColumnWidth(10),
-          },
+          columnWidths: const {0: FlexColumnWidth(4), 1: FlexColumnWidth(5)},
           children: [
             buildRow('timetable/campus.png', '考试地点', place),
             buildRow('timetable/courseId.png', '座位号', '$seatNumber'),
             buildRow('timetable/day.png', '开始时间', dateFormat.format(startTime)),
             buildRow('timetable/day.png', '结束时间', dateFormat.format(endTime)),
-            buildRow('', '是否重修', isRebuild),
+            buildRow('', '是否重修', isSecondExam),
           ],
         )
       ],
@@ -101,18 +101,17 @@ class _ExamPageState extends State<ExamPage> {
   }
 
   Widget buildExamItems(BuildContext context, List<ExamRoom> examItems) {
-    return ListView(
-      children: examItems
-          .map(
-            (e) => Card(
-              margin: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                child: buildExamItem(context, e),
-              ),
-            ),
-          )
-          .toList(),
+    final widgets = examItems.map((e) => buildExamItem(context, e)).toList();
+    return ListView.separated(
+      itemBuilder: (BuildContext context, int index) => Padding(
+        padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+        child: widgets[index],
+      ),
+      itemCount: widgets.length,
+      separatorBuilder: (BuildContext context, int index) => const Padding(
+        padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+        child: Divider(),
+      ),
     );
   }
 

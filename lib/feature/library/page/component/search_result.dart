@@ -196,15 +196,15 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
     );
   }
 
+  /// 搜书页面 搜索框下部选择
+  /// TODO: 改成 DefaultTabContainer
   Widget buildSearchWaySelector() {
     final textStyle = Theme.of(context).textTheme.headline4;
     final primaryColor = Theme.of(context).primaryColor;
 
     return Container(
       margin: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        border: Border.all(),
-      ),
+      decoration: BoxDecoration(border: Border.all()),
       child: Row(
         children: <List<dynamic>>[
           ['任意词', SearchWay.any],
@@ -219,9 +219,7 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
               child: Container(
                 padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
-                  color: searchWay == currentSearchWay ? primaryColor : Colors.white,
-                  // border: Border.all(),
-                ),
+                    color: searchWay == currentSearchWay ? primaryColor : Colors.white), // border: Border.all(),
                 child: Center(
                   child: Text(searchWayName,
                       style: textStyle?.copyWith(color: e[1] == currentSearchWay ? Colors.white : Colors.black)),
@@ -255,9 +253,7 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
         Expanded(
           child: firstPageLoaded
               ? (dataList.isEmpty ? buildNotFound() : buildListView())
-              : const Center(
-                  child: CircularProgressIndicator(),
-                ),
+              : const Center(child: CircularProgressIndicator()),
         ),
       ],
     );

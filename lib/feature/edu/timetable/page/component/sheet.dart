@@ -47,7 +47,7 @@ class Sheet extends StatelessWidget {
   }
 
   Widget _buildTitle(BuildContext context) {
-    final titleStyle = Theme.of(context).textTheme.headline2?.copyWith(fontWeight: FontWeight.w600);
+    final titleStyle = Theme.of(context).textTheme.headline2;
 
     return Container(
       padding: const EdgeInsets.fromLTRB(0, 25, 0, 5),

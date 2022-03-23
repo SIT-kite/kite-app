@@ -72,10 +72,7 @@ class _MailPageState extends State<MailPage> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Image(
-            image: AssetImage("assets/mail/figure_planet.png"),
-            fit: BoxFit.cover,
-          ),
+          const Image(image: AssetImage("assets/mail/figure_planet.png"), fit: BoxFit.cover),
           const SizedBox(height: 20),
           ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 0.75.sw),

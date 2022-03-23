@@ -44,17 +44,19 @@ class _BookInfoPageState extends State<BookInfoPage> {
       builder: (BuildContext context, BookInfo data) {
         return Table(
           columnWidths: const {
-            0: FlexColumnWidth(1),
-            1: FlexColumnWidth(3),
+            0: FlexColumnWidth(2),
+            1: FlexColumnWidth(5),
           },
           // border: TableBorder.all(color: Colors.red),
           children: data.rawDetail.entries
-              .map((e) => TableRow(
-                    children: [
-                      Text(e.key, style: Theme.of(context).textTheme.headline5),
-                      SelectableText(e.value, style: Theme.of(context).textTheme.bodyText2),
-                    ],
-                  ))
+              .map(
+                (e) => TableRow(
+                  children: [
+                    Text(e.key, style: Theme.of(context).textTheme.subtitle2),
+                    SelectableText(e.value, style: Theme.of(context).textTheme.bodyText2),
+                  ],
+                ),
+              )
               .toList(),
         );
       },

@@ -30,10 +30,7 @@ class BookItemWidget extends StatelessWidget {
 
   /// 构造图书封皮预览图片
   Widget buildBookCover(String? imageUrl) {
-    const def = Icon(
-      Icons.library_books_sharp,
-      size: 100,
-    );
+    const def = Icon(Icons.library_books_sharp, size: 100);
     if (imageUrl == null) {
       return def;
     }
@@ -81,10 +78,7 @@ class BookItemWidget extends StatelessWidget {
                       children: [
                         const Text('作者:  '),
                         InkWell(
-                          child: Text(
-                            book.author,
-                            style: const TextStyle(color: Colors.blue),
-                          ),
+                          child: Text(book.author, style: const TextStyle(color: Colors.blue)),
                           onTap: () {
                             onAuthorTap!(book.author);
                           },

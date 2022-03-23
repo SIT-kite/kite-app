@@ -26,6 +26,10 @@ import '../init.dart';
 import 'component/background.dart';
 import 'component/util.dart';
 
+String _getActivityUrl(int activityId) {
+  return 'http://sc.sit.edu.cn/public/activity/activityDetail.action?activityId=$activityId';
+}
+
 class DetailPage extends StatelessWidget {
   final int activityId;
   final bool hideApplyButton;
@@ -39,7 +43,7 @@ class DetailPage extends StatelessWidget {
         IconButton(
           icon: const Icon(Icons.open_in_browser),
           onPressed: () {
-            launchInBrowser('http://sc.sit.edu.cn/public/activity/activityDetail.action?activityId=$activityId');
+            launchInBrowser(_getActivityUrl(activityId));
           },
         )
       ],
@@ -111,7 +115,11 @@ class DetailPage extends StatelessWidget {
   }
 
   Widget _buildDetail(BuildContext context, ActivityDetail detail) {
-    final List<Widget> items = [_buildInfoCard(context, detail), _buildArticle(context, detail.description ?? '暂无信息')];
+    final List<Widget> items = [
+      _buildInfoCard(context, detail),
+      _buildArticle(context, detail.description ?? '暂无信息'),
+      const SizedBox(height: 64),
+    ];
     return SingleChildScrollView(
       child: Column(mainAxisSize: MainAxisSize.min, children: items),
     );

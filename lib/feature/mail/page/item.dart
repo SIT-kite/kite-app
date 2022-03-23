@@ -31,7 +31,7 @@ class MailItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final titleStyle = Theme.of(context).textTheme.headline5;
+    final titleStyle = Theme.of(context).textTheme.subtitle1;
     final subtitleStyle = Theme.of(context).textTheme.bodyText2;
     final contentStyle = Theme.of(context).textTheme.bodyText2;
 

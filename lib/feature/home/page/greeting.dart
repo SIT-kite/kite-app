@@ -29,6 +29,10 @@ int _calcStudyDays(int entranceYear) {
   return days;
 }
 
+String _getWeatherUrl(String location) {
+  return 'https://widget-page.qweather.net/h5/index.html?md=0123456&bg=1&lc=$location&key=f96261862c08497c90c0dea53467f511';
+}
+
 class GreetingWidget extends StatefulWidget {
   const GreetingWidget({Key? key}) : super(key: key);
 
@@ -72,9 +76,7 @@ class _GreetingWidgetState extends State<GreetingWidget> {
     return GestureDetector(
       onTap: () {
         final title = _getCampusName() + '天气';
-        final location = campus == 1 ? '101021000' : '101021200';
-        final url =
-            'https://widget-page.qweather.net/h5/index.html?md=0123456&bg=1&lc=$location&key=f96261862c08497c90c0dea53467f511';
+        final url = _getWeatherUrl(campus == 1 ? '101021000' : '101021200');
         launchInBuiltinWebView(context, url, fixedTitle: title);
       },
       child: SvgPicture.asset('assets/weather/$iconCode.svg',
@@ -90,7 +92,13 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   }
 
   Widget buildAll(BuildContext context) {
-    final textStyle = Theme.of(context).textTheme.headline5?.copyWith(color: Colors.white70);
+    final textStyleSmall = Theme.of(context).textTheme.headline6?.copyWith(color: Colors.white60, fontSize: 15.0);
+    final textStyleLarge = Theme.of(context).textTheme.headline6?.copyWith(color: Colors.white70, fontSize: 24.0);
+    final textStyleWeather = Theme.of(context).textTheme.subtitle1?.copyWith(
+          color: Colors.white70,
+          fontSize: 19.0,
+          fontWeight: FontWeight.w500,
+        );
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -99,8 +107,10 @@ class _GreetingWidgetState extends State<GreetingWidget> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('今天是你在上应大的第 $studyDays 天', style: textStyle),
-              Text('${_getCampusName()}${currentWeather.weather}  ${currentWeather.temperature} °C', style: textStyle)
+              Text('今天是你在上应大的', style: textStyleSmall),
+              Text('第 $studyDays 天', style: textStyleLarge),
+              Text('${_getCampusName()} ${currentWeather.weather} ${currentWeather.temperature} °C',
+                  style: textStyleWeather)
             ],
           ),
         ),

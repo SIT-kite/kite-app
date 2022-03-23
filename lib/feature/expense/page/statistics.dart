@@ -99,7 +99,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
           ),
           PopupMenuButton(
             onSelected: (int value) => setState(() => selectedMonth = value),
-            child: Text('$selectedMonth 月', style: titleStyle),
+            child: Text(' $selectedMonth 月', style: titleStyle),
             itemBuilder: (_) => monthWidgets,
           ),
         ],
@@ -160,6 +160,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
     for (final line in _filterExpense()) {
       sumByClassification[line.type.index] += line.amount;
     }
+    final backgroundColor = Theme.of(context).secondaryHeaderColor;
+
     double sum = sumByClassification.fold(0.0, (previousValue, element) => previousValue += element);
 
     return ExpenseType.values.where((element) => element != ExpenseType.all).map(
@@ -169,16 +171,22 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
         return ListTile(
           leading: buildIcon(expenseType, context),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+          title: Text(expenseTypeMapping[expenseType]!, style: Theme.of(context).textTheme.subtitle1),
+          subtitle: LinearProgressIndicator(value: percentage, backgroundColor: backgroundColor),
+          // 下方 SizedBox 用于限制文字宽度, 使左侧进度条的右端对齐.
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Text(expenseTypeMapping[expenseType]!, style: Theme.of(context).textTheme.headline5),
-              Text('  ${(percentage * 100).toStringAsFixed(2)} %'),
+              Text('¥ ${sumInType.toStringAsFixed(2)}'),
+              SizedBox(
+                width: 60,
+                child: Text(
+                  '${(percentage * 100).toStringAsFixed(2)}%',
+                  textAlign: TextAlign.end,
+                ),
+              ),
             ],
           ),
-          subtitle: LinearProgressIndicator(value: percentage),
-          // 下方 SizedBox 用于限制文字宽度, 使左侧进度条的右端对齐.
-          trailing: SizedBox(width: 80, child: Text('￥${sumInType.toStringAsFixed(2)}')),
           dense: true,
         );
       },
