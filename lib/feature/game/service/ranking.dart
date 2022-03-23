@@ -25,7 +25,7 @@ import '../entity/game.dart';
 
 class RankingService extends AService implements RankingServiceDao {
   static const _rankingPrefix = '/game/ranking/';
-  static const _scoreUploading = '/game/record';
+  static const _uploadScore = '/game/record';
 
   RankingService(ASession session) : super(session);
 
@@ -40,6 +40,6 @@ class RankingService extends AService implements RankingServiceDao {
   @override
   Future<void> postScore(GameRecord record) async {
     Log.info(record.toJson());
-    await session.post(_scoreUploading, data: record.toJson());
+    await session.post(_uploadScore, data: record.toJson());
   }
 }

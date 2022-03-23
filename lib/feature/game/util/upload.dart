@@ -49,7 +49,7 @@ Future<void> uploadGameRecord(BuildContext context, GameRecord record) async {
   try {
     await _innerUploadGameRecord(context, record);
   } catch (e) {
-    showBasicFlash(context, const Text('上传出错'));
+    showBasicFlash(context, Text('上传出错\n' + e.toString()));
     rethrow;
   }
   showBasicFlash(context, const Text('上传成功'));
