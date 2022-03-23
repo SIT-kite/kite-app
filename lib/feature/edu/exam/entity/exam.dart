@@ -43,8 +43,8 @@ class ExamRoom {
   int seatNumber = 0;
 
   /// 是否重修
-  @JsonKey(name: 'cxbj')
-  String isRebuild = "";
+  @JsonKey(name: 'cxbj', defaultValue: '是')
+  String isSecondExam = "";
 
   ExamRoom();
 
@@ -54,7 +54,7 @@ class ExamRoom {
 
   @override
   String toString() {
-    return 'ExamRoom{courseName: $courseName, time: $time, place: $place, campus: $campus, seatNumber: $seatNumber, isRebuild: $isRebuild}';
+    return 'ExamRoom{courseName: $courseName, time: $time, place: $place, campus: $campus, seatNumber: $seatNumber, isSecondExam: $isSecondExam}';
   }
 
   static int _stringToInt(String s) => int.tryParse(s) ?? 0;
