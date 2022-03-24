@@ -28,8 +28,8 @@ class NoticePage extends StatelessWidget {
   Widget _buildNoticeItem(BuildContext context, KiteNotice notice) {
     final dateFormat = DateFormat('yyyy/MM/dd');
 
-    return Card(
-      margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+    return InkWell(
+      onTap: () {},
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Column(
