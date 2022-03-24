@@ -82,7 +82,7 @@ class _ExamPageState extends State<ExamPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(0, 0, 0, 12),
+          padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
           child: Text(name, style: Theme.of(context).textTheme.headline6),
         ),
         Table(
@@ -104,7 +104,7 @@ class _ExamPageState extends State<ExamPage> {
     final widgets = examItems.map((e) => buildExamItem(context, e)).toList();
     return ListView.separated(
       itemBuilder: (BuildContext context, int index) => Padding(
-        padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
         child: widgets[index],
       ),
       itemCount: widgets.length,
@@ -115,36 +115,40 @@ class _ExamPageState extends State<ExamPage> {
     );
   }
 
-  Widget buildBody(BuildContext context) {
-    return MyFutureBuilder<List<ExamRoom>>(
-      future: ExamInitializer.examService.getExamList(
-        SchoolYear(selectedYear),
-        selectedSemester,
+  Widget buildSemesterSelector() {
+    return Container(
+      margin: const EdgeInsets.only(left: 15),
+      child: SemesterSelector(
+        (year) {
+          setState(() => selectedYear = year);
+        },
+        (semester) {
+          setState(() => selectedSemester = semester);
+        },
+        initialYear: selectedYear,
+        initialSemester: selectedSemester,
+        showEntireYear: false,
       ),
-      builder: (context, data) {
-        data.sort((a, b) {
-          return a.time[0].isAfter(b.time[0]) ? 1 : -1;
-        });
-        return Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.only(left: 15),
-              child: SemesterSelector(
-                (year) {
-                  setState(() => selectedYear = year);
-                },
-                (semester) {
-                  setState(() => selectedSemester = semester);
-                },
-                initialYear: selectedYear,
-                initialSemester: selectedSemester,
-                showEntireYear: false,
-              ),
-            ),
-            Expanded(child: buildExamItems(context, data)),
-          ],
-        );
-      },
+    );
+  }
+
+  Widget buildBody(BuildContext context) {
+    return Column(
+      children: [
+        buildSemesterSelector(),
+        MyFutureBuilder<List<ExamRoom>>(
+          future: ExamInitializer.examService.getExamList(
+            SchoolYear(selectedYear),
+            selectedSemester,
+          ),
+          builder: (context, data) {
+            data.sort((a, b) {
+              return a.time[0].isAfter(b.time[0]) ? 1 : -1;
+            });
+            return Expanded(child: buildExamItems(context, data));
+          },
+        ),
+      ],
     );
   }
 
