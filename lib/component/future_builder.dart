@@ -51,7 +51,7 @@ class MyFutureBuilder<T> extends StatelessWidget {
                   context,
                   title: '网络连接超时',
                   content: [
-                    const Text('连接超时,请确认您连接了校园网环境\n(当然也有可能是学校服务器停机维护(崩了))'),
+                    const Text('连接超时，请确认您连接了校园网环境；\n\n注意：学校服务器崩溃或停机维护也会产生这个问题。'),
                   ],
                   actionText: '进入网络工具检查',
                   onAction: () {

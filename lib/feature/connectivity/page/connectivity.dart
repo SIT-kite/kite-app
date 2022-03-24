@@ -18,7 +18,6 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:check_vpn_connection/check_vpn_connection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/util/network.dart';
@@ -108,11 +107,15 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Text(
-        '无法连接到校园网环境,校园网环境指的是如下任意一种网络环境: \n'
-        '1. 连接学校内的 i-SIT, i-SIT-1x 或 eduroam 热点，\n'
-        '2. 打开 EasyConnect App 连接学校 VPN。\n'
-        '3. 自建代理服务器连接HTTP代理\n'
-        '当您确保已连接校园网环境扔提示该页面,大概率可能是学校服务器又停机维护(崩了\n',
+        '无法连接到校园网环境，您可以: \n'
+        '1. 连接学校内的 i-SIT, i-SIT-1x 或 eduroam 热点；\n'
+        '2. 打开 EasyConnect App 连接学校 VPN；\n'
+        '3. 自建代理服务器连接HTTP代理。\n'
+        '\n'
+        '如果您确信您的网络环境正常，可能因为学校服务器停机维护或崩溃，此时您可以尝试：\n'
+        '1. 睡一觉；\n'
+        '2. 通过小风筝内置的 “小游戏” 娱乐片刻；\n'
+        '3. 放弃。',
         textAlign: TextAlign.start,
         style: Theme.of(context).textTheme.bodyText1,
       ),
@@ -157,9 +160,9 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
     return Scaffold(
       appBar: AppBar(title: const Text('网络工具')),
       body: Center(
-        child: SizedBox(
-          height: 0.7.sh,
+        child: Center(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Expanded(flex: 3, child: buildFigure(context)),
               // const Spacer(flex: 1),
