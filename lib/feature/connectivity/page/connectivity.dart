@@ -104,16 +104,22 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
     );
   }
 
-  Widget buildDisconnectedBlock() {
-    Widget buildErrorText() {
-      return Text(
-          '无法连接到校园网。\n'
-          '请连接学校内的 i-SIT, i-SIT-1x 或 eduroam 热点，\n'
-          '或打开 EasyConnect App 连接学校 VPN。',
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyText1);
-    }
+  Widget buildErrorText() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Text(
+        '无法连接到校园网环境,校园网环境指的是如下任意一种网络环境: \n'
+        '1. 连接学校内的 i-SIT, i-SIT-1x 或 eduroam 热点，\n'
+        '2. 打开 EasyConnect App 连接学校 VPN。\n'
+        '3. 自建代理服务器连接HTTP代理\n'
+        '当您确保已连接校园网环境扔提示该页面,大概率可能是学校服务器又停机维护(崩了\n',
+        textAlign: TextAlign.start,
+        style: Theme.of(context).textTheme.bodyText1,
+      ),
+    );
+  }
 
+  Widget buildDisconnectedBlock() {
     return Column(
       children: [
         buildErrorText(),
@@ -156,7 +162,7 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
           child: Column(
             children: [
               Expanded(flex: 3, child: buildFigure(context)),
-              const Spacer(flex: 1),
+              // const Spacer(flex: 1),
               Expanded(flex: 3, child: isConnected ? buildConnectedBlock() : buildDisconnectedBlock()),
             ],
           ),
