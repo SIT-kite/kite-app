@@ -9,6 +9,11 @@ class Notice {
 
   Notice(this.ts, this.html);
   factory Notice.fromJson(Map<String, dynamic> json) => _$NoticeFromJson(json);
+
+  @override
+  String toString() {
+    return 'Notice{ts: $ts, html: $html}';
+  }
 }
 
 @JsonSerializable(createToJson: false)
@@ -27,6 +32,11 @@ class PeriodStatusRecord {
 
   PeriodStatusRecord(this.period, this.count, this.applied, this.text);
   factory PeriodStatusRecord.fromJson(Map<String, dynamic> json) => _$PeriodStatusRecordFromJson(json);
+
+  @override
+  String toString() {
+    return 'PeriodStatusRecord{period: $period, count: $count, applied: $applied, text: $text}';
+  }
 }
 
 @JsonSerializable(createToJson: false)
@@ -40,6 +50,11 @@ class ApplicationRecord {
 
   ApplicationRecord(this.id, this.period, this.user, this.index, this.text, this.status);
   factory ApplicationRecord.fromJson(Map<String, dynamic> json) => _$ApplicationRecordFromJson(json);
+
+  @override
+  String toString() {
+    return 'ApplicationRecord{id: $id, period: $period, user: $user, index: $index, text: $text, status: $status}';
+  }
 }
 
 @JsonSerializable(createToJson: false)
@@ -50,4 +65,9 @@ class ApplyResponse {
 
   ApplyResponse(this.id, this.text, this.index);
   factory ApplyResponse.fromJson(Map<String, dynamic> json) => _$ApplyResponseFromJson(json);
+
+  @override
+  String toString() {
+    return 'ApplyResponse{id: $id, text: $text, index: $index}';
+  }
 }
