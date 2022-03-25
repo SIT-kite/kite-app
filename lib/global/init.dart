@@ -92,7 +92,7 @@ class Initializer {
     );
     LoginInitializer.init(ssoSession: ssoSession);
 
-    if (UniversalPlatform.isDesktop) {
+    if (UniversalPlatform.isDesktop && !GlobalConfig.isTestEnv) {
       await DesktopInitializer.init();
     }
   }
