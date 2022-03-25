@@ -63,6 +63,63 @@ abstract class ASession {
       options: options,
     );
   }
+
+  Future<Response> delete(
+    String url, {
+    Map<String, String>? queryParameters,
+    dynamic data,
+    String? contentType,
+    ResponseType? responseType,
+    Options? options,
+  }) {
+    return request(
+      url,
+      'DELETE',
+      queryParameters: queryParameters,
+      data: data,
+      contentType: contentType,
+      responseType: responseType,
+      options: options,
+    );
+  }
+
+  Future<Response> patch(
+    String url, {
+    Map<String, String>? queryParameters,
+    dynamic data,
+    String? contentType,
+    ResponseType? responseType,
+    Options? options,
+  }) {
+    return request(
+      url,
+      'PATCH',
+      queryParameters: queryParameters,
+      data: data,
+      contentType: contentType,
+      responseType: responseType,
+      options: options,
+    );
+  }
+
+  Future<Response> update(
+    String url, {
+    Map<String, String>? queryParameters,
+    dynamic data,
+    String? contentType,
+    ResponseType? responseType,
+    Options? options,
+  }) {
+    return request(
+      url,
+      'UPDATE',
+      queryParameters: queryParameters,
+      data: data,
+      contentType: contentType,
+      responseType: responseType,
+      options: options,
+    );
+  }
 }
 
 mixin Downloader on ASession {
