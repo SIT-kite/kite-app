@@ -7,7 +7,7 @@ class LibraryAppointmentPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Hello'),
+        title: const Text('图书馆预约'),
       ),
       body: Container(),
     );

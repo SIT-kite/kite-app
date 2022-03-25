@@ -38,7 +38,9 @@ class LibraryPage extends StatelessWidget {
       title: const Text('图书馆'),
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pushNamed("/library/appointment");
+          },
           icon: const Icon(Icons.date_range),
         ),
         IconButton(
