@@ -18,9 +18,9 @@
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:dio/dio.dart';
 import 'package:enough_convert/gbk/gbk.dart';
-import 'package:intl/intl.dart';
 import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/util/date_format.dart';
 
 import '../dao/expense.dart';
 import '../entity/expense.dart';
@@ -49,8 +49,8 @@ class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
       _expenseUrl,
       queryParameters: {
         'page': page.toString(),
-        'from': _dateToString(start),
-        'to': _dateToString(end),
+        'from': start.yyyyMMdd,
+        'to': end.yyyyMMdd,
       },
       responseType: ResponseType.bytes,
     );
@@ -77,10 +77,6 @@ class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
       ..records = records
       ..currentPage = int.parse(currentPage)
       ..total = int.parse(totalPage);
-  }
-
-  static String _dateToString(DateTime date) {
-    return DateFormat('yyyyMMdd').format(date);
   }
 
   /// 根据某地点计算其消费类型
