@@ -19,7 +19,7 @@
 import 'package:kite/setting/dao/index.dart';
 
 final RegExp reUndergraduateId = RegExp(r'^(\d{6}[YGHE\d]\d{3})$');
-final RegExp rePostgraduateId = RegExp(r'^(\d{9})$');
+final RegExp rePostgraduateId = RegExp(r'^(\d{2}6\d{6})$');
 final RegExp reTeacherId = RegExp(r'^(\d{4})$');
 
 UserType? guessUserType(String username) {
