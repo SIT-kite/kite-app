@@ -1,5 +1,4 @@
 /*
- *
  * 上应小风筝  便利校园，一步到位
  * Copyright (C) 2022 上海应用技术大学 上应小风筝团队
  *
@@ -15,29 +14,18 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
-import 'package:kite/feature/library/search/init.dart';
-import 'package:kite/feature/library/search/service/borrow.dart';
-
-import '../mock_util.dart';
+import 'package:kite/feature/contact/service/contact.dart';
+import 'package:kite/feature/initializer_index.dart';
+import 'package:kite/mock/index.dart';
 
 void main() async {
   await init();
-  await loginLibrary();
-  final session = LibrarySearchInitializer.session;
-  final service = LibraryBorrowService(session);
-  test('get history borrow book list', () async {
-    final result = await service.getHistoryBorrowBookList(1, 10);
-    for (final item in result) {
-      print(item);
-    }
-  });
-  test('get current borrow book list', () async {
-    final result = await service.getMyBorrowBookList(1, 10);
-    for (final item in result) {
-      print(item);
-    }
+  await login();
+  var session = KiteInitializer.kiteSession;
+  test('expense test', () async {
+    final contact = await ContactRemoteService(session).getAllContacts();
+    Log.info(contact);
   });
 }

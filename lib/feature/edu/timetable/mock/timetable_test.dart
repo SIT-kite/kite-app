@@ -1,8 +1,7 @@
 import 'package:kite/feature/edu/common/entity/index.dart';
 import 'package:kite/feature/edu/timetable/dao/timetable.dart';
 import 'package:kite/feature/edu/timetable/mock/timetable.dart';
-
-import '../mock_util.dart';
+import 'package:kite/mock/index.dart';
 
 void main() {
   final TimetableDao timetableDao = TimetableMock();

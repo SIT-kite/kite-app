@@ -1,8 +1,7 @@
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:kite/feature/initializer_index.dart';
 import 'package:kite/global/global.dart';
-
-import 'mock_util.dart';
+import 'package:kite/mock/index.dart';
 
 void main() async {
   await init();
