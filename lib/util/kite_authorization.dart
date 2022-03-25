@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:kite/feature/initializer_index.dart';
+import 'package:kite/setting/init.dart';
 
 class AuthorizationDialog extends StatelessWidget {
   final String msg;
@@ -46,4 +48,24 @@ class AuthorizationDialog extends StatelessWidget {
       ],
     );
   }
+}
+
+Future<bool> signUpIfNecessary(BuildContext context, String description) async {
+  // 如果用户未同意过, 请求用户确认
+  if (SettingInitializer.jwt.jwtToken == null) {
+    final bool? check = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) => AuthorizationDialog(description),
+    );
+    if (check == null || !check) {
+      // 取消上传
+      return false;
+    }
+
+    // 注册用户
+    final username = SettingInitializer.auth.currentUsername!;
+    final password = SettingInitializer.auth.ssoPassword!;
+    await KiteInitializer.kiteSession.login(username, password);
+  }
+  return true;
 }

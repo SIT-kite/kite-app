@@ -20,26 +20,12 @@ import 'package:flutter/material.dart';
 import 'package:kite/feature/game/entity/game.dart';
 import 'package:kite/feature/game/service/ranking.dart';
 import 'package:kite/feature/kite/init.dart';
-import 'package:kite/setting/init.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/kite_authorization.dart';
 
 Future<void> _innerUploadGameRecord(BuildContext context, GameRecord record) async {
   // 如果用户未同意过, 请求用户确认
-  if (SettingInitializer.jwt.jwtToken == null) {
-    final bool? check = await showDialog<bool>(
-      context: context,
-      builder: (BuildContext context) => const AuthorizationDialog('使用学号区分不同用户的游戏记录'),
-    );
-    if (check == null || !check) {
-      // 取消上传
-      return;
-    }
-
-    final username = SettingInitializer.auth.currentUsername!;
-    final password = SettingInitializer.auth.ssoPassword!;
-    await KiteInitializer.kiteSession.login(username, password);
-  }
+  signUpIfNecessary(context, '使用学号或工号区分不同用户的游戏记录');
 
   // 上传记录
   await RankingService(KiteInitializer.kiteSession).postScore(record);
