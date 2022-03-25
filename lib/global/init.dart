@@ -17,7 +17,7 @@
  */
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kite/feature/initializer_index.dart';
-import 'package:kite/feature/kite/kite_session.dart';
+import 'package:kite/session/kite_session.dart';
 import 'package:kite/global/desktop_initializer.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/setting/init.dart';
@@ -68,7 +68,6 @@ class Initializer {
       gameBox: await Hive.openBox<dynamic>('game'),
     );
     await KiteInitializer.init(
-      dio: Global.dio,
       kiteSession: kiteSession,
       electricityBox: await Hive.openBox('electricity'),
     );

@@ -23,7 +23,7 @@ import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/setting/dao/jwt.dart';
 import 'package:kite/util/logger.dart';
 
-import 'entity/account.dart';
+import '../feature/kite/entity/account.dart';
 
 const String _baseUrl = 'https://kite.sunnysab.cn/api/v2';
 
