@@ -42,7 +42,7 @@ class LibraryAppointmentPage extends StatelessWidget {
         child: const Icon(Icons.add),
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-            return const AddAppointment();
+            return AddAppointment();
           }));
         },
       ),
