@@ -11,7 +11,7 @@ import 'package:flutter/widgets.dart';
 Future<int?> showAlertDialog(
   BuildContext context, {
   required String title,
-  required List<Widget> content,
+  List<Widget> content = const [],
   List<String>? actionTextList,
   List<Widget>? actionWidgetList,
 }) async {
