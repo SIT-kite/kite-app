@@ -12,6 +12,7 @@ class LibraryAppointmentPage extends StatelessWidget {
         title: const Text('图书馆预约'),
       ),
       body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: ListView(
           children: const [
             ListTile(
@@ -41,7 +42,7 @@ class LibraryAppointmentPage extends StatelessWidget {
         child: const Icon(Icons.add),
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-            return AddAppointment();
+            return const AddAppointment();
           }));
         },
       ),
