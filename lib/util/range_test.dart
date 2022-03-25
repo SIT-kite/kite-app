@@ -1,6 +1,6 @@
-import 'package:kite/util/range.dart';
+import 'package:flutter_test/flutter_test.dart';
 
-import '../service/mock_util.dart';
+import 'range.dart';
 
 void main() {
   test('range', () {

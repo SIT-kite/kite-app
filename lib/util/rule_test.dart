@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kite/util/rule.dart';
+
+import 'rule.dart';
 
 void main() {
   test('test const rule', () {
