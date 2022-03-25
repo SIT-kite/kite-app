@@ -38,7 +38,7 @@ class AppointmentService extends AService implements AppointmentDao {
     if (queryParameters == null) {
       throw Exception('查询字段只能period,username二选一');
     }
-    final response = await session.get(_application, queryParameters: queryParameters);
+    final response = await session.get('$_application/', queryParameters: queryParameters);
     List raw = response.data;
     return raw.map((e) => ApplicationRecord.fromJson(e)).toList();
   }
@@ -52,12 +52,13 @@ class AppointmentService extends AService implements AppointmentDao {
   @override
   Future<Notice> getNotice() async {
     final response = await session.get(_notice);
+    print(response);
     return Notice.fromJson(response.data);
   }
 
   @override
   Future<List<PeriodStatusRecord>> getPeriodStatus(DateTime dateTime) async {
-    final response = await session.get('$_status/${dateTime.yyyyMMdd}');
+    final response = await session.get('$_status/${dateTime.yyyyMMdd}/');
     List raw = response.data;
     return raw.map((e) => PeriodStatusRecord.fromJson(e)).toList();
   }
