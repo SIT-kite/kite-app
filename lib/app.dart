@@ -21,51 +21,14 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kite/route.dart';
 
 import 'feature/page_index.dart';
 import 'global/global.dart';
 import 'setting/init.dart';
-import 'setting/page/index.dart';
 import 'util/logger.dart';
 
 const title = '上应小风筝';
-
-final _routes = {
-  '/home': (context) => const HomePage(),
-  '/report': (context) => const DailyReportPage(),
-  '/login': (context) => const LoginPage(),
-  '/welcome': (context) => const WelcomePage(),
-  '/about': (context) => const AboutPage(),
-  '/expense': (context) => const ExpensePage(),
-  '/connectivity': (context) => const ConnectivityPage(),
-  '/campusCard': (context) => const CampusCardPage(),
-  '/electricity': (context) => const ElectricityPage(),
-  '/score': (context) => const ScorePage(),
-  '/office': (context) => const OfficePage(),
-  '/game': (context) => const GamePage(),
-  '/game/2048': (context) => Game2048Page(),
-  '/game/wordle': (context) => const WordlePage(),
-  '/game/composeSit': (context) => const ComposeSitPage(),
-  '/wiki': (context) => WikiPage(),
-  '/library': (context) => const LibraryPage(),
-  '/library/appointment': (context) => const LibraryAppointmentPage(),
-  '/market': (context) => const MarketPage(),
-  '/timetable': (context) => const TimetablePage(),
-  '/timetable/import': (context) => const TimetableImportPage(),
-  '/setting': (context) => SettingPage(),
-  '/feedback': (context) => const FeedbackPage(),
-  '/notice': (context) => const NoticePage(),
-  '/contact': (context) => const ContactPage(),
-  '/bulletin': (context) => const BulletinPage(),
-  '/mail': (context) => const MailPage(),
-  '/night': (context) => const NightPage(),
-  '/event': (context) => const EventPage(),
-  '/lost-found': (context) => const LostFoundPage(),
-  '/classroom': (context) => const ClassroomPage(),
-  '/exam': (context) => const ExamPage(),
-  '/egg': (context) => const EggPage(),
-  '/bbs': (context) => const BbsPage(),
-};
 
 class KiteApp extends StatelessWidget {
   const KiteApp({Key? key}) : super(key: key);
@@ -74,7 +37,7 @@ class KiteApp extends StatelessWidget {
     Log.info('跳转路由: ${settings.name}');
     Global.pageLogger.page(settings.name ?? 'Unknown');
     return MaterialPageRoute(
-      builder: (context) => _routes[settings.name]!(context),
+      builder: (context) => routeTable[settings.name]!(context),
       settings: settings,
     );
   }
