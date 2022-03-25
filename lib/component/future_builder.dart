@@ -47,17 +47,17 @@ class MyFutureBuilder<T> extends StatelessWidget {
             final error = snapshot.error;
             if (error is DioError && error.type == DioErrorType.connectTimeout) {
               Future.delayed(Duration.zero, () async {
-                await showAlertDialog(
+                final select = await showAlertDialog(
                   context,
                   title: '网络连接超时',
                   content: [
                     const Text('连接超时，该功能需要您连接校园网环境；\n\n注意：学校服务器崩溃或停机维护也会产生这个问题。'),
                   ],
-                  actionText: '进入网络工具检查',
-                  onAction: () {
-                    Navigator.of(context).popAndPushNamed('/connectivity');
-                  },
+                  actionTextList: ['进入网络工具检查', '取消'],
                 );
+                if (select == 0) {
+                  Navigator.of(context).popAndPushNamed('/connectivity');
+                }
               });
             }
             Catcher.reportCheckedError(error, snapshot.stackTrace);

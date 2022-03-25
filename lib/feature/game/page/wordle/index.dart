@@ -63,11 +63,10 @@ class _WordlePageState extends State<WordlePage> {
                           GameRecord(GameType.wordle, score, startTime, currentTime.difference(startTime).inSeconds);
                       GameInitializer.gameRecord.append(record);
 
-                      await showAlertDialog(
+                      final result = await showAlertDialog(
                         context,
                         title: '猜中了!',
-                        actionText: '再来一局?',
-                        onAction: () => setState(board.reset),
+                        actionTextList: ['再来一局?'],
                         content: [
                           Text(
                             board.targetWord.toUpperCase(),
@@ -81,25 +80,32 @@ class _WordlePageState extends State<WordlePage> {
                           Text('猜测 ${board.currentRow + 1}/${board.rows} 次'),
                         ],
                       );
+                      if (result == 0) {
+                        setState(board.reset);
+                      }
 
                       uploadGameRecord(context, record);
                     },
-                    onLose: () => showAlertDialog(
-                      context,
-                      title: '答案是',
-                      actionText: '继续?',
-                      onAction: () => setState(board.reset),
-                      content: [
-                        Text(
-                          board.targetWord.toUpperCase(),
-                          style: const TextStyle(
-                            fontSize: 32,
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
+                    onLose: () async {
+                      final result = await showAlertDialog(
+                        context,
+                        title: '答案是',
+                        actionTextList: ['继续?'],
+                        content: [
+                          Text(
+                            board.targetWord.toUpperCase(),
+                            style: const TextStyle(
+                              fontSize: 32,
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      );
+                      if (result == 0) {
+                        setState(board.reset);
+                      }
+                    },
                   ),
                 ),
                 const SizedBox(height: 20),
