@@ -15,6 +15,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+enum UserType {
+  /// 本、专科生（10位学号）
+  undergraduate,
+
+  /// 研究生（9位学号）
+  postgraduate,
+
+  /// 教师（4位工号）
+  teacher,
+}
+
 abstract class AuthSettingDao {
   /// 获取当前登录用户的用户名
   String? get currentUsername;
@@ -33,4 +45,7 @@ abstract class AuthSettingDao {
 
   /// 设置用户姓名
   set personName(String? foo);
+
+  /// 计算用户类型
+  UserType? get userType;
 }

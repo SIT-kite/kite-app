@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:hive/hive.dart';
+import 'package:kite/util/validation.dart';
 
 import '../dao/auth.dart';
 
@@ -24,6 +25,7 @@ class AuthKeys {
   static const currentUsername = '$namespace/currentUsername';
   static const ssoPassword = '$namespace/ssoPassword';
   static const personName = '$namespace/personName';
+  static const userType = '$namespace/userType';
 }
 
 class AuthSettingStorage implements AuthSettingDao {
@@ -48,4 +50,7 @@ class AuthSettingStorage implements AuthSettingDao {
 
   @override
   set personName(String? foo) => box.put(AuthKeys.personName, foo);
+
+  @override
+  UserType? get userType => personName != null ? guessUserType(personName!) : null;
 }
