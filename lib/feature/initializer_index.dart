@@ -21,7 +21,7 @@ export 'expense/init.dart';
 export 'game/init.dart';
 export 'home/init.dart';
 export 'kite/init.dart';
-export 'library/search/init.dart';
+export 'library/init.dart';
 export 'login/init.dart';
 export 'mail/init.dart';
 export 'office/init.dart';

@@ -7,7 +7,7 @@ import 'entity/search_history.dart';
 import 'service/index.dart';
 import 'storage/search_history.dart';
 
-class LibraryInitializer {
+class LibrarySearchInitializer {
   /// 图书信息访问
   static late BookInfoDao bookInfo;
 

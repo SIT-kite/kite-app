@@ -5,7 +5,7 @@ import 'package:logger/logger.dart';
 
 void main() {
   var logger = Logger();
-  var session = LibraryInitializer.session;
+  var session = LibrarySearchInitializer.session;
   test('search test', () async {
     var result = await BookSearchService(session).search(
       keyword: 'Java',

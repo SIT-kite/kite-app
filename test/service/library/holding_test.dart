@@ -5,7 +5,7 @@ import 'package:logger/logger.dart';
 
 void main() {
   var logger = Logger();
-  var session = LibraryInitializer.session;
+  var session = LibrarySearchInitializer.session;
   test('holding test', () async {
     var a = await HoldingInfoService(session).queryByBookId('54387');
     logger.i(a.holdingList);

@@ -18,8 +18,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:kite/feature/initializer_index.dart';
 import 'package:kite/feature/library/search/entity/hot_search.dart';
+import 'package:kite/feature/library/search/init.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/setting/init.dart';
 
@@ -59,7 +59,7 @@ class _LibraryItemState extends State<LibraryItem> {
     late HotSearch hotSearch;
 
     try {
-      hotSearch = await LibraryInitializer.hotSearchService.getHotSearch();
+      hotSearch = await LibrarySearchInitializer.hotSearchService.getHotSearch();
     } catch (e) {
       return e.runtimeType.toString();
     }

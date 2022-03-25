@@ -26,7 +26,7 @@ import '../mock_util.dart';
 void main() async {
   await init();
   await loginLibrary();
-  final session = LibraryInitializer.session;
+  final session = LibrarySearchInitializer.session;
   final service = LibraryBorrowService(session);
   test('get history borrow book list', () async {
     final result = await service.getHistoryBorrowBookList(1, 10);

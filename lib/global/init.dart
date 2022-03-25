@@ -17,9 +17,9 @@
  */
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kite/feature/initializer_index.dart';
-import 'package:kite/session/kite_session.dart';
 import 'package:kite/global/desktop_initializer.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/session/kite_session.dart';
 import 'package:kite/setting/init.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -78,6 +78,7 @@ class Initializer {
     await LibraryInitializer.init(
       dio: Global.dio,
       searchHistoryBox: await Hive.openBox('librarySearchHistory'),
+      kiteSession: kiteSession,
     );
     await MailInitializer.init();
     await OfficeInitializer.init(

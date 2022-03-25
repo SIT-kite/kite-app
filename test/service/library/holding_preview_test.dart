@@ -1,11 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kite/feature/initializer_index.dart';
+import 'package:kite/feature/library/search/init.dart';
 import 'package:kite/feature/library/search/service/holding_preview.dart';
 import 'package:kite/util/logger.dart';
 
 void main() {
   test('test holding previews', () async {
-    var a = await HoldingPreviewService(LibraryInitializer.session).getHoldingPreviews([
+    var a = await HoldingPreviewService(LibrarySearchInitializer.session).getHoldingPreviews([
       326130,
       170523,
       54387,

@@ -5,7 +5,7 @@ import 'package:logger/logger.dart';
 
 void main() {
   var logger = Logger();
-  var session = LibraryInitializer.session;
+  var session = LibrarySearchInitializer.session;
   test('search test', () async {
     var books = await BookSearchService(session).search(keyword: 'Java');
     var result = await BookImageSearchService(session).searchByIsbnList(books.books.map((e) => e.isbn).toList());

@@ -40,7 +40,7 @@ class _BookInfoPageState extends State<BookInfoPage> {
   Widget buildBookDetail() {
     final bookId = widget.bookImageHolding.book.bookId;
     return MyFutureBuilder<BookInfo>(
-      future: LibraryInitializer.bookInfo.query(bookId),
+      future: LibrarySearchInitializer.bookInfo.query(bookId),
       builder: (BuildContext context, BookInfo data) {
         return Table(
           columnWidths: const {
@@ -103,14 +103,14 @@ class _BookInfoPageState extends State<BookInfoPage> {
   /// 构造邻近的书
   Widget buildBookItem(String bookId) {
     Future<BookImageHolding> get() async {
-      final result = await LibraryInitializer.bookSearch.search(
+      final result = await LibrarySearchInitializer.bookSearch.search(
         keyword: bookId,
         rows: 1,
         searchWay: SearchWay.ctrlNo,
       );
       final ret = await BookImageHolding.simpleQuery(
-        LibraryInitializer.bookImageSearch,
-        LibraryInitializer.holdingPreview,
+        LibrarySearchInitializer.bookImageSearch,
+        LibrarySearchInitializer.holdingPreview,
         result.books,
       );
       return ret[0];
@@ -140,7 +140,7 @@ class _BookInfoPageState extends State<BookInfoPage> {
 
   Widget buildNearBooks(String bookId) {
     return MyFutureBuilder<List<String>>(
-      future: LibraryInitializer.holdingInfo.searchNearBookIdList(bookId),
+      future: LibrarySearchInitializer.holdingInfo.searchNearBookIdList(bookId),
       builder: (BuildContext context, List<String> data) {
         return Column(
           children: data.sublist(0, 5).map((bookId) {
