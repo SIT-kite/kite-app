@@ -37,7 +37,7 @@ class KiteApp extends StatelessWidget {
     Log.info('跳转路由: ${settings.name}');
     Global.pageLogger.page(settings.name ?? 'Unknown');
     return MaterialPageRoute(
-      builder: (context) => routeTable[settings.name]!(context),
+      builder: (context) => RouteTable.get(settings.name!)!(context),
       settings: settings,
     );
   }
