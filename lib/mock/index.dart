@@ -1,3 +1,4 @@
+import 'package:kite/feature/initializer_index.dart';
 import 'package:kite/feature/library/search/init.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/global/init.dart';
@@ -13,9 +14,10 @@ export 'config.dart';
 
 /// 测试前调用该函数做初始化
 Future<void> init() async {
+  GlobalConfig.isTestEnv = true;
   if (httpProxy.isNotEmpty) {
     /// 使用代理
-    Global.httpProxy = httpProxy;
+    GlobalConfig.httpProxy = httpProxy;
   }
   await Initializer.init();
 }
@@ -28,4 +30,9 @@ Future<void> login() async {
 /// 图书馆登陆
 Future<void> loginLibrary() async {
   await LibrarySearchInitializer.session.login(username, libraryPassword);
+}
+
+/// 登陆小风筝服务
+Future<void> loginKite() async {
+  await KiteInitializer.kiteSession.login(username, ssoPassword);
 }
