@@ -124,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
             controller: _usernameController,
             autofocus: true,
             validator: studentIdValidator,
-            decoration: const InputDecoration(labelText: '学号', hintText: '输入你的学号', icon: Icon(Icons.person)),
+            decoration: const InputDecoration(labelText: '账号', hintText: '学号/工号，支持研究生登录', icon: Icon(Icons.person)),
           ),
           TextFormField(
             controller: _passwordController,

@@ -52,5 +52,12 @@ class AuthSettingStorage implements AuthSettingDao {
   set personName(String? foo) => box.put(AuthKeys.personName, foo);
 
   @override
-  UserType? get userType => personName != null ? guessUserType(personName!) : null;
+  UserType? get userType {
+    final username = currentUsername;
+    if (username != null) {
+      // 已登录用户, 账号格式一定是合法的
+      return guessUserType(username)!;
+    }
+    return null;
+  }
 }

@@ -120,7 +120,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Widget> buildFunctionWidgets() {
-    List<FunctionType> list = SettingInitializer.home.homeItems ?? defaultFunctionList.toList();
+    List<FunctionType> list =
+        SettingInitializer.home.homeItems ?? getDefaultFunctionList(SettingInitializer.auth.userType!);
 
     // 先遍历一遍，过滤相邻重复元素
     FunctionType lastItem = list.first;

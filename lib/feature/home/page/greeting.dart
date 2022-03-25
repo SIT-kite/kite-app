@@ -20,6 +20,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/feature/kite/entity/weather.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/setting/dao/auth.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/util/url_launcher.dart';
 
@@ -106,12 +107,16 @@ class _GreetingWidgetState extends State<GreetingWidget> {
         Flexible(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('今天是你在上应大的', style: textStyleSmall),
-              Text('第 $studyDays 天', style: textStyleLarge),
-              Text('${_getCampusName()} ${currentWeather.weather} ${currentWeather.temperature} °C',
-                  style: textStyleWeather)
-            ],
+            children: ((SettingInitializer.auth.userType != UserType.teacher)
+                    ? <Widget>[
+                        Text('今天是你在上应大的', style: textStyleSmall),
+                        Text('第 $studyDays 天', style: textStyleLarge),
+                      ]
+                    : <Widget>[Text('欢迎使用上应小风筝', style: textStyleSmall)]) +
+                <Widget>[
+                  Text('${_getCampusName()} ${currentWeather.weather} ${currentWeather.temperature} °C',
+                      style: textStyleWeather)
+                ],
           ),
         ),
         SizedBox(child: _buildWeatherIcon(currentWeather.icon)),

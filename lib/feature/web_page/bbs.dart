@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kite/component/webview_page.dart';
+import 'package:kite/setting/dao/index.dart';
 import 'package:kite/setting/init.dart';
 
 const _bbsUrl = 'https://support.qq.com/products/386124';
@@ -9,7 +10,8 @@ class BbsPage extends StatelessWidget {
 
   String _getNickname() {
     final srcName = SettingInitializer.auth.personName!;
-    return srcName[0] + '同学';
+    final userType = SettingInitializer.auth.userType!;
+    return srcName[0] + (userType != UserType.teacher ? '同学' : '老师');
   }
 
   @override

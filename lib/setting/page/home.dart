@@ -70,7 +70,8 @@ class HomeSettingPage extends StatefulWidget {
 }
 
 class _HomeSettingPageState extends State<HomeSettingPage> {
-  List<FunctionType> homeItems = SettingInitializer.home.homeItems ?? defaultFunctionList.toList();
+  List<FunctionType> homeItems =
+      SettingInitializer.home.homeItems ?? getDefaultFunctionList(SettingInitializer.auth.userType!);
 
   void _onReorder(int oldIndex, int newIndex) {
     setState(() {
@@ -115,7 +116,7 @@ class _HomeSettingPageState extends State<HomeSettingPage> {
           actions: [
             IconButton(
                 onPressed: () {
-                  setState(() => homeItems = defaultFunctionList);
+                  setState(() => homeItems = getDefaultFunctionList(SettingInitializer.auth.userType!));
                   _onSave();
                 },
                 icon: const Icon(Icons.restore_page_outlined))
