@@ -22,6 +22,8 @@ enum EventNameConstants {
 
 /// 应用程序全局数据对象
 class Global {
+  static String? httpProxy;
+
   static final eventBus = EventBus<EventNameConstants>();
   static late PageLogger pageLogger;
 
@@ -36,11 +38,17 @@ class Global {
     required AuthSettingDao authSetting,
   }) async {
     cookieJar = await CookieInitializer.init();
-    dio = await DioInitializer.init(config: DioConfig()..cookieJar = cookieJar);
+    dio = await DioInitializer.init(
+      config: DioConfig()
+        ..cookieJar = cookieJar
+        ..httpProxy = httpProxy,
+    );
     dio2 = await DioInitializer.init(
-        config: DioConfig()
-          ..cookieJar = cookieJar
-          ..connectTimeout = 30 * 1000);
+      config: DioConfig()
+        ..cookieJar = cookieJar
+        ..connectTimeout = 30 * 1000
+        ..httpProxy = httpProxy,
+    );
     ssoSession = SsoSession(dio: dio, cookieJar: cookieJar);
     ssoSession2 = SsoSession(dio: dio2, cookieJar: cookieJar);
     pageLogger = PageLogger(dio: dio, userEventStorage: userEventStorage);
