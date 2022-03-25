@@ -17,6 +17,7 @@ export 'kite/page/lost_found/index.dart';
 export 'kite/page/market.dart';
 export 'kite/page/night/index.dart';
 export 'kite/page/notice.dart';
+export 'library/page/appointment/index.dart';
 export 'library/page/index.dart';
 export 'login/page/login.dart';
 export 'mail/page/index.dart';

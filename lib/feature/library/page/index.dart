@@ -38,6 +38,10 @@ class LibraryPage extends StatelessWidget {
       title: const Text('图书馆'),
       actions: [
         IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.date_range),
+        ),
+        IconButton(
           onPressed: () {
             showSearch(context: context, delegate: SearchBarDelegate());
           },
