@@ -9,6 +9,11 @@ import 'package:kite/util/page_logger.dart';
 
 import '../feature/user_event/dao.dart';
 
+class GlobalConfig {
+  static String? httpProxy;
+  static bool isTestEnv = false;
+}
+
 enum EventNameConstants {
   onWeatherUpdate,
   onHomeRefresh,
@@ -22,8 +27,6 @@ enum EventNameConstants {
 
 /// 应用程序全局数据对象
 class Global {
-  static String? httpProxy;
-
   static final eventBus = EventBus<EventNameConstants>();
   static late PageLogger pageLogger;
 
@@ -41,13 +44,13 @@ class Global {
     dio = await DioInitializer.init(
       config: DioConfig()
         ..cookieJar = cookieJar
-        ..httpProxy = httpProxy,
+        ..httpProxy = GlobalConfig.httpProxy,
     );
     dio2 = await DioInitializer.init(
       config: DioConfig()
         ..cookieJar = cookieJar
         ..connectTimeout = 30 * 1000
-        ..httpProxy = httpProxy,
+        ..httpProxy = GlobalConfig.httpProxy,
     );
     ssoSession = SsoSession(dio: dio, cookieJar: cookieJar);
     ssoSession2 = SsoSession(dio: dio2, cookieJar: cookieJar);
