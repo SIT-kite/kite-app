@@ -7,7 +7,7 @@ import 'game/entity/game.dart';
 import 'home/entity/home.dart';
 import 'kite/entity/electricity.dart';
 import 'kite/entity/weather.dart';
-import 'library/entity/search_history.dart';
+import 'library/search/entity/search_history.dart';
 import 'report/entity/report.dart';
 import 'user_event/entity.dart';
 
@@ -21,7 +21,7 @@ export 'expense/init.dart';
 export 'game/init.dart';
 export 'home/init.dart';
 export 'kite/init.dart';
-export 'library/init.dart';
+export 'library/search/init.dart';
 export 'login/init.dart';
 export 'mail/init.dart';
 export 'office/init.dart';

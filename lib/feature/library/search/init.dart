@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:hive/hive.dart';
+import 'package:kite/session/library_session.dart';
 
 import 'dao/index.dart';
 import 'entity/search_history.dart';

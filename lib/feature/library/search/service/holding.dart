@@ -22,7 +22,7 @@ import 'package:kite/abstract/abstract_session.dart';
 
 import '../dao/holding.dart';
 import '../entity/holding.dart';
-import '../service/constant.dart';
+import 'constant.dart';
 
 part 'holding.g.dart';
 

@@ -18,6 +18,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:kite/route.dart';
 import 'package:kite/util/flash.dart';
 
 import 'constant.dart';
@@ -39,7 +40,7 @@ class LibraryPage extends StatelessWidget {
       actions: [
         IconButton(
           onPressed: () {
-            Navigator.of(context).pushNamed("/library/appointment");
+            Navigator.of(context).pushNamed(RouteTable.libraryAppointment);
           },
           icon: const Icon(Icons.date_range),
         ),

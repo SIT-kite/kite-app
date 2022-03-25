@@ -23,7 +23,7 @@ import 'package:kite/abstract/abstract_session.dart';
 
 import '../dao/book_info.dart';
 import '../entity/book_info.dart';
-import '../service/constant.dart';
+import 'constant.dart';
 
 class BookInfoService extends AService implements BookInfoDao {
   BookInfoService(ASession session) : super(session);

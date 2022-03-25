@@ -1,4 +1,4 @@
-import 'package:kite/feature/library/init.dart';
+import 'package:kite/feature/library/search/init.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/global/init.dart';
 

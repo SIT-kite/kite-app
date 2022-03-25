@@ -21,7 +21,7 @@ import 'package:kite/abstract/abstract_session.dart';
 
 import '../dao/book_search.dart';
 import '../entity/book_search.dart';
-import '../service/constant.dart';
+import 'constant.dart';
 
 class BookSearchService extends AService implements BookSearchDao {
   BookSearchService(ASession session) : super(session);
