@@ -15,9 +15,9 @@ class SettingInitializer {
   static late HomeSettingDao home;
   static late LoginTimeDao loginTime;
 
-  static Future<void> init() async {
-    final settingBox = await Hive.openBox('setting');
-
+  static Future<void> init({
+    required Box<dynamic> settingBox,
+  }) async {
     auth = AuthSettingStorage(settingBox);
     home = HomeSettingStorage(settingBox);
     theme = ThemeSettingStorage(settingBox);

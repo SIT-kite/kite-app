@@ -27,11 +27,14 @@ Future<int?> showAlertDialog(
           children: () {
             if (actionTextList != null) {
               return actionTextList.asMap().entries.map((e) {
-                return ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context, e.key);
-                  },
-                  child: Text(e.value),
+                return Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 5),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context, e.key);
+                    },
+                    child: Text(e.value),
+                  ),
                 );
               }).toList();
             } else {
