@@ -47,6 +47,21 @@ class EventBus<E> {
     _eventMap[eventName]!.add((arg) => callback(arg));
   }
 
+  /// 判定订阅者是否存在
+  bool contain<T>(E eventName, [EventCallback<T>? f]) {
+    // 获取队列，若该事件不存在，那直接退出函数
+    final list = _eventMap[eventName];
+    if (list == null) {
+      return false;
+    }
+    // 若回调为空，则删除队列所有值
+    if (f == null) {
+      return false;
+    } else {
+      return list.contains(f);
+    }
+  }
+
   /// 移除订阅者
   void off<T>(E eventName, [EventCallback<T>? f]) {
     // 获取队列，若该事件不存在，那直接退出函数

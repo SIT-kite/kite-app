@@ -19,11 +19,12 @@ import 'package:dynamic_color_theme/dynamic_color_theme.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/global/hive_initializer.dart';
 import 'package:kite/global/init.dart';
+import 'package:kite/route.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/setting/storage/index.dart';
 import 'package:kite/util/flash.dart';
@@ -69,6 +70,15 @@ class SettingPage extends StatelessWidget {
     }
   }
 
+  void _gotoWelcome(BuildContext context) {
+    while (Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+    }
+    Navigator.of(context).pushReplacementNamed(RouteTable.welcome);
+
+    Log.info('重启成功');
+  }
+
   void _onLogout(BuildContext context) {
     context.showFlashDialog(
         constraints: const BoxConstraints(maxWidth: 300),
@@ -78,17 +88,15 @@ class SettingPage extends StatelessWidget {
         positiveActionBuilder: (context, controller, _) {
           return TextButton(
               onPressed: () async {
-                // dismiss 函数会异步地执行动画, 但动画在应用重启时会被打断从而产生报错. 因此此处不需要 dismiss.
-                // controller.dismiss();
                 Log.info('退出登录');
                 SettingInitializer.auth
                   ..currentUsername = null
                   ..ssoPassword = null;
 
                 await Initializer.init();
-                // 重启应用
-                Phoenix.rebirth(context);
-                Log.info('重启成功');
+
+                controller.dismiss();
+                _gotoWelcome(context);
               },
               child: const Text('继续'));
         });
@@ -103,8 +111,10 @@ class SettingPage extends StatelessWidget {
         positiveActionBuilder: (context, controller, _) {
           return TextButton(
               onPressed: () async {
-                await Initializer.clear(); // 清除存储
-                Phoenix.rebirth(context); // 重启应用
+                await HiveBoxInitializer.clear(); // 清除存储
+                await Initializer.init();
+                await controller.dismiss();
+                _gotoWelcome(context);
               },
               child: const Text('继续'));
         });
