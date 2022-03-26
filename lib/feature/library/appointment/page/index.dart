@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kite/feature/game/page/wordle/widgets/alert_dialog.dart';
 
 import 'add.dart';
 
@@ -14,10 +15,25 @@ class LibraryAppointmentPage extends StatelessWidget {
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: ListView(
-          children: const [
+          children: [
             ListTile(
               title: Text("2022年3月15日下午场"),
               subtitle: Text("未入馆"),
+              onTap: () async {
+                final result = await showAlertDialog(
+                  context,
+                  title: 'Title',
+                  content: [],
+                  // actionTextList: ['text'],
+                  actionWidgetList: [
+                    TextButton(
+                      onPressed: () {},
+                      child: Text('as'),
+                    ),
+                  ],
+                );
+                print(result);
+              },
             ),
             ListTile(
               title: Text("2022年3月15日上午场"),

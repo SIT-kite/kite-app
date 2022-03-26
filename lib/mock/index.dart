@@ -10,6 +10,8 @@ export 'package:flutter_test/flutter_test.dart';
 export 'package:kite/global/dio_initializer.dart';
 export 'package:kite/util/logger.dart';
 
+export 'config.dart';
+
 /// 测试前调用该函数做初始化
 Future<void> init() async {
   GlobalConfig.isTestEnv = true;

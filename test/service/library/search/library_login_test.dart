@@ -20,8 +20,7 @@
 
 import 'package:kite/feature/library/search/init.dart';
 import 'package:kite/feature/library/search/service/borrow.dart';
-
-import '../mock_util.dart';
+import 'package:kite/mock/index.dart';
 
 void main() async {
   await init();
