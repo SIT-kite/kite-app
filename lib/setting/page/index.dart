@@ -203,11 +203,10 @@ class SettingPage extends StatelessWidget {
               settingKey: '/network/proxy',
               initialValue: SettingInitializer.network.proxy,
               validator: proxyValidator,
-              onChange: (value) {
+              onChange: (value) async {
                 SettingInitializer.network.proxy = value;
                 if (SettingInitializer.network.useProxy) {
-                  // TODO
-                  // SessionPool.init();
+                  await Initializer.init();
                 }
               },
             ),
