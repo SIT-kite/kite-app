@@ -17,9 +17,7 @@
  */
 
 import 'package:catcher/catcher.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/util/alert_dialog.dart';
 
 typedef MyWidgetBuilder<T> = Widget Function(BuildContext context, T data);
 
@@ -45,21 +43,6 @@ class MyFutureBuilder<T> extends StatelessWidget {
             return builder == null ? Text(data.toString()) : builder!(context, snapshot.data!);
           } else if (snapshot.hasError) {
             final error = snapshot.error;
-            if (error is DioError && error.type == DioErrorType.connectTimeout) {
-              Future.delayed(Duration.zero, () async {
-                final select = await showAlertDialog(
-                  context,
-                  title: '网络连接超时',
-                  content: [
-                    const Text('连接超时，该功能需要您连接校园网环境；\n\n注意：学校服务器崩溃或停机维护也会产生这个问题。'),
-                  ],
-                  actionTextList: ['进入网络工具检查', '取消'],
-                );
-                if (select == 0) {
-                  Navigator.of(context).popAndPushNamed('/connectivity');
-                }
-              });
-            }
             Catcher.reportCheckedError(error, snapshot.stackTrace);
             if (onErrorBuilder != null) {
               return onErrorBuilder!(context, error);

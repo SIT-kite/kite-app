@@ -30,6 +30,8 @@ import 'package:kite/util/logger.dart';
 import '../../util/dio_utils.dart';
 import 'encryption.dart';
 
+typedef SsoSessionErrorCallback = void Function(Object e, StackTrace t);
+
 class SsoSession extends ASession with Downloader {
   static const int _maxRetryCount = 5;
   static const String _authServerUrl = 'https://authserver.sit.edu.cn/authserver';
@@ -49,9 +51,13 @@ class SsoSession extends ASession with Downloader {
   String? _username;
   String? _password;
 
+  /// Session错误拦截器
+  SsoSessionErrorCallback? onError;
+
   SsoSession({
     required this.dio,
     required this.cookieJar,
+    this.onError,
   });
 
   /// 判断该请求是否为登录页
@@ -72,6 +78,33 @@ class SsoSession extends ASession with Downloader {
 
   @override
   Future<Response> request(
+    String url,
+    String method, {
+    Map<String, String>? queryParameters,
+    dynamic data,
+    String? contentType,
+    ResponseType? responseType,
+    Options? options,
+  }) async {
+    try {
+      return await _request(
+        url,
+        method,
+        queryParameters: queryParameters,
+        data: data,
+        contentType: contentType,
+        responseType: responseType,
+        options: options,
+      );
+    } catch (e, t) {
+      if (onError != null) {
+        onError!(e, t);
+      }
+      rethrow;
+    }
+  }
+
+  Future<Response> _request(
     String url,
     String method, {
     Map<String, String>? queryParameters,
@@ -155,7 +188,6 @@ class SsoSession extends ASession with Downloader {
 
   Future<Response> login(String username, String password) async {
     int count = 0;
-    Exception lastException;
 
     while (count < _maxRetryCount) {
       try {

@@ -1,9 +1,12 @@
+import 'package:catcher/catcher.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:kite/global/cookie_initializer.dart';
 import 'package:kite/global/dio_initializer.dart';
 import 'package:kite/session/sso/index.dart';
 import 'package:kite/setting/dao/auth.dart';
+import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/event_bus.dart';
 import 'package:kite/util/page_logger.dart';
 
@@ -36,6 +39,27 @@ class Global {
   static late SsoSession ssoSession;
   static late SsoSession ssoSession2;
 
+  static onSsoError(error, stacktrace) {
+    if (Catcher.navigatorKey == null) return;
+    if (Catcher.navigatorKey!.currentContext == null) return;
+    final context = Catcher.navigatorKey!.currentContext!;
+    if (error is DioError && error.type == DioErrorType.connectTimeout) {
+      Future.delayed(Duration.zero, () async {
+        final select = await showAlertDialog(
+          context,
+          title: '网络连接超时',
+          content: [
+            const Text('连接超时，该功能需要您连接校园网环境；\n\n注意：学校服务器崩溃或停机维护也会产生这个问题。'),
+          ],
+          actionTextList: ['进入网络工具检查', '取消'],
+        );
+        if (select == 0) {
+          Navigator.of(context).popAndPushNamed('/connectivity');
+        }
+      });
+    }
+  }
+
   static Future<void> init({
     required UserEventStorageDao userEventStorage,
     required AuthSettingDao authSetting,
@@ -52,8 +76,8 @@ class Global {
         ..connectTimeout = 30 * 1000
         ..httpProxy = GlobalConfig.httpProxy,
     );
-    ssoSession = SsoSession(dio: dio, cookieJar: cookieJar);
-    ssoSession2 = SsoSession(dio: dio2, cookieJar: cookieJar);
+    ssoSession = SsoSession(dio: dio, cookieJar: cookieJar, onError: onSsoError);
+    ssoSession2 = SsoSession(dio: dio2, cookieJar: cookieJar, onError: onSsoError);
     pageLogger = PageLogger(dio: dio, userEventStorage: userEventStorage);
     pageLogger.startup();
 
