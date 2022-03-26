@@ -21,8 +21,8 @@ import 'package:flutter/material.dart';
 import 'package:kite/route.dart';
 import 'package:kite/util/flash.dart';
 
-import 'constant.dart';
-import 'search_delegate.dart';
+import 'search/page/constant.dart';
+import 'search/page/search_delegate.dart';
 
 class LibraryPage extends StatelessWidget {
   const LibraryPage({Key? key}) : super(key: key);
