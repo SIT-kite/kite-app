@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/feature/library/appointment/init.dart';
 import 'package:kite/feature/library/appointment/page/qrcode.dart';
 import 'package:kite/setting/init.dart';
+import 'package:kite/util/alert_dialog.dart';
 
 import '../entity.dart';
 
-class HistoryPage extends StatelessWidget {
+class HistoryPage extends StatefulWidget {
+  const HistoryPage({Key? key}) : super(key: key);
+
+  @override
+  State<HistoryPage> createState() => _HistoryPageState();
+}
+
+class _HistoryPageState extends State<HistoryPage> {
   final service = LibraryAppointmentInitializer.appointmentService;
-  late BuildContext context;
-  HistoryPage({Key? key}) : super(key: key);
 
   String periodToString(int period) {
     final a = {1: '上午', 2: '下午', 3: '晚上'}[period % 10] ?? '未知时间段';
@@ -18,6 +25,93 @@ class HistoryPage extends StatelessWidget {
 
   void loadQrPage(int applyId) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => QrcodePage(applyId: applyId)));
+  }
+
+  Widget buildHistoryItemTrailing(ApplicationRecord item, int currentPeriod) {
+    int applyId = item.id;
+    int status = item.status;
+    int period = item.period;
+
+    if (status == 1) {
+      return const Text(
+        '成功打卡',
+        style: TextStyle(color: Colors.green),
+      );
+    }
+    // 已过期的
+    if (period < currentPeriod && status == 0) {
+      return const Text(
+        '预约成功但未去',
+        style: TextStyle(color: Colors.red),
+      );
+    } else if (period == currentPeriod) {
+      return ElevatedButton(
+        onPressed: () {
+          loadQrPage(applyId);
+        },
+        child: const Text('出示二维码'),
+      );
+    } else {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          const Text('未到规定打卡时段'),
+          const SizedBox(height: 2),
+          TextButton(
+            onPressed: () async {
+              final select = await showAlertDialog(
+                context,
+                title: '取消预约',
+                content: [
+                  const Text('是否想要取消本次预约'),
+                ],
+                actionWidgetList: [
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: const Text('确认取消'),
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text('手滑了'),
+                  ),
+                ],
+              );
+              if (select == 0) {
+                try {
+                  await service.cancelApplication(applyId);
+                  await showAlertDialog(
+                    context,
+                    title: '取消成功',
+                    actionWidgetList: [
+                      TextButton(
+                        onPressed: () {},
+                        child: const Text('知道了'),
+                      ),
+                    ],
+                  );
+                  setState(() {});
+                } catch (e) {
+                  await showAlertDialog(
+                    context,
+                    title: '出错了',
+                    content: [
+                      Text(e.toString()),
+                    ],
+                    actionWidgetList: [
+                      TextButton(
+                        onPressed: () {},
+                        child: const Text('知道了'),
+                      ),
+                    ],
+                  );
+                }
+              }
+            },
+            child: const Text('取消预约'),
+          ),
+        ],
+      );
+    }
   }
 
   Widget buildListView(List<ApplicationRecord> records) {
@@ -30,36 +124,7 @@ class HistoryPage extends StatelessWidget {
             ListTile(
               title: Text(periodToString(e.period)),
               subtitle: Text('${e.text}    座位号: ${e.index}'),
-              trailing: (() {
-                if (e.status == 1) {
-                  return Text(
-                    '成功打卡',
-                    style: TextStyle(color: Colors.green),
-                  );
-                }
-                // 已过期的
-                if (e.period < currentPeriod && e.status == 0) {
-                  return Text(
-                    '预约成功但未去',
-                    style: TextStyle(color: Colors.red),
-                  );
-                } else if (e.period == currentPeriod) {
-                  return Column(
-                    children: [
-                      Text('当前场次'),
-                      SizedBox(height: 2),
-                      ElevatedButton(
-                        onPressed: () {
-                          loadQrPage(e.id);
-                        },
-                        child: Text('出示二维码'),
-                      ),
-                    ],
-                  );
-                } else {
-                  return Text('未到规定打卡时段');
-                }
-              })(),
+              trailing: buildHistoryItemTrailing(e, currentPeriod),
             ),
             const Divider(),
           ],
@@ -82,7 +147,6 @@ class HistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    this.context = context;
     return Scaffold(
       appBar: AppBar(
         title: const Text('预约历史'),
