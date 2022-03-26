@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'qrcode.dart';
+
 class HistoryPage extends StatelessWidget {
   const HistoryPage({Key? key}) : super(key: key);
 
@@ -12,10 +14,13 @@ class HistoryPage extends StatelessWidget {
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: ListView(
-          children: const [
+          children: [
             ListTile(
               title: Text("2022年3月15日下午场"),
               subtitle: Text("未入馆"),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const QrcodePage()));
+              },
             ),
             ListTile(
               title: Text("2022年3月15日上午场"),
