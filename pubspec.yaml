@@ -123,6 +123,7 @@ flutter:
       fonts: [{ asset: assets/fonts/calligraphy.ttf }]
 
   assets:
+    - assets/
     - assets/common/
     - assets/home/
     - assets/welcome/
