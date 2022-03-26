@@ -1,6 +1,7 @@
 import 'package:kite/feature/initializer_index.dart';
-import 'package:kite/mock/index.dart';
 import 'package:kite/setting/init.dart';
+
+import '../mock_util.dart';
 
 void main() async {
   await init();

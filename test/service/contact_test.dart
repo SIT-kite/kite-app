@@ -16,16 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/feature/kite/service/classroom.dart';
-import 'package:kite/global/global.dart';
-import 'package:kite/mock/index.dart';
+import 'package:kite/feature/contact/service/contact.dart';
+import 'package:kite/feature/initializer_index.dart';
+
+import 'mock_util.dart';
 
 void main() async {
   await init();
   await login();
-  var session = Global.ssoSession;
-  test('class_room test', () async {
-    final classroom = await ClassroomService(session).queryAvailableClassroom(1, '2021-12-7');
-    Log.info(classroom);
+  var session = KiteInitializer.kiteSession;
+  test('expense test', () async {
+    final contact = await ContactRemoteService(session).getAllContacts();
+    Log.info(contact);
   });
 }

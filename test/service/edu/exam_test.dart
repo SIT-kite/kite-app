@@ -1,6 +1,7 @@
 import 'package:kite/feature/edu/common/entity/index.dart';
 import 'package:kite/feature/edu/exam/init.dart';
-import 'package:kite/mock/index.dart';
+
+import '../mock_util.dart';
 
 void main() async {
   await init();
