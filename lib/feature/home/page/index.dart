@@ -202,15 +202,14 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     Log.info('开始加载首页');
-    Future.delayed(Duration.zero, () {
+    Future.delayed(Duration.zero, () async {
       showBasicFlash(
         context,
         const Text('正在检查网络连接'),
         duration: const Duration(seconds: 3),
       );
-    });
-    // 检查校园网情况
-    HomeInitializer.ssoSession.checkConnectivity().then((ok) {
+      await Future.delayed(const Duration(seconds: 3));
+      final ok = await HomeInitializer.ssoSession.checkConnectivity();
       if (!ok) {
         _showCheckNetwork(
           context,
