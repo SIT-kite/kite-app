@@ -55,6 +55,11 @@ class KiteSession extends ASession {
         headers: token == null ? null : {'Authorization': 'Bearer ' + token},
       ),
     );
+    // 非 json 数据
+    if (!(response.headers.value(Headers.contentTypeHeader) ?? '').contains('json')) {
+      // 直接返回
+      return response;
+    }
     try {
       final Map<String, dynamic> responseData = response.data;
       final responseDataCode = responseData['code'];
