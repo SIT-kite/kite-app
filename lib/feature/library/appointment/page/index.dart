@@ -72,7 +72,7 @@ class AppointmentPage extends StatelessWidget {
   Widget buildSelectList(BuildContext context, List<PeriodStatusRecord> records) {
     return ListView(
       children: records.map((e) {
-        final a = {1: '上午', 2: '下午'}[e.period % 10]!;
+        final a = {1: '上午', 2: '下午', 3: '晚上'}[e.period % 10]!;
         return Column(children: [
           ListTile(
             isThreeLine: true,
