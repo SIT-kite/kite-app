@@ -71,3 +71,19 @@ class ApplyResponse {
     return 'ApplyResponse{id: $id, text: $text, index: $index}';
   }
 }
+
+@JsonSerializable(createToJson: false)
+class CurrentPeriodResponse {
+  DateTime after;
+  DateTime before;
+  int period;
+
+  CurrentPeriodResponse(this.after, this.before, this.period);
+
+  factory CurrentPeriodResponse.fromJson(Map<String, dynamic> json) => _$CurrentPeriodResponseFromJson(json);
+
+  @override
+  String toString() {
+    return 'CurrentPeriodResponse{after: $after, before: $before, period: $period}';
+  }
+}
