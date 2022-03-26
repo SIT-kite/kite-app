@@ -84,18 +84,11 @@ class AppointmentPage extends StatelessWidget {
                   '已预约(${e.applied}) / 预计总人数(${e.count})',
                   style: const TextStyle(color: Colors.grey),
                 ),
-                SizedBox(
-                  height: 30,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      LinearProgressIndicator(
-                        value: e.applied / e.count,
-                        backgroundColor: Colors.grey,
-                        minHeight: 5,
-                      ),
-                    ],
-                  ),
+                const SizedBox(height: 10),
+                LinearProgressIndicator(
+                  value: e.applied / e.count,
+                  backgroundColor: Colors.grey,
+                  minHeight: 5,
                 ),
               ],
             ),
@@ -114,7 +107,7 @@ class AppointmentPage extends StatelessWidget {
                     '已预约人数: ${e.applied}\n'
                     '预计开放座位: ${e.count}\n'
                     '开放时间段: ${e.text}\n'
-                    '注意: 如预约成功但未在预约时段内打卡,\n'
+                    '注意: 预约成功请在预约时段内打卡,\n'
                     '否则后果自负',
                   ),
                 ],
