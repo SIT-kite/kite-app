@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/component/multibutton_switch.dart';
 import 'package:kite/feature/library/appointment/init.dart';
-import 'package:kite/setting/init.dart';
 import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/kite_authorization.dart';
 
@@ -106,6 +105,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
     );
     // 确定预约
     if (applyDialogResult == 0) {
+      if (!await signUpIfNecessary(context, '预约图书馆')) return;
       await service.apply(e.period);
       await showAlertDialog(
         context,
@@ -116,11 +116,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
     }
   }
 
-  Widget buildSelectList(
-    List<PeriodStatusRecord> periodStatusList,
-    CurrentPeriodResponse? currentPeriod,
-    List<ApplicationRecord> userTodayHistory,
-  ) {
+  Widget buildSelectList(List<PeriodStatusRecord> periodStatusList) {
     return ListView(
       children: periodStatusList.map((e) {
         final a = {1: '上午', 2: '下午', 3: '晚上'}[e.period % 10]!;
@@ -167,24 +163,10 @@ class _AppointmentPageState extends State<AppointmentPage> {
   }
 
   Widget buildAppointmentListByDate(DateTime date) {
-    return MyFutureBuilder(
-      future: Future.wait([
-        // 获取可预约时段
-        service.getPeriodStatus(date),
-        // 获取当前时段
-        // service.getCurrentPeriod(),
-        (() async => null)(),
-        // 获取用户选定日期的记录
-        service.getApplication(
-          username: SettingInitializer.auth.currentUsername,
-          date: date,
-        ),
-      ]),
-      builder: (context, List<dynamic> tuple) {
-        List<PeriodStatusRecord> periodStatusList = tuple[0];
-        CurrentPeriodResponse? currentPeriod = tuple[1];
-        List<ApplicationRecord> userTodayHistory = tuple[2];
-        return buildSelectList(periodStatusList, currentPeriod, userTodayHistory);
+    return MyFutureBuilder<List<PeriodStatusRecord>>(
+      future: service.getPeriodStatus(date),
+      builder: (context, List<PeriodStatusRecord> periodStatusList) {
+        return buildSelectList(periodStatusList);
       },
     );
   }
@@ -198,9 +180,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
           IconButton(
             icon: const Icon(Icons.history),
             onPressed: () async {
-              if (await signUpIfNecessary(context, '查询预约记录')) {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HistoryPage()));
-              }
+              if (!await signUpIfNecessary(context, '查询预约记录')) return;
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HistoryPage()));
             },
           ),
         ],
