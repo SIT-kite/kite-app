@@ -1,11 +1,4 @@
-/*
- * 代码来源：
- * https://github.com/nimone/wordle
- * 版权归原作者所有.
- */
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 /// 显示对话框,对话框关闭后Future结束
 Future<int?> showAlertDialog(

@@ -19,7 +19,7 @@
 import 'package:catcher/catcher.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/feature/game/page/wordle/widgets/alert_dialog.dart';
+import 'package:kite/util/alert_dialog.dart';
 
 typedef MyWidgetBuilder<T> = Widget Function(BuildContext context, T data);
 
