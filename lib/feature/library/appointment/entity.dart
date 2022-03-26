@@ -59,14 +59,15 @@ class ApplicationRecord {
 
 @JsonSerializable(createToJson: false)
 class ApplyResponse {
+  int id;
   String text;
   int index;
 
-  ApplyResponse(this.text, this.index);
+  ApplyResponse(this.id, this.text, this.index);
   factory ApplyResponse.fromJson(Map<String, dynamic> json) => _$ApplyResponseFromJson(json);
 
   @override
   String toString() {
-    return 'ApplyResponse{text: $text, index: $index}';
+    return 'ApplyResponse{id: $id, text: $text, index: $index}';
   }
 }
