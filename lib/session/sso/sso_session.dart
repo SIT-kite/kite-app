@@ -21,7 +21,6 @@ import 'dart:typed_data';
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/exception/session.dart';
 import 'package:kite/feature/kite/service/ocr.dart';
@@ -63,10 +62,10 @@ class SsoSession extends ASession with Downloader {
     this.onError,
   });
 
-  void runWithNoErrorCallback(VoidCallback callback) {
+  Future<void> runWithNoErrorCallback(Future<void> Function() callback) async {
     enableSsoErrorCallback = false;
     try {
-      callback();
+      await callback();
     } finally {
       enableSsoErrorCallback = true;
     }
