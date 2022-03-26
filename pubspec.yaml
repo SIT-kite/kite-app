@@ -87,6 +87,7 @@ dependencies:
   flutter_native_splash: ^2.1.1           # Splash screen
   flutter_platform_widgets: ^1.12.1       # Platform aware widgets
   flutter_weather_bg_null_safety: ^1.0.0  # Weather background
+  qr_flutter: ^4.0.0  # Qr code generate
 
   # Utils
   nfc_manager: ^3.1.0           # NFC
