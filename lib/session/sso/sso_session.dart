@@ -65,8 +65,11 @@ class SsoSession extends ASession with Downloader {
 
   void runWithNoErrorCallback(VoidCallback callback) {
     enableSsoErrorCallback = false;
-    callback();
-    enableSsoErrorCallback = true;
+    try {
+      callback();
+    } finally {
+      enableSsoErrorCallback = true;
+    }
   }
 
   /// 判断该请求是否为登录页
