@@ -57,7 +57,7 @@ class RouteTable {
     gameComposeSit: (context) => const ComposeSitPage(),
     wiki: (context) => WikiPage(),
     library: (context) => const LibraryPage(),
-    libraryAppointment: (context) => const LibraryAppointmentPage(),
+    libraryAppointment: (context) => AppointmentPage(),
     market: (context) => const MarketPage(),
     timetable: (context) => const TimetablePage(),
     timetableImport: (context) => const TimetableImportPage(),

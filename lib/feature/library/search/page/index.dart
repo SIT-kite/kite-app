@@ -40,12 +40,6 @@ class LibraryPage extends StatelessWidget {
       actions: [
         IconButton(
           onPressed: () {
-            Navigator.of(context).pushNamed(RouteTable.libraryAppointment);
-          },
-          icon: const Icon(Icons.date_range),
-        ),
-        IconButton(
-          onPressed: () {
             showSearch(context: context, delegate: SearchBarDelegate());
           },
           icon: const Icon(
@@ -127,6 +121,12 @@ class LibraryPage extends StatelessWidget {
     return Scaffold(
       appBar: _buildAppBar(context),
       body: _buildBody(context),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).pushNamed(RouteTable.libraryAppointment);
+        },
+        child: const Icon(Icons.date_range),
+      ),
     );
   }
 }
