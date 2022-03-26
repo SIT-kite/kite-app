@@ -21,6 +21,7 @@ import 'dart:typed_data';
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/exception/session.dart';
 import 'package:kite/feature/kite/service/ocr.dart';
@@ -54,11 +55,19 @@ class SsoSession extends ASession with Downloader {
   /// Session错误拦截器
   SsoSessionErrorCallback? onError;
 
+  bool enableSsoErrorCallback = true;
+
   SsoSession({
     required this.dio,
     required this.cookieJar,
     this.onError,
   });
+
+  void runWithNoErrorCallback(VoidCallback callback) {
+    enableSsoErrorCallback = false;
+    callback();
+    enableSsoErrorCallback = true;
+  }
 
   /// 判断该请求是否为登录页
   bool isLoginPage(Response response) {
@@ -97,7 +106,7 @@ class SsoSession extends ASession with Downloader {
         options: options,
       );
     } catch (e, t) {
-      if (onError != null) {
+      if (onError != null && enableSsoErrorCallback) {
         onError!(e, t);
       }
       rethrow;
