@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/component/multibutton_switch.dart';
 import 'package:kite/feature/library/appointment/init.dart';
+import 'package:kite/setting/init.dart';
 import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/kite_authorization.dart';
 
@@ -63,16 +64,78 @@ class TodayTomorrowSwitch extends StatelessWidget {
   }
 }
 
-class AppointmentPage extends StatelessWidget {
+class AppointmentPage extends StatefulWidget {
+  const AppointmentPage({Key? key}) : super(key: key);
+
+  @override
+  State<AppointmentPage> createState() => _AppointmentPageState();
+}
+
+class _AppointmentPageState extends State<AppointmentPage> {
   final ValueNotifier<DateTime> date = ValueNotifier(DateTime.now());
+
   final service = LibraryAppointmentInitializer.appointmentService;
 
-  AppointmentPage({Key? key}) : super(key: key);
+  Future<void> showAppointPeriodDialog(PeriodStatusRecord e) async {
+    final applyDialogResult = await showAlertDialog(
+      context,
+      title: '是否要预约本场',
+      content: [
+        Text(
+          '场次编号: ${e.period}\n'
+          '已预约人数: ${e.applied}\n'
+          '预计开放座位: ${e.count}\n'
+          '开放时间段: ${e.text}\n'
+          '注意: 预约成功请在预约时段内打卡,\n'
+          '否则后果自负',
+        ),
+      ],
+      actionWidgetList: [
+        ElevatedButton(
+          onPressed: () {},
+          child: const Text('确定预约'),
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        TextButton(
+          onPressed: () {},
+          child: const Text('取消预约'),
+        ),
+      ],
+    );
+    // 确定预约
+    if (applyDialogResult == 0) {
+      await service.apply(e.period);
+      await showAlertDialog(
+        context,
+        title: '预约成功',
+        actionTextList: ['关闭'],
+      );
+      setState(() {});
+    }
+  }
 
-  Widget buildSelectList(BuildContext context, List<PeriodStatusRecord> records) {
+  Widget buildSelectList(
+    List<PeriodStatusRecord> periodStatusList,
+    CurrentPeriodResponse? currentPeriod,
+    List<ApplicationRecord> userTodayHistory,
+  ) {
     return ListView(
-      children: records.map((e) {
+      children: periodStatusList.map((e) {
         final a = {1: '上午', 2: '下午', 3: '晚上'}[e.period % 10]!;
+        Widget buildTrailingWidget() {
+          Widget buildTextWithBorder(String text) {
+            return Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(border: Border.all()),
+              child: Text(text),
+            );
+          }
+
+          return buildTextWithBorder('预约');
+        }
+
         return Column(children: [
           ListTile(
             isThreeLine: true,
@@ -92,53 +155,37 @@ class AppointmentPage extends StatelessWidget {
                 ),
               ],
             ),
-            trailing: Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(border: Border.all()),
-              child: const Text('预约'),
-            ),
+            trailing: buildTrailingWidget(),
             onTap: () async {
-              final applyDialogResult = await showAlertDialog(
-                context,
-                title: '是否要预约本场',
-                content: [
-                  Text(
-                    '场次编号: ${e.period}\n'
-                    '已预约人数: ${e.applied}\n'
-                    '预计开放座位: ${e.count}\n'
-                    '开放时间段: ${e.text}\n'
-                    '注意: 预约成功请在预约时段内打卡,\n'
-                    '否则后果自负',
-                  ),
-                ],
-                actionWidgetList: [
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('确定预约'),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text('取消预约'),
-                  ),
-                ],
-              );
-              // 确定预约
-              if (applyDialogResult == 0) {
-                await service.apply(e.period);
-                await showAlertDialog(
-                  context,
-                  title: '预约成功',
-                  actionTextList: ['关闭'],
-                );
-              }
+              await showAppointPeriodDialog(e);
             },
           ),
           const Divider(),
         ]);
       }).toList(),
+    );
+  }
+
+  Widget buildAppointmentListByDate(DateTime date) {
+    return MyFutureBuilder(
+      future: Future.wait([
+        // 获取可预约时段
+        service.getPeriodStatus(date),
+        // 获取当前时段
+        // service.getCurrentPeriod(),
+        (() async => null)(),
+        // 获取用户选定日期的记录
+        service.getApplication(
+          username: SettingInitializer.auth.currentUsername,
+          date: date,
+        ),
+      ]),
+      builder: (context, List<dynamic> tuple) {
+        List<PeriodStatusRecord> periodStatusList = tuple[0];
+        CurrentPeriodResponse? currentPeriod = tuple[1];
+        List<ApplicationRecord> userTodayHistory = tuple[2];
+        return buildSelectList(periodStatusList, currentPeriod, userTodayHistory);
+      },
     );
   }
 
@@ -152,7 +199,7 @@ class AppointmentPage extends StatelessWidget {
             icon: const Icon(Icons.history),
             onPressed: () async {
               if (await signUpIfNecessary(context, '查询预约记录')) {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => HistoryPage()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HistoryPage()));
               }
             },
           ),
@@ -163,21 +210,14 @@ class AppointmentPage extends StatelessWidget {
         child: Column(
           children: [
             TodayTomorrowSwitch(
-              onSwitchToday: () {
-                date.value = DateTime.now();
-              },
-              onSwitchTomorrow: () {
-                date.value = DateTime.now().add(const Duration(days: 1));
-              },
+              onSwitchToday: () => date.value = DateTime.now(),
+              onSwitchTomorrow: () => date.value = DateTime.now().add(const Duration(days: 1)),
             ),
             Expanded(
               child: ValueListenableBuilder(
                 valueListenable: date,
                 builder: (BuildContext context, DateTime value, Widget? child) {
-                  return MyFutureBuilder<List<PeriodStatusRecord>>(
-                    future: service.getPeriodStatus(value),
-                    builder: (context, List<PeriodStatusRecord> records) => buildSelectList(context, records),
-                  );
+                  return buildAppointmentListByDate(date.value);
                 },
               ),
             ),
