@@ -64,29 +64,29 @@ class LibraryPage extends StatelessWidget {
     final saying = _getRandomSaying();
 
     return Column(
-      children: saying.text.split('，').map((e) {
-            return SizedBox(
-              width: width,
-              child: Center(
-                child: Text(e),
+      children: [
+        ...saying.text.split('，').map((e) {
+          return SizedBox(
+            width: width,
+            child: Center(
+              child: Text(e),
+            ),
+          );
+        }).toList(),
+        const SizedBox(height: 20),
+        SizedBox(
+          width: width,
+          child: Container(
+            alignment: Alignment.bottomRight,
+            child: Text(
+              "——— ${saying.sayer}",
+              style: const TextStyle(
+                color: Colors.grey,
               ),
-            );
-          }).toList() +
-          [
-            const SizedBox(height: 20),
-            SizedBox(
-              width: width,
-              child: Container(
-                alignment: Alignment.bottomRight,
-                child: Text(
-                  "——— ${saying.sayer}",
-                  style: const TextStyle(
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-            )
-          ],
+            ),
+          ),
+        )
+      ],
     );
   }
 
