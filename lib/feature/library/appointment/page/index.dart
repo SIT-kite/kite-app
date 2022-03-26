@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/component/multibutton_switch.dart';
 import 'package:kite/feature/library/appointment/init.dart';
+import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/kite_authorization.dart';
 
 import '../entity.dart';
@@ -69,7 +69,7 @@ class AppointmentPage extends StatelessWidget {
 
   AppointmentPage({Key? key}) : super(key: key);
 
-  Widget buildSelectList(List<PeriodStatusRecord> records) {
+  Widget buildSelectList(BuildContext context, List<PeriodStatusRecord> records) {
     return ListView(
       children: records.map((e) {
         final a = {1: '上午', 2: '下午'}[e.period % 10]!;
@@ -105,7 +105,42 @@ class AppointmentPage extends StatelessWidget {
               child: const Text('预约'),
             ),
             onTap: () async {
-              await service.apply(e.period);
+              final applyDialogResult = await showAlertDialog(
+                context,
+                title: '是否要预约本场',
+                content: [
+                  Text(
+                    '场次编号: ${e.period}\n'
+                    '已预约人数: ${e.applied}\n'
+                    '预计开放座位: ${e.count}\n'
+                    '开放时间段: ${e.text}\n'
+                    '注意: 如预约成功但未在预约时段内打卡,\n'
+                    '否则后果自负',
+                  ),
+                ],
+                actionWidgetList: [
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: const Text('确定预约'),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text('取消预约'),
+                  ),
+                ],
+              );
+              // 确定预约
+              if (applyDialogResult == 0) {
+                await service.apply(e.period);
+                await showAlertDialog(
+                  context,
+                  title: '预约成功',
+                  actionTextList: ['关闭'],
+                );
+              }
             },
           ),
           const Divider(),
@@ -148,7 +183,7 @@ class AppointmentPage extends StatelessWidget {
                 builder: (BuildContext context, DateTime value, Widget? child) {
                   return MyFutureBuilder<List<PeriodStatusRecord>>(
                     future: service.getPeriodStatus(value),
-                    builder: (context, List<PeriodStatusRecord> records) => buildSelectList(records),
+                    builder: (context, List<PeriodStatusRecord> records) => buildSelectList(context, records),
                   );
                 },
               ),
