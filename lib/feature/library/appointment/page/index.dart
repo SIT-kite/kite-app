@@ -152,7 +152,7 @@ class AppointmentPage extends StatelessWidget {
             icon: const Icon(Icons.history),
             onPressed: () async {
               if (await signUpIfNecessary(context, '查询预约记录')) {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HistoryPage()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => HistoryPage()));
               }
             },
           ),

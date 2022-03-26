@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
+import 'package:kite/feature/library/appointment/init.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class QrcodePage extends StatelessWidget {
-  const QrcodePage({Key? key}) : super(key: key);
+  final service = LibraryAppointmentInitializer.appointmentService;
+  final int applyId;
+  QrcodePage({
+    Key? key,
+    required this.applyId,
+  }) : super(key: key);
 
   Widget buildQrcode(String data) {
     return Builder(builder: (context) {
       final width = MediaQuery.of(context).size.width;
       return QrImage(
         data: data,
-        size: width * 0.5,
+        size: width * 0.8,
       );
     });
   }
@@ -37,10 +43,7 @@ class QrcodePage extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                buildFutureQrcode((() async {
-                  await Future.delayed(const Duration(seconds: 1));
-                  return "1234";
-                })()),
+                buildFutureQrcode(service.getApplicationCode(applyId)),
               ],
             ),
           ),

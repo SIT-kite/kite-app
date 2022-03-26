@@ -46,13 +46,12 @@ class AppointmentService extends AService implements AppointmentDao {
   @override
   Future<String> getApplicationCode(int applyId) async {
     final response = await session.get('$_application/$applyId/code');
-    return response.data['encrypted'];
+    return response.data;
   }
 
   @override
   Future<Notice> getNotice() async {
     final response = await session.get(_notice);
-    print(response);
     return Notice.fromJson(response.data);
   }
 
