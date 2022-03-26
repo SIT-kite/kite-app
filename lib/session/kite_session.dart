@@ -30,7 +30,6 @@ const String _baseUrl = 'https://kite.sunnysab.cn/api/v2';
 class KiteSession extends ASession {
   final Dio dio;
   final JwtDao jwtDao;
-  KiteUser? profile;
 
   KiteSession(this.dio, this.jwtDao);
 
@@ -89,8 +88,8 @@ class KiteSession extends ASession {
       'password': password,
     });
     jwtDao.jwtToken = response.data['token'];
-    profile = KiteUser.fromJson(response.data['profile']);
-    return profile!;
+    final profile = KiteUser.fromJson(response.data['profile']);
+    return profile;
   }
 }
 
