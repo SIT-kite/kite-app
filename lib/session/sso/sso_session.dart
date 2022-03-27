@@ -149,7 +149,7 @@ class SsoSession extends ASession with Downloader {
 
     // 如果跳转登录页，那就先登录
     if (isLoginPage(firstResponse)) {
-      makeSureLogin(firstResponse, url);
+      await makeSureLogin(firstResponse, url);
       return await requestNormally();
     } else {
       return firstResponse;
