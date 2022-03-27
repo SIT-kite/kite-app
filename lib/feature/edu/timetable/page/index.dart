@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:ical/serializer.dart';
 import 'package:kite/feature/edu/timetable/dao/timetable.dart';
 import 'package:kite/feature/edu/timetable/init.dart';
+import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/permission.dart';
@@ -61,6 +62,32 @@ class _TimetablePageState extends State<TimetablePage> {
   final SchoolYear currSchoolYear = const SchoolYear(2021);
   final currSemester = Semester.secondTerm;
   List<Course> timetable = TimetableInitializer.timetableStorage.getTimetable();
+
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () async {
+      if (timetable.isEmpty) {
+        if (await showAlertDialog(
+              context,
+              title: '导入课表',
+              content: [
+                const Text(
+                  '看起来您第一次使用小风筝课表功能\n'
+                  '第一次使用时请先完成课表导入',
+                ),
+              ],
+              actionWidgetList: [
+                ElevatedButton(onPressed: () {}, child: const Text('导入课表')),
+                TextButton(onPressed: () {}, child: const Text('暂时不想')),
+              ],
+            ) ==
+            0) {
+          _onRefresh();
+        }
+      }
+    });
+    super.initState();
+  }
 
   Future<List<Course>> _fetchTimetable() async {
     final timetable = await TimetableInitializer.timetableService.getTimetable(currSchoolYear, currSemester);
