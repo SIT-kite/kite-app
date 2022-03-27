@@ -39,7 +39,14 @@ class ScScoreSummary {
   /// Campus culture.(校园文化)
   final double campus;
 
-  ScScoreSummary(this.lecture, this.practice, this.creation, this.safetyEdu, this.voluntary, this.campus);
+  const ScScoreSummary({
+    this.lecture = 0,
+    this.practice = 0,
+    this.creation = 0,
+    this.safetyEdu = 0,
+    this.voluntary = 0,
+    this.campus = 0,
+  });
 
   @override
   String toString() {

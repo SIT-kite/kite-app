@@ -90,7 +90,14 @@ class ScScoreService extends AService implements ScScoreDao {
           break;
       }
     }
-    return ScScoreSummary(lecture, practice, creation, safetyEdu, voluntary, campus);
+    return ScScoreSummary(
+      lecture: lecture,
+      practice: practice,
+      creation: creation,
+      safetyEdu: safetyEdu,
+      voluntary: voluntary,
+      campus: campus,
+    );
   }
 
   /// 获取我的得分列表

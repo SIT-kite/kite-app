@@ -18,8 +18,28 @@
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:kite/setting/init.dart';
 
 import '../../entity/score.dart';
+
+ScScoreSummary calcTargetScore(String username) {
+  int year = int.parse(username.substring(0, 2));
+  const table = {
+    13: ScScoreSummary(lecture: 1, campus: 1),
+    14: ScScoreSummary(lecture: 1, practice: 1, campus: 1),
+    15: ScScoreSummary(lecture: 1, practice: 1, creation: 1, campus: 1),
+    16: ScScoreSummary(lecture: 1, practice: 1, creation: 1, campus: 1),
+    17: ScScoreSummary(lecture: 1.5, practice: 2, creation: 1.5, safetyEdu: 1, campus: 2),
+    18: ScScoreSummary(lecture: 1.5, practice: 2, creation: 1.5, safetyEdu: 1, campus: 2),
+    19: ScScoreSummary(lecture: 1.5, practice: 2, creation: 1.5, safetyEdu: 1, voluntary: 1, campus: 1),
+    20: ScScoreSummary(lecture: 1.5, practice: 2, creation: 1.5, safetyEdu: 1, voluntary: 1, campus: 1),
+  };
+  if (table.keys.contains(year)) {
+    return table[year]!;
+  } else {
+    return table[20]!;
+  }
+}
 
 class SummaryCard extends StatelessWidget {
   final ScScoreSummary summary;
@@ -70,16 +90,18 @@ class SummaryCard extends StatelessWidget {
       );
 
   Widget _buildChart() {
-    final scoreValues = [
-      summary.campus,
-      summary.voluntary,
-      summary.creation,
-      summary.safetyEdu,
-      summary.practice,
-      summary.lecture
-    ];
-    final totals = [2, 2, 2, 2, 2, 2];
-    const scoreTitles = ['校园\n文化', '志愿', '三创', '安全\n教育', '社会\n实践', '讲座'];
+    List<double> buildScoreList(ScScoreSummary scss) {
+      return [scss.campus, scss.voluntary, scss.creation, scss.safetyEdu, scss.practice, scss.lecture];
+    }
+
+    final scoreValues = buildScoreList(summary);
+    final totals = buildScoreList(calcTargetScore(SettingInitializer.auth.currentUsername!));
+    final scoreTitles = ['校园文化', '志愿', '三创', '安全教育', '社会实践', '讲座'].asMap().entries.map((e) {
+      int index = e.key;
+      String text = e.value;
+      return '$text\n'
+          '${scoreValues[index]} / ${totals[index]}';
+    }).toList();
 
     List<BarChartGroupData> values = [];
     for (int i = 0; i < scoreValues.length; ++i) {
