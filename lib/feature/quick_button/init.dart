@@ -27,6 +27,8 @@ class QuickButton {
       Navigator.of(_context!).pushNamed('/report');
     } else if (type == 'timetable') {
       Navigator.of(_context!).pushNamed('/timetable');
+    } else if (type == 'library') {
+      Navigator.of(_context!).pushNamed('/library');
     }
   }
 
@@ -36,7 +38,8 @@ class QuickButton {
 
     _quickActions.setShortcutItems(<ShortcutItem>[
       const ShortcutItem(type: 'report', localizedTitle: '体温上报', icon: null),
-      const ShortcutItem(type: 'timetable', localizedTitle: '课表', icon: null)
+      const ShortcutItem(type: 'timetable', localizedTitle: '课表', icon: null),
+      const ShortcutItem(type: 'library', localizedTitle: '图书馆', icon: null),
     ]);
   }
 }
