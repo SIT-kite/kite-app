@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/component/multibutton_switch.dart';
@@ -10,6 +9,7 @@ import 'package:kite/util/kite_authorization.dart';
 
 import '../entity.dart';
 import 'history.dart';
+import 'qrcode.dart';
 
 class TodayTomorrowSwitch extends StatelessWidget {
   final VoidCallback onSwitchToday;
@@ -79,6 +79,10 @@ class _AppointmentPageState extends State<AppointmentPage> {
 
   final service = LibraryAppointmentInitializer.appointmentService;
 
+  void loadQrPage(int applyId) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => QrcodePage(applyId: applyId)));
+  }
+
   @override
   void initState() {
     service.getCurrentPeriod().then((value) => currentPeriod.value = value);
@@ -114,13 +118,22 @@ class _AppointmentPageState extends State<AppointmentPage> {
     // 确定预约
     if (applyDialogResult == 0) {
       if (!await signUpIfNecessary(context, '预约图书馆')) return;
-      await service.apply(e.period);
-      await showAlertDialog(
-        context,
-        title: '预约成功',
-        actionTextList: ['关闭'],
-      );
-      setState(() {});
+      try {
+        await service.apply(e.period);
+        await showAlertDialog(
+          context,
+          title: '预约成功',
+          actionTextList: ['关闭'],
+        );
+      } catch (e, _) {
+        showAlertDialog(
+          context,
+          title: '预约失败',
+          actionTextList: ['关闭'],
+        );
+      } finally {
+        setState(() {});
+      }
     }
   }
 
@@ -133,18 +146,42 @@ class _AppointmentPageState extends State<AppointmentPage> {
       children: periodStatusList.map((e) {
         final a = {1: '上午', 2: '下午', 3: '晚上'}[e.period % 10]!;
         Widget buildTrailingWidget() {
-          Widget buildOutdated() => const Text('已过期', style: TextStyle(color: Colors.red));
+          Widget buildOutdated() => const Text('已结束', style: TextStyle(color: Colors.red));
           Widget buildAppointed() => const Icon(Icons.check, color: Colors.green);
           Widget buildAvailable() => const Text('可预约', style: TextStyle(color: Colors.blue));
+          Widget buildQrCode() => IconButton(
+              onPressed: () async {
+                final response = await service.apply(e.period);
+                final applyId = response.id;
+                loadQrPage(applyId);
+              },
+              icon: const Icon(Icons.qr_code));
 
-          if (e.appointed) return buildAppointed();
           return ValueListenableBuilder<CurrentPeriodResponse?>(
             valueListenable: currentPeriod,
             builder: (context, data, child) {
               if (data == null) return const CircularProgressIndicator();
-              if (data.period != null && e.period < data.period!) return buildOutdated();
-              if (data.next != null && e.period < data.next!) return buildOutdated();
-              return buildAvailable();
+              if (e.appointed) {
+                if (e.period == data.period) {
+                  return buildQrCode();
+                } else {
+                  return buildAppointed();
+                }
+              } else {
+                if (data.period != null) {
+                  if (e.period < data.period!) {
+                    return buildOutdated();
+                  } else {
+                    return buildAvailable();
+                  }
+                } else {
+                  if (e.period < data.next!) {
+                    return buildOutdated();
+                  } else {
+                    return buildAvailable();
+                  }
+                }
+              }
             },
           );
         }
@@ -170,10 +207,26 @@ class _AppointmentPageState extends State<AppointmentPage> {
             ),
             trailing: SizedBox(child: Center(child: buildTrailingWidget()), width: 50),
             onTap: () async {
-              if (!e.appointed) {
-                await showAppointPeriodDialog(e);
-              } else {
+              showHasAppointed() {
                 showBasicFlash(context, const Text('您已预约过本场'), duration: const Duration(seconds: 1));
+              }
+
+              showOutdated() {
+                showBasicFlash(context, const Text('该预约已过期'), duration: const Duration(seconds: 1));
+              }
+
+              final data = currentPeriod.value;
+              if ((data != null && data.period != null && e.period < data.period!) ||
+                  (data != null && data.next != null && e.period < data.next!)) {
+                showOutdated();
+                return;
+              }
+
+              if (e.appointed) {
+                showHasAppointed();
+                return;
+              } else {
+                await showAppointPeriodDialog(e);
               }
             },
           ),
