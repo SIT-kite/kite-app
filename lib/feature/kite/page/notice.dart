@@ -60,7 +60,14 @@ class NoticePage extends StatelessWidget {
   Widget _buildNoticeList(BuildContext context, List<KiteNotice> noticeList) {
     return SingleChildScrollView(
       child: Column(
-        children: noticeList.map((e) => _buildNoticeItem(context, e)).toList(),
+        children: noticeList
+            .map((e) => Column(
+                  children: [
+                    _buildNoticeItem(context, e),
+                    const Divider(),
+                  ],
+                ))
+            .toList(),
       ),
     );
   }
