@@ -115,6 +115,10 @@ class _AppointmentPageState extends State<AppointmentPage> {
     }
   }
 
+  Widget buildEmptyList() {
+    return const Center(child: Text('该日闭馆'));
+  }
+
   Widget buildSelectList(List<PeriodStatusRecord> periodStatusList) {
     return ListView(
       children: periodStatusList.map((e) {
@@ -171,7 +175,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
     return MyFutureBuilder<List<PeriodStatusRecord>>(
       future: service.getPeriodStatus(date),
       builder: (context, List<PeriodStatusRecord> periodStatusList) {
-        return buildSelectList(periodStatusList);
+        return periodStatusList.isNotEmpty ? buildSelectList(periodStatusList) : buildEmptyList();
       },
     );
   }
