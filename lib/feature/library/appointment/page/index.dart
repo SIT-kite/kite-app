@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/component/multibutton_switch.dart';
 import 'package:kite/feature/library/appointment/init.dart';
@@ -169,6 +170,22 @@ class _AppointmentPageState extends State<AppointmentPage> {
     );
   }
 
+  Widget buildCurrentPeriod() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: MyFutureBuilder<CurrentPeriodResponse>(
+        future: service.getCurrentPeriod(),
+        builder: (context, response) {
+          if (response.period == null) {
+            return Text('当前不在进馆时段\n下一时间段 ${response.next}');
+          } else {
+            return Text('当前开放，请在 ${DateFormat('HH:mm').format(response.before!.toLocal())} 前入馆');
+          }
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -200,6 +217,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                 },
               ),
             ),
+            buildCurrentPeriod(),
           ],
         ),
       ),
