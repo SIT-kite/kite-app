@@ -1,7 +1,47 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/feature/library/appointment/init.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+
+class TimeDisplay extends StatefulWidget {
+  const TimeDisplay({Key? key}) : super(key: key);
+
+  @override
+  State<TimeDisplay> createState() => _TimeDisplayState();
+}
+
+class _TimeDisplayState extends State<TimeDisplay> {
+  DateTime currentTime = DateTime.now();
+  late Timer timer;
+  @override
+  void initState() {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        currentTime = DateTime.now();
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final df = DateFormat('yyyy-MM-dd   HH:MM:ss');
+    return Text(
+      df.format(currentTime),
+      style: TextStyle(fontSize: 30),
+    );
+  }
+}
 
 class QrcodePage extends StatelessWidget {
   final service = LibraryAppointmentInitializer.appointmentService;
@@ -40,10 +80,12 @@ class QrcodePage extends StatelessWidget {
         children: [
           Container(
             margin: const EdgeInsets.symmetric(vertical: 30),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Column(
               children: [
-                buildFutureQrcode(service.getApplicationCode(applyId)),
+                const TimeDisplay(),
+                Center(
+                  child: buildFutureQrcode(service.getApplicationCode(applyId)),
+                ),
               ],
             ),
           ),
