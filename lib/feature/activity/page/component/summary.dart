@@ -105,6 +105,9 @@ class SummaryCard extends StatelessWidget {
 
     List<BarChartGroupData> values = [];
     for (int i = 0; i < scoreValues.length; ++i) {
+      if (totals[i] == 0) {
+        continue;
+      }
       values.add(BarChartGroupData(x: i, barRods: [
         BarChartRodData(
           toY: scoreValues[i] / totals[i],
