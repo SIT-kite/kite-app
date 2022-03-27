@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/component/multibutton_switch.dart';
 import 'package:kite/feature/library/appointment/init.dart';
 import 'package:kite/util/alert_dialog.dart';
+import 'package:kite/util/flash.dart';
 import 'package:kite/util/kite_authorization.dart';
 
 import '../entity.dart';
@@ -73,8 +75,15 @@ class AppointmentPage extends StatefulWidget {
 
 class _AppointmentPageState extends State<AppointmentPage> {
   final ValueNotifier<DateTime> date = ValueNotifier(DateTime.now());
+  final ValueNotifier<CurrentPeriodResponse?> currentPeriod = ValueNotifier(null);
 
   final service = LibraryAppointmentInitializer.appointmentService;
+
+  @override
+  void initState() {
+    service.getCurrentPeriod().then((value) => currentPeriod.value = value);
+    super.initState();
+  }
 
   Future<void> showAppointPeriodDialog(PeriodStatusRecord e) async {
     final applyDialogResult = await showAlertDialog(
@@ -124,19 +133,20 @@ class _AppointmentPageState extends State<AppointmentPage> {
       children: periodStatusList.map((e) {
         final a = {1: '上午', 2: '下午', 3: '晚上'}[e.period % 10]!;
         Widget buildTrailingWidget() {
-          Widget buildTextWithBorder(String text) {
-            return Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(border: Border.all()),
-              child: Text(text),
-            );
-          }
+          Widget buildOutdated() => const Text('已过期', style: TextStyle(color: Colors.red));
+          Widget buildAppointed() => const Icon(Icons.check, color: Colors.green);
+          Widget buildAvailable() => const Text('可预约', style: TextStyle(color: Colors.blue));
 
-          if (e.appointed) {
-            return const Icon(Icons.check);
-          } else {
-            return buildTextWithBorder('预约');
-          }
+          if (e.appointed) return buildAppointed();
+          return ValueListenableBuilder<CurrentPeriodResponse?>(
+            valueListenable: currentPeriod,
+            builder: (context, data, child) {
+              if (data == null) return const CircularProgressIndicator();
+              if (data.period != null && e.period < data.period!) return buildOutdated();
+              if (data.next != null && e.period < data.next!) return buildOutdated();
+              return buildAvailable();
+            },
+          );
         }
 
         return Column(children: [
@@ -162,6 +172,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
             onTap: () async {
               if (!e.appointed) {
                 await showAppointPeriodDialog(e);
+              } else {
+                showBasicFlash(context, const Text('您已预约过本场'), duration: const Duration(seconds: 1));
               }
             },
           ),
@@ -182,18 +194,21 @@ class _AppointmentPageState extends State<AppointmentPage> {
 
   Widget buildCurrentPeriod() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: MyFutureBuilder<CurrentPeriodResponse>(
-        future: service.getCurrentPeriod(),
-        builder: (context, response) {
-          if (response.period == null) {
-            return Text('当前不在进馆时段\n下一时间段 ${response.next}');
-          } else {
-            return Text('当前开放，请在 ${DateFormat('HH:mm').format(response.before!.toLocal())} 前入馆');
-          }
-        },
-      ),
-    );
+        padding: const EdgeInsets.all(8.0),
+        child: ValueListenableBuilder<CurrentPeriodResponse?>(
+          valueListenable: currentPeriod,
+          builder: (context, data, child) {
+            if (data == null) return const CircularProgressIndicator();
+            if (data.period == null) {
+              return Text(
+                '当前不在进馆时段\n下一时间段 ${data.next}',
+                textAlign: TextAlign.center,
+              );
+            } else {
+              return Text('当前开放，请在 ${DateFormat('HH:mm').format(data.before!.toLocal())} 前入馆');
+            }
+          },
+        ));
   }
 
   @override
@@ -206,7 +221,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
             icon: const Icon(Icons.history),
             onPressed: () async {
               if (!await signUpIfNecessary(context, '查询预约记录')) return;
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HistoryPage()));
+              await Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HistoryPage()));
+              setState(() {});
             },
           ),
         ],
