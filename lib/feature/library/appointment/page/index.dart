@@ -49,11 +49,11 @@ class TodayTomorrowSwitch extends StatelessWidget {
       children: [
         Container(
           child: buildTodayWidget(),
-          margin: const EdgeInsets.symmetric(vertical: 10),
+          margin: const EdgeInsets.symmetric(vertical: 8),
         ),
         Container(
           child: buildTomorrowWidget(),
-          margin: const EdgeInsets.symmetric(vertical: 10),
+          margin: const EdgeInsets.symmetric(vertical: 8),
         ),
       ],
       onSwitch: (i) {
@@ -80,14 +80,12 @@ class _AppointmentPageState extends State<AppointmentPage> {
       context,
       title: '是否要预约本场',
       content: [
-        Text(
-          '场次编号: ${e.period}\n'
-          '已预约人数: ${e.applied}\n'
-          '预计开放座位: ${e.count}\n'
-          '开放时间段: ${e.text}\n'
-          '注意: 预约成功请在预约时段内打卡,\n'
-          '否则后果自负',
-        ),
+        Text('场次编号: ${e.period}\n'
+            '已预约人数: ${e.applied}\n'
+            '预计开放座位: ${e.count}\n'
+            '开放时间段: ${e.text}\n'
+            '\n'
+            '注意: 请务必在预约时段内进馆，未到将影响下一次预约。\n'),
       ],
       actionWidgetList: [
         ElevatedButton(
@@ -186,14 +184,14 @@ class _AppointmentPageState extends State<AppointmentPage> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
+      body: SafeArea(
         child: Column(
           children: [
             TodayTomorrowSwitch(
               onSwitchToday: () => date.value = DateTime.now(),
               onSwitchTomorrow: () => date.value = DateTime.now().add(const Duration(days: 1)),
             ),
+            const SizedBox(height: 8),
             Expanded(
               child: ValueListenableBuilder(
                 valueListenable: date,

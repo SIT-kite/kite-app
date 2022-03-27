@@ -34,7 +34,7 @@ class QrcodePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('出示预约二维码'),
+        title: const Text('预约码'),
       ),
       body: Column(
         children: [

@@ -20,7 +20,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
   String periodToString(int period) {
     final a = {1: '上午', 2: '下午', 3: '晚上'}[period % 10] ?? '未知时间段';
-    return '20${period ~/ 1e5}-${period ~/ 1e3 % 100}-${period ~/ 10 % 100}    ($a)';
+    return '${period ~/ 1e3 % 100} 月 ${period ~/ 10 % 100} 日  （$a）';
   }
 
   void loadQrPage(int applyId) {
@@ -40,76 +40,66 @@ class _HistoryPageState extends State<HistoryPage> {
     }
     // 已过期的
     if (period < currentPeriod && status == 0) {
-      return const Text(
-        '预约成功但未去',
-        style: TextStyle(color: Colors.red),
-      );
+      return const Text('已过期', style: TextStyle(color: Colors.red));
     } else if (period == currentPeriod) {
       return ElevatedButton(
         onPressed: () {
           loadQrPage(applyId);
         },
-        child: const Text('出示二维码'),
+        child: const Text('预约码'),
       );
     } else {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          const Text('未到规定打卡时段'),
-          const SizedBox(height: 2),
-          TextButton(
-            onPressed: () async {
-              final select = await showAlertDialog(
+      return TextButton(
+        onPressed: () async {
+          final select = await showAlertDialog(
+            context,
+            title: '取消预约',
+            content: [
+              const Text('是否想要取消本次预约'),
+            ],
+            actionWidgetList: [
+              ElevatedButton(
+                onPressed: () {},
+                child: const Text('确认取消'),
+              ),
+              TextButton(
+                onPressed: () {},
+                child: const Text('手滑了'),
+              ),
+            ],
+          );
+          if (select == 0) {
+            try {
+              await service.cancelApplication(applyId);
+              await showAlertDialog(
                 context,
-                title: '取消预约',
-                content: [
-                  const Text('是否想要取消本次预约'),
-                ],
+                title: '取消成功',
                 actionWidgetList: [
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('确认取消'),
-                  ),
                   TextButton(
                     onPressed: () {},
-                    child: const Text('手滑了'),
+                    child: const Text('知道了'),
                   ),
                 ],
               );
-              if (select == 0) {
-                try {
-                  await service.cancelApplication(applyId);
-                  await showAlertDialog(
-                    context,
-                    title: '取消成功',
-                    actionWidgetList: [
-                      TextButton(
-                        onPressed: () {},
-                        child: const Text('知道了'),
-                      ),
-                    ],
-                  );
-                  setState(() {});
-                } catch (e) {
-                  await showAlertDialog(
-                    context,
-                    title: '出错了',
-                    content: [
-                      Text(e.toString()),
-                    ],
-                    actionWidgetList: [
-                      TextButton(
-                        onPressed: () {},
-                        child: const Text('知道了'),
-                      ),
-                    ],
-                  );
-                }
-              }
-            },
-            child: const Text('取消预约'),
-          ),
-        ],
+              setState(() {});
+            } catch (e) {
+              await showAlertDialog(
+                context,
+                title: '出错了',
+                content: [
+                  Text(e.toString()),
+                ],
+                actionWidgetList: [
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text('知道了'),
+                  ),
+                ],
+              );
+            }
+          }
+        },
+        child: const Text('取消预约'),
       );
     }
   }
@@ -118,10 +108,10 @@ class _HistoryPageState extends State<HistoryPage> {
     int currentPeriod = 2203262;
     return ListView(
       children: records.map((e) {
-        print(e);
         return Column(
           children: [
             ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 20),
               title: Text(periodToString(e.period)),
               subtitle: Text('${e.text}    座位号: ${e.index}'),
               trailing: buildHistoryItemTrailing(e, currentPeriod),
@@ -151,10 +141,7 @@ class _HistoryPageState extends State<HistoryPage> {
       appBar: AppBar(
         title: const Text('预约历史'),
       ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: buildMyHistoryList(),
-      ),
+      body: buildMyHistoryList(),
     );
   }
 }
