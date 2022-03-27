@@ -1,10 +1,11 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
+import 'package:device_display_brightness/device_display_brightness.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/feature/library/appointment/init.dart';
+import 'package:kite/util/logger.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class TimeDisplay extends StatefulWidget {
@@ -43,13 +44,41 @@ class _TimeDisplayState extends State<TimeDisplay> {
   }
 }
 
-class QrcodePage extends StatelessWidget {
-  final service = LibraryAppointmentInitializer.appointmentService;
+class QrcodePage extends StatefulWidget {
   final int applyId;
-  QrcodePage({
+  const QrcodePage({
     Key? key,
     required this.applyId,
   }) : super(key: key);
+
+  @override
+  State<QrcodePage> createState() => _QrcodePageState();
+}
+
+class _QrcodePageState extends State<QrcodePage> {
+  final service = LibraryAppointmentInitializer.appointmentService;
+  double? brightness;
+  @override
+  void initState() {
+    print('设置屏幕');
+    Future.delayed(Duration.zero, () async {
+      brightness = await DeviceDisplayBrightness.getBrightness();
+      Log.info('当前系统亮度: $brightness');
+      DeviceDisplayBrightness.setBrightness(1);
+      DeviceDisplayBrightness.keepOn(enabled: true);
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (brightness != null) {
+      DeviceDisplayBrightness.setBrightness(brightness!);
+    }
+    DeviceDisplayBrightness.keepOn(enabled: false);
+
+    super.dispose();
+  }
 
   Widget buildQrcode(String data) {
     return Builder(builder: (context) {
@@ -84,7 +113,7 @@ class QrcodePage extends StatelessWidget {
               children: [
                 const TimeDisplay(),
                 Center(
-                  child: buildFutureQrcode(service.getApplicationCode(applyId)),
+                  child: buildFutureQrcode(service.getApplicationCode(widget.applyId)),
                 ),
               ],
             ),
