@@ -60,9 +60,9 @@ class _QrcodePageState extends State<QrcodePage> {
   double? brightness;
   @override
   void initState() {
-    print('设置屏幕');
     Future.delayed(Duration.zero, () async {
       brightness = await DeviceDisplayBrightness.getBrightness();
+      Log.info('获取屏幕亮度: $brightness');
       Log.info('当前系统亮度: $brightness');
       DeviceDisplayBrightness.setBrightness(1);
       DeviceDisplayBrightness.keepOn(enabled: true);
@@ -73,6 +73,7 @@ class _QrcodePageState extends State<QrcodePage> {
   @override
   void dispose() {
     if (brightness != null) {
+      Log.info('还原屏幕亮度: $brightness');
       DeviceDisplayBrightness.setBrightness(brightness!);
     }
     DeviceDisplayBrightness.keepOn(enabled: false);
