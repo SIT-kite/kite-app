@@ -128,7 +128,11 @@ class _AppointmentPageState extends State<AppointmentPage> {
             );
           }
 
-          return buildTextWithBorder('预约');
+          if (e.appointed) {
+            return const Icon(Icons.check);
+          } else {
+            return buildTextWithBorder('预约');
+          }
         }
 
         return Column(children: [
@@ -150,9 +154,11 @@ class _AppointmentPageState extends State<AppointmentPage> {
                 ),
               ],
             ),
-            trailing: buildTrailingWidget(),
+            trailing: SizedBox(child: Center(child: buildTrailingWidget()), width: 50),
             onTap: () async {
-              await showAppointPeriodDialog(e);
+              if (!e.appointed) {
+                await showAppointPeriodDialog(e);
+              }
             },
           ),
           const Divider(),
