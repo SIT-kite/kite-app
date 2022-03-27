@@ -27,8 +27,8 @@ class MyFutureBuilder<T> extends StatelessWidget {
   final MyWidgetBuilder? onErrorBuilder;
   const MyFutureBuilder({
     Key? key,
-    this.future,
-    this.builder,
+    required this.future,
+    required this.builder,
     this.onErrorBuilder,
   }) : super(key: key);
 
