@@ -3,7 +3,7 @@ import 'entity.dart';
 abstract class AppointmentDao {
   /// 获取图书馆公告
   /// 返回一个 html 文档
-  Future<Notice> getNotice();
+  Future<Notice?> getNotice();
 
   /// 查询图书馆某日场次和剩余座位情况
   Future<List<PeriodStatusRecord>> getPeriodStatus(DateTime dateTime);

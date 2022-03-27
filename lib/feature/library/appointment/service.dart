@@ -55,7 +55,7 @@ class AppointmentService extends AService implements AppointmentDao {
   }
 
   @override
-  Future<Notice> getNotice() async {
+  Future<Notice?> getNotice() async {
     final response = await session.get(_notice);
     return Notice.fromJson(response.data);
   }
