@@ -49,6 +49,7 @@ class ApplicationRecord {
   int period;
   String user;
   int index;
+  @JsonKey(defaultValue: '')
   String text;
   int status;
 

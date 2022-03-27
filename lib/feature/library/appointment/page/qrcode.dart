@@ -1,9 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:device_display_brightness/device_display_brightness.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/component/future_builder.dart';
+import 'package:kite/feature/library/appointment/entity.dart';
 import 'package:kite/feature/library/appointment/init.dart';
 import 'package:kite/util/logger.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -57,6 +58,9 @@ class QrcodePage extends StatefulWidget {
 
 class _QrcodePageState extends State<QrcodePage> {
   final service = LibraryAppointmentInitializer.appointmentService;
+  final codeNotifier = ValueNotifier<ApplicationRecord?>(null);
+  String codeString = "";
+
   double? brightness;
   @override
   void initState() {
@@ -66,6 +70,10 @@ class _QrcodePageState extends State<QrcodePage> {
       Log.info('当前系统亮度: $brightness');
       DeviceDisplayBrightness.setBrightness(1);
       DeviceDisplayBrightness.keepOn(enabled: true);
+    });
+    service.getApplicationCode(widget.applyId).then((value) {
+      codeNotifier.value = ApplicationRecord.fromJson(jsonDecode(value)['application']);
+      codeString = value;
     });
     super.initState();
   }
@@ -91,11 +99,22 @@ class _QrcodePageState extends State<QrcodePage> {
     });
   }
 
-  Widget buildFutureQrcode(Future<String> future) {
-    return MyFutureBuilder<String>(
-      future: future,
-      builder: (context, data) {
-        return buildQrcode(data);
+  Widget buildFutureQrcode() {
+    return ValueListenableBuilder<ApplicationRecord?>(
+      valueListenable: codeNotifier,
+      builder: (context, data, child) {
+        if (data == null) return const CircularProgressIndicator();
+        return Column(
+          children: [
+            buildQrcode(codeString),
+            Text(
+              '座位号: ${data.index}\n'
+              '学号: ${data.user}',
+              style: const TextStyle(fontSize: 20),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        );
       },
     );
   }
@@ -114,7 +133,7 @@ class _QrcodePageState extends State<QrcodePage> {
               children: [
                 const TimeDisplay(),
                 Center(
-                  child: buildFutureQrcode(service.getApplicationCode(widget.applyId)),
+                  child: buildFutureQrcode(),
                 ),
               ],
             ),
