@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/feature/edu/exam/init.dart';
@@ -102,6 +104,19 @@ class _ExamPageState extends State<ExamPage> {
 
   Widget buildExamItems(BuildContext context, List<ExamRoom> examItems) {
     final widgets = examItems.map((e) => buildExamItem(context, e)).toList();
+    if (examItems.isEmpty) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SvgPicture.asset(
+            'assets/score/not-found.svg',
+            width: 260,
+            height: 260,
+          ),
+          const Text('该学期暂无考试', style: TextStyle(color: Colors.grey)),
+        ],
+      );
+    }
     return ListView.separated(
       itemBuilder: (BuildContext context, int index) => Padding(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
