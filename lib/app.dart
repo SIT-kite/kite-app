@@ -81,12 +81,14 @@ class KiteApp extends StatelessWidget {
       textTheme: _buildTextTheme(isDark, primaryColor),
       brightness: isDark ? Brightness.dark : Brightness.light,
       useMaterial3: true,
-      scaffoldBackgroundColor: const Color.fromARGB(
-        255,
-        scaffoldBackgroundColorGrey,
-        scaffoldBackgroundColorGrey,
-        scaffoldBackgroundColorGrey,
-      ),
+      scaffoldBackgroundColor: isDark
+          ? null
+          : const Color.fromARGB(
+              255,
+              scaffoldBackgroundColorGrey,
+              scaffoldBackgroundColorGrey,
+              scaffoldBackgroundColorGrey,
+            ),
     );
   }
 
