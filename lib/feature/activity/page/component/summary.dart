@@ -91,16 +91,16 @@ class SummaryCard extends StatelessWidget {
 
   Widget _buildChart() {
     List<double> buildScoreList(ScScoreSummary scss) {
-      return [scss.campus, scss.voluntary, scss.creation, scss.safetyEdu, scss.practice, scss.lecture];
+      return [scss.voluntary, scss.campus, scss.creation, scss.safetyEdu, scss.lecture, scss.practice];
     }
 
     final scoreValues = buildScoreList(summary);
     final totals = buildScoreList(calcTargetScore(SettingInitializer.auth.currentUsername!));
-    final scoreTitles = ['校园文化', '志愿', '三创', '安全教育', '社会实践', '讲座'].asMap().entries.map((e) {
+    final scoreTitles = ['志愿', '校园文化', '三创', '安全文明', '讲座', '社会实践'].asMap().entries.map((e) {
       int index = e.key;
       String text = e.value;
       return '$text\n'
-          '${scoreValues[index]} / ${totals[index]}';
+          '${scoreValues[index]}/${totals[index]}';
     }).toList();
 
     List<BarChartGroupData> values = [];
