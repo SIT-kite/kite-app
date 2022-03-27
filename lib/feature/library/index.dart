@@ -44,7 +44,7 @@ class NoticeWidget extends StatelessWidget {
       child: Builder(builder: (context) {
         return ListTile(
           title: const Text('[图书馆有新公告]', style: TextStyle(color: Colors.blue, fontSize: 18)),
-          subtitle: Text(DateFormat('发布时间: yyyy-MM-dd   HH:mm').format(notice.ts)),
+          subtitle: Text(DateFormat('发布时间: yyyy-MM-dd   HH:mm').format(notice.ts.toLocal())),
           trailing: const Icon(
             Icons.notification_important,
             color: Colors.blueAccent,
@@ -102,8 +102,6 @@ class LibraryPage extends StatelessWidget {
         IconButton(
           onPressed: () async {
             showBasicFlash(context, const Text('图书馆账户信息管理，敬请期待'));
-            final result = await LibraryAppointmentInitializer.appointmentService.getNotice();
-            print(result);
           },
           icon: const Icon(
             Icons.person,
