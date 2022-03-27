@@ -27,28 +27,12 @@ class _HistoryPageState extends State<HistoryPage> {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => QrcodePage(applyId: applyId)));
   }
 
-  Widget buildHistoryItemTrailing(ApplicationRecord item, int currentPeriod) {
+  Widget buildHistoryItemTrailing(ApplicationRecord item, CurrentPeriodResponse currentPeriod) {
     int applyId = item.id;
     int status = item.status;
     int period = item.period;
 
-    if (status == 1) {
-      return const Text(
-        '成功打卡',
-        style: TextStyle(color: Colors.green),
-      );
-    }
-    // 已过期的
-    if (period < currentPeriod && status == 0) {
-      return const Text('已过期', style: TextStyle(color: Colors.red));
-    } else if (period == currentPeriod) {
-      return ElevatedButton(
-        onPressed: () {
-          loadQrPage(applyId);
-        },
-        child: const Text('预约码'),
-      );
-    } else {
+    Widget buildCancelButton() {
       return TextButton(
         onPressed: () async {
           final select = await showAlertDialog(
@@ -102,10 +86,49 @@ class _HistoryPageState extends State<HistoryPage> {
         child: const Text('取消预约'),
       );
     }
+
+    Widget buildSuccessfulText() {
+      return const Text(
+        '成功打卡',
+        style: TextStyle(color: Colors.green),
+      );
+    }
+
+    Widget buildQrCodeButton() {
+      return ElevatedButton(
+        onPressed: () {
+          loadQrPage(applyId);
+        },
+        child: const Text('预约码'),
+      );
+    }
+
+    Widget buildFailedText() {
+      return const Text('已过期', style: TextStyle(color: Colors.red));
+    }
+
+    // 成功打卡了
+    if (status == 1) return buildSuccessfulText();
+
+    // 现在开着
+    if (currentPeriod.period != null) {
+      if (period == currentPeriod.period) return buildQrCodeButton();
+      if (period > currentPeriod.period!) return buildCancelButton();
+      if (period < currentPeriod.period!) return buildFailedText();
+    } else {
+      // 现在没开门
+      // next必然存在
+      if (period >= currentPeriod.next!) return buildCancelButton();
+      if (period < currentPeriod.next!) return buildFailedText();
+    }
+
+    return const Text('未知状态', style: TextStyle(color: Colors.orange));
   }
 
-  Widget buildListView(List<ApplicationRecord> records) {
-    int currentPeriod = 2203262;
+  Widget buildListView(List<ApplicationRecord> records, CurrentPeriodResponse currentPeriod) {
+    records.sort((a, b) {
+      return b.period - a.period;
+    });
     return ListView(
       children: records.map((e) {
         return Column(
@@ -124,13 +147,15 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   Widget buildMyHistoryList() {
-    return MyFutureBuilder<List<ApplicationRecord>>(
-      future: service.getApplication(username: SettingInitializer.auth.currentUsername),
-      builder: (context, data) {
-        data.sort((a, b) {
-          return b.period - a.period;
-        });
-        return buildListView(data);
+    return MyFutureBuilder<List>(
+      future: Future.wait([
+        service.getApplication(username: SettingInitializer.auth.currentUsername),
+        service.getCurrentPeriod(),
+      ]),
+      builder: (context, tuple) {
+        List<ApplicationRecord> applicationRecordList = tuple[0];
+        CurrentPeriodResponse currentPeriod = tuple[1];
+        return buildListView(applicationRecordList, currentPeriod);
       },
     );
   }
