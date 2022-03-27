@@ -38,7 +38,7 @@ class _TimeDisplayState extends State<TimeDisplay> {
     final df = DateFormat('yyyy-MM-dd   HH:MM:ss');
     return Text(
       df.format(currentTime),
-      style: TextStyle(fontSize: 30),
+      style: const TextStyle(fontSize: 30),
     );
   }
 }
