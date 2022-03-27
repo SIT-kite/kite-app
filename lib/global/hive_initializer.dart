@@ -28,11 +28,13 @@ class HiveBoxInitializer {
   }
 
   static Future<void> clear() async {
+    await Hive.deleteBoxFromDisk('electricity');
+    await Hive.deleteBoxFromDisk('contactSetting');
     await Hive.deleteBoxFromDisk('setting');
     await Hive.deleteBoxFromDisk('auth');
     await Hive.deleteBoxFromDisk('librarySearchHistory');
     await Hive.deleteBoxFromDisk('course');
-    await Hive.deleteBoxFromDisk('expense');
+    await Hive.deleteBoxFromDisk('expenseSetting');
     await Hive.deleteBoxFromDisk('game');
     await Hive.deleteBoxFromDisk('mail');
     await Hive.close();
