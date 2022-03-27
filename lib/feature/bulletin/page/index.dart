@@ -71,7 +71,14 @@ class BulletinPage extends StatelessWidget {
               final records = snapshot.data!;
               _sortBulletinRecord(records);
 
-              final items = records.map((e) => _buildBulletinItem(context, e)).toList();
+              final items = records
+                  .map((e) => Column(
+                        children: [
+                          _buildBulletinItem(context, e),
+                          const Divider(),
+                        ],
+                      ))
+                  .toList();
               return SingleChildScrollView(child: Column(children: items));
             } else if (snapshot.hasError) {
               return Center(child: Text('错误类型: ' + snapshot.error.runtimeType.toString()));
