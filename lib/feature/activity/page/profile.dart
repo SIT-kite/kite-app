@@ -56,9 +56,9 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _buildEventList(BuildContext context) {
-    final titleStyle = Theme.of(context).textTheme.headline5;
+    final titleStyle = Theme.of(context).textTheme.headline6;
     final subtitleStyle = Theme.of(context).textTheme.bodyText2;
-    TextStyle? trailingStyle = Theme.of(context).textTheme.headline5;
+    TextStyle? trailingStyle = Theme.of(context).textTheme.headline6;
 
     Widget joinedActivityMapper(ScJoinedActivity activity) {
       final color = activity.status == '通过' ? Colors.green : Theme.of(context).primaryColor;
