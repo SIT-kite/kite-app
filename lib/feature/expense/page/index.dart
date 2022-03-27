@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/flash.dart';
 
 import '../dao/expense.dart';
@@ -37,6 +38,33 @@ class _ExpensePageState extends State<ExpensePage> {
   int currentIndex = 0;
   bool _isRefreshing = false;
   ExpenseType _filter = ExpenseType.all;
+
+  @override
+  void initState() {
+    if (ExpenseInitializer.expenseRecord.isEmpty()) {
+      Future.delayed(Duration.zero, () async {
+        if (await showAlertDialog(
+              context,
+              title: '刷新数据',
+              content: [
+                const Text(
+                  '看起来您第一次使用消费查询, \n'
+                  '需要连接学校服务器获取数据, \n'
+                  '下次可点击右上角刷新获取最新数据',
+                ),
+              ],
+              actionWidgetList: [
+                ElevatedButton(onPressed: () {}, child: const Text('刷新数据')),
+                TextButton(onPressed: () {}, child: const Text('我再看看')),
+              ],
+            ) ==
+            0) {
+          await _refresh();
+        }
+      });
+    }
+    super.initState();
+  }
 
   /// 筛选按钮
   _buildPopupMenuItems() {
@@ -77,7 +105,25 @@ class _ExpensePageState extends State<ExpensePage> {
     return result;
   }
 
-  void _onUpdateRecords(BuildContext context) async {
+  Future<void> _refresh() async {
+    try {
+      showAlertDialog(
+        context,
+        title: '正在加载',
+        content: [const CircularProgressIndicator()],
+        actionWidgetList: [],
+      );
+      await updateRecords();
+    } catch (e, _) {
+      _isRefreshing = false;
+      showBasicFlash(context, Text('错误信息: ${e.toString().split('\n')[0]}'), duration: const Duration(seconds: 3));
+    } finally {
+      // 关闭正在加载对话框
+      Navigator.pop(context);
+    }
+  }
+
+  Future<void> updateRecords() async {
     if (_isRefreshing) {
       showBasicFlash(context, const Text('已经在刷新啦'));
       return;
@@ -100,13 +146,12 @@ class _ExpensePageState extends State<ExpensePage> {
     setState(() => _isRefreshing = false);
   }
 
-  Widget _buildRefreshButton(BuildContext context) {
+  Widget _buildRefreshButton() {
     return IconButton(
       tooltip: '刷新',
       icon: const Icon(Icons.refresh),
-      onPressed: () => Future.delayed(Duration.zero, () => _onUpdateRecords(context)).catchError((e) {
-        _isRefreshing = false;
-        showBasicFlash(context, Text('错误信息: ${e.toString().split('\n')[0]}'), duration: const Duration(seconds: 3));
+      onPressed: () => Future.delayed(Duration.zero, () async {
+        await _refresh();
       }),
     );
   }
@@ -117,7 +162,7 @@ class _ExpensePageState extends State<ExpensePage> {
       appBar: AppBar(
         title: const Text("消费记录"),
         actions: [
-          _buildRefreshButton(context),
+          _buildRefreshButton(),
           currentIndex == 0 ? _buildPopupMenuItems() : Container(),
         ],
       ),
@@ -135,7 +180,10 @@ class _ExpensePageState extends State<ExpensePage> {
         ],
         currentIndex: currentIndex,
         onTap: (int index) {
-          setState(() => {currentIndex = index, _isRefreshing = false});
+          setState(() {
+            currentIndex = index;
+            _isRefreshing = false;
+          });
         },
       ),
     );
