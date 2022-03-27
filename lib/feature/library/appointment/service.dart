@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:intl/intl.dart';
 import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
@@ -51,7 +53,7 @@ class AppointmentService extends AService implements AppointmentDao {
   @override
   Future<String> getApplicationCode(int applyId) async {
     final response = await session.get('$_application/$applyId/code');
-    return response.data;
+    return jsonEncode(response.data);
   }
 
   @override
