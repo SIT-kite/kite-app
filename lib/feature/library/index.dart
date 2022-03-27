@@ -147,9 +147,9 @@ class LibraryPage extends StatelessWidget {
     var screenWidth = MediaQuery.of(context).size.width;
     var imageWidth = screenWidth * 0.6;
     var sayingWidth = screenWidth * 0.5;
-    return Column(
+    return Stack(
       children: [
-        NoticeWidget(),
+        Align(child: NoticeWidget(), alignment: Alignment.topCenter),
         Center(
           child: SizedBox(
             height: 400,
