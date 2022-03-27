@@ -11,7 +11,7 @@ class LibraryNoticePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('图书馆通知'),
+        title: const Text('图书馆通知'),
       ),
       body: MyHtmlWidget(notice.html),
     );

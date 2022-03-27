@@ -19,7 +19,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/component/future_builder.dart';
 import 'package:kite/feature/library/appointment/init.dart';
 import 'package:kite/route.dart';
 import 'package:kite/util/flash.dart';
@@ -28,6 +27,55 @@ import 'appointment/entity.dart';
 import 'appointment/page/notice.dart';
 import 'search/page/constant.dart';
 import 'search/page/search_delegate.dart';
+
+class NoticeWidget extends StatelessWidget {
+  final ValueNotifier<Notice?> noticeNotifier = ValueNotifier(null);
+  NoticeWidget({Key? key}) : super(key: key);
+
+  Widget buildNone() => Container();
+
+  Widget buildSome(Notice notice) {
+    return Container(
+      decoration: const BoxDecoration(
+        border: Border.symmetric(
+          horizontal: BorderSide(color: Colors.black45),
+        ),
+      ),
+      child: Builder(builder: (context) {
+        return ListTile(
+          title: const Text('[图书馆有新公告]', style: TextStyle(color: Colors.blue, fontSize: 18)),
+          subtitle: Text(DateFormat('发布时间: yyyy-MM-dd   HH:mm').format(notice.ts)),
+          trailing: const Icon(
+            Icons.notification_important,
+            color: Colors.blueAccent,
+          ),
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return LibraryNoticePage(notice);
+            }));
+          },
+        );
+      }),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    LibraryAppointmentInitializer.appointmentService.getNotice().then((value) {
+      noticeNotifier.value = value;
+    });
+    return ValueListenableBuilder<Notice?>(
+      valueListenable: noticeNotifier,
+      builder: (context, value, child) {
+        if (value == null) {
+          return buildNone();
+        } else {
+          return buildSome(value);
+        }
+      },
+    );
+  }
+}
 
 class LibraryPage extends StatelessWidget {
   const LibraryPage({Key? key}) : super(key: key);
@@ -97,47 +145,13 @@ class LibraryPage extends StatelessWidget {
     );
   }
 
-  Widget _buildNotice() {
-    Widget buildNone() => Container();
-
-    Widget buildSome(Notice notice) => Container(
-          decoration: const BoxDecoration(
-            border: Border.symmetric(
-              horizontal: BorderSide(color: Colors.black45),
-            ),
-          ),
-          child: Builder(builder: (context) {
-            return ListTile(
-              title: const Text('[图书馆有新公告]', style: TextStyle(color: Colors.blue, fontSize: 18)),
-              subtitle: Text(DateFormat('发布时间: yyyy-MM-dd   HH:mm').format(notice.ts)),
-              trailing: const Icon(
-                Icons.notification_important,
-                color: Colors.blueAccent,
-              ),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return LibraryNoticePage(notice);
-                }));
-              },
-            );
-          }),
-        );
-
-    return MyFutureBuilder<Notice?>(
-      future: LibraryAppointmentInitializer.appointmentService.getNotice(),
-      builder: (context, data) {
-        return data == null ? buildNone() : buildSome(data);
-      },
-    );
-  }
-
   Widget _buildBody(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var imageWidth = screenWidth * 0.6;
     var sayingWidth = screenWidth * 0.5;
     return Column(
       children: [
-        _buildNotice(),
+        NoticeWidget(),
         Center(
           child: SizedBox(
             height: 400,
