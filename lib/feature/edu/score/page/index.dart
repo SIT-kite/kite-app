@@ -85,16 +85,19 @@ class _ScorePageState extends State<ScorePage> {
   }
 
   Widget _buildNoResult() {
-    return Column(children: [
-      Container(
-        child: _notFoundPicture,
-      ),
-      const Text('暂时还没有成绩', style: TextStyle(color: Colors.grey)),
-      Container(
-        margin: const EdgeInsets.only(left: 40, right: 40),
-        child: const Text('过会儿再来吧！', textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),
-      )
-    ]);
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          child: _notFoundPicture,
+        ),
+        const Text('暂时还没有成绩', style: TextStyle(color: Colors.grey)),
+        Container(
+          margin: const EdgeInsets.only(left: 40, right: 40),
+          child: const Text('过会儿再来吧！', textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),
+        ),
+      ],
+    );
   }
 
   Widget _buildBody() {
