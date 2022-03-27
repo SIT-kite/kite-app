@@ -30,12 +30,16 @@ class PeriodStatusRecord {
   /// 场次描述
   String text;
 
-  PeriodStatusRecord(this.period, this.count, this.applied, this.text);
+  /// 是否已预约
+  bool appointed;
+
+  PeriodStatusRecord(this.period, this.count, this.applied, this.text, this.appointed);
+
   factory PeriodStatusRecord.fromJson(Map<String, dynamic> json) => _$PeriodStatusRecordFromJson(json);
 
   @override
   String toString() {
-    return 'PeriodStatusRecord{period: $period, count: $count, applied: $applied, text: $text}';
+    return 'PeriodStatusRecord{period: $period, count: $count, applied: $applied, text: $text, appointed: $appointed}';
   }
 }
 
