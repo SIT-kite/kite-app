@@ -28,5 +28,5 @@ abstract class AppointmentDao {
   Future<void> cancelApplication(int applyId);
 
   /// 获取当前开放场次
-  Future<CurrentPeriodResponse?> getCurrentPeriod();
+  Future<CurrentPeriodResponse> getCurrentPeriod();
 }

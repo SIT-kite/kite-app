@@ -73,11 +73,8 @@ class AppointmentService extends AService implements AppointmentDao {
   }
 
   @override
-  Future<CurrentPeriodResponse?> getCurrentPeriod() async {
+  Future<CurrentPeriodResponse> getCurrentPeriod() async {
     final response = await session.get('$_library/current');
-    if (response.data == null) {
-      return null;
-    }
     return CurrentPeriodResponse.fromJson(response.data);
   }
 

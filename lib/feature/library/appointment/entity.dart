@@ -74,9 +74,10 @@ class ApplyResponse {
 
 @JsonSerializable(createToJson: false)
 class CurrentPeriodResponse {
-  DateTime after;
-  DateTime before;
-  int period;
+  DateTime? after;
+  DateTime? before;
+  int? period;
+  int? next;
 
   CurrentPeriodResponse(this.after, this.before, this.period);
 
@@ -84,6 +85,6 @@ class CurrentPeriodResponse {
 
   @override
   String toString() {
-    return 'CurrentPeriodResponse{after: $after, before: $before, period: $period}';
+    return 'CurrentPeriodResponse{after: $after, before: $before, period: $period, next: $next}';
   }
 }
