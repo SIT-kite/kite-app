@@ -8,8 +8,12 @@ Future<int?> showAlertDialog(
   List<String>? actionTextList,
   List<Widget>? actionWidgetList,
 }) async {
-  if ((actionTextList == null && actionWidgetList == null) || (actionTextList != null && actionWidgetList != null)) {
+  if (actionTextList != null && actionWidgetList != null) {
     throw Exception("actionTextList与actionWidgetList参数不可同时传入");
+  }
+
+  if (actionTextList == null && actionWidgetList == null) {
+    actionWidgetList = [];
   }
 
   return showDialog(
