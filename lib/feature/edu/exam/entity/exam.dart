@@ -43,7 +43,7 @@ class ExamRoom {
   int seatNumber = 0;
 
   /// 是否重修
-  @JsonKey(name: 'cxbj', defaultValue: '是')
+  @JsonKey(name: 'cxbj', defaultValue: '未知')
   String isSecondExam = "";
 
   ExamRoom();
