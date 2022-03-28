@@ -37,7 +37,7 @@ class _TimeDisplayState extends State<TimeDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    final df = DateFormat('yyyy-MM-dd   HH:MM:ss');
+    final df = DateFormat('yyyy-MM-dd   HH:mm:ss');
     return Text(
       df.format(currentTime),
       style: const TextStyle(fontSize: 30),
