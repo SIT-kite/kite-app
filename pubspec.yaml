@@ -81,7 +81,7 @@ dependencies:
   image_picker: ^0.8.4+7
   pull_to_refresh: ^2.0.0
   dynamic_color_theme: ^2.0.0
-  geopattern_flutter: { git: { url: https://gitee.com/sit-yiban/geopattern } }
+  geopattern_flutter: { git: { url: https://github.com/SIT-kite/geopattern } }
   flutter_svg: ^1.0.0
   flutter_screenutil: ^5.1.1              # Screen adaptation
   flutter_native_splash: ^2.1.1           # Splash screen
