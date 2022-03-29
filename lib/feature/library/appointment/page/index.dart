@@ -148,7 +148,10 @@ class _AppointmentPageState extends State<AppointmentPage> {
         Widget buildTrailingWidget() {
           Widget buildOutdated() => const Text('已结束', style: TextStyle(color: Colors.red));
           Widget buildAppointed() => const Icon(Icons.check, color: Colors.green);
-          Widget buildAvailable() => const Text('可预约', style: TextStyle(color: Colors.blue));
+          Widget buildAvailable() => Text(
+                e.applied == e.count ? '已满' : '可预约',
+                style: const TextStyle(color: Colors.blue),
+              );
           Widget buildQrCode() => IconButton(
               onPressed: () async {
                 final response = await service.apply(e.period);
