@@ -44,10 +44,15 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
 
   late TabController _tabController;
 
+  final pageChangeNotifier = ValueNotifier(0);
+
   @override
   void initState() {
-    _tabController = TabController(length: categoryMapping.length, vsync: this);
-
+    _tabController = TabController(
+      length: categoryMapping.length,
+      vsync: this,
+    );
+    _tabController.addListener(() => pageChangeNotifier.value = _tabController.index);
     super.initState();
   }
 
@@ -69,31 +74,26 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
   }
 
   Widget _buildEventList(ActivityType type) {
-    return FutureBuilder<List<Activity>>(
+    return MyFutureBuilder<List<Activity>>(
       future: ScInitializer.scActivityListService.getActivityList(type, 1),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasData) {
-            final result = snapshot.data!.where(_filterActivity).toList();
-            return _buildEventResult(result);
-          } else if (snapshot.hasError) {
-            return Center(child: Text(snapshot.error.toString()));
-          }
-        }
-        return const Center(child: CircularProgressIndicator());
+      builder: (context, data) {
+        final result = data.where(_filterActivity).toList();
+        return _buildEventResult(result);
       },
     );
   }
 
   Widget _buildBody(BuildContext context) {
-    return MyFutureBuilder(
-      future: ScInitializer.session.get('http://sc.sit.edu.cn/'),
-      builder: (context, snapshot) {
-        return TabBarView(
-          controller: _tabController,
-          children: categoryMapping.keys.map((e) => _buildEventList(e)).toList(),
+    return TabBarView(
+      controller: _tabController,
+      children: categoryMapping.keys.map((e) {
+        return ValueListenableBuilder(
+          valueListenable: pageChangeNotifier,
+          builder: (a, b, c) {
+            return _buildEventList(e);
+          },
         );
-      },
+      }).toList(),
     );
   }
 
