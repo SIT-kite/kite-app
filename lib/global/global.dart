@@ -35,7 +35,7 @@ class Global {
 
   static late CookieJar cookieJar;
   static late Dio dio;
-  static late Dio dio2; // 消费查询连接池
+  static late Dio dio2; // 消费查询专用连接池(因为需要修改连接超时)
   static late SsoSession ssoSession;
   static late SsoSession ssoSession2;
 
@@ -68,13 +68,17 @@ class Global {
     dio = await DioInitializer.init(
       config: DioConfig()
         ..cookieJar = cookieJar
-        ..httpProxy = GlobalConfig.httpProxy,
+        ..httpProxy = GlobalConfig.httpProxy
+        ..sendTimeout = 6 * 1000
+        ..receiveTimeout = 6 * 1000,
     );
     dio2 = await DioInitializer.init(
       config: DioConfig()
         ..cookieJar = cookieJar
+        ..httpProxy = GlobalConfig.httpProxy
         ..connectTimeout = 30 * 1000
-        ..httpProxy = GlobalConfig.httpProxy,
+        ..sendTimeout = 6 * 1000
+        ..receiveTimeout = 6 * 1000,
     );
     ssoSession = SsoSession(dio: dio, cookieJar: cookieJar, onError: onSsoError);
     ssoSession2 = SsoSession(dio: dio2, cookieJar: cookieJar, onError: onSsoError);
