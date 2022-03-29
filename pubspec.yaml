@@ -98,6 +98,7 @@ dependencies:
 
   # Desktop support
   window_manager: ^0.2.0
+  synchronized: ^3.0.0+2
 
 
 dev_dependencies:

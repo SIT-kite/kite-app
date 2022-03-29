@@ -20,12 +20,13 @@ import 'dart:typed_data';
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:cookie_jar/cookie_jar.dart';
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' hide Lock;
 import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/exception/session.dart';
 import 'package:kite/feature/kite/service/ocr.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/util/logger.dart';
+import 'package:synchronized/synchronized.dart';
 
 import '../../util/dio_utils.dart';
 import 'encryption.dart';
@@ -56,6 +57,9 @@ class SsoSession extends ASession with Downloader {
 
   bool enableSsoErrorCallback = true;
 
+  /// 惰性登录锁
+  final loginLock = Lock();
+
   SsoSession({
     required this.dio,
     required this.cookieJar,
@@ -77,14 +81,22 @@ class SsoSession extends ASession with Downloader {
   }
 
   /// 进行登录操作
-  Future<void> makeSureLogin(Response _, String url) async {
-    isOnline = false;
-    // 只有用户名与密码均不为空时，才尝试重新登录，否则就抛异常
-    if (username != null && password != null) {
-      await login(_username!, _password!);
-    } else {
-      throw NeedLoginException(url: url);
-    }
+  Future<void> makeSureLogin(String url) async {
+    await loginLock.synchronized(() async {
+      isOnline = false;
+      // 只有用户名与密码均不为空时，才尝试重新登录，否则就抛异常
+      if (username != null && password != null) {
+        await _login(_username!, _password!);
+      } else {
+        throw NeedLoginException(url: url);
+      }
+    });
+  }
+
+  Future<Response> login(String username, String password) async {
+    return await loginLock.synchronized(() async {
+      return await _login(username, password);
+    });
   }
 
   @override
@@ -149,7 +161,7 @@ class SsoSession extends ASession with Downloader {
 
     // 如果跳转登录页，那就先登录
     if (isLoginPage(firstResponse)) {
-      await makeSureLogin(firstResponse, url);
+      await makeSureLogin(url);
       return await requestNormally();
     } else {
       return firstResponse;
@@ -197,7 +209,7 @@ class SsoSession extends ASession with Downloader {
     return response;
   }
 
-  Future<Response> login(String username, String password) async {
+  Future<Response> _login(String username, String password) async {
     int count = 0;
 
     while (count < _maxRetryCount) {

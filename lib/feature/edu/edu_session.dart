@@ -66,7 +66,7 @@ class EduSession extends ASession {
     // 如果还是需要登录
     if (_isRedirectedToLoginPage(response)) {
       Log.info('SsoSession需要登录');
-      await ssoSession.makeSureLogin(response, url);
+      await ssoSession.makeSureLogin(url);
       await _refreshCookie();
       response = await fetch();
     }
