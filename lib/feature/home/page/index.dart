@@ -188,32 +188,17 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     Log.info('开始加载首页');
     Future.delayed(Duration.zero, () async {
-      showBasicFlash(
-        context,
-        const Text('正在检查网络连接'),
-        duration: const Duration(seconds: 3),
-      );
-      await Future.delayed(const Duration(seconds: 3));
-      final ok = await HomeInitializer.ssoSession.checkConnectivity();
-      if (!ok) {
-        _showCheckNetwork(
-          context,
-          title: const Text('无法连接校园网，部分功能暂不可用'),
-        );
-      } else {
+      if (await HomeInitializer.ssoSession.checkConnectivity()) {
         showBasicFlash(
           context,
           const Text('当前已连接校园网环境'),
           duration: const Duration(seconds: 3),
         );
-        await _onHomeRefresh(context);
       }
     });
 
-    if (UniversalPlatform.isAndroid || UniversalPlatform.isIOS) {
-      QuickButton.init(context);
-    }
-    _updateWeather();
+    _onHomeRefresh(context);
+    if (UniversalPlatform.isAndroid || UniversalPlatform.isIOS) QuickButton.init(context);
     Global.eventBus.on(EventNameConstants.onCampusChange, (_) => _updateWeather());
     Global.eventBus.on(EventNameConstants.onHomeItemReorder, (_) => setState(() {}));
     super.initState();
