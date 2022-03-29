@@ -31,9 +31,9 @@ class DioConfig {
   String? httpProxy;
   bool allowBadCertificate = true;
   CookieJar cookieJar = DefaultCookieJar();
-  int connectTimeout = 3 * 1000;
-  int sendTimeout = 3 * 1000;
-  int receiveTimeout = 3 * 1000;
+  int? connectTimeout;
+  int? sendTimeout;
+  int? receiveTimeout;
 }
 
 /// 用于初始化Dio,全局只有一份dio对象
@@ -57,10 +57,11 @@ class DioInitializer {
     dio.interceptors.add(CookieManager(config.cookieJar));
 
     // 设置默认超时时间
-    dio.options
-      ..connectTimeout = config.connectTimeout
-      ..sendTimeout = config.sendTimeout
-      ..receiveTimeout = config.receiveTimeout;
+    dio.options.copyWith(
+      connectTimeout: config.connectTimeout,
+      sendTimeout: config.sendTimeout,
+      receiveTimeout: config.receiveTimeout,
+    );
     return dio;
   }
 
