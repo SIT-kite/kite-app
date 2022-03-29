@@ -82,8 +82,9 @@ class SsoSession extends ASession with Downloader {
 
   /// 进行登录操作
   Future<void> makeSureLogin(String url) async {
+    isOnline = false;
     await loginLock.synchronized(() async {
-      isOnline = false;
+      if (isOnline) return;
       // 只有用户名与密码均不为空时，才尝试重新登录，否则就抛异常
       if (username != null && password != null) {
         await _login(_username!, _password!);
