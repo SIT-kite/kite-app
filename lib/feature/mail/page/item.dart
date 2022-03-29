@@ -51,12 +51,9 @@ class MailItem extends StatelessWidget {
         ),
         radius: 20,
       ),
-      isThreeLine: true,
-      title: Text(subjectText, style: titleStyle, maxLines: 2, overflow: TextOverflow.ellipsis),
-      subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(senderText, style: subtitleStyle),
-        Text(contentText, style: contentStyle, maxLines: 1, overflow: TextOverflow.ellipsis)
-      ]),
+      // isThreeLine: true,
+      title: Text(subjectText, style: titleStyle, maxLines: 1, overflow: TextOverflow.fade),
+      subtitle: Text(senderText, style: subtitleStyle),
       trailing: Text(dateText, style: subtitleStyle),
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(builder: (_) => DetailPage(_message)));

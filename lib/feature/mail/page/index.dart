@@ -62,7 +62,14 @@ class _MailPageState extends State<MailPage> {
   }
 
   Widget _buildMailList() {
-    final List<Widget> items = _messages!.map((e) => MailItem(e)).toList();
+    final List<Widget> items = _messages!.map((e) {
+      return Column(
+        children: [
+          MailItem(e),
+          const Divider(),
+        ],
+      );
+    }).toList();
     return ListView(children: items);
   }
 
