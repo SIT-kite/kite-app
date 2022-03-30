@@ -124,11 +124,10 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          // buildTorchButton(),
+          buildTorchButton(),
           // buildStopButton(),
-          // buildCenterText(),
           buildSwitchButton(),
-          // buildImagePicker(),
+          buildImagePicker(),
         ],
       ),
     );
