@@ -78,7 +78,7 @@ class _GreetingWidgetState extends State<GreetingWidget> {
       onTap: () {
         final title = _getCampusName() + '天气';
         final url = _getWeatherUrl(campus == 1 ? '101021000' : '101021200');
-        launchInBuiltinWebView(context, url, fixedTitle: title);
+        launchUrlInBuiltinWebView(context, url, fixedTitle: title);
       },
       child: SvgPicture.asset('assets/weather/$iconCode.svg',
           width: 60, height: 60, fit: BoxFit.fill, color: Colors.white),

@@ -29,7 +29,7 @@ class UpgradeItem extends StatelessWidget {
 
   void onTapUpdate(AppVersion version) {
     final url = '$appUpgradeUrl?type=${version.platform}&oldVersion=${version.version}';
-    launchInBrowser(url);
+    launchUrl(url);
   }
 
   @override

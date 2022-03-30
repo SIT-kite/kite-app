@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:kite/component/webview.dart';
+import 'package:kite/launch.dart';
 import 'package:kite/util/logger.dart';
-import 'package:kite/util/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class SimpleWebViewPage extends StatefulWidget {
@@ -114,7 +114,7 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
     }
     if (widget.showLoadInBrowser) {
       actions.add(IconButton(
-        onPressed: () => launchInBrowser(widget.initialUrl),
+        onPressed: () => GlobalLauncher.launch(widget.initialUrl),
         icon: const Icon(Icons.open_in_browser),
       ));
     }

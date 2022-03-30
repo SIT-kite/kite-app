@@ -20,9 +20,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/exception/session.dart';
+import 'package:kite/launch.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/util/flash.dart';
-import 'package:kite/util/url_launcher.dart';
 import 'package:kite/util/validation.dart';
 
 import '../init.dart';
@@ -75,10 +75,7 @@ class _LoginPageState extends State<LoginPage> {
         ..personName = personName;
 
       Navigator.pushReplacementNamed(context, '/home');
-      launchInBuiltinWebView(
-        context,
-        'https://cdn.kite.sunnysab.cn/wiki/kite-app/feature/',
-      );
+      GlobalLauncher.launch('https://cdn.kite.sunnysab.cn/wiki/kite-app/feature/');
     } on CredentialsInvalidException catch (e) {
       showBasicFlash(context, Text(e.msg));
       return;
@@ -106,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
 
   static void onOpenUserLicense() {
     const url = "https://cdn.kite.sunnysab.cn/license/";
-    launchInBrowser(url);
+    GlobalLauncher.launch(url);
   }
 
   Widget buildTitleLine() {
@@ -295,7 +292,7 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () {
                       const String forgetPassword =
                           'https://authserver.sit.edu.cn/authserver/getBackPasswordMainPage.do?service=https%3A%2F%2Fmyportal.sit.edu.cn%3A443%2F';
-                      launchInBrowser(forgetPassword);
+                      GlobalLauncher.launch(forgetPassword);
                     },
                   ),
                   TextButton(

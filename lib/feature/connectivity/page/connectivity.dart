@@ -19,9 +19,9 @@ import 'package:app_settings/app_settings.dart';
 import 'package:check_vpn_connection/check_vpn_connection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kite/launch.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/util/network.dart';
-import 'package:kite/util/url_launcher.dart';
 
 import '../init.dart';
 import '../service/network.dart';
@@ -142,13 +142,13 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
               height: 40,
               child: ElevatedButton(
                 child: const Text('打开 EasyConnect'),
-                onPressed: () => launchInBrowser('sangfor://easyconnect'),
+                onPressed: () => GlobalLauncher.launch('sangfor://easyconnect'),
               ),
             ),
           ],
         ),
         TextButton(
-          onPressed: () => launchInBrowser('https://www.sit.edu.cn/xxfw/list.htm'),
+          onPressed: () => GlobalLauncher.launch('https://www.sit.edu.cn/xxfw/list.htm'),
           child: const Text('点此下载 EasyConnect'),
         ),
       ],

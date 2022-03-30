@@ -181,7 +181,7 @@ class _DetailPageState extends State<DetailPage> {
             onPressed: () {
               final url =
                   'https://myportal.sit.edu.cn/detach.portal?action=bulletinBrowser&.ia=false&.pmn=view&.pen=${widget.summary.bulletinCatalogueId}&bulletinId=${widget.summary.uuid}';
-              launchInBrowser(url);
+              launchUrl(url);
             },
             icon: const Icon(Icons.open_in_browser),
           ),

@@ -19,7 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grouped_list/grouped_list.dart';
-import 'package:kite/util/url_launcher.dart';
+import 'package:kite/launch.dart';
 
 import '../entity/contact.dart';
 
@@ -55,7 +55,7 @@ class ContactList extends StatelessWidget {
             color: Theme.of(context).primaryColor,
             onPressed: () {
               final phone = contact.phone;
-              launchInBrowser('tel:${(phone.length == 8 ? '021' : '') + phone}');
+              GlobalLauncher.launch('tel:${(phone.length == 8 ? '021' : '') + phone}');
             },
           )
         ],
