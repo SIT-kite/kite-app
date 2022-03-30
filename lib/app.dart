@@ -105,6 +105,51 @@ class KiteApp extends StatelessWidget {
     final primaryColor = SettingInitializer.theme.color;
     final home = SettingInitializer.auth.currentUsername != null ? const HomePage() : const WelcomePage();
 
+    buildMaterialWithTheme(ThemeData theme) {
+      return MaterialApp(
+        title: title,
+        theme: theme,
+        home: home,
+        debugShowCheckedModeBanner: false,
+        navigatorKey: Catcher.navigatorKey,
+        onGenerateRoute: _onGenerateRoute,
+        builder: (context, widget) {
+          ScreenUtil.setContext(context);
+          return MediaQuery(
+            // 设置文字大小不随系统设置改变
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            child: widget!,
+          );
+        },
+        scrollBehavior: const MaterialScrollBehavior().copyWith(
+          dragDevices: {
+            PointerDeviceKind.mouse,
+            PointerDeviceKind.touch,
+            PointerDeviceKind.stylus,
+            PointerDeviceKind.unknown
+          },
+        ),
+      );
+    }
+
+    buildWidgetWithKeyboardListener(Widget child) {
+      return KeyboardListener(
+        onKeyEvent: (event) {
+          Log.info('按键事件: ${event.logicalKey}');
+
+          if (event is KeyUpEvent && LogicalKeyboardKey.escape == event.logicalKey) {
+            Log.info('松开返回键');
+            final ctx = Catcher.navigatorKey?.currentContext;
+            if (ctx != null && Navigator.canPop(ctx)) {
+              Navigator.pop(ctx);
+            }
+          }
+        },
+        focusNode: FocusNode(),
+        child: child,
+      );
+    }
+
     return ScreenUtilInit(
       builder: () => DynamicColorTheme(
         defaultColor: primaryColor,
@@ -113,43 +158,8 @@ class KiteApp extends StatelessWidget {
           return _buildTheme(context, color, isDark);
         },
         themedWidgetBuilder: (BuildContext context, ThemeData theme) {
-          return KeyboardListener(
-            onKeyEvent: (event) {
-              Log.info('按键事件: ${event.logicalKey}');
-
-              if (event is KeyUpEvent && LogicalKeyboardKey.escape == event.logicalKey) {
-                Log.info('松开返回键');
-                final ctx = Catcher.navigatorKey?.currentContext;
-                if (ctx != null && Navigator.canPop(ctx)) {
-                  Navigator.pop(ctx);
-                }
-              }
-            },
-            focusNode: FocusNode(),
-            child: MaterialApp(
-              title: title,
-              theme: theme,
-              home: home,
-              debugShowCheckedModeBanner: false,
-              navigatorKey: Catcher.navigatorKey,
-              onGenerateRoute: _onGenerateRoute,
-              builder: (context, widget) {
-                ScreenUtil.setContext(context);
-                return MediaQuery(
-                  // 设置文字大小不随系统设置改变
-                  data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                  child: widget!,
-                );
-              },
-              scrollBehavior: const MaterialScrollBehavior().copyWith(
-                dragDevices: {
-                  PointerDeviceKind.mouse,
-                  PointerDeviceKind.touch,
-                  PointerDeviceKind.stylus,
-                  PointerDeviceKind.unknown
-                },
-              ),
-            ),
+          return buildWidgetWithKeyboardListener(
+            buildMaterialWithTheme(theme),
           );
         },
       ),
