@@ -4,13 +4,13 @@ import 'package:kite/util/launcher.dart';
 import 'package:kite/util/rule.dart';
 
 class GlobalLauncher {
-  static late BuildContext context;
-  static final schemeLauncher = SchemeLauncher(
+  static late BuildContext _context;
+  static final _schemeLauncher = SchemeLauncher(
     schemes: [
       LaunchScheme(
         launchRule: FunctionalRule((scheme) => scheme.startsWith('http')),
         onLaunch: (scheme) {
-          Navigator.of(context).pushNamed(
+          Navigator.of(_context).pushNamed(
             scheme,
             arguments: {
               'initialUrl': scheme,
@@ -21,7 +21,7 @@ class GlobalLauncher {
     ],
     onNotFound: (scheme) {
       showAlertDialog(
-        context,
+        _context,
         title: '无法识别',
         content: [
           Text(
@@ -34,11 +34,11 @@ class GlobalLauncher {
     },
   );
 
-  void launch(String schemeText) {
-    schemeLauncher.launch(schemeText);
+  static void launch(String schemeText) {
+    _schemeLauncher.launch(schemeText);
   }
 
-  void init(BuildContext context) {
-    GlobalLauncher.context = context;
+  static void init(BuildContext context) {
+    GlobalLauncher._context = context;
   }
 }
