@@ -22,6 +22,7 @@ import 'package:kite/exception/session.dart';
 import 'package:kite/feature/kite/service/weather.dart';
 import 'package:kite/feature/quick_button/init.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/launch.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
@@ -166,9 +167,10 @@ class _HomePageState extends State<HomePage> {
                 // AppBar
                 actions: [
                   IconButton(
-                    onPressed: () async{
+                    onPressed: () async {
                       final result = await scan(context);
                       Log.info('扫码结果: $result');
+                      if (result != null) GlobalLauncher.launch(result);
                     },
                     icon: Icon(Icons.qr_code_scanner_outlined),
                     iconSize: 30,

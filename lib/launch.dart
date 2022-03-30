@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:kite/route.dart';
 import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/launcher.dart';
+import 'package:kite/util/logger.dart';
 import 'package:kite/util/rule.dart';
 
 class GlobalLauncher {
@@ -10,14 +12,19 @@ class GlobalLauncher {
       LaunchScheme(
         launchRule: FunctionalRule((scheme) => scheme.startsWith('http')),
         onLaunch: (scheme) {
+          Log.info('启动浏览器');
           Navigator.of(_context).pushNamed(
-            scheme,
-            arguments: {
-              'initialUrl': scheme,
-            },
+            RouteTable.browser,
+            arguments: {'initialUrl': scheme},
           );
         },
       ),
+      LaunchScheme(
+        launchRule: FunctionalRule((s) => s.startsWith('QY')),
+        onLaunch: (scheme) {
+          Log.info('启动场所码');
+        },
+      )
     ],
     onNotFound: (scheme) {
       showAlertDialog(
