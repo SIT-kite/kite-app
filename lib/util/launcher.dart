@@ -12,10 +12,10 @@ class LaunchScheme {
   });
 }
 
-class Launcher {
+class SchemeLauncher {
   List<LaunchScheme> schemes;
   onLaunchCallback? onNotFound;
-  Launcher({
+  SchemeLauncher({
     this.schemes = const [],
     this.onNotFound,
   });
