@@ -1,3 +1,4 @@
+import 'package:catcher/catcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:kite/route.dart';
 import 'package:kite/util/alert_dialog.dart';
@@ -8,7 +9,7 @@ import 'package:kite/util/url_launcher.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 class GlobalLauncher {
-  static late BuildContext _context;
+  static get _context => Catcher.navigatorKey!.currentContext!;
   static final _schemeLauncher = SchemeLauncher(
     schemes: [
       LaunchScheme(
@@ -21,7 +22,7 @@ class GlobalLauncher {
               arguments: {'initialUrl': scheme},
             );
           } else {
-            launchUrlInBuiltinWebView(_context, scheme);
+            launchUrl(scheme);
           }
         },
       ),
@@ -55,9 +56,5 @@ class GlobalLauncher {
 
   static void launch(String schemeText) {
     _schemeLauncher.launch(schemeText);
-  }
-
-  static void init(BuildContext context) {
-    GlobalLauncher._context = context;
   }
 }

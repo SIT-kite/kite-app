@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:kite/component/webview.dart';
-import 'package:kite/launch.dart';
 import 'package:kite/util/logger.dart';
+import 'package:kite/util/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class SimpleWebViewPage extends StatefulWidget {
@@ -82,7 +82,7 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
 
   void _onShared() async {
     final controller = await _controllerCompleter.future;
-    Log.info('分享页面: ${controller.currentUrl()}');
+    Log.info('分享页面: ${await controller.currentUrl()}');
   }
 
   /// 构造进度条
@@ -99,25 +99,24 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
 
   @override
   Widget build(BuildContext context) {
-    final actions = <Widget>[];
-    if (widget.showSharedButton) {
-      actions.add(IconButton(
-        onPressed: _onShared,
-        icon: const Icon(Icons.share),
-      ));
-    }
-    if (widget.showRefreshButton) {
-      actions.add(IconButton(
-        onPressed: _onRefresh,
-        icon: const Icon(Icons.refresh),
-      ));
-    }
-    if (widget.showLoadInBrowser) {
-      actions.add(IconButton(
-        onPressed: () => GlobalLauncher.launch(widget.initialUrl),
-        icon: const Icon(Icons.open_in_browser),
-      ));
-    }
+    final actions = <Widget>[
+      if (widget.showSharedButton)
+        IconButton(
+          onPressed: _onShared,
+          icon: const Icon(Icons.share),
+        ),
+      if (widget.showRefreshButton)
+        IconButton(
+          onPressed: _onRefresh,
+          icon: const Icon(Icons.refresh),
+        ),
+      if (widget.showLoadInBrowser)
+        IconButton(
+          onPressed: () => launchUrl(widget.initialUrl),
+          icon: const Icon(Icons.open_in_browser),
+        ),
+    ];
+
     return WillPopScope(
       onWillPop: () async {
         final controller = await _controllerCompleter.future;

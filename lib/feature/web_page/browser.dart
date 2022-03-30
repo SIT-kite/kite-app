@@ -9,6 +9,7 @@ class BrowserPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SimpleWebViewPage(
       initialUrl: initialUrl,
+      showLoadInBrowser: true,
     );
   }
 }
