@@ -23,6 +23,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kite/launch.dart';
 import 'package:kite/route.dart';
 
 import 'feature/page_index.dart';
@@ -104,6 +105,8 @@ class KiteApp extends StatelessWidget {
     final isDark = SettingInitializer.theme.isDarkMode;
     final primaryColor = SettingInitializer.theme.color;
     final home = SettingInitializer.auth.currentUsername != null ? const HomePage() : const WelcomePage();
+
+    GlobalLauncher.init(context);
 
     buildMaterialWithTheme(ThemeData theme) {
       return MaterialApp(
