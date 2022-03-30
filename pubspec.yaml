@@ -87,7 +87,9 @@ dependencies:
   flutter_native_splash: ^2.1.1           # Splash screen
   flutter_platform_widgets: ^1.12.1       # Platform aware widgets
   flutter_weather_bg_null_safety: ^1.0.0  # Weather background
-  qr_flutter: ^4.0.0  # Qr code generate
+  qr_flutter: ^4.0.0                      # Qr code generate
+  mobile_scanner: ^1.0.0                  # qrcode scanner
+  audioplayers: ^0.20.1                   # audo player
 
   # Utils
   nfc_manager: ^3.1.0           # NFC
@@ -95,10 +97,10 @@ dependencies:
   package_info_plus: ^1.3.0     # Get package info (version)
   universal_platform: ^1.0.0+1  # dart.io.Platform API for Web
   check_vpn_connection: ^0.0.2  # Check VPN connection status
+  synchronized: ^3.0.0+2
 
   # Desktop support
   window_manager: ^0.2.0
-  synchronized: ^3.0.0+2
 
 
 dev_dependencies:
@@ -141,6 +143,7 @@ flutter:
     - assets/night/
     - assets/game/
     - assets/mail/
+    - assets/scanner/
 
 # See: https://pub.flutter-io.cn/packages/flutter_native_splash
 flutter_native_splash:

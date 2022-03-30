@@ -22,6 +22,7 @@ export 'library/index.dart';
 export 'login/page/login.dart';
 export 'mail/page/index.dart';
 export 'office/page/index.dart';
+export 'scanner/index.dart';
 export 'web_page/about.dart';
 export 'web_page/bbs.dart';
 export 'web_page/feedback.dart';

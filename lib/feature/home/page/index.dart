@@ -26,6 +26,7 @@ import 'package:kite/setting/init.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/network.dart';
+import 'package:kite/util/scanner.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -159,25 +160,42 @@ class _HomePageState extends State<HomePage> {
           enablePullDown: true,
           enablePullUp: false,
           controller: _refreshController,
-          child: CustomScrollView(slivers: [
-            SliverAppBar(
-              // AppBar
-              automaticallyImplyLeading: false,
-              flexibleSpace: FlexibleSpaceBar(title: _buildTitleLine(context)),
-              expandedHeight: 0.6.sh,
-              backgroundColor: Colors.transparent,
-              centerTitle: false,
-              elevation: 0,
-              pinned: false,
-            ),
-            SliverList(
-              // Functions
-              delegate: SliverChildBuilderDelegate(
-                (_, index) => Padding(padding: EdgeInsets.only(left: 10.w, right: 10.w), child: items[index]),
-                childCount: items.length,
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                // AppBar
+                actions: [
+                  IconButton(
+                    onPressed: () async{
+                      final result = await scan(context);
+                      Log.info('扫码结果: $result');
+                    },
+                    icon: Icon(Icons.qr_code_scanner_outlined),
+                    iconSize: 30,
+                  )
+                ],
+                automaticallyImplyLeading: false,
+                flexibleSpace: FlexibleSpaceBar(
+                  title: _buildTitleLine(context),
+                ),
+                expandedHeight: 0.6.sh,
+                backgroundColor: Colors.transparent,
+                centerTitle: false,
+                elevation: 0,
+                pinned: false,
               ),
-            ),
-          ]),
+              SliverList(
+                // Functions
+                delegate: SliverChildBuilderDelegate(
+                  (_, index) => Padding(
+                    padding: EdgeInsets.only(left: 10.w, right: 10.w),
+                    child: items[index],
+                  ),
+                  childCount: items.length,
+                ),
+              ),
+            ],
+          ),
           onRefresh: () => _onHomeRefresh(context),
         ),
       ],

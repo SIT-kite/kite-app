@@ -38,6 +38,7 @@ class RouteTable {
   static const exam = '/exam';
   static const egg = '/egg';
   static const bbs = '/bbs';
+  static const scanner = '/scanner';
 
   static final routeTable = {
     home: (context) => const HomePage(),
@@ -74,6 +75,7 @@ class RouteTable {
     exam: (context) => const ExamPage(),
     egg: (context) => const EggPage(),
     bbs: (context) => const BbsPage(),
+    scanner: (context) => const ScannerPage(),
   };
 
   static WidgetBuilder? get(String path) {
