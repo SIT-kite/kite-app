@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/feature/home/page/item/bbs.dart';
+import 'package:kite/feature/home/page/item/scan.dart';
 
 import '../../entity/home.dart';
 import 'bulletin.dart';
@@ -66,9 +67,10 @@ class HomeFunctionButton extends StatelessWidget {
   final Widget? iconWidget;
   final String title;
   final String? subtitle;
-
+  final VoidCallback? onPressd;
   HomeFunctionButton({
     this.route,
+    this.onPressd,
     required this.title,
     this.subtitle,
     this.icon,
@@ -91,7 +93,15 @@ class HomeFunctionButton extends StatelessWidget {
         title: Text(title, style: titleStyle),
         subtitle: Text(subtitle ?? '', style: subtitleStyle, maxLines: 1, overflow: TextOverflow.ellipsis),
         // dense: true,
-        onTap: (route != null) ? () => Navigator.of(context).pushNamed(route!) : null,
+        onTap: () {
+          if (onPressd != null) {
+            onPressd!();
+            return;
+          }
+          if (route != null) {
+            Navigator.of(context).pushNamed(route!);
+          }
+        },
         style: ListTileStyle.list,
       ),
     );
@@ -137,6 +147,8 @@ class FunctionButtonFactory {
         return Container();
       case FunctionType.bbs:
         return const BbsItem();
+      case FunctionType.scanner:
+        return const ScanItem();
     }
   }
 }

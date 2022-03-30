@@ -96,6 +96,9 @@ enum FunctionType {
   /// 上应互助
   @HiveField(17)
   bbs,
+
+  /// 扫码
+  scanner,
 }
 
 /* 默认首页布局, 千万不能漏 */
@@ -106,6 +109,7 @@ const _defaultUndergraduateFunctionList = <FunctionType>[
   FunctionType.notice,
   FunctionType.timetable,
   FunctionType.report,
+  FunctionType.scanner,
   FunctionType.separator,
   FunctionType.exam,
   FunctionType.classroom,
@@ -129,6 +133,7 @@ const _defaultPostgraduateFunctionList = <FunctionType>[
   FunctionType.upgrade,
   FunctionType.notice,
   FunctionType.report,
+  FunctionType.scanner,
   FunctionType.separator,
   FunctionType.classroom,
   FunctionType.expense,
@@ -149,6 +154,7 @@ const _defaultTeacherFunctionList = <FunctionType>[
   FunctionType.upgrade,
   FunctionType.notice,
   FunctionType.report,
+  FunctionType.scanner,
   FunctionType.separator,
   FunctionType.expense,
   FunctionType.library,

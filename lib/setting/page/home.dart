@@ -59,6 +59,8 @@ String functionTypeToString(FunctionType type) {
       return '分隔符';
     case FunctionType.bbs:
       return '上应互助';
+    case FunctionType.scanner:
+      return "扫码";
   }
 }
 
