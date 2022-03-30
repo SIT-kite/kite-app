@@ -258,7 +258,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
             if (data == null) return const CircularProgressIndicator();
             if (data.period == null) {
               return Text(
-                '当前不在进馆时段\n下一时间段 ${data.next}',
+                '当前不在进馆时段',
                 textAlign: TextAlign.center,
               );
             } else {
