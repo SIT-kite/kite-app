@@ -129,6 +129,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
         showAlertDialog(
           context,
           title: '预约失败',
+          content: [Text('$e')],
           actionTextList: ['关闭'],
         );
       } finally {
