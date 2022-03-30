@@ -16,6 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/launch.dart';
+import 'package:kite/util/logger.dart';
+import 'package:kite/util/scanner.dart';
 import 'package:quick_actions/quick_actions.dart';
 
 class QuickButton {
@@ -29,6 +32,12 @@ class QuickButton {
       Navigator.of(_context!).pushNamed('/timetable');
     } else if (type == 'library') {
       Navigator.of(_context!).pushNamed('/library');
+    } else if (type == 'scanner') {
+      () async {
+        final result = await scan(_context!);
+        Log.info('扫码结果: $result');
+        if (result != null) GlobalLauncher.launch(result);
+      }();
     }
   }
 
@@ -40,6 +49,7 @@ class QuickButton {
       const ShortcutItem(type: 'report', localizedTitle: '体温上报', icon: null),
       const ShortcutItem(type: 'timetable', localizedTitle: '课表', icon: null),
       const ShortcutItem(type: 'library', localizedTitle: '图书馆', icon: null),
+      const ShortcutItem(type: 'scanner', localizedTitle: '扫码', icon: null),
     ]);
   }
 }

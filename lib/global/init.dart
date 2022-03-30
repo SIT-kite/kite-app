@@ -17,9 +17,11 @@
  */
 import 'package:catcher/catcher.dart';
 import 'package:kite/feature/initializer_index.dart';
+import 'package:kite/feature/sit_app/init.dart';
 import 'package:kite/global/desktop_initializer.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/session/kite_session.dart';
+import 'package:kite/session/sit_app_session.dart';
 import 'package:kite/setting/init.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -65,6 +67,9 @@ class Initializer {
     ReportInitializer.init(dio: Global.dio);
     ScInitializer.init(ssoSession: Global.ssoSession);
     LoginInitializer.init(ssoSession: Global.ssoSession);
+
+    final sitAppSession = SitAppSession(Global.dio, SettingInitializer.sitAppJwt);
+    SitAppInitializer.init(sitAppSession: sitAppSession);
 
     if (UniversalPlatform.isDesktop && !GlobalConfig.isTestEnv) {
       await DesktopInitializer.init();

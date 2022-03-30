@@ -12,6 +12,7 @@ class SettingInitializer {
   static late AuthSettingDao auth;
   static late NetworkSettingDao network;
   static late JwtDao jwt;
+  static late JwtDao sitAppJwt;
   static late HomeSettingDao home;
   static late LoginTimeDao loginTime;
 
@@ -23,6 +24,7 @@ class SettingInitializer {
     theme = ThemeSettingStorage(settingBox);
     network = NetworkSettingStorage(settingBox);
     jwt = JwtStorage(settingBox);
+    sitAppJwt = SitAppJwtStorage(settingBox);
     loginTime = LoginTimeStorage(settingBox);
     Settings.init(cacheProvider: HiveCacheProvider(settingBox));
   }

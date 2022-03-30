@@ -22,6 +22,7 @@ import '../dao/jwt.dart';
 class JwtKeys {
   static const namespace = '/kite';
   static const jwt = '$namespace/jwt';
+  static const sitAppJwt = '$namespace/jwt';
 }
 
 class JwtStorage implements JwtDao {
@@ -34,4 +35,16 @@ class JwtStorage implements JwtDao {
 
   @override
   set jwtToken(String? jwt) => box.put(JwtKeys.jwt, jwt);
+}
+
+class SitAppJwtStorage implements JwtDao {
+  final Box<dynamic> box;
+
+  SitAppJwtStorage(this.box);
+
+  @override
+  String? get jwtToken => box.get(JwtKeys.sitAppJwt, defaultValue: null);
+
+  @override
+  set jwtToken(String? jwt) => box.put(JwtKeys.sitAppJwt, jwt);
 }

@@ -1,5 +1,6 @@
 import 'package:kite/feature/initializer_index.dart';
 import 'package:kite/feature/library/search/init.dart';
+import 'package:kite/feature/sit_app/init.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/global/init.dart';
 
@@ -35,4 +36,9 @@ Future<void> loginLibrary() async {
 /// 登陆小风筝服务
 Future<void> loginKite() async {
   await KiteInitializer.kiteSession.login(username, ssoPassword);
+}
+
+/// 登录上应大App服务
+Future<void> loginSitApp() async {
+  await SitAppInitializer.sitAppSession.login(username, ssoPassword);
 }

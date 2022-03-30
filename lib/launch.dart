@@ -8,6 +8,8 @@ import 'package:kite/util/rule.dart';
 import 'package:kite/util/url_launcher.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+import 'feature/sit_app/arrive_code/dialog.dart';
+
 class GlobalLauncher {
   static get _context => Catcher.navigatorKey!.currentContext!;
   static final _schemeLauncher = SchemeLauncher(
@@ -30,6 +32,7 @@ class GlobalLauncher {
         launchRule: FunctionalRule((s) => s.startsWith('QY')),
         onLaunch: (scheme) {
           Log.info('启动场所码');
+          ArriveCodeDialog.scan(_context, scheme.substring(2));
         },
       ),
       LaunchScheme(
