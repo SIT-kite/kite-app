@@ -36,7 +36,7 @@ Future<AppVersion> getCurrentVersion() async {
   final packageInfo = await PackageInfo.fromPlatform();
   final platform = UniversalPlatform.isAndroid ? 'Android' : (UniversalPlatform.isIOS ? 'iOS' : 'Unknown');
 
-  return AppVersion(platform, '${packageInfo.version}+${packageInfo.buildNumber}');
+  return AppVersion(platform, packageInfo.version);
 }
 
 /// 检查更新
