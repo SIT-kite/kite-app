@@ -40,13 +40,11 @@ class UpgradeItem extends StatelessWidget {
       future: future,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done && snapshot.hasData && snapshot.data != null) {
-          return GestureDetector(
-            onTap: () => onTapUpdate(snapshot.data!),
-            child: HomeFunctionButton(
-              title: '更新',
-              subtitle: '小风筝有新的版本了，点击更新',
-              icon: 'assets/home/icon_upgrade.svg',
-            ),
+          return HomeFunctionButton(
+            title: '更新',
+            onPressd: () => onTapUpdate(snapshot.data!),
+            subtitle: '小风筝有新的版本了，点击更新',
+            icon: 'assets/home/icon_upgrade.svg',
           );
         }
         return const SizedBox(height: 0);
