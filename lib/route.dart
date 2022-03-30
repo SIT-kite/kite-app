@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:kite/feature/web_page/browser.dart';
 
 import 'feature/page_index.dart';
 import 'setting/page/index.dart';
+
+typedef NamedRouteBuilder = Widget Function(BuildContext context, Map<String, dynamic> args);
 
 class RouteTable {
   static const home = '/home';
@@ -39,46 +42,48 @@ class RouteTable {
   static const egg = '/egg';
   static const bbs = '/bbs';
   static const scanner = '/scanner';
+  static const browser = '/browser';
 
-  static final routeTable = {
-    home: (context) => const HomePage(),
-    report: (context) => const DailyReportPage(),
-    login: (context) => const LoginPage(),
-    welcome: (context) => const WelcomePage(),
-    about: (context) => const AboutPage(),
-    expense: (context) => const ExpensePage(),
-    connectivity: (context) => const ConnectivityPage(),
-    campusCard: (context) => const CampusCardPage(),
-    electricity: (context) => const ElectricityPage(),
-    score: (context) => const ScorePage(),
-    office: (context) => const OfficePage(),
-    game: (context) => const GamePage(),
-    game2048: (context) => Game2048Page(),
-    gameWordle: (context) => const WordlePage(),
-    gameComposeSit: (context) => const ComposeSitPage(),
-    wiki: (context) => WikiPage(),
-    library: (context) => const LibraryPage(),
-    libraryAppointment: (context) => AppointmentPage(),
-    market: (context) => const MarketPage(),
-    timetable: (context) => const TimetablePage(),
-    timetableImport: (context) => const TimetableImportPage(),
-    setting: (context) => SettingPage(),
-    feedback: (context) => const FeedbackPage(),
-    notice: (context) => const NoticePage(),
-    contact: (context) => const ContactPage(),
-    bulletin: (context) => const BulletinPage(),
-    mail: (context) => const MailPage(),
-    night: (context) => const NightPage(),
-    event: (context) => const EventPage(),
-    lostFound: (context) => const LostFoundPage(),
-    classroom: (context) => const ClassroomPage(),
-    exam: (context) => const ExamPage(),
-    egg: (context) => const EggPage(),
-    bbs: (context) => const BbsPage(),
-    scanner: (context) => const ScannerPage(),
+  static final Map<String, NamedRouteBuilder> routeTable = {
+    home: (context, args) => HomePage(),
+    report: (context, args) => const DailyReportPage(),
+    login: (context, args) => const LoginPage(),
+    welcome: (context, args) => const WelcomePage(),
+    about: (context, args) => const AboutPage(),
+    expense: (context, args) => const ExpensePage(),
+    connectivity: (context, args) => const ConnectivityPage(),
+    campusCard: (context, args) => const CampusCardPage(),
+    electricity: (context, args) => const ElectricityPage(),
+    score: (context, args) => const ScorePage(),
+    office: (context, args) => const OfficePage(),
+    game: (context, args) => const GamePage(),
+    game2048: (context, args) => Game2048Page(),
+    gameWordle: (context, args) => const WordlePage(),
+    gameComposeSit: (context, args) => const ComposeSitPage(),
+    wiki: (context, args) => WikiPage(),
+    library: (context, args) => const LibraryPage(),
+    libraryAppointment: (context, args) => AppointmentPage(),
+    market: (context, args) => const MarketPage(),
+    timetable: (context, args) => const TimetablePage(),
+    timetableImport: (context, args) => const TimetableImportPage(),
+    setting: (context, args) => SettingPage(),
+    feedback: (context, args) => const FeedbackPage(),
+    notice: (context, args) => const NoticePage(),
+    contact: (context, args) => const ContactPage(),
+    bulletin: (context, args) => const BulletinPage(),
+    mail: (context, args) => const MailPage(),
+    night: (context, args) => const NightPage(),
+    event: (context, args) => const EventPage(),
+    lostFound: (context, args) => const LostFoundPage(),
+    classroom: (context, args) => const ClassroomPage(),
+    exam: (context, args) => const ExamPage(),
+    egg: (context, args) => const EggPage(),
+    bbs: (context, args) => const BbsPage(),
+    scanner: (context, args) => const ScannerPage(),
+    browser: (context, args) => BrowserPage(args['initialUrl']),
   };
 
-  static WidgetBuilder? get(String path) {
+  static NamedRouteBuilder? get(String path) {
     return routeTable[path];
   }
 }

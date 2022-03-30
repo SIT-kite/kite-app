@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'dart:convert';
+
 import 'package:catcher/core/catcher.dart';
 import 'package:dynamic_color_theme/dynamic_color_theme.dart';
 import 'package:flutter/gestures.dart';
@@ -34,10 +36,15 @@ class KiteApp extends StatelessWidget {
   const KiteApp({Key? key}) : super(key: key);
 
   Route<dynamic> _onGenerateRoute(RouteSettings settings) {
-    Log.info('跳转路由: ${settings.name}');
-    Global.pageLogger.page(settings.name ?? 'Unknown');
     return MaterialPageRoute(
-      builder: (context) => RouteTable.get(settings.name!)!(context),
+      builder: (context) {
+        final builder = RouteTable.get(settings.name!);
+        final args = settings.arguments as Map<String, dynamic>? ?? {};
+        final argsJson = jsonEncode(args);
+        Log.info('跳转路由: ${settings.name}, 参数: $argsJson');
+        Global.pageLogger.page(settings.name ?? 'Unknown', argsJson);
+        return builder!(context, args);
+      },
       settings: settings,
     );
   }
