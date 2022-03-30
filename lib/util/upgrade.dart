@@ -58,7 +58,7 @@ Future<AppVersion?> getUpdate() async {
     final platform = columns[0];
     final version = columns[1];
     if (version != current.version) {
-      Log.info('检查到新版本 $version');
+      Log.info('检查到新版本 $version （当前版本 ${current.version}）');
       return AppVersion(platform, version);
     }
   } catch (_) {}
