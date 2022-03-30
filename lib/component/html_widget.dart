@@ -18,8 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:kite/launch.dart';
 import 'package:kite/util/logger.dart';
-import 'package:kite/util/url_launcher.dart';
 
 class MyHtmlWidget extends StatefulWidget {
   final String html;
@@ -45,11 +45,7 @@ class _MyHtmlWidgetState extends State<MyHtmlWidget> {
       renderMode: widget.renderMode,
       textStyle: Theme.of(context).textTheme.bodyText2,
       onTapUrl: (url) {
-        if (url.startsWith('http')) {
-          launchInBuiltinWebView(context, url);
-        } else {
-          launchInBrowser(url);
-        }
+        GlobalLauncher.launch(url);
         return true;
       },
       onTapImage: (ImageMetadata image) {
