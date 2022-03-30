@@ -26,9 +26,10 @@ class SchemeLauncher {
         scheme.onLaunch(schemeText);
         return;
       }
-      if (onNotFound != null) {
-        onNotFound!(schemeText);
-      }
+    }
+
+    if (onNotFound != null) {
+      onNotFound!(schemeText);
     }
   }
 }
