@@ -25,7 +25,7 @@ import 'package:kite/util/kite_authorization.dart';
 
 Future<void> _innerUploadGameRecord(BuildContext context, GameRecord record) async {
   // 如果用户未同意过, 请求用户确认
-  signUpIfNecessary(context, '使用学号或工号区分不同用户的游戏记录');
+  if (!await signUpIfNecessary(context, '使用学号或工号区分不同用户的游戏记录')) return;
 
   // 上传记录
   await RankingService(KiteInitializer.kiteSession).postScore(record);
