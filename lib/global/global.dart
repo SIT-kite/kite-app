@@ -70,13 +70,16 @@ class Global {
         ..cookieJar = cookieJar
         ..httpProxy = GlobalConfig.httpProxy
         ..sendTimeout = 6 * 1000
-        ..receiveTimeout = 6 * 1000,
+        ..receiveTimeout = 6 * 1000
+        ..connectTimeout = 6 * 1000,
     );
     dio2 = await DioInitializer.init(
       config: DioConfig()
         ..cookieJar = cookieJar
         ..httpProxy = GlobalConfig.httpProxy
-        ..connectTimeout = 30 * 1000,
+        ..connectTimeout = 30 * 1000
+        ..sendTimeout = 30 * 1000
+        ..receiveTimeout = 30 * 1000,
     );
     ssoSession = SsoSession(dio: dio, cookieJar: cookieJar, onError: onSsoError);
     ssoSession2 = SsoSession(dio: dio2, cookieJar: cookieJar, onError: onSsoError);
