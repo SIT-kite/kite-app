@@ -19,8 +19,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/launch.dart';
+import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/scanner.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 import 'index.dart';
 
@@ -31,6 +33,15 @@ class ScanItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return HomeFunctionButton(
       onPressd: () async {
+        if (UniversalPlatform.isDesktopOrWeb) {
+          showAlertDialog(
+            context,
+            title: '不支持的功能',
+            content: [const Text('仅移动端支持该功能')],
+            actionTextList: ['OK'],
+          );
+          return;
+        }
         final result = await scan(context);
         Log.info('扫码结果: $result');
         if (result != null) GlobalLauncher.launch(result);
