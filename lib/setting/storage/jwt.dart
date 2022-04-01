@@ -22,7 +22,7 @@ import '../dao/jwt.dart';
 class JwtKeys {
   static const namespace = '/kite';
   static const jwt = '$namespace/jwt';
-  static const sitAppJwt = '$namespace/jwt';
+  static const sitAppJwt = '$namespace/sitAppJwt';
 }
 
 class JwtStorage implements JwtDao {
