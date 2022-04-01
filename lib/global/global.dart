@@ -43,13 +43,14 @@ class Global {
     if (Catcher.navigatorKey == null) return;
     if (Catcher.navigatorKey!.currentContext == null) return;
     final context = Catcher.navigatorKey!.currentContext!;
-    if (error is DioError && error.type == DioErrorType.connectTimeout) {
+    if (error is DioError) {
       Future.delayed(Duration.zero, () async {
         final select = await showAlertDialog(
           context,
           title: '网络连接超时',
           content: [
-            const Text('连接超时，该功能需要您连接校园网环境；\n\n注意：学校服务器崩溃或停机维护也会产生这个问题。'),
+            const Text('连接超时，该功能需要您连接校园网环境；\n\n'
+                '注意：学校服务器崩溃或停机维护也会产生这个问题。'),
           ],
           actionTextList: ['进入网络工具检查', '取消'],
         );
