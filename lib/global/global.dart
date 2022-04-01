@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:catcher/catcher.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
@@ -39,24 +41,27 @@ class Global {
   static late SsoSession ssoSession;
   static late SsoSession ssoSession2;
 
+  // 是否正处于网络错误对话框
+  static bool inSsoErrorDialog = false;
+
   static onSsoError(error, stacktrace) {
     if (Catcher.navigatorKey == null) return;
     if (Catcher.navigatorKey!.currentContext == null) return;
     final context = Catcher.navigatorKey!.currentContext!;
     if (error is DioError) {
-      Future.delayed(Duration.zero, () async {
-        final select = await showAlertDialog(
-          context,
-          title: '网络连接超时',
-          content: [
-            const Text('连接超时，该功能需要您连接校园网环境；\n\n'
-                '注意：学校服务器崩溃或停机维护也会产生这个问题。'),
-          ],
-          actionTextList: ['进入网络工具检查', '取消'],
-        );
-        if (select == 0) {
-          Navigator.of(context).popAndPushNamed('/connectivity');
-        }
+      if (inSsoErrorDialog) return;
+      inSsoErrorDialog = true;
+      showAlertDialog(
+        context,
+        title: '网络连接超时',
+        content: [
+          const Text('连接超时，该功能需要您连接校园网环境；\n\n'
+              '注意：学校服务器崩溃或停机维护也会产生这个问题。'),
+        ],
+        actionTextList: ['进入网络工具检查', '取消'],
+      ).then((select) {
+        if (select == 0) Navigator.of(context).popAndPushNamed('/connectivity');
+        inSsoErrorDialog = false;
       });
     }
   }
