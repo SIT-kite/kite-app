@@ -74,7 +74,7 @@ class _GpaBannerState extends State<GpaBanner> {
       return Container(
         padding: const EdgeInsets.all(10),
         color: const Color(0xFFffe599),
-        child: Text('已选 ${_selectedSet.length} 门课程 绩点 ${gpa.toStringAsPrecision(2)}', softWrap: true),
+        child: Text('已选 ${_selectedSet.length} 门 绩点 ${gpa.toStringAsPrecision(2)}', softWrap: true),
       );
     } else {
       final type = _getType();
