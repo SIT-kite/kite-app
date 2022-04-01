@@ -25,7 +25,8 @@ import 'package:kite/setting/init.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/rule.dart';
 
-const String _defaultUaString = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:46.0) Gecko/20100101 Firefox/46.0';
+const String _defaultUaString =
+    'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:46.0) Gecko/20100101 Firefox/46.0';
 
 class DioConfig {
   String? httpProxy;
@@ -57,7 +58,7 @@ class DioInitializer {
     dio.interceptors.add(CookieManager(config.cookieJar));
 
     // 设置默认超时时间
-    dio.options.copyWith(
+    dio.options = dio.options.copyWith(
       connectTimeout: config.connectTimeout,
       sendTimeout: config.sendTimeout,
       receiveTimeout: config.receiveTimeout,
@@ -72,7 +73,8 @@ class DioInitializer {
       // 如果非IOS/Android，则该函数将抛异常
       await FkUserAgent.init();
       // 更新 dio 设置的 user-agent 字符串
-      dio.options.headers['User-Agent'] = FkUserAgent.webViewUserAgent ?? _defaultUaString;
+      dio.options.headers['User-Agent'] =
+          FkUserAgent.webViewUserAgent ?? _defaultUaString;
     } catch (e) {
       // Desktop端将进入该异常
       // TODO: 自定义UA
@@ -110,7 +112,9 @@ class KiteHttpOverrides extends HttpOverrides {
     final client = super.createHttpClient(context);
 
     // 设置证书检查
-    if (config.allowBadCertificate || SettingInitializer.network.useProxy || config.httpProxy != null) {
+    if (config.allowBadCertificate ||
+        SettingInitializer.network.useProxy ||
+        config.httpProxy != null) {
       client.badCertificateCallback = (cert, host, port) => true;
     }
 
@@ -126,9 +130,11 @@ class KiteHttpOverrides extends HttpOverrides {
         // 不行
         Log.info('测试环境代理服务器为空或不合法，将不使用代理服务器');
       }
-    } else if (SettingInitializer.network.useProxy && SettingInitializer.network.proxy.isNotEmpty) {
+    } else if (SettingInitializer.network.useProxy &&
+        SettingInitializer.network.proxy.isNotEmpty) {
       Log.info('线上设置代理: ${config.httpProxy}');
-      client.findProxy = (url) => getProxyPolicyByUrl(url, SettingInitializer.network.proxy);
+      client.findProxy =
+          (url) => getProxyPolicyByUrl(url, SettingInitializer.network.proxy);
     }
     return client;
   }
