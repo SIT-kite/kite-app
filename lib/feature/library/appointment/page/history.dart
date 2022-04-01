@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/feature/library/appointment/init.dart';
 import 'package:kite/feature/library/appointment/page/qrcode.dart';
@@ -125,7 +124,10 @@ class _HistoryPageState extends State<HistoryPage> {
     return const Text('未知状态', style: TextStyle(color: Colors.orange));
   }
 
-  Widget buildListView(List<ApplicationRecord> records, CurrentPeriodResponse currentPeriod) {
+  Widget buildListView(
+    List<ApplicationRecord> records,
+    CurrentPeriodResponse currentPeriod,
+  ) {
     records.sort((a, b) {
       return b.period - a.period;
     });
