@@ -21,6 +21,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/setting/dao/jwt.dart';
+import 'package:kite/setting/init.dart';
 import 'package:kite/util/logger.dart';
 
 import '../feature/kite/entity/account.dart';
@@ -35,6 +36,40 @@ class KiteSession extends ASession {
 
   @override
   Future<Response> request(
+    String url,
+    String method, {
+    Map<String, String>? queryParameters,
+    data,
+    Options? options,
+    String? contentType,
+    ResponseType? responseType,
+  }) async {
+    Future<Response> normallyRequest() async {
+      return await _requestWithoutRetry(
+        url,
+        method,
+        queryParameters: queryParameters,
+        data: data,
+        options: options,
+        contentType: contentType,
+        responseType: responseType,
+      );
+    }
+
+    try {
+      return await normallyRequest();
+    } on KiteApiError catch (e, _) {
+      if (e.code == 100) {
+        await login(
+          SettingInitializer.auth.currentUsername!,
+          SettingInitializer.auth.ssoPassword!,
+        );
+      }
+      return await normallyRequest();
+    }
+  }
+
+  Future<Response> _requestWithoutRetry(
     String url,
     String method, {
     Map<String, String>? queryParameters,
@@ -74,7 +109,7 @@ class KiteSession extends ASession {
       // 存在code,但是不为0
       if (responseDataCode != null) {
         final errorMsg = responseData['msg'];
-        Log.info('请求出错: $errorMsg');
+        Log.info('请求出错: $responseDataCode $errorMsg');
         throw KiteApiError(responseDataCode, errorMsg);
       }
     } on KiteApiError catch (e) {
