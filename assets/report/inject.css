@@ -45,7 +45,7 @@ uni-button[disabled].bg-green { color: white; background-color: #39b54a; }
 	Layout
 ----------------------------------------------------------------------------- */
 
-uni-page-body, 
+uni-page-body,
 uni-page-body > uni-view:only-child,
 .nav + uni-scroll-view {
 	height: 100%;
@@ -66,7 +66,7 @@ uni-page-body > uni-view:only-child,
 }
 
 /* PC */
-@media (min-width: 576px) {
+@media (min-width: 768px) {
 
 	/* show tab contents */
 	.nav + uni-scroll-view .uni-scroll-view-content {
