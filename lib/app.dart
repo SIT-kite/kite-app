@@ -114,7 +114,7 @@ class KiteApp extends StatelessWidget {
         navigatorKey: Catcher.navigatorKey,
         onGenerateRoute: _onGenerateRoute,
         builder: (context, widget) {
-          ScreenUtil.setContext(context);
+          // ScreenUtil.setContext(context);
           return MediaQuery(
             // 设置文字大小不随系统设置改变
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
@@ -151,7 +151,7 @@ class KiteApp extends StatelessWidget {
     }
 
     return ScreenUtilInit(
-      builder: () => DynamicColorTheme(
+      builder: (Widget? widget) => DynamicColorTheme(
         defaultColor: primaryColor,
         defaultIsDark: isDark,
         data: (Color color, bool isDark) {

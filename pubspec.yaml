@@ -12,7 +12,7 @@ issue_tracker: https://github.com/SIT-kite/kite-app/issues
 documentation: https://github.com/SIT-kite/kite-app#readme
 
 publish_to: none
-environment: { sdk: '>=2.16.0 <3.0.0', flutter: ^2.10.0 }
+environment: { sdk: '>=2.17.0 <3.0.0', flutter: ^3.0.0 }
 
 # ------------------------------------------------------------------------------
 
@@ -66,7 +66,7 @@ dependencies:
   flutter_settings_screens: ^0.3.2-null-safety
 
   # Platform
-  permission_handler: ^8.3.0        # Android / iOS / Windows Permission
+  permission_handler: ^9.2.0        # Android / iOS / Windows Permission
   quick_actions: ^0.6.0+9           # Android / iOS Home screen quick actions
   device_display_brightness: ^0.0.6
   # Open with other APP/programs
@@ -75,7 +75,7 @@ dependencies:
 
   # UI
   flash: ^2.0.3+1
-  fl_chart: ^0.46.0
+  fl_chart: 0.46.0
   text_scroll: ^0.0.3
   grouped_list: ^4.1.0
   image_picker: ^0.8.4+7
@@ -83,13 +83,13 @@ dependencies:
   dynamic_color_theme: ^2.0.0
   geopattern_flutter: { git: { url: https://github.com/SIT-kite/geopattern } }
   flutter_svg: ^1.0.0
-  flutter_screenutil: ^5.1.1              # Screen adaptation
+  flutter_screenutil: ^5.5.2              # Screen adaptation
   flutter_native_splash: ^2.1.1           # Splash screen
   flutter_platform_widgets: ^1.12.1       # Platform aware widgets
   flutter_weather_bg_null_safety: ^1.0.0  # Weather background
   qr_flutter: ^4.0.0                      # Qr code generate
   mobile_scanner: ^1.0.0                  # qrcode scanner
-  audioplayers: ^0.20.1                   # audo player
+  audioplayers: ^0.20.1                   # audio player
 
   # Utils
   nfc_manager: ^3.1.0           # NFC
@@ -105,7 +105,7 @@ dependencies:
 
 dev_dependencies:
   flutter_test: { sdk: flutter }
-  flutter_lints: ^1.0.0
+  flutter_lints: ^2.0.1
   build_runner: ^2.1.7
   hive_generator: ^1.1.2
 
