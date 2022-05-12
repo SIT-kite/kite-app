@@ -69,6 +69,10 @@ flutter build apk
 flutter run
 ```
 
+也可以运行build_script.sh脚本，其中包含了各种常用脚本
+
+还可以运行Makefile，也包含了各种常用命令
+
 ## 联系我们
 
 - 在本项目中提交 issue；
