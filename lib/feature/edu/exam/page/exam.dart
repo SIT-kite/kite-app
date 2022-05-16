@@ -67,8 +67,8 @@ class _ExamPageState extends State<ExamPage> {
   Widget buildExamItem(BuildContext context, ExamRoom examItem) {
     final itemStyle = Theme.of(context).textTheme.bodyText2;
     final name = examItem.courseName;
-    final startTime = examItem.time[0];
-    final endTime = examItem.time[1];
+    final strStartTime = examItem.time.isNotEmpty ? dateFormat.format(examItem.time[0]) : '/';
+    final strEndTime = examItem.time.isNotEmpty ? dateFormat.format(examItem.time[1]) : '/';
     final place = examItem.place;
     final seatNumber = examItem.seatNumber;
     final isSecondExam = examItem.isSecondExam;
@@ -93,8 +93,8 @@ class _ExamPageState extends State<ExamPage> {
           children: [
             buildRow('timetable/campus.png', '考试地点', place),
             buildRow('timetable/courseId.png', '座位号', '$seatNumber'),
-            buildRow('timetable/day.png', '开始时间', dateFormat.format(startTime)),
-            buildRow('timetable/day.png', '结束时间', dateFormat.format(endTime)),
+            buildRow('timetable/day.png', '开始时间', strStartTime),
+            buildRow('timetable/day.png', '结束时间', strEndTime),
             buildRow('', '是否重修', isSecondExam),
           ],
         )
@@ -158,6 +158,12 @@ class _ExamPageState extends State<ExamPage> {
           ),
           builder: (context, data) {
             data.sort((a, b) {
+              if (a.time.isEmpty || b.time.isEmpty) {
+                if (a.time.isEmpty != b.time.isEmpty) {
+                  return a.time.isEmpty ? 1 : -1;
+                }
+                return 0;
+              }
               return a.time[0].isAfter(b.time[0]) ? 1 : -1;
             });
             return Expanded(child: buildExamItems(context, data));

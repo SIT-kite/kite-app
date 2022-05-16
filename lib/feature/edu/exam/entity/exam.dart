@@ -26,7 +26,7 @@ class ExamRoom {
   @JsonKey(name: 'kcmc')
   String courseName = "";
 
-  /// 考试时间
+  /// 考试时间. 若无数据, 列表未空.
   @JsonKey(name: 'kssj', fromJson: _stringToList)
   List<DateTime> time = [];
 
@@ -62,15 +62,19 @@ class ExamRoom {
   static List<DateTime> _stringToList(String s) {
     List<DateTime> result = [];
     final dateFormat = DateFormat('yyyy-MM-dd hh:mm');
-    final date = s.split('(')[0];
-    final time = s.split('(')[1].replaceAll(')', '');
-    String start = date + ' ' + time.split('-')[0];
-    String end = date + ' ' + time.split('-')[1];
-    final startTime = dateFormat.parse(start);
-    final endTime = dateFormat.parse(end);
 
-    result.add(startTime);
-    result.add(endTime);
+    try {
+      final date = s.split('(')[0];
+      final time = s.split('(')[1].replaceAll(')', '');
+      String start = '$date ${time.split('-')[0]}';
+      String end = '$date ${time.split('-')[1]}';
+
+      final startTime = dateFormat.parse(start);
+      final endTime = dateFormat.parse(end);
+
+      result.add(startTime);
+      result.add(endTime);
+    } catch (_) {}
 
     return result;
   }
