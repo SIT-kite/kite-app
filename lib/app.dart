@@ -58,8 +58,8 @@ class KiteApp extends StatelessWidget {
       // https://material.io/design/typography/the-type-system.html
       // https://www.mdui.org/design/style/typography.html
       // 12、14、16、20
-      headline1: TextStyle(fontSize: 24.0, color: fullColor, fontWeight: FontWeight.w500),
-      headline2: TextStyle(fontSize: 20.0, color: fullColor),
+      headline1: TextStyle(fontSize: 30.0, color: fullColor, fontWeight: FontWeight.w500),
+      headline2: TextStyle(fontSize: 28.0, color: fullColor),
       headline3: TextStyle(fontSize: 20.0, color: halfColor, fontWeight: FontWeight.w500),
       headline4: TextStyle(fontSize: 20.0, color: halfColor),
       headline5: TextStyle(fontSize: 24.0, color: fullColor),
@@ -87,7 +87,7 @@ class KiteApp extends StatelessWidget {
       colorSchemeSeed: primaryColor,
       textTheme: _buildTextTheme(isDark, primaryColor),
       brightness: isDark ? Brightness.dark : Brightness.light,
-      useMaterial3: true,
+      useMaterial3: false,
       scaffoldBackgroundColor: isDark
           ? null
           : const Color.fromARGB(
