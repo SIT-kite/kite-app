@@ -30,7 +30,7 @@ class NoticeItem extends StatefulWidget {
 }
 
 class _NoticeItemState extends State<NoticeItem> {
-  static const defaultContent = '查看小风筝上的公告';
+  static const defaultContent = '查看小风筝的公告';
   String content = '加载中';
 
   @override

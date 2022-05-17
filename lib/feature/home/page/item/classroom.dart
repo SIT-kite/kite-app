@@ -29,7 +29,7 @@ class ClassroomItem extends StatelessWidget {
       route: '/classroom',
       icon: 'assets/home/icon_classroom.svg',
       title: '空教室',
-      subtitle: '查找当前没有课的教室',
+      subtitle: '查看当前无课的教室',
     );
   }
 }

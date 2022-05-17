@@ -67,7 +67,9 @@ class _HomeBackgroundState extends State<HomeBackground> {
     Future.delayed(
       const Duration(milliseconds: 500),
       () {
-        if (!DesktopInitializer.eventBus.contain(WindowEvent.onWindowResize, _onWindowResize)) return;
+        if (!DesktopInitializer.eventBus.contain(WindowEvent.onWindowResize, _onWindowResize)) {
+          return;
+        }
         setState(() {});
       },
     );
@@ -115,7 +117,10 @@ class _HomeBackgroundState extends State<HomeBackground> {
       if (SettingInitializer.home.background != null) {
         return _buildImageBg();
       } else {
-        Future.delayed(Duration.zero, () => showBasicFlash(context, const Text('你还没有设置背景图片')));
+        Future.delayed(
+          Duration.zero,
+          () => showBasicFlash(context, const Text('你还没有设置背景图片')),
+        );
       }
     }
     return _buildWeatherBg();

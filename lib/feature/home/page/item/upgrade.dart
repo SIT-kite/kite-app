@@ -43,7 +43,7 @@ class UpgradeItem extends StatelessWidget {
           return HomeFunctionButton(
             title: '更新',
             onPressd: () => onTapUpdate(snapshot.data!),
-            subtitle: '小风筝有新的版本了，点击更新',
+            subtitle: '小风筝有新版本了，点此更新',
             icon: 'assets/home/icon_upgrade.svg',
           );
         }

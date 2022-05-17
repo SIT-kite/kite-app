@@ -28,7 +28,7 @@ class BulletinItem extends StatefulWidget {
 }
 
 class _BulletinItemState extends State<BulletinItem> {
-  late String content = '查看学校的通知';
+  late String content = '查看学校通知'; // TODO: 改成显示第一条通知？
 
   @override
   void initState() {

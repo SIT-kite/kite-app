@@ -77,7 +77,7 @@ class _GreetingWidgetState extends State<GreetingWidget> {
     return GestureDetector(
       onTap: () {
         final title = _getCampusName() + '天气';
-        final url = _getWeatherUrl(campus == 1 ? '101021000' : '101021200');
+        final url = _getWeatherUrl(campus == 1 ? '101021000' : '101021200'); // TODO: 支持长桥校区和梅陇校区
         launchUrlInBuiltinWebView(context, url, fixedTitle: title);
       },
       child: SvgPicture.asset('assets/weather/$iconCode.svg',
@@ -133,10 +133,13 @@ class _GreetingWidgetState extends State<GreetingWidget> {
         builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
           if (snapshot.hasData) {
             studyDays = snapshot.data!;
-            return Container(padding: EdgeInsets.only(left: 12.w, right: 12.w), child: buildAll(context));
+            return Container(
+              padding: EdgeInsets.only(left: 12.w, right: 12.w),
+              child: buildAll(context),
+            );
+          } else {
+            return const Text("Loading…");
           }
-
-          return const Text("Loading……");
         },
       ),
     );

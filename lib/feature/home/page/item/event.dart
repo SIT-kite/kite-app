@@ -28,7 +28,7 @@ class EventItem extends StatefulWidget {
 }
 
 class _EventItemState extends State<EventItem> {
-  late String content = '看看最近有哪些活动';
+  late String content = '查看最新的第二课堂活动';
 
   @override
   void initState() {

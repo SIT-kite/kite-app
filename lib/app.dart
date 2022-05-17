@@ -82,7 +82,7 @@ class KiteApp extends StatelessWidget {
   }
 
   ThemeData _buildTheme(BuildContext context, Color primaryColor, bool isDark) {
-    const scaffoldBackgroundColorGrey = 245;
+    const grey = 245;
     return ThemeData(
       colorSchemeSeed: primaryColor,
       textTheme: _buildTextTheme(isDark, primaryColor),
@@ -90,12 +90,7 @@ class KiteApp extends StatelessWidget {
       useMaterial3: false,
       scaffoldBackgroundColor: isDark
           ? null
-          : const Color.fromARGB(
-              255,
-              scaffoldBackgroundColorGrey,
-              scaffoldBackgroundColorGrey,
-              scaffoldBackgroundColorGrey,
-            ),
+          : const Color.fromARGB(255, grey, grey, grey),
     );
   }
 
@@ -103,7 +98,9 @@ class KiteApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = SettingInitializer.theme.isDarkMode;
     final primaryColor = SettingInitializer.theme.color;
-    final home = SettingInitializer.auth.currentUsername != null ? const HomePage() : const WelcomePage();
+    final home = SettingInitializer.auth.currentUsername != null
+        ? const HomePage()
+        : const WelcomePage();
 
     buildMaterialWithTheme(ThemeData theme) {
       return MaterialApp(

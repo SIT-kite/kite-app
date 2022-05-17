@@ -24,6 +24,7 @@ class KiteDrawer extends Drawer {
 
   @override
   Widget build(BuildContext context) {
+    final inDays = DateTime.now().difference(SettingInitializer.home.installTime!).inDays;
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -32,7 +33,7 @@ class KiteDrawer extends Drawer {
             decoration: BoxDecoration(color: SettingInitializer.theme.color),
             child: Align(
                 alignment: Alignment.bottomLeft,
-                child: Text('小风筝已陪伴你 ${DateTime.now().difference(SettingInitializer.home.installTime!).inDays} 天',
+                child: Text('小风筝已陪伴你 ${inDays} 天',
                     style: Theme.of(context).textTheme.headline4?.copyWith(color: Colors.white70))),
           ),
           ListTile(
