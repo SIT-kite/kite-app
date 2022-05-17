@@ -25,7 +25,7 @@ import 'package:kite/component/webview_page.dart';
 import 'package:kite/util/rule.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-const String _defaultWikiUrl = 'https://cdn.kite.sunnysab.cn/wiki/';
+const String _defaultWikiUrl = 'https://kite.sunnysab.cn/wiki/';
 
 class WikiPage extends StatelessWidget {
   final _controller = Completer<WebViewController>();

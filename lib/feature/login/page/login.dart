@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
         ..personName = personName;
 
       Navigator.pushReplacementNamed(context, '/home');
-      GlobalLauncher.launch('https://cdn.kite.sunnysab.cn/wiki/kite-app/feature/');
+      GlobalLauncher.launch('https://kite.sunnysab.cn/wiki/kite-app/feature/');
     } on CredentialsInvalidException catch (e) {
       showBasicFlash(context, Text(e.msg));
       return;
@@ -102,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   static void onOpenUserLicense() {
-    const url = "https://cdn.kite.sunnysab.cn/license/";
+    const url = "https://kite.sunnysab.cn/license/";
     GlobalLauncher.launch(url);
   }
 

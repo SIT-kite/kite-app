@@ -22,7 +22,7 @@ import 'package:universal_platform/universal_platform.dart';
 
 import 'logger.dart';
 
-const String appVersionUrl = 'https://cdn.kite.sunnysab.cn/version.txt';
+const String appVersionUrl = 'https://kite.sunnysab.cn/version.txt';
 
 class AppVersion {
   String platform;

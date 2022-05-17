@@ -18,7 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/component/webview_page.dart';
 
-const String _aboutUrl = 'https://cdn.kite.sunnysab.cn/about/';
+const String _aboutUrl = 'https://kite.sunnysab.cn/about/';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({Key? key}) : super(key: key);
