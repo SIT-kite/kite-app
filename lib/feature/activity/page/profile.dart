@@ -58,11 +58,10 @@ class ProfilePage extends StatelessWidget {
   Widget _buildEventList(BuildContext context) {
     final titleStyle = Theme.of(context).textTheme.headline6;
     final subtitleStyle = Theme.of(context).textTheme.bodyText2;
-    TextStyle? trailingStyle = Theme.of(context).textTheme.headline6;
 
     Widget joinedActivityMapper(ScJoinedActivity activity) {
       final color = activity.status == '通过' ? Colors.green : Theme.of(context).primaryColor;
-      trailingStyle = trailingStyle?.copyWith(color: color);
+      final trailingStyle = Theme.of(context).textTheme.headline6?.copyWith(color: color);
 
       return ListTile(
         title: Text(activity.title, style: titleStyle, maxLines: 2, overflow: TextOverflow.ellipsis),
@@ -70,8 +69,8 @@ class ProfilePage extends StatelessWidget {
             '申请时间: ${displayDateFormat.format(activity.time)}\n'
             '申请编号: ${activity.applyId}',
             style: subtitleStyle),
-        trailing:
-            Text(activity.amount.abs() > 0.01 ? activity.amount.toString() : activity.status, style: trailingStyle),
+        trailing: Text(activity.amount.abs() > 0.01 ? activity.amount.toStringAsFixed(2) : activity.status,
+            style: trailingStyle),
         onTap: activity.activityId != -1
             ? () {
                 Navigator.of(context).push(
