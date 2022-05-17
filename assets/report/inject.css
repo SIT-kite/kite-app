@@ -1,4 +1,3 @@
-
 /* Global */
 
 /* font-size */
@@ -47,39 +46,39 @@ uni-button[disabled].bg-green { color: white; background-color: #39b54a; }
 
 uni-page-body,
 uni-page-body > uni-view:only-child,
-.nav + uni-scroll-view {
+.nav + uni-scroll-view .uni-scroll-view-content > uni-view {
 	height: 100%;
 }
 .nav + uni-scroll-view,
+.nav + uni-scroll-view .uni-scroll-view {
+	overflow: hidden !important;
+}
 .nav + uni-scroll-view .uni-scroll-view-content > uni-view,
-.cu-bar ~ .cu-list.menu-avatar,
-.cu-list:only-child {
+.nav + uni-scroll-view .uni-scroll-view-content > uni-view > .cu-bar ~ .cu-list.menu-avatar {
 	overflow-y: auto;
 	scrollbar-width: thin;
 }
 
 uni-page-body > uni-view:only-child,
 .nav + uni-scroll-view .uni-scroll-view-content,
-.nav + uni-scroll-view .uni-scroll-view-content > uni-view {
+.nav + uni-scroll-view .uni-scroll-view-content > uni-view:not(:first-child) {
 	display: flex;
 	flex-direction: column;
 }
 
 /* PC */
-@media (min-width: 768px) {
+@media (min-width: 576px) {
 
 	/* show tab contents */
 	.nav + uni-scroll-view .uni-scroll-view-content {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(20%, 1fr));
 	}
-	.nav + uni-scroll-view .uni-scroll-view-content > uni-view {
-		display: flex !important;
-	}
-	.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child > uni-view {
-		flex-shrink: 0;
+	.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child {       /* 今日上报 */
+		display: block !important;
 	}
 	.nav + uni-scroll-view .uni-scroll-view-content > uni-view:not(:first-child) { /* 今日上报之后（历史） */
+		display: flex !important;
 		border-left: 1px solid rgba(0, 0, 0, .1);
 	}
 
@@ -95,6 +94,19 @@ uni-page-body > uni-view:only-child,
 
 }
 
+/* shadow */
+:root {
+	--shadow:
+		0 2px 4px -1px rgba(0, 0, 0, .2),
+		0 4px 5px  0   rgba(0, 0, 0, .14),
+		0 1px 10px 0   rgba(0, 0, 0, .12);
+}
+
+.nav {
+	z-index: 1001;
+	box-shadow: var(--shadow);
+}
+
 /* -----------------------------------------------------------------------------
 	Sticky report button
 ----------------------------------------------------------------------------- */
@@ -102,59 +114,44 @@ uni-page-body > uni-view:only-child,
 .nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child {
 	position: relative;
 }
-.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child > .cu-list.menu:only-child {
-	height: 100%;
-}
-.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child >
-.cu-list.menu:only-child > uni-view[style="margin-left: 5%;"],
-.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child > .cu-list.menu:only-child > .foot {
+
+.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child .foot,
+.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child > .cu-list.menu > uni-view[style="margin-left: 5%;"] {
 	position: sticky;
 	z-index: 1000;
 	width: 100%;
 	background-color: white;
 }
-.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child > .cu-list.menu:only-child > .foot {
-	bottom: 0;
-}
-.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child > .cu-list.menu:only-child > .foot {
-	height: 3.5em;
+.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child .foot {
+	bottom: 1px;
+	min-height: 3.5em;
 	padding: 0 .5em .5em;
 }
-.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child >
-.cu-list.menu:only-child > uni-view[style="margin-left: 5%;"] {
+
+/* #/pages/index/jksb */
+/* uni-view[style="margin-left: 5%;"] only appears on jksb */
+.pages-index-jksb .nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child > uni-view:first-child {
+	margin: .75em 0 !important;
+}
+.pages-index-jksb .nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child > .cu-list.menu {
+	display: contents;
+}
+.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child > .cu-list.menu > uni-view[style="margin-left: 5%;"] {
 	bottom: 3.5em;
 	margin-left: 0 !important;
-	padding: .25em;
-}
-
-/* border-top & shadow */
-.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child >
-.cu-list.menu:only-child > uni-view[style="margin-left: 5%;"] {
+	padding: .25em .5em;
 	border-top: 1px solid rgba(0, 0, 0, .1);
-	box-shadow:
-		0 2px 4px -1px rgba(0, 0, 0, .2),
-		0 4px 5px  0   rgba(0, 0, 0, .14),
-		0 1px 10px 0   rgba(0, 0, 0, .12);
+	box-shadow: var(--shadow);
 }
-
-/* checklist */
-.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child >
-.cu-list.menu:only-child > uni-view[style="margin-left: 5%;"] .checklist-group {
+.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child > .cu-list.menu > uni-view[style="margin-left: 5%;"] .checklist-group {
 	display: block;
-}
-.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child >
-.cu-list.menu:only-child > uni-view[style="margin-left: 5%;"] .checklist-box {
-	margin: 0;
-	padding: .25em !important;
 }
 
 /* #/pages/index/studentReport */
-.nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child > .foot {
-	flex-grow: 1;
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-end;
+.pages-index-studentReport .nav + uni-scroll-view .uni-scroll-view-content > uni-view:first-child > .foot {
 	padding: .5em;
+	border-top: 1px solid rgba(0, 0, 0, .1);
+	box-shadow: var(--shadow);
 }
 
 /* cu-btn */
@@ -170,8 +167,8 @@ uni-page-body > uni-view:only-child,
 .cu-list.menu:only-child,
 .cu-bar.margin-top { margin: 0; }
 .cu-list + .cu-list,
-.cu-list.menu > .cu-list.menu,
-.cu-list.menu > .cu-item + .bg-white.shadow { margin: .5em 0; }
+.cu-list.menu > .cu-list.menu { margin: .75em 0; }
+.cu-list.menu > .cu-item + .bg-white.shadow { margin: .75em; }
 
 /* .cu-bar */
 .cu-bar { min-height: 2.5em; padding: .5em; line-height: 1; }
@@ -189,7 +186,7 @@ uni-page-body > uni-view:only-child,
 .cu-list.menu-avatar > .cu-item {
 	justify-content: start;
 	height: auto; min-height: auto;
-	padding: .5em; gap: .5em;
+	padding: .6em; gap: .6em;
 	border-bottom: 1px solid #ddd;
 	transform: none; transition: none;
 }
@@ -225,9 +222,9 @@ uni-page-body > uni-view:only-child,
 }
 
 /* uni-radio */
-.uni-label-pointer { padding: 0 !important; }
-.uni-label-pointer > uni-text { margin-left: 4px !important; }
-uni-radio-group { gap: .5em; }
+.uni-label-pointer { padding: .25em 0 !important; }
+.uni-label-pointer > uni-text { margin-left: .333em !important; }
+uni-radio-group { gap: .75em; }
 uni-label { display: flex; align-items: center; }
 uni-label > uni-text { line-height: 1; }
 uni-radio .uni-radio-wrapper { display: block; }
