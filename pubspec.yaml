@@ -58,8 +58,8 @@ dependencies:
   flutter_widget_from_html: ^0.8.5
 
   # Email
-  enough_mail: ^1.3.6
-  enough_mail_html: ^1.3.0
+  enough_mail: ^2.1.0
+  enough_mail_html: ^2.0.0
 
   # Settings
   app_settings: ^4.1.1
@@ -75,14 +75,14 @@ dependencies:
 
   # UI
   flash: ^2.0.3+1
-  fl_chart: 0.46.0
+  fl_chart: ^0.50.6
   text_scroll: ^0.0.3
-  grouped_list: ^4.1.0
+  grouped_list: ^5.1.1
   image_picker: ^0.8.4+7
   pull_to_refresh: ^2.0.0
   dynamic_color_theme: ^2.0.0
   geopattern_flutter: { git: { url: https://github.com/SIT-kite/geopattern } }
-  flutter_svg: ^1.0.0
+  flutter_svg: ^1.1.0
   flutter_screenutil: ^5.5.2              # Screen adaptation
   flutter_native_splash: ^2.1.1           # Splash screen
   flutter_platform_widgets: ^1.12.1       # Platform aware widgets
