@@ -39,7 +39,7 @@ class DetailPage extends StatelessWidget {
   Widget _buildBody(BuildContext context) {
     // final html = _message.decodeContentText() ?? '';
     final titleStyle = Theme.of(context).textTheme.headline2?.copyWith(fontWeight: FontWeight.bold);
-    final subtitleStyle = Theme.of(context).textTheme.headline4?.copyWith(color: Colors.black54);
+    final subtitleStyle = Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.black54);
 
     final subjectText = _message.decodeSubject() ?? '无主题';
     final sender = _message.decodeSender();
