@@ -37,7 +37,13 @@ abstract class TimetableStorageDao {
 
   List<Course> getTimetable();
 
-  int? get lastMode;
+  int? lastMode;
 
-  set lastMode(int? displayMode);
+  DateTime? get startDate;
+
+  set startDate(DateTime? date);
+
+  SchoolYear? currentYear;
+
+  Semester? currentSemester;
 }

@@ -59,8 +59,8 @@ class _TimetablePageState extends State<TimetablePage> {
   bool isRefreshing = false;
   final currentKey = GlobalKey();
 
-  final SchoolYear currSchoolYear = const SchoolYear(2021);
-  final currSemester = Semester.secondTerm;
+  final SchoolYear currSchoolYear = TimetableInitializer.timetableStorage.currentYear ?? const SchoolYear(2021);
+  final currSemester = TimetableInitializer.timetableStorage.currentSemester ?? Semester.secondTerm;
   List<Course> timetable = TimetableInitializer.timetableStorage.getTimetable();
 
   @override
@@ -120,7 +120,7 @@ class _TimetablePageState extends State<TimetablePage> {
   Future<void> _onExport() async {
     if (timetable.isEmpty) {
       showBasicFlash(context, const Text('你咋没课呢？？'));
-      // return;
+      return;
     }
     final isPermissionGranted = await ensurePermission(Permission.storage);
     if (!isPermissionGranted) {

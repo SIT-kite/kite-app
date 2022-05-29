@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:hive/hive.dart';
+import 'package:kite/feature/edu/common/entity/index.dart';
 
 import '../dao/timetable.dart';
 import '../entity/timetable.dart';
@@ -70,4 +71,50 @@ class TimetableStorage implements TimetableStorageDao {
 
   @override
   set lastMode(int? mode) => box.put('lastMode', mode);
+
+  @override
+  DateTime? get startDate => box.get('startDate');
+
+  @override
+  set startDate(DateTime? date) => box.put('startDate', date);
+
+  @override
+  Semester? get currentSemester {
+    final int? currSemester = box.get('currentSemester');
+    if (currSemester != null) {
+      if (currSemester == 1) {
+        return Semester.firstTerm;
+      } else {
+        return Semester.secondTerm;
+      }
+    }
+    return null;
+  }
+
+  @override
+  set currentSemester(Semester? value) {
+    if (value != null) {
+      if (value == Semester.firstTerm) {
+        box.put('currentSemester', 1);
+      } else {
+        box.put('currentSemester', 2);
+      }
+    }
+  }
+
+  @override
+  SchoolYear? get currentYear {
+    final int? year = box.get('currentYear');
+    if (year != null) {
+      return SchoolYear(year);
+    }
+    return null;
+  }
+
+  @override
+  set currentYear(SchoolYear? value) {
+    if (value != null) {
+      box.put('currentYear', value.year);
+    }
+  }
 }
