@@ -64,6 +64,7 @@ class _TimetableImportPageState extends State<TimetableImportPage> {
         initialYear: selectedYear,
         initialSemester: selectedSemester,
         showEntireYear: false,
+        showNextYear: true,
       ),
     );
   }
