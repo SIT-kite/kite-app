@@ -15,8 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:enough_mail/imap/response.dart';
-import 'package:enough_mail/mime_message.dart';
+import 'package:enough_mail/enough_mail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/setting/init.dart';
@@ -55,7 +54,7 @@ class _MailPageState extends State<MailPage> {
     final String studentId = SettingInitializer.auth.currentUsername ?? '';
     final String password = MailInitializer.mail.password ?? (SettingInitializer.auth.ssoPassword ?? '');
 
-    final email = studentId + '@mail.sit.edu.cn';
+    final email = '$studentId@mail.sit.edu.cn';
     final service = MailService(email, password);
 
     return await service.getInboxMessage(30);
@@ -124,7 +123,7 @@ class _MailPageState extends State<MailPage> {
 
   Widget _buildPopupMenu() {
     final String studentId = SettingInitializer.auth.currentUsername ?? '';
-    final email = studentId + '@mail.sit.edu.cn';
+    final email = '$studentId@mail.sit.edu.cn';
 
     return PopupMenuButton(itemBuilder: (_) => [PopupMenuItem(child: Text(email))]);
   }

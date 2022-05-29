@@ -148,7 +148,7 @@ class KiteApp extends StatelessWidget {
     }
 
     return ScreenUtilInit(
-      builder: (Widget? widget) => DynamicColorTheme(
+      builder: (BuildContext content, Widget? widget) => DynamicColorTheme(
         defaultColor: primaryColor,
         defaultIsDark: isDark,
         data: (Color color, bool isDark) {

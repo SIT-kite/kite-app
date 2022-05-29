@@ -44,10 +44,10 @@ class ExpenseChart extends StatelessWidget {
             isStrokeCapRound: true,
             belowBarData: BarAreaData(
               show: true,
-              colors: [Theme.of(context).secondaryHeaderColor],
+              color: Theme.of(context).secondaryHeaderColor,
             ),
             spots: spots,
-            colors: [primaryColor],
+            color: primaryColor,
             preventCurveOverShooting: false,
             // isCurved: true,//我觉得折线图更好看一点
             barWidth: 2,
@@ -55,11 +55,11 @@ class ExpenseChart extends StatelessWidget {
           ),
         ],
         titlesData: FlTitlesData(
-          show: true,
-          rightTitles: SideTitles(showTitles: false),
-          leftTitles: SideTitles(showTitles: false),
-          topTitles: SideTitles(showTitles: false),
-        ),
+            show: true,
+            rightTitles: AxisTitles(),
+            leftTitles: AxisTitles(),
+            topTitles: AxisTitles(),
+            bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 25))),
       ),
     );
   }

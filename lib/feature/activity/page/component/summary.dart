@@ -75,17 +75,26 @@ class SummaryCard extends StatelessWidget {
 
   FlTitlesData titlesData(List<String> titles) => FlTitlesData(
         show: true,
-        leftTitles: SideTitles(showTitles: false),
-        topTitles: SideTitles(showTitles: false),
-        rightTitles: SideTitles(showTitles: false),
-        bottomTitles: SideTitles(
-          showTitles: true,
-          getTextStyles: (context, value) => const TextStyle(
-            color: Color(0xff7589a2),
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
+        leftTitles: AxisTitles(),
+        topTitles: AxisTitles(),
+        rightTitles: AxisTitles(),
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 36,
+            getTitlesWidget: (double value, TitleMeta meta) {
+              const style = TextStyle(
+                color: Color(0xff7589a2),
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              );
+              return Text(
+                titles[value.toInt()],
+                textAlign: TextAlign.center,
+                style: style,
+              );
+            },
           ),
-          getTitles: (index) => titles[index.toInt()],
         ),
       );
 
