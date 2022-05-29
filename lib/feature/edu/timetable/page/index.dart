@@ -65,6 +65,8 @@ class _TimetablePageState extends State<TimetablePage> {
 
   @override
   void initState() {
+    TableCache.clear();
+
     Future.delayed(Duration.zero, () async {
       if (timetable.isEmpty) {
         if (await showAlertDialog(

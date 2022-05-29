@@ -24,6 +24,7 @@ import 'package:kite/util/alert_dialog.dart';
 
 import '../entity/timetable.dart';
 import '../init.dart';
+import 'cache.dart';
 import 'component/weekly.dart';
 
 class TimetableImportPage extends StatefulWidget {
@@ -129,6 +130,8 @@ class _TimetableImportPageState extends State<TimetableImportPage> {
     TimetableInitializer.timetableStorage.currentYear = SchoolYear(selectedYear);
     TimetableInitializer.timetableStorage.currentSemester = selectedSemester;
     TimetableInitializer.timetableStorage.startDate = selectedDate.value;
+
+    TableCache.clear();
 
     return timetable;
   }
