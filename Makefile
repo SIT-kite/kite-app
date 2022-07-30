@@ -39,4 +39,4 @@ run_linux:
 
 
 
-all: clean get generate build_android build_linux
+all: clean get generate build_android
