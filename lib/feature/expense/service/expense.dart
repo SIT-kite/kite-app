@@ -17,7 +17,7 @@
  */
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:dio/dio.dart';
-import 'package:enough_convert/gbk/gbk.dart';
+import 'package:enough_convert/enough_convert.dart';
 import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/util/date_format.dart';
