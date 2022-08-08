@@ -26,6 +26,9 @@ class AuthKeys {
   static const ssoPassword = '$namespace/ssoPassword';
   static const personName = '$namespace/personName';
   static const userType = '$namespace/userType';
+  static const freshmanAccount = '$namespace/freshman/account';
+  static const freshmanSecret = '$namespace/freshman/secret';
+  static const useFreshmanAccount = '$namespace/useFreshmanAccount';
 }
 
 class AuthSettingStorage implements AuthSettingDao {
@@ -60,4 +63,21 @@ class AuthSettingStorage implements AuthSettingDao {
     }
     return null;
   }
+
+  @override
+  String? get freshmanAccount => box.get(AuthKeys.freshmanAccount);
+
+  @override
+  set freshmanAccount(String? foo) => box.put(AuthKeys.freshmanAccount, foo);
+
+  @override
+  String? get freshmanSecret => box.get(AuthKeys.freshmanSecret);
+
+  @override
+  set freshmanSecret(String? foo) => box.put(AuthKeys.freshmanSecret, foo);
+
+  @override
+  bool? get useFreshmanAccount => box.get(AuthKeys.useFreshmanAccount);
+  @override
+  set useFreshmanAccount(bool? foo) => box.put(AuthKeys.useFreshmanAccount, foo);
 }

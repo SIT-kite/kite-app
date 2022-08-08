@@ -25,6 +25,9 @@ enum UserType {
 
   /// 教师（4位工号）
   teacher,
+
+  /// 未入学的新生
+  freshman,
 }
 
 abstract class AuthSettingDao {
@@ -48,4 +51,22 @@ abstract class AuthSettingDao {
 
   /// 计算用户类型
   UserType? get userType;
+
+  /// 新生账户
+  String? get freshmanAccount;
+
+  /// 设置新生账户
+  set freshmanAccount(String? foo);
+
+  /// 新生账户
+  String? get freshmanSecret;
+
+  /// 设置新生账户
+  set freshmanSecret(String? foo);
+
+  /// 当前是否使用新生账户？
+  bool? get useFreshmanAccount;
+
+  /// 设置当前是否使用新生账户
+  set useFreshmanAccount(bool? foo);
 }
