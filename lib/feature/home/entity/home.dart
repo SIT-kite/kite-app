@@ -104,7 +104,7 @@ enum FunctionType {
   scanner,
 
   /// 迎新
-  @HiveField(18)
+  @HiveField(19)
   freshman,
 }
 
