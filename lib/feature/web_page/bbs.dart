@@ -6,7 +6,9 @@ import 'package:kite/setting/init.dart';
 const _bbsUrl = 'https://support.qq.com/products/386124';
 
 class BbsPage extends StatelessWidget {
-  const BbsPage({Key? key}) : super(key: key);
+  BbsPage({Key? key}) : super(key: key);
+
+  final isFreshman = SettingInitializer.auth.userType == UserType.freshman;
 
   String _getNickname() {
     final srcName = SettingInitializer.auth.personName!;
@@ -16,10 +18,16 @@ class BbsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String openid = '';
+    if (isFreshman) {
+      openid = SettingInitializer.auth.freshmanAccount!;
+    } else {
+      openid = SettingInitializer.auth.currentUsername!;
+    }
     return SimpleWebViewPage(
       initialUrl: _bbsUrl,
       postData: {
-        'openid': SettingInitializer.auth.currentUsername!,
+        'openid': openid,
         'nickname': _getNickname(),
         'avatar': 'https://txc.qq.com/static/desktop/img/products/def-product-logo.png',
       },
