@@ -68,7 +68,6 @@ class HomeFunctionButton extends StatelessWidget {
   final String title;
   final String? subtitle;
   final VoidCallback? onPressed;
-
   HomeFunctionButton({
     this.route,
     this.onPressed,
@@ -111,26 +110,45 @@ class HomeFunctionButton extends StatelessWidget {
 
 class FunctionButtonFactory {
   static Widget createFunctionButton(FunctionType type) {
-    return {
-      FunctionType.upgrade: () => const UpgradeItem(),
-      FunctionType.notice: () => const NoticeItem(),
-      FunctionType.timetable: () => const TimetableItem(),
-      FunctionType.report: () => const ReportItem(),
-      FunctionType.exam: () => const ExamItem(),
-      FunctionType.classroom: () => const ClassroomItem(),
-      FunctionType.event: () => const EventItem(),
-      FunctionType.expense: () => const ExpenseItem(),
-      FunctionType.score: () => const ScoreItem(),
-      FunctionType.library: () => const LibraryItem(),
-      FunctionType.office: () => const OfficeItem(),
-      FunctionType.mail: () => const MailItem(),
-      FunctionType.bulletin: () => const BulletinItem(),
-      FunctionType.contact: () => const ContactItem(),
-      FunctionType.game: () => const GameItem(),
-      FunctionType.wiki: () => const WikiItem(),
-      FunctionType.separator: () => Container(),
-      FunctionType.bbs: () => const BbsItem(),
-      FunctionType.scanner: () => const ScanItem(),
-    }[type]!();
+    switch (type) {
+      case FunctionType.upgrade:
+        return const UpgradeItem();
+      case FunctionType.notice:
+        return const NoticeItem();
+      case FunctionType.timetable:
+        return const TimetableItem();
+      case FunctionType.report:
+        return const ReportItem();
+      case FunctionType.exam:
+        return const ExamItem();
+      case FunctionType.classroom:
+        return const ClassroomItem();
+      case FunctionType.event:
+        return const EventItem();
+      case FunctionType.expense:
+        return const ExpenseItem();
+      case FunctionType.score:
+        return const ScoreItem();
+      case FunctionType.library:
+        return const LibraryItem();
+      case FunctionType.office:
+        return const OfficeItem();
+      case FunctionType.mail:
+        return const MailItem();
+      case FunctionType.bulletin:
+        return const BulletinItem();
+      case FunctionType.contact:
+        return const ContactItem();
+      case FunctionType.game:
+        return const GameItem();
+      case FunctionType.wiki:
+        return const WikiItem();
+      case FunctionType.separator:
+        return Container();
+      case FunctionType.bbs:
+        return const BbsItem();
+      case FunctionType.scanner:
+        return const ScanItem();
+    }
   }
 }
