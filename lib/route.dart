@@ -78,7 +78,7 @@ class RouteTable {
     classroom: (context, args) => const ClassroomPage(),
     exam: (context, args) => const ExamPage(),
     egg: (context, args) => const EggPage(),
-    bbs: (context, args) => const BbsPage(),
+    bbs: (context, args) => BbsPage(),
     scanner: (context, args) => const ScannerPage(),
     browser: (context, args) => BrowserPage(args['initialUrl']),
   };
