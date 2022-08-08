@@ -190,6 +190,26 @@ class TeacherFunctionList implements IUserFunctionList {
   }
 }
 
+/// 新生功能列表
+class FreshmanFunctionList implements IUserFunctionList {
+  @override
+  List<FunctionType> getFunctionList() {
+    return <FunctionType>[
+      FunctionType.upgrade,
+      FunctionType.notice,
+      FunctionType.report,
+      FunctionType.separator,
+      FunctionType.separator,
+      FunctionType.scanner,
+      FunctionType.bbs,
+      FunctionType.contact,
+      FunctionType.game,
+      FunctionType.wiki,
+      FunctionType.separator,
+    ];
+  }
+}
+
 class UserFunctionListFactory {
   static final _cache = HashMap<UserType, IUserFunctionList>();
 
@@ -197,20 +217,14 @@ class UserFunctionListFactory {
     if (_cache.containsKey(userType)) {
       return _cache[userType]!;
     }
-    final IUserFunctionList result;
-    switch (userType) {
-      case UserType.undergraduate:
-        result = UndergraduateFunctionList();
-        break;
-      case UserType.postgraduate:
-        result = PostgraduateFunctionList();
-        break;
-      case UserType.teacher:
-        result = TeacherFunctionList();
-        break;
-    }
-    _cache[userType] = result;
-    return result;
+    _cache[userType] = {
+      UserType.undergraduate: () => UndergraduateFunctionList(),
+      UserType.postgraduate: () => PostgraduateFunctionList(),
+      UserType.teacher: () => TeacherFunctionList(),
+      UserType.freshman: () => FreshmanFunctionList(),
+    }[userType]!();
+
+    return _cache[userType]!;
   }
 }
 
