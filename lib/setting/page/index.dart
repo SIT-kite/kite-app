@@ -25,6 +25,7 @@ import 'package:kite/global/global.dart';
 import 'package:kite/global/hive_initializer.dart';
 import 'package:kite/global/init.dart';
 import 'package:kite/route.dart';
+import 'package:kite/setting/dao/auth.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/setting/storage/index.dart';
 import 'package:kite/util/flash.dart';
@@ -37,7 +38,7 @@ import 'storage.dart';
 
 class SettingPage extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
-
+  late bool isFreshman;
   SettingPage({Key? key}) : super(key: key);
 
   Widget _negativeActionBuilder(context, controller, _) {
@@ -49,10 +50,10 @@ class SettingPage extends StatelessWidget {
     );
   }
 
-  void _onChangeBgImage() async {
+  Future<void> _onChangeBgImage() async {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    final savePath = (await getApplicationDocumentsDirectory()).path + '/background';
+    final savePath = '${(await getApplicationDocumentsDirectory()).path}/background';
 
     await image?.saveTo(savePath);
     SettingInitializer.home.background = savePath;
@@ -123,6 +124,7 @@ class SettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _passwordController.text = SettingInitializer.auth.ssoPassword ?? '';
+    isFreshman = SettingInitializer.auth.userType == UserType.freshman;
     return SettingsScreen(title: '设置', children: [
       SettingsGroup(
         title: '个性化',
@@ -219,33 +221,34 @@ class SettingPage extends StatelessWidget {
           ],
         ),
       ]),
-      SettingsGroup(
-        title: '账户',
-        children: <Widget>[
-          TextInputSettingsTile(
-            title: '学号',
-            settingKey: AuthKeys.currentUsername,
-            initialValue: SettingInitializer.auth.currentUsername ?? '',
-            validator: studentIdValidator,
-          ),
-          ModalSettingsTile(
-            title: '密码',
-            subtitle: '修改小风筝使用的 OA 密码',
-            showConfirmation: true,
-            onConfirm: () {
-              SettingInitializer.auth.ssoPassword = _passwordController.text;
-              return true;
-            },
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: TextField(controller: _passwordController, obscureText: true),
-              ),
-            ],
-          ),
-        ],
-      ),
-      SimpleSettingsTile(title: '登录测试', subtitle: '检查用户名密码是否正确', onTap: () => _testPassword(context)),
+      if (!isFreshman)
+        SettingsGroup(
+          title: '账户',
+          children: <Widget>[
+            TextInputSettingsTile(
+              title: '学号',
+              settingKey: AuthKeys.currentUsername,
+              initialValue: SettingInitializer.auth.currentUsername ?? '',
+              validator: studentIdValidator,
+            ),
+            ModalSettingsTile(
+              title: '密码',
+              subtitle: '修改小风筝使用的 OA 密码',
+              showConfirmation: true,
+              onConfirm: () {
+                SettingInitializer.auth.ssoPassword = _passwordController.text;
+                return true;
+              },
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: TextField(controller: _passwordController, obscureText: true),
+                ),
+              ],
+            ),
+          ],
+        ),
+      if (!isFreshman) SimpleSettingsTile(title: '登录测试', subtitle: '检查用户名密码是否正确', onTap: () => _testPassword(context)),
       SimpleSettingsTile(title: '退出登录', subtitle: '退出当前账号', onTap: () => _onLogout(context)),
       SimpleSettingsTile(title: '清除数据', subtitle: '清除应用程序保存的账号和设置，但不包括缓存', onTap: () => _onClearStorage(context)),
       kDebugMode
