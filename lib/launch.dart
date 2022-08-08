@@ -36,6 +36,7 @@ class GlobalLauncher {
         },
       ),
       LaunchScheme(
+        // 其他协议，就调用launchUrl启动某个本地app
         launchRule: FunctionalRule((s) => s.contains(':')),
         onLaunch: (scheme) {
           launchUrl(scheme);

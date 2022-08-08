@@ -1,10 +1,10 @@
 import 'package:kite/util/rule.dart';
 
-typedef onLaunchCallback = void Function(String);
+typedef OnLaunchCallback = void Function(String);
 
 class LaunchScheme {
   final Rule<String> launchRule;
-  final onLaunchCallback onLaunch;
+  final OnLaunchCallback onLaunch;
 
   const LaunchScheme({
     required this.launchRule,
@@ -14,7 +14,7 @@ class LaunchScheme {
 
 class SchemeLauncher {
   List<LaunchScheme> schemes;
-  onLaunchCallback? onNotFound;
+  OnLaunchCallback? onNotFound;
   SchemeLauncher({
     this.schemes = const [],
     this.onNotFound,
