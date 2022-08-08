@@ -136,17 +136,17 @@ jobs:
       - name: 🏗️ Build iOS
         run: flutter build ios --no-codesign
 
-  build-Windows:
-    runs-on: windows-latest
-    needs: lint
-    steps:
-      - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v2
-        with: { channel: stable, cache: true }
-      - run: flutter config --enable-windows-desktop
-      - run: flutter pub get
-      - run: flutter pub run build_runner build --delete-conflicting-outputs
-      - run: flutter build windows
+#  build-Windows:
+#    runs-on: windows-latest
+#    needs: lint
+#    steps:
+#      - uses: actions/checkout@v2
+#      - uses: subosito/flutter-action@v2
+#        with: { channel: stable, cache: true }
+#      - run: flutter config --enable-windows-desktop
+#      - run: flutter pub get
+#      - run: flutter pub run build_runner build --delete-conflicting-outputs
+#      - run: flutter build windows
       # TODO Windows 也得打包发tg
 
 # 临时关闭Linux平台的Action
