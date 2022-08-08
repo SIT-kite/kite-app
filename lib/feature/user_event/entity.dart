@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'dart:convert';
+
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -52,6 +54,11 @@ class UserEvent {
   const UserEvent(this.ts, this.type, this.params);
 
   Map<String, dynamic> toJson() => _$UserEventToJson(this);
+
+  @override
+  String toString() {
+    return jsonEncode(toJson());
+  }
 }
 
 int userEventTypeIndex(UserEventType type) => type.index;

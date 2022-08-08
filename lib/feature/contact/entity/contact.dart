@@ -43,4 +43,9 @@ class ContactData extends HiveObject {
   ContactData(this.department, this.description, this.name, this.phone);
 
   factory ContactData.fromJson(Map<String, dynamic> json) => _$ContactDataFromJson(json);
+
+  @override
+  String toString() {
+    return 'ContactData{department: $department, description: $description, name: $name, phone: $phone}';
+  }
 }

@@ -40,4 +40,9 @@ class Weather extends HiveObject {
   }
 
   factory Weather.fromJson(Map<String, dynamic> json) => _$WeatherFromJson(json);
+
+  @override
+  String toString() {
+    return 'Weather{weather: $weather, temperature: $temperature, ts: $ts, icon: $icon}';
+  }
 }
