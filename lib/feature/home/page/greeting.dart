@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/feature/kite/entity/weather.dart';
 import 'package:kite/global/global.dart';
@@ -42,16 +41,17 @@ class GreetingWidget extends StatefulWidget {
 }
 
 class _GreetingWidgetState extends State<GreetingWidget> {
-  int studyDays = 1;
+  int? studyDays;
   int campus = SettingInitializer.home.campus;
   Weather currentWeather = SettingInitializer.home.lastWeather;
-  late bool showStudyDays;
   @override
   void initState() {
     super.initState();
     Global.eventBus.on(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
     // 如果用户不是新生或老师，那么就显示学习天数
-    showStudyDays = ![UserType.freshman, UserType.teacher].contains(SettingInitializer.auth.userType);
+    if (![UserType.freshman, UserType.teacher].contains(SettingInitializer.auth.userType)) {
+      studyDays = _getStudyDays();
+    }
   }
 
   @override
@@ -60,7 +60,7 @@ class _GreetingWidgetState extends State<GreetingWidget> {
     Global.eventBus.off(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
   }
 
-  Future<int> _getStudyDays() async {
+  int _getStudyDays() {
     final studentId = SettingInitializer.auth.currentUsername!;
 
     if (studentId.isNotEmpty) {
@@ -109,7 +109,7 @@ class _GreetingWidgetState extends State<GreetingWidget> {
         Flexible(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: (showStudyDays
+            children: (studyDays != null // 天数为null说明不显示天数
                     ? <Widget>[
                         Text('今天是你在上应大的', style: textStyleSmall),
                         Text('第 $studyDays 天', style: textStyleLarge),
@@ -130,22 +130,7 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.centerLeft,
-      child: FutureBuilder<int>(
-        future: _getStudyDays(),
-        builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-          if (snapshot.hasData) {
-            studyDays = snapshot.data!;
-            return Container(
-              padding: EdgeInsets.only(left: 12.w, right: 12.w),
-              child: buildAll(context),
-            );
-          } else if (snapshot.hasError) {
-            return Text(snapshot.error.toString());
-          } else {
-            return const Text("Loading…");
-          }
-        },
-      ),
+      child: buildAll(context),
     );
   }
 }
