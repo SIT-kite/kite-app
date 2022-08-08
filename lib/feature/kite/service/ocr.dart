@@ -27,12 +27,12 @@ class OcrRecognizeException implements Exception {
 class OcrServer {
   static const _ocrServerUrl = 'https://kite.sunnysab.cn/api/ocr/captcha';
 
-  static recognize(String imageBase64) async {
+  static Future<String> recognize(String imageBase64) async {
     final response = await Dio().post(_ocrServerUrl, data: imageBase64);
     final result = response.data;
     final code = result['code'];
-    if (result['code'] == 0) {
-      return result['data'];
+    if (code) {
+      return result;
     } else {
       throw OcrRecognizeException(code, result['msg']);
     }
