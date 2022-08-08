@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:collection';
+
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kite/global/hive_type_id_pool.dart';
 import 'package:kite/setting/dao/index.dart';
@@ -98,84 +100,120 @@ enum FunctionType {
   bbs,
 
   /// 扫码
+  @HiveField(18)
   scanner,
 }
 
-/* 默认首页布局, 千万不能漏 */
+/// 用户的功能列表
+abstract class IUserFunctionList {
+  List<FunctionType> getFunctionList();
+}
 
 /// 本、专科生默认功能列表
-const _defaultUndergraduateFunctionList = <FunctionType>[
-  FunctionType.upgrade,
-  FunctionType.notice,
-  FunctionType.timetable,
-  FunctionType.report,
-  FunctionType.separator,
-  FunctionType.exam,
-  FunctionType.classroom,
-  FunctionType.event,
-  FunctionType.expense,
-  FunctionType.score,
-  FunctionType.library,
-  FunctionType.office,
-  FunctionType.mail,
-  FunctionType.bulletin,
-  FunctionType.separator,
-  FunctionType.scanner,
-  FunctionType.bbs,
-  FunctionType.contact,
-  FunctionType.game,
-  FunctionType.wiki,
-  FunctionType.separator,
-];
+class UndergraduateFunctionList implements IUserFunctionList {
+  @override
+  List<FunctionType> getFunctionList() {
+    return <FunctionType>[
+      FunctionType.upgrade,
+      FunctionType.notice,
+      FunctionType.timetable,
+      FunctionType.report,
+      FunctionType.separator,
+      FunctionType.exam,
+      FunctionType.classroom,
+      FunctionType.event,
+      FunctionType.expense,
+      FunctionType.score,
+      FunctionType.library,
+      FunctionType.office,
+      FunctionType.mail,
+      FunctionType.bulletin,
+      FunctionType.separator,
+      FunctionType.scanner,
+      FunctionType.bbs,
+      FunctionType.contact,
+      FunctionType.game,
+      FunctionType.wiki,
+      FunctionType.separator,
+    ];
+  }
+}
 
 /// 研究生默认功能列表
-const _defaultPostgraduateFunctionList = <FunctionType>[
-  FunctionType.upgrade,
-  FunctionType.notice,
-  FunctionType.report,
-  FunctionType.separator,
-  FunctionType.classroom,
-  FunctionType.expense,
-  FunctionType.library,
-  FunctionType.office,
-  FunctionType.mail,
-  FunctionType.bulletin,
-  FunctionType.separator,
-  FunctionType.scanner,
-  FunctionType.bbs,
-  FunctionType.contact,
-  FunctionType.game,
-  FunctionType.wiki,
-  FunctionType.separator,
-];
+class PostgraduateFunctionList implements IUserFunctionList {
+  @override
+  List<FunctionType> getFunctionList() {
+    return <FunctionType>[
+      FunctionType.upgrade,
+      FunctionType.notice,
+      FunctionType.report,
+      FunctionType.separator,
+      FunctionType.classroom,
+      FunctionType.expense,
+      FunctionType.library,
+      FunctionType.office,
+      FunctionType.mail,
+      FunctionType.bulletin,
+      FunctionType.separator,
+      FunctionType.scanner,
+      FunctionType.bbs,
+      FunctionType.contact,
+      FunctionType.game,
+      FunctionType.wiki,
+      FunctionType.separator,
+    ];
+  }
+}
 
 /// 教师账户默认功能列表
-const _defaultTeacherFunctionList = <FunctionType>[
-  FunctionType.upgrade,
-  FunctionType.notice,
-  FunctionType.report,
-  FunctionType.separator,
-  FunctionType.expense,
-  FunctionType.library,
-  FunctionType.office,
-  FunctionType.mail,
-  FunctionType.bulletin,
-  FunctionType.separator,
-  FunctionType.scanner,
-  FunctionType.bbs,
-  FunctionType.contact,
-  FunctionType.game,
-  FunctionType.wiki,
-  FunctionType.separator,
-];
+class TeacherFunctionList implements IUserFunctionList {
+  @override
+  List<FunctionType> getFunctionList() {
+    return <FunctionType>[
+      FunctionType.upgrade,
+      FunctionType.notice,
+      FunctionType.report,
+      FunctionType.separator,
+      FunctionType.expense,
+      FunctionType.library,
+      FunctionType.office,
+      FunctionType.mail,
+      FunctionType.bulletin,
+      FunctionType.separator,
+      FunctionType.scanner,
+      FunctionType.bbs,
+      FunctionType.contact,
+      FunctionType.game,
+      FunctionType.wiki,
+      FunctionType.separator,
+    ];
+  }
+}
+
+class UserFunctionListFactory {
+  static final _cache = HashMap<UserType, IUserFunctionList>();
+
+  static IUserFunctionList getUserFunctionList(UserType userType) {
+    if (_cache.containsKey(userType)) {
+      return _cache[userType]!;
+    }
+    final IUserFunctionList result;
+    switch (userType) {
+      case UserType.undergraduate:
+        result = UndergraduateFunctionList();
+        break;
+      case UserType.postgraduate:
+        result = PostgraduateFunctionList();
+        break;
+      case UserType.teacher:
+        result = TeacherFunctionList();
+        break;
+    }
+    _cache[userType] = result;
+    return result;
+  }
+}
 
 List<FunctionType> getDefaultFunctionList(UserType userType) {
-  switch (userType) {
-    case UserType.undergraduate:
-      return _defaultUndergraduateFunctionList;
-    case UserType.postgraduate:
-      return _defaultPostgraduateFunctionList;
-    case UserType.teacher:
-      return _defaultTeacherFunctionList;
-  }
+  return UserFunctionListFactory.getUserFunctionList(userType).getFunctionList();
 }
