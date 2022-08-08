@@ -63,10 +63,4 @@ abstract class AuthSettingDao {
 
   /// 设置新生账户
   set freshmanSecret(String? foo);
-
-  /// 当前是否使用新生账户？
-  bool? get isFreshmanAccount;
-
-  /// 设置当前是否使用新生账户
-  set isFreshmanAccount(bool? foo);
 }

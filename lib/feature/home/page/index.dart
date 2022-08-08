@@ -24,6 +24,7 @@ import 'package:kite/feature/quick_button/init.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/launch.dart';
 import 'package:kite/route.dart';
+import 'package:kite/setting/dao/auth.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
@@ -49,8 +50,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
+
+  late bool isFreshman;
 
   void _updateWeather() {
     Log.info('更新天气');
@@ -86,6 +88,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _onHomeRefresh(BuildContext context) async {
+    if (isFreshman) {
+      _refreshController.refreshCompleted(resetFooterState: true);
+      _updateWeather();
+      return;
+    }
     // 如果未登录 (老用户直接进入 Home 页不会处于登录状态, 但新用户经过 login 页时已登录)
     if (!HomeInitializer.ssoSession.isOnline) {
       try {
@@ -207,9 +214,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    isFreshman = SettingInitializer.auth.userType == UserType.freshman;
     Log.info('开始加载首页');
     Future.delayed(Duration.zero, () async {
-      if (await HomeInitializer.ssoSession.checkConnectivity()) {
+      // 非新生才执行该网络检查逻辑
+      if (!isFreshman && await HomeInitializer.ssoSession.checkConnectivity()) {
         showBasicFlash(
           context,
           const Text('当前已连接校园网环境'),
@@ -219,7 +228,8 @@ class _HomePageState extends State<HomePage> {
     });
 
     _onHomeRefresh(context);
-    if (UniversalPlatform.isAndroid || UniversalPlatform.isIOS) {
+    // 非新生且使用手机
+    if (!isFreshman && (UniversalPlatform.isAndroid || UniversalPlatform.isIOS)) {
       QuickButton.init(context);
     }
     Global.eventBus.on(EventNameConstants.onCampusChange, (_) => _updateWeather());

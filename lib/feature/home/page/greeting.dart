@@ -45,11 +45,13 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   int studyDays = 1;
   int campus = SettingInitializer.home.campus;
   Weather currentWeather = SettingInitializer.home.lastWeather;
-
+  late bool showStudyDays;
   @override
   void initState() {
     super.initState();
     Global.eventBus.on(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
+    // 如果用户不是新生或老师，那么就显示学习天数
+    showStudyDays = ![UserType.freshman, UserType.teacher].contains(SettingInitializer.auth.userType);
   }
 
   @override
@@ -76,7 +78,7 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   Widget _buildWeatherIcon(String iconCode) {
     return GestureDetector(
       onTap: () {
-        final title = _getCampusName() + '天气';
+        final title = '${_getCampusName()}天气';
         final url = _getWeatherUrl(campus == 1 ? '101021000' : '101021200'); // TODO: 支持长桥校区和梅陇校区
         launchUrlInBuiltinWebView(context, url, fixedTitle: title);
       },
@@ -107,7 +109,7 @@ class _GreetingWidgetState extends State<GreetingWidget> {
         Flexible(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: ((SettingInitializer.auth.userType != UserType.teacher)
+            children: (showStudyDays
                     ? <Widget>[
                         Text('今天是你在上应大的', style: textStyleSmall),
                         Text('第 $studyDays 天', style: textStyleLarge),
@@ -137,6 +139,8 @@ class _GreetingWidgetState extends State<GreetingWidget> {
               padding: EdgeInsets.only(left: 12.w, right: 12.w),
               child: buildAll(context),
             );
+          } else if (snapshot.hasError) {
+            return Text(snapshot.error.toString());
           } else {
             return const Text("Loading…");
           }

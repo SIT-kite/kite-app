@@ -57,9 +57,14 @@ class AuthSettingStorage implements AuthSettingDao {
   @override
   UserType? get userType {
     final username = currentUsername;
-    if (username != null) {
+    // 若用户名存在
+    if (username != null && ssoPassword != null) {
       // 已登录用户, 账号格式一定是合法的
       return guessUserType(username)!;
+    }
+    // 若用户名不存在且新生用户存在
+    if (freshmanAccount != null) {
+      return UserType.freshman;
     }
     return null;
   }
@@ -75,9 +80,4 @@ class AuthSettingStorage implements AuthSettingDao {
 
   @override
   set freshmanSecret(String? foo) => box.put(AuthKeys.freshmanSecret, foo);
-
-  @override
-  bool? get isFreshmanAccount => box.get(AuthKeys.isFreshmanAccount);
-  @override
-  set isFreshmanAccount(bool? foo) => box.put(AuthKeys.isFreshmanAccount, foo);
 }
