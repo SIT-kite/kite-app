@@ -21,6 +21,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/feature/home/page/item/bbs.dart';
 import 'package:kite/feature/home/page/item/freshman.dart';
 import 'package:kite/feature/home/page/item/scan.dart';
+import 'package:kite/feature/home/page/item/switch.dart';
 
 import '../../entity/home.dart';
 import 'bulletin.dart';
@@ -152,6 +153,8 @@ class FunctionButtonFactory {
         return const ScanItem();
       case FunctionType.freshman:
         return const FreshmanItem();
+      case FunctionType.switchAccount:
+        return const SwitchAccountItem();
     }
   }
 }

@@ -106,6 +106,10 @@ enum FunctionType {
   /// 迎新
   @HiveField(19)
   freshman,
+
+  /// 切换账户
+  @HiveField(20)
+  switchAccount,
 }
 
 /// 用户的功能列表
@@ -204,13 +208,12 @@ class FreshmanFunctionList implements IUserFunctionList {
     return <FunctionType>[
       FunctionType.upgrade,
       FunctionType.notice,
-      FunctionType.report,
+      FunctionType.switchAccount,
       FunctionType.separator,
       FunctionType.freshman,
       FunctionType.scanner,
       FunctionType.bbs,
       FunctionType.contact,
-      FunctionType.game,
       FunctionType.wiki,
       FunctionType.separator,
     ];
