@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/feature/home/page/item/bbs.dart';
+import 'package:kite/feature/home/page/item/freshman.dart';
 import 'package:kite/feature/home/page/item/scan.dart';
 
 import '../../entity/home.dart';
@@ -149,6 +150,8 @@ class FunctionButtonFactory {
         return const BbsItem();
       case FunctionType.scanner:
         return const ScanItem();
+      case FunctionType.freshman:
+        return const FreshmanItem();
     }
   }
 }
