@@ -3,7 +3,7 @@ if (typeof runFlag === 'undefined') {
   runFlag = true;
   console.info('Initializing wiki/inject.js');
 
-  const index = 'https://cdn.kite.sunnysab.cn/wiki/';
+  const index = 'https://kite.sunnysab.cn/wiki/';
   const primaryColor = 'blue';
 
   if (window.location.href.startsWith(index)) {
