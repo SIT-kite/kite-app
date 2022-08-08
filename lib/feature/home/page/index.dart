@@ -218,7 +218,9 @@ class _HomePageState extends State<HomePage> {
     });
 
     _onHomeRefresh(context);
-    if (UniversalPlatform.isAndroid || UniversalPlatform.isIOS) QuickButton.init(context);
+    if (UniversalPlatform.isAndroid || UniversalPlatform.isIOS) {
+      QuickButton.init(context);
+    }
     Global.eventBus.on(EventNameConstants.onCampusChange, (_) => _updateWeather());
     Global.eventBus.on(EventNameConstants.onHomeItemReorder, (_) => setState(() {}));
     super.initState();
@@ -231,6 +233,21 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  Widget? buildFloatingActionButton() {
+    return UniversalPlatform.isDesktopOrWeb
+        ? FloatingActionButton(
+            child: const Icon(Icons.refresh),
+            onPressed: () async {
+              // 刷新页面
+              Log.info('浮动按钮被点击');
+              // 触发下拉刷新
+              final pos = _refreshController.position!;
+              await pos.animateTo(-100, duration: const Duration(milliseconds: 800), curve: Curves.linear);
+            },
+          )
+        : null;
+  }
+
   @override
   Widget build(BuildContext context) {
     Log.info('Build Home');
@@ -238,18 +255,7 @@ class _HomePageState extends State<HomePage> {
       key: _scaffoldKey,
       body: _buildBody(context),
       drawer: const KiteDrawer(),
-      floatingActionButton: UniversalPlatform.isDesktopOrWeb
-          ? FloatingActionButton(
-              child: const Icon(Icons.refresh),
-              onPressed: () async {
-                // 刷新页面
-                Log.info('浮动按钮被点击');
-                // 触发下拉刷新
-                final pos = _refreshController.position!;
-                await pos.animateTo(-100, duration: const Duration(milliseconds: 800), curve: Curves.linear);
-              },
-            )
-          : null,
+      floatingActionButton: buildFloatingActionButton(),
     );
   }
 }
