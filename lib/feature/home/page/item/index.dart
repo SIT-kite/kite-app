@@ -67,10 +67,10 @@ class HomeFunctionButton extends StatelessWidget {
   final Widget? iconWidget;
   final String title;
   final String? subtitle;
-  final VoidCallback? onPressd;
+  final VoidCallback? onPressed;
   HomeFunctionButton({
     this.route,
-    this.onPressd,
+    this.onPressed,
     required this.title,
     this.subtitle,
     this.icon,
@@ -94,8 +94,8 @@ class HomeFunctionButton extends StatelessWidget {
         subtitle: Text(subtitle ?? '', style: subtitleStyle, maxLines: 1, overflow: TextOverflow.ellipsis),
         // dense: true,
         onTap: () {
-          if (onPressd != null) {
-            onPressd!();
+          if (onPressed != null) {
+            onPressed!();
             return;
           }
           if (route != null) {

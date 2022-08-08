@@ -32,7 +32,7 @@ class ScanItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return HomeFunctionButton(
-      onPressd: () async {
+      onPressed: () async {
         if (UniversalPlatform.isDesktopOrWeb) {
           showAlertDialog(
             context,
