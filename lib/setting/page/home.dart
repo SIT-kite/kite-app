@@ -61,6 +61,8 @@ String functionTypeToString(FunctionType type) {
       return '上应互助';
     case FunctionType.scanner:
       return "扫码";
+    case FunctionType.freshman:
+      return "迎新";
   }
 }
 

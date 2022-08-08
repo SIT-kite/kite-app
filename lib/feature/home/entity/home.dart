@@ -102,6 +102,10 @@ enum FunctionType {
   /// 扫码
   @HiveField(18)
   scanner,
+
+  /// 迎新
+  @HiveField(18)
+  freshman,
 }
 
 /// 用户的功能列表
@@ -129,6 +133,7 @@ class UndergraduateFunctionList implements IUserFunctionList {
       FunctionType.mail,
       FunctionType.bulletin,
       FunctionType.separator,
+      FunctionType.freshman,
       FunctionType.scanner,
       FunctionType.bbs,
       FunctionType.contact,
@@ -155,6 +160,7 @@ class PostgraduateFunctionList implements IUserFunctionList {
       FunctionType.mail,
       FunctionType.bulletin,
       FunctionType.separator,
+      FunctionType.freshman,
       FunctionType.scanner,
       FunctionType.bbs,
       FunctionType.contact,
@@ -180,6 +186,7 @@ class TeacherFunctionList implements IUserFunctionList {
       FunctionType.mail,
       FunctionType.bulletin,
       FunctionType.separator,
+      FunctionType.freshman,
       FunctionType.scanner,
       FunctionType.bbs,
       FunctionType.contact,
@@ -199,7 +206,7 @@ class FreshmanFunctionList implements IUserFunctionList {
       FunctionType.notice,
       FunctionType.report,
       FunctionType.separator,
-      FunctionType.separator,
+      FunctionType.freshman,
       FunctionType.scanner,
       FunctionType.bbs,
       FunctionType.contact,
