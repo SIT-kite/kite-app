@@ -23,6 +23,7 @@ import 'package:kite/feature/kite/service/weather.dart';
 import 'package:kite/feature/quick_button/init.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/launch.dart';
+import 'package:kite/route.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
@@ -115,7 +116,7 @@ class _HomePageState extends State<HomePage> {
       alignment: Alignment.centerLeft,
       child: GestureDetector(
         onTap: () => _scaffoldKey.currentState?.openDrawer(),
-        onDoubleTap: () => Navigator.of(context).pushNamed('/egg'),
+        onDoubleTap: () => Navigator.of(context).pushNamed(RouteTable.egg),
         child: Center(child: SvgPicture.asset('assets/home/kite.svg', width: 80.w, height: 80.h)),
       ),
     );
@@ -172,7 +173,7 @@ class _HomePageState extends State<HomePage> {
                       Log.info('扫码结果: $result');
                       if (result != null) GlobalLauncher.launch(result);
                     },
-                    icon: Icon(Icons.qr_code_scanner_outlined),
+                    icon: const Icon(Icons.qr_code_scanner_outlined),
                     iconSize: 30,
                   )
                 ],
