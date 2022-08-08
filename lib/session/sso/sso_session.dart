@@ -211,18 +211,19 @@ class SsoSession extends ASession with Downloader {
   }
 
   Future<Response> _login(String username, String password) async {
+    Object? exception;
     int count = 0;
-
     while (count < _maxRetryCount) {
       try {
         return await loginWithoutRetry(username, password);
       } catch (e) {
         // 只要是异常，就再重试
         count++;
+        exception = e;
         continue;
       }
     }
-    throw const MaxRetryExceedException(msg: '登录超过最大重试次数 ($_maxRetryCount 次)');
+    throw MaxRetryExceedException(msg: '登录超过最大重试次数 ($_maxRetryCount 次), ${exception.toString()}');
   }
 
   /// 登录流程
