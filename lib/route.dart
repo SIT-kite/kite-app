@@ -1,10 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:kite/feature/web_page/browser.dart';
 
+import 'feature/freshman/page/fre_analytics.dart';
+import 'feature/freshman/page/fre_class.dart';
+import 'feature/freshman/page/fre_friend.dart';
+import 'feature/freshman/page/fre_info.dart';
+import 'feature/freshman/page/fre_roommate.dart';
+import 'feature/freshman/page/index.dart';
 import 'feature/page_index.dart';
 import 'setting/page/index.dart';
 
-typedef NamedRouteBuilder = Widget Function(BuildContext context, Map<String, dynamic> args);
+typedef NamedRouteBuilder = Widget Function(
+    BuildContext context, Map<String, dynamic> args);
 
 class RouteTable {
   static const home = '/home';
@@ -43,6 +50,12 @@ class RouteTable {
   static const bbs = '/bbs';
   static const scanner = '/scanner';
   static const browser = '/browser';
+  static const freshman = '/freshman';
+  static const freFriend = '/fre_friend';
+  static const freInfo = '/fre_info';
+  static const freClass = '/fre_class';
+  static const freAnalytics = '/fre_analytics';
+  static const freRoommate = '/fre_roommate';
 
   static final Map<String, NamedRouteBuilder> routeTable = {
     home: (context, args) => HomePage(),
@@ -81,6 +94,12 @@ class RouteTable {
     bbs: (context, args) => BbsPage(),
     scanner: (context, args) => const ScannerPage(),
     browser: (context, args) => BrowserPage(args['initialUrl']),
+    freshman: (context, args) => FreshmanPage(),
+    freInfo: (context, args) => FreshmanInfoPage(),
+    freFriend: (context, args) => FreshmanFriendPage(),
+    freClass: (context, args) => FreshmanClassPage(),
+    freAnalytics: (context, args) => FreshmanAnalyticsPage(),
+    freRoommate: (context, args) => FreshmanRoommatePage(),
   };
 
   static NamedRouteBuilder? get(String path) {

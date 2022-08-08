@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:catcher/catcher.dart';
+import 'package:kite/feature/freshman/init.dart';
 import 'package:kite/feature/initializer_index.dart';
 import 'package:kite/feature/sit_app/init.dart';
 import 'package:kite/global/desktop_initializer.dart';
@@ -43,7 +44,9 @@ class Initializer {
     await HiveBoxInitializer.init('kite1/hive');
     await UserEventInitializer.init(userEventBox: HiveBoxInitializer.userEvent);
     await SettingInitializer.init(settingBox: HiveBoxInitializer.setting);
-    await Global.init(userEventStorage: UserEventInitializer.userEventStorage, authSetting: SettingInitializer.auth);
+    await Global.init(
+        userEventStorage: UserEventInitializer.userEventStorage,
+        authSetting: SettingInitializer.auth);
     // 初始化用户首次打开时间（而不是应用安装时间）
     // ??= 表示为空时候才赋值
     SettingInitializer.home.installTime ??= DateTime.now();
@@ -53,22 +56,37 @@ class Initializer {
     ConnectivityInitializer.init(ssoSession: Global.ssoSession);
 
     final kiteSession = KiteSession(Global.dio, SettingInitializer.jwt);
-    await ContactInitializer.init(kiteSession: kiteSession, contactDataBox: HiveBoxInitializer.contactSetting);
+    await ContactInitializer.init(
+        kiteSession: kiteSession,
+        contactDataBox: HiveBoxInitializer.contactSetting);
     await EduInitializer.init(
-        ssoSession: Global.ssoSession, cookieJar: Global.cookieJar, timetableBox: HiveBoxInitializer.course);
-    await ExpenseInitializer.init(ssoSession: Global.ssoSession2, expenseRecordBox: HiveBoxInitializer.expense);
+        ssoSession: Global.ssoSession,
+        cookieJar: Global.cookieJar,
+        timetableBox: HiveBoxInitializer.course);
+    await ExpenseInitializer.init(
+        ssoSession: Global.ssoSession2,
+        expenseRecordBox: HiveBoxInitializer.expense);
     await GameInitializer.init(gameBox: HiveBoxInitializer.game);
-    await KiteInitializer.init(kiteSession: kiteSession, electricityBox: HiveBoxInitializer.electricity);
-    await HomeInitializer.init(ssoSession: Global.ssoSession, noticeService: KiteInitializer.noticeService);
+    await KiteInitializer.init(
+        kiteSession: kiteSession,
+        electricityBox: HiveBoxInitializer.electricity);
+    await HomeInitializer.init(
+        ssoSession: Global.ssoSession,
+        noticeService: KiteInitializer.noticeService);
     await LibraryInitializer.init(
-        dio: Global.dio, searchHistoryBox: HiveBoxInitializer.librarySearchHistory, kiteSession: kiteSession);
+        dio: Global.dio,
+        searchHistoryBox: HiveBoxInitializer.librarySearchHistory,
+        kiteSession: kiteSession);
     await MailInitializer.init();
     await OfficeInitializer.init(dio: Global.dio, cookieJar: Global.cookieJar);
     ReportInitializer.init(dio: Global.dio);
     ScInitializer.init(ssoSession: Global.ssoSession);
     LoginInitializer.init(ssoSession: Global.ssoSession);
 
-    final sitAppSession = SitAppSession(Global.dio, SettingInitializer.sitAppJwt);
+    await FreshmanInitializer.init(kiteSession: kiteSession);
+
+    final sitAppSession =
+        SitAppSession(Global.dio, SettingInitializer.sitAppJwt);
     SitAppInitializer.init(sitAppSession: sitAppSession);
 
     if (UniversalPlatform.isDesktop && !GlobalConfig.isTestEnv) {

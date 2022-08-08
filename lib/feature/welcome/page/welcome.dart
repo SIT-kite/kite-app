@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../freshman/page/login.dart';
 import '../../login/page/login.dart';
 
 class WelcomePage extends StatelessWidget {
@@ -32,7 +33,9 @@ class WelcomePage extends StatelessWidget {
           SizedBox(
               width: 1.sw,
               height: 1.sh,
-              child: const Image(image: AssetImage("assets/welcome/background.jpg"), fit: BoxFit.cover)),
+              child: const Image(
+                  image: AssetImage("assets/welcome/background.jpg"),
+                  fit: BoxFit.cover)),
           // Transparent layer.
           Container(color: Colors.black.withOpacity(0.35)),
           // Front weights. Texts and buttons are on the left bottom of the screen.
@@ -48,9 +51,17 @@ class WelcomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Title
-                Text('上应小风筝', style: Theme.of(context).textTheme.headline1?.copyWith(color: Colors.white)),
+                Text('上应小风筝',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline1
+                        ?.copyWith(color: Colors.white)),
                 // Subtitle
-                Text('便利校园，一步到位', style: Theme.of(context).textTheme.headline4?.copyWith(color: Colors.white)),
+                Text('便利校园，一步到位',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline4
+                        ?.copyWith(color: Colors.white)),
                 // Space
                 SizedBox(height: 40.h),
                 // Login button
@@ -62,9 +73,36 @@ class WelcomePage extends StatelessWidget {
                     ),
                     side: BorderSide(width: 1.sm, color: Colors.white),
                   ),
-                  child: Text('登录', style: Theme.of(context).textTheme.headline5?.copyWith(color: Colors.white)),
+                  child: Text('登录',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline5
+                          ?.copyWith(color: Colors.white)),
                   onPressed: () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginPage()));
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => const LoginPage()));
+                  },
+                ),
+
+                SizedBox(height: 10.h),
+
+                // Freshman Login Button
+                OutlinedButton(
+                  autofocus: true,
+                  style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.r),
+                    ),
+                    side: BorderSide(width: 1.sm, color: Colors.white),
+                  ),
+                  child: Text('新生入口',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline5
+                          ?.copyWith(color: Colors.white)),
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => FreshmanLoginPage()));
                   },
                 ),
               ],
