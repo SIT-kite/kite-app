@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/exception/session.dart';
 import 'package:kite/launch.dart';
+import 'package:kite/route.dart';
 import 'package:kite/setting/init.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/validation.dart';
@@ -74,13 +75,13 @@ class _LoginPageState extends State<LoginPage> {
         ..ssoPassword = password
         ..personName = personName;
 
-      Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pushReplacementNamed(context, RouteTable.home);
       GlobalLauncher.launch('https://kite.sunnysab.cn/wiki/kite-app/feature/');
     } on CredentialsInvalidException catch (e) {
       showBasicFlash(context, Text(e.msg));
       return;
     } catch (e) {
-      showBasicFlash(context, Text('未知错误: ' + e.toString()));
+      showBasicFlash(context, Text('未知错误: $e'), duration: const Duration(seconds: 3));
       return;
     } finally {
       setState(() {
