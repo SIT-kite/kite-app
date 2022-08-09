@@ -78,12 +78,15 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
     final phone = _phoneController;
 
     try {
-      final info = await freshmanDao.getInfo(account, secret);
-
+      // 先保存登录信息
       SettingInitializer.auth
-        ..personName = info.name
         ..freshmanSecret = secret
         ..freshmanAccount = account;
+
+      final info = await freshmanDao.getInfo();
+
+      // 登陆成功后赋值名字
+      SettingInitializer.auth.personName = info.name;
 
       // Flutter 官方推荐的在异步函数中使用context需要先检查是否mounted
       if (!mounted) return;
@@ -93,6 +96,10 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       // GlobalLauncher.launch('https://kite.sunnysab.cn/wiki/kite-app/feature/');
       return;
     } finally {
+      // 登陆失败
+      SettingInitializer.auth
+        ..freshmanSecret = null
+        ..freshmanAccount = null;
       setState(() => _disableLoginButton = false);
     }
   }

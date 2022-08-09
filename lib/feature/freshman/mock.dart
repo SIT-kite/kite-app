@@ -5,7 +5,7 @@ import 'package:kite/feature/freshman/entity.dart';
 
 class FreshmanMock implements FreshmanDao {
   @override
-  Future<FreshmanInfo> getInfo(String account, String secret) async {
+  Future<FreshmanInfo> getInfo() async {
     String json = '''
   {
     "name": "姓名",
@@ -24,5 +24,41 @@ class FreshmanMock implements FreshmanDao {
   ''';
     FreshmanInfo f = FreshmanInfo.fromJson(jsonDecode(json));
     return f;
+  }
+
+  @override
+  Future<Analysis> getAnalysis() {
+    // TODO: implement getAnalysis
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Classmate>> getClassmates() {
+    // TODO: implement getClassmates
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Familiar>> getFamiliars() {
+    // TODO: implement getFamiliars
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Roommate>> getRoommates() {
+    // TODO: implement getRoommates
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> postAnalysisLog() {
+    // TODO: implement postAnalysisLog
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> update({Contact? contact, bool? visible}) {
+    // TODO: implement update
+    throw UnimplementedError();
   }
 }
