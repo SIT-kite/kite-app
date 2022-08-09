@@ -19,24 +19,25 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/launch.dart';
+import 'package:kite/route.dart';
+import 'package:kite/util/logger.dart';
 import 'package:kite/util/validation.dart';
 
-import '../../../route.dart';
 import '../../../setting/init.dart';
 import '../../../util/flash.dart';
 import '../dao.dart';
 import '../init.dart';
 
 class FreshmanLoginPage extends StatefulWidget {
-  FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
-
-  FreshmanLoginPage({Key? key}) : super(key: key);
+  const FreshmanLoginPage({Key? key}) : super(key: key);
 
   @override
   State<FreshmanLoginPage> createState() => _FreshmanLoginPageState();
 }
 
 class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
+  FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
+
   // Text field controllers.
   final TextEditingController _accountController = TextEditingController();
   final TextEditingController _secretController = TextEditingController();
@@ -46,29 +47,29 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
 
   final GlobalKey _formKey = GlobalKey<FormState>();
 
-  final TapGestureRecognizer _recognizer = TapGestureRecognizer()
-    ..onTap = onOpenUserLicense;
+  final TapGestureRecognizer _recognizer = TapGestureRecognizer()..onTap = onOpenUserLicense;
 
   // State
-  bool isPasswordClear = false;
-  bool isLicenseAccepted = false;
-  bool disableLoginButton = false;
-  bool isVisible = false;
+  bool _isPasswordClear = false;
+  bool _isLicenseAccepted = false;
+  bool _disableLoginButton = false;
+  bool _isVisible = false;
 
   /// 用户点击登录按钮后
   Future<void> onLogin() async {
+    Log.info('新生登录');
     bool formValid = (_formKey.currentState as FormState).validate();
     if (!formValid) {
+      showBasicFlash(context, const Text('请检查您的输入'));
       return;
     }
-    if (!isLicenseAccepted) {
+    if (!_isLicenseAccepted) {
       showBasicFlash(context, const Text('请阅读并同意用户协议'));
       return;
     }
 
-    setState(() {
-      disableLoginButton = true;
-    });
+    setState(() => _disableLoginButton = true);
+
     final account = _accountController.text;
     final secret = _secretController.text;
 
@@ -77,20 +78,22 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
     final phone = _phoneController;
 
     try {
-      final info = await widget.freshmanDao.getInfo(account, secret);
+      final info = await freshmanDao.getInfo(account, secret);
 
       SettingInitializer.auth
         ..personName = info.name
         ..freshmanSecret = secret
         ..freshmanAccount = account;
 
+      // Flutter 官方推荐的在异步函数中使用context需要先检查是否mounted
+      if (!mounted) return;
       Navigator.pushReplacementNamed(context, RouteTable.home);
+
+      // 预计需要写一份新生的使用说明
       // GlobalLauncher.launch('https://kite.sunnysab.cn/wiki/kite-app/feature/');
       return;
     } finally {
-      setState(() {
-        disableLoginButton = false;
-      });
+      setState(() => _disableLoginButton = false);
     }
   }
 
@@ -113,8 +116,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
 
   Widget buildTitleLine() {
     return Container(
-        alignment: Alignment.centerLeft,
-        child: Text('欢迎新生登录', style: Theme.of(context).textTheme.headline1));
+        alignment: Alignment.centerLeft, child: Text('欢迎新生登录', style: Theme.of(context).textTheme.headline1));
   }
 
   Widget buildLoginForm() {
@@ -127,25 +129,21 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
             controller: _accountController,
             autofocus: true,
             validator: studentIdValidator,
-            decoration: const InputDecoration(
-                labelText: '账号', hintText: '学号', icon: Icon(Icons.person)),
+            decoration: const InputDecoration(labelText: '账号(必填)', hintText: '姓名/学号/准考证号', icon: Icon(Icons.person)),
           ),
           TextFormField(
             controller: _secretController,
             autofocus: true,
-            obscureText: !isPasswordClear,
+            obscureText: !_isPasswordClear,
             decoration: InputDecoration(
-              labelText: '密码',
-              hintText: '默认为身份证后六位',
+              labelText: '密码(必填)',
+              hintText: '身份证号后六位',
               icon: const Icon(Icons.lock),
               suffixIcon: IconButton(
                 // 切换密码明文显示状态的图标按钮
-                icon: Icon(
-                    isPasswordClear ? Icons.visibility_off : Icons.visibility),
+                icon: Icon(_isPasswordClear ? Icons.visibility_off : Icons.visibility),
                 onPressed: () {
-                  setState(() {
-                    isPasswordClear = !isPasswordClear;
-                  });
+                  setState(() => _isPasswordClear = !_isPasswordClear);
                 },
               ),
             ),
@@ -153,20 +151,17 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
           TextFormField(
             controller: _qqController,
             autofocus: true,
-            decoration: const InputDecoration(
-                labelText: 'QQ', hintText: '选填', icon: Icon(Icons.person)),
+            decoration: const InputDecoration(labelText: 'QQ(选填)', hintText: '选填', icon: Icon(Icons.person)),
           ),
           TextFormField(
             controller: _wechatController,
             autofocus: true,
-            decoration: const InputDecoration(
-                labelText: '微信', hintText: '选填', icon: Icon(Icons.person)),
+            decoration: const InputDecoration(labelText: '微信(选填)', hintText: '选填', icon: Icon(Icons.wechat)),
           ),
           TextFormField(
             controller: _phoneController,
             autofocus: true,
-            decoration: const InputDecoration(
-                labelText: '手机号', hintText: '选填', icon: Icon(Icons.phone)),
+            decoration: const InputDecoration(labelText: '手机号(选填)', hintText: '选填', icon: Icon(Icons.phone)),
           )
         ],
       ),
@@ -179,22 +174,17 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Checkbox(
-          value: isLicenseAccepted,
-          onChanged: (_isLicenseAccepted) {
-            setState(() => isLicenseAccepted = _isLicenseAccepted!);
+          value: _isLicenseAccepted,
+          onChanged: (isLicenseAccepted) {
+            setState(() => _isLicenseAccepted = isLicenseAccepted!);
           },
         ),
         Flexible(
           child: Text.rich(
             TextSpan(
               children: [
-                TextSpan(
-                    text: '我已阅读并同意',
-                    style: Theme.of(context).textTheme.bodyText1),
-                TextSpan(
-                    text: '《上应小风筝用户协议》',
-                    style: Theme.of(context).textTheme.bodyText2,
-                    recognizer: _recognizer),
+                TextSpan(text: '我已阅读并同意', style: Theme.of(context).textTheme.bodyText1),
+                TextSpan(text: '《上应小风筝用户协议》', style: Theme.of(context).textTheme.bodyText2, recognizer: _recognizer),
               ],
             ),
           ),
@@ -209,15 +199,18 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Checkbox(
-          value: isVisible,
-          onChanged: (_isVisible) {
-            setState(() => isVisible = _isVisible!);
+          value: _isVisible,
+          onChanged: (bool? isVisible) {
+            setState(() => _isVisible = isVisible!);
           },
         ),
         Flexible(
-            child: Text.rich(TextSpan(children: [
-          TextSpan(text: '同城可见', style: Theme.of(context).textTheme.bodyText1)
-        ])))
+          child: Text.rich(
+            TextSpan(children: [
+              TextSpan(text: '同城可见', style: Theme.of(context).textTheme.bodyText1),
+            ]),
+          ),
+        )
       ],
     );
   }
@@ -230,7 +223,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
         SizedBox(
           height: 40.h,
           child: ElevatedButton(
-            onPressed: disableLoginButton ? null : onLogin,
+            onPressed: _disableLoginButton ? null : onLogin,
             child: const Text('进入风筝元宇宙'),
           ),
         ),
@@ -266,7 +259,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
                   Row(
                     children: [
                       buildLoginButton(),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                     ],
                   ),
                 ],
@@ -276,7 +269,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: EdgeInsets.only(bottom: 20),
+              padding: const EdgeInsets.only(bottom: 20),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
