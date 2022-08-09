@@ -21,29 +21,26 @@ import '../../../route.dart';
 import '../dao.dart';
 import '../init.dart';
 
-List<freshmanFunction> list = [
-  freshmanFunction(
-      Icons.info, RouteTable.freInfo, '我的信息', '查询个人宿舍，辅导员，学院专业等重要信息'),
-  freshmanFunction(Icons.group, RouteTable.freClass, '我的班级', '查询班级信息'),
-  freshmanFunction(Icons.bed, RouteTable.freRoommate, '我的舍友', '查询同寝室舍友'),
-  freshmanFunction(
-      Icons.emoji_emotions, RouteTable.freFriend, '新的朋友', '来看看可能认识的人吧'),
-  freshmanFunction(Icons.analytics, RouteTable.freAnalytics, '风筝分析报告',
-      '一些关于你有趣的数据分析，可能可以窥探你的大学未来')
+List<FreshmanFunction> list = [
+  const FreshmanFunction(Icons.info, RouteTable.freshmanInfo, '我的信息', '查询个人宿舍，辅导员，学院专业等重要信息'),
+  const FreshmanFunction(Icons.group, RouteTable.freshmanClass, '我的班级', '查询班级信息'),
+  const FreshmanFunction(Icons.bed, RouteTable.freshmanRoommate, '我的舍友', '查询同寝室舍友'),
+  const FreshmanFunction(Icons.emoji_emotions, RouteTable.freshmanFriend, '新的朋友', '来看看可能认识的人吧'),
+  const FreshmanFunction(Icons.analytics, RouteTable.freshmanAnalytics, '风筝分析报告', '一些关于你有趣的数据分析，可能可以窥探你的大学未来')
 ];
 
 //抽象功能
-class freshmanFunction {
+class FreshmanFunction {
   final IconData iconData;
   final String fname;
   final String title;
   final String summary;
 
-  freshmanFunction(this.iconData, this.fname, this.title, this.summary);
+  const FreshmanFunction(this.iconData, this.fname, this.title, this.summary);
 }
 
 class FreshmanPage extends StatefulWidget {
-  FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
+  final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
   FreshmanPage({Key? key}) : super(key: key);
 
   @override
@@ -65,7 +62,7 @@ class _FreshmanPageState extends State<FreshmanPage> {
   }
 
 //建立功能列表项
-  Widget buildFunctionItem(freshmanFunction function) {
+  Widget buildFunctionItem(FreshmanFunction function) {
     return ListTile(
       leading: SizedBox(
           height: 40,
@@ -78,7 +75,7 @@ class _FreshmanPageState extends State<FreshmanPage> {
           ))),
       title: Text(function.title),
       subtitle: Text(function.summary),
-      trailing: Icon(Icons.keyboard_arrow_right),
+      trailing: const Icon(Icons.keyboard_arrow_right),
       onTap: () {
         Navigator.of(context).pushReplacementNamed(function.fname);
       },
@@ -86,7 +83,7 @@ class _FreshmanPageState extends State<FreshmanPage> {
   }
 
   //建立功能列表
-  Widget buildFunctionList(List<freshmanFunction> list) {
+  Widget buildFunctionList(List<FreshmanFunction> list) {
     return ListView.builder(
         itemCount: list.length,
         itemBuilder: (BuildContext context, int index) {

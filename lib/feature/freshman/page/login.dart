@@ -19,12 +19,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/launch.dart';
-import 'package:kite/route.dart';
-import 'package:kite/util/logger.dart';
 import 'package:kite/util/validation.dart';
 
+import '../../../route.dart';
 import '../../../setting/init.dart';
 import '../../../util/flash.dart';
+import '../../../util/logger.dart';
 import '../dao.dart';
 import '../init.dart';
 
@@ -151,17 +151,17 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
           TextFormField(
             controller: _qqController,
             autofocus: true,
-            decoration: const InputDecoration(labelText: 'QQ(选填)', hintText: '选填', icon: Icon(Icons.person)),
+            decoration: const InputDecoration(labelText: 'QQ(选填)', hintText: '请输入你的QQ', icon: Icon(Icons.person)),
           ),
           TextFormField(
             controller: _wechatController,
             autofocus: true,
-            decoration: const InputDecoration(labelText: '微信(选填)', hintText: '选填', icon: Icon(Icons.wechat)),
+            decoration: const InputDecoration(labelText: '微信(选填)', hintText: '请输入你的微信', icon: Icon(Icons.wechat)),
           ),
           TextFormField(
             controller: _phoneController,
             autofocus: true,
-            decoration: const InputDecoration(labelText: '手机号(选填)', hintText: '选填', icon: Icon(Icons.phone)),
+            decoration: const InputDecoration(labelText: '手机号(选填)', hintText: '请输入你的手机号', icon: Icon(Icons.phone)),
           )
         ],
       ),

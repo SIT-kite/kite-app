@@ -1,17 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:kite/feature/web_page/browser.dart';
 
-import 'feature/freshman/page/fre_analytics.dart';
-import 'feature/freshman/page/fre_class.dart';
-import 'feature/freshman/page/fre_friend.dart';
-import 'feature/freshman/page/fre_info.dart';
-import 'feature/freshman/page/fre_roommate.dart';
+import 'feature/freshman/page/analytics.dart';
+import 'feature/freshman/page/class.dart';
+import 'feature/freshman/page/friend.dart';
 import 'feature/freshman/page/index.dart';
+import 'feature/freshman/page/info.dart';
+import 'feature/freshman/page/roommate.dart';
 import 'feature/page_index.dart';
 import 'setting/page/index.dart';
 
-typedef NamedRouteBuilder = Widget Function(
-    BuildContext context, Map<String, dynamic> args);
+typedef NamedRouteBuilder = Widget Function(BuildContext context, Map<String, dynamic> args);
 
 class RouteTable {
   static const home = '/home';
@@ -51,11 +50,11 @@ class RouteTable {
   static const scanner = '/scanner';
   static const browser = '/browser';
   static const freshman = '/freshman';
-  static const freFriend = '/fre_friend';
-  static const freInfo = '/fre_info';
-  static const freClass = '/fre_class';
-  static const freAnalytics = '/fre_analytics';
-  static const freRoommate = '/fre_roommate';
+  static const freshmanFriend = '$freshman/friend';
+  static const freshmanInfo = '$freshman/info';
+  static const freshmanClass = '$freshman/class';
+  static const freshmanAnalytics = '$freshman/analytics';
+  static const freshmanRoommate = '$freshman/roommate';
 
   static final Map<String, NamedRouteBuilder> routeTable = {
     home: (context, args) => HomePage(),
@@ -95,11 +94,11 @@ class RouteTable {
     scanner: (context, args) => const ScannerPage(),
     browser: (context, args) => BrowserPage(args['initialUrl']),
     freshman: (context, args) => FreshmanPage(),
-    freInfo: (context, args) => FreshmanInfoPage(),
-    freFriend: (context, args) => FreshmanFriendPage(),
-    freClass: (context, args) => FreshmanClassPage(),
-    freAnalytics: (context, args) => FreshmanAnalyticsPage(),
-    freRoommate: (context, args) => FreshmanRoommatePage(),
+    freshmanInfo: (context, args) => FreshmanInfoPage(),
+    freshmanFriend: (context, args) => FreshmanFriendPage(),
+    freshmanClass: (context, args) => FreshmanClassPage(),
+    freshmanAnalytics: (context, args) => FreshmanAnalyticsPage(),
+    freshmanRoommate: (context, args) => FreshmanRoommatePage(),
   };
 
   static NamedRouteBuilder? get(String path) {
