@@ -80,9 +80,8 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
     try {
       // 先保存登录信息
       SettingInitializer.auth
-        ..freshmanSecret = secret
-        ..freshmanAccount = account;
-
+        ..freshmanAccount = account
+        ..freshmanSecret = secret;
       final info = await freshmanDao.getInfo();
 
       // 登陆成功后赋值名字
@@ -95,11 +94,13 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       // 预计需要写一份新生的使用说明
       // GlobalLauncher.launch('https://kite.sunnysab.cn/wiki/kite-app/feature/');
       return;
-    } finally {
+    } catch (e) {
       // 登陆失败
       SettingInitializer.auth
         ..freshmanSecret = null
         ..freshmanAccount = null;
+      showBasicFlash(context, Text('登陆失败: $e'));
+    } finally {
       setState(() => _disableLoginButton = false);
     }
   }
