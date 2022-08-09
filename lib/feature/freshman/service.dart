@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/feature/freshman/dao.dart';
 import 'package:kite/feature/freshman/entity.dart';
+import 'package:kite/mock/index.dart';
 
 class FreshmanService extends AService implements FreshmanDao {
   FreshmanService(super.session);
@@ -30,7 +31,7 @@ class FreshmanService extends AService implements FreshmanDao {
   @override
   Future<List<Familiar>> getFamiliars() async {
     Response response = await session.get('/familiar');
-    List<dynamic> fellows = response.data['fellows']!;
+    List<dynamic> fellows = response.data['peopleFamiliar']!;
     return fellows.map((e) => Familiar.fromJson(e)).toList();
   }
 
@@ -44,7 +45,7 @@ class FreshmanService extends AService implements FreshmanDao {
   @override
   Future<Analysis> getAnalysis() async {
     Response response = await session.get('/analysis');
-    return Analysis.fromJson(response.data);
+    return Analysis.fromJson(response.data['freshman']);
   }
 
   @override
