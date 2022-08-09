@@ -12,7 +12,7 @@ void main() async {
   test('test freshman getInfo', () async {
     Log.info(await freshmanDao.getInfo());
   });
-  test('test freshman postAnalysisLog', () async {
+  test('test freshman update', () async {
     Log.info(await freshmanDao.getInfo());
     await freshmanDao.update(visible: false);
     Log.info(await freshmanDao.getInfo());
