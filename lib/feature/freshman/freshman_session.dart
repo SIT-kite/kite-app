@@ -55,8 +55,8 @@ class FreshmanSession extends ASession {
     }
 
     // 其他请求的话，如果data是Map那么注入登录态
-    if (data is Map<String, dynamic>) {
-      final Map<String, dynamic> myData = data;
+    if (data == null || data is Map<String, dynamic>) {
+      final Map<String, dynamic> myData = data ?? {};
       myData['account'] = account;
       myData['secret'] = secret;
 
