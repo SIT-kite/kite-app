@@ -33,7 +33,7 @@ class FreshmanMock implements FreshmanDao {
   }
 
   @override
-  Future<List<Classmate>> getClassmates() {
+  Future<List<Mate>> getClassmates() {
     // TODO: implement getClassmates
     throw UnimplementedError();
   }
@@ -45,7 +45,7 @@ class FreshmanMock implements FreshmanDao {
   }
 
   @override
-  Future<List<Roommate>> getRoommates() {
+  Future<List<Mate>> getRoommates() {
     // TODO: implement getRoommates
     throw UnimplementedError();
   }

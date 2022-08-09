@@ -5,7 +5,7 @@ part 'entity.g.dart';
 @JsonSerializable()
 class FreshmanInfo {
   String name = '';
-  int uid = 0;
+  int? uid;
   String studentId = '';
   String college = '';
   String major = '';
@@ -18,6 +18,11 @@ class FreshmanInfo {
   bool visible = false;
   FreshmanInfo();
   factory FreshmanInfo.fromJson(Map<String, dynamic> json) => _$FreshmanInfoFromJson(json);
+
+  @override
+  String toString() {
+    return 'FreshmanInfo{name: $name, uid: $uid, studentId: $studentId, college: $college, major: $major, campus: $campus, building: $building, room: $room, bed: $bed, counselorName: $counselorName, counselorTel: $counselorTel, visible: $visible}';
+  }
 }
 
 @JsonSerializable()
@@ -30,50 +35,53 @@ class Contact {
   factory Contact.fromJson(Map<String, dynamic> json) => _$ContactFromJson(json);
 
   Map<String, dynamic> toJson() => _$ContactToJson(this);
-}
 
-@JsonSerializable()
-class Roommate {
-  String college = '';
-  String major = '';
-  String name = '';
-  String province = '';
-  String bed = '';
-  String lastSeen = '';
-  String avatar = '';
-  Contact contact = Contact();
-  Roommate();
-  factory Roommate.fromJson(Map<String, dynamic> json) => _$RoommateFromJson(json);
+  @override
+  String toString() {
+    return 'Contact{wechat: $wechat, qq: $qq, phone: $phone}';
+  }
 }
 
 @JsonSerializable()
 class Familiar {
   String name = '';
   String college = '';
-  String city = '';
   String gender = '';
-  String avatar = '';
-  String lastSeen = '';
-  Contact contact = Contact();
+
+  String? city;
+  String? avatar;
+  DateTime? lastSeen;
+  Contact? contact;
   Familiar();
   factory Familiar.fromJson(Map<String, dynamic> json) => _$FamiliarFromJson(json);
+
+  @override
+  String toString() {
+    return 'Familiar{name: $name, college: $college, gender: $gender, city: $city, avatar: $avatar, lastSeen: $lastSeen, contact: $contact}';
+  }
 }
 
 @JsonSerializable()
-class Classmate {
+class Mate {
   String college = '';
   String major = '';
   String name = '';
-  String province = '';
   String building = '';
-  String room = '';
+  int room = 0;
   String bed = '';
   String gender = '';
-  String lastSeen = '';
-  String avatar = '';
-  Contact contact = Contact();
-  Classmate();
-  factory Classmate.fromJson(Map<String, dynamic> json) => _$ClassmateFromJson(json);
+
+  String? province;
+  DateTime? lastSeen;
+  String? avatar;
+  Contact? contact;
+  Mate();
+  factory Mate.fromJson(Map<String, dynamic> json) => _$MateFromJson(json);
+
+  @override
+  String toString() {
+    return 'Mate{college: $college, major: $major, name: $name, building: $building, room: $room, bed: $bed, gender: $gender, province: $province, lastSeen: $lastSeen, avatar: $avatar, contact: $contact}';
+  }
 }
 
 @JsonSerializable()
@@ -84,6 +92,11 @@ class AnalysisMajor {
 
   AnalysisMajor();
   factory AnalysisMajor.fromJson(Map<String, dynamic> json) => _$AnalysisMajorFromJson(json);
+
+  @override
+  String toString() {
+    return 'AnalysisMajor{total: $total, boys: $boys, girls: $girls}';
+  }
 }
 
 @JsonSerializable()
@@ -95,4 +108,9 @@ class Analysis {
   AnalysisMajor major = AnalysisMajor();
   Analysis();
   factory Analysis.fromJson(Map<String, dynamic> json) => _$AnalysisFromJson(json);
+
+  @override
+  String toString() {
+    return 'Analysis{sameName: $sameName, sameCity: $sameCity, sameHighSchool: $sameHighSchool, collegeCount: $collegeCount, major: $major}';
+  }
 }
