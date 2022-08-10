@@ -13,53 +13,68 @@ class FreshmanCacheKeys {
   static const familiars = '$namespace/familiars';
 }
 
-//TODO 抽离get和set方法
+//TODO 修复 List相关序列化Bug
 
 class FreshmanCacheStorage implements FreshmanCacheDao {
   final Box<dynamic> box;
   FreshmanCacheStorage(this.box);
 
-  @override
-  Analysis? get analysis {
-    String? json = box.get(FreshmanCacheKeys.analysis);
+  //抽离get
+  dynamic getModel(String key, dynamic model) {
+    String? json = box.get(key);
     if (json == null) return null;
-    return Analysis.fromJson(jsonDecode(json));
+
+    switch (model.runtimeType) {
+      case Analysis:
+      case FreshmanInfo:
+        return model.fromJson(jsonDecode(json));
+      case Mate:
+      case Familiar:
+        List<Map<String, dynamic>> list = jsonDecode(json);
+        return list.map((e) => model.fromJson(e)).toList();
+      default:
+        return null;
+    }
   }
 
-  @override
-  set analysis(Analysis? foo) {
+  //抽离set
+  void setModel(String key, dynamic foo, dynamic model) {
     if (foo == null) {
-      box.put(FreshmanCacheKeys.analysis, null);
+      box.put(key, null);
       return;
     }
-    String json = jsonEncode(foo.toJson());
-    box.put(FreshmanCacheKeys.analysis, json);
-  }
-
-  @override
-  FreshmanInfo? get basicInfo {
-    String? json = box.get(FreshmanCacheKeys.basicInfo);
-    if (json == null) return null;
-    return FreshmanInfo.fromJson(jsonDecode(json));
-  }
-
-  @override
-  set basicInfo(FreshmanInfo? foo) {
-    if (foo == null) {
-      box.put(FreshmanCacheKeys.basicInfo, null);
-      return;
+    switch (model.runtimeType) {
+      case Analysis:
+      case FreshmanInfo:
+        String json = jsonEncode(foo.toJson());
+        box.put(key, json);
+        return;
+      case Mate:
+      case Familiar:
+        List<Map<String, dynamic>> list = foo.map((e) => e.toJson()).toList();
+        String json = jsonEncode(list);
+        box.put(key, json);
     }
-    // 不为空时
-    String json = jsonEncode(foo.toJson());
-    box.put(FreshmanCacheKeys.basicInfo, json);
   }
+
+  @override
+  Analysis? get analysis => getModel(FreshmanCacheKeys.analysis, Analysis);
+
+  @override
+  set analysis(Analysis? foo) => setModel(FreshmanCacheKeys.analysis, foo, Analysis());
+
+  @override
+  FreshmanInfo? get basicInfo => getModel(FreshmanCacheKeys.basicInfo, FreshmanInfo);
+
+  @override
+  set basicInfo(FreshmanInfo? foo) => setModel(FreshmanCacheKeys.basicInfo, foo, FreshmanInfo);
 
   @override
   List<Familiar>? get familiars {
     String? json = box.get(FreshmanCacheKeys.familiars);
     if (json == null) return null;
-    List<Map<String, dynamic>> list = jsonDecode(json);
-    return list.map((e) => Familiar.fromJson(e)).toList();
+    print(jsonDecode(json));
+    return null;
   }
 
   @override
