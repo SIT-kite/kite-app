@@ -61,4 +61,10 @@ class FreshmanMock implements FreshmanDao {
     // TODO: implement update
     throw UnimplementedError();
   }
+
+  @override
+  Future<Contact> getContact() {
+    // TODO: implement getContact
+    throw UnimplementedError();
+  }
 }

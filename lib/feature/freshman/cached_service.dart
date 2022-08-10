@@ -8,9 +8,29 @@ class CachedFreshmanService implements FreshmanDao {
   CachedFreshmanService(this._freshmanDao, this._freshmanCacheDao);
 
   @override
-  Future<Analysis> getAnalysis() {
-    // TODO: 添加缓存支持
-    return _freshmanDao.getAnalysis();
+  Future<void> update({Contact? contact, bool? visible}) async {
+    await _freshmanDao.update(
+      contact: contact,
+      visible: visible,
+    );
+    // 维护缓存数据的一致性
+
+    // 如果contact非空，那意味着contact的修改执行成功
+    if (contact != null) {
+      // TODO: 需要在这里放修改contact的逻辑
+    }
+    // 如果visible非空，意味着visible被修改
+    if (visible != null) {
+      FreshmanInfo info = _freshmanCacheDao.basicInfo!;
+      info.visible = visible;
+      _freshmanCacheDao.basicInfo = info;
+    }
+  }
+
+  @override
+  Future<Contact> getContact() {
+    // TODO: 从本地缓存获取
+    throw UnimplementedError();
   }
 
   Future<T> _getWithCache<T>({
@@ -23,21 +43,6 @@ class CachedFreshmanService implements FreshmanDao {
     data = await onLoadCache();
     onWriteCache(data);
     return data!;
-  }
-
-  @override
-  Future<List<Mate>> getClassmates() {
-    return _getWithCache(
-      onReadCache: () => _freshmanCacheDao.classmates,
-      onWriteCache: (e) => _freshmanCacheDao.classmates = e,
-      onLoadCache: _freshmanDao.getClassmates,
-    );
-  }
-
-  @override
-  Future<List<Familiar>> getFamiliars() {
-    // TODO: 添加缓存支持
-    return _freshmanDao.getFamiliars();
   }
 
   @override
@@ -59,15 +64,30 @@ class CachedFreshmanService implements FreshmanDao {
   }
 
   @override
+  Future<List<Mate>> getClassmates() {
+    return _getWithCache(
+      onReadCache: () => _freshmanCacheDao.classmates,
+      onWriteCache: (e) => _freshmanCacheDao.classmates = e,
+      onLoadCache: _freshmanDao.getClassmates,
+    );
+  }
+
+  @override
+  Future<List<Familiar>> getFamiliars() {
+    // TODO: 添加缓存支持
+    return _freshmanDao.getFamiliars();
+  }
+
+  @override
+  Future<Analysis> getAnalysis() {
+    // TODO: 添加缓存支持
+    return _freshmanDao.getAnalysis();
+  }
+
+  @override
   Future<void> postAnalysisLog() {
     // 装饰模式的弊端
     // 这个不用缓存，但是也得原封不动的调用被装饰对象的相应方法
     return _freshmanDao.postAnalysisLog();
-  }
-
-  @override
-  Future<void> update({Contact? contact, bool? visible}) {
-    // TODO: 这里可能需要清空某些缓存数据，以此维护数据一致性
-    return _freshmanDao.update();
   }
 }
