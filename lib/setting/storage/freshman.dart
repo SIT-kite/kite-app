@@ -9,11 +9,29 @@ class FreshmanCacheKeys {
   static const basicInfo = '$namespace/basicInfo';
   static const classmates = '$namespace/classmates';
   static const roommates = '$namespace/roommates';
+  static const analysis = '$namespace/analysis';
 }
 
 class FreshmanCacheStorage implements FreshmanCacheDao {
   final Box<dynamic> box;
   FreshmanCacheStorage(this.box);
+
+  @override
+  Analysis? get analysis {
+    String? json = box.get(FreshmanCacheKeys.analysis);
+    if (json == null) return null;
+    return Analysis.fromJson(jsonDecode(json));
+  }
+
+  @override
+  set analysis(Analysis? foo) {
+    if (foo == null) {
+      box.put(FreshmanCacheKeys.analysis, null);
+      return;
+    }
+    String json = jsonEncode(foo.toJson());
+    box.put(FreshmanCacheKeys.analysis, json);
+  }
 
   @override
   FreshmanInfo? get basicInfo {

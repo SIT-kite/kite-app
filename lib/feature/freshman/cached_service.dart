@@ -64,8 +64,10 @@ class CachedFreshmanService implements FreshmanDao {
 
   @override
   Future<Analysis> getAnalysis() {
-    // TODO: 添加缓存支持
-    return _freshmanDao.getAnalysis();
+    return _getWithCache(
+        onReadCache: () => _freshmanCacheDao.analysis,
+        onWriteCache: (e) => _freshmanCacheDao.analysis = e,
+        onLoadCache: _freshmanDao.getAnalysis);
   }
 
   @override

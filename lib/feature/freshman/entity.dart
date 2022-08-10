@@ -96,6 +96,7 @@ class AnalysisMajor {
 
   AnalysisMajor();
   factory AnalysisMajor.fromJson(Map<String, dynamic> json) => _$AnalysisMajorFromJson(json);
+  Map<String, dynamic> toJson() => _$AnalysisMajorToJson(this);
 
   @override
   String toString() {
@@ -112,6 +113,7 @@ class Analysis {
   AnalysisMajor major = AnalysisMajor();
   Analysis();
   factory Analysis.fromJson(Map<String, dynamic> json) => _$AnalysisFromJson(json);
+  Map<String, dynamic> toJson() => _$AnalysisToJson(this);
 
   @override
   String toString() {
