@@ -8,6 +8,7 @@ class FreshmanCacheKeys {
   static const namespace = '/freshman';
   static const basicInfo = '$namespace/basicInfo';
   static const classmates = '$namespace/classmates';
+  static const roommates = '$namespace/roommates';
 }
 
 class FreshmanCacheStorage implements FreshmanCacheDao {
@@ -32,14 +33,14 @@ class FreshmanCacheStorage implements FreshmanCacheDao {
     box.put(FreshmanCacheKeys.basicInfo, json);
   }
 
-  List<Mate>? getMates(String key) {
+  List<Mate>? _getMates(String key) {
     String? json = box.get(key);
     if (json == null) return null;
     List<Map<String, dynamic>> list = jsonDecode(json);
     return list.map((e) => Mate.fromJson(e)).toList();
   }
 
-  void setMates(String key, List<Mate>? foo) {
+  void _setMates(String key, List<Mate>? foo) {
     if (foo == null) {
       box.put(key, null);
       return;
@@ -51,8 +52,14 @@ class FreshmanCacheStorage implements FreshmanCacheDao {
   }
 
   @override
-  List<Mate>? get classmates => getMates(FreshmanCacheKeys.classmates);
+  List<Mate>? get classmates => _getMates(FreshmanCacheKeys.classmates);
 
   @override
-  set classmates(List<Mate>? foo) => setMates(FreshmanCacheKeys.classmates, foo);
+  set classmates(List<Mate>? foo) => _setMates(FreshmanCacheKeys.classmates, foo);
+
+  @override
+  List<Mate>? get roommates => _getMates(FreshmanCacheKeys.roommates);
+
+  @override
+  set roommates(List<Mate>? foo) => _setMates(FreshmanCacheKeys.roommates, foo);
 }
