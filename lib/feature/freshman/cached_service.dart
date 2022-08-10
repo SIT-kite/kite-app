@@ -13,13 +13,25 @@ class CachedFreshmanService implements FreshmanDao {
     return _freshmanDao.getAnalysis();
   }
 
+  Future<T> _getWithCache<T>({
+    required T? Function() onReadCache, // 读缓存数据时
+    required void Function(T?) onWriteCache, // 写缓存数据
+    required Future<T> Function() onLoadCache, // 当缓存数据不存在时，需要加载数据
+  }) async {
+    var data = onReadCache();
+    if (data != null) return data;
+    data = await onLoadCache();
+    onWriteCache(data);
+    return data!;
+  }
+
   @override
-  Future<List<Mate>> getClassmates() async {
-    var mates = _freshmanCacheDao.classmates;
-    if (mates != null) return mates;
-    mates = await _freshmanDao.getClassmates();
-    _freshmanCacheDao.classmates = mates;
-    return mates;
+  Future<List<Mate>> getClassmates() {
+    return _getWithCache(
+      onReadCache: () => _freshmanCacheDao.classmates,
+      onWriteCache: (e) => _freshmanCacheDao.classmates = e,
+      onLoadCache: _freshmanDao.getClassmates,
+    );
   }
 
   @override
@@ -30,20 +42,20 @@ class CachedFreshmanService implements FreshmanDao {
 
   @override
   Future<FreshmanInfo> getInfo() async {
-    // 如果有缓存，直接返回
-    var info = _freshmanCacheDao.basicInfo;
-    if (info != null) return info;
-
-    // 否则没有缓存，先请求一次
-    info = await _freshmanDao.getInfo();
-    _freshmanCacheDao.basicInfo = info; // 缓存
-    return info;
+    return _getWithCache(
+      onReadCache: () => _freshmanCacheDao.basicInfo,
+      onWriteCache: (e) => _freshmanCacheDao.basicInfo = e,
+      onLoadCache: _freshmanDao.getInfo,
+    );
   }
 
   @override
   Future<List<Mate>> getRoommates() {
-    // TODO: 添加缓存支持
-    return _freshmanDao.getRoommates();
+    return _getWithCache(
+      onReadCache: () => _freshmanCacheDao.roommates,
+      onWriteCache: (e) => _freshmanCacheDao.roommates = e,
+      onLoadCache: _freshmanDao.getRoommates,
+    );
   }
 
   @override
