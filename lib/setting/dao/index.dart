@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 export 'auth.dart';
+export 'freshman.dart';
 export 'home.dart';
 export 'jwt.dart';
 export 'network.dart';

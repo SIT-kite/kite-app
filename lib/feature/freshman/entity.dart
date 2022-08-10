@@ -18,6 +18,7 @@ class FreshmanInfo {
   bool visible = false;
   FreshmanInfo();
   factory FreshmanInfo.fromJson(Map<String, dynamic> json) => _$FreshmanInfoFromJson(json);
+  Map<String, dynamic> toJson() => _$FreshmanInfoToJson(this);
 
   @override
   String toString() {

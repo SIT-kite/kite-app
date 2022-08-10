@@ -15,6 +15,7 @@ class SettingInitializer {
   static late JwtDao sitAppJwt;
   static late HomeSettingDao home;
   static late LoginTimeDao loginTime;
+  static late FreshmanCacheDao freshman;
 
   static Future<void> init({
     required Box<dynamic> settingBox,
@@ -26,6 +27,7 @@ class SettingInitializer {
     jwt = JwtStorage(settingBox);
     sitAppJwt = SitAppJwtStorage(settingBox);
     loginTime = LoginTimeStorage(settingBox);
+    freshman = FreshmanCacheStorage(settingBox);
     Settings.init(cacheProvider: HiveCacheProvider(settingBox));
   }
 }
