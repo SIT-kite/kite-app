@@ -78,6 +78,7 @@ class Mate {
   Contact? contact;
   Mate();
   factory Mate.fromJson(Map<String, dynamic> json) => _$MateFromJson(json);
+  Map<String, dynamic> toJson() => _$MateToJson(this);
 
   @override
   String toString() {

@@ -7,6 +7,7 @@ import 'package:kite/setting/dao/freshman.dart';
 class FreshmanCacheKeys {
   static const namespace = '/freshman';
   static const basicInfo = '$namespace/basicInfo';
+  static const classmates = '$namespace/classmates';
 }
 
 class FreshmanCacheStorage implements FreshmanCacheDao {
@@ -28,6 +29,26 @@ class FreshmanCacheStorage implements FreshmanCacheDao {
     }
     // 不为空时
     String json = jsonEncode(foo.toJson());
+    box.put(FreshmanCacheKeys.basicInfo, json);
+  }
+
+  @override
+  List<Mate>? get classmates {
+    String? json = box.get(FreshmanCacheKeys.classmates);
+    if (json == null) return null;
+    List<Map<String, dynamic>> list = jsonDecode(json);
+    return list.map((e) => Mate.fromJson(e)).toList();
+  }
+
+  @override
+  set classmates(List<Mate>? foo) {
+    if (foo == null) {
+      box.put(FreshmanCacheKeys.classmates, null);
+      return;
+    }
+    // 不为空时
+    List<Map<String, dynamic>> list = foo.map((e) => e.toJson()).toList();
+    String json = jsonEncode(list);
     box.put(FreshmanCacheKeys.basicInfo, json);
   }
 }

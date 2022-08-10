@@ -14,9 +14,12 @@ class CachedFreshmanService implements FreshmanDao {
   }
 
   @override
-  Future<List<Mate>> getClassmates() {
-    // TODO: 添加缓存支持
-    return _freshmanDao.getClassmates();
+  Future<List<Mate>> getClassmates() async {
+    var mates = _freshmanCacheDao.classmates;
+    if (mates != null) return mates;
+    mates = await _freshmanDao.getClassmates();
+    _freshmanCacheDao.classmates = mates;
+    return mates;
   }
 
   @override
