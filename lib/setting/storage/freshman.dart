@@ -10,7 +10,10 @@ class FreshmanCacheKeys {
   static const classmates = '$namespace/classmates';
   static const roommates = '$namespace/roommates';
   static const analysis = '$namespace/analysis';
+  static const familiars = '$namespace/familiars';
 }
+
+//TODO 抽离get和set方法
 
 class FreshmanCacheStorage implements FreshmanCacheDao {
   final Box<dynamic> box;
@@ -49,6 +52,25 @@ class FreshmanCacheStorage implements FreshmanCacheDao {
     // 不为空时
     String json = jsonEncode(foo.toJson());
     box.put(FreshmanCacheKeys.basicInfo, json);
+  }
+
+  @override
+  List<Familiar>? get familiars {
+    String? json = box.get(FreshmanCacheKeys.familiars);
+    if (json == null) return null;
+    List<Map<String, dynamic>> list = jsonDecode(json);
+    return list.map((e) => Familiar.fromJson(e)).toList();
+  }
+
+  @override
+  set familiars(List<Familiar>? foo) {
+    if (foo == null) {
+      box.put(FreshmanCacheKeys.familiars, null);
+      return;
+    }
+    List<Map<String, dynamic>> list = foo.map((e) => e.toJson()).toList();
+    String json = jsonEncode(list);
+    box.put(FreshmanCacheKeys.familiars, json);
   }
 
   List<Mate>? _getMates(String key) {

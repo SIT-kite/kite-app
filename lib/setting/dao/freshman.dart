@@ -5,4 +5,5 @@ abstract class FreshmanCacheDao {
   FreshmanInfo? basicInfo;
   List<Mate>? classmates;
   List<Mate>? roommates;
+  List<Familiar>? familiars;
 }

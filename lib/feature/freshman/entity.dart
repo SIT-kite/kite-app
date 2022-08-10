@@ -57,6 +57,7 @@ class Familiar {
   Contact? contact;
   Familiar();
   factory Familiar.fromJson(Map<String, dynamic> json) => _$FamiliarFromJson(json);
+  Map<String, dynamic> toJson() => _$FamiliarToJson(this);
 
   @override
   String toString() {
