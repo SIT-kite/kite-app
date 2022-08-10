@@ -16,13 +16,15 @@ class FreshmanInfo {
   String counselorName = '';
   String counselorTel = '';
   bool visible = false;
+  Contact? contact;
+
   FreshmanInfo();
   factory FreshmanInfo.fromJson(Map<String, dynamic> json) => _$FreshmanInfoFromJson(json);
   Map<String, dynamic> toJson() => _$FreshmanInfoToJson(this);
 
   @override
   String toString() {
-    return 'FreshmanInfo{name: $name, uid: $uid, studentId: $studentId, college: $college, major: $major, campus: $campus, building: $building, room: $room, bed: $bed, counselorName: $counselorName, counselorTel: $counselorTel, visible: $visible}';
+    return 'FreshmanInfo{name: $name, uid: $uid, studentId: $studentId, college: $college, major: $major, campus: $campus, building: $building, room: $room, bed: $bed, counselorName: $counselorName, counselorTel: $counselorTel, visible: $visible, contact: $contact}';
   }
 }
 
@@ -30,7 +32,7 @@ class FreshmanInfo {
 class Contact {
   String? wechat;
   String? qq;
-  String? phone;
+  String? tel;
 
   Contact();
   factory Contact.fromJson(Map<String, dynamic> json) => _$ContactFromJson(json);
@@ -39,7 +41,7 @@ class Contact {
 
   @override
   String toString() {
-    return 'Contact{wechat: $wechat, qq: $qq, phone: $phone}';
+    return 'Contact{wechat: $wechat, qq: $qq, tel: $tel}';
   }
 }
 

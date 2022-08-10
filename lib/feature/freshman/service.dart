@@ -52,10 +52,4 @@ class FreshmanService extends AService implements FreshmanDao {
   Future<void> postAnalysisLog() async {
     await session.post('/analysis/log');
   }
-
-  @override
-  Future<Contact> getContact() {
-    // 服务器不提供该api
-    throw UnimplementedError();
-  }
 }

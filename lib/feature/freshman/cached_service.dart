@@ -13,24 +13,8 @@ class CachedFreshmanService implements FreshmanDao {
       contact: contact,
       visible: visible,
     );
-    // 维护缓存数据的一致性
-
-    // 如果contact非空，那意味着contact的修改执行成功
-    if (contact != null) {
-      // TODO: 需要在这里放修改contact的逻辑
-    }
-    // 如果visible非空，意味着visible被修改
-    if (visible != null) {
-      FreshmanInfo info = _freshmanCacheDao.basicInfo!;
-      info.visible = visible;
-      _freshmanCacheDao.basicInfo = info;
-    }
-  }
-
-  @override
-  Future<Contact> getContact() {
-    // TODO: 从本地缓存获取
-    throw UnimplementedError();
+    // 维护缓存数据的一致性，直接清空缓存
+    _freshmanCacheDao.basicInfo = null;
   }
 
   Future<T> _getWithCache<T>({
