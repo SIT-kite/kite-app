@@ -16,21 +16,6 @@ jobs:
       - uses: subosito/flutter-action@v2
         with: { channel: stable, cache: true } # channel: 'stable', 'beta' or 'master'
 
-      - name: 📌 Restore pub cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.pub-cache/
-            .dart_tool/
-            .packages
-            .flutter-plugins
-            .flutter-plugins-dependencies
-            pubspec.lock
-          key: pub-${{ github.ref }}-${{ github.sha }} # use ${{ hashFiles('pubspec.lock') }} when available
-          restore-keys: |
-            pub-${{ github.ref }}-
-            pub-
-
       - name: 📌 Flutter Code Generate
         run: |
           flutter pub get
@@ -40,24 +25,7 @@ jobs:
       - name: 📌 Flutter Analysis
         run: flutter analyze --no-fatal-infos --no-pub
 
-      - name: 📌 Cache pub
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.pub-cache/
-            .dart_tool/
-            .packages
-            .flutter-plugins
-            .flutter-plugins-dependencies
-            pubspec.lock
-          key: pub-${{ github.ref }}-${{ github.sha }}
 
-      - name: 📌 Cache Workspace
-        uses: actions/cache@v2
-        with:
-          path: |
-            lib/
-          key: app-${{ github.ref }}-${{ github.sha }}
 
 
   # flutter build apk, cache build/
@@ -71,24 +39,11 @@ jobs:
       - uses: subosito/flutter-action@v2
         with: { channel: stable, cache: true } # channel: 'stable', 'beta' or 'master'
 
-      - name: 📌 Restore pub cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.pub-cache/
-            .dart_tool/
-            .packages
-            .flutter-plugins
-            .flutter-plugins-dependencies
-            pubspec.lock
-          key: pub-${{ github.ref }}-${{ github.sha }}
-
-      - name: 📌 Restore Workspace
-        uses: actions/cache@v2
-        with:
-          path: |
-            lib/
-          key: app-${{ github.ref }}-${{ github.sha }}
+      - name: 📌 Flutter Code Generate
+        run: |
+          flutter pub get
+          flutter pub run build_runner build --delete-conflicting-outputs
+          flutter pub run flutter_native_splash:create
 
       - name: 🏗️ Build Apk (arm64 only)
         run: flutter build apk --split-per-abi --target-platform android-arm64
@@ -114,24 +69,11 @@ jobs:
       - uses: subosito/flutter-action@v2
         with: { channel: 'stable', cache: true } # or: 'beta' or 'master'
 
-      - name: 📌 Restore pub cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.pub-cache/
-            .dart_tool/
-            .packages
-            .flutter-plugins
-            .flutter-plugins-dependencies
-            pubspec.lock
-          key: pub-${{ github.ref }}-${{ github.sha }}
-
-      - name: 📌 Restore Workspace
-        uses: actions/cache@v2
-        with:
-          path: |
-            lib/
-          key: app-${{ github.ref }}-${{ github.sha }}
+      - name: 📌 Flutter Code Generate
+        run: |
+          flutter pub get
+          flutter pub run build_runner build --delete-conflicting-outputs
+          flutter pub run flutter_native_splash:create
 
       - name: 🏗️ Build iOS
         run: flutter build ios --no-codesign
