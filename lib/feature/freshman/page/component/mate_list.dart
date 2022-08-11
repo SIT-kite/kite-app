@@ -55,18 +55,32 @@ class _MateListWidgetState extends State<MateListWidget> {
     ];
   }
 
-  Widget buildListItem(Mate mate) {
+  Widget buildDefaultAvatar(String name) {
     final TextStyle avatarStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.grey[50]);
+
+    return CircleAvatar(
+      backgroundColor: Theme.of(context).primaryColor,
+      radius: 20,
+      child: Container(
+          child: (name ?? '').isEmpty
+              ? Center(child: Icon(Icons.account_circle, size: 40, color: Colors.grey[50]))
+              : Text(name[0], style: avatarStyle)),
+    );
+  }
+
+  Widget buildListItem(Mate mate) {
     final lastSeenText = mate.lastSeen != null ? DateFormat("yyyy-MM-dd hh:mm").format(mate.lastSeen!) : "从未登录";
     return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: Theme.of(context).primaryColor,
-        radius: 20,
-        child: Container(
-            child: (mate.name ?? '').isEmpty
-                ? Center(child: Icon(Icons.account_circle, size: 40, color: Colors.grey[50]))
-                : Text(mate.name[0], style: avatarStyle)),
-      ),
+      leading: mate.avatar == null
+          ? buildDefaultAvatar(mate.name)
+          : Image.network(
+              mate.avatar!,
+              height: 40,
+              width: 40,
+              errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+                return buildDefaultAvatar(mate.name);
+              },
+            ),
       title: Text(mate.name),
       subtitle: Text('上次登陆时间: $lastSeenText'),
       onTap: () {
