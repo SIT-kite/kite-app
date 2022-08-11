@@ -6,7 +6,7 @@ class InfoItem {
   String title = '';
   String subtitle = '';
   VoidCallback? onTap;
-  InfoItem(this.iconData, this.title, this.subtitle, {this.onTap});
+  InfoItem(this.iconData, this.subtitle, this.title, {this.onTap});
 }
 
 class BasicInfoPageWidget extends StatefulWidget {
