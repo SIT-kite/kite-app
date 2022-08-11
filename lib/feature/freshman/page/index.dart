@@ -77,7 +77,7 @@ class _FreshmanPageState extends State<FreshmanPage> {
       subtitle: Text(function.summary),
       trailing: const Icon(Icons.keyboard_arrow_right),
       onTap: () {
-        Navigator.of(context).pushReplacementNamed(function.name);
+        Navigator.of(context).pushNamed(function.name);
       },
     );
   }
