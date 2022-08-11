@@ -25,7 +25,7 @@ List<FreshmanFunction> list = [
   const FreshmanFunction(Icons.info, RouteTable.freshmanInfo, '我的信息', '查询个人宿舍，辅导员，学院专业等重要信息'),
   const FreshmanFunction(Icons.group, RouteTable.freshmanClass, '我的班级', '查询班级信息'),
   const FreshmanFunction(Icons.bed, RouteTable.freshmanRoommate, '我的舍友', '查询同寝室舍友'),
-  const FreshmanFunction(Icons.emoji_emotions, RouteTable.freshmanFriend, '新的朋友', '来看看可能认识的人吧'),
+  const FreshmanFunction(Icons.emoji_emotions, RouteTable.freshmanFamiliar, '新的朋友', '来看看可能认识的人吧'),
   const FreshmanFunction(Icons.analytics, RouteTable.freshmanAnalytics, '风筝分析报告', '一些关于你有趣的数据分析，可能可以窥探你的大学未来')
 ];
 

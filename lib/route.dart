@@ -3,7 +3,7 @@ import 'package:kite/feature/web_page/browser.dart';
 
 import 'feature/freshman/page/analytics.dart';
 import 'feature/freshman/page/class.dart';
-import 'feature/freshman/page/friend.dart';
+import 'feature/freshman/page/familiar.dart';
 import 'feature/freshman/page/index.dart';
 import 'feature/freshman/page/info.dart';
 import 'feature/freshman/page/roommate.dart';
@@ -50,7 +50,7 @@ class RouteTable {
   static const scanner = '/scanner';
   static const browser = '/browser';
   static const freshman = '/freshman';
-  static const freshmanFriend = '$freshman/friend';
+  static const freshmanFamiliar = '$freshman/familiar';
   static const freshmanInfo = '$freshman/info';
   static const freshmanClass = '$freshman/class';
   static const freshmanAnalytics = '$freshman/analytics';
@@ -95,7 +95,7 @@ class RouteTable {
     browser: (context, args) => BrowserPage(args['initialUrl']),
     freshman: (context, args) => FreshmanPage(),
     freshmanInfo: (context, args) => const FreshmanInfoPage(),
-    freshmanFriend: (context, args) => const FreshmanFriendPage(),
+    freshmanFamiliar: (context, args) => const FreshmanFamiliarPage(),
     freshmanClass: (context, args) => const FreshmanClassPage(),
     freshmanAnalytics: (context, args) => const FreshmanAnalyticsPage(),
     freshmanRoommate: (context, args) => const FreshmanRoommatePage(),

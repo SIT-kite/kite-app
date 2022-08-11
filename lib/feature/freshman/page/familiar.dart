@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import '../dao.dart';
 import '../init.dart';
 
-class FreshmanFriendPage extends StatefulWidget {
-  const FreshmanFriendPage({Key? key}) : super(key: key);
+class FreshmanFamiliarPage extends StatefulWidget {
+  const FreshmanFamiliarPage({Key? key}) : super(key: key);
 
   @override
-  State<FreshmanFriendPage> createState() => _FreshmanFriendPageState();
+  State<FreshmanFamiliarPage> createState() => _FreshmanFamiliarPageState();
 }
 
-class _FreshmanFriendPageState extends State<FreshmanFriendPage> {
+class _FreshmanFamiliarPageState extends State<FreshmanFamiliarPage> {
   final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
   @override
   Widget build(BuildContext context) {
