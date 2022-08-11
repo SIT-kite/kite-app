@@ -32,8 +32,8 @@ class _FreshmanAnalysisPageState extends State<FreshmanAnalysisPage> {
       college: info.college,
       infoItems: [
         InfoItem(Icons.person, "同名人数", '${data.sameName} 人'),
-        InfoItem(Icons.location_city, "来自同一个城市的人数", '${data.sameCity} 人'),
-        InfoItem(Icons.school, "来自同一个高中的人数", '${data.sameHighSchool} 人'),
+        if (data.sameCity != -1) InfoItem(Icons.location_city, "来自同一个城市的人数", '${data.sameCity} 人'),
+        if (data.sameHighSchool != -1) InfoItem(Icons.school, "来自同一个高中的人数", '${data.sameHighSchool} 人'),
         InfoItem(Icons.school, "学院总人数", '${data.collegeCount} 人'),
         InfoItem(Icons.school, "专业总人数", '${data.major.total} 人'),
         InfoItem(Icons.male, "专业男生人数", '${data.major.boys} 人'),
