@@ -91,7 +91,7 @@ class FreshmanCacheStorage implements FreshmanCacheDao {
   List<Mate>? _getMates(String key) {
     String? json = box.get(key);
     if (json == null) return null;
-    List<Map<String, dynamic>> list = jsonDecode(json);
+    List<dynamic> list = jsonDecode(json);
     return list.map((e) => Mate.fromJson(e)).toList();
   }
 
