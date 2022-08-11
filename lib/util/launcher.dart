@@ -24,8 +24,8 @@ class SchemeLauncher {
   Future<bool> launch(String schemeText) async {
     for (final scheme in schemes) {
       // 如果被接受且执行成功，那么直接return掉
-      if (scheme.launchRule.accept(schemeText) && await scheme.onLaunch(schemeText)) {
-        return true;
+      if (scheme.launchRule.accept(schemeText)) {
+        return await scheme.onLaunch(schemeText);
       }
     }
 

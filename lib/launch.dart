@@ -43,9 +43,17 @@ class GlobalLauncher {
         // 其他协议，就调用launchUrl启动某个本地app
         launchRule: FunctionalRule((s) => s.contains(':')),
         onLaunch: (scheme) async {
+          Log.info('尝试打开scheme: $scheme');
+
           final uri = Uri.tryParse(scheme);
           if (uri == null) return false;
-          return await launchUrl(uri);
+          if (await canLaunchUrl(uri) && await launchUrl(uri)) {
+            Log.info('成功打开scheme: $scheme');
+            return true;
+          } else {
+            Log.info('打开失败scheme: $scheme');
+            return false;
+          }
         },
       )
     ],
