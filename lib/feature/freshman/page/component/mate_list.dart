@@ -23,17 +23,23 @@ class _MateListWidgetState extends State<MateListWidget> {
         child: Container(
             child: (mate.name ?? '').isEmpty
                 ? Center(child: Icon(Icons.account_circle, size: 40, color: Colors.grey[50]))
-                : Text(mate.name![0], style: avatarStyle)),
+                : Text(mate.name[0], style: avatarStyle)),
       ),
       title: Text(mate.name),
       subtitle: Text(mate.lastSeen != null ? DateFormat("上次登陆时间：yyyy-MM-dd hh:mm").format(mate.lastSeen!) : "从未登录"),
       onTap: () {
         // 展示对话框显示更多信息
-        showAlertDialog(context, title: mate.name, content: [
-          Text(mate.toString()),
-        ], actionWidgetList: [
-          TextButton(onPressed: () {}, child: const Text('关闭对话框')),
-        ]);
+        showAlertDialog(
+          context,
+          title: mate.name,
+          content: [
+            // TODO: 需要单独写组件来渲染更多信息，这里暂时仅显示字符串
+            Text(mate.toString()),
+          ],
+          actionWidgetList: [
+            TextButton(onPressed: () {}, child: const Text('关闭对话框')),
+          ],
+        );
       },
     );
   }
