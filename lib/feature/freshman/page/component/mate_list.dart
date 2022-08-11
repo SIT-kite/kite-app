@@ -71,16 +71,18 @@ class _MateListWidgetState extends State<MateListWidget> {
   Widget buildListItem(Mate mate) {
     final lastSeenText = mate.lastSeen != null ? DateFormat("yyyy-MM-dd hh:mm").format(mate.lastSeen!) : "从未登录";
     return ListTile(
-      leading: mate.avatar == null
-          ? buildDefaultAvatar(mate.name)
-          : Image.network(
-              mate.avatar!,
-              height: 40,
-              width: 40,
-              errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
-                return buildDefaultAvatar(mate.name);
-              },
-            ),
+      // 网络图片加载有些问题
+      // leading: mate.avatar == null
+      //     ? buildDefaultAvatar(mate.name)
+      //     : Image.network(
+      //         mate.avatar!,
+      //         height: 40,
+      //         width: 40,
+      //         errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+      //           return buildDefaultAvatar(mate.name);
+      //         },
+      //       ),
+      leading: buildDefaultAvatar(mate.name),
       title: Text(mate.name),
       subtitle: Text('上次登陆时间: $lastSeenText'),
       onTap: () {
