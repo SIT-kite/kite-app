@@ -163,8 +163,8 @@ class _FreshmanInfoPageState extends State<FreshmanInfoPage> {
             ),
           )),
       title: Text(infoItem.title),
-      subtitle: Text(infoItem.subTitle),
-      trailing: infoItem.editAble == false
+      subtitle: Text(infoItem.subtitle),
+      trailing: infoItem.editable == false
           ? const Icon(Icons.edit_off)
           : const Icon(
               Icons.edit,
@@ -194,7 +194,7 @@ class _FreshmanInfoPageState extends State<FreshmanInfoPage> {
 class InfoItem {
   IconData iconData = Icons.person;
   String title = '';
-  String subTitle = '';
-  bool editAble = false;
-  InfoItem(this.iconData, this.title, this.subTitle, this.editAble);
+  String subtitle = '';
+  bool editable = false;
+  InfoItem(this.iconData, this.title, this.subtitle, this.editable);
 }
