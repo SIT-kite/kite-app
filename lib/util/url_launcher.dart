@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:kite/component/webview_page.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:kite/launch.dart';
 
 import 'logger.dart';
 
 Future<void> launchUrl(String url) async {
-  Log.info('开启浏览器加载URL: $url');
-  if (!await launch(url)) {
-    throw 'Could not launch $url';
-  }
+  GlobalLauncher.launch(url);
 }
 
 Future<void> launchUrlInBuiltinWebView(

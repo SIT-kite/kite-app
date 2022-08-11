@@ -1,6 +1,7 @@
 import 'package:kite/util/rule.dart';
 
-typedef OnLaunchCallback = void Function(String);
+// 返回执行结果，如果false表示失败
+typedef OnLaunchCallback = Future<bool> Function(String);
 
 class LaunchScheme {
   final Rule<String> launchRule;
@@ -20,10 +21,10 @@ class SchemeLauncher {
     this.onNotFound,
   });
 
-  void launch(String schemeText) {
+  Future<void> launch(String schemeText) async {
     for (final scheme in schemes) {
-      if (scheme.launchRule.accept(schemeText)) {
-        scheme.onLaunch(schemeText);
+      // 如果被接受且执行成功，那么直接return掉
+      if (scheme.launchRule.accept(schemeText) && await scheme.onLaunch(schemeText)) {
         return;
       }
     }
