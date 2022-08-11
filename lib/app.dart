@@ -52,7 +52,6 @@ class KiteApp extends StatelessWidget {
   TextTheme _buildTextTheme(bool isDark, Color primaryColor) {
     final fullColor = isDark ? Colors.white : Colors.black;
     final halfColor = isDark ? Colors.white70 : Colors.black87;
-    // final lightColor = isDark ? Colors.white60 : Colors.black54;
 
     return TextTheme(
       // https://material.io/design/typography/the-type-system.html
@@ -69,15 +68,6 @@ class KiteApp extends StatelessWidget {
       bodyText1: TextStyle(fontSize: 16.0, color: fullColor),
       bodyText2: TextStyle(fontSize: 14.0, color: fullColor),
       caption: TextStyle(fontSize: 12.0, color: halfColor),
-
-      // headline1: TextStyle(fontSize: 30.0, color: fullColor, fontWeight: FontWeight.w500),
-      // headline2: TextStyle(fontSize: 28.0, color: fullColor),
-      // headline3: TextStyle(fontSize: 24.0, color: halfColor),
-      // headline4: TextStyle(fontSize: 22.0, color: halfColor, fontWeight: FontWeight.w500),
-      // headline5: TextStyle(fontSize: 20.0, color: lightColor, fontWeight: FontWeight.w400),
-      // headline6: TextStyle(fontSize: 18.0, color: lightColor, fontWeight: FontWeight.w500),
-      // bodyText1: TextStyle(fontSize: 16.0, color: lightColor),
-      // bodyText2: TextStyle(fontSize: 14.0, color: lightColor),
     );
   }
 

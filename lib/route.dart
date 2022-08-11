@@ -57,7 +57,7 @@ class RouteTable {
   static const freshmanRoommate = '$freshman/roommate';
 
   static final Map<String, NamedRouteBuilder> routeTable = {
-    home: (context, args) => HomePage(),
+    home: (context, args) => const HomePage(),
     report: (context, args) => const DailyReportPage(),
     login: (context, args) => const LoginPage(),
     welcome: (context, args) => const WelcomePage(),
@@ -74,7 +74,7 @@ class RouteTable {
     gameComposeSit: (context, args) => const ComposeSitPage(),
     wiki: (context, args) => WikiPage(),
     library: (context, args) => const LibraryPage(),
-    libraryAppointment: (context, args) => AppointmentPage(),
+    libraryAppointment: (context, args) => const AppointmentPage(),
     market: (context, args) => const MarketPage(),
     timetable: (context, args) => const TimetablePage(),
     timetableImport: (context, args) => const TimetableImportPage(),
@@ -94,11 +94,11 @@ class RouteTable {
     scanner: (context, args) => const ScannerPage(),
     browser: (context, args) => BrowserPage(args['initialUrl']),
     freshman: (context, args) => FreshmanPage(),
-    freshmanInfo: (context, args) => FreshmanInfoPage(),
-    freshmanFriend: (context, args) => FreshmanFriendPage(),
-    freshmanClass: (context, args) => FreshmanClassPage(),
-    freshmanAnalytics: (context, args) => FreshmanAnalyticsPage(),
-    freshmanRoommate: (context, args) => FreshmanRoommatePage(),
+    freshmanInfo: (context, args) => const FreshmanInfoPage(),
+    freshmanFriend: (context, args) => const FreshmanFriendPage(),
+    freshmanClass: (context, args) => const FreshmanClassPage(),
+    freshmanAnalytics: (context, args) => const FreshmanAnalyticsPage(),
+    freshmanRoommate: (context, args) => const FreshmanRoommatePage(),
   };
 
   static NamedRouteBuilder? get(String path) {
