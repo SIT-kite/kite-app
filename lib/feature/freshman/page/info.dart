@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/route.dart';
 
@@ -7,8 +6,6 @@ import '../../../component/future_builder.dart';
 import '../dao.dart';
 import '../entity.dart';
 import '../init.dart';
-
-//todo 进一步抽离组件，添加联系方式信息修改
 
 class FreshmanInfoPage extends StatefulWidget {
   const FreshmanInfoPage({Key? key}) : super(key: key);
@@ -21,11 +18,6 @@ class _FreshmanInfoPageState extends State<FreshmanInfoPage> {
   final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
   final double bgHeight = 250;
 
-  List<InfoItem> list = [
-    InfoItem(Icons.person, "姓名", "info.name", false),
-    InfoItem(Icons.person, "姓名", "info.name", false)
-  ];
-
   @override
   Widget build(BuildContext context) {
     return _buildBody(context);
@@ -35,7 +27,7 @@ class _FreshmanInfoPageState extends State<FreshmanInfoPage> {
     return MyFutureBuilder<FreshmanInfo>(
         future: freshmanDao.getInfo(),
         builder: (context, data) {
-          list = buildList(data);
+          final list = buildList(data);
           return _buildBackGround(data, list);
         });
   }
@@ -158,36 +150,27 @@ class _FreshmanInfoPageState extends State<FreshmanInfoPage> {
               child: Icon(
                 infoItem.iconData,
                 color: Colors.white,
-                size: 35,
+                size: 30,
               ),
             ),
           )),
-      title: Text(infoItem.title),
-      subtitle: Text(infoItem.subtitle),
-      trailing: infoItem.editable == false
-          ? const Icon(Icons.edit_off)
-          : const Icon(
-              Icons.edit,
-              color: Colors.deepOrange,
-            ),
+      subtitle: Text(infoItem.title),
+      title: Text(infoItem.subtitle),
     );
   }
 
   List<InfoItem> buildList(FreshmanInfo info) {
-    List<InfoItem> list = [
-      InfoItem(Icons.account_circle, info.name, "姓名", false),
-      InfoItem(Icons.badge, info.studentId, "学号", false),
-      InfoItem(Icons.school, info.college, "学院", false),
-      InfoItem(Icons.emoji_objects, info.major, "专业", false),
-      InfoItem(Icons.corporate_fare, info.campus, "校区", false),
-      InfoItem(Icons.night_shelter, info.building, "宿舍楼", false),
-      InfoItem(Icons.king_bed, '${info.room}-${info.bed}', "寝室", false),
-      InfoItem(Icons.face, info.counselorName, "辅导员姓名", false),
-      InfoItem(Icons.phone_in_talk, info.counselorTel, "辅导员联系方式", false),
-      InfoItem(Icons.wechat, "*********", "你的联系方式", true),
-      InfoItem(Icons.remove_red_eye, info.visible.toString(), "同城可见", true),
+    return [
+      InfoItem(Icons.account_circle, info.name, "姓名"),
+      InfoItem(Icons.badge, info.studentId, "学号"),
+      InfoItem(Icons.school, info.college, "学院"),
+      InfoItem(Icons.emoji_objects, info.major, "专业"),
+      InfoItem(Icons.corporate_fare, info.campus, "校区"),
+      InfoItem(Icons.night_shelter, info.building, "宿舍楼"),
+      InfoItem(Icons.room, '${info.room}-${info.bed}', "寝室"),
+      InfoItem(Icons.face, info.counselorName, "辅导员姓名"),
+      InfoItem(Icons.phone_in_talk, info.counselorTel, "辅导员联系方式"),
     ];
-    return list;
   }
 }
 
@@ -195,6 +178,5 @@ class InfoItem {
   IconData iconData = Icons.person;
   String title = '';
   String subtitle = '';
-  bool editable = false;
-  InfoItem(this.iconData, this.title, this.subtitle, this.editable);
+  InfoItem(this.iconData, this.title, this.subtitle);
 }

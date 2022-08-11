@@ -32,11 +32,11 @@ List<FreshmanFunction> list = [
 //抽象功能
 class FreshmanFunction {
   final IconData iconData;
-  final String fname;
+  final String name;
   final String title;
   final String summary;
 
-  const FreshmanFunction(this.iconData, this.fname, this.title, this.summary);
+  const FreshmanFunction(this.iconData, this.name, this.title, this.summary);
 }
 
 class FreshmanPage extends StatefulWidget {
@@ -77,7 +77,7 @@ class _FreshmanPageState extends State<FreshmanPage> {
       subtitle: Text(function.summary),
       trailing: const Icon(Icons.keyboard_arrow_right),
       onTap: () {
-        Navigator.of(context).pushReplacementNamed(function.fname);
+        Navigator.of(context).pushReplacementNamed(function.name);
       },
     );
   }
