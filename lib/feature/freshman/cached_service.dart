@@ -58,7 +58,6 @@ class CachedFreshmanService implements FreshmanDao {
 
   @override
   Future<List<Familiar>> getFamiliars() {
-    // TODO: 添加缓存支持
     return _getWithCache(
         onReadCache: () => _freshmanCacheDao.familiars,
         onWriteCache: (e) => _freshmanCacheDao.familiars = e,
