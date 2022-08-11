@@ -19,7 +19,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/launch.dart';
-import 'package:kite/util/validation.dart';
 
 import '../../../route.dart';
 import '../../../setting/init.dart';
@@ -136,7 +135,6 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
           TextFormField(
             controller: _accountController,
             autofocus: true,
-            validator: studentIdValidator,
             decoration: const InputDecoration(labelText: '账号(必填)', hintText: '姓名/学号/准考证号', icon: Icon(Icons.person)),
           ),
           TextFormField(
@@ -245,9 +243,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       body: Stack(
         children: [
           Center(
-            child:
-                // Create new container and make it center in vertical direction.
-                Container(
+            child: Container(
               width: 1.sw,
               padding: EdgeInsets.fromLTRB(50.w, 0, 50.w, 0),
               child: Column(
