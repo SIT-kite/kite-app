@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/setting/dao/index.dart';
+import 'package:kite/setting/init.dart';
 
 import '../../../route.dart';
 import '../dao.dart';
@@ -77,7 +79,13 @@ class _FreshmanPageState extends State<FreshmanPage> {
       subtitle: Text(function.summary),
       trailing: const Icon(Icons.keyboard_arrow_right),
       onTap: () {
-        Navigator.of(context).pushNamed(function.name);
+        // 若是新生则进入
+        if (SettingInitializer.auth.userType == UserType.freshman) {
+          Navigator.of(context).pushNamed(function.name);
+          return;
+        }
+        // 若非新生则转到新生登录页
+        Navigator.of(context).pushNamed(RouteTable.freshmanLogin);
       },
     );
   }

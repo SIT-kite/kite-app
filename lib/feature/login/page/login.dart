@@ -32,7 +32,7 @@ class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -245,6 +245,14 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Stack(
         children: [
+          Positioned(
+            top: 40.h,
+            left: 10.w,
+            child: IconButton(
+              icon: Icon(Icons.arrow_back_outlined, size: 35.sm),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
           // Proxy setting
           Positioned(
             top: 40.h,

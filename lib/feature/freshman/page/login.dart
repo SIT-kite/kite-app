@@ -204,6 +204,14 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
     return Scaffold(
       body: Stack(
         children: [
+          Positioned(
+            top: 40.h,
+            left: 10.w,
+            child: IconButton(
+              icon: Icon(Icons.arrow_back_outlined, size: 35.sm),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
           Center(
             child: Container(
               width: 1.sw,
