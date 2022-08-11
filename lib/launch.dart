@@ -65,11 +65,12 @@ class GlobalLauncher {
     },
   );
 
-  static Future<void> launch(String schemeText) {
+  static Future<bool> launch(String schemeText) {
     return _schemeLauncher.launch(schemeText);
   }
 
-  static void launchTel(String tel) => launch('tel://$tel');
+  static Future<bool> launchTel(String tel) => launch('tel://$tel');
 
-  static void launchQqContact(String qq) => launch('mqqapi://card/show_pslcard?src_type=internal&version=1&uin=$qq');
+  static Future<bool> launchQqContact(String qq) =>
+      launch('mqqapi://card/show_pslcard?src_type=internal&version=1&uin=$qq');
 }

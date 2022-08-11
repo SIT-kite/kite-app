@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:kite/launch.dart';
+import 'package:kite/util/flash.dart';
 
 import '../../entity.dart';
 import 'basic_info.dart';
@@ -13,6 +16,45 @@ class MateListWidget extends StatefulWidget {
 }
 
 class _MateListWidgetState extends State<MateListWidget> {
+  List<InfoItem> buildInfoItems(Mate mate) {
+    return [
+      if (![null, ''].contains(mate.contact?.wechat))
+        InfoItem(
+          Icons.wechat,
+          '微信',
+          mate.contact!.wechat!,
+          onTap: () {
+            Clipboard.setData(ClipboardData(text: mate.contact!.wechat!));
+            showBasicFlash(context, const Text('已复制到剪切板'));
+          },
+        ),
+      if (![null, ''].contains(mate.contact?.qq))
+        InfoItem(
+          Icons.person,
+          'QQ',
+          mate.contact!.qq!,
+          onTap: () async {
+            if (!await GlobalLauncher.launchQqContact(mate.contact!.qq!)) {
+              Clipboard.setData(ClipboardData(text: mate.contact!.wechat!));
+              showBasicFlash(context, const Text('已复制到剪切板'));
+            }
+          },
+        ),
+      if (![null, ''].contains(mate.contact?.tel))
+        InfoItem(
+          Icons.phone,
+          '电话号码',
+          mate.contact!.tel!,
+          onTap: () async {
+            if (!await GlobalLauncher.launchTel(mate.contact!.tel!)) {
+              Clipboard.setData(ClipboardData(text: mate.contact!.wechat!));
+              showBasicFlash(context, const Text('已复制到剪切板'));
+            }
+          },
+        ),
+    ];
+  }
+
   Widget buildListItem(Mate mate) {
     final TextStyle avatarStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.grey[50]);
     final lastSeenText = mate.lastSeen != null ? DateFormat("yyyy-MM-dd hh:mm").format(mate.lastSeen!) : "从未登录";
@@ -41,11 +83,7 @@ class _MateListWidgetState extends State<MateListWidget> {
               InfoItem(Icons.person, "性别", mate.gender == 'M' ? '男' : '女'),
               if (mate.province != null) InfoItem(Icons.location_city, '省份', mate.province!),
               if (mate.lastSeen != null) InfoItem(Icons.location_city, '上次登录时间', lastSeenText),
-
-              // TODO: 实现对应联系方式的跳转
-              if (![null, ''].contains(mate.contact?.wechat)) InfoItem(Icons.wechat, '微信', mate.contact!.wechat!),
-              if (![null, ''].contains(mate.contact?.qq)) InfoItem(Icons.person, 'QQ', mate.contact!.qq!),
-              if (![null, ''].contains(mate.contact?.tel)) InfoItem(Icons.phone, '电话号码', mate.contact!.tel!),
+              ...buildInfoItems(mate), // unpack
             ],
           );
         }));

@@ -21,16 +21,17 @@ class SchemeLauncher {
     this.onNotFound,
   });
 
-  Future<void> launch(String schemeText) async {
+  Future<bool> launch(String schemeText) async {
     for (final scheme in schemes) {
       // 如果被接受且执行成功，那么直接return掉
       if (scheme.launchRule.accept(schemeText) && await scheme.onLaunch(schemeText)) {
-        return;
+        return true;
       }
     }
 
     if (onNotFound != null) {
       onNotFound!(schemeText);
     }
+    return false;
   }
 }
