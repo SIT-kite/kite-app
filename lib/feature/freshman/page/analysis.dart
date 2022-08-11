@@ -1,17 +1,16 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../dao.dart';
 import '../init.dart';
 
-class FreshmanAnalyticsPage extends StatefulWidget {
-  const FreshmanAnalyticsPage({Key? key}) : super(key: key);
+class FreshmanAnalysisPage extends StatefulWidget {
+  const FreshmanAnalysisPage({Key? key}) : super(key: key);
 
   @override
-  State<FreshmanAnalyticsPage> createState() => _FreshmanAnalyticsPageState();
+  State<FreshmanAnalysisPage> createState() => _FreshmanAnalysisPageState();
 }
 
-class _FreshmanAnalyticsPageState extends State<FreshmanAnalyticsPage> {
+class _FreshmanAnalysisPageState extends State<FreshmanAnalysisPage> {
   final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
   @override
   Widget build(BuildContext context) {
