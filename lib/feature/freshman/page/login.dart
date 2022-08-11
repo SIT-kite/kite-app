@@ -40,9 +40,6 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
   // Text field controllers.
   final TextEditingController _accountController = TextEditingController();
   final TextEditingController _secretController = TextEditingController();
-  final TextEditingController _qqController = TextEditingController();
-  final TextEditingController _wechatController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
 
   final GlobalKey _formKey = GlobalKey<FormState>();
 
@@ -52,7 +49,6 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
   bool _isPasswordClear = false;
   bool _isLicenseAccepted = false;
   bool _disableLoginButton = false;
-  bool _isVisible = false;
 
   /// 用户点击登录按钮后
   Future<void> onLogin() async {
@@ -72,15 +68,18 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
     final account = _accountController.text;
     final secret = _secretController.text;
 
-    final qq = _qqController.text;
-    final wechat = _wechatController.text;
-    final phone = _phoneController;
-
     try {
       // 先保存登录信息
       SettingInitializer.auth
         ..freshmanAccount = account
         ..freshmanSecret = secret;
+      // 清空本地缓存
+      SettingInitializer.freshman.basicInfo = null;
+      SettingInitializer.freshman.analysis = null;
+      SettingInitializer.freshman.roommates = null;
+      SettingInitializer.freshman.classmates = null;
+      SettingInitializer.freshman.familiars = null;
+
       final info = await freshmanDao.getInfo();
 
       // 登陆成功后赋值名字
@@ -154,21 +153,6 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
               ),
             ),
           ),
-          TextFormField(
-            controller: _qqController,
-            autofocus: true,
-            decoration: const InputDecoration(labelText: 'QQ(选填)', hintText: '请输入你的QQ', icon: Icon(Icons.person)),
-          ),
-          TextFormField(
-            controller: _wechatController,
-            autofocus: true,
-            decoration: const InputDecoration(labelText: '微信(选填)', hintText: '请输入你的微信', icon: Icon(Icons.wechat)),
-          ),
-          TextFormField(
-            controller: _phoneController,
-            autofocus: true,
-            decoration: const InputDecoration(labelText: '手机号(选填)', hintText: '请输入你的手机号', icon: Icon(Icons.phone)),
-          )
         ],
       ),
     );
@@ -195,28 +179,6 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
             ),
           ),
         ),
-      ],
-    );
-  }
-
-  Widget buildVisibleCheckBox() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Checkbox(
-          value: _isVisible,
-          onChanged: (bool? isVisible) {
-            setState(() => _isVisible = isVisible!);
-          },
-        ),
-        Flexible(
-          child: Text.rich(
-            TextSpan(children: [
-              TextSpan(text: '同城可见', style: Theme.of(context).textTheme.bodyText1),
-            ]),
-          ),
-        )
       ],
     );
   }
@@ -257,7 +219,6 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
                   SizedBox(height: 10.h),
                   // User license check box.
                   buildUserLicenseCheckbox(),
-                  buildVisibleCheckBox(),
                   SizedBox(height: 25.h),
                   // Login button.
                   Row(
