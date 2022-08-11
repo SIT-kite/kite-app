@@ -25,10 +25,7 @@ class _FreshmanClassPageState extends State<FreshmanClassPage> {
       body: MyFutureBuilder<List<Mate>>(
         future: freshmanDao.getClassmates(),
         builder: (context, data) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: MateListWidget(data),
-          );
+          return MateListWidget(data);
         },
       ),
     );

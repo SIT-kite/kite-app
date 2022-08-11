@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
+import 'package:kite/feature/freshman/page/component/common.dart';
 
 import '../dao.dart';
 import '../entity.dart';
@@ -20,7 +21,7 @@ class _FreshmanRoommatePageState extends State<FreshmanRoommatePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('当前宿舍：${myInfo.campus}-${myInfo.building}-${myInfo.room}'),
+        buildTitle(mateList, '当前宿舍：${myInfo.campus}-${myInfo.building}-${myInfo.room}', Icons.home, context),
         Expanded(child: MateListWidget(mateList)),
       ],
     );
@@ -35,10 +36,7 @@ class _FreshmanRoommatePageState extends State<FreshmanRoommatePage> {
       body: MyFutureBuilder<List<dynamic>>(
         future: Future.wait([freshmanDao.getRoommates(), freshmanDao.getInfo()]),
         builder: (context, data) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: buildBody(data[0], data[1]),
-          );
+          return buildBody(data[0], data[1]);
         },
       ),
     );

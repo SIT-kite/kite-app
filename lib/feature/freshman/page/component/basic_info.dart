@@ -116,7 +116,6 @@ class _BasicInfoPageWidgetState extends State<BasicInfoPageWidget> {
                 width: 70,
                 height: 70,
                 decoration: const BoxDecoration(
-                  color: Colors.deepOrange,
                   shape: BoxShape.circle,
                 ),
                 child: widget.avatar ?? buildDefaultAvatar(),
