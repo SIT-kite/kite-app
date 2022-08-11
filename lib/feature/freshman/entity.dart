@@ -91,8 +91,13 @@ class Mate {
 
 @JsonSerializable()
 class AnalysisMajor {
+  /// 同专业总人数
   int total = 0;
+
+  /// 同专业的男生
   int boys = 0;
+
+  /// 同专业的女生
   int girls = 0;
 
   AnalysisMajor();
@@ -107,11 +112,21 @@ class AnalysisMajor {
 
 @JsonSerializable()
 class Analysis {
+  /// 同名人数
   int sameName = 0;
+
+  /// 来自同一个城市的人数
   int sameCity = 0;
+
+  /// 来自同一个高中的人数
   int sameHighSchool = 0;
+
+  /// 学院人数
   int collegeCount = 0;
+
+  /// 专业人数信息分析
   AnalysisMajor major = AnalysisMajor();
+
   Analysis();
   factory Analysis.fromJson(Map<String, dynamic> json) => _$AnalysisFromJson(json);
   Map<String, dynamic> toJson() => _$AnalysisToJson(this);
