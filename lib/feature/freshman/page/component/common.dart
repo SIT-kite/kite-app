@@ -24,8 +24,18 @@ List<InfoItem> buildContactInfoItems(BuildContext context, Contact? contact) {
         'QQ',
         contact!.qq!,
         onTap: () async {
+          // 异步异常捕获， 已废用
+          // runZonedGuarded<Future<void>>(() async {
+          //   await GlobalLauncher.launchQqContact(contact.qq!);
+          // }, (dynamic error, StackTrace stackTrace) {
+          //   if (kDebugMode) {
+          //     print(error);
+          //   }
+          //   Clipboard.setData(ClipboardData(text: contact.wechat!));
+          //   showBasicFlash(context, const Text('已复制到剪切板'));
+          // });
           if (!await GlobalLauncher.launchQqContact(contact.qq!)) {
-            Clipboard.setData(ClipboardData(text: contact.wechat!));
+            Clipboard.setData(ClipboardData(text: contact.qq!));
             showBasicFlash(context, const Text('已复制到剪切板'));
           }
         },
@@ -37,7 +47,7 @@ List<InfoItem> buildContactInfoItems(BuildContext context, Contact? contact) {
         contact!.tel!,
         onTap: () async {
           if (!await GlobalLauncher.launchTel(contact.tel!)) {
-            Clipboard.setData(ClipboardData(text: contact.wechat!));
+            Clipboard.setData(ClipboardData(text: contact.tel!));
             showBasicFlash(context, const Text('已复制到剪切板'));
           }
         },
