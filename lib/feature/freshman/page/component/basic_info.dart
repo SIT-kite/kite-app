@@ -36,15 +36,31 @@ class _BasicInfoPageWidgetState extends State<BasicInfoPageWidget> {
 
   /// 构造默认头像
   Widget buildDefaultAvatar() {
-    return CircleAvatar(
-      backgroundColor: Theme.of(context).primaryColor,
+    return Container(
+      decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: LinearGradient(
+            colors: [Color.fromARGB(255, 3, 99, 172), Color.fromARGB(255, 150, 97, 217)],
+            end: Alignment.topCenter,
+            begin: Alignment.bottomCenter,
+          ),
+          boxShadow: [BoxShadow(color: Colors.black54, offset: Offset(2.0, 2.0), blurRadius: 4.0)]),
       child: Container(
+          alignment: const Alignment(0, -0.5),
           child: (widget.name).isEmpty
               ? Center(child: Icon(Icons.account_circle, size: 40, color: Colors.grey[50]))
-              : Text(widget.name[0], style: const TextStyle(fontSize: 30))),
+              : Text(widget.name[0],
+                  style: const TextStyle(
+                      fontFamily: 'calligraphy',
+                      fontSize: 45,
+                      color: Colors.white,
+                      shadows: [BoxShadow(color: Colors.black54, offset: Offset(2.0, 4.0), blurRadius: 10.0)],
+                      fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.none))),
     );
   }
 
+  /// 构造背景
   Widget _buildBackground(String name, String college, List<InfoItem> list) {
     return Stack(
         alignment: AlignmentDirectional.center,
@@ -151,6 +167,7 @@ class _BasicInfoPageWidgetState extends State<BasicInfoPageWidget> {
         ]);
   }
 
+  /// 构造列表项
   Widget _buildItem(InfoItem infoItem) {
     return ListTile(
       textColor: Colors.black,

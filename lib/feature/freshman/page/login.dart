@@ -134,7 +134,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
           TextFormField(
             controller: _accountController,
             autofocus: true,
-            decoration: const InputDecoration(labelText: '账号(必填)', hintText: '姓名/学号/准考证号', icon: Icon(Icons.person)),
+            decoration: const InputDecoration(labelText: '账号(必填)', hintText: '学号', icon: Icon(Icons.person)),
           ),
           TextFormField(
             controller: _secretController,
