@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/util/alert_dialog.dart';
 
 import '../../entity.dart';
+import 'basic_info.dart';
 
 class MateListWidget extends StatefulWidget {
   final List<Mate> mateList;
@@ -15,7 +15,7 @@ class MateListWidget extends StatefulWidget {
 class _MateListWidgetState extends State<MateListWidget> {
   Widget buildListItem(Mate mate) {
     final TextStyle avatarStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.grey[50]);
-
+    final lastSeenText = mate.lastSeen != null ? DateFormat("yyyy-MM-dd hh:mm").format(mate.lastSeen!) : "从未登录";
     return ListTile(
       leading: CircleAvatar(
         backgroundColor: Theme.of(context).primaryColor,
@@ -26,20 +26,29 @@ class _MateListWidgetState extends State<MateListWidget> {
                 : Text(mate.name[0], style: avatarStyle)),
       ),
       title: Text(mate.name),
-      subtitle: Text(mate.lastSeen != null ? DateFormat("上次登陆时间：yyyy-MM-dd hh:mm").format(mate.lastSeen!) : "从未登录"),
+      subtitle: Text('上次登陆时间: $lastSeenText'),
       onTap: () {
-        // 展示对话框显示更多信息
-        showAlertDialog(
-          context,
-          title: mate.name,
-          content: [
-            // TODO: 需要单独写组件来渲染更多信息，这里暂时仅显示字符串
-            Text(mate.toString()),
-          ],
-          actionWidgetList: [
-            TextButton(onPressed: () {}, child: const Text('关闭对话框')),
-          ],
-        );
+        Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+          return BasicInfoPageWidget(
+            name: mate.name,
+            college: mate.college,
+            infoItems: [
+              InfoItem(Icons.account_circle, "姓名", mate.name),
+              InfoItem(Icons.school, "学院", mate.college),
+              InfoItem(Icons.emoji_objects, "专业", mate.major),
+              InfoItem(Icons.night_shelter, "宿舍楼", mate.building),
+              InfoItem(Icons.room, "寝室", '${mate.room}-${mate.bed}'),
+              InfoItem(Icons.person, "性别", mate.gender == 'M' ? '男' : '女'),
+              if (mate.province != null) InfoItem(Icons.location_city, '省份', mate.province!),
+              if (mate.lastSeen != null) InfoItem(Icons.location_city, '上次登录时间', lastSeenText),
+
+              // TODO: 实现对应联系方式的跳转
+              if (![null, ''].contains(mate.contact?.wechat)) InfoItem(Icons.wechat, '微信', mate.contact!.wechat!),
+              if (![null, ''].contains(mate.contact?.qq)) InfoItem(Icons.person, 'QQ', mate.contact!.qq!),
+              if (![null, ''].contains(mate.contact?.tel)) InfoItem(Icons.phone, '电话号码', mate.contact!.tel!),
+            ],
+          );
+        }));
       },
     );
   }
