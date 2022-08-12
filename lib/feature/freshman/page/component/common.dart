@@ -162,4 +162,15 @@ extension Styles on Widget {
       child: this,
     );
   }
+
+  Widget withOrangeBarStyle(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(10, 1, 20, 1),
+      alignment: const Alignment(-1, 0),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(colors: [Colors.red, Colors.orange.shade700]), //背景渐变
+      ),
+      child: this,
+    );
+  }
 }

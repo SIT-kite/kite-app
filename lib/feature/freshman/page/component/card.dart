@@ -50,50 +50,34 @@ class _PersonItemCardWidgetState extends State<PersonItemCardWidget> {
   }
 
   Widget buildLastSeen() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(20, 1, 20, 1),
-      alignment: const Alignment(-1, 0),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [Colors.red, Colors.orange.shade700]), //背景渐变
-      ),
-      child: buildInfoItemRow(
-        iconData: Icons.timelapse,
-        text: "${widget.lastSeenText}在线",
-        fontSize: 14,
-        iconSize: 20,
-        context: context,
-      ),
-    );
+    return buildInfoItemRow(
+      iconData: Icons.timelapse,
+      text: "${widget.lastSeenText}在线",
+      fontSize: 14,
+      iconSize: 20,
+      context: context,
+    ).withOrangeBarStyle(context);
   }
 
   Widget buildLocation() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(20, 1, 20, 1),
-      alignment: const Alignment(-1, 0),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [Colors.red, Colors.orange.shade700]), //背景渐变
-      ),
-      child: () {
-        final loc = widget.locationText;
-        if (loc != null) {
-          return buildInfoItemRow(
-            iconData: Icons.room,
-            text: loc,
-            fontSize: 14,
-            iconSize: 20,
-            context: context,
-          );
-        } else {
-          return buildInfoItemRow(
-            iconData: Icons.room,
-            text: '在宇宙漫游哦',
-            fontSize: 13,
-            iconSize: 17,
-            context: context,
-          );
-        }
-      }(),
-    );
+    final loc = widget.locationText;
+    if (loc != null) {
+      return buildInfoItemRow(
+        iconData: Icons.room,
+        text: loc,
+        fontSize: 14,
+        iconSize: 20,
+        context: context,
+      ).withOrangeBarStyle(context);
+    } else {
+      return buildInfoItemRow(
+        iconData: Icons.room,
+        text: '在宇宙漫游哦',
+        fontSize: 13,
+        iconSize: 17,
+        context: context,
+      ).withOrangeBarStyle(context);
+    }
   }
 
   Widget buildContent() {
