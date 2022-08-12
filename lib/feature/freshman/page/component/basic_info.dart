@@ -6,7 +6,8 @@ class InfoItem {
   String title = '';
   String subtitle = '';
   VoidCallback? onTap;
-  InfoItem(this.iconData, this.subtitle, this.title, {this.onTap});
+  IconData? trailIconData;
+  InfoItem(this.iconData, this.subtitle, this.title, {this.onTap, this.trailIconData});
 }
 
 class BasicInfoPageWidget extends StatefulWidget {
@@ -188,6 +189,7 @@ class _BasicInfoPageWidgetState extends State<BasicInfoPageWidget> {
       onTap: () {
         if (infoItem.onTap != null) infoItem.onTap!();
       },
+      trailing: Icon(infoItem.trailIconData),
     );
   }
 }

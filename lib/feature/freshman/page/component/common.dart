@@ -20,6 +20,7 @@ List<InfoItem> buildContactInfoItems(BuildContext context, Contact? contact) {
           Clipboard.setData(ClipboardData(text: wechat));
           showBasicFlash(context, const Text('已复制到剪切板'));
         },
+        trailIconData: Icons.copy,
       ),
     if (qq != null && qq.isNotEmpty)
       InfoItem(
@@ -32,6 +33,7 @@ List<InfoItem> buildContactInfoItems(BuildContext context, Contact? contact) {
             showBasicFlash(context, const Text('已复制到剪切板'));
           }
         },
+        trailIconData: Icons.open_in_browser,
       ),
     if (tel != null && tel.isNotEmpty)
       InfoItem(
@@ -44,6 +46,7 @@ List<InfoItem> buildContactInfoItems(BuildContext context, Contact? contact) {
             showBasicFlash(context, const Text('已复制到剪切板'));
           }
         },
+        trailIconData: Icons.phone,
       ),
   ];
 }
