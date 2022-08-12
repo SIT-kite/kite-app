@@ -18,11 +18,13 @@ class _FreshmanAnalysisPageState extends State<FreshmanAnalysisPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MyFutureBuilder<List<dynamic>>(
-      future: Future.wait([freshmanDao.getAnalysis(), freshmanDao.getInfo()]),
-      builder: (context, data) {
-        return _buildBody(context, data[0], data[1]);
-      },
+    return Scaffold(
+      body: MyFutureBuilder<List<dynamic>>(
+        future: Future.wait([freshmanDao.getAnalysis(), freshmanDao.getInfo()]),
+        builder: (context, data) {
+          return _buildBody(context, data[0], data[1]);
+        },
+      ),
     );
   }
 
