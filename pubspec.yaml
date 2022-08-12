@@ -23,6 +23,8 @@ dependencies:
 
   flutter: { sdk: flutter }
 
+  device_info_plus_platform_interface: 2.5.0
+
   # Basic
   intl: ^0.17.0               # i18n & l10n
   logger: ^1.1.0              # logger
