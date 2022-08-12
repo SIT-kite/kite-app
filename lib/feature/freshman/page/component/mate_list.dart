@@ -41,22 +41,19 @@ class _MateListWidgetState extends State<MateListWidget> {
     final wechat = mate.contact?.wechat;
     final qq = mate.contact?.qq;
     final tel = mate.contact?.tel;
-    final wechatRow = buildMateItemRow(
+    final wechatRow = buildInfoItemRow(
       iconData: Icons.wechat,
-      title: '微信号:  ',
-      text: wechat != null && wechat != '' ? wechat : '未填写',
+      text: ' 微信号:  ${wechat != null && wechat != '' ? wechat : '未填写'}',
       context: context,
     );
-    final qqRow = buildMateItemRow(
+    final qqRow = buildInfoItemRow(
       iconData: Icons.person,
-      title: 'QQ:  ',
-      text: qq != null && qq != '' ? qq : '未填写',
+      text: 'QQ:  ${qq != null && qq != '' ? qq : '未填写'}',
       context: context,
     );
-    final telRow = buildMateItemRow(
+    final telRow = buildInfoItemRow(
       iconData: Icons.phone,
-      title: '手机号:  ',
-      text: tel != null && tel != '' ? tel : '未填写',
+      text: '手机号:  ${tel != null && tel != '' ? tel : '未填写'}',
       context: context,
     );
 
@@ -70,22 +67,19 @@ class _MateListWidgetState extends State<MateListWidget> {
         SizedBox(
           height: 8.h,
         ),
-        buildMateItemRow(
+        buildInfoItemRow(
           iconData: Icons.school,
-          title: "学院:  ",
-          text: mate.college,
+          text: "学院:  ${mate.college}",
           context: context,
         ),
-        buildMateItemRow(
+        buildInfoItemRow(
           iconData: Icons.emoji_objects,
-          title: "专业:  ",
-          text: mate.major,
+          text: "专业:  ${mate.major}",
           context: context,
         ),
-        buildMateItemRow(
+        buildInfoItemRow(
           iconData: Icons.home,
-          title: "寝室:  ",
-          text: '${mate.building}${mate.bed}号床',
+          text: "寝室:  ${mate.building}${mate.bed}号床",
           context: context,
         ),
         wechatRow,
@@ -95,42 +89,6 @@ class _MateListWidgetState extends State<MateListWidget> {
     );
   }
 
-  Widget buildLastSeenWidget(DateTime? lastSeen) {
-    final lastSeenText = calcLastSeen(lastSeen);
-
-    return buildMateItemRow(
-      iconData: Icons.timelapse,
-      title: ' ',
-      text: "$lastSeenText在线",
-      fontSize: 14,
-      iconSize: 20,
-      context: context,
-    );
-  }
-
-  // 构造城市显示组件
-  Widget buildLocationWidget(Mate mate) {
-    if (mate.province != null) {
-      return buildMateItemRow(
-        iconData: Icons.room,
-        title: '',
-        text: mate.province!,
-        fontSize: 14,
-        iconSize: 20,
-        context: context,
-      );
-    } else {
-      return buildMateItemRow(
-        iconData: Icons.room,
-        title: ' ',
-        text: '在宇宙漫游哦',
-        fontSize: 13,
-        iconSize: 17,
-        context: context,
-      );
-    }
-  }
-
   Widget buildListView(List<Mate> list) {
     return ListView(
       children: list.map((e) {
@@ -138,9 +96,10 @@ class _MateListWidgetState extends State<MateListWidget> {
           basicInfoWidget: buildBasicInfoWidget(e),
           name: e.name,
           isMale: e.gender == 'M',
-          lastSeenWidget: buildLastSeenWidget(e.lastSeen),
-          locationWidget: buildLocationWidget(e),
+          lastSeenText: calcLastSeen(e.lastSeen),
+          locationText: e.province,
           onLoadMore: () => loadMoreInfo(e),
+          height: 270,
         );
       }).toList(),
     );
@@ -149,15 +108,17 @@ class _MateListWidgetState extends State<MateListWidget> {
   Widget buildBody(List<Mate> mateList) {
     return Column(
       children: [
-        Container(
-            decoration: const BoxDecoration(
-                color: Colors.blueAccent,
-                boxShadow: [BoxShadow(color: Colors.black, offset: Offset(2, 2.0), blurRadius: 4.0)]),
-            width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.all(5),
-            child: buildMateItemRow(
-                iconData: Icons.info, title: '总计人数(不包含自己): ${mateList.length}', text: '', context: context)),
-        Expanded(child: Container(padding: const EdgeInsets.symmetric(horizontal: 8), child: buildListView(mateList))),
+        buildInfoItemRow(
+          iconData: Icons.info,
+          text: '总计人数(不包含自己): ${mateList.length}',
+          context: context,
+        ).withTitleBarStyle(context),
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: buildListView(mateList),
+          ),
+        ),
       ],
     );
   }

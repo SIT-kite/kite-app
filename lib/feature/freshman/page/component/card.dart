@@ -5,17 +5,19 @@ import 'common.dart';
 
 class PersonItemCardWidget extends StatefulWidget {
   final String name;
-  final Widget lastSeenWidget;
-  final Widget locationWidget;
+  final String lastSeenText;
+  final String? locationText;
   final VoidCallback? onLoadMore;
   final Widget basicInfoWidget;
   final bool isMale;
+  final double? height;
   const PersonItemCardWidget({
     required this.basicInfoWidget,
     required this.name,
-    required this.lastSeenWidget,
-    required this.locationWidget,
+    required this.lastSeenText,
+    required this.locationText,
     required this.isMale,
+    this.height,
     this.onLoadMore,
     Key? key,
   }) : super(key: key);
@@ -37,10 +39,9 @@ class _PersonItemCardWidgetState extends State<PersonItemCardWidget> {
               //阴影
               BoxShadow(color: Colors.black54, offset: Offset(7.0, 7.0), blurRadius: 4.0)
             ]),
-        child: (buildMateItemRow(
+        child: (buildInfoItemRow(
           iconData: Icons.send,
-          title: ' ',
-          text: '更多信息',
+          text: ' 更多信息',
           fontSize: 20,
           context: context,
         )),
@@ -55,7 +56,13 @@ class _PersonItemCardWidgetState extends State<PersonItemCardWidget> {
       decoration: BoxDecoration(
         gradient: LinearGradient(colors: [Colors.red, Colors.orange.shade700]), //背景渐变
       ),
-      child: widget.lastSeenWidget,
+      child: buildInfoItemRow(
+        iconData: Icons.timelapse,
+        text: "${widget.lastSeenText}在线",
+        fontSize: 14,
+        iconSize: 20,
+        context: context,
+      ),
     );
   }
 
@@ -66,7 +73,26 @@ class _PersonItemCardWidgetState extends State<PersonItemCardWidget> {
       decoration: BoxDecoration(
         gradient: LinearGradient(colors: [Colors.red, Colors.orange.shade700]), //背景渐变
       ),
-      child: widget.locationWidget,
+      child: () {
+        final loc = widget.locationText;
+        if (loc != null) {
+          return buildInfoItemRow(
+            iconData: Icons.room,
+            text: loc,
+            fontSize: 14,
+            iconSize: 20,
+            context: context,
+          );
+        } else {
+          return buildInfoItemRow(
+            iconData: Icons.room,
+            text: '在宇宙漫游哦',
+            fontSize: 13,
+            iconSize: 17,
+            context: context,
+          );
+        }
+      }(),
     );
   }
 
@@ -137,7 +163,7 @@ class _PersonItemCardWidgetState extends State<PersonItemCardWidget> {
             ],
           ),
           child: SizedBox(
-            height: 270,
+            height: widget.height,
             width: MediaQuery.of(context).size.width - 20.w,
             child: buildContent(),
           ),

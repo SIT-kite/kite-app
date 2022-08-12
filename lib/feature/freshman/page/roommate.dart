@@ -21,7 +21,11 @@ class _FreshmanRoommatePageState extends State<FreshmanRoommatePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        buildTitle(mateList, '当前宿舍：${myInfo.campus}-${myInfo.building}-${myInfo.room}', Icons.home, context),
+        buildInfoItemRow(
+          iconData: Icons.home,
+          text: '当前宿舍：${myInfo.campus}-${myInfo.building}-${myInfo.room}',
+          context: context,
+        ).withTitleBarStyle(context),
         Expanded(child: MateListWidget(mateList)),
       ],
     );

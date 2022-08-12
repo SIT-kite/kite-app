@@ -125,24 +125,10 @@ String calcLastSeen(DateTime? lastSeen) {
   return lastSeenText;
 }
 
-/// 构建标题
-Widget buildTitle(List<Mate> mateList, String title, IconData iconData, BuildContext context) {
-  return Container(
-    decoration: const BoxDecoration(
-      color: Colors.blueAccent,
-      boxShadow: [BoxShadow(color: Colors.black, offset: Offset(2, 2.0), blurRadius: 4.0)],
-    ),
-    width: MediaQuery.of(context).size.width,
-    padding: const EdgeInsets.all(5),
-    child: buildMateItemRow(iconData: iconData, title: title, text: '', context: context),
-  );
-}
-
 /// 构建常用icon+文字样式
-Widget buildMateItemRow({
+Widget buildInfoItemRow({
   required BuildContext context,
   required IconData iconData,
-  required String title,
   required String text,
   double? fontSize,
   double? iconSize,
@@ -157,14 +143,23 @@ Widget buildMateItemRow({
           size: iconSize ?? IconTheme.of(context).size,
         ),
         Text(
-          title,
+          '  $text',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: fontSize ?? 15),
         ),
-        Text(
-          text,
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: fontSize ?? 15),
-        )
       ],
     ),
   );
+}
+
+extension Styles on Widget {
+  Widget withTitleBarStyle(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+          color: Colors.blueAccent,
+          boxShadow: [BoxShadow(color: Colors.black, offset: Offset(2, 2.0), blurRadius: 4.0)]),
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.all(5),
+      child: this,
+    );
+  }
 }

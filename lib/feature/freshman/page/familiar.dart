@@ -34,10 +34,7 @@ class _FreshmanFamiliarPageState extends State<FreshmanFamiliarPage> {
       body: MyFutureBuilder<List<Familiar>>(
         future: freshmanDao.getFamiliars(),
         builder: (context, data) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: buildBody(data),
-          );
+          return buildBody(data);
         },
       ),
     );
