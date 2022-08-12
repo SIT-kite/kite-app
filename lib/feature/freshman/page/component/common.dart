@@ -142,9 +142,16 @@ Widget buildInfoItemRow({
           color: Colors.white,
           size: iconSize ?? IconTheme.of(context).size,
         ),
-        Text(
-          '  $text',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: fontSize ?? 15),
+        Expanded(
+          child: Text(
+            ' $text',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: fontSize ?? 15,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
         ),
       ],
     ),
