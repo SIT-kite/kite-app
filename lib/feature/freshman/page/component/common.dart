@@ -11,7 +11,7 @@ List<InfoItem> buildContactInfoItems(BuildContext context, Contact? contact) {
   final qq = contact?.qq;
   final tel = contact?.tel;
   return [
-    if (wechat != null && wechat.isEmpty)
+    if (wechat != null && wechat.isNotEmpty)
       InfoItem(
         Icons.wechat,
         '微信',
@@ -21,7 +21,7 @@ List<InfoItem> buildContactInfoItems(BuildContext context, Contact? contact) {
           showBasicFlash(context, const Text('已复制到剪切板'));
         },
       ),
-    if (qq != null && qq.isEmpty)
+    if (qq != null && qq.isNotEmpty)
       InfoItem(
         Icons.person,
         'QQ',
@@ -33,7 +33,7 @@ List<InfoItem> buildContactInfoItems(BuildContext context, Contact? contact) {
           }
         },
       ),
-    if (tel != null && tel.isEmpty)
+    if (tel != null && tel.isNotEmpty)
       InfoItem(
         Icons.phone,
         '电话号码',
@@ -55,7 +55,7 @@ Widget buildListItemDefaultAvatar(BuildContext context, String name) {
     backgroundColor: Colors.white,
     radius: 20,
     child: Container(
-      child: (name ?? '').isEmpty
+      child: name.isEmpty
           ? const Center(child: Icon(Icons.account_circle, size: 40, color: Colors.black))
           : Text(name[0], style: avatarStyle),
     ),
@@ -108,7 +108,7 @@ String calcLastSeen(DateTime? lastSeen) {
   var lastSeenText = '从未登录';
   if (lastSeen != null) {
     lastSeenText = '';
-    final diff = DateTime.now().difference(lastSeen!);
+    final diff = DateTime.now().difference(lastSeen);
     if (diff.inDays != 0) {
       lastSeenText += '${diff.inDays}天前';
     } else if (diff.inHours != 0) {

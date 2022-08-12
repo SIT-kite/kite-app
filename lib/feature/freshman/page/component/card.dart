@@ -71,36 +71,39 @@ class _PersonItemCardWidgetState extends State<PersonItemCardWidget> {
   }
 
   Widget buildContent() {
-    return Flex(
-      direction: Axis.horizontal,
-      children: [
-        Expanded(
-          flex: 6,
-          child: Stack(children: [
-            Align(
-              alignment: const Alignment(0, -0.7),
-              child: buildAvatar(name: widget.name),
-            ),
-            Positioned(
-              top: 120,
-              left: 0,
-              child: buildLastSeen(),
-            ),
-            Positioned(
-              top: 165,
-              left: 0,
-              child: buildLocation(),
-            )
-          ]),
-        ),
-        Expanded(
-          flex: 11,
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: widget.basicInfoWidget,
+    return InkWell(
+      onTap: widget.onLoadMore,
+      child: Flex(
+        direction: Axis.horizontal,
+        children: [
+          Expanded(
+            flex: 6,
+            child: Stack(children: [
+              Align(
+                alignment: const Alignment(0, -0.7),
+                child: buildAvatar(name: widget.name),
+              ),
+              Positioned(
+                top: 120,
+                left: 0,
+                child: buildLastSeen(),
+              ),
+              Positioned(
+                top: 165,
+                left: 0,
+                child: buildLocation(),
+              )
+            ]),
           ),
-        )
-      ],
+          Expanded(
+            flex: 11,
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: widget.basicInfoWidget,
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -138,12 +141,6 @@ class _PersonItemCardWidgetState extends State<PersonItemCardWidget> {
             width: MediaQuery.of(context).size.width - 20.w,
             child: buildContent(),
           ),
-        ),
-        Positioned(
-          top: 5.h,
-          right: 0,
-          width: 110.w,
-          child: buildMoreButton(),
         ),
       ],
     );
