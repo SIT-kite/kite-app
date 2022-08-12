@@ -37,7 +37,7 @@ class _FreshmanInfoPageState extends State<FreshmanInfoPage> {
         InfoItem(Icons.emoji_objects, "专业", data.major),
         InfoItem(Icons.corporate_fare, "校区", data.campus),
         InfoItem(Icons.night_shelter, "宿舍楼", data.building),
-        InfoItem(Icons.room, "寝室", '${data.room}-${data.bed}'),
+        InfoItem(Icons.room, "寝室", '${data.room}室${data.bed}床'),
         InfoItem(Icons.face, "辅导员姓名", data.counselorName),
         InfoItem(Icons.phone_in_talk, "辅导员联系方式", data.counselorTel),
         if (![null, ''].contains(data.contact?.wechat)) InfoItem(Icons.wechat, '微信', data.contact!.wechat!),

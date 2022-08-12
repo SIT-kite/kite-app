@@ -27,7 +27,7 @@ class _MateListWidgetState extends State<MateListWidget> {
           InfoItem(Icons.school, "学院", mate.college),
           InfoItem(Icons.emoji_objects, "专业", mate.major),
           InfoItem(Icons.night_shelter, "宿舍楼", mate.building),
-          InfoItem(Icons.bed, "寝室", '${mate.room}-${mate.bed}'),
+          InfoItem(Icons.bed, "寝室", '${mate.room}室${mate.bed}床'),
           InfoItem(mate.gender == 'M' ? Icons.male : Icons.female, "性别", mate.gender == 'M' ? '男' : '女'),
           if (mate.province != null) InfoItem(Icons.location_city, '省份', mate.province!),
           if (mate.lastSeen != null) InfoItem(Icons.location_city, '上次登录时间', lastSeenText),
@@ -79,7 +79,7 @@ class _MateListWidgetState extends State<MateListWidget> {
         ),
         buildInfoItemRow(
           iconData: Icons.home,
-          text: "寝室:  ${mate.building}${mate.bed}号床",
+          text: "寝室:  ${mate.building}${mate.room}室",
           context: context,
         ),
         wechatRow,
