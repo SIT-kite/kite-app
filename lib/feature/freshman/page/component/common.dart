@@ -7,47 +7,40 @@ import '../../entity.dart';
 import 'basic_info.dart';
 
 List<InfoItem> buildContactInfoItems(BuildContext context, Contact? contact) {
+  final wechat = contact?.wechat;
+  final qq = contact?.qq;
+  final tel = contact?.tel;
   return [
-    if (![null, ''].contains(contact?.wechat))
+    if (wechat != null && wechat.isEmpty)
       InfoItem(
         Icons.wechat,
         '微信',
-        contact!.wechat!,
+        wechat,
         onTap: () {
-          Clipboard.setData(ClipboardData(text: contact.wechat!));
+          Clipboard.setData(ClipboardData(text: wechat));
           showBasicFlash(context, const Text('已复制到剪切板'));
         },
       ),
-    if (![null, ''].contains(contact?.qq))
+    if (qq != null && qq.isEmpty)
       InfoItem(
         Icons.person,
         'QQ',
-        contact!.qq!,
+        qq,
         onTap: () async {
-          // 异步异常捕获， 已废用
-          // runZonedGuarded<Future<void>>(() async {
-          //   await GlobalLauncher.launchQqContact(contact.qq!);
-          // }, (dynamic error, StackTrace stackTrace) {
-          //   if (kDebugMode) {
-          //     print(error);
-          //   }
-          //   Clipboard.setData(ClipboardData(text: contact.wechat!));
-          //   showBasicFlash(context, const Text('已复制到剪切板'));
-          // });
-          if (!await GlobalLauncher.launchQqContact(contact.qq!)) {
-            Clipboard.setData(ClipboardData(text: contact.qq!));
+          if (!await GlobalLauncher.launchQqContact(qq)) {
+            Clipboard.setData(ClipboardData(text: qq));
             showBasicFlash(context, const Text('已复制到剪切板'));
           }
         },
       ),
-    if (![null, ''].contains(contact?.tel))
+    if (tel != null && tel.isEmpty)
       InfoItem(
         Icons.phone,
         '电话号码',
-        contact!.tel!,
+        tel,
         onTap: () async {
-          if (!await GlobalLauncher.launchTel(contact.tel!)) {
-            Clipboard.setData(ClipboardData(text: contact.tel!));
+          if (!await GlobalLauncher.launchTel(tel)) {
+            Clipboard.setData(ClipboardData(text: tel));
             showBasicFlash(context, const Text('已复制到剪切板'));
           }
         },
@@ -62,9 +55,10 @@ Widget buildListItemDefaultAvatar(BuildContext context, String name) {
     backgroundColor: Colors.white,
     radius: 20,
     child: Container(
-        child: (name ?? '').isEmpty
-            ? const Center(child: Icon(Icons.account_circle, size: 40, color: Colors.black))
-            : Text(name[0], style: avatarStyle)),
+      child: (name ?? '').isEmpty
+          ? const Center(child: Icon(Icons.account_circle, size: 40, color: Colors.black))
+          : Text(name[0], style: avatarStyle),
+    ),
   );
 }
 
@@ -72,25 +66,29 @@ Widget buildListItemDefaultAvatar(BuildContext context, String name) {
 Widget buildDefaultAvatar(String name) {
   return Container(
     decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: LinearGradient(
-          colors: [Color.fromARGB(255, 3, 99, 172), Color.fromARGB(255, 150, 97, 217)],
-          end: Alignment.topCenter,
-          begin: Alignment.bottomCenter,
-        ),
-        boxShadow: [BoxShadow(color: Colors.black54, offset: Offset(5.0, 5.0), blurRadius: 4.0)]),
+      shape: BoxShape.circle,
+      gradient: LinearGradient(
+        colors: [Color.fromARGB(255, 3, 99, 172), Color.fromARGB(255, 150, 97, 217)],
+        end: Alignment.topCenter,
+        begin: Alignment.bottomCenter,
+      ),
+      boxShadow: [BoxShadow(color: Colors.black54, offset: Offset(5.0, 5.0), blurRadius: 4.0)],
+    ),
     child: Container(
-        alignment: const Alignment(0, 0),
-        child: (name).isEmpty
-            ? Center(child: Icon(Icons.account_circle, size: 40, color: Colors.grey[50]))
-            : Text(name[0],
-                style: const TextStyle(
-                    fontFamily: 'calligraphy',
-                    fontSize: 45,
-                    color: Colors.white,
-                    shadows: [BoxShadow(color: Colors.black54, offset: Offset(2.0, 4.0), blurRadius: 10.0)],
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.none))),
+      alignment: const Alignment(0, 0),
+      child: name.isEmpty
+          ? Center(child: Icon(Icons.account_circle, size: 40, color: Colors.grey[50]))
+          : Text(
+              name[0],
+              style: const TextStyle(
+                  fontFamily: 'calligraphy',
+                  fontSize: 45,
+                  color: Colors.white,
+                  shadows: [BoxShadow(color: Colors.black54, offset: Offset(2.0, 4.0), blurRadius: 10.0)],
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.none),
+            ),
+    ),
   );
 }
 
@@ -127,22 +125,25 @@ String calcLastSeen(DateTime? lastSeen) {
 /// 构建标题
 Widget buildTitle(List<Mate> mateList, String title, IconData iconData, BuildContext context) {
   return Container(
-      decoration: const BoxDecoration(
-          color: Colors.blueAccent,
-          boxShadow: [BoxShadow(color: Colors.black, offset: Offset(2, 2.0), blurRadius: 4.0)]),
-      width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.all(5),
-      child: buildMateItemRow(iconData: iconData, title: title, text: '', context: context));
+    decoration: const BoxDecoration(
+      color: Colors.blueAccent,
+      boxShadow: [BoxShadow(color: Colors.black, offset: Offset(2, 2.0), blurRadius: 4.0)],
+    ),
+    width: MediaQuery.of(context).size.width,
+    padding: const EdgeInsets.all(5),
+    child: buildMateItemRow(iconData: iconData, title: title, text: '', context: context),
+  );
 }
 
 /// 构建常用icon+文字样式
-Widget buildMateItemRow(
-    {required IconData iconData,
-    required String title,
-    required String text,
-    double? fonSize,
-    double? iconSize,
-    required BuildContext context}) {
+Widget buildMateItemRow({
+  required BuildContext context,
+  required IconData iconData,
+  required String title,
+  required String text,
+  double? fontSize,
+  double? iconSize,
+}) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 3.0),
     child: Row(
@@ -154,11 +155,11 @@ Widget buildMateItemRow(
         ),
         Text(
           title,
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: fonSize ?? 15),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: fontSize ?? 15),
         ),
         Text(
           text,
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: fonSize ?? 15),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: fontSize ?? 15),
         )
       ],
     ),

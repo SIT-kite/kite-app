@@ -7,8 +7,8 @@ void main() async {
   await init();
   FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
   SettingInitializer.auth
-    ..freshmanAccount = '216072111'
-    ..freshmanSecret = '134629';
+    ..freshmanAccount = '郑欣宇'
+    ..freshmanSecret = '273326';
   test('test freshman getInfo', () async {
     Log.info(await freshmanDao.getInfo());
   });
