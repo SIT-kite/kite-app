@@ -43,7 +43,7 @@ class _MateListWidgetState extends State<MateListWidget> {
     final tel = mate.contact?.tel;
     final wechatRow = buildInfoItemRow(
       iconData: Icons.wechat,
-      text: ' 微信号:  ${wechat != null && wechat != '' ? wechat : '未填写'}',
+      text: '微信号:  ${wechat != null && wechat != '' ? wechat : '未填写'}',
       context: context,
     );
     final qqRow = buildInfoItemRow(

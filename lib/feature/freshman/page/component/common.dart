@@ -18,7 +18,7 @@ List<InfoItem> buildContactInfoItems(BuildContext context, Contact? contact) {
         wechat,
         onTap: () {
           Clipboard.setData(ClipboardData(text: wechat));
-          showBasicFlash(context, const Text('已复制到剪切板'));
+          showBasicFlash(context, const Text('不支持启动微信, 已复制到剪切板'));
         },
         trailIconData: Icons.copy,
       ),
@@ -30,7 +30,7 @@ List<InfoItem> buildContactInfoItems(BuildContext context, Contact? contact) {
         onTap: () async {
           if (!await GlobalLauncher.launchQqContact(qq)) {
             Clipboard.setData(ClipboardData(text: qq));
-            showBasicFlash(context, const Text('已复制到剪切板'));
+            showBasicFlash(context, const Text('未安装QQ, 已复制到剪切板'));
           }
         },
         trailIconData: Icons.open_in_browser,
@@ -43,7 +43,7 @@ List<InfoItem> buildContactInfoItems(BuildContext context, Contact? contact) {
         onTap: () async {
           if (!await GlobalLauncher.launchTel(tel)) {
             Clipboard.setData(ClipboardData(text: tel));
-            showBasicFlash(context, const Text('已复制到剪切板'));
+            showBasicFlash(context, const Text('无法启动电话, 已复制到剪切板'));
           }
         },
         trailIconData: Icons.phone,

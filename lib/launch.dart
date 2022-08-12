@@ -47,10 +47,15 @@ class GlobalLauncher {
 
           final uri = Uri.tryParse(scheme);
           if (uri == null) return false;
-          if (await canLaunchUrl(uri) && await launchUrl(uri)) {
-            Log.info('成功打开scheme: $scheme');
-            return true;
-          } else {
+          try {
+            if (await launchUrl(uri)) {
+              Log.info('成功打开scheme: $scheme');
+              return true;
+            } else {
+              Log.info('打开失败scheme: $scheme');
+              return false;
+            }
+          } catch (e) {
             Log.info('打开失败scheme: $scheme');
             return false;
           }
