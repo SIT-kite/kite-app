@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/launch.dart';
 import 'package:kite/util/flash.dart';
 
@@ -177,6 +178,7 @@ extension Styles on Widget {
       decoration: BoxDecoration(
         gradient: LinearGradient(colors: [Colors.red, Colors.orange.shade700]), //背景渐变
       ),
+      width: 200.w,
       child: this,
     );
   }
