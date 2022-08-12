@@ -135,7 +135,7 @@ Widget buildInfoItemRow({
   double? iconSize,
 }) {
   return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 3.0),
+    padding: const EdgeInsets.symmetric(vertical: 1.5),
     child: Row(
       children: [
         Icon(
@@ -148,8 +148,7 @@ Widget buildInfoItemRow({
             ' $text',
             style: TextStyle(
               color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: fontSize ?? 15,
+              fontSize: fontSize ?? 14,
               overflow: TextOverflow.ellipsis,
             ),
           ),

@@ -15,7 +15,7 @@ class MateListWidget extends StatefulWidget {
 }
 
 class _MateListWidgetState extends State<MateListWidget> {
-  // 打开更多页
+  /// 打开更多页
   void loadMoreInfo(Mate mate) {
     final lastSeenText = calcLastSeen(mate.lastSeen);
     Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
@@ -37,6 +37,7 @@ class _MateListWidgetState extends State<MateListWidget> {
     }));
   }
 
+  ///构建基本信息
   Widget buildBasicInfoWidget(Mate mate) {
     final wechat = mate.contact?.wechat;
     final qq = mate.contact?.qq;
@@ -57,35 +58,54 @@ class _MateListWidgetState extends State<MateListWidget> {
       context: context,
     );
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          mate.name,
-          style: const TextStyle(fontSize: 35, color: Colors.white, fontWeight: FontWeight.bold),
+    return Stack(children: [
+      Align(
+        alignment: const Alignment(1, -1.4),
+        child: SizedBox(
+          width: 100,
+          height: 100,
+          child: buildSexIcon(mate.gender == 'M'),
         ),
-        SizedBox(
-          height: 8.h,
-        ),
-        buildInfoItemRow(
-          iconData: Icons.school,
-          text: "学院:  ${mate.college}",
-          context: context,
-        ),
-        buildInfoItemRow(
-          iconData: Icons.emoji_objects,
-          text: "专业:  ${mate.major}",
-          context: context,
-        ),
-        buildInfoItemRow(
-          iconData: Icons.home,
-          text: "寝室:  ${mate.building}${mate.room}室",
-          context: context,
-        ),
-        wechatRow,
-        qqRow,
-        telRow,
-      ],
+      ),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            mate.name,
+            style: const TextStyle(fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            height: 4.h,
+          ),
+          buildInfoItemRow(
+            iconData: Icons.school,
+            text: "学院:  ${mate.college}",
+            context: context,
+          ),
+          buildInfoItemRow(
+            iconData: Icons.emoji_objects,
+            text: "专业:  ${mate.major}",
+            context: context,
+          ),
+          buildInfoItemRow(
+            iconData: Icons.home,
+            text: "寝室:  ${mate.building}${mate.room}室",
+            context: context,
+          ),
+          wechatRow,
+          qqRow,
+          telRow,
+        ],
+      ),
+    ]);
+  }
+
+  /// 性别icon印章
+  Widget buildSexIcon(bool isMale) {
+    return Icon(
+      isMale ? Icons.male : Icons.female,
+      size: 50,
+      color: Colors.black45,
     );
   }
 
@@ -99,7 +119,7 @@ class _MateListWidgetState extends State<MateListWidget> {
           lastSeenText: calcLastSeen(e.lastSeen),
           locationText: e.province,
           onLoadMore: () => loadMoreInfo(e),
-          height: 270,
+          height: 235,
         );
       }).toList(),
     );

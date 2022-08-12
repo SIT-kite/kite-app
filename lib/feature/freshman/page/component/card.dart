@@ -73,13 +73,14 @@ class _PersonItemCardWidgetState extends State<PersonItemCardWidget> {
       return buildInfoItemRow(
         iconData: Icons.room,
         text: '在宇宙漫游哦',
-        fontSize: 13,
+        fontSize: 14,
         iconSize: 17,
         context: context,
       ).withOrangeBarStyle(context);
     }
   }
 
+  /// 嵌套InkWell实现水波纹点击效果  组合（头像，背景卡片，位置卡片和上次登录卡片）左区 和（信息组件）右区
   Widget buildContent() {
     return InkWell(
       onTap: widget.onLoadMore,
@@ -117,11 +118,12 @@ class _PersonItemCardWidgetState extends State<PersonItemCardWidget> {
     );
   }
 
+  /// 性别icon印章
   Widget buildSexIcon() {
     return Icon(
       widget.isMale ? Icons.male : Icons.female,
       size: 100,
-      color: Theme.of(context).primaryColor,
+      color: Colors.black.withAlpha(100),
     );
   }
 
@@ -129,17 +131,11 @@ class _PersonItemCardWidgetState extends State<PersonItemCardWidget> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Positioned(
-          bottom: 10.h,
-          right: 10.w,
-          width: 100,
-          height: 100,
-          child: buildSexIcon(),
-        ),
         Container(
-          margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor.withAlpha(200),
+            gradient: LinearGradient(colors: [Theme.of(context).primaryColorDark, Theme.of(context).primaryColor]),
+            // color: Theme.of(context).primaryColor.withAlpha(200),
             borderRadius: BorderRadius.circular(15.0), //像素圆角
             boxShadow: const [
               //阴影

@@ -9,6 +9,9 @@ void main() async {
   SettingInitializer.auth
     ..freshmanAccount = '郑欣宇'
     ..freshmanSecret = '273326';
+  //  备用测试信息
+  // ..freshmanAccount = '216072111'
+  // ..freshmanSecret = '134629';
   test('test freshman getInfo', () async {
     Log.info(await freshmanDao.getInfo());
   });
