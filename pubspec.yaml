@@ -146,6 +146,7 @@ flutter:
     - assets/game/
     - assets/mail/
     - assets/scanner/
+    - assets/freshman/
 
 # See: https://pub.flutter-io.cn/packages/flutter_native_splash
 flutter_native_splash:
