@@ -72,7 +72,8 @@ class _MateListWidgetState extends State<MateListWidget> {
         children: [
           Text(
             mate.name,
-            style: const TextStyle(fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+                fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),
           ),
           SizedBox(
             height: 4.h,

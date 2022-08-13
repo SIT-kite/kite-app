@@ -43,20 +43,6 @@ class _FreshmanAnalysisPageState extends State<FreshmanAnalysisPage> {
           },
           icon: const Icon(Icons.change_circle),
         ));
-
-    return BasicInfoPageWidget(
-      name: info.name,
-      college: info.college,
-      infoItems: [
-        if (data.sameName != 0) InfoItem(Icons.person, "同名人数", '${data.sameName} 人'),
-        if (data.sameCity != -1) InfoItem(Icons.location_city, "来自同一个城市的人数", '${data.sameCity} 人'),
-        if (data.sameHighSchool != -1) InfoItem(Icons.school, "来自同一个高中的人数", '${data.sameHighSchool} 人'),
-        InfoItem(Icons.school, "学院总人数", '${data.collegeCount} 人'),
-        InfoItem(Icons.emoji_objects, "专业总人数", '${data.major.total} 人'),
-        InfoItem(Icons.male, "专业男生人数", '${data.major.boys} 人'),
-        InfoItem(Icons.female, "专业女生人数", '${data.major.girls} 人'),
-      ],
-    );
   }
 
   Widget _buildBodyBasicInfo(BuildContext context, Analysis data, FreshmanInfo info) {
