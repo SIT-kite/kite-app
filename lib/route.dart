@@ -4,6 +4,7 @@ import 'package:kite/feature/web_page/browser.dart';
 
 import 'feature/freshman/page/analysis.dart';
 import 'feature/freshman/page/class.dart';
+import 'feature/freshman/page/contact.dart';
 import 'feature/freshman/page/familiar.dart';
 import 'feature/freshman/page/index.dart';
 import 'feature/freshman/page/info.dart';
@@ -57,6 +58,7 @@ class RouteTable {
   static const freshmanAnalysis = '$freshman/analysis';
   static const freshmanRoommate = '$freshman/roommate';
   static const freshmanLogin = '$freshman/login';
+  static const freshmanContact = '$freshman/contact';
 
   static final Map<String, NamedRouteBuilder> routeTable = {
     home: (context, args) => const HomePage(),
@@ -102,6 +104,7 @@ class RouteTable {
     freshmanAnalysis: (context, args) => const FreshmanAnalysisPage(),
     freshmanRoommate: (context, args) => const FreshmanRoommatePage(),
     freshmanLogin: (context, args) => const FreshmanLoginPage(),
+    freshmanContact: (context, args) => const FreshmanContactPage(),
   };
 
   static NamedRouteBuilder? get(String path) {
