@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/feature/freshman/page/component/card.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../dao.dart';
 import '../../entity.dart';
@@ -20,7 +19,6 @@ class MateListWidget extends StatefulWidget {
 
 class _MateListWidgetState extends State<MateListWidget> {
   final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   /// 打开个人详情页
   void loadMoreInfo(Mate mate) {
@@ -144,11 +142,7 @@ class _MateListWidgetState extends State<MateListWidget> {
         Expanded(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: SmartRefresher(
-                controller: _refreshController,
-                enablePullDown: true,
-                onRefresh: _onRefresh,
-                child: buildListView(mateList)),
+            child: buildListView(mateList),
           ),
         ),
       ],
@@ -158,10 +152,5 @@ class _MateListWidgetState extends State<MateListWidget> {
   @override
   Widget build(BuildContext context) {
     return buildBody(widget.mateList);
-  }
-
-  Future<void> _onRefresh() async {
-    await freshmanDao.clearMateCache();
-    _refreshController.refreshCompleted(resetFooterState: true);
   }
 }

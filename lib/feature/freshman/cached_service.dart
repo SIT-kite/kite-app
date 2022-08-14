@@ -2,10 +2,35 @@ import 'package:kite/feature/freshman/dao.dart';
 import 'package:kite/feature/freshman/entity.dart';
 import 'package:kite/setting/dao/freshman.dart';
 
+class FreshmanCacheManager {
+  final FreshmanCacheDao freshmanCacheDao;
+  FreshmanCacheManager(this.freshmanCacheDao);
+
+  void clearFamiliars() => freshmanCacheDao.familiars = null;
+  void clearClassmates() => freshmanCacheDao.classmates = null;
+  void clearRoommates() => freshmanCacheDao.roommates = null;
+  void clearAnalysis() => freshmanCacheDao.analysis = null;
+  void clearBasicInfo() => freshmanCacheDao.basicInfo = null;
+  void clearAll() {
+    clearFamiliars();
+    clearClassmates();
+    clearRoommates();
+    clearAnalysis();
+    clearBasicInfo();
+  }
+}
+
 class CachedFreshmanService implements FreshmanDao {
   final FreshmanDao _freshmanDao;
   final FreshmanCacheDao _freshmanCacheDao;
-  CachedFreshmanService(this._freshmanDao, this._freshmanCacheDao);
+  final FreshmanCacheManager _freshmanCacheManager;
+  const CachedFreshmanService({
+    required FreshmanDao freshmanDao,
+    required FreshmanCacheDao freshmanCacheDao,
+    required FreshmanCacheManager freshmanCacheManager,
+  })  : _freshmanDao = freshmanDao,
+        _freshmanCacheDao = freshmanCacheDao,
+        _freshmanCacheManager = freshmanCacheManager;
 
   @override
   Future<void> update({Contact? contact, bool? visible}) async {
@@ -14,7 +39,7 @@ class CachedFreshmanService implements FreshmanDao {
       visible: visible,
     );
     // 维护缓存数据的一致性，直接清空缓存
-    _freshmanCacheDao.basicInfo = null;
+    _freshmanCacheManager.clearBasicInfo();
   }
 
   Future<T> _getWithCache<T>({
@@ -77,16 +102,5 @@ class CachedFreshmanService implements FreshmanDao {
     // 装饰模式的弊端
     // 这个不用缓存，但是也得原封不动的调用被装饰对象的相应方法
     return _freshmanDao.postAnalysisLog();
-  }
-
-  @override
-  Future<void> clearMateCache() async {
-    _freshmanCacheDao.classmates = null;
-    _freshmanCacheDao.roommates = null;
-  }
-
-  @override
-  Future<void> clearFamiliarsCache() async {
-    _freshmanCacheDao.familiars = null;
   }
 }

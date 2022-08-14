@@ -54,16 +54,4 @@ class FreshmanService extends AService implements FreshmanDao {
   Future<void> postAnalysisLog() async {
     await session.post('/analysis/log');
   }
-
-  @override
-  Future<void> clearMateCache() {
-    // TODO: implement clearCache
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> clearFamiliarsCache() {
-    // TODO: implement clearFamiliarsCache
-    throw UnimplementedError();
-  }
 }

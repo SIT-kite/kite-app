@@ -9,6 +9,4 @@ abstract class FreshmanDao {
   Future<Analysis> getAnalysis();
 
   Future<void> postAnalysisLog();
-  Future<void> clearMateCache();
-  Future<void> clearFamiliarsCache();
 }
