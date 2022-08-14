@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/feature/freshman/dao.dart';
@@ -16,7 +18,7 @@ class FreshmanService extends AService implements FreshmanDao {
   @override
   Future<void> update({Contact? contact, bool? visible}) async {
     await session.request('/update', 'PUT', data: {
-      if (contact != null) 'contact': contact.toJson(),
+      if (contact != null) 'contact': jsonEncode(contact.toJson()),
       if (visible != null) 'visible': visible,
     });
   }
