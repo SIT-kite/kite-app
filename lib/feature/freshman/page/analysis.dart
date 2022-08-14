@@ -22,24 +22,37 @@ class _FreshmanAnalysisPageState extends State<FreshmanAnalysisPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: MyFutureBuilder<List<dynamic>>(
-          future: Future.wait([freshmanDao.getAnalysis(), freshmanDao.getInfo()]),
-          builder: (context, data) {
-            return StaticValue.isFan
-                ? _buildBodyStack(context, data[0], data[1])
-                : _buildBodyBasicInfo(context, data[0], data[1]);
-          },
-        ),
-        floatingActionButton: IconButton(
-          iconSize: 50,
-          color: !StaticValue.isFan ? Theme.of(context).primaryColorDark : Colors.red,
-          onPressed: () {
-            setState(() {
-              StaticValue.isFan = !StaticValue.isFan;
-            });
-          },
-          icon: const Icon(Icons.change_circle),
-        ));
+      body: MyFutureBuilder<List<dynamic>>(
+        future: Future.wait([freshmanDao.getAnalysis(), freshmanDao.getInfo()]),
+        // builder: (context, data) {
+        //   return AnimatedSwitcher(
+        //       duration: const Duration(milliseconds: 2000),
+        //       key: GlobalKey(),
+        //       transitionBuilder: (Widget child, Animation<double> animation) {
+        //         var tween = Tween<Offset>(begin: const Offset(1, 0), end: const Offset(0, 0));
+        //         return MySlideTransition(position: tween.animate(animation), child: child);
+        //       },
+        //       child: StaticValue.isFan
+        //           ? _buildBodyStack(context, data[0], data[1])
+        //           : _buildBodyBasicInfo(context, data[0], data[1]));
+        // },
+        builder: (context, data) {
+          return StaticValue.isFan
+              ? _buildBodyStack(context, data[0], data[1])
+              : _buildBodyBasicInfo(context, data[0], data[1]);
+        },
+      ),
+      floatingActionButton: IconButton(
+        iconSize: 50,
+        color: !StaticValue.isFan ? Theme.of(context).primaryColorDark : Colors.red,
+        onPressed: () {
+          setState(() {
+            StaticValue.isFan = !StaticValue.isFan;
+          });
+        },
+        icon: const Icon(Icons.change_circle),
+      ),
+    );
   }
 
   //信息风格分析
@@ -170,3 +183,30 @@ class _FreshmanAnalysisPageState extends State<FreshmanAnalysisPage> {
     );
   }
 }
+
+// class MySlideTransition extends AnimatedWidget {
+//   const MySlideTransition({
+//     Key? key,
+//     required Animation<Offset> position,
+//     this.transformHitTests = true,
+//     required this.child,
+//   }) : super(key: key, listenable: position);
+//
+//   final bool transformHitTests;
+//
+//   final Widget child;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     final position = listenable as Animation<Offset>;
+//     Offset offset = position.value;
+//     if (position.status == AnimationStatus.reverse) {
+//       offset = Offset(-offset.dx, offset.dy);
+//     }
+//     return FractionalTranslation(
+//       translation: offset,
+//       transformHitTests: transformHitTests,
+//       child: child,
+//     );
+//   }
+// }

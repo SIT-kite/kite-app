@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../dao.dart';
 import '../../entity.dart';
+import '../../init.dart';
 import 'basic_info.dart';
 import 'card.dart';
 import 'common.dart';
@@ -15,6 +18,8 @@ class FamiliarListWidget extends StatefulWidget {
 }
 
 class _FamiliarListWidgetState extends State<FamiliarListWidget> {
+  final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
   void loadMore(Familiar familiar) {
     final lastSeenText = calcLastSeen(familiar.lastSeen);
 
@@ -26,7 +31,7 @@ class _FamiliarListWidgetState extends State<FamiliarListWidget> {
           infoItems: [
             InfoItem(Icons.account_circle, "姓名", familiar.name),
             InfoItem(Icons.school, "学院", familiar.college),
-            InfoItem(Icons.person, "性别", familiar.gender == 'M' ? '男' : '女'),
+            InfoItem(familiar.gender == 'M' ? Icons.male : Icons.female, "性别", familiar.gender == 'M' ? '男' : '女'),
             if (familiar.city != null) InfoItem(Icons.location_city, "城市", familiar.city!),
             if (familiar.lastSeen != null) InfoItem(Icons.timelapse, '上次登录时间', lastSeenText),
             ...buildContactInfoItems(context, familiar.contact), // unpack
@@ -103,7 +108,15 @@ class _FamiliarListWidgetState extends State<FamiliarListWidget> {
           text: '总计人数(不包含自己): ${familiarList.length}',
           context: context,
         ).withTitleBarStyle(context),
-        Expanded(child: buildListView(familiarList)),
+        Expanded(
+            child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SmartRefresher(
+              enablePullDown: true,
+              controller: _refreshController,
+              onRefresh: _onRefresh,
+              child: buildListView(familiarList)),
+        )),
       ],
     );
   }
@@ -111,5 +124,10 @@ class _FamiliarListWidgetState extends State<FamiliarListWidget> {
   @override
   Widget build(BuildContext context) {
     return buildBody(widget.familiarList);
+  }
+
+  Future<void> _onRefresh() async {
+    await freshmanDao.clearMateCache();
+    _refreshController.refreshCompleted(resetFooterState: true);
   }
 }
