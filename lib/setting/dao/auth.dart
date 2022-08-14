@@ -51,16 +51,4 @@ abstract class AuthSettingDao {
 
   /// 计算用户类型
   UserType? get userType;
-
-  /// 新生账户
-  String? get freshmanAccount;
-
-  /// 设置新生账户
-  set freshmanAccount(String? foo);
-
-  /// 新生账户
-  String? get freshmanSecret;
-
-  /// 设置新生账户
-  set freshmanSecret(String? foo);
 }

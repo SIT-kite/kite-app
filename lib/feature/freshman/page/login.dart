@@ -70,20 +70,16 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
 
     try {
       // 先保存登录信息
-      SettingInitializer.auth
+      SettingInitializer.freshman
         ..freshmanAccount = account
         ..freshmanSecret = secret;
       // 清空本地缓存
-      SettingInitializer.freshman.basicInfo = null;
-      SettingInitializer.freshman.analysis = null;
-      SettingInitializer.freshman.roommates = null;
-      SettingInitializer.freshman.classmates = null;
-      SettingInitializer.freshman.familiars = null;
+      FreshmanInitializer.freshmanCacheManager.clearAll();
 
       final info = await freshmanDao.getInfo();
 
       // 登陆成功后赋值名字
-      SettingInitializer.auth.personName = info.name;
+      SettingInitializer.freshman.freshmanName = info.name;
 
       // Flutter 官方推荐的在异步函数中使用context需要先检查是否mounted
       if (!mounted) return;
@@ -94,7 +90,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       return;
     } catch (e) {
       // 登陆失败
-      SettingInitializer.auth
+      SettingInitializer.freshman
         ..freshmanSecret = null
         ..freshmanAccount = null;
       showBasicFlash(context, Text('登陆失败: $e'));
@@ -107,8 +103,8 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
   void initState() {
     super.initState();
 
-    String? account = SettingInitializer.auth.freshmanAccount;
-    String? secret = SettingInitializer.auth.freshmanSecret;
+    String? account = SettingInitializer.freshman.freshmanAccount;
+    String? secret = SettingInitializer.freshman.freshmanSecret;
     if (account != null) {
       _accountController.text = account;
       _secretController.text = secret ?? '';

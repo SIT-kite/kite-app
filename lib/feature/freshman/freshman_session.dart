@@ -1,13 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_session.dart';
-import 'package:kite/setting/dao/auth.dart';
+import 'package:kite/setting/dao/index.dart';
 import 'package:kite/util/logger.dart';
 
 class FreshmanSession extends ASession {
   final ASession _session;
-  final AuthSettingDao _authSettingDao;
+  final FreshmanCacheDao _freshmanCacheDao;
 
-  FreshmanSession(this._session, this._authSettingDao) {
+  FreshmanSession(this._session, this._freshmanCacheDao) {
     Log.info('初始化 FreshmanSession');
   }
   @override
@@ -37,13 +37,13 @@ class FreshmanSession extends ASession {
     }
 
     // 如果不存在新生信息，那就不管了
-    if (_authSettingDao.freshmanAccount == null || _authSettingDao.freshmanSecret == null) {
+    if (_freshmanCacheDao.freshmanAccount == null || _freshmanCacheDao.freshmanSecret == null) {
       return await myRequest(data, url, queryParameters);
     }
 
     // 新生信息
-    String account = _authSettingDao.freshmanAccount!;
-    String secret = _authSettingDao.freshmanSecret!;
+    String account = _freshmanCacheDao.freshmanAccount!;
+    String secret = _freshmanCacheDao.freshmanSecret!;
 
     final String myUrl = '/freshman/$account$url';
 

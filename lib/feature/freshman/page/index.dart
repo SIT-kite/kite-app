@@ -16,12 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/setting/dao/index.dart';
 import 'package:kite/setting/init.dart';
 
 import '../../../route.dart';
-import '../dao.dart';
-import '../init.dart';
 
 List<FreshmanFunction> list = [
   const FreshmanFunction(Icons.info, RouteTable.freshmanInfo, '我的信息', '查询个人宿舍，辅导员，学院专业等重要信息'),
@@ -43,7 +40,6 @@ class FreshmanFunction {
 }
 
 class FreshmanPage extends StatefulWidget {
-  final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
   FreshmanPage({Key? key}) : super(key: key);
 
   @override
@@ -80,12 +76,12 @@ class _FreshmanPageState extends State<FreshmanPage> {
       subtitle: Text(function.summary),
       trailing: const Icon(Icons.keyboard_arrow_right),
       onTap: () {
-        // 若是新生则进入
-        if (SettingInitializer.auth.userType == UserType.freshman) {
+        // 若存在新生信息
+        if (SettingInitializer.freshman.freshmanSecret != null && SettingInitializer.freshman.freshmanSecret != null) {
           Navigator.of(context).pushNamed(function.name);
           return;
         }
-        // 若非新生则转到新生登录页
+        // 若非新生但存在新生信息则进入
         Navigator.of(context).pushNamed(RouteTable.freshmanLogin);
       },
     );
@@ -94,9 +90,10 @@ class _FreshmanPageState extends State<FreshmanPage> {
   //建立功能列表
   Widget buildFunctionList(List<FreshmanFunction> list) {
     return ListView.builder(
-        itemCount: list.length,
-        itemBuilder: (BuildContext context, int index) {
-          return buildFunctionItem(list[index]);
-        });
+      itemCount: list.length,
+      itemBuilder: (BuildContext context, int index) {
+        return buildFunctionItem(list[index]);
+      },
+    );
   }
 }

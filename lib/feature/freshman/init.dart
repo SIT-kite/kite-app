@@ -14,7 +14,7 @@ class FreshmanInitializer {
   static Future<void> init({
     required ASession kiteSession,
   }) async {
-    freshmanSession = FreshmanSession(kiteSession, SettingInitializer.auth);
+    freshmanSession = FreshmanSession(kiteSession, SettingInitializer.freshman);
     freshmanCacheManager = FreshmanCacheManager(SettingInitializer.freshman);
     freshmanDao = CachedFreshmanService(
       freshmanDao: FreshmanService(freshmanSession),
