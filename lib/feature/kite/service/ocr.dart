@@ -31,8 +31,8 @@ class OcrServer {
     final response = await Dio().post(_ocrServerUrl, data: imageBase64);
     final result = response.data;
     final code = result['code'];
-    if (code) {
-      return result;
+    if (code == 0) {
+      return result['data'];
     } else {
       throw OcrRecognizeException(code, result['msg']);
     }
