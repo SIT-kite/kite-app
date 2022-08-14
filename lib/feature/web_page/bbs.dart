@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/component/webview_page.dart';
 import 'package:kite/setting/dao/index.dart';
 import 'package:kite/setting/init.dart';
+import 'package:kite/util/logger.dart';
 
 const _bbsUrl = 'https://support.qq.com/products/386124';
 
@@ -26,6 +27,7 @@ class BbsPage extends StatelessWidget {
     } else {
       nickname = '${nickname[0]}同学';
     }
+    Log.info('BBS身份：{openid: $openid, nickname: $nickname}');
     return SimpleWebViewPage(
       initialUrl: _bbsUrl,
       postData: {
