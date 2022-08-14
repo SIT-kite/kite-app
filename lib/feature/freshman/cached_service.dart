@@ -78,4 +78,15 @@ class CachedFreshmanService implements FreshmanDao {
     // 这个不用缓存，但是也得原封不动的调用被装饰对象的相应方法
     return _freshmanDao.postAnalysisLog();
   }
+
+  @override
+  Future<void> clearMateCache() async {
+    _freshmanCacheDao.classmates = null;
+    _freshmanCacheDao.roommates = null;
+  }
+
+  @override
+  Future<void> clearFamiliarsCache() async {
+    _freshmanCacheDao.familiars = null;
+  }
 }

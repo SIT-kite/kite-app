@@ -7,5 +7,8 @@ abstract class FreshmanDao {
   Future<List<Familiar>> getFamiliars();
   Future<List<Mate>> getClassmates();
   Future<Analysis> getAnalysis();
+
   Future<void> postAnalysisLog();
+  Future<void> clearMateCache();
+  Future<void> clearFamiliarsCache();
 }

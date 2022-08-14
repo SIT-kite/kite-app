@@ -67,4 +67,16 @@ class FreshmanMock implements FreshmanDao {
     // TODO: implement getContact
     throw UnimplementedError();
   }
+
+  @override
+  Future<void> clearMateCache() {
+    // TODO: implement clearCache
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> clearFamiliarsCache() {
+    // TODO: implement clearFamiliarsCache
+    throw UnimplementedError();
+  }
 }
