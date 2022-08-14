@@ -190,7 +190,6 @@ class TeacherFunctionList implements IUserFunctionList {
       FunctionType.mail,
       FunctionType.bulletin,
       FunctionType.separator,
-      FunctionType.freshman,
       FunctionType.scanner,
       FunctionType.bbs,
       FunctionType.contact,
