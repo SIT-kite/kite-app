@@ -14,13 +14,15 @@ class FreshmanFamiliarPage extends StatefulWidget {
 }
 
 class _FreshmanFamiliarPageState extends State<FreshmanFamiliarPage> {
+  bool isFatherChange = false;
+
   final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
 
-  Widget buildBody(List<Familiar> familiarList) {
+  Widget buildBody(List<Familiar> familiarList, Function callBack) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(child: FamiliarListWidget(familiarList)),
+        Expanded(child: FamiliarListWidget(familiarList, callBack)),
       ],
     );
   }
@@ -29,14 +31,23 @@ class _FreshmanFamiliarPageState extends State<FreshmanFamiliarPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('可能认识的人'),
+        title: Text(isFatherChange.toString()),
       ),
       body: MyFutureBuilder<List<Familiar>>(
         future: freshmanDao.getFamiliars(),
         builder: (context, data) {
-          return buildBody(data);
+          return buildBody(data, callBack());
         },
       ),
     );
+  }
+
+  ///回调方法 用于子组件控制父组件刷新页面
+  Function callBack() {
+    return (bool isChange) {
+      setState(() {
+        isFatherChange = isChange;
+      });
+    };
   }
 }

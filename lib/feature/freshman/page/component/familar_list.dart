@@ -11,7 +11,8 @@ import 'common.dart';
 
 class FamiliarListWidget extends StatefulWidget {
   final List<Familiar> familiarList;
-  const FamiliarListWidget(this.familiarList, {Key? key}) : super(key: key);
+  final Function callBack;
+  const FamiliarListWidget(this.familiarList, this.callBack, {Key? key}) : super(key: key);
 
   @override
   State<FamiliarListWidget> createState() => _FamiliarListWidgetState();
@@ -19,6 +20,7 @@ class FamiliarListWidget extends StatefulWidget {
 
 class _FamiliarListWidgetState extends State<FamiliarListWidget> {
   final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
+
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
   void loadMore(Familiar familiar) {
     final lastSeenText = calcLastSeen(familiar.lastSeen);
@@ -99,7 +101,7 @@ class _FamiliarListWidgetState extends State<FamiliarListWidget> {
     );
   }
 
-  Widget buildBody(List<Familiar> familiarList) {
+  Widget buildBody(List<Familiar> familiarList, Function callBack) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -108,26 +110,23 @@ class _FamiliarListWidgetState extends State<FamiliarListWidget> {
           text: '总计人数(不包含自己): ${familiarList.length}',
           context: context,
         ).withTitleBarStyle(context),
-        Expanded(
-            child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SmartRefresher(
-              enablePullDown: true,
-              controller: _refreshController,
-              onRefresh: _onRefresh,
-              child: buildListView(familiarList)),
-        )),
+        SmartRefresher(
+          onRefresh: () {
+            callBack(true);
+          },
+          controller: _refreshController,
+          child: Expanded(
+              child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: buildListView(familiarList),
+          )),
+        ),
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return buildBody(widget.familiarList);
-  }
-
-  Future<void> _onRefresh() async {
-    await freshmanDao.clearFamiliarsCache();
-    _refreshController.refreshCompleted(resetFooterState: true);
+    return buildBody(widget.familiarList, widget.callBack);
   }
 }
