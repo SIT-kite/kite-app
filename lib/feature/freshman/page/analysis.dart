@@ -7,9 +7,9 @@ import 'package:kite/feature/freshman/entity.dart';
 import '../dao.dart';
 import '../init.dart';
 import 'component/basic_info.dart';
-import 'component/staticValue.dart';
 
 class FreshmanAnalysisPage extends StatefulWidget {
+  static bool isFan = true;
   const FreshmanAnalysisPage({Key? key}) : super(key: key);
 
   @override
@@ -37,17 +37,17 @@ class _FreshmanAnalysisPageState extends State<FreshmanAnalysisPage> {
         //           : _buildBodyBasicInfo(context, data[0], data[1]));
         // },
         builder: (context, data) {
-          return StaticValue.isFan
+          return FreshmanAnalysisPage.isFan
               ? _buildBodyStack(context, data[0], data[1])
               : _buildBodyBasicInfo(context, data[0], data[1]);
         },
       ),
       floatingActionButton: IconButton(
         iconSize: 50,
-        color: !StaticValue.isFan ? Theme.of(context).primaryColorDark : Colors.red,
+        color: !FreshmanAnalysisPage.isFan ? Theme.of(context).primaryColorDark : Colors.red,
         onPressed: () {
           setState(() {
-            StaticValue.isFan = !StaticValue.isFan;
+            FreshmanAnalysisPage.isFan = !FreshmanAnalysisPage.isFan;
           });
         },
         icon: const Icon(Icons.change_circle),
