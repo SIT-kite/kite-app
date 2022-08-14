@@ -7,7 +7,7 @@ import 'package:kite/setting/init.dart';
 void main() async {
   await init();
   FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
-  SettingInitializer.auth
+  SettingInitializer.freshman
     ..freshmanAccount = '郑欣宇'
     ..freshmanSecret = '273326';
   //  备用测试信息
