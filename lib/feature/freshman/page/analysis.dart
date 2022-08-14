@@ -7,6 +7,7 @@ import 'package:kite/feature/freshman/entity.dart';
 import '../dao.dart';
 import '../init.dart';
 import 'component/basic_info.dart';
+import 'component/staticValue.dart';
 
 class FreshmanAnalysisPage extends StatefulWidget {
   const FreshmanAnalysisPage({Key? key}) : super(key: key);
@@ -17,34 +18,31 @@ class FreshmanAnalysisPage extends StatefulWidget {
 
 class _FreshmanAnalysisPageState extends State<FreshmanAnalysisPage> {
   final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
-  bool isFan = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: MyFutureBuilder<List<dynamic>>(
-        future: Future.wait([freshmanDao.getAnalysis(), freshmanDao.getInfo()]),
-        builder: (context, data) {
-          return _buildBody(context, data[0], data[1]);
-        },
-      ),
-    );
-  }
-
-  Widget _buildBody(BuildContext context, Analysis data, FreshmanInfo info) {
-    return Scaffold(
-        body: isFan ? _buildBodyStack(context, data, info) : _buildBodyBasicInfo(context, data, info),
+        body: MyFutureBuilder<List<dynamic>>(
+          future: Future.wait([freshmanDao.getAnalysis(), freshmanDao.getInfo()]),
+          builder: (context, data) {
+            return StaticValue.isFan
+                ? _buildBodyStack(context, data[0], data[1])
+                : _buildBodyBasicInfo(context, data[0], data[1]);
+          },
+        ),
         floatingActionButton: IconButton(
           iconSize: 50,
-          color: !isFan ? Theme.of(context).primaryColorDark : Colors.red,
+          color: !StaticValue.isFan ? Theme.of(context).primaryColorDark : Colors.red,
           onPressed: () {
             setState(() {
-              isFan = !isFan;
+              StaticValue.isFan = !StaticValue.isFan;
             });
           },
           icon: const Icon(Icons.change_circle),
         ));
   }
 
+  //信息风格分析
   Widget _buildBodyBasicInfo(BuildContext context, Analysis data, FreshmanInfo info) {
     return BasicInfoPageWidget(
       name: info.name,
@@ -52,7 +50,7 @@ class _FreshmanAnalysisPageState extends State<FreshmanAnalysisPage> {
       infoItems: [
         if (data.sameName != 0) InfoItem(Icons.person, "同名人数", '${data.sameName} 人'),
         if (data.sameCity != -1) InfoItem(Icons.location_city, "来自同一个城市的人数", '${data.sameCity} 人'),
-        if (data.sameHighSchool != -1) InfoItem(Icons.school, "来自同一个高中的人数", '${data.sameHighSchool} 人'),
+        if (data.sameHighSchool != -1) InfoItem(Icons.face, "来自同一个高中的人数", '${data.sameHighSchool} 人'),
         InfoItem(Icons.school, "学院总人数", '${data.collegeCount} 人'),
         InfoItem(Icons.emoji_objects, "专业总人数", '${data.major.total} 人'),
         InfoItem(Icons.male, "专业男生人数", '${data.major.boys} 人'),
@@ -61,6 +59,7 @@ class _FreshmanAnalysisPageState extends State<FreshmanAnalysisPage> {
     );
   }
 
+  //分享图风格分析
   Widget _buildBodyStack(BuildContext context, Analysis data, FreshmanInfo info) {
     return Stack(
       children: [
@@ -79,18 +78,8 @@ class _FreshmanAnalysisPageState extends State<FreshmanAnalysisPage> {
             SizedBox(
               height: 120.h,
             ),
-            // Image.asset("assets/freshman/analysis_desktop.png",
-            //     width: MediaQuery.of(context).size.width, height: 200, fit: BoxFit.contain),
           ],
         ),
-        Positioned(
-            left: 30.w,
-            top: 30.h,
-            child: SvgPicture.asset(
-              'assets/home/kite.svg',
-              width: 70,
-              height: 70,
-            )),
         Positioned(
             top: 300.h, left: MediaQuery.of(context).size.width / 4, child: buildTextColumn(context, data, info)),
         Align(
@@ -99,11 +88,24 @@ class _FreshmanAnalysisPageState extends State<FreshmanAnalysisPage> {
               'assets/freshman/welcome_bg.png',
               width: 350,
               height: 350,
-            ))
+            )),
+        Positioned(
+          left: 30.w,
+          top: 30.h,
+          child: GestureDetector(
+            onTap: () => Navigator.of(context).pop(),
+            child: SvgPicture.asset(
+              'assets/home/kite.svg',
+              width: 70,
+              height: 70,
+            ),
+          ),
+        ),
       ],
     );
   }
 
+  //文字列抽离
   Widget buildTextColumn(BuildContext context, Analysis data, FreshmanInfo info) {
     TextStyle italicText = const TextStyle(fontStyle: FontStyle.italic, fontSize: 15);
     return Column(
@@ -140,6 +142,7 @@ class _FreshmanAnalysisPageState extends State<FreshmanAnalysisPage> {
     );
   }
 
+  //文字行抽离
   Widget buildAnalysisTextRow({
     required String text,
     String? analysis,

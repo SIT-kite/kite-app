@@ -147,7 +147,8 @@ class _BasicInfoPageWidgetState extends State<BasicInfoPageWidget> {
               ],
             ),
           ),
-          //返回按钮
+
+          ///返回按钮
           Positioned(
               left: 24,
               top: 54,
