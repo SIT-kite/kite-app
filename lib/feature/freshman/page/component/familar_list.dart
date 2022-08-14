@@ -127,7 +127,7 @@ class _FamiliarListWidgetState extends State<FamiliarListWidget> {
   }
 
   Future<void> _onRefresh() async {
-    await freshmanDao.clearMateCache();
+    await freshmanDao.clearFamiliarsCache();
     _refreshController.refreshCompleted(resetFooterState: true);
   }
 }
