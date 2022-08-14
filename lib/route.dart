@@ -4,11 +4,11 @@ import 'package:kite/feature/web_page/browser.dart';
 
 import 'feature/freshman/page/analysis.dart';
 import 'feature/freshman/page/class.dart';
-import 'feature/freshman/page/contact.dart';
 import 'feature/freshman/page/familiar.dart';
 import 'feature/freshman/page/index.dart';
 import 'feature/freshman/page/info.dart';
 import 'feature/freshman/page/roommate.dart';
+import 'feature/freshman/page/update.dart';
 import 'feature/page_index.dart';
 import 'setting/page/index.dart';
 
@@ -104,7 +104,7 @@ class RouteTable {
     freshmanAnalysis: (context, args) => const FreshmanAnalysisPage(),
     freshmanRoommate: (context, args) => const FreshmanRoommatePage(),
     freshmanLogin: (context, args) => const FreshmanLoginPage(),
-    freshmanContact: (context, args) => const FreshmanContactPage(),
+    freshmanContact: (context, args) => const FreshmanUpdatePage(),
   };
 
   static NamedRouteBuilder? get(String path) {
