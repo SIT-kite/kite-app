@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
+import 'package:kite/feature/freshman/cached_service.dart';
 import 'package:kite/feature/freshman/entity.dart';
 import 'package:kite/feature/freshman/page/component/familar_list.dart';
 
@@ -14,15 +15,23 @@ class FreshmanFamiliarPage extends StatefulWidget {
 }
 
 class _FreshmanFamiliarPageState extends State<FreshmanFamiliarPage> {
-  bool isFatherChange = false;
-
   final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
+  final FreshmanCacheManager freshmanCacheManager = FreshmanInitializer.freshmanCacheManager;
+  void onRefresh() {
+    freshmanCacheManager.clearFamiliars();
+    setState(() {});
+  }
 
-  Widget buildBody(List<Familiar> familiarList, Function callBack) {
+  Widget buildBody(List<Familiar> familiarList) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(child: FamiliarListWidget(familiarList, callBack)),
+        Expanded(
+          child: FamiliarListWidget(
+            familiarList,
+            onRefresh: onRefresh,
+          ),
+        ),
       ],
     );
   }
@@ -31,23 +40,14 @@ class _FreshmanFamiliarPageState extends State<FreshmanFamiliarPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(isFatherChange.toString()),
+        title: const Text('可能认识的人'),
       ),
       body: MyFutureBuilder<List<Familiar>>(
         future: freshmanDao.getFamiliars(),
         builder: (context, data) {
-          return buildBody(data, callBack());
+          return buildBody(data);
         },
       ),
     );
-  }
-
-  ///回调方法 用于子组件控制父组件刷新页面
-  Function callBack() {
-    return (bool isChange) {
-      setState(() {
-        isFatherChange = isChange;
-      });
-    };
   }
 }

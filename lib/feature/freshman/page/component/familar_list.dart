@@ -2,26 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../../dao.dart';
 import '../../entity.dart';
-import '../../init.dart';
 import 'basic_info.dart';
 import 'card.dart';
 import 'common.dart';
 
 class FamiliarListWidget extends StatefulWidget {
   final List<Familiar> familiarList;
-  final Function callBack;
-  const FamiliarListWidget(this.familiarList, this.callBack, {Key? key}) : super(key: key);
+  final VoidCallback? onRefresh;
+  const FamiliarListWidget(this.familiarList, {this.onRefresh, Key? key}) : super(key: key);
 
   @override
   State<FamiliarListWidget> createState() => _FamiliarListWidgetState();
 }
 
 class _FamiliarListWidgetState extends State<FamiliarListWidget> {
-  final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
+  final RefreshController _refreshController = RefreshController();
 
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
   void loadMore(Familiar familiar) {
     final lastSeenText = calcLastSeen(familiar.lastSeen);
 
@@ -101,32 +98,27 @@ class _FamiliarListWidgetState extends State<FamiliarListWidget> {
     );
   }
 
-  Widget buildBody(List<Familiar> familiarList, Function callBack) {
+  @override
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         buildInfoItemRow(
           iconData: Icons.info,
-          text: '总计人数(不包含自己): ${familiarList.length}',
+          text: '总计人数(不包含自己): ${widget.familiarList.length}',
           context: context,
         ).withTitleBarStyle(context),
-        SmartRefresher(
-          onRefresh: () {
-            callBack(true);
-          },
-          controller: _refreshController,
-          child: Expanded(
-              child: Padding(
+        Expanded(
+          child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: buildListView(familiarList),
-          )),
+            child: SmartRefresher(
+              controller: _refreshController,
+              onRefresh: widget.onRefresh,
+              child: buildListView(widget.familiarList),
+            ),
+          ),
         ),
       ],
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return buildBody(widget.familiarList, widget.callBack);
   }
 }
