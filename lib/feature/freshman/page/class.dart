@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
 
+import '../cached_service.dart';
 import '../dao.dart';
 import '../entity.dart';
 import '../init.dart';
@@ -14,7 +15,12 @@ class FreshmanClassPage extends StatefulWidget {
 }
 
 class _FreshmanClassPageState extends State<FreshmanClassPage> {
+  final FreshmanCacheManager freshmanCacheManager = FreshmanInitializer.freshmanCacheManager;
   final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
+  void onRefresh() {
+    freshmanCacheManager.clearClassmates();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +31,10 @@ class _FreshmanClassPageState extends State<FreshmanClassPage> {
       body: MyFutureBuilder<List<Mate>>(
         future: freshmanDao.getClassmates(),
         builder: (context, data) {
-          return MateListWidget(data);
+          return MateListWidget(
+            data,
+            callBack: onRefresh,
+          );
         },
       ),
     );

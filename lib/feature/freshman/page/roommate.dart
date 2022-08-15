@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
+import 'package:kite/feature/freshman/cached_service.dart';
 import 'package:kite/feature/freshman/page/component/common.dart';
 
 import '../dao.dart';
@@ -16,6 +17,12 @@ class FreshmanRoommatePage extends StatefulWidget {
 
 class _FreshmanRoommatePageState extends State<FreshmanRoommatePage> {
   final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
+  final FreshmanCacheManager freshmanCacheManager = FreshmanInitializer.freshmanCacheManager;
+
+  void onRefresh() {
+    freshmanCacheManager.clearRoommates();
+    setState(() {});
+  }
 
   Widget buildBody(List<Mate> mateList, FreshmanInfo myInfo) {
     return Column(
@@ -26,7 +33,7 @@ class _FreshmanRoommatePageState extends State<FreshmanRoommatePage> {
           text: '当前宿舍：${myInfo.campus}-${myInfo.building}-${myInfo.room}',
           context: context,
         ).withTitleBarStyle(context),
-        Expanded(child: MateListWidget(mateList)),
+        Expanded(child: MateListWidget(mateList, callBack: onRefresh)),
       ],
     );
   }

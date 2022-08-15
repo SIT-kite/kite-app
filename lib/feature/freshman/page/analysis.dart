@@ -24,18 +24,6 @@ class _FreshmanAnalysisPageState extends State<FreshmanAnalysisPage> {
     return Scaffold(
       body: MyFutureBuilder<List<dynamic>>(
         future: Future.wait([freshmanDao.getAnalysis(), freshmanDao.getInfo()]),
-        // builder: (context, data) {
-        //   return AnimatedSwitcher(
-        //       duration: const Duration(milliseconds: 2000),
-        //       key: GlobalKey(),
-        //       transitionBuilder: (Widget child, Animation<double> animation) {
-        //         var tween = Tween<Offset>(begin: const Offset(1, 0), end: const Offset(0, 0));
-        //         return MySlideTransition(position: tween.animate(animation), child: child);
-        //       },
-        //       child: StaticValue.isFan
-        //           ? _buildBodyStack(context, data[0], data[1])
-        //           : _buildBodyBasicInfo(context, data[0], data[1]));
-        // },
         builder: (context, data) {
           return FreshmanAnalysisPage.isFan
               ? _buildBodyStack(context, data[0], data[1])

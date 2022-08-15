@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/feature/freshman/page/component/card.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../dao.dart';
 import '../../entity.dart';
@@ -10,14 +11,15 @@ import 'common.dart';
 
 class MateListWidget extends StatefulWidget {
   final List<Mate> mateList;
-
-  const MateListWidget(this.mateList, {Key? key}) : super(key: key);
+  final VoidCallback? callBack;
+  const MateListWidget(this.mateList, {this.callBack, Key? key}) : super(key: key);
 
   @override
   State<MateListWidget> createState() => _MateListWidgetState();
 }
 
 class _MateListWidgetState extends State<MateListWidget> {
+  final RefreshController _refreshController = RefreshController();
   final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
 
   /// 打开个人详情页
@@ -142,7 +144,11 @@ class _MateListWidgetState extends State<MateListWidget> {
         Expanded(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: buildListView(mateList),
+            child: SmartRefresher(
+              controller: _refreshController,
+              onRefresh: widget.callBack,
+              child: buildListView(mateList),
+            ),
           ),
         ),
       ],
