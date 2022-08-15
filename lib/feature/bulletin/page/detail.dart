@@ -55,12 +55,10 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Future<void> _onDownloadFile(Attachment attachment) async {
-    showBasicFlash(context, const Text('开始下载'),
-        duration: const Duration(seconds: 1));
+    showBasicFlash(context, const Text('开始下载'), duration: const Duration(seconds: 1));
     Log.info('下载文件: [${attachment.name}](${attachment.url})');
 
-    String targetPath = (await getTemporaryDirectory()).path +
-        '/kite1/downloads/${attachment.name}';
+    String targetPath = (await getTemporaryDirectory()).path + '/kite1/downloads/${attachment.name}';
     Log.info('下载到：' + targetPath);
     // 如果文件不存在，那么下载文件
     if (!await File(targetPath).exists()) {
@@ -153,8 +151,8 @@ class _DetailPageState extends State<DetailPage> {
   Future<BulletinDetail> getBulletinDetail() async {
     if (article == null) {
       Log.info('开始加载OA公告文章');
-      article = await BulletinInitializer.bulletin.getBulletinDetail(
-          widget.summary.bulletinCatalogueId, widget.summary.uuid);
+      article =
+          await BulletinInitializer.bulletin.getBulletinDetail(widget.summary.bulletinCatalogueId, widget.summary.uuid);
       Log.info('加载OA公告文章完毕');
     } else {
       Log.info('使用已获取的OA公告文章');
@@ -169,8 +167,7 @@ class _DetailPageState extends State<DetailPage> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
-              return SingleChildScrollView(
-                  child: _buildArticle(context, snapshot.data!));
+              return SingleChildScrollView(child: _buildArticle(context, snapshot.data!));
             } else if (snapshot.hasError) {
               return Text(snapshot.error.runtimeType.toString());
             }
@@ -189,14 +186,13 @@ class _DetailPageState extends State<DetailPage> {
             onPressed: () {
               final url =
                   'https://myportal.sit.edu.cn/detach.portal?action=bulletinBrowser&.ia=false&.pmn=view&.pen=${widget.summary.bulletinCatalogueId}&bulletinId=${widget.summary.uuid}';
-              launchUrl(url);
+              launchUrlInBrowser(url);
             },
             icon: const Icon(Icons.open_in_browser),
           ),
         ],
       ),
-      body: Padding(
-          padding: const EdgeInsets.all(12), child: _buildBody(widget.summary)),
+      body: Padding(padding: const EdgeInsets.all(12), child: _buildBody(widget.summary)),
     );
   }
 }

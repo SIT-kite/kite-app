@@ -43,7 +43,7 @@ class DetailPage extends StatelessWidget {
         IconButton(
           icon: const Icon(Icons.open_in_browser),
           onPressed: () {
-            launchUrl(_getActivityUrl(activityId));
+            launchUrlInBrowser(_getActivityUrl(activityId));
           },
         )
       ],

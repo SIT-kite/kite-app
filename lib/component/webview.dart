@@ -150,7 +150,7 @@ class _MyWebViewState extends State<MyWebView> {
 
   void onResourceError(WebResourceError error) {
     if (!(error.failingUrl?.startsWith('http') ?? true)) {
-      launchUrl(error.failingUrl!);
+      launchUrlInBrowser(error.failingUrl!);
       _controllerCompleter.future.then((value) => value.goBack());
     }
   }

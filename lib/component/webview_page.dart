@@ -68,7 +68,7 @@ class SimpleWebViewPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _SimpleWebViewPageState createState() => _SimpleWebViewPageState();
+  State<SimpleWebViewPage> createState() => _SimpleWebViewPageState();
 }
 
 class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
@@ -88,12 +88,12 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
   /// 构造进度条
   PreferredSizeWidget buildTopIndicator() {
     return PreferredSize(
+      preferredSize: const Size.fromHeight(3.0),
       child: LinearProgressIndicator(
         backgroundColor: Colors.white70.withOpacity(0),
         value: progress / 100,
         valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
       ),
-      preferredSize: const Size.fromHeight(3.0),
     );
   }
 
@@ -112,7 +112,7 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
         ),
       if (widget.showLoadInBrowser)
         IconButton(
-          onPressed: () => launchUrl(widget.initialUrl),
+          onPressed: () => launchUrlInBrowser(widget.initialUrl),
           icon: const Icon(Icons.open_in_browser),
         ),
     ];

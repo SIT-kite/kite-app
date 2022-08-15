@@ -38,7 +38,7 @@ class DetailPage extends StatelessWidget {
     Widget buildHtmlSection(String content) {
       final html = content.replaceAll('../app/files/', 'https://xgfy.sit.edu.cn/app/files/');
       return HtmlWidget(html, textStyle: textStyle, onTapUrl: (url) {
-        launchUrl(url);
+        launchUrlInBrowser(url);
         return true;
       });
     }
