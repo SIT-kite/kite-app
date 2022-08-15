@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 
+import '../../init.dart';
 import '../util.dart';
 
 class DateHeader extends StatefulWidget {
@@ -57,8 +58,9 @@ class _DateHeaderState extends State<DateHeader> {
     return Expanded(flex: 2, child: Text('${widget.currentWeek}\n周', style: style, textAlign: TextAlign.center));
   }
 
+  ///每天的列
   Widget _buildDayColumn(int day) {
-    final date = getDateFromWeekDay(dateSemesterStart, widget.currentWeek, day);
+    final date = getDateFromWeekDay(TimetableInitializer.timetableStorage.startDate!, widget.currentWeek, day);
     final dateString = '${date.month}/${date.day}';
 
     TextStyle? style = Theme.of(context).textTheme.bodyText2;

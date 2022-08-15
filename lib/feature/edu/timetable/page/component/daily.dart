@@ -19,19 +19,29 @@ import 'package:flutter/material.dart';
 
 import '../../../util/icon.dart';
 import '../../entity/timetable.dart';
+import '../../init.dart';
 import '../cache.dart';
 import '../util.dart';
 import 'header.dart';
 import 'sheet.dart';
 
-class DailyTimetable extends StatelessWidget {
-  static const String _courseIconPath = 'assets/course/';
-
+class DailyTimetable extends StatefulWidget {
   /// 教务系统课程列表
   final List<Course> allCourses;
 
   /// 初始日期
   final DateTime? initialDate;
+
+  ///todo 待修复
+  void jumpToday() {}
+
+  @override
+  State<StatefulWidget> createState() => _DailyTimetableState();
+  const DailyTimetable(this.allCourses, {Key? key, this.initialDate}) : super(key: key);
+}
+
+class _DailyTimetableState extends State<DailyTimetable> {
+  static const String _courseIconPath = 'assets/course/';
 
   /// 课表应该显示的周（页数 + 1）
   int _currentWeek = 0;
@@ -40,9 +50,7 @@ class DailyTimetable extends StatelessWidget {
   int _currentDay = 0;
 
   /// 翻页控制
-  late final PageController _pageController;
-
-  DailyTimetable(this.allCourses, {Key? key, this.initialDate}) : super(key: key);
+  late PageController _pageController;
 
   void _setWeekDay(int week, int day) {
     _currentWeek = week;
@@ -51,7 +59,8 @@ class DailyTimetable extends StatelessWidget {
 
   /// 设置页面为对应日期页.
   void _setDate(DateTime theDay) {
-    int days = theDay.difference(dateSemesterStart).inDays;
+    //求一下过了多少天
+    int days = theDay.difference(TimetableInitializer.timetableStorage.startDate!).inDays;
 
     int week = days ~/ 7 + 1, day = days % 7 + 1;
     if (days >= 0 && 1 <= week && week <= 20 && 1 <= day && day <= 7) {
@@ -72,20 +81,19 @@ class DailyTimetable extends StatelessWidget {
     }
   }
 
-  /// 跳转到今天
-  void jumpToday() {
-    _setDate(DateTime.now());
-    jumpToDay(_currentWeek, _currentDay);
-  }
-
-  Widget _buildCourseCard(BuildContext context, Course course) {
+  Widget _buildCourseCard(BuildContext context, Course course, List<Course> allCourses) {
     final TextStyle? textStyle = Theme.of(context).textTheme.bodyText2;
-    final Widget courseIcon = Image.asset(_courseIconPath + CourseCategory.query(course.courseName) + '.png');
+    final Widget courseIcon = Image.asset('$_courseIconPath${CourseCategory.query(course.courseName)}.png');
     final timetable = getBuildingTimetable(course.campus, course.place);
     final description =
         formatTimeIndex(timetable, course.timeIndex, '${course.weekText} 周${weekWord[course.dayIndex - 1]}\nss-ee');
     return Card(
         margin: const EdgeInsets.all(8),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        ),
+        clipBehavior: Clip.antiAlias,
+        color: const Color.fromARGB(255, 228, 235, 245),
         child: ListTile(
           // 点击卡片打开课程详情.
           onTap: () => showModalBottomSheet(
@@ -106,12 +114,7 @@ class DailyTimetable extends StatelessWidget {
               ],
             ),
           ]),
-        ),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-        ),
-        clipBehavior: Clip.antiAlias,
-        color: const Color.fromARGB(255, 228, 235, 245));
+        ));
   }
 
   Widget _buildEmptyPage() {
@@ -120,7 +123,7 @@ class DailyTimetable extends StatelessWidget {
   }
 
   /// 构建第 index 页视图
-  Widget _pageBuilder(BuildContext context, int index) {
+  Widget _pageBuilder(BuildContext context, int index, List<Course> allCourses) {
     int week = index ~/ 7 + 1;
     int day = index % 7 + 1;
     final List<Course> todayCourse = TableCache.filterCourseOnDay(allCourses, week, day);
@@ -139,7 +142,7 @@ class DailyTimetable extends StatelessWidget {
           child: todayCourse.isNotEmpty
               ? ListView(
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  children: todayCourse.map((e) => _buildCourseCard(context, e)).toList())
+                  children: todayCourse.map((e) => _buildCourseCard(context, e, widget.allCourses)).toList())
               : _buildEmptyPage(),
         )
       ],
@@ -150,13 +153,12 @@ class DailyTimetable extends StatelessWidget {
   Widget build(BuildContext context) {
     _setDate(DateTime.now());
     _pageController = PageController(initialPage: (_currentWeek - 1) * 7 + _currentDay - 1, keepPage: false);
-
     return PageView.builder(
       controller: _pageController,
       scrollDirection: Axis.horizontal,
       // TODO: 存储
       itemCount: 20 * 7,
-      itemBuilder: (_, int index) => _pageBuilder(context, index),
+      itemBuilder: (_, int index) => _pageBuilder(context, index, widget.allCourses),
     );
   }
 }

@@ -21,8 +21,10 @@ import 'package:ical/serializer.dart';
 import '../entity/timetable.dart';
 import '../init.dart';
 
-// -- 基本常量
+//静态
+class ABC {}
 
+// -- 基本常量
 final dateSemesterStart = TimetableInitializer.timetableStorage.startDate ?? DateTime(2022, 2, 14);
 
 final List<String> weekWord = ['一', '二', '三', '四', '五', '六', '日'];

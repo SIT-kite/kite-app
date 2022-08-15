@@ -61,7 +61,9 @@ class _TimetablePageState extends State<TimetablePage> {
 
   final SchoolYear currSchoolYear = TimetableInitializer.timetableStorage.currentYear ?? const SchoolYear(2021);
   final currSemester = TimetableInitializer.timetableStorage.currentSemester ?? Semester.secondTerm;
-  List<Course> timetable = TimetableInitializer.timetableStorage.getTimetable();
+
+  // 课程表
+  late List<Course> timetable;
 
   @override
   void initState() {
@@ -99,6 +101,7 @@ class _TimetablePageState extends State<TimetablePage> {
     return timetable;
   }
 
+  ///刷新的方法
   Future<void> _onRefresh() async {
     if (isRefreshing) {
       return;
@@ -119,6 +122,7 @@ class _TimetablePageState extends State<TimetablePage> {
     // 刷新界面
   }
 
+  ///导出的方法
   Future<void> _onExport() async {
     if (timetable.isEmpty) {
       showBasicFlash(context, const Text('你咋没课呢？？'));
@@ -140,7 +144,7 @@ class _TimetablePageState extends State<TimetablePage> {
     }
 
     final String iCalContent = iCal.serialize();
-    final String path = (await getExternalCacheDirectories())![0].path + '/calendar.ics';
+    final String path = '${(await getExternalCacheDirectories())![0].path}/calendar.ics';
     final File file = File(path);
 
     if (!file.existsSync()) {
@@ -151,13 +155,15 @@ class _TimetablePageState extends State<TimetablePage> {
     OpenFile.open(path, type: 'text/calendar');
   }
 
+  ///更多菜单回调方法
   PopupMenuButton _buildPopupMenu(BuildContext context) {
     final List<Function()> callback = [
-      () => Navigator.of(context).pushNamed('/timetable/import'),
+      () => Navigator.of(context).pushNamed('/timetable/import').then((value) => value == true ? _onRefresh() : null),
       _onRefresh,
       _onExport,
     ];
 
+    ///更多菜单按钮
     return PopupMenuButton(
       onSelected: (index) => callback[index](),
       itemBuilder: (BuildContext ctx) {
@@ -170,6 +176,7 @@ class _TimetablePageState extends State<TimetablePage> {
     );
   }
 
+  ///跳到今天的方法
   void _onPressJumpToday() {
     if (displayMode == displayModeDaily) {
       (currentKey.currentWidget as DailyTimetable).jumpToday();
@@ -178,6 +185,7 @@ class _TimetablePageState extends State<TimetablePage> {
     }
   }
 
+  ///切换按钮
   Widget _buildModeSwitchButton() {
     return IconButton(
       icon: const Icon(Icons.swap_horiz),
@@ -192,13 +200,16 @@ class _TimetablePageState extends State<TimetablePage> {
     );
   }
 
+  ///跳到今天按钮
   Widget _buildFloatingButton() {
     final textStyle = Theme.of(context).textTheme.headline2?.copyWith(color: Colors.white);
-    return FloatingActionButton(child: Text('今', style: textStyle), onPressed: _onPressJumpToday);
+    return FloatingActionButton(onPressed: _onPressJumpToday, child: Text('今', style: textStyle));
   }
 
   @override
   Widget build(BuildContext context) {
+    timetable = TimetableInitializer.timetableStorage.getTimetable();
+
     return Scaffold(
       appBar: AppBar(title: const Text('课程表'), actions: <Widget>[
         _buildModeSwitchButton(),

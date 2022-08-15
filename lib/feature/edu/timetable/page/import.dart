@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/feature/edu/common/entity/index.dart';
@@ -110,7 +112,6 @@ class _TimetableImportPageState extends State<TimetableImportPage> {
                   firstDate: DateTime(DateTime.now().year),
                   lastDate: DateTime(DateTime.now().year + 2),
                 );
-
                 if (date != null) selectedDate.value = date;
               },
             ),
@@ -118,6 +119,11 @@ class _TimetableImportPageState extends State<TimetableImportPage> {
         )
       ],
     );
+  }
+
+  ///更新时间的方法
+  Future<void> updateData() async {
+    TimetableInitializer.timetableStorage.currentYear = SchoolYear(selectedYear);
   }
 
   Future<List<Course>> _updateTimetable() async {
@@ -155,7 +161,7 @@ class _TimetableImportPageState extends State<TimetableImportPage> {
               ) ==
               0) {
             _updateTimetable();
-            Navigator.of(context).pop();
+            Navigator.of(context).pop(true);
           }
         },
         child: const Icon(Icons.check),
