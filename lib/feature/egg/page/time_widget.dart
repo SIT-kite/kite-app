@@ -1,3 +1,21 @@
+/*
+ * 上应小风筝  便利校园，一步到位
+ * Copyright (C) 2022 上海应用技术大学 上应小风筝团队
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -10,6 +28,7 @@ class MultiProtuberance extends MovableObject {
   double radius;
   late double rotate;
   double count;
+
   MultiProtuberance(WorldRule worldRule, this.radius, this.count) : super(worldRule) {
     primaryRadius = radius;
     rotate = Random.secure().nextDouble();
@@ -48,6 +67,7 @@ class MultiProtuberance extends MovableObject {
 class Circle extends MovableObject {
   late double primaryRadius;
   double radius;
+
   Circle(WorldRule worldRule, this.radius) : super(worldRule) {
     primaryRadius = radius;
   }
@@ -104,7 +124,9 @@ class _TimeWidgetState extends State<TimeWidget> {
   Drawable? back;
   bool hasDispose = false;
   int currentTimeMs = 0;
+
   double get width => world.worldRule.bound.width;
+
   double get height => world.worldRule.bound.height;
 
   /// 每个小球的盒半径
@@ -184,6 +206,7 @@ class _TimeWidgetState extends State<TimeWidget> {
   }
 
   List<Circle> circles = [];
+
   @override
   void initState() {
     world = widget.world;

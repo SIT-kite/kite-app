@@ -1,3 +1,21 @@
+/*
+ * 上应小风筝  便利校园，一步到位
+ * Copyright (C) 2022 上海应用技术大学 上应小风筝团队
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import 'package:flutter/material.dart';
 
 abstract class Drawable {
@@ -13,8 +31,7 @@ class WorldRule {
   /// 世界的边界
   Size bound;
 
-  WorldRule(
-    this.bound, {
+  WorldRule(this.bound, {
     this.tickTime = 16,
   });
 }
@@ -86,6 +103,7 @@ abstract class IObject implements Drawable {
 
 abstract class MovableObject extends IObject with Movable {
   WorldRule worldRule;
+
   MovableObject(this.worldRule);
 
   @override
@@ -96,12 +114,14 @@ abstract class MovableObject extends IObject with Movable {
 
 class World implements Drawable, ITickHandler {
   WorldRule worldRule;
+
   World(this.worldRule);
 
   /// 可运动的对象集合
   List<MovableObject> _objects = [];
 
   int size() => _objects.length;
+
   void pushMovableObject(MovableObject object) {
     _objects.add(object);
   }
@@ -128,7 +148,9 @@ typedef FunctionalDrawableCallback = void Function(Canvas canvas);
 
 class FunctionalDrawable implements Drawable {
   final FunctionalDrawableCallback callback;
+
   const FunctionalDrawable(this.callback);
+
   @override
   void draw(Canvas canvas) {
     callback(canvas);
@@ -137,7 +159,9 @@ class FunctionalDrawable implements Drawable {
 
 class MultiDrawable implements Drawable {
   final Iterable<Drawable?> drawables;
+
   const MultiDrawable(this.drawables);
+
   @override
   void draw(Canvas canvas) {
     for (final drawable in drawables) {
@@ -154,8 +178,8 @@ class DrawablePainter extends CustomPainter {
   Drawable drawable;
   OnPaintCallback? beforePaint;
   OnPaintCallback? afterPaint;
-  DrawablePainter(
-    this.drawable, {
+
+  DrawablePainter(this.drawable, {
     this.beforePaint,
     this.afterPaint,
   });

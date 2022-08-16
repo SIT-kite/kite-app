@@ -1,3 +1,21 @@
+/*
+ * 上应小风筝  便利校园，一步到位
+ * Copyright (C) 2022 上海应用技术大学 上应小风筝团队
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
@@ -29,7 +47,7 @@ class TodayTomorrowSwitch extends StatelessWidget {
     final todayDateText = '${today.month}-${today.day}';
     return Text(
       "今天\n"
-      "$todayWeekText（$todayDateText）",
+          "$todayWeekText（$todayDateText）",
       textAlign: TextAlign.center,
     );
   }
@@ -41,7 +59,7 @@ class TodayTomorrowSwitch extends StatelessWidget {
     final tomorrowDateText = '${tomorrow.month}-${tomorrow.day}';
     return Text(
       "明天\n"
-      "$tomorrowWeekText（$tomorrowDateText）",
+          "$tomorrowWeekText（$tomorrowDateText）",
       textAlign: TextAlign.center,
     );
   }
@@ -150,9 +168,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
           Widget buildOutdated() => const Text('已结束', style: TextStyle(color: Colors.red));
           Widget buildAppointed() => const Icon(Icons.check, color: Colors.green);
           Widget buildAvailable() => Text(
-                e.applied == e.count ? '已满' : '可预约',
-                style: const TextStyle(color: Colors.blue),
-              );
+            e.applied == e.count ? '已满' : '可预约',
+            style: const TextStyle(color: Colors.blue),
+          );
           Widget buildQrCode() => IconButton(
               onPressed: () async {
                 final response = await service.apply(e.period);

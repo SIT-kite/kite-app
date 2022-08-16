@@ -1,3 +1,21 @@
+/*
+ * 上应小风筝  便利校园，一步到位
+ * Copyright (C) 2022 上海应用技术大学 上应小风筝团队
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'entity.g.dart';
@@ -19,7 +37,9 @@ class FreshmanInfo {
   Contact? contact;
 
   FreshmanInfo();
+
   factory FreshmanInfo.fromJson(Map<String, dynamic> json) => _$FreshmanInfoFromJson(json);
+
   Map<String, dynamic> toJson() => _$FreshmanInfoToJson(this);
 
   @override
@@ -35,6 +55,7 @@ class Contact {
   String? tel;
 
   Contact();
+
   factory Contact.fromJson(Map<String, dynamic> json) => _$ContactFromJson(json);
 
   Map<String, dynamic> toJson() => _$ContactToJson(this);
@@ -55,8 +76,11 @@ class Familiar {
   String? avatar;
   DateTime? lastSeen;
   Contact? contact;
+
   Familiar();
+
   factory Familiar.fromJson(Map<String, dynamic> json) => _$FamiliarFromJson(json);
+
   Map<String, dynamic> toJson() => _$FamiliarToJson(this);
 
   @override
@@ -79,8 +103,11 @@ class Mate {
   DateTime? lastSeen;
   String? avatar;
   Contact? contact;
+
   Mate();
+
   factory Mate.fromJson(Map<String, dynamic> json) => _$MateFromJson(json);
+
   Map<String, dynamic> toJson() => _$MateToJson(this);
 
   @override
@@ -101,7 +128,9 @@ class AnalysisMajor {
   int girls = 0;
 
   AnalysisMajor();
+
   factory AnalysisMajor.fromJson(Map<String, dynamic> json) => _$AnalysisMajorFromJson(json);
+
   Map<String, dynamic> toJson() => _$AnalysisMajorToJson(this);
 
   @override
@@ -128,7 +157,9 @@ class Analysis {
   AnalysisMajor major = AnalysisMajor();
 
   Analysis();
+
   factory Analysis.fromJson(Map<String, dynamic> json) => _$AnalysisFromJson(json);
+
   Map<String, dynamic> toJson() => _$AnalysisToJson(this);
 
   @override
