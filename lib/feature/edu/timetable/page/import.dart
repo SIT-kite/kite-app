@@ -19,7 +19,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:kite/component/future_builder.dart';
 import 'package:kite/feature/edu/common/entity/index.dart';
 import 'package:kite/feature/edu/util/selector.dart';
 import 'package:kite/util/alert_dialog.dart';
@@ -27,7 +26,6 @@ import 'package:kite/util/alert_dialog.dart';
 import '../entity/timetable.dart';
 import '../init.dart';
 import 'cache.dart';
-import 'component/weekly.dart';
 
 class TimetableImportPage extends StatefulWidget {
   const TimetableImportPage({Key? key}) : super(key: key);
@@ -71,17 +69,17 @@ class _TimetableImportPageState extends State<TimetableImportPage> {
       ),
     );
   }
-
-  Widget _buildTimetablePreview() {
-    final service = TimetableInitializer.timetableService;
-    final courses = service.getTimetable(SchoolYear(selectedYear), selectedSemester);
-
-    return MyFutureBuilder<List<Course>>(
-        future: courses,
-        builder: (context, courses) {
-          return WeeklyTimetable(courses, initialDate: DateTime.now());
-        });
-  }
+  //
+  // Widget _buildTimetablePreview() {
+  //   final service = TimetableInitializer.timetableService;
+  //   final courses = service.getTimetable(SchoolYear(selectedYear), selectedSemester);
+  //
+  //   return MyFutureBuilder<List<Course>>(
+  //       future: courses,
+  //       builder: (context, courses) {
+  //         return WeeklyTimetable(courses, initialDate: DateTime.now());
+  //       });
+  // }
 
   Widget _buildBody() {
     return Column(

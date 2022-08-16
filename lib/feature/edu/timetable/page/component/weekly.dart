@@ -20,11 +20,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../entity/timetable.dart';
+import '../../init.dart';
 import '../util.dart';
 import 'grid.dart';
 import 'header.dart';
 
-class WeeklyTimetable extends StatelessWidget {
+class WeeklyTimetable extends StatefulWidget {
   /// 教务系统课程列表
   final List<Course> allCourses;
 
@@ -32,11 +33,18 @@ class WeeklyTimetable extends StatelessWidget {
   /// TODO 暂时还没用上？
   final DateTime? initialDate;
 
-  late final PageController _pageController;
+  @override
+  State<StatefulWidget> createState() => _WeeklyTimetableState();
+
+  const WeeklyTimetable(this.allCourses, {Key? key, this.initialDate}) : super(key: key);
+
+  void jumpToday() {}
+}
+
+class _WeeklyTimetableState extends State<WeeklyTimetable> {
+  late PageController _pageController;
 
   int _currentWeek = 1;
-
-  WeeklyTimetable(this.allCourses, {Key? key, this.initialDate}) : super(key: key);
 
   /// 布局左侧边栏, 显示节次
   Widget _buildLeftColumn() {
@@ -46,11 +54,11 @@ class WeeklyTimetable extends StatelessWidget {
       const border = BorderSide(color: Colors.black12, width: 0.8);
 
       return Container(
-        child: Center(child: Text((index + 1).toString(), style: textStyle)),
         decoration: const BoxDecoration(
           color: Colors.white,
           border: Border(top: border, right: border),
         ),
+        child: Center(child: Text((index + 1).toString(), style: textStyle)),
       );
     }
 
@@ -100,7 +108,7 @@ class WeeklyTimetable extends StatelessWidget {
               textDirection: TextDirection.ltr,
               children: [
                 Expanded(flex: 2, child: _buildLeftColumn()),
-                Expanded(flex: 21, child: TableGrids(allCourses, week))
+                Expanded(flex: 21, child: TableGrids(widget.allCourses, week))
               ],
             ),
           ),
@@ -111,6 +119,8 @@ class WeeklyTimetable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    dateSemesterStart = TimetableInitializer.timetableStorage.startDate ?? DateTime(2022, 2, 14);
+
     _setDate(DateTime.now());
     _pageController = PageController(initialPage: _currentWeek - 1, keepPage: false);
 
