@@ -52,7 +52,7 @@ class _FreshmanPageState extends State<FreshmanPage> {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        title: const Text('新生功能'),
+        title: const Text('我的入学信息'),
       ),
       body: Column(
         children: [Expanded(child: buildFunctionList(list))],

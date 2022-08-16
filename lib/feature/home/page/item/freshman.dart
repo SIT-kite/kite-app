@@ -25,8 +25,8 @@ class FreshmanItem extends StatelessWidget {
     return HomeFunctionButton(
       route: '/freshman',
       iconWidget: Icon(Icons.people, size: 30.h, color: Theme.of(context).primaryColor),
-      title: '迎新',
-      subtitle: '新生入学查询',
+      title: '入学信息',
+      subtitle: '新生入学信息查询',
     );
   }
 }

@@ -118,7 +118,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
 
   Widget buildTitleLine() {
     return Container(
-        alignment: Alignment.centerLeft, child: Text('欢迎新生登录', style: Theme.of(context).textTheme.headline1));
+        alignment: Alignment.centerLeft, child: Text('欢迎新同学', style: Theme.of(context).textTheme.headline1));
   }
 
   Widget buildLoginForm() {
@@ -131,7 +131,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
             controller: _accountController,
             autofocus: true,
             decoration: const InputDecoration(
-              labelText: '账号(必填)',
+              labelText: '账号',
               hintText: '学号/姓名/准考证号',
               icon: Icon(Icons.person),
             ),
@@ -141,7 +141,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
             autofocus: true,
             obscureText: !_isPasswordClear,
             decoration: InputDecoration(
-              labelText: '密码(必填)',
+              labelText: '密码',
               hintText: '身份证号后六位',
               icon: const Icon(Icons.lock),
               suffixIcon: IconButton(

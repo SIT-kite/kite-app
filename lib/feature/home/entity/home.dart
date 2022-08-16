@@ -103,7 +103,7 @@ enum FunctionType {
   @HiveField(18)
   scanner,
 
-  /// 迎新
+  /// 迎新(入学信息)
   @HiveField(19)
   freshman,
 

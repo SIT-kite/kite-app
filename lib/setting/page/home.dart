@@ -62,7 +62,7 @@ String functionTypeToString(FunctionType type) {
     case FunctionType.scanner:
       return "扫码";
     case FunctionType.freshman:
-      return "迎新";
+      return "入学信息";
     case FunctionType.switchAccount:
       return "切换账户";
   }
