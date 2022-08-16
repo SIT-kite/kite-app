@@ -30,7 +30,7 @@ class HiveCacheProvider implements CacheProvider {
   }
 
   @override
-  bool getBool(String key,{bool? defaultValue}) {
+  bool getBool(String key, {bool? defaultValue}) {
     return box.get(key);
   }
 

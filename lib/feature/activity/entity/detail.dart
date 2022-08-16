@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 class ActivityDetail {
   /// Activity id
   final int id;
@@ -57,21 +56,8 @@ class ActivityDetail {
   /// Description in text[]
   final String? description;
 
-
-  const ActivityDetail(
-      this.id,
-      this.category,
-      this.title,
-      this.startTime,
-      this.signStartTime,
-      this.signEndTime,
-      this.place,
-      this.duration,
-      this.manager,
-      this.contact,
-      this.organizer,
-      this.undertaker,
-      this.description);
+  const ActivityDetail(this.id, this.category, this.title, this.startTime, this.signStartTime, this.signEndTime,
+      this.place, this.duration, this.manager, this.contact, this.organizer, this.undertaker, this.description);
 
   @override
   String toString() {

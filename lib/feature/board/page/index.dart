@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 class BoardPage extends StatelessWidget {
@@ -7,6 +5,10 @@ class BoardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: const Text("风景墙"),), body: Container());
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text("风景墙"),
+        ),
+        body: Container());
   }
 }
