@@ -18,12 +18,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:kite/feature/home/page/item/bbs.dart';
-import 'package:kite/feature/home/page/item/freshman.dart';
-import 'package:kite/feature/home/page/item/scan.dart';
-import 'package:kite/feature/home/page/item/switch.dart';
 
 import '../../entity/home.dart';
+
+import 'bbs.dart';
+import 'board.dart';
+import 'freshman.dart';
+import 'scan.dart';
+import 'switch.dart';
 import 'bulletin.dart';
 import 'classroom.dart';
 import 'contact.dart';
@@ -56,9 +58,7 @@ export 'night.dart';
 export 'notice.dart';
 export 'office.dart';
 export 'report.dart';
-export 'report.dart';
 export 'score.dart';
-export 'timetable.dart';
 export 'timetable.dart';
 export 'upgrade.dart';
 export 'wiki.dart';
@@ -155,6 +155,8 @@ class FunctionButtonFactory {
         return const FreshmanItem();
       case FunctionType.switchAccount:
         return const SwitchAccountItem();
+      case FunctionType.board:
+        return const BoardItem();
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:kite/feature/board/page/index.dart';
 import 'package:kite/feature/freshman/page/login.dart';
 import 'package:kite/feature/web_page/browser.dart';
 
@@ -59,6 +60,7 @@ class RouteTable {
   static const freshmanRoommate = '$freshman/roommate';
   static const freshmanLogin = '$freshman/login';
   static const freshmanContact = '$freshman/contact';
+  static const board = '/board';
 
   static final Map<String, NamedRouteBuilder> routeTable = {
     home: (context, args) => const HomePage(),
@@ -105,6 +107,7 @@ class RouteTable {
     freshmanRoommate: (context, args) => const FreshmanRoommatePage(),
     freshmanLogin: (context, args) => const FreshmanLoginPage(),
     freshmanContact: (context, args) => const FreshmanUpdatePage(),
+    board: (context, args) => const BoardPage(),
   };
 
   static NamedRouteBuilder? get(String path) {

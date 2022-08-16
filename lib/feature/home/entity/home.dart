@@ -110,6 +110,10 @@ enum FunctionType {
   /// 切换账户
   @HiveField(20)
   switchAccount,
+
+  /// 风景墙
+  @HiveField(21)
+  board,
 }
 
 /// 用户的功能列表
@@ -142,6 +146,7 @@ class UndergraduateFunctionList implements IUserFunctionList {
       FunctionType.bbs,
       FunctionType.contact,
       FunctionType.game,
+      FunctionType.board,
       FunctionType.wiki,
       FunctionType.separator,
     ];
@@ -169,6 +174,7 @@ class PostgraduateFunctionList implements IUserFunctionList {
       FunctionType.bbs,
       FunctionType.contact,
       FunctionType.game,
+      FunctionType.board,
       FunctionType.wiki,
       FunctionType.separator,
     ];
@@ -194,6 +200,7 @@ class TeacherFunctionList implements IUserFunctionList {
       FunctionType.bbs,
       FunctionType.contact,
       FunctionType.game,
+      FunctionType.board,
       FunctionType.wiki,
       FunctionType.separator,
     ];
@@ -213,6 +220,7 @@ class FreshmanFunctionList implements IUserFunctionList {
       FunctionType.scanner,
       FunctionType.bbs,
       FunctionType.contact,
+      FunctionType.board,
       FunctionType.wiki,
       FunctionType.separator,
     ];

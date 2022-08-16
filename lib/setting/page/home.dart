@@ -60,11 +60,13 @@ String functionTypeToString(FunctionType type) {
     case FunctionType.bbs:
       return '上应互助';
     case FunctionType.scanner:
-      return "扫码";
+      return '扫码';
     case FunctionType.freshman:
-      return "入学信息";
+      return '入学信息';
     case FunctionType.switchAccount:
-      return "切换账户";
+      return '切换账户';
+    case FunctionType.board:
+      return '风景墙';
   }
 }
 
