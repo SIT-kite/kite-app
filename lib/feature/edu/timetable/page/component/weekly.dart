@@ -34,14 +34,12 @@ class WeeklyTimetable extends StatefulWidget {
   final DateTime? initialDate;
 
   @override
-  State<StatefulWidget> createState() => _WeeklyTimetableState();
+  State<StatefulWidget> createState() => WeeklyTimetableState();
 
   const WeeklyTimetable(this.allCourses, {Key? key, this.initialDate}) : super(key: key);
-
-  void jumpToday() {}
 }
 
-class _WeeklyTimetableState extends State<WeeklyTimetable> {
+class WeeklyTimetableState extends State<WeeklyTimetable> {
   late PageController _pageController;
 
   int _currentWeek = 1;

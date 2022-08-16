@@ -57,6 +57,7 @@ class _TimetablePageState extends State<TimetablePage> {
   // 模式：周课表 日课表
   int displayMode = TimetableInitializer.timetableStorage.lastMode ?? displayModeDaily;
   bool isRefreshing = false;
+
   final currentKey = GlobalKey();
 
   final SchoolYear currSchoolYear = TimetableInitializer.timetableStorage.currentYear ?? const SchoolYear(2021);
@@ -179,9 +180,9 @@ class _TimetablePageState extends State<TimetablePage> {
   ///跳到今天的方法
   void _onPressJumpToday() {
     if (displayMode == displayModeDaily) {
-      (currentKey.currentWidget as DailyTimetable).jumpToday();
+      (currentKey.currentState as DailyTimetableState).jumpToday();
     } else {
-      (currentKey.currentWidget as WeeklyTimetable).jumpToday();
+      (currentKey.currentState as WeeklyTimetableState).jumpToday();
     }
   }
 

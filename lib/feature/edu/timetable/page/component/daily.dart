@@ -32,15 +32,12 @@ class DailyTimetable extends StatefulWidget {
   /// 初始日期
   final DateTime? initialDate;
 
-  ///todo 待修复
-  void jumpToday() {}
-
   @override
-  State<StatefulWidget> createState() => _DailyTimetableState();
+  State<StatefulWidget> createState() => DailyTimetableState();
   const DailyTimetable(this.allCourses, {Key? key, this.initialDate}) : super(key: key);
 }
 
-class _DailyTimetableState extends State<DailyTimetable> {
+class DailyTimetableState extends State<DailyTimetable> {
   static const String _courseIconPath = 'assets/course/';
 
   /// 课表应该显示的周（页数 + 1）
@@ -79,6 +76,12 @@ class _DailyTimetableState extends State<DailyTimetable> {
         curve: Curves.linearToEaseOut,
       );
     }
+  }
+
+  /// 跳转到今天
+  void jumpToday() {
+    _setDate(DateTime.now());
+    jumpToDay(_currentWeek, _currentDay);
   }
 
   Widget _buildCourseCard(BuildContext context, Course course, List<Course> allCourses) {
