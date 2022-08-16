@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
 
-import '../cached_service.dart';
+import '../cache.dart';
 import '../dao.dart';
 import '../entity.dart';
 import '../init.dart';

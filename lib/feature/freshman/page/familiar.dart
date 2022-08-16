@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
-import 'package:kite/feature/freshman/cached_service.dart';
+import 'package:kite/feature/freshman/cache.dart';
 import 'package:kite/feature/freshman/entity.dart';
 import 'package:kite/feature/freshman/page/component/familar_list.dart';
 

@@ -1,7 +1,7 @@
 import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/setting/init.dart';
 
-import 'cached_service.dart';
+import 'cache.dart';
 import 'dao.dart';
 import 'freshman_session.dart';
 import 'service.dart';
