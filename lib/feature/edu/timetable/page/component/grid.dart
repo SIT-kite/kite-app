@@ -36,15 +36,15 @@ class TableGrids extends StatelessWidget {
   TableGrids(this.allCourses, this.currentWeek, {Key? key}) : super(key: key);
 
   Widget _buildCourseGrid(BuildContext context, Course? grid) {
-    final textStyle = Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.white);
-
+    final textStyle = Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.white, fontWeight: FontWeight.bold);
+    final textStyle2 = Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.white);
     Widget buildCourseGrid(Course course) {
-      Text buildText(text, maxLines) => Text(
+      Text buildText(text, maxLines, {TextStyle? myTextStyle}) => Text(
             text,
             softWrap: true,
             overflow: TextOverflow.ellipsis,
             maxLines: maxLines,
-            style: textStyle,
+            style: myTextStyle ?? textStyle,
           );
       final decoration = BoxDecoration(
         color: getBeautifulColor(course.courseId.hashCode),
@@ -63,14 +63,19 @@ class TableGrids extends StatelessWidget {
           width: singleGridWidth - 3,
           height: singleGridHeight * course.duration - 4,
           decoration: decoration,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              buildText(course.courseName, 3),
-              buildText(formatPlace(course.place), 2),
-              buildText(course.teacher.join(','), 2),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                buildText(course.courseName, 3),
+                const SizedBox(height: 3),
+                buildText(formatPlace(course.place), 2, myTextStyle: textStyle2),
+                const SizedBox(height: 3),
+                buildText(course.teacher.join(','), 2, myTextStyle: textStyle2),
+              ],
+            ),
           ),
         ),
       );
