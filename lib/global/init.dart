@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:catcher/catcher.dart';
+import 'package:kite/feature/board/init.dart';
 import 'package:kite/feature/freshman/init.dart';
 import 'package:kite/feature/initializer_index.dart';
 import 'package:kite/feature/sit_app/init.dart';
@@ -78,6 +79,7 @@ class Initializer {
 
     final sitAppSession = SitAppSession(Global.dio, SettingInitializer.sitAppJwt);
     SitAppInitializer.init(sitAppSession: sitAppSession);
+    BoardInitializer.init(kiteSession: kiteSession);
 
     if (UniversalPlatform.isDesktop && !GlobalConfig.isTestEnv) {
       await DesktopInitializer.init();

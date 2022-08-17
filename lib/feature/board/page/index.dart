@@ -19,9 +19,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-import '../../kite/init.dart';
-import '../service.dart';
-
 class BoardPage extends StatelessWidget {
   const BoardPage({Key? key}) : super(key: key);
 
@@ -51,8 +48,6 @@ class BoardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final service = BoardService(KiteInitializer.kiteSession);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("风景墙"),
