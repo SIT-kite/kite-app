@@ -19,9 +19,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/launch.dart';
+import 'package:kite/storage/init.dart';
 
 import '../../../route.dart';
-import '../../../setting/init.dart';
 import '../../../util/flash.dart';
 import '../../../util/logger.dart';
 import '../dao.dart';
@@ -70,7 +70,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
 
     try {
       // 先保存登录信息
-      SettingInitializer.freshman
+      KvStorageInitializer.freshman
         ..freshmanAccount = account
         ..freshmanSecret = secret;
       // 清空本地缓存
@@ -79,7 +79,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       final info = await freshmanDao.getInfo();
 
       // 登陆成功后赋值名字
-      SettingInitializer.freshman.freshmanName = info.name;
+      KvStorageInitializer.freshman.freshmanName = info.name;
 
       // Flutter 官方推荐的在异步函数中使用context需要先检查是否mounted
       if (!mounted) return;
@@ -90,7 +90,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       return;
     } catch (e) {
       // 登陆失败
-      SettingInitializer.freshman
+      KvStorageInitializer.freshman
         ..freshmanSecret = null
         ..freshmanAccount = null;
       showBasicFlash(context, Text('登陆失败: $e'));
@@ -103,8 +103,8 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
   void initState() {
     super.initState();
 
-    String? account = SettingInitializer.freshman.freshmanAccount;
-    String? secret = SettingInitializer.freshman.freshmanSecret;
+    String? account = KvStorageInitializer.freshman.freshmanAccount;
+    String? secret = KvStorageInitializer.freshman.freshmanSecret;
     if (account != null) {
       _accountController.text = account;
       _secretController.text = secret ?? '';

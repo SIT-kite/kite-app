@@ -18,7 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/feature/kite/entity/electricity.dart';
 import 'package:kite/global/global.dart';
-import 'package:kite/setting/init.dart';
+import 'package:kite/storage/init.dart';
 
 import 'index.dart';
 
@@ -30,7 +30,7 @@ class ElectricityItem extends StatefulWidget {
 }
 
 class _ElectricityItemState extends State<ElectricityItem> {
-  final Balance? lastBalance = SettingInitializer.home.lastBalance;
+  final Balance? lastBalance = KvStorageInitializer.home.lastBalance;
   late String content = '宿舍电费余额和用电记录';
 
   @override

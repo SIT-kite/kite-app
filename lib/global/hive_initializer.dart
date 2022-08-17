@@ -30,12 +30,12 @@ class HiveBoxInitializer {
   static late Box<dynamic> course;
   static late Box<ExpenseRecord> expense;
   static late Box<dynamic> game;
-  static late Box<dynamic> setting;
+  static late Box<dynamic> kv;
 
   static Future<void> init(String root) async {
     await Hive.initFlutter(root);
     registerAdapters();
-    setting = await Hive.openBox('setting');
+    kv = await Hive.openBox('setting');
     userEvent = await Hive.openBox('userEvent');
     librarySearchHistory = await Hive.openBox('librarySearchHistory');
     electricity = await Hive.openBox('electricity');

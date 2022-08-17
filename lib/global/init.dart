@@ -25,6 +25,7 @@ import 'package:kite/global/global.dart';
 import 'package:kite/session/kite_session.dart';
 import 'package:kite/session/sit_app_session.dart';
 import 'package:kite/setting/init.dart';
+import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -49,17 +50,18 @@ class Initializer {
 
     await HiveBoxInitializer.init('kite1/hive');
     await UserEventInitializer.init(userEventBox: HiveBoxInitializer.userEvent);
-    await SettingInitializer.init(settingBox: HiveBoxInitializer.setting);
-    await Global.init(userEventStorage: UserEventInitializer.userEventStorage, authSetting: SettingInitializer.auth);
+    KvStorageInitializer.init(kvStorageBox: HiveBoxInitializer.kv);
+    SettingInitializer.init(kvStorageBox: HiveBoxInitializer.kv);
+    await Global.init(userEventStorage: UserEventInitializer.userEventStorage, authSetting: KvStorageInitializer.auth);
     // 初始化用户首次打开时间（而不是应用安装时间）
     // ??= 表示为空时候才赋值
-    SettingInitializer.home.installTime ??= DateTime.now();
+    KvStorageInitializer.home.installTime ??= DateTime.now();
 
     BulletinInitializer.init(ssoSession: Global.ssoSession);
     CampusCardInitializer.init(session: Global.ssoSession);
     ConnectivityInitializer.init(ssoSession: Global.ssoSession);
 
-    final kiteSession = KiteSession(Global.dio, SettingInitializer.jwt);
+    final kiteSession = KiteSession(Global.dio, KvStorageInitializer.jwt);
     await ContactInitializer.init(kiteSession: kiteSession, contactDataBox: HiveBoxInitializer.contactSetting);
     await EduInitializer.init(
         ssoSession: Global.ssoSession, cookieJar: Global.cookieJar, timetableBox: HiveBoxInitializer.course);
@@ -77,7 +79,7 @@ class Initializer {
 
     await FreshmanInitializer.init(kiteSession: kiteSession);
 
-    final sitAppSession = SitAppSession(Global.dio, SettingInitializer.sitAppJwt);
+    final sitAppSession = SitAppSession(Global.dio, KvStorageInitializer.sitAppJwt);
     SitAppInitializer.init(sitAppSession: sitAppSession);
     BoardInitializer.init(kiteSession: kiteSession);
 

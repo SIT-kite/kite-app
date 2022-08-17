@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/exception/session.dart';
 import 'package:kite/feature/office/init.dart';
 import 'package:kite/global/global.dart';
-import 'package:kite/setting/init.dart';
+import 'package:kite/storage/init.dart';
 
 import 'index.dart';
 
@@ -49,13 +49,13 @@ class _OfficeItemState extends State<OfficeItem> {
   void _onHomeRefresh(_) async {
     if (!mounted) return;
     final String result = await _buildContent();
-    SettingInitializer.home.lastOfficeStatus = result;
+    KvStorageInitializer.home.lastOfficeStatus = result;
     setState(() => content = result);
   }
 
   Future<String> _buildContent() async {
-    final username = SettingInitializer.auth.currentUsername!;
-    final password = SettingInitializer.auth.ssoPassword!;
+    final username = KvStorageInitializer.auth.currentUsername!;
+    final password = KvStorageInitializer.auth.ssoPassword!;
 
     if (!OfficeInitializer.session.isLogin) {
       try {
@@ -82,7 +82,7 @@ class _OfficeItemState extends State<OfficeItem> {
   Widget build(BuildContext context) {
     // 如果是首屏加载, 从缓存读
     if (content == null) {
-      final String? lastOfficeStatus = SettingInitializer.home.lastOfficeStatus;
+      final String? lastOfficeStatus = KvStorageInitializer.home.lastOfficeStatus;
       content = lastOfficeStatus ?? defaultContent;
     }
     return HomeFunctionButton(route: '/office', icon: 'assets/home/icon_office.svg', title: '办公', subtitle: content);

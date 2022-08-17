@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/feature/initializer_index.dart';
 import 'package:kite/feature/report/entity/report.dart';
 import 'package:kite/global/global.dart';
-import 'package:kite/setting/init.dart';
+import 'package:kite/storage/init.dart';
 
 import 'index.dart';
 
@@ -66,7 +66,7 @@ class _ReportItemState extends State<ReportItem> {
     late ReportHistory? history;
 
     try {
-      history = await ReportInitializer.reportService.getRecentHistory(SettingInitializer.auth.currentUsername ?? '');
+      history = await ReportInitializer.reportService.getRecentHistory(KvStorageInitializer.auth.currentUsername ?? '');
     } catch (e) {
       return '获取状态失败, ${e.runtimeType}';
     }
@@ -74,7 +74,7 @@ class _ReportItemState extends State<ReportItem> {
       return '无上报记录';
     }
     // 别忘了本地缓存更新一下.
-    SettingInitializer.home.lastReport = history;
+    KvStorageInitializer.home.lastReport = history;
     return _generateContent(history);
   }
 
@@ -82,7 +82,7 @@ class _ReportItemState extends State<ReportItem> {
   Widget build(BuildContext context) {
     // 如果是第一次加载 (非下拉导致的渲染), 加载缓存的上报记录.
     if (content == null) {
-      final ReportHistory? lastReport = SettingInitializer.home.lastReport;
+      final ReportHistory? lastReport = KvStorageInitializer.home.lastReport;
       // 如果本地没有缓存记录, 加载默认文本. 否则加载记录.
       if (lastReport == null) {
         content = defaultContent;

@@ -24,12 +24,12 @@ import 'package:kite/feature/quick_button/init.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/launch.dart';
 import 'package:kite/route.dart';
-import 'package:kite/setting/dao/auth.dart';
-import 'package:kite/setting/init.dart';
+import 'package:kite/storage/init.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/network.dart';
 import 'package:kite/util/scanner.dart';
+import 'package:kite/util/user.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -58,15 +58,15 @@ class _HomePageState extends State<HomePage> {
     Log.info('更新天气');
     Future.delayed(const Duration(milliseconds: 800), () async {
       try {
-        final weather = await WeatherService().getCurrentWeather(SettingInitializer.home.campus);
+        final weather = await WeatherService().getCurrentWeather(KvStorageInitializer.home.campus);
         Global.eventBus.emit(EventNameConstants.onWeatherUpdate, weather);
       } catch (_) {}
     });
   }
 
   Future<void> _doLogin(BuildContext context) async {
-    final String username = SettingInitializer.auth.currentUsername!;
-    final String password = SettingInitializer.auth.ssoPassword!;
+    final String username = KvStorageInitializer.auth.currentUsername!;
+    final String password = KvStorageInitializer.auth.ssoPassword!;
 
     await HomeInitializer.ssoSession.login(username, password);
   }
@@ -130,8 +130,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Widget> buildFunctionWidgets() {
-    UserType userType = SettingInitializer.auth.userType!;
-    List<FunctionType> list = SettingInitializer.home.homeItems ?? getDefaultFunctionList(userType);
+    UserType userType = AccountUtils.getUserType()!;
+    List<FunctionType> list = KvStorageInitializer.home.homeItems ?? getDefaultFunctionList(userType);
 
     // 先遍历一遍，过滤相邻重复元素
     FunctionType lastItem = list.first;
@@ -214,7 +214,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    isFreshman = SettingInitializer.auth.userType == UserType.freshman;
+    isFreshman = AccountUtils.getUserType() == UserType.freshman;
     Log.info('开始加载首页');
     Future.delayed(Duration.zero, () async {
       // 非新生才执行该网络检查逻辑

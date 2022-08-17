@@ -20,7 +20,7 @@ import 'package:check_vpn_connection/check_vpn_connection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/launch.dart';
-import 'package:kite/setting/init.dart';
+import 'package:kite/storage/init.dart';
 import 'package:kite/util/network.dart';
 
 import '../init.dart';
@@ -58,7 +58,7 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
 
     Widget buildConnectedByProxy() => Text(
         '已通过 HTTP 代理连接校园网\n'
-        '地址：${SettingInitializer.network.proxy}',
+        '地址：${KvStorageInitializer.network.proxy}',
         textAlign: TextAlign.center,
         style: style);
 
@@ -86,7 +86,7 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
       );
     }
 
-    if (SettingInitializer.network.useProxy) {
+    if (KvStorageInitializer.network.useProxy) {
       return buildConnectedByProxy();
     }
     return FutureBuilder(

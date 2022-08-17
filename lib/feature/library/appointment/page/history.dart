@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/feature/library/appointment/init.dart';
 import 'package:kite/feature/library/appointment/page/qrcode.dart';
-import 'package:kite/setting/init.dart';
+import 'package:kite/storage/init.dart';
 import 'package:kite/util/alert_dialog.dart';
 
 import '../entity.dart';
@@ -142,8 +142,10 @@ class _HistoryPageState extends State<HistoryPage> {
     return const Text('未知状态', style: TextStyle(color: Colors.orange));
   }
 
-  Widget buildListView(List<ApplicationRecord> records,
-      CurrentPeriodResponse currentPeriod,) {
+  Widget buildListView(
+    List<ApplicationRecord> records,
+    CurrentPeriodResponse currentPeriod,
+  ) {
     records.sort((a, b) {
       return b.period - a.period;
     });
@@ -167,7 +169,7 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget buildMyHistoryList() {
     return MyFutureBuilder<List>(
       future: Future.wait([
-        service.getApplication(username: SettingInitializer.auth.currentUsername),
+        service.getApplication(username: KvStorageInitializer.auth.currentUsername),
         service.getCurrentPeriod(),
       ]),
       builder: (context, tuple) {

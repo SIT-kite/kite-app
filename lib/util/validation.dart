@@ -15,28 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-// Rule of student id.
-import 'package:kite/setting/dao/index.dart';
-
-final RegExp reUndergraduateId = RegExp(r'^(\d{6}[YGHE\d]\d{3})$');
-final RegExp rePostgraduateId = RegExp(r'^(\d{2}6\d{6})$');
-final RegExp reTeacherId = RegExp(r'^(\d{4})$');
-
-UserType? guessUserType(String username) {
-  if (username.length == 10 && reUndergraduateId.hasMatch(username.toUpperCase())) {
-    return UserType.undergraduate;
-  } else if (username.length == 9 && rePostgraduateId.hasMatch(username)) {
-    return UserType.postgraduate;
-  } else if (username.length == 4 && reTeacherId.hasMatch(username)) {
-    return UserType.teacher;
-  }
-  return null;
-}
+import 'package:kite/util/user.dart';
 
 String? studentIdValidator(String? username) {
   if (username != null && username.isNotEmpty) {
     // 仅允许学生学号登录, 并且屏蔽
-    if (guessUserType(username) == null) {
+    if (AccountUtils.guessUserType(username) == null) {
       return '账号格式不正确';
     }
   }

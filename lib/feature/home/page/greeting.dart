@@ -19,9 +19,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/feature/kite/entity/weather.dart';
 import 'package:kite/global/global.dart';
-import 'package:kite/setting/dao/auth.dart';
-import 'package:kite/setting/init.dart';
+import 'package:kite/storage/init.dart';
 import 'package:kite/util/url_launcher.dart';
+import 'package:kite/util/user.dart';
 
 /// 计算入学时间, 默认按 9 月 1 日开学来算. 年份 entranceYear 是完整的年份, 如 2018.
 int _calcStudyDays(int entranceYear) {
@@ -42,14 +42,14 @@ class GreetingWidget extends StatefulWidget {
 
 class _GreetingWidgetState extends State<GreetingWidget> {
   int? studyDays;
-  int campus = SettingInitializer.home.campus;
-  Weather currentWeather = SettingInitializer.home.lastWeather;
+  int campus = KvStorageInitializer.home.campus;
+  Weather currentWeather = KvStorageInitializer.home.lastWeather;
   @override
   void initState() {
     super.initState();
     Global.eventBus.on(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
     // 如果用户不是新生或老师，那么就显示学习天数
-    if (![UserType.freshman, UserType.teacher].contains(SettingInitializer.auth.userType)) {
+    if (![UserType.freshman, UserType.teacher].contains(AccountUtils.getUserType())) {
       studyDays = _getStudyDays();
     }
   }
@@ -61,7 +61,7 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   }
 
   int _getStudyDays() {
-    final studentId = SettingInitializer.auth.currentUsername!;
+    final studentId = KvStorageInitializer.auth.currentUsername!;
 
     if (studentId.isNotEmpty) {
       int entranceYear = 2000 + int.parse(studentId.substring(0, 2));
@@ -88,8 +88,8 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   }
 
   void _onWeatherUpdate(dynamic newWeather) {
-    SettingInitializer.home.lastWeather = newWeather;
-    campus = SettingInitializer.home.campus;
+    KvStorageInitializer.home.lastWeather = newWeather;
+    campus = KvStorageInitializer.home.campus;
 
     setState(() => currentWeather = newWeather as Weather);
   }

@@ -16,8 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:hive/hive.dart';
-import 'package:kite/setting/init.dart';
-import 'package:kite/util/validation.dart';
 
 import '../dao/auth.dart';
 
@@ -51,19 +49,4 @@ class AuthSettingStorage implements AuthSettingDao {
 
   @override
   set personName(String? foo) => box.put(AuthKeys.personName, foo);
-
-  @override
-  UserType? get userType {
-    final username = currentUsername;
-    // 若用户名存在
-    if (username != null && ssoPassword != null) {
-      // 已登录用户, 账号格式一定是合法的
-      return guessUserType(username)!;
-    }
-    // 若用户名不存在且新生用户存在
-    if (SettingInitializer.freshman.freshmanAccount != null) {
-      return UserType.freshman;
-    }
-    return null;
-  }
 }

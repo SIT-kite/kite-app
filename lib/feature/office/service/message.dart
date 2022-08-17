@@ -20,7 +20,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
-import 'package:kite/setting/init.dart';
+import 'package:kite/storage/init.dart';
 
 import '../entity/index.dart';
 
@@ -30,7 +30,7 @@ class OfficeMessageService extends AService {
   OfficeMessageService(ASession session) : super(session);
 
   Future<OfficeMessageCount> queryMessageCount() async {
-    String payload = 'code=${SettingInitializer.auth.currentUsername}';
+    String payload = 'code=${KvStorageInitializer.auth.currentUsername}';
 
     final response = await session.post(serviceMessageCount,
         data: payload, contentType: Headers.formUrlEncodedContentType, responseType: ResponseType.json);

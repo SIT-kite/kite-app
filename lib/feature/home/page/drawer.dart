@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/setting/init.dart';
+import 'package:kite/storage/init.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 class KiteDrawer extends Drawer {
@@ -24,13 +24,13 @@ class KiteDrawer extends Drawer {
 
   @override
   Widget build(BuildContext context) {
-    final inDays = DateTime.now().difference(SettingInitializer.home.installTime!).inDays;
+    final inDays = DateTime.now().difference(KvStorageInitializer.home.installTime!).inDays;
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: BoxDecoration(color: SettingInitializer.theme.color),
+            decoration: BoxDecoration(color: KvStorageInitializer.theme.color),
             child: Align(
                 alignment: Alignment.bottomLeft,
                 child: Text('小风筝已陪伴你 ${inDays} 天',

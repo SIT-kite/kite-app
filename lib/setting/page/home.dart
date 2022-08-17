@@ -19,7 +19,8 @@
 import 'package:flutter/material.dart';
 import 'package:kite/feature/home/entity/home.dart';
 import 'package:kite/global/global.dart';
-import 'package:kite/setting/init.dart';
+import 'package:kite/storage/init.dart';
+import 'package:kite/util/user.dart';
 
 String functionTypeToString(FunctionType type) {
   switch (type) {
@@ -79,7 +80,7 @@ class HomeSettingPage extends StatefulWidget {
 
 class _HomeSettingPageState extends State<HomeSettingPage> {
   List<FunctionType> homeItems =
-      SettingInitializer.home.homeItems ?? getDefaultFunctionList(SettingInitializer.auth.userType!);
+      KvStorageInitializer.home.homeItems ?? getDefaultFunctionList(AccountUtils.getUserType()!);
 
   void _onReorder(int oldIndex, int newIndex) {
     setState(() {
@@ -94,7 +95,7 @@ class _HomeSettingPageState extends State<HomeSettingPage> {
   }
 
   void _onSave() {
-    SettingInitializer.home.homeItems = homeItems;
+    KvStorageInitializer.home.homeItems = homeItems;
   }
 
   @override
@@ -124,7 +125,7 @@ class _HomeSettingPageState extends State<HomeSettingPage> {
           actions: [
             IconButton(
                 onPressed: () {
-                  setState(() => homeItems = getDefaultFunctionList(SettingInitializer.auth.userType!));
+                  setState(() => homeItems = getDefaultFunctionList(AccountUtils.getUserType()!));
                   _onSave();
                 },
                 icon: const Icon(Icons.restore_page_outlined))

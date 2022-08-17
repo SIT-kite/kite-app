@@ -20,7 +20,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/exception/session.dart';
-import 'package:kite/setting/init.dart';
+import 'package:kite/storage/init.dart';
 
 import '../entity/index.dart';
 import '../init.dart';
@@ -89,8 +89,8 @@ class _OfficePageState extends State<OfficePage> {
 
   Future<List<SimpleFunction>> _fetchFuncList() async {
     if (!OfficeInitializer.session.isLogin) {
-      final username = SettingInitializer.auth.currentUsername!;
-      final password = SettingInitializer.auth.ssoPassword!;
+      final username = KvStorageInitializer.auth.currentUsername!;
+      final password = KvStorageInitializer.auth.ssoPassword!;
       await OfficeInitializer.session.login(
         username: username,
         password: password,

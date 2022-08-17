@@ -21,7 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kite/component/webview.dart';
 import 'package:kite/component/webview_page.dart';
-import 'package:kite/setting/init.dart';
+import 'package:kite/storage/init.dart';
 import 'package:kite/util/rule.dart';
 
 const _reportUrlPrefix = 'http://xgfy.sit.edu.cn/h5/#/';
@@ -32,7 +32,7 @@ class DailyReportPage extends StatelessWidget {
 
   static Future<String> _getInjectJs() async {
     // TODO: 把 replace 完的 JS 缓存了
-    final String username = SettingInitializer.auth.currentUsername ?? '';
+    final String username = KvStorageInitializer.auth.currentUsername ?? '';
     final String css = await rootBundle.loadString('assets/report/inject.css');
     final String js = await rootBundle.loadString('assets/report/inject.js');
     return js.replaceFirst('{{username}}', username).replaceFirst('{{injectCSS}}', css);

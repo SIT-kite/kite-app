@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/setting/init.dart';
+import 'package:kite/storage/init.dart';
 
 import '../../../route.dart';
 
@@ -77,7 +77,8 @@ class _FreshmanPageState extends State<FreshmanPage> {
       trailing: const Icon(Icons.keyboard_arrow_right),
       onTap: () {
         // 若存在新生信息
-        if (SettingInitializer.freshman.freshmanSecret != null && SettingInitializer.freshman.freshmanSecret != null) {
+        if (KvStorageInitializer.freshman.freshmanSecret != null &&
+            KvStorageInitializer.freshman.freshmanSecret != null) {
           Navigator.of(context).pushNamed(function.name);
           return;
         }

@@ -20,8 +20,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_session.dart';
-import 'package:kite/setting/dao/jwt.dart';
-import 'package:kite/setting/init.dart';
+import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
 
 import '../feature/kite/entity/account.dart';
@@ -61,8 +60,8 @@ class KiteSession extends ASession {
     } on KiteApiError catch (e, _) {
       if (e.code == 100) {
         await login(
-          SettingInitializer.auth.currentUsername!,
-          SettingInitializer.auth.ssoPassword!,
+          KvStorageInitializer.auth.currentUsername!,
+          KvStorageInitializer.auth.ssoPassword!,
         );
       }
       return await normallyRequest();

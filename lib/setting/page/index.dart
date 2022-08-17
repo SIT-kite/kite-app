@@ -25,11 +25,10 @@ import 'package:kite/global/global.dart';
 import 'package:kite/global/hive_initializer.dart';
 import 'package:kite/global/init.dart';
 import 'package:kite/route.dart';
-import 'package:kite/setting/dao/auth.dart';
-import 'package:kite/setting/init.dart';
-import 'package:kite/setting/storage/index.dart';
+import 'package:kite/storage/init.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
+import 'package:kite/util/user.dart';
 import 'package:kite/util/validation.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -56,13 +55,13 @@ class SettingPage extends StatelessWidget {
     final savePath = '${(await getApplicationDocumentsDirectory()).path}/background';
 
     await image?.saveTo(savePath);
-    SettingInitializer.home.background = savePath;
+    KvStorageInitializer.home.background = savePath;
     Global.eventBus.emit(EventNameConstants.onBackgroundChange);
   }
 
   void _testPassword(BuildContext context) async {
-    final user = SettingInitializer.auth.currentUsername;
-    final password = SettingInitializer.auth.ssoPassword;
+    final user = KvStorageInitializer.auth.currentUsername;
+    final password = KvStorageInitializer.auth.ssoPassword;
     try {
       await Global.ssoSession.login(user!, password!);
       showBasicFlash(context, const Text('用户名和密码正确'));
@@ -90,7 +89,7 @@ class SettingPage extends StatelessWidget {
           return TextButton(
               onPressed: () async {
                 Log.info('退出登录');
-                SettingInitializer.auth
+                KvStorageInitializer.auth
                   ..currentUsername = null
                   ..ssoPassword = null;
 
@@ -123,15 +122,15 @@ class SettingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _passwordController.text = SettingInitializer.auth.ssoPassword ?? '';
-    isFreshman = SettingInitializer.auth.userType == UserType.freshman;
+    _passwordController.text = KvStorageInitializer.auth.ssoPassword ?? '';
+    isFreshman = AccountUtils.getUserType() == UserType.freshman;
     return SettingsScreen(title: '设置', children: [
       SettingsGroup(
         title: '个性化',
         children: <Widget>[
           ColorPickerSettingsTile(
             settingKey: ThemeKeys.themeColor,
-            defaultValue: SettingInitializer.theme.color,
+            defaultValue: KvStorageInitializer.theme.color,
             title: '主题色',
             onChange: (newColor) => DynamicColorTheme.of(context).setColor(
               color: newColor,
@@ -140,7 +139,7 @@ class SettingPage extends StatelessWidget {
           ),
           SwitchSettingsTile(
             settingKey: ThemeKeys.isDarkMode,
-            defaultValue: SettingInitializer.theme.isDarkMode,
+            defaultValue: KvStorageInitializer.theme.isDarkMode,
             title: '夜间模式',
             subtitle: '开启夜间模式以保护视力，部分颜色显示可能异常',
             leading: const Icon(Icons.dark_mode),
@@ -158,9 +157,9 @@ class SettingPage extends StatelessWidget {
               1: '实时天气',
               2: '静态图片',
             },
-            selected: SettingInitializer.home.backgroundMode,
+            selected: KvStorageInitializer.home.backgroundMode,
             onChange: (value) {
-              SettingInitializer.home.backgroundMode = value;
+              KvStorageInitializer.home.backgroundMode = value;
               Global.eventBus.emit(EventNameConstants.onBackgroundChange);
             },
           ),
@@ -172,9 +171,9 @@ class SettingPage extends StatelessWidget {
               1: '奉贤',
               2: '徐汇',
             },
-            selected: SettingInitializer.home.campus,
+            selected: KvStorageInitializer.home.campus,
             onChange: (value) {
-              SettingInitializer.home.campus = value;
+              KvStorageInitializer.home.campus = value;
               Global.eventBus.emit(EventNameConstants.onCampusChange);
             },
           ),
@@ -189,13 +188,13 @@ class SettingPage extends StatelessWidget {
       SettingsGroup(title: '网络', children: <Widget>[
         SwitchSettingsTile(
           settingKey: '/network/useProxy',
-          defaultValue: SettingInitializer.network.useProxy,
+          defaultValue: KvStorageInitializer.network.useProxy,
           title: '使用 HTTP 代理',
           subtitle: '通过 HTTP 代理连接校园网',
           leading: const Icon(Icons.vpn_key),
           onChange: (value) async {
             if (value) {
-              SettingInitializer.network.useProxy = value;
+              KvStorageInitializer.network.useProxy = value;
               await Initializer.init();
             }
           },
@@ -203,11 +202,11 @@ class SettingPage extends StatelessWidget {
             TextInputSettingsTile(
               title: '代理地址',
               settingKey: '/network/proxy',
-              initialValue: SettingInitializer.network.proxy,
+              initialValue: KvStorageInitializer.network.proxy,
               validator: proxyValidator,
               onChange: (value) async {
-                SettingInitializer.network.proxy = value;
-                if (SettingInitializer.network.useProxy) {
+                KvStorageInitializer.network.proxy = value;
+                if (KvStorageInitializer.network.useProxy) {
                   await Initializer.init();
                 }
               },
@@ -228,7 +227,7 @@ class SettingPage extends StatelessWidget {
             TextInputSettingsTile(
               title: '学号',
               settingKey: AuthKeys.currentUsername,
-              initialValue: SettingInitializer.auth.currentUsername ?? '',
+              initialValue: KvStorageInitializer.auth.currentUsername ?? '',
               validator: studentIdValidator,
             ),
             ModalSettingsTile(
@@ -236,7 +235,7 @@ class SettingPage extends StatelessWidget {
               subtitle: '修改小风筝使用的 OA 密码',
               showConfirmation: true,
               onConfirm: () {
-                SettingInitializer.auth.ssoPassword = _passwordController.text;
+                KvStorageInitializer.auth.ssoPassword = _passwordController.text;
                 return true;
               },
               children: [

@@ -20,8 +20,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_session.dart';
-import 'package:kite/setting/dao/jwt.dart';
-import 'package:kite/setting/init.dart';
+import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
 
 class SitAppSession extends ASession {
@@ -31,14 +30,15 @@ class SitAppSession extends ASession {
   SitAppSession(this.dio, this.jwtDao);
 
   @override
-  Future<Response> request(String url,
-      String method, {
-        Map<String, String>? queryParameters,
-        data,
-        Options? options,
-        String? contentType,
-        ResponseType? responseType,
-      }) async {
+  Future<Response> request(
+    String url,
+    String method, {
+    Map<String, String>? queryParameters,
+    data,
+    Options? options,
+    String? contentType,
+    ResponseType? responseType,
+  }) async {
     Future<Response> normallyRequest() async {
       return await _requestWithoutRetry(
         url,
@@ -56,22 +56,23 @@ class SitAppSession extends ASession {
     } on SitAppApiError catch (e, _) {
       if (e.code == 500) {
         await login(
-          SettingInitializer.auth.currentUsername!,
-          SettingInitializer.auth.ssoPassword!,
+          KvStorageInitializer.auth.currentUsername!,
+          KvStorageInitializer.auth.ssoPassword!,
         );
       }
       return await normallyRequest();
     }
   }
 
-  Future<Response> _requestWithoutRetry(String url,
-      String method, {
-        Map<String, String>? queryParameters,
-        data,
-        Options? options,
-        String? contentType,
-        ResponseType? responseType,
-      }) async {
+  Future<Response> _requestWithoutRetry(
+    String url,
+    String method, {
+    Map<String, String>? queryParameters,
+    data,
+    Options? options,
+    String? contentType,
+    ResponseType? responseType,
+  }) async {
     String? token = jwtDao.jwtToken;
     final response = await dio.request(
       url,

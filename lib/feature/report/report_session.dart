@@ -20,7 +20,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_session.dart';
-import 'package:kite/setting/init.dart';
+import 'package:kite/storage/init.dart';
 
 class ReportSession extends ASession {
   final Dio dio;
@@ -54,7 +54,7 @@ class ReportSession extends ASession {
 
     // Make default options.
     final String ts = _getTimestamp();
-    final String sign = _sign(SettingInitializer.auth.currentUsername ?? '', ts);
+    final String sign = _sign(KvStorageInitializer.auth.currentUsername ?? '', ts);
     final Map<String, dynamic> newHeaders = {'ts': ts, 'decodes': sign};
 
     newOptions.headers == null ? newOptions.headers = newHeaders : newOptions.headers?.addAll(newHeaders);

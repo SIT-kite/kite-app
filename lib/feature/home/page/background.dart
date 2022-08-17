@@ -25,7 +25,7 @@ import 'package:flutter_weather_bg_null_safety/utils/weather_type.dart';
 import 'package:kite/feature/kite/entity/weather.dart';
 import 'package:kite/global/desktop_initializer.dart';
 import 'package:kite/global/global.dart';
-import 'package:kite/setting/init.dart';
+import 'package:kite/storage/init.dart';
 import 'package:kite/util/flash.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -43,7 +43,7 @@ class _HomeBackgroundState extends State<HomeBackground> {
 
   @override
   void initState() {
-    _weatherCode = widget.initialWeatherCode ?? int.parse(SettingInitializer.home.lastWeather.icon);
+    _weatherCode = widget.initialWeatherCode ?? int.parse(KvStorageInitializer.home.lastWeather.icon);
     super.initState();
     Global.eventBus.on(EventNameConstants.onBackgroundChange, _onBackgroundUpdate);
     Global.eventBus.on(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
@@ -80,7 +80,7 @@ class _HomeBackgroundState extends State<HomeBackground> {
   }
 
   void _onBackgroundUpdate(_) {
-    if (SettingInitializer.home.background == null) {
+    if (KvStorageInitializer.home.background == null) {
       showBasicFlash(context, const Text('你还没有设置背景图片'));
       return;
     }
@@ -91,7 +91,7 @@ class _HomeBackgroundState extends State<HomeBackground> {
     Weather w = newWeather as Weather;
 
     // 天气背景
-    if (SettingInitializer.home.backgroundMode == 1) {
+    if (KvStorageInitializer.home.backgroundMode == 1) {
       setState(() => _weatherCode = int.parse(w.icon));
     } else {
       _weatherCode = int.parse(w.icon);
@@ -107,14 +107,14 @@ class _HomeBackgroundState extends State<HomeBackground> {
   }
 
   Widget _buildImageBg() {
-    final path = SettingInitializer.home.background!;
+    final path = KvStorageInitializer.home.background!;
     return Image.file(File(path), fit: BoxFit.fill);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (SettingInitializer.home.backgroundMode == 2) {
-      if (SettingInitializer.home.background != null) {
+    if (KvStorageInitializer.home.backgroundMode == 2) {
+      if (KvStorageInitializer.home.background != null) {
         return _buildImageBg();
       } else {
         Future.delayed(

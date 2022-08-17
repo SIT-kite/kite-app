@@ -18,7 +18,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_session.dart';
-import 'package:kite/setting/dao/index.dart';
+import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
 
 class FreshmanSession extends ASession {
@@ -30,17 +30,20 @@ class FreshmanSession extends ASession {
   }
 
   @override
-  Future<Response> request(String url,
-      String method, {
-        Map<String, String>? queryParameters,
-        data,
-        Options? options,
-        String? contentType,
-        ResponseType? responseType,
-      }) async {
-    Future<Response> myRequest(dynamic data1,
-        String url1,
-        Map<String, String>? queryParameters1,) async {
+  Future<Response> request(
+    String url,
+    String method, {
+    Map<String, String>? queryParameters,
+    data,
+    Options? options,
+    String? contentType,
+    ResponseType? responseType,
+  }) async {
+    Future<Response> myRequest(
+      dynamic data1,
+      String url1,
+      Map<String, String>? queryParameters1,
+    ) async {
       return await _session.request(
         url1,
         method,

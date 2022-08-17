@@ -21,7 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/feature/library/search/entity/hot_search.dart';
 import 'package:kite/feature/library/search/init.dart';
 import 'package:kite/global/global.dart';
-import 'package:kite/setting/init.dart';
+import 'package:kite/storage/init.dart';
 
 import 'index.dart';
 
@@ -68,7 +68,7 @@ class _LibraryItemState extends State<LibraryItem> {
     final hotItem = monthlyHot[randomIndex];
 
     final result = '热搜: ${hotItem.hotSearchWord} (${hotItem.count})';
-    SettingInitializer.home.lastHotSearch = result;
+    KvStorageInitializer.home.lastHotSearch = result;
     return result;
   }
 
@@ -76,7 +76,7 @@ class _LibraryItemState extends State<LibraryItem> {
   Widget build(BuildContext context) {
     // 如果是首屏加载
     if (content == null) {
-      final lastHotSearch = SettingInitializer.home.lastHotSearch;
+      final lastHotSearch = KvStorageInitializer.home.lastHotSearch;
       content = lastHotSearch ?? defaultContent;
     }
     return HomeFunctionButton(route: '/library', icon: 'assets/home/icon_library.svg', title: '图书馆', subtitle: content);

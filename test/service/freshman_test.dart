@@ -2,12 +2,12 @@ import 'package:kite/feature/freshman/dao.dart';
 import 'package:kite/feature/freshman/entity.dart';
 import 'package:kite/feature/freshman/init.dart';
 import 'package:kite/mock/index.dart';
-import 'package:kite/setting/init.dart';
+import 'package:kite/storage/init.dart';
 
 void main() async {
   await init();
   FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
-  SettingInitializer.freshman
+  KvStorageInitializer.freshman
     ..freshmanAccount = '郑欣宇'
     ..freshmanSecret = '273326';
   //  备用测试信息

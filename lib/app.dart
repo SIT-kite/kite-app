@@ -24,10 +24,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/route.dart';
+import 'package:kite/util/user.dart';
 
 import 'feature/page_index.dart';
 import 'global/global.dart';
-import 'setting/init.dart';
+import 'storage/init.dart';
 import 'util/logger.dart';
 
 const title = '上应小风筝';
@@ -84,9 +85,9 @@ class KiteApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = SettingInitializer.theme.isDarkMode;
-    final primaryColor = SettingInitializer.theme.color;
-    final home = SettingInitializer.auth.userType != null ? const HomePage() : const WelcomePage();
+    final isDark = KvStorageInitializer.theme.isDarkMode;
+    final primaryColor = KvStorageInitializer.theme.color;
+    final home = AccountUtils.getUserType() != null ? const HomePage() : const WelcomePage();
 
     buildMaterialWithTheme(ThemeData theme) {
       return MaterialApp(

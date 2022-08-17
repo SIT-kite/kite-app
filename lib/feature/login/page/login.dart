@@ -22,7 +22,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/exception/session.dart';
 import 'package:kite/launch.dart';
 import 'package:kite/route.dart';
-import 'package:kite/setting/init.dart';
+import 'package:kite/storage/init.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/validation.dart';
 
@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
     try {
       await LoginInitializer.ssoSession.login(username, password);
       final personName = await LoginInitializer.authServerService.getPersonName();
-      SettingInitializer.auth
+      KvStorageInitializer.auth
         ..currentUsername = username
         ..ssoPassword = password
         ..personName = personName;
@@ -94,8 +94,8 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
 
-    String? username = SettingInitializer.auth.currentUsername;
-    String? password = SettingInitializer.auth.ssoPassword;
+    String? username = KvStorageInitializer.auth.currentUsername;
+    String? password = KvStorageInitializer.auth.ssoPassword;
     if (username != null) {
       _usernameController.text = username;
       _passwordController.text = password ?? '';
@@ -200,7 +200,7 @@ class _LoginPageState extends State<LoginPage> {
         controller.dismiss();
         isProxySettingShown = false;
 
-        SettingInitializer.network
+        KvStorageInitializer.network
           ..useProxy = true
           ..proxy = inputText;
         // TODO
@@ -215,7 +215,7 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
     isProxySettingShown = true;
-    _proxyInputController.text = SettingInitializer.network.proxy;
+    _proxyInputController.text = KvStorageInitializer.network.proxy;
 
     context.showFlashBar(
       persistent: true,

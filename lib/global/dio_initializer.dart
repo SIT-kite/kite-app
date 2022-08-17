@@ -21,7 +21,7 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:fk_user_agent/fk_user_agent.dart';
-import 'package:kite/setting/init.dart';
+import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/rule.dart';
 
@@ -110,7 +110,7 @@ class KiteHttpOverrides extends HttpOverrides {
     final client = super.createHttpClient(context);
 
     // 设置证书检查
-    if (config.allowBadCertificate || SettingInitializer.network.useProxy || config.httpProxy != null) {
+    if (config.allowBadCertificate || KvStorageInitializer.network.useProxy || config.httpProxy != null) {
       client.badCertificateCallback = (cert, host, port) => true;
     }
 
@@ -126,9 +126,9 @@ class KiteHttpOverrides extends HttpOverrides {
         // 不行
         Log.info('测试环境代理服务器为空或不合法，将不使用代理服务器');
       }
-    } else if (SettingInitializer.network.useProxy && SettingInitializer.network.proxy.isNotEmpty) {
+    } else if (KvStorageInitializer.network.useProxy && KvStorageInitializer.network.proxy.isNotEmpty) {
       Log.info('线上设置代理: ${config.httpProxy}');
-      client.findProxy = (url) => getProxyPolicyByUrl(url, SettingInitializer.network.proxy);
+      client.findProxy = (url) => getProxyPolicyByUrl(url, KvStorageInitializer.network.proxy);
     }
     return client;
   }
