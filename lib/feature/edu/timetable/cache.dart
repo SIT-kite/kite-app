@@ -16,27 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import '../entity/timetable.dart';
+import 'entity.dart';
 
 /// 某一天课程的缓存
 class TableCache {
-  static final Map<int, List<Course>> _cache = {};
+  final Map<int, List<Course>> _cache = {};
 
   TableCache();
 
-  static List<Course> get(int week, int day) {
+  List<Course> get(int week, int day) {
     return _cache[week * 10 + day] ?? [];
   }
 
-  static void put(int week, int day, List<Course> courseList) {
+  void put(int week, int day, List<Course> courseList) {
     _cache[week * 10 + day] = courseList;
   }
 
-  static void clear() {
+  void clear() {
     _cache.clear();
   }
 
-  static List<Course> filterCourseOnDay(List<Course> allCourses, int week, int day) {
+  List<Course> filterCourseOnDay(List<Course> allCourses, int week, int day) {
     List<Course> filtered = get(week, day);
     if (filtered.isNotEmpty) {
       return filtered;

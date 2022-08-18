@@ -20,12 +20,11 @@ import 'dart:core';
 import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
-import '../../common/entity/index.dart';
-import '../../util/convert_util.dart';
-import '../dao/timetable.dart';
-import '../entity/timetable.dart';
+import '../common/entity/index.dart';
+import '../util/convert_util.dart';
+import 'entity.dart';
 
-class TimetableService extends AService implements TimetableDao {
+class TimetableService extends AService {
   static const _timetableUrl = 'http://jwxt.sit.edu.cn/jwglxt/kbcx/xskbcx_cxXsgrkb.html';
 
   TimetableService(ASession session) : super(session);
@@ -37,7 +36,6 @@ class TimetableService extends AService implements TimetableDao {
   }
 
   /// 获取课表
-  @override
   Future<List<Course>> getTimetable(SchoolYear schoolYear, Semester semester) async {
     final response = await session.post(
       _timetableUrl,

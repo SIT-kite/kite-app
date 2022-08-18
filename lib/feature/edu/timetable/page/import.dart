@@ -23,9 +23,7 @@ import 'package:kite/feature/edu/common/entity/index.dart';
 import 'package:kite/feature/edu/util/selector.dart';
 import 'package:kite/util/alert_dialog.dart';
 
-import '../entity/timetable.dart';
-import '../init.dart';
-import 'cache.dart';
+import '../entity.dart';
 
 class TimetableImportPage extends StatefulWidget {
   const TimetableImportPage({Key? key}) : super(key: key);
@@ -121,23 +119,23 @@ class _TimetableImportPageState extends State<TimetableImportPage> {
 
   ///更新时间的方法
   Future<void> updateData() async {
-    TimetableInitializer.timetableStorage.currentYear = SchoolYear(selectedYear);
+    // TimetableInitializer.timetableStorage.currentYear = SchoolYear(selectedYear);
   }
 
   Future<List<Course>> _updateTimetable() async {
-    final timetable =
-        await TimetableInitializer.timetableService.getTimetable(SchoolYear(selectedYear), selectedSemester);
+    // final timetable =
+    //     await TimetableInitializer.timetableService.getTimetable(SchoolYear(selectedYear), selectedSemester);
+    //
+    // await TimetableInitializer.timetableStorage.clear();
+    // TimetableInitializer.timetableStorage.addAll(timetable);
+    //
+    // TimetableInitializer.timetableStorage.currentYear = SchoolYear(selectedYear);
+    // TimetableInitializer.timetableStorage.currentSemester = selectedSemester;
+    // TimetableInitializer.timetableStorage.startDate = selectedDate.value;
+    //
+    // TableCache.clear();
 
-    await TimetableInitializer.timetableStorage.clear();
-    TimetableInitializer.timetableStorage.addAll(timetable);
-
-    TimetableInitializer.timetableStorage.currentYear = SchoolYear(selectedYear);
-    TimetableInitializer.timetableStorage.currentSemester = selectedSemester;
-    TimetableInitializer.timetableStorage.startDate = selectedDate.value;
-
-    TableCache.clear();
-
-    return timetable;
+    return [];
   }
 
   @override

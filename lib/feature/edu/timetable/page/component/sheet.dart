@@ -17,7 +17,7 @@
  */
 import 'package:flutter/material.dart';
 
-import '../../entity/timetable.dart';
+import '../../entity.dart';
 import '../util.dart';
 
 class Sheet extends StatelessWidget {

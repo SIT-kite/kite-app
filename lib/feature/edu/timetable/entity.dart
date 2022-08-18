@@ -19,7 +19,7 @@ import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kite/global/hive_type_id_pool.dart';
 
-part 'timetable.g.dart';
+part 'entity.g.dart';
 
 @HiveType(typeId: HiveTypeIdPool.courseItem)
 @JsonSerializable()
@@ -158,4 +158,10 @@ class Course extends HiveObject {
     }
     return result;
   }
+}
+
+/// 课表显示模式
+enum DisplayMode {
+  daily,
+  weekly,
 }

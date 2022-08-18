@@ -18,9 +18,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../util/icon.dart';
-import '../../entity/timetable.dart';
+import '../../entity.dart';
 import '../../init.dart';
-import '../cache.dart';
 import '../util.dart';
 import 'header.dart';
 import 'sheet.dart';
@@ -129,7 +128,7 @@ class DailyTimetableState extends State<DailyTimetable> {
   Widget _pageBuilder(BuildContext context, int index, List<Course> allCourses) {
     int week = index ~/ 7 + 1;
     int day = index % 7 + 1;
-    final List<Course> todayCourse = TableCache.filterCourseOnDay(allCourses, week, day);
+    final List<Course> todayCourse = TimetableInitializer.tableCache.filterCourseOnDay(allCourses, week, day);
 
     return Column(
       children: [

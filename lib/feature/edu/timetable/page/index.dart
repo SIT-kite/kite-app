@@ -19,8 +19,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:ical/serializer.dart';
-import 'package:kite/feature/edu/timetable/dao/timetable.dart';
 import 'package:kite/feature/edu/timetable/init.dart';
+import 'package:kite/route.dart';
 import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
@@ -29,22 +29,16 @@ import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../../common/entity/index.dart';
-import '../entity/timetable.dart';
-import 'cache.dart';
+import '../entity.dart';
 import 'component/daily.dart';
 import 'component/weekly.dart';
 import 'util.dart';
-
-/// 课表模式
-const displayModeDaily = 0;
-const displayModeWeekly = 1;
 
 class TimetablePage extends StatefulWidget {
   const TimetablePage({Key? key}) : super(key: key);
 
   @override
-  _TimetablePageState createState() => _TimetablePageState();
+  State<TimetablePage> createState() => _TimetablePageState();
 }
 
 class _TimetablePageState extends State<TimetablePage> {
@@ -52,24 +46,29 @@ class _TimetablePageState extends State<TimetablePage> {
   /// TODO 还没用上
   // static const int maxWeekCount = 20;
 
-  TimetableStorageDao get timetableStorage => TimetableInitializer.timetableStorage;
+  final timetableStorage = TimetableInitializer.timetableStorage;
+  final cache = TimetableInitializer.tableCache;
 
-  // 模式：周课表 日课表
-  int displayMode = TimetableInitializer.timetableStorage.lastMode ?? displayModeDaily;
   bool isRefreshing = false;
 
   final currentKey = GlobalKey();
 
-  final SchoolYear currSchoolYear = TimetableInitializer.timetableStorage.currentYear ?? const SchoolYear(2021);
-  final currSemester = TimetableInitializer.timetableStorage.currentSemester ?? Semester.secondTerm;
+  // 模式：周课表 日课表
+  late DisplayMode displayMode;
 
   // 课程表
   late List<Course> timetable;
 
+  void initAllLate() {
+    displayMode = timetableStorage.lastMode ?? DisplayMode.daily; // 初始化late变量
+    timetableStorage.lastMode = displayMode; // 持久化
+
+    timetable = timetableStorage.currentTable ?? [];
+  }
+
   @override
   void initState() {
-    TableCache.clear();
-
+    initAllLate();
     Future.delayed(Duration.zero, () async {
       if (timetable.isEmpty) {
         if (await showAlertDialog(
@@ -92,35 +91,6 @@ class _TimetablePageState extends State<TimetablePage> {
       }
     });
     super.initState();
-  }
-
-  Future<List<Course>> _fetchTimetable() async {
-    final timetable = await TimetableInitializer.timetableService.getTimetable(currSchoolYear, currSemester);
-
-    await timetableStorage.clear();
-    timetableStorage.addAll(timetable);
-    return timetable;
-  }
-
-  ///刷新的方法
-  Future<void> _onRefresh() async {
-    if (isRefreshing) {
-      return;
-    }
-    isRefreshing = true;
-    try {
-      final newTimetable = await _fetchTimetable();
-      TableCache.clear();
-
-      setState(() => timetable = newTimetable);
-      showBasicFlash(context, const Text('加载成功'));
-    } catch (e) {
-      showBasicFlash(context, Text('加载失败: ${e.toString().split('\n')[0]}'));
-      rethrow;
-    } finally {
-      isRefreshing = false;
-    }
-    // 刷新界面
   }
 
   ///导出的方法
@@ -156,10 +126,18 @@ class _TimetablePageState extends State<TimetablePage> {
     OpenFile.open(path, type: 'text/calendar');
   }
 
+  /// 根据本地缓存刷新课表
+  void _onRefresh() {
+    setState(() => timetable = timetableStorage.currentTable ?? []);
+    showBasicFlash(context, const Text('加载成功'));
+  }
+
   ///更多菜单回调方法
   PopupMenuButton _buildPopupMenu(BuildContext context) {
     final List<Function()> callback = [
-      () => Navigator.of(context).pushNamed('/timetable/import').then((value) => value == true ? _onRefresh() : null),
+      () => Navigator.of(context)
+          .pushNamed(RouteTable.timetableImport)
+          .then((value) => value == true ? _onRefresh() : null),
       _onRefresh,
       _onExport,
     ];
@@ -169,7 +147,7 @@ class _TimetablePageState extends State<TimetablePage> {
       onSelected: (index) => callback[index](),
       itemBuilder: (BuildContext ctx) {
         return const <PopupMenuEntry>[
-          PopupMenuItem(value: 0, child: Text('导入')),
+          PopupMenuItem(value: 0, child: Text('导入课表')),
           PopupMenuItem(value: 1, child: Text('刷新')),
           PopupMenuItem(value: 2, child: Text('导出日历')),
         ];
@@ -179,7 +157,7 @@ class _TimetablePageState extends State<TimetablePage> {
 
   ///跳到今天的方法
   void _onPressJumpToday() {
-    if (displayMode == displayModeDaily) {
+    if (displayMode == DisplayMode.daily) {
       (currentKey.currentState as DailyTimetableState).jumpToday();
     } else {
       (currentKey.currentState as WeeklyTimetableState).jumpToday();
@@ -191,12 +169,11 @@ class _TimetablePageState extends State<TimetablePage> {
     return IconButton(
       icon: const Icon(Icons.swap_horiz),
       onPressed: () {
-        if (displayMode == displayModeDaily) {
-          setState(() => displayMode = displayModeWeekly);
-        } else {
-          setState(() => displayMode = displayModeDaily);
-        }
-        timetableStorage.lastMode = displayMode;
+        // 显示有0和1两种模式，可通过(x+1) & 2进行来会切换
+        setState(() {
+          displayMode = DisplayMode.values[(displayMode.index + 1) & 1];
+        });
+        timetableStorage.lastMode = displayMode; // 持久化变更
       },
     );
   }
@@ -209,7 +186,7 @@ class _TimetablePageState extends State<TimetablePage> {
 
   @override
   Widget build(BuildContext context) {
-    timetable = TimetableInitializer.timetableStorage.getTimetable();
+    timetable = timetableStorage.currentTable!;
 
     return Scaffold(
       appBar: AppBar(title: const Text('课程表'), actions: <Widget>[
@@ -217,7 +194,7 @@ class _TimetablePageState extends State<TimetablePage> {
         _buildPopupMenu(context),
       ]),
       floatingActionButton: _buildFloatingButton(),
-      body: displayMode == displayModeDaily
+      body: displayMode == DisplayMode.daily
           ? DailyTimetable(timetable, key: currentKey)
           : WeeklyTimetable(timetable, key: currentKey),
     );
