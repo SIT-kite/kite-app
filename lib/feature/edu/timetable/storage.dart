@@ -70,12 +70,18 @@ class TimetableStorage {
 
   /// 添加课表
   void addTable(TimetableMeta meta, List<Course> courses) {
+    tableNames = [meta.name, ...((tableNames ?? []).where((n) => n != meta.name))];
     addTableMeta(meta.name, meta);
     addTableCourses(meta.name, courses);
   }
 
   /// 删除课表
   void removeTable(String name) {
+    // 如果删除的是当前正在使用的课表
+    if (name == currentTableName) {
+      currentTableName = null;
+    }
+    tableNames = (tableNames ?? []).where((n) => n != name).toList();
     [
       TimetableKeys.buildTableMetaKeyByName(name),
       TimetableKeys.buildTableCoursesKeyByName(name),

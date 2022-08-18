@@ -100,16 +100,18 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
         Expanded(flex: 1, child: DateHeader(week, -1)),
         Expanded(
           flex: 10,
-          child: SingleChildScrollView(
-            controller: ScrollController(),
-            child: Row(
-              textDirection: TextDirection.ltr,
-              children: [
-                Expanded(flex: 2, child: _buildLeftColumn()),
-                Expanded(flex: 21, child: TableGrids(widget.allCourses, week))
-              ],
-            ),
-          ),
+          child: widget.allCourses.isEmpty
+              ? const Center(child: Text('这周没有课哦'))
+              : SingleChildScrollView(
+                  controller: ScrollController(),
+                  child: Row(
+                    textDirection: TextDirection.ltr,
+                    children: [
+                      Expanded(flex: 2, child: _buildLeftColumn()),
+                      Expanded(flex: 21, child: TableGrids(widget.allCourses, week))
+                    ],
+                  ),
+                ),
         ),
       ],
     );

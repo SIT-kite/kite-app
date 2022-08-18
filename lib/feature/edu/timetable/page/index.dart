@@ -67,27 +67,28 @@ class _TimetablePageState extends State<TimetablePage> {
   @override
   void initState() {
     initAllLate();
-    Future.delayed(Duration.zero, () async {
-      if (timetable.isEmpty) {
-        if (await showAlertDialog(
-              context,
-              title: '导入课表',
-              content: [
-                const Text(
-                  '看起来您第一次使用小风筝课表功能\n'
-                  '第一次使用时请先完成课表导入',
-                ),
-              ],
-              actionWidgetList: [
-                ElevatedButton(onPressed: () {}, child: const Text('导入课表')),
-                TextButton(onPressed: () {}, child: const Text('暂时不想')),
-              ],
-            ) ==
-            0) {
+    if (timetable.isEmpty) {
+      Future.delayed(Duration.zero, () async {
+        final select = await showAlertDialog(
+          context,
+          title: '导入课表',
+          content: [
+            const Text(
+              '看起来您第一次使用小风筝课表功能\n'
+              '第一次使用时请先完成课表导入',
+            ),
+          ],
+          actionWidgetList: [
+            ElevatedButton(onPressed: () {}, child: const Text('导入课表')),
+            TextButton(onPressed: () {}, child: const Text('暂时不想')),
+          ],
+        );
+        if (select == 0) {
+          await Navigator.of(context).pushNamed(RouteTable.timetableImport);
           _onRefresh();
         }
-      }
-    });
+      });
+    }
     super.initState();
   }
 
@@ -127,15 +128,14 @@ class _TimetablePageState extends State<TimetablePage> {
   /// 根据本地缓存刷新课表
   void _onRefresh() {
     setState(() => timetable = timetableStorage.currentTableCourses ?? []);
+    cache.clear();
     showBasicFlash(context, const Text('加载成功'));
   }
 
   ///更多菜单回调方法
   PopupMenuButton _buildPopupMenu(BuildContext context) {
     final List<Function()> callback = [
-      () => Navigator.of(context)
-          .pushNamed(RouteTable.timetableImport)
-          .then((value) => value == true ? _onRefresh() : null),
+      () => Navigator.of(context).pushNamed(RouteTable.timetableImport).then((value) => _onRefresh()),
       _onRefresh,
       _onExport,
     ];
@@ -182,6 +182,12 @@ class _TimetablePageState extends State<TimetablePage> {
     return FloatingActionButton(onPressed: _onPressJumpToday, child: Text('今', style: textStyle));
   }
 
+  Widget _buildBody() {
+    return displayMode == DisplayMode.daily
+        ? DailyTimetable(timetable, key: currentKey)
+        : WeeklyTimetable(timetable, key: currentKey);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -190,9 +196,7 @@ class _TimetablePageState extends State<TimetablePage> {
         _buildPopupMenu(context),
       ]),
       floatingActionButton: _buildFloatingButton(),
-      body: displayMode == DisplayMode.daily
-          ? DailyTimetable(timetable, key: currentKey)
-          : WeeklyTimetable(timetable, key: currentKey),
+      body: _buildBody(),
     );
   }
 }

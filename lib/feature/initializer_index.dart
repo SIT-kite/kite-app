@@ -60,4 +60,5 @@ void registerAdapters() {
   registerAdapter(LibrarySearchHistoryItemAdapter());
   registerAdapter(UserEventAdapter());
   registerAdapter(UserEventTypeAdapter());
+  registerAdapter(TimetableMetaAdapter());
 }

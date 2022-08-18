@@ -19,11 +19,20 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:kite/feature/edu/common/entity/index.dart';
 import 'package:kite/feature/edu/util/selector.dart';
+import 'package:kite/util/alert_dialog.dart';
 
 import '../entity.dart';
 import '../init.dart';
+
+const _semesterDescription = {
+  Semester.all: '全学年',
+  Semester.firstTerm: '第一学期',
+  Semester.secondTerm: '第二学期',
+};
 
 class TimetableImportDialog extends StatefulWidget {
   const TimetableImportDialog({Key? key}) : super(key: key);
@@ -44,13 +53,16 @@ class _TimetableImportDialogState extends State<TimetableImportDialog> {
 
   final ValueNotifier<DateTime> selectedDate = ValueNotifier(DateTime.now());
 
+  final tableNameController = TextEditingController();
+  final tableDescriptionController = TextEditingController();
+
   @override
   void initState() {
     final DateTime now = DateTime.now();
     // 先根据当前时间估算出是哪个学期
     selectedYear = (now.month >= 9 ? now.year : now.year - 1);
     selectedSemester = (now.month >= 3 && now.month <= 7) ? Semester.secondTerm : Semester.firstTerm;
-
+    _updateTableName();
     super.initState();
   }
 
@@ -60,9 +72,11 @@ class _TimetableImportDialogState extends State<TimetableImportDialog> {
       child: SemesterSelector(
         yearSelectCallback: (year) {
           setState(() => selectedYear = year);
+          _updateTableName();
         },
         semesterSelectCallback: (semester) {
           setState(() => selectedSemester = semester);
+          _updateTableName();
         },
         initialYear: selectedYear,
         initialSemester: selectedSemester,
@@ -70,6 +84,12 @@ class _TimetableImportDialogState extends State<TimetableImportDialog> {
         showNextYear: true,
       ),
     );
+  }
+
+  void _updateTableName() {
+    final year = selectedYear;
+    final semester = selectedSemester;
+    tableNameController.text = '$year - ${year + 1} 学年 ${_semesterDescription[semester]} 课表';
   }
 
   Widget _buildBody() {
@@ -109,39 +129,65 @@ class _TimetableImportDialogState extends State<TimetableImportDialog> {
             children: [
               TextFormField(
                 autofocus: true,
+                controller: tableNameController,
                 decoration: const InputDecoration(labelText: '课表名称'),
+              ),
+              TextFormField(
+                autofocus: true,
+                controller: tableDescriptionController,
+                decoration: const InputDecoration(labelText: '课表备注'),
               ),
             ],
           ),
+        ),
+        SizedBox(
+          height: 10.h,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                _fetchTimetable().then((value) {
+                  Navigator.of(context).pop(value);
+                });
+              },
+              child: const Text('导入课表'),
+            ),
+            SizedBox(width: 10.w),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('取消导入'),
+            ),
+          ],
         ),
       ],
     );
   }
 
   Future<dynamic> _fetchTimetable() async {
-    const semesterDescription = {
-      Semester.all: '全学年',
-      Semester.firstTerm: '第一学期',
-      Semester.secondTerm: '第二学期',
-    };
-
     final year = selectedYear;
     final semester = selectedSemester;
 
     final tableCourse = await timetableService.getTimetable(SchoolYear(year), semester);
     final tableMeta = TimetableMeta()
-      ..name = '$year - ${year + 1} 学年 ${semesterDescription[semester]}'
+      ..name = tableNameController.text
       ..startDate = selectedDate.value
       ..schoolYear = year
       ..semester = semester.index
       ..description = '无';
-    return [tableCourse, tableMeta];
+    return [tableMeta, tableCourse];
   }
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      child: _buildBody(),
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
+        child: _buildBody(),
+      ),
     );
   }
 }
@@ -156,13 +202,46 @@ class TimetableImportPage extends StatefulWidget {
 class _TimetableImportPageState extends State<TimetableImportPage> {
   final timetableStorage = TimetableInitializer.timetableStorage;
 
+  Widget _buildTableMetaInfo(TimetableMeta meta) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('课表名称：${meta.name}'),
+        Text('课表描述：${meta.description}'),
+        Text('课表学年：${meta.schoolYear} - ${meta.schoolYear + 1} 学年'),
+        Text('课表学期：${_semesterDescription[Semester.values[meta.semester]]}'),
+        Text('开始时间：${DateFormat('yyyy-MM-dd').format(meta.startDate)}'),
+      ],
+    );
+  }
+
   Widget _buildTableNameListView(List<String> names) {
+    final currentTableName = timetableStorage.currentTableName;
     return ListView(
       children: names.map((e) {
+        final meta = timetableStorage.getTableMetaByName(e);
         return ListTile(
           title: Text(e),
+          trailing: e == currentTableName ? const Icon(Icons.check, color: Colors.green) : null,
           onTap: () {
-            // 对话框？
+            showAlertDialog(
+              context,
+              title: '课表信息',
+              content: [_buildTableMetaInfo(meta!)],
+              actionWidgetList: [
+                ElevatedButton(onPressed: () {}, child: const Text('设为默认课表')),
+                SizedBox(width: 10.w),
+                ElevatedButton(onPressed: () {}, child: const Text('删除课表')),
+              ],
+            ).then((idx) {
+              if (idx == null) return;
+              [
+                () => timetableStorage.currentTableName = meta.name,
+                () => {},
+                () => timetableStorage.removeTable(meta.name),
+              ][idx]();
+              setState(() {});
+            });
           },
         );
       }).toList(),
@@ -196,8 +275,13 @@ class _TimetableImportPageState extends State<TimetableImportPage> {
             builder: (BuildContext context) {
               return const TimetableImportDialog();
             },
-          );
-          setState(() {});
+          ).then((value) {
+            if (value == null) return;
+            timetableStorage.addTable(value[0], value[1]);
+            final TimetableMeta meta = value[0];
+            timetableStorage.currentTableName = meta.name;
+            setState(() {});
+          });
         },
         child: const Icon(Icons.add),
       ),
