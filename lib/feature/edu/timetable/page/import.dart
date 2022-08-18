@@ -21,18 +21,21 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:kite/feature/edu/common/entity/index.dart';
 import 'package:kite/feature/edu/util/selector.dart';
-import 'package:kite/util/alert_dialog.dart';
 
 import '../entity.dart';
+import '../init.dart';
 
-class TimetableImportPage extends StatefulWidget {
-  const TimetableImportPage({Key? key}) : super(key: key);
+class TimetableImportDialog extends StatefulWidget {
+  const TimetableImportDialog({Key? key}) : super(key: key);
 
   @override
-  State<TimetableImportPage> createState() => _TimetableImportPageState();
+  State<TimetableImportDialog> createState() => _TimetableImportDialogState();
 }
 
-class _TimetableImportPageState extends State<TimetableImportPage> {
+class _TimetableImportDialogState extends State<TimetableImportDialog> {
+  final timetableService = TimetableInitializer.timetableService;
+  final timetableStorage = TimetableInitializer.timetableStorage;
+
   /// 四位年份
   late int selectedYear;
 
@@ -100,30 +103,84 @@ class _TimetableImportPageState extends State<TimetableImportPage> {
               },
             ),
           ],
-        )
+        ),
+        Form(
+          child: Column(
+            children: [
+              TextFormField(
+                autofocus: true,
+                decoration: const InputDecoration(labelText: '课表名称'),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
 
-  ///更新时间的方法
-  Future<void> updateData() async {
-    // TimetableInitializer.timetableStorage.currentYear = SchoolYear(selectedYear);
+  Future<dynamic> _fetchTimetable() async {
+    const semesterDescription = {
+      Semester.all: '全学年',
+      Semester.firstTerm: '第一学期',
+      Semester.secondTerm: '第二学期',
+    };
+
+    final year = selectedYear;
+    final semester = selectedSemester;
+
+    final tableCourse = await timetableService.getTimetable(SchoolYear(year), semester);
+    final tableMeta = TimetableMeta()
+      ..name = '$year - ${year + 1} 学年 ${semesterDescription[semester]}'
+      ..startDate = selectedDate.value
+      ..schoolYear = year
+      ..semester = semester.index
+      ..description = '无';
+    return [tableCourse, tableMeta];
   }
 
-  Future<List<Course>> _updateTimetable() async {
-    // final timetable =
-    //     await TimetableInitializer.timetableService.getTimetable(SchoolYear(selectedYear), selectedSemester);
-    //
-    // await TimetableInitializer.timetableStorage.clear();
-    // TimetableInitializer.timetableStorage.addAll(timetable);
-    //
-    // TimetableInitializer.timetableStorage.currentYear = SchoolYear(selectedYear);
-    // TimetableInitializer.timetableStorage.currentSemester = selectedSemester;
-    // TimetableInitializer.timetableStorage.startDate = selectedDate.value;
-    //
-    // TableCache.clear();
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: _buildBody(),
+    );
+  }
+}
 
-    return [];
+class TimetableImportPage extends StatefulWidget {
+  const TimetableImportPage({Key? key}) : super(key: key);
+
+  @override
+  State<TimetableImportPage> createState() => _TimetableImportPageState();
+}
+
+class _TimetableImportPageState extends State<TimetableImportPage> {
+  final timetableStorage = TimetableInitializer.timetableStorage;
+
+  Widget _buildTableNameListView(List<String> names) {
+    return ListView(
+      children: names.map((e) {
+        return ListTile(
+          title: Text(e),
+          onTap: () {
+            // 对话框？
+          },
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildBody() {
+    final tableNames = timetableStorage.tableNames ?? [];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('当前已导入的课表数：${tableNames.length}'),
+        Expanded(
+          child: _buildTableNameListView(tableNames),
+        )
+      ],
+    );
   }
 
   @override
@@ -133,22 +190,16 @@ class _TimetableImportPageState extends State<TimetableImportPage> {
         title: const Text('导入课表'),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          if (await showAlertDialog(
-                context,
-                title: '警告',
-                content: [const Text('小风筝将清除您本学期课表数据')],
-                actionWidgetList: [
-                  ElevatedButton(onPressed: () {}, child: const Text('好')),
-                  TextButton(onPressed: () {}, child: const Text('暂时不要')),
-                ],
-              ) ==
-              0) {
-            _updateTimetable();
-            Navigator.of(context).pop(true);
-          }
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return const TimetableImportDialog();
+            },
+          );
+          setState(() {});
         },
-        child: const Icon(Icons.check),
+        child: const Icon(Icons.add),
       ),
       body: Padding(
         padding: const EdgeInsets.all(12),

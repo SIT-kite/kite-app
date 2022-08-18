@@ -60,7 +60,9 @@ class _DateHeaderState extends State<DateHeader> {
 
   ///每天的列
   Widget _buildDayColumn(int day) {
-    final date = getDateFromWeekDay(TimetableInitializer.timetableStorage.startDate!, widget.currentWeek, day);
+    final startDate = TimetableInitializer.timetableStorage.currentTableMeta?.startDate ?? DateTime.now();
+
+    final date = getDateFromWeekDay(startDate, widget.currentWeek, day);
     final dateString = '${date.month}/${date.day}';
 
     TextStyle? style = Theme.of(context).textTheme.bodyText2;

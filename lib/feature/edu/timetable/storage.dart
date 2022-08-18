@@ -20,6 +20,8 @@ import 'package:kite/feature/edu/common/entity/index.dart';
 
 import 'entity.dart';
 
+String buildTableName(SchoolYear schoolYear, Semester semester) => '${schoolYear.year!}-${semester.index}';
+
 class TimetableKeys {
   static const _namespace = '/timetable';
 
@@ -29,15 +31,14 @@ class TimetableKeys {
   /// 课表相关数据的命名空间
   static const table = '$_namespace/table';
 
+  /// 课表名
+  static const tableNames = '$table/names';
+
   /// 维护多个课表的元数据
-  static const tableNames = '$table/name';
+  static String buildTableMetaKeyByName(name) => '$table/metas/${name.hashCode.toRadixString(16)}'; // 名称不能存中文在路径中需要哈希一下
 
   /// 通过课表名称获取课表路径
-  static String buildTableKeyByName(String name) => '$table/data/$name';
-
-  /// 通过学年学期信息获取课表路径
-  static String buildTableKey(SchoolYear schoolYear, Semester semester) =>
-      buildTableKeyByName('${schoolYear.year!}-${semester.index}');
+  static String buildTableCoursesKeyByName(name) => '$table/courses/${name.hashCode.toRadixString(16)}';
 
   /// 当前使用的课表名称
   static const currentTableName = '$_namespace/currentTableName';
@@ -51,31 +52,47 @@ class TimetableStorage {
 
   const TimetableStorage(this.box);
 
-  List<Course>? getTableByName(String name) {
-    return box.get(TimetableKeys.buildTableKeyByName(name));
-  }
-
-  void setTableByName(String name, List<Course>? table) {
-    box.put(TimetableKeys.buildTableKeyByName(name), table);
-  }
-
-  List<Course>? getTable(SchoolYear schoolYear, Semester semester) {
-    return box.get(TimetableKeys.buildTableKey(schoolYear, semester));
-  }
-
-  void setTable(SchoolYear schoolYear, Semester semester, List<Course>? table) {
-    box.put(TimetableKeys.buildTableKey(schoolYear, semester), table);
-  }
-
   List<String>? get tableNames => box.get(TimetableKeys.tableNames);
   set tableNames(List<String>? foo) => box.put(TimetableKeys.tableNames, foo);
+
+  /// 通过课表名获取课表
+  List<Course>? getTableCourseByName(String name) => box.get(TimetableKeys.buildTableCoursesKeyByName(name));
+
+  /// 添加一张课表
+  void addTableCourses(String name, List<Course> table) =>
+      box.put(TimetableKeys.buildTableCoursesKeyByName(name), table);
+
+  /// 通过课表名获取课表元数据
+  TimetableMeta? getTableMetaByName(String name) => box.get(TimetableKeys.buildTableMetaKeyByName(name));
+
+  /// 通过课表名添加课表元数据
+  void addTableMeta(String name, TimetableMeta? foo) => box.put(TimetableKeys.buildTableMetaKeyByName(name), foo);
+
+  /// 添加课表
+  void addTable(TimetableMeta meta, List<Course> courses) {
+    addTableMeta(meta.name, meta);
+    addTableCourses(meta.name, courses);
+  }
+
+  /// 删除课表
+  void removeTable(String name) {
+    [
+      TimetableKeys.buildTableMetaKeyByName(name),
+      TimetableKeys.buildTableCoursesKeyByName(name),
+    ].forEach(box.delete);
+  }
 
   String? get currentTableName => box.get(TimetableKeys.currentTableName);
   set currentTableName(String? foo) => box.put(TimetableKeys.currentTableName, foo);
 
-  List<Course>? get currentTable {
+  List<Course>? get currentTableCourses {
     if (currentTableName == null) return null;
-    return getTableByName(currentTableName!);
+    return getTableCourseByName(currentTableName!);
+  }
+
+  TimetableMeta? get currentTableMeta {
+    if (currentTableName == null) return null;
+    return getTableMetaByName(currentTableName!);
   }
 
   DisplayMode? get lastMode {
@@ -85,7 +102,4 @@ class TimetableStorage {
   }
 
   set lastMode(DisplayMode? foo) => box.put(TimetableKeys.lastMode, foo?.index);
-
-  DateTime? get startDate => box.get(TimetableKeys.startDate);
-  set startDate(DateTime? date) => box.put(TimetableKeys.startDate, date);
 }

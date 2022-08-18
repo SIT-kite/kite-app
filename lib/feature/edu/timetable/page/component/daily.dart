@@ -55,8 +55,9 @@ class DailyTimetableState extends State<DailyTimetable> {
 
   /// 设置页面为对应日期页.
   void _setDate(DateTime theDay) {
+    final startDate = TimetableInitializer.timetableStorage.currentTableMeta?.startDate ?? DateTime.now();
     //求一下过了多少天
-    int days = theDay.difference(TimetableInitializer.timetableStorage.startDate!).inDays;
+    int days = theDay.difference(startDate).inDays;
 
     int week = days ~/ 7 + 1, day = days % 7 + 1;
     if (days >= 0 && 1 <= week && week <= 20 && 1 <= day && day <= 7) {

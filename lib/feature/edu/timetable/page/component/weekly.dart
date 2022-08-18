@@ -21,7 +21,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/feature/edu/timetable/entity.dart';
 
 import '../../init.dart';
-import '../util.dart';
 import 'grid.dart';
 import 'header.dart';
 
@@ -41,6 +40,7 @@ class WeeklyTimetable extends StatefulWidget {
 
 class WeeklyTimetableState extends State<WeeklyTimetable> {
   late PageController _pageController;
+  late DateTime dateSemesterStart;
 
   int _currentWeek = 1;
 
@@ -117,7 +117,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
 
   @override
   Widget build(BuildContext context) {
-    dateSemesterStart = TimetableInitializer.timetableStorage.startDate ?? DateTime(2022, 2, 14);
+    dateSemesterStart = TimetableInitializer.timetableStorage.currentTableMeta?.startDate ?? DateTime(2022, 2, 14);
 
     _setDate(DateTime.now());
     _pageController = PageController(initialPage: _currentWeek - 1, keepPage: false);

@@ -21,9 +21,6 @@ import 'package:ical/serializer.dart';
 import '../entity.dart';
 import '../init.dart';
 
-// -- 基本常量
-DateTime dateSemesterStart = TimetableInitializer.timetableStorage.startDate ?? DateTime(2022, 2, 14);
-
 final List<String> weekWord = ['一', '二', '三', '四', '五', '六', '日'];
 
 final List<Color> colorList = [
@@ -206,6 +203,9 @@ void addEventForCourse(ICalendar cal, Course course) {
   final indexEnd = getIndexEnd(indexStart, course.timeIndex);
   final timeStart = timetable[indexStart - 1].start;
   final timeEnd = timetable[indexEnd - 1].end;
+
+  DateTime dateSemesterStart =
+      TimetableInitializer.timetableStorage.currentTableMeta?.startDate ?? DateTime(2022, 2, 14);
 
   final description = '第 ${timeStart == timeEnd ? timeStart : "$timeStart-$timeEnd"} 节\n'
       '${course.place}\n'

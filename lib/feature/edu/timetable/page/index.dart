@@ -49,8 +49,6 @@ class _TimetablePageState extends State<TimetablePage> {
   final timetableStorage = TimetableInitializer.timetableStorage;
   final cache = TimetableInitializer.tableCache;
 
-  bool isRefreshing = false;
-
   final currentKey = GlobalKey();
 
   // 模式：周课表 日课表
@@ -63,7 +61,7 @@ class _TimetablePageState extends State<TimetablePage> {
     displayMode = timetableStorage.lastMode ?? DisplayMode.daily; // 初始化late变量
     timetableStorage.lastMode = displayMode; // 持久化
 
-    timetable = timetableStorage.currentTable ?? [];
+    timetable = timetableStorage.currentTableCourses ?? [];
   }
 
   @override
@@ -128,7 +126,7 @@ class _TimetablePageState extends State<TimetablePage> {
 
   /// 根据本地缓存刷新课表
   void _onRefresh() {
-    setState(() => timetable = timetableStorage.currentTable ?? []);
+    setState(() => timetable = timetableStorage.currentTableCourses ?? []);
     showBasicFlash(context, const Text('加载成功'));
   }
 
@@ -186,8 +184,6 @@ class _TimetablePageState extends State<TimetablePage> {
 
   @override
   Widget build(BuildContext context) {
-    timetable = timetableStorage.currentTable!;
-
     return Scaffold(
       appBar: AppBar(title: const Text('课程表'), actions: <Widget>[
         _buildModeSwitchButton(),
