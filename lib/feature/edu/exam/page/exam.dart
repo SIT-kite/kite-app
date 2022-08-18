@@ -134,10 +134,10 @@ class _ExamPageState extends State<ExamPage> {
     return Container(
       margin: const EdgeInsets.only(left: 15),
       child: SemesterSelector(
-        (year) {
+        yearSelectCallback:(year) {
           setState(() => selectedYear = year);
         },
-        (semester) {
+        semesterSelectCallback: (semester) {
           setState(() => selectedSemester = semester);
         },
         initialYear: selectedYear,

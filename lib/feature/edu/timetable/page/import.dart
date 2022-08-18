@@ -44,6 +44,7 @@ class _TimetableImportPageState extends State<TimetableImportPage> {
   @override
   void initState() {
     final DateTime now = DateTime.now();
+    // 先根据当前时间估算出是哪个学期
     selectedYear = (now.month >= 9 ? now.year : now.year - 1);
     selectedSemester = (now.month >= 3 && now.month <= 7) ? Semester.secondTerm : Semester.firstTerm;
 
@@ -54,10 +55,10 @@ class _TimetableImportPageState extends State<TimetableImportPage> {
     return Container(
       margin: const EdgeInsets.only(left: 15),
       child: SemesterSelector(
-        (year) {
+        yearSelectCallback: (year) {
           setState(() => selectedYear = year);
         },
-        (semester) {
+        semesterSelectCallback: (semester) {
           setState(() => selectedSemester = semester);
         },
         initialYear: selectedYear,
@@ -67,17 +68,6 @@ class _TimetableImportPageState extends State<TimetableImportPage> {
       ),
     );
   }
-  //
-  // Widget _buildTimetablePreview() {
-  //   final service = TimetableInitializer.timetableService;
-  //   final courses = service.getTimetable(SchoolYear(selectedYear), selectedSemester);
-  //
-  //   return MyFutureBuilder<List<Course>>(
-  //       future: courses,
-  //       builder: (context, courses) {
-  //         return WeeklyTimetable(courses, initialDate: DateTime.now());
-  //       });
-  // }
 
   Widget _buildBody() {
     return Column(
@@ -95,9 +85,7 @@ class _TimetableImportPageState extends State<TimetableImportPage> {
               child: ValueListenableBuilder<DateTime>(
                 valueListenable: selectedDate,
                 builder: (context, value, child) {
-                  return Text(
-                    '${value.year} 年 ${value.month} 月 ${value.day} 日',
-                  );
+                  return Text('${value.year} 年 ${value.month} 月 ${value.day} 日');
                 },
               ),
               onPressed: () async {

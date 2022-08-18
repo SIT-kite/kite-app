@@ -31,9 +31,15 @@ class SemesterSelector extends StatefulWidget {
   final Function(int) yearSelectCallback;
   final Function(Semester) semesterSelectCallback;
 
-  const SemesterSelector(this.yearSelectCallback, this.semesterSelectCallback,
-      {this.initialYear, this.initialSemester, this.showEntireYear, this.showNextYear, Key? key})
-      : super(key: key);
+  const SemesterSelector({
+    required this.yearSelectCallback,
+    required this.semesterSelectCallback,
+    this.initialYear,
+    this.initialSemester,
+    this.showEntireYear,
+    this.showNextYear,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _SemesterSelectorState();
