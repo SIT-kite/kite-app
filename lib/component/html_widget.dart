@@ -39,18 +39,20 @@ class MyHtmlWidget extends StatefulWidget {
 class _MyHtmlWidgetState extends State<MyHtmlWidget> {
   @override
   Widget build(BuildContext context) {
-    return HtmlWidget(
-      widget.html,
-      isSelectable: widget.isSelectable,
-      renderMode: widget.renderMode,
-      textStyle: Theme.of(context).textTheme.bodyText2,
-      onTapUrl: (url) {
-        GlobalLauncher.launch(url);
-        return true;
-      },
-      onTapImage: (ImageMetadata image) {
-        Log.info('图片被点击: ' + image.sources.toList()[0].url);
-      },
+    return SingleChildScrollView(
+      child: HtmlWidget(
+        widget.html,
+        isSelectable: widget.isSelectable,
+        renderMode: widget.renderMode,
+        textStyle: Theme.of(context).textTheme.bodyText2,
+        onTapUrl: (url) {
+          GlobalLauncher.launch(url);
+          return true;
+        },
+        onTapImage: (ImageMetadata image) {
+          Log.info('图片被点击: ${image.sources.toList()[0].url}');
+        },
+      ),
     );
   }
 }
