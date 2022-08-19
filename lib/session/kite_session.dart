@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'dart:async';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_session.dart';
@@ -70,8 +69,6 @@ class KiteSession extends ASession {
     Map<String, String>? queryParameters,
     data,
     Options? options,
-    String? contentType,
-    ResponseType? responseType,
   }) async {
     String? token = jwtDao.jwtToken;
     final response = await dio.request(
@@ -80,8 +77,6 @@ class KiteSession extends ASession {
       queryParameters: queryParameters,
       options: (options ?? Options()).copyWith(
         method: method,
-        contentType: contentType ?? ContentType.json.value,
-        responseType: responseType ?? ResponseType.json,
         headers: token == null ? null : {'Authorization': 'Bearer $token'},
       ),
     );
