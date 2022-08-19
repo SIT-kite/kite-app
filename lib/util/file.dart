@@ -7,27 +7,36 @@ import 'package:permission_handler/permission_handler.dart';
 import 'logger.dart';
 import 'permission.dart';
 
-Future<void> writeToTempFileAndOpen({
-  required dynamic content,
-  required String filename,
-  required String type,
-}) async {
-  final isPermissionGranted = await ensurePermission(Permission.storage);
-  if (!isPermissionGranted) {
-    throw '无写入文件权限';
+class FileUtils {
+  static Future<void> writeToFile({
+    required dynamic content,
+    required String filepath,
+  }) async {
+    final isPermissionGranted = await ensurePermission(Permission.storage);
+    if (!isPermissionGranted) {
+      throw '无写入文件权限';
+    }
+
+    final file = File(filepath);
+
+    if (!await file.exists()) {
+      await file.create(recursive: true);
+    }
+    if (content is String) {
+      await file.writeAsString(content);
+    } else {
+      await file.writeAsBytes(content);
+    }
   }
 
-  final path = '${(await getTemporaryDirectory()).path}/$filename';
-  final file = File(path);
-
-  if (!await file.exists()) {
-    await file.create(recursive: true);
+  static Future<void> writeToTempFileAndOpen({
+    required dynamic content,
+    required String filename,
+    required String type,
+  }) async {
+    final path = '${(await getTemporaryDirectory()).path}/$filename';
+    await writeToFile(content: content, filepath: path);
+    Log.info('保存文件$filename到 $path');
+    OpenFile.open(path, type: type);
   }
-  if (content is String) {
-    file.writeAsString(content);
-  } else {
-    file.writeAsBytes(content);
-  }
-  Log.info('保存文件$filename到 $path');
-  OpenFile.open(path, type: type);
 }

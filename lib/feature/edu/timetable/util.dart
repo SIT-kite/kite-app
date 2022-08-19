@@ -47,7 +47,7 @@ String convertTableToIcs(TimetableMeta meta, List<Course> courses) {
 }
 
 Future<void> exportTimetableToCalendar(TimetableMeta meta, List<Course> courses) async {
-  await writeToTempFileAndOpen(
+  await FileUtils.writeToTempFileAndOpen(
     content: convertTableToIcs(meta, courses),
     filename: 'kite_table.ics',
     type: 'text/calendar',
