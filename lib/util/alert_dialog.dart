@@ -27,7 +27,7 @@ Future<int?> showAlertDialog(
   List<Widget>? actionWidgetList,
 }) async {
   if (actionTextList != null && actionWidgetList != null) {
-    throw Exception("actionTextList与actionWidgetList参数不可同时传入");
+    throw Exception("actionTextList 与 actionWidgetList 参数不可同时传入");
   }
 
   if (actionTextList == null && actionWidgetList == null) {
@@ -37,7 +37,7 @@ Future<int?> showAlertDialog(
   return showDialog(
     context: context,
     builder: (_) => AlertDialog(
-      title: Center(child: Text(title)),
+      title: Center(child: Text(title, style: const TextStyle(fontWeight: FontWeight.bold))),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
