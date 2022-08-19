@@ -15,24 +15,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:ical/serializer.dart';
 import 'package:kite/feature/edu/timetable/cache.dart';
 import 'package:kite/feature/edu/timetable/init.dart';
 import 'package:kite/feature/edu/timetable/page/component/daily_and_weekly.dart';
+import 'package:kite/feature/edu/timetable/util.dart';
 import 'package:kite/route.dart';
 import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
-import 'package:kite/util/permission.dart';
-import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../entity.dart';
-import 'util.dart';
 
 class TimetablePage extends StatefulWidget {
   const TimetablePage({Key? key}) : super(key: key);
@@ -92,37 +85,12 @@ class _TimetablePageState extends State<TimetablePage> {
     super.initState();
   }
 
-  ///导出的方法
-  Future<void> _onExport() async {
+  void _onExport() {
     if (courses.isEmpty) {
       showBasicFlash(context, const Text('你咋没课呢？？'));
       return;
     }
-    final isPermissionGranted = await ensurePermission(Permission.storage);
-    if (!isPermissionGranted) {
-      showBasicFlash(context, const Text('无写入文件权限'));
-      return;
-    }
-
-    final ICalendar iCal = ICalendar(
-      company: 'Kite Team, Yiban WorkStation of Shanghai Institute of Technology',
-      product: 'kite',
-      lang: 'ZH',
-    );
-    for (final course in courses) {
-      addEventForCourse(iCal, course);
-    }
-
-    final String iCalContent = iCal.serialize();
-    final String path = '${(await getExternalCacheDirectories())![0].path}/calendar.ics';
-    final File file = File(path);
-
-    if (!file.existsSync()) {
-      file.createSync(recursive: true);
-    }
-    file.writeAsStringSync(iCalContent);
-    Log.info('保存日历文件到 $path');
-    OpenFile.open(path, type: 'text/calendar');
+    exportTimetableToCalendar(meta!, courses);
   }
 
   /// 根据本地缓存刷新课表

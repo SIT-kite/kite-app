@@ -16,10 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:ical/serializer.dart';
-
-import '../entity.dart';
-import '../init.dart';
 
 final List<String> weekWord = ['一', '二', '三', '四', '五', '六', '日'];
 
@@ -49,7 +45,7 @@ class Time {
   const Time(this.hour, this.minute);
 
   @override
-  String toString() => '$hour:' + '$minute'.padLeft(2, '0');
+  String toString() => '$hour:${'$minute'.padLeft(2, '0')}';
 }
 
 class CourseEnd {
@@ -195,36 +191,4 @@ String formatPlace(String place) {
   }
   indexOfBucket = place.indexOf('(');
   return indexOfBucket != -1 ? place.substring(0, indexOfBucket) : place;
-}
-
-void addEventForCourse(ICalendar cal, Course course) {
-  final timetable = getBuildingTimetable(course.campus, course.place);
-  final indexStart = getIndexStart(course.timeIndex);
-  final indexEnd = getIndexEnd(indexStart, course.timeIndex);
-  final timeStart = timetable[indexStart - 1].start;
-  final timeEnd = timetable[indexEnd - 1].end;
-
-  DateTime dateSemesterStart =
-      TimetableInitializer.timetableStorage.currentTableMeta?.startDate ?? DateTime(2022, 2, 14);
-
-  final description = '第 ${timeStart == timeEnd ? timeStart : "$timeStart-$timeEnd"} 节\n'
-      '${course.place}\n'
-      '${course.teacher.join(', ')}';
-
-  // 一学期最多有 20 周
-  for (int currentWeek = 1; currentWeek < 20; ++currentWeek) {
-    // 本周没课, 跳过
-    if ((1 << currentWeek) & course.weekIndex == 0) continue;
-
-    final date = getDateFromWeekDay(dateSemesterStart, currentWeek, course.dayIndex);
-    final IEvent event = IEvent(
-      // uid: 'SIT-KITE-${course.courseId}-${const Uuid().v1()}',
-      summary: course.courseName,
-      description: '第 ${course.teacher.join(', ')} | ',
-      location: description,
-      start: date.add(Duration(hours: timeStart.hour, minutes: timeStart.minute)),
-      end: date.add(Duration(hours: timeEnd.hour, minutes: timeEnd.minute)),
-    );
-    cal.addElement(event);
-  }
 }
