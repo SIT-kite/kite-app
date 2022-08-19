@@ -31,9 +31,9 @@ class GameMeta {
 }
 
 const Map<GameType, GameMeta> gameMapping = {
+  GameType.composeSit: GameMeta('合成上应大', '/game/composeSit', 'assets/game/icon_sit.png'),
   GameType.game2048: GameMeta('2048', '/game/2048', 'assets/game/icon_2048.png'),
   GameType.wordle: GameMeta('Wordle', '/game/wordle', 'assets/game/icon_wordle.png'),
-  GameType.composeSit: GameMeta('合成上应大', '/game/composeSit', 'assets/game/icon_sit.png'),
 };
 
 class GamePage extends StatefulWidget {
