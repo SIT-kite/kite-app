@@ -59,7 +59,7 @@ class OfficeSession extends ASession {
 
   /// 为时间戳生成签名. 此方案是联鹏习惯的反爬方式.
   static String _sign(String ts) {
-    final content = const Utf8Encoder().convert('unifri.com' + ts);
+    final content = const Utf8Encoder().convert('unifri.com$ts');
     return md5.convert(content).toString();
   }
 
@@ -69,8 +69,6 @@ class OfficeSession extends ASession {
     String method, {
     Map<String, String>? queryParameters,
     dynamic data,
-    String? contentType,
-    ResponseType? responseType,
     Options? options,
   }) async {
     Options newOptions = options ?? Options();
@@ -86,8 +84,6 @@ class OfficeSession extends ASession {
 
     newOptions.headers == null ? newOptions.headers = newHeaders : newOptions.headers?.addAll(newHeaders);
     newOptions.method = method;
-    newOptions.contentType = contentType;
-    newOptions.responseType = responseType;
 
     return await dio.request(
       url,

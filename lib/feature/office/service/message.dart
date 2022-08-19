@@ -32,8 +32,14 @@ class OfficeMessageService extends AService {
   Future<OfficeMessageCount> queryMessageCount() async {
     String payload = 'code=${KvStorageInitializer.auth.currentUsername}';
 
-    final response = await session.post(serviceMessageCount,
-        data: payload, contentType: Headers.formUrlEncodedContentType, responseType: ResponseType.json);
+    final response = await session.post(
+      serviceMessageCount,
+      data: payload,
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+        responseType: ResponseType.json,
+      ),
+    );
     final Map<String, dynamic> data = response.data;
     final OfficeMessageCount result = OfficeMessageCount.fromJson(data['data']);
     return result;
@@ -46,8 +52,10 @@ class OfficeMessageService extends AService {
     final response = await session.post(
       url,
       data: payload,
-      contentType: 'application/x-www-form-urlencoded',
-      responseType: ResponseType.json,
+      options: Options(
+        contentType: 'application/x-www-form-urlencoded',
+        responseType: ResponseType.json,
+      ),
     );
     final List data = jsonDecode(response.data);
     final int totalNum = int.parse(data.last['totalNum']);

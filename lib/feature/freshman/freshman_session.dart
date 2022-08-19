@@ -36,8 +36,6 @@ class FreshmanSession extends ASession {
     Map<String, String>? queryParameters,
     data,
     Options? options,
-    String? contentType,
-    ResponseType? responseType,
   }) async {
     Future<Response> myRequest(
       dynamic data1,
@@ -50,8 +48,6 @@ class FreshmanSession extends ASession {
         queryParameters: queryParameters1,
         data: data1,
         options: options,
-        contentType: contentType,
-        responseType: responseType,
       );
     }
 

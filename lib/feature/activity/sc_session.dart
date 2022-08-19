@@ -42,8 +42,6 @@ class ScSession extends ASession {
     String method, {
     Map<String, String>? queryParameters,
     data,
-    String? contentType,
-    ResponseType? responseType,
     Options? options,
   }) async {
     Future<Response> fetch() async {
@@ -52,8 +50,6 @@ class ScSession extends ASession {
         method,
         queryParameters: queryParameters,
         data: data,
-        contentType: contentType,
-        responseType: responseType,
       );
     }
 

@@ -40,8 +40,6 @@ class KiteSession extends ASession {
     Map<String, String>? queryParameters,
     data,
     Options? options,
-    String? contentType,
-    ResponseType? responseType,
   }) async {
     Future<Response> normallyRequest() async {
       return await _requestWithoutRetry(
@@ -50,8 +48,6 @@ class KiteSession extends ASession {
         queryParameters: queryParameters,
         data: data,
         options: options,
-        contentType: contentType,
-        responseType: responseType,
       );
     }
 

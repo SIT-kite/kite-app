@@ -30,7 +30,11 @@ class OfficeFunctionService extends AService {
   Future<List<SimpleFunction>> selectFunctions() async {
     String payload = '{"appObject":"student","appName":null}';
 
-    final Response response = await session.post(serviceFunctionList, data: payload, responseType: ResponseType.json);
+    final Response response = await session.post(
+      serviceFunctionList,
+      data: payload,
+      options: Options(responseType: ResponseType.json),
+    );
 
     final Map<String, dynamic> data = response.data;
     final List<SimpleFunction> functionList = (data['value'] as List<dynamic>)
@@ -50,7 +54,11 @@ class OfficeFunctionService extends AService {
   Future<FunctionDetail> getFunctionDetail(String functionId) async {
     final String payload = '{"appID":"$functionId"}';
 
-    final response = await session.post(serviceFunctionDetail, data: payload, responseType: ResponseType.json);
+    final response = await session.post(
+      serviceFunctionDetail,
+      data: payload,
+      options: Options(responseType: ResponseType.json),
+    );
     final Map<String, dynamic> data = response.data;
     final List<FunctionDetailSection> sections =
         (data['value'] as List<dynamic>).map((e) => FunctionDetailSection.fromJson(e)).toList();

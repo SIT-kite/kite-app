@@ -36,8 +36,6 @@ class SitAppSession extends ASession {
     Map<String, String>? queryParameters,
     data,
     Options? options,
-    String? contentType,
-    ResponseType? responseType,
   }) async {
     Future<Response> normallyRequest() async {
       return await _requestWithoutRetry(
@@ -46,8 +44,6 @@ class SitAppSession extends ASession {
         queryParameters: queryParameters,
         data: data,
         options: options,
-        contentType: contentType,
-        responseType: responseType,
       );
     }
 
@@ -70,8 +66,6 @@ class SitAppSession extends ASession {
     Map<String, String>? queryParameters,
     data,
     Options? options,
-    String? contentType,
-    ResponseType? responseType,
   }) async {
     String? token = jwtDao.jwtToken;
     final response = await dio.request(
@@ -80,8 +74,8 @@ class SitAppSession extends ASession {
       queryParameters: queryParameters,
       options: (options ?? Options()).copyWith(
         method: method,
-        contentType: contentType ?? ContentType.json.value,
-        responseType: responseType ?? ResponseType.json,
+        contentType: options == null ? ContentType.json.value : null,
+        responseType: options == null ? ResponseType.json : null,
         headers: () {
           final Map<String, String> headersMap = {};
           if (token != null) headersMap['Authorization'] = token;

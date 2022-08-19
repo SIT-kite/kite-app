@@ -43,7 +43,7 @@ class BookImageSearchService extends AService implements BookImageSearchDao {
         'type': '0',
         'isbns': isbnStr,
       },
-      responseType: ResponseType.plain,
+      options: Options(responseType: ResponseType.plain),
     );
     var responseStr = (response.data as String).trim();
     responseStr = responseStr.substring(1, responseStr.length - 1);

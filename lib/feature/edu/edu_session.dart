@@ -41,8 +41,6 @@ class EduSession extends ASession {
     String method, {
     Map<String, String>? queryParameters,
     data,
-    String? contentType,
-    ResponseType? responseType,
     Options? options,
   }) async {
     Future<Response> fetch() async {
@@ -51,8 +49,6 @@ class EduSession extends ASession {
         method,
         queryParameters: queryParameters,
         data: data,
-        contentType: contentType,
-        responseType: responseType,
       );
     }
 

@@ -24,23 +24,17 @@ abstract class ASession {
     Map<String, String>? queryParameters,
     dynamic data,
     Options? options,
-    String? contentType,
-    ResponseType? responseType,
   });
 
   Future<Response> get(
     String url, {
     Map<String, String>? queryParameters,
-    String? contentType,
-    ResponseType? responseType,
     Options? options,
   }) {
     return request(
       url,
       'GET',
       queryParameters: queryParameters,
-      contentType: contentType,
-      responseType: responseType,
       options: options,
     );
   }
@@ -49,8 +43,6 @@ abstract class ASession {
     String url, {
     Map<String, String>? queryParameters,
     dynamic data,
-    String? contentType,
-    ResponseType? responseType,
     Options? options,
   }) {
     return request(
@@ -58,8 +50,6 @@ abstract class ASession {
       'POST',
       queryParameters: queryParameters,
       data: data,
-      contentType: contentType,
-      responseType: responseType,
       options: options,
     );
   }
@@ -68,8 +58,6 @@ abstract class ASession {
     String url, {
     Map<String, String>? queryParameters,
     dynamic data,
-    String? contentType,
-    ResponseType? responseType,
     Options? options,
   }) {
     return request(
@@ -77,8 +65,6 @@ abstract class ASession {
       'DELETE',
       queryParameters: queryParameters,
       data: data,
-      contentType: contentType,
-      responseType: responseType,
       options: options,
     );
   }
@@ -87,8 +73,6 @@ abstract class ASession {
     String url, {
     Map<String, String>? queryParameters,
     dynamic data,
-    String? contentType,
-    ResponseType? responseType,
     Options? options,
   }) {
     return request(
@@ -96,8 +80,6 @@ abstract class ASession {
       'PATCH',
       queryParameters: queryParameters,
       data: data,
-      contentType: contentType,
-      responseType: responseType,
       options: options,
     );
   }
@@ -106,8 +88,6 @@ abstract class ASession {
     String url, {
     Map<String, String>? queryParameters,
     dynamic data,
-    String? contentType,
-    ResponseType? responseType,
     Options? options,
   }) {
     return request(
@@ -115,8 +95,6 @@ abstract class ASession {
       'UPDATE',
       queryParameters: queryParameters,
       data: data,
-      contentType: contentType,
-      responseType: responseType,
       options: options,
     );
   }
@@ -157,19 +135,8 @@ class DefaultSession extends ASession with Downloader {
     Map<String, String>? queryParameters,
     dynamic data,
     Options? options,
-    String? contentType,
-    ResponseType? responseType,
   }) {
-    return dio.request(
-      url,
-      data: data,
-      queryParameters: queryParameters,
-      options: (options ?? Options()).copyWith(
-        method: method,
-        contentType: contentType,
-        responseType: responseType,
-      ),
-    );
+    return dio.request(url, data: data, queryParameters: queryParameters, options: options);
   }
 
   @override

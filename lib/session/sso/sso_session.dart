@@ -106,8 +106,6 @@ class SsoSession extends ASession with Downloader {
     String method, {
     Map<String, String>? queryParameters,
     dynamic data,
-    String? contentType,
-    ResponseType? responseType,
     Options? options,
   }) async {
     try {
@@ -116,8 +114,6 @@ class SsoSession extends ASession with Downloader {
         method,
         queryParameters: queryParameters,
         data: data,
-        contentType: contentType,
-        responseType: responseType,
         options: options,
       );
     } catch (e, t) {

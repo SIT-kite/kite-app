@@ -46,8 +46,6 @@ class ReportSession extends ASession {
     String method, {
     Map<String, String>? queryParameters,
     dynamic data,
-    String? contentType,
-    ResponseType? responseType,
     Options? options,
   }) async {
     Options newOptions = options ?? Options();
@@ -59,8 +57,6 @@ class ReportSession extends ASession {
 
     newOptions.headers == null ? newOptions.headers = newHeaders : newOptions.headers?.addAll(newHeaders);
     newOptions.method = method;
-    newOptions.contentType = contentType;
-    newOptions.responseType = responseType;
 
     return await dio.request(
       url,

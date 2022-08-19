@@ -52,7 +52,7 @@ class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
         'from': start.yyyyMMdd,
         'to': end.yyyyMMdd,
       },
-      responseType: ResponseType.bytes,
+      options: Options(responseType: ResponseType.bytes),
     );
 
     return _parseExpenseDetail(_codec.decode(response.data));
