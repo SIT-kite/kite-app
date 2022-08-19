@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kite/feature/edu/timetable/cache.dart';
+import 'package:kite/util/logger.dart';
 
 import '../../entity.dart';
 import 'daily.dart';
@@ -77,6 +78,7 @@ class _TimetableViewerState extends State<TimetableViewer> {
 
   @override
   void initState() {
+    Log.info('TimetableViewer init');
     displayModeState = widget.initialDisplayMode;
     tableCoursesState = widget.initialTableCourses;
     tableMetaState = widget.initialTableMeta;

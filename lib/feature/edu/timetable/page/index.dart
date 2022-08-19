@@ -19,6 +19,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:ical/serializer.dart';
+import 'package:kite/feature/edu/timetable/cache.dart';
 import 'package:kite/feature/edu/timetable/init.dart';
 import 'package:kite/feature/edu/timetable/page/component/daily_and_weekly.dart';
 import 'package:kite/route.dart';
@@ -46,28 +47,27 @@ class _TimetablePageState extends State<TimetablePage> {
   // static const int maxWeekCount = 20;
   final tableViewerController = TimetableViewerController();
 
-  final timetableStorage = TimetableInitializer.timetableStorage;
-
-  final tableCache = TimetableInitializer.tableCache;
+  final storage = TimetableInitializer.timetableStorage;
 
   // 模式：周课表 日课表
   late DisplayMode displayMode;
 
   // 课程表
-  late List<Course> timetable;
+  late List<Course> courses;
 
   // 课表元数据
-  late TimetableMeta? timetableMeta;
+  late TimetableMeta? meta;
 
   @override
   void initState() {
-    displayMode = timetableStorage.lastMode ?? DisplayMode.daily;
-    timetableStorage.lastMode = displayMode;
+    Log.info('Timetable init');
+    displayMode = storage.lastMode ?? DisplayMode.daily;
+    storage.lastMode = displayMode;
 
-    timetable = timetableStorage.currentTableCourses ?? [];
-    timetableMeta = timetableStorage.currentTableMeta;
+    courses = storage.currentTableCourses ?? [];
+    meta = storage.currentTableMeta;
 
-    if (timetable.isEmpty) {
+    if (courses.isEmpty) {
       Future.delayed(Duration.zero, () async {
         final select = await showAlertDialog(
           context,
@@ -94,7 +94,7 @@ class _TimetablePageState extends State<TimetablePage> {
 
   ///导出的方法
   Future<void> _onExport() async {
-    if (timetable.isEmpty) {
+    if (courses.isEmpty) {
       showBasicFlash(context, const Text('你咋没课呢？？'));
       return;
     }
@@ -109,7 +109,7 @@ class _TimetablePageState extends State<TimetablePage> {
       product: 'kite',
       lang: 'ZH',
     );
-    for (final course in timetable) {
+    for (final course in courses) {
       addEventForCourse(iCal, course);
     }
 
@@ -127,8 +127,10 @@ class _TimetablePageState extends State<TimetablePage> {
 
   /// 根据本地缓存刷新课表
   void _onRefresh() {
-    setState(() => timetable = timetableStorage.currentTableCourses ?? []);
-    tableCache.clear();
+    setState(() {
+      courses = storage.currentTableCourses ?? [];
+      meta = storage.currentTableMeta;
+    });
     showBasicFlash(context, const Text('加载成功'));
   }
 
@@ -163,6 +165,7 @@ class _TimetablePageState extends State<TimetablePage> {
 
   @override
   Widget build(BuildContext context) {
+    Log.info('Timetable build');
     return Scaffold(
       appBar: AppBar(
         title: const Text('课程表'),
@@ -176,12 +179,12 @@ class _TimetablePageState extends State<TimetablePage> {
           child: Text('今', style: Theme.of(context).textTheme.headline2?.copyWith(color: Colors.white))),
       body: TimetableViewer(
         controller: tableViewerController,
-        initialTableMeta: timetableMeta,
-        initialTableCourses: timetable,
-        tableCache: tableCache,
+        initialTableMeta: meta,
+        initialTableCourses: courses,
+        tableCache: TableCache(),
         initialDisplayMode: displayMode,
         onDisplayChanged: (DisplayMode displayMode) {
-          timetableStorage.lastMode = displayMode;
+          storage.lastMode = displayMode;
         },
       ),
     );
