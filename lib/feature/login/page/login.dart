@@ -113,7 +113,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget buildTitleLine() {
     return Container(
         alignment: Alignment.centerLeft,
-        child: Text('欢迎登录', style: Theme.of(context).textTheme.headline1));
+        child: const Text('欢迎登录',
+            style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold)));
   }
 
   Widget buildLoginForm() {

@@ -43,7 +43,8 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
 
   final GlobalKey _formKey = GlobalKey<FormState>();
 
-  final TapGestureRecognizer _recognizer = TapGestureRecognizer()..onTap = onOpenUserLicense;
+  final TapGestureRecognizer _recognizer = TapGestureRecognizer()
+    ..onTap = onOpenUserLicense;
 
   // State
   bool _isPasswordClear = false;
@@ -118,7 +119,9 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
 
   Widget buildTitleLine() {
     return Container(
-        alignment: Alignment.centerLeft, child: Text('欢迎新同学', style: Theme.of(context).textTheme.headline1));
+        alignment: Alignment.centerLeft,
+        child: const Text('欢迎新同学',
+            style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold)));
   }
 
   Widget buildLoginForm() {
@@ -146,7 +149,8 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
               icon: const Icon(Icons.lock),
               suffixIcon: IconButton(
                 // 切换密码明文显示状态的图标按钮
-                icon: Icon(_isPasswordClear ? Icons.visibility_off : Icons.visibility),
+                icon: Icon(
+                    _isPasswordClear ? Icons.visibility_off : Icons.visibility),
                 onPressed: () {
                   setState(() => _isPasswordClear = !_isPasswordClear);
                 },
@@ -173,8 +177,13 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
           child: Text.rich(
             TextSpan(
               children: [
-                TextSpan(text: '我已阅读并同意', style: Theme.of(context).textTheme.bodyText1),
-                TextSpan(text: '《上应小风筝用户协议》', style: Theme.of(context).textTheme.bodyText2, recognizer: _recognizer),
+                TextSpan(
+                    text: '我已阅读并同意',
+                    style: Theme.of(context).textTheme.bodyText1),
+                TextSpan(
+                    text: '《上应小风筝用户协议》',
+                    style: Theme.of(context).textTheme.bodyText2,
+                    recognizer: _recognizer),
               ],
             ),
           ),
