@@ -41,7 +41,7 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
 
   void play() async {
     AudioPlayer player = AudioPlayer();
-    await player.play(UrlSource('scanner/beep.mp3'));
+    await player.play(AssetSource('scanner/beep.mp3'));
   }
 
   Widget buildImagePicker() {
