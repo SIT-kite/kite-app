@@ -67,8 +67,7 @@ class _TimetablePageState extends State<TimetablePage> {
           title: '导入课表',
           content: [
             const Text(
-              '看起来您第一次使用小风筝课表功能\n'
-              '第一次使用时请先完成课表导入',
+              '您似乎是第一次使用小风筝课表功能，请先完成课表导入吧！',
             ),
           ],
           actionWidgetList: [
