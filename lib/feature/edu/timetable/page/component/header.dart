@@ -18,7 +18,6 @@
 
 import 'package:flutter/material.dart';
 
-import '../../init.dart';
 import '../util.dart';
 
 class DateHeader extends StatefulWidget {
@@ -31,7 +30,15 @@ class DateHeader extends StatefulWidget {
   /// 点击的回调
   final Function(int)? onTap;
 
-  const DateHeader(this.currentWeek, this.selectedDay, {this.onTap, Key? key}) : super(key: key);
+  final DateTime startDate;
+
+  const DateHeader({
+    this.onTap,
+    Key? key,
+    required this.currentWeek,
+    required this.selectedDay,
+    required this.startDate,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _DateHeaderState();
@@ -60,9 +67,7 @@ class _DateHeaderState extends State<DateHeader> {
 
   ///每天的列
   Widget _buildDayColumn(int day) {
-    final startDate = TimetableInitializer.timetableStorage.currentTableMeta?.startDate ?? DateTime.now();
-
-    final date = getDateFromWeekDay(startDate, widget.currentWeek, day);
+    final date = getDateFromWeekDay(widget.startDate, widget.currentWeek, day);
     final dateString = '${date.month}/${date.day}';
 
     TextStyle? style = Theme.of(context).textTheme.bodyText2;

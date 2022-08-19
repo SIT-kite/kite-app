@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/feature/edu/timetable/entity.dart';
 
-import '../../init.dart';
+import '../../cache.dart';
 import 'grid.dart';
 import 'header.dart';
 
@@ -29,13 +29,20 @@ class WeeklyTimetable extends StatefulWidget {
   final List<Course> allCourses;
 
   /// 初始日期
-  /// TODO 暂时还没用上？
-  final DateTime? initialDate;
+  final DateTime initialDate;
+
+  /// 课表缓存
+  final TableCache tableCache;
 
   @override
   State<StatefulWidget> createState() => WeeklyTimetableState();
 
-  const WeeklyTimetable(this.allCourses, {Key? key, this.initialDate}) : super(key: key);
+  const WeeklyTimetable({
+    Key? key,
+    required this.allCourses,
+    required this.initialDate,
+    required this.tableCache,
+  }) : super(key: key);
 }
 
 class WeeklyTimetableState extends State<WeeklyTimetable> {
@@ -97,7 +104,13 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
   Widget _pageBuilder(int week) {
     return Column(
       children: [
-        Expanded(flex: 1, child: DateHeader(week, -1)),
+        Expanded(
+            flex: 1,
+            child: DateHeader(
+              currentWeek: week,
+              selectedDay: -1,
+              startDate: widget.initialDate,
+            )),
         Expanded(
           flex: 10,
           child: widget.allCourses.isEmpty
@@ -108,7 +121,13 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
                     textDirection: TextDirection.ltr,
                     children: [
                       Expanded(flex: 2, child: _buildLeftColumn()),
-                      Expanded(flex: 21, child: TableGrids(widget.allCourses, week))
+                      Expanded(
+                          flex: 21,
+                          child: TableGrids(
+                            widget.allCourses,
+                            week,
+                            widget.tableCache,
+                          ))
                     ],
                   ),
                 ),
@@ -119,7 +138,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
 
   @override
   Widget build(BuildContext context) {
-    dateSemesterStart = TimetableInitializer.timetableStorage.currentTableMeta?.startDate ?? DateTime(2022, 2, 14);
+    dateSemesterStart = widget.initialDate;
 
     _setDate(DateTime.now());
     _pageController = PageController(initialPage: _currentWeek - 1, keepPage: false);

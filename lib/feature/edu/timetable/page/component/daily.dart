@@ -18,8 +18,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../util/icon.dart';
+import '../../cache.dart';
 import '../../entity.dart';
-import '../../init.dart';
 import '../util.dart';
 import 'header.dart';
 import 'sheet.dart';
@@ -29,11 +29,19 @@ class DailyTimetable extends StatefulWidget {
   final List<Course> allCourses;
 
   /// 初始日期
-  final DateTime? initialDate;
+  final DateTime initialDate;
+
+  /// 课表缓存
+  final TableCache tableCache;
 
   @override
   State<StatefulWidget> createState() => DailyTimetableState();
-  const DailyTimetable(this.allCourses, {Key? key, this.initialDate}) : super(key: key);
+  const DailyTimetable({
+    Key? key,
+    required this.allCourses,
+    required this.initialDate,
+    required this.tableCache,
+  }) : super(key: key);
 }
 
 class DailyTimetableState extends State<DailyTimetable> {
@@ -55,9 +63,8 @@ class DailyTimetableState extends State<DailyTimetable> {
 
   /// 设置页面为对应日期页.
   void _setDate(DateTime theDay) {
-    final startDate = TimetableInitializer.timetableStorage.currentTableMeta?.startDate ?? DateTime.now();
-    //求一下过了多少天
-    int days = theDay.difference(startDate).inDays;
+    // 求一下过了多少天
+    int days = theDay.difference(widget.initialDate).inDays;
 
     int week = days ~/ 7 + 1, day = days % 7 + 1;
     if (days >= 0 && 1 <= week && week <= 20 && 1 <= day && day <= 7) {
@@ -129,16 +136,21 @@ class DailyTimetableState extends State<DailyTimetable> {
   Widget _pageBuilder(BuildContext context, int index, List<Course> allCourses) {
     int week = index ~/ 7 + 1;
     int day = index % 7 + 1;
-    final List<Course> todayCourse = TimetableInitializer.tableCache.filterCourseOnDay(allCourses, week, day);
+    final List<Course> todayCourse = widget.tableCache.filterCourseOnDay(allCourses, week, day);
 
     return Column(
       children: [
         // 翻页不影响选择的星期, 因此沿用 _currentDay.
         Expanded(
-          child: DateHeader(week, day, onTap: (selectedDay) {
-            day = selectedDay;
-            jumpToDay(week, day);
-          }),
+          child: DateHeader(
+            selectedDay: day,
+            currentWeek: week,
+            startDate: widget.initialDate,
+            onTap: (selectedDay) {
+              day = selectedDay;
+              jumpToDay(week, day);
+            },
+          ),
         ),
         Expanded(
           flex: 10,

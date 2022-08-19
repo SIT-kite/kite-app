@@ -20,6 +20,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:ical/serializer.dart';
 import 'package:kite/feature/edu/timetable/init.dart';
+import 'package:kite/feature/edu/timetable/page/component/daily_and_weekly.dart';
 import 'package:kite/route.dart';
 import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/flash.dart';
@@ -30,8 +31,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../entity.dart';
-import 'component/daily.dart';
-import 'component/weekly.dart';
 import 'util.dart';
 
 class TimetablePage extends StatefulWidget {
@@ -45,11 +44,11 @@ class _TimetablePageState extends State<TimetablePage> {
   /// 最大周数
   /// TODO 还没用上
   // static const int maxWeekCount = 20;
+  final tableViewerController = TimetableViewerController();
 
   final timetableStorage = TimetableInitializer.timetableStorage;
-  final cache = TimetableInitializer.tableCache;
 
-  final currentKey = GlobalKey();
+  final tableCache = TimetableInitializer.tableCache;
 
   // 模式：周课表 日课表
   late DisplayMode displayMode;
@@ -57,16 +56,17 @@ class _TimetablePageState extends State<TimetablePage> {
   // 课程表
   late List<Course> timetable;
 
-  void initAllLate() {
-    displayMode = timetableStorage.lastMode ?? DisplayMode.daily; // 初始化late变量
-    timetableStorage.lastMode = displayMode; // 持久化
-
-    timetable = timetableStorage.currentTableCourses ?? [];
-  }
+  // 课表元数据
+  late TimetableMeta? timetableMeta;
 
   @override
   void initState() {
-    initAllLate();
+    displayMode = timetableStorage.lastMode ?? DisplayMode.daily;
+    timetableStorage.lastMode = displayMode;
+
+    timetable = timetableStorage.currentTableCourses ?? [];
+    timetableMeta = timetableStorage.currentTableMeta;
+
     if (timetable.isEmpty) {
       Future.delayed(Duration.zero, () async {
         final select = await showAlertDialog(
@@ -128,7 +128,7 @@ class _TimetablePageState extends State<TimetablePage> {
   /// 根据本地缓存刷新课表
   void _onRefresh() {
     setState(() => timetable = timetableStorage.currentTableCourses ?? []);
-    cache.clear();
+    tableCache.clear();
     showBasicFlash(context, const Text('加载成功'));
   }
 
@@ -153,50 +153,37 @@ class _TimetablePageState extends State<TimetablePage> {
     );
   }
 
-  ///跳到今天的方法
-  void _onPressJumpToday() {
-    if (displayMode == DisplayMode.daily) {
-      (currentKey.currentState as DailyTimetableState).jumpToday();
-    } else {
-      (currentKey.currentState as WeeklyTimetableState).jumpToday();
-    }
-  }
-
   ///切换按钮
   Widget _buildModeSwitchButton() {
     return IconButton(
       icon: const Icon(Icons.swap_horiz),
-      onPressed: () {
-        // 显示有0和1两种模式，可通过(x+1) & 2进行来会切换
-        setState(() {
-          displayMode = DisplayMode.values[(displayMode.index + 1) & 1];
-        });
-        timetableStorage.lastMode = displayMode; // 持久化变更
-      },
+      onPressed: tableViewerController.switchDisplayMode,
     );
-  }
-
-  ///跳到今天按钮
-  Widget _buildFloatingButton() {
-    final textStyle = Theme.of(context).textTheme.headline2?.copyWith(color: Colors.white);
-    return FloatingActionButton(onPressed: _onPressJumpToday, child: Text('今', style: textStyle));
-  }
-
-  Widget _buildBody() {
-    return displayMode == DisplayMode.daily
-        ? DailyTimetable(timetable, key: currentKey)
-        : WeeklyTimetable(timetable, key: currentKey);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('课程表'), actions: <Widget>[
-        _buildModeSwitchButton(),
-        _buildPopupMenu(context),
-      ]),
-      floatingActionButton: _buildFloatingButton(),
-      body: _buildBody(),
+      appBar: AppBar(
+        title: const Text('课程表'),
+        actions: <Widget>[
+          _buildModeSwitchButton(),
+          _buildPopupMenu(context),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () => tableViewerController.jumpToToday(),
+          child: Text('今', style: Theme.of(context).textTheme.headline2?.copyWith(color: Colors.white))),
+      body: TimetableViewer(
+        controller: tableViewerController,
+        initialTableMeta: timetableMeta,
+        initialTableCourses: timetable,
+        tableCache: tableCache,
+        initialDisplayMode: displayMode,
+        onDisplayChanged: (DisplayMode displayMode) {
+          timetableStorage.lastMode = displayMode;
+        },
+      ),
     );
   }
 }

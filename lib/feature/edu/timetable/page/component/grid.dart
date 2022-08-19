@@ -17,9 +17,9 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:kite/feature/edu/timetable/cache.dart';
 import 'package:kite/feature/edu/timetable/entity.dart';
 
-import '../../init.dart';
 import '../util.dart';
 import 'sheet.dart';
 
@@ -31,9 +31,11 @@ class TableGrids extends StatelessWidget {
   late double singleGridWidth;
 
   final List<Course> allCourses;
+  final TableCache tableCache;
+
   final int currentWeek;
 
-  TableGrids(this.allCourses, this.currentWeek, {Key? key}) : super(key: key);
+  TableGrids(this.allCourses, this.currentWeek, this.tableCache, {Key? key}) : super(key: key);
 
   Widget _buildCourseGrid(BuildContext context, Course? grid) {
     final textStyle = Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.white, fontWeight: FontWeight.bold);
@@ -119,7 +121,7 @@ class TableGrids extends StatelessWidget {
   /// 构建某一天的那一列格子.
   Widget _buildDay(BuildContext context, int day) {
     // 该日的课程列表
-    final List<Course> dayCourseList = TimetableInitializer.tableCache.filterCourseOnDay(allCourses, currentWeek, day);
+    final List<Course> dayCourseList = tableCache.filterCourseOnDay(allCourses, currentWeek, day);
     // 该日的格子列表
     final List<Course?> grids = _buildGrids(dayCourseList);
 

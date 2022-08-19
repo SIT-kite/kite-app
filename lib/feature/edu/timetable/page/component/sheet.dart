@@ -62,7 +62,7 @@ class Sheet extends StatelessWidget {
 
   Widget _buildItem(BuildContext context, String icon, String text) {
     final itemStyle = Theme.of(context).textTheme.bodyText2;
-    final iconImage = AssetImage('assets/timetable/' + icon);
+    final iconImage = AssetImage('assets/timetable/$icon');
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),

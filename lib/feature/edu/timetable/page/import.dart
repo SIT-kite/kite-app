@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/feature/edu/common/entity/index.dart';
+import 'package:kite/feature/edu/timetable/page/preview.dart';
 import 'package:kite/feature/edu/util/selector.dart';
 import 'package:kite/util/alert_dialog.dart';
 
@@ -227,7 +228,22 @@ class _TimetableImportPageState extends State<TimetableImportPage> {
             showAlertDialog(
               context,
               title: '课表信息',
-              content: [_buildTableMetaInfo(meta!)],
+              content: [
+                _buildTableMetaInfo(meta!),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0, 5.h, 0, 0),
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (ctx) {
+                          return TimetablePreviewPage(
+                            meta: meta,
+                            courses: timetableStorage.getTableCourseByName(e)!,
+                          );
+                        }));
+                      },
+                      child: const Text('预览课表')),
+                ),
+              ],
               actionWidgetList: [
                 ElevatedButton(onPressed: () {}, child: const Text('设为默认课表')),
                 SizedBox(width: 10.w),

@@ -56,7 +56,8 @@ class TimetableStorage {
   set tableNames(List<String>? foo) => box.put(TimetableKeys.tableNames, foo);
 
   /// 通过课表名获取课表
-  List<Course>? getTableCourseByName(String name) => box.get(TimetableKeys.buildTableCoursesKeyByName(name));
+  List<Course>? getTableCourseByName(String name) =>
+      (box.get(TimetableKeys.buildTableCoursesKeyByName(name)) as List<dynamic>).map((e) => e as Course).toList();
 
   /// 添加一张课表
   void addTableCourses(String name, List<Course> table) =>
