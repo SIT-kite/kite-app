@@ -101,21 +101,17 @@ class _ScorePageState extends State<ScorePage> {
   }
 
   Widget _buildBody() {
-    return Column(
-      children: [
-        MyFutureBuilder<List<Score>>(
-          future: ScoreInitializer.scoreService.getScoreList(SchoolYear(selectedYear), selectedSemester),
-          builder: (context, data) {
-            final scoreList = data;
-            return Column(
-              children: [
-                _buildHeader(scoreList),
-                Expanded(child: scoreList.isNotEmpty ? _buildListView(scoreList) : _buildNoResult()),
-              ],
-            );
-          },
-        ),
-      ],
+    return MyFutureBuilder<List<Score>>(
+      future: ScoreInitializer.scoreService.getScoreList(SchoolYear(selectedYear), selectedSemester),
+      builder: (context, data) {
+        final scoreList = data;
+        return Column(
+          children: [
+            _buildHeader(scoreList),
+            Expanded(child: scoreList.isNotEmpty ? _buildListView(scoreList) : _buildNoResult()),
+          ],
+        );
+      },
     );
   }
 
