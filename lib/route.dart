@@ -123,7 +123,7 @@ class RouteTable {
     freshmanRoommate: (context, args) => const RoommateWidget(),
     freshmanLogin: (context, args) => const FreshmanLoginPage(),
     freshmanContact: (context, args) => const FreshmanUpdatePage(),
-    board: (context, args) => const BoardPage(),
+    board: (context, args) => BoardPage(),
   };
 
   static NamedRouteBuilder? get(String path) {

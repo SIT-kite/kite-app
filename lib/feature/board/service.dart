@@ -16,9 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:dio/dio.dart';
 import 'package:kite/feature/board/entity.dart';
 
@@ -40,11 +37,10 @@ class BoardService extends AService implements BoardDao {
     return result;
   }
 
-  Future<void> submitPicture(Uint8List data) async {
+  Future<void> submitPicture(String imageName, MultipartFile multipartFile) async {
     await session.post(
       '$_boardUrl/new',
-      data: data,
-      options: Options(contentType: ContentType.json.value),
+      data: FormData.fromMap({imageName: multipartFile}),
     );
   }
 }

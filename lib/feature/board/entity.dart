@@ -22,8 +22,8 @@ part 'entity.g.dart';
 
 @JsonSerializable()
 class PictureSummary {
-  /// Picture uuid.
-  final String uuid;
+  /// Picture id.
+  final String id;
 
   /// Publisher nickname
   final String publisher;
@@ -34,8 +34,12 @@ class PictureSummary {
   /// Publish time
   final String ts;
 
-  const PictureSummary(this.uuid, this.publisher, this.thumbnail, this.ts);
+  const PictureSummary(this.id, this.publisher, this.thumbnail, this.ts);
 
-  factory PictureSummary.fromJson(Map<String, dynamic> json) =>
-      _$PictureSummaryFromJson(json);
+  factory PictureSummary.fromJson(Map<String, dynamic> json) => _$PictureSummaryFromJson(json);
+
+  @override
+  String toString() {
+    return 'PictureSummary{id: $id, publisher: $publisher, thumbnail: $thumbnail, ts: $ts}';
+  }
 }

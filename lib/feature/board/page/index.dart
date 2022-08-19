@@ -16,11 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:kite/feature/board/init.dart';
+import 'package:kite/feature/board/service.dart';
+import 'package:kite/util/file.dart';
+import 'package:kite/util/logger.dart';
 
 class BoardPage extends StatelessWidget {
-  const BoardPage({Key? key}) : super(key: key);
+  final BoardService boardService = BoardInitializer.boardServiceDao;
+  BoardPage({Key? key}) : super(key: key);
 
   Widget buildView() {
     // Test code
@@ -54,7 +63,24 @@ class BoardPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.upload),
-        onPressed: () {},
+        onPressed: () async {
+          try {
+            final String? imagePath = await FileUtils.pickImageByFilePicker();
+            if (imagePath == null) return;
+            final multipartFile = await MultipartFile.fromFile(
+              imagePath,
+              filename: imagePath.split(Platform.pathSeparator).last,
+            );
+            EasyLoading.show(status: '正在上传');
+            await boardService.submitPicture('Snapshot', multipartFile);
+            EasyLoading.showSuccess('上传成功');
+          } catch (e) {
+            Log.info(e);
+            EasyLoading.showError('上传失败');
+          } finally {
+            EasyLoading.dismiss();
+          }
+        },
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
