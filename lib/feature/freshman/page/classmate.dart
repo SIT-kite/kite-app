@@ -25,14 +25,14 @@ import '../entity.dart';
 import '../init.dart';
 import 'component/mate_list.dart';
 
-class FreshmanClassPage extends StatefulWidget {
-  const FreshmanClassPage({Key? key}) : super(key: key);
+class ClassmateWidget extends StatefulWidget {
+  const ClassmateWidget({Key? key}) : super(key: key);
 
   @override
-  State<FreshmanClassPage> createState() => _FreshmanClassPageState();
+  State<ClassmateWidget> createState() => _ClassmateWidgetState();
 }
 
-class _FreshmanClassPageState extends State<FreshmanClassPage> {
+class _ClassmateWidgetState extends State<ClassmateWidget> {
   final FreshmanCacheManager freshmanCacheManager = FreshmanInitializer.freshmanCacheManager;
   final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
 
@@ -43,19 +43,14 @@ class _FreshmanClassPageState extends State<FreshmanClassPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('班级同学'),
-      ),
-      body: MyFutureBuilder<List<Mate>>(
-        future: freshmanDao.getClassmates(),
-        builder: (context, data) {
-          return MateListWidget(
-            data,
-            callBack: onRefresh,
-          );
-        },
-      ),
+    return MyFutureBuilder<List<Mate>>(
+      future: freshmanDao.getClassmates(),
+      builder: (context, data) {
+        return MateListWidget(
+          data,
+          callBack: onRefresh,
+        );
+      },
     );
   }
 }

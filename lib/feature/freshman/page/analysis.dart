@@ -24,62 +24,25 @@ import 'package:kite/feature/freshman/entity.dart';
 
 import '../dao.dart';
 import '../init.dart';
-import 'component/basic_info.dart';
 
-class FreshmanAnalysisPage extends StatefulWidget {
-  static bool isFan = true;
-
+class FreshmanAnalysisPage extends StatelessWidget {
   const FreshmanAnalysisPage({Key? key}) : super(key: key);
 
   @override
-  State<FreshmanAnalysisPage> createState() => _FreshmanAnalysisPageState();
-}
-
-class _FreshmanAnalysisPageState extends State<FreshmanAnalysisPage> {
-  final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
-
-  @override
   Widget build(BuildContext context) {
+    final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
+
     return Scaffold(
       body: MyFutureBuilder<List<dynamic>>(
         future: Future.wait([freshmanDao.getAnalysis(), freshmanDao.getInfo()]),
         builder: (context, data) {
-          return FreshmanAnalysisPage.isFan
-              ? _buildBodyStack(context, data[0], data[1])
-              : _buildBodyBasicInfo(context, data[0], data[1]);
+          return _buildBodyStack(context, data[0], data[1]);
         },
-      ),
-      floatingActionButton: IconButton(
-        iconSize: 50,
-        color: !FreshmanAnalysisPage.isFan ? Theme.of(context).primaryColorDark : Colors.red,
-        onPressed: () {
-          setState(() {
-            FreshmanAnalysisPage.isFan = !FreshmanAnalysisPage.isFan;
-          });
-        },
-        icon: const Icon(Icons.change_circle),
       ),
     );
   }
 
-  //信息风格分析
-  Widget _buildBodyBasicInfo(BuildContext context, Analysis data, FreshmanInfo info) {
-    return BasicInfoPageWidget(
-      name: info.name,
-      college: info.college,
-      infoItems: [
-        if (data.sameName != 0) InfoItem(Icons.person, "同名人数", '${data.sameName} 人'),
-        if (data.sameCity != -1) InfoItem(Icons.location_city, "来自同一个城市的人数", '${data.sameCity} 人'),
-        if (data.sameHighSchool != -1) InfoItem(Icons.face, "来自同一个高中的人数", '${data.sameHighSchool} 人'),
-        InfoItem(Icons.school, "学院总人数", '${data.collegeCount} 人'),
-        InfoItem(Icons.emoji_objects, "专业总人数", '${data.major.total} 人'),
-        InfoItem(Icons.male, "专业男生人数", '${data.major.boys} 人'),
-        InfoItem(Icons.female, "专业女生人数", '${data.major.girls} 人'),
-      ],
-    );
-  }
-
-  //分享图风格分析
+  /// 分享图风格分析
   Widget _buildBodyStack(BuildContext context, Analysis data, FreshmanInfo info) {
     return Stack(
       children: [
@@ -125,7 +88,7 @@ class _FreshmanAnalysisPageState extends State<FreshmanAnalysisPage> {
     );
   }
 
-  //文字列抽离
+  /// 文字列抽离
   Widget buildTextColumn(BuildContext context, Analysis data, FreshmanInfo info) {
     TextStyle italicText = const TextStyle(fontStyle: FontStyle.italic, fontSize: 15);
     return Column(
@@ -162,7 +125,7 @@ class _FreshmanAnalysisPageState extends State<FreshmanAnalysisPage> {
     );
   }
 
-  //文字行抽离
+  /// 文字行抽离
   Widget buildAnalysisTextRow({
     required String text,
     String? analysis,
@@ -190,30 +153,3 @@ class _FreshmanAnalysisPageState extends State<FreshmanAnalysisPage> {
     );
   }
 }
-
-// class MySlideTransition extends AnimatedWidget {
-//   const MySlideTransition({
-//     Key? key,
-//     required Animation<Offset> position,
-//     this.transformHitTests = true,
-//     required this.child,
-//   }) : super(key: key, listenable: position);
-//
-//   final bool transformHitTests;
-//
-//   final Widget child;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final position = listenable as Animation<Offset>;
-//     Offset offset = position.value;
-//     if (position.status == AnimationStatus.reverse) {
-//       offset = Offset(-offset.dx, offset.dy);
-//     }
-//     return FractionalTranslation(
-//       translation: offset,
-//       transformHitTests: transformHitTests,
-//       child: child,
-//     );
-//   }
-// }

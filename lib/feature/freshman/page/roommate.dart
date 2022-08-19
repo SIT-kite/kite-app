@@ -26,14 +26,14 @@ import '../entity.dart';
 import '../init.dart';
 import 'component/mate_list.dart';
 
-class FreshmanRoommatePage extends StatefulWidget {
-  const FreshmanRoommatePage({Key? key}) : super(key: key);
+class RoommateWidget extends StatefulWidget {
+  const RoommateWidget({Key? key}) : super(key: key);
 
   @override
-  State<FreshmanRoommatePage> createState() => _FreshmanRoommatePageState();
+  State<RoommateWidget> createState() => _RoommateWidgetState();
 }
 
-class _FreshmanRoommatePageState extends State<FreshmanRoommatePage> {
+class _RoommateWidgetState extends State<RoommateWidget> {
   final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
   final FreshmanCacheManager freshmanCacheManager = FreshmanInitializer.freshmanCacheManager;
 
@@ -58,16 +58,11 @@ class _FreshmanRoommatePageState extends State<FreshmanRoommatePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('我的舍友'),
-      ),
-      body: MyFutureBuilder<List<dynamic>>(
-        future: Future.wait([freshmanDao.getRoommates(), freshmanDao.getInfo()]),
-        builder: (context, data) {
-          return buildBody(data[0], data[1]);
-        },
-      ),
+    return MyFutureBuilder<List<dynamic>>(
+      future: Future.wait([freshmanDao.getRoommates(), freshmanDao.getInfo()]),
+      builder: (context, data) {
+        return buildBody(data[0], data[1]);
+      },
     );
   }
 }

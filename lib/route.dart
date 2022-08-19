@@ -22,10 +22,9 @@ import 'package:kite/feature/freshman/page/login.dart';
 import 'package:kite/feature/web_page/browser.dart';
 
 import 'feature/freshman/page/analysis.dart';
-import 'feature/freshman/page/class.dart';
+import 'feature/freshman/page/classmate.dart';
 import 'feature/freshman/page/familiar.dart';
 import 'feature/freshman/page/index.dart';
-import 'feature/freshman/page/info.dart';
 import 'feature/freshman/page/roommate.dart';
 import 'feature/freshman/page/update.dart';
 import 'feature/page_index.dart';
@@ -114,15 +113,14 @@ class RouteTable {
     classroom: (context, args) => const ClassroomPage(),
     exam: (context, args) => const ExamPage(),
     egg: (context, args) => const EggPage(),
-    bbs: (context, args) => BbsPage(),
+    bbs: (context, args) => const BbsPage(),
     scanner: (context, args) => const ScannerPage(),
     browser: (context, args) => BrowserPage(args['initialUrl']),
-    freshman: (context, args) => FreshmanPage(),
-    freshmanInfo: (context, args) => const FreshmanInfoPage(),
-    freshmanFamiliar: (context, args) => const FreshmanFamiliarPage(),
-    freshmanClass: (context, args) => const FreshmanClassPage(),
+    freshman: (context, args) => const FreshmanPage(),
+    freshmanFamiliar: (context, args) => const FamiliarPeopleWidget(),
+    freshmanClass: (context, args) => const ClassmateWidget(),
     freshmanAnalysis: (context, args) => const FreshmanAnalysisPage(),
-    freshmanRoommate: (context, args) => const FreshmanRoommatePage(),
+    freshmanRoommate: (context, args) => const RoommateWidget(),
     freshmanLogin: (context, args) => const FreshmanLoginPage(),
     freshmanContact: (context, args) => const FreshmanUpdatePage(),
     board: (context, args) => const BoardPage(),

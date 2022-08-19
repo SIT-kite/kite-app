@@ -25,14 +25,14 @@ import 'package:kite/feature/freshman/page/component/familar_list.dart';
 import '../dao.dart';
 import '../init.dart';
 
-class FreshmanFamiliarPage extends StatefulWidget {
-  const FreshmanFamiliarPage({Key? key}) : super(key: key);
+class FamiliarPeopleWidget extends StatefulWidget {
+  const FamiliarPeopleWidget({Key? key}) : super(key: key);
 
   @override
-  State<FreshmanFamiliarPage> createState() => _FreshmanFamiliarPageState();
+  State<FamiliarPeopleWidget> createState() => _FamiliarPeopleWidgetState();
 }
 
-class _FreshmanFamiliarPageState extends State<FreshmanFamiliarPage> {
+class _FamiliarPeopleWidgetState extends State<FamiliarPeopleWidget> {
   final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
   final FreshmanCacheManager freshmanCacheManager = FreshmanInitializer.freshmanCacheManager;
 
@@ -57,16 +57,11 @@ class _FreshmanFamiliarPageState extends State<FreshmanFamiliarPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('可能认识的人'),
-      ),
-      body: MyFutureBuilder<List<Familiar>>(
-        future: freshmanDao.getFamiliars(),
-        builder: (context, data) {
-          return buildBody(data);
-        },
-      ),
+    return MyFutureBuilder<List<Familiar>>(
+      future: freshmanDao.getFamiliars(),
+      builder: (context, data) {
+        return buildBody(data);
+      },
     );
   }
 }

@@ -18,6 +18,12 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kite/feature/freshman/page/friend.dart';
+import 'package:kite/storage/init.dart';
+
+import '../../../../route.dart';
+import '../analysis.dart';
+import '../update.dart';
 
 class InfoItem {
   IconData iconData = Icons.person;
@@ -29,13 +35,13 @@ class InfoItem {
   InfoItem(this.iconData, this.subtitle, this.title, {this.onTap, this.trailIconData});
 }
 
-class BasicInfoPageWidget extends StatefulWidget {
+class BasicInfoWidget extends StatelessWidget {
   final String name;
   final String college;
   final List<InfoItem> infoItems;
   final Widget? avatar;
 
-  const BasicInfoPageWidget({
+  const BasicInfoWidget({
     required this.name,
     required this.college,
     required this.infoItems,
@@ -43,16 +49,16 @@ class BasicInfoPageWidget extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  @override
-  State<BasicInfoPageWidget> createState() => _BasicInfoPageWidgetState();
-}
-
-class _BasicInfoPageWidgetState extends State<BasicInfoPageWidget> {
   final double bgHeight = 250;
 
   @override
   Widget build(BuildContext context) {
-    return _buildBackground(widget.name, widget.college, widget.infoItems);
+    if (KvStorageInitializer.freshman.freshmanSecret == null) {
+      // 若无新生信息
+      Navigator.of(context).pushReplacementNamed(RouteTable.freshmanLogin);
+    }
+
+    return _buildBackground(context, name, college, infoItems);
   }
 
   /// 构造默认头像
@@ -67,129 +73,133 @@ class _BasicInfoPageWidgetState extends State<BasicInfoPageWidget> {
           ),
           boxShadow: [BoxShadow(color: Colors.black54, offset: Offset(2.0, 2.0), blurRadius: 4.0)]),
       child: Container(
-          alignment: const Alignment(0, -0.5),
-          child: (widget.name).isEmpty
-              ? Center(child: Icon(Icons.account_circle, size: 40, color: Colors.grey[50]))
-              : Text(widget.name[0],
-              style: const TextStyle(
-                  fontFamily: 'calligraphy',
-                  fontSize: 45,
-                  color: Colors.white,
-                  shadows: [BoxShadow(color: Colors.black54, offset: Offset(2.0, 4.0), blurRadius: 10.0)],
-                  fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.none))),
+        alignment: const Alignment(0, -0.5),
+        child: (name).isEmpty
+            ? Center(child: Icon(Icons.account_circle, size: 40, color: Colors.grey[50]))
+            : Text(name[0],
+                style: const TextStyle(
+                    fontFamily: 'calligraphy',
+                    fontSize: 45,
+                    color: Colors.white,
+                    shadows: [BoxShadow(color: Colors.black54, offset: Offset(2.0, 4.0), blurRadius: 10.0)],
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.none)),
+      ),
     );
   }
 
+  PopupMenuButton _buildMenuButton(BuildContext context) {
+    final menuButton = PopupMenuButton(
+      itemBuilder: (BuildContext context) {
+        return [
+          PopupMenuItem(
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => const FreshmanAnalysisPage()));
+            },
+            child: const Text('风筝报告'),
+          ),
+          PopupMenuItem(
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => const MySwitcher(false)));
+            },
+            child: const Text('联系方式设置'),
+          )
+        ];
+      },
+    );
+    return menuButton;
+  }
+
   /// 构造背景
-  Widget _buildBackground(String name, String college, List<InfoItem> list) {
-    return Stack(
-        alignment: AlignmentDirectional.center,
-        textDirection: TextDirection.ltr,
-        clipBehavior: Clip.antiAlias,
-        children: [
-          //上背景
-          Column(
-            children: [
-              Container(
-                height: bgHeight,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColorDark]),
-                ),
-              ),
-            ],
-          ),
-
-          //下背景
-          Positioned(
-              top: bgHeight,
-              height: MediaQuery.of(context).size.height - bgHeight,
-              width: MediaQuery.of(context).size.width,
-              child: Container(
-                color: Colors.white,
-              )),
-
-          //列表
-          Positioned(
-              top: bgHeight,
-              height: MediaQuery.of(context).size.height - bgHeight,
-              width: MediaQuery.of(context).size.width,
-              child: Scaffold(
-                body: ListView.builder(
-                  itemCount: list.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return _buildItem(list[index]);
-                  },
-                ),
-              )),
-
-          //头像，以后可以加载用户头像，如果有的话
-          Positioned(
-            top: bgHeight,
-            height: MediaQuery.of(context).size.height - bgHeight,
-            width: MediaQuery.of(context).size.width,
-            child: Align(
-              alignment: const Alignment(0.9, -1.2),
-              child: Container(
-                width: 70,
-                height: 70,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-                child: widget.avatar ?? buildDefaultAvatar(),
-              ),
-            ),
-          ),
-
-          //背景文字
-          Positioned(
-            top: bgHeight - 100,
-            left: 20,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildBackground(BuildContext context, String name, String college, List<InfoItem> list) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('我的入学信息'),
+        actions: [_buildMenuButton(context)],
+      ),
+      body: Stack(
+          alignment: AlignmentDirectional.center,
+          textDirection: TextDirection.ltr,
+          clipBehavior: Clip.antiAlias,
+          children: [
+            // 上背景
+            Column(
               children: [
-                Text(
-                  name,
-                  textAlign: TextAlign.left,
-                  style: const TextStyle(color: Colors.white, fontSize: 30, decoration: TextDecoration.none),
+                Container(
+                  height: bgHeight,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColorDark]),
+                  ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  '$college新生',
-                  textAlign: TextAlign.left,
-                  style: const TextStyle(color: CupertinoColors.white, fontSize: 16, decoration: TextDecoration.none),
-                )
               ],
             ),
-          ),
 
-          ///返回按钮
-          Positioned(
-              left: 24,
-              top: 54,
-              child: GestureDetector(
-                  onTap: () => Navigator.of(context).pop(),
-                  child: Container(
-                    width: 45,
-                    height: 45,
-                    alignment: Alignment.center,
-                    decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                    child: const Icon(
-                      Icons.keyboard_double_arrow_left_sharp,
-                      color: Colors.blueAccent,
-                      size: 30,
-                    ),
-                  ))),
-        ]);
+            // 列表
+            Positioned(
+              top: bgHeight,
+              height: MediaQuery.of(context).size.height - bgHeight,
+              width: MediaQuery.of(context).size.width,
+              child: ListView(
+                children: list.map((e) => _buildItem(context, e)).toList(),
+              ),
+            ),
+
+            // 头像，以后可以加载用户头像，如果有的话
+            Positioned(
+              top: bgHeight,
+              height: MediaQuery.of(context).size.height - bgHeight,
+              width: MediaQuery.of(context).size.width,
+              child: Align(
+                alignment: const Alignment(0.9, -1.2),
+                child: Container(
+                  width: 70,
+                  height: 70,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  child: avatar ?? buildDefaultAvatar(),
+                ),
+              ),
+            ),
+
+            //背景文字
+            Positioned(
+              top: bgHeight - 100,
+              left: 20,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(color: Colors.white, fontSize: 30, decoration: TextDecoration.none),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    '$college新生',
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(color: CupertinoColors.white, fontSize: 16, decoration: TextDecoration.none),
+                  )
+                ],
+              ),
+            ),
+          ]),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.person),
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const FriendPage()));
+        },
+      ),
+    );
   }
 
   /// 构造列表项
-  Widget _buildItem(InfoItem infoItem) {
+  Widget _buildItem(BuildContext context, InfoItem infoItem) {
     return ListTile(
       textColor: Colors.black,
       leading: SizedBox(

@@ -43,7 +43,7 @@ class _FamiliarListWidgetState extends State<FamiliarListWidget> {
 
     Navigator.of(context).push(
       MaterialPageRoute(builder: (ctx) {
-        return BasicInfoPageWidget(
+        return BasicInfoWidget(
           name: familiar.name,
           college: familiar.college,
           infoItems: [

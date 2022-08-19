@@ -45,7 +45,7 @@ class _MateListWidgetState extends State<MateListWidget> {
   void loadMoreInfo(Mate mate) {
     final lastSeenText = calcLastSeen(mate.lastSeen);
     Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-      return BasicInfoPageWidget(
+      return BasicInfoWidget(
         name: mate.name,
         college: mate.college,
         infoItems: [
