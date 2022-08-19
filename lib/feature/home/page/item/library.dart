@@ -59,9 +59,10 @@ class _LibraryItemState extends State<LibraryItem> {
     late HotSearch hotSearch;
 
     try {
-      hotSearch = await LibrarySearchInitializer.hotSearchService.getHotSearch();
+      hotSearch =
+          await LibrarySearchInitializer.hotSearchService.getHotSearch();
     } catch (e) {
-      return e.runtimeType.toString();
+      return defaultContent;
     }
     final monthlyHot = hotSearch.recentMonth;
     final randomIndex = Random().nextInt(monthlyHot.length);
@@ -79,6 +80,10 @@ class _LibraryItemState extends State<LibraryItem> {
       final lastHotSearch = KvStorageInitializer.home.lastHotSearch;
       content = lastHotSearch ?? defaultContent;
     }
-    return HomeFunctionButton(route: '/library', icon: 'assets/home/icon_library.svg', title: '图书馆', subtitle: content);
+    return HomeFunctionButton(
+        route: '/library',
+        icon: 'assets/home/icon_library.svg',
+        title: '图书馆',
+        subtitle: content);
   }
 }
