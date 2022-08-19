@@ -21,9 +21,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../entity.dart';
-import 'basic_info.dart';
 import 'card.dart';
 import 'common.dart';
+import 'profile.dart';
 
 class FamiliarListWidget extends StatefulWidget {
   final List<Familiar> familiarList;
@@ -104,7 +104,7 @@ class _FamiliarListWidgetState extends State<FamiliarListWidget> {
   Widget buildListView(List<Familiar> list) {
     return ListView(
       children: list.map((e) {
-        return PersonItemCardWidget(
+        return PersonItemWidget(
           basicInfoWidget: buildBasicInfoWidget(e),
           name: e.name,
           isMale: e.gender == 'M',

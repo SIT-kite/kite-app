@@ -21,7 +21,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'common.dart';
 
-class PersonItemCardWidget extends StatefulWidget {
+class PersonItemWidget extends StatelessWidget {
   final String name;
   final String lastSeenText;
   final String? locationText;
@@ -30,7 +30,7 @@ class PersonItemCardWidget extends StatefulWidget {
   final bool isMale;
   final double? height;
 
-  const PersonItemCardWidget({
+  const PersonItemWidget({
     required this.basicInfoWidget,
     required this.name,
     required this.lastSeenText,
@@ -41,14 +41,9 @@ class PersonItemCardWidget extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  @override
-  State<PersonItemCardWidget> createState() => _PersonItemCardWidgetState();
-}
-
-class _PersonItemCardWidgetState extends State<PersonItemCardWidget> {
-  Widget buildMoreButton() {
+  Widget buildMoreButton(BuildContext context) {
     return GestureDetector(
-      onTap: widget.onLoadMore,
+      onTap: onLoadMore,
       child: Container(
         padding: const EdgeInsets.fromLTRB(10, 2, 0, 2),
         decoration: BoxDecoration(
@@ -68,18 +63,18 @@ class _PersonItemCardWidgetState extends State<PersonItemCardWidget> {
     );
   }
 
-  Widget buildLastSeen() {
+  Widget buildLastSeen(BuildContext context) {
     return buildInfoItemRow(
       iconData: Icons.timelapse,
-      text: "${widget.lastSeenText}在线",
+      text: "$lastSeenText在线",
       fontSize: 14,
       iconSize: 20,
       context: context,
     ).withOrangeBarStyle(context);
   }
 
-  Widget buildLocation() {
-    final loc = widget.locationText;
+  Widget buildLocation(BuildContext context) {
+    final loc = locationText;
     if (loc != null) {
       return buildInfoItemRow(
         iconData: Icons.room,
@@ -100,9 +95,9 @@ class _PersonItemCardWidgetState extends State<PersonItemCardWidget> {
   }
 
   /// 嵌套InkWell实现水波纹点击效果  组合（头像，背景卡片，位置卡片和上次登录卡片）左区 和（信息组件）右区
-  Widget buildContent() {
+  Widget buildContent(BuildContext context) {
     return InkWell(
-      onTap: widget.onLoadMore,
+      onTap: onLoadMore,
       child: Flex(
         direction: Axis.horizontal,
         children: [
@@ -111,17 +106,17 @@ class _PersonItemCardWidgetState extends State<PersonItemCardWidget> {
             child: Stack(children: [
               Align(
                 alignment: const Alignment(0, -0.7),
-                child: buildAvatar(name: widget.name),
+                child: buildAvatar(name: name),
               ),
               Positioned(
                 top: 120,
                 left: 0,
-                child: buildLastSeen(),
+                child: buildLastSeen(context),
               ),
               Positioned(
                 top: 165,
                 left: 0,
-                child: buildLocation(),
+                child: buildLocation(context),
               )
             ]),
           ),
@@ -129,20 +124,11 @@ class _PersonItemCardWidgetState extends State<PersonItemCardWidget> {
             flex: 11,
             child: Padding(
               padding: const EdgeInsets.all(10.0),
-              child: widget.basicInfoWidget,
+              child: basicInfoWidget,
             ),
           )
         ],
       ),
-    );
-  }
-
-  /// 性别icon印章
-  Widget buildSexIcon() {
-    return Icon(
-      widget.isMale ? Icons.male : Icons.female,
-      size: 100,
-      color: Colors.black.withAlpha(100),
     );
   }
 
@@ -153,18 +139,17 @@ class _PersonItemCardWidgetState extends State<PersonItemCardWidget> {
         Container(
           margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [Theme.of(context).primaryColorDark, Theme.of(context).primaryColor]),
-            // color: Theme.of(context).primaryColor.withAlpha(200),
-            borderRadius: BorderRadius.circular(15.0), //像素圆角
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(4.0), //像素圆角
             boxShadow: const [
-              //阴影
-              BoxShadow(color: Colors.black12, offset: Offset(7.0, 7.0), blurRadius: 4.0)
+              // 阴影
+              BoxShadow(color: Colors.black12, offset: Offset(4.0, 7.0), blurRadius: 4.0)
             ],
           ),
           child: SizedBox(
-            height: widget.height,
+            height: height,
             width: MediaQuery.of(context).size.width - 20.w,
-            child: buildContent(),
+            child: buildContent(context),
           ),
         ),
       ],

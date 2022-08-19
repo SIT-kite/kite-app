@@ -23,7 +23,7 @@ import 'package:kite/launch.dart';
 import 'package:kite/util/flash.dart';
 
 import '../../entity.dart';
-import 'basic_info.dart';
+import 'profile.dart';
 
 List<InfoItem> buildContactInfoItems(BuildContext context, Contact? contact) {
   final wechat = contact?.wechat;
@@ -101,15 +101,15 @@ Widget buildDefaultAvatar(String name) {
       child: name.isEmpty
           ? Center(child: Icon(Icons.account_circle, size: 40, color: Colors.grey[50]))
           : Text(
-        name[0],
-        style: const TextStyle(
-            fontFamily: 'calligraphy',
-            fontSize: 45,
-            color: Colors.white,
-            shadows: [BoxShadow(color: Colors.black54, offset: Offset(2.0, 4.0), blurRadius: 10.0)],
-            fontWeight: FontWeight.bold,
-            decoration: TextDecoration.none),
-      ),
+              name[0],
+              style: const TextStyle(
+                  fontFamily: 'calligraphy',
+                  fontSize: 45,
+                  color: Colors.white,
+                  shadows: [BoxShadow(color: Colors.black54, offset: Offset(2.0, 4.0), blurRadius: 10.0)],
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.none),
+            ),
     ),
   );
 }
@@ -158,14 +158,14 @@ Widget buildInfoItemRow({
       children: [
         Icon(
           iconData,
-          color: Colors.white,
+          color: Colors.lightBlue,
           size: iconSize ?? IconTheme.of(context).size,
         ),
         Expanded(
           child: Text(
             ' $text',
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black87,
               fontSize: fontSize ?? 14,
               overflow: TextOverflow.ellipsis,
             ),
@@ -179,9 +179,8 @@ Widget buildInfoItemRow({
 extension Styles on Widget {
   Widget withTitleBarStyle(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-          color: Colors.blueAccent,
-          boxShadow: [BoxShadow(color: Colors.black, offset: Offset(2, 2.0), blurRadius: 4.0)]),
+      decoration:
+          const BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(color: Colors.grey, offset: Offset(1, 1.0))]),
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(5),
       child: this,
@@ -193,7 +192,7 @@ extension Styles on Widget {
       padding: const EdgeInsets.fromLTRB(10, 1, 20, 1),
       alignment: const Alignment(-1, 0),
       decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [Colors.red, Colors.orange.shade700]), //背景渐变
+        gradient: LinearGradient(colors: [Colors.orange.shade700, Colors.yellow]), //背景渐变
       ),
       width: 200.w,
       child: this,

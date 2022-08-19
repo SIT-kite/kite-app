@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:kite/feature/freshman/page/component/basic_info.dart';
+import 'package:kite/feature/freshman/page/component/profile.dart';
 
 import '../../../component/future_builder.dart';
 import '../dao.dart';
@@ -50,7 +50,6 @@ class _FreshmanPageState extends State<FreshmanPage> {
       college: data.college,
       infoItems: [
         InfoItem(Icons.badge, "学号", data.studentId),
-        InfoItem(Icons.school, "学院", data.college),
         InfoItem(Icons.emoji_objects, "专业", data.major),
         InfoItem(Icons.corporate_fare, "宿舍", '${data.campus} ${data.building}${data.room}-${data.bed}'),
         InfoItem(Icons.face, "辅导员", data.counselorName),

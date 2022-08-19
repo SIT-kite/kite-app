@@ -24,36 +24,27 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../dao.dart';
 import '../../entity.dart';
 import '../../init.dart';
-import 'basic_info.dart';
 import 'common.dart';
+import 'profile.dart';
 
-class MateListWidget extends StatefulWidget {
+class MateListWidget extends StatelessWidget {
   final List<Mate> mateList;
   final VoidCallback? callBack;
-
-  const MateListWidget(this.mateList, {this.callBack, Key? key}) : super(key: key);
-
-  @override
-  State<MateListWidget> createState() => _MateListWidgetState();
-}
-
-class _MateListWidgetState extends State<MateListWidget> {
   final RefreshController _refreshController = RefreshController();
   final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
 
+  MateListWidget(this.mateList, {this.callBack, Key? key}) : super(key: key);
+
   /// 打开个人详情页
-  void loadMoreInfo(Mate mate) {
+  void loadMoreInfo(BuildContext context, Mate mate) {
     final lastSeenText = calcLastSeen(mate.lastSeen);
     Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
       return BasicInfoWidget(
         name: mate.name,
         college: mate.college,
         infoItems: [
-          InfoItem(Icons.account_circle, "姓名", mate.name),
-          InfoItem(Icons.school, "学院", mate.college),
           InfoItem(Icons.emoji_objects, "专业", mate.major),
-          InfoItem(Icons.night_shelter, "宿舍楼", mate.building),
-          InfoItem(Icons.bed, "寝室", '${mate.room}室${mate.bed}床'),
+          InfoItem(Icons.bed, "寝室", '${mate.building} ${mate.room}室${mate.bed}床'),
           InfoItem(mate.gender == 'M' ? Icons.male : Icons.female, "性别", mate.gender == 'M' ? '男' : '女'),
           if (mate.province != null) InfoItem(Icons.location_city, '省份', mate.province!),
           if (mate.lastSeen != null) InfoItem(Icons.location_city, '上次登录时间', lastSeenText),
@@ -64,13 +55,13 @@ class _MateListWidgetState extends State<MateListWidget> {
   }
 
   ///构建基本信息
-  Widget buildBasicInfoWidget(Mate mate) {
+  Widget buildBasicInfoWidget(BuildContext context, Mate mate) {
     final wechat = mate.contact?.wechat;
     final qq = mate.contact?.qq;
     final tel = mate.contact?.tel;
     final wechatRow = buildInfoItemRow(
       iconData: Icons.wechat,
-      text: '微信号:  ${wechat != null && wechat != '' ? wechat : '未填写'}',
+      text: '微信:  ${wechat != null && wechat != '' ? wechat : '未填写'}',
       context: context,
     );
     final qqRow = buildInfoItemRow(
@@ -80,13 +71,13 @@ class _MateListWidgetState extends State<MateListWidget> {
     );
     final telRow = buildInfoItemRow(
       iconData: Icons.phone,
-      text: '手机号:  ${tel != null && tel != '' ? tel : '未填写'}',
+      text: '手机:  ${tel != null && tel != '' ? tel : '未填写'}',
       context: context,
     );
 
     return Stack(children: [
       Align(
-        alignment: const Alignment(1, -1.4),
+        alignment: const Alignment(1.3, -1.4),
         child: SizedBox(
           width: 100,
           height: 100,
@@ -99,7 +90,7 @@ class _MateListWidgetState extends State<MateListWidget> {
           Text(
             mate.name,
             style: const TextStyle(
-                fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),
+                fontSize: 30, color: Colors.black54, fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),
           ),
           SizedBox(
             height: 4.h,
@@ -132,27 +123,27 @@ class _MateListWidgetState extends State<MateListWidget> {
     return Icon(
       isMale ? Icons.male : Icons.female,
       size: 50,
-      color: Colors.black45,
+      color: isMale ? Colors.lightBlue : Colors.red,
     );
   }
 
-  Widget buildListView(List<Mate> list) {
+  Widget buildListView(BuildContext context, List<Mate> list) {
     return ListView(
       children: list.map((e) {
-        return PersonItemCardWidget(
-          basicInfoWidget: buildBasicInfoWidget(e),
+        return PersonItemWidget(
+          basicInfoWidget: buildBasicInfoWidget(context, e),
           name: e.name,
           isMale: e.gender == 'M',
           lastSeenText: calcLastSeen(e.lastSeen),
           locationText: e.province,
-          onLoadMore: () => loadMoreInfo(e),
+          onLoadMore: () => loadMoreInfo(context, e),
           height: 235,
         );
       }).toList(),
     );
   }
 
-  Widget buildBody(List<Mate> mateList) {
+  Widget buildBody(BuildContext context, List<Mate> mateList) {
     return Column(
       children: [
         buildInfoItemRow(
@@ -165,8 +156,8 @@ class _MateListWidgetState extends State<MateListWidget> {
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: SmartRefresher(
               controller: _refreshController,
-              onRefresh: widget.callBack,
-              child: buildListView(mateList),
+              onRefresh: callBack,
+              child: buildListView(context, mateList),
             ),
           ),
         ),
@@ -176,6 +167,6 @@ class _MateListWidgetState extends State<MateListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return buildBody(widget.mateList);
+    return buildBody(context, mateList);
   }
 }

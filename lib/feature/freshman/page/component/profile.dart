@@ -114,7 +114,7 @@ class BasicInfoWidget extends StatelessWidget {
   Widget _buildBackground(BuildContext context, String name, String college, List<InfoItem> list) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('我的入学信息'),
+        title: const Text('入学信息'),
         actions: [_buildMenuButton(context)],
       ),
       body: Stack(
