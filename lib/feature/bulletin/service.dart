@@ -20,8 +20,8 @@ import 'package:intl/intl.dart';
 import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
-import '../dao/bulletin.dart';
-import '../entity/bulletin.dart';
+import 'dao.dart';
+import 'entity.dart';
 
 class BulletinService extends AService implements BulletinDao {
   BulletinService(ASession session) : super(session);
@@ -30,7 +30,7 @@ class BulletinService extends AService implements BulletinDao {
     return element.find('#containerFrame > table')!.findAll('a').map((e) {
       return Attachment()
         ..name = e.text.trim()
-        ..url = 'https://myportal.sit.edu.cn/' + e.attributes['href']!;
+        ..url = 'https://myportal.sit.edu.cn/${e.attributes['href']!}';
     }).toList();
   }
 
@@ -87,7 +87,7 @@ class BulletinService extends AService implements BulletinDao {
       final departmentAndDate = e.find('span', class_: 'rss-time')!.text.trim();
       final departmentAndDateLen = departmentAndDate.length;
       final department = departmentAndDate.substring(0, departmentAndDateLen - 8);
-      final date = '20' + departmentAndDate.substring(departmentAndDateLen - 8, departmentAndDateLen);
+      final date = '20${departmentAndDate.substring(departmentAndDateLen - 8, departmentAndDateLen)}';
 
       final titleElement = e.find('a', class_: 'rss-title')!;
       final uri = Uri.parse(titleElement.attributes['href']!);

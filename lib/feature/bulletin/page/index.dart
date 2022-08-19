@@ -18,7 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../entity/bulletin.dart';
+import '../entity.dart';
 import '../init.dart';
 import 'detail.dart';
 
@@ -35,7 +35,7 @@ class BulletinPage extends StatelessWidget {
       padding: const EdgeInsets.all(4),
       child: ListTile(
         title: Text(record.title, style: titleStyle, overflow: TextOverflow.ellipsis),
-        subtitle: Text(record.department + ' | ' + _dateFormat.format(record.dateTime), style: subtitleStyle),
+        subtitle: Text('${record.department} | ${_dateFormat.format(record.dateTime)}', style: subtitleStyle),
         onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailPage(record))),
       ),
     );
@@ -81,7 +81,7 @@ class BulletinPage extends StatelessWidget {
                   .toList();
               return SingleChildScrollView(child: Column(children: items));
             } else if (snapshot.hasError) {
-              return Center(child: Text('错误类型: ' + snapshot.error.runtimeType.toString()));
+              return Center(child: Text('错误类型: ${snapshot.error.runtimeType}'));
             }
           }
           return const Center(child: CircularProgressIndicator());

@@ -15,7 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import '../entity/bulletin.dart';
+
+import 'entity.dart';
 
 abstract class BulletinDao {
   /// 获取所有的分类信息

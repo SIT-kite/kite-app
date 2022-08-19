@@ -25,7 +25,7 @@ import 'package:kite/util/url_launcher.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../entity/bulletin.dart';
+import '../entity.dart';
 import '../init.dart';
 
 class DetailPage extends StatefulWidget {
@@ -33,7 +33,7 @@ class DetailPage extends StatefulWidget {
   const DetailPage(this.summary, {Key? key}) : super(key: key);
 
   @override
-  _DetailPageState createState() => _DetailPageState();
+  State<DetailPage> createState() => _DetailPageState();
 }
 
 class _DetailPageState extends State<DetailPage> {
@@ -58,8 +58,8 @@ class _DetailPageState extends State<DetailPage> {
     showBasicFlash(context, const Text('开始下载'), duration: const Duration(seconds: 1));
     Log.info('下载文件: [${attachment.name}](${attachment.url})');
 
-    String targetPath = (await getTemporaryDirectory()).path + '/kite1/downloads/${attachment.name}';
-    Log.info('下载到：' + targetPath);
+    String targetPath = '${(await getTemporaryDirectory()).path}/kite1/downloads/${attachment.name}';
+    Log.info('下载到：$targetPath');
     // 如果文件不存在，那么下载文件
     if (!await File(targetPath).exists()) {
       await BulletinInitializer.session.download(
@@ -71,6 +71,7 @@ class _DetailPageState extends State<DetailPage> {
       );
     }
 
+    if (!mounted) return;
     showBasicFlash(
       context,
       Row(
