@@ -15,8 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:kite/component/future_builder.dart';
+import 'package:kite/component/html_widget.dart';
 import 'package:kite/component/webview_page.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 const String _aboutUrl = 'https://kite.sunnysab.cn/about/';
 
@@ -25,9 +29,30 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SimpleWebViewPage(
-      initialUrl: _aboutUrl,
-      fixedTitle: '关于',
+    if (!UniversalPlatform.isDesktop) {
+      return const SimpleWebViewPage(
+        initialUrl: _aboutUrl,
+        fixedTitle: '关于',
+      );
+    }
+
+    final controller = MyFutureBuilderController();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('关于'),
+        actions: [
+          IconButton(
+            onPressed: () => controller.refresh(),
+            icon: const Icon(Icons.refresh),
+          ),
+        ],
+      ),
+      body: MyFutureBuilder<Response<String>>(
+          controller: controller,
+          future: Dio().get(_aboutUrl),
+          builder: (ctx, data) {
+            return MyHtmlWidget(data.data.toString());
+          }),
     );
   }
 }

@@ -23,26 +23,43 @@ import 'package:kite/route.dart';
 
 typedef MyWidgetBuilder<T> = Widget Function(BuildContext context, T data);
 
-class MyFutureBuilder<T> extends StatelessWidget {
+class MyFutureBuilderController {
+  late State<MyFutureBuilder> _state;
+  void _bindState(State<MyFutureBuilder> state) => this._state = state;
+
+  void refresh() => (_state as _MyFutureBuilderState).refresh();
+}
+
+class MyFutureBuilder<T> extends StatefulWidget {
   final Future<T>? future;
   final MyWidgetBuilder<T>? builder;
   final MyWidgetBuilder? onErrorBuilder;
+  final MyFutureBuilderController? controller;
   const MyFutureBuilder({
     Key? key,
     required this.future,
     required this.builder,
     this.onErrorBuilder,
+    this.controller,
   }) : super(key: key);
+
+  @override
+  State<MyFutureBuilder<T>> createState() => _MyFutureBuilderState<T>();
+}
+
+class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
+  void refresh() => setState(() {});
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<T>(
-      future: future,
+      key: UniqueKey(),
+      future: widget.future,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
             final data = snapshot.data;
-            return builder == null ? Text(data.toString()) : builder!(context, snapshot.data!);
+            return widget.builder == null ? Text(data.toString()) : widget.builder!(context, snapshot.data!);
           } else if (snapshot.hasError) {
             final error = snapshot.error;
 
@@ -63,8 +80,8 @@ class MyFutureBuilder<T> extends StatelessWidget {
 
             Catcher.reportCheckedError(error, snapshot.stackTrace);
 
-            if (onErrorBuilder != null) {
-              return onErrorBuilder!(context, error);
+            if (widget.onErrorBuilder != null) {
+              return widget.onErrorBuilder!(context, error);
             }
 
             return Expanded(
@@ -84,5 +101,11 @@ class MyFutureBuilder<T> extends StatelessWidget {
         return const Center(child: CircularProgressIndicator());
       },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.controller != null) widget.controller?._bindState(this);
   }
 }
