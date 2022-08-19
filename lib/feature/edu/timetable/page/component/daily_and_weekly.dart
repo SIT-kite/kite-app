@@ -60,19 +60,19 @@ class TimetableViewer extends StatefulWidget {
 }
 
 class TimetableViewerController {
-  State<TimetableViewer>? state;
+  _TimetableViewerState? _state;
   TimetableViewerController();
 
   void switchDisplayMode() {
-    (state as _TimetableViewerState).switchDisplayMode();
+    _state?.switchDisplayMode();
   }
 
   void jumpToToday() {
-    (state as _TimetableViewerState).jumpToday();
+    _state?.jumpToday();
   }
 
   void _bindState(State<TimetableViewer> state) {
-    this.state = state;
+    _state = state as _TimetableViewerState;
   }
 }
 
