@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'dart:io';
+
 import 'package:dynamic_color_theme/dynamic_color_theme.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/foundation.dart';
@@ -27,6 +29,7 @@ import 'package:kite/global/hive_initializer.dart';
 import 'package:kite/global/init.dart';
 import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
+import 'package:kite/util/file.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/user.dart';
@@ -53,17 +56,17 @@ class SettingPage extends StatelessWidget {
   }
 
   Future<void> _onChangeBgImage() async {
+    final saveToPath = '${(await getApplicationDocumentsDirectory()).path}/kite1/background';
+
     if (UniversalPlatform.isDesktop) {
-      EasyLoading.showInfo('桌面端不支持');
-      return;
+      String? srcPath = await FileUtils.pickImageByFilePicker();
+      if (srcPath == null) return;
+      await File(srcPath).copy(saveToPath);
+    } else {
+      XFile? image = await FileUtils.pickImageByImagePicker();
+      await image?.saveTo(saveToPath);
     }
-
-    final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-    final savePath = '${(await getApplicationDocumentsDirectory()).path}/background';
-
-    await image?.saveTo(savePath);
-    KvStorageInitializer.home.background = savePath;
+    KvStorageInitializer.home.background = saveToPath;
     Global.eventBus.emit(EventNameConstants.onBackgroundChange);
   }
 

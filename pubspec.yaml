@@ -106,6 +106,7 @@ dependencies:
   # Desktop support
   window_manager: ^0.2.0
   flutter_easyloading: ^3.0.5
+  file_picker: ^4.6.1
 
 
 dev_dependencies:

@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -38,5 +40,42 @@ class FileUtils {
     await writeToFile(content: content, filepath: path);
     Log.info('保存文件$filename到 $path');
     OpenFile.open(path, type: type);
+  }
+
+  static Future<String?> pickImageByFilePicker() async {
+    final pfs = await pickFiles(
+      dialogTitle: '选择图片',
+      type: FileType.image,
+    );
+    return pfs != null && pfs.isNotEmpty ? pfs[0] : null;
+  }
+
+  static Future<XFile?> pickImageByImagePicker() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    return image;
+  }
+
+  static Future<List<String>?> pickFiles({
+    String? dialogTitle,
+    String? initialDirectory,
+    FileType type = FileType.any,
+    List<String>? allowedExtensions,
+    bool allowMultiple = false,
+  }) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      dialogTitle: dialogTitle,
+      initialDirectory: initialDirectory,
+      type: type,
+      allowedExtensions: allowedExtensions,
+      allowMultiple: allowMultiple,
+    );
+
+    if (result == null) return null;
+    return result.files //
+        .map((e) => e.path) // 获取路径
+        .where((e) => e != null) // 过滤掉所有的null
+        .map((e) => e!) // 强制String?转String
+        .toList(); // 输出列表
   }
 }
