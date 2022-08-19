@@ -71,10 +71,15 @@ class SettingPage extends StatelessWidget {
     final user = KvStorageInitializer.auth.currentUsername;
     final password = KvStorageInitializer.auth.ssoPassword;
     try {
+      EasyLoading.instance.userInteractions = false;
+      EasyLoading.show(status: '正在登录');
       await Global.ssoSession.login(user!, password!);
-      showBasicFlash(context, const Text('用户名和密码正确'));
+      EasyLoading.showSuccess('用户名和密码正确');
     } catch (e) {
       showBasicFlash(context, Text('登录异常: ${e.toString().split('\n')[0]}'), duration: const Duration(seconds: 3));
+    } finally {
+      EasyLoading.dismiss();
+      EasyLoading.instance.userInteractions = true;
     }
   }
 
