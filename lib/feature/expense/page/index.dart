@@ -108,6 +108,8 @@ class _ExpensePageState extends State<ExpensePage> {
 
   Future<void> _refresh() async {
     try {
+      // 关闭用户交互
+      EasyLoading.instance.userInteractions = false;
       EasyLoading.show(status: '正在拉取消费记录');
       await updateRecords();
     } catch (e, t) {
@@ -116,6 +118,8 @@ class _ExpensePageState extends State<ExpensePage> {
     } finally {
       // 关闭正在加载对话框
       EasyLoading.dismiss();
+      // 开启用户交互
+      EasyLoading.instance.userInteractions = true;
     }
   }
 
