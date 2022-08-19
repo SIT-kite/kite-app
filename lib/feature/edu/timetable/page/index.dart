@@ -178,6 +178,7 @@ class _TimetablePageState extends State<TimetablePage> {
           onPressed: () => tableViewerController.jumpToToday(),
           child: Text('今', style: Theme.of(context).textTheme.headline2?.copyWith(color: Colors.white))),
       body: TimetableViewer(
+        key: UniqueKey(),
         controller: tableViewerController,
         initialTableMeta: meta,
         initialTableCourses: courses,
