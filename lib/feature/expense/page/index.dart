@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/flash.dart';
 
@@ -30,7 +31,7 @@ class ExpensePage extends StatefulWidget {
   const ExpensePage({Key? key}) : super(key: key);
 
   @override
-  _ExpensePageState createState() => _ExpensePageState();
+  State<ExpensePage> createState() => _ExpensePageState();
 }
 
 class _ExpensePageState extends State<ExpensePage> {
@@ -107,19 +108,14 @@ class _ExpensePageState extends State<ExpensePage> {
 
   Future<void> _refresh() async {
     try {
-      showAlertDialog(
-        context,
-        title: '正在加载',
-        content: [const CircularProgressIndicator()],
-        actionWidgetList: [],
-      );
+      EasyLoading.show(status: '正在拉取消费记录');
       await updateRecords();
-    } catch (e, _) {
+    } catch (e, t) {
       _isRefreshing = false;
       showBasicFlash(context, Text('错误信息: ${e.toString().split('\n')[0]}'), duration: const Duration(seconds: 3));
     } finally {
       // 关闭正在加载对话框
-      Navigator.pop(context);
+      EasyLoading.dismiss();
     }
   }
 
@@ -137,6 +133,7 @@ class _ExpensePageState extends State<ExpensePage> {
 
     final OaExpensePage firstPage = await _fetchAndSave(service, 1, start: startDate);
 
+    if (!mounted) return;
     showBasicFlash(context, Text('已加载 1 页, 共 ${firstPage.total} 页'));
     setState(() {});
 
