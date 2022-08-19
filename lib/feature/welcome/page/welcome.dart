@@ -53,54 +53,70 @@ class WelcomePage extends StatelessWidget {
                 // Title
                 Text(
                   '上应小风筝',
-                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: Colors.white),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineLarge
+                      ?.copyWith(color: Colors.white),
                 ),
                 // Subtitle
                 Text(
                   '便利校园，一步到位',
-                  style: Theme.of(context).textTheme.headline5?.copyWith(color: Colors.white),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline5
+                      ?.copyWith(color: Colors.white),
                 ),
                 // Space
                 SizedBox(height: 40.h),
                 // Login button
-                OutlinedButton(
-                  autofocus: true,
-                  style: OutlinedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.r),
+                Row(children: [
+                  OutlinedButton(
+                    autofocus: true,
+                    style: OutlinedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.r),
+                      ),
+                      side: BorderSide(width: 1.sm, color: Colors.white),
                     ),
-                    side: BorderSide(width: 1.sm, color: Colors.white),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: Text(
-                      '登录',
-                      style: Theme.of(context).textTheme.headline2?.copyWith(color: Colors.white),
+                    child: Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: Text(
+                        '登录',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline4
+                            ?.copyWith(color: Colors.white),
+                      ),
                     ),
+                    onPressed: () =>
+                        Navigator.of(context).pushNamed(RouteTable.login),
                   ),
-                  onPressed: () => Navigator.of(context).pushNamed(RouteTable.login),
-                ),
 
-                SizedBox(height: 10.h),
+                  SizedBox(width: 10.h),
 
-                // Freshman Login Button
-                OutlinedButton(
-                  autofocus: true,
-                  style: OutlinedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.r),
+                  // Freshman Login Button
+                  OutlinedButton(
+                    autofocus: true,
+                    style: OutlinedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.r),
+                      ),
+                      side: BorderSide(width: 1.sm, color: Colors.white),
                     ),
-                    side: BorderSide(width: 1.sm, color: Colors.white),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: Text(
-                      '迎新入口',
-                      style: Theme.of(context).textTheme.headline2?.copyWith(color: Colors.white),
+                    child: Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: Text(
+                        '新生入口',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline4
+                            ?.copyWith(color: Colors.white),
+                      ),
                     ),
+                    onPressed: () => Navigator.of(context)
+                        .pushNamed(RouteTable.freshmanLogin),
                   ),
-                  onPressed: () => Navigator.of(context).pushNamed(RouteTable.freshmanLogin),
-                ),
+                ]),
               ],
             ),
           )

@@ -43,7 +43,8 @@ class _LoginPageState extends State<LoginPage> {
 
   final GlobalKey _formKey = GlobalKey<FormState>();
 
-  final TapGestureRecognizer _recognizer = TapGestureRecognizer()..onTap = onOpenUserLicense;
+  final TapGestureRecognizer _recognizer = TapGestureRecognizer()
+    ..onTap = onOpenUserLicense;
 
   // State
   bool isPasswordClear = false;
@@ -69,7 +70,8 @@ class _LoginPageState extends State<LoginPage> {
     final password = _passwordController.text;
     try {
       await LoginInitializer.ssoSession.login(username, password);
-      final personName = await LoginInitializer.authServerService.getPersonName();
+      final personName =
+          await LoginInitializer.authServerService.getPersonName();
       KvStorageInitializer.auth
         ..currentUsername = username
         ..ssoPassword = password
@@ -81,7 +83,8 @@ class _LoginPageState extends State<LoginPage> {
       showBasicFlash(context, Text(e.msg));
       return;
     } catch (e) {
-      showBasicFlash(context, Text('未知错误: $e'), duration: const Duration(seconds: 3));
+      showBasicFlash(context, Text('未知错误: $e'),
+          duration: const Duration(seconds: 3));
       return;
     } finally {
       setState(() {
@@ -109,7 +112,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget buildTitleLine() {
     return Container(
-        alignment: Alignment.centerLeft, child: Text('欢迎登录', style: Theme.of(context).textTheme.headline1));
+        alignment: Alignment.centerLeft,
+        child: Text('欢迎登录', style: Theme.of(context).textTheme.headline1));
   }
 
   Widget buildLoginForm() {
@@ -122,7 +126,8 @@ class _LoginPageState extends State<LoginPage> {
             controller: _usernameController,
             autofocus: true,
             validator: studentIdValidator,
-            decoration: const InputDecoration(labelText: '账号', hintText: '学号/工号，支持研究生登录', icon: Icon(Icons.person)),
+            decoration: const InputDecoration(
+                labelText: '账号', hintText: '学号/工号', icon: Icon(Icons.person)),
           ),
           TextFormField(
             controller: _passwordController,
@@ -134,7 +139,8 @@ class _LoginPageState extends State<LoginPage> {
               icon: const Icon(Icons.lock),
               suffixIcon: IconButton(
                 // 切换密码明文显示状态的图标按钮
-                icon: Icon(isPasswordClear ? Icons.visibility_off : Icons.visibility),
+                icon: Icon(
+                    isPasswordClear ? Icons.visibility_off : Icons.visibility),
                 onPressed: () {
                   setState(() {
                     isPasswordClear = !isPasswordClear;
@@ -163,8 +169,13 @@ class _LoginPageState extends State<LoginPage> {
           child: Text.rich(
             TextSpan(
               children: [
-                TextSpan(text: '我已阅读并同意', style: Theme.of(context).textTheme.bodyText1),
-                TextSpan(text: '《上应小风筝用户协议》', style: Theme.of(context).textTheme.bodyText2, recognizer: _recognizer),
+                TextSpan(
+                    text: '我已阅读并同意',
+                    style: Theme.of(context).textTheme.bodyText1),
+                TextSpan(
+                    text: '《上应小风筝用户协议》',
+                    style: Theme.of(context).textTheme.bodyText2,
+                    recognizer: _recognizer),
               ],
             ),
           ),
@@ -189,7 +200,8 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildProxySetButton(BuildContext context, FlashController<dynamic> controller, _) {
+  Widget _buildProxySetButton(
+      BuildContext context, FlashController<dynamic> controller, _) {
     return IconButton(
       onPressed: () {
         final String inputText = _proxyInputController.text;
