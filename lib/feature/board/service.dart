@@ -16,6 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:dio/dio.dart';
 import 'package:kite/feature/board/entity.dart';
 
 import '../../abstract/abstract_service.dart';
@@ -28,13 +32,19 @@ class BoardService extends AService implements BoardDao {
   BoardService(ASession session) : super(session);
 
   @override
-  Future<List<PictureSummary>> getPictureList(
-      {int page = 1, int count = 20}) async {
-    final response = await session.get(_boardUrl);
+  Future<List<PictureSummary>> getPictureList({int page = 1, int count = 20}) async {
+    final response = await session.get('$_boardUrl/');
     final List pictureList = response.data;
 
-    List<PictureSummary> result =
-        pictureList.map((e) => PictureSummary.fromJson(e)).toList();
+    List<PictureSummary> result = pictureList.map((e) => PictureSummary.fromJson(e)).toList();
     return result;
+  }
+
+  Future<void> submitPicture(Uint8List data) async {
+    await session.post(
+      '$_boardUrl/new',
+      data: data,
+      options: Options(contentType: ContentType.json.value),
+    );
   }
 }

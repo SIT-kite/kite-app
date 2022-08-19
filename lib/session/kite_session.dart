@@ -82,7 +82,7 @@ class KiteSession extends ASession {
         method: method,
         contentType: contentType ?? ContentType.json.value,
         responseType: responseType ?? ResponseType.json,
-        headers: token == null ? null : {'Authorization': 'Bearer ' + token},
+        headers: token == null ? null : {'Authorization': 'Bearer $token'},
       ),
     );
     // 非 json 数据
