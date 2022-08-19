@@ -23,7 +23,7 @@ dependencies:
 
   flutter: { sdk: flutter }
 
-  device_info_plus_platform_interface: 2.5.0
+  device_info_plus_platform_interface: ^2.6.1
 
   # Basic
   intl: ^0.17.0               # i18n & l10n
@@ -42,8 +42,8 @@ dependencies:
 
   # File format
   ical: ^0.2.2                # iCalendar file generator
-  json_serializable: ^6.1.3   # JSON
-  json_annotation: ^4.4.0     # JSON code generation
+  json_serializable: ^6.3.1   # JSON
+  json_annotation: ^4.6.0     # JSON code generation
   beautiful_soup_dart: ^0.3.0 # HTML parser
 
   # hive (key-value database)
@@ -68,7 +68,7 @@ dependencies:
   flutter_settings_screens: ^0.3.2-null-safety
 
   # Platform
-  permission_handler: 9.2.0        # Android / iOS / Windows Permission
+  permission_handler: 10.0.0        # Android / iOS / Windows Permission
   quick_actions: ^0.6.0+9           # Android / iOS Home screen quick actions
   device_display_brightness: ^0.0.6
   # Open with other APP/programs
@@ -110,8 +110,8 @@ dependencies:
 dev_dependencies:
   flutter_test: { sdk: flutter }
   flutter_lints: ^2.0.1
-  build_runner: ^2.1.7
-  hive_generator: ^1.1.2
+  build_runner: ^2.2.0
+  hive_generator: ^1.1.3
 
 # ------------------------------------------------------------------------------
 
