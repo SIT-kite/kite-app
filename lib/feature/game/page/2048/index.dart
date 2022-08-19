@@ -23,6 +23,7 @@
 // sunnysab (sunnysab.cn)
 // 2022.1.14
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 
@@ -171,6 +172,8 @@ class _GameWidgetState extends State<GameWidget> {
   }
 
   void moveLeft() {
+    playStepSound();
+
     setState(() {
       _game.moveLeft();
       checkGameOver();
@@ -178,6 +181,8 @@ class _GameWidgetState extends State<GameWidget> {
   }
 
   void moveRight() {
+    playStepSound();
+
     setState(() {
       _game.moveRight();
       checkGameOver();
@@ -185,6 +190,8 @@ class _GameWidgetState extends State<GameWidget> {
   }
 
   void moveUp() {
+    playStepSound();
+
     setState(() {
       _game.moveUp();
       checkGameOver();
@@ -192,10 +199,17 @@ class _GameWidgetState extends State<GameWidget> {
   }
 
   void moveDown() {
+    playStepSound();
+
     setState(() {
       _game.moveDown();
       checkGameOver();
     });
+  }
+
+  Future<void> playStepSound() async {
+    AudioPlayer player = AudioPlayer();
+    await player.play(AssetSource('game/step.mp3'));
   }
 
   void checkGameOver() {

@@ -150,6 +150,9 @@ flutter:
     - assets/mail/
     - assets/scanner/
     - assets/freshman/
+    # Prompt sound.
+    - assets/game/step.mp3
+    - assets/scanner/beep.mp3
 
 # See: https://pub.flutter-io.cn/packages/flutter_native_splash
 flutter_native_splash:
