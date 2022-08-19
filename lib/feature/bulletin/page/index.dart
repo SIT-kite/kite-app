@@ -28,15 +28,20 @@ class BulletinPage extends StatelessWidget {
   const BulletinPage({Key? key}) : super(key: key);
 
   Widget _buildBulletinItem(BuildContext context, BulletinRecord record) {
-    final titleStyle = Theme.of(context).textTheme.subtitle1;
-    final subtitleStyle = Theme.of(context).textTheme.bodyText1;
+    final titleStyle = Theme.of(context).textTheme.headline4;
+    final subtitleStyle =
+        Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.black54);
 
     return Padding(
-      padding: const EdgeInsets.all(4),
+      padding: const EdgeInsets.all(2),
       child: ListTile(
-        title: Text(record.title, style: titleStyle, overflow: TextOverflow.ellipsis),
-        subtitle: Text('${record.department} | ${_dateFormat.format(record.dateTime)}', style: subtitleStyle),
-        onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailPage(record))),
+        title: Text(record.title,
+            style: titleStyle, overflow: TextOverflow.ellipsis),
+        subtitle: Text(
+            '${record.department} | ${_dateFormat.format(record.dateTime)}',
+            style: subtitleStyle),
+        onTap: () => Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => DetailPage(record))),
       ),
     );
   }
@@ -47,10 +52,13 @@ class BulletinPage extends StatelessWidget {
 
     final service = BulletinInitializer.bulletin;
     final catalogues = service.getAllCatalogues();
-    final futureResult = await Future.wait(catalogues.map((e) => service.queryBulletinList(page, e.id)));
+    final futureResult = await Future.wait(
+        catalogues.map((e) => service.queryBulletinList(page, e.id)));
 
-    final List<BulletinRecord> records = futureResult.fold(<BulletinRecord>[],
-        (List<BulletinRecord> previousValue, BulletinListPage page) => previousValue + page.bulletinItems).toList();
+    final List<BulletinRecord> records = futureResult.fold(
+        <BulletinRecord>[],
+        (List<BulletinRecord> previousValue, BulletinListPage page) =>
+            previousValue + page.bulletinItems).toList();
     return records;
   }
 
