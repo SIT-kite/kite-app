@@ -51,7 +51,7 @@ class _RoommateWidgetState extends State<RoommateWidget> {
           text: '当前宿舍：${myInfo.campus}-${myInfo.building}-${myInfo.room}',
           context: context,
         ).withTitleBarStyle(context),
-        Expanded(child: MateListWidget(mateList, callBack: onRefresh)),
+        Expanded(child: MateListWidget(mateList, callBack: onRefresh, showDormitory: false)),
       ],
     );
   }

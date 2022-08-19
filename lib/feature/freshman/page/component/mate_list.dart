@@ -28,12 +28,13 @@ import 'common.dart';
 import 'profile.dart';
 
 class MateListWidget extends StatelessWidget {
+  final bool showDormitory;
   final List<Mate> mateList;
   final VoidCallback? callBack;
   final RefreshController _refreshController = RefreshController();
   final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
 
-  MateListWidget(this.mateList, {this.callBack, Key? key}) : super(key: key);
+  MateListWidget(this.mateList, {this.callBack, this.showDormitory = true, Key? key}) : super(key: key);
 
   /// 打开个人详情页
   void loadMoreInfo(BuildContext context, Mate mate) {
@@ -105,11 +106,12 @@ class MateListWidget extends StatelessWidget {
             text: "专业:  ${mate.major}",
             context: context,
           ),
-          buildInfoItemRow(
-            iconData: Icons.home,
-            text: "寝室:  ${mate.building}${mate.room}室",
-            context: context,
-          ),
+          if (showDormitory)
+            buildInfoItemRow(
+              iconData: Icons.home,
+              text: "寝室:  ${mate.building}${mate.room}室",
+              context: context,
+            ),
           wechatRow,
           qqRow,
           telRow,
