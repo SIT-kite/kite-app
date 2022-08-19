@@ -28,7 +28,7 @@ class Search extends SearchDelegate<String> {
 
   @override
   List<Widget>? buildActions(BuildContext context) {
-    return <Widget>[IconButton(onPressed: () => query = "", icon: const Icon(Icons.clear))];
+    return <Widget>[IconButton(onPressed: () => query = '', icon: const Icon(Icons.clear))];
   }
 
   @override

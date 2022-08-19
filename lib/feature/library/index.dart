@@ -132,7 +132,7 @@ class LibraryPage extends StatelessWidget {
           child: Container(
             alignment: Alignment.bottomRight,
             child: Text(
-              "——— ${saying.sayer}",
+              '——— ${saying.sayer}',
               style: const TextStyle(
                 color: Colors.grey,
               ),
@@ -158,7 +158,7 @@ class LibraryPage extends StatelessWidget {
                 SizedBox(
                   width: imageWidth,
                   child: const Image(
-                    image: AssetImage("assets/library/saying.png"),
+                    image: AssetImage('assets/library/saying.png'),
                     fit: BoxFit.cover,
                   ),
                 ),

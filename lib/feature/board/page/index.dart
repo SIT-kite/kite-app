@@ -50,7 +50,7 @@ class BoardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("风景墙"),
+        title: const Text('风景墙'),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.upload),

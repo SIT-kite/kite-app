@@ -44,7 +44,7 @@ class GameBoard extends StatefulWidget {
 
 class _GameBoardState extends State<GameBoard> {
   handleCharInput(String value, int colIdx) {
-    if (value == "") {
+    if (value == '') {
       // on backspace jump to previous box & clear the char
       if (colIdx != 0) FocusScope.of(context).previousFocus();
       setState(() => widget.board.remove(colIdx: colIdx));
@@ -89,14 +89,14 @@ class _GameBoardState extends State<GameBoard> {
           color: widget.board.getColor(rowIdx: i, colIdx: j),
           child: i == widget.board.currentRow
               ? CharacterInput(
-            value: widget.board.state[i][j],
-            onChange: (val) => handleCharInput(val, j),
-            onSubmit: handleRowSubmit,
-          )
+                  value: widget.board.state[i][j],
+                  onChange: (val) => handleCharInput(val, j),
+                  onSubmit: handleRowSubmit,
+                )
               : Text(
-            widget.board.state[i][j],
-            style: const TextStyle(fontSize: 32),
-          ),
+                  widget.board.state[i][j],
+                  style: const TextStyle(fontSize: 32),
+                ),
         ));
       }
       result.add(Row(

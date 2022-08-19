@@ -17,10 +17,10 @@
  */
 class Attachment {
   /// 附件标题
-  String name = "";
+  String name = '';
 
   /// 附件下载网址
-  String url = "";
+  String url = '';
 
   @override
   String toString() {
@@ -45,7 +45,7 @@ class BulletinDetail {
   int readNumber = 0;
 
   /// 内容(html格式)
-  String content = "";
+  String content = '';
 
   /// 附件
   List<Attachment> attachments = [];

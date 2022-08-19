@@ -58,7 +58,7 @@ class CharacterInput extends StatelessWidget {
 
   const CharacterInput({
     Key? key,
-    this.value = "",
+    this.value = '',
     required this.onChange,
     required this.onSubmit,
   }) : super(key: key);
@@ -80,7 +80,7 @@ class CharacterInput extends StatelessWidget {
       ),
       inputFormatters: [
         LengthLimitingTextInputFormatter(1),
-        FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
+        FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
       ],
       showCursor: false,
       enableInteractiveSelection: false,

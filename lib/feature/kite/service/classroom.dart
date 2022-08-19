@@ -23,7 +23,7 @@ import '../dao/classroom.dart';
 import '../entity/classroom.dart';
 
 class ClassroomService extends AService implements ClassroomRemoteDao {
-  static const _classroomUrl = "/classroom/available";
+  static const _classroomUrl = '/classroom/available';
 
   ClassroomService(ASession session) : super(session);
 

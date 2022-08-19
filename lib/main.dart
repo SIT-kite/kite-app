@@ -22,7 +22,7 @@ import 'package:kite/global/init.dart';
 
 import 'app.dart';
 
-const exceptionLogUrl = "https://kite.sunnysab.cn/api/v2/report/exception";
+const exceptionLogUrl = 'https://kite.sunnysab.cn/api/v2/report/exception';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +32,7 @@ void main() async {
     SilentReportMode(),
     [
       ConsoleHandler(),
-      ToastHandler(backgroundColor: Colors.black38, customMessage: "程序好像有点小问题"), // 这里给用户一点提示, 避免出错时用户感到奇怪
+      ToastHandler(backgroundColor: Colors.black38, customMessage: '程序好像有点小问题'), // 这里给用户一点提示, 避免出错时用户感到奇怪
       HttpHandler(HttpRequestType.post, Uri.parse(exceptionLogUrl), requestTimeout: 5000, printLogs: true),
     ],
   );

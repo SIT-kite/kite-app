@@ -161,7 +161,7 @@ class Course extends HiveObject {
   static int _weekText2Index(String text) {
     int result = 0;
     text.split(',').forEach((weekText) {
-      final int step = weekText.endsWith("(单)") || weekText.endsWith("(双)") ? 2 : 1;
+      final int step = weekText.endsWith('(单)') || weekText.endsWith('(双)') ? 2 : 1;
       final String text = weekText.split('周')[0];
       result |= _time2Index(text, step);
     });

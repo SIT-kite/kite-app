@@ -30,7 +30,7 @@ class TimetableService extends AService {
   TimetableService(ASession session) : super(session);
 
   static List<Course> _parseTimetable(Map<String, dynamic> json) {
-    final List<dynamic> courseList = json["kbList"];
+    final List<dynamic> courseList = json['kbList'];
 
     return courseList.map((e) => Course.fromJson(e)).toList();
   }

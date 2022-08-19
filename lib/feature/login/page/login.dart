@@ -106,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   static void onOpenUserLicense() {
-    const url = "https://kite.sunnysab.cn/license/";
+    const url = 'https://kite.sunnysab.cn/license/';
     GlobalLauncher.launch(url);
   }
 

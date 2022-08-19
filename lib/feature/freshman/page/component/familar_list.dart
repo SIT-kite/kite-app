@@ -47,10 +47,10 @@ class _FamiliarListWidgetState extends State<FamiliarListWidget> {
           name: familiar.name,
           college: familiar.college,
           infoItems: [
-            InfoItem(Icons.account_circle, "姓名", familiar.name),
-            InfoItem(Icons.school, "学院", familiar.college),
-            InfoItem(familiar.gender == 'M' ? Icons.male : Icons.female, "性别", familiar.gender == 'M' ? '男' : '女'),
-            if (familiar.city != null) InfoItem(Icons.location_city, "城市", familiar.city!),
+            InfoItem(Icons.account_circle, '姓名', familiar.name),
+            InfoItem(Icons.school, '学院', familiar.college),
+            InfoItem(familiar.gender == 'M' ? Icons.male : Icons.female, '性别', familiar.gender == 'M' ? '男' : '女'),
+            if (familiar.city != null) InfoItem(Icons.location_city, '城市', familiar.city!),
             if (familiar.lastSeen != null) InfoItem(Icons.timelapse, '上次登录时间', lastSeenText),
             ...buildContactInfoItems(context, familiar.contact), // unpack
           ],
@@ -91,7 +91,7 @@ class _FamiliarListWidgetState extends State<FamiliarListWidget> {
         ),
         buildInfoItemRow(
           iconData: Icons.school,
-          text: "学院:  ${familiar.college}",
+          text: '学院:  ${familiar.college}',
           context: context,
         ),
         wechatRow,

@@ -36,7 +36,7 @@ class BoardModel {
         rows = rows ?? targetWord.length,
         state = List.generate(
           rows ?? targetWord.length,
-              (i) => List.generate(targetWord.length, (j) => ""),
+          (i) => List.generate(targetWord.length, (j) => ''),
         );
 
   add(String value, {int? rowIdx, required int colIdx}) {
@@ -44,7 +44,7 @@ class BoardModel {
   }
 
   remove({int? rowIdx, required int colIdx}) {
-    state[rowIdx ?? currentRow][colIdx] = "";
+    state[rowIdx ?? currentRow][colIdx] = '';
   }
 
   moveToNextRow() => currentRow++;
@@ -52,17 +52,17 @@ class BoardModel {
   reset() {
     state = List.generate(
       rows,
-          (i) => List.generate(columns, (j) => ""),
+      (i) => List.generate(columns, (j) => ''),
     );
     currentRow = 0;
   }
 
   bool isRowComplete({int? rowIdx}) {
-    return state[rowIdx ?? currentRow].join("").length == columns;
+    return state[rowIdx ?? currentRow].join('').length == columns;
   }
 
   bool isRowTargetWord({int? rowIdx}) {
-    return state[rowIdx ?? currentRow].join("") == targetWord;
+    return state[rowIdx ?? currentRow].join('') == targetWord;
   }
 
   Color getColor({required int rowIdx, required int colIdx}) {
@@ -72,7 +72,7 @@ class BoardModel {
       return Colors.grey.shade600;
     } else if (char == targetWord[colIdx]) {
       return Colors.green;
-    } else if (char != "" && targetWord.contains(char)) {
+    } else if (char != '' && targetWord.contains(char)) {
       return Colors.orange;
     }
     return Colors.grey.shade700;

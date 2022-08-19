@@ -51,7 +51,7 @@ class _GpaBannerState extends State<GpaBanner> {
   }
 
   String _getType() {
-    return (widget._semester == Semester.all) ? "学年" : "学期";
+    return (widget._semester == Semester.all) ? '学年' : '学期';
   }
 
   void _onSelectCourse(Score? score) {

@@ -50,7 +50,7 @@ class SearchBarDelegate extends SearchDelegate<String> {
     return [
       IconButton(
         onPressed: () {
-          query = "";
+          query = '';
           showSuggestions(context);
         },
         icon: const Icon(Icons.clear),
@@ -67,9 +67,9 @@ class SearchBarDelegate extends SearchDelegate<String> {
       ),
       onPressed: () {
         if (query.isEmpty) {
-          close(context, "");
+          close(context, '');
         } else {
-          query = "";
+          query = '';
           showSuggestions(context);
         }
       },

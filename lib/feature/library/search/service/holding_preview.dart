@@ -30,7 +30,7 @@ class HoldingPreviewService extends AService implements HoldingPreviewDao {
     var response = await session.get(
       Constants.bookHoldingPreviewsUrl,
       queryParameters: {
-        'bookrecnos': bookIdList.join(","),
+        'bookrecnos': bookIdList.join(','),
         'curLibcodes': '',
         'return_fmt': 'json',
       },

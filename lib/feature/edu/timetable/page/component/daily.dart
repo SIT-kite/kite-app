@@ -138,7 +138,7 @@ class DailyTimetableState extends State<DailyTimetable> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text("太棒啦，今天没有课"),
+          const Text('太棒啦，今天没有课'),
           if (widget.viewChangingCallback != null)
             TextButton(
               child: const Text('转到到周课表'),

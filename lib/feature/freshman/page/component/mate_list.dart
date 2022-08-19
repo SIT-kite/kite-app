@@ -44,9 +44,9 @@ class MateListWidget extends StatelessWidget {
         name: mate.name,
         college: mate.college,
         infoItems: [
-          InfoItem(Icons.emoji_objects, "专业", mate.major),
-          InfoItem(Icons.bed, "寝室", '${mate.building} ${mate.room}室${mate.bed}床'),
-          InfoItem(mate.gender == 'M' ? Icons.male : Icons.female, "性别", mate.gender == 'M' ? '男' : '女'),
+          InfoItem(Icons.emoji_objects, '专业', mate.major),
+          InfoItem(Icons.bed, '寝室', '${mate.building} ${mate.room}室${mate.bed}床'),
+          InfoItem(mate.gender == 'M' ? Icons.male : Icons.female, '性别', mate.gender == 'M' ? '男' : '女'),
           if (mate.province != null) InfoItem(Icons.location_city, '省份', mate.province!),
           if (mate.lastSeen != null) InfoItem(Icons.location_city, '上次登录时间', lastSeenText),
           ...buildContactInfoItems(context, mate.contact), // unpack
@@ -98,18 +98,18 @@ class MateListWidget extends StatelessWidget {
           ),
           buildInfoItemRow(
             iconData: Icons.school,
-            text: "学院:  ${mate.college}",
+            text: '学院:  ${mate.college}',
             context: context,
           ),
           buildInfoItemRow(
             iconData: Icons.emoji_objects,
-            text: "专业:  ${mate.major}",
+            text: '专业:  ${mate.major}',
             context: context,
           ),
           if (showDormitory)
             buildInfoItemRow(
               iconData: Icons.home,
-              text: "寝室:  ${mate.building}${mate.room}室",
+              text: '寝室:  ${mate.building}${mate.room}室',
               context: context,
             ),
           wechatRow,

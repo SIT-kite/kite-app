@@ -110,7 +110,7 @@ class _SuggestionItemState extends State<SuggestionItem> {
   Widget build(BuildContext context) {
     return InkWell(
       child: Chip(
-        label: Text(widget.title ?? ""),
+        label: Text(widget.title ?? ''),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),

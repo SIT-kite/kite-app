@@ -95,7 +95,7 @@ class HiveCacheProvider implements CacheProvider {
   }
 
   @override
-  Future<void> setString(String key, String? value, {String? defaultValue = ""}) async {
+  Future<void> setString(String key, String? value, {String? defaultValue = ''}) async {
     box.put(key, value ?? defaultValue);
   }
 }

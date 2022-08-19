@@ -40,7 +40,7 @@ class DioConfig {
 class DioInitializer {
   /// 初始化SessionPool
   static Future<Dio> init({required DioConfig config}) async {
-    Log.info("初始化Dio");
+    Log.info('初始化Dio');
     // dio初始化完成后，才能初始化 UA
     final dio = _initDioInstance(config: config);
     await _initUserAgentString(dio: dio);

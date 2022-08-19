@@ -25,12 +25,13 @@ import '../feature/user_event/entity.dart';
 import '../feature/user_event/init.dart';
 import 'logger.dart';
 
-const String reportEventUrl = "https://kite.sunnysab.cn/api/v2/report/event";
+const String reportEventUrl = 'https://kite.sunnysab.cn/api/v2/report/event';
 const int maxCacheSize = 10;
 
 class PageLogger {
   var cachedCount = 0;
   final Dio dio;
+
   PageLogger({required this.dio, required UserEventStorageDao userEventStorage}) {
     userEventStorage.getEventCount();
   }

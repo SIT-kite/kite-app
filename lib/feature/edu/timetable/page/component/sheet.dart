@@ -83,7 +83,7 @@ class Sheet extends StatelessWidget {
       _buildItem(context, 'campus.png', classes[0].campus),
     ];
     final List<String> timeStrings = generateTimeString();
-    return fixedItems + timeStrings.map((e) => _buildItem(context, "day.png", e)).toList();
+    return fixedItems + timeStrings.map((e) => _buildItem(context, 'day.png', e)).toList();
   }
 
   @override

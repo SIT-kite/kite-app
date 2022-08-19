@@ -22,7 +22,7 @@ import '../dao/contact.dart';
 import '../entity/contact.dart';
 
 class ContactRemoteService extends AService implements ContactRemoteDao {
-  static const _contactUrl = "/contact";
+  static const _contactUrl = '/contact';
 
   ContactRemoteService(ASession session) : super(session);
 

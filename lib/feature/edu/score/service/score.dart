@@ -38,10 +38,10 @@ class ScoreService extends AService implements ScoreDao {
     When you use 1,2,3 to choose the <td>, you will get [] by 2,
     it's because /n is chosen by 2 in dart,so here use 1,3,5 to choose <td>
   */
-  static const _scoreDetailPageSelector = "div.table-responsive > #subtab > tbody > tr";
-  static const _scoreFormSelector = "td:nth-child(1)";
-  static const _scorePercentageSelector = "td:nth-child(3)";
-  static const _scoreValueSelector = "td:nth-child(5)";
+  static const _scoreDetailPageSelector = 'div.table-responsive > #subtab > tbody > tr';
+  static const _scoreFormSelector = 'td:nth-child(1)';
+  static const _scorePercentageSelector = 'td:nth-child(3)';
+  static const _scoreValueSelector = 'td:nth-child(5)';
 
   ScoreService(ASession session) : super(session);
 

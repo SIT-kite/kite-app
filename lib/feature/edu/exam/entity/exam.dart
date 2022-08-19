@@ -24,7 +24,7 @@ part 'exam.g.dart';
 class ExamRoom {
   /// 课程名称
   @JsonKey(name: 'kcmc')
-  String courseName = "";
+  String courseName = '';
 
   /// 考试时间. 若无数据, 列表未空.
   @JsonKey(name: 'kssj', fromJson: _stringToList)
@@ -32,11 +32,11 @@ class ExamRoom {
 
   /// 考试地点
   @JsonKey(name: 'cdmc')
-  String place = "";
+  String place = '';
 
   /// 考试校区
   @JsonKey(name: 'cdxqmc')
-  String campus = "";
+  String campus = '';
 
   /// 考试座号
   @JsonKey(name: 'zwh', fromJson: _stringToInt)
@@ -44,7 +44,7 @@ class ExamRoom {
 
   /// 是否重修
   @JsonKey(name: 'cxbj', defaultValue: '未知')
-  String isSecondExam = "";
+  String isSecondExam = '';
 
   ExamRoom();
 

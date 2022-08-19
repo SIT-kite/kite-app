@@ -46,8 +46,8 @@ class TodayTomorrowSwitch extends StatelessWidget {
     final todayWeekText = '周' + _weekText.substring(today.weekday - 1, today.weekday);
     final todayDateText = '${today.month}-${today.day}';
     return Text(
-      "今天\n"
-          "$todayWeekText（$todayDateText）",
+      '今天\n'
+      '$todayWeekText（$todayDateText）',
       textAlign: TextAlign.center,
     );
   }
@@ -58,8 +58,8 @@ class TodayTomorrowSwitch extends StatelessWidget {
     final tomorrowWeekText = '周' + _weekText.substring(tomorrow.weekday - 1, tomorrow.weekday);
     final tomorrowDateText = '${tomorrow.month}-${tomorrow.day}';
     return Text(
-      "明天\n"
-          "$tomorrowWeekText（$tomorrowDateText）",
+      '明天\n'
+      '$tomorrowWeekText（$tomorrowDateText）',
       textAlign: TextAlign.center,
     );
   }
@@ -168,9 +168,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
           Widget buildOutdated() => const Text('已结束', style: TextStyle(color: Colors.red));
           Widget buildAppointed() => const Icon(Icons.check, color: Colors.green);
           Widget buildAvailable() => Text(
-            e.applied == e.count ? '已满' : '可预约',
-            style: const TextStyle(color: Colors.blue),
-          );
+                e.applied == e.count ? '已满' : '可预约',
+                style: const TextStyle(color: Colors.blue),
+              );
           Widget buildQrCode() => IconButton(
               onPressed: () async {
                 final response = await service.apply(e.period);

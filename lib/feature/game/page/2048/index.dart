@@ -257,7 +257,7 @@ class _GameWidgetState extends State<GameWidget> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text("得分", style: TextStyle(color: Colors.grey[700])),
+                          Text('得分', style: TextStyle(color: Colors.grey[700])),
                           Text(
                             _game.score.toString(),
                             style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.grey[800]),
@@ -273,7 +273,7 @@ class _GameWidgetState extends State<GameWidget> {
                       width: 130.0,
                       height: 60.0,
                       decoration: BoxDecoration(border: Border.all(color: Colors.grey[400]!)),
-                      child: const Center(child: Text("新游戏"))),
+                      child: const Center(child: Text('新游戏'))),
                   onPressed: () {
                     newGame();
                   },
@@ -285,7 +285,7 @@ class _GameWidgetState extends State<GameWidget> {
           child: Opacity(
             opacity: _isGameOver ? 1.0 : 0.0,
             child: const Center(
-              child: Text("Game Over!", style: TextStyle(fontSize: 24.0)),
+              child: Text('Game Over!', style: TextStyle(fontSize: 24.0)),
             ),
           ),
         ),

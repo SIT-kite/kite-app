@@ -27,7 +27,7 @@ import '../../abstract/abstract_session.dart';
 import 'dao.dart';
 
 class BoardService extends AService implements BoardDao {
-  static const _boardUrl = "/board";
+  static const _boardUrl = '/board';
 
   BoardService(ASession session) : super(session);
 

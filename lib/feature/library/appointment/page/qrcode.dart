@@ -79,7 +79,7 @@ class QrcodePage extends StatefulWidget {
 class _QrcodePageState extends State<QrcodePage> {
   final service = LibraryAppointmentInitializer.appointmentService;
   final codeNotifier = ValueNotifier<ApplicationRecord?>(null);
-  String codeString = "";
+  String codeString = '';
 
   double? brightness;
 
@@ -130,7 +130,7 @@ class _QrcodePageState extends State<QrcodePage> {
             buildQrcode(codeString),
             Text(
               '座位号: ${data.index}\n'
-                  '学号: ${data.user}',
+              '学号: ${data.user}',
               style: const TextStyle(fontSize: 20),
               textAlign: TextAlign.center,
             ),
