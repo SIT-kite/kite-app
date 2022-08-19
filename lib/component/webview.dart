@@ -156,8 +156,8 @@ class _MyWebViewState extends State<MyWebView> {
       return '';
     }
     return '''
-    <form method="post" action="${widget.initialUrl}'>
-      ${widget.postData!.entries.map((e) => '''<input type="hidden" name="${e.key}' value='${e.value}'>''').join('\n')}
+    <form method="post" action="${widget.initialUrl}">
+      ${widget.postData!.entries.map((e) => '''<input type="hidden" name="${e.key}" value="${e.value}">''').join('\n')}
       <button hidden type="submit">
     </form>
     <script>
