@@ -34,13 +34,18 @@ class DailyTimetable extends StatefulWidget {
   /// 课表缓存
   final TableCache tableCache;
 
+  /// 视图切换回调
+  final Function()? viewChangingCallback;
+
   @override
   State<StatefulWidget> createState() => DailyTimetableState();
+
   const DailyTimetable({
     Key? key,
     required this.allCourses,
     required this.initialDate,
     required this.tableCache,
+    this.viewChangingCallback,
   }) : super(key: key);
 }
 
@@ -128,8 +133,22 @@ class DailyTimetableState extends State<DailyTimetable> {
   }
 
   Widget _buildEmptyPage() {
-    // TODO: 搞好看点
-    return const Center(child: Text("今天没有课哦"));
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text("太棒啦，今天没有课"),
+          if (widget.viewChangingCallback != null)
+            TextButton(
+              child: const Text('转到到周课表'),
+              onPressed: () {
+                (widget.viewChangingCallback)!();
+              },
+            )
+        ],
+      ),
+    );
   }
 
   /// 构建第 index 页视图
