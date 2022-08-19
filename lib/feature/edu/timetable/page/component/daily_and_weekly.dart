@@ -101,9 +101,7 @@ class _TimetableViewerState extends State<TimetableViewer> {
     tableCoursesState = widget.initialTableCourses;
     tableMetaState = widget.initialTableMeta;
     super.initState();
-    if (widget.controller != null) {
-      widget.controller!._bindState(this);
-    }
+    widget.controller?._bindState(this);
   }
 
   void switchDisplayMode() {
