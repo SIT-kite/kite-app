@@ -22,6 +22,7 @@ import 'package:dynamic_color_theme/dynamic_color_theme.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/route.dart';
 import 'package:kite/util/user.dart';
@@ -97,14 +98,13 @@ class KiteApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         navigatorKey: Catcher.navigatorKey,
         onGenerateRoute: _onGenerateRoute,
-        builder: (context, widget) {
-          // ScreenUtil.setContext(context);
+        builder: EasyLoading.init(builder: (context, widget) {
           return MediaQuery(
             // 设置文字大小不随系统设置改变
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: widget!,
           );
-        },
+        }),
         scrollBehavior: const MaterialScrollBehavior().copyWith(
           dragDevices: {
             PointerDeviceKind.mouse,
