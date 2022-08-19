@@ -17,8 +17,8 @@
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kite/component/future_builder.dart';
 import 'package:kite/feature/edu/score/init.dart';
-import 'package:kite/util/logger.dart';
 
 import '../../common/entity/index.dart';
 import '../../util/selector.dart';
@@ -30,7 +30,7 @@ class ScorePage extends StatefulWidget {
   const ScorePage({Key? key}) : super(key: key);
 
   @override
-  _ScorePageState createState() => _ScorePageState();
+  State<ScorePage> createState() => _ScorePageState();
 }
 
 class _ScorePageState extends State<ScorePage> {
@@ -101,26 +101,21 @@ class _ScorePageState extends State<ScorePage> {
   }
 
   Widget _buildBody() {
-    final future = ScoreInitializer.scoreService.getScoreList(SchoolYear(selectedYear), selectedSemester);
-
-    return FutureBuilder<List<Score>>(
-      future: future,
-      builder: (context, snapshot) {
-        Log.info('查询成绩:${snapshot.connectionState}');
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
-            return Center(child: Text(snapshot.error.toString().split('\n')[0]));
-          }
-          final scoreList = snapshot.data!;
-
-          Log.info(scoreList);
-          return Column(children: [
-            _buildHeader(scoreList),
-            Expanded(child: scoreList.isNotEmpty ? _buildListView(scoreList) : _buildNoResult()),
-          ]);
-        }
-        return const Center(child: CircularProgressIndicator());
-      },
+    return Column(
+      children: [
+        MyFutureBuilder<List<Score>>(
+          future: ScoreInitializer.scoreService.getScoreList(SchoolYear(selectedYear), selectedSemester),
+          builder: (context, data) {
+            final scoreList = data;
+            return Column(
+              children: [
+                _buildHeader(scoreList),
+                Expanded(child: scoreList.isNotEmpty ? _buildListView(scoreList) : _buildNoResult()),
+              ],
+            );
+          },
+        ),
+      ],
     );
   }
 

@@ -169,6 +169,7 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
   Widget buildListView() {
     return ListView.separated(
       itemBuilder: (BuildContext context, int index) => Padding(
+        padding: const EdgeInsets.fromLTRB(10, 1, 10, 1),
         child: InkWell(
           child: BookItemWidget(
             dataList[index],
@@ -182,7 +183,6 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
             );
           },
         ),
-        padding: const EdgeInsets.fromLTRB(10, 1, 10, 1),
       ),
       itemCount: dataList.length,
       controller: _scrollController,
@@ -246,7 +246,6 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
   Widget build(BuildContext context) {
     Log.info('初始化列表');
     return Column(
-      // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         buildSearchWaySelector(),
         Text('总结果数: $searchResultCount  用时: $useTime  已加载: $currentPage/$totalPage'),

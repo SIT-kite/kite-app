@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/util/logger.dart';
+import 'package:kite/component/future_builder.dart';
 
 import '../entity/book_search.dart';
 import '../entity/hot_search.dart';
@@ -134,23 +134,13 @@ class SearchBarDelegate extends SearchDelegate<String> {
             ),
             const SizedBox(height: 20),
             Text('大家都在搜', style: Theme.of(context).textTheme.bodyText1),
-            FutureBuilder<HotSearch>(
-              // future: HotSearchMock().getHotSearch(),
+            MyFutureBuilder<HotSearch>(
               future: LibrarySearchInitializer.hotSearchService.getHotSearch(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                Log.info('获取热搜状态: ${snapshot.connectionState}');
-
-                if (snapshot.hasData) {
-                  // 获取数据
-                  HotSearch hotSearch = snapshot.data!;
-                  return SuggestionItemView(
-                    titleItems: hotSearch.recentMonth.map((e) => e.hotSearchWord).toList(),
-                    onItemTap: (title) => _searchByGiving(context, title),
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(child: Text(snapshot.error.toString()));
-                }
-                return const Center(child: CircularProgressIndicator());
+              builder: (BuildContext context, data) {
+                return SuggestionItemView(
+                  titleItems: data.recentMonth.map((e) => e.hotSearchWord).toList(),
+                  onItemTap: (title) => _searchByGiving(context, title),
+                );
               },
             ),
           ],

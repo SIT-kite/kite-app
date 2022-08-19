@@ -21,11 +21,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
-import 'package:kite/feature/edu/exam/init.dart';
 
 import '../../common/entity/index.dart';
 import '../../util/selector.dart';
 import '../entity/exam.dart';
+import '../init.dart';
 
 class ExamPage extends StatefulWidget {
   const ExamPage({Key? key}) : super(key: key);
@@ -52,9 +52,9 @@ class _ExamPageState extends State<ExamPage> {
     super.initState();
   }
 
-  Widget _buildItem(BuildContext context, String icon, String text) {
+  Widget _buildItem(String icon, String text) {
     final itemStyle = Theme.of(context).textTheme.bodyText1;
-    final iconImage = AssetImage('assets/' + icon);
+    final iconImage = AssetImage('assets/$icon');
     return Row(
       children: [
         icon.isEmpty ? const SizedBox(height: 24, width: 24) : Image(image: iconImage, width: 24, height: 24),
@@ -64,7 +64,7 @@ class _ExamPageState extends State<ExamPage> {
     );
   }
 
-  Widget buildExamItem(BuildContext context, ExamRoom examItem) {
+  Widget buildExamItem(ExamRoom examItem) {
     final itemStyle = Theme.of(context).textTheme.bodyText2;
     final name = examItem.courseName;
     final strStartTime = examItem.time.isNotEmpty ? dateFormat.format(examItem.time[0]) : '/';
@@ -75,7 +75,7 @@ class _ExamPageState extends State<ExamPage> {
 
     TableRow buildRow(String icon, String title, String content) {
       return TableRow(children: [
-        _buildItem(context, icon, title),
+        _buildItem(icon, title),
         Text(content, style: itemStyle),
       ]);
     }
@@ -102,8 +102,8 @@ class _ExamPageState extends State<ExamPage> {
     );
   }
 
-  Widget buildExamItems(BuildContext context, List<ExamRoom> examItems) {
-    final widgets = examItems.map((e) => buildExamItem(context, e)).toList();
+  Widget buildExamItems(List<ExamRoom> examItems) {
+    final widgets = examItems.map((e) => buildExamItem(e)).toList();
     if (examItems.isEmpty) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -134,7 +134,7 @@ class _ExamPageState extends State<ExamPage> {
     return Container(
       margin: const EdgeInsets.only(left: 15),
       child: SemesterSelector(
-        yearSelectCallback:(year) {
+        yearSelectCallback: (year) {
           setState(() => selectedYear = year);
         },
         semesterSelectCallback: (semester) {
@@ -147,37 +147,33 @@ class _ExamPageState extends State<ExamPage> {
     );
   }
 
-  Widget buildBody(BuildContext context) {
-    return Column(
-      children: [
-        buildSemesterSelector(),
-        MyFutureBuilder<List<ExamRoom>>(
-          future: ExamInitializer.examService.getExamList(
-            SchoolYear(selectedYear),
-            selectedSemester,
-          ),
-          builder: (context, data) {
-            data.sort((a, b) {
-              if (a.time.isEmpty || b.time.isEmpty) {
-                if (a.time.isEmpty != b.time.isEmpty) {
-                  return a.time.isEmpty ? 1 : -1;
-                }
-                return 0;
-              }
-              return a.time[0].isAfter(b.time[0]) ? 1 : -1;
-            });
-            return Expanded(child: buildExamItems(context, data));
-          },
-        ),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('考试安排')),
-      body: buildBody(context),
+      body: Column(
+        children: [
+          buildSemesterSelector(),
+          MyFutureBuilder<List<ExamRoom>>(
+            future: ExamInitializer.examService.getExamList(
+              SchoolYear(selectedYear),
+              selectedSemester,
+            ),
+            builder: (context, data) {
+              data.sort((a, b) {
+                if (a.time.isEmpty || b.time.isEmpty) {
+                  if (a.time.isEmpty != b.time.isEmpty) {
+                    return a.time.isEmpty ? 1 : -1;
+                  }
+                  return 0;
+                }
+                return a.time[0].isAfter(b.time[0]) ? 1 : -1;
+              });
+              return Expanded(child: buildExamItems(data));
+            },
+          ),
+        ],
+      ),
     );
   }
 }
