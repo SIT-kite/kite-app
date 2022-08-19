@@ -22,18 +22,20 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:kite/component/future_builder.dart';
 import 'package:kite/feature/board/init.dart';
 import 'package:kite/feature/board/service.dart';
 import 'package:kite/util/file.dart';
 import 'package:kite/util/logger.dart';
 
+import '../entity.dart';
+
 class BoardPage extends StatelessWidget {
   final BoardService boardService = BoardInitializer.boardServiceDao;
   BoardPage({Key? key}) : super(key: key);
 
-  Widget buildView() {
-    // Test code
-    return GridView.builder(
+  Widget buildView(List<PictureSummary> pictures) {
+    return GridView(
       gridDelegate: SliverWovenGridDelegate.count(
         crossAxisCount: 2,
         mainAxisSpacing: 2,
@@ -47,11 +49,16 @@ class BoardPage extends StatelessWidget {
           ),
         ],
       ),
-      itemBuilder: (context, i) {
-        return Card(
-          child: Text(i.toString()),
+      children: pictures.map((e) {
+        return Column(
+          children: [
+            Text(e.id),
+            Text(e.publisher),
+            Text(e.ts),
+            Image.network(e.thumbnail),
+          ],
         );
-      },
+      }).toList(),
     );
   }
 
@@ -84,7 +91,12 @@ class BoardPage extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
-        child: buildView(),
+        child: MyFutureBuilder<List<PictureSummary>>(
+          future: boardService.getPictureList(),
+          builder: (ctx, data) {
+            return buildView(data);
+          },
+        ),
       ),
     );
   }
