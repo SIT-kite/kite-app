@@ -85,16 +85,12 @@ Widget buildListItemDefaultAvatar(BuildContext context, String name) {
 }
 
 /// 构造默认头像
-Widget buildDefaultAvatar(String name) {
+Widget buildDefaultAvatar(String name, {required Color defaultColor}) {
   return Container(
-    decoration: const BoxDecoration(
+    decoration: BoxDecoration(
       shape: BoxShape.circle,
-      gradient: LinearGradient(
-        colors: [Color.fromARGB(255, 3, 99, 172), Color.fromARGB(255, 150, 97, 217)],
-        end: Alignment.topCenter,
-        begin: Alignment.bottomCenter,
-      ),
-      boxShadow: [BoxShadow(color: Colors.black54, offset: Offset(5.0, 5.0), blurRadius: 4.0)],
+      color: defaultColor,
+      boxShadow: const [BoxShadow(color: Colors.black54, offset: Offset(1.0, 1.0), blurRadius: 2.0)],
     ),
     child: Container(
       alignment: const Alignment(0, 0),
@@ -115,14 +111,14 @@ Widget buildDefaultAvatar(String name) {
 }
 
 /// 构造头像
-Widget buildAvatar({Widget? avatar, required String name}) {
+Widget buildAvatar({Widget? avatar, required String name, Color color = Colors.blueAccent}) {
   return Container(
     width: 70,
     height: 70,
     decoration: const BoxDecoration(
       shape: BoxShape.circle,
     ),
-    child: avatar ?? buildDefaultAvatar(name),
+    child: avatar ?? buildDefaultAvatar(name, defaultColor: color),
   );
 }
 
@@ -158,7 +154,7 @@ Widget buildInfoItemRow({
       children: [
         Icon(
           iconData,
-          color: Colors.lightBlue,
+          color: Theme.of(context).primaryColor,
           size: iconSize ?? IconTheme.of(context).size,
         ),
         Expanded(
@@ -191,9 +187,7 @@ extension Styles on Widget {
     return Container(
       padding: const EdgeInsets.fromLTRB(10, 1, 20, 1),
       alignment: const Alignment(-1, 0),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [Colors.orange.shade700, Colors.yellow]), //背景渐变
-      ),
+      decoration: BoxDecoration(color: Colors.white.withOpacity(0.4)),
       width: 200.w,
       child: this,
     );

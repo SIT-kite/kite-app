@@ -125,7 +125,7 @@ class MateListWidget extends StatelessWidget {
     return Icon(
       isMale ? Icons.male : Icons.female,
       size: 50,
-      color: isMale ? Colors.lightBlue : Colors.red,
+      color: isMale ? Colors.lightBlue : Colors.pinkAccent,
     );
   }
 

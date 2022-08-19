@@ -127,12 +127,7 @@ class BasicInfoWidget extends StatelessWidget {
               children: [
                 Container(
                   height: bgHeight,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColorDark]),
-                  ),
+                  decoration: BoxDecoration(color: Theme.of(context).primaryColor),
                 ),
               ],
             ),
@@ -207,7 +202,7 @@ class BasicInfoWidget extends StatelessWidget {
           height: 45,
           child: ClipOval(
             child: CircleAvatar(
-              backgroundColor: Theme.of(context).primaryColorDark,
+              backgroundColor: Theme.of(context).primaryColor,
               child: Icon(
                 infoItem.iconData,
                 color: Colors.white,

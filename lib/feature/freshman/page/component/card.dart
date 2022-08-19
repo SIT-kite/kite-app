@@ -106,7 +106,7 @@ class PersonItemWidget extends StatelessWidget {
             child: Stack(children: [
               Align(
                 alignment: const Alignment(0, -0.7),
-                child: buildAvatar(name: name),
+                child: buildAvatar(name: name, color: Theme.of(context).primaryColor),
               ),
               Positioned(
                 top: 120,
@@ -141,10 +141,6 @@ class PersonItemWidget extends StatelessWidget {
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(4.0), //像素圆角
-            boxShadow: const [
-              // 阴影
-              BoxShadow(color: Colors.black12, offset: Offset(4.0, 7.0), blurRadius: 4.0)
-            ],
           ),
           child: SizedBox(
             height: height,
