@@ -17,7 +17,9 @@
  */
 
 import 'package:catcher/catcher.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:kite/route.dart';
 
 typedef MyWidgetBuilder<T> = Widget Function(BuildContext context, T data);
 
@@ -43,7 +45,24 @@ class MyFutureBuilder<T> extends StatelessWidget {
             return builder == null ? Text(data.toString()) : builder!(context, snapshot.data!);
           } else if (snapshot.hasError) {
             final error = snapshot.error;
+
+            // 单独处理网络连接错误，且不上报
+            if (error is DioError && (error).type == DioErrorType.connectTimeout) {
+              return Center(
+                child: Column(
+                  children: [
+                    const Text('网络连接超时，请检查是否连接到校园网环境'),
+                    ElevatedButton(
+                      onPressed: () => Navigator.of(context).pushReplacementNamed(RouteTable.connectivity),
+                      child: const Text('进入网络工具检查'),
+                    )
+                  ],
+                ),
+              );
+            }
+
             Catcher.reportCheckedError(error, snapshot.stackTrace);
+
             if (onErrorBuilder != null) {
               return onErrorBuilder!(context, error);
             }
