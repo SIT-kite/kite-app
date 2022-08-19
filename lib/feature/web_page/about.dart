@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/component/html_widget.dart';
 import 'package:kite/component/webview_page.dart';
+import 'package:kite/launch.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 const String _aboutUrl = 'https://kite.sunnysab.cn/about/';
@@ -48,11 +49,16 @@ class AboutPage extends StatelessWidget {
         ],
       ),
       body: MyFutureBuilder<Response<String>>(
-          controller: controller,
-          future: Dio().get(_aboutUrl),
-          builder: (ctx, data) {
-            return MyHtmlWidget(data.data.toString());
-          }),
+        controller: controller,
+        future: Dio().get(_aboutUrl),
+        builder: (ctx, data) {
+          return MyHtmlWidget(data.data.toString());
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => GlobalLauncher.launch(_aboutUrl),
+        child: const Icon(Icons.open_in_browser),
+      ),
     );
   }
 }
