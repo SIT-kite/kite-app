@@ -16,10 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/feature/contact/entity/contact.dart';
 import 'package:kite/feature/library/search/entity/search_history.dart';
+import 'package:kite/util/alert_dialog.dart';
 
 class DebugStoragePage extends StatelessWidget {
   const DebugStoragePage({Key? key}) : super(key: key);
@@ -32,10 +34,35 @@ class DebugStoragePage extends StatelessWidget {
       final type = value.runtimeType.toString();
 
       return ListTile(
-          title: Text(key, style: Theme.of(context).textTheme.headline3),
-          subtitle: Text(value.toString(), style: Theme.of(context).textTheme.bodyText2),
-          trailing: Text(type, style: Theme.of(context).textTheme.bodyText1),
-          dense: true);
+        title: Text(key, style: Theme.of(context).textTheme.headline3),
+        subtitle: Text(
+          '$value',
+          style: Theme.of(context).textTheme.bodyText2?.copyWith(overflow: TextOverflow.ellipsis),
+        ),
+        trailing: Text(type, style: Theme.of(context).textTheme.bodyText1),
+        dense: true,
+        onTap: () {
+          showAlertDialog(
+            context,
+            title: key,
+            content: [
+              SizedBox(
+                height: 300.h,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Text(value.toString()),
+                    ],
+                  ),
+                ),
+              )
+            ],
+            actionWidgetList: [
+              ElevatedButton(onPressed: () {}, child: const Text('关闭')),
+            ],
+          );
+        },
+      );
     }).toList();
     final sectionBody = items.isNotEmpty ? items : [const Text('无内容')];
 
@@ -47,7 +74,10 @@ class DebugStoragePage extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: <Widget>[Text(boxName, style: Theme.of(context).textTheme.headline3)] + sectionBody,
+            children: <Widget>[
+              Text(boxName, style: Theme.of(context).textTheme.headline3),
+              ...sectionBody,
+            ],
           ),
         ),
       ),

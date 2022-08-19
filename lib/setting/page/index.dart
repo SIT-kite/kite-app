@@ -19,6 +19,7 @@ import 'package:dynamic_color_theme/dynamic_color_theme.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kite/global/global.dart';
@@ -31,13 +32,15 @@ import 'package:kite/util/logger.dart';
 import 'package:kite/util/user.dart';
 import 'package:kite/util/validation.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 import 'home.dart';
 import 'storage.dart';
 
 class SettingPage extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
-  late bool isFreshman;
+  final bool isFreshman = AccountUtils.getUserType() == UserType.freshman;
+
   SettingPage({Key? key}) : super(key: key);
 
   Widget _negativeActionBuilder(context, controller, _) {
@@ -50,8 +53,13 @@ class SettingPage extends StatelessWidget {
   }
 
   Future<void> _onChangeBgImage() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (UniversalPlatform.isDesktop) {
+      EasyLoading.showInfo('桌面端不支持');
+      return;
+    }
+
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
     final savePath = '${(await getApplicationDocumentsDirectory()).path}/background';
 
     await image?.saveTo(savePath);
@@ -123,7 +131,6 @@ class SettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _passwordController.text = KvStorageInitializer.auth.ssoPassword ?? '';
-    isFreshman = AccountUtils.getUserType() == UserType.freshman;
     return SettingsScreen(title: '设置', children: [
       SettingsGroup(
         title: '个性化',
