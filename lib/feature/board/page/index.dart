@@ -22,7 +22,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:kite/component/future_builder.dart';
+import 'package:kite/feature/board/component/card.dart';
 import 'package:kite/feature/board/init.dart';
 import 'package:kite/feature/board/service.dart';
 import 'package:kite/util/file.dart';
@@ -32,42 +32,46 @@ import 'package:kite/util/user.dart';
 
 import '../entity.dart';
 
-class BoardPage extends StatelessWidget {
-  final BoardService boardService = BoardInitializer.boardServiceDao;
-  BoardPage({Key? key}) : super(key: key);
+class BoardPage extends StatefulWidget {
+  const BoardPage({Key? key}) : super(key: key);
 
-  Widget buildView(List<PictureSummary> pictures) {
-    return GridView(
-      gridDelegate: SliverWovenGridDelegate.count(
-        crossAxisCount: 2,
-        mainAxisSpacing: 2,
-        crossAxisSpacing: 2,
-        pattern: [
-          const WovenGridTile(1),
-          const WovenGridTile(
-            13 / 16,
-            crossAxisRatio: 0.9,
-            alignment: AlignmentDirectional.center,
-          ),
-        ],
-      ),
-      children: pictures.map((e) {
-        return Column(
-          children: [
-            Text(e.id),
-            Text(e.publisher),
-            Text(e.ts),
-            Image.network(e.thumbnail),
-          ],
-        );
-      }).toList(),
-    );
+  @override
+  State<BoardPage> createState() => _BoardPageState();
+}
+
+class _BoardPageState extends State<BoardPage> {
+  final BoardService boardService = BoardInitializer.boardServiceDao;
+
+  List<PictureSummary> _pictures = [];
+  int _lastPage = 1;
+  bool _atEnd = false;
+
+  final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+        if (!_atEnd) {
+          print('Loading more pictures.');
+          loadMorePicture();
+        }
+      } else {
+        setState(() {
+          _atEnd = false;
+        });
+      }
+    });
+    loadInitialPicture();
   }
 
   Future<void> onUploadPicture(BuildContext context) async {
     // 如果用户未同意过, 请求用户确认
     if (!await signUpIfNecessary(context, '标识图片上传者')) return;
 
+    bool success = false;
     try {
       final String? imagePath = await FileUtils.pickImageByFilePicker();
       if (imagePath == null) return;
@@ -78,12 +82,76 @@ class BoardPage extends StatelessWidget {
       EasyLoading.show(status: '正在上传');
       await boardService.submitPicture('Snapshot', multipartFile);
       EasyLoading.showSuccess('上传成功');
+
+      success = true;
     } catch (e) {
       Log.info(e);
       EasyLoading.showError('上传失败');
     } finally {
       EasyLoading.dismiss();
     }
+
+    if (success) {
+      refresh();
+    }
+  }
+
+  void refresh() {
+    _lastPage = 1;
+    loadInitialPicture();
+
+    _scrollController.animateTo(0, duration: const Duration(milliseconds: 500), curve: Curves.linear);
+  }
+
+  void loadInitialPicture() async {
+    _lastPage = 1;
+    _pictures = await boardService.getPictureList();
+
+    setState(() {});
+  }
+
+  void loadMorePicture() async {
+    if (_atEnd) {
+      return;
+    }
+
+    final lastPictures = await boardService.getPictureList(page: _lastPage);
+    if (lastPictures.isEmpty) {
+      setState(() {
+        _atEnd = true;
+      });
+      return;
+    }
+
+    _lastPage++;
+    setState(() {
+      _pictures.addAll(lastPictures);
+    });
+  }
+
+  Widget buildView(List<PictureSummary> pictures) {
+    return Column(
+      children: [
+        Expanded(
+          child: MasonryGridView.count(
+            controller: _scrollController,
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            crossAxisCount: 2,
+            mainAxisSpacing: 4,
+            crossAxisSpacing: 4,
+            itemBuilder: (context, index) {
+              return PictureCard(pictures[index]);
+            },
+            itemCount: pictures.length,
+          ),
+        ),
+        if (_atEnd)
+          const SizedBox(
+            height: 40,
+            child: Center(child: Text('到底啦')),
+          )
+      ],
+    );
   }
 
   @override
@@ -102,12 +170,7 @@ class BoardPage extends StatelessWidget {
           : null,
       body: Padding(
         padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
-        child: MyFutureBuilder<List<PictureSummary>>(
-          future: boardService.getPictureList(),
-          builder: (ctx, data) {
-            return buildView(data);
-          },
-        ),
+        child: buildView(_pictures),
       ),
     );
   }
