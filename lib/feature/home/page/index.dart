@@ -20,6 +20,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/exception/session.dart';
 import 'package:kite/feature/kite/service/weather.dart';
+import 'package:kite/feature/login/init.dart';
 import 'package:kite/feature/quick_button/init.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/launch.dart';
@@ -69,6 +70,11 @@ class _HomePageState extends State<HomePage> {
     final String password = KvStorageInitializer.auth.ssoPassword!;
 
     await HomeInitializer.ssoSession.login(username, password);
+
+    if (KvStorageInitializer.auth.personName == null) {
+      final personName = await LoginInitializer.authServerService.getPersonName();
+      KvStorageInitializer.auth.personName = personName;
+    }
   }
 
   /// 显示检查网络的flash
