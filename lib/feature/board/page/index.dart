@@ -97,14 +97,12 @@ class _BoardPageState extends State<BoardPage> {
 
   void refresh() {
     loadInitialPicture();
-
     _scrollController.animateTo(0, duration: const Duration(milliseconds: 500), curve: Curves.linear);
   }
 
   void loadInitialPicture() async {
     _lastPage = 1;
     _pictures = await boardService.getPictureList();
-
     _lastPage++;
     setState(() {});
   }
@@ -114,16 +112,12 @@ class _BoardPageState extends State<BoardPage> {
 
     final lastPictures = await boardService.getPictureList(page: _lastPage);
     if (lastPictures.isEmpty) {
-      setState(() {
-        _atEnd = true;
-      });
+      setState(() => _atEnd = true);
       return;
     }
 
     _lastPage++;
-    setState(() {
-      _pictures.addAll(lastPictures);
-    });
+    setState(() => _pictures.addAll(lastPictures));
   }
 
   Widget buildView(List<PictureSummary> pictures) {
