@@ -63,14 +63,14 @@ class _MySwitcherState extends State<MySwitcher> {
   }
 }
 
-class FreshmanUpdatePage extends StatefulWidget {
-  const FreshmanUpdatePage({Key? key}) : super(key: key);
+class UpdateContactPage extends StatefulWidget {
+  const UpdateContactPage({Key? key}) : super(key: key);
 
   @override
-  State<FreshmanUpdatePage> createState() => _FreshmanUpdatePageState();
+  State<UpdateContactPage> createState() => _UpdateContactPageState();
 }
 
-class _FreshmanUpdatePageState extends State<FreshmanUpdatePage> {
+class _UpdateContactPageState extends State<UpdateContactPage> {
   final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
 
   /// 初始状态
@@ -156,27 +156,32 @@ class _FreshmanUpdatePageState extends State<FreshmanUpdatePage> {
           buildTextFormField('微信', Icons.wechat, wechatTextEditingController),
           buildTextFormField('QQ', Icons.person, qqTextEditingController),
           buildTextFormField('手机号', Icons.phone, telTextEditingController),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '是否允许可能认识的人发现自己？',
-                style: Theme.of(context).textTheme.headline3,
-              ),
-              MySwitcher(
-                visibleState,
-                onChanged: (bool value) => visibleState = value,
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '允许可能认识的人发现我',
+                  style: Theme.of(context).textTheme.headline3,
+                ),
+                MySwitcher(
+                  visibleState,
+                  onChanged: (bool value) => visibleState = value,
+                ),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget buildTextFormField(String? fieldName,
-      IconData iconData,
-      TextEditingController textEditingController,) {
+  Widget buildTextFormField(
+    String? fieldName,
+    IconData iconData,
+    TextEditingController textEditingController,
+  ) {
     return TextFormField(
       autofocus: true,
       controller: textEditingController,

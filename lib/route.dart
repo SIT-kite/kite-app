@@ -122,7 +122,7 @@ class RouteTable {
     freshmanAnalysis: (context, args) => const FreshmanAnalysisPage(),
     freshmanRoommate: (context, args) => const RoommateWidget(),
     freshmanLogin: (context, args) => const FreshmanLoginPage(),
-    freshmanContact: (context, args) => const FreshmanUpdatePage(),
+    freshmanContact: (context, args) => const UpdateContactPage(),
     board: (context, args) => BoardPage(),
   };
 
