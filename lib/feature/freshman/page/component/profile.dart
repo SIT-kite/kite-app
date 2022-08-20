@@ -88,26 +88,23 @@ class BasicInfoWidget extends StatelessWidget {
     );
   }
 
-  PopupMenuButton _buildMenuButton(BuildContext context) {
-    final menuButton = PopupMenuButton(
-      itemBuilder: (BuildContext context) {
-        return [
-          PopupMenuItem(
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => const FreshmanAnalysisPage()));
-            },
-            child: const Text('风筝报告'),
-          ),
-          PopupMenuItem(
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => const MySwitcher(false)));
-            },
-            child: const Text('联系方式设置'),
-          )
-        ];
-      },
-    );
-    return menuButton;
+  List<Widget> _buildMenuButton(BuildContext context) {
+    return <Widget>[
+      IconButton(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const FreshmanAnalysisPage()));
+        },
+        icon: const Icon(Icons.analytics),
+        tooltip: '风筝报告',
+      ),
+      IconButton(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const MySwitcher(false)));
+        },
+        icon: const Icon(Icons.menu),
+        tooltip: '联系方式设置',
+      )
+    ];
   }
 
   /// 构造背景
@@ -115,7 +112,7 @@ class BasicInfoWidget extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('入学信息'),
-        actions: [_buildMenuButton(context)],
+        actions: _buildMenuButton(context),
       ),
       body: Stack(
           alignment: AlignmentDirectional.center,
