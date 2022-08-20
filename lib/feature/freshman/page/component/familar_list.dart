@@ -125,6 +125,7 @@ class _FamiliarListWidgetState extends State<FamiliarListWidget> {
 
   Widget buildListView(List<Familiar> list) {
     return ListView(
+      controller: ScrollController(),
       children: list.map((e) {
         return PersonItemWidget(
           basicInfoWidget: buildBasicInfoWidget(e),

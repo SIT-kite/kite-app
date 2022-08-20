@@ -128,6 +128,7 @@ class MateListWidget extends StatelessWidget {
 
   Widget buildListView(BuildContext context, List<Mate> list) {
     return ListView(
+      controller: ScrollController(),
       children: list.map((e) {
         return PersonItemWidget(
           basicInfoWidget: buildBasicInfoWidget(context, e),
