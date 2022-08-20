@@ -91,7 +91,15 @@ jobs:
           key: app-${{ github.ref }}-${{ github.sha }}
 
       - name: 🏗️ Build Apk (arm64 only)
-        run: flutter build apk --split-per-abi --target-platform android-arm64
+        run: flutter build apk --split-per-abi --target-platform android-arm64 android-x64
+
+      - uses: r0adkll/sign-android-release@v1
+        name: Sign APK
+        with:
+          releaseDirectory: build/app/outputs/flutter-apk
+          signingKeyBase64: ${{ secrets.APK_SIGN_JKS_BASE64 }}
+          alias: ${{ secrets.APK_SIGN_ALIAS }}
+          keyStorePassword: ${{ secrets.APK_SIGN_PASS }}
 
       - name: 📌 Cache Build
         uses: actions/cache@v2
@@ -186,18 +194,11 @@ jobs:
           path: build/
           key: apk-${{ github.ref }}-${{ github.sha }}
 
-      - uses: r0adkll/sign-android-release@v1
-        name: Sign APK
-        with:
-          releaseDirectory: build/app/outputs/flutter-apk
-          signingKeyBase64: ${{ secrets.APK_SIGN_JKS_BASE64 }}
-          alias: ${{ secrets.APK_SIGN_ALIAS }}
-          keyStorePassword: ${{ secrets.APK_SIGN_PASS }}
-
       - name: ✏️ Rename apk file
         run: |
           cd build/app/outputs/flutter-apk/
           mv app-arm64-v8a-release.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
+          mv app-x86_64-release.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-x86_64-release.apk
 
       - name: 🤖 Upload apk by bot
         uses: appleboy/telegram-action@v0.1.1
@@ -207,6 +208,13 @@ jobs:
           document: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
           message: "🚀 Apk Build by Github Actions"
 
+      - name: 🤖 Upload apk by bot
+        uses: appleboy/telegram-action@v0.1.1
+        with:
+          to: ${{ secrets.CHAT_ID }}
+          token: ${{ secrets.BOT_TOKEN }}
+          document: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-x86_64-release.apk
+          message: "🚀 Apk Build by Github Actions"
 
   # Send notification
   notification:
