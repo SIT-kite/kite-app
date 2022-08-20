@@ -75,8 +75,8 @@ class _BoardPageState extends State<BoardPage> {
     // 如果用户未同意过, 请求用户确认
     if (!await signUpIfNecessary(context, '标识图片上传者')) return;
     try {
-      final List<String>? imagePaths = await FileUtils.pickImagesByFilePicker();
-      if (imagePaths == null || imagePaths.isEmpty) return;
+      final List<String> imagePaths = await FileUtils.pickImagesByFilePicker();
+      if (imagePaths.isEmpty) return;
 
       int size = imagePaths.length;
       EasyLoading.instance.userInteractions = false;
