@@ -91,7 +91,7 @@ jobs:
           key: app-${{ github.ref }}-${{ github.sha }}
 
       - name: 🏗️ Build Apk (arm64 only)
-        run: flutter build apk --split-per-abi --target-platform android-arm64 android-x64
+        run: flutter build apk --split-per-abi
 
       - uses: r0adkll/sign-android-release@v1
         name: Sign APK
