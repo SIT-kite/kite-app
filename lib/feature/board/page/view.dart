@@ -16,33 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:json_annotation/json_annotation.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
 
-part 'entity.g.dart';
+class ViewPage extends StatelessWidget {
+  final String url;
 
-@JsonSerializable()
-class PictureSummary {
-  /// Picture id.
-  final String id;
-
-  /// Publisher nickname
-  final String publisher;
-
-  /// Thumbnail image url.
-  final String thumbnail;
-
-  /// Origin picture url.
-  final String origin;
-
-  /// Publish time
-  final String ts;
-
-  const PictureSummary(this.id, this.publisher, this.thumbnail, this.origin, this.ts);
-
-  factory PictureSummary.fromJson(Map<String, dynamic> json) => _$PictureSummaryFromJson(json);
+  const ViewPage(this.url, {Key? key}) : super(key: key);
 
   @override
-  String toString() {
-    return 'PictureSummary{id: $id, publisher: $publisher, thumbnail: $thumbnail, origin: $origin, ts: $ts}';
+  Widget build(BuildContext context) {
+    return PhotoView(
+      imageProvider: CachedNetworkImageProvider(url),
+    );
   }
 }

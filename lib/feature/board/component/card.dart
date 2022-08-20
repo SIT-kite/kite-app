@@ -18,6 +18,7 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:kite/feature/board/page/view.dart';
 
 import '../entity.dart';
 
@@ -31,8 +32,12 @@ class PictureCard extends StatelessWidget {
     return Card(
       child: Column(
         children: [
-          CachedNetworkImage(imageUrl: picture.thumbnail),
-          SizedBox(height: 20),
+          GestureDetector(
+              child: CachedNetworkImage(imageUrl: picture.thumbnail),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => ViewPage(picture.origin)));
+              }),
+          const SizedBox(height: 20),
         ],
       ),
     );
