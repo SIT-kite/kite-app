@@ -18,6 +18,7 @@
 
 import 'dart:async';
 
+import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -155,8 +156,9 @@ class _TimetableImportDialogState extends State<TimetableImportDialog> {
                 EasyLoading.show(status: '正在导入', dismissOnTap: false);
                 _fetchTimetable().then((value) {
                   Navigator.of(context).pop(value);
-                }).catchError((error) {
-                  EasyLoading.showError('导入失败');
+                }).onError((e, t) {
+                  EasyLoading.showError('导入失败\n$e');
+                  Catcher.reportCheckedError(e, t);
                 }).whenComplete(() {
                   // 关闭对话框
                   EasyLoading.dismiss();

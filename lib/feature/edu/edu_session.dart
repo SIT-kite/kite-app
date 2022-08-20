@@ -49,6 +49,7 @@ class EduSession extends ASession {
         method,
         queryParameters: queryParameters,
         data: data,
+        options: options,
       );
     }
 

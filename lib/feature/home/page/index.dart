@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -100,19 +101,19 @@ class _HomePageState extends State<HomePage> {
       return;
     }
     // 如果未登录 (老用户直接进入 Home 页不会处于登录状态, 但新用户经过 login 页时已登录)
-    if (!HomeInitializer.ssoSession.isOnline) {
-      try {
-        await _doLogin(context);
-        showBasicFlash(context, const Text('登录成功'));
-      } on Exception catch (e) {
-        // 如果是认证相关问题, 弹出相应的错误信息.
-        if (e is UnknownAuthException || e is CredentialsInvalidException) {
-          showBasicFlash(context, Text('登录异常: $e'));
-        } else {
-          // 如果是网络问题, 提示检查网络.
-          _showCheckNetwork(context, title: Text('$e: 网络异常'));
-        }
+    try {
+      await _doLogin(context);
+      showBasicFlash(context, const Text('登录成功'));
+    } on Exception catch (e) {
+      // 如果是认证相关问题, 弹出相应的错误信息.
+      if (e is UnknownAuthException || e is CredentialsInvalidException) {
+        showBasicFlash(context, Text('登录异常: $e'));
+      } else {
+        // 如果是网络问题, 提示检查网络.
+        _showCheckNetwork(context, title: Text('$e: 网络异常'));
       }
+    } catch (e, s) {
+      Catcher.reportCheckedError(e, s);
     }
 
     if (HomeInitializer.ssoSession.isOnline) {

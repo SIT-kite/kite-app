@@ -138,8 +138,9 @@ class SsoSession extends ASession with Downloader {
       final response = await dio.request(
         url,
         queryParameters: queryParameters,
-        options: (options ?? Options()).copyWith(
-          headers: options!.headers,
+        options: options!.copyWith(
+          contentType: Headers.formUrlEncodedContentType,
+          headers: options.headers,
           method: method,
           followRedirects: false,
           validateStatus: (status) {
