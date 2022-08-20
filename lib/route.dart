@@ -22,10 +22,8 @@ import 'package:kite/feature/freshman/page/login.dart';
 import 'package:kite/feature/web_page/browser.dart';
 
 import 'feature/freshman/page/analysis.dart';
-import 'feature/freshman/page/classmate.dart';
-import 'feature/freshman/page/familiar.dart';
-import 'feature/freshman/page/index.dart';
-import 'feature/freshman/page/roommate.dart';
+import 'feature/freshman/page/friend/index.dart';
+import 'feature/freshman/page/info.dart';
 import 'feature/freshman/page/update.dart';
 import 'feature/page_index.dart';
 import 'setting/page/index.dart';
@@ -70,13 +68,10 @@ class RouteTable {
   static const scanner = '/scanner';
   static const browser = '/browser';
   static const freshman = '/freshman';
-  static const freshmanFamiliar = '$freshman/familiar';
-  static const freshmanInfo = '$freshman/info';
-  static const freshmanClass = '$freshman/class';
-  static const freshmanAnalysis = '$freshman/analysis';
-  static const freshmanRoommate = '$freshman/roommate';
   static const freshmanLogin = '$freshman/login';
-  static const freshmanContact = '$freshman/contact';
+  static const freshmanUpdate = '$freshman/update';
+  static const freshmanAnalysis = '$freshman/analysis';
+  static const freshmanFriend = '$freshman/friend';
   static const board = '/board';
 
   static final Map<String, NamedRouteBuilder> routeTable = {
@@ -117,13 +112,11 @@ class RouteTable {
     scanner: (context, args) => const ScannerPage(),
     browser: (context, args) => BrowserPage(args['initialUrl']),
     freshman: (context, args) => const FreshmanPage(),
-    freshmanFamiliar: (context, args) => const FamiliarPeopleWidget(),
-    freshmanClass: (context, args) => const ClassmateWidget(),
     freshmanAnalysis: (context, args) => const FreshmanAnalysisPage(),
-    freshmanRoommate: (context, args) => const RoommateWidget(),
     freshmanLogin: (context, args) => const FreshmanLoginPage(),
-    freshmanContact: (context, args) => const UpdateContactPage(),
-    board: (context, args) => BoardPage(),
+    freshmanUpdate: (context, args) => const FreshmanUpdatePage(),
+    freshmanFriend: (context, args) => const FreshmanFriendPage(),
+    board: (context, args) => const BoardPage(),
   };
 
   static NamedRouteBuilder? get(String path) {

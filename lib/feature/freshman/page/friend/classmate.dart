@@ -18,49 +18,38 @@
 
 import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
-import 'package:kite/feature/freshman/cache.dart';
-import 'package:kite/feature/freshman/entity.dart';
-import 'package:kite/feature/freshman/page/component/familar_list.dart';
 
-import '../dao.dart';
-import '../init.dart';
+import '../../cache.dart';
+import '../../dao.dart';
+import '../../entity.dart';
+import '../../init.dart';
+import '../component/mate_list.dart';
 
-class FamiliarPeopleWidget extends StatefulWidget {
-  const FamiliarPeopleWidget({Key? key}) : super(key: key);
+class ClassmateWidget extends StatefulWidget {
+  const ClassmateWidget({Key? key}) : super(key: key);
 
   @override
-  State<FamiliarPeopleWidget> createState() => _FamiliarPeopleWidgetState();
+  State<ClassmateWidget> createState() => _ClassmateWidgetState();
 }
 
-class _FamiliarPeopleWidgetState extends State<FamiliarPeopleWidget> {
-  final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
+class _ClassmateWidgetState extends State<ClassmateWidget> {
   final FreshmanCacheManager freshmanCacheManager = FreshmanInitializer.freshmanCacheManager;
+  final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
 
   void onRefresh() {
-    freshmanCacheManager.clearFamiliars();
+    freshmanCacheManager.clearClassmates();
     setState(() {});
-  }
-
-  Widget buildBody(List<Familiar> familiarList) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: FamiliarListWidget(
-            familiarList,
-            onRefresh: onRefresh,
-          ),
-        ),
-      ],
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return MyFutureBuilder<List<Familiar>>(
-      future: freshmanDao.getFamiliars(),
+    return MyFutureBuilder<List<Mate>>(
+      future: freshmanDao.getClassmates(),
       builder: (context, data) {
-        return buildBody(data);
+        return MateListWidget(
+          data,
+          callBack: onRefresh,
+        );
       },
     );
   }

@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kite/feature/freshman/page/component/profile.dart';
+import 'package:kite/route.dart';
 
 import '../../../component/future_builder.dart';
 import '../../../launch.dart';
@@ -49,7 +50,7 @@ class _FreshmanPageState extends State<FreshmanPage> {
   }
 
   Widget _buildBody(BuildContext context, FreshmanInfo data) {
-    return BasicInfoWidget(
+    return BasicInfoPageWidget(
       name: data.name,
       college: data.college,
       infoItems: [
@@ -59,6 +60,11 @@ class _FreshmanPageState extends State<FreshmanPage> {
         InfoItem(Icons.face, '辅导员', data.counselorName),
         ...buildContactInfoItems(context, data.contact, counselorTel: data.counselorTel),
       ],
+      appBarActions: buildAppBarMenuButton(context),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.person),
+        onPressed: () => Navigator.of(context).pushNamed(RouteTable.freshmanFriend),
+      ),
     );
   }
 

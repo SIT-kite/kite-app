@@ -22,14 +22,14 @@ import 'classmate.dart';
 import 'familiar.dart';
 import 'roommate.dart';
 
-class FriendPage extends StatefulWidget {
-  const FriendPage({Key? key}) : super(key: key);
+class FreshmanFriendPage extends StatefulWidget {
+  const FreshmanFriendPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _FriendPageState();
+  State<StatefulWidget> createState() => _FreshmanFriendPageState();
 }
 
-class _FriendPageState extends State<FriendPage> with SingleTickerProviderStateMixin {
+class _FreshmanFriendPageState extends State<FreshmanFriendPage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -55,6 +55,7 @@ class _FriendPageState extends State<FriendPage> with SingleTickerProviderStateM
         appBar: AppBar(
           title: const Text('新的朋友'),
           bottom: _buildBarHeader(),
+          actions: buildAppBarMenuButton(context),
         ),
         body: TabBarView(
           controller: _tabController,

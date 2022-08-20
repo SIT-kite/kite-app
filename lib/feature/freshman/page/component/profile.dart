@@ -19,12 +19,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/feature/freshman/page/friend.dart';
 import 'package:kite/storage/init.dart';
 
 import '../../../../route.dart';
-import '../analysis.dart';
-import '../update.dart';
 
 class InfoItem {
   IconData iconData = Icons.person;
@@ -36,17 +33,23 @@ class InfoItem {
   InfoItem(this.iconData, this.subtitle, this.title, {this.onTap, this.trailIconData});
 }
 
-class BasicInfoWidget extends StatelessWidget {
+class BasicInfoPageWidget extends StatelessWidget {
   final String name;
   final String college;
   final List<InfoItem> infoItems;
   final Widget? avatar;
 
-  const BasicInfoWidget({
+  final Widget? floatingActionButton;
+  final List<Widget>? appBarActions;
+  final String? title;
+  const BasicInfoPageWidget({
     required this.name,
     required this.college,
     required this.infoItems,
     this.avatar,
+    this.floatingActionButton,
+    this.appBarActions,
+    this.title,
     Key? key,
   }) : super(key: key);
 
@@ -89,32 +92,12 @@ class BasicInfoWidget extends StatelessWidget {
     );
   }
 
-  /// 构建菜单按钮
-  List<Widget> _buildMenuButton(BuildContext context) {
-    return <Widget>[
-      IconButton(
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const FreshmanAnalysisPage()));
-        },
-        icon: const Icon(Icons.analytics),
-        tooltip: '风筝报告',
-      ),
-      IconButton(
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const UpdateContactPage()));
-        },
-        icon: const Icon(Icons.menu),
-        tooltip: '联系方式设置',
-      )
-    ];
-  }
-
   /// 构造背景及内容
   Widget _buildBackground(BuildContext context, String name, String college, List<InfoItem> list) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('入学信息'),
-        actions: _buildMenuButton(context),
+        title: Text(title ?? '入学信息'),
+        actions: appBarActions,
       ),
       body: Stack(
           alignment: AlignmentDirectional.center,
@@ -183,12 +166,7 @@ class BasicInfoWidget extends StatelessWidget {
               ),
             ),
           ]),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.person),
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const FriendPage()));
-        },
-      ),
+      floatingActionButton: floatingActionButton,
     );
   }
 

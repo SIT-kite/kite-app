@@ -21,10 +21,10 @@ import 'package:kite/component/future_builder.dart';
 import 'package:kite/feature/freshman/cache.dart';
 import 'package:kite/feature/freshman/page/component/common.dart';
 
-import '../dao.dart';
-import '../entity.dart';
-import '../init.dart';
-import 'component/mate_list.dart';
+import '../../dao.dart';
+import '../../entity.dart';
+import '../../init.dart';
+import '../component/mate_list.dart';
 
 class RoommateWidget extends StatefulWidget {
   const RoommateWidget({Key? key}) : super(key: key);

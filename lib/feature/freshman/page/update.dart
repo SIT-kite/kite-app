@@ -63,14 +63,14 @@ class _MySwitcherState extends State<MySwitcher> {
   }
 }
 
-class UpdateContactPage extends StatefulWidget {
-  const UpdateContactPage({Key? key}) : super(key: key);
+class FreshmanUpdatePage extends StatefulWidget {
+  const FreshmanUpdatePage({Key? key}) : super(key: key);
 
   @override
-  State<UpdateContactPage> createState() => _UpdateContactPageState();
+  State<FreshmanUpdatePage> createState() => _FreshmanUpdatePageState();
 }
 
-class _UpdateContactPageState extends State<UpdateContactPage> {
+class _FreshmanUpdatePageState extends State<FreshmanUpdatePage> {
   final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
 
   /// 初始状态

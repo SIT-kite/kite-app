@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/launch.dart';
+import 'package:kite/route.dart';
 import 'package:kite/util/flash.dart';
 
 import '../../entity.dart';
@@ -205,4 +206,20 @@ extension Styles on Widget {
       child: this,
     );
   }
+}
+
+/// 构建菜单按钮
+List<Widget> buildAppBarMenuButton(BuildContext context) {
+  return <Widget>[
+    IconButton(
+      onPressed: () => Navigator.of(context).pushNamed(RouteTable.freshmanAnalysis),
+      icon: const Icon(Icons.analytics),
+      tooltip: '风筝报告',
+    ),
+    IconButton(
+      onPressed: () => Navigator.of(context).pushNamed(RouteTable.freshmanUpdate),
+      icon: const Icon(Icons.menu),
+      tooltip: '联系方式设置',
+    )
+  ];
 }

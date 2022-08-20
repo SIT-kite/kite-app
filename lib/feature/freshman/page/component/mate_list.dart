@@ -21,9 +21,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/feature/freshman/page/component/card.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../../dao.dart';
 import '../../entity.dart';
-import '../../init.dart';
 import 'common.dart';
 import 'profile.dart';
 
@@ -32,7 +30,6 @@ class MateListWidget extends StatelessWidget {
   final List<Mate> mateList;
   final VoidCallback? callBack;
   final RefreshController _refreshController = RefreshController();
-  final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
 
   MateListWidget(this.mateList, {this.callBack, this.showDormitory = true, Key? key}) : super(key: key);
 
@@ -40,7 +37,7 @@ class MateListWidget extends StatelessWidget {
   void loadMoreInfo(BuildContext context, Mate mate) {
     final lastSeenText = calcLastSeen(mate.lastSeen);
     Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-      return BasicInfoWidget(
+      return BasicInfoPageWidget(
         name: mate.name,
         college: mate.college,
         infoItems: [
