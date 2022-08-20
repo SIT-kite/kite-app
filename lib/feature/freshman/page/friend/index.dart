@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:kite/feature/freshman/page/component/common.dart';
 
 import 'classmate.dart';
 import 'familiar.dart';
