@@ -99,8 +99,7 @@ jobs:
           path: build/
           key: apk-${{ github.ref }}-${{ github.sha }}
 
-
-  # flutter build ios
+    # flutter build ios
   build-iOS:
     runs-on: macos-latest
     needs: lint
@@ -166,7 +165,6 @@ jobs:
 #      - run: flutter build linux
       # TODO 咋压缩文件发tg里
 
-
   # Upload apk
   upload:
     runs-on: ubuntu-latest
@@ -187,6 +185,12 @@ jobs:
         with:
           path: build/
           key: apk-${{ github.ref }}-${{ github.sha }}
+
+      - name: 📌 Install apksigner & Sign apk
+        run: |
+          echo -n "${{ secrets.APK_SIGN_JKS_BASE64 }}" | base64 -d > key.jks
+          apt install apksigner -y
+          apksigner sign --ks key.jks --ks-key-alias androidKey --ks-pass pass:${{ secrets.APK_SIGN_PASS }} build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
 
       - name: ✏️ Rename apk file
         run: |
