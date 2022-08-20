@@ -88,6 +88,7 @@ class BasicInfoWidget extends StatelessWidget {
     );
   }
 
+  /// 构建菜单按钮
   List<Widget> _buildMenuButton(BuildContext context) {
     return <Widget>[
       IconButton(

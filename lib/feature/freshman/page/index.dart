@@ -17,12 +17,16 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kite/feature/freshman/page/component/profile.dart';
 
 import '../../../component/future_builder.dart';
+import '../../../launch.dart';
+import '../../../util/flash.dart';
 import '../dao.dart';
 import '../entity.dart';
 import '../init.dart';
+import 'component/common.dart';
 
 class FreshmanPage extends StatefulWidget {
   const FreshmanPage({Key? key}) : super(key: key);
@@ -53,11 +57,16 @@ class _FreshmanPageState extends State<FreshmanPage> {
         InfoItem(Icons.emoji_objects, '专业', data.major),
         InfoItem(Icons.corporate_fare, '宿舍', '${data.campus} ${data.building}${data.room}-${data.bed}'),
         InfoItem(Icons.face, '辅导员', data.counselorName),
-        InfoItem(Icons.phone_in_talk, '辅导员联系方式', data.counselorTel),
-        if (![null, ''].contains(data.contact?.qq)) InfoItem(Icons.person, '我的QQ', data.contact!.qq!),
-        if (![null, ''].contains(data.contact?.wechat)) InfoItem(Icons.wechat, '我的微信', data.contact!.wechat!),
-        if (![null, ''].contains(data.contact?.tel)) InfoItem(Icons.phone, '我的电话', data.contact!.tel!),
+        ...buildContactInfoItems(context, data.contact, counselorTel: data.counselorTel),
       ],
     );
+  }
+
+  ///联系方式跳转
+  launcherOnTap({required String contact, required String tips}) async {
+    if (!await GlobalLauncher.launch(contact)) {
+      Clipboard.setData(ClipboardData(text: contact));
+      showBasicFlash(context, Text(tips));
+    }
   }
 }

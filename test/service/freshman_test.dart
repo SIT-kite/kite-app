@@ -8,8 +8,8 @@ void main() async {
   await init();
   FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
   KvStorageInitializer.freshman
-    ..freshmanAccount = '郑欣宇'
-    ..freshmanSecret = '273326';
+    ..freshmanAccount = '龚书羽'
+    ..freshmanSecret = '181624';
   //  备用测试信息
   // ..freshmanAccount = '216072111'
   // ..freshmanSecret = '134629';

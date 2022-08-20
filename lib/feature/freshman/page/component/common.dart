@@ -25,11 +25,24 @@ import 'package:kite/util/flash.dart';
 import '../../entity.dart';
 import 'profile.dart';
 
-List<InfoItem> buildContactInfoItems(BuildContext context, Contact? contact) {
+List<InfoItem> buildContactInfoItems(BuildContext context, Contact? contact, {String? counselorTel}) {
   final wechat = contact?.wechat;
   final qq = contact?.qq;
   final tel = contact?.tel;
   return [
+    if (counselorTel != null && counselorTel.isNotEmpty)
+      InfoItem(
+        Icons.phone_in_talk,
+        '辅导员电话号码',
+        counselorTel,
+        onTap: () async {
+          if (!await GlobalLauncher.launchTel(counselorTel)) {
+            Clipboard.setData(ClipboardData(text: counselorTel));
+            showBasicFlash(context, const Text('无法启动电话, 已复制到剪切板'));
+          }
+        },
+        trailIconData: Icons.phone,
+      ),
     if (wechat != null && wechat.isNotEmpty)
       InfoItem(
         Icons.wechat,
