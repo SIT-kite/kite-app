@@ -107,6 +107,8 @@ class SsoSession extends ASession with Downloader {
     Map<String, String>? queryParameters,
     dynamic data,
     Options? options,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
   }) async {
     try {
       return await _request(
@@ -130,6 +132,8 @@ class SsoSession extends ASession with Downloader {
     Map<String, String>? queryParameters,
     dynamic data,
     Options? options,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
   }) async {
     options ??= Options();
 
@@ -148,6 +152,8 @@ class SsoSession extends ASession with Downloader {
           },
         ),
         data: data,
+        onSendProgress: onSendProgress,
+        onReceiveProgress: onReceiveProgress,
       );
       // 处理重定向
       return await DioUtils.processRedirect(dio, response);

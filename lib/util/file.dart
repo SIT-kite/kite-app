@@ -47,7 +47,17 @@ class FileUtils {
       dialogTitle: '选择图片',
       type: FileType.image,
     );
+
     return pfs != null && pfs.isNotEmpty ? pfs[0] : null;
+  }
+
+  static Future<List<String>?> pickImagesByFilePicker() async {
+    final pfs = await pickFiles(
+      dialogTitle: '选择图片',
+      type: FileType.image,
+      allowMultiple: true,
+    );
+    return pfs;
   }
 
   static Future<XFile?> pickImageByImagePicker() async {

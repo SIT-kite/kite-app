@@ -75,15 +75,22 @@ class _BoardPageState extends State<BoardPage> {
     // 如果用户未同意过, 请求用户确认
     if (!await signUpIfNecessary(context, '标识图片上传者')) return;
     try {
-      final String? imagePath = await FileUtils.pickImageByFilePicker();
-      if (imagePath == null) return;
-      final multipartFile = await MultipartFile.fromFile(
-        imagePath,
-        filename: imagePath.split(Platform.pathSeparator).last,
-      );
+      final List<String>? imagePaths = await FileUtils.pickImagesByFilePicker();
+      if (imagePaths == null || imagePaths.isEmpty) return;
+
+      int size = imagePaths.length;
       EasyLoading.instance.userInteractions = false;
-      EasyLoading.show(status: '正在上传');
-      await boardService.submitPicture('Snapshot', multipartFile);
+      for (int i = 0; i < size; i++) {
+        final file = await MultipartFile.fromFile(
+          imagePaths[i],
+          filename: imagePaths[i].split(Platform.pathSeparator).last,
+        );
+
+        await boardService.submitPictures([file], onProgress: (int count, int total) {
+          EasyLoading.showProgress(count / total, status: '正在上传(${i + 1}/$size)');
+        });
+      }
+
       EasyLoading.showSuccess('上传成功');
       refresh();
     } catch (e) {

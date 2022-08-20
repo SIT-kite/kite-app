@@ -24,18 +24,24 @@ abstract class ASession {
     Map<String, String>? queryParameters,
     dynamic data,
     Options? options,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
   });
 
   Future<Response> get(
     String url, {
     Map<String, String>? queryParameters,
     Options? options,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
   }) {
     return request(
       url,
       'GET',
       queryParameters: queryParameters,
       options: options,
+      onSendProgress: onReceiveProgress,
+      onReceiveProgress: onReceiveProgress,
     );
   }
 
@@ -44,6 +50,8 @@ abstract class ASession {
     Map<String, String>? queryParameters,
     dynamic data,
     Options? options,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
   }) {
     return request(
       url,
@@ -51,6 +59,8 @@ abstract class ASession {
       queryParameters: queryParameters,
       data: data,
       options: options,
+      onSendProgress: onReceiveProgress,
+      onReceiveProgress: onReceiveProgress,
     );
   }
 
@@ -59,6 +69,8 @@ abstract class ASession {
     Map<String, String>? queryParameters,
     dynamic data,
     Options? options,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
   }) {
     return request(
       url,
@@ -66,6 +78,8 @@ abstract class ASession {
       queryParameters: queryParameters,
       data: data,
       options: options,
+      onSendProgress: onReceiveProgress,
+      onReceiveProgress: onReceiveProgress,
     );
   }
 
@@ -74,6 +88,8 @@ abstract class ASession {
     Map<String, String>? queryParameters,
     dynamic data,
     Options? options,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
   }) {
     return request(
       url,
@@ -81,6 +97,8 @@ abstract class ASession {
       queryParameters: queryParameters,
       data: data,
       options: options,
+      onSendProgress: onReceiveProgress,
+      onReceiveProgress: onReceiveProgress,
     );
   }
 
@@ -89,6 +107,8 @@ abstract class ASession {
     Map<String, String>? queryParameters,
     dynamic data,
     Options? options,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
   }) {
     return request(
       url,
@@ -96,6 +116,8 @@ abstract class ASession {
       queryParameters: queryParameters,
       data: data,
       options: options,
+      onSendProgress: onReceiveProgress,
+      onReceiveProgress: onReceiveProgress,
     );
   }
 }
@@ -135,8 +157,17 @@ class DefaultSession extends ASession with Downloader {
     Map<String, String>? queryParameters,
     dynamic data,
     Options? options,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
   }) {
-    return dio.request(url, data: data, queryParameters: queryParameters, options: options);
+    return dio.request(
+      url,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+      onSendProgress: onReceiveProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
   }
 
   @override

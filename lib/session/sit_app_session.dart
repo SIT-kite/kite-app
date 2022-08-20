@@ -36,6 +36,8 @@ class SitAppSession extends ASession {
     Map<String, String>? queryParameters,
     data,
     Options? options,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
   }) async {
     Future<Response> normallyRequest() async {
       return await _requestWithoutRetry(
@@ -44,6 +46,8 @@ class SitAppSession extends ASession {
         queryParameters: queryParameters,
         data: data,
         options: options,
+        onSendProgress: onSendProgress,
+        onReceiveProgress: onReceiveProgress,
       );
     }
 
@@ -66,6 +70,8 @@ class SitAppSession extends ASession {
     Map<String, String>? queryParameters,
     data,
     Options? options,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
   }) async {
     String? token = jwtDao.jwtToken;
     final response = await dio.request(
@@ -82,6 +88,8 @@ class SitAppSession extends ASession {
           return headersMap;
         }(),
       ),
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
     );
     // 非 json 数据
     if (!(response.headers.value(Headers.contentTypeHeader) ?? '').contains('json')) {

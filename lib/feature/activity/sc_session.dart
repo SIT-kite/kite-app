@@ -43,6 +43,8 @@ class ScSession extends ASession {
     Map<String, String>? queryParameters,
     data,
     Options? options,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
   }) async {
     Future<Response> fetch() async {
       return await _session.request(
@@ -50,6 +52,8 @@ class ScSession extends ASession {
         method,
         queryParameters: queryParameters,
         data: data,
+        onSendProgress: onSendProgress,
+        onReceiveProgress: onReceiveProgress,
       );
     }
 

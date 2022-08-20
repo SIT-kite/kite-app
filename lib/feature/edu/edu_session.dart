@@ -42,6 +42,8 @@ class EduSession extends ASession {
     Map<String, String>? queryParameters,
     data,
     Options? options,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
   }) async {
     Future<Response> fetch() async {
       return await ssoSession.request(
@@ -50,6 +52,8 @@ class EduSession extends ASession {
         queryParameters: queryParameters,
         data: data,
         options: options,
+        onSendProgress: onSendProgress,
+        onReceiveProgress: onReceiveProgress,
       );
     }
 

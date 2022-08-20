@@ -47,6 +47,8 @@ class ReportSession extends ASession {
     Map<String, String>? queryParameters,
     dynamic data,
     Options? options,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
   }) async {
     Options newOptions = options ?? Options();
 
@@ -63,6 +65,8 @@ class ReportSession extends ASession {
       queryParameters: queryParameters,
       data: data,
       options: newOptions,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
     );
   }
 }

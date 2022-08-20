@@ -20,8 +20,14 @@ void main() async {
 
     final file = File('C:/Users/zzq/Desktop/Snipaste_2022-08-20_00-21-21.png');
     final bs = await file.readAsBytes();
-    await boardService.submitPicture(
-        'snapshot', MultipartFile.fromBytes(bs, contentType: MediaType.parse('image/png')));
+    await boardService.submitPictures(
+      [
+        MultipartFile.fromBytes(
+          bs,
+          contentType: MediaType.parse('image/png'),
+        )
+      ],
+    );
     Log.info('Submit successful');
   });
 }

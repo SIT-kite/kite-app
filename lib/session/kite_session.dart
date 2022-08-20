@@ -39,6 +39,8 @@ class KiteSession extends ASession {
     Map<String, String>? queryParameters,
     data,
     Options? options,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
   }) async {
     Future<Response> normallyRequest() async {
       return await _requestWithoutRetry(
@@ -47,6 +49,8 @@ class KiteSession extends ASession {
         queryParameters: queryParameters,
         data: data,
         options: options,
+        onSendProgress: onSendProgress,
+        onReceiveProgress: onReceiveProgress,
       );
     }
 
@@ -69,6 +73,8 @@ class KiteSession extends ASession {
     Map<String, String>? queryParameters,
     data,
     Options? options,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
   }) async {
     String? token = jwtDao.jwtToken;
     final response = await dio.request(
@@ -79,6 +85,8 @@ class KiteSession extends ASession {
         method: method,
         headers: token == null ? null : {'Authorization': 'Bearer $token'},
       ),
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
     );
     // 非 json 数据
     if (!(response.headers.value(Headers.contentTypeHeader) ?? '').contains('json')) {

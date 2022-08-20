@@ -37,10 +37,23 @@ class BoardService extends AService implements BoardDao {
     return result;
   }
 
-  Future<void> submitPicture(String imageName, MultipartFile multipartFile) async {
+  Future<void> submitPictures(List<MultipartFile> files, {ProgressCallback? onProgress}) async {
+    int sc = 0, st = 0, rc = 0, rt = 0;
     await session.post(
       '$_boardUrl/new',
-      data: FormData.fromMap({imageName: multipartFile}),
+      data: FormData.fromMap(
+        files.asMap().map((key, value) => MapEntry(key.toString(), value)),
+      ),
+      onSendProgress: (c, t) {
+        sc = c;
+        st = t;
+        if (onProgress != null) onProgress(sc + rc, st + rt);
+      },
+      onReceiveProgress: (c, t) {
+        rc = c;
+        rt = t;
+        if (onProgress != null) onProgress(sc + rc, st + rt);
+      },
     );
   }
 }

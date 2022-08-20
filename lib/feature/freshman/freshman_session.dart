@@ -36,6 +36,8 @@ class FreshmanSession extends ASession {
     Map<String, String>? queryParameters,
     data,
     Options? options,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
   }) async {
     Future<Response> myRequest(
       dynamic data1,
@@ -48,6 +50,8 @@ class FreshmanSession extends ASession {
         queryParameters: queryParameters1,
         data: data1,
         options: options,
+        onSendProgress: onSendProgress,
+        onReceiveProgress: onReceiveProgress,
       );
     }
 
