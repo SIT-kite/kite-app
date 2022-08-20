@@ -29,6 +29,7 @@ class ViewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return PhotoView(
       imageProvider: CachedNetworkImageProvider(url),
+      onTapUp: (context, details, value) => Navigator.of(context).pop(),
     );
   }
 }
