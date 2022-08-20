@@ -87,7 +87,7 @@ class GlobalLauncher {
         content: [
           Text(
             '无法识别的内容: \n'
-                '$scheme',
+            '$scheme',
           ),
         ],
         actionTextList: ['我知道了'],
@@ -100,7 +100,7 @@ class GlobalLauncher {
     return _schemeLauncher.launch(schemeText);
   }
 
-  static Future<bool> launchTel(String tel) => launch('tel://$tel');
+  static Future<bool> launchTel(String tel) => launch('tel:$tel');
 
   static Future<bool> launchQqContact(String qq) =>
       launch('mqqapi://card/show_pslcard?src_type=internal&version=1&uin=$qq');
