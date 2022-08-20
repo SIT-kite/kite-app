@@ -25,19 +25,12 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../entity/game.dart';
 import '../service/ranking.dart';
 
-class GameRanking extends StatefulWidget {
+class GameRanking extends StatelessWidget {
   static const _colorMapping = [Colors.red, Colors.deepOrange, Colors.orange];
 
   final GameType gameType;
 
-  GameRanking(this.gameType, {Key? key}) : super(key: key);
-
-  @override
-  State<GameRanking> createState() => _GameRankingState();
-}
-
-class _GameRankingState extends State<GameRanking> {
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  const GameRanking(this.gameType, {Key? key}) : super(key: key);
 
   /// 构建排行榜行, 下标从 1 开始
   Widget _buildItem(BuildContext context, int index, GameRankingItem item) {
@@ -46,8 +39,8 @@ class _GameRankingState extends State<GameRanking> {
     return ListTile(
       leading: CircleAvatar(
         backgroundColor: color,
-        child: Text(index.toString()),
         radius: 20,
+        child: Text(index.toString()),
       ),
       minLeadingWidth: 40,
       title: Text(item.studentId),
@@ -71,44 +64,39 @@ class _GameRankingState extends State<GameRanking> {
     );
   }
 
-  @override
-  void dispose() {
-    _refreshController.dispose();
-    super.dispose();
+  Widget _buildRankView(BuildContext context, List<GameRankingItem> list) {
+    if (list.isEmpty) return emptyRanking(context);
+
+    list.sort((a, b) => b.score - a.score);
+    return ListView(
+      controller: ScrollController(),
+      children: Iterable.generate(list.length, (int i) {
+        return _buildItem(context, i + 1, list[i]);
+      }).toList(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final service = RankingService(KiteInitializer.kiteSession);
-    final future = service.getGameRanking(widget.gameType.index);
-
-    return SmartRefresher(
-      enablePullDown: true,
-      enablePullUp: false,
-      controller: _refreshController,
-      onRefresh: () {
-        if (mounted) {
-          setState(() {});
-          Future.delayed(
-            const Duration(milliseconds: 500),
-            () => _refreshController.refreshCompleted(resetFooterState: true),
-          );
-        }
+    final future = service.getGameRanking(gameType.index);
+    final mfbController = MyFutureBuilderController();
+    final refreshController = RefreshController();
+    return MyFutureBuilder<List<GameRankingItem>>(
+      controller: mfbController,
+      future: future,
+      builder: (context, list) {
+        return SmartRefresher(
+          enablePullDown: true,
+          enablePullUp: false,
+          onRefresh: () {
+            mfbController.refresh();
+            refreshController.refreshCompleted();
+          },
+          controller: refreshController,
+          child: _buildRankView(context, list),
+        );
       },
-      child: MyFutureBuilder<List<GameRankingItem>>(
-        future: future,
-        builder: (context, list) {
-          if (list.isEmpty) {
-            return emptyRanking(context);
-          }
-          final widgets = <Widget>[];
-          list.sort((a, b) => b.score - a.score);
-          for (int i = 0; i < list.length; ++i) {
-            widgets.add(_buildItem(context, i + 1, list[i]));
-          }
-          return Column(mainAxisSize: MainAxisSize.min, children: widgets);
-        },
-      ),
     );
   }
 }

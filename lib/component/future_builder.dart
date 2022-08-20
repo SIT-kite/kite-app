@@ -25,7 +25,7 @@ typedef MyWidgetBuilder<T> = Widget Function(BuildContext context, T data);
 
 class MyFutureBuilderController {
   late State<MyFutureBuilder> _state;
-  void _bindState(State<MyFutureBuilder> state) => this._state = state;
+  void _bindState(State<MyFutureBuilder> state) => _state = state;
 
   void refresh() => (_state as _MyFutureBuilderState).refresh();
 }
@@ -59,7 +59,7 @@ class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
             final data = snapshot.data;
-            return widget.builder == null ? Text(data.toString()) : widget.builder!(context, snapshot.data!);
+            return widget.builder == null ? Text(data.toString()) : widget.builder!(context, snapshot.data as T);
           } else if (snapshot.hasError) {
             final error = snapshot.error;
 

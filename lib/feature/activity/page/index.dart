@@ -70,7 +70,10 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
   }
 
   Widget _buildEventResult(List<Activity> activities) {
-    return ListView(children: activities.map((e) => EventCard(e)).toList());
+    return ListView(
+      controller: ScrollController(),
+      children: activities.map((e) => EventCard(e)).toList(),
+    );
   }
 
   Widget _buildEventList(ActivityType type) {
