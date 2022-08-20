@@ -43,7 +43,11 @@ class _BoardPageState extends State<BoardPage> {
   final BoardService boardService = BoardInitializer.boardServiceDao;
 
   List<PictureSummary> _pictures = [];
+
+  /// lastPage 记录下一次应该拉取的页号.
   int _lastPage = 1;
+
+  /// 控制 "到底" 提示的显示.
   bool _atEnd = false;
 
   final _scrollController = ScrollController();
@@ -55,7 +59,7 @@ class _BoardPageState extends State<BoardPage> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         if (!_atEnd) {
-          print('Loading more pictures.');
+          Log.info('Loading more pictures.');
           loadMorePicture();
         }
       } else {
@@ -97,7 +101,6 @@ class _BoardPageState extends State<BoardPage> {
   }
 
   void refresh() {
-    _lastPage = 1;
     loadInitialPicture();
 
     _scrollController.animateTo(0, duration: const Duration(milliseconds: 500), curve: Curves.linear);
@@ -107,6 +110,7 @@ class _BoardPageState extends State<BoardPage> {
     _lastPage = 1;
     _pictures = await boardService.getPictureList();
 
+    _lastPage++;
     setState(() {});
   }
 
