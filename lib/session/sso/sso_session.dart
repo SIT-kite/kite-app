@@ -129,8 +129,6 @@ class SsoSession extends ASession with Downloader {
     String method, {
     Map<String, String>? queryParameters,
     dynamic data,
-    String? contentType,
-    ResponseType? responseType,
     Options? options,
   }) async {
     options ??= Options();
@@ -140,13 +138,14 @@ class SsoSession extends ASession with Downloader {
       final response = await dio.request(
         url,
         queryParameters: queryParameters,
-        options: DioUtils.NON_REDIRECT_OPTION_WITH_FORM_TYPE
-            .copyWith(
-              method: method,
-              contentType: contentType,
-              responseType: responseType,
-            )
-            .copyWith(headers: options!.headers),
+        options: (options ?? Options()).copyWith(
+          headers: options!.headers,
+          method: method,
+          followRedirects: false,
+          validateStatus: (status) {
+            return status! < 400;
+          },
+        ),
         data: data,
       );
       // 处理重定向
@@ -313,7 +312,15 @@ class SsoSession extends ASession with Downloader {
       'rmShown': '1',
     };
     // 登录系统
-    final res = await dio.post(_loginUrl, data: requestBody, options: DioUtils.NON_REDIRECT_OPTION_WITH_FORM_TYPE);
+    final res = await dio.post(_loginUrl,
+        data: requestBody,
+        options: Options(
+          contentType: Headers.formUrlEncodedContentType,
+          followRedirects: false,
+          validateStatus: (status) {
+            return status! < 400;
+          },
+        ));
     // 处理重定向
     return await DioUtils.processRedirect(dio, res);
   }

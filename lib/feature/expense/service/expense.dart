@@ -64,9 +64,12 @@ class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
     final BeautifulSoup soup = BeautifulSoup(htmlPage);
     // 先获取每一行,过滤首行
     List<ExpenseRecord> records = [];
-    for (final bill in soup.findAll(recordSelector).sublist(1)) {
-      records.add(_parseExpenseItem(bill));
-      ExpenseInitializer.expenseRecord.add(_parseExpenseItem(bill));
+    final record = soup.findAll(recordSelector);
+    if (record.isNotEmpty) {
+      for (final bill in record.sublist(1)) {
+        records.add(_parseExpenseItem(bill));
+        ExpenseInitializer.expenseRecord.add(_parseExpenseItem(bill));
+      }
     }
     // 页号信息
     final pageInfo = soup.findAll('div', id: 'listContent')[1].text;

@@ -23,11 +23,12 @@ class DioUtils {
   // ignore: non_constant_identifier_names
   static Options get NON_REDIRECT_OPTION_WITH_FORM_TYPE {
     return Options(
-        contentType: Headers.formUrlEncodedContentType,
-        followRedirects: false,
-        validateStatus: (status) {
-          return status! < 400;
-        });
+      contentType: Headers.formUrlEncodedContentType,
+      followRedirects: false,
+      validateStatus: (status) {
+        return status! < 400;
+      },
+    );
   }
 
   // ignore: non_constant_identifier_names
