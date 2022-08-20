@@ -18,6 +18,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/feature/freshman/page/friend.dart';
 import 'package:kite/storage/init.dart';
 
@@ -108,7 +109,7 @@ class BasicInfoWidget extends StatelessWidget {
     ];
   }
 
-  /// 构造背景
+  /// 构造背景及内容
   Widget _buildBackground(BuildContext context, String name, String college, List<InfoItem> list) {
     return Scaffold(
       appBar: AppBar(
@@ -133,7 +134,7 @@ class BasicInfoWidget extends StatelessWidget {
             // 列表
             Positioned(
               top: bgHeight,
-              height: MediaQuery.of(context).size.height - bgHeight,
+              height: MediaQuery.of(context).size.height - bgHeight - 70.h,
               width: MediaQuery.of(context).size.width,
               child: ListView(
                 children: list.map((e) => _buildItem(context, e)).toList(),
