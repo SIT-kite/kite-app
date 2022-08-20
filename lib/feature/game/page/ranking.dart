@@ -89,7 +89,9 @@ class GameRanking extends StatelessWidget {
         return SmartRefresher(
           enablePullDown: true,
           enablePullUp: false,
-          onRefresh: () {
+          onRefresh: () async {
+            // 避免频繁刷新
+            await Future.delayed(const Duration(seconds: 1));
             mfbController.refresh();
             refreshController.refreshCompleted();
           },

@@ -105,7 +105,7 @@ class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
 
   @override
   void initState() {
-    super.initState();
     if (widget.controller != null) widget.controller?._bindState(this);
+    super.initState();
   }
 }
