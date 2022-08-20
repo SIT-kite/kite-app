@@ -38,6 +38,7 @@ class FamiliarListWidget extends StatefulWidget {
 class _FamiliarListWidgetState extends State<FamiliarListWidget> {
   final RefreshController _refreshController = RefreshController();
 
+  ///加载更多
   void loadMore(Familiar familiar) {
     final lastSeenText = calcLastSeen(familiar.lastSeen);
 
@@ -79,25 +80,46 @@ class _FamiliarListWidgetState extends State<FamiliarListWidget> {
       context: context,
     );
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Stack(
       children: [
-        Text(
-          familiar.name,
-          style: const TextStyle(fontSize: 35, color: Colors.white, fontWeight: FontWeight.bold),
+        Align(
+          alignment: const Alignment(1.3, -1.5),
+          child: SizedBox(
+            width: 100,
+            height: 100,
+            child: buildSexIcon(familiar.gender == 'M'),
+          ),
         ),
-        SizedBox(
-          height: 8.h,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              familiar.name,
+              style: const TextStyle(fontSize: 35, color: Colors.black54, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 8.h,
+            ),
+            buildInfoItemRow(
+              iconData: Icons.school,
+              text: '学院:  ${familiar.college}',
+              context: context,
+            ),
+            wechatRow,
+            qqRow,
+            telRow,
+          ],
         ),
-        buildInfoItemRow(
-          iconData: Icons.school,
-          text: '学院:  ${familiar.college}',
-          context: context,
-        ),
-        wechatRow,
-        qqRow,
-        telRow,
       ],
+    );
+  }
+
+  /// 性别icon印章
+  Widget buildSexIcon(bool isMale) {
+    return Icon(
+      isMale ? Icons.male : Icons.female,
+      size: 50,
+      color: isMale ? Colors.lightBlue : Colors.pinkAccent,
     );
   }
 
