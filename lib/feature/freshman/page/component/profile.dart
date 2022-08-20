@@ -99,7 +99,7 @@ class BasicInfoWidget extends StatelessWidget {
       ),
       IconButton(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const MySwitcher(false)));
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const UpdateContactPage()));
         },
         icon: const Icon(Icons.menu),
         tooltip: '联系方式设置',
