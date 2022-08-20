@@ -26,7 +26,9 @@ import 'package:kite/component/future_builder.dart';
 import 'package:kite/feature/board/init.dart';
 import 'package:kite/feature/board/service.dart';
 import 'package:kite/util/file.dart';
+import 'package:kite/util/kite_authorization.dart';
 import 'package:kite/util/logger.dart';
+import 'package:kite/util/user.dart';
 
 import '../entity.dart';
 
@@ -62,33 +64,42 @@ class BoardPage extends StatelessWidget {
     );
   }
 
+  Future<void> onUploadPicture(BuildContext context) async {
+    // 如果用户未同意过, 请求用户确认
+    if (!await signUpIfNecessary(context, '标识图片上传者')) return;
+
+    try {
+      final String? imagePath = await FileUtils.pickImageByFilePicker();
+      if (imagePath == null) return;
+      final multipartFile = await MultipartFile.fromFile(
+        imagePath,
+        filename: imagePath.split(Platform.pathSeparator).last,
+      );
+      EasyLoading.show(status: '正在上传');
+      await boardService.submitPicture('Snapshot', multipartFile);
+      EasyLoading.showSuccess('上传成功');
+    } catch (e) {
+      Log.info(e);
+      EasyLoading.showError('上传失败');
+    } finally {
+      EasyLoading.dismiss();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final bool showUpload = AccountUtils.getUserType() != UserType.freshman;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('风景墙'),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.upload),
-        onPressed: () async {
-          try {
-            final String? imagePath = await FileUtils.pickImageByFilePicker();
-            if (imagePath == null) return;
-            final multipartFile = await MultipartFile.fromFile(
-              imagePath,
-              filename: imagePath.split(Platform.pathSeparator).last,
-            );
-            EasyLoading.show(status: '正在上传');
-            await boardService.submitPicture('Snapshot', multipartFile);
-            EasyLoading.showSuccess('上传成功');
-          } catch (e) {
-            Log.info(e);
-            EasyLoading.showError('上传失败');
-          } finally {
-            EasyLoading.dismiss();
-          }
-        },
-      ),
+      floatingActionButton: showUpload
+          ? FloatingActionButton(
+              onPressed: () => onUploadPicture(context),
+              child: const Icon(Icons.upload),
+            )
+          : null,
       body: Padding(
         padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
         child: MyFutureBuilder<List<PictureSummary>>(
