@@ -20,6 +20,7 @@ import 'package:catcher/catcher.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/route.dart';
+import 'package:kite/util/logger.dart';
 
 typedef MyWidgetBuilder<T> = Widget Function(BuildContext context, T data);
 
@@ -64,7 +65,7 @@ class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
             final error = snapshot.error;
 
             // 单独处理网络连接错误，且不上报
-            if (error is DioError && (error).type == DioErrorType.connectTimeout) {
+            if (error is DioError && [DioErrorType.connectTimeout, DioErrorType.other].contains((error).type)) {
               return Center(
                 child: Column(
                   children: [
@@ -78,6 +79,7 @@ class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
               );
             }
 
+            Log.info(error.runtimeType);
             Catcher.reportCheckedError(error, snapshot.stackTrace);
 
             if (widget.onErrorBuilder != null) {

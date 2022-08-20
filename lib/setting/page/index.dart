@@ -275,7 +275,7 @@ class SettingPage extends StatelessWidget {
               title: '启动详细错误对话框',
               subtitle: '将展示详细的异常栈追踪信息',
               leading: const Icon(Icons.info),
-              onChange: (value) async {
+              onChange: (value) {
                 KvStorageInitializer.developOptions.showErrorInfoDialog = value;
               }),
           if (kDebugMode)
