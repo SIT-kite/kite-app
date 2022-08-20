@@ -186,11 +186,13 @@ jobs:
           path: build/
           key: apk-${{ github.ref }}-${{ github.sha }}
 
-      - name: 📌 Install apksigner & Sign apk
-        run: |
-          echo -n "${{ secrets.APK_SIGN_JKS_BASE64 }}" | base64 -d > key.jks
-          apt install apksigner -y
-          apksigner sign --ks key.jks --ks-key-alias androidKey --ks-pass pass:${{ secrets.APK_SIGN_PASS }} build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+      - uses: r0adkll/sign-android-release@v1
+        name: Sign APK
+        with:
+          releaseDirectory: build/app/outputs/flutter-apk
+          signingKeyBase64: ${{ secrets.APK_SIGN_JKS_BASE64 }}
+          alias: ${{ secrets.APK_SIGN_ALIAS }}
+          keyStorePassword: ${{ secrets.APK_SIGN_PASS }}
 
       - name: ✏️ Rename apk file
         run: |
