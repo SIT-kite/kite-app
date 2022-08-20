@@ -55,12 +55,10 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Future<void> _onDownloadFile(Attachment attachment) async {
-    showBasicFlash(context, const Text('开始下载'),
-        duration: const Duration(seconds: 1));
+    showBasicFlash(context, const Text('开始下载'), duration: const Duration(seconds: 1));
     Log.info('下载文件: [${attachment.name}](${attachment.url})');
 
-    String targetPath =
-        '${(await getTemporaryDirectory()).path}/kite1/downloads/${attachment.name}';
+    String targetPath = '${(await getTemporaryDirectory()).path}/kite1/downloads/${attachment.name}';
     Log.info('下载到：$targetPath');
     // 如果文件不存在，那么下载文件
     if (!await File(targetPath).exists()) {
@@ -138,16 +136,17 @@ class _DetailPageState extends State<DetailPage> {
         const SizedBox(height: 30),
         MyHtmlWidget(_linkTel(article.content)),
         const SizedBox(height: 30),
+        if (article.attachments.isNotEmpty) Text('该公告包含以下附件', style: titleStyle),
         if (article.attachments.isNotEmpty)
-          Text('该公告包含以下附件', style: titleStyle),
-        Column(
-          children: article.attachments.map((e) {
-            return TextButton(
-              onPressed: () async => _onDownloadFile(e),
-              child: Text(e.name),
-            );
-          }).toList(),
-        ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: article.attachments.map((e) {
+              return TextButton(
+                onPressed: () async => _onDownloadFile(e),
+                child: Text(e.name),
+              );
+            }).toList(),
+          ),
       ],
     );
   }
@@ -156,8 +155,8 @@ class _DetailPageState extends State<DetailPage> {
   Future<BulletinDetail> getBulletinDetail() async {
     if (article == null) {
       Log.info('开始加载OA公告文章');
-      article = await BulletinInitializer.bulletin.getBulletinDetail(
-          widget.summary.bulletinCatalogueId, widget.summary.uuid);
+      article =
+          await BulletinInitializer.bulletin.getBulletinDetail(widget.summary.bulletinCatalogueId, widget.summary.uuid);
       Log.info('加载OA公告文章完毕');
     } else {
       Log.info('使用已获取的OA公告文章');
@@ -172,8 +171,7 @@ class _DetailPageState extends State<DetailPage> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
-              return SingleChildScrollView(
-                  child: _buildArticle(context, snapshot.data!));
+              return SingleChildScrollView(child: _buildArticle(context, snapshot.data!));
             } else if (snapshot.hasError) {
               return Text(snapshot.error.runtimeType.toString());
             }
@@ -198,8 +196,7 @@ class _DetailPageState extends State<DetailPage> {
           ),
         ],
       ),
-      body: Padding(
-          padding: const EdgeInsets.all(12), child: _buildBody(widget.summary)),
+      body: Padding(padding: const EdgeInsets.all(12), child: _buildBody(widget.summary)),
     );
   }
 }
