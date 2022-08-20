@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:kite/util/alert_dialog.dart';
@@ -115,6 +116,7 @@ class _ExpensePageState extends State<ExpensePage> {
     } catch (e, t) {
       _isRefreshing = false;
       showBasicFlash(context, Text('错误信息: ${e.toString().split('\n')[0]}'), duration: const Duration(seconds: 3));
+      Catcher.reportCheckedError(e, t);
     } finally {
       // 关闭正在加载对话框
       EasyLoading.dismiss();
