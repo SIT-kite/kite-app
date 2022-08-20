@@ -111,7 +111,7 @@ enum FunctionType {
   @HiveField(20)
   switchAccount,
 
-  /// 风景墙
+  /// 风筝时刻
   @HiveField(21)
   board,
 }

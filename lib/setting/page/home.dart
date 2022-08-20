@@ -67,7 +67,7 @@ String functionTypeToString(FunctionType type) {
     case FunctionType.switchAccount:
       return '切换账户';
     case FunctionType.board:
-      return '风景墙';
+      return '风筝时刻';
   }
 }
 

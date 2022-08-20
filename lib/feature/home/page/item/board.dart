@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/global/global.dart';
 
 import 'index.dart';
 
@@ -28,7 +27,7 @@ class BoardItem extends StatelessWidget {
     return HomeFunctionButton(
       route: '/board',
       icon: 'assets/home/icon_board.svg',
-      title: '风景墙',
+      title: '风筝时刻',
       subtitle: '随手记录美好',
     );
   }

@@ -159,9 +159,7 @@ class _BoardPageState extends State<BoardPage> {
     final bool showUpload = AccountUtils.getUserType() != UserType.freshman;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('风景墙'),
-      ),
+      appBar: AppBar(title: const Text('风筝时刻')),
       floatingActionButton: showUpload
           ? FloatingActionButton(
               onPressed: () => onUploadPicture(context),
