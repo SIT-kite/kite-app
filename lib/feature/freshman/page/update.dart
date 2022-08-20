@@ -88,11 +88,10 @@ class _FreshmanUpdatePageState extends State<FreshmanUpdatePage> {
   /// 初始化初始态变量
   void makeInitialState(FreshmanInfo info) {
     final contact = info.contact;
-    if (contact != null) {
-      initialWechat = contact.wechat ?? '';
-      initialQq = contact.qq ?? '';
-      initialTel = contact.tel ?? '';
-    }
+    initialWechat = contact?.wechat ?? '';
+    initialQq = contact?.qq ?? '';
+    initialTel = contact?.tel ?? '';
+
     initialVisible = info.visible;
     visibleState = initialVisible;
     qqTextEditingController.text = initialQq;
