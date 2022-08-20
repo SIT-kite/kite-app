@@ -74,8 +74,6 @@ class _BoardPageState extends State<BoardPage> {
   Future<void> onUploadPicture(BuildContext context) async {
     // 如果用户未同意过, 请求用户确认
     if (!await signUpIfNecessary(context, '标识图片上传者')) return;
-
-    bool success = false;
     try {
       final String? imagePath = await FileUtils.pickImageByFilePicker();
       if (imagePath == null) return;
@@ -83,20 +81,17 @@ class _BoardPageState extends State<BoardPage> {
         imagePath,
         filename: imagePath.split(Platform.pathSeparator).last,
       );
+      EasyLoading.instance.userInteractions = false;
       EasyLoading.show(status: '正在上传');
       await boardService.submitPicture('Snapshot', multipartFile);
       EasyLoading.showSuccess('上传成功');
-
-      success = true;
+      refresh();
     } catch (e) {
-      Log.info(e);
+      Log.error(e);
       EasyLoading.showError('上传失败');
     } finally {
+      EasyLoading.instance.userInteractions = true;
       EasyLoading.dismiss();
-    }
-
-    if (success) {
-      refresh();
     }
   }
 
@@ -115,9 +110,7 @@ class _BoardPageState extends State<BoardPage> {
   }
 
   void loadMorePicture() async {
-    if (_atEnd) {
-      return;
-    }
+    if (_atEnd) return;
 
     final lastPictures = await boardService.getPictureList(page: _lastPage);
     if (lastPictures.isEmpty) {
