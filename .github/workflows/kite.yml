@@ -91,7 +91,7 @@ jobs:
           key: app-${{ github.ref }}-${{ github.sha }}
 
       - name: 🏗️ Build Apk (arm64 only)
-        run: flutter build apk --split-per-abi
+        run: flutter build apk --split-per-abi --target-platform android-arm64,android-x64
 
       - uses: r0adkll/sign-android-release@v1
         name: Sign APK
@@ -197,15 +197,15 @@ jobs:
       - name: ✏️ Rename apk file
         run: |
           cd build/app/outputs/flutter-apk/
-          mv app-arm64-v8a-release.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
-          mv app-x86_64-release.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-x86_64-release.apk
+          mv app-arm64-v8a-release-signed.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk
+          mv app-x86_64-release-signed.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-x86_64-release-signed.apk
 
       - name: 🤖 Upload apk by bot
         uses: appleboy/telegram-action@v0.1.1
         with:
           to: ${{ secrets.CHAT_ID }}
           token: ${{ secrets.BOT_TOKEN }}
-          document: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release.apk
+          document: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk
           message: "🚀 Apk Build by Github Actions"
 
       - name: 🤖 Upload apk by bot
@@ -213,7 +213,7 @@ jobs:
         with:
           to: ${{ secrets.CHAT_ID }}
           token: ${{ secrets.BOT_TOKEN }}
-          document: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-x86_64-release.apk
+          document: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-x86_64-release-signed.apk
           message: "🚀 Apk Build by Github Actions"
 
   # Send notification
