@@ -174,15 +174,16 @@ class _HomePageState extends State<HomePage> {
               SliverAppBar(
                 // AppBar
                 actions: [
-                  IconButton(
-                    onPressed: () async {
-                      final result = await scan(context);
-                      Log.info('扫码结果: $result');
-                      if (result != null) GlobalLauncher.launch(result);
-                    },
-                    icon: const Icon(Icons.qr_code_scanner_outlined),
-                    iconSize: 30,
-                  )
+                  if (!UniversalPlatform.isDesktopOrWeb)
+                    IconButton(
+                      onPressed: () async {
+                        final result = await scan(context);
+                        Log.info('扫码结果: $result');
+                        if (result != null) GlobalLauncher.launch(result);
+                      },
+                      icon: const Icon(Icons.qr_code_scanner_outlined),
+                      iconSize: 30,
+                    )
                 ],
                 automaticallyImplyLeading: false,
                 flexibleSpace: FlexibleSpaceBar(

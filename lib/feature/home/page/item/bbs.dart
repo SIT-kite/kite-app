@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 import 'index.dart';
 
@@ -25,6 +26,8 @@ class BbsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (UniversalPlatform.isDesktopOrWeb) return Container();
+
     return HomeFunctionButton(
       route: '/bbs',
       icon: 'assets/home/icon_bbs.svg',
