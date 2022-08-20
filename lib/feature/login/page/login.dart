@@ -43,8 +43,7 @@ class _LoginPageState extends State<LoginPage> {
 
   final GlobalKey _formKey = GlobalKey<FormState>();
 
-  final TapGestureRecognizer _recognizer = TapGestureRecognizer()
-    ..onTap = onOpenUserLicense;
+  final TapGestureRecognizer _recognizer = TapGestureRecognizer()..onTap = onOpenUserLicense;
 
   // State
   bool isPasswordClear = false;
@@ -70,21 +69,24 @@ class _LoginPageState extends State<LoginPage> {
     final password = _passwordController.text;
     try {
       await LoginInitializer.ssoSession.login(username, password);
-      final personName =
-          await LoginInitializer.authServerService.getPersonName();
+      final personName = await LoginInitializer.authServerService.getPersonName();
       KvStorageInitializer.auth
         ..currentUsername = username
         ..ssoPassword = password
         ..personName = personName;
 
+      if (!mounted) return;
+      // 后退到就剩一个栈内元素
+      while (Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      }
       Navigator.pushReplacementNamed(context, RouteTable.home);
       GlobalLauncher.launch('https://kite.sunnysab.cn/wiki/kite-app/feature/');
     } on CredentialsInvalidException catch (e) {
       showBasicFlash(context, Text(e.msg));
       return;
     } catch (e) {
-      showBasicFlash(context, Text('未知错误: $e'),
-          duration: const Duration(seconds: 3));
+      showBasicFlash(context, Text('未知错误: $e'), duration: const Duration(seconds: 3));
       return;
     } finally {
       setState(() {
@@ -113,8 +115,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget buildTitleLine() {
     return Container(
         alignment: Alignment.centerLeft,
-        child: const Text('欢迎登录',
-            style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold)));
+        child: const Text('欢迎登录', style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold)));
   }
 
   Widget buildLoginForm() {
@@ -127,8 +128,7 @@ class _LoginPageState extends State<LoginPage> {
             controller: _usernameController,
             autofocus: true,
             validator: studentIdValidator,
-            decoration: const InputDecoration(
-                labelText: '账号', hintText: '学号/工号', icon: Icon(Icons.person)),
+            decoration: const InputDecoration(labelText: '账号', hintText: '学号/工号', icon: Icon(Icons.person)),
           ),
           TextFormField(
             controller: _passwordController,
@@ -140,8 +140,7 @@ class _LoginPageState extends State<LoginPage> {
               icon: const Icon(Icons.lock),
               suffixIcon: IconButton(
                 // 切换密码明文显示状态的图标按钮
-                icon: Icon(
-                    isPasswordClear ? Icons.visibility_off : Icons.visibility),
+                icon: Icon(isPasswordClear ? Icons.visibility_off : Icons.visibility),
                 onPressed: () {
                   setState(() {
                     isPasswordClear = !isPasswordClear;
@@ -170,13 +169,8 @@ class _LoginPageState extends State<LoginPage> {
           child: Text.rich(
             TextSpan(
               children: [
-                TextSpan(
-                    text: '我已阅读并同意',
-                    style: Theme.of(context).textTheme.bodyText1),
-                TextSpan(
-                    text: '《上应小风筝用户协议》',
-                    style: Theme.of(context).textTheme.bodyText2,
-                    recognizer: _recognizer),
+                TextSpan(text: '我已阅读并同意', style: Theme.of(context).textTheme.bodyText1),
+                TextSpan(text: '《上应小风筝用户协议》', style: Theme.of(context).textTheme.bodyText2, recognizer: _recognizer),
               ],
             ),
           ),
@@ -201,8 +195,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildProxySetButton(
-      BuildContext context, FlashController<dynamic> controller, _) {
+  Widget _buildProxySetButton(BuildContext context, FlashController<dynamic> controller, _) {
     return IconButton(
       onPressed: () {
         final String inputText = _proxyInputController.text;

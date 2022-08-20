@@ -83,6 +83,10 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
 
       // Flutter 官方推荐的在异步函数中使用context需要先检查是否mounted
       if (!mounted) return;
+      // 后退到就剩一个栈内元素
+      while (Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      }
       Navigator.pushReplacementNamed(context, RouteTable.home);
 
       // 预计需要写一份新生的使用说明
