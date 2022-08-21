@@ -30,20 +30,19 @@ class ConnectivityPage extends StatefulWidget {
   const ConnectivityPage({Key? key}) : super(key: key);
 
   @override
-  _ConnectivityPageState createState() => _ConnectivityPageState();
+  State<ConnectivityPage> createState() => _ConnectivityPageState();
 }
 
 class _ConnectivityPageState extends State<ConnectivityPage> {
   bool isConnected = false;
-
+  late Future checkConnectivityFuture;
   @override
   void initState() {
     super.initState();
 
-    ConnectivityInitializer.ssoSession.checkConnectivity().then((value) {
-      setState(() {
-        isConnected = value;
-      });
+    checkConnectivityFuture = ConnectivityInitializer.ssoSession.checkConnectivity().then((value) {
+      if (!mounted) return;
+      setState(() => isConnected = value);
     });
   }
 
@@ -133,8 +132,8 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
             const SizedBox(
               height: 40,
               child: ElevatedButton(
-                child: Text('打开 WLAN 设置'),
                 onPressed: AppSettings.openWIFISettings,
+                child: Text('打开 WLAN 设置'),
               ),
             ),
             const SizedBox(width: 20),
