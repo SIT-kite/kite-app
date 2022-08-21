@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/launch.dart';
 import 'package:kite/storage/init.dart';
+import 'package:kite/util/logger.dart';
 import 'package:kite/util/network.dart';
 
 import '../init.dart';
@@ -41,6 +42,7 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
     super.initState();
 
     checkConnectivityFuture = ConnectivityInitializer.ssoSession.checkConnectivity().then((value) {
+      Log.info('当前是否连接校园网：$value');
       if (!mounted) return;
       setState(() => isConnected = value);
     });

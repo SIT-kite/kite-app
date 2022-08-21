@@ -28,10 +28,9 @@ extension CheckSessionConnectivity on SsoSession {
         await get(
           url,
           options: Options(
+            contentType: Headers.formUrlEncodedContentType,
             followRedirects: false,
-            sendTimeout: 3,
-            receiveTimeout: 3,
-            validateStatus: (code) => true,
+            validateStatus: (status) => status! < 400,
           ),
         );
       });
