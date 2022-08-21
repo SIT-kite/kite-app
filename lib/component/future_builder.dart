@@ -73,7 +73,11 @@ class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
                     ElevatedButton(
                       onPressed: () => Navigator.of(context).pushReplacementNamed(RouteTable.connectivity),
                       child: const Text('进入网络工具检查'),
-                    )
+                    ),
+                    TextButton(
+                      onPressed: refresh,
+                      child: const Text('刷新页面'),
+                    ),
                   ],
                 ),
               );
