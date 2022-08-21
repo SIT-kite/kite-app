@@ -261,11 +261,12 @@ class SettingPage extends StatelessWidget {
                 ),
               ],
             ),
+            if (!isFreshman)
+              SimpleSettingsTile(title: '登录测试', subtitle: '检查用户名密码是否正确', onTap: () => _testPassword(context)),
+            SimpleSettingsTile(title: '退出登录', subtitle: '退出当前账号', onTap: () => _onLogout(context)),
+            SimpleSettingsTile(title: '清除数据', subtitle: '清除应用程序保存的账号和设置，但不包括缓存', onTap: () => _onClearStorage(context)),
           ],
         ),
-      if (!isFreshman) SimpleSettingsTile(title: '登录测试', subtitle: '检查用户名密码是否正确', onTap: () => _testPassword(context)),
-      SimpleSettingsTile(title: '退出登录', subtitle: '退出当前账号', onTap: () => _onLogout(context)),
-      SimpleSettingsTile(title: '清除数据', subtitle: '清除应用程序保存的账号和设置，但不包括缓存', onTap: () => _onClearStorage(context)),
       SettingsGroup(
         title: '开发者选项',
         children: <Widget>[
@@ -278,13 +279,12 @@ class SettingPage extends StatelessWidget {
               onChange: (value) {
                 KvStorageInitializer.developOptions.showErrorInfoDialog = value;
               }),
-          if (kDebugMode)
-            SimpleSettingsTile(
-              title: '显示本机存储内容',
-              subtitle: '含首页及各模块存储的数据',
-              onTap: () =>
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const DebugStoragePage())),
-            )
+          SimpleSettingsTile(
+            title: '显示本机存储内容',
+            subtitle: '含首页及各模块存储的数据',
+            leading: const Icon(Icons.storage),
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const DebugStoragePage())),
+          )
         ],
       ),
     ]);
