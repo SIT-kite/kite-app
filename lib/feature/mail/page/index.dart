@@ -44,8 +44,10 @@ class _MailPageState extends State<MailPage> {
       messages.sort((a, b) {
         return a.decodeDate()!.isAfter(b.decodeDate()!) ? -1 : 1;
       });
+      if (!mounted) return;
       setState(() => _messages = messages);
     } catch (_) {
+      if (!mounted) return;
       setState(() => _index = 1);
     }
   }
