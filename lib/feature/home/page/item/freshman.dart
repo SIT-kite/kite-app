@@ -44,7 +44,14 @@ class FreshmanItem extends StatelessWidget {
       }
     }
     return HomeFunctionButton(
-      route: RouteTable.freshman,
+      onPressed: () {
+        if (KvStorageInitializer.freshman.freshmanAccount == null ||
+            KvStorageInitializer.freshman.freshmanSecret == null) {
+          Navigator.of(context).pushNamed(RouteTable.freshmanLogin);
+        } else {
+          Navigator.of(context).pushNamed(RouteTable.freshman);
+        }
+      },
       iconWidget: Icon(Icons.people, size: 30.h, color: Theme.of(context).primaryColor),
       title: '入学信息',
       subtitle: '新生入学信息查询',
