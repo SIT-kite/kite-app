@@ -168,9 +168,8 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
           },
           injectJsRules: widget.injectJsRules,
           onProgress: (value) {
-            setState(() {
-              progress = value % 100;
-            });
+            if (!mounted) return;
+            setState(() => progress = value % 100);
           },
           onPageFinished: (url) async {
             if (widget.fixedTitle == null) {
