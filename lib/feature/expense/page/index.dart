@@ -38,7 +38,6 @@ class ExpensePage extends StatefulWidget {
 class _ExpensePageState extends State<ExpensePage> {
   /// 底部导航键的标志位
   int currentIndex = 0;
-  bool _isRefreshing = false;
   ExpenseType _filter = ExpenseType.all;
 
   @override
@@ -114,8 +113,7 @@ class _ExpensePageState extends State<ExpensePage> {
       EasyLoading.show(status: '正在拉取消费记录');
       await updateRecords();
     } catch (e, t) {
-      _isRefreshing = false;
-      showBasicFlash(context, Text('错误信息: ${e.toString().split('\n')[0]}'), duration: const Duration(seconds: 3));
+      EasyLoading.showError('错误信息: ${e.toString().split('\n')[0]}');
       Catcher.reportCheckedError(e, t);
     } finally {
       // 关闭正在加载对话框
@@ -126,12 +124,6 @@ class _ExpensePageState extends State<ExpensePage> {
   }
 
   Future<void> updateRecords() async {
-    if (_isRefreshing) {
-      showBasicFlash(context, const Text('已经在刷新啦'));
-      return;
-    } else {
-      _isRefreshing = true;
-    }
     showBasicFlash(context, const Text('正在更新消费数据, 速度受限于学校服务器, 请稍等'));
 
     final DateTime? startDate = ExpenseInitializer.expenseRecord.getLastOne()?.ts;
@@ -145,8 +137,7 @@ class _ExpensePageState extends State<ExpensePage> {
 
     _fetchBillConcurrently(service, 2, firstPage.total - 1);
 
-    showBasicFlash(context, const Text('加载完成'));
-    setState(() => _isRefreshing = false);
+    EasyLoading.showSuccess('加载成功');
   }
 
   Widget _buildRefreshButton() {
@@ -183,10 +174,7 @@ class _ExpensePageState extends State<ExpensePage> {
         ],
         currentIndex: currentIndex,
         onTap: (int index) {
-          setState(() {
-            currentIndex = index;
-            _isRefreshing = false;
-          });
+          setState(() => currentIndex = index);
         },
       ),
     );
