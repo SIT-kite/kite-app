@@ -48,8 +48,8 @@ class _ReportItemState extends State<ReportItem> {
   }
 
   void _onHomeRefresh(_) async {
-    if (!mounted) return;
     final String result = await _buildContent();
+    if (!mounted) return;
     setState(() => content = result);
   }
 
