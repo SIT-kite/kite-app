@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:catcher/catcher.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +51,10 @@ class MyFutureBuilder<T> extends StatefulWidget {
 }
 
 class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
-  void refresh() => setState(() {});
+  void refresh() {
+    if (!mounted) return;
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
