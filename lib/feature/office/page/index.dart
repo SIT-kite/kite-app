@@ -74,11 +74,13 @@ class _OfficePageState extends State<OfficePage> {
     Future.delayed(Duration.zero, () async {
       try {
         final functionList = await _fetchFuncList();
+        if (!mounted) return;
         setState(() {
           _allFunctions = functionList;
           _lastError = null;
         });
       } on CredentialsInvalidException catch (e) {
+        if (!mounted) return;
         setState(() {
           _lastError = e.toString();
         });
