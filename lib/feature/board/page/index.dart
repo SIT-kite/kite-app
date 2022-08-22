@@ -111,6 +111,7 @@ class _BoardPageState extends State<BoardPage> {
     _lastPage = 1;
     _pictures = await boardService.getPictureList();
     _lastPage++;
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -118,6 +119,8 @@ class _BoardPageState extends State<BoardPage> {
     if (_atEnd) return;
 
     final lastPictures = await boardService.getPictureList(page: _lastPage);
+
+    if (!mounted) return;
     if (lastPictures.isEmpty) {
       setState(() => _atEnd = true);
       return;
