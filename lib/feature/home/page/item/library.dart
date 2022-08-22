@@ -50,8 +50,8 @@ class _LibraryItemState extends State<LibraryItem> {
   }
 
   void _onHomeRefresh(_) async {
-    if (!mounted) return;
     final String result = await _buildContent();
+    if (!mounted) return;
     setState(() => content = result);
   }
 
@@ -59,8 +59,7 @@ class _LibraryItemState extends State<LibraryItem> {
     late HotSearch hotSearch;
 
     try {
-      hotSearch =
-          await LibrarySearchInitializer.hotSearchService.getHotSearch();
+      hotSearch = await LibrarySearchInitializer.hotSearchService.getHotSearch();
     } catch (e) {
       return defaultContent;
     }
@@ -80,10 +79,6 @@ class _LibraryItemState extends State<LibraryItem> {
       final lastHotSearch = KvStorageInitializer.home.lastHotSearch;
       content = lastHotSearch ?? defaultContent;
     }
-    return HomeFunctionButton(
-        route: '/library',
-        icon: 'assets/home/icon_library.svg',
-        title: '图书馆',
-        subtitle: content);
+    return HomeFunctionButton(route: '/library', icon: 'assets/home/icon_library.svg', title: '图书馆', subtitle: content);
   }
 }
