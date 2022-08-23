@@ -25,37 +25,37 @@ class HiveCacheProvider implements CacheProvider {
   const HiveCacheProvider(this.box);
 
   @override
-  bool? containsKey(String key) {
+  bool containsKey(String key) {
     return box.containsKey(key);
   }
 
   @override
-  bool getBool(String key, {bool? defaultValue}) {
-    return box.get(key);
+  bool? getBool(String key, {bool? defaultValue}) {
+    return box.get(key, defaultValue: defaultValue);
   }
 
   @override
-  double? getDouble(String key) {
-    return box.get(key);
+  double? getDouble(String key, {double? defaultValue}) {
+    return box.get(key, defaultValue: defaultValue);
   }
 
   @override
-  int? getInt(String key) {
-    return box.get(key);
+  int? getInt(String key, {int? defaultValue}) {
+    return box.get(key, defaultValue: defaultValue);
   }
 
   @override
-  Set? getKeys() {
+  Set getKeys() {
     return box.keys.toSet();
   }
 
   @override
-  String? getString(String key) {
-    return box.get(key);
+  String? getString(String key, {String? defaultValue}) {
+    return box.get(key, defaultValue: defaultValue);
   }
 
   @override
-  T getValue<T>(String key, T defaultValue) {
+  T? getValue<T>(String key, {T? defaultValue}) {
     return box.get(key, defaultValue: defaultValue);
   }
 
@@ -90,7 +90,7 @@ class HiveCacheProvider implements CacheProvider {
   }
 
   @override
-  Future<void> setObject<T>(String key, T value) async {
+  Future<void> setObject<T>(String key, T? value) async {
     box.put(key, value);
   }
 
