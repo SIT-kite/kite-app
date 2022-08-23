@@ -81,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.of(context).pop();
       }
       Navigator.pushReplacementNamed(context, RouteTable.home);
-      GlobalLauncher.launch('https://kite.sunnysab.cn/wiki/kite-app/feature/');
+      GlobalLauncher.launch('https://kite.sunnysab.cn/wiki/kite-app/features/');
     } on CredentialsInvalidException catch (e) {
       showBasicFlash(context, Text(e.msg));
       return;
