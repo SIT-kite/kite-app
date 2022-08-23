@@ -65,7 +65,7 @@ dependencies:
 
   # Settings
   app_settings: ^4.1.1
-  flutter_settings_screens: ^0.3.2-null-safety
+  flutter_settings_screens: 0.3.2-null-safety
 
   # Platform
   permission_handler: 10.0.0        # Android / iOS / Windows Permission
