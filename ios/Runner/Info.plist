@@ -2,12 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 	<dict>
-		<key>NSContactsUsageDescription</key>
-		<string>使用小风筝打开通讯录功能，请求访问通讯录权限</string>
-		<key>NSPhotoLibraryUsageDescription</key>
-		<string>使用小风筝图片上传功能，请求访问相册权限</string>
-		<key>NSCameraUsageDescription</key>
-		<string>使用小风筝扫码功能，需要访问相机权限</string>
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>
@@ -46,11 +40,11 @@
 		<key>NSCalendarsUsageDescription</key>
 		<string>Used for Calendar Task.</string>
 		<key>NSCameraUsageDescription</key>
-		<string>Used for Image Picker plugin for Flutter</string>
+		<string>使用小风筝扫码功能，需要访问相机权限</string>
 		<key>NSMicrophoneUsageDescription</key>
 		<string>Used for Image Picker plugin for Flutter</string>
 		<key>NSPhotoLibraryUsageDescription</key>
-		<string>Used for Image Picker plugin for Flutter</string>
+		<string>使用小风筝图片上传功能，需要请求访问相册权限</string>
 		<key>UIBackgroundModes</key>
 		<array>
 			<string>remote-notification</string>
