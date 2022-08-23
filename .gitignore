@@ -67,7 +67,6 @@ kite.iml
 
 # Miscellaneous
 *.class
-*.lock
 *.log
 *.pyc
 *.swp
