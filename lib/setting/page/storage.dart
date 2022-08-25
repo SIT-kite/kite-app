@@ -15,21 +15,102 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hive/hive.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/feature/contact/entity/contact.dart';
 import 'package:kite/feature/library/search/entity/search_history.dart';
 import 'package:kite/util/alert_dialog.dart';
+import 'package:kite/util/logger.dart';
 
-class DebugStoragePage extends StatelessWidget {
+class SimpleInputDialog {
+  final BuildContext context;
+  SimpleInputDialog(this.context);
+
+  Future<String?> inputString({String? initialValue}) async {
+    Log.info('inputString');
+    if (initialValue == null) return null;
+    final controller = TextEditingController();
+    controller.text = initialValue;
+    await showAlertDialog(
+      context,
+      content: TextFormField(
+        controller: controller,
+      ),
+      actionTextList: ['提交修改', '取消修改'],
+    );
+    return controller.text;
+  }
+
+  Future<bool?> inputBool({bool? initialValue}) async {
+    if (initialValue == null) return null;
+    ValueNotifier<bool> notifier = ValueNotifier(initialValue);
+    await showAlertDialog(
+      context,
+      content: ValueListenableBuilder<bool>(
+        valueListenable: notifier,
+        builder: (BuildContext context, bool value, Widget? child) {
+          return Checkbox(value: value, onChanged: (v) => notifier.value = v!);
+        },
+      ),
+      actionTextList: ['提交修改', '取消修改'],
+    );
+    return notifier.value;
+  }
+}
+
+class DebugStoragePage extends StatefulWidget {
   const DebugStoragePage({Key? key}) : super(key: key);
 
-  void showContentDialog(BuildContext context, String key, dynamic value) {
+  @override
+  State<DebugStoragePage> createState() => _DebugStoragePageState();
+}
+
+class _DebugStoragePageState extends State<DebugStoragePage> {
+  Future<bool?> modify(BuildContext context, Box<dynamic> box, String key, dynamic value) async {
+    dynamic result = value;
+    final input = SimpleInputDialog(context);
+    if (value is String) {
+      result = await input.inputString(initialValue: value);
+    } else if (value is bool) {
+      result = await input.inputBool(initialValue: value);
+    } else {
+      return null;
+    }
+    // 是否被修改了
+    bool isModified = value != result;
+    if (isModified) box.put(key, result);
+    return isModified;
+  }
+
+  void showContentDialog(BuildContext context, Box<dynamic> box, String key, dynamic value) {
     showAlertDialog(
       context,
       title: key,
-      content: SingleChildScrollView(child: Column(children: [Text(value.toString())])),
+      content: SingleChildScrollView(
+        child: Column(
+          children: [
+            Text(value.toString()),
+            if (kDebugMode)
+              TextButton(
+                onPressed: () async {
+                  final result = await modify(context, box, key, value);
+                  if (result == null) {
+                    EasyLoading.showError('不支持的操作');
+                    return;
+                  }
+                  if (!result) return; // 未修改
+                  if (!mounted) return;
+                  Navigator.pop(context); // 关闭上一层对话框
+                  setState(() {});
+                },
+                child: const Text('修改'),
+              ),
+          ],
+        ),
+      ),
       actionWidgetList: [
         ElevatedButton(onPressed: () {}, child: const Text('关闭')),
       ],
@@ -51,7 +132,7 @@ class DebugStoragePage extends StatelessWidget {
         ),
         trailing: Text(type, style: Theme.of(context).textTheme.bodyText1),
         dense: true,
-        onTap: () => showContentDialog(context, key, value),
+        onTap: () => showContentDialog(context, box, key, value),
       );
     }).toList();
     final sectionBody = items.isNotEmpty ? items : [const Text('无内容')];
