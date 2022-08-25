@@ -41,6 +41,8 @@
 	<string>Used for Calendar Task.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Used for Image Picker plugin for Flutter</string>
+	<key>NSMicrophoneUsageDescription</key>
+  <string>Used for Image Picker plugin for Flutter</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Used for Image Picker plugin for Flutter</string>
 	<key>UIBackgroundModes</key>
