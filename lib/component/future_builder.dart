@@ -22,15 +22,15 @@ import 'package:catcher/catcher.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/route.dart';
-import 'package:kite/util/logger.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 typedef MyWidgetBuilder<T> = Widget Function(BuildContext context, T data);
 
-class MyFutureBuilderController {
-  late State<MyFutureBuilder> _state;
-  void _bindState(State<MyFutureBuilder> state) => _state = state;
+class MyFutureBuilderController<T> {
+  late _MyFutureBuilderState<T> _state;
+  void _bindState(State<MyFutureBuilder<T>> state) => _state = state as _MyFutureBuilderState<T>;
 
-  void refresh() => (_state as _MyFutureBuilderState).refresh();
+  Future<T> refresh() => _state.refresh();
 }
 
 class MyFutureBuilder<T> extends StatefulWidget {
@@ -38,12 +38,17 @@ class MyFutureBuilder<T> extends StatefulWidget {
   final MyWidgetBuilder<T>? builder;
   final MyWidgetBuilder? onErrorBuilder;
   final MyFutureBuilderController? controller;
+
+  /// 是否启用下拉刷新
+  final bool enablePullRefresh;
+
   const MyFutureBuilder({
     Key? key,
     required this.future,
     required this.builder,
     this.onErrorBuilder,
     this.controller,
+    this.enablePullRefresh = false,
   }) : super(key: key);
 
   @override
@@ -51,72 +56,106 @@ class MyFutureBuilder<T> extends StatefulWidget {
 }
 
 class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
-  void refresh() {
-    if (!mounted) return;
+  Completer<T> completer = Completer();
+
+  Future<T> refresh() {
+    completer = Completer();
     setState(() {});
+    return completer.future;
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget buildWhenSuccessful(T? data) {
+    if (!completer.isCompleted) completer.complete(data);
+    return widget.builder == null ? Text(data.toString()) : widget.builder!(context, data as T);
+  }
+
+  Widget buildWhenError(error, stackTrace) {
+    if (!completer.isCompleted) completer.completeError(error, stackTrace);
+    // 单独处理网络连接错误，且不上报
+    if (error is DioError && [DioErrorType.connectTimeout, DioErrorType.other].contains((error).type)) {
+      return Center(
+        child: Column(
+          children: [
+            const Text('网络连接超时，请检查是否连接到校园网环境'),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pushReplacementNamed(RouteTable.connectivity),
+              child: const Text('进入网络工具检查'),
+            ),
+            TextButton(
+              onPressed: refresh,
+              child: const Text('刷新页面'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Catcher.reportCheckedError(error, stackTrace);
+
+    if (widget.onErrorBuilder != null) {
+      return widget.onErrorBuilder!(context, error);
+    }
+
+    return Expanded(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Text(error.toString()),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildWhenOther(AsyncSnapshot<T> snapshot) {
+    if (!completer.isCompleted) completer.complete();
+    throw Exception('snapshot has no data or error');
+  }
+
+  Widget buildWhenLoading() {
+    return const Center(child: CircularProgressIndicator());
+  }
+
+  Widget buildFutureBuilder() {
     return FutureBuilder<T>(
       key: UniqueKey(),
       future: widget.future,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
-            final data = snapshot.data;
-            return widget.builder == null ? Text(data.toString()) : widget.builder!(context, snapshot.data as T);
+            return buildWhenSuccessful(snapshot.data);
           } else if (snapshot.hasError) {
-            final error = snapshot.error;
-
-            // 单独处理网络连接错误，且不上报
-            if (error is DioError && [DioErrorType.connectTimeout, DioErrorType.other].contains((error).type)) {
-              return Center(
-                child: Column(
-                  children: [
-                    const Text('网络连接超时，请检查是否连接到校园网环境'),
-                    ElevatedButton(
-                      onPressed: () => Navigator.of(context).pushReplacementNamed(RouteTable.connectivity),
-                      child: const Text('进入网络工具检查'),
-                    ),
-                    TextButton(
-                      onPressed: refresh,
-                      child: const Text('刷新页面'),
-                    ),
-                  ],
-                ),
-              );
-            }
-
-            Log.info(error.runtimeType);
-            Catcher.reportCheckedError(error, snapshot.stackTrace);
-
-            if (widget.onErrorBuilder != null) {
-              return widget.onErrorBuilder!(context, error);
-            }
-
-            return Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Text(error.toString()),
-                  ],
-                ),
-              ),
-            );
+            return buildWhenError(snapshot.error, snapshot.stackTrace);
           } else {
-            throw Exception('snapshot has no data or error');
+            return buildWhenOther(snapshot);
           }
         }
-
-        return const Center(child: CircularProgressIndicator());
+        return buildWhenLoading();
       },
     );
   }
 
   @override
+  Widget build(BuildContext context) {
+    Widget result = buildFutureBuilder();
+
+    RefreshController refreshController = RefreshController();
+    if (widget.enablePullRefresh) {
+      result = SmartRefresher(
+        controller: refreshController,
+        onRefresh: () async {
+          await refresh();
+          refreshController.refreshCompleted();
+        },
+        child: result,
+      );
+    }
+    return result;
+  }
+
+  @override
   void initState() {
-    if (widget.controller != null) widget.controller?._bindState(this);
+    widget.controller?._bindState(this);
     super.initState();
   }
 }
