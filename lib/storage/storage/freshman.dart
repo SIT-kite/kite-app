@@ -33,6 +33,8 @@ class FreshmanCacheKeys {
   static const authAccount = '$namespace/auth/account';
   static const authSecret = '$namespace/auth/secret';
   static const authName = '$namespace/auth/name';
+
+  static const disableFirstEnterDialogState = '$namespace/state/disableFirstEnterDialog';
 }
 
 class FreshmanCacheStorage implements FreshmanCacheDao {
@@ -91,4 +93,10 @@ class FreshmanCacheStorage implements FreshmanCacheDao {
 
   @override
   set freshmanName(String? foo) => box.put(FreshmanCacheKeys.authName, foo);
+
+  @override
+  bool? get disableFirstEnterDialogState => box.get(FreshmanCacheKeys.disableFirstEnterDialogState);
+
+  @override
+  set disableFirstEnterDialogState(bool? foo) => box.put(FreshmanCacheKeys.disableFirstEnterDialogState, foo);
 }

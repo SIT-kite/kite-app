@@ -28,12 +28,14 @@ class FreshmanInitializer {
   static late FreshmanSession freshmanSession;
   static late FreshmanDao freshmanDao;
   static late FreshmanCacheManager freshmanCacheManager;
+  static late FreshmanCacheDao freshmanCacheDao;
 
   static Future<void> init({
     required ASession kiteSession,
   }) async {
-    freshmanSession = FreshmanSession(kiteSession, KvStorageInitializer.freshman);
-    freshmanCacheManager = FreshmanCacheManager(KvStorageInitializer.freshman);
+    freshmanCacheDao = KvStorageInitializer.freshman;
+    freshmanSession = FreshmanSession(kiteSession, freshmanCacheDao);
+    freshmanCacheManager = FreshmanCacheManager(freshmanCacheDao);
     freshmanDao = CachedFreshmanService(
       freshmanDao: FreshmanService(freshmanSession),
       freshmanCacheDao: KvStorageInitializer.freshman,

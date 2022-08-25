@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kite/feature/freshman/page/component/profile.dart';
 import 'package:kite/route.dart';
+import 'package:kite/util/alert_dialog.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../component/future_builder.dart';
@@ -36,8 +37,28 @@ class FreshmanPage extends StatelessWidget {
   final freshmanCacheManager = FreshmanInitializer.freshmanCacheManager;
   final refreshController = RefreshController();
   final myFutureBuilderController = MyFutureBuilderController();
+  final freshmanCacheDao = FreshmanInitializer.freshmanCacheDao;
+
+  void showFirstDialog(BuildContext context) {
+    if (!(freshmanCacheDao.disableFirstEnterDialogState ?? false)) {
+      showAlertDialog(context, title: '补充资料', content: [
+        const Text('是否补充个人资料？')
+      ], actionWidgetList: [
+        ElevatedButton(onPressed: () {}, child: const Text('补充信息')),
+        TextButton(onPressed: () {}, child: const Text('不再提示')),
+      ]).then((select) {
+        if (select == 0) {
+          Navigator.of(context).pushNamed(RouteTable.freshmanUpdate);
+        } else {
+          freshmanCacheDao.disableFirstEnterDialogState = true;
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    Future.delayed(Duration.zero, () => showFirstDialog(context));
     return MyFutureBuilder<FreshmanInfo>(
       controller: myFutureBuilderController,
       future: freshmanDao.getInfo(),

@@ -33,4 +33,7 @@ abstract class FreshmanCacheDao {
 
   /// 新生姓名
   String? freshmanName;
+
+  /// 禁用第一次进入时的对话框？
+  bool? disableFirstEnterDialogState;
 }
