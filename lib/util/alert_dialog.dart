@@ -22,7 +22,7 @@ import 'package:flutter/material.dart';
 Future<int?> showAlertDialog(
   BuildContext context, {
   required String title,
-  List<Widget> content = const [],
+  dynamic content,
   List<String>? actionTextList,
   List<Widget>? actionWidgetList,
 }) async {
@@ -33,16 +33,25 @@ Future<int?> showAlertDialog(
   if (actionTextList == null && actionWidgetList == null) {
     actionWidgetList = [];
   }
+  Widget contentWidget = Container();
+
+  if (content is List<Widget>) {
+    contentWidget = Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: content,
+    );
+  } else if (content is Widget) {
+    contentWidget = content;
+  } else {
+    throw TypeError();
+  }
 
   return showDialog(
     context: context,
     builder: (_) => AlertDialog(
       title: Center(child: Text(title, style: const TextStyle(fontWeight: FontWeight.bold))),
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: content,
-      ),
+      content: contentWidget,
       actions: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,

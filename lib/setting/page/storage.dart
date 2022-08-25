@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/feature/contact/entity/contact.dart';
@@ -25,6 +24,17 @@ import 'package:kite/util/alert_dialog.dart';
 
 class DebugStoragePage extends StatelessWidget {
   const DebugStoragePage({Key? key}) : super(key: key);
+
+  void showContentDialog(BuildContext context, String key, dynamic value) {
+    showAlertDialog(
+      context,
+      title: key,
+      content: SingleChildScrollView(child: Column(children: [Text(value.toString())])),
+      actionWidgetList: [
+        ElevatedButton(onPressed: () {}, child: const Text('关闭')),
+      ],
+    );
+  }
 
   Future<Widget> _buildBoxSection<T>(BuildContext context, String boxName) async {
     final box = await Hive.openBox<T>(boxName);
@@ -41,27 +51,7 @@ class DebugStoragePage extends StatelessWidget {
         ),
         trailing: Text(type, style: Theme.of(context).textTheme.bodyText1),
         dense: true,
-        onTap: () {
-          showAlertDialog(
-            context,
-            title: key,
-            content: [
-              SizedBox(
-                height: 300.h,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Text(value.toString()),
-                    ],
-                  ),
-                ),
-              )
-            ],
-            actionWidgetList: [
-              ElevatedButton(onPressed: () {}, child: const Text('关闭')),
-            ],
-          );
-        },
+        onTap: () => showContentDialog(context, key, value),
       );
     }).toList();
     final sectionBody = items.isNotEmpty ? items : [const Text('无内容')];
