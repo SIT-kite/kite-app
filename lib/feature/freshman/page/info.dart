@@ -20,29 +20,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kite/feature/freshman/page/component/profile.dart';
 import 'package:kite/route.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../component/future_builder.dart';
 import '../../../launch.dart';
 import '../../../util/flash.dart';
-import '../dao.dart';
 import '../entity.dart';
 import '../init.dart';
 import 'component/common.dart';
 
-class FreshmanPage extends StatefulWidget {
-  const FreshmanPage({Key? key}) : super(key: key);
+class FreshmanPage extends StatelessWidget {
+  FreshmanPage({Key? key}) : super(key: key);
 
-  @override
-  State<FreshmanPage> createState() => _FreshmanPageState();
-}
-
-class _FreshmanPageState extends State<FreshmanPage> {
-  final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
-
+  final freshmanDao = FreshmanInitializer.freshmanDao;
+  final freshmanCacheManager = FreshmanInitializer.freshmanCacheManager;
+  final refreshController = RefreshController();
+  final myFutureBuilderController = MyFutureBuilderController();
   @override
   Widget build(BuildContext context) {
     return MyFutureBuilder<FreshmanInfo>(
+      controller: myFutureBuilderController,
       future: freshmanDao.getInfo(),
+      enablePullRefresh: true,
       builder: (context, data) {
         return _buildBody(context, data);
       },
@@ -69,7 +68,7 @@ class _FreshmanPageState extends State<FreshmanPage> {
   }
 
   ///联系方式跳转
-  launcherOnTap({required String contact, required String tips}) async {
+  launcherOnTap(BuildContext context, {required String contact, required String tips}) async {
     if (!await GlobalLauncher.launch(contact)) {
       Clipboard.setData(ClipboardData(text: contact));
       showBasicFlash(context, Text(tips));

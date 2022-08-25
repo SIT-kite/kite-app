@@ -111,7 +111,7 @@ class RouteTable {
     bbs: (context, args) => const BbsPage(),
     scanner: (context, args) => const ScannerPage(),
     browser: (context, args) => BrowserPage(args['initialUrl']),
-    freshman: (context, args) => const FreshmanPage(),
+    freshman: (context, args) => FreshmanPage(),
     freshmanAnalysis: (context, args) => const FreshmanAnalysisPage(),
     freshmanLogin: (context, args) => const FreshmanLoginPage(),
     freshmanUpdate: (context, args) => const FreshmanUpdatePage(),
