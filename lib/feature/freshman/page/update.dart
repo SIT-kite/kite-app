@@ -20,6 +20,7 @@ import 'dart:core';
 
 import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/feature/freshman/entity.dart';
 import 'package:kite/util/flash.dart';
 
@@ -136,7 +137,10 @@ class _FreshmanUpdatePageState extends State<FreshmanUpdatePage> {
         future: freshmanDao.getInfo(),
         builder: (context, data) {
           makeInitialState(data);
-          return _buildBody(data);
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _buildBody(data),
+          );
         },
       ),
     );
@@ -150,28 +154,35 @@ class _FreshmanUpdatePageState extends State<FreshmanUpdatePage> {
 
   Widget _buildBody(FreshmanInfo info) {
     return Form(
-      child: Column(
-        children: [
-          buildTextFormField('微信', Icons.wechat, wechatTextEditingController),
-          buildTextFormField('QQ', Icons.person, qqTextEditingController),
-          buildTextFormField('手机号', Icons.phone, telTextEditingController),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  '允许可能认识的人发现我',
-                  style: Theme.of(context).textTheme.headline3,
-                ),
-                MySwitcher(
-                  visibleState,
-                  onChanged: (bool value) => visibleState = value,
-                ),
-              ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            buildTextFormField('微信', Icons.wechat, wechatTextEditingController),
+            buildTextFormField('QQ', Icons.person, qqTextEditingController),
+            buildTextFormField('手机号', Icons.phone, telTextEditingController),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '允许可能认识的人发现我',
+                    style: Theme.of(context).textTheme.headline3,
+                  ),
+                  MySwitcher(
+                    visibleState,
+                    onChanged: (bool value) => visibleState = value,
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            SizedBox(height: 20.h),
+            Text(
+              'PS: 本页填写的信息将使同学，舍友之间可见，以方便大家互相添加好友，组建群聊',
+              style: Theme.of(context).textTheme.bodyText2,
+            ),
+          ],
+        ),
       ),
     );
   }
