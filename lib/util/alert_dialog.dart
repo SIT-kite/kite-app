@@ -21,7 +21,7 @@ import 'package:flutter/material.dart';
 /// 显示对话框,对话框关闭后Future结束
 Future<int?> showAlertDialog(
   BuildContext context, {
-  required String title,
+  String? title,
   dynamic content,
   List<String>? actionTextList,
   List<Widget>? actionWidgetList,
@@ -50,7 +50,7 @@ Future<int?> showAlertDialog(
   return showDialog(
     context: context,
     builder: (_) => AlertDialog(
-      title: Center(child: Text(title, style: const TextStyle(fontWeight: FontWeight.bold))),
+      title: title == null ? null : Center(child: Text(title, style: const TextStyle(fontWeight: FontWeight.bold))),
       content: contentWidget,
       actions: [
         Row(
