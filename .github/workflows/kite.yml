@@ -161,26 +161,9 @@ jobs:
           channel: stable
           cache: true
 
-      - name: 📌 Restore pub cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.pub-cache/
-            .dart_tool/
-            .packages
-            .flutter-plugins
-            .flutter-plugins-dependencies
-            pubspec.lock
-          key: pub-${{ github.ref }}-${{ github.sha }}
-
-      - name: 📌 Restore Workspace
-        uses: actions/cache@v2
-        with:
-          path: |
-            lib/
-          key: app-${{ github.ref }}-${{ github.sha }}
-
       - run: flutter config --enable-windows-desktop
+      - run: flutter pub get
+      - run: flutter pub run build_runner build --delete-conflicting-outputs
       - run: flutter build windows
 
   # 临时关闭Linux平台的Action
@@ -204,7 +187,6 @@ jobs:
     if: github.ref == 'refs/heads/master'
     needs:
       - build-Android
-      - build-iOS
     steps:
 
       - uses: nelonoel/branch-name@v1.0.1
@@ -231,7 +213,7 @@ jobs:
           to: ${{ secrets.CHAT_ID }}
           token: ${{ secrets.BOT_TOKEN }}
           document: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk
-          message: "🚀 Apk Build by Github Actions"
+          message: "🚀 Android arm64-v8a Apk Build by Github Actions"
 
       - name: 🤖 Upload apk by bot
         uses: appleboy/telegram-action@v0.1.1
@@ -239,7 +221,7 @@ jobs:
           to: ${{ secrets.CHAT_ID }}
           token: ${{ secrets.BOT_TOKEN }}
           document: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-x86_64-release-signed.apk
-          message: "🚀 Apk Build by Github Actions"
+          message: "🚀 Android x86_64 Apk Build by Github Actions"
 
   # Send notification
   notification:
