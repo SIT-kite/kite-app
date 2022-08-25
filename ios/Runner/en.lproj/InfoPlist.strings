@@ -6,9 +6,8 @@
 
 */
 
-NSCalendarsUsageDescription = "Kite needs to get your calendar access";
-NSMicrophoneUsageDescription = "Kite needs to get your microphone access";
-NSCameraUsageDescription = "Kite needs to get your camera access";
-NSPhotoLibraryUsageDescription = "Kite needs to get your photo access";
+NSCalendarsUsageDescription = "Kite needs to get your calendar access to export timetable";
+NSCameraUsageDescription = "Kite needs to get your camera access to use scanner";
+NSPhotoLibraryUsageDescription = "Kite needs to get your photo access to upload picture to image board";
 CFBundleDisplayName = "Kite";
-NFCReaderUsageDescription = "Kite needs to get your NFC access";
+NFCReaderUsageDescription = "Kite needs to get your NFC access to read your school card";
