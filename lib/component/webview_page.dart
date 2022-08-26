@@ -175,7 +175,10 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
             if (widget.fixedTitle == null) {
               final controller = await _controllerCompleter.future;
               title = (await controller.getTitle()) ?? '无标题页面';
-              setState(() {});
+
+              if (mounted) {
+                setState(() {});
+              }
             }
           },
           javascriptChannels: widget.javascriptChannels,
