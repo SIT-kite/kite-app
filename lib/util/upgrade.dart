@@ -19,6 +19,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:universal_platform/universal_platform.dart';
+import 'package:version/version.dart';
 
 import 'logger.dart';
 
@@ -39,6 +40,15 @@ Future<AppVersion> getCurrentVersion() async {
   return AppVersion(platform, packageInfo.version);
 }
 
+/// Compare App version
+bool needUpdate(String currentVersion, String remoteVersion) {
+  Version current = Version.parse(currentVersion);
+  Version remote = Version.parse(remoteVersion);
+
+  Log.info('Current version is $currentVersion, while the remote version is $remoteVersion.');
+  return current < remote;
+}
+
 /// 检查更新
 Future<AppVersion?> getUpdate() async {
   if (kDebugMode) {
@@ -57,7 +67,7 @@ Future<AppVersion?> getUpdate() async {
 
     final platform = columns[0];
     final version = columns[1];
-    if (version != current.version) {
+    if (needUpdate(current.version, version)) {
       Log.info('检查到新版本 $version （当前版本 ${current.version}）');
       return AppVersion(platform, version);
     }
