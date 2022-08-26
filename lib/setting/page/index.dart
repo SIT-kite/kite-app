@@ -29,6 +29,7 @@ import 'package:kite/global/hive_initializer.dart';
 import 'package:kite/global/init.dart';
 import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
+import 'package:kite/storage/storage/admin.dart';
 import 'package:kite/storage/storage/develop.dart';
 import 'package:kite/util/file.dart';
 import 'package:kite/util/flash.dart';
@@ -272,6 +273,17 @@ class SettingPage extends StatelessWidget {
             subtitle: '清除应用程序保存的账号和设置，但不包括缓存',
             onTap: () => _onClearStorage(context)),
       ]),
+      if (kDebugMode)
+        SettingsGroup(
+          title: '管理员选项',
+          children: <Widget>[
+            TextInputSettingsTile(
+              title: '"问答" 密钥',
+              settingKey: AdminKeys.bbsSecret,
+              initialValue: KvStorageInitializer.admin.bbsSecret ?? '',
+            ),
+          ],
+        ),
       SettingsGroup(
         title: '开发者选项',
         children: <Widget>[
