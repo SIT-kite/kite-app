@@ -52,7 +52,10 @@ class Initializer {
     await UserEventInitializer.init(userEventBox: HiveBoxInitializer.userEvent);
     KvStorageInitializer.init(kvStorageBox: HiveBoxInitializer.kv);
     SettingInitializer.init(kvStorageBox: HiveBoxInitializer.kv);
-    await Global.init(userEventStorage: UserEventInitializer.userEventStorage, authSetting: KvStorageInitializer.auth);
+    await Global.init(
+      userEventStorage: UserEventInitializer.userEventStorage,
+      authSetting: KvStorageInitializer.auth,
+    );
     // 初始化用户首次打开时间（而不是应用安装时间）
     // ??= 表示为空时候才赋值
     KvStorageInitializer.home.installTime ??= DateTime.now();
@@ -61,25 +64,55 @@ class Initializer {
     CampusCardInitializer.init(session: Global.ssoSession);
     ConnectivityInitializer.init(ssoSession: Global.ssoSession);
 
-    final kiteSession = KiteSession(Global.dio, KvStorageInitializer.jwt);
-    await ContactInitializer.init(kiteSession: kiteSession, contactDataBox: HiveBoxInitializer.contactSetting);
+    final kiteSession = KiteSession(
+      Global.dio,
+      KvStorageInitializer.jwt,
+    );
+    await ContactInitializer.init(
+      kiteSession: kiteSession,
+      contactDataBox: HiveBoxInitializer.contactSetting,
+    );
     await EduInitializer.init(
-        ssoSession: Global.ssoSession, cookieJar: Global.cookieJar, timetableBox: HiveBoxInitializer.course);
-    await ExpenseInitializer.init(ssoSession: Global.ssoSession2, expenseRecordBox: HiveBoxInitializer.expense);
-    await KiteInitializer.init(kiteSession: kiteSession, electricityBox: HiveBoxInitializer.electricity);
-    await GameInitializer.init(gameBox: HiveBoxInitializer.game, kiteSession: kiteSession);
-    await HomeInitializer.init(ssoSession: Global.ssoSession, noticeService: KiteInitializer.noticeService);
+      ssoSession: Global.ssoSession,
+      cookieJar: Global.cookieJar,
+      timetableBox: HiveBoxInitializer.course,
+    );
+    await ExpenseInitializer.init(
+      ssoSession: Global.ssoSession2,
+      expenseRecordBox: HiveBoxInitializer.expense,
+    );
+    await KiteInitializer.init(
+      kiteSession: kiteSession,
+      electricityBox: HiveBoxInitializer.electricity,
+    );
+    await GameInitializer.init(
+      gameBox: HiveBoxInitializer.game,
+      kiteSession: kiteSession,
+    );
+    await HomeInitializer.init(
+      ssoSession: Global.ssoSession,
+      noticeService: KiteInitializer.noticeService,
+    );
     await LibraryInitializer.init(
-        dio: Global.dio, searchHistoryBox: HiveBoxInitializer.librarySearchHistory, kiteSession: kiteSession);
+      dio: Global.dio,
+      searchHistoryBox: HiveBoxInitializer.librarySearchHistory,
+      kiteSession: kiteSession,
+    );
     await MailInitializer.init();
-    await OfficeInitializer.init(dio: Global.dio, cookieJar: Global.cookieJar);
+    await OfficeInitializer.init(
+      dio: Global.dio,
+      cookieJar: Global.cookieJar,
+    );
     ReportInitializer.init(dio: Global.dio);
     ScInitializer.init(ssoSession: Global.ssoSession);
     LoginInitializer.init(ssoSession: Global.ssoSession);
 
     await FreshmanInitializer.init(kiteSession: kiteSession);
 
-    final sitAppSession = SitAppSession(Global.dio, KvStorageInitializer.sitAppJwt);
+    final sitAppSession = SitAppSession(
+      Global.dio,
+      KvStorageInitializer.sitAppJwt,
+    );
     SitAppInitializer.init(sitAppSession: sitAppSession);
     BoardInitializer.init(kiteSession: kiteSession);
 
