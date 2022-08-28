@@ -18,8 +18,8 @@
 
 import 'package:hive/hive.dart';
 
-import '../dao/game.dart';
-import '../entity/game.dart';
+import 'dao.dart';
+import 'entity.dart';
 
 class GameStorage implements GameRecordStorageDao {
   final Box<dynamic> box;

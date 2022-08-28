@@ -21,7 +21,7 @@ import 'package:kite/util/hive_register_adapter.dart';
 import 'contact/entity/contact.dart';
 import 'edu/timetable/entity.dart';
 import 'expense/entity/expense.dart';
-import 'game/entity/game.dart';
+import 'game/entity.dart';
 import 'home/entity/home.dart';
 import 'kite/entity/electricity.dart';
 import 'kite/entity/weather.dart';

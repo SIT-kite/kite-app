@@ -19,8 +19,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/feature/game/entity/game.dart';
 import 'package:kite/feature/game/init.dart';
+
+import '../entity.dart';
 
 class HistoryPage extends StatelessWidget {
   static final dateFormat = DateFormat('yyyy-MM-dd hh:mm:ss');

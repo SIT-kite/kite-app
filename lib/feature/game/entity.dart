@@ -21,7 +21,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 import '../../../global/hive_type_id_pool.dart';
 
-part 'game.g.dart';
+part 'entity.g.dart';
 
 @HiveType(typeId: HiveTypeIdPool.gameTypeItem)
 enum GameType {

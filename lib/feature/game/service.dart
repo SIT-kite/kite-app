@@ -20,8 +20,8 @@ import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/util/logger.dart';
 
-import '../dao/game.dart';
-import '../entity/game.dart';
+import 'dao.dart';
+import 'entity.dart';
 
 class RankingService extends AService implements RankingServiceDao {
   static const _rankingPrefix = '/game/ranking/';

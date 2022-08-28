@@ -19,11 +19,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/component/future_builder.dart';
-import 'package:kite/feature/kite/init.dart';
+import 'package:kite/feature/initializer_index.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../entity/game.dart';
-import '../service/ranking.dart';
+import '../entity.dart';
 
 class GameRanking extends StatelessWidget {
   static const _colorMapping = [Colors.red, Colors.deepOrange, Colors.orange];
@@ -78,7 +77,7 @@ class GameRanking extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final service = RankingService(KiteInitializer.kiteSession);
+    final service = GameInitializer.rankingService;
     final future = service.getGameRanking(gameId);
     final mfbController = MyFutureBuilderController();
     final refreshController = RefreshController();

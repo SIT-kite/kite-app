@@ -17,7 +17,12 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:kite/feature/initializer_index.dart';
 import 'package:kite/feature/web_page/wiki.dart';
+import 'package:kite/util/kite_authorization.dart';
+
+import '../entity.dart';
 
 IconButton helpButton(BuildContext context) {
   return IconButton(
@@ -30,4 +35,17 @@ IconButton helpButton(BuildContext context) {
     },
     icon: const Icon(Icons.help_outline),
   );
+}
+
+Future<void> uploadGameRecord(BuildContext context, GameRecord record) async {
+  try {
+    // 如果用户未同意过, 请求用户确认
+    if (!await signUpIfNecessary(context, '使用学号或工号区分不同用户的游戏记录')) return;
+    // 上传记录
+    await GameInitializer.rankingService.postScore(record);
+    EasyLoading.showInfo('正在上传');
+  } catch (e) {
+    EasyLoading.showError('上传出错: $e');
+    rethrow;
+  }
 }

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import '../entity/game.dart';
+import 'entity.dart';
 
 /// 游戏记录访问接口
 abstract class GameRecordStorageDao {

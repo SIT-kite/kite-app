@@ -29,9 +29,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kite/util/alert_dialog.dart';
 
-import '../../entity/game.dart';
+import '../../entity.dart';
 import '../../init.dart';
-import '../../util/upload.dart';
 import '../common.dart';
 import 'models/board_model.dart';
 import 'widgets/board.dart';
