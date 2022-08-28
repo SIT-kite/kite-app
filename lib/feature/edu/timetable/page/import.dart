@@ -121,6 +121,7 @@ class _TimetableImportDialogState extends State<TimetableImportDialog> {
                   currentDate: DateTime.now(),
                   firstDate: DateTime(DateTime.now().year),
                   lastDate: DateTime(DateTime.now().year + 2),
+                  selectableDayPredicate: (DateTime dataTime) => dataTime.weekday == DateTime.monday,
                 );
                 if (date != null) selectedDate.value = date;
               },
