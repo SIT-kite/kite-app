@@ -15,6 +15,12 @@ abstract class Game {
 
   /// 进入游戏
   void enter(BuildContext context);
+
+  @override
+  bool operator ==(Object other) => other is Game && other.gameId == gameId;
+
+  @override
+  int get hashCode => gameId;
 }
 
 class Game2048 implements Game {
