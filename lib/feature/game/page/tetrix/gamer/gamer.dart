@@ -369,7 +369,9 @@ class GameControl extends State<Game> with RouteAware {
         for (int i = 0; i < GAME_PAD_MATRIX_W; i++) {
           _data[line][i] = 0;
         }
-        setState(() {});
+        if (mounted) {
+          setState(() {});
+        }
         line++;
         await Future.delayed(_REST_LINE_DURATION);
         return line != GAME_PAD_MATRIX_H;
