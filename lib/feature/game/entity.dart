@@ -36,6 +36,9 @@ enum GameType {
   /// 合成上应大游戏
   @HiveField(2)
   composeSit,
+
+  /// 俄罗斯方块
+  tetris,
 }
 
 int _getGameIndex(GameType type) => type.index;

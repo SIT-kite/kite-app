@@ -25,6 +25,7 @@ import 'feature/freshman/page/analysis.dart';
 import 'feature/freshman/page/friend/index.dart';
 import 'feature/freshman/page/info.dart';
 import 'feature/freshman/page/update.dart';
+import 'feature/game/page/tetrix/index.dart';
 import 'feature/page_index.dart';
 import 'setting/page/index.dart';
 
@@ -46,6 +47,7 @@ class RouteTable {
   static const game2048 = '$game/2048';
   static const gameWordle = '$game/wordle';
   static const gameComposeSit = '$game/composeSit';
+  static const gameTetrix = '$game/tetrix';
   static const wiki = '/wiki';
   static const library = '/library';
   static const libraryAppointment = '$library/appointment';
@@ -90,6 +92,7 @@ class RouteTable {
     game2048: (context, args) => Game2048Page(),
     gameWordle: (context, args) => const WordlePage(),
     gameComposeSit: (context, args) => const ComposeSitPage(),
+    gameTetrix: (context, args) => const TetrixPage(),
     wiki: (context, args) => WikiPage(),
     library: (context, args) => const LibraryPage(),
     libraryAppointment: (context, args) => const AppointmentPage(),

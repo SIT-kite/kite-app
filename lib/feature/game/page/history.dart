@@ -54,6 +54,9 @@ class HistoryPage extends StatelessWidget {
       case GameType.composeSit:
         path = 'assets/game/icon_sit.png';
         break;
+      case GameType.tetris:
+        path = 'assets/game/icon_tetris.png';
+        break;
     }
     return Image(image: AssetImage(path));
   }

@@ -29,53 +29,23 @@ import 'gamer/keyboard.dart';
 import 'material/audios.dart';
 import 'panel/page_portrait.dart';
 
-void main() {
-  debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
-  _disableDebugPrint();
-  runApp(MyApp());
-}
-
-void _disableDebugPrint() {
-  bool debug = false;
-  assert(() {
-    debug = true;
-    return true;
-  }());
-  if (!debug) {
-    debugPrint = (message, {wrapWidth}) {
-      //disable log print when not in debug mode
-    };
-  }
-}
-
-final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
-
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'tetris',
-      navigatorObservers: [routeObserver],
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
-        body: Sound(child: Game(child: KeyboardController(child: _HomePage()))),
-      ),
-    );
-  }
-}
-
 const SCREEN_BORDER_WIDTH = 3.0;
 
 const BACKGROUND_COLOR = const Color(0xffefcc19);
 
-class _HomePage extends StatelessWidget {
+final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
+
+class TetrixPage extends StatelessWidget {
+  const TetrixPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    //only Android/iOS support land mode
-    bool land = MediaQuery.of(context).orientation == Orientation.landscape;
-    return land ? PageLand() : PagePortrait();
+    return Scaffold(
+      body: Sound(
+        child: Game(
+          child: KeyboardController(child: const PagePortrait()),
+        ),
+      ),
+    );
   }
 }
