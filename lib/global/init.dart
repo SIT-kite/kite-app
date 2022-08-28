@@ -66,8 +66,8 @@ class Initializer {
     await EduInitializer.init(
         ssoSession: Global.ssoSession, cookieJar: Global.cookieJar, timetableBox: HiveBoxInitializer.course);
     await ExpenseInitializer.init(ssoSession: Global.ssoSession2, expenseRecordBox: HiveBoxInitializer.expense);
-    await GameInitializer.init(gameBox: HiveBoxInitializer.game);
     await KiteInitializer.init(kiteSession: kiteSession, electricityBox: HiveBoxInitializer.electricity);
+    await GameInitializer.init(gameBox: HiveBoxInitializer.game, kiteSession: kiteSession);
     await HomeInitializer.init(ssoSession: Global.ssoSession, noticeService: KiteInitializer.noticeService);
     await LibraryInitializer.init(
         dio: Global.dio, searchHistoryBox: HiveBoxInitializer.librarySearchHistory, kiteSession: kiteSession);
