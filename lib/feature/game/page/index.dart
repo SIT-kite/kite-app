@@ -49,7 +49,7 @@ class _GamePageState extends State<GamePage> with SingleTickerProviderStateMixin
     );
   }
 
-  Widget _gameButtonLine(Game game) {
+  Widget _gameButtonLine(AGame game) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
       child: ListTile(
@@ -61,7 +61,7 @@ class _GamePageState extends State<GamePage> with SingleTickerProviderStateMixin
     );
   }
 
-  Widget _buildContent(BuildContext context, Game game) {
+  Widget _buildContent(BuildContext context, AGame game) {
     return Column(
       children: [
         Expanded(child: GameRanking(game.gameId)),

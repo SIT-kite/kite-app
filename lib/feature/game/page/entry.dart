@@ -3,7 +3,7 @@ import 'package:kite/route.dart';
 
 import '../entity.dart';
 
-abstract class Game {
+abstract class AGame {
   /// 获取游戏标题
   String get title;
 
@@ -17,13 +17,13 @@ abstract class Game {
   void enter(BuildContext context);
 
   @override
-  bool operator ==(Object other) => other is Game && other.gameId == gameId;
+  bool operator ==(Object other) => other is AGame && other.gameId == gameId;
 
   @override
   int get hashCode => gameId;
 }
 
-class Game2048 implements Game {
+class Game2048 implements AGame {
   @override
   String get title => '2048';
 
@@ -39,7 +39,7 @@ class Game2048 implements Game {
   }
 }
 
-class GameComposeSit implements Game {
+class GameComposeSit implements AGame {
   @override
   String get title => '合成上应大';
 
@@ -55,7 +55,7 @@ class GameComposeSit implements Game {
   }
 }
 
-class GameWordle implements Game {
+class GameWordle implements AGame {
   @override
   String get title => 'Wordle';
 
@@ -72,15 +72,15 @@ class GameWordle implements Game {
 }
 
 class GameManager {
-  final Map<int, Game> _games = {};
+  final Map<int, AGame> _games = {};
 
-  void registerGame(Game game) => _games[game.gameId] = game;
+  void registerGame(AGame game) => _games[game.gameId] = game;
 
-  Game? findGameById(int id) => _games[id];
+  AGame? findGameById(int id) => _games[id];
 
   List<int> get gameIdList => _games.keys.toList();
 
-  List<Game> get gameList => _games.values.toList();
+  List<AGame> get gameList => _games.values.toList();
 
   int get size => _games.length;
 }
