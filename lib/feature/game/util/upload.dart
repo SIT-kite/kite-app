@@ -17,10 +17,10 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:kite/feature/game/entity/game.dart';
 import 'package:kite/feature/game/service/ranking.dart';
 import 'package:kite/feature/kite/init.dart';
-import 'package:kite/util/flash.dart';
 import 'package:kite/util/kite_authorization.dart';
 
 Future<void> _innerUploadGameRecord(BuildContext context, GameRecord record) async {
@@ -34,9 +34,9 @@ Future<void> _innerUploadGameRecord(BuildContext context, GameRecord record) asy
 Future<void> uploadGameRecord(BuildContext context, GameRecord record) async {
   try {
     await _innerUploadGameRecord(context, record);
+    EasyLoading.showInfo('正在上传');
   } catch (e) {
-    showBasicFlash(context, Text('上传出错\n' + e.toString()));
+    EasyLoading.showError('上传出错: $e');
     rethrow;
   }
-  showBasicFlash(context, const Text('上传成功'));
 }

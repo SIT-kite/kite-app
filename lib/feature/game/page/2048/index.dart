@@ -30,7 +30,7 @@ import 'package:flutter/material.dart';
 import '../../entity/game.dart';
 import '../../init.dart';
 import '../../util/upload.dart';
-import '../action.dart';
+import '../common.dart';
 import 'logic.dart';
 
 final boxColors = <int, Color>{
@@ -107,7 +107,7 @@ class BoardGridWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final boardSize = _state.boardSize();
     double width = (boardSize.width - (_GameWidgetState.column + 1) * _state.cellPadding) / _GameWidgetState.column;
-    List<CellBox> _backgroundBox = <CellBox>[];
+    List<CellBox> backgroundBox = <CellBox>[];
     for (int r = 0; r < _GameWidgetState.row; ++r) {
       for (int c = 0; c < _GameWidgetState.column; ++c) {
         CellBox box = CellBox(
@@ -116,7 +116,7 @@ class BoardGridWidget extends StatelessWidget {
           size: width,
           color: Colors.grey[300]!,
         );
-        _backgroundBox.add(box);
+        backgroundBox.add(box);
       }
     }
     return Positioned(
@@ -130,7 +130,7 @@ class BoardGridWidget extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(8.0)),
           ),
           child: Stack(
-            children: _backgroundBox,
+            children: backgroundBox,
           ),
         ));
   }

@@ -31,13 +31,14 @@ class HistoryPage extends StatelessWidget {
     final textStyle = Theme.of(context).textTheme.headline3;
 
     return Center(
-        child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SvgPicture.asset('assets/game/empty.svg'),
-        Text('快去完成一局游戏放松一下吧~', style: textStyle),
-      ],
-    ));
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SvgPicture.asset('assets/game/empty.svg'),
+          Text('快去完成一局游戏放松一下吧~', style: textStyle),
+        ],
+      ),
+    );
   }
 
   Widget _getGameIcon(GameType type) {

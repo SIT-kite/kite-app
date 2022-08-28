@@ -32,7 +32,7 @@ import 'package:kite/util/alert_dialog.dart';
 import '../../entity/game.dart';
 import '../../init.dart';
 import '../../util/upload.dart';
-import '../action.dart';
+import '../common.dart';
 import 'models/board_model.dart';
 import 'widgets/board.dart';
 
@@ -78,7 +78,7 @@ class _WordlePageState extends State<WordlePage> {
                       // 存储游戏记录
                       final currentTime = DateTime.now();
                       final record =
-                      GameRecord(GameType.wordle, score, startTime, currentTime.difference(startTime).inSeconds);
+                          GameRecord(GameType.wordle, score, startTime, currentTime.difference(startTime).inSeconds);
                       GameInitializer.gameRecord.append(record);
 
                       final result = await showAlertDialog(

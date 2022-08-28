@@ -28,9 +28,9 @@ import '../service/ranking.dart';
 class GameRanking extends StatelessWidget {
   static const _colorMapping = [Colors.red, Colors.deepOrange, Colors.orange];
 
-  final GameType gameType;
+  final int gameId;
 
-  const GameRanking(this.gameType, {Key? key}) : super(key: key);
+  const GameRanking(this.gameId, {Key? key}) : super(key: key);
 
   /// 构建排行榜行, 下标从 1 开始
   Widget _buildItem(BuildContext context, int index, GameRankingItem item) {
@@ -79,7 +79,7 @@ class GameRanking extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final service = RankingService(KiteInitializer.kiteSession);
-    final future = service.getGameRanking(gameType.index);
+    final future = service.getGameRanking(gameId);
     final mfbController = MyFutureBuilderController();
     final refreshController = RefreshController();
     return MyFutureBuilder<List<GameRankingItem>>(

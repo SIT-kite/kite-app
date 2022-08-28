@@ -17,13 +17,21 @@
  */
 
 import 'package:hive/hive.dart';
+import 'package:kite/feature/game/page/entry.dart';
 
 import 'storage/game.dart';
 
 class GameInitializer {
   static late GameStorage gameRecord;
+  static GameManager gameManager = GameManager();
 
   static init({required Box<dynamic> gameBox}) async {
     gameRecord = GameStorage(gameBox);
+    // 注册游戏
+    [
+      Game2048(),
+      GameComposeSit(),
+      GameWordle(),
+    ].forEach(gameManager.registerGame);
   }
 }

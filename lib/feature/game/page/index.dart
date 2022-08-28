@@ -17,24 +17,12 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:kite/feature/game/page/entry.dart';
+import 'package:kite/feature/initializer_index.dart';
 
-import '../entity/game.dart';
-import 'action.dart';
+import 'common.dart';
 import 'history.dart';
 import 'ranking.dart';
-
-class GameMeta {
-  final String name;
-  final String icon;
-  final String route;
-  const GameMeta(this.name, this.route, this.icon);
-}
-
-const Map<GameType, GameMeta> gameMapping = {
-  GameType.composeSit: GameMeta('合成上应大', '/game/composeSit', 'assets/game/icon_sit.png'),
-  GameType.game2048: GameMeta('2048', '/game/2048', 'assets/game/icon_2048.png'),
-  GameType.wordle: GameMeta('Wordle', '/game/wordle', 'assets/game/icon_wordle.png'),
-};
 
 class GamePage extends StatefulWidget {
   const GamePage({Key? key}) : super(key: key);
@@ -45,11 +33,11 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final GameManager gameManager = GameInitializer.gameManager;
 
   @override
   void initState() {
-    _tabController = TabController(length: gameMapping.length, vsync: this);
-
+    _tabController = TabController(length: gameManager.size, vsync: this);
     super.initState();
   }
 
@@ -57,27 +45,27 @@ class _GamePageState extends State<GamePage> with SingleTickerProviderStateMixin
     return TabBar(
       isScrollable: true,
       controller: _tabController,
-      tabs: gameMapping.values.map((e) => Tab(text: e.name)).toList(),
+      tabs: gameManager.gameList.map((e) => Text(e.title)).toList(),
     );
   }
 
-  Widget _gameButtonLine(BuildContext context, GameMeta game) {
+  Widget _gameButtonLine(Game game) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
       child: ListTile(
-        leading: Image.asset(game.icon, height: 64, width: 64),
+        leading: SizedBox(width: 64, height: 64, child: game.icon),
         trailing: const Icon(Icons.chevron_right),
-        title: Text(game.name),
-        onTap: () => Navigator.of(context).pushNamed(game.route),
+        title: Text(game.title),
+        onTap: () => game.enter(context),
       ),
     );
   }
 
-  Widget _buildContent(BuildContext context, GameType gameType) {
+  Widget _buildContent(BuildContext context, Game game) {
     return Column(
       children: [
-        Expanded(child: GameRanking(gameType)),
-        _gameButtonLine(context, gameMapping[gameType]!),
+        Expanded(child: GameRanking(game.gameId)),
+        _gameButtonLine(game),
       ],
     );
   }
@@ -85,7 +73,7 @@ class _GamePageState extends State<GamePage> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: gameMapping.length,
+      length: gameManager.size,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('小游戏'),
@@ -101,7 +89,7 @@ class _GamePageState extends State<GamePage> with SingleTickerProviderStateMixin
         ),
         body: TabBarView(
           controller: _tabController,
-          children: gameMapping.keys.map((e) => _buildContent(context, e)).toList(),
+          children: gameManager.gameList.map((e) => _buildContent(context, e)).toList(),
         ),
       ),
     );
