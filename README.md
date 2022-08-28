@@ -116,11 +116,12 @@ flutter run
 
 ## 致谢
 
-本项目中使用的其他开源项目有：
+本项目中使用的其他开源项目：
 
 - [Game2048](https://github.com/linuxsong/game2048)
 - [Wordle](https://github.com/nimone/wordle)
 - [DanXi][DanXi]
+- [flutter-tetrix](https://github.com/boyan01/flutter-tetris)
 
 这些项目的开源协议详见其各自的 LICENSE, 版权归原作者所有.
 
