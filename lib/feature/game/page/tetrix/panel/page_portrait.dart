@@ -27,8 +27,6 @@ import '../index.dart';
 import 'controller.dart';
 import 'screen.dart';
 
-part 'page_land.dart';
-
 class PagePortrait extends StatelessWidget {
   const PagePortrait({Key? key}) : super(key: key);
 
@@ -47,7 +45,7 @@ class PagePortrait extends StatelessWidget {
               const Spacer(),
               _ScreenDecoration(child: Screen(width: screenW)),
               const Spacer(flex: 2),
-              GameController(),
+              const GameController(),
             ],
           ),
         ),
@@ -67,21 +65,11 @@ class _ScreenDecoration extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        border: Border(
-          top: BorderSide(color: Color(0xFF987f0f), width: SCREEN_BORDER_WIDTH),
-          left: BorderSide(color: Color(0xFF987f0f), width: SCREEN_BORDER_WIDTH),
-          right: BorderSide(color: Color(0xFFfae36c), width: SCREEN_BORDER_WIDTH),
-          bottom: BorderSide(color: Color(0xFFfae36c), width: SCREEN_BORDER_WIDTH),
-        ),
-      ),
+      decoration: BoxDecoration(border: Border.all(color: Colors.black54)),
       child: Container(
-        decoration: BoxDecoration(border: Border.all(color: Colors.black54)),
-        child: Container(
-          padding: const EdgeInsets.all(3),
-          color: SCREEN_BACKGROUND,
-          child: child,
-        ),
+        padding: const EdgeInsets.all(3),
+        color: SCREEN_BACKGROUND,
+        child: child,
       ),
     );
   }

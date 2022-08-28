@@ -31,7 +31,7 @@ import 'panel/page_portrait.dart';
 
 const SCREEN_BORDER_WIDTH = 3.0;
 
-const BACKGROUND_COLOR = const Color(0xffefcc19);
+const BACKGROUND_COLOR = Colors.white24;
 
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
 
@@ -41,6 +41,7 @@ class TetrixPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text('俄罗斯方块')),
       body: Sound(
         child: Game(
           child: KeyboardController(child: const PagePortrait()),
