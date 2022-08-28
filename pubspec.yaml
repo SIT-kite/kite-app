@@ -70,17 +70,19 @@ dependencies:
   # Platform
   permission_handler: 10.0.0        # Android / iOS / Windows Permission
   quick_actions: ^0.6.0+9           # Android / iOS Home screen quick actions
-  device_display_brightness: ^0.0.6
+  device_display_brightness: ^0.0.6 # Android / iOS screen brightness
+
   # Open with other APP/programs
   open_file: ^3.2.1                 # Open files
   url_launcher: ^6.0.17             # Open URLs
+  image_picker: ^0.8.4+7            # Open Android / iOS system image picker
+  file_picker: ^4.6.1               # Open system file picker
 
   # UI
   flash: ^2.0.3+1
   fl_chart: ^0.55.0
   text_scroll: ^0.1.0
   grouped_list: ^5.1.1
-  image_picker: ^0.8.4+7
   pull_to_refresh: ^2.0.0
   dynamic_color_theme: ^2.0.0
   geopattern_flutter: { git: { url: https://github.com/SIT-kite/geopattern } }
@@ -94,6 +96,8 @@ dependencies:
   audioplayers: ^1.0.1                   # audio player
   flutter_staggered_grid_view: ^0.6.2
   cached_network_image: ^3.2.1
+  flutter_easyloading: ^3.0.5
+  photo_view: ^0.14.0
 
   # Utils
   version: ^3.0.2               # Version comparison
@@ -102,14 +106,11 @@ dependencies:
   package_info_plus: ^1.3.0     # Get package info (version)
   universal_platform: ^1.0.0+1  # dart.io.Platform API for Web
   check_vpn_connection: ^0.0.2  # Check VPN connection status
-  synchronized: ^3.0.0+2
+  synchronized: ^3.0.0+2        # lock
+  stack_trace: ^1.10.0          # parse stacktrace
 
   # Desktop support
   window_manager: ^0.2.0
-  flutter_easyloading: ^3.0.5
-  file_picker: ^4.6.1
-  photo_view: ^0.14.0
-  stack_trace: ^1.10.0
 
 
 dev_dependencies:
