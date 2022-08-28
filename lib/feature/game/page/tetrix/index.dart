@@ -26,7 +26,6 @@ import 'package:flutter/material.dart';
 
 import 'gamer/gamer.dart';
 import 'gamer/keyboard.dart';
-import 'material/audios.dart';
 import 'panel/page_portrait.dart';
 
 const SCREEN_BORDER_WIDTH = 3.0;
@@ -42,10 +41,8 @@ class TetrixPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('俄罗斯方块')),
-      body: Sound(
-        child: Game(
-          child: KeyboardController(child: const PagePortrait()),
-        ),
+      body: Game(
+        child: KeyboardController(child: const PagePortrait()),
       ),
     );
   }

@@ -153,7 +153,7 @@ class GameControl extends State<Game> with RouteAware {
     return next;
   }
 
-  SoundState get _sound => Sound.of(context);
+  final Sound _sound = Sound();
 
   void rotate() {
     if (_states == GameStates.running) {
@@ -223,7 +223,9 @@ class GameControl extends State<Game> with RouteAware {
         _mixCurrentIntoData();
       }
     }
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   Timer? _autoFallTimer;
@@ -278,10 +280,14 @@ class GameControl extends State<Game> with RouteAware {
       _states = GameStates.mixing;
       mixSound?.call();
       _forTable((i, j) => _mask[i][j] = _current?.get(j, i) ?? _mask[i][j]);
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
       await Future.delayed(const Duration(milliseconds: 200));
       _forTable((i, j) => _mask[i][j] = 0);
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     }
 
     //_current已经融入_data了，所以不再需要
@@ -300,7 +306,7 @@ class GameControl extends State<Game> with RouteAware {
   ///遍历表格
   ///i 为 row
   ///j 为 column
-  static void _forTable(dynamic function(int row, int column)) {
+  static void _forTable(dynamic Function(int row, int column) function) {
     for (int i = 0; i < GAME_PAD_MATRIX_H; i++) {
       for (int j = 0; j < GAME_PAD_MATRIX_W; j++) {
         final b = function(i, j);
@@ -418,7 +424,7 @@ class GameControl extends State<Game> with RouteAware {
 }
 
 class GameState extends InheritedWidget {
-  GameState(
+  const GameState(
     this.data,
     this.states,
     this.level,

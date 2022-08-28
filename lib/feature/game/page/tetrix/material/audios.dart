@@ -21,64 +21,15 @@
 //
 // Imported and commented on 2022.8.28
 
-import 'dart:async';
+import 'package:audioplayers/audioplayers.dart';
 
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:soundpool/soundpool.dart';
-
-class Sound extends StatefulWidget {
-  final Widget child;
-
-  const Sound({Key? key, required this.child}) : super(key: key);
-
-  @override
-  SoundState createState() => SoundState();
-
-  static SoundState of(BuildContext context) {
-    final state = context.findAncestorStateOfType<SoundState>();
-    assert(state != null, 'can not find Sound widget');
-    return state!;
-  }
-}
-
-const _SOUNDS = ['clean.mp3', 'drop.mp3', 'explosion.mp3', 'move.mp3', 'rotate.mp3', 'start.mp3'];
-
-class SoundState extends State<Sound> {
-  late Soundpool _pool;
-
-  final _soundIds = <String, int>{};
-
+class Sound {
   bool mute = false;
 
   void _play(String name) {
-    final soundId = _soundIds[name];
-    if (soundId != null && !mute) {
-      _pool.play(soundId);
-    }
-  }
+    AudioPlayer player = AudioPlayer();
 
-  @override
-  void initState() {
-    super.initState();
-    _pool = Soundpool.fromOptions(options: SoundpoolOptions(maxStreams: 6));
-    for (var value in _SOUNDS) {
-      scheduleMicrotask(() async {
-        final data = await rootBundle.load('assets/audios/$value');
-        _soundIds[value] = await _pool.load(data);
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _pool.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return widget.child;
+    player.play(AssetSource('game/tetrix/$name'));
   }
 
   void start() {
