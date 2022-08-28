@@ -24,10 +24,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:kite/feature/game/entity/game.dart';
-import 'package:kite/feature/game/util/upload.dart';
 import 'package:kite/util/kite_authorization.dart';
 
+import '../../../entity.dart';
+import '../../common.dart';
 import '../gamer/block.dart';
 import '../index.dart';
 import '../material/audios.dart';

@@ -38,6 +38,7 @@ enum GameType {
   composeSit,
 
   /// 俄罗斯方块
+  @HiveField(3)
   tetris,
 }
 
