@@ -24,6 +24,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:kite/feature/game/entity/game.dart';
+import 'package:kite/feature/game/util/upload.dart';
 
 import '../gamer/block.dart';
 import '../index.dart';
@@ -272,6 +274,7 @@ class GameControl extends State<Game> with RouteAware {
 
       _cleared += clearLines.length;
       _points += clearLines.length * _level * 5;
+      uploadGameRecord(context, GameRecord(GameType.tetris, _points, DateTime.now(), 0));
 
       //up level possible when cleared
       int level = (_cleared ~/ 50) + _LEVEL_MIN;
