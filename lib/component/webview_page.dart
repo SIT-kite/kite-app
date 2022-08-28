@@ -67,6 +67,9 @@ class SimpleWebViewPage extends StatefulWidget {
   /// 是否显示顶部进度条
   final bool showTopProgressIndicator;
 
+  /// 自定义Action按钮
+  final List<Widget>? otherActions;
+
   const SimpleWebViewPage({
     Key? key,
     required this.initialUrl,
@@ -83,6 +86,7 @@ class SimpleWebViewPage extends StatefulWidget {
     this.initialAsyncCookies,
     this.javascriptChannels,
     this.showLaunchButtonIfUnsupported = true,
+    this.otherActions,
   }) : super(key: key);
 
   @override
@@ -134,6 +138,7 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
           onPressed: () => launchUrlInBrowser(widget.initialUrl),
           icon: const Icon(Icons.open_in_browser),
         ),
+      ...?widget.otherActions,
     ];
 
     return WillPopScope(
