@@ -50,6 +50,10 @@ class AuthorizationDialog extends StatelessWidget {
   }
 }
 
+bool hasSignedKite() {
+  return KvStorageInitializer.jwt.jwtToken != null;
+}
+
 Future<bool> signUpIfNecessary(BuildContext context, String description) async {
   // 如果用户未同意过, 请求用户确认
   if (KvStorageInitializer.jwt.jwtToken == null) {
