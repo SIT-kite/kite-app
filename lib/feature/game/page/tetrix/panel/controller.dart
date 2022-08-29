@@ -215,13 +215,14 @@ class DropButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _Description(
-      text: 'drop',
+      text: '瞬间下落',
       child: _Button(
-          enableLongPress: false,
-          size: const Size(90, 90),
-          onTap: () {
-            Game.of(context).drop();
-          }),
+        enableLongPress: false,
+        size: const Size(90, 90),
+        onTap: () {
+          Game.of(context).drop();
+        },
+      ),
     );
   }
 }
@@ -387,6 +388,7 @@ class _ButtonState extends State<_Button> {
         },
         child: SizedBox.fromSize(
           size: widget.size,
+          child: widget.icon,
         ),
       ),
     );
