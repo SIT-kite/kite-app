@@ -90,7 +90,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       Navigator.pushReplacementNamed(context, RouteTable.home);
 
       // 预计需要写一份新生的使用说明
-      // GlobalLauncher.launch('https://kite.sunnysab.cn/wiki/kite-app/feature/');
+      // GlobalLauncher.launch('https://kite.sunnysab.cn/wiki/kite-app/features/');
       return;
     } catch (e) {
       // 登陆失败

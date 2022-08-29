@@ -306,7 +306,9 @@ class GameControl extends State<Game> with RouteAware {
       return;
     } else {
       //游戏尚未结束，开启下一轮方块下落
-      _startGame();
+      if (mounted) {
+        _startGame();
+      }
     }
   }
 
