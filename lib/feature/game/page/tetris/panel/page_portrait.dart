@@ -23,7 +23,6 @@
 
 import 'package:flutter/material.dart';
 
-import '../index.dart';
 import 'controller.dart';
 import 'screen.dart';
 
@@ -37,7 +36,7 @@ class PagePortrait extends StatelessWidget {
 
     return SizedBox.expand(
       child: Container(
-        color: BACKGROUND_COLOR,
+        color: Colors.white24,
         child: Padding(
           padding: MediaQuery.of(context).padding,
           child: Column(

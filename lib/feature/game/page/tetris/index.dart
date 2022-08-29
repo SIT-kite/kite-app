@@ -28,10 +28,6 @@ import 'gamer/gamer.dart';
 import 'gamer/keyboard.dart';
 import 'panel/page_portrait.dart';
 
-const SCREEN_BORDER_WIDTH = 3.0;
-
-const BACKGROUND_COLOR = Colors.white24;
-
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
 
 class TetrisPage extends StatelessWidget {
