@@ -54,7 +54,12 @@ class _TimetableImportDialogState extends State<TimetableImportDialog> {
   /// 要查询的学期
   late Semester selectedSemester;
 
-  final ValueNotifier<DateTime> selectedDate = ValueNotifier(DateTime.now());
+  final ValueNotifier<DateTime> selectedDate = ValueNotifier(
+    // 计算大于等于今天的周一日期的最小值
+    Iterable.generate(7, (i) {
+      return DateTime.now().add(Duration(days: i));
+    }).firstWhere((e) => e.weekday == DateTime.monday),
+  );
 
   final tableNameController = TextEditingController();
   final tableDescriptionController = TextEditingController();
