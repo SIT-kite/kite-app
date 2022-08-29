@@ -34,8 +34,8 @@ const BACKGROUND_COLOR = Colors.white24;
 
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
 
-class TetrixPage extends StatelessWidget {
-  const TetrixPage({Key? key}) : super(key: key);
+class TetrisPage extends StatelessWidget {
+  const TetrisPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

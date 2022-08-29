@@ -35,7 +35,7 @@ class GameInitializer {
     [
       Game2048(),
       GameComposeSit(),
-      GameTetrix(),
+      GameTetris(),
       GameWordle(),
     ].forEach(gameManager.registerGame);
   }

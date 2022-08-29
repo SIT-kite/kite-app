@@ -29,7 +29,7 @@ class Sound {
   void _play(String name) {
     if (!mute) {
       AudioPlayer player = AudioPlayer();
-      player.play(AssetSource('game/tetrix/$name'));
+      player.play(AssetSource('game/tetris/$name'));
     }
   }
 

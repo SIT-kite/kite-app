@@ -89,7 +89,7 @@ class GameWordle implements AGame {
   }
 }
 
-class GameTetrix implements AGame {
+class GameTetris implements AGame {
   @override
   String get title => '俄罗斯方块';
 
@@ -97,11 +97,11 @@ class GameTetrix implements AGame {
   int get gameId => GameType.tetris.index;
 
   @override
-  Widget get icon => Image.asset('assets/game/icon_tetrix.png');
+  Widget get icon => Image.asset('assets/game/icon_tetris.png');
 
   @override
   void enter(BuildContext context) {
-    Navigator.of(context).pushNamed(RouteTable.gameTetrix);
+    Navigator.of(context).pushNamed(RouteTable.gameTetris);
   }
 }
 
