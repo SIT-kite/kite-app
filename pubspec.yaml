@@ -152,7 +152,7 @@ flutter:
     - assets/course/
     - assets/night/
     - assets/game/
-    - assets/game/tetrix/
+    - assets/game/tetris/
     - assets/mail/
     - assets/scanner/
     - assets/freshman/
