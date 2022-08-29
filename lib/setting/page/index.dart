@@ -210,10 +210,8 @@ class SettingPage extends StatelessWidget {
           subtitle: '通过 HTTP 代理连接校园网',
           leading: const Icon(Icons.vpn_key),
           onChange: (value) async {
-            if (value) {
-              KvStorageInitializer.network.useProxy = value;
-              await Initializer.init();
-            }
+            KvStorageInitializer.network.useProxy = value;
+            await Initializer.init();
           },
           childrenIfEnabled: [
             TextInputSettingsTile(
