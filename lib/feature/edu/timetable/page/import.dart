@@ -55,7 +55,6 @@ class _TimetableImportDialogState extends State<TimetableImportDialog> {
   late Semester selectedSemester;
 
   final ValueNotifier<DateTime> selectedDate = ValueNotifier(
-    // 计算大于等于今天的周一日期的最小值
     Iterable.generate(7, (i) {
       return DateTime.now().add(Duration(days: i));
     }).firstWhere((e) => e.weekday == DateTime.monday),
@@ -128,7 +127,7 @@ class _TimetableImportDialogState extends State<TimetableImportDialog> {
                   lastDate: DateTime(DateTime.now().year + 2),
                   selectableDayPredicate: (DateTime dataTime) => dataTime.weekday == DateTime.monday,
                 );
-                if (date != null) selectedDate.value = date;
+                if (date != null) selectedDate.value = DateTime(date.year, date.month, date.day, 8, 20);
               },
             ),
           ],
