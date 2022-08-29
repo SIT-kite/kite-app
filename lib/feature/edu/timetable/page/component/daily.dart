@@ -175,6 +175,7 @@ class DailyTimetableState extends State<DailyTimetable> {
           flex: 10,
           child: todayCourse.isNotEmpty
               ? ListView(
+                  controller: ScrollController(),
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                   children: todayCourse.map((e) => _buildCourseCard(context, e, widget.allCourses)).toList())
               : _buildEmptyPage(),
