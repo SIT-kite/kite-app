@@ -17,6 +17,7 @@
  */
 
 import 'package:ical/serializer.dart';
+import 'package:intl/intl.dart';
 import 'package:kite/util/file.dart';
 
 import 'entity.dart';
@@ -58,8 +59,10 @@ String convertTableToIcs(TimetableMeta meta, List<Course> courses) {
     product: 'kite',
     lang: 'ZH',
   );
+  // 需要把
+  final startDate = DateTime(meta.startDate.year, meta.startDate.month, meta.startDate.day);
   for (final course in courses) {
-    _addEventForCourse(iCal, course, meta.startDate);
+    _addEventForCourse(iCal, course, startDate);
   }
   return iCal.serialize();
 }
@@ -67,7 +70,7 @@ String convertTableToIcs(TimetableMeta meta, List<Course> courses) {
 Future<void> exportTimetableToCalendar(TimetableMeta meta, List<Course> courses) async {
   await FileUtils.writeToTempFileAndOpen(
     content: convertTableToIcs(meta, courses),
-    filename: 'kite_table.ics',
+    filename: 'kite_table_${DateFormat('yyyyMMdd_hhmmss').format(DateTime.now())}.ics',
     type: 'text/calendar',
   );
 }
