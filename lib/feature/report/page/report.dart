@@ -17,15 +17,74 @@
  */
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kite/component/my_switcher.dart';
 import 'package:kite/component/webview.dart';
 import 'package:kite/component/webview_page.dart';
 import 'package:kite/storage/init.dart';
+import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/rule.dart';
 
 const _reportUrlPrefix = 'http://xgfy.sit.edu.cn/h5/#/';
 const _reportUrlIndex = _reportUrlPrefix + 'pages/index/index';
+
+class ReminderDialog extends StatelessWidget {
+  ReminderDialog({Key? key}) : super(key: key);
+  final ValueNotifier<TimeOfDay?> _notifier = ValueNotifier(null);
+  @override
+  Widget build(BuildContext context) {
+    final reportTime = KvStorageInitializer.report.time;
+    if (reportTime != null) {
+      _notifier.value = TimeOfDay(hour: reportTime.hour, minute: reportTime.minute);
+    }
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Text('设置每天规定时间之前若打开小风筝且发现未上报则弹出对话框提醒'),
+        Row(
+          children: [
+            const Text('是否启用：'),
+            MySwitcher(
+              KvStorageInitializer.report.enable ?? false,
+              onChanged: (value) => KvStorageInitializer.report.enable = value,
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            const Text('请选择时间：'),
+            TextButton(
+              onPressed: () async {
+                final selectTime = await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay.fromDateTime(reportTime ?? DateTime.now()),
+                );
+                if (selectTime == null) return;
+                _notifier.value = selectTime;
+                KvStorageInitializer.report.time = DateTime(0, 0, 0, selectTime.hour, selectTime.minute);
+              },
+              child: ValueListenableBuilder(
+                valueListenable: _notifier,
+                builder: (context, data, widget) {
+                  if (reportTime == null) {
+                    return const Text('未选择');
+                  }
+                  final t = _notifier.value!;
+                  final hh = t.hour;
+                  final mm = t.minute;
+                  return Text('$hh:$mm');
+                },
+              ),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+}
 
 class DailyReportPage extends StatelessWidget {
   const DailyReportPage({Key? key}) : super(key: key);
@@ -43,6 +102,21 @@ class DailyReportPage extends StatelessWidget {
     return SimpleWebViewPage(
       initialUrl: _reportUrlIndex,
       fixedTitle: '体温上报',
+      otherActions: [
+        IconButton(
+          onPressed: () {
+            showAlertDialog(
+              context,
+              title: '每日上报提醒',
+              content: SingleChildScrollView(
+                child: ReminderDialog(),
+              ),
+              actionTextList: ['关闭窗口'],
+            );
+          },
+          icon: const Icon(Icons.sms),
+        ),
+      ],
       injectJsRules: [
         InjectJsRuleItem(
           rule: FunctionalRule((url) => url.startsWith(_reportUrlPrefix)),

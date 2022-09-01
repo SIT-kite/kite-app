@@ -21,8 +21,10 @@ import 'package:kite/storage/dao/admin.dart';
 import 'package:kite/storage/dao/develop.dart';
 import 'package:kite/storage/storage/admin.dart';
 import 'package:kite/storage/storage/develop.dart';
+import 'package:kite/storage/storage/report.dart';
 
 import 'dao/index.dart';
+import 'dao/report.dart';
 import 'storage/index.dart';
 
 export 'dao/index.dart';
@@ -39,6 +41,7 @@ class KvStorageInitializer {
   static late LoginTimeDao loginTime;
   static late FreshmanCacheDao freshman;
   static late DevelopOptionsDao developOptions;
+  static late ReportStorageDao report;
   static late Box<dynamic> kvStorageBox;
 
   static Future<void> init({
@@ -55,5 +58,6 @@ class KvStorageInitializer {
     loginTime = LoginTimeStorage(kvStorageBox);
     freshman = FreshmanCacheStorage(kvStorageBox);
     developOptions = DevelopOptionsStorage(kvStorageBox);
+    report = ReportStorage(kvStorageBox);
   }
 }

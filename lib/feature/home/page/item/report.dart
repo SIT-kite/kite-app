@@ -19,7 +19,9 @@ import 'package:flutter/material.dart';
 import 'package:kite/feature/initializer_index.dart';
 import 'package:kite/feature/report/entity/report.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
+import 'package:kite/util/alert_dialog.dart';
 
 import 'index.dart';
 
@@ -53,9 +55,38 @@ class _ReportItemState extends State<ReportItem> {
     setState(() => content = result);
   }
 
+  Future<void> dialogRemind() async {
+    final rs = KvStorageInitializer.report;
+    if (rs.enable == null || rs.enable == false) return;
+
+    final now = DateTime.now();
+    final expectH = rs.time!.hour;
+    final expectM = rs.time!.minute;
+    final actualH = now.hour;
+    final actualM = now.minute;
+
+    // 超时了
+    if (actualH * 60 + actualM > expectH * 60 + expectM) return;
+
+    // 弹框提醒
+    final select = await showAlertDialog(
+      context,
+      title: '疫情上报提醒小助手',
+      content: const Text('您今日还未完成疫情上报，是否立即上报？'),
+      actionWidgetList: [
+        ElevatedButton(onPressed: () {}, child: const Text('立即前往')),
+        TextButton(onPressed: () {}, child: const Text('关闭对话框')),
+      ],
+    );
+    if (select == null || select == 1) return;
+    if (!mounted) return;
+    Navigator.of(context).pushNamed(RouteTable.report);
+  }
+
   String _generateContent(ReportHistory history) {
     final today = DateTime.now();
     if (history.date != (today.year * 10000 + today.month * 100 + today.day)) {
+      dialogRemind();
       return '今日未上报';
     }
     final normal = history.isNormal == 0 ? '体温正常' : '体温异常';
