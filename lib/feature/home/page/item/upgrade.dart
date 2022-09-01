@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/util/upgrade.dart';
 import 'package:kite/util/url_launcher.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 import 'index.dart';
 
@@ -34,6 +35,9 @@ class UpgradeItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (UniversalPlatform.isDesktopOrWeb) {
+      return const SizedBox(height: 0);
+    }
     final future = getUpdate();
 
     return FutureBuilder<AppVersion?>(
