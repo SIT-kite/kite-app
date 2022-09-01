@@ -21,48 +21,13 @@ import 'dart:core';
 import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kite/component/my_switcher.dart';
 import 'package:kite/feature/freshman/entity.dart';
 import 'package:kite/util/flash.dart';
 
 import '../../../component/future_builder.dart';
 import '../dao.dart';
 import '../init.dart';
-
-class MySwitcher extends StatefulWidget {
-  final bool initialState;
-  final ValueChanged<bool>? onChanged;
-
-  const MySwitcher(this.initialState, {this.onChanged, Key? key}) : super(key: key);
-
-  @override
-  State<MySwitcher> createState() => _MySwitcherState();
-}
-
-class _MySwitcherState extends State<MySwitcher> {
-  late bool state;
-
-  @override
-  void initState() {
-    state = widget.initialState;
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Switch(
-      activeColor: Colors.green,
-      value: state,
-      onChanged: (value) {
-        setState(() {
-          state = value;
-          if (widget.onChanged != null) {
-            widget.onChanged!(state);
-          }
-        });
-      },
-    );
-  }
-}
 
 class FreshmanUpdatePage extends StatefulWidget {
   const FreshmanUpdatePage({Key? key}) : super(key: key);
