@@ -28,11 +28,12 @@ import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/rule.dart';
 
 const _reportUrlPrefix = 'http://xgfy.sit.edu.cn/h5/#/';
-const _reportUrlIndex = _reportUrlPrefix + 'pages/index/index';
+const _reportUrlIndex = '${_reportUrlPrefix}pages/index/index';
 
 class ReminderDialog extends StatelessWidget {
   ReminderDialog({Key? key}) : super(key: key);
   final ValueNotifier<TimeOfDay?> _notifier = ValueNotifier(null);
+
   @override
   Widget build(BuildContext context) {
     final reportTime = KvStorageInitializer.report.time;
@@ -43,10 +44,11 @@ class ReminderDialog extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Text('设置每天规定时间之前若打开小风筝且发现未上报则弹出对话框提醒'),
+        const Text('打开小风筝时自动检测上报情况并提醒'),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('是否启用：'),
+            const Text('启用'),
             MySwitcher(
               KvStorageInitializer.report.enable ?? false,
               onChanged: (value) => KvStorageInitializer.report.enable = value,
@@ -54,8 +56,9 @@ class ReminderDialog extends StatelessWidget {
           ],
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('请选择时间：'),
+            const Text('提醒时间'),
             TextButton(
               onPressed: () async {
                 final selectTime = await showTimePicker(
