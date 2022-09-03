@@ -49,7 +49,7 @@ class FreshmanPage extends StatelessWidget {
       ]).then((select) {
         if (select == 0) {
           Navigator.of(context).pushNamed(RouteTable.freshmanUpdate);
-        } else {
+        } else if (select == 1) {
           freshmanCacheDao.disableFirstEnterDialogState = true;
         }
       });
