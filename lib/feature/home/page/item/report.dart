@@ -36,6 +36,9 @@ class _ReportItemState extends State<ReportItem> {
   static const String defaultContent = '记得上报哦';
   String? content;
 
+  /// 用于限制仅弹出一次对话框
+  bool hasWarnedDialog = false;
+
   @override
   void initState() {
     Global.eventBus.on(EventNameConstants.onHomeRefresh, _onHomeRefresh);
@@ -56,6 +59,7 @@ class _ReportItemState extends State<ReportItem> {
   }
 
   Future<void> dialogRemind() async {
+    if (hasWarnedDialog) return;
     final rs = KvStorageInitializer.report;
     if (rs.enable == null || rs.enable == false) return;
 
@@ -80,13 +84,14 @@ class _ReportItemState extends State<ReportItem> {
     );
     if (select == null || select == 1) return;
     if (!mounted) return;
-    Navigator.of(context).pushNamed(RouteTable.report);
+    await Navigator.of(context).pushNamed(RouteTable.report);
+    hasWarnedDialog = true;
   }
 
   String _generateContent(ReportHistory history) {
     final today = DateTime.now();
     if (history.date != (today.year * 10000 + today.month * 100 + today.day)) {
-      dialogRemind();
+      Future.delayed(Duration.zero, dialogRemind);
       return '今日未上报';
     }
     final normal = history.isNormal == 0 ? '体温正常' : '体温异常';
