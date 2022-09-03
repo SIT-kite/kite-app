@@ -46,7 +46,9 @@ class BbsPage extends StatelessWidget {
       nickname = '${nickname[0]}同学';
     }
 
-    openid = KvStorageInitializer.admin.bbsSecret ?? openid;
+    openid = KvStorageInitializer.admin.bbsSecret == null || KvStorageInitializer.admin.bbsSecret!.isEmpty
+        ? openid
+        : KvStorageInitializer.admin.bbsSecret!;
     Log.info('BBS身份：{openid: $openid, nickname: $nickname}');
     return SimpleWebViewPage(
       initialUrl: _bbsUrl,
