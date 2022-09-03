@@ -63,6 +63,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       return;
     }
 
+    if (!mounted) return;
     setState(() => _disableLoginButton = true);
 
     final account = _accountController.text;
@@ -99,7 +100,9 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
         ..freshmanAccount = null;
       showBasicFlash(context, Text('登陆失败: $e'));
     } finally {
-      setState(() => _disableLoginButton = false);
+      if (mounted) {
+        setState(() => _disableLoginButton = false);
+      }
     }
   }
 

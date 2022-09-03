@@ -62,9 +62,8 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    setState(() {
-      disableLoginButton = true;
-    });
+    if (!mounted) return;
+    setState(() => disableLoginButton = true);
     final username = _usernameController.text;
     final password = _passwordController.text;
     try {
@@ -89,9 +88,9 @@ class _LoginPageState extends State<LoginPage> {
       showBasicFlash(context, Text('未知错误: $e'), duration: const Duration(seconds: 3));
       return;
     } finally {
-      setState(() {
-        disableLoginButton = false;
-      });
+      if (mounted) {
+        setState(() => disableLoginButton = false);
+      }
     }
   }
 
@@ -161,8 +160,8 @@ class _LoginPageState extends State<LoginPage> {
       children: [
         Checkbox(
           value: isLicenseAccepted,
-          onChanged: (_isLicenseAccepted) {
-            setState(() => isLicenseAccepted = _isLicenseAccepted!);
+          onChanged: (value) {
+            setState(() => isLicenseAccepted = value!);
           },
         ),
         Flexible(
@@ -295,7 +294,7 @@ class _LoginPageState extends State<LoginPage> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: EdgeInsets.only(bottom: 20),
+              padding: const EdgeInsets.only(bottom: 20),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
