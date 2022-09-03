@@ -203,11 +203,12 @@ class SettingPage extends StatelessWidget {
             },
           ),
           SimpleSettingsTile(title: '背景图片', subtitle: '自定义首页背景图片', onTap: _onChangeBgImage),
-          SimpleSettingsTile(
-            title: '功能顺序',
-            subtitle: '自定义首页功能的分组与顺序',
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeSettingPage())),
-          ),
+          if (!isFreshman)
+            SimpleSettingsTile(
+              title: '功能顺序',
+              subtitle: '自定义首页功能的分组与顺序',
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeSettingPage())),
+            ),
         ],
       ),
       SettingsGroup(title: '网络', children: <Widget>[
