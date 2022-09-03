@@ -22,6 +22,7 @@ import 'package:catcher/catcher.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/route.dart';
+import 'package:kite/util/logger.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 typedef MyWidgetBuilder<T> = Widget Function(BuildContext context, T data);
@@ -39,6 +40,9 @@ class MyFutureBuilder<T> extends StatefulWidget {
   final MyWidgetBuilder? onErrorBuilder;
   final MyFutureBuilderController? controller;
 
+  /// 建议使用该参数代替future
+  final Future<T> Function()? futureGetter;
+
   /// 刷新之前回调
   final Future<void> Function()? onPreRefresh;
 
@@ -50,13 +54,14 @@ class MyFutureBuilder<T> extends StatefulWidget {
 
   const MyFutureBuilder({
     Key? key,
-    required this.future,
+    this.future,
     required this.builder,
     this.onErrorBuilder,
     this.controller,
     this.enablePullRefresh = false,
     this.onPreRefresh,
     this.onPostRefresh,
+    this.futureGetter,
   }) : super(key: key);
 
   @override
@@ -67,7 +72,6 @@ class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
   Completer<T> completer = Completer();
 
   Future<T> refresh() {
-    completer = Completer();
     setState(() {});
     return completer.future;
   }
@@ -100,9 +104,7 @@ class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
 
     Catcher.reportCheckedError(error, stackTrace);
 
-    if (widget.onErrorBuilder != null) {
-      return widget.onErrorBuilder!(context, error);
-    }
+    if (widget.onErrorBuilder != null) widget.onErrorBuilder!(context, error);
 
     return Expanded(
       child: SingleChildScrollView(
@@ -124,10 +126,17 @@ class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
     return const Center(child: CircularProgressIndicator());
   }
 
+  Future<T> fetchData() async {
+    if (widget.futureGetter != null) {
+      return await widget.futureGetter!();
+    }
+    return await widget.future!;
+  }
+
   Widget buildFutureBuilder() {
     return FutureBuilder<T>(
       key: UniqueKey(),
-      future: widget.future,
+      future: fetchData(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
@@ -152,6 +161,8 @@ class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
       result = SmartRefresher(
         controller: refreshController,
         onRefresh: () async {
+          Log.info('FutureBuilder onPreRefresh');
+          completer = Completer();
           if (widget.onPreRefresh != null) await widget.onPreRefresh!();
           await refresh();
           refreshController.refreshCompleted();
