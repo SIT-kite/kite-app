@@ -83,6 +83,7 @@ class _TimetablePageState extends State<TimetablePage> {
           ],
         );
         if (select == 0) {
+          if (!mounted) return;
           await Navigator.of(context).pushNamed(RouteTable.timetableImport);
           _onRefresh();
         }
