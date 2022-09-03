@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:kite/global/init.dart';
 import 'package:kite/util/catcher_dialog_handler.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 import 'app.dart';
 
@@ -40,7 +41,8 @@ void main() async {
       [
         ConsoleHandler(),
         DialogHandler(),
-        ToastHandler(backgroundColor: Colors.black38, customMessage: '程序好像有点小问题'), // 这里给用户一点提示, 避免出错时用户感到奇怪
+        if (!UniversalPlatform.isDesktopOrWeb)
+          ToastHandler(backgroundColor: Colors.black38, customMessage: '程序好像有点小问题'), // 这里给用户一点提示, 避免出错时用户感到奇怪
         HttpHandler(HttpRequestType.post, Uri.parse(exceptionLogUrl), requestTimeout: 5000, printLogs: true),
       ],
     ),
@@ -50,7 +52,8 @@ void main() async {
       [
         ConsoleHandler(),
         DialogHandler(),
-        ToastHandler(backgroundColor: Colors.black38, customMessage: '程序好像有点小问题'), // 这里给用户一点提示, 避免出错时用户感到奇怪
+        if (!UniversalPlatform.isDesktopOrWeb)
+          ToastHandler(backgroundColor: Colors.black38, customMessage: '程序好像有点小问题'), // 这里给用户一点提示, 避免出错时用户感到奇怪
       ],
     ),
   );
