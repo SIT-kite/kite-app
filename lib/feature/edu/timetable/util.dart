@@ -66,10 +66,14 @@ String convertTableToIcs(TimetableMeta meta, List<Course> courses) {
   return iCal.serialize();
 }
 
+String getExportTimetableFilename() {
+  return 'kite_table_${DateFormat('yyyyMMdd_hhmmss').format(DateTime.now())}.ics';
+}
+
 Future<void> exportTimetableToCalendar(TimetableMeta meta, List<Course> courses) async {
   await FileUtils.writeToTempFileAndOpen(
     content: convertTableToIcs(meta, courses),
-    filename: 'kite_table_${DateFormat('yyyyMMdd_hhmmss').format(DateTime.now())}.ics',
+    filename: getExportTimetableFilename(),
     type: 'text/calendar',
   );
 }

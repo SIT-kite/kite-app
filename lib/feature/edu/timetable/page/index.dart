@@ -29,6 +29,7 @@ import 'package:kite/route.dart';
 import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
+import 'package:kite/util/url_launcher.dart';
 
 import '../entity.dart';
 import '../util.dart';
@@ -91,13 +92,14 @@ class _TimetablePageState extends State<TimetablePage> {
   }
 
   void _exportByUrl() async {
-    const url = 'http://localhost:8081';
+    final url = 'http://localhost:8081/${getExportTimetableFilename()}';
     HttpServer? server;
     try {
       server = await HttpServer.bind(InternetAddress.loopbackIPv4, 8081, shared: true);
 
       Log.info('HTTP服务启动成功');
       server.listen((HttpRequest request) {
+        request.response.headers.contentType = ContentType.parse('text/calendar');
         request.response.write(convertTableToIcs(meta!, courses));
         request.response.close();
       });
@@ -111,18 +113,23 @@ class _TimetablePageState extends State<TimetablePage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             TextButton(
+              onPressed: () => launchUrlInBrowser(url),
+              child: Text(url),
+            ),
+            TextButton(
               onPressed: () async {
-                await Clipboard.setData(const ClipboardData(text: url));
+                await Clipboard.setData(ClipboardData(text: url));
                 EasyLoading.showSuccess('成功复制到剪切板');
               },
-              child: const Text(url),
+              child: const Text('点击此处可复制链接'),
             ),
-            const Text('注意：点击可复制链接, 关闭本对话框后链接将失效'),
+            const Text('注意：关闭本对话框后链接将失效'),
           ],
         ),
         actionTextList: ['关闭'],
       );
     } catch (e, st) {
+      Log.info('HTTP服务启动失败');
       Catcher.reportCheckedError(e, st);
       return;
     } finally {
