@@ -15,24 +15,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'dart:io';
-
-import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/feature/edu/timetable/cache.dart';
 import 'package:kite/feature/edu/timetable/init.dart';
 import 'package:kite/feature/edu/timetable/page/component/daily_and_weekly.dart';
+import 'package:kite/feature/edu/timetable/page/export.dart';
 import 'package:kite/route.dart';
 import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
-import 'package:kite/util/url_launcher.dart';
 
 import '../entity.dart';
-import '../util.dart';
 
 class TimetablePage extends StatefulWidget {
   const TimetablePage({Key? key}) : super(key: key);
@@ -58,15 +51,10 @@ class _TimetablePageState extends State<TimetablePage> {
   // 课表元数据
   late TimetableMeta? meta;
 
-  @override
-  void initState() {
-    Log.info('Timetable init');
-    displayMode = storage.lastMode ?? DisplayMode.daily;
-    storage.lastMode = displayMode;
+  /// 懒加载变量，只有用到的时候才会初始化
+  late ExportDialog exportDialog = ExportDialog(context, meta!, courses);
 
-    courses = storage.currentTableCourses ?? [];
-    meta = storage.currentTableMeta;
-
+  void checkFirstImportTable() {
     if (courses.isEmpty) {
       Future.delayed(Duration.zero, () async {
         final select = await showAlertDialog(
@@ -89,78 +77,25 @@ class _TimetablePageState extends State<TimetablePage> {
         }
       });
     }
+  }
+
+  @override
+  void initState() {
+    Log.info('Timetable init');
+    displayMode = storage.lastMode ?? DisplayMode.daily;
+    storage.lastMode = displayMode;
+    courses = storage.currentTableCourses ?? [];
+    meta = storage.currentTableMeta;
+    checkFirstImportTable();
     super.initState();
   }
 
-  void _exportByUrl() async {
-    final url = 'http://localhost:8081/${getExportTimetableFilename()}';
-    HttpServer? server;
-    try {
-      server = await HttpServer.bind(InternetAddress.loopbackIPv4, 8081, shared: true);
-
-      Log.info('HTTP服务启动成功');
-      server.listen((HttpRequest request) {
-        request.response.headers.contentType = ContentType.parse('text/calendar');
-        request.response.write(convertTableToIcs(meta!, courses));
-        request.response.close();
-      });
-
-      if (!mounted) return;
-
-      await showAlertDialog(
-        context,
-        title: '已生成链接',
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextButton(
-              onPressed: () => launchUrlInBrowser(url),
-              child: Text(url),
-            ),
-            TextButton(
-              onPressed: () async {
-                await Clipboard.setData(ClipboardData(text: url));
-                EasyLoading.showSuccess('成功复制到剪切板');
-              },
-              child: const Text('点击此处可复制链接'),
-            ),
-            const Text('注意：关闭本对话框后链接将失效'),
-          ],
-        ),
-        actionTextList: ['关闭'],
-      );
-    } catch (e, st) {
-      Log.info('HTTP服务启动失败');
-      Catcher.reportCheckedError(e, st);
-      return;
-    } finally {
-      server?.close();
-      Log.info('HTTP服务已关闭');
-    }
-  }
-
   void _onExport() {
-    if (courses.isEmpty) {
+    if (meta == null || courses.isEmpty) {
       showBasicFlash(context, const Text('你咋没课呢？？'));
       return;
     }
-    showAlertDialog(context,
-        title: '请选择导出方式',
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ElevatedButton(
-              onPressed: () => exportTimetableToCalendar(meta!, courses),
-              child: const Text('导出至文件'),
-            ),
-            SizedBox(height: 10.h),
-            ElevatedButton(
-              onPressed: _exportByUrl,
-              child: const Text('导出为URL'),
-            ),
-          ],
-        ),
-        actionWidgetList: [TextButton(onPressed: () {}, child: const Text('关闭对话框'))]);
+    exportDialog.export();
   }
 
   /// 根据本地缓存刷新课表

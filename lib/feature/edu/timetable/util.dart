@@ -23,7 +23,7 @@ import 'package:kite/util/file.dart';
 import 'entity.dart';
 import 'page/util.dart';
 
-void _addEventForCourse(ICalendar cal, Course course, DateTime startDate) {
+void _addEventForCourse(ICalendar cal, Course course, DateTime startDate, Duration? alarmBefore) {
   final timetable = getBuildingTimetable(course.campus, course.place);
   final indexStart = getIndexStart(course.timeIndex);
   final indexEnd = getIndexEnd(indexStart, course.timeIndex);
@@ -40,19 +40,28 @@ void _addEventForCourse(ICalendar cal, Course course, DateTime startDate) {
     if ((1 << currentWeek) & course.weekIndex == 0) continue;
 
     final date = getDateFromWeekDay(startDate, currentWeek, course.dayIndex);
+    final startTime = date.add(Duration(hours: timeStart.hour, minutes: timeStart.minute));
+    final endTime = date.add(Duration(hours: timeEnd.hour, minutes: timeEnd.minute));
     final IEvent event = IEvent(
       // uid: 'SIT-KITE-${course.courseId}-${const Uuid().v1()}',
       summary: course.courseName,
-      location: description,
-      start: date.add(Duration(hours: timeStart.hour, minutes: timeStart.minute)),
-      end: date.add(Duration(hours: timeEnd.hour, minutes: timeEnd.minute)),
+      location: course.place,
+      description: description,
+      start: startTime,
+      end: endTime,
+      alarm: alarmBefore == null
+          ? null
+          : IAlarm.display(
+              trigger: startTime.subtract(alarmBefore),
+              description: description,
+            ),
     );
     cal.addElement(event);
   }
 }
 
 ///导出的方法
-String convertTableToIcs(TimetableMeta meta, List<Course> courses) {
+String convertTableToIcs(TimetableMeta meta, List<Course> courses, Duration? alarmBefore) {
   final ICalendar iCal = ICalendar(
     company: 'Kite Team, Yiban WorkStation of Shanghai Institute of Technology',
     product: 'kite',
@@ -61,7 +70,7 @@ String convertTableToIcs(TimetableMeta meta, List<Course> courses) {
   // 需要把
   final startDate = DateTime(meta.startDate.year, meta.startDate.month, meta.startDate.day);
   for (final course in courses) {
-    _addEventForCourse(iCal, course, startDate);
+    _addEventForCourse(iCal, course, startDate, alarmBefore);
   }
   return iCal.serialize();
 }
@@ -70,9 +79,9 @@ String getExportTimetableFilename() {
   return 'kite_table_${DateFormat('yyyyMMdd_hhmmss').format(DateTime.now())}.ics';
 }
 
-Future<void> exportTimetableToCalendar(TimetableMeta meta, List<Course> courses) async {
+Future<void> exportTimetableToCalendar(TimetableMeta meta, List<Course> courses, Duration? alarmBefore) async {
   await FileUtils.writeToTempFileAndOpen(
-    content: convertTableToIcs(meta, courses),
+    content: convertTableToIcs(meta, courses, alarmBefore),
     filename: getExportTimetableFilename(),
     type: 'text/calendar',
   );

@@ -47,6 +47,35 @@ Future<int?> showAlertDialog(
     throw TypeError();
   }
 
+  final List<Widget> actions = () {
+    if (actionTextList != null) {
+      return actionTextList.asMap().entries.map((e) {
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 5),
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context, e.key);
+            },
+            child: Text(e.value),
+          ),
+        );
+      }).toList();
+    } else {
+      return actionWidgetList!.asMap().entries.map((e) {
+        return InkWell(
+          onTap: () {
+            Navigator.pop(context, e.key);
+          },
+
+          /// 把外部Widget的点击吸收掉
+          child: AbsorbPointer(
+            child: e.value,
+          ),
+        );
+      }).toList();
+    }
+  }();
+
   return showDialog(
     context: context,
     builder: (_) => AlertDialog(
@@ -55,34 +84,7 @@ Future<int?> showAlertDialog(
       actions: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: () {
-            if (actionTextList != null) {
-              return actionTextList.asMap().entries.map((e) {
-                return Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 5),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context, e.key);
-                    },
-                    child: Text(e.value),
-                  ),
-                );
-              }).toList();
-            } else {
-              return actionWidgetList!.asMap().entries.map((e) {
-                return InkWell(
-                  onTap: () {
-                    Navigator.pop(context, e.key);
-                  },
-
-                  /// 把外部Widget的点击吸收掉
-                  child: AbsorbPointer(
-                    child: e.value,
-                  ),
-                );
-              }).toList();
-            }
-          }(),
+          children: actions,
         ),
       ],
     ),
