@@ -18,7 +18,6 @@
 
 import 'dart:async';
 
-import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -154,21 +153,22 @@ class _TimetableImportDialogState extends State<TimetableImportDialog> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 // 关闭用户交互
                 EasyLoading.instance.userInteractions = false;
                 EasyLoading.show(status: '正在导入', dismissOnTap: false);
-                _fetchTimetable().then((value) {
+                try {
+                  final value = _fetchTimetable();
                   Navigator.of(context).pop(value);
-                }).onError((e, t) {
-                  EasyLoading.showError('导入失败\n$e');
-                  Catcher.reportCheckedError(e, t);
-                }).whenComplete(() {
+                } catch (e) {
+                  EasyLoading.showError('导入失败');
+                  rethrow;
+                } finally {
                   // 关闭对话框
                   EasyLoading.dismiss();
                   // 允许用户交互
                   EasyLoading.instance.userInteractions = true;
-                });
+                }
               },
               child: const Text('导入课表'),
             ),
