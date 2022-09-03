@@ -61,7 +61,9 @@ class FreshmanPage extends StatelessWidget {
     Future.delayed(Duration.zero, () => showFirstDialog(context));
     return MyFutureBuilder<FreshmanInfo>(
       controller: myFutureBuilderController,
-      future: freshmanDao.getInfo(),
+      futureGetter: () async {
+        return await freshmanDao.getInfo();
+      },
       enablePullRefresh: true,
       onPreRefresh: () async {
         // 刷新前执行的逻辑
