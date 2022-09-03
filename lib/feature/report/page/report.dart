@@ -44,7 +44,7 @@ class ReminderDialog extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Text('打开小风筝时自动检测上报情况并提醒'),
+        const Text('打开小风筝时自动检测上报情况，若在设置时间之前未上报，则提醒用户引导其疫情上报'),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
