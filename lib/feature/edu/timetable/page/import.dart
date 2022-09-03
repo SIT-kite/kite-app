@@ -158,7 +158,8 @@ class _TimetableImportDialogState extends State<TimetableImportDialog> {
                 EasyLoading.instance.userInteractions = false;
                 EasyLoading.show(status: '正在导入', dismissOnTap: false);
                 try {
-                  final value = _fetchTimetable();
+                  final value = await _fetchTimetable();
+                  if (!mounted) return;
                   Navigator.of(context).pop(value);
                 } catch (e) {
                   EasyLoading.showError('导入失败');
