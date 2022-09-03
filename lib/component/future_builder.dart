@@ -39,6 +39,12 @@ class MyFutureBuilder<T> extends StatefulWidget {
   final MyWidgetBuilder? onErrorBuilder;
   final MyFutureBuilderController? controller;
 
+  /// 刷新之前回调
+  final Future<void> Function()? onPreRefresh;
+
+  /// 刷新后回调
+  final Future<void> Function()? onPostRefresh;
+
   /// 是否启用下拉刷新
   final bool enablePullRefresh;
 
@@ -49,6 +55,8 @@ class MyFutureBuilder<T> extends StatefulWidget {
     this.onErrorBuilder,
     this.controller,
     this.enablePullRefresh = false,
+    this.onPreRefresh,
+    this.onPostRefresh,
   }) : super(key: key);
 
   @override
@@ -144,8 +152,10 @@ class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
       result = SmartRefresher(
         controller: refreshController,
         onRefresh: () async {
+          if (widget.onPreRefresh != null) await widget.onPreRefresh!();
           await refresh();
           refreshController.refreshCompleted();
+          if (widget.onPostRefresh != null) await widget.onPostRefresh!();
         },
         child: result,
       );

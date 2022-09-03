@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/component/future_builder.dart';
+import 'package:kite/feature/freshman/cache.dart';
 import 'package:kite/feature/freshman/entity.dart';
 
 import '../dao.dart';
@@ -31,10 +32,15 @@ class FreshmanAnalysisPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
-
+    final FreshmanCacheManager freshmanCacheManager = FreshmanInitializer.freshmanCacheManager;
     return Scaffold(
       body: MyFutureBuilder<List<dynamic>>(
         future: Future.wait([freshmanDao.getAnalysis(), freshmanDao.getInfo()]),
+        enablePullRefresh: true,
+        onPreRefresh: () async {
+          freshmanCacheManager.clearAnalysis();
+          freshmanCacheManager.clearBasicInfo();
+        },
         builder: (context, data) {
           return _buildBodyStack(context, data[0], data[1]);
         },

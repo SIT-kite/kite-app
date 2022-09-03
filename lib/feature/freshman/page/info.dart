@@ -63,6 +63,10 @@ class FreshmanPage extends StatelessWidget {
       controller: myFutureBuilderController,
       future: freshmanDao.getInfo(),
       enablePullRefresh: true,
+      onPreRefresh: () async {
+        // 刷新前执行的逻辑
+        freshmanCacheManager.clearBasicInfo(); // 先清空本地数据
+      },
       builder: (context, data) {
         return _buildBody(context, data);
       },
