@@ -20,13 +20,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/feature/initializer_index.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../entity.dart';
 
 class GameRanking extends StatelessWidget {
   static const _colorMapping = [Colors.red, Colors.deepOrange, Colors.orange];
-
   final int gameId;
 
   const GameRanking(this.gameId, {Key? key}) : super(key: key);
@@ -63,40 +61,31 @@ class GameRanking extends StatelessWidget {
     );
   }
 
+  void gotoMyself() {
+    // scrollController.jumpTo();
+  }
+
   Widget _buildRankView(BuildContext context, List<GameRankingItem> list) {
     if (list.isEmpty) return emptyRanking(context);
 
     list.sort((a, b) => b.score - a.score);
-    return ListView(
+    return SingleChildScrollView(
       controller: ScrollController(),
-      children: Iterable.generate(list.length, (int i) {
-        return _buildItem(context, i + 1, list[i]);
-      }).toList(),
+      child: Column(
+        children: Iterable.generate(list.length, (int i) {
+          return _buildItem(context, i + 1, list[i]);
+        }).toList(),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final service = GameInitializer.rankingService;
-    final future = service.getGameRanking(gameId);
-    final mfbController = MyFutureBuilderController();
-    final refreshController = RefreshController();
     return MyFutureBuilder<List<GameRankingItem>>(
-      controller: mfbController,
-      future: future,
+      futureGetter: () => GameInitializer.rankingService.getGameRanking(gameId),
+      enablePullRefresh: true,
       builder: (context, list) {
-        return SmartRefresher(
-          enablePullDown: true,
-          enablePullUp: false,
-          onRefresh: () async {
-            // 避免频繁刷新
-            await Future.delayed(const Duration(seconds: 1));
-            mfbController.refresh();
-            refreshController.refreshCompleted();
-          },
-          controller: refreshController,
-          child: _buildRankView(context, list),
-        );
+        return _buildRankView(context, list);
       },
     );
   }
