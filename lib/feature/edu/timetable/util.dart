@@ -43,7 +43,6 @@ void _addEventForCourse(ICalendar cal, Course course, DateTime startDate) {
     final IEvent event = IEvent(
       // uid: 'SIT-KITE-${course.courseId}-${const Uuid().v1()}',
       summary: course.courseName,
-      description: '第 ${course.teacher.join(', ')} | ',
       location: description,
       start: date.add(Duration(hours: timeStart.hour, minutes: timeStart.minute)),
       end: date.add(Duration(hours: timeEnd.hour, minutes: timeEnd.minute)),
