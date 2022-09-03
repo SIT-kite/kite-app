@@ -32,7 +32,8 @@ const _reportUrlIndex = '${_reportUrlPrefix}pages/index/index';
 
 class ReminderDialog extends StatelessWidget {
   ReminderDialog({Key? key}) : super(key: key);
-  final ValueNotifier<TimeOfDay?> _notifier = ValueNotifier(null);
+  final ValueNotifier<TimeOfDay?> _notifier = ValueNotifier(
+      KvStorageInitializer.report.time == null ? null : TimeOfDay.fromDateTime(KvStorageInitializer.report.time!));
 
   @override
   Widget build(BuildContext context) {
@@ -69,10 +70,10 @@ class ReminderDialog extends StatelessWidget {
                 _notifier.value = selectTime;
                 KvStorageInitializer.report.time = DateTime(0, 0, 0, selectTime.hour, selectTime.minute);
               },
-              child: ValueListenableBuilder(
+              child: ValueListenableBuilder<TimeOfDay?>(
                 valueListenable: _notifier,
                 builder: (context, data, widget) {
-                  if (reportTime == null) {
+                  if (data == null) {
                     return const Text('未选择');
                   }
                   final t = _notifier.value!;
