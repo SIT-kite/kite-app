@@ -22,7 +22,6 @@ import 'package:catcher/catcher.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/route.dart';
-import 'package:kite/util/logger.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 typedef MyWidgetBuilder<T> = Widget Function(BuildContext context, T data);
@@ -161,7 +160,6 @@ class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
       result = SmartRefresher(
         controller: refreshController,
         onRefresh: () async {
-          Log.info('FutureBuilder onPreRefresh');
           completer = Completer();
           if (widget.onPreRefresh != null) await widget.onPreRefresh!();
           await refresh();
