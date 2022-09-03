@@ -107,9 +107,17 @@ class SettingPage extends StatelessWidget {
           return TextButton(
               onPressed: () async {
                 Log.info('退出登录');
-                KvStorageInitializer.auth
-                  ..currentUsername = null
-                  ..ssoPassword = null;
+
+                if (isFreshman) {
+                  KvStorageInitializer.freshman
+                    ..freshmanAccount = null
+                    ..freshmanName = null
+                    ..freshmanSecret = null;
+                } else {
+                  KvStorageInitializer.auth
+                    ..currentUsername = null
+                    ..ssoPassword = null;
+                }
 
                 await Initializer.init();
 
@@ -235,16 +243,17 @@ class SettingPage extends StatelessWidget {
           ],
         ),
       ]),
-      if (!isFreshman)
-        SettingsGroup(
-          title: '账户',
-          children: <Widget>[
+      SettingsGroup(
+        title: '账户',
+        children: <Widget>[
+          if (!isFreshman)
             TextInputSettingsTile(
               title: '学号',
               settingKey: AuthKeys.currentUsername,
               initialValue: KvStorageInitializer.auth.currentUsername ?? '',
               validator: studentIdValidator,
             ),
+          if (!isFreshman)
             ModalSettingsTile(
               title: '密码',
               subtitle: '修改小风筝使用的 OA 密码',
@@ -260,10 +269,11 @@ class SettingPage extends StatelessWidget {
                 ),
               ],
             ),
+          if (!isFreshman)
             SimpleSettingsTile(title: '登录测试', subtitle: '检查用户名密码是否正确', onTap: () => _testPassword(context)),
-            SimpleSettingsTile(title: '退出登录', subtitle: '退出当前账号', onTap: () => _onLogout(context)),
-          ],
-        ),
+          SimpleSettingsTile(title: '退出登录', subtitle: '退出当前账号', onTap: () => _onLogout(context)),
+        ],
+      ),
       SettingsGroup(title: '数据管理', children: [
         SimpleSettingsTile(
             title: '清除数据',
