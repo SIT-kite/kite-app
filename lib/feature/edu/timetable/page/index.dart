@@ -94,7 +94,7 @@ class _TimetablePageState extends State<TimetablePage> {
     const url = 'http://localhost:8081';
     HttpServer? server;
     try {
-      server = await HttpServer.bind(InternetAddress.anyIPv6, 8081, shared: true);
+      server = await HttpServer.bind(InternetAddress.loopbackIPv4, 8081, shared: true);
 
       Log.info('HTTP服务启动成功');
       server.listen((HttpRequest request) {
