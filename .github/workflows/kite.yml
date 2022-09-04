@@ -223,7 +223,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           password: ${{ secrets.SERVER_SECRET }}
           source: "build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk"
-          target: "/var/kite/web/apk/sit-kite-latest.apk"
+          target: "/var/kite/web/apk/sit-kite-arm64-v8a-release-latest.apk"
           strip_components: 2
 
       - name: 🤖 Upload apk by bot
