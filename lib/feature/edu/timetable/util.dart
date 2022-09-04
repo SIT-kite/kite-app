@@ -66,6 +66,7 @@ String convertTableToIcs(TimetableMeta meta, List<Course> courses, Duration? ala
     company: 'Kite Team, Yiban WorkStation of Shanghai Institute of Technology',
     product: 'kite',
     lang: 'ZH',
+    refreshInterval: const Duration(days: 36500),
   );
   // 需要把
   final startDate = DateTime(meta.startDate.year, meta.startDate.month, meta.startDate.day);
