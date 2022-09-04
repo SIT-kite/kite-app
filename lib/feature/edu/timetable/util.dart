@@ -30,7 +30,7 @@ void _addEventForCourse(ICalendar cal, Course course, DateTime startDate, Durati
   final timeStart = timetable[indexStart - 1].start;
   final timeEnd = timetable[indexEnd - 1].end;
 
-  final description = '第 ${timeStart == timeEnd ? timeStart : '$timeStart-$timeEnd'} 节\n'
+  final description = '第 ${indexStart == indexEnd ? indexStart : '$indexStart-$indexEnd'} 节\n'
       '${course.place}\n'
       '${course.teacher.join(', ')}';
 
@@ -40,19 +40,19 @@ void _addEventForCourse(ICalendar cal, Course course, DateTime startDate, Durati
     if ((1 << currentWeek) & course.weekIndex == 0) continue;
 
     final date = getDateFromWeekDay(startDate, currentWeek, course.dayIndex);
-    final startTime = date.add(Duration(hours: timeStart.hour, minutes: timeStart.minute));
-    final endTime = date.add(Duration(hours: timeEnd.hour, minutes: timeEnd.minute));
+    final eventStartTime = date.add(Duration(hours: timeStart.hour, minutes: timeStart.minute));
+    final eventEndTime = date.add(Duration(hours: timeEnd.hour, minutes: timeEnd.minute));
     final IEvent event = IEvent(
       // uid: 'SIT-KITE-${course.courseId}-${const Uuid().v1()}',
       summary: course.courseName,
       location: course.place,
       description: description,
-      start: startTime,
-      end: endTime,
+      start: eventStartTime,
+      end: eventEndTime,
       alarm: alarmBefore == null
           ? null
           : IAlarm.display(
-              trigger: startTime.subtract(alarmBefore),
+              trigger: eventStartTime.subtract(alarmBefore),
               description: description,
             ),
     );
