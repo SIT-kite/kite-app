@@ -18,8 +18,8 @@
 import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
-import '../dao/notice.dart';
-import '../entity/notice.dart';
+import 'dao.dart';
+import 'entity.dart';
 
 class NoticeService extends AService implements NoticeServiceDao {
   static const String _noticePath = '/notice';

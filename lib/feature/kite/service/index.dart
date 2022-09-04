@@ -16,6 +16,5 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 export 'electricity.dart';
-export 'notice.dart';
 export 'ocr.dart';
 export 'weather.dart';

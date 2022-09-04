@@ -19,8 +19,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
 
-import '../entity/notice.dart';
 import '../init.dart';
+import 'entity.dart';
 
 class NoticePage extends StatelessWidget {
   const NoticePage({Key? key}) : super(key: key);

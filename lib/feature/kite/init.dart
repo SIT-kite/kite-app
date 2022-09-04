@@ -20,6 +20,8 @@ import 'package:hive/hive.dart';
 import 'package:kite/session/kite_session.dart';
 
 import 'dao/index.dart';
+import 'notice/dao.dart';
+import 'notice/service.dart';
 import 'service/classroom.dart';
 import 'service/index.dart';
 import 'storage/electricity.dart';

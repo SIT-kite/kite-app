@@ -17,7 +17,7 @@
  */
 import 'package:json_annotation/json_annotation.dart';
 
-part 'notice.g.dart';
+part 'entity.g.dart';
 
 @JsonSerializable(createToJson: false)
 class KiteNotice {
