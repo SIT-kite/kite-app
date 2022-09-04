@@ -22,6 +22,26 @@ import 'package:kite/route.dart';
 class WelcomePage extends StatelessWidget {
   const WelcomePage({Key? key}) : super(key: key);
 
+  Widget buildEntryButton(BuildContext context, String title, String routeName) {
+    return OutlinedButton(
+      autofocus: true,
+      style: OutlinedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.r),
+        ),
+        side: BorderSide(width: 1.sm, color: Colors.white),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(3.0),
+        child: Text(
+          title,
+          style: Theme.of(context).textTheme.headline4?.copyWith(color: Colors.white),
+        ),
+      ),
+      onPressed: () => Navigator.of(context).pushNamed(routeName),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,44 +84,9 @@ class WelcomePage extends StatelessWidget {
                 SizedBox(height: 40.h),
                 // Login button
                 Row(children: [
-                  OutlinedButton(
-                    autofocus: true,
-                    style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.r),
-                      ),
-                      side: BorderSide(width: 1.sm, color: Colors.white),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(3.0),
-                      child: Text(
-                        '登录',
-                        style: Theme.of(context).textTheme.headline4?.copyWith(color: Colors.white),
-                      ),
-                    ),
-                    onPressed: () => Navigator.of(context).pushNamed(RouteTable.login),
-                  ),
-
+                  buildEntryButton(context, '登录', RouteTable.login),
                   SizedBox(width: 10.h),
-
-                  // Freshman Login Button
-                  OutlinedButton(
-                    autofocus: true,
-                    style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.r),
-                      ),
-                      side: BorderSide(width: 1.sm, color: Colors.white),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(3.0),
-                      child: Text(
-                        '新生入口',
-                        style: Theme.of(context).textTheme.headline4?.copyWith(color: Colors.white),
-                      ),
-                    ),
-                    onPressed: () => Navigator.of(context).pushNamed(RouteTable.freshmanLogin),
-                  ),
+                  buildEntryButton(context, '新生入口', RouteTable.freshmanLogin),
                 ]),
               ],
             ),
