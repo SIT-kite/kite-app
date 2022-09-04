@@ -215,6 +215,17 @@ jobs:
           document: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk
           message: "🚀 Android arm64-v8a Apk Build by Github Actions"
 
+      - name: Copy file via SSH
+        uses: appleboy/scp-action@v0.1.2
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          port: ${{ secrets.PORT }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_SECRET }}
+          source: "build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk"
+          target: "/var/kite/web/apk/sit-kite-latest.apk"
+          strip_components: 2
+
       - name: 🤖 Upload apk by bot
         uses: appleboy/telegram-action@v0.1.1
         with:
