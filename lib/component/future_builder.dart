@@ -129,7 +129,10 @@ class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
     if (widget.futureGetter != null) {
       return await widget.futureGetter!();
     }
-    return await widget.future!;
+    if (widget.future != null) {
+      return await widget.future!;
+    }
+    throw UnsupportedError('MyFutureBuilder must set a future or futureGetter');
   }
 
   Widget buildFutureBuilder() {
