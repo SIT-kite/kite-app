@@ -39,7 +39,10 @@ void _addEventForCourse(ICalendar cal, Course course, DateTime startDate, Durati
     // 本周没课, 跳过
     if ((1 << currentWeek) & course.weekIndex == 0) continue;
 
-    final date = getDateFromWeekDay(startDate, currentWeek, course.dayIndex);
+    // 这里需要使用UTC时间
+    // 实际测试得出，如果不使用UTC，有的手机会将其看作本地时间
+    // 有的手机会将其看作UTC+0的时间从而导致实际显示时间与预期不一致
+    final date = getDateFromWeekDay(startDate, currentWeek, course.dayIndex).toUtc();
     final eventStartTime = date.add(Duration(hours: timeStart.hour, minutes: timeStart.minute));
     final eventEndTime = date.add(Duration(hours: timeEnd.hour, minutes: timeEnd.minute));
     final IEvent event = IEvent(
