@@ -160,7 +160,7 @@ class _HomePageState extends State<HomePage> {
         result.addAll([HomeItemGroup(currentGroup), separator]);
         currentGroup = [];
       } else {
-        currentGroup.add(FunctionButtonFactory.createFunctionButton(item));
+        currentGroup.add(FunctionButtonFactory.createFunctionButton(context, item));
       }
     }
     return [const GreetingWidget(), separator] + result + [separator, Image.asset('assets/home/bottom.png')];

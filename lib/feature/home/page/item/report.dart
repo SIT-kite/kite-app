@@ -126,6 +126,11 @@ class _ReportItemState extends State<ReportItem> {
         content = _generateContent(lastReport);
       }
     }
-    return HomeFunctionButton(route: '/report', icon: 'assets/home/icon_report.svg', title: '体温上报', subtitle: content);
+    return HomeFunctionButton(
+      route: '/report',
+      icon: 'assets/home/icon_report.svg',
+      title: '体温上报',
+      subtitle: content,
+    );
   }
 }

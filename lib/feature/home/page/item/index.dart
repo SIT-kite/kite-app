@@ -18,50 +18,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kite/launch.dart';
+import 'package:kite/route.dart';
+import 'package:kite/util/logger.dart';
+import 'package:kite/util/scanner.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 import '../../entity/home.dart';
-
-import 'bbs.dart';
-import 'board.dart';
-import 'freshman.dart';
-import 'scan.dart';
-import 'switch.dart';
-import 'bulletin.dart';
-import 'classroom.dart';
-import 'contact.dart';
-import 'event.dart';
 import 'exam.dart';
 import 'expense.dart';
-import 'game.dart';
+import 'freshman.dart';
 import 'library.dart';
 import 'mail.dart';
 import 'notice.dart';
 import 'office.dart';
 import 'report.dart';
-import 'score.dart';
-import 'timetable.dart';
 import 'upgrade.dart';
-import 'wiki.dart';
-
-export 'bbs.dart';
-export 'bulletin.dart';
-export 'classroom.dart';
-export 'contact.dart';
-export 'electricity.dart';
-export 'event.dart';
-export 'exam.dart';
-export 'expense.dart';
-export 'game.dart';
-export 'library.dart';
-export 'mail.dart';
-export 'night.dart';
-export 'notice.dart';
-export 'office.dart';
-export 'report.dart';
-export 'score.dart';
-export 'timetable.dart';
-export 'upgrade.dart';
-export 'wiki.dart';
 
 class HomeFunctionButton extends StatelessWidget {
   final String? route;
@@ -111,52 +83,104 @@ class HomeFunctionButton extends StatelessWidget {
 }
 
 class FunctionButtonFactory {
-  static Widget createFunctionButton(FunctionType type) {
-    switch (type) {
-      case FunctionType.upgrade:
-        return const UpgradeItem();
-      case FunctionType.notice:
-        return const NoticeItem();
-      case FunctionType.timetable:
-        return const TimetableItem();
-      case FunctionType.report:
-        return const ReportItem();
-      case FunctionType.exam:
-        return const ExamItem();
-      case FunctionType.classroom:
-        return const ClassroomItem();
-      case FunctionType.event:
-        return const EventItem();
-      case FunctionType.expense:
-        return const ExpenseItem();
-      case FunctionType.score:
-        return const ScoreItem();
-      case FunctionType.library:
-        return const LibraryItem();
-      case FunctionType.office:
-        return const OfficeItem();
-      case FunctionType.mail:
-        return const MailItem();
-      case FunctionType.bulletin:
-        return const BulletinItem();
-      case FunctionType.contact:
-        return const ContactItem();
-      case FunctionType.game:
-        return const GameItem();
-      case FunctionType.wiki:
-        return const WikiItem();
-      case FunctionType.separator:
-        return Container();
-      case FunctionType.bbs:
-        return const BbsItem();
-      case FunctionType.scanner:
-        return const ScanItem();
-      case FunctionType.freshman:
-        return const FreshmanItem();
-      case FunctionType.switchAccount:
-        return const SwitchAccountItem();
-      case FunctionType.board:
-        return const BoardItem();
+  static final Map<FunctionType, WidgetBuilder> builders = {
+    FunctionType.upgrade: (context) => const UpgradeItem(),
+    FunctionType.notice: (context) => const NoticeItem(),
+    FunctionType.timetable: (context) => HomeFunctionButton(
+          route: '/timetable',
+          icon: 'assets/home/icon_timetable.svg',
+          title: '课程表',
+          subtitle: '查看近期课程',
+        ),
+    FunctionType.report: (context) => const ReportItem(),
+    FunctionType.exam: (context) => const ExamItem(),
+    FunctionType.classroom: (context) => HomeFunctionButton(
+          route: '/classroom',
+          icon: 'assets/home/icon_classroom.svg',
+          title: '空教室',
+          subtitle: '查看当前无课的教室',
+        ),
+    FunctionType.event: (context) => HomeFunctionButton(
+          route: '/event',
+          icon: 'assets/home/icon_event.svg',
+          title: '活动',
+          subtitle: '查看最新的第二课堂活动',
+        ),
+    FunctionType.expense: (context) => const ExpenseItem(),
+    FunctionType.score: (context) => HomeFunctionButton(
+          route: '/score',
+          icon: 'assets/home/icon_score.svg',
+          title: '成绩',
+          subtitle: '愿每一天都有收获',
+        ),
+    FunctionType.library: (context) => const LibraryItem(),
+    FunctionType.office: (context) => const OfficeItem(),
+    FunctionType.mail: (context) => const MailItem(),
+    FunctionType.bulletin: (context) => HomeFunctionButton(
+          route: '/bulletin',
+          icon: 'assets/home/icon_bulletin.svg',
+          title: 'OA 公告',
+          subtitle: '查看学校通知',
+        ),
+    FunctionType.contact: (context) => HomeFunctionButton(
+          route: '/contact',
+          icon: 'assets/home/icon_contact.svg',
+          title: '常用电话',
+          subtitle: '查找学校部门的联系方式',
+        ),
+    FunctionType.game: (context) => HomeFunctionButton(
+          route: '/game',
+          icon: 'assets/home/icon_game.svg',
+          title: '小游戏',
+          subtitle: '来放松一下吧',
+        ),
+    FunctionType.wiki: (context) => HomeFunctionButton(
+          route: RouteTable.wiki,
+          icon: 'assets/home/icon_wiki.svg',
+          title: 'Wiki',
+          subtitle: '上应大生存指南',
+        ),
+    FunctionType.separator: (context) => Container(),
+    FunctionType.bbs: (context) => UniversalPlatform.isDesktopOrWeb
+        ? Container()
+        : HomeFunctionButton(
+            route: '/bbs',
+            icon: 'assets/home/icon_bbs.svg',
+            title: '问答',
+            subtitle: '这里有我们共同的声音',
+          ),
+    FunctionType.scanner: (context) => UniversalPlatform.isDesktopOrWeb
+        ? Container()
+        : HomeFunctionButton(
+            onPressed: () async {
+              final result = await scan(context);
+              Log.info('扫码结果: $result');
+              if (result != null) GlobalLauncher.launch(result);
+            },
+            // icon: 'assets/home/icon_bbs.svg',
+            iconWidget: Icon(Icons.qr_code_scanner, size: 30.h, color: Theme.of(context).primaryColor),
+            title: '扫码',
+            subtitle: '扫描各种二维码',
+          ),
+    FunctionType.freshman: (context) => FreshmanItem(),
+    FunctionType.switchAccount: (context) => HomeFunctionButton(
+          route: RouteTable.login,
+          iconWidget: Icon(Icons.switch_account, size: 30.h, color: Theme.of(context).primaryColor),
+          title: '切换用户',
+          subtitle: '切换到正式用户',
+        ),
+    FunctionType.board: (context) => HomeFunctionButton(
+          route: '/board',
+          icon: 'assets/home/icon_board.svg',
+          title: '风筝时刻',
+          subtitle: '随手记录美好',
+        ),
+  };
+  static Widget createFunctionButton(BuildContext context, FunctionType type) {
+    final builder = builders[type];
+    if (builder == null) {
+      throw UnimplementedError("未实现的功能项");
     }
+    return builder(context);
   }
 }
