@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/feature/edu/timetable/entity.dart';
+import 'package:kite/feature/edu/timetable/page/util.dart';
 
 import '../../cache.dart';
 import 'grid.dart';
@@ -80,7 +81,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
 
   /// 设置页面为对应日期页.
   void _setDate(DateTime theDay) {
-    int days = theDay.difference(dateSemesterStart).inDays;
+    int days = theDay.clearTime().difference(dateSemesterStart.clearTime()).inDays;
 
     int week = days ~/ 7 + 1;
     if (days >= 0 && 1 <= week && week <= 20) {

@@ -43,6 +43,11 @@ class TimetableMeta extends HiveObject {
   /// 学期
   @HiveField(4)
   int semester = 0;
+
+  @override
+  String toString() {
+    return 'TimetableMeta{name: $name, description: $description, startDate: $startDate, schoolYear: $schoolYear, semester: $semester}';
+  }
 }
 
 @HiveType(typeId: HiveTypeIdPool.courseItem)

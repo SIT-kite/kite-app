@@ -192,3 +192,9 @@ String formatPlace(String place) {
   indexOfBucket = place.indexOf('(');
   return indexOfBucket != -1 ? place.substring(0, indexOfBucket) : place;
 }
+
+extension DateTimeUtil on DateTime {
+  DateTime clearTime([int hour = 0, int minute = 0, int second = 0]) {
+    return DateTime(year, month, day, hour, minute, second);
+  }
+}
