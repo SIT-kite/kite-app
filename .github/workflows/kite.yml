@@ -233,7 +233,9 @@ jobs:
           port: ${{ secrets.PORT }}
           username: ${{ secrets.SERVER_USER }}
           password: ${{ secrets.SERVER_SECRET }}
-          script: mv /var/kite/web/apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk /var/kite/web/apk/sit-kite-arm64-v8a-release-latest.apk
+          script: |
+            rm /var/kite/web/apk/sit-kite-arm64-v8a-release-latest.apk
+            mv /var/kite/web/apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk /var/kite/web/apk/sit-kite-arm64-v8a-release-latest.apk
 
       - name: 🤖 Upload apk by bot
         uses: appleboy/telegram-action@v0.1.1
