@@ -87,7 +87,7 @@ class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
       return Center(
         child: Column(
           children: [
-            const Text('网络连接超时，请检查是否连接到校园网环境'),
+            const Text('网络连接超时，请检查是否连接到校园网环境(也有可能学校临时维护服务器，请以网页登录结果为准)'),
             ElevatedButton(
               onPressed: () => Navigator.of(context).pushReplacementNamed(RouteTable.connectivity),
               child: const Text('进入网络工具检查'),
