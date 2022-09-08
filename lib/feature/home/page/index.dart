@@ -94,30 +94,36 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> _onHomeRefresh(BuildContext context) async {
+  Future<void> _onHomeRefresh(
+    BuildContext context, [
+    bool loginSso = false, // 默认不登录oa，使用懒加载的方式登录
+  ]) async {
     if (isFreshman) {
       _refreshController.refreshCompleted(resetFooterState: true);
       _updateWeather();
       return;
     }
-    // 如果未登录 (老用户直接进入 Home 页不会处于登录状态, 但新用户经过 login 页时已登录)
-    try {
-      await _doLogin(context);
-      showBasicFlash(context, const Text('登录成功'));
-    } on Exception catch (e) {
-      // 如果是认证相关问题, 弹出相应的错误信息.
-      if (e is UnknownAuthException || e is CredentialsInvalidException) {
-        showBasicFlash(context, Text('登录异常: $e'));
-      } else {
-        // 如果是网络问题, 提示检查网络.
-        _showCheckNetwork(context, title: Text('$e: 网络异常'));
+    if (loginSso) {
+      // 如果未登录 (老用户直接进入 Home 页不会处于登录状态, 但新用户经过 login 页时已登录)
+      try {
+        await _doLogin(context);
+        if (!mounted) return;
+        showBasicFlash(context, const Text('登录成功'));
+      } on Exception catch (e) {
+        // 如果是认证相关问题, 弹出相应的错误信息.
+        if (e is UnknownAuthException || e is CredentialsInvalidException) {
+          showBasicFlash(context, Text('登录异常: $e'));
+        } else {
+          // 如果是网络问题, 提示检查网络.
+          _showCheckNetwork(context, title: Text('$e: 网络异常'));
+        }
+      } catch (e, s) {
+        Catcher.reportCheckedError(e, s);
       }
-    } catch (e, s) {
-      Catcher.reportCheckedError(e, s);
-    }
 
-    if (HomeInitializer.ssoSession.isOnline) {
-      Global.eventBus.emit(EventNameConstants.onHomeRefresh);
+      if (HomeInitializer.ssoSession.isOnline) {
+        Global.eventBus.emit(EventNameConstants.onHomeRefresh);
+      }
     }
     _refreshController.refreshCompleted(resetFooterState: true);
 
@@ -214,7 +220,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-          onRefresh: () => _onHomeRefresh(context),
+          onRefresh: () => _onHomeRefresh(context, true),
         ),
       ],
     );
