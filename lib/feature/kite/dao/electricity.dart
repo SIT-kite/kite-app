@@ -37,8 +37,8 @@ abstract class ElectricityServiceDao {
   Future<Rank> getRank(String room);
 
   // 获取按小时用电记录
-  Future<List<HourlyBill>> getHourlyBill(String room);
+  Future<List<Bill>> getHourlyBill(String room);
 
   // 获取按天用电记录
-  Future<List<DailyBill>> getDailyBill(String room);
+  Future<List<Bill>> getDailyBill(String room);
 }

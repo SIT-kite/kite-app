@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/feature/kite/page/electricity/rank.dart';
 
 import '../../init.dart';
 import 'balance.dart';
@@ -29,7 +30,7 @@ class ElectricityPage extends StatefulWidget {
 }
 
 class _ElectricityPageState extends State<ElectricityPage> {
-  int showType = 0; // 0: 不显示查询结果; 1: 查余额; 2: 查统计
+  int showType = 0; // 0: 不显示查询结果; 1: 查余额; 2: 查统计; 3:排行榜
 
   final GlobalKey _formKey = GlobalKey<FormState>();
   final TextEditingController _buildingController = TextEditingController();
@@ -100,23 +101,14 @@ class _ElectricityPageState extends State<ElectricityPage> {
     );
   }
 
-  void _onQueryBalance() {
+  void onReady(int i) {
     if (!(_formKey.currentState as FormState).validate()) {
       return;
     }
     KiteInitializer.electricityStorage.lastBuilding = _buildingController.text;
     KiteInitializer.electricityStorage.lastRoom = _roomController.text;
 
-    setState(() => showType = 1);
-  }
-
-  void _onQueryStatistics() {
-    if (!(_formKey.currentState as FormState).validate()) {
-      return;
-    }
-    KiteInitializer.electricityStorage.lastBuilding = _buildingController.text;
-    KiteInitializer.electricityStorage.lastRoom = _roomController.text;
-    setState(() => showType = 2);
+    setState(() => showType = i);
   }
 
   Widget _buildButtonRow() {
@@ -125,37 +117,42 @@ class _ElectricityPageState extends State<ElectricityPage> {
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         ElevatedButton(
           style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.amber)),
-          onPressed: _onQueryBalance,
+          onPressed: () => onReady(1),
           child: const Text('查余额'),
         ),
         ElevatedButton(
           style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.amber)),
-          onPressed: _onQueryStatistics,
+          onPressed: () => onReady(3),
+          child: const Text('排行榜'),
+        ),
+        ElevatedButton(
+          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.amber)),
+          onPressed: () => onReady(2),
           child: const Text('使用情况'),
         )
       ]),
     );
   }
 
-  Widget _buildBalanceResult() {
-    String building = _buildingController.text;
-    String room = _roomController.text;
-
-    return Container(height: 400, width: 400, child: BalanceSection('10$building$room'));
-  }
-
-  Widget _buildStatisticsResult() {
-    String building = _buildingController.text;
-    String room = _roomController.text;
-
-    return Container(height: 400, width: 400, child: ChartSection('10$building$room'));
+  Widget _buildResultBody(Widget son) {
+    return SizedBox(
+      height: 400,
+      width: 400,
+      child: son,
+    );
   }
 
   Widget _buildResult() {
+    String room = '10${_buildingController.text}${_roomController.text}';
+
     if (showType == 1) {
-      return _buildBalanceResult();
-    } else if (showType == 2) {
-      return _buildStatisticsResult();
+      return _buildResultBody(BalanceSection(room));
+    }
+    if (showType == 2) {
+      return _buildResultBody(ChartSection(room));
+    }
+    if (showType == 3) {
+      return _buildResultBody(RankView(room));
     }
     return const Center();
   }

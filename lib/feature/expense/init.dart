@@ -18,10 +18,10 @@
 
 import 'package:hive/hive.dart';
 import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/feature/expense/service/expense.dart';
 
 import 'dao/expense.dart';
 import 'entity/expense.dart';
-import 'mock/expense.dart';
 import 'storage/expense.dart';
 
 class ExpenseInitializer {
@@ -34,7 +34,7 @@ class ExpenseInitializer {
   }) async {
     expenseRecord = ExpenseLocalStorage(expenseRecordBox);
 
-    // expenseRemote = ExpenseRemoteService(ssoSession);
-    expenseRemote = ExpenseMock();
+    expenseRemote = ExpenseRemoteService(ssoSession);
+    // expenseRemote = ExpenseMock();
   }
 }

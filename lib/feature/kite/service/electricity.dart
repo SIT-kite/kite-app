@@ -36,19 +36,17 @@ class ElectricityService extends AService implements ElectricityServiceDao {
   }
 
   @override
-  Future<List<DailyBill>> getDailyBill(String room) async {
+  Future<List<Bill>> getDailyBill(String room) async {
     final response = await session.get('$_baseUrl/$room/bill/days');
-    List<DailyBill> list = response.data.map<DailyBill>(DailyBill.fromJson).toList();
-
-    return list;
+    List<dynamic> list = response.data;
+    return list.map((e) => Bill.fromJson(e)).toList();
   }
 
   @override
-  Future<List<HourlyBill>> getHourlyBill(String room) async {
+  Future<List<Bill>> getHourlyBill(String room) async {
     final response = await session.get('$_baseUrl/$room/bill/hours');
-    List<HourlyBill> list = response.data.map<HourlyBill>(HourlyBill.fromJson).toList();
-
-    return list;
+    List<dynamic> list = response.data;
+    return list.map((e) => Bill.fromJson(e)).toList();
   }
 
   @override

@@ -17,6 +17,11 @@
  */
 import 'package:flutter/material.dart';
 
+import '../../../../component/chart.dart';
+import '../../../../component/future_builder.dart';
+import '../../entity/electricity.dart';
+import '../../init.dart';
+
 /* const List<Color> _gradientColors = [
   Color(0xff23b6e6),
   Color(0xff02d39a),
@@ -57,15 +62,15 @@ class _ChartSectionState extends State<ChartSection> {
     );
   }
 
-  Widget _buildView() {
+  Widget _buildView(List<Bill> data) {
+    List<double> list = data.map((e) => e.charge).toList();
+
     return Column(
       children: <Widget>[
-        const AspectRatio(
+        AspectRatio(
           aspectRatio: 1.70,
           child: Padding(
-            padding: const EdgeInsets.only(right: 24, left: 24, top: 0, bottom: 0),
-            // child: _buildLineChart(_getBottomTitles()),
-          ),
+              padding: const EdgeInsets.only(right: 24, left: 24, top: 0, bottom: 0), child: ExpenseChart(list)),
         ),
         _buildModeSelector(),
       ],
@@ -74,11 +79,17 @@ class _ChartSectionState extends State<ChartSection> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildView();
-
-    // return FutureBuilder(
-    //   future: fetchElecExpense(room, mode),
-    //   builder: (context, snapshot) {},
-    // );
+    if (isShowDays) {
+      return MyFutureBuilder<List<Bill>>(
+          future: KiteInitializer.electricityService.getDailyBill(room),
+          builder: (context, data) {
+            return _buildView(data);
+          });
+    }
+    return MyFutureBuilder<List<Bill>>(
+        future: KiteInitializer.electricityService.getHourlyBill(room),
+        builder: (context, data) {
+          return _buildView(data);
+        });
   }
 }
