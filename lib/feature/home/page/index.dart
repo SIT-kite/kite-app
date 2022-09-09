@@ -230,7 +230,11 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     isFreshman = AccountUtils.getUserType() == UserType.freshman;
     Log.info('开始加载首页');
+
     Future.delayed(Duration.zero, () async {
+      if (KvStorageInitializer.home.autoLaunchTimetable ?? false) {
+        Navigator.of(context).pushNamed(RouteTable.timetable);
+      }
       // 非新生才执行该网络检查逻辑
       if (!isFreshman && await HomeInitializer.ssoSession.checkConnectivity()) {
         showBasicFlash(

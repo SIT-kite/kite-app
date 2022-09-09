@@ -22,47 +22,26 @@ import 'package:kite/feature/report/entity/report.dart';
 
 abstract class HomeSettingDao {
   int get campus; // 校区
-
   set campus(int value);
 
-  String? get background; // 背景图片 path
-
-  set background(String? path);
+  String? background; // 背景图片 path
 
   int get backgroundMode; // 背景模式
-
   set backgroundMode(int mode);
 
-  DateTime? get installTime; // 安装时间
-
-  set installTime(DateTime? dateTime);
+  DateTime? installTime; // 安装时间
 
   Weather get lastWeather; // 天气
-
   set lastWeather(Weather weather);
 
   // 首页在无网状态下加载的缓存
-  ReportHistory? get lastReport;
+  ReportHistory? lastReport;
+  Balance? lastBalance;
+  String? lastHotSearch;
+  String? lastOfficeStatus;
+  Set<int>? readNotice;
+  List<FunctionType>? homeItems;
 
-  set lastReport(ReportHistory? reportHistory);
-
-  Balance? get lastBalance;
-
-  set lastBalance(Balance? lastBalance);
-
-  String? get lastHotSearch;
-
-  set lastHotSearch(String? hotSearch);
-
-  String? get lastOfficeStatus;
-
-  set lastOfficeStatus(String? status);
-
-  Set<int>? get readNotice;
-
-  set readNotice(Set<int>? noticeSet);
-
-  List<FunctionType>? get homeItems;
-
-  set homeItems(List<FunctionType>? newButtonList);
+  // 启动时是否自动启动课表
+  bool? autoLaunchTimetable;
 }

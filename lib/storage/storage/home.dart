@@ -40,6 +40,7 @@ class HomeKeyKeys {
   static const lastOfficeStatus = '$namespace/lastOfficeStatus';
 
   static const readNotice = '$namespace/readNotice';
+  static const autoLaunchTimetable = '$namespace/autoLaunchTimetable';
 }
 
 class HomeSettingStorage implements HomeSettingDao {
@@ -115,4 +116,10 @@ class HomeSettingStorage implements HomeSettingDao {
 
   @override
   set homeItems(List<FunctionType>? items) => box.put(HomeKeyKeys.homeItems, items);
+
+  @override
+  bool? get autoLaunchTimetable => box.get(HomeKeyKeys.autoLaunchTimetable);
+
+  @override
+  set autoLaunchTimetable(bool? foo) => box.put(HomeKeyKeys.autoLaunchTimetable, foo);
 }

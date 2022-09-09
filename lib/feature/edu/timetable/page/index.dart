@@ -21,6 +21,7 @@ import 'package:kite/feature/edu/timetable/init.dart';
 import 'package:kite/feature/edu/timetable/page/component/daily_and_weekly.dart';
 import 'package:kite/feature/edu/timetable/page/export.dart';
 import 'package:kite/route.dart';
+import 'package:kite/storage/init.dart';
 import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
@@ -113,16 +114,24 @@ class _TimetablePageState extends State<TimetablePage> {
       () => Navigator.of(context).pushNamed(RouteTable.timetableImport).then((value) => _onRefresh()),
       _onRefresh,
       _onExport,
+      () => KvStorageInitializer.home.autoLaunchTimetable = !(KvStorageInitializer.home.autoLaunchTimetable ?? false),
     ];
+
+    Widget buildCenterRow(Widget child) => Row(mainAxisAlignment: MainAxisAlignment.center, children: [child]);
 
     ///更多菜单按钮
     return PopupMenuButton(
       onSelected: (index) => callback[index](),
       itemBuilder: (BuildContext ctx) {
-        return const <PopupMenuEntry>[
-          PopupMenuItem(value: 0, child: Text('导入课表')),
-          PopupMenuItem(value: 1, child: Text('刷新')),
-          PopupMenuItem(value: 2, child: Text('导出日历')),
+        return <PopupMenuEntry>[
+          PopupMenuItem(value: 0, child: buildCenterRow(const Text('导入课表'))),
+          PopupMenuItem(value: 1, child: buildCenterRow(const Text('刷新'))),
+          PopupMenuItem(value: 2, child: buildCenterRow(const Text('导出日历'))),
+          CheckedPopupMenuItem(
+            value: 3,
+            checked: KvStorageInitializer.home.autoLaunchTimetable ?? false,
+            child: const Text('自启课表'),
+          ),
         ];
       },
     );
