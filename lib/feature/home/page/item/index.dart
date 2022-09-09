@@ -181,7 +181,7 @@ class FunctionButtonFactory {
   static Widget createFunctionButton(BuildContext context, FunctionType type) {
     final builder = builders[type];
     if (builder == null) {
-      throw UnimplementedError("未实现的功能项");
+      throw UnimplementedError("未实现的功能项: ${type.name}");
     }
     return builder(context);
   }
