@@ -18,38 +18,24 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/common/entity/kite_user.dart';
+import 'package:kite/storage/dao/kite.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
-
-part 'kite_session.g.dart';
-
-@JsonSerializable(createToJson: false)
-class KiteUser {
-  int uid = 0;
-  String account = '';
-  DateTime createTime = DateTime.now();
-  int role = 0;
-  bool isBlock = false;
-
-  KiteUser();
-
-  factory KiteUser.fromJson(Map<String, dynamic> json) => _$KiteUserFromJson(json);
-
-  @override
-  String toString() {
-    return 'KiteUser{uid: $uid, account: $account, createTime: $createTime, role: $role, isBlock: $isBlock}';
-  }
-}
 
 const String _baseUrl = 'https://kite.sunnysab.cn/api/v2';
 
 class KiteSession extends ASession {
   final Dio dio;
   final JwtDao jwtDao;
+  final KiteStorageDao kiteDao;
 
-  KiteSession(this.dio, this.jwtDao);
+  KiteSession(
+    this.dio,
+    this.jwtDao,
+    this.kiteDao,
+  );
 
   @override
   Future<Response> request(
@@ -146,6 +132,7 @@ class KiteSession extends ASession {
     });
     jwtDao.jwtToken = response.data['token'];
     final profile = KiteUser.fromJson(response.data['profile']);
+    kiteDao.userProfile = profile;
     return profile;
   }
 }

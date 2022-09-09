@@ -67,6 +67,7 @@ class Initializer {
     final kiteSession = KiteSession(
       Global.dio,
       KvStorageInitializer.jwt,
+      KvStorageInitializer.kite,
     );
     await ContactInitializer.init(
       kiteSession: kiteSession,

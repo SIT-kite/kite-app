@@ -19,8 +19,10 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kite/storage/dao/admin.dart';
 import 'package:kite/storage/dao/develop.dart';
+import 'package:kite/storage/dao/kite.dart';
 import 'package:kite/storage/storage/admin.dart';
 import 'package:kite/storage/storage/develop.dart';
+import 'package:kite/storage/storage/kite.dart';
 import 'package:kite/storage/storage/report.dart';
 
 import 'dao/index.dart';
@@ -42,6 +44,8 @@ class KvStorageInitializer {
   static late FreshmanCacheDao freshman;
   static late DevelopOptionsDao developOptions;
   static late ReportStorageDao report;
+  static late KiteStorageDao kite;
+
   static late Box<dynamic> kvStorageBox;
 
   static Future<void> init({
@@ -59,5 +63,6 @@ class KvStorageInitializer {
     freshman = FreshmanCacheStorage(kvStorageBox);
     developOptions = DevelopOptionsStorage(kvStorageBox);
     report = ReportStorage(kvStorageBox);
+    kite = KiteStorage(kvStorageBox);
   }
 }
