@@ -20,10 +20,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
+import 'package:kite/component/platform_widget.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/rule.dart';
 import 'package:kite/util/url_launcher.dart';
-import 'package:universal_platform/universal_platform.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'unsupported_platform_launch.dart';
@@ -212,19 +212,23 @@ class _MyWebViewState extends State<MyWebView> {
 
   @override
   Widget build(BuildContext context) {
-    if (UniversalPlatform.isDesktopOrWeb) {
-      return UnsupportedPlatformUrlLauncher(
-        widget.initialUrl ?? '',
-        showLaunchButton: widget.showLaunchButtonIfUnsupported,
-      );
-    }
-    if (widget.initialAsyncCookies == null) {
-      return buildWebView(widget.initialCookies);
-    }
-    return MyFutureBuilder<List<WebViewCookie>>(
-      future: widget.initialAsyncCookies,
-      builder: (context, data) {
-        return buildWebView([...widget.initialCookies, ...data]);
+    return MyPlatformWidget(
+      desktopOrWebBuilder: (context) {
+        return UnsupportedPlatformUrlLauncher(
+          widget.initialUrl ?? '',
+          showLaunchButton: widget.showLaunchButtonIfUnsupported,
+        );
+      },
+      mobileBuilder: (context) {
+        if (widget.initialAsyncCookies == null) {
+          return buildWebView(widget.initialCookies);
+        }
+        return MyFutureBuilder<List<WebViewCookie>>(
+          future: widget.initialAsyncCookies,
+          builder: (context, data) {
+            return buildWebView([...widget.initialCookies, ...data]);
+          },
+        );
       },
     );
   }
