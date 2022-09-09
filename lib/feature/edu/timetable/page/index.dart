@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/feature/edu/timetable/cache.dart';
 import 'package:kite/feature/edu/timetable/init.dart';
 import 'package:kite/feature/edu/timetable/page/component/daily_and_weekly.dart';
@@ -124,13 +125,32 @@ class _TimetablePageState extends State<TimetablePage> {
       onSelected: (index) => callback[index](),
       itemBuilder: (BuildContext ctx) {
         return <PopupMenuEntry>[
-          PopupMenuItem(value: 0, child: buildCenterRow(const Text('导入课表'))),
-          PopupMenuItem(value: 1, child: buildCenterRow(const Text('刷新'))),
-          PopupMenuItem(value: 2, child: buildCenterRow(const Text('导出日历'))),
+          ...['导入课表', '刷新', '导出日历'].asMap().entries.map(
+                (e) => PopupMenuItem(
+                  value: e.key,
+                  padding: EdgeInsets.only(left: 65.w),
+                  child: Text(e.value),
+                ),
+              ),
           CheckedPopupMenuItem(
             value: 3,
             checked: KvStorageInitializer.home.autoLaunchTimetable ?? false,
-            child: const Text('自启课表'),
+            child: Row(
+              children: [
+                const Text('自启课表'),
+                IconButton(
+                  onPressed: () {
+                    showAlertDialog(
+                      context,
+                      title: '自启课表帮助',
+                      content: const Text('如果启用，则打开小风筝时将自动转到课表页面'),
+                      actionTextList: ['OK'],
+                    );
+                  },
+                  icon: const Icon(Icons.help),
+                ),
+              ],
+            ),
           ),
         ];
       },
