@@ -22,14 +22,15 @@ import '../dao/electricity.dart';
 import '../entity/electricity.dart';
 
 class ElectricityService extends AService implements ElectricityServiceDao {
-  static const String _baseUrl = 'https://kite.sunnysab.cn/api/v2/electricity/room';
+  static const String _baseUrl = '/electricity/room';
 
   ElectricityService(ASession session) : super(session);
 
   @override
   Future<Balance> getBalance(String room) async {
     final response = await session.get('$_baseUrl/$room');
-    Balance balance = Balance.fromJson(response.data['data']);
+
+    Balance balance = Balance.fromJson(response.data);
 
     return balance;
   }
@@ -37,7 +38,7 @@ class ElectricityService extends AService implements ElectricityServiceDao {
   @override
   Future<List<DailyBill>> getDailyBill(String room) async {
     final response = await session.get('$_baseUrl/$room/bill/days');
-    List<DailyBill> list = response.data['data'].map<DailyBill>(DailyBill.fromJson).toList();
+    List<DailyBill> list = response.data.map<DailyBill>(DailyBill.fromJson).toList();
 
     return list;
   }
@@ -45,7 +46,7 @@ class ElectricityService extends AService implements ElectricityServiceDao {
   @override
   Future<List<HourlyBill>> getHourlyBill(String room) async {
     final response = await session.get('$_baseUrl/$room/bill/hours');
-    List<HourlyBill> list = response.data['data'].map<HourlyBill>(HourlyBill.fromJson).toList();
+    List<HourlyBill> list = response.data.map<HourlyBill>(HourlyBill.fromJson).toList();
 
     return list;
   }
@@ -53,7 +54,7 @@ class ElectricityService extends AService implements ElectricityServiceDao {
   @override
   Future<Rank> getRank(String room) async {
     final response = await session.get('$_baseUrl/$room/rank');
-    final rank = Rank.fromJson(response.data['data']);
+    final rank = Rank.fromJson(response.data);
 
     return rank;
   }

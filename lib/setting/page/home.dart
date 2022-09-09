@@ -68,6 +68,8 @@ String functionTypeToString(FunctionType type) {
       return '切换账户';
     case FunctionType.board:
       return '风筝时刻';
+    case FunctionType.electricity:
+      return '查电费';
   }
 }
 

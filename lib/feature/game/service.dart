@@ -29,6 +29,7 @@ class RankingService extends AService implements RankingServiceDao {
 
   RankingService(ASession session) : super(session);
 
+  ///发送请求，获取游戏排名
   @override
   Future<List<GameRankingItem>> getGameRanking(int gameId) async {
     final response = await session.get(_rankingPrefix + gameId.toString());

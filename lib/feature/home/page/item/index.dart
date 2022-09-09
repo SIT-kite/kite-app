@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kite/feature/home/page/item/electricity.dart';
 import 'package:kite/launch.dart';
 import 'package:kite/route.dart';
 import 'package:kite/util/logger.dart';
@@ -169,6 +170,7 @@ class FunctionButtonFactory {
           title: '切换用户',
           subtitle: '切换到正式用户',
         ),
+    FunctionType.electricity: (context) => ElectricityItem(),
     FunctionType.board: (context) => HomeFunctionButton(
           route: '/board',
           icon: 'assets/home/icon_board.svg',

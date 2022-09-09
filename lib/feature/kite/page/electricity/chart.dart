@@ -74,7 +74,8 @@ class _ChartSectionState extends State<ChartSection> {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return _buildView();
+
     // return FutureBuilder(
     //   future: fetchElecExpense(room, mode),
     //   builder: (context, snapshot) {},

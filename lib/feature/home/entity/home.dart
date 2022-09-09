@@ -114,6 +114,9 @@ enum FunctionType {
   /// 风筝时刻
   @HiveField(21)
   board,
+
+  @HiveField(22)
+  electricity,
 }
 
 /// 用户的功能列表
@@ -148,6 +151,7 @@ class UndergraduateFunctionList implements IUserFunctionList {
       FunctionType.game,
       FunctionType.board,
       FunctionType.wiki,
+      FunctionType.electricity,
       FunctionType.separator,
     ];
   }

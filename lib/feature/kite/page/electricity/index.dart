@@ -106,6 +106,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
     }
     KiteInitializer.electricityStorage.lastBuilding = _buildingController.text;
     KiteInitializer.electricityStorage.lastRoom = _roomController.text;
+
     setState(() => showType = 1);
   }
 
@@ -115,7 +116,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
     }
     KiteInitializer.electricityStorage.lastBuilding = _buildingController.text;
     KiteInitializer.electricityStorage.lastRoom = _roomController.text;
-    setState(() => showType = 1);
+    setState(() => showType = 2);
   }
 
   Widget _buildButtonRow() {
@@ -123,14 +124,14 @@ class _ElectricityPageState extends State<ElectricityPage> {
       width: 300,
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         ElevatedButton(
-          child: const Text('查余额'),
           style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.amber)),
           onPressed: _onQueryBalance,
+          child: const Text('查余额'),
         ),
         ElevatedButton(
-          child: const Text('使用情况'),
           style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.amber)),
           onPressed: _onQueryStatistics,
+          child: const Text('使用情况'),
         )
       ]),
     );
@@ -140,14 +141,14 @@ class _ElectricityPageState extends State<ElectricityPage> {
     String building = _buildingController.text;
     String room = _roomController.text;
 
-    return BalanceSection('10$building$room');
+    return Container(height: 400, width: 400, child: BalanceSection('10$building$room'));
   }
 
   Widget _buildStatisticsResult() {
     String building = _buildingController.text;
     String room = _roomController.text;
 
-    return ChartSection('10$building$room');
+    return Container(height: 400, width: 400, child: ChartSection('10$building$room'));
   }
 
   Widget _buildResult() {
