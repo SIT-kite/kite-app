@@ -218,11 +218,11 @@ class _BookHoldingInfo {
 }
 
 class HoldingInfoService extends AService implements HoldingInfoDao {
-  HoldingInfoService(ASession session) : super(session);
+  HoldingInfoService(ISession session) : super(session);
 
   @override
   Future<HoldingInfo> queryByBookId(String bookId) async {
-    var response = await session.get('${Constants.bookHoldingUrl}/$bookId');
+    var response = await session.request('${Constants.bookHoldingUrl}/$bookId', RequestMethod.get);
 
     var rawBookHoldingInfo = _BookHoldingInfo.fromJson(response.data);
     var result = rawBookHoldingInfo.holdingList.map((rawHoldingItem) {
@@ -264,8 +264,9 @@ class HoldingInfoService extends AService implements HoldingInfoDao {
   /// 搜索附近的书的id号
   @override
   Future<List<String>> searchNearBookIdList(String bookId) async {
-    var response = await session.get(
+    var response = await session.request(
       Constants.virtualBookshelfUrl,
+      RequestMethod.get,
       queryParameters: {
         'bookrecno': bookId,
 

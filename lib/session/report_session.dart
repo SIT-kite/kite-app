@@ -22,7 +22,9 @@ import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/storage/init.dart';
 
-class ReportSession extends ASession {
+import 'dio_common.dart';
+
+class ReportSession extends ISession {
   final Dio dio;
 
   ReportSession({
@@ -40,8 +42,7 @@ class ReportSession extends ASession {
     return hash.substring(16, 32) + hash.substring(0, 16);
   }
 
-  @override
-  Future<Response> request(
+  Future<Response> _dioRequest(
     String url,
     String method, {
     Map<String, String>? queryParameters,
@@ -68,6 +69,28 @@ class ReportSession extends ASession {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+  }
+
+  @override
+  Future<MyResponse> request(
+    String url,
+    RequestMethod method, {
+    Map<String, String>? queryParameters,
+    data,
+    MyOptions? options,
+    MyProgressCallback? onSendProgress,
+    MyProgressCallback? onReceiveProgress,
+  }) async {
+    Response response = await _dioRequest(
+      url,
+      method.toUpperCaseString(),
+      queryParameters: queryParameters,
+      data: data,
+      options: options?.toDioOptions(),
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+    return response.toMyResponse();
   }
 }
 

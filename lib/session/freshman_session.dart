@@ -16,13 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
 
-class FreshmanSession extends ASession {
-  final ASession _session;
+class FreshmanSession extends ISession {
+  final ISession _session;
   final FreshmanCacheDao _freshmanCacheDao;
 
   FreshmanSession(this._session, this._freshmanCacheDao) {
@@ -30,16 +29,16 @@ class FreshmanSession extends ASession {
   }
 
   @override
-  Future<Response> request(
+  Future<MyResponse> request(
     String url,
-    String method, {
+    RequestMethod method, {
     Map<String, String>? queryParameters,
     data,
-    Options? options,
-    ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
+    MyOptions? options,
+    MyProgressCallback? onSendProgress,
+    MyProgressCallback? onReceiveProgress,
   }) async {
-    Future<Response> myRequest(
+    Future<MyResponse> myRequest(
       dynamic data1,
       String url1,
       Map<String, String>? queryParameters1,
@@ -67,7 +66,7 @@ class FreshmanSession extends ASession {
     final String myUrl = '/freshman/$account$url';
 
     // 如果是GET请求，登录态直接注入到 queryParameters 中
-    if (method == 'GET') {
+    if (method == RequestMethod.get) {
       final myQuery = queryParameters ?? {};
       myQuery['secret'] = secret;
       return await myRequest(data, myUrl, myQuery);

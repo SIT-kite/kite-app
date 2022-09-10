@@ -35,12 +35,12 @@ class ScActivityDetailService extends AService implements ScActivityDetailDao {
   static String selectorBanner = 'div[style=" color:#7a7a7a; text-align:center"]';
   static String selectorDescription = 'div[style="padding:30px 50px; font-size:14px;"]';
 
-  ScActivityDetailService(ASession session) : super(session);
+  ScActivityDetailService(ISession session) : super(session);
 
   /// 获取第二课堂活动详情
   @override
   Future<ActivityDetail> getActivityDetail(int activityId) async {
-    final response = await session.post(_scDetailUrlBase + activityId.toString());
+    final response = await session.request(_scDetailUrlBase + activityId.toString(), RequestMethod.post);
     return _parseActivityDetail(response.data);
   }
 

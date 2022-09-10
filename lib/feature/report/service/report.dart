@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
@@ -23,19 +22,20 @@ import '../dao/report.dart';
 import '../entity/report.dart';
 
 class ReportService extends AService implements ReportDao {
-  ReportService(ASession session) : super(session);
+  ReportService(ISession session) : super(session);
 
   static const String _historyUrl = 'http://xgfy.sit.edu.cn/report/report/getMyReport';
 
   @override
   Future<List<ReportHistory>> getHistoryList(String userId) async {
     final payload = '{"usercode":"$userId","batchno":""}'; // TODO：batchno 填入今天日期？yyyyMMdd
-    final response = await session.post(
+    final response = await session.request(
       _historyUrl,
+      RequestMethod.post,
       data: payload,
-      options: Options(
-        contentType: Headers.jsonContentType,
-        responseType: ResponseType.json,
+      options: MyOptions(
+        contentType: HeaderConstants.jsonContentType,
+        responseType: MyResponseType.json,
       ),
     );
 

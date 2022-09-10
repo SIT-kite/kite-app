@@ -17,7 +17,6 @@
  */
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/storage/init.dart';
@@ -27,17 +26,18 @@ import '../entity/index.dart';
 const String serviceMessageCount = 'https://xgfy.sit.edu.cn/unifri-flow/user/queryFlowCount';
 
 class OfficeMessageService extends AService {
-  OfficeMessageService(ASession session) : super(session);
+  OfficeMessageService(ISession session) : super(session);
 
   Future<OfficeMessageCount> queryMessageCount() async {
     String payload = 'code=${KvStorageInitializer.auth.currentUsername}';
 
-    final response = await session.post(
+    final response = await session.request(
       serviceMessageCount,
+      RequestMethod.post,
       data: payload,
-      options: Options(
-        contentType: Headers.formUrlEncodedContentType,
-        responseType: ResponseType.json,
+      options: MyOptions(
+        contentType: 'application/x-www-form-urlencoded;charset=utf-8',
+        responseType: MyResponseType.json,
       ),
     );
     final Map<String, dynamic> data = response.data;
@@ -49,12 +49,13 @@ class OfficeMessageService extends AService {
     final String url = _getMessageListUrl(type);
     final String payload = 'myFlow=1&pageIdx=$page&pageSize=999'; // TODO: 此处硬编码.
 
-    final response = await session.post(
+    final response = await session.request(
       url,
+      RequestMethod.post,
       data: payload,
-      options: Options(
+      options: MyOptions(
         contentType: 'application/x-www-form-urlencoded',
-        responseType: ResponseType.json,
+        responseType: MyResponseType.json,
       ),
     );
     final List data = jsonDecode(response.data);

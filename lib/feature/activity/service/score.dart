@@ -46,12 +46,12 @@ class ScScoreService extends AService implements ScScoreDao {
   static final dateFormatParser = DateFormat('yyyy-MM-dd hh:mm:ss');
   static final activityIdRe = RegExp(r'activityId=(\d+)');
 
-  ScScoreService(ASession session) : super(session);
+  ScScoreService(ISession session) : super(session);
 
   /// 获取第二课堂分数
   @override
   Future<ScScoreSummary> getScScoreSummary() async {
-    final response = await session.post(_scHomeUrl);
+    final response = await session.request(_scHomeUrl, RequestMethod.post);
     return _parseScScoreSummary(response.data);
   }
 
@@ -103,7 +103,7 @@ class ScScoreService extends AService implements ScScoreDao {
   /// 获取我的得分列表
   @override
   Future<List<ScScoreItem>> getMyScoreList() async {
-    final response = await session.post(_scScoreUrl);
+    final response = await session.request(_scScoreUrl, RequestMethod.post);
     return _parseMyScoreList(response.data);
   }
 
@@ -126,7 +126,7 @@ class ScScoreService extends AService implements ScScoreDao {
   /// 获取我的活动列表
   @override
   Future<List<ScActivityApplication>> getMyActivityList() async {
-    final response = await session.post(_scMyEventUrl);
+    final response = await session.request(_scMyEventUrl, RequestMethod.post);
     return _parseMyActivityList(response.data);
   }
 

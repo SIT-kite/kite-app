@@ -23,12 +23,13 @@ import '../entity/holding_preview.dart';
 import 'constant.dart';
 
 class HoldingPreviewService extends AService implements HoldingPreviewDao {
-  HoldingPreviewService(ASession session) : super(session);
+  HoldingPreviewService(ISession session) : super(session);
 
   @override
   Future<HoldingPreviews> getHoldingPreviews(List<String> bookIdList) async {
-    var response = await session.get(
+    var response = await session.request(
       Constants.bookHoldingPreviewsUrl,
+      RequestMethod.get,
       queryParameters: {
         'bookrecnos': bookIdList.join(','),
         'curLibcodes': '',

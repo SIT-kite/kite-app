@@ -24,11 +24,11 @@ import '../entity/electricity.dart';
 class ElectricityService extends AService implements ElectricityServiceDao {
   static const String _baseUrl = '/electricity/room';
 
-  ElectricityService(ASession session) : super(session);
+  ElectricityService(ISession session) : super(session);
 
   @override
   Future<Balance> getBalance(String room) async {
-    final response = await session.get('$_baseUrl/$room');
+    final response = await session.request('$_baseUrl/$room', RequestMethod.get);
 
     Balance balance = Balance.fromJson(response.data);
 
@@ -37,21 +37,21 @@ class ElectricityService extends AService implements ElectricityServiceDao {
 
   @override
   Future<List<DailyBill>> getDailyBill(String room) async {
-    final response = await session.get('$_baseUrl/$room/bill/days');
+    final response = await session.request('$_baseUrl/$room/bill/days', RequestMethod.get);
     List<dynamic> list = response.data;
     return list.map((e) => DailyBill.fromJson(e)).toList();
   }
 
   @override
   Future<List<HourlyBill>> getHourlyBill(String room) async {
-    final response = await session.get('$_baseUrl/$room/bill/hours');
+    final response = await session.request('$_baseUrl/$room/bill/hours', RequestMethod.get);
     List<dynamic> list = response.data;
     return list.map((e) => HourlyBill.fromJson(e)).toList();
   }
 
   @override
   Future<Rank> getRank(String room) async {
-    final response = await session.get('$_baseUrl/$room/rank');
+    final response = await session.request('$_baseUrl/$room/rank', RequestMethod.get);
     final rank = Rank.fromJson(response.data);
 
     return rank;

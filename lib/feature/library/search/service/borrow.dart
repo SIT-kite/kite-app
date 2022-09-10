@@ -26,12 +26,13 @@ import '../entity/borrow.dart';
 import 'constant.dart';
 
 class LibraryBorrowService extends AService implements LibraryBorrowDao {
-  LibraryBorrowService(ASession session) : super(session);
+  LibraryBorrowService(ISession session) : super(session);
 
   @override
   Future<List<HistoryBorrowBookItem>> getHistoryBorrowBookList(int page, int rows) async {
-    final response = await session.get(
+    final response = await session.request(
       Constants.historyLoanListUrl,
+      RequestMethod.get,
       queryParameters: {
         'page': page.toString(),
         'rows': rows.toString(),
@@ -58,8 +59,9 @@ class LibraryBorrowService extends AService implements LibraryBorrowDao {
 
   @override
   Future<List<BorrowBookItem>> getMyBorrowBookList(int page, int rows) async {
-    final response = await session.get(
+    final response = await session.request(
       Constants.currentLoanListUrl,
+      RequestMethod.get,
       queryParameters: {
         'page': page.toString(),
         'rows': rows.toString(),
@@ -90,8 +92,9 @@ class LibraryBorrowService extends AService implements LibraryBorrowDao {
     required List<String> barcodeList,
     bool renewAll = false,
   }) async {
-    final response = await session.post(
+    final response = await session.request(
       Constants.doRenewUrl,
+      RequestMethod.post,
       data: {
         'pdsToken': pdsToken,
         'barcodeList': barcodeList.join(','),
@@ -107,7 +110,7 @@ class LibraryBorrowService extends AService implements LibraryBorrowDao {
     required List<String> barcodeList,
     bool renewAll = false,
   }) async {
-    final response = await session.get(Constants.renewList);
+    final response = await session.request(Constants.renewList, RequestMethod.get);
     final pdsToken = BeautifulSoup(response.data).find('input', attrs: {'name': 'pdsToken'})!.attributes['value'] ?? '';
     return await _doRenew(
       pdsToken: pdsToken,

@@ -24,7 +24,7 @@ import 'entity.dart';
 class NoticeService extends AService implements NoticeServiceDao {
   static const String _noticePath = '/notice';
 
-  NoticeService(ASession session) : super(session);
+  NoticeService(ISession session) : super(session);
 
   /// 对通知排序, 优先放置置顶通知, 其次是新通知.
   void _sort(List<KiteNotice> noticeList) {
@@ -36,7 +36,7 @@ class NoticeService extends AService implements NoticeServiceDao {
 
   @override
   Future<List<KiteNotice>> getNoticeList() async {
-    final response = await session.get(_noticePath);
+    final response = await session.request(_noticePath, RequestMethod.get);
     final List noticeList = response.data;
 
     List<KiteNotice> result = noticeList.map((e) => KiteNotice.fromJson(e)).toList();

@@ -24,12 +24,13 @@ import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/exception/session.dart';
 import 'package:kite/util/dio_utils.dart';
 import 'package:kite/util/logger.dart';
-import 'package:pointycastle/asymmetric/api.dart';
 
-class LibrarySession extends DefaultSession {
+import 'dio_common.dart';
+
+class LibrarySession extends DefaultDioSession {
   static const _opacUrl = 'http://210.35.66.106/opac';
-  static const _pemUrl = _opacUrl + '/certificate/pem';
-  static const _doLoginUrl = _opacUrl + '/reader/doLogin';
+  static const _pemUrl = '$_opacUrl/certificate/pem';
+  static const _doLoginUrl = '$_opacUrl/reader/doLogin';
   LibrarySession(Dio dio) : super(dio) {
     Log.info('初始化LibrarySession');
   }
@@ -44,7 +45,7 @@ class LibrarySession extends DefaultSession {
   }
 
   Future<Response> _login(String username, String password) async {
-    final response = await post(
+    final response = await dio.post(
       _doLoginUrl,
       data: {
         'vToken': '',
@@ -69,12 +70,12 @@ class LibrarySession extends DefaultSession {
     return encryptedPwd;
   }
 
-  Future<RSAPublicKey> _getRSAPublicKey() async {
-    final pemResponse = await get(_pemUrl);
+  Future<dynamic> _getRSAPublicKey() async {
+    final pemResponse = await request(_pemUrl, RequestMethod.get);
     String publicKeyStr = pemResponse.data;
-    final pemFileContent = '-----BEGIN PUBLIC KEY-----\n' + publicKeyStr + '\n-----END PUBLIC KEY-----';
+    final pemFileContent = '-----BEGIN PUBLIC KEY-----\n$publicKeyStr\n-----END PUBLIC KEY-----';
 
     final parser = RSAKeyParser();
-    return parser.parse(pemFileContent) as RSAPublicKey;
+    return parser.parse(pemFileContent);
   }
 }

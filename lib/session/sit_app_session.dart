@@ -23,14 +23,15 @@ import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
 
-class SitAppSession extends ASession {
+import 'dio_common.dart';
+
+class SitAppSession implements ISession {
   final Dio dio;
   final JwtDao jwtDao;
 
   SitAppSession(this.dio, this.jwtDao);
 
-  @override
-  Future<Response> request(
+  Future<Response> _dioRequest(
     String url,
     String method, {
     Map<String, String>? queryParameters,
@@ -123,12 +124,34 @@ class SitAppSession extends ASession {
   /// 用户登录
   /// 用户不存在时，将自动创建用户
   Future<Response> login(String username, String password) async {
-    final response = await post('http://210.35.96.115:8099/login', data: {
+    final response = await dio.post('http://210.35.96.115:8099/login', data: {
       'userName': username,
       'userPassword': password,
     });
     jwtDao.jwtToken = response.data['data'];
     return response;
+  }
+
+  @override
+  Future<MyResponse> request(
+    String url,
+    RequestMethod method, {
+    Map<String, String>? queryParameters,
+    data,
+    MyOptions? options,
+    MyProgressCallback? onSendProgress,
+    MyProgressCallback? onReceiveProgress,
+  }) async {
+    Response response = await _dioRequest(
+      url,
+      method.toString().toUpperCase(),
+      queryParameters: queryParameters,
+      data: data,
+      options: options?.toDioOptions(),
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+    return response.toMyResponse();
   }
 }
 

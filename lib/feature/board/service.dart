@@ -26,11 +26,11 @@ import 'dao.dart';
 class BoardService extends AService implements BoardDao {
   static const _boardUrl = '/board';
 
-  BoardService(ASession session) : super(session);
+  BoardService(ISession session) : super(session);
 
   @override
   Future<List<PictureSummary>> getPictureList({int page = 1, int count = 20}) async {
-    final response = await session.get('$_boardUrl/?index=$page&count=$count');
+    final response = await session.request('$_boardUrl/?index=$page&count=$count', RequestMethod.get);
     final List pictureList = response.data;
 
     List<PictureSummary> result = pictureList.map((e) => PictureSummary.fromJson(e)).toList();
@@ -39,8 +39,9 @@ class BoardService extends AService implements BoardDao {
 
   Future<void> submitPictures(List<MultipartFile> files, {ProgressCallback? onProgress}) async {
     int sc = 0, st = 0, rc = 0, rt = 0;
-    await session.post(
+    await session.request(
       '$_boardUrl/new',
+      RequestMethod.post,
       data: FormData.fromMap(
         files.asMap().map((key, value) => MapEntry(key.toString(), value)),
       ),

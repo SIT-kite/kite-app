@@ -19,7 +19,7 @@
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 
-import 'office_session.dart';
+import '../../session/office_session.dart';
 import 'service/function.dart';
 import 'service/message.dart';
 

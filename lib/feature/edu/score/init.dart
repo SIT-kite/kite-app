@@ -27,7 +27,7 @@ class ScoreInitializer {
   static late ScoreDao scoreService;
   static late CourseEvaluationDao courseEvaluationService;
 
-  static void init(ASession eduSession) {
+  static void init(ISession eduSession) {
     scoreService = ScoreService(eduSession);
     courseEvaluationService = CourseEvaluationService(eduSession);
   }

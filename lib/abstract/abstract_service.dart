@@ -18,7 +18,7 @@
 import 'abstract_session.dart';
 
 abstract class AService {
-  final ASession session;
+  final ISession session;
 
   const AService(this.session);
 }

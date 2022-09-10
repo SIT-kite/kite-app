@@ -23,7 +23,7 @@ import 'package:kite/feature/edu/score/init.dart';
 import 'package:kite/feature/edu/timetable/init.dart';
 import 'package:kite/session/sso/index.dart';
 
-import 'edu_session.dart';
+import '../../session/edu_session.dart';
 
 class EduInitializer {
   static late CookieJar cookieJar;

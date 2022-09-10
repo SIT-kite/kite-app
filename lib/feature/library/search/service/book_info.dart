@@ -26,7 +26,7 @@ import '../entity/book_info.dart';
 import 'constant.dart';
 
 class BookInfoService extends AService implements BookInfoDao {
-  BookInfoService(ASession session) : super(session);
+  BookInfoService(ISession session) : super(session);
 
   BookInfo _createBookInfo(LinkedHashMap<String, String> rawDetail) {
     final isbnAndPriceStr = rawDetail['ISBN']!;
@@ -43,7 +43,7 @@ class BookInfoService extends AService implements BookInfoDao {
 
   @override
   Future<BookInfo> query(String bookId) async {
-    final response = await session.get(Constants.bookUrl + '/$bookId');
+    final response = await session.request('${Constants.bookUrl}/$bookId', RequestMethod.get);
     final html = response.data;
 
     final detailItems = BeautifulSoup(html)

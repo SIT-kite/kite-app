@@ -15,163 +15,74 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:dio/dio.dart';
 
-abstract class ASession {
-  Future<Response> request(
-    String url,
-    String method, {
-    Map<String, String>? queryParameters,
-    dynamic data,
-    Options? options,
-    ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
+class MyResponse<T> {
+  T data;
+  Uri realUri;
+  MyResponse({
+    required this.data,
+    required this.realUri,
   });
-
-  Future<Response> get(
-    String url, {
-    Map<String, String>? queryParameters,
-    Options? options,
-    ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
-  }) {
-    return request(
-      url,
-      'GET',
-      queryParameters: queryParameters,
-      options: options,
-      onSendProgress: onReceiveProgress,
-      onReceiveProgress: onReceiveProgress,
-    );
-  }
-
-  Future<Response> post(
-    String url, {
-    Map<String, String>? queryParameters,
-    dynamic data,
-    Options? options,
-    ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
-  }) {
-    return request(
-      url,
-      'POST',
-      queryParameters: queryParameters,
-      data: data,
-      options: options,
-      onSendProgress: onReceiveProgress,
-      onReceiveProgress: onReceiveProgress,
-    );
-  }
-
-  Future<Response> delete(
-    String url, {
-    Map<String, String>? queryParameters,
-    dynamic data,
-    Options? options,
-    ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
-  }) {
-    return request(
-      url,
-      'DELETE',
-      queryParameters: queryParameters,
-      data: data,
-      options: options,
-      onSendProgress: onReceiveProgress,
-      onReceiveProgress: onReceiveProgress,
-    );
-  }
-
-  Future<Response> patch(
-    String url, {
-    Map<String, String>? queryParameters,
-    dynamic data,
-    Options? options,
-    ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
-  }) {
-    return request(
-      url,
-      'PATCH',
-      queryParameters: queryParameters,
-      data: data,
-      options: options,
-      onSendProgress: onReceiveProgress,
-      onReceiveProgress: onReceiveProgress,
-    );
-  }
-
-  Future<Response> update(
-    String url, {
-    Map<String, String>? queryParameters,
-    dynamic data,
-    Options? options,
-    ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
-  }) {
-    return request(
-      url,
-      'UPDATE',
-      queryParameters: queryParameters,
-      data: data,
-      options: options,
-      onSendProgress: onReceiveProgress,
-      onReceiveProgress: onReceiveProgress,
-    );
-  }
 }
 
-mixin Downloader on ASession {
-  Dio getDio();
+enum MyResponseType { json, stream, plain, bytes }
 
-  Future<Response> download(
+class HeaderConstants {
+  static const jsonContentType = 'application/json; charset=utf-8';
+  static const formUrlEncodedContentType = 'application/x-www-form-urlencoded;charset=utf-8';
+  static const textPlainContentType = 'text/plain';
+}
+
+class MyOptions {
+  String? method;
+  int? sendTimeout;
+  int? receiveTimeout;
+  Map<String, dynamic>? extra;
+  Map<String, dynamic>? headers;
+  MyResponseType? responseType;
+  String? contentType;
+
+  MyOptions({
+    this.method,
+    this.sendTimeout,
+    this.receiveTimeout,
+    this.extra,
+    this.headers,
+    this.responseType,
+    this.contentType,
+  });
+}
+
+typedef MyProgressCallback = void Function(int count, int total);
+
+enum RequestMethod {
+  get,
+  post,
+  delete,
+  patch,
+  update,
+  put,
+}
+
+abstract class ISession {
+  Future<MyResponse> request(
+    String url,
+    RequestMethod method, {
+    Map<String, String>? queryParameters,
+    dynamic data,
+    MyOptions? options,
+    MyProgressCallback? onSendProgress,
+    MyProgressCallback? onReceiveProgress,
+  });
+}
+
+abstract class IDownloader {
+  Future<void> download(
     String url, {
     String? savePath,
-    ProgressCallback? onReceiveProgress,
-    Map<String, String>? queryParameters,
-    data,
-    String? contentType,
-    Options? options,
-  }) async {
-    return await getDio().download(
-      url,
-      savePath,
-      onReceiveProgress: onReceiveProgress,
-      queryParameters: queryParameters,
-      data: data,
-      options: (options ?? Options()).copyWith(contentType: contentType),
-    );
-  }
-}
-
-class DefaultSession extends ASession with Downloader {
-  Dio dio;
-
-  DefaultSession(this.dio);
-
-  @override
-  Future<Response> request(
-    String url,
-    String method, {
+    MyProgressCallback? onReceiveProgress,
     Map<String, String>? queryParameters,
     dynamic data,
-    Options? options,
-    ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
-  }) {
-    return dio.request(
-      url,
-      data: data,
-      queryParameters: queryParameters,
-      options: options,
-      onSendProgress: onReceiveProgress,
-      onReceiveProgress: onReceiveProgress,
-    );
-  }
-
-  @override
-  Dio getDio() {
-    return dio;
-  }
+    MyOptions? options,
+  });
 }

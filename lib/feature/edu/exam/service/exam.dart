@@ -27,13 +27,14 @@ import '../entity/exam.dart';
 class ExamService extends AService implements ExamDao {
   static const _examRoomUrl = 'http://jwxt.sit.edu.cn/jwglxt/kwgl/kscx_cxXsksxxIndex.html';
 
-  ExamService(ASession session) : super(session);
+  ExamService(ISession session) : super(session);
 
   /// 获取考场信息
   @override
   Future<List<ExamRoom>> getExamList(SchoolYear schoolYear, Semester semester) async {
-    var response = await session.post(
+    var response = await session.request(
       _examRoomUrl,
+      RequestMethod.post,
       queryParameters: {
         'doType': 'query',
         'gnmkdm': 'N358105',

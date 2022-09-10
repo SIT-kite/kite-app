@@ -19,9 +19,9 @@
 import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/storage/init.dart';
 
+import '../../session/freshman_session.dart';
 import 'cache.dart';
 import 'dao.dart';
-import 'freshman_session.dart';
 import 'service.dart';
 
 class FreshmanInitializer {
@@ -31,7 +31,7 @@ class FreshmanInitializer {
   static late FreshmanCacheDao freshmanCacheDao;
 
   static Future<void> init({
-    required ASession kiteSession,
+    required ISession kiteSession,
   }) async {
     freshmanCacheDao = KvStorageInitializer.freshman;
     freshmanSession = FreshmanSession(kiteSession, freshmanCacheDao);

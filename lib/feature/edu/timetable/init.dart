@@ -30,7 +30,7 @@ class TimetableInitializer {
   static late TableCache tableCache;
 
   static void init({
-    required ASession eduSession,
+    required ISession eduSession,
     required Box<dynamic> timetableBox,
   }) {
     timetableService = TimetableService(eduSession);

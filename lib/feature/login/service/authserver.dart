@@ -17,17 +17,17 @@
  */
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
-import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
 class AuthServerService extends AService {
-  AuthServerService(ASession session) : super(session);
+  AuthServerService(ISession session) : super(session);
 
   Future<String> getPersonName() async {
-    final response = await session.get(
+    final response = await session.request(
       'https://authserver.sit.edu.cn/authserver/index.do',
-      options: Options(
+      RequestMethod.get,
+      options: MyOptions(
         headers: {
           'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:46.0) Gecko/20100101 Firefox/46.0',
         },

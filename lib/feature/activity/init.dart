@@ -18,9 +18,9 @@
 
 import 'package:kite/abstract/abstract_session.dart';
 
+import '../../session/sc_session.dart';
 import 'dao/index.dart';
 import 'dao/list.dart';
-import 'sc_session.dart';
 import 'service/index.dart';
 
 class ScInitializer {
@@ -31,7 +31,7 @@ class ScInitializer {
   static late ScScoreDao scScoreService;
 
   static void init({
-    required ASession ssoSession,
+    required ISession ssoSession,
   }) {
     session = ScSession(ssoSession);
     scActivityListService = ScActivityListService(session);

@@ -16,37 +16,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:dio/dio.dart';
+import '../abstract/abstract_session.dart';
+import '../util/logger.dart';
 
-import '../../abstract/abstract_session.dart';
-import '../../util/logger.dart';
-
-class ScSession extends ASession {
-  final ASession _session;
+class ScSession extends ISession {
+  final ISession _session;
 
   ScSession(this._session) {
     Log.info('初始化 ScSession');
   }
 
   Future<void> _refreshCookie() async {
-    await _session.get('https://authserver.sit.edu.cn/authserver/login?service=http%3A%2F%2Fsc.sit.edu.cn%2Flogin.jsp');
+    await _session.request(
+      'https://authserver.sit.edu.cn/authserver/login?service=http%3A%2F%2Fsc.sit.edu.cn%2Flogin.jsp',
+      RequestMethod.get,
+    );
   }
 
-  bool _isRedirectedToLoginPage(Response response) {
-    return (response.data as String).startsWith('<script');
+  bool _isRedirectedToLoginPage(String data) {
+    return data.startsWith('<script');
   }
 
   @override
-  Future<Response> request(
+  Future<MyResponse> request(
     String url,
-    String method, {
+    RequestMethod method, {
     Map<String, String>? queryParameters,
     data,
-    Options? options,
-    ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
+    MyOptions? options,
+    MyProgressCallback? onSendProgress,
+    MyProgressCallback? onReceiveProgress,
   }) async {
-    Future<Response> fetch() async {
+    Future<MyResponse> fetch() async {
       return await _session.request(
         url,
         method,
@@ -57,9 +58,9 @@ class ScSession extends ASession {
       );
     }
 
-    Response response = await fetch();
+    MyResponse response = await fetch();
     // 如果返回值是登录页面，那就从 SSO 跳转一次以登录.
-    if (_isRedirectedToLoginPage(response)) {
+    if (_isRedirectedToLoginPage(response.data as String)) {
       await _refreshCookie();
       response = await fetch();
     }

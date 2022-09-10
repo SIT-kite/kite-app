@@ -22,12 +22,13 @@ import 'package:kite/abstract/abstract_session.dart';
 import 'dao.dart';
 
 class ArriveCodeService extends AService implements ArriveCodeDao {
-  ArriveCodeService(ASession session) : super(session);
+  ArriveCodeService(ISession session) : super(session);
 
   @override
   Future<String> arrive(String code) async {
-    final response = await session.post(
+    final response = await session.request(
       'https://xgfy.sit.edu.cn//regist/scan/appAdd',
+      RequestMethod.post,
       data: {'place': code},
     );
     return response.data['msg'];

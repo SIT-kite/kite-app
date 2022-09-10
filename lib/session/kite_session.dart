@@ -24,9 +24,11 @@ import 'package:kite/storage/dao/kite.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
 
+import 'dio_common.dart';
+
 const String _baseUrl = 'https://kite.sunnysab.cn/api/v2';
 
-class KiteSession extends ASession {
+class KiteSession implements ISession {
   final Dio dio;
   final JwtDao jwtDao;
   final KiteStorageDao kiteDao;
@@ -37,8 +39,7 @@ class KiteSession extends ASession {
     this.kiteDao,
   );
 
-  @override
-  Future<Response> request(
+  Future<Response> _dioRequest(
     String url,
     String method, {
     Map<String, String>? queryParameters,
@@ -61,7 +62,7 @@ class KiteSession extends ASession {
 
     try {
       return await normallyRequest();
-    } on KiteApiError catch (e, _) {
+    } on KiteApiError catch (e) {
       if (e.code == 100) {
         await login(
           KvStorageInitializer.auth.currentUsername!,
@@ -126,7 +127,7 @@ class KiteSession extends ASession {
   /// 用户登录
   /// 用户不存在时，将自动创建用户
   Future<KiteUser> login(String username, String password) async {
-    final response = await post('/session', data: {
+    final response = await _dioRequest('/session', 'POST', data: {
       'account': username,
       'password': password,
     });
@@ -134,6 +135,28 @@ class KiteSession extends ASession {
     final profile = KiteUser.fromJson(response.data['profile']);
     kiteDao.userProfile = profile;
     return profile;
+  }
+
+  @override
+  Future<MyResponse> request(
+    String url,
+    RequestMethod method, {
+    Map<String, String>? queryParameters,
+    data,
+    MyOptions? options,
+    MyProgressCallback? onSendProgress,
+    MyProgressCallback? onReceiveProgress,
+  }) async {
+    Response response = await _dioRequest(
+      url,
+      method.toUpperCaseString(),
+      queryParameters: queryParameters,
+      data: data,
+      options: options?.toDioOptions(),
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+    return response.toMyResponse();
   }
 }
 

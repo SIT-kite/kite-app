@@ -31,12 +31,13 @@ class AppointmentService extends AService implements AppointmentDao {
   static const _notice = '$_library/notice';
   static const _status = '$_library/status';
 
-  AppointmentService(ASession session) : super(session);
+  AppointmentService(ISession session) : super(session);
 
   @override
   Future<ApplyResponse> apply(int period) async {
-    final response = await session.post(
+    final response = await session.request(
       _application,
+      RequestMethod.post,
       data: {'period': period},
     );
     return ApplyResponse.fromJson(response.data);
@@ -44,7 +45,7 @@ class AppointmentService extends AService implements AppointmentDao {
 
   @override
   Future<void> cancelApplication(int applyId) async {
-    await session.delete('$_application/$applyId');
+    await session.request('$_application/$applyId', RequestMethod.delete);
   }
 
   @override
@@ -63,45 +64,45 @@ class AppointmentService extends AService implements AppointmentDao {
     if (date != null) {
       queryParameters['date'] = DateFormat('yyyyMMdd').format(date);
     }
-    final response = await session.get('$_application/', queryParameters: queryParameters);
+    final response = await session.request('$_application/', RequestMethod.get, queryParameters: queryParameters);
     List raw = response.data;
     return raw.map((e) => ApplicationRecord.fromJson(e)).toList();
   }
 
   @override
   Future<String> getApplicationCode(int applyId) async {
-    final response = await session.get('$_application/$applyId/code');
+    final response = await session.request('$_application/$applyId/code', RequestMethod.get);
     return jsonEncode(response.data);
   }
 
   @override
   Future<Notice?> getNotice() async {
-    final response = await session.get(_notice);
+    final response = await session.request(_notice, RequestMethod.get);
     if (response.data == null) return null;
     return Notice.fromJson(response.data);
   }
 
   @override
   Future<List<PeriodStatusRecord>> getPeriodStatus(DateTime dateTime) async {
-    final response = await session.get('$_status/${dateTime.yyyyMMdd}/');
+    final response = await session.request('$_status/${dateTime.yyyyMMdd}/', RequestMethod.get);
     List raw = response.data;
     return raw.map((e) => PeriodStatusRecord.fromJson(e)).toList();
   }
 
   @override
   Future<void> updateApplication(int applyId, int status) async {
-    await session.patch('$_application/$applyId', data: {'status': status});
+    await session.request('$_application/$applyId', RequestMethod.patch, data: {'status': status});
   }
 
   @override
   Future<CurrentPeriodResponse> getCurrentPeriod() async {
-    final response = await session.get('$_library/current');
+    final response = await session.request('$_library/current', RequestMethod.get);
     return CurrentPeriodResponse.fromJson(response.data);
   }
 
   @override
   Future<String> getRsaPublicKey() async {
-    final response = await session.get('$_library/publicKey');
+    final response = await session.request('$_library/publicKey', RequestMethod.get);
     return response.data;
   }
 }

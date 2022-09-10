@@ -24,7 +24,7 @@ import 'dao.dart';
 import 'entity.dart';
 
 class BulletinService extends AService implements BulletinDao {
-  BulletinService(ASession session) : super(session);
+  BulletinService(ISession session) : super(session);
 
   List<Attachment> _parseAttachment(Bs4Element element) {
     return element.find('#containerFrame > table')!.findAll('a').map((e) {
@@ -73,7 +73,7 @@ class BulletinService extends AService implements BulletinDao {
 
   @override
   Future<BulletinDetail> getBulletinDetail(String bulletinCatalogueId, String uuid) async {
-    final response = await session.get(_buildBulletinUrl(bulletinCatalogueId, uuid));
+    final response = await session.request(_buildBulletinUrl(bulletinCatalogueId, uuid), RequestMethod.get);
     return _parseBulletinDetail(BeautifulSoup(response.data).html!);
   }
 
@@ -112,7 +112,7 @@ class BulletinService extends AService implements BulletinDao {
 
   @override
   Future<BulletinListPage> queryBulletinList(int pageIndex, String bulletinCatalogueId) async {
-    final response = await session.get(_buildBulletinListUrl(pageIndex, bulletinCatalogueId));
+    final response = await session.request(_buildBulletinListUrl(pageIndex, bulletinCatalogueId), RequestMethod.get);
     return _parseBulletinListPage(BeautifulSoup(response.data).html!);
   }
 }

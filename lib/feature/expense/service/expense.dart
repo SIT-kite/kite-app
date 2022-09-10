@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
-import 'package:dio/dio.dart';
 import 'package:enough_convert/enough_convert.dart';
 import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
@@ -37,7 +36,7 @@ class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
   };
   static const _codec = GbkCodec();
 
-  ExpenseRemoteService(ASession session) : super(session);
+  ExpenseRemoteService(ISession session) : super(session);
 
   @override
   Future<OaExpensePage> getExpensePage(
@@ -45,14 +44,15 @@ class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
     required DateTime start,
     required DateTime end,
   }) async {
-    final response = await session.get(
+    final response = await session.request(
       _expenseUrl,
+      RequestMethod.get,
       queryParameters: {
         'page': page.toString(),
         'from': start.yyyyMMdd,
         'to': end.yyyyMMdd,
       },
-      options: Options(responseType: ResponseType.bytes),
+      options: MyOptions(responseType: MyResponseType.bytes),
     );
 
     return _parseExpenseDetail(_codec.decode(response.data));

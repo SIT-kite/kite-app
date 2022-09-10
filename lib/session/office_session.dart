@@ -22,10 +22,12 @@ import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/exception/session.dart';
 
+import 'dio_common.dart';
+
 /// 应网办登录地址, POST 请求
 const String _officeLoginUrl = 'https://xgfy.sit.edu.cn/unifri-flow/login';
 
-class OfficeSession extends ASession {
+class OfficeSession extends ISession {
   bool isLogin = false;
   String? username;
   String? jwtToken;
@@ -64,16 +66,16 @@ class OfficeSession extends ASession {
   }
 
   @override
-  Future<Response> request(
+  Future<MyResponse> request(
     String url,
-    String method, {
+    RequestMethod method, {
     Map<String, String>? queryParameters,
     dynamic data,
-    Options? options,
-    ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
+    MyOptions? options,
+    MyProgressCallback? onSendProgress,
+    MyProgressCallback? onReceiveProgress,
   }) async {
-    Options newOptions = options ?? Options();
+    Options newOptions = options?.toDioOptions() ?? Options();
 
     // Make default options.
     final String ts = _getTimestamp();
@@ -85,9 +87,9 @@ class OfficeSession extends ASession {
     };
 
     newOptions.headers == null ? newOptions.headers = newHeaders : newOptions.headers?.addAll(newHeaders);
-    newOptions.method = method;
+    newOptions.method = method.toUpperCaseString();
 
-    return await dio.request(
+    final response = await dio.request(
       url,
       queryParameters: queryParameters,
       data: data,
@@ -95,5 +97,6 @@ class OfficeSession extends ASession {
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
     );
+    return response.toMyResponse();
   }
 }

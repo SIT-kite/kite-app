@@ -24,7 +24,7 @@ import '../entity/hot_search.dart';
 import 'constant.dart';
 
 class HotSearchService extends AService implements HotSearchDao {
-  HotSearchService(ASession session) : super(session);
+  HotSearchService(ISession session) : super(session);
 
   HotSearchItem _parse(String rawText) {
     final texts = rawText.split('(').map((e) => e.trim()).toList();
@@ -36,7 +36,7 @@ class HotSearchService extends AService implements HotSearchDao {
 
   @override
   Future<HotSearch> getHotSearch() async {
-    var response = await session.get(Constants.hotSearchUrl);
+    var response = await session.request(Constants.hotSearchUrl, RequestMethod.get);
     var fieldsets = BeautifulSoup(response.data).findAll('fieldset');
 
     List<HotSearchItem> getHotSearchItems(Bs4Element fieldset) {

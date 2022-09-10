@@ -29,7 +29,7 @@ class ContactInitializer {
   static late ContactRemoteDao contactRemoteDao;
 
   static Future<void> init({
-    required ASession kiteSession,
+    required ISession kiteSession,
     required Box<ContactData> contactDataBox,
   }) async {
     contactStorageDao = ContactDataStorage(contactDataBox);

@@ -17,6 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:kite/abstract/abstract_session.dart';
 
 import '../entity.dart';
 import '../init.dart';
@@ -29,36 +30,28 @@ class BulletinPage extends StatelessWidget {
 
   Widget _buildBulletinItem(BuildContext context, BulletinRecord record) {
     final titleStyle = Theme.of(context).textTheme.headline4;
-    final subtitleStyle =
-        Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.black54);
+    final subtitleStyle = Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.black54);
 
     return Padding(
       padding: const EdgeInsets.all(2),
       child: ListTile(
-        title: Text(record.title,
-            style: titleStyle, overflow: TextOverflow.ellipsis),
-        subtitle: Text(
-            '${record.department} | ${_dateFormat.format(record.dateTime)}',
-            style: subtitleStyle),
-        onTap: () => Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => DetailPage(record))),
+        title: Text(record.title, style: titleStyle, overflow: TextOverflow.ellipsis),
+        subtitle: Text('${record.department} | ${_dateFormat.format(record.dateTime)}', style: subtitleStyle),
+        onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailPage(record))),
       ),
     );
   }
 
   Future<List<BulletinRecord>> _queryBulletinListInAllCategory(int page) async {
     // Make sure login.
-    await BulletinInitializer.session.get('https://myportal.sit.edu.cn/');
+    await BulletinInitializer.session.request('https://myportal.sit.edu.cn/', RequestMethod.get);
 
     final service = BulletinInitializer.bulletin;
     final catalogues = service.getAllCatalogues();
-    final futureResult = await Future.wait(
-        catalogues.map((e) => service.queryBulletinList(page, e.id)));
+    final futureResult = await Future.wait(catalogues.map((e) => service.queryBulletinList(page, e.id)));
 
-    final List<BulletinRecord> records = futureResult.fold(
-        <BulletinRecord>[],
-        (List<BulletinRecord> previousValue, BulletinListPage page) =>
-            previousValue + page.bulletinItems).toList();
+    final List<BulletinRecord> records = futureResult.fold(<BulletinRecord>[],
+        (List<BulletinRecord> previousValue, BulletinListPage page) => previousValue + page.bulletinItems).toList();
     return records;
   }
 

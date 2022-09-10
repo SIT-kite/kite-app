@@ -37,17 +37,17 @@ class ScJoinActivityService extends AService implements ScJoinActivityDao {
     '对不起，您不在该活动的范围内！',
   ];
 
-  ScJoinActivityService(ASession session) : super(session);
+  ScJoinActivityService(ISession session) : super(session);
 
   /// 提交最后的活动申请
   Future<String> _sendFinalRequest(int activityId) async {
     final url = _applyRequest + activityId.toString();
-    return (await session.get(url)).data;
+    return (await session.request(url, RequestMethod.get)).data;
   }
 
   Future<String> _sendCheckRequest(int activityId) async {
     final url = _applyCheck + activityId.toString();
-    final code = ((await session.get(url)).data as String).trim();
+    final code = ((await session.request(url, RequestMethod.get)).data as String).trim();
 
     return _codeMessage[int.parse(code)];
   }

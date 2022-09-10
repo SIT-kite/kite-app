@@ -24,7 +24,7 @@ import '../entity/evaluation.dart';
 class CourseEvaluationService extends AService implements CourseEvaluationDao {
   static const _serviceUrl = 'http://jwxt.sit.edu.cn/jwglxt/xspjgl/xspj_cxXspjIndex.html?doType=query&gnmkdm=N401605';
 
-  CourseEvaluationService(ASession session) : super(session);
+  CourseEvaluationService(ISession session) : super(session);
 
   List<CourseToEvaluate> _parseEvaluationList(Map<String, dynamic> page) {
     final List evaluationList = page['items'];
@@ -43,7 +43,7 @@ class CourseEvaluationService extends AService implements CourseEvaluationDao {
       'time': 0
     };
 
-    final response = await session.post(_serviceUrl, data: form);
+    final response = await session.request(_serviceUrl, RequestMethod.post, data: form);
     return _parseEvaluationList(response.data);
   }
 }

@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
@@ -25,15 +24,16 @@ const String serviceFunctionList = 'https://xgfy.sit.edu.cn/app/public/queryAppM
 const String serviceFunctionDetail = 'https://xgfy.sit.edu.cn/app/public/queryAppFormJson';
 
 class OfficeFunctionService extends AService {
-  OfficeFunctionService(ASession session) : super(session);
+  OfficeFunctionService(ISession session) : super(session);
 
   Future<List<SimpleFunction>> selectFunctions() async {
     String payload = '{"appObject":"student","appName":null}';
 
-    final Response response = await session.post(
+    final response = await session.request(
       serviceFunctionList,
+      RequestMethod.post,
       data: payload,
-      options: Options(responseType: ResponseType.json),
+      options: MyOptions(responseType: MyResponseType.json),
     );
 
     final Map<String, dynamic> data = response.data;
@@ -54,10 +54,11 @@ class OfficeFunctionService extends AService {
   Future<FunctionDetail> getFunctionDetail(String functionId) async {
     final String payload = '{"appID":"$functionId"}';
 
-    final response = await session.post(
+    final response = await session.request(
       serviceFunctionDetail,
+      RequestMethod.post,
       data: payload,
-      options: Options(responseType: ResponseType.json),
+      options: MyOptions(responseType: MyResponseType.json),
     );
     final Map<String, dynamic> data = response.data;
     final List<FunctionDetailSection> sections =

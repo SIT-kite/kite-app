@@ -38,7 +38,7 @@ class ScActivityListService extends AService implements ScActivityListDao {
   static String selector = '.ul_7 li > a';
   static DateFormat dateFormatParser = DateFormat('yyyy-MM-dd hh:mm:ss');
 
-  ScActivityListService(ASession session) : super(session);
+  ScActivityListService(ISession session) : super(session);
 
   /// 获取第二课堂活动列表date
   @override
@@ -48,7 +48,7 @@ class ScActivityListService extends AService implements ScActivityListDao {
     }
 
     final url = _generateUrl(type, page);
-    final response = await session.get(url);
+    final response = await session.request(url, RequestMethod.get);
 
     return _parseActivityList(response.data);
   }
@@ -56,7 +56,9 @@ class ScActivityListService extends AService implements ScActivityListDao {
   @override
   Future<List<Activity>> query(String queryString) async {
     const String url = 'http://sc.sit.edu.cn/public/activity/activityList.action';
-    final response = await session.post(url, data: {'activityName': queryString});
+    final response = await session.request(url, RequestMethod.post, data: {
+      'activityName': queryString,
+    });
 
     return _parseActivityList(response.data);
   }

@@ -24,6 +24,7 @@ import 'package:dio/dio.dart' hide Lock;
 import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/exception/session.dart';
 import 'package:kite/feature/kite/service/ocr.dart';
+import 'package:kite/session/dio_common.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
 import 'package:synchronized/synchronized.dart';
@@ -33,7 +34,7 @@ import 'encryption.dart';
 
 typedef SsoSessionErrorCallback = void Function(Object e, StackTrace t);
 
-class SsoSession extends ASession with Downloader {
+class SsoSession with MyDioDownloaderMixin implements ISession {
   static const int _maxRetryCount = 5;
   static const String _authServerUrl = 'https://authserver.sit.edu.cn/authserver';
   static const String _loginUrl = '$_authServerUrl/login';
@@ -42,7 +43,9 @@ class SsoSession extends ASession with Downloader {
   static const String _loginSuccessUrl = 'https://authserver.sit.edu.cn/authserver/index.do';
 
   // http客户端对象和缓存
+  @override
   final Dio dio;
+
   CookieJar cookieJar;
 
   /// 登录状态
@@ -75,6 +78,27 @@ class SsoSession extends ASession with Downloader {
     }
   }
 
+  Future<bool> checkConnectivity({
+    String url = 'http://jwxt.sit.edu.cn/',
+  }) async {
+    try {
+      await runWithNoErrorCallback(() async {
+        await _dioRequest(
+          url,
+          'GET',
+          options: Options(
+            contentType: Headers.formUrlEncodedContentType,
+            followRedirects: false,
+            validateStatus: (status) => status! < 400,
+          ),
+        );
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   /// 判断该请求是否为登录页
   bool isLoginPage(Response response) {
     return response.realUri.toString().contains(_loginUrl);
@@ -100,8 +124,7 @@ class SsoSession extends ASession with Downloader {
     });
   }
 
-  @override
-  Future<Response> request(
+  Future<Response> _dioRequest(
     String url,
     String method, {
     Map<String, String>? queryParameters,
@@ -333,7 +356,24 @@ class SsoSession extends ASession with Downloader {
   }
 
   @override
-  Dio getDio() {
-    return dio;
+  Future<MyResponse> request(
+    String url,
+    RequestMethod method, {
+    Map<String, String>? queryParameters,
+    data,
+    MyOptions? options,
+    MyProgressCallback? onSendProgress,
+    MyProgressCallback? onReceiveProgress,
+  }) async {
+    Response response = await _dioRequest(
+      url,
+      method.toUpperCaseString(),
+      queryParameters: queryParameters,
+      data: data,
+      options: options?.toDioOptions(),
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+    );
+    return response.toMyResponse();
   }
 }

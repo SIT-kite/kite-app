@@ -24,11 +24,11 @@ import '../entity/contact.dart';
 class ContactRemoteService extends AService implements ContactRemoteDao {
   static const _contactUrl = '/contact';
 
-  ContactRemoteService(ASession session) : super(session);
+  ContactRemoteService(ISession session) : super(session);
 
   @override
   Future<List<ContactData>> getAllContacts() async {
-    final response = await session.get(_contactUrl);
+    final response = await session.request(_contactUrl, RequestMethod.get);
     final List contactList = response.data;
     List<ContactData> result = contactList.map((e) => ContactData.fromJson(e)).toList();
     return result;

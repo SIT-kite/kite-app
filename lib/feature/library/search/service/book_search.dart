@@ -24,7 +24,7 @@ import '../entity/book_search.dart';
 import 'constant.dart';
 
 class BookSearchService extends AService implements BookSearchDao {
-  BookSearchService(ASession session) : super(session);
+  BookSearchService(ISession session) : super(session);
 
   static String _searchWayToString(SearchWay sw) {
     return {
@@ -93,8 +93,9 @@ class BookSearchService extends AService implements BookSearchDao {
     SortWay sortWay = SortWay.matchScore,
     SortOrder sortOrder = SortOrder.desc,
   }) async {
-    var response = await session.get(
+    var response = await session.request(
       Constants.searchUrl,
+      RequestMethod.get,
       queryParameters: {
         'q': keyword,
         'searchType': 'standard',

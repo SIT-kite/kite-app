@@ -15,12 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/session/sso/index.dart';
 import 'package:kite/util/logger.dart';
 
-class EduSession extends ASession {
+class EduSession extends ISession {
   final SsoSession ssoSession;
 
   EduSession(this.ssoSession) {
@@ -28,24 +27,24 @@ class EduSession extends ASession {
   }
 
   Future<void> _refreshCookie() async {
-    await ssoSession.get('http://jwxt.sit.edu.cn/sso/jziotlogin');
+    await ssoSession.request('http://jwxt.sit.edu.cn/sso/jziotlogin', RequestMethod.get);
   }
 
-  bool _isRedirectedToLoginPage(Response response) {
+  bool _isRedirectedToLoginPage(MyResponse response) {
     return response.realUri.path == '/jwglxt/xtgl/login_slogin.html';
   }
 
   @override
-  Future<Response> request(
+  Future<MyResponse> request(
     String url,
-    String method, {
+    RequestMethod method, {
     Map<String, String>? queryParameters,
     data,
-    Options? options,
-    ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
+    MyOptions? options,
+    MyProgressCallback? onSendProgress,
+    MyProgressCallback? onReceiveProgress,
   }) async {
-    Future<Response> fetch() async {
+    Future<MyResponse> fetch() async {
       return await ssoSession.request(
         url,
         method,
@@ -57,7 +56,7 @@ class EduSession extends ASession {
       );
     }
 
-    Response response = await fetch();
+    var response = await fetch();
     // 如果返回值是登录页面，那就从 SSO 跳转一次以登录.
     if (_isRedirectedToLoginPage(response)) {
       Log.info('EduSession需要登录');

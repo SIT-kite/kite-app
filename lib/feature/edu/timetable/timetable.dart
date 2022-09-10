@@ -27,7 +27,7 @@ import 'entity.dart';
 class TimetableService extends AService {
   static const _timetableUrl = 'http://jwxt.sit.edu.cn/jwglxt/kbcx/xskbcx_cxXsgrkb.html';
 
-  TimetableService(ASession session) : super(session);
+  TimetableService(ISession session) : super(session);
 
   static List<Course> _parseTimetable(Map<String, dynamic> json) {
     final List<dynamic> courseList = json['kbList'];
@@ -37,8 +37,9 @@ class TimetableService extends AService {
 
   /// 获取课表
   Future<List<Course>> getTimetable(SchoolYear schoolYear, Semester semester) async {
-    final response = await session.post(
+    final response = await session.request(
       _timetableUrl,
+      RequestMethod.post,
       queryParameters: {'gnmkdm': 'N253508'},
       data: {
         // 学年名

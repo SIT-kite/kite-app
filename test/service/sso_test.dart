@@ -1,4 +1,5 @@
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
+import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/feature/initializer_index.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/mock/index.dart';
@@ -8,7 +9,7 @@ void main() async {
   await login();
   var session = Global.ssoSession;
   test('test login', () async {
-    final index = await session.get('https://myportal.sit.edu.cn/');
+    final index = await session.request('https://myportal.sit.edu.cn/', RequestMethod.get);
     final list = BeautifulSoup(index.data)
         .find('div', class_: 'composer')!
         .findAll('li')

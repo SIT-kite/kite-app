@@ -18,8 +18,8 @@
 
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_service.dart';
+import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/feature/freshman/dao.dart';
 import 'package:kite/feature/freshman/entity.dart';
 import 'package:kite/mock/index.dart';
@@ -29,13 +29,13 @@ class FreshmanService extends AService implements FreshmanDao {
 
   @override
   Future<FreshmanInfo> getInfo() async {
-    Response response = await session.get('');
+    final response = await session.request('', RequestMethod.get);
     return FreshmanInfo.fromJson(response.data);
   }
 
   @override
   Future<void> update({Contact? contact, bool? visible}) async {
-    await session.request('/update', 'PUT', data: {
+    await session.request('/update', RequestMethod.put, data: {
       if (contact != null) 'contact': jsonEncode(contact.toJson()),
       if (visible != null) 'visible': visible,
     });
@@ -43,33 +43,33 @@ class FreshmanService extends AService implements FreshmanDao {
 
   @override
   Future<List<Mate>> getRoommates() async {
-    Response response = await session.get('/roommate');
+    final response = await session.request('/roommate', RequestMethod.get);
     List<dynamic> roommates = response.data['roommates']!;
     return roommates.map((e) => Mate.fromJson(e)).toList();
   }
 
   @override
   Future<List<Familiar>> getFamiliars() async {
-    Response response = await session.get('/familiar');
+    final response = await session.request('/familiar', RequestMethod.get);
     List<dynamic> fellows = response.data['peopleFamiliar']!;
     return fellows.map((e) => Familiar.fromJson(e)).toList();
   }
 
   @override
   Future<List<Mate>> getClassmates() async {
-    Response response = await session.get('/classmate');
+    final response = await session.request('/classmate', RequestMethod.get);
     List<dynamic> classmate = response.data['classmates']!;
     return classmate.map((e) => Mate.fromJson(e)).toList();
   }
 
   @override
   Future<Analysis> getAnalysis() async {
-    Response response = await session.get('/analysis');
+    final response = await session.request('/analysis', RequestMethod.get);
     return Analysis.fromJson(response.data['freshman']);
   }
 
   @override
   Future<void> postAnalysisLog() async {
-    await session.post('/analysis/log');
+    await session.request('/analysis/log', RequestMethod.post);
   }
 }
