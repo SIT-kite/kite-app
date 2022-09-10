@@ -40,11 +40,12 @@ class RankView extends StatelessWidget {
       child: Column(
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Text('${rank.consumption}',
+            Text(rank.consumption.toStringAsFixed(2),
                 style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 32, color: Colors.black)),
             const Text('元', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.grey)),
           ]),
-          Text('24小时消费超越了 ${rank.rank / rank.roomCount}% 的寝室', style: const TextStyle(fontSize: 16)),
+          Text('24小时消费超越了 ${(rank.rank / rank.roomCount).toStringAsFixed(2)}% 的寝室',
+              style: const TextStyle(fontSize: 16)),
           Container(margin: const EdgeInsets.only(top: 5, bottom: 5), height: 1, color: Colors.blue),
           // Text('上次充值 ${getCharge(rank.)} 元'),
           // const Text('( 仅可查询七天内且最新一次充值记录 )')

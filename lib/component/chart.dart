@@ -32,7 +32,9 @@ class ExpenseChart extends StatelessWidget {
 
     return LineChart(
       LineChartData(
-        lineTouchData: LineTouchData(touchTooltipData: LineTouchTooltipData(tooltipBgColor: Colors.transparent)),
+        ///触摸控制
+        lineTouchData: LineTouchData(
+            touchTooltipData: LineTouchTooltipData(tooltipBgColor: Colors.transparent), touchSpotThreshold: 10),
         borderData: FlBorderData(
           border: const Border(
             bottom: BorderSide(width: 1.0),

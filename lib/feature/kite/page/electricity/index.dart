@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/feature/kite/page/electricity/rank.dart';
 
 import '../../init.dart';
@@ -135,10 +136,13 @@ class _ElectricityPageState extends State<ElectricityPage> {
   }
 
   Widget _buildResultBody(Widget son) {
-    return SizedBox(
-      height: 400,
-      width: 400,
-      child: son,
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 40.h),
+      child: SizedBox(
+        height: 400,
+        width: 400,
+        child: son,
+      ),
     );
   }
 

@@ -62,8 +62,15 @@ class _ChartSectionState extends State<ChartSection> {
     );
   }
 
-  Widget _buildView(List<Bill> data) {
-    List<double> list = data.map((e) => e.charge).toList();
+  Widget _buildView({List<HourlyBill>? hour, List<DailyBill>? day}) {
+    List<double> list = [0];
+    if (hour != null) {
+      list = hour.map((e) => e.consumption.toStringAsFixed(2)).map((e) => double.parse(e)).toList();
+    }
+    ;
+    if (day != null) {
+      list = day.map((e) => e.consumption.toStringAsFixed(2)).map((e) => double.parse(e)).toList();
+    }
 
     return Column(
       children: <Widget>[
@@ -80,16 +87,16 @@ class _ChartSectionState extends State<ChartSection> {
   @override
   Widget build(BuildContext context) {
     if (isShowDays) {
-      return MyFutureBuilder<List<Bill>>(
+      return MyFutureBuilder<List<DailyBill>>(
           future: KiteInitializer.electricityService.getDailyBill(room),
           builder: (context, data) {
-            return _buildView(data);
+            return _buildView(day: data);
           });
     }
-    return MyFutureBuilder<List<Bill>>(
+    return MyFutureBuilder<List<HourlyBill>>(
         future: KiteInitializer.electricityService.getHourlyBill(room),
         builder: (context, data) {
-          return _buildView(data);
+          return _buildView(hour: data);
         });
   }
 }

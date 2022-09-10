@@ -69,7 +69,7 @@ class Rank {
 }
 
 @JsonSerializable()
-class Bill {
+class HourlyBill {
   /// 充值金额
   @JsonKey()
   final double charge;
@@ -82,7 +82,26 @@ class Bill {
   @JsonKey()
   final DateTime time;
 
-  Bill(this.charge, this.consumption, this.time);
+  HourlyBill(this.charge, this.consumption, this.time);
 
-  factory Bill.fromJson(Map<String, dynamic> json) => _$BillFromJson(json);
+  factory HourlyBill.fromJson(Map<String, dynamic> json) => _$HourlyBillFromJson(json);
+}
+
+@JsonSerializable()
+class DailyBill {
+  /// 充值金额
+  @JsonKey()
+  final double charge;
+
+  /// 消费金额
+  @JsonKey()
+  final double consumption;
+
+  /// 时间
+  @JsonKey()
+  final DateTime date;
+
+  DailyBill(this.charge, this.consumption, this.date);
+
+  factory DailyBill.fromJson(Map<String, dynamic> json) => _$DailyBillFromJson(json);
 }
