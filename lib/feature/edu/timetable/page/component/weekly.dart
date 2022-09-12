@@ -106,6 +106,13 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
   /// 跳到某一周
   void jumpWeek(int week) {
     _currentWeek = week;
+    if (_pageController.hasClients) {
+      _pageController.animateToPage(
+        _currentWeek - 1,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.linearToEaseOut,
+      );
+    }
   }
 
   Widget _pageBuilder(int week) {

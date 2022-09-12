@@ -171,45 +171,20 @@ class _TimetablePageState extends State<TimetablePage> {
 
   ///跳转到某一周按钮
   Widget _buildSwitchWeekButton() {
-    List weekList = [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13,
-      14,
-      15,
-      16,
-      17,
-      18,
-      19,
-      20
-    ];
-    // 复刻PopupMenuButton
-    // return ListView(
-    //   itemExtent: 10,
-    //   children: weekList.map((e) => Text(e.toString())).toList(),
-    // );
+    List weekList = Iterable.generate(20, (i) => i).toList();
 
     return PopupMenuButton(
       onSelected: (index) =>
-          tableViewerController.jumpToWeeK(int.parse(index.toString())),
+          tableViewerController.jumpToWeeK(int.parse(index.toString()) + 1),
       itemBuilder: (BuildContext context) {
         return weekList
             .map((e) => PopupMenuItem(
                   value: e,
-                  child: Text(e.toString()),
+                  child: Text('第${e + 1}周'),
                 ))
             .toList();
       },
+      constraints: const BoxConstraints(maxHeight: 400, minWidth: 50),
       child: const Icon(Icons.scale),
     );
   }
