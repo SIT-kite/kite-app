@@ -19,16 +19,26 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class ExpenseChart extends StatelessWidget {
+  List<double>? xAxis;
+  Widget Function(double value, TitleMeta meta)? bottomTitle;
   final List<double> dailyExpense;
-
-  const ExpenseChart(this.dailyExpense, {Key? key}) : super(key: key);
+  bool? isZero;
+  ExpenseChart(this.dailyExpense, {Key? key, this.isZero, this.xAxis, this.bottomTitle}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
 
     final expenseMapping = dailyExpense.asMap();
-    final spots = expenseMapping.keys.map((i) => FlSpot((i + 1).toDouble(), expenseMapping[i] ?? 0.0)).toList();
+
+    List<FlSpot> spots;
+
+    if (isZero != null && isZero == true) {
+      spots = expenseMapping.keys.map((i) => FlSpot(xAxis?[i] ?? (i).toDouble(), expenseMapping[i] ?? 0.0)).toList();
+    } else {
+      spots =
+          expenseMapping.keys.map((i) => FlSpot(xAxis?[i] ?? (i + 1).toDouble(), expenseMapping[i] ?? 0.0)).toList();
+    }
 
     return LineChart(
       LineChartData(
@@ -46,22 +56,25 @@ class ExpenseChart extends StatelessWidget {
             isStrokeCapRound: true,
             belowBarData: BarAreaData(
               show: true,
-              color: Theme.of(context).secondaryHeaderColor,
+              color: Theme.of(context).secondaryHeaderColor.withAlpha(60),
             ),
             spots: spots,
             color: primaryColor,
             preventCurveOverShooting: false,
-            // isCurved: true,//我觉得折线图更好看一点
+            // isCurved: true, //我觉得折线图更好看一点
             barWidth: 2,
             preventCurveOvershootingThreshold: 3.0,
           ),
         ],
+
         titlesData: FlTitlesData(
             show: true,
             rightTitles: AxisTitles(),
             leftTitles: AxisTitles(),
             topTitles: AxisTitles(),
-            bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 25))),
+            bottomTitles: bottomTitle != null
+                ? AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 25, getTitlesWidget: bottomTitle))
+                : AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 25))),
       ),
     );
   }

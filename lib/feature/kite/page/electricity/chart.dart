@@ -15,9 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:kite/component/chart.dart';
+import 'package:kite/feature/kite/page/electricity/rank.dart';
 
-import '../../../../component/chart.dart';
 import '../../../../component/future_builder.dart';
 import '../../entity/electricity.dart';
 import '../../init.dart';
@@ -64,23 +67,53 @@ class _ChartSectionState extends State<ChartSection> {
 
   Widget _buildView({List<HourlyBill>? hour, List<DailyBill>? day}) {
     List<double> list = [0];
+    List<String>? timeList;
+
     if (hour != null) {
       list = hour.map((e) => e.consumption.toStringAsFixed(2)).map((e) => double.parse(e)).toList();
+      timeList = hour.map((e) => DateFormat('HH:mm').format(e.time)).toList();
     }
-    ;
     if (day != null) {
       list = day.map((e) => e.consumption.toStringAsFixed(2)).map((e) => double.parse(e)).toList();
+      timeList = day.map((e) => DateFormat('MM-dd').format(e.date)).toList();
     }
 
-    return Column(
-      children: <Widget>[
-        AspectRatio(
-          aspectRatio: 1.70,
-          child: Padding(
-              padding: const EdgeInsets.only(right: 24, left: 24, top: 0, bottom: 0), child: ExpenseChart(list)),
-        ),
-        _buildModeSelector(),
-      ],
+    Widget bottomTitle(double value, TitleMeta mate) {
+      const style = TextStyle(
+        fontWeight: FontWeight.bold,
+        color: Colors.blueGrey,
+        fontSize: 12,
+      );
+
+      String text;
+      text = timeList![value.toInt()];
+      return SideTitleWidget(
+        axisSide: mate.axisSide,
+        child: Text(text, style: style),
+      );
+    }
+
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          isShowDays ? const Text('📒过去一周电费消耗金额统计图') : const Text('📒过去一天电费消耗金额统计图'),
+          const SizedBox(height: 20),
+          AspectRatio(
+            aspectRatio: 1.70,
+            child: Padding(
+                padding: const EdgeInsets.only(right: 24, left: 24, top: 0, bottom: 0),
+                child: ExpenseChart(
+                  list,
+                  bottomTitle: bottomTitle,
+                  // xAxis: timeList,
+                  isZero: true,
+                )),
+          ),
+          _buildModeSelector(),
+          const SizedBox(height: 20),
+          isShowDays ? const SizedBox() : RankView(room)
+        ],
+      ),
     );
   }
 
@@ -88,13 +121,13 @@ class _ChartSectionState extends State<ChartSection> {
   Widget build(BuildContext context) {
     if (isShowDays) {
       return MyFutureBuilder<List<DailyBill>>(
-          future: KiteInitializer.electricityService.getDailyBill(room),
+          futureGetter: () => KiteInitializer.electricityService.getDailyBill(room),
           builder: (context, data) {
             return _buildView(day: data);
           });
     }
     return MyFutureBuilder<List<HourlyBill>>(
-        future: KiteInitializer.electricityService.getHourlyBill(room),
+        futureGetter: () => KiteInitializer.electricityService.getHourlyBill(room),
         builder: (context, data) {
           return _buildView(hour: data);
         });

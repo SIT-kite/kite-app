@@ -26,42 +26,54 @@ import '../../init.dart';
 
 class BalanceSection extends StatelessWidget {
   final String room;
-
+  final TextStyle style = const TextStyle(fontSize: 20);
   const BalanceSection(this.room, {Key? key}) : super(key: key);
 
   Widget _buildView(BuildContext context, Balance balance) {
     return Container(
-      height: 200.h,
-      padding: EdgeInsets.symmetric(horizontal: 40.w),
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(5, 10, 10, 10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          // 设置四周圆角 角度
-          borderRadius: const BorderRadius.all(Radius.circular(4.0)),
-          // 设置四周边框
-          border: Border.all(width: 2, color: Colors.blue.shade400),
-        ),
+      margin: const EdgeInsets.fromLTRB(35, 30, 35, 0),
+      width: 400.w,
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        // 设置四周圆角 角度
+        borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+        // 设置四周边框
+        border: Border.all(width: 2, color: Colors.blue.shade400),
+      ),
+      alignment: Alignment.center,
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Row(
+              children: const [
+                Text(
+                  'ℹ余额信息',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+            SizedBox(height: 10.h),
+            Text('🏠︎房间号:  ${balance.room}', style: style),
+            Text('👛剩余金额:  ${balance.balance.toStringAsFixed(2)}元', style: style),
+            Text('🔋剩余电量:  ${balance.power.toStringAsFixed(2)}度', style: style),
+            Container(
+              margin: const EdgeInsets.only(top: 5),
+              child: Text('⏲更新时间:  ${DateFormat('yyyy-MM-dd HH:mm').format(balance.ts.toLocal())}', style: style),
+            ),
+            SizedBox(height: 30.h),
             Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-              TextButton(
+              ElevatedButton.icon(
+                icon: const Icon(Icons.info),
                 onPressed: () {
                   const String electricityHint = '数据来自校内在线电费查询平台。如有错误，请以充值机显示金额为准~';
                   showBasicFlash(context, const Text(electricityHint));
                 },
-                child: Text('数据不一致?', style: Theme.of(context).textTheme.headline4),
+                label: const Text('数据不一致?', style: TextStyle(fontSize: 18)),
               )
             ]),
-            Text('　房间号: ${balance.room}'),
-            Text('剩余金额: ${balance.balance.toStringAsFixed(2)}'),
-            Text('剩余电量: ${balance.power.toStringAsFixed(2)}'),
-            Container(
-              margin: const EdgeInsets.only(top: 5),
-              child: Text('更新时间: ${DateFormat('yyyy-MM-dd hh:mm').format(balance.ts.toLocal())}',
-                  style: Theme.of(context).textTheme.bodyText2),
-            ),
           ],
         ),
       ),
@@ -71,7 +83,7 @@ class BalanceSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MyFutureBuilder<Balance>(
-      future: KiteInitializer.electricityService.getBalance(room),
+      futureGetter: () => KiteInitializer.electricityService.getBalance(room),
       builder: (context, data) {
         return _buildView(context, data);
       },

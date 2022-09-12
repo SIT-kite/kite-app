@@ -17,7 +17,6 @@
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/feature/kite/page/electricity/rank.dart';
 
 import '../../init.dart';
 import 'balance.dart';
@@ -117,17 +116,12 @@ class _ElectricityPageState extends State<ElectricityPage> {
       width: 300,
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         ElevatedButton(
-          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.amber)),
+          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blueAccent)),
           onPressed: () => onReady(1),
           child: const Text('查余额'),
         ),
         ElevatedButton(
-          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.amber)),
-          onPressed: () => onReady(3),
-          child: const Text('排行榜'),
-        ),
-        ElevatedButton(
-          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.amber)),
+          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blueAccent)),
           onPressed: () => onReady(2),
           child: const Text('使用情况'),
         )
@@ -139,7 +133,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 40.h),
       child: SizedBox(
-        height: 400,
+        height: 500.h,
         width: 400,
         child: son,
       ),
@@ -150,14 +144,12 @@ class _ElectricityPageState extends State<ElectricityPage> {
     String room = '10${_buildingController.text}${_roomController.text}';
 
     if (showType == 1) {
-      return _buildResultBody(BalanceSection(room));
+      return BalanceSection(room);
     }
     if (showType == 2) {
       return _buildResultBody(ChartSection(room));
     }
-    if (showType == 3) {
-      return _buildResultBody(RankView(room));
-    }
+
     return const Center();
   }
 
