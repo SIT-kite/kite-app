@@ -112,13 +112,17 @@ class _TimetablePageState extends State<TimetablePage> {
   ///更多菜单回调方法
   PopupMenuButton _buildPopupMenu(BuildContext context) {
     final List<Function()> callback = [
-      () => Navigator.of(context).pushNamed(RouteTable.timetableImport).then((value) => _onRefresh()),
+      () => Navigator.of(context)
+          .pushNamed(RouteTable.timetableImport)
+          .then((value) => _onRefresh()),
       _onRefresh,
       _onExport,
-      () => KvStorageInitializer.home.autoLaunchTimetable = !(KvStorageInitializer.home.autoLaunchTimetable ?? false),
+      () => KvStorageInitializer.home.autoLaunchTimetable =
+          !(KvStorageInitializer.home.autoLaunchTimetable ?? false),
     ];
 
-    Widget buildCenterRow(Widget child) => Row(mainAxisAlignment: MainAxisAlignment.center, children: [child]);
+    // Widget buildCenterRow(Widget child) =>
+    //     Row(mainAxisAlignment: MainAxisAlignment.center, children: [child]);
 
     ///更多菜单按钮
     return PopupMenuButton(
@@ -165,6 +169,51 @@ class _TimetablePageState extends State<TimetablePage> {
     );
   }
 
+  ///跳转到某一周按钮
+  Widget _buildSwitchWeekButton() {
+    List weekList = [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ];
+    // 复刻PopupMenuButton
+    // return ListView(
+    //   itemExtent: 10,
+    //   children: weekList.map((e) => Text(e.toString())).toList(),
+    // );
+
+    return PopupMenuButton(
+      onSelected: (index) =>
+          tableViewerController.jumpToWeeK(int.parse(index.toString())),
+      itemBuilder: (BuildContext context) {
+        return weekList
+            .map((e) => PopupMenuItem(
+                  value: e,
+                  child: Text(e.toString()),
+                ))
+            .toList();
+      },
+      child: const Icon(Icons.scale),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Log.info('Timetable build');
@@ -172,13 +221,18 @@ class _TimetablePageState extends State<TimetablePage> {
       appBar: AppBar(
         title: const Text('课程表'),
         actions: <Widget>[
+          _buildSwitchWeekButton(),
           _buildModeSwitchButton(),
           _buildPopupMenu(context),
         ],
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () => tableViewerController.jumpToToday(),
-          child: Text('今', style: Theme.of(context).textTheme.headline2?.copyWith(color: Colors.white))),
+          child: Text('今',
+              style: Theme.of(context)
+                  .textTheme
+                  .headline2
+                  ?.copyWith(color: Colors.white))),
       body: TimetableViewer(
         key: UniqueKey(),
         controller: tableViewerController,

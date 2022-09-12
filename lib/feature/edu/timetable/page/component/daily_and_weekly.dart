@@ -71,6 +71,10 @@ class TimetableViewerController {
     _state?.jumpToday();
   }
 
+  void jumpToWeeK(int week) {
+    _state?.jumpWeek(week);
+  }
+
   void _bindState(State<TimetableViewer> state) {
     _state = state as _TimetableViewerState;
   }
@@ -124,13 +128,23 @@ class _TimetableViewerState extends State<TimetableViewer> {
     }
   }
 
+  /// 跳到某一周
+  void jumpWeek(int week) {
+    if (displayModeState == DisplayMode.daily) {
+      (currentKey.currentState as DailyTimetableState).jumpWeek(week);
+    } else {
+      (currentKey.currentState as WeeklyTimetableState).jumpWeek(week);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (displayModeState == DisplayMode.daily) {
       return DailyTimetable(
         key: currentKey,
         allCourses: tableCoursesState,
-        initialDate: tableMetaState == null ? DateTime.now() : tableMetaState!.startDate,
+        initialDate:
+            tableMetaState == null ? DateTime.now() : tableMetaState!.startDate,
         tableCache: widget.tableCache,
         viewChangingCallback: switchDisplayMode,
       );
@@ -138,7 +152,8 @@ class _TimetableViewerState extends State<TimetableViewer> {
     return WeeklyTimetable(
       key: currentKey,
       allCourses: tableCoursesState,
-      initialDate: tableMetaState == null ? DateTime.now() : tableMetaState!.startDate,
+      initialDate:
+          tableMetaState == null ? DateTime.now() : tableMetaState!.startDate,
       tableCache: widget.tableCache,
     );
   }
