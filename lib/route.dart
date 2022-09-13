@@ -113,7 +113,20 @@ class RouteTable {
     egg: (context, args) => const EggPage(),
     bbs: (context, args) => const BbsPage(),
     scanner: (context, args) => const ScannerPage(),
-    browser: (context, args) => BrowserPage(args['initialUrl']),
+    browser: (context, args) {
+      return BrowserPage(
+        initialUrl: args['initialUrl'],
+        fixedTitle: args['fixedTitle'],
+        showSharedButton: args['showSharedButton'],
+        showRefreshButton: args['showRefreshButton'],
+        showLoadInBrowser: args['showLoadInBrowser'],
+        userAgent: args['userAgent'],
+        showLaunchButtonIfUnsupported: args['showLaunchButtonIfUnsupported'],
+        showTopProgressIndicator: args['showTopProgressIndicator'],
+        javascript: args['javascript'],
+        javascriptUrl: args['javascriptUrl'],
+      );
+    },
     freshman: (context, args) => FreshmanPage(),
     freshmanAnalysis: (context, args) => const FreshmanAnalysisPage(),
     freshmanLogin: (context, args) => const FreshmanLoginPage(),
