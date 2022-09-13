@@ -84,7 +84,7 @@ class KiteSession implements ISession {
   }) async {
     String? token = jwtDao.jwtToken;
     final response = await dio.request(
-      _baseUrl + url,
+      url.startsWith('http') ? url : _baseUrl + url,
       data: data,
       queryParameters: queryParameters,
       options: (options ?? Options()).copyWith(
@@ -101,6 +101,7 @@ class KiteSession implements ISession {
     }
     try {
       final Map<String, dynamic> responseData = response.data;
+      if (!responseData.containsKey('code')) return response;
       final responseDataCode = responseData['code'];
       // 请求正常
       if (responseDataCode == 0) {

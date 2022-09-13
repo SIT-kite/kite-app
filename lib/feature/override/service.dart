@@ -9,7 +9,7 @@ class FunctionOverrideService extends AService implements FunctionOverrideServic
 
   @override
   Future<FunctionOverrideInfo> get() async {
-    final response = await session.request('/override', RequestMethod.get);
+    final response = await session.request('https://kite.sunnysab.cn/override.json', RequestMethod.get);
     return FunctionOverrideInfo.fromJson(response.data);
   }
 }
