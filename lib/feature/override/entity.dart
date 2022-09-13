@@ -31,7 +31,7 @@ class ExtraHomeItem {
 class FunctionOverrideInfo {
   List<RouteOverrideItem> routeOverride = [];
   List<ExtraHomeItem> extraHomeItem = [];
-
+  FunctionOverrideInfo();
   factory FunctionOverrideInfo.fromJson(Map<String, dynamic> json) => _$FunctionOverrideInfoFromJson(json);
   Map<String, dynamic> toJson() => _$FunctionOverrideInfoToJson(this);
 }
