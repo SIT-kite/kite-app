@@ -138,6 +138,7 @@ class UndergraduateFunctionList implements IUserFunctionList {
       FunctionType.classroom,
       FunctionType.event,
       FunctionType.expense,
+      FunctionType.electricity,
       FunctionType.score,
       FunctionType.library,
       FunctionType.office,
@@ -151,7 +152,6 @@ class UndergraduateFunctionList implements IUserFunctionList {
       FunctionType.game,
       FunctionType.board,
       FunctionType.wiki,
-      FunctionType.electricity,
       FunctionType.separator,
     ];
   }
@@ -168,6 +168,7 @@ class PostgraduateFunctionList implements IUserFunctionList {
       FunctionType.separator,
       FunctionType.classroom,
       FunctionType.expense,
+      FunctionType.electricity,
       FunctionType.library,
       FunctionType.office,
       FunctionType.mail,
@@ -195,6 +196,7 @@ class TeacherFunctionList implements IUserFunctionList {
       FunctionType.report,
       FunctionType.separator,
       FunctionType.expense,
+      FunctionType.electricity,
       FunctionType.library,
       FunctionType.office,
       FunctionType.mail,
