@@ -20,7 +20,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:kite/feature/board/page/index.dart';
 import 'package:kite/feature/freshman/page/login.dart';
 import 'package:kite/feature/override/entity.dart';
-import 'package:kite/feature/web_page/browser.dart';
 
 import 'abstract/route.dart';
 import 'feature/freshman/page/analysis.dart';
@@ -30,7 +29,8 @@ import 'feature/freshman/page/update.dart';
 import 'feature/game/page/tetris/index.dart';
 import 'feature/not_found/page.dart';
 import 'feature/page_index.dart';
-import 'feature/web_page/html_page.dart';
+import 'feature/simple_page/browser.dart';
+import 'feature/simple_page/html_page.dart';
 import 'setting/page/index.dart';
 
 class RouteTable {

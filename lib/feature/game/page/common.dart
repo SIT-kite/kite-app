@@ -19,7 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:kite/feature/initializer_index.dart';
-import 'package:kite/feature/web_page/wiki.dart';
+import 'package:kite/feature/simple_page/wiki.dart';
 import 'package:kite/util/kite_authorization.dart';
 
 import '../entity.dart';
