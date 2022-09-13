@@ -54,7 +54,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
-  final overrideFunctionNotifier = ValueNotifier<List<ExtraHomeItem>?>(null);
+  final overrideFunctionNotifier = ValueNotifier<FunctionOverrideInfo?>(null);
   late bool isFreshman;
 
   void _updateWeather() {
@@ -133,7 +133,7 @@ class _HomePageState extends State<HomePage> {
     KvStorageInitializer.override.info = null;
     FunctionOverrideInitializer.cachedService.get().then((value) {
       Global.eventBus.emit(EventNameConstants.onRouteRefresh, value.routeOverride);
-      overrideFunctionNotifier.value = value.extraHomeItem;
+      overrideFunctionNotifier.value = value;
     });
   }
 
@@ -148,9 +148,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  List<Widget> buildFunctionWidgets(List<ExtraHomeItem>? extraItemList) {
+  List<Widget> buildFunctionWidgets(List<ExtraHomeItem>? extraItemList, List<HomeItemHideInfo>? hideInfoList) {
+    print(extraItemList);
     UserType userType = AccountUtils.getUserType()!;
     List<FunctionType> list = KvStorageInitializer.home.homeItems ?? getDefaultFunctionList(userType);
+    final filter = HomeItemHideInfoFilter(hideInfoList ?? []);
 
     // 先遍历一遍，过滤相邻重复元素
     FunctionType lastItem = list.first;
@@ -172,7 +174,9 @@ class _HomePageState extends State<HomePage> {
         result.addAll([HomeItemGroup(currentGroup), separator]);
         currentGroup = [];
       } else {
-        currentGroup.add(FunctionButtonFactory.createFunctionButton(context, item));
+        if (!filter.accept(item, userType)) {
+          currentGroup.add(FunctionButtonFactory.createFunctionButton(context, item));
+        }
       }
     }
 
@@ -208,9 +212,14 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    return ValueListenableBuilder<List<ExtraHomeItem>?>(
+    return ValueListenableBuilder<FunctionOverrideInfo?>(
       valueListenable: overrideFunctionNotifier,
-      builder: (context, data, child) => buildByChildren(buildFunctionWidgets(data)),
+      builder: (context, data, child) => buildByChildren(
+        buildFunctionWidgets(
+          data?.extraHomeItem,
+          data?.homeItemHide,
+        ),
+      ),
     );
   }
 

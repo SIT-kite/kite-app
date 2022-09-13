@@ -24,6 +24,16 @@ const _json = """
       "description": "description1234",
       "iconUrl": "https://kite.sunnysab.cn/page/assets/assets/home/icon_exam.svg"
     }
+  ],
+  "homeItemHide": [
+    {
+      "nameList": ["electricity"],
+      "userTypeList": ["undergraduate", "postgraduate"]
+    },
+    {
+      "nameList": ["switchAccount", "switchAccount"],
+      "userTypeList": ["undergraduate", "postgraduate"]
+    }
   ]
 }
 

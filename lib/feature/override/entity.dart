@@ -20,6 +20,7 @@ class RouteOverrideItem {
 class ExtraHomeItem {
   String title = '';
   String route = '';
+  @JsonKey(defaultValue: '')
   String description = '';
   String iconUrl = '';
   ExtraHomeItem();
@@ -28,9 +29,28 @@ class ExtraHomeItem {
 }
 
 @JsonSerializable()
+class HomeItemHideInfo {
+  @JsonKey(defaultValue: [])
+  List<String> nameList = [];
+
+  @JsonKey(defaultValue: [])
+  List<String> userTypeList = [];
+
+  HomeItemHideInfo();
+  factory HomeItemHideInfo.fromJson(Map<String, dynamic> json) => _$HomeItemHideInfoFromJson(json);
+  Map<String, dynamic> toJson() => _$HomeItemHideInfoToJson(this);
+}
+
+@JsonSerializable()
 class FunctionOverrideInfo {
+  @JsonKey(defaultValue: [])
   List<RouteOverrideItem> routeOverride = [];
+
+  @JsonKey(defaultValue: [])
   List<ExtraHomeItem> extraHomeItem = [];
+
+  @JsonKey(defaultValue: [])
+  List<HomeItemHideInfo> homeItemHide = [];
   FunctionOverrideInfo();
   factory FunctionOverrideInfo.fromJson(Map<String, dynamic> json) => _$FunctionOverrideInfoFromJson(json);
   Map<String, dynamic> toJson() => _$FunctionOverrideInfoToJson(this);

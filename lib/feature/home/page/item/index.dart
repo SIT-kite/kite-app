@@ -24,6 +24,7 @@ import 'package:kite/launch.dart';
 import 'package:kite/route.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/scanner.dart';
+import 'package:kite/util/user.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import '../../entity/home.dart';
@@ -200,4 +201,25 @@ Widget buildHomeFunctionButtonByExtraHomeItem(BuildContext context, ExtraHomeIte
     ),
     route: item.route,
   );
+}
+
+class HomeItemHideInfoFilter {
+  // Map<functionName, Set<userType>>
+  Map<String, Set<String>> map = {};
+  HomeItemHideInfoFilter(List<HomeItemHideInfo> hideInfoList) {
+    for (final hideInfo in hideInfoList) {
+      for (final functionName in hideInfo.nameList) {
+        for (final userType in hideInfo.userTypeList) {
+          if (!map.containsKey(functionName)) map[functionName] = {};
+          map[functionName]!.add(userType);
+        }
+      }
+    }
+  }
+
+  // if true then should be hide
+  bool accept(FunctionType functionType, UserType userType) {
+    if (!map.containsKey(functionType.name)) return false;
+    return map[functionType.name]!.contains(userType.name);
+  }
 }
