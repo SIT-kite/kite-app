@@ -17,6 +17,8 @@
  */
 
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:kite/feature/override/interface.dart';
+import 'package:kite/feature/override/storage.dart';
 import 'package:kite/storage/dao/admin.dart';
 import 'package:kite/storage/dao/develop.dart';
 import 'package:kite/storage/dao/kite.dart';
@@ -44,6 +46,7 @@ class KvStorageInitializer {
   static late FreshmanCacheDao freshman;
   static late DevelopOptionsDao developOptions;
   static late ReportStorageDao report;
+  static late FunctionOverrideStorageDao override;
   static late KiteStorageDao kite;
 
   static late Box<dynamic> kvStorageBox;
@@ -64,5 +67,6 @@ class KvStorageInitializer {
     developOptions = DevelopOptionsStorage(kvStorageBox);
     report = ReportStorage(kvStorageBox);
     kite = KiteStorage(kvStorageBox);
+    override = FunctionOverrideStorage(kvStorageBox);
   }
 }

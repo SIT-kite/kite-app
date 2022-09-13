@@ -19,6 +19,7 @@ import 'package:catcher/catcher.dart';
 import 'package:kite/feature/board/init.dart';
 import 'package:kite/feature/freshman/init.dart';
 import 'package:kite/feature/initializer_index.dart';
+import 'package:kite/feature/override/init.dart';
 import 'package:kite/feature/sit_app/init.dart';
 import 'package:kite/global/desktop_initializer.dart';
 import 'package:kite/global/global.dart';
@@ -69,6 +70,11 @@ class Initializer {
       KvStorageInitializer.jwt,
       KvStorageInitializer.kite,
     );
+    FunctionOverrideInitializer.init(
+      kiteSession: kiteSession,
+      storageDao: KvStorageInitializer.override,
+    );
+
     await ContactInitializer.init(
       kiteSession: kiteSession,
       contactDataBox: HiveBoxInitializer.contactSetting,
