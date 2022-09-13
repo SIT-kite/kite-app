@@ -29,6 +29,7 @@ import 'feature/freshman/page/info.dart';
 import 'feature/freshman/page/update.dart';
 import 'feature/game/page/tetris/index.dart';
 import 'feature/not_found/page.dart';
+import 'feature/override/init.dart';
 import 'feature/page_index.dart';
 import 'setting/page/index.dart';
 
@@ -77,21 +78,6 @@ class RouteTable {
   static const freshmanFriend = '$freshman/friend';
   static const board = '/board';
   static const notFound = '/not_found';
-}
-
-class StaticRouteTable implements IRouteGenerator {
-  final Map<String, NamedRouteBuilder> table;
-  StaticRouteTable(this.table);
-
-  @override
-  bool accept(String routeName) => table.containsKey(routeName);
-
-  @override
-  WidgetBuilder onGenerateRoute(String routeName, Map<String, dynamic> arguments) {
-    return (context) {
-      return table[routeName]!(context, arguments);
-    };
-  }
 }
 
 final defaultRouteTable = StaticRouteTable({
@@ -182,4 +168,12 @@ class DefaultRouteWithOverride implements IRouteGenerator {
     }
     return (context) => NotFoundPage(newRouteItem.outputRoute);
   }
+}
+
+Future<IRouteGenerator> initRoute() async {
+  final overrideInfo = await FunctionOverrideInitializer.cachedService.get();
+  return DefaultRouteWithOverride(
+    defaultRoute: defaultRouteTable,
+    overrideItems: overrideInfo.routeOverride,
+  );
 }
