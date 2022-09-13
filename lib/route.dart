@@ -19,17 +19,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:kite/feature/board/page/index.dart';
 import 'package:kite/feature/freshman/page/login.dart';
+import 'package:kite/feature/override/entity.dart';
 import 'package:kite/feature/web_page/browser.dart';
 
+import 'abstract/route.dart';
 import 'feature/freshman/page/analysis.dart';
 import 'feature/freshman/page/friend/index.dart';
 import 'feature/freshman/page/info.dart';
 import 'feature/freshman/page/update.dart';
 import 'feature/game/page/tetris/index.dart';
+import 'feature/not_found/page.dart';
 import 'feature/page_index.dart';
 import 'setting/page/index.dart';
-
-typedef NamedRouteBuilder = Widget Function(BuildContext context, Map<String, dynamic> args);
 
 class RouteTable {
   static const home = '/home';
@@ -75,67 +76,110 @@ class RouteTable {
   static const freshmanAnalysis = '$freshman/analysis';
   static const freshmanFriend = '$freshman/friend';
   static const board = '/board';
+  static const notFound = '/not_found';
+}
 
-  static final Map<String, NamedRouteBuilder> routeTable = {
-    home: (context, args) => const HomePage(),
-    report: (context, args) => const DailyReportPage(),
-    login: (context, args) => const LoginPage(),
-    welcome: (context, args) => const WelcomePage(),
-    about: (context, args) => const AboutPage(),
-    expense: (context, args) => const ExpensePage(),
-    connectivity: (context, args) => const ConnectivityPage(),
-    campusCard: (context, args) => const CampusCardPage(),
-    electricity: (context, args) => const ElectricityPage(),
-    score: (context, args) => const ScorePage(),
-    office: (context, args) => const OfficePage(),
-    game: (context, args) => const GamePage(),
-    game2048: (context, args) => Game2048Page(),
-    gameWordle: (context, args) => const WordlePage(),
-    gameComposeSit: (context, args) => const ComposeSitPage(),
-    gameTetris: (context, args) => const TetrisPage(),
-    wiki: (context, args) => WikiPage(),
-    library: (context, args) => const LibraryPage(),
-    libraryAppointment: (context, args) => const AppointmentPage(),
-    market: (context, args) => const MarketPage(),
-    timetable: (context, args) => const TimetablePage(),
-    timetableImport: (context, args) => const TimetableImportPage(),
-    setting: (context, args) => SettingPage(),
-    feedback: (context, args) => const FeedbackPage(),
-    notice: (context, args) => const NoticePage(),
-    contact: (context, args) => const ContactPage(),
-    bulletin: (context, args) => const BulletinPage(),
-    mail: (context, args) => const MailPage(),
-    night: (context, args) => const NightPage(),
-    event: (context, args) => const EventPage(),
-    lostFound: (context, args) => const LostFoundPage(),
-    classroom: (context, args) => const ClassroomPage(),
-    exam: (context, args) => const ExamPage(),
-    egg: (context, args) => const EggPage(),
-    bbs: (context, args) => const BbsPage(),
-    scanner: (context, args) => const ScannerPage(),
-    browser: (context, args) {
-      return BrowserPage(
-        initialUrl: args['initialUrl'],
-        fixedTitle: args['fixedTitle'],
-        showSharedButton: args['showSharedButton'],
-        showRefreshButton: args['showRefreshButton'],
-        showLoadInBrowser: args['showLoadInBrowser'],
-        userAgent: args['userAgent'],
-        showLaunchButtonIfUnsupported: args['showLaunchButtonIfUnsupported'],
-        showTopProgressIndicator: args['showTopProgressIndicator'],
-        javascript: args['javascript'],
-        javascriptUrl: args['javascriptUrl'],
-      );
-    },
-    freshman: (context, args) => FreshmanPage(),
-    freshmanAnalysis: (context, args) => const FreshmanAnalysisPage(),
-    freshmanLogin: (context, args) => const FreshmanLoginPage(),
-    freshmanUpdate: (context, args) => const FreshmanUpdatePage(),
-    freshmanFriend: (context, args) => const FreshmanFriendPage(),
-    board: (context, args) => const BoardPage(),
-  };
+class StaticRouteTable implements IRouteGenerator {
+  final Map<String, NamedRouteBuilder> table;
+  StaticRouteTable(this.table);
 
-  static NamedRouteBuilder? get(String path) {
-    return routeTable[path];
+  @override
+  bool accept(String routeName) => table.containsKey(routeName);
+
+  @override
+  WidgetBuilder onGenerateRoute(String routeName, Map<String, dynamic> arguments) {
+    return (context) {
+      return table[routeName]!(context, arguments);
+    };
+  }
+}
+
+final defaultRouteTable = StaticRouteTable({
+  RouteTable.home: (context, args) => const HomePage(),
+  RouteTable.report: (context, args) => const DailyReportPage(),
+  RouteTable.login: (context, args) => const LoginPage(),
+  RouteTable.welcome: (context, args) => const WelcomePage(),
+  RouteTable.about: (context, args) => const AboutPage(),
+  RouteTable.expense: (context, args) => const ExpensePage(),
+  RouteTable.connectivity: (context, args) => const ConnectivityPage(),
+  RouteTable.campusCard: (context, args) => const CampusCardPage(),
+  RouteTable.electricity: (context, args) => const ElectricityPage(),
+  RouteTable.score: (context, args) => const ScorePage(),
+  RouteTable.office: (context, args) => const OfficePage(),
+  RouteTable.game: (context, args) => const GamePage(),
+  RouteTable.game2048: (context, args) => Game2048Page(),
+  RouteTable.gameWordle: (context, args) => const WordlePage(),
+  RouteTable.gameComposeSit: (context, args) => const ComposeSitPage(),
+  RouteTable.gameTetris: (context, args) => const TetrisPage(),
+  RouteTable.wiki: (context, args) => WikiPage(),
+  RouteTable.library: (context, args) => const LibraryPage(),
+  RouteTable.libraryAppointment: (context, args) => const AppointmentPage(),
+  RouteTable.market: (context, args) => const MarketPage(),
+  RouteTable.timetable: (context, args) => const TimetablePage(),
+  RouteTable.timetableImport: (context, args) => const TimetableImportPage(),
+  RouteTable.setting: (context, args) => SettingPage(),
+  RouteTable.feedback: (context, args) => const FeedbackPage(),
+  RouteTable.notice: (context, args) => const NoticePage(),
+  RouteTable.contact: (context, args) => const ContactPage(),
+  RouteTable.bulletin: (context, args) => const BulletinPage(),
+  RouteTable.mail: (context, args) => const MailPage(),
+  RouteTable.night: (context, args) => const NightPage(),
+  RouteTable.event: (context, args) => const EventPage(),
+  RouteTable.lostFound: (context, args) => const LostFoundPage(),
+  RouteTable.classroom: (context, args) => const ClassroomPage(),
+  RouteTable.exam: (context, args) => const ExamPage(),
+  RouteTable.egg: (context, args) => const EggPage(),
+  RouteTable.bbs: (context, args) => const BbsPage(),
+  RouteTable.scanner: (context, args) => const ScannerPage(),
+  RouteTable.browser: (context, args) {
+    return BrowserPage(
+      initialUrl: args['initialUrl'],
+      fixedTitle: args['fixedTitle'],
+      showSharedButton: args['showSharedButton'],
+      showRefreshButton: args['showRefreshButton'],
+      showLoadInBrowser: args['showLoadInBrowser'],
+      userAgent: args['userAgent'],
+      showLaunchButtonIfUnsupported: args['showLaunchButtonIfUnsupported'],
+      showTopProgressIndicator: args['showTopProgressIndicator'],
+      javascript: args['javascript'],
+      javascriptUrl: args['javascriptUrl'],
+    );
+  },
+  RouteTable.freshman: (context, args) => FreshmanPage(),
+  RouteTable.freshmanAnalysis: (context, args) => const FreshmanAnalysisPage(),
+  RouteTable.freshmanLogin: (context, args) => const FreshmanLoginPage(),
+  RouteTable.freshmanUpdate: (context, args) => const FreshmanUpdatePage(),
+  RouteTable.freshmanFriend: (context, args) => const FreshmanFriendPage(),
+  RouteTable.board: (context, args) => const BoardPage(),
+  RouteTable.notFound: (context, args) => NotFoundPage(args['routeName']),
+});
+
+class DefaultRouteWithOverride implements IRouteGenerator {
+  final IRouteGenerator defaultRoute;
+
+  final Map<String, RouteOverrideItem> indexedOverrideItems;
+  DefaultRouteWithOverride({
+    required this.defaultRoute,
+    required List<RouteOverrideItem> overrideItems,
+  }) : indexedOverrideItems = {for (final e in overrideItems) e.inputRoute: e};
+
+  @override
+  bool accept(String routeName) {
+    if (defaultRoute.accept(routeName)) return true;
+    return indexedOverrideItems.containsKey(routeName);
+  }
+
+  @override
+  WidgetBuilder onGenerateRoute(String routeName, Map<String, dynamic> arguments) {
+    if (!indexedOverrideItems.containsKey(routeName)) {
+      // No override
+      return defaultRoute.onGenerateRoute(routeName, arguments);
+    }
+    // override
+    final newRouteItem = indexedOverrideItems[routeName]!;
+    if (defaultRoute.accept(newRouteItem.outputRoute)) {
+      return defaultRoute.onGenerateRoute(newRouteItem.outputRoute, newRouteItem.args);
+    }
+    return (context) => NotFoundPage(newRouteItem.outputRoute);
   }
 }

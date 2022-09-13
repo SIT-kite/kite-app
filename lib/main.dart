@@ -23,6 +23,7 @@ import 'package:kite/util/catcher_dialog_handler.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import 'app.dart';
+import 'route.dart';
 
 const exceptionLogUrl = 'https://kite.sunnysab.cn/api/v2/report/exception';
 
@@ -33,7 +34,7 @@ void main() async {
 
   Catcher(
     rootWidget: Phoenix(
-      child: const KiteApp(),
+      child: KiteApp(routeGenerator: defaultRouteTable),
     ),
     releaseConfig: CatcherOptions(
       // 对话框和新页面的方式不是很好汉化, 且程序中存在连续抛异常的情况, 为不打扰用户直接静默上报

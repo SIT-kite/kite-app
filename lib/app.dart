@@ -24,9 +24,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/route.dart';
 import 'package:kite/util/user.dart';
 
+import 'abstract/route.dart';
 import 'feature/page_index.dart';
 import 'global/global.dart';
 import 'storage/init.dart';
@@ -35,17 +35,20 @@ import 'util/logger.dart';
 const title = '上应小风筝';
 
 class KiteApp extends StatelessWidget {
-  const KiteApp({Key? key}) : super(key: key);
+  final IRouteGenerator routeGenerator;
+  const KiteApp({
+    Key? key,
+    required this.routeGenerator,
+  }) : super(key: key);
 
   Route<dynamic> _onGenerateRoute(RouteSettings settings) {
     return MaterialPageRoute(
       builder: (context) {
-        final builder = RouteTable.get(settings.name!);
         final args = settings.arguments as Map<String, dynamic>? ?? {};
         final argsJson = jsonEncode(args);
         Log.info('跳转路由: ${settings.name}, 参数: $argsJson');
         Global.pageLogger.page(settings.name ?? 'Unknown', argsJson);
-        return builder!(context, args);
+        return routeGenerator.onGenerateRoute(settings.name!, args)(context);
       },
       settings: settings,
     );
