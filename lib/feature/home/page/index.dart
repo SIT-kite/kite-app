@@ -128,6 +128,7 @@ class _HomePageState extends State<HomePage> {
 
     // 下拉也要更新一下天气 :D
     _updateWeather();
+    Global.eventBus.emit(EventNameConstants.onRouteRefresh);
   }
 
   Widget _buildTitleLine(BuildContext context) {

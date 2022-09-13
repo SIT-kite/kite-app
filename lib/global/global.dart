@@ -38,6 +38,7 @@ class GlobalConfig {
 }
 
 enum EventNameConstants {
+  onRouteRefresh,
   onWeatherUpdate,
   onHomeRefresh,
   onHomeItemReorder,

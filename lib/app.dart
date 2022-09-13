@@ -24,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kite/route.dart';
 import 'package:kite/util/user.dart';
 
 import 'abstract/route.dart';
@@ -34,12 +35,16 @@ import 'util/logger.dart';
 
 const title = '上应小风筝';
 
-class KiteApp extends StatelessWidget {
-  final IRouteGenerator routeGenerator;
-  const KiteApp({
-    Key? key,
-    required this.routeGenerator,
-  }) : super(key: key);
+class KiteApp extends StatefulWidget {
+  const KiteApp({Key? key}) : super(key: key);
+
+  @override
+  State<KiteApp> createState() => _KiteAppState();
+}
+
+class _KiteAppState extends State<KiteApp> {
+  // 先使用默认的路由表
+  IRouteGenerator routeGenerator = defaultRouteTable;
 
   Route<dynamic> _onGenerateRoute(RouteSettings settings) {
     return MaterialPageRoute(
@@ -93,6 +98,10 @@ class KiteApp extends StatelessWidget {
     final primaryColor = KvStorageInitializer.theme.color;
     final home = AccountUtils.getUserType() != null ? const HomePage() : const WelcomePage();
 
+    // refresh override route
+    Global.eventBus.on(EventNameConstants.onRouteRefresh, (arg) {
+      initRoute().then((value) => routeGenerator = value);
+    });
     buildMaterialWithTheme(ThemeData theme) {
       return MaterialApp(
         title: title,
