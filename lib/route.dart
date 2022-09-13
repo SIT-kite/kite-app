@@ -30,6 +30,7 @@ import 'feature/freshman/page/update.dart';
 import 'feature/game/page/tetris/index.dart';
 import 'feature/not_found/page.dart';
 import 'feature/page_index.dart';
+import 'feature/web_page/html_page.dart';
 import 'setting/page/index.dart';
 
 class RouteTable {
@@ -77,6 +78,7 @@ class RouteTable {
   static const freshmanFriend = '$freshman/friend';
   static const board = '/board';
   static const notFound = '/not_found';
+  static const simpleHtml = '/simple_html';
 }
 
 final defaultRouteTable = StaticRouteTable(
@@ -138,6 +140,13 @@ final defaultRouteTable = StaticRouteTable(
     RouteTable.freshmanFriend: (context, args) => const FreshmanFriendPage(),
     RouteTable.board: (context, args) => const BoardPage(),
     RouteTable.notFound: (context, args) => NotFoundPage(args['routeName']),
+    RouteTable.simpleHtml: (context, args) {
+      return SimpleHtmlPage(
+        title: args['title'],
+        url: args['url'],
+        htmlContent: args['htmlContent'],
+      );
+    },
   },
   onNotFound: (context, routeName, args) => NotFoundPage(routeName),
 );

@@ -33,7 +33,7 @@ class MyHtmlWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _MyHtmlWidgetState createState() => _MyHtmlWidgetState();
+  State<MyHtmlWidget> createState() => _MyHtmlWidgetState();
 }
 
 class _MyHtmlWidgetState extends State<MyHtmlWidget> {
