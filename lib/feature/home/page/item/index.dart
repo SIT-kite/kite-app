@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/feature/home/page/item/electricity.dart';
+import 'package:kite/feature/override/entity.dart';
 import 'package:kite/launch.dart';
 import 'package:kite/route.dart';
 import 'package:kite/util/logger.dart';
@@ -185,4 +186,18 @@ class FunctionButtonFactory {
     }
     return builder(context);
   }
+}
+
+Widget buildHomeFunctionButtonByExtraHomeItem(BuildContext context, ExtraHomeItem item) {
+  return HomeFunctionButton(
+    title: item.title,
+    subtitle: item.description,
+    iconWidget: SvgPicture.network(
+      item.iconUrl,
+      height: 30.h,
+      width: 30.w,
+      color: Theme.of(context).primaryColor,
+    ),
+    route: item.route,
+  );
 }

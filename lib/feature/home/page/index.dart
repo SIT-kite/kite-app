@@ -22,6 +22,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/exception/session.dart';
 import 'package:kite/feature/kite/service/weather.dart';
 import 'package:kite/feature/login/init.dart';
+import 'package:kite/feature/override/entity.dart';
+import 'package:kite/feature/override/init.dart';
 import 'package:kite/feature/quick_button/init.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/launch.dart';
@@ -52,7 +54,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
-
+  final overrideFunctionNotifier = ValueNotifier<List<ExtraHomeItem>?>(null);
   late bool isFreshman;
 
   void _updateWeather() {
@@ -128,7 +130,11 @@ class _HomePageState extends State<HomePage> {
 
     // 下拉也要更新一下天气 :D
     _updateWeather();
-    Global.eventBus.emit(EventNameConstants.onRouteRefresh);
+    KvStorageInitializer.override.info = null;
+    FunctionOverrideInitializer.cachedService.get().then((value) {
+      Global.eventBus.emit(EventNameConstants.onRouteRefresh, value.routeOverride);
+      overrideFunctionNotifier.value = value.extraHomeItem;
+    });
   }
 
   Widget _buildTitleLine(BuildContext context) {
@@ -142,7 +148,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  List<Widget> buildFunctionWidgets() {
+  List<Widget> buildFunctionWidgets(List<ExtraHomeItem>? extraItemList) {
     UserType userType = AccountUtils.getUserType()!;
     List<FunctionType> list = KvStorageInitializer.home.homeItems ?? getDefaultFunctionList(userType);
 
@@ -169,12 +175,46 @@ class _HomePageState extends State<HomePage> {
         currentGroup.add(FunctionButtonFactory.createFunctionButton(context, item));
       }
     }
-    return [const GreetingWidget(), separator] + result + [separator, Image.asset('assets/home/bottom.png')];
+
+    if (extraItemList != null) {
+      result.addAll([
+        HomeItemGroup(
+          extraItemList.map((e) => buildHomeFunctionButtonByExtraHomeItem(context, e)).toList(),
+        ),
+        separator,
+      ]);
+    }
+
+    return [
+      const GreetingWidget(),
+      separator,
+      ...result,
+      separator,
+      Image.asset('assets/home/bottom.png'),
+    ];
+  }
+
+  Widget buildMainBody() {
+    Widget buildByChildren(List<Widget> items) {
+      return SliverList(
+        // Functions
+        delegate: SliverChildBuilderDelegate(
+          (_, index) => Padding(
+            padding: EdgeInsets.only(left: 10.w, right: 10.w),
+            child: items[index],
+          ),
+          childCount: items.length,
+        ),
+      );
+    }
+
+    return ValueListenableBuilder<List<ExtraHomeItem>?>(
+      valueListenable: overrideFunctionNotifier,
+      builder: (context, data, child) => buildByChildren(buildFunctionWidgets(data)),
+    );
   }
 
   Widget _buildBody(BuildContext context) {
-    final items = buildFunctionWidgets();
-
     return Stack(
       children: [
         const HomeBackground(),
@@ -208,16 +248,7 @@ class _HomePageState extends State<HomePage> {
                 elevation: 0,
                 pinned: false,
               ),
-              SliverList(
-                // Functions
-                delegate: SliverChildBuilderDelegate(
-                  (_, index) => Padding(
-                    padding: EdgeInsets.only(left: 10.w, right: 10.w),
-                    child: items[index],
-                  ),
-                  childCount: items.length,
-                ),
-              ),
+              buildMainBody(),
             ],
           ),
           onRefresh: () => _onHomeRefresh(context, true),

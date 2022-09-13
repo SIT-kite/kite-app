@@ -28,6 +28,7 @@ import 'package:kite/route.dart';
 import 'package:kite/util/user.dart';
 
 import 'abstract/route.dart';
+import 'feature/override/entity.dart';
 import 'feature/page_index.dart';
 import 'global/global.dart';
 import 'storage/init.dart';
@@ -100,7 +101,10 @@ class _KiteAppState extends State<KiteApp> {
 
     // refresh override route
     Global.eventBus.on(EventNameConstants.onRouteRefresh, (arg) {
-      initRoute().then((value) => routeGenerator = value);
+      routeGenerator = DefaultRouteWithOverride(
+        defaultRoute: defaultRouteTable,
+        overrideItems: arg! as List<RouteOverrideItem>,
+      );
     });
     buildMaterialWithTheme(ThemeData theme) {
       return MaterialApp(

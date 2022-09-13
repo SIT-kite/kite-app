@@ -29,7 +29,6 @@ import 'feature/freshman/page/info.dart';
 import 'feature/freshman/page/update.dart';
 import 'feature/game/page/tetris/index.dart';
 import 'feature/not_found/page.dart';
-import 'feature/override/init.dart';
 import 'feature/page_index.dart';
 import 'setting/page/index.dart';
 
@@ -80,65 +79,68 @@ class RouteTable {
   static const notFound = '/not_found';
 }
 
-final defaultRouteTable = StaticRouteTable({
-  RouteTable.home: (context, args) => const HomePage(),
-  RouteTable.report: (context, args) => const DailyReportPage(),
-  RouteTable.login: (context, args) => const LoginPage(),
-  RouteTable.welcome: (context, args) => const WelcomePage(),
-  RouteTable.about: (context, args) => const AboutPage(),
-  RouteTable.expense: (context, args) => const ExpensePage(),
-  RouteTable.connectivity: (context, args) => const ConnectivityPage(),
-  RouteTable.campusCard: (context, args) => const CampusCardPage(),
-  RouteTable.electricity: (context, args) => const ElectricityPage(),
-  RouteTable.score: (context, args) => const ScorePage(),
-  RouteTable.office: (context, args) => const OfficePage(),
-  RouteTable.game: (context, args) => const GamePage(),
-  RouteTable.game2048: (context, args) => Game2048Page(),
-  RouteTable.gameWordle: (context, args) => const WordlePage(),
-  RouteTable.gameComposeSit: (context, args) => const ComposeSitPage(),
-  RouteTable.gameTetris: (context, args) => const TetrisPage(),
-  RouteTable.wiki: (context, args) => WikiPage(),
-  RouteTable.library: (context, args) => const LibraryPage(),
-  RouteTable.libraryAppointment: (context, args) => const AppointmentPage(),
-  RouteTable.market: (context, args) => const MarketPage(),
-  RouteTable.timetable: (context, args) => const TimetablePage(),
-  RouteTable.timetableImport: (context, args) => const TimetableImportPage(),
-  RouteTable.setting: (context, args) => SettingPage(),
-  RouteTable.feedback: (context, args) => const FeedbackPage(),
-  RouteTable.notice: (context, args) => const NoticePage(),
-  RouteTable.contact: (context, args) => const ContactPage(),
-  RouteTable.bulletin: (context, args) => const BulletinPage(),
-  RouteTable.mail: (context, args) => const MailPage(),
-  RouteTable.night: (context, args) => const NightPage(),
-  RouteTable.event: (context, args) => const EventPage(),
-  RouteTable.lostFound: (context, args) => const LostFoundPage(),
-  RouteTable.classroom: (context, args) => const ClassroomPage(),
-  RouteTable.exam: (context, args) => const ExamPage(),
-  RouteTable.egg: (context, args) => const EggPage(),
-  RouteTable.bbs: (context, args) => const BbsPage(),
-  RouteTable.scanner: (context, args) => const ScannerPage(),
-  RouteTable.browser: (context, args) {
-    return BrowserPage(
-      initialUrl: args['initialUrl'],
-      fixedTitle: args['fixedTitle'],
-      showSharedButton: args['showSharedButton'],
-      showRefreshButton: args['showRefreshButton'],
-      showLoadInBrowser: args['showLoadInBrowser'],
-      userAgent: args['userAgent'],
-      showLaunchButtonIfUnsupported: args['showLaunchButtonIfUnsupported'],
-      showTopProgressIndicator: args['showTopProgressIndicator'],
-      javascript: args['javascript'],
-      javascriptUrl: args['javascriptUrl'],
-    );
+final defaultRouteTable = StaticRouteTable(
+  table: {
+    RouteTable.home: (context, args) => const HomePage(),
+    RouteTable.report: (context, args) => const DailyReportPage(),
+    RouteTable.login: (context, args) => const LoginPage(),
+    RouteTable.welcome: (context, args) => const WelcomePage(),
+    RouteTable.about: (context, args) => const AboutPage(),
+    RouteTable.expense: (context, args) => const ExpensePage(),
+    RouteTable.connectivity: (context, args) => const ConnectivityPage(),
+    RouteTable.campusCard: (context, args) => const CampusCardPage(),
+    RouteTable.electricity: (context, args) => const ElectricityPage(),
+    RouteTable.score: (context, args) => const ScorePage(),
+    RouteTable.office: (context, args) => const OfficePage(),
+    RouteTable.game: (context, args) => const GamePage(),
+    RouteTable.game2048: (context, args) => Game2048Page(),
+    RouteTable.gameWordle: (context, args) => const WordlePage(),
+    RouteTable.gameComposeSit: (context, args) => const ComposeSitPage(),
+    RouteTable.gameTetris: (context, args) => const TetrisPage(),
+    RouteTable.wiki: (context, args) => WikiPage(),
+    RouteTable.library: (context, args) => const LibraryPage(),
+    RouteTable.libraryAppointment: (context, args) => const AppointmentPage(),
+    RouteTable.market: (context, args) => const MarketPage(),
+    RouteTable.timetable: (context, args) => const TimetablePage(),
+    RouteTable.timetableImport: (context, args) => const TimetableImportPage(),
+    RouteTable.setting: (context, args) => SettingPage(),
+    RouteTable.feedback: (context, args) => const FeedbackPage(),
+    RouteTable.notice: (context, args) => const NoticePage(),
+    RouteTable.contact: (context, args) => const ContactPage(),
+    RouteTable.bulletin: (context, args) => const BulletinPage(),
+    RouteTable.mail: (context, args) => const MailPage(),
+    RouteTable.night: (context, args) => const NightPage(),
+    RouteTable.event: (context, args) => const EventPage(),
+    RouteTable.lostFound: (context, args) => const LostFoundPage(),
+    RouteTable.classroom: (context, args) => const ClassroomPage(),
+    RouteTable.exam: (context, args) => const ExamPage(),
+    RouteTable.egg: (context, args) => const EggPage(),
+    RouteTable.bbs: (context, args) => const BbsPage(),
+    RouteTable.scanner: (context, args) => const ScannerPage(),
+    RouteTable.browser: (context, args) {
+      return BrowserPage(
+        initialUrl: args['initialUrl'],
+        fixedTitle: args['fixedTitle'],
+        showSharedButton: args['showSharedButton'],
+        showRefreshButton: args['showRefreshButton'],
+        showLoadInBrowser: args['showLoadInBrowser'],
+        userAgent: args['userAgent'],
+        showLaunchButtonIfUnsupported: args['showLaunchButtonIfUnsupported'],
+        showTopProgressIndicator: args['showTopProgressIndicator'],
+        javascript: args['javascript'],
+        javascriptUrl: args['javascriptUrl'],
+      );
+    },
+    RouteTable.freshman: (context, args) => FreshmanPage(),
+    RouteTable.freshmanAnalysis: (context, args) => const FreshmanAnalysisPage(),
+    RouteTable.freshmanLogin: (context, args) => const FreshmanLoginPage(),
+    RouteTable.freshmanUpdate: (context, args) => const FreshmanUpdatePage(),
+    RouteTable.freshmanFriend: (context, args) => const FreshmanFriendPage(),
+    RouteTable.board: (context, args) => const BoardPage(),
+    RouteTable.notFound: (context, args) => NotFoundPage(args['routeName']),
   },
-  RouteTable.freshman: (context, args) => FreshmanPage(),
-  RouteTable.freshmanAnalysis: (context, args) => const FreshmanAnalysisPage(),
-  RouteTable.freshmanLogin: (context, args) => const FreshmanLoginPage(),
-  RouteTable.freshmanUpdate: (context, args) => const FreshmanUpdatePage(),
-  RouteTable.freshmanFriend: (context, args) => const FreshmanFriendPage(),
-  RouteTable.board: (context, args) => const BoardPage(),
-  RouteTable.notFound: (context, args) => NotFoundPage(args['routeName']),
-});
+  onNotFound: (context, routeName, args) => NotFoundPage(routeName),
+);
 
 class DefaultRouteWithOverride implements IRouteGenerator {
   final IRouteGenerator defaultRoute;
@@ -168,12 +170,4 @@ class DefaultRouteWithOverride implements IRouteGenerator {
     }
     return (context) => NotFoundPage(newRouteItem.outputRoute);
   }
-}
-
-Future<IRouteGenerator> initRoute() async {
-  final overrideInfo = await FunctionOverrideInitializer.cachedService.get();
-  return DefaultRouteWithOverride(
-    defaultRoute: defaultRouteTable,
-    overrideItems: overrideInfo.routeOverride,
-  );
 }

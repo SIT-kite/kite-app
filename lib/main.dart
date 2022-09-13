@@ -33,7 +33,7 @@ void main() async {
 
   Catcher(
     rootWidget: Phoenix(
-      child: KiteApp(),
+      child: const KiteApp(),
     ),
     releaseConfig: CatcherOptions(
       // 对话框和新页面的方式不是很好汉化, 且程序中存在连续抛异常的情况, 为不打扰用户直接静默上报
