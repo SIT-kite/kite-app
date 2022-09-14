@@ -21,6 +21,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/component/platform_widget.dart';
+import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/rule.dart';
 import 'package:kite/util/url_launcher.dart';
@@ -208,6 +209,7 @@ class _MyWebViewState extends State<MyWebView> {
       },
       onShowFileChooser: () async {
         Log.info('OnShowFileChooser');
+        showAlertDialog(context, title: '文件上传');
         return [];
       },
       onProgress: widget.onProgress,
