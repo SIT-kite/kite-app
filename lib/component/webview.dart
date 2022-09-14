@@ -206,6 +206,10 @@ class _MyWebViewState extends State<MyWebView> {
           widget.onPageFinished!(url);
         }
       },
+      onShowFileChooser: () async {
+        Log.info('OnShowFileChooser');
+        return [];
+      },
       onProgress: widget.onProgress,
     );
   }
