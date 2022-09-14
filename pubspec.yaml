@@ -110,15 +110,8 @@ dependencies:
 
   # Desktop support
   window_manager: ^0.2.0
-
-dependency_overrides:
-  # Webview and browser related
-  webview_flutter:
-    git:
-      url: https://github.com/flutter/plugins.git
-      path: packages/webview_flutter/webview_flutter
-      ref: 046e72cbe600032de5e1fe3f13a3277fb204c132
-
+  flutter_inappwebview: ^5.4.3+7
+  webview_flutter: ^3.0.4
 
 dev_dependencies:
   flutter_test: { sdk: flutter }
