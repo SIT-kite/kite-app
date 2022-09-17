@@ -115,6 +115,7 @@ enum FunctionType {
   @HiveField(21)
   board,
 
+  /// 电费查询
   @HiveField(22)
   electricity,
 }
@@ -252,5 +253,6 @@ class UserFunctionListFactory {
 }
 
 List<FunctionType> getDefaultFunctionList(UserType userType) {
-  return UserFunctionListFactory.getUserFunctionList(userType).getFunctionList();
+  return UserFunctionListFactory.getUserFunctionList(userType)
+      .getFunctionList();
 }

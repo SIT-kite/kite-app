@@ -31,7 +31,6 @@ export 'game/page/wordle/index.dart';
 export 'home/page/index.dart';
 export 'kite/notice/page.dart';
 export 'kite/page/classroom/index.dart';
-export 'kite/page/electricity/index.dart';
 export 'kite/page/lost_found/index.dart';
 export 'kite/page/market.dart';
 export 'kite/page/night/index.dart';

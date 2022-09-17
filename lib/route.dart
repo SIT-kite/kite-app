@@ -22,6 +22,7 @@ import 'package:kite/feature/freshman/page/login.dart';
 import 'package:kite/feature/override/entity.dart';
 
 import 'abstract/route.dart';
+import 'feature/electricity/page/index.dart';
 import 'feature/freshman/page/analysis.dart';
 import 'feature/freshman/page/friend/index.dart';
 import 'feature/freshman/page/info.dart';
@@ -134,7 +135,8 @@ final defaultRouteTable = StaticRouteTable(
       );
     },
     RouteTable.freshman: (context, args) => FreshmanPage(),
-    RouteTable.freshmanAnalysis: (context, args) => const FreshmanAnalysisPage(),
+    RouteTable.freshmanAnalysis: (context, args) =>
+        const FreshmanAnalysisPage(),
     RouteTable.freshmanLogin: (context, args) => const FreshmanLoginPage(),
     RouteTable.freshmanUpdate: (context, args) => const FreshmanUpdatePage(),
     RouteTable.freshmanFriend: (context, args) => const FreshmanFriendPage(),
@@ -167,7 +169,8 @@ class DefaultRouteWithOverride implements IRouteGenerator {
   }
 
   @override
-  WidgetBuilder onGenerateRoute(String routeName, Map<String, dynamic> arguments) {
+  WidgetBuilder onGenerateRoute(
+      String routeName, Map<String, dynamic> arguments) {
     if (!indexedOverrideItems.containsKey(routeName)) {
       // No override
       return defaultRoute.onGenerateRoute(routeName, arguments);
@@ -175,7 +178,8 @@ class DefaultRouteWithOverride implements IRouteGenerator {
     // override
     final newRouteItem = indexedOverrideItems[routeName]!;
     if (defaultRoute.accept(newRouteItem.outputRoute)) {
-      return defaultRoute.onGenerateRoute(newRouteItem.outputRoute, newRouteItem.args);
+      return defaultRoute.onGenerateRoute(
+          newRouteItem.outputRoute, newRouteItem.args);
     }
     return (context) => NotFoundPage(newRouteItem.outputRoute);
   }

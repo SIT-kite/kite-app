@@ -59,16 +59,22 @@ class HomeFunctionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final titleStyle = Theme.of(context).textTheme.headline4?.copyWith(color: Colors.black54);
-    final subtitleStyle = Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.black54);
+    final titleStyle =
+        Theme.of(context).textTheme.headline4?.copyWith(color: Colors.black54);
+    final subtitleStyle =
+        Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.black54);
 
     return Container(
       decoration: BoxDecoration(color: Colors.white.withOpacity(0.6)),
       child: ListTile(
-        leading:
-            iconWidget ?? SvgPicture.asset(icon!, height: 30.h, width: 30.w, color: Theme.of(context).primaryColor),
+        leading: iconWidget ??
+            SvgPicture.asset(icon!,
+                height: 30.h,
+                width: 30.w,
+                color: Theme.of(context).primaryColor),
         title: Text(title, style: titleStyle),
-        subtitle: Text(subtitle ?? '', style: subtitleStyle, maxLines: 1, overflow: TextOverflow.ellipsis),
+        subtitle: Text(subtitle ?? '',
+            style: subtitleStyle, maxLines: 1, overflow: TextOverflow.ellipsis),
         // dense: true,
         onTap: () {
           if (onPressed != null) {
@@ -161,18 +167,20 @@ class FunctionButtonFactory {
               if (result != null) GlobalLauncher.launch(result);
             },
             // icon: 'assets/home/icon_bbs.svg',
-            iconWidget: Icon(Icons.qr_code_scanner, size: 30.h, color: Theme.of(context).primaryColor),
+            iconWidget: Icon(Icons.qr_code_scanner,
+                size: 30.h, color: Theme.of(context).primaryColor),
             title: '扫码',
             subtitle: '扫描各种二维码',
           ),
-    FunctionType.freshman: (context) => FreshmanItem(),
+    FunctionType.freshman: (context) => const FreshmanItem(),
     FunctionType.switchAccount: (context) => HomeFunctionButton(
           route: RouteTable.login,
-          iconWidget: Icon(Icons.switch_account, size: 30.h, color: Theme.of(context).primaryColor),
+          iconWidget: Icon(Icons.switch_account,
+              size: 30.h, color: Theme.of(context).primaryColor),
           title: '切换用户',
           subtitle: '切换到正式用户',
         ),
-    FunctionType.electricity: (context) => ElectricityItem(),
+    FunctionType.electricity: (context) => const ElectricityItem(),
     FunctionType.board: (context) => HomeFunctionButton(
           route: '/board',
           icon: 'assets/home/icon_board.svg',
@@ -189,7 +197,8 @@ class FunctionButtonFactory {
   }
 }
 
-Widget buildHomeFunctionButtonByExtraHomeItem(BuildContext context, ExtraHomeItem item) {
+Widget buildHomeFunctionButtonByExtraHomeItem(
+    BuildContext context, ExtraHomeItem item) {
   return HomeFunctionButton(
     title: item.title,
     subtitle: item.description,

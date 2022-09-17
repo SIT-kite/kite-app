@@ -16,10 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/feature/kite/entity/electricity.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/storage/init.dart';
 
+import '../../../electricity/entity.dart';
 import 'index.dart';
 
 class ElectricityItem extends StatefulWidget {
@@ -43,7 +43,8 @@ class _ElectricityItemState extends State<ElectricityItem> {
   @override
   Widget build(BuildContext context) {
     if (lastBalance != null) {
-      content = '寝室 ${lastBalance!.room} 上次余额 ${lastBalance!.balance.toStringAsPrecision(2)}';
+      content =
+          '寝室 ${lastBalance!.room} 上次余额 ${lastBalance!.balance.toStringAsPrecision(2)}';
     }
     return HomeFunctionButton(
       route: '/electricity',

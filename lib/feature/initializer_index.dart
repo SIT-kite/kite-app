@@ -20,10 +20,10 @@ import 'package:kite/util/hive_register_adapter.dart';
 
 import 'contact/entity/contact.dart';
 import 'edu/timetable/entity.dart';
+import 'electricity/entity.dart';
 import 'expense/entity/expense.dart';
 import 'game/entity.dart';
 import 'home/entity/home.dart';
-import 'kite/entity/electricity.dart';
 import 'kite/entity/weather.dart';
 import 'library/search/entity/search_history.dart';
 import 'report/entity/report.dart';

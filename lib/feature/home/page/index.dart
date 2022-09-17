@@ -53,7 +53,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   final overrideFunctionNotifier = ValueNotifier<FunctionOverrideInfo?>(null);
   late bool isFreshman;
 
@@ -61,7 +62,8 @@ class _HomePageState extends State<HomePage> {
     Log.info('更新天气');
     Future.delayed(const Duration(milliseconds: 800), () async {
       try {
-        final weather = await WeatherService().getCurrentWeather(KvStorageInitializer.home.campus);
+        final weather = await WeatherService()
+            .getCurrentWeather(KvStorageInitializer.home.campus);
         Global.eventBus.emit(EventNameConstants.onWeatherUpdate, weather);
       } catch (_) {}
     });
@@ -74,7 +76,8 @@ class _HomePageState extends State<HomePage> {
     await HomeInitializer.ssoSession.login(username, password);
 
     if (KvStorageInitializer.auth.personName == null) {
-      final personName = await LoginInitializer.authServerService.getPersonName();
+      final personName =
+          await LoginInitializer.authServerService.getPersonName();
       KvStorageInitializer.auth.personName = personName;
     }
   }
@@ -132,7 +135,8 @@ class _HomePageState extends State<HomePage> {
     _updateWeather();
     KvStorageInitializer.override.info = null;
     FunctionOverrideInitializer.cachedService.get().then((value) {
-      Global.eventBus.emit(EventNameConstants.onRouteRefresh, value.routeOverride);
+      Global.eventBus
+          .emit(EventNameConstants.onRouteRefresh, value.routeOverride);
       overrideFunctionNotifier.value = value;
     });
   }
@@ -143,15 +147,19 @@ class _HomePageState extends State<HomePage> {
       child: GestureDetector(
         onTap: () => _scaffoldKey.currentState?.openDrawer(),
         onDoubleTap: () => Navigator.of(context).pushNamed(RouteTable.egg),
-        child: Center(child: SvgPicture.asset('assets/home/kite.svg', width: 80.w, height: 80.h)),
+        child: Center(
+            child: SvgPicture.asset('assets/home/kite.svg',
+                width: 80.w, height: 80.h)),
       ),
     );
   }
 
-  List<Widget> buildFunctionWidgets(List<ExtraHomeItem>? extraItemList, List<HomeItemHideInfo>? hideInfoList) {
-    print(extraItemList);
+  List<Widget> buildFunctionWidgets(List<ExtraHomeItem>? extraItemList,
+      List<HomeItemHideInfo>? hideInfoList) {
+    // print(extraItemList);
     UserType userType = AccountUtils.getUserType()!;
-    List<FunctionType> list = KvStorageInitializer.home.homeItems ?? getDefaultFunctionList(userType);
+    List<FunctionType> list =
+        KvStorageInitializer.home.homeItems ?? getDefaultFunctionList(userType);
     final filter = HomeItemHideInfoFilter(hideInfoList ?? []);
 
     // 先遍历一遍，过滤相邻重复元素
@@ -175,7 +183,8 @@ class _HomePageState extends State<HomePage> {
         currentGroup = [];
       } else {
         if (!filter.accept(item, userType)) {
-          currentGroup.add(FunctionButtonFactory.createFunctionButton(context, item));
+          currentGroup
+              .add(FunctionButtonFactory.createFunctionButton(context, item));
         }
       }
     }
@@ -183,7 +192,9 @@ class _HomePageState extends State<HomePage> {
     if (extraItemList != null) {
       result.addAll([
         HomeItemGroup(
-          extraItemList.map((e) => buildHomeFunctionButtonByExtraHomeItem(context, e)).toList(),
+          extraItemList
+              .map((e) => buildHomeFunctionButtonByExtraHomeItem(context, e))
+              .toList(),
         ),
         separator,
       ]);
@@ -287,11 +298,14 @@ class _HomePageState extends State<HomePage> {
 
     _onHomeRefresh(context);
     // 非新生且使用手机
-    if (!isFreshman && (UniversalPlatform.isAndroid || UniversalPlatform.isIOS)) {
+    if (!isFreshman &&
+        (UniversalPlatform.isAndroid || UniversalPlatform.isIOS)) {
       QuickButton.init(context);
     }
-    Global.eventBus.on(EventNameConstants.onCampusChange, (_) => _updateWeather());
-    Global.eventBus.on(EventNameConstants.onHomeItemReorder, (_) => setState(() {}));
+    Global.eventBus
+        .on(EventNameConstants.onCampusChange, (_) => _updateWeather());
+    Global.eventBus
+        .on(EventNameConstants.onHomeItemReorder, (_) => setState(() {}));
     super.initState();
   }
 
@@ -311,7 +325,9 @@ class _HomePageState extends State<HomePage> {
               Log.info('浮动按钮被点击');
               // 触发下拉刷新
               final pos = _refreshController.position!;
-              await pos.animateTo(-100, duration: const Duration(milliseconds: 800), curve: Curves.linear);
+              await pos.animateTo(-100,
+                  duration: const Duration(milliseconds: 800),
+                  curve: Curves.linear);
             },
           )
         : null;

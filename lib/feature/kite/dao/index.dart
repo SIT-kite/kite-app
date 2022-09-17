@@ -17,5 +17,4 @@
  */
 
 export 'classroom.dart';
-export 'electricity.dart';
 export 'weatcher.dart';

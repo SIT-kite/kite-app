@@ -15,24 +15,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 import 'package:hive/hive.dart';
 
-import '../../electricity/dao.dart';
+import '../../session/kite_session.dart';
+import 'dao.dart';
+import 'service.dart';
+import 'storage.dart';
 
-class ElectricityStorage implements ElectricityStorageDao {
-  final Box<dynamic> box;
+class ElectricityInitializer {
+  static late ElectricityStorageDao electricityStorage;
+  static late ElectricityServiceDao electricityService;
+  static late KiteSession kiteSession;
+  static Future<void> init({
+    required KiteSession kiteSession,
+    required Box<dynamic> electricityBox,
+  }) async {
+    ElectricityInitializer.kiteSession = kiteSession;
 
-  const ElectricityStorage(this.box);
+    electricityService = ElectricityService(kiteSession);
 
-  @override
-  String? get lastBuilding => box.get('/building');
-
-  @override
-  set lastBuilding(String? building) => box.put('/building', building);
-
-  @override
-  String? get lastRoom => box.get('/room');
-
-  @override
-  set lastRoom(String? room) => box.put('/room', room);
+    electricityStorage = ElectricityStorage(electricityBox);
+  }
 }

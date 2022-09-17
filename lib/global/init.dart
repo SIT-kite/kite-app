@@ -30,6 +30,7 @@ import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+import '../feature/electricity/init.dart';
 import 'hive_initializer.dart';
 
 class Initializer {
@@ -88,9 +89,9 @@ class Initializer {
       ssoSession: Global.ssoSession2,
       expenseRecordBox: HiveBoxInitializer.expense,
     );
+
     await KiteInitializer.init(
       kiteSession: kiteSession,
-      electricityBox: HiveBoxInitializer.electricity,
     );
     await GameInitializer.init(
       gameBox: HiveBoxInitializer.game,
@@ -115,6 +116,11 @@ class Initializer {
     LoginInitializer.init(ssoSession: Global.ssoSession);
 
     await FreshmanInitializer.init(kiteSession: kiteSession);
+
+    await ElectricityInitializer.init(
+      kiteSession: kiteSession,
+      electricityBox: HiveBoxInitializer.electricity,
+    );
 
     final sitAppSession = SitAppSession(
       Global.dio,

@@ -17,7 +17,7 @@
  */
 import 'package:hive/hive.dart';
 
-import '../../electricity/dao.dart';
+import 'dao.dart';
 
 class ElectricityStorage implements ElectricityStorageDao {
   final Box<dynamic> box;
