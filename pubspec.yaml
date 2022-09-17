@@ -55,6 +55,8 @@ dependencies:
   dio_cookie_manager: ^2.0.0
 
 
+  # Webview and browser related
+  webview_flutter: ^3.0.0
   fk_user_agent: ^2.0.1
   flutter_widget_from_html: ^0.8.5
 
@@ -110,8 +112,7 @@ dependencies:
 
   # Desktop support
   window_manager: ^0.2.0
-  flutter_inappwebview: ^5.4.3+7
-  webview_flutter: ^3.0.4
+
 
 dev_dependencies:
   flutter_test: { sdk: flutter }
