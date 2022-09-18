@@ -46,8 +46,7 @@ class Balance {
 
   Balance(this.balance, this.power, this.room, this.ts);
 
-  factory Balance.fromJson(Map<String, dynamic> json) =>
-      _$BalanceFromJson(json);
+  factory Balance.fromJson(Map<String, dynamic> json) => _$BalanceFromJson(json);
 }
 
 @JsonSerializable()
@@ -85,8 +84,12 @@ class HourlyBill {
 
   HourlyBill(this.charge, this.consumption, this.time);
 
-  factory HourlyBill.fromJson(Map<String, dynamic> json) =>
-      _$HourlyBillFromJson(json);
+  factory HourlyBill.fromJson(Map<String, dynamic> json) => _$HourlyBillFromJson(json);
+
+  @override
+  String toString() {
+    return 'HourlyBill{charge: $charge, consumption: $consumption, time: $time}';
+  }
 }
 
 @JsonSerializable()
@@ -105,6 +108,5 @@ class DailyBill {
 
   DailyBill(this.charge, this.consumption, this.date);
 
-  factory DailyBill.fromJson(Map<String, dynamic> json) =>
-      _$DailyBillFromJson(json);
+  factory DailyBill.fromJson(Map<String, dynamic> json) => _$DailyBillFromJson(json);
 }

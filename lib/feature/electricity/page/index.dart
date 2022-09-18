@@ -21,7 +21,60 @@ import 'package:kite/component/future_builder.dart';
 
 import '../entity.dart';
 import '../init.dart';
-import 'chart.dart';
+import 'component/chart.dart';
+
+Widget cardTitle(String title) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: [
+      const SizedBox(width: 10),
+      Text(
+        title,
+        style: const TextStyle(fontWeight: FontWeight.bold),
+      )
+    ],
+  );
+}
+
+class ElectricityChart extends StatefulWidget {
+  final String room;
+  const ElectricityChart(this.room, {Key? key}) : super(key: key);
+
+  @override
+  State<ElectricityChart> createState() => _ElectricityChartState();
+}
+
+class _ElectricityChartState extends State<ElectricityChart> {
+  ElectricityChartMode mode = ElectricityChartMode.hourly;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        cardTitle('用电视图'),
+        const SizedBox(height: 30),
+        ElectricityChartWidget(
+          room: widget.room,
+          mode: mode,
+        ),
+        const SizedBox(height: 10),
+        Center(
+          child: ElevatedButton.icon(
+            onPressed: () {
+              setState(() => mode = ElectricityChartMode.values[(mode.index + 1) & 1]);
+            },
+            icon: const Icon(Icons.change_circle),
+            label: const Text(
+              '周模式',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}
 
 class ElectricityPage extends StatefulWidget {
   const ElectricityPage({Key? key}) : super(key: key);
@@ -57,22 +110,9 @@ class _ElectricityPageState extends State<ElectricityPage> {
           const SizedBox(height: 5),
           rankCard(),
           const SizedBox(height: 25),
-          const ElectricityChart(),
+          ElectricityChart(room),
         ],
       ),
-    );
-  }
-
-  Widget cardTitle(String title) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        const SizedBox(width: 10),
-        Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        )
-      ],
     );
   }
 
@@ -100,16 +140,12 @@ class _ElectricityPageState extends State<ElectricityPage> {
           height: 80,
           width: 400,
           alignment: AlignmentDirectional.centerEnd,
-          decoration: BoxDecoration(
-              color: Colors.blueAccent.withAlpha(70),
-              borderRadius: BorderRadius.circular(10)),
+          decoration: BoxDecoration(color: Colors.blueAccent.withAlpha(70), borderRadius: BorderRadius.circular(10)),
           child: Row(
             children: [
               Container(
                 padding: const EdgeInsets.fromLTRB(18, 5, 10, 5),
-                decoration: const BoxDecoration(
-                    border: Border(
-                        right: BorderSide(width: 2, color: Colors.black87))),
+                decoration: const BoxDecoration(border: Border(right: BorderSide(width: 2, color: Colors.black87))),
                 height: 60,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,8 +155,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
                       '剩余电量',
                       '${data.power.toStringAsFixed(2)}度',
                     ),
-                    balanceInfo(Icons.savings, '剩余金额',
-                        '${data.balance.toStringAsFixed(2)}元'),
+                    balanceInfo(Icons.savings, '剩余金额', '${data.balance.toStringAsFixed(2)}元'),
                   ],
                 ),
               ),
@@ -130,11 +165,8 @@ class _ElectricityPageState extends State<ElectricityPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    balanceInfo(Icons.house, '房间号码', data.room.toString(),
-                        width: 90),
-                    balanceInfo(Icons.update, '更新时间',
-                        DateFormat('MM/dd HH:mm').format(data.ts.toLocal()),
-                        width: 90)
+                    balanceInfo(Icons.house, '房间号码', data.room.toString(), width: 90),
+                    balanceInfo(Icons.update, '更新时间', DateFormat('MM/dd HH:mm').format(data.ts.toLocal()), width: 90)
                   ],
                 ),
               ),
@@ -148,8 +180,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
   }
 
   ///余额Row封装
-  Widget balanceInfo(IconData icon, String title, String content,
-      {double? width}) {
+  Widget balanceInfo(IconData icon, String title, String content, {double? width}) {
     return Row(
       children: [
         Icon(icon),
@@ -188,9 +219,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
         padding: const EdgeInsets.all(10),
         width: 400,
         height: 120,
-        decoration: BoxDecoration(
-            color: Colors.blueAccent.withAlpha(70),
-            borderRadius: BorderRadius.circular(20)),
+        decoration: BoxDecoration(color: Colors.blueAccent.withAlpha(70), borderRadius: BorderRadius.circular(20)),
         child: Row(
           children: [
             const Icon(
@@ -203,11 +232,9 @@ class _ElectricityPageState extends State<ElectricityPage> {
               children: [
                 Text(
                   '24小时用电消费： ${data.consumption.toStringAsFixed(2)}元',
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 18),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
-                Text(
-                    '超过了${(data.rank * 100 / data.roomCount).toStringAsFixed(2)}%宿舍')
+                Text('超过了${(data.rank * 100 / data.roomCount).toStringAsFixed(2)}%宿舍')
               ],
             ))
           ],

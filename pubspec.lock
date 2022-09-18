@@ -1669,14 +1669,12 @@ packages:
     source: hosted
     version: "2.2.0"
   webview_flutter:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
-      path: "packages/webview_flutter/webview_flutter"
-      ref: "046e72cbe600032de5e1fe3f13a3277fb204c132"
-      resolved-ref: "046e72cbe600032de5e1fe3f13a3277fb204c132"
-      url: "https://github.com/flutter/plugins.git"
-    source: git
-    version: "3.0.1"
+      name: webview_flutter
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.0.4"
   webview_flutter_android:
     dependency: transitive
     description:
