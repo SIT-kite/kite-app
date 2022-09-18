@@ -44,7 +44,6 @@ class HiveBoxInitializer {
   }
 
   static Future<void> clear() async {
-    await Hive.deleteBoxFromDisk('electricity');
     await Hive.deleteBoxFromDisk('contactSetting');
     await Hive.deleteBoxFromDisk('setting');
     await Hive.deleteBoxFromDisk('auth');
