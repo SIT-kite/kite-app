@@ -119,7 +119,7 @@ class Initializer {
 
     await ElectricityInitializer.init(
       kiteSession: kiteSession,
-      electricityBox: HiveBoxInitializer.electricity,
+      electricityBox: HiveBoxInitializer.kv,
     );
 
     final sitAppSession = SitAppSession(

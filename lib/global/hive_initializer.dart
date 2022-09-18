@@ -25,7 +25,6 @@ import 'package:kite/feature/library/search/entity/search_history.dart';
 class HiveBoxInitializer {
   static late Box<dynamic> userEvent;
   static late Box<LibrarySearchHistoryItem> librarySearchHistory;
-  static late Box<dynamic> electricity;
   static late Box<ContactData> contactSetting;
   static late Box<dynamic> course;
   static late Box<ExpenseRecord> expense;
@@ -38,7 +37,6 @@ class HiveBoxInitializer {
     kv = await Hive.openBox('setting');
     userEvent = await Hive.openBox('userEvent');
     librarySearchHistory = await Hive.openBox('librarySearchHistory');
-    electricity = await Hive.openBox('electricity');
     contactSetting = await Hive.openBox('contactSetting');
     course = await Hive.openBox<dynamic>('course');
     expense = await Hive.openBox('expenseSetting');

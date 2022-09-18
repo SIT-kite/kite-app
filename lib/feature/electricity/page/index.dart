@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/component/simple_search_delegate.dart';
-import 'package:kite/route.dart';
+import 'package:kite/util/logger.dart';
 
 import '../entity.dart';
 import '../init.dart';
@@ -95,9 +95,35 @@ class ElectricityPage extends StatefulWidget {
 }
 
 class _ElectricityPageState extends State<ElectricityPage> {
-  String room = ElectricityInitializer.electricityStorage.lastRoomList?.last ??
-      '10231001';
-  bool isDaily = false;
+  final storage = ElectricityInitializer.electricityStorage;
+
+  String? room;
+  @override
+  void initState() {
+    storage.lastRoomList ??= [];
+    if (storage.lastRoomList!.isNotEmpty) room = storage.lastRoomList!.last;
+    super.initState();
+  }
+
+  void search() {
+    showSearch(
+      context: context,
+      delegate: SimpleTextSearchDelegate(
+        recentList: storage.lastRoomList!.reversed.toList(), // 最近查询(需要从hive里获取)，也可留空
+        searchList: ['1021502', '1021501', '1021503'], // 待搜索提示的列表(需要从服务器获取，可以缓存至数据库)
+      ),
+    ).then((value) {
+      if (value != null) {
+        Log.info('选择宿舍：$value');
+        final list = storage.lastRoomList!;
+        list.remove(value);
+        list.add(value);
+        storage.lastRoomList = list;
+        setState(() => room = value);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,31 +131,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
         title: const Text('电费查询'),
         actions: <Widget>[
           IconButton(
-              onPressed: () {
-                showSearch(
-                  context: context,
-                  delegate: SimpleTextSearchDelegate(
-                    recentList: ElectricityInitializer
-                            .electricityStorage.lastRoomList ??
-                        ['23102001'], // 最近查询(需要从hive里获取)，也可留空
-                    searchList: [
-                      '222',
-                      '333',
-                      '234'
-                    ], // 待搜索提示的列表(需要从服务器获取，可以缓存至数据库)
-                  ),
-                ).then((value) {
-                  if (value != null && value != '') {
-                    setState(() {
-                      room = value;
-                      ElectricityInitializer.electricityStorage.lastRoomList
-                          ?.add(value);
-                    });
-                  }
-                  Navigator.pushReplacementNamed(
-                      context, RouteTable.electricity);
-                });
-              },
+              onPressed: search,
               icon: const Icon(
                 Icons.search_rounded,
               )),
@@ -141,6 +143,11 @@ class _ElectricityPageState extends State<ElectricityPage> {
   }
 
   Widget _buildBody() {
+    if (room == null) {
+      return const Center(
+        child: Text('未指定房间号'),
+      );
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
       child: Column(
@@ -150,7 +157,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
           const SizedBox(height: 5),
           rankCard(),
           const SizedBox(height: 25),
-          ElectricityChart(room),
+          ElectricityChart(room!),
         ],
       ),
     );
@@ -163,7 +170,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
         cardTitle('余额查询'),
         const SizedBox(height: 10),
         MyFutureBuilder<Balance>(
-          future: ElectricityInitializer.electricityService.getBalance(room),
+          future: ElectricityInitializer.electricityService.getBalance(room!),
           builder: (context, data) {
             return balanceContent(data);
           },
@@ -180,16 +187,12 @@ class _ElectricityPageState extends State<ElectricityPage> {
           height: 80,
           width: 400,
           alignment: AlignmentDirectional.centerEnd,
-          decoration: BoxDecoration(
-              color: Colors.blueAccent.withAlpha(70),
-              borderRadius: BorderRadius.circular(10)),
+          decoration: BoxDecoration(color: Colors.blueAccent.withAlpha(70), borderRadius: BorderRadius.circular(10)),
           child: Row(
             children: [
               Container(
                 padding: const EdgeInsets.fromLTRB(18, 5, 10, 5),
-                decoration: const BoxDecoration(
-                    border: Border(
-                        right: BorderSide(width: 2, color: Colors.black87))),
+                decoration: const BoxDecoration(border: Border(right: BorderSide(width: 2, color: Colors.black87))),
                 height: 60,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,8 +202,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
                       '剩余电量',
                       '${data.power.toStringAsFixed(2)}度',
                     ),
-                    balanceInfo(Icons.savings, '剩余金额',
-                        '${data.balance.toStringAsFixed(2)}元'),
+                    balanceInfo(Icons.savings, '剩余金额', '${data.balance.toStringAsFixed(2)}元'),
                   ],
                 ),
               ),
@@ -210,11 +212,8 @@ class _ElectricityPageState extends State<ElectricityPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    balanceInfo(Icons.house, '房间号码', data.room.toString(),
-                        width: 90),
-                    balanceInfo(Icons.update, '更新时间',
-                        DateFormat('MM/dd HH:mm').format(data.ts.toLocal()),
-                        width: 90)
+                    balanceInfo(Icons.house, '房间号码', data.room.toString(), width: 90),
+                    balanceInfo(Icons.update, '更新时间', DateFormat('MM/dd HH:mm').format(data.ts.toLocal()), width: 90)
                   ],
                 ),
               ),
@@ -228,8 +227,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
   }
 
   ///余额Row封装
-  Widget balanceInfo(IconData icon, String title, String content,
-      {double? width}) {
+  Widget balanceInfo(IconData icon, String title, String content, {double? width}) {
     return Row(
       children: [
         Icon(icon),
@@ -253,7 +251,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
         cardTitle('用电排名'),
         const SizedBox(height: 10),
         MyFutureBuilder<Rank>(
-          future: ElectricityInitializer.electricityService.getRank(room),
+          future: ElectricityInitializer.electricityService.getRank(room!),
           builder: (context, data) {
             return rankContent(data);
           },
@@ -268,9 +266,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
         padding: const EdgeInsets.all(10),
         width: 400,
         height: 120,
-        decoration: BoxDecoration(
-            color: Colors.blueAccent.withAlpha(70),
-            borderRadius: BorderRadius.circular(20)),
+        decoration: BoxDecoration(color: Colors.blueAccent.withAlpha(70), borderRadius: BorderRadius.circular(20)),
         child: Row(
           children: [
             const Icon(
@@ -283,11 +279,9 @@ class _ElectricityPageState extends State<ElectricityPage> {
               children: [
                 Text(
                   '24小时用电消费： ${data.consumption.toStringAsFixed(2)}元',
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 18),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
-                Text(
-                    '超过了${(data.rank * 100 / data.roomCount).toStringAsFixed(2)}%宿舍')
+                Text('超过了${(data.rank * 100 / data.roomCount).toStringAsFixed(2)}%宿舍')
               ],
             ))
           ],
