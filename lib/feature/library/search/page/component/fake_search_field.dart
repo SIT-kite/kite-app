@@ -36,6 +36,7 @@ class _FakeSearchFieldState extends State<FakeSearchField> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: widget.onTap,
       child: TextField(
         enabled: false,
         decoration: InputDecoration(
@@ -49,7 +50,6 @@ class _FakeSearchFieldState extends State<FakeSearchField> {
           ),
         ),
       ),
-      onTap: widget.onTap,
     );
   }
 }

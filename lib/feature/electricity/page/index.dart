@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/component/simple_search_delegate.dart';
-import 'package:kite/util/logger.dart';
+import 'package:kite/route.dart';
 
 import '../entity.dart';
 import '../init.dart';
@@ -95,7 +95,8 @@ class ElectricityPage extends StatefulWidget {
 }
 
 class _ElectricityPageState extends State<ElectricityPage> {
-  String room = '1021501';
+  String room = ElectricityInitializer.electricityStorage.lastRoomList?.last ??
+      '10231001';
   bool isDaily = false;
   @override
   Widget build(BuildContext context) {
@@ -108,11 +109,25 @@ class _ElectricityPageState extends State<ElectricityPage> {
                 showSearch(
                   context: context,
                   delegate: SimpleTextSearchDelegate(
-                    recentList: ['222', '234'], // 最近查询(需要从hive里获取)，也可留空
-                    searchList: ['222', '333', '234'], // 待搜索提示的列表(需要从服务器获取，可以缓存至数据库)
+                    recentList: ElectricityInitializer
+                            .electricityStorage.lastRoomList ??
+                        ['23102001'], // 最近查询(需要从hive里获取)，也可留空
+                    searchList: [
+                      '222',
+                      '333',
+                      '234'
+                    ], // 待搜索提示的列表(需要从服务器获取，可以缓存至数据库)
                   ),
                 ).then((value) {
-                  Log.info('选择寝室：$value');
+                  if (value != null && value != '') {
+                    setState(() {
+                      room = value;
+                      ElectricityInitializer.electricityStorage.lastRoomList
+                          ?.add(value);
+                    });
+                  }
+                  Navigator.pushReplacementNamed(
+                      context, RouteTable.electricity);
                 });
               },
               icon: const Icon(

@@ -19,13 +19,9 @@ import 'entity.dart';
 
 // 本地存储
 abstract class ElectricityStorageDao {
-  String? get lastBuilding;
+  List<String>? get lastRoomList;
 
-  set lastBuilding(String? building);
-
-  String? get lastRoom;
-
-  set lastRoom(String? room);
+  set lastRoomList(List<String>? room);
 }
 
 // 远程

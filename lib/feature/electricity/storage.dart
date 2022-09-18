@@ -22,17 +22,12 @@ import 'dao.dart';
 class ElectricityStorage implements ElectricityStorageDao {
   final Box<dynamic> box;
 
-  const ElectricityStorage(this.box);
+  ElectricityStorage(this.box);
 
   @override
-  String? get lastBuilding => box.get('/building');
+  List<String>? get lastRoomList => box.get('/lastRoomList');
 
   @override
-  set lastBuilding(String? building) => box.put('/building', building);
-
-  @override
-  String? get lastRoom => box.get('/room');
-
-  @override
-  set lastRoom(String? room) => box.put('/room', room);
+  set lastRoomList(List<String>? roomList) =>
+      box.put('/lastRoomList', roomList);
 }
