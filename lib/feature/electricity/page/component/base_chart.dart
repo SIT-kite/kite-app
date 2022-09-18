@@ -37,10 +37,10 @@ class BaseElectricityChartWidget extends StatelessWidget {
       color: Colors.blueGrey,
       fontSize: 11,
     );
-    String text = value.toInt().toString();
+    String text = value.toStringAsFixed(2);
     return SideTitleWidget(
       axisSide: mate.axisSide,
-      child: Text('$text元', style: style),
+      child: Text(text, style: style),
     );
   }
 
