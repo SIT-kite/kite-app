@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
+import 'package:kite/component/simple_search_delegate.dart';
 
 import '../entity.dart';
 import '../init.dart';
@@ -92,7 +93,19 @@ class _ElectricityPageState extends State<ElectricityPage> {
       appBar: AppBar(
         title: const Text('电费查询'),
         actions: <Widget>[
-          IconButton(onPressed: () {}, icon: const Icon(Icons.search_rounded)),
+          IconButton(
+              onPressed: () {
+                showSearch(
+                  context: context,
+                  delegate: SimpleTextSearchDelegate(
+                    recentList: [], // 最近查询(需要从hive里获取)
+                    searchList: ['222', '333', '234'], // 待搜索提示的列表(需要从服务器获取，可以缓存至数据库)
+                  ),
+                );
+              },
+              icon: const Icon(
+                Icons.search_rounded,
+              )),
           IconButton(icon: const Icon(Icons.share), onPressed: () {}),
         ],
       ),
