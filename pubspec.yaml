@@ -99,6 +99,7 @@ dependencies:
   cached_network_image: ^3.2.1
   flutter_easyloading: ^3.0.5
   photo_view: ^0.14.0
+  animated_button_bar: ^0.0.2
 
   # Utils
   version: ^3.0.2               # Version comparison
@@ -112,6 +113,8 @@ dependencies:
 
   # Desktop support
   window_manager: ^0.2.0
+
+
 
 
 dev_dependencies:

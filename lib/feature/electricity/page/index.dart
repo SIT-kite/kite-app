@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'package:animated_button_bar/animated_button_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
@@ -55,24 +56,32 @@ class _ElectricityChartState extends State<ElectricityChart> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         cardTitle('用电视图'),
-        const SizedBox(height: 30),
+        const SizedBox(height: 20),
         ElectricityChartWidget(
           room: widget.room,
           mode: mode,
         ),
-        const SizedBox(height: 10),
-        Center(
-          child: ElevatedButton.icon(
-            onPressed: () {
-              setState(() => mode = ElectricityChartMode.values[(mode.index + 1) & 1]);
-            },
-            icon: const Icon(Icons.change_circle),
-            label: const Text(
-              '周模式',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-            ),
-          ),
-        )
+        const SizedBox(height: 5),
+        SizedBox(
+            width: 300,
+            child: AnimatedButtonBar(
+              radius: 20,
+              invertedSelection: true,
+              backgroundColor: Colors.white,
+              foregroundColor: Colors.blueAccent,
+              children: [
+                ButtonBarEntry(
+                    onTap: () => setState(() {
+                          mode = ElectricityChartMode.hourly;
+                        }),
+                    child: const Text('最近24小时')),
+                ButtonBarEntry(
+                    onTap: () => setState(() {
+                          mode = ElectricityChartMode.daily;
+                        }),
+                    child: const Text('最近一周')),
+              ],
+            ))
       ],
     );
   }
@@ -156,12 +165,16 @@ class _ElectricityPageState extends State<ElectricityPage> {
           height: 80,
           width: 400,
           alignment: AlignmentDirectional.centerEnd,
-          decoration: BoxDecoration(color: Colors.blueAccent.withAlpha(70), borderRadius: BorderRadius.circular(10)),
+          decoration: BoxDecoration(
+              color: Colors.blueAccent.withAlpha(70),
+              borderRadius: BorderRadius.circular(10)),
           child: Row(
             children: [
               Container(
                 padding: const EdgeInsets.fromLTRB(18, 5, 10, 5),
-                decoration: const BoxDecoration(border: Border(right: BorderSide(width: 2, color: Colors.black87))),
+                decoration: const BoxDecoration(
+                    border: Border(
+                        right: BorderSide(width: 2, color: Colors.black87))),
                 height: 60,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,7 +184,8 @@ class _ElectricityPageState extends State<ElectricityPage> {
                       '剩余电量',
                       '${data.power.toStringAsFixed(2)}度',
                     ),
-                    balanceInfo(Icons.savings, '剩余金额', '${data.balance.toStringAsFixed(2)}元'),
+                    balanceInfo(Icons.savings, '剩余金额',
+                        '${data.balance.toStringAsFixed(2)}元'),
                   ],
                 ),
               ),
@@ -181,8 +195,11 @@ class _ElectricityPageState extends State<ElectricityPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    balanceInfo(Icons.house, '房间号码', data.room.toString(), width: 90),
-                    balanceInfo(Icons.update, '更新时间', DateFormat('MM/dd HH:mm').format(data.ts.toLocal()), width: 90)
+                    balanceInfo(Icons.house, '房间号码', data.room.toString(),
+                        width: 90),
+                    balanceInfo(Icons.update, '更新时间',
+                        DateFormat('MM/dd HH:mm').format(data.ts.toLocal()),
+                        width: 90)
                   ],
                 ),
               ),
@@ -190,13 +207,14 @@ class _ElectricityPageState extends State<ElectricityPage> {
           ),
         ),
         const SizedBox(height: 3),
-        data.power > 0 ? const Text('电量充足') : const Text('电量低于10度请尽快充值')
+        data.balance > 10 ? const Text('余额充足') : const Text('余额低于10元请尽快充值')
       ],
     );
   }
 
   ///余额Row封装
-  Widget balanceInfo(IconData icon, String title, String content, {double? width}) {
+  Widget balanceInfo(IconData icon, String title, String content,
+      {double? width}) {
     return Row(
       children: [
         Icon(icon),
@@ -235,7 +253,9 @@ class _ElectricityPageState extends State<ElectricityPage> {
         padding: const EdgeInsets.all(10),
         width: 400,
         height: 120,
-        decoration: BoxDecoration(color: Colors.blueAccent.withAlpha(70), borderRadius: BorderRadius.circular(20)),
+        decoration: BoxDecoration(
+            color: Colors.blueAccent.withAlpha(70),
+            borderRadius: BorderRadius.circular(20)),
         child: Row(
           children: [
             const Icon(
@@ -248,9 +268,11 @@ class _ElectricityPageState extends State<ElectricityPage> {
               children: [
                 Text(
                   '24小时用电消费： ${data.consumption.toStringAsFixed(2)}元',
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18),
                 ),
-                Text('超过了${(data.rank * 100 / data.roomCount).toStringAsFixed(2)}%宿舍')
+                Text(
+                    '超过了${(data.rank * 100 / data.roomCount).toStringAsFixed(2)}%宿舍')
               ],
             ))
           ],

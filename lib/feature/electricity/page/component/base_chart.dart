@@ -22,9 +22,8 @@ class BaseElectricityChartWidget extends StatelessWidget {
       child: Text(
         bottomTitles[value.toInt()],
         style: TextStyle(
-          fontWeight: FontWeight.bold,
           color: Colors.blueGrey,
-          fontSize: 6.sp,
+          fontSize: 11.sp,
         ),
       ),
     );
@@ -33,11 +32,10 @@ class BaseElectricityChartWidget extends StatelessWidget {
   ///左边部标题栏
   Widget leftTitle(double value, TitleMeta mate) {
     const style = TextStyle(
-      fontWeight: FontWeight.bold,
       color: Colors.blueGrey,
       fontSize: 11,
     );
-    String text = value.toStringAsFixed(2);
+    String text = '${value.toStringAsFixed(2)}元';
     return SideTitleWidget(
       axisSide: mate.axisSide,
       child: Text(text, style: style),
@@ -99,7 +97,7 @@ class BaseElectricityChartWidget extends StatelessWidget {
           leftTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
-              reservedSize: 40,
+              reservedSize: 50,
               getTitlesWidget: leftTitle,
             ),
           ),
