@@ -9,14 +9,13 @@ class SimpleTextSearchDelegate extends SearchDelegate {
     required this.recentList,
     required this.searchList,
   });
+
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
       IconButton(
         icon: const Icon(Icons.clear),
-        onPressed: () {
-          query = "";
-        },
+        onPressed: () => query = "",
       )
     ];
   }
@@ -25,22 +24,16 @@ class SimpleTextSearchDelegate extends SearchDelegate {
   Widget? buildLeading(BuildContext context) {
     return IconButton(
       icon: AnimatedIcon(icon: AnimatedIcons.menu_arrow, progress: transitionAnimation),
-      onPressed: () {
-        close(context, "");
-      },
+      onPressed: () => close(context, null),
     );
   }
 
   @override
   Widget buildResults(BuildContext context) {
-    return Center(
-      child: Text("搜索的结果：$query"),
-    );
+    return Container();
   }
 
-  Widget buildRecentList({
-    TextSelectCallback? onSelect,
-  }) {
+  Widget buildRecentList({TextSelectCallback? onSelect}) {
     return ListView(
       children: recentList.map((e) {
         return ListTile(
@@ -55,40 +48,25 @@ class SimpleTextSearchDelegate extends SearchDelegate {
     );
   }
 
-  Widget buildSearchList({
-    TextSelectCallback? onSelect,
-  }) {
+  Widget buildSearchList({TextSelectCallback? onSelect}) {
     final suggestionList = searchList.where((input) => input.contains(query)).map((e) {
-      final splitTextList = e.split(query).map((e) => "<span style='color:grey'>$e</span>");
+      final splitTextList = e.split(query).map((e1) => "<span style='color:grey'>$e1</span>");
       final highlight = "<span style='color:black;font-weight: bold'>$query</span>";
-      return splitTextList.join(highlight);
+      return [
+        e, // 原文
+        splitTextList.join(highlight), // 带有高亮信息的文字
+      ];
     }).toList();
 
-    return ListView.builder(
-      itemCount: suggestionList.length,
-      itemBuilder: (context, index) {
-        final String itemText = suggestionList[index];
+    return ListView(
+      children: suggestionList.map((e) {
         return ListTile(
-          title: () {
-            return HtmlWidget(itemText);
-            // return RichText(
-            //   text: TextSpan(
-            //     text: itemText.substring(0, query.length),
-            //     style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-            //     children: [
-            //       TextSpan(
-            //         text: itemText.substring(query.length),
-            //         style: const TextStyle(color: Colors.grey),
-            //       )
-            //     ],
-            //   ),
-            // );
-          }(),
+          title: HtmlWidget(e[1]),
           onTap: () {
-            if (onSelect != null) onSelect(itemText);
+            if (onSelect != null) onSelect(e[0]);
           },
         );
-      },
+      }).toList(),
     );
   }
 
@@ -96,13 +74,9 @@ class SimpleTextSearchDelegate extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     // 用户未输入
     if (query.isEmpty) {
-      return buildRecentList(onSelect: (select) => query = select);
+      return buildRecentList(onSelect: (select) => close(context, select));
     } else {
-      return buildSearchList(
-        onSelect: (select) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(query)));
-        },
-      );
+      return buildSearchList(onSelect: (select) => close(context, select));
     }
   }
 }
