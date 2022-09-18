@@ -110,7 +110,8 @@ class _ElectricityPageState extends State<ElectricityPage> {
       context: context,
       delegate: SimpleTextSearchDelegate(
         recentList: storage.lastRoomList!.reversed.toList(), // 最近查询(需要从hive里获取)，也可留空
-        searchList: ['1021502', '1021501', '1021503'], // 待搜索提示的列表(需要从服务器获取，可以缓存至数据库)
+        suggestionList: ['1021502', '1021501', '1021503'], // 待搜索提示的列表(需要从服务器获取，可以缓存至数据库)
+        onlyUseSuggestion: true, // 只允许使用搜索建议里的
       ),
     ).then((value) {
       if (value != null) {

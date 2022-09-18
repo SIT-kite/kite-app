@@ -4,10 +4,12 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 typedef TextSelectCallback = void Function(String);
 
 class SimpleTextSearchDelegate extends SearchDelegate {
-  final List<String> recentList, searchList;
+  final List<String> recentList, suggestionList;
+  final bool onlyUseSuggestion;
   SimpleTextSearchDelegate({
     required this.recentList,
-    required this.searchList,
+    required this.suggestionList,
+    this.onlyUseSuggestion = true,
   });
 
   @override
@@ -30,6 +32,10 @@ class SimpleTextSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
+    // 是否允许用户不仅仅只使用建议里的搜索条目？
+    if (!onlyUseSuggestion) {
+      close(context, query);
+    }
     return Container();
   }
 
@@ -49,17 +55,15 @@ class SimpleTextSearchDelegate extends SearchDelegate {
   }
 
   Widget buildSearchList({TextSelectCallback? onSelect}) {
-    final suggestionList = searchList.where((input) => input.contains(query)).map((e) {
-      final splitTextList = e.split(query).map((e1) => "<span style='color:grey'>$e1</span>");
-      final highlight = "<span style='color:black;font-weight: bold'>$query</span>";
-      return [
-        e, // 原文
-        splitTextList.join(highlight), // 带有高亮信息的文字
-      ];
-    }).toList();
-
     return ListView(
-      children: suggestionList.map((e) {
+      children: suggestionList.where((input) => input.contains(query)).map((e) {
+        final splitTextList = e.split(query).map((e1) => "<span style='color:grey'>$e1</span>");
+        final highlight = "<span style='color:black;font-weight: bold'>$query</span>";
+        return [
+          e, // 原文
+          splitTextList.join(highlight), // 带有高亮信息的文字
+        ];
+      }).map((e) {
         return ListTile(
           title: HtmlWidget(e[1]),
           onTap: () {
