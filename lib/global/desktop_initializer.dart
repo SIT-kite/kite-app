@@ -37,6 +37,11 @@ class MyWindowListener extends WindowListener {
 }
 
 class DesktopInitializer {
+  /// The default window size is small enough for any modern desktop device.
+  static const Size defaultSize = Size(500, 800);
+
+  /// If the window was resized to too small accidentally, this will keep a minimum function area.
+  static const Size minSize = Size(300, 400);
   static late EventBus<WindowEvent> eventBus;
   static late WindowListener windowListener;
 
@@ -48,7 +53,10 @@ class DesktopInitializer {
     await windowManager.ensureInitialized();
     windowManager.waitUntilReadyToShow().then((_) async {
       // Hide window title bar
-      await windowManager.setSize(const Size(500, 800));
+      await windowManager.setSize(defaultSize);
+      // Center the window.
+      await windowManager.center();
+      await windowManager.setMinimumSize(minSize);
       await windowManager.show();
     });
   }
