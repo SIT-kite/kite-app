@@ -182,7 +182,8 @@ jobs:
           flutter pub get
           flutter pub run build_runner build --delete-conflicting-outputs
           flutter build macos
-      - uses: actions/upload-artifact2v2
+
+      - uses: actions/upload-artifact@v2
         with:
           name: macOS-building
           path: build/macos/Products/Debug/kite.app
