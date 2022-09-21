@@ -184,10 +184,6 @@ jobs:
           flutter pub run build_runner build --delete-conflicting-outputs
           flutter build macos
 
-      - uses: actions/upload-artifact@v2
-        with:
-          name: macOS-building
-          path: build/macos/Build/Products/Release/上应小风筝.app
   # 临时关闭Linux平台的Action
   #  build-Linux:
   #    runs-on: ubuntu-latest
