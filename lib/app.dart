@@ -126,6 +126,7 @@ class _KiteAppState extends State<KiteApp> {
             PointerDeviceKind.mouse,
             PointerDeviceKind.touch,
             PointerDeviceKind.stylus,
+            PointerDeviceKind.trackpad,
             PointerDeviceKind.unknown
           },
         ),
