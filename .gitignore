@@ -20,6 +20,8 @@ doc/api/
 
 # IDE
 .idea/
+.vs/
+.vscode/
 
 # Flutter
 .flutter-plugins-dependencies

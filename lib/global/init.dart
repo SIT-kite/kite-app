@@ -48,6 +48,11 @@ class Initializer {
   }
 
   static Future<void> _init() async {
+    // Initialize the window size before others for a better experience when loading.
+    if (UniversalPlatform.isDesktop && !GlobalConfig.isTestEnv) {
+      await DesktopInitializer.init();
+    }
+
     // 初始化Hive数据库
 
     await HiveBoxInitializer.init('kite1/hive');
@@ -128,9 +133,5 @@ class Initializer {
     );
     SitAppInitializer.init(sitAppSession: sitAppSession);
     BoardInitializer.init(kiteSession: kiteSession);
-
-    if (UniversalPlatform.isDesktop && !GlobalConfig.isTestEnv) {
-      await DesktopInitializer.init();
-    }
   }
 }

@@ -60,10 +60,13 @@ jobs:
           key: app-${{ github.ref }}-${{ github.sha }}
 
 
-  # flutter build apk, cache build/
+  ######################
+  # Android
+  #
   build-Android:
     needs: lint
     runs-on: ubuntu-latest
+    if: github.repository == 'SIT-kite/kite-app'
     steps:
 
       - uses: actions/checkout@v3
@@ -110,7 +113,9 @@ jobs:
           path: build/
           key: apk-${{ github.ref }}-${{ github.sha }}
 
-    # flutter build ios
+  ######################
+  # iOS
+  #
   build-iOS:
     runs-on: macos-latest
     needs: lint
@@ -166,6 +171,48 @@ jobs:
       - run: flutter pub run build_runner build --delete-conflicting-outputs
       - run: flutter build windows
 
+  ######################
+  # macOS
+  #
+  build-macOS:
+    runs-on: macos-latest
+    needs: lint
+    env:
+      MACOS_APP_RELEASE_PATH: build/macos/Build/Products/Release
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.0.5
+          channel: stable
+          cache: true
+      # Building
+      - name: Build macOS
+        run: |
+          flutter config --enable-macos-desktop
+          flutter pub get
+          flutter pub run build_runner build --delete-conflicting-outputs
+          flutter build macos --release
+      # Signing
+      - name: Codesign executable
+        env:
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
+        run: |
+          echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
+          echo "Create Keychain"
+          security create-keychain -p SIT_KITE_PWD build.keychain
+          echo "Assign to Login Keychain"
+          security default-keychain -s build.keychain
+          echo "Unlock the Login Keychain"
+          security unlock-keychain -p SIT_KITE_PWD build.keychain
+          echo "Import certificate"
+          security import certificate.p12 -k build.keychain -P $MACOS_CERTIFICATE_PWD -T /usr/bin/codesign
+          echo "Set Key Partition"
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k SIT_KITE_PWD build.keychain
+          echo "Sign the app"
+          /usr/bin/codesign --force --deep -s MJGX7ZZ3AG ./$MACOS_APP_RELEASE_PATH/上应小风筝.app
   build-Linux:
     runs-on: ubuntu-latest
     needs: lint
@@ -183,7 +230,9 @@ jobs:
   # Upload apk
   upload:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
+    if: |
+      github.ref == 'refs/heads/master' &&
+      github.repository == 'SIT-kite/kite-app'
     needs:
       - build-Android
     steps:
@@ -257,7 +306,10 @@ jobs:
   notification:
     runs-on: ubuntu-latest
     needs: [ upload ]
-    if: github.event_name != 'pull_request' && always()
+    if: |
+      github.event_name != 'pull_request' &&
+      github.repository == 'SIT-kite/kite-app' &&
+      always()
     steps:
 
       - uses: technote-space/workflow-conclusion-action@v2
