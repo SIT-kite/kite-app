@@ -60,11 +60,13 @@ jobs:
           key: app-${{ github.ref }}-${{ github.sha }}
 
 
-  # flutter build apk, cache build/
+  ######################
+  # Android
+  #
   build-Android:
     needs: lint
     runs-on: ubuntu-latest
-    if: github.repository == 'PlumyGame/SIT-kite/kite-app'
+    if: github.repository == 'SIT-kite/kite-app'
     steps:
 
       - uses: actions/checkout@v3
@@ -111,7 +113,9 @@ jobs:
           path: build/
           key: apk-${{ github.ref }}-${{ github.sha }}
 
-    # flutter build ios
+  ######################
+  # iOS
+  #
   build-iOS:
     runs-on: macos-latest
     needs: lint
@@ -153,15 +157,34 @@ jobs:
   build-Windows:
     runs-on: windows-latest
     needs: lint
-    env:
-      MACOS_APP_RELEASE_PATH: build/macos/Build/Products/Release
     steps:
       - uses: actions/checkout@v3
 
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: 3.0.5
-          channel: stable # although dev is recommended for desktop
+          channel: stable
+          cache: true
+
+      - run: flutter config --enable-windows-desktop
+      - run: flutter pub get
+      - run: flutter pub run build_runner build --delete-conflicting-outputs
+      - run: flutter build windows
+
+
+  ######################
+  # macOS
+  #
+  build-macOS:
+    runs-on: macos-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.0.5
+          channel: stable
           cache: true
       # Building
       - name: Build macOS
@@ -192,23 +215,9 @@ jobs:
           echo "Sign the app"
           /usr/bin/codesign --force --deep -s <IDENTITY-ID> ./$MACOS_APP_RELEASE_PATH/<YOUR-APP-NAME>.app
 
-  build-macOS:
-    runs-on: macos-latest
-    needs: lint
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: 3.0.5
-          channel: stable
-          cache: true
-      - run: |
-          flutter config --enable-macos-desktop
-          flutter pub get
-          flutter pub run build_runner build --delete-conflicting-outputs
-          flutter build macos --release
-
+  ######################
+  # Linux
+  #
   # 临时关闭Linux平台的Action
   #  build-Linux:
   #    runs-on: ubuntu-latest
@@ -229,7 +238,7 @@ jobs:
     runs-on: ubuntu-latest
     if: |
       github.ref == 'refs/heads/master' &&
-      github.repository == 'PlumyGame/SIT-kite/kite-app'
+      github.repository == 'SIT-kite/kite-app'
     needs:
       - build-Android
     steps:
@@ -305,7 +314,7 @@ jobs:
     needs: [ upload ]
     if: |
       github.event_name != 'pull_request' &&
-      github.repository == 'PlumyGame/SIT-kite/kite-app' &&
+      github.repository == 'SIT-kite/kite-app' &&
       always()
     steps:
 
