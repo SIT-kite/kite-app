@@ -1,0 +1,18 @@
+{
+  "qq": "QQ",
+  "wechat": "微信",
+  "counselor": "辅导员",
+  "counselorPhoneNumber": "辅导员电话号码",
+  "phoneNumber": "电话号码",
+  "moreInfo": "更多信息",
+  "online": "在线",
+  "cantLaunchPhoneSoToClipboard": "无法为您拨打电话，号码已复制到剪切板。",
+  "@cantLaunchPhoneSoToClipboard": {
+  },
+  "cantLaunchWechatSoToClipboard": "无法为您打开微信，微信号已复制到剪切板。",
+  "@cantLaunchWechatSoToClipboard": {
+  },
+  "cantLaunchQqSoToClipboard": "无法为您打开QQ，QQ号已复制到剪切板。",
+  "@cantLaunchQqSoToClipboard": {
+  }
+}

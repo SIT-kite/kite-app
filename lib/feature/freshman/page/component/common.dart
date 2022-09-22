@@ -19,14 +19,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/launch.dart';
 import 'package:kite/route.dart';
+import 'package:kite/util/dsl.dart';
 import 'package:kite/util/flash.dart';
 
 import '../../entity.dart';
 import 'profile.dart';
 
-List<InfoItem> buildContactInfoItems(BuildContext context, Contact? contact, {String? counselorTel}) {
+List<InfoItem> buildContactInfoItems(BuildContext ctx, Contact? contact,
+    {String? counselorTel}) {
   final wechat = contact?.wechat;
   final qq = contact?.qq;
   final tel = contact?.tel;
@@ -34,12 +37,12 @@ List<InfoItem> buildContactInfoItems(BuildContext context, Contact? contact, {St
     if (counselorTel != null && counselorTel.isNotEmpty)
       InfoItem(
         Icons.phone_in_talk,
-        '辅导员电话号码',
+        ctx.l.counselorPhoneNumber,
         counselorTel,
         onTap: () async {
           if (!await GlobalLauncher.launchTel(counselorTel)) {
             Clipboard.setData(ClipboardData(text: counselorTel));
-            showBasicFlash(context, const Text('无法启动电话, 已复制到剪切板'));
+            showBasicFlash(ctx, ctx.l.cantLaunchPhoneSoToClipboard.txt);
           }
         },
         trailIconData: Icons.phone,
@@ -47,23 +50,23 @@ List<InfoItem> buildContactInfoItems(BuildContext context, Contact? contact, {St
     if (wechat != null && wechat.isNotEmpty)
       InfoItem(
         Icons.wechat,
-        '微信',
+        ctx.l.wechat,
         wechat,
         onTap: () {
           Clipboard.setData(ClipboardData(text: wechat));
-          showBasicFlash(context, const Text('不支持启动微信, 已复制到剪切板'));
+          showBasicFlash(ctx, ctx.l.cantLaunchWechatSoToClipboard.txt);
         },
         trailIconData: Icons.copy,
       ),
     if (qq != null && qq.isNotEmpty)
       InfoItem(
         Icons.person,
-        'QQ',
+        ctx.l.qq,
         qq,
         onTap: () async {
           if (!await GlobalLauncher.launchQqContact(qq)) {
             Clipboard.setData(ClipboardData(text: qq));
-            showBasicFlash(context, const Text('未安装QQ, 已复制到剪切板'));
+            showBasicFlash(ctx, ctx.l.cantLaunchQqSoToClipboard.txt);
           }
         },
         trailIconData: Icons.open_in_browser,
@@ -71,12 +74,12 @@ List<InfoItem> buildContactInfoItems(BuildContext context, Contact? contact, {St
     if (tel != null && tel.isNotEmpty)
       InfoItem(
         Icons.phone,
-        '电话号码',
+        ctx.l.phoneNumber,
         tel,
         onTap: () async {
           if (!await GlobalLauncher.launchTel(tel)) {
             Clipboard.setData(ClipboardData(text: tel));
-            showBasicFlash(context, const Text('无法启动电话, 已复制到剪切板'));
+            showBasicFlash(ctx, ctx.l.cantLaunchPhoneSoToClipboard.txt);
           }
         },
         trailIconData: Icons.phone,
@@ -85,14 +88,16 @@ List<InfoItem> buildContactInfoItems(BuildContext context, Contact? contact, {St
 }
 
 Widget buildListItemDefaultAvatar(BuildContext context, String name) {
-  final TextStyle avatarStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.grey[50]);
+  final TextStyle avatarStyle =
+      Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.grey[50]);
 
   return CircleAvatar(
     backgroundColor: Colors.white,
     radius: 20,
     child: Container(
       child: name.isEmpty
-          ? const Center(child: Icon(Icons.account_circle, size: 40, color: Colors.black))
+          ? const Center(
+              child: Icon(Icons.account_circle, size: 40, color: Colors.black))
           : Text(name[0], style: avatarStyle),
     ),
   );
@@ -104,19 +109,29 @@ Widget buildDefaultAvatar(String name, {required Color defaultColor}) {
     decoration: BoxDecoration(
       shape: BoxShape.circle,
       color: defaultColor,
-      boxShadow: const [BoxShadow(color: Colors.black54, offset: Offset(1.0, 1.0), blurRadius: 2.0)],
+      boxShadow: const [
+        BoxShadow(
+            color: Colors.black54, offset: Offset(1.0, 1.0), blurRadius: 2.0)
+      ],
     ),
     child: Container(
       alignment: const Alignment(0, 0),
       child: name.isEmpty
-          ? Center(child: Icon(Icons.account_circle, size: 40, color: Colors.grey[50]))
+          ? Center(
+              child:
+                  Icon(Icons.account_circle, size: 40, color: Colors.grey[50]))
           : Text(
               name[0],
               style: const TextStyle(
                   fontFamily: 'calligraphy',
                   fontSize: 45,
                   color: Colors.white,
-                  shadows: [BoxShadow(color: Colors.black54, offset: Offset(2.0, 4.0), blurRadius: 10.0)],
+                  shadows: [
+                    BoxShadow(
+                        color: Colors.black54,
+                        offset: Offset(2.0, 4.0),
+                        blurRadius: 10.0)
+                  ],
                   fontWeight: FontWeight.bold,
                   decoration: TextDecoration.none),
             ),
@@ -125,7 +140,8 @@ Widget buildDefaultAvatar(String name, {required Color defaultColor}) {
 }
 
 /// 构造头像
-Widget buildAvatar({Widget? avatar, required String name, Color color = Colors.blueAccent}) {
+Widget buildAvatar(
+    {Widget? avatar, required String name, Color color = Colors.blueAccent}) {
   return Container(
     width: 70,
     height: 70,
@@ -189,8 +205,9 @@ Widget buildInfoItemRow({
 extension Styles on Widget {
   Widget withTitleBarStyle(BuildContext context) {
     return Container(
-      decoration:
-          const BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(color: Colors.grey, offset: Offset(1, 1.0))]),
+      decoration: const BoxDecoration(
+          color: Colors.white,
+          boxShadow: [BoxShadow(color: Colors.grey, offset: Offset(1, 1.0))]),
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(5),
       child: this,
@@ -212,12 +229,14 @@ extension Styles on Widget {
 List<Widget> buildAppBarMenuButton(BuildContext context) {
   return <Widget>[
     IconButton(
-      onPressed: () => Navigator.of(context).pushNamed(RouteTable.freshmanAnalysis),
+      onPressed: () =>
+          Navigator.of(context).pushNamed(RouteTable.freshmanAnalysis),
       icon: const Icon(Icons.analytics),
       tooltip: '风筝报告',
     ),
     IconButton(
-      onPressed: () => Navigator.of(context).pushNamed(RouteTable.freshmanUpdate),
+      onPressed: () =>
+          Navigator.of(context).pushNamed(RouteTable.freshmanUpdate),
       icon: const Icon(Icons.menu),
       tooltip: '联系方式设置',
     )

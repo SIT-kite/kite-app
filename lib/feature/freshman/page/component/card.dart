@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kite/l10n/extension.dart';
 
 import 'common.dart';
 
@@ -55,7 +56,7 @@ class PersonItemWidget extends StatelessWidget {
             ]),
         child: (buildInfoItemRow(
           iconData: Icons.send,
-          text: ' 更多信息',
+          text: context.l.moreInfo,
           fontSize: 20,
           context: context,
         )),
@@ -66,7 +67,7 @@ class PersonItemWidget extends StatelessWidget {
   Widget buildLastSeen(BuildContext context) {
     return buildInfoItemRow(
       iconData: Icons.timelapse,
-      text: '$lastSeenText在线',
+      text: '$lastSeenText ${context.l.online}',
       fontSize: 14,
       iconSize: 20,
       context: context,
@@ -86,6 +87,7 @@ class PersonItemWidget extends StatelessWidget {
     } else {
       return buildInfoItemRow(
         iconData: Icons.room,
+        //TODO: I18n
         text: '在宇宙漫游哦',
         fontSize: 14,
         iconSize: 17,

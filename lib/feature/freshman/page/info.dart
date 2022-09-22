@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kite/feature/freshman/page/component/profile.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
 import 'package:kite/util/alert_dialog.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -75,7 +76,7 @@ class FreshmanPage extends StatelessWidget {
     );
   }
 
-  Widget _buildBody(BuildContext context, FreshmanInfo data) {
+  Widget _buildBody(BuildContext ctx, FreshmanInfo data) {
     return BasicInfoPageWidget(
       name: data.name,
       college: data.college,
@@ -83,13 +84,13 @@ class FreshmanPage extends StatelessWidget {
         InfoItem(Icons.badge, '学号', data.studentId),
         InfoItem(Icons.emoji_objects, '专业', data.major),
         InfoItem(Icons.corporate_fare, '宿舍', '${data.campus} ${data.building}${data.room}-${data.bed}'),
-        InfoItem(Icons.face, '辅导员', data.counselorName),
-        ...buildContactInfoItems(context, data.contact, counselorTel: data.counselorTel),
+        InfoItem(Icons.face,ctx.l.counselor, data.counselorName),
+        ...buildContactInfoItems(ctx, data.contact, counselorTel: data.counselorTel),
       ],
-      appBarActions: buildAppBarMenuButton(context),
+      appBarActions: buildAppBarMenuButton(ctx),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.person),
-        onPressed: () => Navigator.of(context).pushNamed(RouteTable.freshmanFriend),
+        onPressed: () => Navigator.of(ctx).pushNamed(RouteTable.freshmanFriend),
       ),
     );
   }

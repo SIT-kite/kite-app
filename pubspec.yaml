@@ -6,8 +6,8 @@ version: 1.4.4+31
 
 description: '上应小风筝 APP，基于 Flutter。'
 
-homepage:      https://github.com/SIT-kite/kite-app
-repository:    https://github.com/SIT-kite/kite-app
+homepage: https://github.com/SIT-kite/kite-app
+repository: https://github.com/SIT-kite/kite-app
 issue_tracker: https://github.com/SIT-kite/kite-app/issues
 documentation: https://github.com/SIT-kite/kite-app#readme
 
@@ -24,9 +24,11 @@ dependencies:
   flutter: { sdk: flutter }
 
   device_info_plus_platform_interface: ^2.6.1
-
-  # Basic
+  # I18n
+  flutter_localizations:
+    sdk: flutter
   intl: ^0.17.0               # i18n & l10n
+  # Basic
   logger: ^1.1.0              # logger
   catcher: ^0.6.9             # Error handling
   path_provider: ^2.0.8       # Path
@@ -128,16 +130,17 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
-
+  # For i18n
+  generate: true
   fonts:
     # Iconfont for ywb.sit.edu.cn
     # For office module. So I named it office_iconfont.
     - family: office_iconfont
-      fonts: [{ asset: assets/fonts/office_iconfont.ttf }]
+      fonts: [ { asset: assets/fonts/office_iconfont.ttf } ]
 
     # Good night module
     - family: calligraphy
-      fonts: [{ asset: assets/fonts/calligraphy.ttf }]
+      fonts: [ { asset: assets/fonts/calligraphy.ttf } ]
 
   assets:
     - assets/

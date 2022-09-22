@@ -33,7 +33,7 @@ import 'feature/page_index.dart';
 import 'global/global.dart';
 import 'storage/init.dart';
 import 'util/logger.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 const title = '上应小风筝';
 
 class KiteApp extends StatefulWidget {
@@ -114,6 +114,8 @@ class _KiteAppState extends State<KiteApp> {
         debugShowCheckedModeBanner: false,
         navigatorKey: Catcher.navigatorKey,
         onGenerateRoute: _onGenerateRoute,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         builder: EasyLoading.init(builder: (context, widget) {
           return MediaQuery(
             // 设置文字大小不随系统设置改变

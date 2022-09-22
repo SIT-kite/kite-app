@@ -1,0 +1,21 @@
+{
+  "qq": "QQ",
+  "wechat": "Wechat",
+  "counselor": "Counselor",
+  "counselorPhoneNumber": "Counselor Phone Number",
+  "phoneNumber": "Phone Number",
+  "moreInfo": "More Info",
+  "online": "Online",
+  "cantLaunchPhoneSoToClipboard": "Phone number has been copied because Phone Call isn't available.",
+  "@cantLaunchPhoneSoToClipboard": {
+    "description": "Used in Freshman vCard when Phone.app can't be launched."
+  },
+  "cantLaunchWechatSoToClipboard": "Wechat number has been copied because Wechat isn't available.",
+  "@cantLaunchWechatSoToClipboard": {
+    "description": "Used in Freshman vCard when Wechat.app can't be launched."
+  },
+  "cantLaunchQqSoToClipboard": "QQ number has been copied because QQ isn't available.",
+  "@cantLaunchQqSoToClipboard": {
+    "description": "Used in Freshman vCard when QQ.app can't be launched."
+  }
+}
