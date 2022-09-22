@@ -201,19 +201,19 @@ jobs:
         run: |
           echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
           echo "Create Keychain"
-          security create-keychain -p <YOUR-PASSWORD> build.keychain
+          security create-keychain -p SIT_KITE_PWD build.keychain
           echo "Assign to Login Keychain"
           security default-keychain -s build.keychain
           echo "Unlock the Login Keychain"
-          security unlock-keychain -p <YOUR-PASSWORD> build.keychain
+          security unlock-keychain -p SIT_KITE_PWD build.keychain
           echo "Import certificate"
           security import certificate.p12 -k build.keychain -P $MACOS_CERTIFICATE_PWD -T /usr/bin/codesign
           echo "Set Key Partition"
-          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k <YOUR-PASSWORD> build.keychain
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k SIT_KITE_PWD build.keychain
           echo "Find Identity"
           security find-identity
           echo "Sign the app"
-          /usr/bin/codesign --force --deep -s <IDENTITY-ID> ./$MACOS_APP_RELEASE_PATH/<YOUR-APP-NAME>.app
+          /usr/bin/codesign --force --deep -s MJGX7ZZ3AG ./$MACOS_APP_RELEASE_PATH/上应小风筝.app
 
   ######################
   # Linux
