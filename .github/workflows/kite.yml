@@ -178,6 +178,8 @@ jobs:
   build-macOS:
     runs-on: macos-latest
     needs: lint
+    env:
+      MACOS_APP_RELEASE_PATH: build/macos/Build/Products/Release
     steps:
       - uses: actions/checkout@v3
 
@@ -210,8 +212,6 @@ jobs:
           security import certificate.p12 -k build.keychain -P $MACOS_CERTIFICATE_PWD -T /usr/bin/codesign
           echo "Set Key Partition"
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k SIT_KITE_PWD build.keychain
-          echo "Find Identity"
-          security find-identity
           echo "Sign the app"
           /usr/bin/codesign --force --deep -s MJGX7ZZ3AG ./$MACOS_APP_RELEASE_PATH/上应小风筝.app
 
