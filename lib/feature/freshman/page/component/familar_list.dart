@@ -68,7 +68,7 @@ class _FamiliarListWidgetState extends State<FamiliarListWidget> {
     final tel = familiar.contact?.tel;
     final wechatRow = buildInfoItemRow(
       iconData: Icons.wechat,
-      text: '${i18n.wechat}  ${wechat != null && wechat != '' ? wechat : i18n.unfilled}',
+      text: '${i18n.wechat}:  ${wechat != null && wechat != '' ? wechat : i18n.unfilled}',
       context: context,
     );
     final qqRow = buildInfoItemRow(
@@ -78,7 +78,7 @@ class _FamiliarListWidgetState extends State<FamiliarListWidget> {
     );
     final telRow = buildInfoItemRow(
       iconData: Icons.phone,
-      text: '${i18n.tel}  ${tel != null && tel != '' ? tel : i18n.unfilled}',
+      text: '${i18n.tel}:  ${tel != null && tel != '' ? tel : i18n.unfilled}',
       context: context,
     );
 
