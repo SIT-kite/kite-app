@@ -28,7 +28,6 @@ import '../../../util/flash.dart';
 import '../../../util/logger.dart';
 import '../dao.dart';
 import '../init.dart';
-import 'package:kite/r.dart';
 
 class FreshmanLoginPage extends StatefulWidget {
   const FreshmanLoginPage({Key? key}) : super(key: key);
@@ -152,8 +151,8 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
             autofocus: true,
             obscureText: !_isPasswordClear,
             decoration: InputDecoration(
-              labelText: i18n.password,
-              hintText: i18n.freshmanLoginPasswordHint,
+              labelText: i18n.pwd,
+              hintText: i18n.freshmanLoginPwdHint,
               icon: const Icon(Icons.lock),
               suffixIcon: IconButton(
                 // 切换密码明文显示状态的图标按钮
@@ -262,7 +261,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
                 children: [
                   TextButton(
                     child: Text(
-                      i18n.freshmanIssueFeedbackButton,
+                      i18n.feedbackButton,
                       style: const TextStyle(color: Colors.grey),
                     ),
                     onPressed: () {

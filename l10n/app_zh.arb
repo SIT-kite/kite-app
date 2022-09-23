@@ -34,5 +34,8 @@
   "freshmanLoginAccountHint": "学号/姓名/准考证号",
   "freshmanLoginPasswordHint": "身份证号后六位",
   "freshmanLoginButton": "进入风筝元宇宙",
-  "freshmanIssueFeedbackButton": "遇到问题"
+  "freshmanIssueFeedbackButton": "遇到问题",
+  "kiteBoardTitle": "风筝时刻",
+  "kiteBoardReachEndLabel": "到底啦",
+  "uploadingCounter": "已上传 {done} / {all}"
 }

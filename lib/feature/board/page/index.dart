@@ -25,6 +25,8 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:kite/feature/board/component/card.dart';
 import 'package:kite/feature/board/init.dart';
 import 'package:kite/feature/board/service.dart';
+import 'package:kite/l10n/extension.dart';
+import 'package:kite/util/dsl.dart';
 import 'package:kite/util/file.dart';
 import 'package:kite/util/kite_authorization.dart';
 import 'package:kite/util/logger.dart';
@@ -73,6 +75,7 @@ class _BoardPageState extends State<BoardPage> {
 
   Future<void> onUploadPicture(BuildContext context) async {
     // 如果用户未同意过, 请求用户确认
+    // TODO: I18n
     if (!await signUpIfNecessary(context, '标识图片上传者')) return;
     try {
       final List<String> imagePaths = await FileUtils.pickImagesByFilePicker();
@@ -87,15 +90,15 @@ class _BoardPageState extends State<BoardPage> {
         );
 
         await boardService.submitPictures([file], onProgress: (int count, int total) {
-          EasyLoading.showProgress(count / total, status: '正在上传(${i + 1}/$size)');
+          EasyLoading.showProgress(count / total, status: i18n.uploadingCounter(i + 1, size));
         });
       }
 
-      EasyLoading.showSuccess('上传成功');
+      EasyLoading.showSuccess(i18n.uploadDoneTip);
       refresh();
     } catch (e) {
       Log.error(e);
-      EasyLoading.showError('上传失败');
+      EasyLoading.showError(i18n.uploadFailedTip);
     } finally {
       EasyLoading.instance.userInteractions = true;
       EasyLoading.dismiss();
@@ -147,9 +150,9 @@ class _BoardPageState extends State<BoardPage> {
           ),
         ),
         if (_atEnd)
-          const SizedBox(
+          SizedBox(
             height: 40,
-            child: Center(child: Text('到底啦')),
+            child: Center(child: i18n.kiteBoardReachEndLabel.txt),
           )
       ],
     );
@@ -160,7 +163,7 @@ class _BoardPageState extends State<BoardPage> {
     final bool showUpload = AccountUtils.getUserType() != UserType.freshman;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('风筝时刻')),
+      appBar: AppBar(title: i18n.kiteBoardTitle.txt),
       floatingActionButton: showUpload
           ? FloatingActionButton(
               onPressed: () => onUploadPicture(context),

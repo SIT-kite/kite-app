@@ -118,14 +118,20 @@
   "noLocationLabel": "No location",
   "kiteStatisticsButton": "Kite Statistics",
   "personalInfoSettingButton": "Set Personal Info",
+  "feedbackButton": "Feedback",
   "account": "Account",
-  "password": "Password",
+  "pwd": "Password",
   "freshmanLoginAccountHint": "Student ID/Full Name/Examinee Number",
-  "freshmanLoginPasswordHint": "The last six number of your ID card",
+  "freshmanLoginPwdHint": "The last six number of your ID card",
   "freshmanLoginButton": "Join Kite World",
   "freshmanTitle": "Welcome!",
-  "freshmanIssueFeedbackButton": "Feedback",
   "freshmanLoginFailedWarn": "Login failed",
+  "kiteLoginAccountHint": "Student ID/Work number",
+  "kiteLoginPwdHint": "Enter your password",
+  "kiteLoginButton": "Join Kite World",
+  "kiteLoginTitle": "Welcome!",
+  "kiteForgotPwdButton": "Forgot password?",
+  "studentLoginFailedWarn": "Login failed",
   "readAndAcceptRequest": "Please read and accept {agreement}.",
   "@readAndAcceptRequest": {
     "placeholders": {
@@ -134,5 +140,20 @@
       }
     }
   },
-  "validateInputRequest": "Please check your input."
+  "validateInputRequest": "Please check your input.",
+  "kiteBoardTitle": "Kite Board",
+  "kiteBoardReachEndLabel": "wow, you dug through the Earth!",
+  "uploadingCounter": "Uploaded {done} / {all}",
+  "@uploadingCounter": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "all": {
+        "type": "int"
+      }
+    }
+  },
+  "uploadDoneTip": "Uploaded successfully!",
+  "uploadFailedTip": "uh-oh, failed to upload."
 }
