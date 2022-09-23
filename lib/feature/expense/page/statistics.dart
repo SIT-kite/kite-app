@@ -17,16 +17,16 @@
  */
 import 'package:flutter/material.dart';
 
-import '../../../component/chart.dart';
 import '../entity/expense.dart';
 import '../init.dart';
-import '../page/icon.dart';
+import 'chart.dart';
+import 'icon.dart';
 
 class StatisticsPage extends StatefulWidget {
   const StatisticsPage({Key? key}) : super(key: key);
 
   @override
-  _StatisticsPageState createState() => _StatisticsPageState();
+  State<StatisticsPage> createState() => _StatisticsPageState();
 }
 
 class _StatisticsPageState extends State<StatisticsPage> {
