@@ -22,8 +22,10 @@ import 'package:catcher/catcher.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:kite/component/future_builder.dart';
 import 'package:kite/global/cookie_initializer.dart';
 import 'package:kite/global/dio_initializer.dart';
+import 'package:kite/route.dart';
 import 'package:kite/session/sso/index.dart';
 import 'package:kite/storage/dao/index.dart';
 import 'package:kite/util/alert_dialog.dart';
@@ -119,5 +121,33 @@ class Global {
       // 惰性登录
       ssoSession.lazyLogin(auth.currentUsername!, auth.ssoPassword!);
     }
+
+    // 全局FutureBuilder异常处理
+    MyFutureBuilder.globalErrorBuilder = (context, futureBuilder, error, stacktrace) {
+      // 单独处理网络连接错误，且不上报
+      if (error is DioError && [DioErrorType.connectTimeout, DioErrorType.other].contains((error).type)) {
+        return Center(
+          child: Column(
+            children: [
+              const Text('网络连接超时，请检查是否连接到校园网环境(也有可能学校临时维护服务器，请以网页登录结果为准)'),
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).pushReplacementNamed(RouteTable.connectivity),
+                child: const Text('进入网络工具检查'),
+              ),
+              if (futureBuilder.futureGetter != null && futureBuilder.controller != null)
+                TextButton(
+                  onPressed: () => futureBuilder.controller?.refresh(),
+                  child: const Text('刷新页面'),
+                ),
+            ],
+          ),
+        );
+      }
+
+      Catcher.reportCheckedError(error, stacktrace);
+
+      // 其他错误暂时不处理
+      return null;
+    };
   }
 }

@@ -18,13 +18,16 @@
 
 import 'dart:async';
 
-import 'package:catcher/catcher.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/route.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 typedef MyWidgetBuilder<T> = Widget Function(BuildContext context, T data);
+typedef MyErrorWidgetBuilder<T> = Widget? Function(
+  BuildContext context,
+  MyFutureBuilder futureBuilder,
+  dynamic error,
+  dynamic stackTrace,
+);
 
 class MyFutureBuilderController<T> {
   late _MyFutureBuilderState<T> _state;
@@ -34,6 +37,9 @@ class MyFutureBuilderController<T> {
 }
 
 class MyFutureBuilder<T> extends StatefulWidget {
+  // 全局错误处理
+  static MyErrorWidgetBuilder? globalErrorBuilder;
+
   final Future<T>? future;
   final MyWidgetBuilder<T>? builder;
   final MyWidgetBuilder? onErrorBuilder;
@@ -81,31 +87,21 @@ class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
   }
 
   Widget buildWhenError(error, stackTrace) {
-    if (!completer.isCompleted) completer.completeError(error, stackTrace);
-    // 单独处理网络连接错误，且不上报
-    if (error is DioError && [DioErrorType.connectTimeout, DioErrorType.other].contains((error).type)) {
-      return Center(
-        child: Column(
-          children: [
-            const Text('网络连接超时，请检查是否连接到校园网环境(也有可能学校临时维护服务器，请以网页登录结果为准)'),
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).pushReplacementNamed(RouteTable.connectivity),
-              child: const Text('进入网络工具检查'),
-            ),
-            if (widget.futureGetter != null)
-              TextButton(
-                onPressed: refresh,
-                child: const Text('刷新页面'),
-              ),
-          ],
-        ),
-      );
+    if (!completer.isCompleted) {
+      completer.completeError(error, stackTrace);
+    }
+    // 判定是否有单独处理
+    if (widget.onErrorBuilder != null) {
+      return widget.onErrorBuilder!(context, error);
     }
 
-    Catcher.reportCheckedError(error, stackTrace);
+    // 判定是否有全局处理
+    if (MyFutureBuilder.globalErrorBuilder != null) {
+      final r = MyFutureBuilder.globalErrorBuilder!(context, widget, error, stackTrace);
+      if (r != null) return r;
+    }
 
-    if (widget.onErrorBuilder != null) widget.onErrorBuilder!(context, error);
-
+    // 默认处理
     return Expanded(
       child: SingleChildScrollView(
         child: Column(
