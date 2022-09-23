@@ -23,6 +23,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/component/my_switcher.dart';
 import 'package:kite/feature/freshman/entity.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/util/flash.dart';
 
 import '../../../component/future_builder.dart';
@@ -122,9 +123,9 @@ class _FreshmanUpdatePageState extends State<FreshmanUpdatePage> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            buildTextFormField('微信', Icons.wechat, wechatTextEditingController),
-            buildTextFormField('QQ', Icons.person, qqTextEditingController),
-            buildTextFormField('手机号', Icons.phone, telTextEditingController),
+            buildTextFormField(i18n.wechat, Icons.wechat, wechatTextEditingController),
+            buildTextFormField(i18n.qq, Icons.person, qqTextEditingController),
+            buildTextFormField(i18n.phoneNumber, Icons.phone, telTextEditingController),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Row(
@@ -163,7 +164,7 @@ class _FreshmanUpdatePageState extends State<FreshmanUpdatePage> {
       decoration: InputDecoration(
         labelStyle: const TextStyle(color: Colors.black),
         labelText: fieldName,
-        hintText: '未填写',
+        hintText: i18n.unfilled,
         prefixIcon: Icon(iconData),
       ),
     );

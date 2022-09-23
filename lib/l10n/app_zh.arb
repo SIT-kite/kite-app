@@ -14,5 +14,18 @@
   },
   "cantLaunchQqSoToClipboard": "无法为您打开QQ，QQ号已复制到剪切板。",
   "@cantLaunchQqSoToClipboard": {
-  }
+  },
+  "noOnlineRecords": "从未在线",
+  "faculty": "学院",
+  "major": "专业",
+  "dormitory": "宿舍",
+  "dormitoryDetailed_rbb": "{building} {room}室 {bed}床",
+  "dormitoryDetailed_rb": "{building} {room}室",
+  "studentID": "学号",
+  "province": "省份",
+  "admissionInfo": "入学信息",
+  "freshman": "新生",
+  "roommate": "室友",
+  "classmate": "同学",
+  "friendsRadder": "可能认识的人"
 }

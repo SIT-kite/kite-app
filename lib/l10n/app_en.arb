@@ -1,4 +1,8 @@
 {
+  "yes": "Yes",
+  "no": "No",
+  "ok": "OK",
+  "dontShowThisAgain": "Don't show this again",
   "qq": "QQ",
   "wechat": "Wechat",
   "counselor": "Counselor",
@@ -17,5 +21,93 @@
   "cantLaunchQqSoToClipboard": "QQ number has been copied because QQ isn't available.",
   "@cantLaunchQqSoToClipboard": {
     "description": "Used in Freshman vCard when QQ.app can't be launched."
-  }
+  },
+  "noOnlineRecords": "No online records",
+  "faculty": "Faculty",
+  "major": "Major",
+  "name": "Name",
+  "fullName": "Name",
+  "nickName": "Name",
+  "gender": "Gender",
+  "male": "Male",
+  "female": "Female",
+  "city": "City",
+  "lastOnlineTime": "Last Online",
+  "unfilled": "Unfilled",
+  "tel": "TEL.",
+  "numberOfPeopleBesidesMe": "Number of people besides me",
+  "dormitory": "Dormitory",
+  "dormitoryDetailed_rbbc": "Room {room} Bed {bed} {building} {campus}",
+  "@dormitoryDetailed_rbbc": {
+    "placeholders": {
+      "room": {
+        "type": "int",
+        "example": "401"
+      },
+      "bed": {
+        "type": "String",
+        "example": "4"
+      },
+      "building": {
+        "type": "String"
+      },
+      "campus": {
+        "type": "String"
+      }
+    }
+  },
+  "dormitoryDetailed_rbb": "Room {room} Bed {bed} {building}",
+  "@dormitoryDetailed_rbb": {
+    "placeholders": {
+      "room": {
+        "type": "int",
+        "example": "401"
+      },
+      "bed": {
+        "type": "String",
+        "example": "4"
+      },
+      "building": {
+        "type": "String"
+      }
+    }
+  },
+  "dormitoryDetailed_rb": "Room {room} {building}",
+  "@dormitoryDetailed_rb": {
+    "placeholders": {
+      "room": {
+        "type": "int",
+        "example": "401"
+      },
+      "building": {
+        "type": "String"
+      }
+    }
+  },
+  "dormitoryDetailed_rbc": "Room {room} {building} {campus}",
+  "@dormitoryDetailed_rbc": {
+    "placeholders": {
+      "room": {
+        "type": "int",
+        "example": "401"
+      },
+      "building": {
+        "type": "String"
+      },
+      "campus": {
+        "type": "String"
+      }
+    }
+  },
+  "studentID": "Student ID",
+  "province": "Province",
+  "admissionInfo": "Admission Info",
+  "freshman": "Freshman",
+  "roommate": "Roommate",
+  "classmate": "Classmate",
+  "friendsRadder": "Friends Radder",
+  "newFriends": "New Friends",
+  "currentDormitory": "Current Dormitory",
+  "addInfo": "Add Info",
+  "addInfoRequest": "Would like you add personal information to display?"
 }

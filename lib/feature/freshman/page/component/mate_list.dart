@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/feature/freshman/page/component/card.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../entity.dart';
@@ -32,7 +33,6 @@ class MateListWidget extends StatelessWidget {
   final RefreshController _refreshController = RefreshController();
 
   MateListWidget(this.mateList, {this.callBack, this.showDormitory = true, Key? key}) : super(key: key);
-
   /// 打开个人详情页
   void loadMoreInfo(BuildContext context, Mate mate) {
     final lastSeenText = calcLastSeen(mate.lastSeen);
@@ -41,11 +41,11 @@ class MateListWidget extends StatelessWidget {
         name: mate.name,
         college: mate.college,
         infoItems: [
-          InfoItem(Icons.emoji_objects, '专业', mate.major),
-          InfoItem(Icons.bed, '寝室', '${mate.building} ${mate.room}室${mate.bed}床'),
-          InfoItem(mate.gender == 'M' ? Icons.male : Icons.female, '性别', mate.gender == 'M' ? '男' : '女'),
-          if (mate.province != null) InfoItem(Icons.location_city, '省份', mate.province!),
-          if (mate.lastSeen != null) InfoItem(Icons.location_city, '上次登录时间', lastSeenText),
+          InfoItem(Icons.emoji_objects, i18n.faculty, mate.major),
+          InfoItem(Icons.bed, i18n.dormitory, i18n.dormitoryDetailed_rbb(mate.room, mate.bed, mate.building)),
+          InfoItem(mate.gender == 'M' ? Icons.male : Icons.female, i18n.gender, mate.gender == 'M' ? i18n.male : i18n.female),
+          if (mate.province != null) InfoItem(Icons.location_city, i18n.province, mate.province!),
+          if (mate.lastSeen != null) InfoItem(Icons.location_city, i18n.lastOnlineTime, lastSeenText),
           ...buildContactInfoItems(context, mate.contact), // unpack
         ],
       );
@@ -59,17 +59,17 @@ class MateListWidget extends StatelessWidget {
     final tel = mate.contact?.tel;
     final wechatRow = buildInfoItemRow(
       iconData: Icons.wechat,
-      text: '微信:  ${wechat != null && wechat != '' ? wechat : '未填写'}',
+      text: '${i18n.wechat}:  ${wechat != null && wechat != '' ? wechat : i18n.unfilled}',
       context: context,
     );
     final qqRow = buildInfoItemRow(
       iconData: Icons.person,
-      text: 'QQ:  ${qq != null && qq != '' ? qq : '未填写'}',
+      text: '${i18n.qq}:  ${qq != null && qq != '' ? qq : i18n.unfilled}',
       context: context,
     );
     final telRow = buildInfoItemRow(
       iconData: Icons.phone,
-      text: '手机:  ${tel != null && tel != '' ? tel : '未填写'}',
+      text: '${i18n.tel}:  ${tel != null && tel != '' ? tel : i18n.unfilled}',
       context: context,
     );
 
@@ -95,18 +95,18 @@ class MateListWidget extends StatelessWidget {
           ),
           buildInfoItemRow(
             iconData: Icons.school,
-            text: '学院:  ${mate.college}',
+            text: '${i18n.faculty}:  ${mate.college}',
             context: context,
           ),
           buildInfoItemRow(
             iconData: Icons.emoji_objects,
-            text: '专业:  ${mate.major}',
+            text: '${i18n.major}:  ${mate.major}',
             context: context,
           ),
           if (showDormitory)
             buildInfoItemRow(
               iconData: Icons.home,
-              text: '寝室:  ${mate.building}${mate.room}室',
+              text: '${i18n.dormitory}: ${i18n.dormitoryDetailed_rb(mate.room, mate.building)}',
               context: context,
             ),
           wechatRow,
@@ -148,7 +148,7 @@ class MateListWidget extends StatelessWidget {
       children: [
         buildInfoItemRow(
           iconData: Icons.info,
-          text: '总计人数(不包含自己): ${mateList.length}',
+          text: '${i18n.numberOfPeopleBesidesMe}: ${mateList.length}',
           context: context,
         ).withTitleBarStyle(context),
         Expanded(

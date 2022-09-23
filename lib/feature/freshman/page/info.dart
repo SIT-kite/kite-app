@@ -22,6 +22,7 @@ import 'package:kite/feature/freshman/page/component/profile.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
 import 'package:kite/util/alert_dialog.dart';
+import 'package:kite/util/dsl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../component/future_builder.dart';
@@ -42,11 +43,11 @@ class FreshmanPage extends StatelessWidget {
 
   void showFirstDialog(BuildContext context) {
     if (!(freshmanCacheDao.disableFirstEnterDialogState ?? false)) {
-      showAlertDialog(context, title: '补充资料', content: [
-        const Text('是否补充个人资料？')
+      showAlertDialog(context, title: i18n.addInfo, content: [
+        i18n.addInfoRequest.txt
       ], actionWidgetList: [
-        ElevatedButton(onPressed: () {}, child: const Text('补充信息')),
-        TextButton(onPressed: () {}, child: const Text('不再提示')),
+        ElevatedButton(onPressed: () {}, child: i18n.yes.txt),
+        TextButton(onPressed: () {}, child: i18n.dontShowThisAgain.txt),
       ]).then((select) {
         if (select == 0) {
           Navigator.of(context).pushNamed(RouteTable.freshmanUpdate);
@@ -81,10 +82,10 @@ class FreshmanPage extends StatelessWidget {
       name: data.name,
       college: data.college,
       infoItems: [
-        InfoItem(Icons.badge, '学号', data.studentId),
-        InfoItem(Icons.emoji_objects, '专业', data.major),
-        InfoItem(Icons.corporate_fare, '宿舍', '${data.campus} ${data.building}${data.room}-${data.bed}'),
-        InfoItem(Icons.face,ctx.l.counselor, data.counselorName),
+        InfoItem(Icons.badge, i18n.studentID, data.studentId),
+        InfoItem(Icons.emoji_objects, i18n.major, data.major),
+        InfoItem(Icons.corporate_fare, i18n.dormitory, i18n.dormitoryDetailed_rbbc(data.room, data.bed, data.building, data.campus)),
+        InfoItem(Icons.face,i18n.counselor, data.counselorName),
         ...buildContactInfoItems(ctx, data.contact, counselorTel: data.counselorTel),
       ],
       appBarActions: buildAppBarMenuButton(ctx),

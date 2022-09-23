@@ -22,6 +22,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/storage/init.dart';
 
 import '../../../../route.dart';
+import 'package:kite/l10n/extension.dart';
 
 class InfoItem {
   IconData iconData = Icons.person;
@@ -96,7 +97,7 @@ class BasicInfoPageWidget extends StatelessWidget {
   Widget _buildBackground(BuildContext context, String name, String college, List<InfoItem> list) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title ?? '入学信息'),
+        title: Text(title ?? i18n.admissionInfo),
         actions: appBarActions,
       ),
       body: Stack(
@@ -158,7 +159,7 @@ class BasicInfoPageWidget extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    '$college新生',
+                    '$college ${i18n.freshman}',
                     textAlign: TextAlign.left,
                     style: const TextStyle(color: CupertinoColors.white, fontSize: 16, decoration: TextDecoration.none),
                   )

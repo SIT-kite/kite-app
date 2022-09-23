@@ -97,6 +97,7 @@ class FreshmanAnalysisPage extends StatelessWidget {
   /// 文字列抽离
   Widget buildTextColumn(BuildContext context, Analysis data, FreshmanInfo info) {
     TextStyle italicText = const TextStyle(fontStyle: FontStyle.italic, fontSize: 15);
+    // TODO: I18n
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,

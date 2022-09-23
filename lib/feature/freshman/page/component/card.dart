@@ -67,7 +67,7 @@ class PersonItemWidget extends StatelessWidget {
   Widget buildLastSeen(BuildContext context) {
     return buildInfoItemRow(
       iconData: Icons.timelapse,
-      text: '$lastSeenText ${context.l.online}',
+      text: lastSeenText,
       fontSize: 14,
       iconSize: 20,
       context: context,

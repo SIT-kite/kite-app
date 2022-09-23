@@ -28,8 +28,7 @@ import 'package:kite/util/flash.dart';
 import '../../entity.dart';
 import 'profile.dart';
 
-List<InfoItem> buildContactInfoItems(BuildContext ctx, Contact? contact,
-    {String? counselorTel}) {
+List<InfoItem> buildContactInfoItems(BuildContext ctx, Contact? contact, {String? counselorTel}) {
   final wechat = contact?.wechat;
   final qq = contact?.qq;
   final tel = contact?.tel;
@@ -37,12 +36,12 @@ List<InfoItem> buildContactInfoItems(BuildContext ctx, Contact? contact,
     if (counselorTel != null && counselorTel.isNotEmpty)
       InfoItem(
         Icons.phone_in_talk,
-        ctx.l.counselorPhoneNumber,
+        i18n.counselorPhoneNumber,
         counselorTel,
         onTap: () async {
           if (!await GlobalLauncher.launchTel(counselorTel)) {
             Clipboard.setData(ClipboardData(text: counselorTel));
-            showBasicFlash(ctx, ctx.l.cantLaunchPhoneSoToClipboard.txt);
+            showBasicFlash(ctx, i18n.cantLaunchPhoneSoToClipboard.txt);
           }
         },
         trailIconData: Icons.phone,
@@ -50,23 +49,23 @@ List<InfoItem> buildContactInfoItems(BuildContext ctx, Contact? contact,
     if (wechat != null && wechat.isNotEmpty)
       InfoItem(
         Icons.wechat,
-        ctx.l.wechat,
+        i18n.wechat,
         wechat,
         onTap: () {
           Clipboard.setData(ClipboardData(text: wechat));
-          showBasicFlash(ctx, ctx.l.cantLaunchWechatSoToClipboard.txt);
+          showBasicFlash(ctx, i18n.cantLaunchWechatSoToClipboard.txt);
         },
         trailIconData: Icons.copy,
       ),
     if (qq != null && qq.isNotEmpty)
       InfoItem(
         Icons.person,
-        ctx.l.qq,
+        i18n.qq,
         qq,
         onTap: () async {
           if (!await GlobalLauncher.launchQqContact(qq)) {
             Clipboard.setData(ClipboardData(text: qq));
-            showBasicFlash(ctx, ctx.l.cantLaunchQqSoToClipboard.txt);
+            showBasicFlash(ctx, i18n.cantLaunchQqSoToClipboard.txt);
           }
         },
         trailIconData: Icons.open_in_browser,
@@ -74,12 +73,12 @@ List<InfoItem> buildContactInfoItems(BuildContext ctx, Contact? contact,
     if (tel != null && tel.isNotEmpty)
       InfoItem(
         Icons.phone,
-        ctx.l.phoneNumber,
+        i18n.phoneNumber,
         tel,
         onTap: () async {
           if (!await GlobalLauncher.launchTel(tel)) {
             Clipboard.setData(ClipboardData(text: tel));
-            showBasicFlash(ctx, ctx.l.cantLaunchPhoneSoToClipboard.txt);
+            showBasicFlash(ctx, i18n.cantLaunchPhoneSoToClipboard.txt);
           }
         },
         trailIconData: Icons.phone,
@@ -88,16 +87,14 @@ List<InfoItem> buildContactInfoItems(BuildContext ctx, Contact? contact,
 }
 
 Widget buildListItemDefaultAvatar(BuildContext context, String name) {
-  final TextStyle avatarStyle =
-      Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.grey[50]);
+  final TextStyle avatarStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.grey[50]);
 
   return CircleAvatar(
     backgroundColor: Colors.white,
     radius: 20,
     child: Container(
       child: name.isEmpty
-          ? const Center(
-              child: Icon(Icons.account_circle, size: 40, color: Colors.black))
+          ? const Center(child: Icon(Icons.account_circle, size: 40, color: Colors.black))
           : Text(name[0], style: avatarStyle),
     ),
   );
@@ -109,29 +106,19 @@ Widget buildDefaultAvatar(String name, {required Color defaultColor}) {
     decoration: BoxDecoration(
       shape: BoxShape.circle,
       color: defaultColor,
-      boxShadow: const [
-        BoxShadow(
-            color: Colors.black54, offset: Offset(1.0, 1.0), blurRadius: 2.0)
-      ],
+      boxShadow: const [BoxShadow(color: Colors.black54, offset: Offset(1.0, 1.0), blurRadius: 2.0)],
     ),
     child: Container(
       alignment: const Alignment(0, 0),
       child: name.isEmpty
-          ? Center(
-              child:
-                  Icon(Icons.account_circle, size: 40, color: Colors.grey[50]))
+          ? Center(child: Icon(Icons.account_circle, size: 40, color: Colors.grey[50]))
           : Text(
               name[0],
               style: const TextStyle(
                   fontFamily: 'calligraphy',
                   fontSize: 45,
                   color: Colors.white,
-                  shadows: [
-                    BoxShadow(
-                        color: Colors.black54,
-                        offset: Offset(2.0, 4.0),
-                        blurRadius: 10.0)
-                  ],
+                  shadows: [BoxShadow(color: Colors.black54, offset: Offset(2.0, 4.0), blurRadius: 10.0)],
                   fontWeight: FontWeight.bold,
                   decoration: TextDecoration.none),
             ),
@@ -140,8 +127,7 @@ Widget buildDefaultAvatar(String name, {required Color defaultColor}) {
 }
 
 /// 构造头像
-Widget buildAvatar(
-    {Widget? avatar, required String name, Color color = Colors.blueAccent}) {
+Widget buildAvatar({Widget? avatar, required String name, Color color = Colors.blueAccent}) {
   return Container(
     width: 70,
     height: 70,
@@ -153,11 +139,13 @@ Widget buildAvatar(
 }
 
 String calcLastSeen(DateTime? lastSeen) {
-  var lastSeenText = '从未登录';
+  // TODO: A potential time zone bug is here.
+  var lastSeenText = i18n.noOnlineRecords;
   if (lastSeen != null) {
     lastSeenText = '';
     final diff = DateTime.now().difference(lastSeen);
     if (diff.inDays != 0) {
+      // handle with plural
       lastSeenText += '${diff.inDays}天前';
     } else if (diff.inHours != 0) {
       lastSeenText += '${diff.inHours}小时前';
@@ -205,9 +193,8 @@ Widget buildInfoItemRow({
 extension Styles on Widget {
   Widget withTitleBarStyle(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-          color: Colors.white,
-          boxShadow: [BoxShadow(color: Colors.grey, offset: Offset(1, 1.0))]),
+      decoration:
+          const BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(color: Colors.grey, offset: Offset(1, 1.0))]),
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(5),
       child: this,
@@ -229,14 +216,12 @@ extension Styles on Widget {
 List<Widget> buildAppBarMenuButton(BuildContext context) {
   return <Widget>[
     IconButton(
-      onPressed: () =>
-          Navigator.of(context).pushNamed(RouteTable.freshmanAnalysis),
+      onPressed: () => Navigator.of(context).pushNamed(RouteTable.freshmanAnalysis),
       icon: const Icon(Icons.analytics),
       tooltip: '风筝报告',
     ),
     IconButton(
-      onPressed: () =>
-          Navigator.of(context).pushNamed(RouteTable.freshmanUpdate),
+      onPressed: () => Navigator.of(context).pushNamed(RouteTable.freshmanUpdate),
       icon: const Icon(Icons.menu),
       tooltip: '联系方式设置',
     )

@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/feature/freshman/cache.dart';
 import 'package:kite/feature/freshman/page/component/common.dart';
+import 'package:kite/l10n/extension.dart';
 
 import '../../dao.dart';
 import '../../entity.dart';
@@ -48,7 +49,7 @@ class _RoommateWidgetState extends State<RoommateWidget> {
       children: [
         buildInfoItemRow(
           iconData: Icons.home,
-          text: '当前宿舍：${myInfo.campus}-${myInfo.building}-${myInfo.room}',
+          text: '${i18n.currentDormitory}:  ${i18n.dormitoryDetailed_rbc(myInfo.room, myInfo.building, myInfo.campus)}',
           context: context,
         ).withTitleBarStyle(context),
         Expanded(child: MateListWidget(mateList, callBack: onRefresh, showDormitory: false)),

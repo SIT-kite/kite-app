@@ -24,6 +24,7 @@ import '../../entity.dart';
 import 'card.dart';
 import 'common.dart';
 import 'profile.dart';
+import 'package:kite/l10n/extension.dart';
 
 class FamiliarListWidget extends StatefulWidget {
   final List<Familiar> familiarList;
@@ -48,11 +49,12 @@ class _FamiliarListWidgetState extends State<FamiliarListWidget> {
           name: familiar.name,
           college: familiar.college,
           infoItems: [
-            InfoItem(Icons.account_circle, '姓名', familiar.name),
-            InfoItem(Icons.school, '学院', familiar.college),
-            InfoItem(familiar.gender == 'M' ? Icons.male : Icons.female, '性别', familiar.gender == 'M' ? '男' : '女'),
-            if (familiar.city != null) InfoItem(Icons.location_city, '城市', familiar.city!),
-            if (familiar.lastSeen != null) InfoItem(Icons.timelapse, '上次登录时间', lastSeenText),
+            InfoItem(Icons.account_circle, i18n.fullName, familiar.name),
+            InfoItem(Icons.school, i18n.faculty, familiar.college),
+            InfoItem(familiar.gender == 'M' ? Icons.male : Icons.female, i18n.gender,
+                familiar.gender == 'M' ? i18n.male : i18n.female),
+            if (familiar.city != null) InfoItem(Icons.location_city, i18n.city, familiar.city!),
+            if (familiar.lastSeen != null) InfoItem(Icons.timelapse, i18n.lastOnlineTime, lastSeenText),
             ...buildContactInfoItems(context, familiar.contact), // unpack
           ],
         );
@@ -66,17 +68,17 @@ class _FamiliarListWidgetState extends State<FamiliarListWidget> {
     final tel = familiar.contact?.tel;
     final wechatRow = buildInfoItemRow(
       iconData: Icons.wechat,
-      text: '微信号:  ${wechat != null && wechat != '' ? wechat : '未填写'}',
+      text: '${i18n.wechat}  ${wechat != null && wechat != '' ? wechat : i18n.unfilled}',
       context: context,
     );
     final qqRow = buildInfoItemRow(
       iconData: Icons.person,
-      text: 'QQ:  ${qq != null && qq != '' ? qq : '未填写'}',
+      text: '${i18n.qq}:  ${qq != null && qq != '' ? qq : i18n.unfilled}',
       context: context,
     );
     final telRow = buildInfoItemRow(
       iconData: Icons.phone,
-      text: '手机号:  ${tel != null && tel != '' ? tel : '未填写'}',
+      text: '${i18n.tel}  ${tel != null && tel != '' ? tel : i18n.unfilled}',
       context: context,
     );
 
@@ -102,7 +104,7 @@ class _FamiliarListWidgetState extends State<FamiliarListWidget> {
             ),
             buildInfoItemRow(
               iconData: Icons.school,
-              text: '学院:  ${familiar.college}',
+              text: '${i18n.faculty}  ${familiar.college}',
               context: context,
             ),
             wechatRow,
@@ -147,7 +149,7 @@ class _FamiliarListWidgetState extends State<FamiliarListWidget> {
       children: [
         buildInfoItemRow(
           iconData: Icons.info,
-          text: '总计人数(不包含自己): ${widget.familiarList.length}',
+          text: '${i18n.numberOfPeopleBesidesMe}: ${widget.familiarList.length}',
           context: context,
         ).withTitleBarStyle(context),
         Expanded(
