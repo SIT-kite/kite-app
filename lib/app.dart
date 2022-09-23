@@ -34,8 +34,7 @@ import 'global/global.dart';
 import 'storage/init.dart';
 import 'util/logger.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-const title = '上应小风筝';
-
+import 'r.dart';
 class KiteApp extends StatefulWidget {
   const KiteApp({Key? key}) : super(key: key);
 
@@ -108,7 +107,7 @@ class _KiteAppState extends State<KiteApp> {
     });
     buildMaterialWithTheme(ThemeData theme) {
       return MaterialApp(
-        title: title,
+        title: R.appName,
         theme: theme,
         home: home,
         debugShowCheckedModeBanner: false,

@@ -26,6 +26,7 @@ import 'package:kite/feature/freshman/entity.dart';
 import '../dao.dart';
 import '../init.dart';
 
+// TODO: Rename this to statistics
 class FreshmanAnalysisPage extends StatelessWidget {
   const FreshmanAnalysisPage({Key? key}) : super(key: key);
 
@@ -93,7 +94,7 @@ class FreshmanAnalysisPage extends StatelessWidget {
       ],
     );
   }
-
+  // TODO: I18n
   /// 文字列抽离
   Widget buildTextColumn(BuildContext context, Analysis data, FreshmanInfo info) {
     TextStyle italicText = const TextStyle(fontStyle: FontStyle.italic, fontSize: 15);

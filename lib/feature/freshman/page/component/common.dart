@@ -41,7 +41,7 @@ List<InfoItem> buildContactInfoItems(BuildContext ctx, Contact? contact, {String
         onTap: () async {
           if (!await GlobalLauncher.launchTel(counselorTel)) {
             Clipboard.setData(ClipboardData(text: counselorTel));
-            showBasicFlash(ctx, i18n.cantLaunchPhoneSoToClipboard.txt);
+            showBasicFlash(ctx, i18n.cantLaunchPhoneSoNumber2ClipboardTip.txt);
           }
         },
         trailIconData: Icons.phone,
@@ -53,7 +53,7 @@ List<InfoItem> buildContactInfoItems(BuildContext ctx, Contact? contact, {String
         wechat,
         onTap: () {
           Clipboard.setData(ClipboardData(text: wechat));
-          showBasicFlash(ctx, i18n.cantLaunchWechatSoToClipboard.txt);
+          showBasicFlash(ctx, i18n.cantLaunchWechatSoNumber2ClipboardTip.txt);
         },
         trailIconData: Icons.copy,
       ),
@@ -65,7 +65,7 @@ List<InfoItem> buildContactInfoItems(BuildContext ctx, Contact? contact, {String
         onTap: () async {
           if (!await GlobalLauncher.launchQqContact(qq)) {
             Clipboard.setData(ClipboardData(text: qq));
-            showBasicFlash(ctx, i18n.cantLaunchQqSoToClipboard.txt);
+            showBasicFlash(ctx, i18n.cantLaunchQqSoNumber2ClipboardTip.txt);
           }
         },
         trailIconData: Icons.open_in_browser,
@@ -78,7 +78,7 @@ List<InfoItem> buildContactInfoItems(BuildContext ctx, Contact? contact, {String
         onTap: () async {
           if (!await GlobalLauncher.launchTel(tel)) {
             Clipboard.setData(ClipboardData(text: tel));
-            showBasicFlash(ctx, i18n.cantLaunchPhoneSoToClipboard.txt);
+            showBasicFlash(ctx, i18n.cantLaunchPhoneSoNumber2ClipboardTip.txt);
           }
         },
         trailIconData: Icons.phone,
@@ -218,12 +218,12 @@ List<Widget> buildAppBarMenuButton(BuildContext context) {
     IconButton(
       onPressed: () => Navigator.of(context).pushNamed(RouteTable.freshmanAnalysis),
       icon: const Icon(Icons.analytics),
-      tooltip: '风筝报告',
+      tooltip: i18n.kiteStatisticsButton,
     ),
     IconButton(
       onPressed: () => Navigator.of(context).pushNamed(RouteTable.freshmanUpdate),
       icon: const Icon(Icons.menu),
-      tooltip: '联系方式设置',
+      tooltip: i18n.personalInfoSettingButton,
     )
   ];
 }

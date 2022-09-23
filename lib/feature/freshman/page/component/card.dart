@@ -56,7 +56,7 @@ class PersonItemWidget extends StatelessWidget {
             ]),
         child: (buildInfoItemRow(
           iconData: Icons.send,
-          text: context.l.moreInfo,
+          text: context.l.moreInfoTitle,
           fontSize: 20,
           context: context,
         )),
@@ -87,8 +87,7 @@ class PersonItemWidget extends StatelessWidget {
     } else {
       return buildInfoItemRow(
         iconData: Icons.room,
-        //TODO: I18n
-        text: '在宇宙漫游哦',
+        text: i18n.noLocationLabel,
         fontSize: 14,
         iconSize: 17,
         context: context,

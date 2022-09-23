@@ -2,23 +2,24 @@
   "yes": "Yes",
   "no": "No",
   "ok": "OK",
-  "dontShowThisAgain": "Don't show this again",
+  "dontShowThisAgainButton": "Don't show this again",
   "qq": "QQ",
   "wechat": "Wechat",
   "counselor": "Counselor",
   "counselorPhoneNumber": "Counselor Phone Number",
   "phoneNumber": "Phone Number",
-  "moreInfo": "More Info",
+  "moreInfoTitle": "More Info",
   "online": "Online",
-  "cantLaunchPhoneSoToClipboard": "Phone number has been copied because Phone Call isn't available.",
+  "acceptedAgreementCheckbox": "I have known and accepted",
+  "cantLaunchPhoneSoNumber2ClipboardTip": "Phone number has been copied because Phone Call isn't available.",
   "@cantLaunchPhoneSoToClipboard": {
     "description": "Used in Freshman vCard when Phone.app can't be launched."
   },
-  "cantLaunchWechatSoToClipboard": "Wechat number has been copied because Wechat isn't available.",
+  "cantLaunchWechatSoNumber2ClipboardTip": "Wechat number has been copied because Wechat isn't available.",
   "@cantLaunchWechatSoToClipboard": {
     "description": "Used in Freshman vCard when Wechat.app can't be launched."
   },
-  "cantLaunchQqSoToClipboard": "QQ number has been copied because QQ isn't available.",
+  "cantLaunchQqSoNumber2ClipboardTip": "QQ number has been copied because QQ isn't available.",
   "@cantLaunchQqSoToClipboard": {
     "description": "Used in Freshman vCard when QQ.app can't be launched."
   },
@@ -26,7 +27,7 @@
   "faculty": "Faculty",
   "major": "Major",
   "name": "Name",
-  "fullName": "Name",
+  "fullName": "Full Name",
   "nickName": "Name",
   "gender": "Gender",
   "male": "Male",
@@ -101,13 +102,37 @@
   },
   "studentID": "Student ID",
   "province": "Province",
-  "admissionInfo": "Admission Info",
+  "admissionInfoTitle": "Admission Info",
   "freshman": "Freshman",
   "roommate": "Roommate",
   "classmate": "Classmate",
   "friendsRadder": "Friends Radder",
-  "newFriends": "New Friends",
-  "currentDormitory": "Current Dormitory",
-  "addInfo": "Add Info",
-  "addInfoRequest": "Would like you add personal information to display?"
+  "newFriendsTitle": "New Friends",
+  "currentDormitoryLabel": "Current Dormitory",
+  "addInfoTitle": "Add Info",
+  "addInfoRequest": "Would like you add personal information to display?",
+  "personalInfoTitle": "Personal Info",
+  "userInfoUpdatedTip": "Your info updated!",
+  "allowOthersFindMeCheckbox": "Allow others to find me",
+  "personalInfoDescriptionLabel": "The information on this page would show your roommates and classmate. It's convenient to make friends or create chat rooms.",
+  "noLocationLabel": "No location",
+  "kiteStatisticsButton": "Kite Statistics",
+  "personalInfoSettingButton": "Set Personal Info",
+  "account": "Account",
+  "password": "Password",
+  "freshmanLoginAccountHint": "Student ID/Full Name/Examinee Number",
+  "freshmanLoginPasswordHint": "The last six number of your ID card",
+  "freshmanLoginButton": "Join Kite World",
+  "freshmanTitle": "Welcome!",
+  "freshmanIssueFeedbackButton": "Feedback",
+  "freshmanLoginFailedWarn": "Login failed",
+  "readAndAcceptRequest": "Please read and accept {agreement}.",
+  "@readAndAcceptRequest": {
+    "placeholders": {
+      "agreement": {
+        "type": "String"
+      }
+    }
+  },
+  "validateInputRequest": "Please check your input."
 }

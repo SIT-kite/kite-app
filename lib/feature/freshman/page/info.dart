@@ -43,11 +43,11 @@ class FreshmanPage extends StatelessWidget {
 
   void showFirstDialog(BuildContext context) {
     if (!(freshmanCacheDao.disableFirstEnterDialogState ?? false)) {
-      showAlertDialog(context, title: i18n.addInfo, content: [
+      showAlertDialog(context, title: i18n.addInfoTitle, content: [
         i18n.addInfoRequest.txt
       ], actionWidgetList: [
         ElevatedButton(onPressed: () {}, child: i18n.yes.txt),
-        TextButton(onPressed: () {}, child: i18n.dontShowThisAgain.txt),
+        TextButton(onPressed: () {}, child: i18n.dontShowThisAgainButton.txt),
       ]).then((select) {
         if (select == 0) {
           Navigator.of(context).pushNamed(RouteTable.freshmanUpdate);

@@ -27,5 +27,12 @@
   "freshman": "新生",
   "roommate": "室友",
   "classmate": "同学",
-  "friendsRadder": "可能认识的人"
+  "friendsRadder": "可能认识的人",
+  "novCardLocationLabel": "在宇宙漫游哦",
+  "account": "账号",
+  "password": "密码",
+  "freshmanLoginAccountHint": "学号/姓名/准考证号",
+  "freshmanLoginPasswordHint": "身份证号后六位",
+  "freshmanLoginButton": "进入风筝元宇宙",
+  "freshmanIssueFeedbackButton": "遇到问题"
 }

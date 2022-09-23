@@ -56,7 +56,7 @@ class _FreshmanFriendPageState extends State<FreshmanFriendPage> with SingleTick
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: i18n.newFriends.txt,
+          title: i18n.newFriendsTitle.txt,
           bottom: _buildBarHeader(),
           actions: buildAppBarMenuButton(context),
         ),
