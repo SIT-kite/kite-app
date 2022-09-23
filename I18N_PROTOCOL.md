@@ -27,10 +27,10 @@ var response = i18n.yes;
 response = i18n.no;
 ```
 
-You can also add, remove, modify or even support a new language in the [l10n](lib/l10n) folder.
+You can also add, remove, modify or even support a new language in the [l10n](l10n) folder.
 
-The [app_en.arb](lib/l10n/app_en.arb) is the template language, which means any structural change will affect other
-languages.
+The [app_en.arb](l10n/app_en.arb) is the template localization, hereinafter referred to as `template`,
+which means any structural change will affect other languages.
 
 More readings:
 [A Guide to Flutter Localization](https://phrase.com/blog/posts/flutter-localization/),
@@ -39,7 +39,8 @@ More readings:
 
 ## Internationalization Protocol
 
-I18n aims at building a flexible system/scaffold for the collaboration of programming and localization.
+I18n aims to build a flexible and low coupling system/scaffold for
+the collaboration of programming and localization.
 
 ### Naming the Translation Key
 
@@ -61,7 +62,10 @@ use them in naming unambiguously.
 
 ``` json
 // Good
-""
+"foodNotFoundInListError": "Sorry, what you chosen isn't found in this list."
+
+// Bad
+"findFoodWrongInList": "Sorry, what you chosen isn't found in this list."
 ```
 
 3️⃣ Use the common abbreviation instead of a long phrase or any word that has a conventional abbreviation.
@@ -103,19 +107,42 @@ use them in naming unambiguously.
 
 ### Used in controls
 
-1️⃣ For the toast, pop-up and flash, suffix the translation key with:
+1️⃣ For the `toast`, `pop-up` and `flash`, suffix the translation key with:
 
-- `Tip`: If users did well. To tip users something. e.g.: `ChangedPassowrdTip`, `UnsavedChangeTip`
-- `Warn`: If users did something wrong. e.g.: `PhoneNumberInputIsEmptyWarn`.
-- `Error`: If an error appeared. e.g.: `DisconnectedError`,`NetworkTimeoutError`.
+- `Tip`: If users did well. To tip users something. e.g.: `changedPassowrdTip`, `unsavedChangeTip`
+- `Warn`: If users did something wrong. e.g.: `phoneNumberInputIsEmptyWarn`.
+- `Error`: If an error appeared. e.g.: `disconnectedError`,`networkTimeoutError`.
 
-2️⃣ For any request dialog, suffix the translation key with:
+**Purpose:** It's free to switch the form of expression without any change of translation key.
 
-- `Request`: If app wants users to do something. e.g.: `ChangePasswordRequest`,`AddPersonalInfoRequest`
+2️⃣ For any `request dialog`, suffix the translation key with:
+
+- `Request`: If app wants users to do something. e.g.: `changePasswordRequest`,`addPersonalInfoRequest`
+
+**Purpose:** It emphasizes the right tone in front of users.
+
+3️⃣ For `Button`, `Label`, `Title` and other controls, suffix the translation key with the current layer.
+Such as `freshmanProfileTitle`, `freshmanAddInfoTitle`, `addInfoButton`.
+
+**Purpose:** It's clear to find the corresponding control in a layer-based UI.
 
 ### Formatting Overloading
 
+When it comes to overload placeholder functions, suffix with the abbreviation of its parameter signature, for example:
+
+``` json
+"dormitoryDetailed_rbbc": "Room {room} Bed {bed} {building} {campus}",
+"dormitoryDetailed_rbb": "Room {room} Bed {bed} {building}",
+"dormitoryDetailed_rb": "Room {room} {building}",
+"dormitoryDetailed_rbc": "Room {room} {building} {campus}"
+```
+
+The best practice is to add the first alphabet in lowercase for each parameter sequentially after a underscore.
+
 ## Localization Protocol
+
+I10n is designed to assist translation workers to understand in a comprehensive manner,
+which comes with a new workflow.
 
 ### Language style
 
@@ -137,7 +164,7 @@ Something is wrong. Please try again later.
 
 // Bad
 """
-ConnectionTimeOutException at stacktrace....
+ConnectionTimeoutException at stacktrace....
 Your Operation failed.
 """
 
@@ -148,11 +175,10 @@ Unknown exception. Your opeartion was cancelled.
 
 ### Editing .arb File
 
-Keep the order of other l10n files identical to the [template l10n file](lib/l10n/app_en.arb),
-hereinafter referred to as `template`.
+1️⃣ Keep the order of other l10n files identical to the `template`.
 
-It'd be better to attach a description for every translation entry, as mentioned below, in `template`
-to hint localization workers the usage of the entry.
+2️⃣ It'd be better to attach a description for every translation entry, as mentioned below, in `template`
+to hint localization workers and programmer the usage of those entries.
 
 ``` json
 "cantLaunchQqSo2Clipboard": "QQ number has been copied because QQ isn't available.",
@@ -161,7 +187,7 @@ to hint localization workers the usage of the entry.
 }
 ```
 
-Use string-format syntax to help workers organize the word order for all languages,
+3️⃣ Use string-format syntax to help workers organize the word order for all languages,
 such as English, Chinese and Japanese.
 
 ``` json
@@ -183,5 +209,5 @@ such as English, Chinese and Japanese.
 }
 ```
 
-Do not copy `description` and `placeholders` from meta keys, prefixed with `@`, in `template` to a concrete
+4️⃣ Do not copy `description` and `placeholders` from meta keys, prefixed with `@`, in `template` to a concrete
 language one.
