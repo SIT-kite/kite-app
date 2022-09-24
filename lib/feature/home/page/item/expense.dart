@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/feature/expense/entity/expense.dart';
 import 'package:kite/feature/expense/init.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/l10n/extension.dart';
 
 import 'index.dart';
 
@@ -31,7 +32,7 @@ class ExpenseItem extends StatefulWidget {
 
 class _ExpenseItemState extends State<ExpenseItem> {
   final ExpenseRecord? lastExpense = ExpenseInitializer.expenseRecord.getLastOne();
-  late String content = '校园卡消费记录';
+  String content = i18n.ftype_expenseTracker_desc;
 
   @override
   void initState() {
@@ -48,7 +49,7 @@ class _ExpenseItemState extends State<ExpenseItem> {
     return HomeFunctionButton(
       route: '/expense',
       icon: 'assets/home/icon_expense.svg',
-      title: '查消费',
+      title: i18n.ftype_expenseTracker,
       subtitle: content,
     );
   }

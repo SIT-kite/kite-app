@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/feature/initializer_index.dart';
 import 'package:kite/feature/report/entity/report.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/alert_dialog.dart';
@@ -33,7 +34,7 @@ class ReportItem extends StatefulWidget {
 }
 
 class _ReportItemState extends State<ReportItem> {
-  static const String defaultContent = '记得上报哦';
+  static String defaultContent = i18n.ftype_reportTemperature_desc;
   String? content;
 
   /// 用于限制仅弹出一次对话框
@@ -129,7 +130,7 @@ class _ReportItemState extends State<ReportItem> {
     return HomeFunctionButton(
       route: '/report',
       icon: 'assets/home/icon_report.svg',
-      title: '体温上报',
+      title: i18n.ftype_reportTemperature,
       subtitle: content,
     );
   }

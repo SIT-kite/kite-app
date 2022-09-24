@@ -20,6 +20,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/feature/home/page/item/electricity.dart';
 import 'package:kite/feature/override/entity.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/launch.dart';
 import 'package:kite/route.dart';
 import 'package:kite/util/logger.dart';
@@ -45,6 +46,7 @@ class HomeFunctionButton extends StatelessWidget {
   final String title;
   final String? subtitle;
   final VoidCallback? onPressed;
+
   HomeFunctionButton({
     this.route,
     this.onPressed,
@@ -59,22 +61,16 @@ class HomeFunctionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final titleStyle =
-        Theme.of(context).textTheme.headline4?.copyWith(color: Colors.black54);
-    final subtitleStyle =
-        Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.black54);
+    final titleStyle = Theme.of(context).textTheme.headline4?.copyWith(color: Colors.black54);
+    final subtitleStyle = Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.black54);
 
     return Container(
       decoration: BoxDecoration(color: Colors.white.withOpacity(0.6)),
       child: ListTile(
-        leading: iconWidget ??
-            SvgPicture.asset(icon!,
-                height: 30.h,
-                width: 30.w,
-                color: Theme.of(context).primaryColor),
+        leading:
+            iconWidget ?? SvgPicture.asset(icon!, height: 30.h, width: 30.w, color: Theme.of(context).primaryColor),
         title: Text(title, style: titleStyle),
-        subtitle: Text(subtitle ?? '',
-            style: subtitleStyle, maxLines: 1, overflow: TextOverflow.ellipsis),
+        subtitle: Text(subtitle ?? '', style: subtitleStyle, maxLines: 1, overflow: TextOverflow.ellipsis),
         // dense: true,
         onTap: () {
           if (onPressed != null) {
@@ -98,29 +94,29 @@ class FunctionButtonFactory {
     FunctionType.timetable: (context) => HomeFunctionButton(
           route: '/timetable',
           icon: 'assets/home/icon_timetable.svg',
-          title: '课程表',
-          subtitle: '查看近期课程',
+          title: i18n.ftype_timetable,
+          subtitle: i18n.ftype_timetable_desc,
         ),
     FunctionType.report: (context) => const ReportItem(),
     FunctionType.exam: (context) => const ExamItem(),
     FunctionType.classroom: (context) => HomeFunctionButton(
           route: '/classroom',
           icon: 'assets/home/icon_classroom.svg',
-          title: '空教室',
-          subtitle: '查看当前无课的教室',
+          title: i18n.ftype_classroomBrowser,
+          subtitle: i18n.ftype_classroomBrowser_desc,
         ),
     FunctionType.event: (context) => HomeFunctionButton(
           route: '/event',
           icon: 'assets/home/icon_event.svg',
-          title: '活动',
-          subtitle: '查看最新的第二课堂活动',
+          title: i18n.ftype_event,
+          subtitle: i18n.ftype_event_desc,
         ),
     FunctionType.expense: (context) => const ExpenseItem(),
     FunctionType.score: (context) => HomeFunctionButton(
           route: '/score',
           icon: 'assets/home/icon_score.svg',
-          title: '成绩',
-          subtitle: '愿每一天都有收获',
+          title: i18n.ftype_examResult,
+          subtitle: i18n.ftype_examResult_desc,
         ),
     FunctionType.library: (context) => const LibraryItem(),
     FunctionType.office: (context) => const OfficeItem(),
@@ -128,26 +124,26 @@ class FunctionButtonFactory {
     FunctionType.bulletin: (context) => HomeFunctionButton(
           route: '/bulletin',
           icon: 'assets/home/icon_bulletin.svg',
-          title: 'OA 公告',
-          subtitle: '查看学校通知',
+          title: i18n.ftype_oaAnnouncement,
+          subtitle: i18n.ftype_oaAnnouncement_desc,
         ),
     FunctionType.contact: (context) => HomeFunctionButton(
           route: '/contact',
           icon: 'assets/home/icon_contact.svg',
-          title: '常用电话',
-          subtitle: '查找学校部门的联系方式',
+          title: i18n.ftype_yellowPages,
+          subtitle: i18n.ftype_yellowPages_desc,
         ),
     FunctionType.game: (context) => HomeFunctionButton(
           route: '/game',
           icon: 'assets/home/icon_game.svg',
-          title: '小游戏',
-          subtitle: '来放松一下吧',
+          title: i18n.ftype_game,
+          subtitle: i18n.ftype_game_desc,
         ),
     FunctionType.wiki: (context) => HomeFunctionButton(
           route: RouteTable.wiki,
           icon: 'assets/home/icon_wiki.svg',
-          title: 'Wiki',
-          subtitle: '上应大生存指南',
+          title: i18n.ftype_wiki,
+          subtitle: i18n.ftype_wiki_desc,
         ),
     FunctionType.separator: (context) => Container(),
     FunctionType.bbs: (context) => UniversalPlatform.isDesktopOrWeb
@@ -155,8 +151,8 @@ class FunctionButtonFactory {
         : HomeFunctionButton(
             route: '/bbs',
             icon: 'assets/home/icon_bbs.svg',
-            title: '问答',
-            subtitle: '这里有我们共同的声音',
+            title: i18n.ftype_bbs,
+            subtitle: i18n.ftype_bbs_desc,
           ),
     FunctionType.scanner: (context) => UniversalPlatform.isDesktopOrWeb
         ? Container()
@@ -167,27 +163,26 @@ class FunctionButtonFactory {
               if (result != null) GlobalLauncher.launch(result);
             },
             // icon: 'assets/home/icon_bbs.svg',
-            iconWidget: Icon(Icons.qr_code_scanner,
-                size: 30.h, color: Theme.of(context).primaryColor),
-            title: '扫码',
-            subtitle: '扫描各种二维码',
+            iconWidget: Icon(Icons.qr_code_scanner, size: 30.h, color: Theme.of(context).primaryColor),
+            title: i18n.ftype_scanner,
+            subtitle: i18n.ftype_scanner_desc,
           ),
     FunctionType.freshman: (context) => const FreshmanItem(),
     FunctionType.switchAccount: (context) => HomeFunctionButton(
           route: RouteTable.login,
-          iconWidget: Icon(Icons.switch_account,
-              size: 30.h, color: Theme.of(context).primaryColor),
-          title: '切换用户',
-          subtitle: '切换到正式用户',
+          iconWidget: Icon(Icons.switch_account, size: 30.h, color: Theme.of(context).primaryColor),
+          title: i18n.ftype_switchAccount,
+          subtitle: i18n.ftype_switchAccount_desc,
         ),
     FunctionType.electricity: (context) => const ElectricityItem(),
     FunctionType.board: (context) => HomeFunctionButton(
           route: '/board',
           icon: 'assets/home/icon_board.svg',
-          title: '风筝时刻',
-          subtitle: '随手记录美好',
+          title: i18n.ftype_kiteBoard,
+          subtitle: i18n.ftype_kiteBoard_desc,
         ),
   };
+
   static Widget createFunctionButton(BuildContext context, FunctionType type) {
     final builder = builders[type];
     if (builder == null) {
@@ -197,8 +192,7 @@ class FunctionButtonFactory {
   }
 }
 
-Widget buildHomeFunctionButtonByExtraHomeItem(
-    BuildContext context, ExtraHomeItem item) {
+Widget buildHomeFunctionButtonByExtraHomeItem(BuildContext context, ExtraHomeItem item) {
   return HomeFunctionButton(
     title: item.title,
     subtitle: item.description,
@@ -215,6 +209,7 @@ Widget buildHomeFunctionButtonByExtraHomeItem(
 class HomeItemHideInfoFilter {
   // Map<functionName, Set<userType>>
   Map<String, Set<String>> map = {};
+
   HomeItemHideInfoFilter(List<HomeItemHideInfo> hideInfoList) {
     for (final hideInfo in hideInfoList) {
       for (final functionName in hideInfo.nameList) {

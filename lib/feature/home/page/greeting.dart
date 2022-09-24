@@ -20,6 +20,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:kite/feature/kite/entity/weather.dart';
 import 'package:kite/feature/simple_page/weather.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/user.dart';
 
@@ -40,6 +41,7 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   int? studyDays;
   int campus = KvStorageInitializer.home.campus;
   Weather currentWeather = KvStorageInitializer.home.lastWeather;
+
   @override
   void initState() {
     super.initState();
@@ -106,10 +108,10 @@ class _GreetingWidgetState extends State<GreetingWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: (studyDays != null // 天数为null说明不显示天数
                     ? <Widget>[
-                        Text('今天是你在上应大的', style: textStyleSmall),
-                        Text('第 $studyDays 天', style: textStyleLarge),
+                        Text(i18n.greetingHeaderL1, style: textStyleSmall),
+                        Text(i18n.greetingHeaderL2(studyDays ?? 0), style: textStyleLarge),
                       ]
-                    : <Widget>[Text('欢迎使用上应小风筝', style: textStyleSmall)]) +
+                    : <Widget>[Text(i18n.greetingHeaderNoDays, style: textStyleSmall)]) +
                 <Widget>[
                   Text('${_getCampusName()} ${currentWeather.weather} ${currentWeather.temperature} °C',
                       style: textStyleWeather)

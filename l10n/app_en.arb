@@ -162,7 +162,7 @@
   "uploadDoneTip": "Uploaded successfully!",
   "uploadFailedTip": "uh-oh, failed to upload.",
   "backgroundSettingIsEmptyWarn": "You haven't set the background.",
-  "daysKiteWithYouLabel": "Kite accompanied you for {days,plural, =0{0} =1{1 day} other{{days} days}}",
+  "daysKiteWithYouLabel": "Kite has accompanied you for {days,plural, =0{0} =1{1 day} other{{days} days}}",
   "@daysKiteWithYouLabel": {
     "placeholders": {
       "days": {
@@ -219,5 +219,62 @@
   "loginCredentialsValidatedTip": "Account and password is correct",
   "loginFailedWarn": "Login Failed",
   "logoutKiteWarn": "Confirm to logout the Kite?",
-  "wipeKiteDataSettingsDesc": "Login credentials will be wiped then Kite restarts. If you want to wipe all data of Kite, please go to settings on your device and find \"上应小风筝\" app to reset."
+  "wipeKiteDataSettingsDesc": "Login credentials will be wiped then Kite restarts. If you want to wipe all data of Kite, please go to settings on your device and find \"上应小风筝\" app to reset.",
+  "ftype_upgrade": "Upgrade Kite",
+  "ftype_upgrade_desc": "A new version? Let's check it out!",
+  "ftype_kiteBulletin": "Kite Bulletin Board",
+  "ftype_kiteBulletin_desc": "Loading...",
+  "ftype_timetable": "Timetable",
+  "ftype_timetable_desc": "School timetable",
+  "ftype_reportTemperature": "Report Temperature",
+  "ftype_reportTemperature_desc": "Don't forgor!",
+  "ftype_examArrangement": "Exam Arrangement",
+  "ftype_examArrangement_desc": "Recent exam arrangement",
+  "ftype_classroomBrowser": "Classroom Browser",
+  "ftype_classroomBrowser_desc": "Is there any empty classroom?",
+  "ftype_event": "Event",
+  "ftype_event_desc": "The latest Second Class events",
+  "ftype_expenseTracker": "Expense Tracker",
+  "ftype_expenseTracker_desc": "School card shopping history",
+  "ftype_library": "Library",
+  "ftype_library_desc": "Reading is thinking",
+  "ftype_office": "Office",
+  "ftype_office_desc": "What should I prepare?",
+  "ftype_eduEmail": "Edu Email",
+  "ftype_eduEmail_desc": "Check your educational email",
+  "ftype_oaAnnouncement": "OA Announcement",
+  "ftype_oaAnnouncement_desc": "School announcements",
+  "ftype_yellowPages": "Yellow Pages",
+  "ftype_yellowPages_desc": "Contact school",
+  "ftype_game": "Game",
+  "ftype_game_desc": "Let's gaming!",
+  "ftype_wiki": "Wiki",
+  "ftype_wiki_desc": "Kite Wiki",
+  "ftype_bbs": "BBS",
+  "ftype_bbs_desc": "Kite BBS",
+  "ftype_scanner": "Scan",
+  "ftype_scanner_desc": "Scan a QR code",
+  "ftype_freshman": "Freshman",
+  "ftype_freshman_desc": "To retrieve freshman info",
+  "ftype_switchAccount": ">>> Regular User",
+  "ftype_switchAccount_desc": "Switch to regular user",
+  "ftype_electricityBill": "Electricity Bill",
+  "ftype_electricityBill_desc": "Dormitory balance and ⚡ history",
+  "ftype_kiteBoard": "Kite Board",
+  "ftype_kiteBoard_desc": "Fly a 🪁",
+  "ftype_examResult": "Exam Result",
+  "ftype_examResult_desc": "Don't stop until you're proud",
+  "greetingHeaderL1": "SIT has accompanied you for",
+  "@greetingHeaderL1": {
+    "description": "The first line of greeting header"
+  },
+  "greetingHeaderL2": "{days,plural, =0{0 Day} =1{1 Day} other{{days} Days}",
+  "@greetingHeaderL2": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "greetingHeaderNoDays": "Hello, I'm a Kite from SIT!"
 }

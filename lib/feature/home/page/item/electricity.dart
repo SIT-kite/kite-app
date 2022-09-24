@@ -17,6 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
 
 import '../../../electricity/entity.dart';
@@ -31,7 +32,7 @@ class ElectricityItem extends StatefulWidget {
 
 class _ElectricityItemState extends State<ElectricityItem> {
   final Balance? lastBalance = KvStorageInitializer.home.lastBalance;
-  late String content = '宿舍电费余额和用电记录';
+  String content = i18n.ftype_electricityBill_desc;
 
   @override
   void initState() {
@@ -49,7 +50,7 @@ class _ElectricityItemState extends State<ElectricityItem> {
     return HomeFunctionButton(
       route: '/electricity',
       icon: 'assets/home/icon_electricity.svg',
-      title: '查电费',
+      title:  i18n.ftype_electricityBill,
       subtitle: content,
     );
   }

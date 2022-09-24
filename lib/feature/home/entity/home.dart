@@ -23,7 +23,7 @@ import 'package:kite/global/hive_type_id_pool.dart';
 import 'package:kite/util/user.dart';
 
 part 'home.g.dart';
-
+// TODO: Rename
 @HiveType(typeId: HiveTypeIdPool.functionTypeItem)
 enum FunctionType {
   /// 升级

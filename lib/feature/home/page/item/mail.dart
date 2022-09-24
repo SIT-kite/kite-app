@@ -17,6 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/l10n/extension.dart';
 
 import 'index.dart';
 
@@ -28,8 +29,8 @@ class MailItem extends StatefulWidget {
 }
 
 class _MailItemState extends State<MailItem> {
-  static const defaultContent = '查看校园邮箱中的邮件';
-  String content = defaultContent;
+  String defaultContent = i18n.ftype_eduEmail_desc;
+  String content = i18n.ftype_eduEmail_desc;
 
   @override
   void initState() {
@@ -50,7 +51,7 @@ class _MailItemState extends State<MailItem> {
     return HomeFunctionButton(
       route: '/mail',
       icon: 'assets/home/icon_mail.svg',
-      title: 'Edu 邮箱',
+      title: i18n.ftype_eduEmail,
       subtitle: content,
     );
   }

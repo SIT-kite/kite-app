@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/exception/session.dart';
 import 'package:kite/feature/office/init.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
 
 import 'index.dart';
@@ -31,7 +32,7 @@ class OfficeItem extends StatefulWidget {
 }
 
 class _OfficeItemState extends State<OfficeItem> {
-  static const defaultContent = '通过应网办办理业务';
+  static String defaultContent = i18n.ftype_office_desc;
   String? content;
 
   @override
@@ -85,6 +86,7 @@ class _OfficeItemState extends State<OfficeItem> {
       final String? lastOfficeStatus = KvStorageInitializer.home.lastOfficeStatus;
       content = lastOfficeStatus ?? defaultContent;
     }
-    return HomeFunctionButton(route: '/office', icon: 'assets/home/icon_office.svg', title: '办公', subtitle: content);
+    return HomeFunctionButton(
+        route: '/office', icon: 'assets/home/icon_office.svg', title: i18n.ftype_office, subtitle: content);
   }
 }

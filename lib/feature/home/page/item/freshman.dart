@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/user.dart';
@@ -53,8 +54,8 @@ class FreshmanItem extends StatelessWidget {
         }
       },
       iconWidget: Icon(Icons.people, size: 30.h, color: Theme.of(context).primaryColor),
-      title: '入学信息',
-      subtitle: '新生入学信息查询',
+      title: i18n.ftype_freshman,
+      subtitle: i18n.ftype_freshman_desc,
     );
   }
 }

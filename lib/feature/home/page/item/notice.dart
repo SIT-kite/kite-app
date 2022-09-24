@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/feature/kite/notice/entity.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/l10n/extension.dart';
 
 import '../../init.dart';
 import 'index.dart';
@@ -30,8 +31,8 @@ class NoticeItem extends StatefulWidget {
 }
 
 class _NoticeItemState extends State<NoticeItem> {
-  static const defaultContent = '查看小风筝的公告';
-  String content = '加载中';
+  String defaultContent = i18n.ftype_kiteBulletin_desc;
+  String content = i18n.ftype_kiteBulletin_desc;
 
   @override
   void initState() {
@@ -71,7 +72,7 @@ class _NoticeItemState extends State<NoticeItem> {
         return HomeFunctionButton(
           route: '/notice',
           icon: 'assets/home/icon_notice.svg',
-          title: '公告',
+          title: i18n.ftype_kiteBulletin,
           subtitle: content,
         );
       },

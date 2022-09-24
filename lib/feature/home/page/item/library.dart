@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/feature/library/search/entity/hot_search.dart';
 import 'package:kite/feature/library/search/init.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
 
 import 'index.dart';
@@ -33,7 +34,7 @@ class LibraryItem extends StatefulWidget {
 }
 
 class _LibraryItemState extends State<LibraryItem> {
-  static const String defaultContent = '馆藏书籍和借阅情况';
+  String defaultContent = i18n.ftype_library_desc;
   String? content;
 
   @override
@@ -79,6 +80,7 @@ class _LibraryItemState extends State<LibraryItem> {
       final lastHotSearch = KvStorageInitializer.home.lastHotSearch;
       content = lastHotSearch ?? defaultContent;
     }
-    return HomeFunctionButton(route: '/library', icon: 'assets/home/icon_library.svg', title: '图书馆', subtitle: content);
+    return HomeFunctionButton(
+        route: '/library', icon: 'assets/home/icon_library.svg', title: i18n.ftype_library, subtitle: content);
   }
 }
