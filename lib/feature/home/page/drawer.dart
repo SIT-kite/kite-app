@@ -16,7 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
+import 'package:kite/util/dsl.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 class KiteDrawer extends Drawer {
@@ -33,18 +35,18 @@ class KiteDrawer extends Drawer {
             decoration: BoxDecoration(color: KvStorageInitializer.theme.color),
             child: Align(
                 alignment: Alignment.bottomLeft,
-                child: Text('小风筝已陪伴你 ${inDays} 天',
+                child: Text(i18n.daysKiteWithYouLabel(inDays),
                     style: Theme.of(context).textTheme.headline4?.copyWith(color: Colors.white70))),
           ),
           ListTile(
-            title: const Text('设置'),
+            title: Text(MaterialLocalizations.of(context).cancelButtonLabel),
             onTap: () {
               Navigator.pop(context);
               Navigator.of(context).pushNamed('/setting');
             },
           ),
           ListTile(
-            title: const Text('网络工具'),
+            title: i18n.networkTool.txt,
             onTap: () {
               Navigator.pop(context);
               Navigator.of(context).pushNamed('/connectivity');
@@ -52,7 +54,7 @@ class KiteDrawer extends Drawer {
           ),
           UniversalPlatform.isAndroid
               ? ListTile(
-                  title: const Text('校园卡工具'),
+                  title: i18n.schoolCardTool.txt,
                   onTap: () {
                     Navigator.pop(context);
                     Navigator.of(context).pushNamed('/campusCard');
@@ -60,14 +62,14 @@ class KiteDrawer extends Drawer {
                 )
               : const SizedBox(height: 0),
           ListTile(
-            title: const Text('反馈'),
+            title: i18n.feedback.txt,
             onTap: () {
               Navigator.pop(context);
               Navigator.of(context).pushNamed('/feedback');
             },
           ),
           ListTile(
-            title: const Text('关于'),
+            title: i18n.about.txt,
             onTap: () {
               Navigator.pop(context);
               Navigator.of(context).pushNamed('/about');

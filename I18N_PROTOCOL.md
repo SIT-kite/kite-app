@@ -33,9 +33,10 @@ The [app_en.arb](l10n/app_en.arb) is the template localization, hereinafter refe
 which means any structural change will affect other languages.
 
 More readings:
-[A Guide to Flutter Localization](https://phrase.com/blog/posts/flutter-localization/),
-[Flutter ARB file (.arb)](https://localizely.com/flutter-arb/),
-[Flutter Localization with ARB made simple](https://medium.com/@angga.arifandi/flutter-localization-with-arb-made-simple-c03da609dcaf)
+- https://phrase.com/blog/posts/flutter-localization
+- https://blog.logrocket.com/internationalization-flutter-apps
+- https://localizely.com/flutter-arb
+- https://medium.com/@angga.arifandi/flutter-localization-with-arb-made-simple-c03da609dcaf
 
 ## Internationalization Protocol
 

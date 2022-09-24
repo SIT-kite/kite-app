@@ -155,5 +155,19 @@
     }
   },
   "uploadDoneTip": "Uploaded successfully!",
-  "uploadFailedTip": "uh-oh, failed to upload."
+  "uploadFailedTip": "uh-oh, failed to upload.",
+  "backgroundSettingIsEmptyWarn": "You haven't set the background.",
+  "daysKiteWithYouLabel": "Kite accompanied you for {days,plural, =0{0} =1{1 day} other{{days} days}}",
+  "@daysKiteWithYouLabel": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "settings": "Settings",
+  "networkTool": "Network Tool",
+  "schoolCardTool": "School Card Tool",
+  "feedback": "Feedback",
+  "about": "About"
 }
