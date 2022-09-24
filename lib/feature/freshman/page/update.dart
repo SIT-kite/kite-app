@@ -145,7 +145,7 @@ class _FreshmanUpdatePageState extends State<FreshmanUpdatePage> {
             ),
             SizedBox(height: 20.h),
             Text(
-              i18n.personalInfoDescriptionLabel,
+              i18n.personalInfoDescLabel,
               style: Theme.of(context).textTheme.bodyText2,
             ),
           ],

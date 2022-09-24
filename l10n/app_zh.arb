@@ -37,5 +37,6 @@
   "freshmanIssueFeedbackButton": "遇到问题",
   "kiteBoardTitle": "风筝时刻",
   "kiteBoardReachEndLabel": "到底啦",
-  "uploadingCounter": "已上传 {done} / {all}"
+  "uploadingCounter": "已上传 {done} / {all}",
+  "wipeKiteDataSettingsDesc": "此操作将清除您本地的登录信息（不包括网页缓存），并重启本应用。如果你想清除所有数据，请在手机设置的应用管理界面中找到 \"上应小风筝\" 并重置。"
 }

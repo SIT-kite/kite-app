@@ -33,6 +33,7 @@ import 'package:kite/storage/dao/pref.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/storage/storage/admin.dart';
 import 'package:kite/storage/storage/develop.dart';
+import 'package:kite/util/dsl.dart';
 import 'package:kite/util/file.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
@@ -55,7 +56,7 @@ class SettingPage extends StatelessWidget {
       onPressed: () {
         controller.dismiss();
       },
-      child: const Text('取消'),
+      child: i18n.cancel.txt,
     );
   }
 
@@ -79,11 +80,12 @@ class SettingPage extends StatelessWidget {
     final password = KvStorageInitializer.auth.ssoPassword;
     try {
       EasyLoading.instance.userInteractions = false;
-      EasyLoading.show(status: '正在登录');
+      EasyLoading.show(status: i18n.loggingIn);
       await Global.ssoSession.login(user!, password!);
-      EasyLoading.showSuccess('用户名和密码正确');
+      EasyLoading.showSuccess(i18n.loginCredentialsValidatedTip);
     } catch (e) {
-      showBasicFlash(context, Text('登录异常: ${e.toString().split('\n')[0]}'), duration: const Duration(seconds: 3));
+      showBasicFlash(context, Text('${i18n.loginFailedWarn}: ${e.toString().split('\n')[0]}'),
+          duration: const Duration(seconds: 3));
     } finally {
       EasyLoading.dismiss();
       EasyLoading.instance.userInteractions = true;
@@ -102,8 +104,8 @@ class SettingPage extends StatelessWidget {
   void _onLogout(BuildContext context) {
     context.showFlashDialog(
         constraints: const BoxConstraints(maxWidth: 300),
-        title: const Text('退出登录'),
-        content: const Text('您将会退出当前账号，是否继续？'),
+        title: i18n.logout.txt,
+        content: i18n.logoutKiteWarn.txt,
         negativeActionBuilder: _negativeActionBuilder,
         positiveActionBuilder: (context, controller, _) {
           return TextButton(
@@ -126,15 +128,16 @@ class SettingPage extends StatelessWidget {
                 controller.dismiss();
                 _gotoWelcome(context);
               },
-              child: const Text('继续'));
+              child: i18n.continue_.txt);
         });
   }
 
   void _onClearStorage(BuildContext context) {
     context.showFlashDialog(
         constraints: const BoxConstraints(maxWidth: 300),
-        title: const Text('清除数据'),
-        content: const Text('此操作将清除您本地的登录信息（不包括网页缓存），并重启本应用。如果你想清除所有数据，请在手机设置的应用管理界面中找到 "上应小风筝" 并重置。'),
+        title: i18n.wipeKiteDataSettings.txt,
+        // TODO: Dedicated descriptions for mobile and desktop.
+        content: i18n.wipeKiteDataSettingsDesc.txt,
         negativeActionBuilder: _negativeActionBuilder,
         positiveActionBuilder: (context, controller, _) {
           return TextButton(
@@ -144,7 +147,7 @@ class SettingPage extends StatelessWidget {
                 await controller.dismiss();
                 _gotoWelcome(context);
               },
-              child: const Text('继续'));
+              child: i18n.continue_.txt);
         });
   }
 
@@ -268,19 +271,19 @@ class SettingPage extends StatelessWidget {
         ),
       ]),
       SettingsGroup(
-        title: '账户',
+        title: i18n.account,
         children: <Widget>[
           if (!isFreshman)
             TextInputSettingsTile(
-              title: '学号',
+              title: i18n.studentID,
               settingKey: AuthKeys.currentUsername,
               initialValue: KvStorageInitializer.auth.currentUsername ?? '',
               validator: studentIdValidator,
             ),
           if (!isFreshman)
             ModalSettingsTile(
-              title: '密码',
-              subtitle: '修改小风筝使用的 OA 密码',
+              title: i18n.changeOaPwdSettings,
+              subtitle: i18n.changeOaPwdSettingsSubtitle,
               showConfirmation: true,
               onConfirm: () {
                 KvStorageInitializer.auth.ssoPassword = _passwordController.text;
@@ -294,17 +297,24 @@ class SettingPage extends StatelessWidget {
               ],
             ),
           if (!isFreshman)
-            SimpleSettingsTile(title: '登录测试', subtitle: '检查用户名密码是否正确', onTap: () => _testPassword(context)),
-          SimpleSettingsTile(title: '退出登录', subtitle: '退出当前账号', onTap: () => _onLogout(context)),
+            SimpleSettingsTile(
+                title: i18n.testLoginKiteSettings,
+                subtitle: i18n.testLoginKiteSettingsSubtitle,
+                onTap: () => _testPassword(context)),
+          SimpleSettingsTile(
+              title: i18n.logoutKiteSettings,
+              subtitle: i18n.logoutKiteSettingsSubtitle,
+              onTap: () => _onLogout(context)),
         ],
       ),
-      SettingsGroup(title: '数据管理', children: [
+      SettingsGroup(title: i18n.dataManagement, children: [
         SimpleSettingsTile(
-            title: '清除数据',
+            title: i18n.wipeKiteDataSettings,
             leading: const Icon(Icons.remove_circle),
-            subtitle: '清除应用程序保存的账号和设置，但不包括缓存',
+            subtitle: i18n.wipeKiteDataSettingsSubtitle,
             onTap: () => _onClearStorage(context)),
       ]),
+      // TODO: Remove this
       if (kDebugMode)
         SettingsGroup(
           title: '管理员选项',
@@ -317,20 +327,20 @@ class SettingPage extends StatelessWidget {
           ],
         ),
       SettingsGroup(
-        title: '开发者选项',
+        title: i18n.devOptions,
         children: <Widget>[
           SwitchSettingsTile(
               settingKey: DevelopOptionsKeys.showErrorInfoDialog,
               defaultValue: KvStorageInitializer.developOptions.showErrorInfoDialog ?? false,
-              title: '启动详细错误对话框',
-              subtitle: '将展示详细的异常栈追踪信息',
+              title: i18n.detailedExceptionDialogSettings,
+              subtitle: i18n.detailedExceptionDialogSettingsSubtitle,
               leading: const Icon(Icons.info),
               onChange: (value) {
                 KvStorageInitializer.developOptions.showErrorInfoDialog = value;
               }),
           SimpleSettingsTile(
-            title: '显示本机存储内容',
-            subtitle: '含首页及各模块存储的数据',
+            title: i18n.localStorageSettings,
+            subtitle: i18n.localStorageSettingsSubtitle,
             leading: const Icon(Icons.storage),
             onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const DebugStoragePage())),
           )
