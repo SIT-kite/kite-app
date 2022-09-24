@@ -115,6 +115,7 @@ class _KiteAppState extends State<KiteApp> {
         onGenerateRoute: _onGenerateRoute,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
+        locale: KvStorageInitializer.pref.locale,
         builder: EasyLoading.init(builder: (context, widget) {
           return MediaQuery(
             // 设置文字大小不随系统设置改变

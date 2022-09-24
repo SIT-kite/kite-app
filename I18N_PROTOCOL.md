@@ -108,9 +108,10 @@ use them in naming unambiguously.
 
 ### Used in controls
 
-1️⃣ For the `toast`, `pop-up` and `flash`, suffix the translation key with:
+1️⃣ For the `toast`, `pop-up`, `tooltip` and `flash`, suffix the translation key with:
 
 - `Tip`: If users did well. To tip users something. e.g.: `changedPassowrdTip`, `unsavedChangeTip`
+- `Tooltip`: e.g.: `buttonTooltip`.
 - `Warn`: If users did something wrong. e.g.: `phoneNumberInputIsEmptyWarn`.
 - `Error`: If an error appeared. e.g.: `disconnectedError`,`networkTimeoutError`.
 

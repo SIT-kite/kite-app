@@ -27,7 +27,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/global/hive_initializer.dart';
 import 'package:kite/global/init.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
+import 'package:kite/storage/dao/pref.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/storage/storage/admin.dart';
 import 'package:kite/storage/storage/develop.dart';
@@ -146,41 +148,59 @@ class SettingPage extends StatelessWidget {
         });
   }
 
+  _buildLanguagePrefSelector(BuildContext ctx) {
+    final cur = KvStorageInitializer.pref.locale;
+    return DropDownSettingsTile<String>(
+      title: i18n.language,
+      subtitle: i18n.languagePrefDropDownSubtitle,
+      settingKey: PrefKeys.locale,
+      values: {
+        "en": i18n.language_en,
+        "zh": i18n.language_zh,
+      },
+      selected: cur.languageCode,
+      onChange: (value) {
+        KvStorageInitializer.pref.locale = Locale(value);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     _passwordController.text = KvStorageInitializer.auth.ssoPassword ?? '';
-    return SettingsScreen(title: '设置', children: [
+    return SettingsScreen(title: i18n.settingsTitle, children: [
       SettingsGroup(
-        title: '个性化',
+        title: i18n.personalizeTitle,
         children: <Widget>[
           ColorPickerSettingsTile(
             settingKey: ThemeKeys.themeColor,
             defaultValue: KvStorageInitializer.theme.color,
-            title: '主题色',
+            title: i18n.themeColorSettings,
             onChange: (newColor) => DynamicColorTheme.of(context).setColor(
               color: newColor,
               shouldSave: true, // saves it to shared preferences
             ),
           ),
+          _buildLanguagePrefSelector(context),
           SwitchSettingsTile(
             settingKey: ThemeKeys.isDarkMode,
             defaultValue: KvStorageInitializer.theme.isDarkMode,
-            title: '夜间模式',
-            subtitle: '开启夜间模式以保护视力，部分颜色显示可能异常',
+            title: i18n.darkModeSettings,
+            subtitle: i18n.darkModeSettingsSubtitle,
             leading: const Icon(Icons.dark_mode),
             onChange: (value) => DynamicColorTheme.of(context).setIsDark(isDark: value, shouldSave: false),
           ),
         ],
       ),
       SettingsGroup(
-        title: '首页',
+        title: i18n.mainPage,
         children: <Widget>[
           RadioSettingsTile<int>(
-            title: '首页背景模式',
+            title: i18n.mainPageBgModeSettings,
             settingKey: HomeKeyKeys.backgroundMode,
-            values: const <int, String>{
-              1: '实时天气',
-              2: '静态图片',
+            values: <int, String>{
+              1: i18n.realtimeWeather,
+              2: i18n.staticPicture,
             },
             selected: KvStorageInitializer.home.backgroundMode,
             onChange: (value) {
@@ -189,12 +209,12 @@ class SettingPage extends StatelessWidget {
             },
           ),
           DropDownSettingsTile<int>(
-            title: '校区',
-            subtitle: '显示对应校区的天气',
+            title: i18n.campus,
+            subtitle: i18n.campusDropDownSettingsSubtitle,
             settingKey: HomeKeyKeys.campus,
-            values: const <int, String>{
-              1: '奉贤',
-              2: '徐汇',
+            values: <int, String>{
+              1: i18n.fengxianDistrict,
+              2: i18n.xuhuiDistrict,
             },
             selected: KvStorageInitializer.home.campus,
             onChange: (value) {
@@ -202,21 +222,24 @@ class SettingPage extends StatelessWidget {
               Global.eventBus.emit(EventNameConstants.onCampusChange);
             },
           ),
-          SimpleSettingsTile(title: '背景图片', subtitle: '自定义首页背景图片', onTap: _onChangeBgImage),
+          SimpleSettingsTile(
+              title: i18n.backgroundPictureSettings,
+              subtitle: i18n.backgroundPictureSettingsSubtitle,
+              onTap: _onChangeBgImage),
           if (!isFreshman)
             SimpleSettingsTile(
-              title: '功能顺序',
-              subtitle: '自定义首页功能的分组与顺序',
+              title: i18n.functionOrderSettings,
+              subtitle: i18n.functionOrderSettingsSubtitle,
               onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeSettingPage())),
             ),
         ],
       ),
-      SettingsGroup(title: '网络', children: <Widget>[
+      SettingsGroup(title: i18n.networking, children: <Widget>[
         SwitchSettingsTile(
           settingKey: '/network/useProxy',
           defaultValue: KvStorageInitializer.network.useProxy,
-          title: '使用 HTTP 代理',
-          subtitle: '通过 HTTP 代理连接校园网',
+          title: i18n.enableHttpProxySwitch,
+          subtitle: i18n.enableHttpProxySwitchSubtitle,
           leading: const Icon(Icons.vpn_key),
           onChange: (value) async {
             KvStorageInitializer.network.useProxy = value;
@@ -224,7 +247,7 @@ class SettingPage extends StatelessWidget {
           },
           childrenIfEnabled: [
             TextInputSettingsTile(
-              title: '代理地址',
+              title: i18n.proxyAddressSettings,
               settingKey: '/network/proxy',
               initialValue: KvStorageInitializer.network.proxy,
               validator: proxyValidator,
@@ -236,8 +259,8 @@ class SettingPage extends StatelessWidget {
               },
             ),
             SimpleSettingsTile(
-                title: '测试连接',
-                subtitle: '检查校园网或网络代理的连接',
+                title: i18n.testConnectivity2School,
+                subtitle: i18n.testConnectivity2SchoolSubtitle,
                 onTap: () {
                   Navigator.pushNamed(context, '/connectivity');
                 }),

@@ -39,7 +39,7 @@ class KiteDrawer extends Drawer {
                     style: Theme.of(context).textTheme.headline4?.copyWith(color: Colors.white70))),
           ),
           ListTile(
-            title: Text(MaterialLocalizations.of(context).cancelButtonLabel),
+            title: Text(i18n.settings),
             onTap: () {
               Navigator.pop(context);
               Navigator.of(context).pushNamed('/setting');
