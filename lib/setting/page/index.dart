@@ -22,6 +22,7 @@ import 'package:flash/flash.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kite/global/global.dart';
@@ -51,12 +52,21 @@ class SettingPage extends StatelessWidget {
 
   SettingPage({Key? key}) : super(key: key);
 
-  Widget _negativeActionBuilder(context, controller, _) {
+  Widget _negativeActionBuilderCancel(context, controller, _) {
     return TextButton(
       onPressed: () {
         controller.dismiss();
       },
       child: i18n.cancel.txt,
+    );
+  }
+
+  Widget _negativeActionBuilderNotNow(context, controller, _) {
+    return TextButton(
+      onPressed: () {
+        controller.dismiss();
+      },
+      child: i18n.notNow.txt,
     );
   }
 
@@ -106,7 +116,7 @@ class SettingPage extends StatelessWidget {
         constraints: const BoxConstraints(maxWidth: 300),
         title: i18n.logout.txt,
         content: i18n.logoutKiteWarn.txt,
-        negativeActionBuilder: _negativeActionBuilder,
+        negativeActionBuilder: _negativeActionBuilderCancel,
         positiveActionBuilder: (context, controller, _) {
           return TextButton(
               onPressed: () async {
@@ -138,7 +148,7 @@ class SettingPage extends StatelessWidget {
         title: i18n.wipeKiteDataSettings.txt,
         // TODO: Dedicated descriptions for mobile and desktop.
         content: i18n.wipeKiteDataSettingsDesc.txt,
-        negativeActionBuilder: _negativeActionBuilder,
+        negativeActionBuilder: _negativeActionBuilderCancel,
         positiveActionBuilder: (context, controller, _) {
           return TextButton(
               onPressed: () async {
@@ -164,15 +174,20 @@ class SettingPage extends StatelessWidget {
       selected: curLangCode,
       onChange: (value) {
         KvStorageInitializer.pref.locale = Locale(value);
-        /*ctx.showFlashDialog(
+        // TODO: Test on mobile
+        Phoenix.rebirth(ctx);
+        /*
+        ctx.showFlashDialog(
             constraints: const BoxConstraints(maxWidth: 300),
             title: i18n.restartRequestTitle.txt,
             content: i18n.restartRequest.txt,
-            negativeActionBuilder: _negativeActionBuilder,
+            negativeActionBuilder: _negativeActionBuilderNotNow,
             positiveActionBuilder: (context, controller, _) {
               return TextButton(
                   onPressed: () async {
-
+                    Phoenix.rebirth(ctx);
+                    Phoenix.rebirth(ctx);
+                    await controller.dismiss();
                   },
                   child: i18n.ok.txt);
             });*/

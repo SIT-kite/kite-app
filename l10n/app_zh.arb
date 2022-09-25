@@ -1,4 +1,5 @@
 {
+  "ok": "好的",
   "qq": "QQ",
   "wechat": "微信",
   "counselor": "辅导员",
@@ -91,5 +92,8 @@
   "fengxian": "奉贤",
   "xuhui": "徐汇",
   "campusWeatherTitle":"{campus} 天气",
-  "weather_sunny": "晴"
+  "weather_sunny": "晴",
+  "restartRequestTitle": "重启",
+  "restartRequest": "现在重启小风筝吗?",
+  "notNow": "再等等"
 }

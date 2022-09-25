@@ -293,6 +293,5 @@
   "weather": "Weather",
   "restartRequestTitle": "Restart?",
   "restartRequest": "Would you like to restart Kite now?",
-  "notNow": "Not Now",
-  "restartRequestYes": "Haha, do it yourself."
+  "notNow": "Not Now"
 }

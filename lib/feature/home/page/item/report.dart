@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/feature/home/entity/home.dart';
 import 'package:kite/feature/initializer_index.dart';
 import 'package:kite/feature/report/entity/report.dart';
 import 'package:kite/global/global.dart';
@@ -34,7 +35,7 @@ class ReportItem extends StatefulWidget {
 }
 
 class _ReportItemState extends State<ReportItem> {
-  static String defaultContent = i18n.ftype_reportTemperature_desc;
+  static String get defaultContent => FunctionType.report.toLocalizedDesc();
   String? content;
 
   /// 用于限制仅弹出一次对话框
@@ -130,7 +131,7 @@ class _ReportItemState extends State<ReportItem> {
     return HomeFunctionButton(
       route: '/report',
       icon: 'assets/home/icon_report.svg',
-      title: i18n.ftype_reportTemperature,
+      title: FunctionType.report.toLocalized(),
       subtitle: content,
     );
   }

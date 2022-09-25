@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/feature/home/entity/home.dart';
 import 'package:kite/feature/kite/notice/entity.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
@@ -31,8 +32,8 @@ class NoticeItem extends StatefulWidget {
 }
 
 class _NoticeItemState extends State<NoticeItem> {
-  String defaultContent = i18n.ftype_kiteBulletin_desc;
-  String content = i18n.ftype_kiteBulletin_desc;
+  String defaultContent = FunctionType.notice.toLocalizedDesc();
+  String content = FunctionType.notice.toLocalizedDesc();
 
   @override
   void initState() {
@@ -72,7 +73,7 @@ class _NoticeItemState extends State<NoticeItem> {
         return HomeFunctionButton(
           route: '/notice',
           icon: 'assets/home/icon_notice.svg',
-          title: i18n.ftype_kiteBulletin,
+          title: FunctionType.notice.toLocalized(),
           subtitle: content,
         );
       },
