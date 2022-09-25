@@ -129,7 +129,7 @@ enum FunctionType {
       case FunctionType.timetable:
         return i18n.ftype_timetable;
       case FunctionType.report:
-        return i18n.ftype_reportTemperature;
+        return i18n.ftype_reportTemp;
       case FunctionType.exam:
         return i18n.ftype_examArrangement;
       case FunctionType.classroom:
@@ -180,7 +180,7 @@ enum FunctionType {
       case FunctionType.timetable:
         return i18n.ftype_timetable_desc;
       case FunctionType.report:
-        return i18n.ftype_reportTemperature_desc;
+        return i18n.ftype_reportTemp_desc;
       case FunctionType.exam:
         return i18n.ftype_examArrangement_desc;
       case FunctionType.classroom:

@@ -24,6 +24,7 @@ import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/alert_dialog.dart';
+import 'package:kite/util/dsl.dart';
 
 import 'index.dart';
 
@@ -76,11 +77,11 @@ class _ReportItemState extends State<ReportItem> {
     // 弹框提醒
     final select = await showAlertDialog(
       context,
-      title: '疫情上报提醒小助手',
-      content: const Text('您今日还未完成疫情上报，是否立即上报？'),
+      title: i18n.reportTempHelper,
+      content: i18n.reportTempRequest.txt,
       actionWidgetList: [
-        ElevatedButton(onPressed: () {}, child: const Text('立即前往')),
-        TextButton(onPressed: () {}, child: const Text('关闭对话框')),
+        ElevatedButton(onPressed: () {}, child: i18n.yes.txt),
+        TextButton(onPressed: () {}, child: i18n.notNow.txt),
       ],
     );
     if (select == null || select == 1) return;
@@ -93,10 +94,10 @@ class _ReportItemState extends State<ReportItem> {
     final today = DateTime.now();
     if (history.date != (today.year * 10000 + today.month * 100 + today.day)) {
       Future.delayed(Duration.zero, dialogRemind);
-      return '今日未上报';
+      return i18n.reportTempReportedToday;
     }
-    final normal = history.isNormal == 0 ? '体温正常' : '体温异常';
-    return '今日已上报, $normal (${history.place})';
+    final tempState = history.isNormal == 0 ? i18n.reportTempNormal : i18n.reportTempAbnormal;
+    return '${i18n.reportTempUnreportedToday}, $tempState ${history.place}';
   }
 
   Future<String> _buildContent() async {
@@ -105,10 +106,10 @@ class _ReportItemState extends State<ReportItem> {
     try {
       history = await ReportInitializer.reportService.getRecentHistory(KvStorageInitializer.auth.currentUsername ?? '');
     } catch (e) {
-      return '获取状态失败, ${e.runtimeType}';
+      return '${i18n.failed}: ${e.runtimeType}';
     }
     if (history == null) {
-      return '无上报记录';
+      return i18n.reportTempNoReportRecords;
     }
     // 别忘了本地缓存更新一下.
     KvStorageInitializer.home.lastReport = history;

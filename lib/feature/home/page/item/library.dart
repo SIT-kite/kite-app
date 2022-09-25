@@ -68,7 +68,7 @@ class _LibraryItemState extends State<LibraryItem> {
     final randomIndex = Random().nextInt(monthlyHot.length);
     final hotItem = monthlyHot[randomIndex];
 
-    final result = '热搜: ${hotItem.hotSearchWord} (${hotItem.count})';
+    final result = '${i18n.hotPost}: ${hotItem.hotSearchWord} (${hotItem.count})';
     KvStorageInitializer.home.lastHotSearch = result;
     return result;
   }

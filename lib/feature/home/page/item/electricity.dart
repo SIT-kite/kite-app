@@ -44,8 +44,9 @@ class _ElectricityItemState extends State<ElectricityItem> {
 
   @override
   Widget build(BuildContext context) {
-    if (lastBalance != null) {
-      content = '寝室 ${lastBalance!.room} 上次余额 ${lastBalance!.balance.toStringAsPrecision(2)}';
+    final b = lastBalance;
+    if (b != null) {
+      content = i18n.electricityBillContent(b.room, b.balance.toStringAsPrecision(2));
     }
     return HomeFunctionButton(
       route: '/electricity',

@@ -225,10 +225,10 @@ class SettingPage extends StatelessWidget {
         ],
       ),
       SettingsGroup(
-        title: i18n.mainPage,
+        title: i18n.homepage,
         children: <Widget>[
           RadioSettingsTile<int>(
-            title: i18n.mainPageBgModeSettings,
+            title: i18n.homepageBgModeSettings,
             settingKey: HomeKeyKeys.backgroundMode,
             values: <int, String>{
               1: i18n.realtimeWeather,

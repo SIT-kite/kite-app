@@ -2,6 +2,8 @@
   "yes": "Yes",
   "no": "No",
   "ok": "OK",
+  "go": "Go",
+  "failed": "Failed",
   "cancel": "Cancel",
   "loading": "Loading",
   "loggingIn": "Logging in",
@@ -184,8 +186,8 @@
   "themeColorSettings": "Theme Color",
   "darkModeSettings": "Dark Mode",
   "darkModeSettingsSubtitle": "Kite will protect your eyes",
-  "mainPage": "Main Page",
-  "mainPageBgModeSettings": "Background mode of Main Page",
+  "homepage": "Homepage",
+  "homepageBgModeSettings": "Background mode of Homepage",
   "staticPicture": "Static Picture",
   "realtimeWeather": "Real-time Weather",
   "campus": "Campus",
@@ -226,8 +228,8 @@
   "ftype_kiteBulletin_desc": "Loading...",
   "ftype_timetable": "Timetable",
   "ftype_timetable_desc": "School timetable",
-  "ftype_reportTemperature": "Report Temperature",
-  "ftype_reportTemperature_desc": "Don't forgor!",
+  "ftype_reportTemp": "Report Temperature",
+  "ftype_reportTemp_desc": "Don't forgor!",
   "ftype_examArrangement": "Exam Arrangement",
   "ftype_examArrangement_desc": "Recent exam arrangement",
   "ftype_classroomBrowser": "Classroom Browser",
@@ -293,5 +295,50 @@
   "weather": "Weather",
   "restartRequestTitle": "Restart?",
   "restartRequest": "Would you like to restart Kite now?",
-  "notNow": "Not Now"
+  "notNow": "Not Now",
+  "electricityBillContent": "last {balance}￥ Room {room}",
+  "@electricityBillContent": {
+    "placeholders": {
+      "room": {
+        "type": "int"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "draft": "Draft",
+  "processing": "Processing",
+  "done": "Done",
+  "hotPost": "HOT",
+  "expenseTrackerContent": "{amount}￥ {place}",
+  "@expenseTrackerContent": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "reportTempHelper": "Temperature Report Helper",
+  "reportTempRequest": "Today you haven't reported temperature, do you want to do now?",
+  "reportTempReportedToday": "Reported Today",
+  "@reportTempReportedToday": {
+    "description": "For building string: Reported Today Normal {place}"
+  },
+  "reportTempUnreportedToday": "Unreported Today",
+  "@reportTempNotReportedToday": {
+    "description": "For building string: Unreported Today Today Normal {place}"
+  },
+  "reportTempAbnormal": "Abnormal",
+  "@reportTempAbnormal": {
+    "description": "For building string: Reported Today Abnormal {place}"
+  },
+  "reportTempNormal": "Normal",
+  "@reportTempNormal": {
+    "description": "For building string: Reported Today Normal {place}"
+  },
+  "reportTempNoReportRecords": "No report records"
 }

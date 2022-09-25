@@ -72,9 +72,9 @@ class _OfficeItemState extends State<OfficeItem> {
     }
     format(s, x) => x > 0 ? '$s ($x)' : '';
     final totalMessage = await OfficeInitializer.messageService.queryMessageCount();
-    final draftBlock = format('草稿', totalMessage.inDraft);
-    final doingBlock = format('在办', totalMessage.inProgress);
-    final completedBlock = format('完成', totalMessage.completed);
+    final draftBlock = format(i18n.draft, totalMessage.inDraft);
+    final doingBlock = format(i18n.processing, totalMessage.inProgress);
+    final completedBlock = format(i18n.done, totalMessage.completed);
 
     return '$draftBlock $doingBlock $completedBlock'.trim();
   }
