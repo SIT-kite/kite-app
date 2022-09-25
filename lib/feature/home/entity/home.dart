@@ -120,7 +120,7 @@ enum FunctionType {
   @HiveField(22)
   electricity;
 
-  String toLocalized() {
+  String localized() {
     switch (this) {
       case FunctionType.upgrade:
         return i18n.ftype_upgrade;
@@ -135,7 +135,7 @@ enum FunctionType {
       case FunctionType.classroom:
         return i18n.ftype_classroomBrowser;
       case FunctionType.event:
-        return i18n.ftype_event;
+        return i18n.ftype_act;
       case FunctionType.expense:
         return i18n.ftype_expenseTracker;
       case FunctionType.score:
@@ -171,7 +171,7 @@ enum FunctionType {
     }
   }
 
-  String toLocalizedDesc() {
+  String localizedDesc() {
     switch (this) {
       case FunctionType.upgrade:
         return i18n.ftype_upgrade_desc;
@@ -186,7 +186,7 @@ enum FunctionType {
       case FunctionType.classroom:
         return i18n.ftype_classroomBrowser_desc;
       case FunctionType.event:
-        return i18n.ftype_event_desc;
+        return i18n.ftype_act_desc;
       case FunctionType.expense:
         return i18n.ftype_expenseTracker_desc;
       case FunctionType.score:

@@ -83,7 +83,7 @@ class _LibraryItemState extends State<LibraryItem> {
     return HomeFunctionButton(
         route: '/library',
         icon: 'assets/home/icon_library.svg',
-        title: FunctionType.library.toLocalized(),
-        subtitle: content ?? FunctionType.library.toLocalizedDesc());
+        title: FunctionType.library.localized(),
+        subtitle: content ?? FunctionType.library.localizedDesc());
   }
 }

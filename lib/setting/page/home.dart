@@ -62,7 +62,7 @@ class _HomeSettingPageState extends State<HomeSettingPage> {
             dense: true,
             trailing: const Icon(Icons.menu),
             title: Text(
-              homeItems[i].toLocalized(),
+              homeItems[i].localized(),
               style: homeItems[i] == FunctionType.separator ? const TextStyle(color: Colors.cyan) : null,
             ),
           ),

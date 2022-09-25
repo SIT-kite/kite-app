@@ -47,9 +47,9 @@ class UpgradeItem extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done && snapshot.hasData && snapshot.data != null) {
           return HomeFunctionButton(
-            title: FunctionType.upgrade.toLocalized(),
+            title: FunctionType.upgrade.localized(),
             onPressed: () => onTapUpdate(snapshot.data!),
-            subtitle: FunctionType.upgrade.toLocalizedDesc(),
+            subtitle: FunctionType.upgrade.localizedDesc(),
             icon: 'assets/home/icon_upgrade.svg',
           );
         }

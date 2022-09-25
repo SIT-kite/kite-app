@@ -18,6 +18,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
+import 'package:kite/feature/home/entity/home.dart';
+import 'package:kite/l10n/extension.dart';
+import 'package:kite/util/dsl.dart';
 
 import '../entity/list.dart';
 import '../init.dart';
@@ -33,14 +36,14 @@ class EventPage extends StatefulWidget {
 }
 
 class _EventPageState extends State<EventPage> with SingleTickerProviderStateMixin {
-  static Map<ActivityType, String> categoryMapping = {
-    ActivityType.lecture: '讲座报告',
-    ActivityType.creation: '三创',
-    ActivityType.theme: '主题教育',
-    ActivityType.campus: '校园文化',
-    ActivityType.practice: '社会实践',
-    ActivityType.voluntary: '志愿公益',
-  };
+  static const categories = [
+    ActivityType.lecture,
+    ActivityType.creation,
+    ActivityType.theme,
+    ActivityType.campus,
+    ActivityType.practice,
+    ActivityType.voluntary,
+  ];
 
   late TabController _tabController;
 
@@ -49,7 +52,7 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
   @override
   void initState() {
     _tabController = TabController(
-      length: categoryMapping.length,
+      length: categories.length,
       vsync: this,
     );
     _tabController.addListener(() => pageChangeNotifier.value = _tabController.index);
@@ -65,7 +68,7 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
     return TabBar(
       isScrollable: true,
       controller: _tabController,
-      tabs: categoryMapping.values.map((e) => Tab(text: e)).toList(),
+      tabs: categories.map((e) => Tab(text: e.localized())).toList(),
     );
   }
 
@@ -89,7 +92,7 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
   Widget _buildBody(BuildContext context) {
     return TabBarView(
       controller: _tabController,
-      children: categoryMapping.keys.map((e) {
+      children: categories.map((e) {
         return ValueListenableBuilder(
           valueListenable: pageChangeNotifier,
           builder: (a, b, c) {
@@ -103,10 +106,10 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: categoryMapping.length,
+      length: categories.length,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('活动'),
+          title: FunctionType.event.localized().txt,
           bottom: _buildBarHeader(),
           actions: [
             IconButton(

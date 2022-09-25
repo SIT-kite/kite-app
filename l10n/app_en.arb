@@ -234,8 +234,8 @@
   "ftype_examArrangement_desc": "Recent exam arrangement",
   "ftype_classroomBrowser": "Classroom Browser",
   "ftype_classroomBrowser_desc": "Is there any empty classroom?",
-  "ftype_event": "Event",
-  "ftype_event_desc": "The latest Second Class events",
+  "ftype_act": "Activities",
+  "ftype_act_desc": "The latest Second Class activities",
   "ftype_expenseTracker": "Expense Tracker",
   "ftype_expenseTracker_desc": "School card shopping history",
   "ftype_library": "Library",
@@ -340,5 +340,13 @@
   "@reportTempNormal": {
     "description": "For building string: Reported Today Normal {place}"
   },
-  "reportTempNoReportRecords": "No report records"
+  "reportTempNoReportRecords": "No report records",
+  "actLecture": "Lecture",
+  "actCreation": "Creation",
+  "actThematicEdu": "Thematic Edu",
+  "actSchoolCulture": "School Culture",
+  "actPractice": "Practice",
+  "actVoluntary": "Voluntary",
+  "actSafetyEdu": "Safety Edu",
+  "actUnknown": "Unknown"
 }

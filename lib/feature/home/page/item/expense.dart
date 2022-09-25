@@ -51,8 +51,8 @@ class _ExpenseItemState extends State<ExpenseItem> {
     return HomeFunctionButton(
       route: '/expense',
       icon: 'assets/home/icon_expense.svg',
-      title: FunctionType.expense.toLocalized(),
-      subtitle: content ?? FunctionType.expense.toLocalizedDesc(),
+      title: FunctionType.expense.localized(),
+      subtitle: content ?? FunctionType.expense.localizedDesc(),
     );
   }
 }

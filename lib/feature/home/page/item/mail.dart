@@ -51,8 +51,8 @@ class _MailItemState extends State<MailItem> {
     return HomeFunctionButton(
       route: '/mail',
       icon: 'assets/home/icon_mail.svg',
-      title: FunctionType.mail.toLocalized(),
-      subtitle: content ?? FunctionType.mail.toLocalizedDesc(),
+      title: FunctionType.mail.localized(),
+      subtitle: content ?? FunctionType.mail.localizedDesc(),
     );
   }
 }

@@ -103,8 +103,8 @@
   "ftype_examArrangement_desc": "查看我最近的考试安排",
   "ftype_classroomBrowser": "空教室",
   "ftype_classroomBrowser_desc": "查看当前没课的教室",
-  "ftype_event": "活动",
-  "ftype_event_desc": "查看第二课堂的活动",
+  "ftype_act": "活动",
+  "ftype_act_desc": "查看第二课堂的活动",
   "ftype_expenseTracker": "查消费",
   "ftype_expenseTracker_desc": "校园卡消费记录",
   "ftype_library": "图书馆",
@@ -159,5 +159,13 @@
   "reportTempUnreportedToday": "今日未上报",
   "reportTempAbnormal": "体温异常",
   "reportTempNormal": "体温正常",
-  "reportTempNoReportRecords": "无上报记录"
+  "reportTempNoReportRecords": "无上报记录",
+  "actLecture": "讲座报告",
+  "actCreation": "三创",
+  "actThematicEdu": "主题教育",
+  "actSchoolCulture": "校园文化",
+  "actPractice": "社会实践",
+  "actVoluntary": "志愿公益",
+  "actSafetyEdu": "校园安全文明",
+  "actUnknown": "未知"
 }
