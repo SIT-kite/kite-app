@@ -30,7 +30,7 @@ class ExamItem extends StatefulWidget {
 }
 
 class _ExamItemState extends State<ExamItem> {
-  String content = FunctionType.exam.toLocalizedDesc();
+  String? content;
 
   @override
   void initState() {
@@ -45,7 +45,7 @@ class _ExamItemState extends State<ExamItem> {
       route: '/exam',
       icon: 'assets/home/icon_exam.svg',
       title: FunctionType.exam.toLocalized(),
-      subtitle: content,
+      subtitle: content ?? FunctionType.exam.toLocalizedDesc(),
     );
   }
 }

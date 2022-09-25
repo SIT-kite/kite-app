@@ -143,7 +143,7 @@ enum FunctionType {
       case FunctionType.library:
         return i18n.ftype_library;
       case FunctionType.office:
-        return i18n.ftype_office;
+        return i18n.ftype_application;
       case FunctionType.mail:
         return i18n.ftype_eduEmail;
       case FunctionType.bulletin:
@@ -194,7 +194,7 @@ enum FunctionType {
       case FunctionType.library:
         return i18n.ftype_library_desc;
       case FunctionType.office:
-        return i18n.ftype_office_desc;
+        return i18n.ftype_application_desc;
       case FunctionType.mail:
         return i18n.ftype_eduEmail_desc;
       case FunctionType.bulletin:

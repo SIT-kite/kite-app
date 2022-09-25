@@ -33,7 +33,7 @@ class ElectricityItem extends StatefulWidget {
 
 class _ElectricityItemState extends State<ElectricityItem> {
   final Balance? lastBalance = KvStorageInitializer.home.lastBalance;
-  String content = FunctionType.electricity.toLocalizedDesc();
+  String? content;
 
   @override
   void initState() {
@@ -45,14 +45,13 @@ class _ElectricityItemState extends State<ElectricityItem> {
   @override
   Widget build(BuildContext context) {
     if (lastBalance != null) {
-      content =
-          '寝室 ${lastBalance!.room} 上次余额 ${lastBalance!.balance.toStringAsPrecision(2)}';
+      content = '寝室 ${lastBalance!.room} 上次余额 ${lastBalance!.balance.toStringAsPrecision(2)}';
     }
     return HomeFunctionButton(
       route: '/electricity',
       icon: 'assets/home/icon_electricity.svg',
-      title:  FunctionType.electricity.toLocalized(),
-      subtitle: content,
+      title: FunctionType.electricity.toLocalized(),
+      subtitle: content ?? FunctionType.electricity.toLocalizedDesc(),
     );
   }
 }

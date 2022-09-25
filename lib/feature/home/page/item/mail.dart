@@ -30,8 +30,7 @@ class MailItem extends StatefulWidget {
 }
 
 class _MailItemState extends State<MailItem> {
-  String defaultContent = FunctionType.mail.toLocalizedDesc();
-  String content = FunctionType.mail.toLocalizedDesc();
+  String? content;
 
   @override
   void initState() {
@@ -53,7 +52,7 @@ class _MailItemState extends State<MailItem> {
       route: '/mail',
       icon: 'assets/home/icon_mail.svg',
       title: FunctionType.mail.toLocalized(),
-      subtitle: content,
+      subtitle: content ?? FunctionType.mail.toLocalizedDesc(),
     );
   }
 }

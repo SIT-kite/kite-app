@@ -33,7 +33,6 @@ class OfficeItem extends StatefulWidget {
 }
 
 class _OfficeItemState extends State<OfficeItem> {
-  static String defaultContent = FunctionType.office.toLocalized();
   String? content;
 
   @override
@@ -84,13 +83,17 @@ class _OfficeItemState extends State<OfficeItem> {
   Widget build(BuildContext context) {
     // 如果是首屏加载, 从缓存读
     if (content == null) {
-      final String? lastOfficeStatus = KvStorageInitializer.home.lastOfficeStatus;
-      content = lastOfficeStatus ?? defaultContent;
+      var lastOfficeStatus = KvStorageInitializer.home.lastOfficeStatus;
+      if (lastOfficeStatus?.isEmpty ?? true) {
+        content = null;
+      } else {
+        content = lastOfficeStatus;
+      }
     }
     return HomeFunctionButton(
         route: '/office',
         icon: 'assets/home/icon_office.svg',
         title: FunctionType.office.toLocalized(),
-        subtitle: content);
+        subtitle: content ?? FunctionType.office.toLocalizedDesc());
   }
 }

@@ -32,8 +32,7 @@ class NoticeItem extends StatefulWidget {
 }
 
 class _NoticeItemState extends State<NoticeItem> {
-  String defaultContent = FunctionType.notice.toLocalizedDesc();
-  String content = FunctionType.notice.toLocalizedDesc();
+  String? content;
 
   @override
   void initState() {
@@ -48,7 +47,7 @@ class _NoticeItemState extends State<NoticeItem> {
   }
 
   void _onHomeRefresh(_) async {
-    final String result = await _buildContent() ?? defaultContent;
+    final String? result = await _buildContent();
     if (!mounted) return;
     setState(() => content = result);
   }
@@ -68,13 +67,13 @@ class _NoticeItemState extends State<NoticeItem> {
       future: _buildContent(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          content = snapshot.data ?? defaultContent;
+          content = snapshot.data;
         }
         return HomeFunctionButton(
           route: '/notice',
           icon: 'assets/home/icon_notice.svg',
           title: FunctionType.notice.toLocalized(),
-          subtitle: content,
+          subtitle: content ?? FunctionType.notice.toLocalizedDesc(),
         );
       },
     );

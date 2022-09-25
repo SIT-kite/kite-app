@@ -33,7 +33,7 @@ class ExpenseItem extends StatefulWidget {
 
 class _ExpenseItemState extends State<ExpenseItem> {
   final ExpenseRecord? lastExpense = ExpenseInitializer.expenseRecord.getLastOne();
-  String content =  FunctionType.expense.toLocalizedDesc();
+  String? content;
 
   @override
   void initState() {
@@ -51,7 +51,7 @@ class _ExpenseItemState extends State<ExpenseItem> {
       route: '/expense',
       icon: 'assets/home/icon_expense.svg',
       title: FunctionType.expense.toLocalized(),
-      subtitle: content,
+      subtitle: content ?? FunctionType.expense.toLocalizedDesc(),
     );
   }
 }

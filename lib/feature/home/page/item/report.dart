@@ -35,7 +35,6 @@ class ReportItem extends StatefulWidget {
 }
 
 class _ReportItemState extends State<ReportItem> {
-  static String get defaultContent => FunctionType.report.toLocalizedDesc();
   String? content;
 
   /// 用于限制仅弹出一次对话框
@@ -122,9 +121,7 @@ class _ReportItemState extends State<ReportItem> {
     if (content == null) {
       final ReportHistory? lastReport = KvStorageInitializer.home.lastReport;
       // 如果本地没有缓存记录, 加载默认文本. 否则加载记录.
-      if (lastReport == null) {
-        content = defaultContent;
-      } else {
+      if (lastReport != null) {
         content = _generateContent(lastReport);
       }
     }
@@ -132,7 +129,7 @@ class _ReportItemState extends State<ReportItem> {
       route: '/report',
       icon: 'assets/home/icon_report.svg',
       title: FunctionType.report.toLocalized(),
-      subtitle: content,
+      subtitle: content ?? FunctionType.report.toLocalizedDesc(),
     );
   }
 }

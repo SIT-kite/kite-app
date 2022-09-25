@@ -35,7 +35,6 @@ class LibraryItem extends StatefulWidget {
 }
 
 class _LibraryItemState extends State<LibraryItem> {
-  String defaultContent = FunctionType.library.toLocalizedDesc();
   String? content;
 
   @override
@@ -52,18 +51,18 @@ class _LibraryItemState extends State<LibraryItem> {
   }
 
   void _onHomeRefresh(_) async {
-    final String result = await _buildContent();
+    final String? result = await _buildContent();
     if (!mounted) return;
     setState(() => content = result);
   }
 
-  Future<String> _buildContent() async {
+  Future<String?> _buildContent() async {
     late HotSearch hotSearch;
 
     try {
       hotSearch = await LibrarySearchInitializer.hotSearchService.getHotSearch();
     } catch (e) {
-      return defaultContent;
+      return null;
     }
     final monthlyHot = hotSearch.recentMonth;
     final randomIndex = Random().nextInt(monthlyHot.length);
@@ -79,12 +78,12 @@ class _LibraryItemState extends State<LibraryItem> {
     // 如果是首屏加载
     if (content == null) {
       final lastHotSearch = KvStorageInitializer.home.lastHotSearch;
-      content = lastHotSearch ?? defaultContent;
+      content = lastHotSearch;
     }
     return HomeFunctionButton(
         route: '/library',
         icon: 'assets/home/icon_library.svg',
         title: FunctionType.library.toLocalized(),
-        subtitle: content);
+        subtitle: content ?? FunctionType.library.toLocalizedDesc());
   }
 }
