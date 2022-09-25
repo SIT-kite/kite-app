@@ -23,25 +23,15 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 const String _ventuskyUrl = 'https://www.ventusky.com/?p=31.046;121.773;10&l=rain-1h';
 
-class DistrictWeatherCode {
-  DistrictWeatherCode._();
-  /// campus 0
-  static const xuhui = "101021200";
-
-  /// campus 1
-  static const fengxian = "101021000";
-
-  static from({required int campus}) => campus == 1 ? fengxian : xuhui;
-}
-
 String _getWeatherUrl(int campus) {
-  String location = DistrictWeatherCode.from(campus: campus);
+  String location = WeatherCode.from(campus: campus);
   return 'https://widget-page.qweather.net/h5/index.html?md=0123456&bg=1&lc=$location&key=f96261862c08497c90c0dea53467f511';
 }
 
 class WeatherPage extends StatelessWidget {
   final int campus;
   final String? title;
+
   // TODO: Don't change any state in a stateless widget
   bool simple = true;
   late WebViewController controller;

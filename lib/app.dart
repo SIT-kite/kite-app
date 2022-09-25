@@ -35,6 +35,7 @@ import 'storage/init.dart';
 import 'util/logger.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'r.dart';
+
 class KiteApp extends StatefulWidget {
   const KiteApp({Key? key}) : super(key: key);
 
@@ -106,6 +107,7 @@ class _KiteAppState extends State<KiteApp> {
       );
     });
     buildMaterialWithTheme(ThemeData theme) {
+      KvStorageInitializer.pref.locale ??= Localizations.localeOf(context);
       return MaterialApp(
         title: R.appName,
         theme: theme,

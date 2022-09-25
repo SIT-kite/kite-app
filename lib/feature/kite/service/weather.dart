@@ -15,18 +15,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'dart:ui';
+
 import 'package:dio/dio.dart';
+import 'package:kite/l10n/extension.dart';
+import 'package:kite/storage/init.dart';
 
 import '../dao/weather.dart';
 import '../entity/weather.dart';
 
 class WeatherService implements WeatherDao {
-  // TODO: Language specific
-  static String _getWeatherUrl(int campus) => 'https://kite.sunnysab.cn/api/v2/weather/$campus';
+  static String _getWeatherUrl(int campus, int lang) => 'https://kite.sunnysab.cn/api/v2/weather/$campus?lang=$lang';
 
   @override
   Future<Weather> getCurrentWeather(int campus) async {
-    final url = _getWeatherUrl(campus);
+    var lang = KvStorageInitializer.pref.locale?.languageCode ?? Lang.zh;
+    final url = _getWeatherUrl(campus, Lang.toCode(lang) ?? Lang.zhCode);
     final response = await Dio().get(url);
     final weather = Weather.fromJson(response.data['data']);
 
