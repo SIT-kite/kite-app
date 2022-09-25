@@ -176,14 +176,14 @@
   "feedback": "Feedback",
   "about": "About",
   "language": "Language",
-  "languagePrefDropDownSubtitle": "Select a language for your Kite. Restart is needed",
+  "languagePrefDropDownSubtitle": "Select a language for your Kite",
   "language_en": "English",
   "language_zh": "Chinese",
   "settingsTitle": "Settings",
   "personalizeTitle": "Personalize",
   "themeColorSettings": "Theme Color",
   "darkModeSettings": "Dark Mode",
-  "darkModeSettingsSubtitle": "Kite will protect your eyes.",
+  "darkModeSettingsSubtitle": "Kite will protect your eyes",
   "mainPage": "Main Page",
   "mainPageBgModeSettings": "Background mode of Main Page",
   "staticPicture": "Static Picture",
@@ -210,7 +210,7 @@
   "logoutKiteSettingsSubtitle": "Logout current Kite account",
   "dataManagement": "Data Management",
   "wipeKiteDataSettings": "Wipe Kite Data",
-  "wipeKiteDataSettingsSubtitle": "Wipe Kite account and settings besides cache",
+  "wipeKiteDataSettingsSubtitle": "Wipe Kite saved accounts and settings besides cache",
   "devOptions": "Development Options",
   "detailedExceptionDialogSettings": "Enable detailed exception dialog",
   "detailedExceptionDialogSettingsSubtitle": "Detailed stacktrace will be shown",
@@ -266,11 +266,11 @@
   "ftype_examResult_desc": "Don't stop until you're proud",
   "ftype_separator": "Separator",
   "ftype_separator_desc": "For grouping functions",
-  "greetingHeaderL1": "SIT has accompanied you for",
+  "greetingHeaderL1": "SIT has accompanied you",
   "@greetingHeaderL1": {
     "description": "The first line of greeting header"
   },
-  "greetingHeaderL2": "{days,plural, =0{0 Day} =1{1 Day} other{{days} Days}",
+  "greetingHeaderL2": "For {days,plural, =0{0 Day} =1{1 Day} other{{days} Days}",
   "@greetingHeaderL2": {
     "placeholders": {
       "days": {

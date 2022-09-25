@@ -173,7 +173,9 @@ class SettingPage extends StatelessWidget {
       },
       selected: curLangCode,
       onChange: (value) {
-        KvStorageInitializer.pref.locale = Locale(value);
+        if (KvStorageInitializer.pref.locale?.languageCode != value) {
+          KvStorageInitializer.pref.locale = Locale(value);
+        }
         // TODO: Test on mobile
         Phoenix.rebirth(ctx);
         /*
@@ -243,8 +245,8 @@ class SettingPage extends StatelessWidget {
             subtitle: i18n.campusDropDownSettingsSubtitle,
             settingKey: HomeKeyKeys.campus,
             values: <int, String>{
-              1: i18n.fengxianDistrict,
-              2: i18n.xuhuiDistrict,
+              1: i18n.fengxian,
+              2: i18n.xuhui,
             },
             selected: KvStorageInitializer.home.campus,
             onChange: (value) {
