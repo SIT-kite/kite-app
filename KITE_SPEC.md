@@ -10,7 +10,7 @@
 | reportTemp       | Report Temperature     | 体温上报    |
 | examArrangement  | Exam Arrangement       | 考试安排    |
 | classroomBrowser | Classroom Browser      | 空教室     |
-| act              | Activity               | 活动      |
+| activity         | Activity               | 活动      |
 | expenseTracker   | Expense Tracker        | 查消费     |
 | library          | Library                | 图书馆     |
 | office           | Office                 | 办公      |

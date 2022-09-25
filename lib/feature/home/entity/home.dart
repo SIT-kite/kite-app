@@ -135,7 +135,7 @@ enum FunctionType {
       case FunctionType.classroom:
         return i18n.ftype_classroomBrowser;
       case FunctionType.event:
-        return i18n.ftype_act;
+        return i18n.ftype_activity;
       case FunctionType.expense:
         return i18n.ftype_expenseTracker;
       case FunctionType.score:
@@ -186,7 +186,7 @@ enum FunctionType {
       case FunctionType.classroom:
         return i18n.ftype_classroomBrowser_desc;
       case FunctionType.event:
-        return i18n.ftype_act_desc;
+        return i18n.ftype_activity_desc;
       case FunctionType.expense:
         return i18n.ftype_expenseTracker_desc;
       case FunctionType.score:

@@ -119,7 +119,7 @@ jobs:
   # iOS
   #
   build-iOS:
-    runs-on: macos-latest
+    runs-on: macos-12
     needs: lint
     steps:
 

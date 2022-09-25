@@ -34,12 +34,12 @@ class Lang {
   Lang._();
 
   static const zh = "zh";
-  static const zhTW = "zhTW";
+  static const zhTw = "zhTW";
   static const en = "en";
   @zh
   static const zhCode = 1;
-  @zhTWCode
-  static const zhTWCode = 2;
+  @zhTwCode
+  static const zhTwCode = 2;
   @enCode
   static const enCode = 3;
 
@@ -47,8 +47,8 @@ class Lang {
     switch (lang) {
       case zh:
         return zhCode;
-      case zhTW:
-        return zhTWCode;
+      case zhTw:
+        return zhTwCode;
       case en:
         return enCode;
     }

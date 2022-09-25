@@ -3,9 +3,16 @@
   "no": "No",
   "ok": "OK",
   "go": "Go",
+  "refresh": "Refresh",
   "failed": "Failed",
   "cancel": "Cancel",
   "loading": "Loading",
+  "downloading": "Downloading",
+  "downloadCompleted": "Download Completed",
+  "open": "Open",
+  "@open": {
+    "description": "Open a file"
+  },
   "loggingIn": "Logging in",
   "logout": "Logout",
   "continue_": "Continue",
@@ -234,8 +241,8 @@
   "ftype_examArrangement_desc": "Recent exam arrangement",
   "ftype_classroomBrowser": "Classroom Browser",
   "ftype_classroomBrowser_desc": "Is there any empty classroom?",
-  "ftype_act": "Activities",
-  "ftype_act_desc": "The latest Second Class activities",
+  "ftype_activity": "Activities",
+  "ftype_activity_desc": "The latest Second Class activities",
   "ftype_expenseTracker": "Expense Tracker",
   "ftype_expenseTracker_desc": "School card shopping history",
   "ftype_library": "Library",
@@ -341,12 +348,29 @@
     "description": "For building string: Reported Today Normal {place}"
   },
   "reportTempNoReportRecords": "No report records",
-  "actLecture": "Lecture",
-  "actCreation": "Creation",
-  "actThematicEdu": "Thematic Edu",
-  "actSchoolCulture": "School Culture",
-  "actPractice": "Practice",
-  "actVoluntary": "Voluntary",
-  "actSafetyEdu": "Safety Edu",
-  "actUnknown": "Unknown"
+  "activityLecture": "Lecture",
+  "activityCreation": "Creation",
+  "activityThematicEdu": "Thematic Edu",
+  "activitySchoolCulture": "School Culture",
+  "activityPractice": "Practice",
+  "activityVoluntary": "Voluntary",
+  "activitySafetyEdu": "Safety Edu",
+  "activityUnknown": "Unknown",
+  "publishingDepartment": "Department",
+  "author": "Author",
+  "publishTime": "Publish Time",
+  "oaAnnouncementAttachmentTip": "{count,plural, =1{Attachment} other{Attachments}",
+  "oaAnnouncementTextTitle": "Announcement Text",
+  "@oaAnnouncementAttachmentTip": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kiteBuiltinPinned": "[Pinned]",
+  "libraryAccountManagementButtonTip": "Library account management is coming soon...",
+  "libraryAnnouncementPublishTime": "Publish Date",
+  "libraryAnnouncementLabel": "There is an announcement from library",
+  "libraryAnnouncementTitle": "Library Announcement"
 }

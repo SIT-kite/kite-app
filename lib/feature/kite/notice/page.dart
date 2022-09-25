@@ -18,6 +18,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
+import 'package:kite/feature/home/entity/home.dart';
+import 'package:kite/l10n/extension.dart';
+import 'package:kite/util/dsl.dart';
 
 import '../init.dart';
 import 'entity.dart';
@@ -26,8 +29,6 @@ class NoticePage extends StatelessWidget {
   const NoticePage({Key? key}) : super(key: key);
 
   Widget _buildNoticeItem(BuildContext context, KiteNotice notice) {
-    final dateFormat = DateFormat('yyyy/MM/dd');
-
     return InkWell(
       onTap: () {},
       child: Padding(
@@ -41,11 +42,11 @@ class NoticePage extends StatelessWidget {
               children: [
                 // 标题, 注意遇到长标题时要折断
                 Expanded(
-                  child: Text((notice.top ? '[置顶] ' : '') + notice.title,
+                  child: Text((notice.top ? '${i18n.kiteBuiltinPinned} ' : '') + notice.title,
                       overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.headline3),
                 ),
                 // 日期
-                Text(dateFormat.format(notice.publishTime), style: const TextStyle(color: Colors.grey)),
+                Text(context.dateNum(notice.publishTime), style: const TextStyle(color: Colors.grey)),
               ],
             ),
             const SizedBox(height: 10),
@@ -84,7 +85,7 @@ class NoticePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('公告')),
+      appBar: AppBar(title: FunctionType.notice.localized().txt),
       body: SafeArea(child: _buildBody()),
     );
   }

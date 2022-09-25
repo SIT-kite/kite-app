@@ -18,21 +18,35 @@
 
 import 'package:flutter/material.dart';
 import 'package:kite/component/html_widget.dart';
+import 'package:kite/l10n/extension.dart';
+import 'package:kite/util/dsl.dart';
 
 import '../entity.dart';
 
 class LibraryNoticePage extends StatelessWidget {
   final Notice notice;
+  final bool isHtml;
 
-  const LibraryNoticePage(this.notice, {Key? key}) : super(key: key);
+  const LibraryNoticePage(this.notice, {Key? key, this.isHtml = true}) : super(key: key);
+
+  buildPlainText(Notice notice) {
+    return Padding(
+      padding: const EdgeInsets.all(40),
+      child: Center(
+        child: Text(
+          notice.html,
+          style: const TextStyle(fontSize: 24),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('图书馆通知'),
-      ),
-      body: MyHtmlWidget(notice.html),
-    );
+        appBar: AppBar(
+          title: i18n.libraryAnnouncementTitle.txt,
+        ),
+        body: isHtml ? MyHtmlWidget(notice.html) : buildPlainText(notice));
   }
 }

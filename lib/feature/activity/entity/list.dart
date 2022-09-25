@@ -30,21 +30,21 @@ enum ActivityType {
   String localized() {
     switch (this) {
       case lecture:
-        return i18n.actLecture;
+        return i18n.activityLecture;
       case theme:
-        return i18n.actThematicEdu;
+        return i18n.activityThematicEdu;
       case creation:
-        return i18n.actCreation;
+        return i18n.activityCreation;
       case campus:
-        return i18n.actSchoolCulture;
+        return i18n.activitySchoolCulture;
       case practice:
-        return i18n.actPractice;
+        return i18n.activityPractice;
       case voluntary:
-        return i18n.actVoluntary;
+        return i18n.activityVoluntary;
       case safetyEdu:
-        return i18n.actSafetyEdu;
+        return i18n.activitySafetyEdu;
       case unknown:
-        return i18n.actUnknown;
+        return i18n.activityUnknown;
     }
   }
 }

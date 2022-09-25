@@ -16,6 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/feature/home/entity/home.dart';
+import 'package:kite/l10n/extension.dart';
+import 'package:kite/util/dsl.dart';
 
 import '../entity/contact.dart';
 import '../init.dart';
@@ -26,10 +29,10 @@ class ContactPage extends StatefulWidget {
   const ContactPage({Key? key}) : super(key: key);
 
   @override
-  _ContactPageState createState() => _ContactPageState();
+  ContactPageState createState() => ContactPageState();
 }
 
-class _ContactPageState extends State<ContactPage> {
+class ContactPageState extends State<ContactPage> {
   final List<ContactData> _contactData = ContactInitializer.contactStorageDao.getAllContacts();
 
   Future<List<ContactData>> _fetchContactList() async {
@@ -64,7 +67,7 @@ class _ContactPageState extends State<ContactPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('常用电话'),
+        title: FunctionType.contact.localized().txt,
         actions: [
           IconButton(
               onPressed: () => showSearch(context: context, delegate: Search(_contactData)),
@@ -78,7 +81,7 @@ class _ContactPageState extends State<ContactPage> {
 
   Widget _buildRefreshButton() {
     return IconButton(
-      tooltip: '刷新',
+      tooltip: i18n.refresh,
       icon: const Icon(Icons.refresh),
       onPressed: () {
         _contactData.clear();
