@@ -21,8 +21,9 @@ import 'package:kite/feature/home/entity/home.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
+import 'package:kite/util/dsl.dart';
 import 'package:kite/util/user.dart';
-
+// TODO: Rename to `Rearrange`
 class HomeSettingPage extends StatefulWidget {
   const HomeSettingPage({Key? key}) : super(key: key);
 
@@ -73,7 +74,7 @@ class _HomeSettingPageState extends State<HomeSettingPage> {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('首页菜单'),
+          title: i18n.functionRearrangeSettings.txt,
           actions: [
             IconButton(
                 onPressed: () {
@@ -84,8 +85,8 @@ class _HomeSettingPageState extends State<HomeSettingPage> {
           ],
         ),
         body: ReorderableListView(
-          children: buildWidgetItems(homeItems),
           onReorder: _onReorder,
+          children: buildWidgetItems(homeItems),
         ),
       ),
       onWillPop: () async {

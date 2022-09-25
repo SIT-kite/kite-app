@@ -46,12 +46,23 @@ class _OfficeItemState extends State<OfficeItem> {
     Global.eventBus.off(EventNameConstants.onHomeRefresh, _onHomeRefresh);
     super.dispose();
   }
+  void _tryUpdateContent(String? newContent){
+    if (newContent != null) {
+      if (newContent.isEmpty || newContent.trim().isEmpty) {
+        content = null;
+      } else {
+        content = newContent;
+      }
+    } else {
+      content = null;
+    }
+  }
 
   void _onHomeRefresh(_) async {
     if (!mounted) return;
     final String result = await _buildContent();
     KvStorageInitializer.home.lastOfficeStatus = result;
-    setState(() => content = result);
+    setState(() => _tryUpdateContent(result));
   }
 
   Future<String> _buildContent() async {
@@ -82,14 +93,7 @@ class _OfficeItemState extends State<OfficeItem> {
   @override
   Widget build(BuildContext context) {
     // 如果是首屏加载, 从缓存读
-    if (content == null) {
-      var lastOfficeStatus = KvStorageInitializer.home.lastOfficeStatus;
-      if (lastOfficeStatus?.isEmpty ?? true) {
-        content = null;
-      } else {
-        content = lastOfficeStatus;
-      }
-    }
+    _tryUpdateContent(KvStorageInitializer.home.lastOfficeStatus);
     return HomeFunctionButton(
         route: '/office',
         icon: 'assets/home/icon_office.svg',

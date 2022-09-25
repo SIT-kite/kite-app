@@ -166,10 +166,11 @@ class SettingPage extends StatelessWidget {
     return DropDownSettingsTile<String>(
       title: i18n.language,
       subtitle: i18n.languagePrefDropDownSubtitle,
+      leading: const Icon(Icons.translate_rounded),
       settingKey: PrefKey.locale,
       values: {
-        R.localeEn: i18n.language_en,
-        R.localeZh: i18n.language_zh,
+        Lang.en: i18n.language_en,
+        Lang.zh: i18n.language_zh,
       },
       selected: curLangCode,
       onChange: (value) {
@@ -178,21 +179,6 @@ class SettingPage extends StatelessWidget {
         }
         // TODO: Test on mobile
         Phoenix.rebirth(ctx);
-        /*
-        ctx.showFlashDialog(
-            constraints: const BoxConstraints(maxWidth: 300),
-            title: i18n.restartRequestTitle.txt,
-            content: i18n.restartRequest.txt,
-            negativeActionBuilder: _negativeActionBuilderNotNow,
-            positiveActionBuilder: (context, controller, _) {
-              return TextButton(
-                  onPressed: () async {
-                    Phoenix.rebirth(ctx);
-                    Phoenix.rebirth(ctx);
-                    await controller.dismiss();
-                  },
-                  child: i18n.ok.txt);
-            });*/
       },
     );
   }
@@ -201,13 +187,15 @@ class SettingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     _passwordController.text = KvStorageInitializer.auth.ssoPassword ?? '';
     return SettingsScreen(title: i18n.settingsTitle, children: [
+      // Personalize
       SettingsGroup(
         title: i18n.personalizeTitle,
         children: <Widget>[
           ColorPickerSettingsTile(
+            title: i18n.themeColorSettings,
+            leading: const Icon(Icons.palette_outlined),
             settingKey: ThemeKeys.themeColor,
             defaultValue: KvStorageInitializer.theme.color,
-            title: i18n.themeColorSettings,
             onChange: (newColor) => DynamicColorTheme.of(context).setColor(
               color: newColor,
               shouldSave: true, // saves it to shared preferences
@@ -224,6 +212,7 @@ class SettingPage extends StatelessWidget {
           ),
         ],
       ),
+      // TODO: A new personalize system
       SettingsGroup(
         title: i18n.homepage,
         children: <Widget>[
@@ -257,11 +246,13 @@ class SettingPage extends StatelessWidget {
           SimpleSettingsTile(
               title: i18n.backgroundPictureSettings,
               subtitle: i18n.backgroundPictureSettingsSubtitle,
+              leading: const Icon(Icons.photo_size_select_actual_outlined),
               onTap: _onChangeBgImage),
           if (!isFreshman)
             SimpleSettingsTile(
-              title: i18n.functionOrderSettings,
-              subtitle: i18n.functionOrderSettingsSubtitle,
+              title: i18n.functionRearrangeSettings,
+              subtitle: i18n.functionRearrangeSettingsSubtitle,
+              leading: const Icon(Icons.menu),
               onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeSettingPage())),
             ),
         ],
@@ -299,6 +290,7 @@ class SettingPage extends StatelessWidget {
           ],
         ),
       ]),
+      // Account
       SettingsGroup(
         title: i18n.account,
         children: <Widget>[
@@ -313,6 +305,7 @@ class SettingPage extends StatelessWidget {
             ModalSettingsTile(
               title: i18n.changeOaPwdSettings,
               subtitle: i18n.changeOaPwdSettingsSubtitle,
+              leading: const Icon(Icons.lock),
               showConfirmation: true,
               onConfirm: () {
                 KvStorageInitializer.auth.ssoPassword = _passwordController.text;
@@ -329,14 +322,17 @@ class SettingPage extends StatelessWidget {
             SimpleSettingsTile(
                 title: i18n.testLoginKiteSettings,
                 subtitle: i18n.testLoginKiteSettingsSubtitle,
+                leading: const Icon(Icons.login_rounded),
                 onTap: () => _testPassword(context)),
           SimpleSettingsTile(
               title: i18n.logoutKiteSettings,
               subtitle: i18n.logoutKiteSettingsSubtitle,
+              leading: const Icon(Icons.logout_rounded),
               onTap: () => _onLogout(context)),
         ],
       ),
-      SettingsGroup(title: i18n.dataManagement, children: [
+      // Data Management
+      SettingsGroup(title: i18n.dataManagement, children: <Widget>[
         SimpleSettingsTile(
             title: i18n.wipeKiteDataSettings,
             leading: const Icon(Icons.remove_circle),

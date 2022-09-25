@@ -40,6 +40,7 @@ class KiteDrawer extends Drawer {
           ),
           ListTile(
             title: Text(i18n.settings),
+            leading: const Icon(Icons.settings),
             onTap: () {
               Navigator.pop(context);
               Navigator.of(context).pushNamed('/setting');
@@ -47,6 +48,7 @@ class KiteDrawer extends Drawer {
           ),
           ListTile(
             title: i18n.networkTool.txt,
+            leading: const Icon(Icons.lan),
             onTap: () {
               Navigator.pop(context);
               Navigator.of(context).pushNamed('/connectivity');
@@ -61,15 +63,19 @@ class KiteDrawer extends Drawer {
                   },
                 )
               : const SizedBox(height: 0),
+          // Feedback
           ListTile(
             title: i18n.feedback.txt,
+            leading: const Icon(Icons.feedback_rounded),
             onTap: () {
               Navigator.pop(context);
               Navigator.of(context).pushNamed('/feedback');
             },
           ),
+          // About
           ListTile(
             title: i18n.about.txt,
+            leading: const Icon(Icons.info_rounded),
             onTap: () {
               Navigator.pop(context);
               Navigator.of(context).pushNamed('/about');
