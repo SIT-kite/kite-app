@@ -32,15 +32,15 @@ import 'search/page/constant.dart';
 import 'search/page/search_delegate.dart';
 
 class NoticeWidget extends StatelessWidget {
-  static const announcementPreviewCharLimit = 25;
+  static const noticePreviewCharLimit = 25;
   final ValueNotifier<Notice?> noticeNotifier = ValueNotifier(null);
 
   NoticeWidget({Key? key}) : super(key: key);
 
   Widget buildNone() => Container();
 
-  String genAnnouncementPreview(Notice notice) =>
-      notice.html.substring(0, min(notice.html.length, announcementPreviewCharLimit));
+  String genNoticePreview(Notice notice) =>
+      notice.html.substring(0, min(notice.html.length, noticePreviewCharLimit));
 
   Widget buildSome(Notice notice) {
     final isRealHtml = guessIsHtml(notice.html);
@@ -52,9 +52,9 @@ class NoticeWidget extends StatelessWidget {
       ),
       child: Builder(builder: (context) {
         return ListTile(
-          title: Text(isRealHtml ? i18n.libraryAnnouncementLabel : genAnnouncementPreview(notice),
+          title: Text(isRealHtml ? i18n.libraryNoticeLabel : genNoticePreview(notice),
               style: const TextStyle(color: Colors.blue, fontSize: 18)),
-          subtitle: Text(('${i18n.libraryAnnouncementPublishTime}:  ${context.dateNumX(notice.ts.toLocal())}')),
+          subtitle: Text(('${i18n.libraryNoticePublishTime}:  ${context.dateFullNum(notice.ts.toLocal())}')),
           trailing: const Icon(
             Icons.notification_important,
             color: Colors.blueAccent,

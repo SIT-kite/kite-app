@@ -29,10 +29,10 @@ class ContactPage extends StatefulWidget {
   const ContactPage({Key? key}) : super(key: key);
 
   @override
-  ContactPageState createState() => ContactPageState();
+  State<ContactPage> createState() => _ContactPageState();
 }
 
-class ContactPageState extends State<ContactPage> {
+class _ContactPageState extends State<ContactPage> {
   final List<ContactData> _contactData = ContactInitializer.contactStorageDao.getAllContacts();
 
   Future<List<ContactData>> _fetchContactList() async {

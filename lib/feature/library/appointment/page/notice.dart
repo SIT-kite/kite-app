@@ -30,22 +30,21 @@ class LibraryNoticePage extends StatelessWidget {
   const LibraryNoticePage(this.notice, {Key? key, this.isHtml = true}) : super(key: key);
 
   buildPlainText(Notice notice) {
-    return Padding(
-      padding: const EdgeInsets.all(40),
-      child: Center(
+    return Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(15),
         child: Text(
           notice.html,
-          style: const TextStyle(fontSize: 24),
-        ),
-      ),
-    );
+          style: const TextStyle(fontSize: 20),
+          overflow: TextOverflow.visible,
+        ));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: i18n.libraryAnnouncementTitle.txt,
+          title: i18n.libraryNoticeTitle.txt,
         ),
         body: isHtml ? MyHtmlWidget(notice.html) : buildPlainText(notice));
   }

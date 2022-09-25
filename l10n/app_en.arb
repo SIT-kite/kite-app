@@ -370,7 +370,8 @@
   },
   "kiteBuiltinPinned": "[Pinned]",
   "libraryAccountManagementButtonTip": "Library account management is coming soon...",
-  "libraryAnnouncementPublishTime": "Publish Date",
-  "libraryAnnouncementLabel": "There is an announcement from library",
-  "libraryAnnouncementTitle": "Library Announcement"
+  "libraryNoticePublishTime": "Send Time",
+  "libraryNoticeLabel": "There is a notice from the library.",
+  "libraryNoticeTitle": "Library Notice",
+  "applicationDesc": "This function is based on \"上应一网通办\".\n For most of types, you have to do the necessary procedure on the spot although you submitted an application online."
 }

@@ -29,29 +29,3 @@ class WeatherCode {
 
   static from({required int campus}) => campus == 1 ? fengxian : xuhui;
 }
-
-class Lang {
-  Lang._();
-
-  static const zh = "zh";
-  static const zhTw = "zhTW";
-  static const en = "en";
-  @zh
-  static const zhCode = 1;
-  @zhTwCode
-  static const zhTwCode = 2;
-  @enCode
-  static const enCode = 3;
-
-  static int? toCode(String lang) {
-    switch (lang) {
-      case zh:
-        return zhCode;
-      case zhTw:
-        return zhTwCode;
-      case en:
-        return enCode;
-    }
-    return null;
-  }
-}

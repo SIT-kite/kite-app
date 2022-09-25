@@ -20,6 +20,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/exception/session.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
 
 import '../entity/index.dart';
@@ -61,7 +62,7 @@ class OfficePage extends StatefulWidget {
   const OfficePage({Key? key}) : super(key: key);
 
   @override
-  _OfficePageState createState() => _OfficePageState();
+  State<OfficePage> createState() => _OfficePageState();
 }
 
 class _OfficePageState extends State<OfficePage> {
@@ -124,12 +125,11 @@ class _OfficePageState extends State<OfficePage> {
   Widget _buildNotice() {
     return Container(
       alignment: Alignment.center,
-      child: const Text(
-        '本模块及子模块的内容来源于 "上应一网通办"。\n'
-        '对于绝大多数业务，您在平台上完成申请后，仍然要去现场办理。',
+      padding: const EdgeInsets.all(15),
+      child: Text(
+        i18n.applicationDesc,
         overflow: TextOverflow.visible,
       ),
-      padding: const EdgeInsets.all(15),
     );
   }
 

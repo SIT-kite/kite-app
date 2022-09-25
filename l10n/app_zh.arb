@@ -175,8 +175,9 @@
   "oaAnnouncementTextTitle": "公告正文",
   "kiteBuiltinPinned": "[置顶]",
   "libraryAccountManagementButtonTip": "图书馆账户信息管理，敬请期待",
-  "libraryAnnouncementPublishTime": "发布日期",
-  "libraryAnnouncementLabel": "图书馆发布了一条公告",
-  "libraryAnnouncementTitle": "图书馆公告"
+  "libraryNoticeSendTime": "发送日期",
+  "libraryNoticeLabel": "图书馆发送了一条通知",
+  "libraryNoticeTitle": "图书馆通知",
+  "applicationDesc": "本功能基于 \"上应一网通办\".\n对于绝大多数业务，即使你在平台上已完成申请，仍要去现场办理。"
 }
 

@@ -21,10 +21,9 @@ import 'package:enough_mail_html/enough_mail_html.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/html_widget.dart';
+import 'package:kite/l10n/extension.dart';
 
 class DetailPage extends StatelessWidget {
-  static final dateFormat = DateFormat('yyyy/MM/dd HH:mm');
-
   final MimeMessage _message;
 
   const DetailPage(this._message, {Key? key}) : super(key: key);
@@ -45,7 +44,7 @@ class DetailPage extends StatelessWidget {
     final sender = _message.decodeSender();
     final senderText = sender[0].toString() + (sender.length > 1 ? '等' : '');
     final date = _message.decodeDate();
-    final dateText = date != null ? dateFormat.format(date) : '';
+    final dateText = date != null ? context.dateFullNum(date) : '';
 
     return Padding(
       padding: const EdgeInsets.all(10),
