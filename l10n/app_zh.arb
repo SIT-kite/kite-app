@@ -178,6 +178,7 @@
   "libraryNoticeSendTime": "发送日期",
   "libraryNoticeLabel": "图书馆发送了一条通知",
   "libraryNoticeTitle": "图书馆通知",
-  "applicationDesc": "本功能基于 \"上应一网通办\".\n对于绝大多数业务，即使你在平台上已完成申请，仍要去现场办理。"
+  "applicationDesc": "本功能基于 \"上应一网通办\".\n对于绝大多数业务，即使你在平台上已完成申请，仍要去现场办理。",
+  "studentIdCopy2ClipboardTip": "复制你的学号到剪贴板啦"
 }
 

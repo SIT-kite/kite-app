@@ -21,6 +21,7 @@ import 'package:dynamic_color_theme/dynamic_color_theme.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
@@ -162,7 +163,9 @@ class SettingPage extends StatelessWidget {
   }
 
   _buildLanguagePrefSelector(BuildContext ctx) {
-    final curLangCode = KvStorageInitializer.pref.locale?.languageCode ?? Localizations.localeOf(ctx).languageCode;
+    final curLangCode = KvStorageInitializer.pref.locale?.languageCode ?? Localizations
+        .localeOf(ctx)
+        .languageCode;
     return DropDownSettingsTile<String>(
       title: i18n.language,
       subtitle: i18n.languagePrefDropDownSubtitle,
@@ -196,10 +199,11 @@ class SettingPage extends StatelessWidget {
             leading: const Icon(Icons.palette_outlined),
             settingKey: ThemeKeys.themeColor,
             defaultValue: KvStorageInitializer.theme.color,
-            onChange: (newColor) => DynamicColorTheme.of(context).setColor(
-              color: newColor,
-              shouldSave: true, // saves it to shared preferences
-            ),
+            onChange: (newColor) =>
+                DynamicColorTheme.of(context).setColor(
+                  color: newColor,
+                  shouldSave: true, // saves it to shared preferences
+                ),
           ),
           _buildLanguagePrefSelector(context),
           SwitchSettingsTile(
@@ -232,6 +236,7 @@ class SettingPage extends StatelessWidget {
           DropDownSettingsTile<int>(
             title: i18n.campus,
             subtitle: i18n.campusDropDownSettingsSubtitle,
+            leading: const Icon(Icons.location_on),
             settingKey: HomeKeyKeys.campus,
             values: <int, String>{
               1: i18n.fengxian,
@@ -295,11 +300,18 @@ class SettingPage extends StatelessWidget {
         title: i18n.account,
         children: <Widget>[
           if (!isFreshman)
-            TextInputSettingsTile(
+            SimpleSettingsTile(
               title: i18n.studentID,
-              settingKey: AuthKeys.currentUsername,
-              initialValue: KvStorageInitializer.auth.currentUsername ?? '',
-              validator: studentIdValidator,
+              subtitle: KvStorageInitializer.auth.currentUsername ?? "",
+              leading: const Icon(Icons.person_rounded),
+              onTap: () {
+                // Copy the student ID to clipboard
+                final id = KvStorageInitializer.auth.currentUsername;
+                if (id != null) {
+                  Clipboard.setData(ClipboardData(text: id));
+                  showBasicFlash(context, i18n.studentIdCopy2ClipboardTip.txt);
+                }
+              },
             ),
           if (!isFreshman)
             ModalSettingsTile(

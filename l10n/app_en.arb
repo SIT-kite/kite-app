@@ -373,5 +373,6 @@
   "libraryNoticePublishTime": "Send Time",
   "libraryNoticeLabel": "There is a notice from the library.",
   "libraryNoticeTitle": "Library Notice",
-  "applicationDesc": "This function is based on \"上应一网通办\".\n For most of types, you have to do the necessary procedure on the spot although you submitted an application online."
+  "applicationDesc": "This function is based on \"上应一网通办\".\n For most of types, you have to do the necessary procedure on the spot although you submitted an application online.",
+  "studentIdCopy2ClipboardTip": "Your student ID is copied."
 }
