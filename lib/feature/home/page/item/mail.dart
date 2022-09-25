@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/feature/home/entity/home.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 
@@ -29,8 +30,8 @@ class MailItem extends StatefulWidget {
 }
 
 class _MailItemState extends State<MailItem> {
-  String defaultContent = i18n.ftype_eduEmail_desc;
-  String content = i18n.ftype_eduEmail_desc;
+  String defaultContent = FunctionType.mail.toLocalizedDesc();
+  String content = FunctionType.mail.toLocalizedDesc();
 
   @override
   void initState() {
@@ -51,7 +52,7 @@ class _MailItemState extends State<MailItem> {
     return HomeFunctionButton(
       route: '/mail',
       icon: 'assets/home/icon_mail.svg',
-      title: i18n.ftype_eduEmail,
+      title: FunctionType.mail.toLocalized(),
       subtitle: content,
     );
   }

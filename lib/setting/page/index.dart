@@ -152,18 +152,30 @@ class SettingPage extends StatelessWidget {
   }
 
   _buildLanguagePrefSelector(BuildContext ctx) {
-    final cur = KvStorageInitializer.pref.locale;
+    final curLangCode = KvStorageInitializer.pref.locale?.languageCode ?? Localizations.localeOf(ctx).languageCode;
     return DropDownSettingsTile<String>(
       title: i18n.language,
       subtitle: i18n.languagePrefDropDownSubtitle,
       settingKey: PrefKey.locale,
       values: {
-        "en": i18n.language_en,
-        "zh": i18n.language_zh,
+        R.localeEn: i18n.language_en,
+        R.localeZh: i18n.language_zh,
       },
-      selected: cur.languageCode,
+      selected: curLangCode,
       onChange: (value) {
         KvStorageInitializer.pref.locale = Locale(value);
+        /*ctx.showFlashDialog(
+            constraints: const BoxConstraints(maxWidth: 300),
+            title: i18n.restartRequestTitle.txt,
+            content: i18n.restartRequest.txt,
+            negativeActionBuilder: _negativeActionBuilder,
+            positiveActionBuilder: (context, controller, _) {
+              return TextButton(
+                  onPressed: () async {
+
+                  },
+                  child: i18n.ok.txt);
+            });*/
       },
     );
   }

@@ -1,5 +1,7 @@
 # Kite Specification
+
 ## Function Type Terms
+
 | Type              | English                | Chinese |
 |-------------------|------------------------|---------|
 | upgrade           | Upgrade Kite           | 更新      |
@@ -24,3 +26,4 @@
 | electricityBill   | Electricity Bill       | 查电费     |
 | kiteBoard         | Kite Board             | 风筝时刻    |
 | examResult        | Exam Result            | 成绩      |
+| separator         | Separator              | 分隔符     |

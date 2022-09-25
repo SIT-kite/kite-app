@@ -17,6 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/exception/session.dart';
+import 'package:kite/feature/home/entity/home.dart';
 import 'package:kite/feature/office/init.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
@@ -32,7 +33,7 @@ class OfficeItem extends StatefulWidget {
 }
 
 class _OfficeItemState extends State<OfficeItem> {
-  static String defaultContent = i18n.ftype_office_desc;
+  static String defaultContent = FunctionType.office.toLocalized();
   String? content;
 
   @override
@@ -87,6 +88,9 @@ class _OfficeItemState extends State<OfficeItem> {
       content = lastOfficeStatus ?? defaultContent;
     }
     return HomeFunctionButton(
-        route: '/office', icon: 'assets/home/icon_office.svg', title: i18n.ftype_office, subtitle: content);
+        route: '/office',
+        icon: 'assets/home/icon_office.svg',
+        title: FunctionType.office.toLocalized(),
+        subtitle: content);
   }
 }

@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/feature/home/entity/home.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 
@@ -29,7 +30,7 @@ class ExamItem extends StatefulWidget {
 }
 
 class _ExamItemState extends State<ExamItem> {
-  String content = i18n.ftype_examArrangement_desc;
+  String content = FunctionType.exam.toLocalizedDesc();
 
   @override
   void initState() {
@@ -43,7 +44,7 @@ class _ExamItemState extends State<ExamItem> {
     return HomeFunctionButton(
       route: '/exam',
       icon: 'assets/home/icon_exam.svg',
-      title: i18n.ftype_examArrangement,
+      title: FunctionType.exam.toLocalized(),
       subtitle: content,
     );
   }

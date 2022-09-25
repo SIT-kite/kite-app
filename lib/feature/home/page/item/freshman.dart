@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kite/feature/home/entity/home.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
@@ -54,8 +55,8 @@ class FreshmanItem extends StatelessWidget {
         }
       },
       iconWidget: Icon(Icons.people, size: 30.h, color: Theme.of(context).primaryColor),
-      title: i18n.ftype_freshman,
-      subtitle: i18n.ftype_freshman_desc,
+      title: FunctionType.freshman.toLocalized(),
+      subtitle: FunctionType.freshman.toLocalizedDesc(),
     );
   }
 }

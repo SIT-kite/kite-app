@@ -83,6 +83,8 @@
   "ftype_kiteBoard_desc": "随手记录美好",
   "ftype_examResult": "成绩",
   "ftype_examResult_desc": "愿每一天都有收获",
+  "ftype_separator": "分隔符",
+  "ftype_separator_desc": "用于功能分组",
   "greetingHeaderL1": "今天是你在上应大的",
   "greetingHeaderL2": "第 {days,plural, =0{0} =1{1} other{{days}} 天",
   "greetingHeaderNoDays": "欢迎使用上应小风筝",

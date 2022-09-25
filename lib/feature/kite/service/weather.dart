@@ -21,6 +21,7 @@ import '../dao/weather.dart';
 import '../entity/weather.dart';
 
 class WeatherService implements WeatherDao {
+  // TODO: Language specific
   static String _getWeatherUrl(int campus) => 'https://kite.sunnysab.cn/api/v2/weather/$campus';
 
   @override

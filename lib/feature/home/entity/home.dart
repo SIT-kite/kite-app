@@ -20,9 +20,11 @@ import 'dart:collection';
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kite/global/hive_type_id_pool.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/util/user.dart';
 
 part 'home.g.dart';
+
 // TODO: Rename
 @HiveType(typeId: HiveTypeIdPool.functionTypeItem)
 enum FunctionType {
@@ -35,7 +37,6 @@ enum FunctionType {
   notice,
 
   /// 课程表
-
   @HiveField(2)
   timetable,
 
@@ -117,7 +118,109 @@ enum FunctionType {
 
   /// 电费查询
   @HiveField(22)
-  electricity,
+  electricity;
+
+  String toLocalized() {
+    switch (this) {
+      case FunctionType.upgrade:
+        return i18n.ftype_upgrade;
+      case FunctionType.notice:
+        return i18n.ftype_kiteBulletin;
+      case FunctionType.timetable:
+        return i18n.ftype_timetable;
+      case FunctionType.report:
+        return i18n.ftype_reportTemperature;
+      case FunctionType.exam:
+        return i18n.ftype_examArrangement;
+      case FunctionType.classroom:
+        return i18n.ftype_classroomBrowser;
+      case FunctionType.event:
+        return i18n.ftype_event;
+      case FunctionType.expense:
+        return i18n.ftype_expenseTracker;
+      case FunctionType.score:
+        return i18n.ftype_examResult;
+      case FunctionType.library:
+        return i18n.ftype_library;
+      case FunctionType.office:
+        return i18n.ftype_office;
+      case FunctionType.mail:
+        return i18n.ftype_eduEmail;
+      case FunctionType.bulletin:
+        return i18n.ftype_oaAnnouncement;
+      case FunctionType.contact:
+        return i18n.ftype_yellowPages;
+      case FunctionType.game:
+        return i18n.ftype_game;
+      case FunctionType.wiki:
+        return i18n.ftype_wiki;
+      case FunctionType.separator:
+        return i18n.ftype_separator;
+      case FunctionType.bbs:
+        return i18n.ftype_bbs;
+      case FunctionType.scanner:
+        return i18n.ftype_scanner;
+      case FunctionType.freshman:
+        return i18n.ftype_freshman;
+      case FunctionType.switchAccount:
+        return i18n.ftype_switchAccount;
+      case FunctionType.board:
+        return i18n.ftype_kiteBoard;
+      case FunctionType.electricity:
+        return i18n.ftype_electricityBill;
+    }
+  }
+
+  String toLocalizedDesc() {
+    switch (this) {
+      case FunctionType.upgrade:
+        return i18n.ftype_upgrade_desc;
+      case FunctionType.notice:
+        return i18n.ftype_kiteBulletin_desc;
+      case FunctionType.timetable:
+        return i18n.ftype_timetable_desc;
+      case FunctionType.report:
+        return i18n.ftype_reportTemperature_desc;
+      case FunctionType.exam:
+        return i18n.ftype_examArrangement_desc;
+      case FunctionType.classroom:
+        return i18n.ftype_classroomBrowser_desc;
+      case FunctionType.event:
+        return i18n.ftype_event_desc;
+      case FunctionType.expense:
+        return i18n.ftype_expenseTracker_desc;
+      case FunctionType.score:
+        return i18n.ftype_examResult_desc;
+      case FunctionType.library:
+        return i18n.ftype_library_desc;
+      case FunctionType.office:
+        return i18n.ftype_office_desc;
+      case FunctionType.mail:
+        return i18n.ftype_eduEmail_desc;
+      case FunctionType.bulletin:
+        return i18n.ftype_oaAnnouncement_desc;
+      case FunctionType.contact:
+        return i18n.ftype_yellowPages_desc;
+      case FunctionType.game:
+        return i18n.ftype_game_desc;
+      case FunctionType.wiki:
+        return i18n.ftype_wiki_desc;
+      case FunctionType.separator:
+        return i18n.ftype_separator_desc;
+      case FunctionType.bbs:
+        return i18n.ftype_bbs_desc;
+      case FunctionType.scanner:
+        return i18n.ftype_scanner_desc;
+      case FunctionType.freshman:
+        return i18n.ftype_freshman_desc;
+      case FunctionType.switchAccount:
+        return i18n.ftype_switchAccount_desc;
+      case FunctionType.board:
+        return i18n.ftype_kiteBoard_desc;
+      case FunctionType.electricity:
+        return i18n.ftype_electricityBill_desc;
+    }
+  }
 }
 
 /// 用户的功能列表
@@ -253,6 +356,5 @@ class UserFunctionListFactory {
 }
 
 List<FunctionType> getDefaultFunctionList(UserType userType) {
-  return UserFunctionListFactory.getUserFunctionList(userType)
-      .getFunctionList();
+  return UserFunctionListFactory.getUserFunctionList(userType).getFunctionList();
 }

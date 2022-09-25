@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/feature/expense/entity/expense.dart';
 import 'package:kite/feature/expense/init.dart';
+import 'package:kite/feature/home/entity/home.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 
@@ -32,7 +33,7 @@ class ExpenseItem extends StatefulWidget {
 
 class _ExpenseItemState extends State<ExpenseItem> {
   final ExpenseRecord? lastExpense = ExpenseInitializer.expenseRecord.getLastOne();
-  String content = i18n.ftype_expenseTracker_desc;
+  String content =  FunctionType.expense.toLocalizedDesc();
 
   @override
   void initState() {
@@ -49,7 +50,7 @@ class _ExpenseItemState extends State<ExpenseItem> {
     return HomeFunctionButton(
       route: '/expense',
       icon: 'assets/home/icon_expense.svg',
-      title: i18n.ftype_expenseTracker,
+      title: FunctionType.expense.toLocalized(),
       subtitle: content,
     );
   }

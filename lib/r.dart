@@ -7,4 +7,7 @@ class R {
   static const kiteWikiUrl = "https://kite.sunnysab.cn/wiki/kite-app/features/";
   static const forgotLoginPwdUrl =
       "https://authserver.sit.edu.cn/authserver/getBackPasswordMainPage.do?service=https%3A%2F%2Fmyportal.sit.edu.cn%3A443%2F";
+
+  static const localeEn = "en";
+  static const localeZh = "zh";
 }

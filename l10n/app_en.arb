@@ -264,6 +264,8 @@
   "ftype_kiteBoard_desc": "Fly a 🪁",
   "ftype_examResult": "Exam Result",
   "ftype_examResult_desc": "Don't stop until you're proud",
+  "ftype_separator": "Separator",
+  "ftype_separator_desc": "For grouping functions",
   "greetingHeaderL1": "SIT has accompanied you for",
   "@greetingHeaderL1": {
     "description": "The first line of greeting header"
@@ -288,5 +290,9 @@
     }
   },
   "weather_sunny": "Sunny",
-  "weather": "Weather"
+  "weather": "Weather",
+  "restartRequestTitle": "Restart?",
+  "restartRequest": "Would you like to restart Kite now?",
+  "notNow": "Not Now",
+  "restartRequestYes": "Haha, do it yourself."
 }

@@ -18,6 +18,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:kite/feature/home/entity/home.dart';
 import 'package:kite/feature/library/search/entity/hot_search.dart';
 import 'package:kite/feature/library/search/init.dart';
 import 'package:kite/global/global.dart';
@@ -34,7 +35,7 @@ class LibraryItem extends StatefulWidget {
 }
 
 class _LibraryItemState extends State<LibraryItem> {
-  String defaultContent = i18n.ftype_library_desc;
+  String defaultContent = FunctionType.library.toLocalizedDesc();
   String? content;
 
   @override
@@ -81,6 +82,9 @@ class _LibraryItemState extends State<LibraryItem> {
       content = lastHotSearch ?? defaultContent;
     }
     return HomeFunctionButton(
-        route: '/library', icon: 'assets/home/icon_library.svg', title: i18n.ftype_library, subtitle: content);
+        route: '/library',
+        icon: 'assets/home/icon_library.svg',
+        title: FunctionType.library.toLocalized(),
+        subtitle: content);
   }
 }

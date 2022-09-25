@@ -6,7 +6,7 @@ class PrefKey{
 }
 
 abstract class PrefDao {
-  Locale get locale;
+  Locale? get locale;
 
-  set locale(Locale value);
+  set locale(Locale? value);
 }
