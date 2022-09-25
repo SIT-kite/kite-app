@@ -276,5 +276,17 @@
       }
     }
   },
-  "greetingHeaderNoDays": "Hello, I'm a Kite from SIT!"
+  "greetingHeaderNoDays": "Hello, I'm a Kite from SIT!",
+  "fengxian": "Fengxian",
+  "xuhui": "Xuhui",
+  "campusWeatherTitle": "{campus} Weather",
+  "@campusWeatherTitle": {
+    "placeholders": {
+      "campus": {
+        "type": "String"
+      }
+    }
+  },
+  "weather_sunny": "Sunny",
+  "weather": "Weather"
 }

@@ -69,14 +69,14 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   }
 
   String _getCampusName() {
-    if (campus == 1) return '奉贤校区';
-    return '徐汇';
+    if (campus == 1) return i18n.fengxianDistrict;
+    return i18n.xuhuiDistrict;
   }
 
   Widget _buildWeatherIcon(String iconCode) {
     return GestureDetector(
       onTap: () {
-        final title = '${_getCampusName()}天气';
+        final title = i18n.campusWeatherTitle(_getCampusName());
         Navigator.of(context).push(MaterialPageRoute(builder: (context) => WeatherPage(campus, title: title)));
       },
       child: SvgPicture.asset('assets/weather/$iconCode.svg',

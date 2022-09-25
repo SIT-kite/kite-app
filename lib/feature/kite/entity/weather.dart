@@ -18,6 +18,7 @@
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kite/global/hive_type_id_pool.dart';
+import 'package:kite/l10n/extension.dart';
 
 part 'weather.g.dart';
 
@@ -36,7 +37,7 @@ class Weather extends HiveObject {
   Weather(this.weather, this.temperature, this.ts, this.icon);
 
   static Weather defaultWeather() {
-    return Weather('晴', 20, DateTime.now().toString(), '100');
+    return Weather(i18n.weather_sunny, 20, DateTime.now().toString(), '100');
   }
 
   factory Weather.fromJson(Map<String, dynamic> json) => _$WeatherFromJson(json);

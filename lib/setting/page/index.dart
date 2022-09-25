@@ -156,7 +156,7 @@ class SettingPage extends StatelessWidget {
     return DropDownSettingsTile<String>(
       title: i18n.language,
       subtitle: i18n.languagePrefDropDownSubtitle,
-      settingKey: PrefKeys.locale,
+      settingKey: PrefKey.locale,
       values: {
         "en": i18n.language_en,
         "zh": i18n.language_zh,

@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-class PrefKeys{
-  PrefKeys._();
+class PrefKey{
+  PrefKey._();
   static const locale = "locale";
 }
 

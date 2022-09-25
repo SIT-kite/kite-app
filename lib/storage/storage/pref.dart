@@ -11,10 +11,10 @@ class PrefStorage implements PrefDao {
 
   @override
   Locale get locale {
-    final String langCode = box.get(PrefKeys.locale, defaultValue: const Locale.fromSubtags(languageCode: "zh"));
+    final String langCode = box.get(PrefKey.locale, defaultValue: const Locale.fromSubtags(languageCode: "zh"));
     return Locale(langCode);
   }
 
   @override
-  set locale(Locale value) => box.put(PrefKeys.locale, value.languageCode);
+  set locale(Locale value) => box.put(PrefKey.locale, value.languageCode);
 }

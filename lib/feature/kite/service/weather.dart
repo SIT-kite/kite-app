@@ -17,7 +17,7 @@
  */
 import 'package:dio/dio.dart';
 
-import '../dao/weatcher.dart';
+import '../dao/weather.dart';
 import '../entity/weather.dart';
 
 class WeatherService implements WeatherDao {

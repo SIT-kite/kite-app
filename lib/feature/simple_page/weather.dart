@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:kite/component/webview_page.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 const String _ventuskyUrl = 'https://www.ventusky.com/?p=31.046;121.773;10&l=rain-1h';
@@ -42,7 +43,7 @@ class WeatherPage extends StatelessWidget {
 
     return SimpleWebViewPage(
       initialUrl: url,
-      fixedTitle: title ?? '天气',
+      fixedTitle: title ?? i18n.weather,
       onWebViewCreated: (controller) {
         this.controller = controller;
       },

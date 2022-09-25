@@ -17,4 +17,4 @@
  */
 
 export 'classroom.dart';
-export 'weatcher.dart';
+export 'weather.dart';

@@ -67,7 +67,7 @@
   "ftype_yellowPages_desc": "查找学校部门的联系方式",
   "ftype_game": "小游戏",
   "ftype_game_desc": "来放松一下叭！",
-  "ftype_wiki": "Wiki",
+  "ftype_wiki": "上应 Wiki",
   "ftype_wiki_desc": "上应大生存指南",
   "ftype_bbs": "问答",
   "ftype_bbs_desc": "这里有我们共同的声音",
@@ -83,9 +83,11 @@
   "ftype_kiteBoard_desc": "随手记录美好",
   "ftype_examResult": "成绩",
   "ftype_examResult_desc": "愿每一天都有收获",
-  "@greetingHeaderL1": {
-    "description": "今天是你在上应大的"
-  },
+  "greetingHeaderL1": "今天是你在上应大的",
   "greetingHeaderL2": "第 {days,plural, =0{0} =1{1} other{{days}} 天",
-  "greetingHeaderNoDays": "欢迎使用上应小风筝"
+  "greetingHeaderNoDays": "欢迎使用上应小风筝",
+  "fengxian": "奉贤",
+  "xuhui": "徐汇",
+  "campusWeatherTitle":"{campus} 天气",
+  "weather_sunny": "晴"
 }
