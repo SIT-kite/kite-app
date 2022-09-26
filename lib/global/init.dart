@@ -86,6 +86,7 @@ class Initializer {
     );
     await EduInitializer.init(
       ssoSession: Global.ssoSession,
+      kiteSession: kiteSession,
       cookieJar: Global.cookieJar,
       timetableBox: HiveBoxInitializer.course,
     );

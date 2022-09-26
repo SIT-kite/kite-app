@@ -36,7 +36,9 @@ const _semesterDescription = {
 };
 
 class TimetableImportDialog extends StatefulWidget {
-  const TimetableImportDialog({Key? key}) : super(key: key);
+  final DateTime? defaultStartDate;
+
+  const TimetableImportDialog({Key? key, this.defaultStartDate}) : super(key: key);
 
   @override
   State<TimetableImportDialog> createState() => _TimetableImportDialogState();
@@ -52,10 +54,13 @@ class _TimetableImportDialogState extends State<TimetableImportDialog> {
   /// 要查询的学期
   late Semester selectedSemester;
 
-  final ValueNotifier<DateTime> selectedDate = ValueNotifier(
-    Iterable.generate(7, (i) {
-      return DateTime.now().add(Duration(days: i));
-    }).firstWhere((e) => e.weekday == DateTime.monday),
+  // 如果没指定默认起始日期，那么走默认日期计算逻辑
+  late ValueNotifier<DateTime> selectedDate = ValueNotifier(
+    widget.defaultStartDate != null
+        ? widget.defaultStartDate!
+        : Iterable.generate(7, (i) {
+            return DateTime.now().add(Duration(days: i));
+          }).firstWhere((e) => e.weekday == DateTime.monday),
   );
 
   final tableNameController = TextEditingController();
@@ -222,6 +227,16 @@ class TimetableImportPage extends StatefulWidget {
 
 class _TimetableImportPageState extends State<TimetableImportPage> {
   final timetableStorage = TimetableInitializer.timetableStorage;
+  final kiteTimetableService = TimetableInitializer.kiteTimetableService;
+
+  DateTime? defaultStartDate;
+
+  @override
+  void initState() {
+    // 静默赋值
+    kiteTimetableService.getSemesterDefaultStartDate().then((value) => defaultStartDate = value);
+    super.initState();
+  }
 
   Widget _buildTableMetaInfo(TimetableMeta meta) {
     final startDateNotifier = ValueNotifier(meta.startDate);
@@ -372,7 +387,9 @@ class _TimetableImportPageState extends State<TimetableImportPage> {
           showDialog(
             context: context,
             builder: (BuildContext context) {
-              return const TimetableImportDialog();
+              return TimetableImportDialog(
+                defaultStartDate: defaultStartDate,
+              );
             },
           ).then((value) {
             if (value == null) return;
