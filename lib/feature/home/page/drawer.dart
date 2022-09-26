@@ -35,7 +35,7 @@ class KiteDrawer extends Drawer {
             decoration: BoxDecoration(color: KvStorageInitializer.theme.color),
             child: Align(
                 alignment: Alignment.bottomLeft,
-                child: Text(i18n.daysKiteWithYouLabel(inDays),
+                child: Text(inDays <= 0 ? i18n.daysKiteWithYouLabel0 : i18n.daysKiteWithYouLabel(inDays),
                     style: Theme.of(context).textTheme.headline4?.copyWith(color: Colors.white70))),
           ),
           ListTile(
@@ -57,6 +57,7 @@ class KiteDrawer extends Drawer {
           UniversalPlatform.isAndroid
               ? ListTile(
                   title: i18n.schoolCardTool.txt,
+                  leading: const Icon(Icons.credit_card),
                   onTap: () {
                     Navigator.pop(context);
                     Navigator.of(context).pushNamed('/campusCard');

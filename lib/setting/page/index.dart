@@ -163,25 +163,29 @@ class SettingPage extends StatelessWidget {
   }
 
   _buildLanguagePrefSelector(BuildContext ctx) {
-    final curLangCode = KvStorageInitializer.pref.locale?.languageCode ?? Localizations
-        .localeOf(ctx)
-        .languageCode;
-    return DropDownSettingsTile<String>(
+    final Locale curLocale;
+    final savedLocale = KvStorageInitializer.pref.locale;
+    if (savedLocale == null) {
+      final defaultLocale = Localizations.localeOf(ctx);
+      KvStorageInitializer.pref.locale = defaultLocale;
+      curLocale = defaultLocale;
+    } else {
+      curLocale = savedLocale;
+    }
+    return DropDownSettingsTile<Locale>(
       title: i18n.language,
       subtitle: i18n.languagePrefDropDownSubtitle,
       leading: const Icon(Icons.translate_rounded),
       settingKey: PrefKey.locale,
       values: {
-        Lang.en: i18n.language_en,
-        Lang.zh: i18n.language_zh,
+        Lang.enLocale: i18n.language_en,
+        Lang.zhLocale: i18n.language_zh,
+        Lang.zhTwLocale: i18n.language_zh_TW,
       },
-      selected: curLangCode,
+      selected: curLocale,
       onChange: (value) {
-        if (KvStorageInitializer.pref.locale?.languageCode != value) {
-          KvStorageInitializer.pref.locale = Locale(value);
-        }
         // TODO: Test on mobile
-        Phoenix.rebirth(ctx);
+          Phoenix.rebirth(ctx);
       },
     );
   }
@@ -199,11 +203,10 @@ class SettingPage extends StatelessWidget {
             leading: const Icon(Icons.palette_outlined),
             settingKey: ThemeKeys.themeColor,
             defaultValue: KvStorageInitializer.theme.color,
-            onChange: (newColor) =>
-                DynamicColorTheme.of(context).setColor(
-                  color: newColor,
-                  shouldSave: true, // saves it to shared preferences
-                ),
+            onChange: (newColor) => DynamicColorTheme.of(context).setColor(
+              color: newColor,
+              shouldSave: true, // saves it to shared preferences
+            ),
           ),
           _buildLanguagePrefSelector(context),
           SwitchSettingsTile(

@@ -171,7 +171,8 @@
   "uploadDoneTip": "Uploaded successfully!",
   "uploadFailedTip": "uh-oh, failed to upload.",
   "backgroundSettingIsEmptyWarn": "You haven't set the background.",
-  "daysKiteWithYouLabel": "Kite has accompanied you for {days,plural, =0{0} =1{1 day} other{{days} days}}",
+  "daysKiteWithYouLabel": "Kite has accompanied you for {days,plural, =1{1 day} other{{days} days}}",
+  "daysKiteWithYouLabel0": "Kite just met you :)",
   "@daysKiteWithYouLabel": {
     "placeholders": {
       "days": {
@@ -187,7 +188,8 @@
   "language": "Language",
   "languagePrefDropDownSubtitle": "Select a language for your Kite",
   "language_en": "English",
-  "language_zh": "Chinese",
+  "language_zh": "中文(简体)",
+  "language_zh_TW": "中文(繁體)",
   "settingsTitle": "Settings",
   "personalizeTitle": "Personalize",
   "themeColorSettings": "Theme Color",
@@ -275,11 +277,13 @@
   "ftype_examResult_desc": "Don't stop until you're proud",
   "ftype_separator": "Separator",
   "ftype_separator_desc": "For grouping functions",
+  "greetingHeader0L1": "Hello, welcome to",
+  "greetingHeader0L2": "SIT",
   "greetingHeaderL1": "SIT has accompanied you",
   "@greetingHeaderL1": {
     "description": "The first line of greeting header"
   },
-  "greetingHeaderL2": "For {days,plural, =0{0 Day} =1{1 Day} other{{days} Days}",
+  "greetingHeaderL2": "{days,plural, =1{For 1 Day} other{For {days} Days}",
   "@greetingHeaderL2": {
     "placeholders": {
       "days": {
@@ -287,7 +291,6 @@
       }
     }
   },
-  "greetingHeaderNoDays": "Hello, I'm a Kite from SIT!",
   "fengxian": "Fengxian",
   "xuhui": "Xuhui",
   "campusWeatherTitle": "{campus} Weather",

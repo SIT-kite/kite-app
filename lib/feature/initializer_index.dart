@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:kite/storage/entity/locale_adaptor.dart';
 import 'package:kite/util/hive_register_adapter.dart';
 
 import 'contact/entity/contact.dart';
@@ -61,4 +62,5 @@ void registerAdapters() {
   registerAdapter(UserEventAdapter());
   registerAdapter(UserEventTypeAdapter());
   registerAdapter(TimetableMetaAdapter());
+  registerAdapter(LocaleAdaptor());
 }

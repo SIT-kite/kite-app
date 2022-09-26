@@ -24,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
 import 'package:kite/util/user.dart';
 
@@ -107,7 +108,6 @@ class _KiteAppState extends State<KiteApp> {
       );
     });
     buildMaterialWithTheme(ThemeData theme) {
-      KvStorageInitializer.pref.locale ??= Localizations.localeOf(context);
       return MaterialApp(
         title: R.appName,
         theme: theme,
@@ -116,7 +116,7 @@ class _KiteAppState extends State<KiteApp> {
         navigatorKey: Catcher.navigatorKey,
         onGenerateRoute: _onGenerateRoute,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
+        supportedLocales: Lang.supports,
         locale: KvStorageInitializer.pref.locale,
         builder: EasyLoading.init(builder: (context, widget) {
           return MediaQuery(

@@ -99,23 +99,29 @@ class _GreetingWidgetState extends State<GreetingWidget> {
           fontSize: 19.0,
           fontWeight: FontWeight.w500,
         );
-
+    final days = studyDays;
+    final List<Widget> sitDate;
+    if (days == null) {
+      sitDate = [
+        Text(i18n.greetingHeader0L1, style: textStyleSmall),
+      ];
+    } else {
+      sitDate = [
+        Text(days <= 0 ? i18n.greetingHeader0L1 : i18n.greetingHeaderL1, style: textStyleSmall),
+        Text(i18n.greetingHeaderL2(days), style: textStyleLarge),
+      ];
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Flexible(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: (studyDays != null // 天数为null说明不显示天数
-                    ? <Widget>[
-                        Text(i18n.greetingHeaderL1, style: textStyleSmall),
-                        Text(i18n.greetingHeaderL2(studyDays ?? 0), style: textStyleLarge),
-                      ]
-                    : <Widget>[Text(i18n.greetingHeaderNoDays, style: textStyleSmall)]) +
-                <Widget>[
-                  Text('${_getCampusName()} ${currentWeather.weather} ${currentWeather.temperature} °C',
-                      style: textStyleWeather)
-                ],
+            children: [
+              ...sitDate,
+              Text('${_getCampusName()} ${currentWeather.weather} ${currentWeather.temperature} °C',
+                  style: textStyleWeather)
+            ],
           ),
         ),
         SizedBox(child: _buildWeatherIcon(currentWeather.icon)),

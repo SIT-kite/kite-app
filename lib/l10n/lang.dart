@@ -10,6 +10,11 @@ class Lang {
   static const zh = "zh";
   static const zhTw = "zh_TW";
   static const en = "en";
+
+  static const zhLocale = Locale.fromSubtags(languageCode: "zh");
+  static const zhTwLocale = Locale.fromSubtags(languageCode: "zh", scriptCode: "Hant", countryCode: "TW");
+  static const enLocale = Locale.fromSubtags(languageCode: "en");
+
   static const zhCode = 1;
   static const zhTwCode = 2;
   static const enCode = 3;
@@ -75,4 +80,10 @@ class Lang {
     }
     return zhFullNumf;
   }
+
+  static const supports = [
+    Locale.fromSubtags(languageCode: 'en'), // generic English 'en'
+    Locale.fromSubtags(languageCode: 'zh', countryCode: 'TW'), // generic traditional Chinese 'zh_Hant'
+    Locale.fromSubtags(languageCode: 'zh'), // generic Chinese 'zh'
+  ];
 }
