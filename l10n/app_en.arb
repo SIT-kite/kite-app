@@ -26,15 +26,15 @@
   "online": "Online",
   "acceptedAgreementCheckbox": "I have known and accepted",
   "cantLaunchPhoneSoNumber2ClipboardTip": "Phone number has been copied because Phone Call isn't available.",
-  "@cantLaunchPhoneSoToClipboard": {
+  "@cantLaunchPhoneSoNumber2ClipboardTip": {
     "description": "Used in Freshman vCard when Phone.app can't be launched."
   },
   "cantLaunchWechatSoNumber2ClipboardTip": "Wechat number has been copied because Wechat isn't available.",
-  "@cantLaunchWechatSoToClipboard": {
+  "@cantLaunchWechatSoNumber2ClipboardTip": {
     "description": "Used in Freshman vCard when Wechat.app can't be launched."
   },
   "cantLaunchQqSoNumber2ClipboardTip": "QQ number has been copied because QQ isn't available.",
-  "@cantLaunchQqSoToClipboard": {
+  "@cantLaunchQqSoNumber2ClipboardTip": {
     "description": "Used in Freshman vCard when QQ.app can't be launched."
   },
   "noOnlineRecords": "No online records",
@@ -172,7 +172,6 @@
   "uploadFailedTip": "uh-oh, failed to upload.",
   "backgroundSettingIsEmptyWarn": "You haven't set the background.",
   "daysKiteWithYouLabel": "Kite has accompanied you for {days,plural, =1{1 day} other{{days} days}}",
-  "daysKiteWithYouLabel0": "Kite just met you :)",
   "@daysKiteWithYouLabel": {
     "placeholders": {
       "days": {
@@ -180,6 +179,7 @@
       }
     }
   },
+  "daysKiteWithYouLabel0": "Kite just met you :)",
   "settings": "Settings",
   "networkTool": "Network Tool",
   "schoolCardTool": "School Card Tool",
@@ -339,7 +339,7 @@
     "description": "For building string: Reported Today Normal {place}"
   },
   "reportTempUnreportedToday": "Unreported Today",
-  "@reportTempNotReportedToday": {
+  "@reportTempUnreportedToday": {
     "description": "For building string: Unreported Today Today Normal {place}"
   },
   "reportTempAbnormal": "Abnormal",
@@ -363,7 +363,6 @@
   "author": "Author",
   "publishTime": "Publish Time",
   "oaAnnouncementAttachmentTip": "{count,plural, =1{Attachment} other{Attachments}",
-  "oaAnnouncementTextTitle": "Announcement Text",
   "@oaAnnouncementAttachmentTip": {
     "placeholders": {
       "count": {
@@ -371,6 +370,7 @@
       }
     }
   },
+  "oaAnnouncementTextTitle": "Announcement Text",
   "kiteBuiltinPinned": "[Pinned]",
   "libraryAccountManagementButtonTip": "Library account management is coming soon...",
   "libraryNoticePublishTime": "Send Time",
