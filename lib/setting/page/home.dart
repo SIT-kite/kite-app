@@ -74,7 +74,7 @@ class _HomeSettingPageState extends State<HomeSettingPage> {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: i18n.functionRearrangeSettings.txt,
+          title: i18n.functionRearrangementSettings.txt,
           actions: [
             IconButton(
                 onPressed: () {

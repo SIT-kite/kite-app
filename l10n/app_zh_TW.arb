@@ -1,3 +1,25 @@
 {
-  "language": "語言"
+  "language": "語言",
+  "settingsTitle": "選項",
+  "personalizeTitle": "個性化",
+  "themeColorSettings": "主題顏色",
+  "darkModeSettings": "夜間模式",
+  "darkModeSettingsSubtitle": "小風箏會在夜裡也守護你喔",
+  "homepage": "主頁",
+  "homepageBgModeSettings": "主頁的背景相片模式",
+  "staticPicture": "靜態相片",
+  "realtimeWeather": "即時天氣",
+  "campus": "學區",
+  "campusDropDownSettingsSubtitle": "顯示哪裡的天氣",
+  "xuhuiDistrict": "徐匯區",
+  "fengxianDistrict": "奉賢區",
+  "backgroundPictureSettings": "背景相片",
+  "backgroundPictureSettingsSubtitle": "客製化顯示在主頁的相片",
+  "functionRearrangementSettings": "重新排序主頁功能",
+  "functionRearrangementSettingsSubtitle": "客製化主頁功能的順序和分組",
+  "networking": "網路",
+  "enableHttpProxySwitch": "啟用 Http 代理",
+  "enableHttpProxySwitchSubtitle": "啟用 Http 代理連接校園網路",
+  "xuhui": "徐匯",
+  "fengxian": "奉賢"
 }

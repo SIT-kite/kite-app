@@ -1,7 +1,7 @@
-from typing import Any, List, Tuple
 from collections import OrderedDict
+from typing import Any
 
-RawPairList = List[Tuple[str, Any]]
+RawPairList = list[tuple[str, Any]]
 
 EMPTY_VALUE = object()
 
@@ -11,6 +11,7 @@ class Pair:
     value: str | object
     has_meta: bool
     meta_value: Any
+    key_parts: list[str]
 
     def __init__(self, key: str = "", value: str = EMPTY_VALUE):
         self.key = key
@@ -24,6 +25,9 @@ class Pair:
     def set_meta(self, meta_value: Any):
         self.has_meta = True
         self.meta_value = meta_value
+
+    def __repr__(self):
+        return f"Pair({self.key=},{self.has_meta=})"
 
 
 PairList = list[Pair]

@@ -172,3 +172,5 @@ flutter_native_splash:
   color: '#FFFFFF'
   image: assets/icon.png
   # background_image: 'assets/background.png'
+flutter_intl:
+  enabled: true

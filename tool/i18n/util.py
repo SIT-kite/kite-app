@@ -1,4 +1,4 @@
-from typing import List, Dict, TypeVar
+from typing import List, Dict, TypeVar, Callable
 
 T = TypeVar("T")
 
@@ -24,3 +24,27 @@ def From(dic: Dict[str, T], Get: str, Or: T = None) -> T:
     if Get not in dic:
         return Or
     return dic[Get]
+
+
+def getAttrOrSet(obj, name: str, default: Callable[[], T]) -> T:
+    if hasattr(obj, name):
+        return getattr(obj, name)
+    else:
+        new = default()
+        setattr(obj, name, new)
+        return new
+
+
+class Ref:
+    def __init__(self, value=None):
+        self.value = value
+
+
+def contains(small, big) -> bool:
+    for i in range(len(big) - len(small) + 1):
+        for j in range(len(small)):
+            if big[i + j] != small[j]:
+                break
+        else:
+            return True
+    return False
