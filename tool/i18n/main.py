@@ -29,8 +29,13 @@ args:
 ---------------------
 rearrange: rearrange other .arb files in the same order of the template.
 args:
-    name: 
+    prefix: the prefix of all .arb file
     template: template path
+    fill_blank*: fill all missing l10n pair
+        options: [y,n]
+        default: n
+    indent*: indent of json output
+    keep_unmatched_meta* : keep a meta missing a pair 
 """
 
 all_tasks = {

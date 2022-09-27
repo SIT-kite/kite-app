@@ -1,72 +1,81 @@
 {
-  "yes": "Yes",
-  "no": "No",
-  "ok": "OK",
-  "go": "Go",
-  "refresh": "Refresh",
-  "failed": "Failed",
-  "cancel": "Cancel",
-  "loading": "Loading",
-  "downloading": "Downloading",
-  "downloadCompleted": "Download Completed",
-  "open": "Open",
-  "@open": {
-    "description": "Open a file"
-  },
-  "loggingIn": "Logging in",
-  "logout": "Logout",
-  "continue_": "Continue",
-  "dontShowThisAgainButton": "Don't show this again",
-  "qq": "QQ",
-  "wechat": "Wechat",
-  "counselor": "Counselor",
-  "counselorPhoneNumber": "Counselor Phone Number",
-  "phoneNumber": "Phone Number",
-  "moreInfoTitle": "More Info",
-  "online": "Online",
+  "about": "About",
   "acceptedAgreementCheckbox": "I have known and accepted",
+  "account": "Account",
+  "activityCreation": "Creation",
+  "activityLecture": "Lecture",
+  "activityPractice": "Practice",
+  "activitySafetyEdu": "Safety Edu",
+  "activitySchoolCulture": "School Culture",
+  "activityThematicEdu": "Thematic Edu",
+  "activityUnknown": "Unknown",
+  "activityVoluntary": "Voluntary",
+  "addInfoRequest": "Would like you add personal information to display?",
+  "addInfoTitle": "Add Info",
+  "admissionInfoTitle": "Admission Info",
+  "allowOthersFindMeCheckbox": "Allow others to find me",
+  "applicationDesc": "This function is based on \"上应一网通办\".\n For most of types, you have to do the necessary procedure on the spot although you submitted an application online.",
+  "author": "Author",
+  "backgroundPictureSettings": "Background Picture",
+  "backgroundPictureSettingsSubtitle": "Customize the picture shown on the background",
+  "backgroundSettingIsEmptyWarn": "You haven't set the background.",
+  "campus": "Campus",
+  "campusDropDownSettingsSubtitle": "To display the weather",
+  "campusWeatherTitle": "{campus} Weather",
+  "@campusWeatherTitle": {
+    "placeholders": {
+      "campus": {
+        "type": "String"
+      }
+    }
+  },
+  "cancel": "Cancel",
   "cantLaunchPhoneSoNumber2ClipboardTip": "Phone number has been copied because Phone Call isn't available.",
   "@cantLaunchPhoneSoNumber2ClipboardTip": {
     "description": "Used in Freshman vCard when Phone.app can't be launched."
-  },
-  "cantLaunchWechatSoNumber2ClipboardTip": "Wechat number has been copied because Wechat isn't available.",
-  "@cantLaunchWechatSoNumber2ClipboardTip": {
-    "description": "Used in Freshman vCard when Wechat.app can't be launched."
   },
   "cantLaunchQqSoNumber2ClipboardTip": "QQ number has been copied because QQ isn't available.",
   "@cantLaunchQqSoNumber2ClipboardTip": {
     "description": "Used in Freshman vCard when QQ.app can't be launched."
   },
-  "noOnlineRecords": "No online records",
-  "faculty": "Faculty",
-  "major": "Major",
-  "name": "Name",
-  "fullName": "Full Name",
-  "nickName": "Name",
-  "gender": "Gender",
-  "male": "Male",
-  "female": "Female",
+  "cantLaunchWechatSoNumber2ClipboardTip": "Wechat number has been copied because Wechat isn't available.",
+  "@cantLaunchWechatSoNumber2ClipboardTip": {
+    "description": "Used in Freshman vCard when Wechat.app can't be launched."
+  },
+  "changeOaPwdSettings": "OA Password",
+  "changeOaPwdSettingsSubtitle": "Change the OA password used for logging in Kite",
   "city": "City",
-  "lastOnlineTime": "Last Online",
-  "unfilled": "Unfilled",
-  "tel": "TEL.",
-  "numberOfPeopleBesidesMe": "Number of people besides me",
+  "classmate": "Classmate",
+  "continue_": "Continue",
+  "counselor": "Counselor",
+  "counselorPhoneNumber": "Counselor Phone Number",
+  "currentDormitoryLabel": "Current Dormitory",
+  "darkModeSettings": "Dark Mode",
+  "darkModeSettingsSubtitle": "Kite will protect your eyes",
+  "dataManagement": "Data Management",
+  "daysKiteWithYouLabel": "Kite has accompanied you for {days,plural, =1{1 day} other{{days} days}}",
+  "@daysKiteWithYouLabel": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "daysKiteWithYouLabel0": "Kite just met you :)",
+  "detailedExceptionDialogSettings": "Enable detailed exception dialog",
+  "detailedExceptionDialogSettingsSubtitle": "Detailed stacktrace will be shown",
+  "devOptions": "Development Options",
+  "done": "Done",
+  "dontShowThisAgainButton": "Don't show this again",
   "dormitory": "Dormitory",
-  "dormitoryDetailed_rbbc": "Room {room} Bed {bed} {building} {campus}",
-  "@dormitoryDetailed_rbbc": {
+  "dormitoryDetailed_rb": "Room {room} {building}",
+  "@dormitoryDetailed_rb": {
     "placeholders": {
       "room": {
         "type": "int",
         "example": "401"
       },
-      "bed": {
-        "type": "String",
-        "example": "4"
-      },
       "building": {
-        "type": "String"
-      },
-      "campus": {
         "type": "String"
       }
     }
@@ -87,14 +96,21 @@
       }
     }
   },
-  "dormitoryDetailed_rb": "Room {room} {building}",
-  "@dormitoryDetailed_rb": {
+  "dormitoryDetailed_rbbc": "Room {room} Bed {bed} {building} {campus}",
+  "@dormitoryDetailed_rbbc": {
     "placeholders": {
       "room": {
         "type": "int",
         "example": "401"
       },
+      "bed": {
+        "type": "String",
+        "example": "4"
+      },
       "building": {
+        "type": "String"
+      },
+      "campus": {
         "type": "String"
       }
     }
@@ -114,169 +130,98 @@
       }
     }
   },
-  "studentID": "Student ID",
-  "province": "Province",
-  "admissionInfoTitle": "Admission Info",
-  "freshman": "Freshman",
-  "roommate": "Roommate",
-  "classmate": "Classmate",
-  "friendsRadder": "Friends Radder",
-  "newFriendsTitle": "New Friends",
-  "currentDormitoryLabel": "Current Dormitory",
-  "addInfoTitle": "Add Info",
-  "addInfoRequest": "Would like you add personal information to display?",
-  "personalInfoTitle": "Personal Info",
-  "userInfoUpdatedTip": "Your info updated!",
-  "allowOthersFindMeCheckbox": "Allow others to find me",
-  "personalInfoDescLabel": "The information on this page would show your roommates and classmate. It's convenient to make friends or create chat rooms.",
-  "noLocationLabel": "No location",
-  "kiteStatisticsButtonTooltip": "Kite Statistics",
-  "personalInfoSettingButtonTooltip": "Set Personal Info",
-  "feedbackButton": "Feedback",
-  "account": "Account",
-  "pwd": "Password",
-  "freshmanLoginAccountHint": "Student ID/Full Name/Examinee Number",
-  "freshmanLoginPwdHint": "The last six number of your ID card",
-  "freshmanLoginButton": "Join Kite World",
-  "freshmanTitle": "Welcome!",
-  "freshmanLoginFailedWarn": "Login failed",
-  "kiteLoginAccountHint": "Student ID/Work number",
-  "kiteLoginPwdHint": "Enter your password",
-  "kiteLoginButton": "Join Kite World",
-  "kiteLoginTitle": "Welcome!",
-  "kiteForgotPwdButton": "Forgot password?",
-  "studentLoginFailedWarn": "Login failed",
-  "readAndAcceptRequest": "Please read and accept {agreement}.",
-  "@readAndAcceptRequest": {
+  "downloadCompleted": "Download Completed",
+  "downloading": "Downloading",
+  "draft": "Draft",
+  "electricityBillContent": "last {balance}￥ Room {room}",
+  "@electricityBillContent": {
     "placeholders": {
-      "agreement": {
+      "room": {
+        "type": "int"
+      },
+      "balance": {
         "type": "String"
       }
     }
   },
-  "validateInputRequest": "Please check your input.",
-  "kiteBoardTitle": "Kite Board",
-  "kiteBoardReachEndLabel": "wow, you dug through the Earth!",
-  "uploadingCounter": "Uploaded {done} / {all}",
-  "@uploadingCounter": {
-    "placeholders": {
-      "done": {
-        "type": "int"
-      },
-      "all": {
-        "type": "int"
-      }
-    }
-  },
-  "uploadDoneTip": "Uploaded successfully!",
-  "uploadFailedTip": "uh-oh, failed to upload.",
-  "backgroundSettingIsEmptyWarn": "You haven't set the background.",
-  "daysKiteWithYouLabel": "Kite has accompanied you for {days,plural, =1{1 day} other{{days} days}}",
-  "@daysKiteWithYouLabel": {
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
-  "daysKiteWithYouLabel0": "Kite just met you :)",
-  "settings": "Settings",
-  "networkTool": "Network Tool",
-  "schoolCardTool": "School Card Tool",
-  "feedback": "Feedback",
-  "about": "About",
-  "language": "Language",
-  "languagePrefDropDownSubtitle": "Select a language for your Kite",
-  "language_en": "English",
-  "language_zh": "中文(简体)",
-  "language_zh_TW": "中文(繁體)",
-  "settingsTitle": "Settings",
-  "personalizeTitle": "Personalize",
-  "themeColorSettings": "Theme Color",
-  "darkModeSettings": "Dark Mode",
-  "darkModeSettingsSubtitle": "Kite will protect your eyes",
-  "homepage": "Homepage",
-  "homepageBgModeSettings": "Background mode of Homepage",
-  "staticPicture": "Static Picture",
-  "realtimeWeather": "Real-time Weather",
-  "campus": "Campus",
-  "campusDropDownSettingsSubtitle": "To display the weather",
-  "xuhuiDistrict": "Xuhui District",
-  "fengxianDistrict": "Fengxian District",
-  "backgroundPictureSettings": "Background Picture",
-  "backgroundPictureSettingsSubtitle": "Customize the picture shown on the background",
-  "functionRearrangeSettings": "Function Rearrange",
-  "functionRearrangeSettingsSubtitle": "Customize the order and group of functions",
-  "networking": "Networking",
   "enableHttpProxySwitch": "Enable Http Proxy",
   "enableHttpProxySwitchSubtitle": "Connect to the school district network by Http proxy",
-  "proxyAddressSettings": "Proxy Address",
-  "testConnectivity2School": "Test Connectivity",
-  "testConnectivity2SchoolSubtitle": "Test connectivity to school",
-  "changeOaPwdSettings": "OA Password",
-  "changeOaPwdSettingsSubtitle": "Change the OA password used for logging in Kite",
-  "testLoginKiteSettings": "Test Login Kite",
-  "testLoginKiteSettingsSubtitle": "Validate your Kite account and OA password",
-  "logoutKiteSettings": "Logout Kite",
-  "logoutKiteSettingsSubtitle": "Logout current Kite account",
-  "dataManagement": "Data Management",
-  "wipeKiteDataSettings": "Wipe Kite Data",
-  "wipeKiteDataSettingsSubtitle": "Wipe Kite saved accounts and settings besides cache",
-  "devOptions": "Development Options",
-  "detailedExceptionDialogSettings": "Enable detailed exception dialog",
-  "detailedExceptionDialogSettingsSubtitle": "Detailed stacktrace will be shown",
-  "localStorageSettings": "Local storage",
-  "localStorageSettingsSubtitle": "Display local storage of Kite on your device.",
-  "loginCredentialsValidatedTip": "Account and password is correct",
-  "loginFailedWarn": "Login Failed",
-  "logoutKiteWarn": "Confirm to logout the Kite?",
-  "wipeKiteDataSettingsDesc": "Login credentials will be wiped then Kite restarts. If you want to wipe all data of Kite, please go to settings on your device and find \"上应小风筝\" app to reset.",
-  "ftype_upgrade": "Upgrade Kite",
-  "ftype_upgrade_desc": "A new version? Let's check it out!",
-  "ftype_kiteBulletin": "Kite Bulletin Board",
-  "ftype_kiteBulletin_desc": "Loading...",
-  "ftype_timetable": "Timetable",
-  "ftype_timetable_desc": "School timetable",
-  "ftype_reportTemp": "Report Temperature",
-  "ftype_reportTemp_desc": "Don't forgor!",
-  "ftype_examArrangement": "Exam Arrangement",
-  "ftype_examArrangement_desc": "Recent exam arrangement",
-  "ftype_classroomBrowser": "Classroom Browser",
-  "ftype_classroomBrowser_desc": "Is there any empty classroom?",
+  "expenseTrackerContent": "{amount}￥ {place}",
+  "@expenseTrackerContent": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "faculty": "Faculty",
+  "failed": "Failed",
+  "feedback": "Feedback",
+  "feedbackButton": "Feedback",
+  "female": "Female",
+  "fengxian": "Fengxian",
+  "fengxianDistrict": "Fengxian District",
+  "freshman": "Freshman",
+  "freshmanLoginAccountHint": "Student ID/Full Name/Examinee Number",
+  "freshmanLoginButton": "Join Kite World",
+  "freshmanLoginFailedWarn": "Login failed",
+  "freshmanLoginPwdHint": "The last six number of your ID card",
+  "freshmanTitle": "Welcome!",
+  "friendsRadder": "Friends Radder",
   "ftype_activity": "Activities",
   "ftype_activity_desc": "The latest Second Class activities",
-  "ftype_expenseTracker": "Expense Tracker",
-  "ftype_expenseTracker_desc": "School card shopping history",
-  "ftype_library": "Library",
-  "ftype_library_desc": "Reading is thinking",
   "ftype_application": "Application",
   "ftype_application_desc": "What should I prepare for applications?",
-  "ftype_eduEmail": "Edu Email",
-  "ftype_eduEmail_desc": "Check your educational email",
-  "ftype_oaAnnouncement": "OA Announcement",
-  "ftype_oaAnnouncement_desc": "School announcements",
-  "ftype_yellowPages": "Yellow Pages",
-  "ftype_yellowPages_desc": "Contact school",
-  "ftype_game": "Game",
-  "ftype_game_desc": "Let's gaming!",
-  "ftype_wiki": "Wiki",
-  "ftype_wiki_desc": "Kite Wiki",
   "ftype_bbs": "BBS",
   "ftype_bbs_desc": "Kite BBS",
-  "ftype_scanner": "Scan",
-  "ftype_scanner_desc": "Scan a QR code",
-  "ftype_freshman": "Freshman",
-  "ftype_freshman_desc": "To retrieve freshman info",
-  "ftype_switchAccount": ">>> Regular User",
-  "ftype_switchAccount_desc": "Switch to regular user",
+  "ftype_classroomBrowser": "Classroom Browser",
+  "ftype_classroomBrowser_desc": "Is there any empty classroom?",
+  "ftype_eduEmail": "Edu Email",
+  "ftype_eduEmail_desc": "Check your educational email",
   "ftype_electricityBill": "Electricity Bill",
   "ftype_electricityBill_desc": "Dormitory balance and ⚡ history",
-  "ftype_kiteBoard": "Kite Board",
-  "ftype_kiteBoard_desc": "Fly a 🪁",
+  "ftype_examArrangement": "Exam Arrangement",
+  "ftype_examArrangement_desc": "Recent exam arrangement",
   "ftype_examResult": "Exam Result",
   "ftype_examResult_desc": "Don't stop until you're proud",
+  "ftype_expenseTracker": "Expense Tracker",
+  "ftype_expenseTracker_desc": "School card shopping history",
+  "ftype_freshman": "Freshman",
+  "ftype_freshman_desc": "To retrieve freshman info",
+  "ftype_game": "Game",
+  "ftype_game_desc": "Let's gaming!",
+  "ftype_kiteBoard": "Kite Board",
+  "ftype_kiteBoard_desc": "Fly a 🪁",
+  "ftype_kiteBulletin": "Kite Bulletin Board",
+  "ftype_kiteBulletin_desc": "Loading...",
+  "ftype_library": "Library",
+  "ftype_library_desc": "Reading is thinking",
+  "ftype_oaAnnouncement": "OA Announcement",
+  "ftype_oaAnnouncement_desc": "School announcements",
+  "ftype_reportTemp": "Report Temperature",
+  "ftype_reportTemp_desc": "Don't forgor!",
+  "ftype_scanner": "Scan",
+  "ftype_scanner_desc": "Scan a QR code",
   "ftype_separator": "Separator",
   "ftype_separator_desc": "For grouping functions",
+  "ftype_switchAccount": ">>> Regular User",
+  "ftype_switchAccount_desc": "Switch to regular user",
+  "ftype_timetable": "Timetable",
+  "ftype_timetable_desc": "School timetable",
+  "ftype_upgrade": "Upgrade Kite",
+  "ftype_upgrade_desc": "A new version? Let's check it out!",
+  "ftype_wiki": "Wiki",
+  "ftype_wiki_desc": "Kite Wiki",
+  "ftype_yellowPages": "Yellow Pages",
+  "ftype_yellowPages_desc": "Contact school",
+  "fullName": "Full Name",
+  "functionRearrangementSettings": "Function Rearrange",
+  "functionRearrangementSettingsSubtitle": "Customize the order and group of functions",
+  "gender": "Gender",
+  "go": "Go",
   "greetingHeader0L1": "Hello, welcome to",
   "greetingHeader0L2": "SIT",
   "greetingHeaderL1": "SIT has accompanied you",
@@ -291,77 +236,51 @@
       }
     }
   },
-  "fengxian": "Fengxian",
-  "xuhui": "Xuhui",
-  "campusWeatherTitle": "{campus} Weather",
-  "@campusWeatherTitle": {
-    "placeholders": {
-      "campus": {
-        "type": "String"
-      }
-    }
-  },
-  "weather_sunny": "Sunny",
-  "weather": "Weather",
-  "restartRequestTitle": "Restart?",
-  "restartRequest": "Would you like to restart Kite now?",
-  "notNow": "Not Now",
-  "electricityBillContent": "last {balance}￥ Room {room}",
-  "@electricityBillContent": {
-    "placeholders": {
-      "room": {
-        "type": "int"
-      },
-      "balance": {
-        "type": "String"
-      }
-    }
-  },
-  "draft": "Draft",
-  "processing": "Processing",
-  "done": "Done",
+  "homepage": "Homepage",
+  "homepageBgModeSettings": "Background mode of Homepage",
   "hotPost": "HOT",
-  "expenseTrackerContent": "{amount}￥ {place}",
-  "@expenseTrackerContent": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      },
-      "place": {
-        "type": "String"
-      }
-    }
-  },
-  "reportTempHelper": "Temperature Report Helper",
-  "reportTempRequest": "Today you haven't reported temperature, do you want to do now?",
-  "reportTempReportedToday": "Reported Today",
-  "@reportTempReportedToday": {
-    "description": "For building string: Reported Today Normal {place}"
-  },
-  "reportTempUnreportedToday": "Unreported Today",
-  "@reportTempUnreportedToday": {
-    "description": "For building string: Unreported Today Today Normal {place}"
-  },
-  "reportTempAbnormal": "Abnormal",
-  "@reportTempAbnormal": {
-    "description": "For building string: Reported Today Abnormal {place}"
-  },
-  "reportTempNormal": "Normal",
-  "@reportTempNormal": {
-    "description": "For building string: Reported Today Normal {place}"
-  },
-  "reportTempNoReportRecords": "No report records",
-  "activityLecture": "Lecture",
-  "activityCreation": "Creation",
-  "activityThematicEdu": "Thematic Edu",
-  "activitySchoolCulture": "School Culture",
-  "activityPractice": "Practice",
-  "activityVoluntary": "Voluntary",
-  "activitySafetyEdu": "Safety Edu",
-  "activityUnknown": "Unknown",
-  "publishingDepartment": "Department",
-  "author": "Author",
-  "publishTime": "Publish Time",
+  "kiteBoardReachEndLabel": "wow, you dug through the Earth!",
+  "kiteBoardTitle": "Kite Board",
+  "kiteBuiltinPinned": "[Pinned]",
+  "kiteForgotPwdButton": "Forgot password?",
+  "kiteLoginAccountHint": "Student ID/Work number",
+  "kiteLoginButton": "Join Kite World",
+  "kiteLoginPwdHint": "Enter your password",
+  "kiteLoginTitle": "Welcome!",
+  "kiteStatisticsButtonTooltip": "Kite Statistics",
+  "language": "Language",
+  "languagePrefDropDownSubtitle": "Select a language for your Kite",
+  "language_en": "English",
+  "language_zh": "中文(简体)",
+  "language_zh_TW": "中文(繁體)",
+  "lastOnlineTime": "Last Online",
+  "libraryAccountManagementButtonTip": "Library account management is coming soon...",
+  "libraryNoticeLabel": "There is a notice from the library.",
+  "libraryNoticePublishTime": "Send Time",
+  "libraryNoticeTitle": "Library Notice",
+  "loading": "Loading",
+  "localStorageSettings": "Local storage",
+  "localStorageSettingsSubtitle": "Display local storage of Kite on your device.",
+  "loggingIn": "Logging in",
+  "loginCredentialsValidatedTip": "Account and password is correct",
+  "loginFailedWarn": "Login Failed",
+  "logout": "Logout",
+  "logoutKiteSettings": "Logout Kite",
+  "logoutKiteSettingsSubtitle": "Logout current Kite account",
+  "logoutKiteWarn": "Confirm to logout the Kite?",
+  "major": "Major",
+  "male": "Male",
+  "moreInfoTitle": "More Info",
+  "name": "Name",
+  "networkTool": "Network Tool",
+  "networking": "Networking",
+  "newFriendsTitle": "New Friends",
+  "nickName": "Name",
+  "no": "No",
+  "noLocationLabel": "No location",
+  "noOnlineRecords": "No online records",
+  "notNow": "Not Now",
+  "numberOfPeopleBesidesMe": "Number of people besides me",
   "oaAnnouncementAttachmentTip": "{count,plural, =1{Attachment} other{Attachments}",
   "@oaAnnouncementAttachmentTip": {
     "placeholders": {
@@ -371,11 +290,92 @@
     }
   },
   "oaAnnouncementTextTitle": "Announcement Text",
-  "kiteBuiltinPinned": "[Pinned]",
-  "libraryAccountManagementButtonTip": "Library account management is coming soon...",
-  "libraryNoticePublishTime": "Send Time",
-  "libraryNoticeLabel": "There is a notice from the library.",
-  "libraryNoticeTitle": "Library Notice",
-  "applicationDesc": "This function is based on \"上应一网通办\".\n For most of types, you have to do the necessary procedure on the spot although you submitted an application online.",
-  "studentIdCopy2ClipboardTip": "Your student ID is copied."
+  "ok": "OK",
+  "online": "Online",
+  "open": "Open",
+  "@open": {
+    "description": "Open a file"
+  },
+  "personalInfoDescLabel": "The information on this page would show your roommates and classmate. It's convenient to make friends or create chat rooms.",
+  "personalInfoSettingButtonTooltip": "Set Personal Info",
+  "personalInfoTitle": "Personal Info",
+  "personalizeTitle": "Personalize",
+  "phoneNumber": "Phone Number",
+  "processing": "Processing",
+  "province": "Province",
+  "proxyAddressSettings": "Proxy Address",
+  "publishTime": "Publish Time",
+  "publishingDepartment": "Department",
+  "pwd": "Password",
+  "qq": "QQ",
+  "readAndAcceptRequest": "Please read and accept {agreement}.",
+  "@readAndAcceptRequest": {
+    "placeholders": {
+      "agreement": {
+        "type": "String"
+      }
+    }
+  },
+  "realtimeWeather": "Real-time Weather",
+  "refresh": "Refresh",
+  "reportTempAbnormal": "Abnormal",
+  "@reportTempAbnormal": {
+    "description": "For building string: Reported Today Abnormal {place}"
+  },
+  "reportTempHelper": "Temperature Report Helper",
+  "reportTempNoReportRecords": "No report records",
+  "reportTempNormal": "Normal",
+  "@reportTempNormal": {
+    "description": "For building string: Reported Today Normal {place}"
+  },
+  "reportTempReportedToday": "Reported Today",
+  "@reportTempReportedToday": {
+    "description": "For building string: Reported Today Normal {place}"
+  },
+  "reportTempRequest": "Today you haven't reported temperature, do you want to do now?",
+  "reportTempUnreportedToday": "Unreported Today",
+  "@reportTempUnreportedToday": {
+    "description": "For building string: Unreported Today Today Normal {place}"
+  },
+  "restartRequest": "Would you like to restart Kite now?",
+  "restartRequestTitle": "Restart?",
+  "roommate": "Roommate",
+  "schoolCardTool": "School Card Tool",
+  "settings": "Settings",
+  "settingsTitle": "Settings",
+  "staticPicture": "Static Picture",
+  "studentID": "Student ID",
+  "studentIdCopy2ClipboardTip": "Your student ID is copied.",
+  "studentLoginFailedWarn": "Login failed",
+  "tel": "TEL.",
+  "testConnectivity2School": "Test Connectivity",
+  "testConnectivity2SchoolSubtitle": "Test connectivity to school",
+  "testLoginKiteSettings": "Test Login Kite",
+  "testLoginKiteSettingsSubtitle": "Validate your Kite account and OA password",
+  "themeColorSettings": "Theme Color",
+  "unfilled": "Unfilled",
+  "uploadDoneTip": "Uploaded successfully!",
+  "uploadFailedTip": "uh-oh, failed to upload.",
+  "uploadingCounter": "Uploaded {done} / {all}",
+  "@uploadingCounter": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "all": {
+        "type": "int"
+      }
+    }
+  },
+  "userInfoUpdatedTip": "Your info updated!",
+  "validateInputRequest": "Please check your input.",
+  "weather": "Weather",
+  "weather_sunny": "Sunny",
+  "wechat": "Wechat",
+  "wipeKiteDataSettings": "Wipe Kite Data",
+  "wipeKiteDataSettingsDesc": "Login credentials will be wiped then Kite restarts. If you want to wipe all data of Kite, please go to settings on your device and find \"上应小风筝\" app to reset.",
+  "wipeKiteDataSettingsSubtitle": "Wipe Kite saved accounts and settings besides cache",
+  "xuhui": "Xuhui",
+  "xuhuiDistrict": "Xuhui District",
+  "yes": "Yes"
 }

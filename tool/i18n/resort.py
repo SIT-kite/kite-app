@@ -1,15 +1,13 @@
 import json
 from typing import Callable
 from functools import cmp_to_key
-import pair
 import util
 from pair import *
 import tags
 import weights
 import split
 
-OrderedJson = OrderedDict[str, Any]
-jcoder = json.JSONDecoder(object_hook=OrderedDict)
+
 required_para = [
     "target",
 ]
@@ -17,12 +15,12 @@ ResortMethod = Callable[[RawPairList], PairList]
 
 
 def do_cleanup(raw_list: RawPairList) -> PairList:
-    li, di = pair.convert_pairs(raw_list)
+    li, di = convert_pairs(raw_list)
     return li
 
 
 def do_alphabetically_sort(raw_list: RawPairList, reverse=False) -> PairList:
-    li, di = pair.convert_pairs(raw_list)
+    li, di = convert_pairs(raw_list)
     if not reverse:
         li.sort(key=lambda x: x.key)
     else:
@@ -52,7 +50,7 @@ def lexicographical_compr(a: Pair, b: Pair):
 
 
 def do_lexicographical_sort(raw_list: RawPairList) -> PairList:
-    li, di = pair.convert_pairs(raw_list)
+    li, di = convert_pairs(raw_list)
     li.sort(key=cmp_to_key(lexicographical_compr))
     return li
 
@@ -69,11 +67,11 @@ def attach_tag(p: Pair):
 
 
 def do_tags_sort(raw_list: RawPairList) -> PairList:
-    li, di = pair.convert_pairs(raw_list)
+    li, di = convert_pairs(raw_list)
     for p in li:
         p.key_parts = split.split_key(p.key)
         attach_tag(p)
-    li.sort(key=lambda p: tags.sum_weight(p.tags), reverse=True)
+    li.sort(key=lambda pr: tags.sum_weight(pr.tags), reverse=True)
     return li
 
 
@@ -94,16 +92,14 @@ def wrapper(args):
     keep_unmatched_meta = util.From(paras, Get="keep_unmatched_meta", Or="n") == "y"
     method_name = util.From(paras, Get="method", Or="cleanup")
     method = util.From(methods, Get=method_name, Or=do_cleanup)
-    with open(target, mode="r", encoding="UTF-8") as f:
-        txt = f.read()
+    txt = util.read_fi(target)
     res = resort(txt, method, indent, keep_unmatched_meta)
-    with open(target, mode="w", encoding="UTF-8") as f:
-        f.write(res)
+    util.write_fi(target, res)
 
 
 def resort(target, method: ResortMethod, indent=2, keep_unmatched_meta=False) -> str:
     l10n = json.loads(target)
     relisted = list(l10n.items())
     pair_list = method(relisted)
-    ordered = pair.flatten_pairs(pair_list, keep_unmatched_meta)
+    ordered = flatten_pairs(pair_list, keep_unmatched_meta)
     return json.dumps(ordered, ensure_ascii=False, indent=indent)

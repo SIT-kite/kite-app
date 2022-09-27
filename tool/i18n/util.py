@@ -48,3 +48,13 @@ def contains(small, big) -> bool:
         else:
             return True
     return False
+
+
+def read_fi(path: str, mode="r"):
+    with open(path, mode=mode, encoding="UTF-8") as f:
+        return f.read()
+
+
+def write_fi(path: str, content: str, mode="w"):
+    with open(path, mode=mode, encoding="UTF-8") as f:
+        f.write(content)

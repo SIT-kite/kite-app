@@ -27,7 +27,7 @@ class Pair:
         self.meta_value = meta_value
 
     def __repr__(self):
-        return f"Pair({self.key=},{self.has_meta=})"
+        return f"Pair({self.key},{self.has_meta=}:\"{self.value}\")"
 
 
 PairList = list[Pair]
