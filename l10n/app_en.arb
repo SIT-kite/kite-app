@@ -20,6 +20,7 @@
   "backgroundPictureSettingsSubtitle": "Customize the picture shown on the background",
   "backgroundSettingIsEmptyWarn": "You haven't set the background.",
   "campus": "Campus",
+  "campusDropDownSettings": "Your Campus",
   "campusDropDownSettingsSubtitle": "To display the weather",
   "campusWeatherTitle": "{campus} Weather",
   "@campusWeatherTitle": {
@@ -42,7 +43,7 @@
   "@cantLaunchWechatSoNumber2ClipboardTip": {
     "description": "Used in Freshman vCard when Wechat.app can't be launched."
   },
-  "changeOaPwdSettings": "OA Password",
+  "changeOaPwdSettings": "Change OA Password",
   "changeOaPwdSettingsSubtitle": "Change the OA password used for logging in Kite",
   "city": "City",
   "classmate": "Classmate",
@@ -157,6 +158,7 @@
       }
     }
   },
+  "expenseTrackerFirstTimeRefreshRequest": "Expense Tracker needs to access school district network to retrieve expense history. You can refresh the expense history manually next time by hitting the \"Refresh\" button at the top right.",
   "faculty": "Faculty",
   "failed": "Failed",
   "feedback": "Feedback",
@@ -164,6 +166,7 @@
   "female": "Female",
   "fengxian": "Fengxian",
   "fengxianDistrict": "Fengxian District",
+  "filter": "Filter",
   "freshman": "Freshman",
   "freshmanLoginAccountHint": "Student ID/Full Name/Examinee Number",
   "freshmanLoginButton": "Join Kite World",
@@ -219,7 +222,7 @@
   "ftype_yellowPages_desc": "Contact school",
   "fullName": "Full Name",
   "functionRearrangementSettings": "Function Rearrange",
-  "functionRearrangementSettingsSubtitle": "Customize the order and group of functions",
+  "functionRearrangementSettingsSubtitle": "Customize the order and group of functions on the homepage.",
   "gender": "Gender",
   "go": "Go",
   "greetingHeader0L1": "Hello, welcome to",
@@ -256,7 +259,7 @@
   "lastOnlineTime": "Last Online",
   "libraryAccountManagementButtonTip": "Library account management is coming soon...",
   "libraryNoticeLabel": "There is a notice from the library.",
-  "libraryNoticePublishTime": "Send Time",
+  "libraryNoticeSendTime": "Send Time",
   "libraryNoticeTitle": "Library Notice",
   "loading": "Loading",
   "localStorageSettings": "Local storage",

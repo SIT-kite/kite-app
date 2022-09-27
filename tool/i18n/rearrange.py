@@ -3,7 +3,7 @@ import os
 import ntpath
 
 required_para = [
-    "name",
+    "prefix",
     "template",
 ]
 
@@ -17,10 +17,11 @@ def wrapper(args):
     indent = int(util.From(paras, Get="indent", Or="2"))
     keep_unmatched_meta = util.From(paras, Get="keep_unmatched_meta", Or="n") == "y"
     teplt_head, teplt_tail = ntpath.split(template)
-    rearrange(teplt_head, prefix, teplt_tail.removeprefix(prefix), indent, keep_unmatched_meta, fill_blank)
+    template_suffix = teplt_tail.removeprefix(prefix)
+    rearrange(teplt_head, prefix, template_suffix, indent, keep_unmatched_meta, fill_blank)
 
 
-def rearrange(l10n_dir, prefix, template_suffix, indent=2, keep_unmatched_meta=False, fill_blank=False):
+def rearrange(l10n_dir: str, prefix: str, template_suffix: str, indent=2, keep_unmatched_meta=False, fill_blank=False):
     """
     :param keep_unmatched_meta: keep a meta missing a pair
     :param l10n_dir: lib/l10n
@@ -29,21 +30,37 @@ def rearrange(l10n_dir, prefix, template_suffix, indent=2, keep_unmatched_meta=F
     :param indent: 2
     :param fill_blank: False
     """
-    teplt_full = prefix + template_suffix
+    template_fullname = prefix + template_suffix
+    others_path = collect_others(l10n_dir, prefix, template_fullname)
+    template_path = ntpath.join(l10n_dir, template_fullname)
+    tplist, tpmap = load_arb(path=template_path)
+    rearrange_others(others_path, tplist, indent, keep_unmatched_meta, fill_blank)
+
+
+def collect_others(l10n_dir: str, prefix: str = "app", template: str = "app_en.arb") -> list[str]:
+    """
+    :param template: the full name of template
+    :param prefix: app_
+    :param l10n_dir: lib/l10n
+    :return: paths of other .arb files
+    """
     others_path = []
     for f in os.listdir(l10n_dir):
         full = ntpath.join(l10n_dir, f)
         if os.path.isfile(full):
             head, tail = ntpath.split(full)
-            if tail != teplt_full and tail.endswith(".arb") and tail.startswith(prefix):
+            if tail != template and tail.endswith(".arb") and tail.startswith(prefix):
                 others_path.append(full)
-    tmplt_path = ntpath.join(l10n_dir, teplt_full)
-    tmplt_li, tmplt_map = load_arb(tmplt_path)
+    return others_path
+
+
+def rearrange_others(others_path: list[str], template_plist: PairList, indent=2, keep_unmatched_meta=False,
+                     fill_blank=False):
     others_arb = []
     for other_path in others_path:
-        plist, pmap = load_arb(other_path)
+        plist, pmap = load_arb(path=other_path)
         others_arb.append(ArbFile(other_path, plist, pmap))
-    for tp in tmplt_li:
+    for tp in template_plist:
         key = tp.key
         for arb in others_arb:
             if key in arb.pmap:

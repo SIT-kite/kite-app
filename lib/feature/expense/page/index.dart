@@ -18,7 +18,9 @@
 import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/util/alert_dialog.dart';
+import 'package:kite/util/dsl.dart';
 import 'package:kite/util/flash.dart';
 
 import '../dao/expense.dart';
@@ -46,7 +48,7 @@ class _ExpensePageState extends State<ExpensePage> {
       Future.delayed(Duration.zero, () async {
         if (await showAlertDialog(
               context,
-              title: '刷新数据',
+              title: i18n.refresh,
               content: [
                 const Text(
                   '看起来您第一次使用消费查询, \n'
@@ -55,8 +57,8 @@ class _ExpensePageState extends State<ExpensePage> {
                 ),
               ],
               actionWidgetList: [
-                ElevatedButton(onPressed: () {}, child: const Text('刷新数据')),
-                TextButton(onPressed: () {}, child: const Text('我再看看')),
+                ElevatedButton(onPressed: () {}, child: i18n.refresh.txt),
+                TextButton(onPressed: () {}, child: i18n.notNow.txt),
               ],
             ) ==
             0) {

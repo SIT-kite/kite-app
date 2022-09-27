@@ -54,7 +54,7 @@ class NoticeWidget extends StatelessWidget {
         return ListTile(
           title: Text(isRealHtml ? i18n.libraryNoticeLabel : genNoticePreview(notice),
               style: const TextStyle(color: Colors.blue, fontSize: 18)),
-          subtitle: Text(('${i18n.libraryNoticePublishTime}:  ${context.dateFullNum(notice.ts.toLocal())}')),
+          subtitle: Text(('${i18n.libraryNoticeSendTime}:  ${context.dateFullNum(notice.ts.toLocal())}')),
           trailing: const Icon(
             Icons.notification_important,
             color: Colors.blueAccent,

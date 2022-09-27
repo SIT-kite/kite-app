@@ -23,7 +23,7 @@ OrderedJson = OrderedDict[str, Any]
 jcoder = json.JSONDecoder(object_hook=OrderedDict)
 
 
-def load_arb(path=None, content=None) -> tuple[PairList, PairMap]:
+def load_arb(*, path=None, content=None) -> tuple[PairList, PairMap]:
     if path is None and content is None:
         raise Exception("No .arb path or content is given")
     if path is not None and content is None:

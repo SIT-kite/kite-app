@@ -1,6 +1,7 @@
 import sys
 import resort
 import rearrange
+import serve
 
 help_txt = """
 * means optional
@@ -31,17 +32,27 @@ rearrange: rearrange other .arb files in the same order of the template.
 args:
     prefix: the prefix of all .arb file
     template: template path
-    fill_blank*: fill all missing l10n pair
+    fill_blank*: fill all missing l10n pairs
         options: [y,n]
         default: n
     indent*: indent of json output
-    keep_unmatched_meta* : keep a meta missing a pair 
+    keep_unmatched_meta* : keep a meta missing a pair
+---------------------
+serve: auto-rearrange other .arb files when any key changed in template.
+args:
+    prefix: the prefix of all .arb file
+    template: template path
+    fill_blank*: fill all missing l10n pairs
+        default: y
+    indent*: indent of json output
+    keep_unmatched_meta* : keep a meta missing a pair
 """
 
 all_tasks = {
     "help": lambda _: print(help_txt),
     "resort": resort.wrapper,
-    "rearrange": rearrange.wrapper
+    "rearrange": rearrange.wrapper,
+    "serve": serve.wrapper,
 }
 
 
