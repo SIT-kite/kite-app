@@ -13,7 +13,7 @@
 | activity         | Activity               | 活动      |
 | expenseTracker   | Expense Tracker        | 查消费     |
 | library          | Library                | 图书馆     |
-| office           | Office                 | 办公      |
+| application      | Application            | 办事      |
 | eduEmail         | Edu Email              | Edu 邮箱  |
 | oaAnnouncement   | OA Announcement        | OA 公告   |
 | yellowPages      | Yellow Pages           | 常用电话    |

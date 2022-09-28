@@ -218,12 +218,12 @@ List<Widget> buildAppBarMenuButton(BuildContext context) {
     IconButton(
       onPressed: () => Navigator.of(context).pushNamed(RouteTable.freshmanAnalysis),
       icon: const Icon(Icons.analytics),
-      tooltip: i18n.kiteStatisticsButtonTooltip,
+      tooltip: i18n.kiteStatisticsBtnTooltip,
     ),
     IconButton(
       onPressed: () => Navigator.of(context).pushNamed(RouteTable.freshmanUpdate),
       icon: const Icon(Icons.menu),
-      tooltip: i18n.personalInfoSettingButtonTooltip,
+      tooltip: i18n.personalInfoSettingBtnTooltip,
     )
   ];
 }

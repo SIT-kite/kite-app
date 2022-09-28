@@ -205,7 +205,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
           height: 40.h,
           child: ElevatedButton(
             onPressed: _disableLoginButton ? null : onLogin,
-            child: i18n.freshmanLoginButton.txt,
+            child: i18n.freshmanLoginBtn.txt,
           ),
         ),
       ],
@@ -261,7 +261,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
                 children: [
                   TextButton(
                     child: Text(
-                      i18n.feedbackButton,
+                      i18n.feedbackBtn,
                       style: const TextStyle(color: Colors.grey),
                     ),
                     onPressed: () {

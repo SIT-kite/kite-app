@@ -111,7 +111,7 @@ class LibraryPage extends StatelessWidget {
         ),
         IconButton(
           onPressed: () async {
-            showBasicFlash(context, i18n.libraryAccountManagementButtonTip.txt);
+            showBasicFlash(context, i18n.libraryAccountManagementBtnTip.txt);
           },
           icon: const Icon(
             Icons.person,

@@ -194,7 +194,7 @@ class _LoginPageState extends State<LoginPage> {
           height: 40.h,
           child: ElevatedButton(
             onPressed: disableLoginButton ? null : onLogin,
-            child: i18n.kiteLoginButton.txt,
+            child: i18n.kiteLoginBtn.txt,
           ),
         ),
       ],
@@ -308,7 +308,7 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   TextButton(
                     child: Text(
-                      i18n.kiteForgotPwdButton,
+                      i18n.kiteForgotPwdBtn,
                       style: const TextStyle(color: Colors.grey),
                     ),
                     onPressed: () {
@@ -317,7 +317,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   TextButton(
                     child: Text(
-                      i18n.feedbackButton,
+                      i18n.feedbackBtn,
                       style: const TextStyle(color: Colors.grey),
                     ),
                     onPressed: () {

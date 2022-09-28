@@ -56,38 +56,10 @@
   "daysKiteWithYouLabel0": "Kite just met you :)",
   "devOptions": "Development Options",
   "done": "Done",
-  "dontShowThisAgainButton": "Don't show this again",
+  "dontShowThisAgainBtn": "Don't show this again",
   "dormitory": "Dormitory",
-  "dormitoryDetailed_rb": "Room {room} {building}",
-  "@dormitoryDetailed_rb": {
-    "placeholders": {
-      "room": {
-        "type": "int",
-        "example": "401"
-      },
-      "building": {
-        "type": "String"
-      }
-    }
-  },
-  "dormitoryDetailed_rbb": "Room {room} Bed {bed} {building}",
-  "@dormitoryDetailed_rbb": {
-    "placeholders": {
-      "room": {
-        "type": "int",
-        "example": "401"
-      },
-      "bed": {
-        "type": "String",
-        "example": "4"
-      },
-      "building": {
-        "type": "String"
-      }
-    }
-  },
-  "dormitoryDetailed_rbbc": "Room {room} Bed {bed} {building} {campus}",
-  "@dormitoryDetailed_rbbc": {
+  "dormitoryDetailed_bbcr": "Room {room} Bed {bed} {building} {campus}",
+  "@dormitoryDetailed_bbcr": {
     "placeholders": {
       "room": {
         "type": "int",
@@ -105,8 +77,24 @@
       }
     }
   },
-  "dormitoryDetailed_rbc": "Room {room} {building} {campus}",
-  "@dormitoryDetailed_rbc": {
+  "dormitoryDetailed_bbr": "Room {room} Bed {bed} {building}",
+  "@dormitoryDetailed_bbr": {
+    "placeholders": {
+      "room": {
+        "type": "int",
+        "example": "401"
+      },
+      "bed": {
+        "type": "String",
+        "example": "4"
+      },
+      "building": {
+        "type": "String"
+      }
+    }
+  },
+  "dormitoryDetailed_bcr": "Room {room} {building} {campus}",
+  "@dormitoryDetailed_bcr": {
     "placeholders": {
       "room": {
         "type": "int",
@@ -116,6 +104,18 @@
         "type": "String"
       },
       "campus": {
+        "type": "String"
+      }
+    }
+  },
+  "dormitoryDetailed_br": "Room {room} {building}",
+  "@dormitoryDetailed_br": {
+    "placeholders": {
+      "room": {
+        "type": "int",
+        "example": "401"
+      },
+      "building": {
         "type": "String"
       }
     }
@@ -149,14 +149,14 @@
   "faculty": "Faculty",
   "failed": "Failed",
   "feedback": "Feedback",
-  "feedbackButton": "Feedback",
+  "feedbackBtn": "Feedback",
   "female": "Female",
   "fengxian": "Fengxian",
   "fengxianDistrict": "Fengxian District",
   "filter": "Filter",
   "freshman": "Freshman",
   "freshmanLoginAccountHint": "Student ID/Full Name/Examinee Number",
-  "freshmanLoginButton": "Join Kite World",
+  "freshmanLoginBtn": "Join Kite World",
   "freshmanLoginFailedWarn": "Login failed",
   "freshmanLoginPwdHint": "The last six number of your ID card",
   "freshmanTitle": "Welcome!",
@@ -229,18 +229,18 @@
   "kiteBoardReachEndLabel": "wow, you dug through the Earth!",
   "kiteBoardTitle": "Kite Board",
   "kiteBuiltinPinned": "[Pinned]",
-  "kiteForgotPwdButton": "Forgot password?",
+  "kiteForgotPwdBtn": "Forgot password?",
   "kiteLoginAccountHint": "Student ID/Work number",
-  "kiteLoginButton": "Join Kite World",
+  "kiteLoginBtn": "Join Kite World",
   "kiteLoginPwdHint": "Enter your password",
   "kiteLoginTitle": "Welcome!",
-  "kiteStatisticsButtonTooltip": "Kite Statistics",
+  "kiteStatisticsBtnTooltip": "Kite Statistics",
   "language": "Language",
   "language_en": "English",
   "language_zh": "中文(简体)",
   "language_zh_TW": "中文(繁體)",
   "lastOnlineTime": "Last Online",
-  "libraryAccountManagementButtonTip": "Library account management is coming soon...",
+  "libraryAccountManagementBtnTip": "Library account management is coming soon...",
   "libraryNoticeLabel": "There is a notice from the library.",
   "libraryNoticeSendTime": "Send Time",
   "libraryNoticeTitle": "Library Notice",
@@ -279,7 +279,7 @@
     "description": "Open a file"
   },
   "personalInfoDescLabel": "The information on this page would show your roommates and classmate. It's convenient to make friends or create chat rooms.",
-  "personalInfoSettingButtonTooltip": "Set Personal Info",
+  "personalInfoSettingBtnTooltip": "Set Personal Info",
   "personalInfoTitle": "Personal Info",
   "personalizeTitle": "Personalize",
   "phoneNumber": "Phone Number",

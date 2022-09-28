@@ -47,7 +47,7 @@ class FreshmanPage extends StatelessWidget {
         i18n.addInfoRequest.txt
       ], actionWidgetList: [
         ElevatedButton(onPressed: () {}, child: i18n.yes.txt),
-        TextButton(onPressed: () {}, child: i18n.dontShowThisAgainButton.txt),
+        TextButton(onPressed: () {}, child: i18n.dontShowThisAgainBtn.txt),
       ]).then((select) {
         if (select == 0) {
           Navigator.of(context).pushNamed(RouteTable.freshmanUpdate);
@@ -84,7 +84,7 @@ class FreshmanPage extends StatelessWidget {
       infoItems: [
         InfoItem(Icons.badge, i18n.studentID, data.studentId),
         InfoItem(Icons.emoji_objects, i18n.major, data.major),
-        InfoItem(Icons.corporate_fare, i18n.dormitory, i18n.dormitoryDetailed_rbbc(data.room, data.bed, data.building, data.campus)),
+        InfoItem(Icons.corporate_fare, i18n.dormitory, i18n.dormitoryDetailed_bbcr(data.room, data.bed, data.building, data.campus)),
         InfoItem(Icons.face,i18n.counselor, data.counselorName),
         ...buildContactInfoItems(ctx, data.contact, counselorTel: data.counselorTel),
       ],

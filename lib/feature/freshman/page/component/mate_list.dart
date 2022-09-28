@@ -42,7 +42,7 @@ class MateListWidget extends StatelessWidget {
         college: mate.college,
         infoItems: [
           InfoItem(Icons.emoji_objects, i18n.faculty, mate.major),
-          InfoItem(Icons.bed, i18n.dormitory, i18n.dormitoryDetailed_rbb(mate.room, mate.bed, mate.building)),
+          InfoItem(Icons.bed, i18n.dormitory, i18n.dormitoryDetailed_bbr(mate.room, mate.bed, mate.building)),
           InfoItem(mate.gender == 'M' ? Icons.male : Icons.female, i18n.gender, mate.gender == 'M' ? i18n.male : i18n.female),
           if (mate.province != null) InfoItem(Icons.location_city, i18n.province, mate.province!),
           if (mate.lastSeen != null) InfoItem(Icons.location_city, i18n.lastOnlineTime, lastSeenText),
@@ -106,7 +106,7 @@ class MateListWidget extends StatelessWidget {
           if (showDormitory)
             buildInfoItemRow(
               iconData: Icons.home,
-              text: '${i18n.dormitory}: ${i18n.dormitoryDetailed_rb(mate.room, mate.building)}',
+              text: '${i18n.dormitory}: ${i18n.dormitoryDetailed_br(mate.room, mate.building)}',
               context: context,
             ),
           wechatRow,
