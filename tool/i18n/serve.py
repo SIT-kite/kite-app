@@ -12,13 +12,13 @@ required_para = [
 
 
 def wrapper(args):
-    paras = util.split_para(args)
-    util.check_para_exist(paras, required_para)
+    paras = split_para(args)
+    check_para_exist(paras, required_para)
     prefix = paras["prefix"]
     template = paras["template"]
-    fill_blank = util.From(paras, Get="fill_blank", Or="y") == "y"
-    indent = int(util.From(paras, Get="indent", Or="2"))
-    keep_unmatched_meta = util.From(paras, Get="keep_unmatched_meta", Or="n") == "y"
+    fill_blank = From(paras, Get="fill_blank", Or="y") == "y"
+    indent = int(From(paras, Get="indent", Or="2"))
+    keep_unmatched_meta = From(paras, Get="keep_unmatched_meta", Or="n") == "y"
     teplt_head, teplt_tail = ntpath.split(template)
     template_suffix = teplt_tail.removeprefix(prefix)
     serve(teplt_head, prefix, template_suffix, indent, keep_unmatched_meta, fill_blank)
@@ -28,12 +28,12 @@ def serve(l10n_dir: str, prefix: str, template_suffix: str, indent=2, keep_unmat
     template_fullname = prefix + template_suffix
     template_path = ntpath.join(l10n_dir, template_fullname)
     others_path = re.collect_others(l10n_dir, prefix, template_fullname)
-    cached_stamp = 0
+    last_stamp = 0
     last_plist = []
     while True:
         stamp = os.stat(template_path).st_mtime
-        if stamp != cached_stamp:
-            cached_stamp = stamp
+        if stamp != last_stamp:
+            last_stamp = stamp
             try:
                 tplist, tpmap = load_arb(path=template_path)
                 if is_key_changed(last_plist, tplist):

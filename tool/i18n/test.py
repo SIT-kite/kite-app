@@ -22,6 +22,3 @@ def test_serve():
     l10n_dir = "../../l10n"
     prefix = "app_"
     serve.serve(l10n_dir, prefix, template_suffix="en.arb")
-
-
-test_serve()

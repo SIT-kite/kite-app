@@ -1,31 +1,20 @@
-import json
-from typing import Callable
 from functools import cmp_to_key
-import util
-from pair import *
 import tags
 import weights
 import split
-
+from arb import *
 
 required_para = [
     "target",
 ]
-ResortMethod = Callable[[RawPairList], PairList]
+ResortMethod = Callable[[PairList, PairMap], PairList]
 
 
-def do_cleanup(raw_list: RawPairList) -> PairList:
-    li, di = convert_pairs(raw_list)
-    return li
-
-
-def do_alphabetically_sort(raw_list: RawPairList, reverse=False) -> PairList:
-    li, di = convert_pairs(raw_list)
+def do_alphabetically_sort(plist: PairList, pmap: PairMap, reverse=False) -> PairList:
     if not reverse:
-        li.sort(key=lambda x: x.key)
+        return sorted(plist, key=lambda x: x.key)
     else:
-        li.sort(key=lambda x: ''.join(reversed(x.key)))
-    return li
+        return sorted(plist, key=lambda x: ''.join(reversed(x.key)))
 
 
 def lexicographical_compr(a: Pair, b: Pair):
@@ -49,10 +38,8 @@ def lexicographical_compr(a: Pair, b: Pair):
         return 0
 
 
-def do_lexicographical_sort(raw_list: RawPairList) -> PairList:
-    li, di = convert_pairs(raw_list)
-    li.sort(key=cmp_to_key(lexicographical_compr))
-    return li
+def do_lexicographical_sort(plist: PairList, pmap: PairMap) -> PairList:
+    return sorted(plist, key=cmp_to_key(lexicographical_compr))
 
 
 def lister():
@@ -62,44 +49,40 @@ def lister():
 def attach_tag(p: Pair):
     for tag in weights.all_tags:
         if tag.match(p):
-            p_tags = util.getAttrOrSet(p, "tags", lister)
+            p_tags = getAttrOrSet(p, "tags", lister)
             p_tags.append(tag.tag(p))
 
 
-def do_tags_sort(raw_list: RawPairList) -> PairList:
-    li, di = convert_pairs(raw_list)
-    for p in li:
+def do_tags_sort(plist: PairList, pmap: PairMap) -> PairList:
+    for p in plist:
         p.key_parts = split.split_key(p.key)
         attach_tag(p)
-    li.sort(key=lambda pr: tags.sum_weight(pr.tags), reverse=True)
-    return li
+    return sorted(plist, key=lambda pr: tags.sum_weight(pr.tags), reverse=True)
 
 
 methods: dict[str, ResortMethod] = {
-    "cleanup": do_cleanup,
-    "alphabetical": lambda li: do_alphabetically_sort(li, reverse=False),
-    "-alphabetical": lambda li: do_alphabetically_sort(li, reverse=True),
+    "alphabetical": lambda li, mp: do_alphabetically_sort(li, mp, reverse=False),
+    "-alphabetical": lambda li, mp: do_alphabetically_sort(li, mp, reverse=True),
     "lexicographical": do_lexicographical_sort,
     "tags": do_tags_sort,
 }
 
 
 def wrapper(args):
-    paras = util.split_para(args)
-    util.check_para_exist(paras, required_para)
+    paras = split_para(args)
+    check_para_exist(paras, required_para)
     target = paras["target"]
-    indent = int(util.From(paras, Get="indent", Or="2"))
-    keep_unmatched_meta = util.From(paras, Get="keep_unmatched_meta", Or="n") == "y"
-    method_name = util.From(paras, Get="method", Or="cleanup")
-    method = util.From(methods, Get=method_name, Or=do_cleanup)
-    txt = util.read_fi(target)
+    indent = int(From(paras, Get="indent", Or="2"))
+    keep_unmatched_meta = From(paras, Get="keep_unmatched_meta", Or="n") == "y"
+    method_name = From(paras, Get="method", Or="cleanup")
+    method = From(methods, Get=method_name, Or=do_alphabetically_sort)
+    txt = read_fi(target)
     res = resort(txt, method, indent, keep_unmatched_meta)
-    util.write_fi(target, res)
+    write_fi(target, res)
 
 
 def resort(target, method: ResortMethod, indent=2, keep_unmatched_meta=False) -> str:
-    l10n = json.loads(target)
-    relisted = list(l10n.items())
-    pair_list = method(relisted)
+    plist, pmap = load_arb(content=target)
+    pair_list = method(plist, pmap)
     ordered = flatten_pairs(pair_list, keep_unmatched_meta)
     return json.dumps(ordered, ensure_ascii=False, indent=indent)

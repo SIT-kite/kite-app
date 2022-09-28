@@ -2,6 +2,18 @@ import sys
 import resort
 import rearrange
 import serve
+import migration
+
+tittle = """
+   ██╗   ██╗   █████╗   ███╗   ██╗
+   ██║  ███║  ██╔══██╗  ████╗  ██║
+   ██║  ╚██║  ╚█████╔╝  ██╔██╗ ██║
+   ██║   ██║  ██╔══██╗  ██║╚██╗██║
+   ██║   ██║  ╚█████╔╝  ██║ ╚████║
+   ╚═╝   ╚═╝   ╚════╝   ╚═╝  ╚═══╝
+By Liplum (https://github.com/liplum)
+Input with argument \"help\" to get help info
+"""
 
 help_txt = """
 * means optional
@@ -12,19 +24,18 @@ resort: resort a .arb file.
 args:
     target: .arb file path
         type: str
-    method*: how to resort this file
+    *method: how to resort this file
         options: [
-            cleanup : keep the meta following its pair,
             alphabetical : sort in alphabetical order,
             -alphabetical : sort in alphabetical order with a reversed key,
             lexicographical : sort in lexicographical order,
             tags : sort by weighted tags
         ]
         default: alphabetical 
-    keep_unmatched_meta* : keep a meta missing a pair 
+    *keep_unmatched_meta: keep a meta even missing a pair 
         options: [y,n]
         default: n
-    indent*: indent of json output
+    *indent: indent of json output
         type: int
         default: 2
 ---------------------
@@ -32,20 +43,27 @@ rearrange: rearrange other .arb files in the same order of the template.
 args:
     prefix: the prefix of all .arb file
     template: template path
-    fill_blank*: fill all missing l10n pairs
+    *fill_blank: fill all missing l10n pairs
         options: [y,n]
         default: n
-    indent*: indent of json output
-    keep_unmatched_meta* : keep a meta missing a pair
+    *indent: indent of json output
+          default: 2
+    *keep_unmatched_meta : keep a meta even missing a pair
+        default: n
 ---------------------
 serve: auto-rearrange other .arb files when any key changed in template.
 args:
     prefix: the prefix of all .arb file
     template: template path
-    fill_blank*: fill all missing l10n pairs
+    *fill_blank: fill all missing l10n pairs
         default: y
-    indent*: indent of json output
-    keep_unmatched_meta* : keep a meta missing a pair
+    *indent: indent of json output
+           default: 2
+    *keep_unmatched_meta: keep a meta even missing a pair
+        default: n
+---------------------
+migrate: an interactive migration tool with a wizard setup. 
+--------------------------
 """
 
 all_tasks = {
@@ -53,12 +71,13 @@ all_tasks = {
     "resort": resort.wrapper,
     "rearrange": rearrange.wrapper,
     "serve": serve.wrapper,
+    "migration": migration.main,
 }
 
 
 def main():
     if len(sys.argv) == 1:
-        print(help_txt)
+        print(tittle)
         return
     args = sys.argv[1:]
     arg0 = args[0]

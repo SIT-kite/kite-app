@@ -29,6 +29,3 @@ def split_key(key: str) -> list[str]:
         li.append(s.getvalue().lower())
         s.close()
     return li
-
-
-split_key("abcAde")
