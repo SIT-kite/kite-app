@@ -3,6 +3,8 @@ import resort
 
 line = "----------------------------------------------"
 
+log = []
+
 
 class Config:
     def __init__(self):
@@ -10,6 +12,7 @@ class Config:
         self.prefix = "app_"
         self.folder = "lib/l10n"
         self.template_name = "app_en.arb"
+        self.resort_method = resort.Alphabetical
         self.auto_add = True
         self.keep_unmatched_meta = False
 
@@ -25,6 +28,10 @@ def yn(reply: str) -> bool:
 
 def D(*args):
     print(f"|>", *args)
+
+
+def Log(*args):
+    log.append(f"|> {' '.join(args)}", )
 
 
 def C(prompt: str) -> str:
@@ -52,10 +59,10 @@ def cmd_add():
     new = ntpath.join(x.folder, name)
     tplist, tpmap = load_arb(path=template_path())
     if x.auto_add:
-        rearrange_other(new, tplist, x.indent, x.keep_unmatched_meta, fill_blank=True)
+        rearrange_others_saved_re([new], tplist, x.indent, x.keep_unmatched_meta, fill_blank=True)
         D(f"{new} was created and rearranged.")
     else:
-        rearrange_other(new, tplist, x.indent, x.keep_unmatched_meta, fill_blank=False)
+        rearrange_others_saved_re([new], tplist, x.indent, x.keep_unmatched_meta, fill_blank=False)
         D(f"{new} was created.")
 
 
@@ -90,20 +97,25 @@ def cmd_rename():
                 D(f"the new key \"{new}\" is invalid, please enter again.")
             else:
                 break
-        arbs = load_all_arb_in(paths=other_arb_paths)
-        arbs.append(template_arb)
-        Dline("[renaming]")
+        other_arbs = load_all_arb_in(paths=other_arb_paths)
+        arbs = other_arbs + [template_arb]
         for arb in arbs:
             if old in arb.pmap:
                 arb.rename_key(old=old, new=new)
-                D(f"renamed \"{old}\" to \"{new}\" in \"{arb.file_name()}\".")
+                Log(f"renamed \"{old}\" to \"{new}\" in \"{arb.file_name()}\".")
             else:
                 if x.auto_add:
                     p = Pair(key=new, value="")
                     arb.add(p)
-                    D(f"added \"{new}\" in \"{arb.file_name()}\".")
-            save_flatten_plist(arb, x.indent, x.keep_unmatched_meta)
-            D(f"{arb.file_name()} saved.")
+                    Log(f"added \"{new}\" in \"{arb.file_name()}\".")
+
+        if x.resort_method is not None:  # auto_resort
+            resorted = resort.methods[x.resort_method](template_arb.plist, template_arb.pmap)
+            template_arb.plist = resorted
+            rearrange_others(other_arbs, template_arb, fill_blank=x.auto_add)
+        for arb in arbs:
+            save_flatten(arb, x.indent, x.keep_unmatched_meta)
+            Log(f"{arb.file_name()} saved.")
         Dline("[renamed]")
 
 
@@ -112,16 +124,15 @@ def cmd_resort():
     if size == 0:
         D("No resort available.")
         return
-    methods: list[resort.ResortMethod] = []
-    index = 0
-    for name, func in resort.methods.items():
-        methods.append(func)
+    for index, name in resort.id2methods.items():
         D(f"{index}: {name}")  # index 2 name
-        index += 1
     D("enter the number of method.")
     while True:
         try:
-            i = int(C("method="))
+            inputted = C("method=")
+            if inputted == "#":
+                return
+            i = int(inputted)
             if 0 <= i < size:
                 break
             else:
@@ -129,17 +140,25 @@ def cmd_resort():
         except:
             D("input is invalid, plz try again.")
     template_arb = load_arb_from(path=template_path())
-    tplist, tpmap = template_arb.plist, template_arb.pmap
-    template_arb.re = methods[i](tplist, tpmap)
-    save_flatten_re(template_arb)
-    rearrange_others(other_arb_paths, tplist, x.indent, x.keep_unmatched_meta, fill_blank=x.auto_add)
+    method_name = resort.id2methods[i]
+    template_arb.plist = resort.methods[method_name](template_arb.plist, template_arb.pmap)
+    save_flatten(template_arb)
+    rearrange_others_saved_re(other_arb_paths, template_arb.plist,
+                              x.indent, x.keep_unmatched_meta,
+                              fill_blank=x.auto_add)
     D("all .arb files were resorted and rearranged.")
+
+
+def cmd_log():
+    for ln in log:
+        D(ln)
 
 
 cmds: dict[str, Callable[[], None]] = {
     "add": cmd_add,
     "rename": cmd_rename,
     "resort": cmd_resort,
+    "log": cmd_log,
 }
 cmd_names = list(cmds.keys())
 cmd_full_names = ', '.join(cmd_names)
@@ -183,8 +202,10 @@ def init():
             head, tail = ntpath.split(full)
             if tail != x.template_name and tail.endswith(".arb") and tail.startswith(x.prefix):
                 other_arb_paths.append(full)
-
+    Dline("[config]")
     D(f"{x.indent=},{x.prefix=},{x.folder=},{x.auto_add=}")
+    D(f"{x.resort_method=}")
+    Dline("[config]")
     D(f"l10n folder locates at {os.path.abspath(x.folder)}")
     D(f"all .arb file paths: [")
     for p in other_arb_paths:
@@ -195,8 +216,8 @@ def init():
 
 
 def setup_indent():
+    D(f"please enter indent, \"{x.indent}\" as default")
     while True:
-        D(f"please enter indent, \"{x.indent}\" as default")
         inputted = C("indent=")
         try:
             if inputted == "#":
@@ -209,8 +230,8 @@ def setup_indent():
 
 
 def setup_prefix():
+    D(f"please enter prefix of .arb file name, \"{x.prefix}\" as default")
     while True:
-        D(f"please enter prefix of .arb file name, \"{x.prefix}\" as default")
         inputted = C("prefix=")
         if inputted == "#":
             return 1
@@ -220,8 +241,8 @@ def setup_prefix():
 
 
 def setup_folder():
+    D(f"please enter l10n folder path, \"{x.folder}\" as default")
     while True:
-        D(f"please enter l10n folder path, \"{x.folder}\" as default")
         inputted = C("folder=")
         if inputted == "#":
             return 1
@@ -231,8 +252,8 @@ def setup_folder():
 
 
 def setup_template_name():
+    D(f"please enter template file name without extension, \"{x.template_name}\" as default")
     while True:
-        D(f"please enter template file name without extension, \"{x.template_name}\" as default")
         inputted = C("folder=")
         if inputted == "#":
             return 1
@@ -242,8 +263,8 @@ def setup_template_name():
 
 
 def setup_auto_add():
+    D(f"\"auto_add\" will add missing key automatically , \"{x.auto_add}\" as default")
     while True:
-        D(f"\"auto_add\" will add missing key automatically , \"{x.auto_add}\" as default")
         inputted = C("auto_add=")
         if inputted == "#":
             return 1
@@ -253,14 +274,34 @@ def setup_auto_add():
 
 
 def setup_keep_unmatched_meta():
+    D(f"\"keep_unmatched_meta\" will keep a meta even missing a pair, \"{x.keep_unmatched_meta}\" as default")
     while True:
-        D(f"\"keep_unmatched_meta\" will keep a meta even missing a pair, \"{x.keep_unmatched_meta}\" as default")
         inputted = C("keep_unmatched_meta=")
         if inputted == "#":
             return 1
         if inputted != "":
             x.keep_unmatched_meta = to_bool(inputted)
         return
+
+
+def setup_auto_resort():
+    D(f"\"auto_resort\" will resort when any file is change by migration, \"{x.resort_method}\" as default")
+    while True:
+        for index, name in resort.id2methods.items():
+            D(f"{index}: {name}")  # index 2 name
+        D(f"-1: None -- disable auto_resort")  # index 2 name
+        inputted = C("id=")
+        if inputted == "#":
+            return 1
+        try:
+            i = int(inputted)
+            if 0 <= i < len(resort.id2methods):
+                x.resort_method = resort.id2methods[i]
+            else:
+                x.resort_method = None
+            return
+        except:
+            D("input is invalid, plz try again.")
 
 
 all_setups: list[Callable[[], int | None]] = [
@@ -270,6 +311,7 @@ all_setups: list[Callable[[], int | None]] = [
     setup_template_name,
     setup_auto_add,
     setup_keep_unmatched_meta,
+    setup_auto_resort,
 ]
 
 

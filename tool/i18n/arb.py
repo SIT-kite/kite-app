@@ -10,13 +10,11 @@ class ArbFile:
     path: str
     plist: PairList
     pmap: PairMap
-    re: PairList
 
     def __init__(self, path: str, plist: PairList, pmap: PairMap):
         self.path = path
         self.plist = plist
         self.pmap = pmap
-        self.re = []
 
     def split(self) -> tuple[str, str]:
         return ntpath.split(self.path)
@@ -83,13 +81,7 @@ def load_all_arb_in(
     return all_arb
 
 
-def save_flatten_plist(arb: ArbFile, indent=2, keep_unmatched_meta=False):
+def save_flatten(arb: ArbFile, indent=2, keep_unmatched_meta=False):
     ordered = flatten_pairs(arb.plist, keep_unmatched_meta)
-    content = json.dumps(ordered, ensure_ascii=False, indent=indent)
-    write_fi(arb.path, content)
-
-
-def save_flatten_re(arb: ArbFile, indent=2, keep_unmatched_meta=False):
-    ordered = flatten_pairs(arb.re, keep_unmatched_meta)
     content = json.dumps(ordered, ensure_ascii=False, indent=indent)
     write_fi(arb.path, content)

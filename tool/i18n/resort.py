@@ -60,13 +60,22 @@ def do_tags_sort(plist: PairList, pmap: PairMap) -> PairList:
     return sorted(plist, key=lambda pr: tags.sum_weight(pr.tags), reverse=True)
 
 
+Alphabetical = "alphabetical"
+Aalphabetical = "-alphabetical"
+Lexicographical = "lexicographical"
+Tags = "tags"
 methods: dict[str, ResortMethod] = {
-    "alphabetical": lambda li, mp: do_alphabetically_sort(li, mp, reverse=False),
-    "-alphabetical": lambda li, mp: do_alphabetically_sort(li, mp, reverse=True),
-    "lexicographical": do_lexicographical_sort,
-    "tags": do_tags_sort,
+    Alphabetical: lambda li, mp: do_alphabetically_sort(li, mp, reverse=False),
+    Aalphabetical: lambda li, mp: do_alphabetically_sort(li, mp, reverse=True),
+    Lexicographical: do_lexicographical_sort,
+    Tags: do_tags_sort,
 }
-
+id2methods: dict[int, str] = {
+    0: Alphabetical,
+    1: Aalphabetical,
+    2: Lexicographical,
+    3: Tags,
+}
 
 def wrapper(args):
     paras = split_para(args)

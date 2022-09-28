@@ -34,7 +34,7 @@ def rearrange(l10n_dir: str, prefix: str, template_suffix: str, indent=2, keep_u
     others_path = collect_others(l10n_dir, prefix, template_fullname)
     template_path = ntpath.join(l10n_dir, template_fullname)
     tplist, tpmap = load_arb(path=template_path)
-    rearrange_others(others_path, tplist, indent, keep_unmatched_meta, fill_blank)
+    rearrange_others_saved_re(others_path, tplist, indent, keep_unmatched_meta, fill_blank)
 
 
 def collect_others(l10n_dir: str, prefix: str = "app", template: str = "app_en.arb") -> list[str]:
@@ -53,36 +53,42 @@ def collect_others(l10n_dir: str, prefix: str = "app", template: str = "app_en.a
     return others_path
 
 
-def rearrange_other(
-        other_path: str, template_plist: PairList,
-        indent=2, keep_unmatched_meta=False, fill_blank=False
-):
-    arb = load_arb_from(path=other_path)
-    for tp in template_plist:
-        key = tp.key
-        if key in arb.pmap:
-            arb.re.append(arb.pmap[key])
-        else:
-            if fill_blank:
-                arb.re.append(Pair(key, value=""))
-    save_flatten_re(arb, indent, keep_unmatched_meta)
+def rearrange_others(arbs: list[ArbFile], template: ArbFile, fill_blank=False):
+    """
+    rearrange in place
+    """
+    for arb in arbs:
+        new_plist = []
+        for tp in template.plist:
+            key = tp.key
+            if key in arb.pmap:
+                new_plist.append(arb.pmap[key])
+            else:
+                if fill_blank:
+                    p = Pair(key, value="")
+                    arb.pmap[key] = p
+                    new_plist.append(p)
+        arb.plist = new_plist
 
 
-def rearrange_others(
+def rearrange_others_saved_re(
         others_path: list[str], template_plist: PairList,
         indent=2, keep_unmatched_meta=False, fill_blank=False
 ):
     others_arb = []
     for other_path in others_path:
-        arb = load_arb_from(path=other_path)
-        others_arb.append(arb)
-    for tp in template_plist:
-        key = tp.key
-        for arb in others_arb:
+        others_arb.append(load_arb_from(path=other_path))
+    for arb in others_arb:
+        new_plist = []
+        for tp in template_plist:
+            key = tp.key
             if key in arb.pmap:
-                arb.re.append(arb.pmap[key])
+                new_plist.append(arb.pmap[key])
             else:
                 if fill_blank:
-                    arb.re.append(Pair(key, value=""))
+                    p = Pair(key, value="")
+                    arb.pmap[key] = p
+                    new_plist.append(p)
+        arb.plist = new_plist
     for arb in others_arb:
-        save_flatten_re(arb, indent, keep_unmatched_meta)
+        save_flatten(arb, indent, keep_unmatched_meta)

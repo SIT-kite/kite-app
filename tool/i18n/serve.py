@@ -38,7 +38,7 @@ def serve(l10n_dir: str, prefix: str, template_suffix: str, indent=2, keep_unmat
                 tplist, tpmap = load_arb(path=template_path)
                 if is_key_changed(last_plist, tplist):
                     last_plist = tplist
-                    re.rearrange_others(others_path, tplist, indent, keep_unmatched_meta, fill_blank)
+                    re.rearrange_others_saved_re(others_path, tplist, indent, keep_unmatched_meta, fill_blank)
                     print(f"[{datetime.now()}] refreshed.")
             except:
                 pass

@@ -146,9 +146,9 @@ class SettingPage extends StatelessWidget {
   void _onClearStorage(BuildContext context) {
     context.showFlashDialog(
         constraints: const BoxConstraints(maxWidth: 300),
-        title: i18n.wipeKiteDataSettings.txt,
+        title: i18n.settingsWipeKiteData.txt,
         // TODO: Dedicated descriptions for mobile and desktop.
-        content: i18n.wipeKiteDataSettingsDesc.txt,
+        content: i18n.settingsWipeKiteDataDesc.txt,
         negativeActionBuilder: _negativeActionBuilderCancel,
         positiveActionBuilder: (context, controller, _) {
           return TextButton(
@@ -173,8 +173,8 @@ class SettingPage extends StatelessWidget {
       curLocale = savedLocale;
     }
     return DropDownSettingsTile<Locale>(
-      title: i18n.language,
-      subtitle: i18n.languagePrefDropDownSubtitle,
+      title: i18n.settingsLanguage,
+      subtitle: i18n.settingsLanguageSub,
       leading: const Icon(Icons.translate_rounded),
       settingKey: PrefKey.locale,
       values: {
@@ -199,7 +199,7 @@ class SettingPage extends StatelessWidget {
         title: i18n.personalizeTitle,
         children: <Widget>[
           ColorPickerSettingsTile(
-            title: i18n.themeColorSettings,
+            title: i18n.settingsThemeColor,
             leading: const Icon(Icons.palette_outlined),
             settingKey: ThemeKeys.themeColor,
             defaultValue: KvStorageInitializer.theme.color,
@@ -212,8 +212,8 @@ class SettingPage extends StatelessWidget {
           SwitchSettingsTile(
             settingKey: ThemeKeys.isDarkMode,
             defaultValue: KvStorageInitializer.theme.isDarkMode,
-            title: i18n.darkModeSettings,
-            subtitle: i18n.darkModeSettingsSubtitle,
+            title: i18n.settingsDarkMode,
+            subtitle: i18n.settingsDarkModeSub,
             leading: const Icon(Icons.dark_mode),
             onChange: (value) => DynamicColorTheme.of(context).setIsDark(isDark: value, shouldSave: false),
           ),
@@ -224,7 +224,7 @@ class SettingPage extends StatelessWidget {
         title: i18n.homepage,
         children: <Widget>[
           RadioSettingsTile<int>(
-            title: i18n.homepageBgModeSettings,
+            title: i18n.settingsHomepageWallpaperMode,
             settingKey: HomeKeyKeys.backgroundMode,
             values: <int, String>{
               1: i18n.realtimeWeather,
@@ -237,8 +237,8 @@ class SettingPage extends StatelessWidget {
             },
           ),
           DropDownSettingsTile<int>(
-            title: i18n.campus,
-            subtitle: i18n.campusDropDownSettingsSubtitle,
+            title: i18n.settingsCampus,
+            subtitle: i18n.settingsCampusSub,
             leading: const Icon(Icons.location_on),
             settingKey: HomeKeyKeys.campus,
             values: <int, String>{
@@ -252,14 +252,14 @@ class SettingPage extends StatelessWidget {
             },
           ),
           SimpleSettingsTile(
-              title: i18n.backgroundPictureSettings,
-              subtitle: i18n.backgroundPictureSettingsSubtitle,
+              title: i18n.settingsWallpaper,
+              subtitle: i18n.settingsWallpaperSub,
               leading: const Icon(Icons.photo_size_select_actual_outlined),
               onTap: _onChangeBgImage),
           if (!isFreshman)
             SimpleSettingsTile(
-              title: i18n.functionRearrangementSettings,
-              subtitle: i18n.functionRearrangementSettingsSubtitle,
+              title: i18n.settingsFuncRearrange,
+              subtitle: i18n.settingsFuncRearrangeSub,
               leading: const Icon(Icons.menu),
               onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeSettingPage())),
             ),
@@ -269,8 +269,8 @@ class SettingPage extends StatelessWidget {
         SwitchSettingsTile(
           settingKey: '/network/useProxy',
           defaultValue: KvStorageInitializer.network.useProxy,
-          title: i18n.enableHttpProxySwitch,
-          subtitle: i18n.enableHttpProxySwitchSubtitle,
+          title: i18n.settingsHttpProxy,
+          subtitle: i18n.settingsHttpProxySub,
           leading: const Icon(Icons.vpn_key),
           onChange: (value) async {
             KvStorageInitializer.network.useProxy = value;
@@ -278,7 +278,7 @@ class SettingPage extends StatelessWidget {
           },
           childrenIfEnabled: [
             TextInputSettingsTile(
-              title: i18n.proxyAddressSettings,
+              title: i18n.settingsProxyAddress,
               settingKey: '/network/proxy',
               initialValue: KvStorageInitializer.network.proxy,
               validator: proxyValidator,
@@ -290,8 +290,8 @@ class SettingPage extends StatelessWidget {
               },
             ),
             SimpleSettingsTile(
-                title: i18n.testConnectivity2School,
-                subtitle: i18n.testConnectivity2SchoolSubtitle,
+                title: i18n.settingsTestConnect2School,
+                subtitle: i18n.settingsTestConnect2SchoolSub,
                 onTap: () {
                   Navigator.pushNamed(context, '/connectivity');
                 }),
@@ -318,8 +318,8 @@ class SettingPage extends StatelessWidget {
             ),
           if (!isFreshman)
             ModalSettingsTile(
-              title: i18n.changeOaPwdSettings,
-              subtitle: i18n.changeOaPwdSettingsSubtitle,
+              title: i18n.settingsChangeOaPwd,
+              subtitle: i18n.settingsChangeOaPwdSub,
               leading: const Icon(Icons.lock),
               showConfirmation: true,
               onConfirm: () {
@@ -335,13 +335,13 @@ class SettingPage extends StatelessWidget {
             ),
           if (!isFreshman)
             SimpleSettingsTile(
-                title: i18n.testLoginKiteSettings,
-                subtitle: i18n.testLoginKiteSettingsSubtitle,
+                title: i18n.settingsTestLoginKite,
+                subtitle: i18n.settingsTestLoginKiteSub,
                 leading: const Icon(Icons.login_rounded),
                 onTap: () => _testPassword(context)),
           SimpleSettingsTile(
-              title: i18n.logoutKiteSettings,
-              subtitle: i18n.logoutKiteSettingsSubtitle,
+              title: i18n.settingsLogoutKite,
+              subtitle: i18n.settingsLogoutKiteSub,
               leading: const Icon(Icons.logout_rounded),
               onTap: () => _onLogout(context)),
         ],
@@ -349,9 +349,9 @@ class SettingPage extends StatelessWidget {
       // Data Management
       SettingsGroup(title: i18n.dataManagement, children: <Widget>[
         SimpleSettingsTile(
-            title: i18n.wipeKiteDataSettings,
+            title: i18n.settingsWipeKiteData,
             leading: const Icon(Icons.remove_circle),
-            subtitle: i18n.wipeKiteDataSettingsSubtitle,
+            subtitle: i18n.settingsWipeKiteDataSub,
             onTap: () => _onClearStorage(context)),
       ]),
       // TODO: Remove this
@@ -372,15 +372,15 @@ class SettingPage extends StatelessWidget {
           SwitchSettingsTile(
               settingKey: DevelopOptionsKeys.showErrorInfoDialog,
               defaultValue: KvStorageInitializer.developOptions.showErrorInfoDialog ?? false,
-              title: i18n.detailedExceptionDialogSettings,
-              subtitle: i18n.detailedExceptionDialogSettingsSubtitle,
+              title: i18n.settingsDetailedXcpDialog,
+              subtitle: i18n.settingsDetailedXcpDialogSub,
               leading: const Icon(Icons.info),
               onChange: (value) {
                 KvStorageInitializer.developOptions.showErrorInfoDialog = value;
               }),
           SimpleSettingsTile(
-            title: i18n.localStorageSettings,
-            subtitle: i18n.localStorageSettingsSubtitle,
+            title: i18n.settingsLocalStorage,
+            subtitle: i18n.settingsLocalStorageSub,
             leading: const Icon(Icons.storage),
             onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const DebugStoragePage())),
           )

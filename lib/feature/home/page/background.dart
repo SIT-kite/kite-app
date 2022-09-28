@@ -83,7 +83,7 @@ class _HomeBackgroundState extends State<HomeBackground> {
 
   void _onBackgroundUpdate(_) {
     if (KvStorageInitializer.home.background == null) {
-      showBasicFlash(context, i18n.backgroundSettingIsEmptyWarn.txt);
+      showBasicFlash(context, i18n.settingsWallpaperEmptyWarn.txt);
       return;
     }
     setState(() {});
@@ -121,7 +121,7 @@ class _HomeBackgroundState extends State<HomeBackground> {
       } else {
         Future.delayed(
           Duration.zero,
-          () => showBasicFlash(context, i18n.backgroundSettingIsEmptyWarn.txt),
+          () => showBasicFlash(context, i18n.settingsWallpaperEmptyWarn.txt),
         );
       }
     }
