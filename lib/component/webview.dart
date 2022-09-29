@@ -140,13 +140,13 @@ class _MyWebViewState extends State<MyWebView> {
     // 同步获取js代码
     if (injectJsRule.javascript != null) {
       Log.info('执行了js注入');
-      controller.runJavascript(injectJsRule.javascript!);
+      await controller.runJavascript(injectJsRule.javascript!);
     }
     // 异步获取js代码
     if (injectJsRule.asyncJavascript != null) {
       String? js = await injectJsRule.asyncJavascript;
       if (js != null) {
-        controller.runJavascript(js);
+        await controller.runJavascript(js);
       }
     }
   }

@@ -16,7 +16,7 @@ class FunctionOverrideInitializer {
       serviceDao: FunctionOverrideService(kiteSession),
       storageDao: storageDao,
     );*/
-    // TODO: For development
+    // TODO: Temporarily disabled for I18n development
     cachedService = FunctionOverrideDisabled();
     // cachedService = FunctionOverrideMock();
   }

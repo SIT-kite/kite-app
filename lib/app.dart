@@ -30,12 +30,10 @@ import 'package:kite/util/user.dart';
 
 import 'abstract/route.dart';
 import 'feature/override/entity.dart';
-import 'feature/page_index.dart';
 import 'global/global.dart';
 import 'storage/init.dart';
 import 'util/logger.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'r.dart';
 
 class KiteApp extends StatefulWidget {
   const KiteApp({Key? key}) : super(key: key);
@@ -98,20 +96,26 @@ class _KiteAppState extends State<KiteApp> {
   Widget build(BuildContext context) {
     final isDark = KvStorageInitializer.theme.isDarkMode;
     final primaryColor = KvStorageInitializer.theme.color;
-    final home = AccountUtils.getUserType() != null ? const HomePage() : const WelcomePage();
 
     // refresh override route
     Global.eventBus.on(EventNameConstants.onRouteRefresh, (arg) {
-      routeGenerator = DefaultRouteWithOverride(
-        defaultRoute: defaultRouteTable,
-        overrideItems: arg! as List<RouteOverrideItem>,
+      final FunctionOverrideInfo overrideInfo = arg! as FunctionOverrideInfo;
+      // 路由公告
+      routeGenerator = RouteWithNoticeDialog(
+        Catcher.navigatorKey!.currentContext!,
+        routeNotice: overrideInfo.routeNotice,
+        // 路由覆盖
+        routeGenerator: DefaultRouteWithOverride(
+          defaultRoute: defaultRouteTable, // 静态路由
+          overrideItems: overrideInfo.routeOverride,
+        ),
       );
     });
     buildMaterialWithTheme(ThemeData theme) {
       return MaterialApp(
         title: R.appName,
         theme: theme,
-        home: home,
+        initialRoute: AccountUtils.getUserType() != null ? RouteTable.home : RouteTable.welcome,
         debugShowCheckedModeBanner: false,
         navigatorKey: Catcher.navigatorKey,
         onGenerateRoute: _onGenerateRoute,

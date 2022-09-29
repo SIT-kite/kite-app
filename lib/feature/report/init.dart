@@ -18,6 +18,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/storage/init.dart';
 import 'package:kite/util/hive_register_adapter.dart';
 
 import '../../session/report_session.dart';
@@ -33,7 +34,10 @@ class ReportInitializer {
     required Dio dio,
   }) {
     registerAdapter(ReportHistoryAdapter());
-    session = ReportSession(dio: dio);
+    session = ReportSession(
+      dio: dio,
+      username: KvStorageInitializer.auth.currentUsername,
+    );
     reportService = ReportService(session);
   }
 }

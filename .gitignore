@@ -161,3 +161,4 @@ generated_plugin*
 # 过滤构建脚本生成的配置文件
 build.cfg
 
+dist/

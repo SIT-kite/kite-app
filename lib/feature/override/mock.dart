@@ -1,20 +1,13 @@
-import 'dart:convert';
-
 import 'package:kite/feature/override/entity.dart';
 
 import 'interface.dart';
 
-const _json = """
-{
+const _json = {
   "routeOverride": [
     {
       "inputRoute": "/timetable",
       "outputRoute": "/browser",
-      "args": {
-        "initialUrl": "https://www.xxx.com",
-        "fixedTitle": "HellasoWorld",
-        "showSharedButton": true
-      }
+      "args": {"initialUrl": "https://www.xxx.com", "fixedTitle": "HellasoWorld", "showSharedButton": true}
     }
   ],
   "extraHomeItem": [
@@ -34,15 +27,25 @@ const _json = """
       "nameList": ["switchAccount", "switchAccount"],
       "userTypeList": ["undergraduate", "postgraduate"]
     }
-  ]
-}
-
-""";
+  ],
+  "routeNotice": {
+    "/egg": {
+      "id": 1,
+      "title": "Egg维护中",
+      "msg": "Egg维护中，可能无法正常使用",
+    },
+    "/notice": {
+      "id": 2,
+      "title": "公告维护中",
+      "msg": "公告维护中，可能无法正常使用",
+    }
+  }
+};
 
 class FunctionOverrideMock implements FunctionOverrideServiceDao {
   @override
   Future<FunctionOverrideInfo> get() async {
-    return FunctionOverrideInfo.fromJson(jsonDecode(_json));
+    return FunctionOverrideInfo.fromJson(_json);
   }
 }
 

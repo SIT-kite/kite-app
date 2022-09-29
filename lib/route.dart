@@ -20,6 +20,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:kite/feature/board/page/index.dart';
 import 'package:kite/feature/freshman/page/login.dart';
 import 'package:kite/feature/override/entity.dart';
+import 'package:kite/storage/init.dart';
+import 'package:kite/util/alert_dialog.dart';
 
 import 'abstract/route.dart';
 import 'feature/electricity/page/index.dart';
@@ -135,8 +137,7 @@ final defaultRouteTable = StaticRouteTable(
       );
     },
     RouteTable.freshman: (context, args) => FreshmanPage(),
-    RouteTable.freshmanAnalysis: (context, args) =>
-        const FreshmanAnalysisPage(),
+    RouteTable.freshmanAnalysis: (context, args) => const FreshmanAnalysisPage(),
     RouteTable.freshmanLogin: (context, args) => const FreshmanLoginPage(),
     RouteTable.freshmanUpdate: (context, args) => const FreshmanUpdatePage(),
     RouteTable.freshmanFriend: (context, args) => const FreshmanFriendPage(),
@@ -169,8 +170,7 @@ class DefaultRouteWithOverride implements IRouteGenerator {
   }
 
   @override
-  WidgetBuilder onGenerateRoute(
-      String routeName, Map<String, dynamic> arguments) {
+  WidgetBuilder onGenerateRoute(String routeName, Map<String, dynamic> arguments) {
     if (!indexedOverrideItems.containsKey(routeName)) {
       // No override
       return defaultRoute.onGenerateRoute(routeName, arguments);
@@ -178,9 +178,45 @@ class DefaultRouteWithOverride implements IRouteGenerator {
     // override
     final newRouteItem = indexedOverrideItems[routeName]!;
     if (defaultRoute.accept(newRouteItem.outputRoute)) {
-      return defaultRoute.onGenerateRoute(
-          newRouteItem.outputRoute, newRouteItem.args);
+      return defaultRoute.onGenerateRoute(newRouteItem.outputRoute, newRouteItem.args);
     }
     return (context) => NotFoundPage(newRouteItem.outputRoute);
+  }
+}
+
+class RouteWithNoticeDialog implements IRouteGenerator {
+  final IRouteGenerator routeGenerator;
+  final Map<String, RouteNotice> routeNotice;
+  final BuildContext context;
+  RouteWithNoticeDialog(
+    this.context, {
+    required this.routeGenerator,
+    this.routeNotice = const {},
+  });
+
+  @override
+  bool accept(String routeName) => routeGenerator.accept(routeName);
+
+  @override
+  WidgetBuilder onGenerateRoute(String routeName, Map<String, dynamic> arguments) {
+    if (routeNotice.containsKey(routeName)) {
+      final notice = routeNotice[routeName]!;
+      Future.delayed(Duration.zero, () async {
+        final overrideDb = KvStorageInitializer.override;
+        final confirmedRouteNotice = overrideDb.confirmedRouteNotice ?? [];
+        if (confirmedRouteNotice.contains(notice.id)) return;
+        final select = await showAlertDialog(
+          context,
+          title: notice.title,
+          content: Text(notice.msg),
+          actionTextList: ['我已收到'],
+        );
+        if (select == 0) {
+          confirmedRouteNotice.add(notice.id);
+          overrideDb.confirmedRouteNotice = confirmedRouteNotice;
+        }
+      });
+    }
+    return routeGenerator.onGenerateRoute(routeName, arguments);
   }
 }

@@ -28,23 +28,26 @@ class ReportService extends AService implements ReportDao {
 
   @override
   Future<List<ReportHistory>> getHistoryList(String userId) async {
-    final payload = '{"usercode":"$userId","batchno":""}'; // TODO：batchno 填入今天日期？yyyyMMdd
     final response = await session.request(
       _historyUrl,
       RequestMethod.post,
-      data: payload,
+      data: {
+        'usercode': userId,
+        'batchno': '', // TODO：batchno 填入今天日期？yyyyMMdd
+      },
       options: MyOptions(
         contentType: HeaderConstants.jsonContentType,
         responseType: MyResponseType.json,
       ),
     );
 
-    final Map<String, dynamic> respondedData = response.data;
-    if (respondedData['code'] == 0) {
-      final List userHistory = respondedData['data'];
+    final Map<String, dynamic> data = response.data;
+    final responseCode = data['code'];
+    if (responseCode == 0) {
+      final List userHistory = data['data'];
       return userHistory.map((e) => ReportHistory.fromJson(e as Map<String, dynamic>)).toList();
     }
-    throw Exception('(${respondedData['code']}) ${respondedData['msg']}');
+    throw Exception('($responseCode) ${data['msg']}');
   }
 
   @override
