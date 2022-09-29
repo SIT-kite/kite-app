@@ -17,6 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/l10n/extension.dart';
 
 import '../../common/entity/index.dart';
 import '../entity/score.dart';
@@ -51,7 +52,7 @@ class _GpaBannerState extends State<GpaBanner> {
   }
 
   String _getType() {
-    return (widget._semester == Semester.all) ? '学年' : '学期';
+    return (widget._semester == Semester.all) ? i18n.academicYear : i18n.academicYear;
   }
 
   void _onSelectCourse(Score? score) {
@@ -74,7 +75,7 @@ class _GpaBannerState extends State<GpaBanner> {
       return Container(
         padding: const EdgeInsets.all(10),
         color: const Color(0xFFffe599),
-        child: Text('已选 ${_selectedSet.length} 门 绩点 ${gpa.toStringAsPrecision(2)}', softWrap: true),
+        child: Text(i18n.gpaSelectedAndTotalLabel(_selectedSet.length, gpa.toStringAsPrecision(2)), softWrap: true),
       );
     } else {
       final type = _getType();
@@ -83,7 +84,7 @@ class _GpaBannerState extends State<GpaBanner> {
       return Container(
         padding: const EdgeInsets.all(10),
         color: const Color(0xFFffe599),
-        child: Text('$type绩点 ${gpa.isNaN ? 0.00 : gpa.toStringAsPrecision(2)}', softWrap: true),
+        child: Text(i18n.gpaPointLabel(type, gpa.isNaN ? "0.00" : gpa.toStringAsPrecision(2)), softWrap: true),
       );
     }
   }

@@ -66,10 +66,10 @@ class LoginResult {
 
 class Network {
   static const _indexUrl = 'http://172.16.8.70';
-  static const _drcomUrl = _indexUrl + '/drcom';
-  static const _loginUrl = _drcomUrl + '/login';
-  static const _checkStatusUrl = _drcomUrl + '/chkstatus';
-  static const _logoutUrl = _drcomUrl + '/logout';
+  static const _drcomUrl = '$_indexUrl/drcom';
+  static const _loginUrl = '$_drcomUrl/login';
+  static const _checkStatusUrl = '$_drcomUrl/chkstatus';
+  static const _logoutUrl = '$_drcomUrl/logout';
 
   static Future<Map<String, dynamic>> _get(String url, {Map<String, dynamic>? queryParameters}) async {
     var response = await Dio().get(

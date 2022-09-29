@@ -17,13 +17,15 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/component/webview_page.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/util/cookie_util.dart';
 
 import '../../init.dart';
 import '../entity/evaluation.dart';
 
 const _evaluationPageUrl = 'http://jwxt.sit.edu.cn/jwglxt/xspjgl/xspj_cxXspjDisplay.html?gnmkdm=N401605';
-
+/// REAL. THE PAYLOAD IS IN PINYIN. DONT BLAME ANYONE BUT THE SCHOOL.
+/// More reading: https://github.com/sunnysab/zf-tools/blob/master/TRANSLATION.md
 class EvaluationPage extends StatefulWidget {
   final List<CourseToEvaluate> coursesToEvaluate;
 
@@ -53,7 +55,7 @@ class _EvaluationPageState extends State<EvaluationPage> {
     final coursesToEvaluate = widget.coursesToEvaluate;
     return SimpleWebViewPage(
       initialUrl: _evaluationPageUrl,
-      fixedTitle: '评教',
+      fixedTitle: i18n.teacherEvalTitle,
       initialAsyncCookies: EduInitializer.cookieJar.loadAsWebViewCookie(
         Uri.parse('http://jwxt.sit.edu.cn/jwglxt/'),
       ),

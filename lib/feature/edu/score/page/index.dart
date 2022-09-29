@@ -19,6 +19,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/feature/edu/score/init.dart';
+import 'package:kite/feature/home/entity/home.dart';
+import 'package:kite/l10n/extension.dart';
+import 'package:kite/util/dsl.dart';
 
 import '../../common/entity/index.dart';
 import '../../util/selector.dart';
@@ -91,10 +94,11 @@ class _ScorePageState extends State<ScorePage> {
         Container(
           child: _notFoundPicture,
         ),
-        const Text('暂时还没有成绩', style: TextStyle(color: Colors.grey)),
+        Text(i18n.examResultNoResult, style: const TextStyle(color: Colors.grey)),
         Container(
           margin: const EdgeInsets.only(left: 40, right: 40),
-          child: const Text('过会儿再来吧！', textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),
+          child: Text(i18n.examResultBePatientLabel,
+              textAlign: TextAlign.center, style: const TextStyle(color: Colors.grey)),
         ),
       ],
     );
@@ -119,7 +123,7 @@ class _ScorePageState extends State<ScorePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('成绩查询'),
+        title: FunctionType.exam.localized().txt,
       ),
       body: _buildBody(),
     );

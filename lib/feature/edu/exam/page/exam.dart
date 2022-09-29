@@ -21,6 +21,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
+import 'package:kite/feature/home/entity/home.dart';
+import 'package:kite/l10n/extension.dart';
+import 'package:kite/util/dsl.dart';
 
 import '../../common/entity/index.dart';
 import '../../util/selector.dart';
@@ -91,11 +94,11 @@ class _ExamPageState extends State<ExamPage> {
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           columnWidths: const {0: FlexColumnWidth(4), 1: FlexColumnWidth(5)},
           children: [
-            buildRow('timetable/campus.png', '考试地点', place),
-            buildRow('timetable/courseId.png', '座位号', '$seatNumber'),
-            buildRow('timetable/day.png', '开始时间', strStartTime),
-            buildRow('timetable/day.png', '结束时间', strEndTime),
-            buildRow('', '是否重修', isSecondExam),
+            buildRow('timetable/campus.png', i18n.examLocation, place),
+            buildRow('timetable/courseId.png', i18n.examSeatNumber, '$seatNumber'),
+            buildRow('timetable/day.png', i18n.examStartTime, strStartTime),
+            buildRow('timetable/day.png', i18n.examEndTime, strEndTime),
+            buildRow('', i18n.examIsRetake, isSecondExam),
           ],
         )
       ],
@@ -113,7 +116,7 @@ class _ExamPageState extends State<ExamPage> {
             width: 260,
             height: 260,
           ),
-          const Text('该学期暂无考试', style: TextStyle(color: Colors.grey)),
+          Text(i18n.examNoExamThisSemester, style: const TextStyle(color: Colors.grey)),
         ],
       );
     }
@@ -150,7 +153,7 @@ class _ExamPageState extends State<ExamPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('考试安排')),
+      appBar: AppBar(title: FunctionType.exam.localized().txt),
       body: Column(
         children: [
           buildSemesterSelector(),

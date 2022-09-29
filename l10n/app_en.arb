@@ -1,5 +1,6 @@
 {
   "about": "About",
+  "academicYear": "Academic Year",
   "acceptedAgreementCheckbox": "I have known and accepted",
   "account": "Account",
   "activityCreation": "Creation",
@@ -12,6 +13,7 @@
   "activityVoluntary": "Voluntary",
   "addInfoRequest": "Would like you add personal information to display?",
   "addInfoTitle": "Add Info",
+  "address": "Address",
   "allowOthersFindMeCheckbox": "Allow others to find me",
   "applicationDesc": "This function is based on \"上应一网通办\".\n For most of types, you have to do the necessary procedure on the spot although you submitted an application online.",
   "author": "Author",
@@ -46,6 +48,10 @@
   },
   "city": "City",
   "classmate": "Classmate",
+  "connectivityConnectFailedError": "Unable to connect to campus network. Troubleshooting:\n1. Attempt to connect to the school's hotspots, \"i-SIT\",\"i-SIT-1x\" or \"eduroam\"\n.2. Attempt to launch \"EasyConnect\" VPN to connect to School.\n3. Attempt to use a self-built proxy server to connect to campus network via Http proxy\nIf they all didn't work, it's probably due to school server downtime for maintenance or even crash, please try again later.",
+  "connectivityConnectedByProxy": "Connected to campus network by Http proxy.",
+  "connectivityConnectedByVpn": "Connected to campus network by VPN.",
+  "connectivityConnectedByWlan": "Connected to campus network by WLAN.",
   "continue_": "Continue",
   "counselor": "Counselor",
   "counselorPhoneNumber": "Counselor Phone Number",
@@ -127,6 +133,7 @@
     }
   },
   "downloadCompleted": "Download Completed",
+  "downloadEasyConnectBtn": "Download EasyConnect",
   "downloading": "Downloading",
   "draft": "Draft",
   "electricityBillContent": "last {balance}￥ Room {room}",
@@ -140,6 +147,14 @@
       }
     }
   },
+  "examEndTime": "Ent Time",
+  "examIsRetake": "Is Retake",
+  "examLocation": "Location",
+  "examNoExamThisSemester": "No exams this semester",
+  "examResultBePatientLabel": "Please be patient :)",
+  "examResultNoResult": "No result record",
+  "examSeatNumber": "Seat No.",
+  "examStartTime": "Start Time",
   "expenseTrackerContent": "{amount}￥ {place}",
   "@expenseTrackerContent": {
     "placeholders": {
@@ -159,6 +174,7 @@
   "female": "Female",
   "fengxian": "Fengxian",
   "fengxianDistrict": "Fengxian District",
+  "fetching": "Fetching",
   "filter": "Filter",
   "freshman": "Freshman",
   "freshmanLoginAccountHint": "Student ID/Full Name/Examinee Number",
@@ -216,9 +232,31 @@
   "fullName": "Full Name",
   "gender": "Gender",
   "go": "Go",
-  "greetingHeaderEnableIncrement": "n",
+  "gpaPointLabel": "Point of {type}: {point}",
+  "@gpaPointLabel": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      },
+      "point": {
+        "type": "String"
+      }
+    }
+  },
+  "gpaSelectedAndTotalLabel": "Selected: {count}, point: {point}",
+  "@gpaSelectedAndTotalLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "point": {
+        "type": "String"
+      }
+    }
+  },
   "greetingHeader0L1": "Welcome! Have a nice day",
   "greetingHeader0L2": "At SIT",
+  "greetingHeaderEnableIncrement": "n",
   "greetingHeaderL1": "SIT has accompanied you",
   "@greetingHeaderL1": {
     "description": "The first line of greeting header"
@@ -247,6 +285,7 @@
   "language_zh": "中文(简体)",
   "language_zh_TW": "中文(繁體)",
   "lastOnlineTime": "Last Online",
+  "launchEasyConnectBtn": "Launch EasyConnect",
   "libraryAccountManagementBtnTip": "Library account management is coming soon...",
   "libraryNoticeLabel": "There is a notice from the library.",
   "libraryNoticeSendTime": "Send Time",
@@ -270,6 +309,7 @@
   "noLocationLabel": "No location",
   "noOnlineRecords": "No online records",
   "noTitle": "No title",
+  "notLoggedIn": "Not Logged In",
   "notNow": "Not Now",
   "numberOfPeopleBesidesMe": "Number of people besides me",
   "oaAnnouncementAttachmentTip": "{count,plural, =1{Attachment} other{Attachments}",
@@ -287,6 +327,7 @@
   "@open": {
     "description": "Open a file"
   },
+  "openWlanSettingsBtn": "Open WLAN settings",
   "personalInfoDescLabel": "The information on this page would show your roommates and classmate. It's convenient to make friends or create chat rooms.",
   "personalInfoSettingBtnTooltip": "Set Personal Info",
   "personalInfoTitle": "Personal Info",
@@ -330,6 +371,7 @@
   "restartRequest": "Would you like to restart Kite now?",
   "restartRequestTitle": "Restart?",
   "roommate": "Roommate",
+  "semester": "Semester",
   "settings": "Settings",
   "settingsCampus": "Your Campus",
   "settingsCampusSub": "To display the weather",
@@ -368,6 +410,7 @@
   "studentIdCopy2ClipboardTip": "Your student ID is copied.",
   "studentInfoTitle": "Admission Info",
   "studentLoginFailedWarn": "Login failed",
+  "teacherEvalTitle": "Teacher Evaluation",
   "tel": "TEL.",
   "unfilled": "Unfilled",
   "unknown": "Unknown",
@@ -391,15 +434,5 @@
   "wechat": "Wechat",
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
-  "yes": "Yes",
-  "connectivityConnectedByProxy": "Connected to campus network by Http proxy.",
-  "connectivityConnectedByVpn": "Connected to campus network by VPN.",
-  "address": "Address",
-  "fetching": "Fetching",
-  "notLoggedIn": "Not Logged In",
-  "connectivityConnectedByWlan": "Connected to campus network by WLAN.",
-  "connectivityConnectFailedError": "Unable to connect to campus network. Troubleshooting:\n1. Attempt to connect to the school's hotspots, \"i-SIT\",\"i-SIT-1x\" or \"eduroam\"\n.2. Attempt to launch \"EasyConnect\" VPN to connect to School.\n3. Attempt to use a self-built proxy server to connect to campus network via Http proxy\nIf they all didn't work, it's probably due to school server downtime for maintenance or even crash, please try again later.",
-  "openWlanSettingsBtn": "Open WLAN settings",
-  "launchEasyConnectBtn": "Launch EasyConnect",
-  "downloadEasyConnectBtn": "Download EasyConnect"
+  "yes": "Yes"
 }

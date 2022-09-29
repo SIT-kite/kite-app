@@ -18,7 +18,8 @@
 import 'package:json_annotation/json_annotation.dart';
 
 part 'evaluation.g.dart';
-
+/// REAL. THE PAYLOAD IS IN PINYIN. DONT BLAME ANYONE BUT THE SCHOOL.
+/// More reading: https://github.com/sunnysab/zf-tools/blob/master/TRANSLATION.md
 @JsonSerializable()
 class CourseToEvaluate {
   /// 老师姓名

@@ -23,7 +23,8 @@ import '../../common/entity/index.dart';
 import '../../util/convert_util.dart';
 import '../dao/exam.dart';
 import '../entity/exam.dart';
-
+/// REAL. THE PAYLOAD IS IN PINYIN. DONT BLAME ANYONE BUT THE SCHOOL.
+/// More reading: https://github.com/sunnysab/zf-tools/blob/master/TRANSLATION.md
 class ExamService extends AService implements ExamDao {
   static const _examRoomUrl = 'http://jwxt.sit.edu.cn/jwglxt/kwgl/kscx_cxXsksxxIndex.html';
 
