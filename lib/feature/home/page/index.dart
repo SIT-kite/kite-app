@@ -130,6 +130,8 @@ class _HomePageState extends State<HomePage> {
 
     // 下拉也要更新一下天气 :D
     _updateWeather();
+
+    // TODO 未设置缓存策略，暂时先直接清空缓存
     KvStorageInitializer.override.cache = null;
     FunctionOverrideInitializer.cachedService.get().then((value) {
       Global.eventBus.emit(
