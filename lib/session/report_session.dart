@@ -20,15 +20,16 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:kite/abstract/abstract_session.dart';
-import 'package:kite/storage/init.dart';
 
 import 'dio_common.dart';
 
 class ReportSession extends ISession {
   final Dio dio;
+  String? username;
 
   ReportSession({
     required this.dio,
+    this.username,
   });
 
   /// 获取当前以毫秒为单位的时间戳.
@@ -55,7 +56,7 @@ class ReportSession extends ISession {
 
     // Make default options.
     final String ts = _getTimestamp();
-    final String sign = _sign(KvStorageInitializer.auth.currentUsername ?? '', ts);
+    final String sign = _sign(username ?? '', ts);
     final Map<String, dynamic> newHeaders = {'ts': ts, 'decodes': sign};
 
     newOptions.headers == null ? newOptions.headers = newHeaders : newOptions.headers?.addAll(newHeaders);
