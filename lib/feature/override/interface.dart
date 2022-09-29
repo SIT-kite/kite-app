@@ -1,7 +1,7 @@
 import 'entity.dart';
 
 abstract class FunctionOverrideStorageDao {
-  FunctionOverrideInfo? info;
+  FunctionOverrideInfo? cache;
   List<int>? confirmedRouteNotice;
 }
 

@@ -12,9 +12,9 @@ class FunctionOverrideCachedService implements FunctionOverrideServiceDao {
   });
   @override
   Future<FunctionOverrideInfo> get() async {
-    if (storageDao.info != null) return storageDao.info!;
+    if (storageDao.cache != null) return storageDao.cache!;
     final data = await serviceDao.get();
-    storageDao.info = data;
+    storageDao.cache = data;
     return data;
   }
 }

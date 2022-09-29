@@ -130,7 +130,7 @@ class _HomePageState extends State<HomePage> {
 
     // 下拉也要更新一下天气 :D
     _updateWeather();
-    KvStorageInitializer.override.info = null;
+    KvStorageInitializer.override.cache = null;
     FunctionOverrideInitializer.cachedService.get().then((value) {
       Global.eventBus.emit(
         EventNameConstants.onRouteRefresh,
