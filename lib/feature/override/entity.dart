@@ -42,6 +42,16 @@ class HomeItemHideInfo {
 }
 
 @JsonSerializable()
+class RouteNotice {
+  int id = 0;
+  String title = '';
+  String msg = '';
+  RouteNotice();
+  factory RouteNotice.fromJson(Map<String, dynamic> json) => _$RouteNoticeFromJson(json);
+  Map<String, dynamic> toJson() => _$RouteNoticeToJson(this);
+}
+
+@JsonSerializable()
 class FunctionOverrideInfo {
   @JsonKey(defaultValue: [])
   List<RouteOverrideItem> routeOverride = [];
@@ -51,6 +61,10 @@ class FunctionOverrideInfo {
 
   @JsonKey(defaultValue: [])
   List<HomeItemHideInfo> homeItemHide = [];
+
+  @JsonKey(defaultValue: {})
+  Map<String, RouteNotice> routeNotice = {};
+
   FunctionOverrideInfo();
   factory FunctionOverrideInfo.fromJson(Map<String, dynamic> json) => _$FunctionOverrideInfoFromJson(json);
   Map<String, dynamic> toJson() => _$FunctionOverrideInfoToJson(this);

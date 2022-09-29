@@ -101,9 +101,16 @@ class _KiteAppState extends State<KiteApp> {
 
     // refresh override route
     Global.eventBus.on(EventNameConstants.onRouteRefresh, (arg) {
-      routeGenerator = DefaultRouteWithOverride(
-        defaultRoute: defaultRouteTable,
-        overrideItems: arg! as List<RouteOverrideItem>,
+      final FunctionOverrideInfo overrideInfo = arg! as FunctionOverrideInfo;
+      // 路由公告
+      routeGenerator = RouteWithNoticeDialog(
+        Catcher.navigatorKey!.currentContext!,
+        routeNotice: overrideInfo.routeNotice,
+        // 路由覆盖
+        routeGenerator: DefaultRouteWithOverride(
+          defaultRoute: defaultRouteTable, // 静态路由
+          overrideItems: overrideInfo.routeOverride,
+        ),
       );
     });
     buildMaterialWithTheme(ThemeData theme) {
