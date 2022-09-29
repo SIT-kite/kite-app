@@ -5,7 +5,7 @@ import 'interface.dart';
 
 class FunctionOverrideKeys {
   static const namespace = "/override";
-  static const cache = "$namespace/info";
+  static const cache = "$namespace/cache";
   static const confirmedRouteNotice = "$namespace/confirmedRouteNotice";
 }
 
