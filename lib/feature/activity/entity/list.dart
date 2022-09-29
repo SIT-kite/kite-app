@@ -56,9 +56,9 @@ enum ActivityScoreType {
   practice,
   voluntary,
   safetyEdu;
-  // TODO: I18n
+  // TODO: No I18n
 /*
-  String toLocalized() {
+  String localized() {
     switch (this) {
       case lecture:
         return i18n.actLecture;

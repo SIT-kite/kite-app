@@ -33,7 +33,8 @@ You can also add, remove, modify or even support a new language in the [l10n](l1
 The [app_en.arb](l10n/app_en.arb) is the template localization, hereinafter referred to
 as `template`, which means any structural change will affect other languages.
 
-There is a tool for
+There is a tool for i10n that will be mentioned later, please check
+its [homepage](https://github.com/liplum/L10nArbTool) on GitHub.
 
 More readings:
 
@@ -197,6 +198,7 @@ with a new workflow.
 - 用可爱的句末语气词
 
 #### Wording
+
 Reduce the programming specific terms and help users understand what happened more clearly.
 
 ``` kotlin
@@ -224,7 +226,6 @@ Unknown exception. Your opeartion was cancelled.
 ### Editing .arb File
 
 1️⃣ Keep the order of other l10n files identical to the `template`.
-
 
 2️⃣ It'd be better to attach a description for every translation entry, as mentioned below,
 in `template`
@@ -262,7 +263,13 @@ English, Chinese and Japanese.
 4️⃣ Do not copy `description` and `placeholders` from meta keys, prefixed with `@`, in `template` to
 a concrete language one.
 
-## I18n Python Tool
-```shell
+## Localization Arb Tool
 
+[L10ArbTool](https://github.com/liplum/L10nArbTool)
+allows you to edit and manage .arb files with an interactive CLI.
+
+```shell
+git clone https://github.com/liplum/L10nArbTool.git
+cd L10nArbTool
+python main.py migration
 ```

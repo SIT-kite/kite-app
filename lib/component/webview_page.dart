@@ -20,6 +20,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:kite/component/webview.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -61,7 +62,7 @@ class SimpleWebViewPage extends StatefulWidget {
   /// 暴露dart回调到js接口
   final Set<JavascriptChannel>? javascriptChannels;
 
-  /// 如果不支持webview，是否显示浏览器打开按钮
+  /// 如果不支持 WebView，是否显示浏览器打开按钮
   final bool showLaunchButtonIfUnsupported;
 
   /// 是否显示顶部进度条
@@ -95,7 +96,7 @@ class SimpleWebViewPage extends StatefulWidget {
 
 class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
   final _controllerCompleter = Completer<WebViewController>();
-  String title = '无标题页面';
+  String title = i18n.noTitle;
   int progress = 0;
 
   void _onRefresh() async {
@@ -152,7 +153,7 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.fixedTitle == null ? title : widget.fixedTitle!),
+          title: Text(widget.fixedTitle ?? title),
           actions: actions,
           bottom: widget.showTopProgressIndicator ? buildTopIndicator() : null,
           leading: IconButton(
@@ -179,7 +180,7 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
           onPageFinished: (url) async {
             if (widget.fixedTitle == null) {
               final controller = await _controllerCompleter.future;
-              title = (await controller.getTitle()) ?? '无标题页面';
+              title = (await controller.getTitle()) ?? i18n.noTitle;
 
               if (mounted) {
                 setState(() {});

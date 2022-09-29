@@ -20,6 +20,8 @@ import 'dart:typed_data';
 
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
+import 'package:kite/l10n/extension.dart';
+import 'package:kite/util/dsl.dart';
 import 'package:kite/util/flash.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 
@@ -42,7 +44,7 @@ class CampusCardRecord {
   }
 
   static CampusCardRecord invalid(int cardId) {
-    return CampusCardRecord(cardId, '未知卡', '', 'Unknown');
+    return CampusCardRecord(cardId, i18n.campusCardUnknownCard, '', i18n.unknown);
   }
 }
 
@@ -59,8 +61,7 @@ class _CampusCardPageState extends State<CampusCardPage> {
 
   static String _dateToString(DateTime date) {
     final local = date.toLocal();
-
-    return '${local.month} 月 ${local.day} 日 ${local.hour}:${local.minute}';
+    return dateFullNum(local);
   }
 
   static String _tsToString(int ts) {
@@ -96,7 +97,7 @@ class _CampusCardPageState extends State<CampusCardPage> {
       });
     }).catchError((_) {
       completer.complete();
-      showBasicFlash(context, const Text('网络错误'));
+      showBasicFlash(context, i18n.networkError.txt);
     });
   }
 
@@ -126,8 +127,9 @@ class _CampusCardPageState extends State<CampusCardPage> {
 
   Widget buildFailedPrompt() {
     return Center(
+      // TODO: better NFC tip
       child: Text(
-        '此设备不支持 NFC 或 NFC 功能不可用',
+        i18n.campusCardNfcUnavailableOrDisabled,
         style: Theme.of(context).textTheme.headline3!,
       ),
     );
@@ -139,7 +141,7 @@ class _CampusCardPageState extends State<CampusCardPage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            '请将卡片贴合到手机背面 NFC 读卡器处',
+            i18n.campusCardNfcPrompt,
             style: Theme.of(context).textTheme.headline3!,
           ),
           const SizedBox(height: 40.0),
@@ -182,7 +184,7 @@ class _CampusCardPageState extends State<CampusCardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('校园卡工具')),
+      appBar: AppBar(title: i18n.campusCardTool.txt),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),

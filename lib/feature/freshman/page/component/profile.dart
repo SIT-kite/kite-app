@@ -97,7 +97,7 @@ class BasicInfoPageWidget extends StatelessWidget {
   Widget _buildBackground(BuildContext context, String name, String college, List<InfoItem> list) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title ?? i18n.admissionInfoTitle),
+        title: Text(title ?? i18n.studentInfoTitle),
         actions: appBarActions,
       ),
       body: Stack(

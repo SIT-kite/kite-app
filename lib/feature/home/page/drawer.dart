@@ -56,7 +56,7 @@ class KiteDrawer extends Drawer {
           ),
           UniversalPlatform.isAndroid
               ? ListTile(
-                  title: i18n.schoolCardTool.txt,
+                  title: i18n.campusCardTool.txt,
                   leading: const Icon(Icons.credit_card),
                   onTap: () {
                     Navigator.pop(context);

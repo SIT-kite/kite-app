@@ -9,6 +9,7 @@ class Lang {
 
   static const zh = "zh";
   static const zhTw = "zh_TW";
+  static const tw = "TW";
   static const en = "en";
 
   static const zhLocale = Locale.fromSubtags(languageCode: "zh");
@@ -19,16 +20,16 @@ class Lang {
   static const zhTwCode = 2;
   static const enCode = 3;
 
-  static final zhTextf = DateFormat("yyyy年M月d日' EEEE", "zh_CN");
-  static final zhTwTextf = DateFormat("yyyy年M月d日' EEEE", "zh_TW");
+  static final zhTextf = DateFormat("yyyy年M月d日 EEEE", "zh_CN");
+  static final zhTwTextf = DateFormat("yyyy年M月d日 EEEE", "zh_TW");
   static final enTextf = DateFormat("EEEE, MMMM d, yyyy", "en_US");
 
   static final zhNumf = DateFormat("yyyy-M-d", "zh_CN");
   static final zhTwNumf = DateFormat("yyyy-M-d", "zh_TW");
-  static final enNumf = DateFormat("M/d/yy", "en_US");
+  static final enNumf = DateFormat("M-d-yy", "en_US");
 
   static final zhFullNumf = DateFormat("yy/MM/dd H:mm::ss", "zh_CN");
-  static final zhTwFullNumf = DateFormat("yyMM/dd H:mm::ss", "zh_TW");
+  static final zhTwFullNumf = DateFormat("yy/MM/dd H:mm::ss", "zh_TW");
   static final enFullNumf = DateFormat("MM/dd/yy H:mm::ss", "en_US");
 
   static final timef = DateFormat("H:mm::ss");
@@ -45,38 +46,41 @@ class Lang {
     return null;
   }
 
-  static DateFormat textf(String langCode) {
-    switch (langCode) {
-      case zh:
+  static DateFormat textf(String lang, String? country) {
+    if (lang == zh) {
+      if (country == null) {
         return zhTextf;
-      case zhTw:
-        return zhTwTextf;
-      case en:
-        return enTextf;
+      } else if (country == tw) {
+        return zhTextf;
+      }
+    } else if (lang == en) {
+      return enTextf;
     }
     return zhTextf;
   }
 
-  static DateFormat numf(String langCode) {
-    switch (langCode) {
-      case zh:
+  static DateFormat numf(String lang, String? country) {
+    if (lang == zh) {
+      if (country == null) {
         return zhNumf;
-      case zhTw:
-        return zhTwNumf;
-      case en:
-        return enNumf;
+      } else if (country == tw) {
+        return zhNumf;
+      }
+    } else if (lang == en) {
+      return enNumf;
     }
     return zhNumf;
   }
 
-  static DateFormat fullNumf(String langCode) {
-    switch (langCode) {
-      case zh:
+  static DateFormat fullNumf(String lang, String? country) {
+    if (lang == zh) {
+      if (country == null) {
         return zhFullNumf;
-      case zhTw:
+      } else if (country == tw) {
         return zhTwFullNumf;
-      case en:
-        return enFullNumf;
+      }
+    } else if (lang == en) {
+      return enFullNumf;
     }
     return zhFullNumf;
   }

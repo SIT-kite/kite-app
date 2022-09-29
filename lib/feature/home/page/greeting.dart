@@ -26,8 +26,11 @@ import 'package:kite/util/user.dart';
 
 /// 计算入学时间, 默认按 9 月 1 日开学来算. 年份 entranceYear 是完整的年份, 如 2018.
 int _calcStudyDays(int entranceYear) {
-  int days = DateTime.now().difference(DateTime(entranceYear, 9, 1)).inDays;
-  return days;
+  // if now is 2022/9/1, the difference is 0 day
+  final admissionTime = DateTime(entranceYear, 9, 1);
+  final now = DateTime.now();
+  final diff = now.difference(admissionTime);
+  return diff.inDays;
 }
 
 class GreetingWidget extends StatefulWidget {
@@ -38,6 +41,7 @@ class GreetingWidget extends StatefulWidget {
 }
 
 class _GreetingWidgetState extends State<GreetingWidget> {
+  // TODO: Update studyDays when current system date changed
   int? studyDays;
   int campus = KvStorageInitializer.home.campus;
   Weather currentWeather = KvStorageInitializer.home.lastWeather;
@@ -106,10 +110,18 @@ class _GreetingWidgetState extends State<GreetingWidget> {
         Text(i18n.greetingHeader0L1, style: textStyleSmall),
       ];
     } else {
-      sitDate = [
-        Text(days <= 0 ? i18n.greetingHeader0L1 : i18n.greetingHeaderL1, style: textStyleSmall),
-        Text(i18n.greetingHeaderL2(days), style: textStyleLarge),
-      ];
+      if (days <= 0) {
+        sitDate = [
+          Text(i18n.greetingHeader0L1, style: textStyleSmall),
+          Text(i18n.greetingHeader0L2, style: textStyleLarge),
+        ];
+      } else {
+        sitDate = [
+          Text(i18n.greetingHeaderL1, style: textStyleSmall),
+          Text(i18n.greetingHeaderL2(yOrNo(i18n.greetingHeaderEnableIncrement) ? days + 1 : days),
+              style: textStyleLarge),
+        ];
+      }
     }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
