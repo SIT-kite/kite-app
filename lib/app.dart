@@ -29,7 +29,6 @@ import 'package:kite/util/user.dart';
 
 import 'abstract/route.dart';
 import 'feature/override/entity.dart';
-import 'feature/page_index.dart';
 import 'global/global.dart';
 import 'storage/init.dart';
 import 'util/logger.dart';
@@ -97,7 +96,6 @@ class _KiteAppState extends State<KiteApp> {
   Widget build(BuildContext context) {
     final isDark = KvStorageInitializer.theme.isDarkMode;
     final primaryColor = KvStorageInitializer.theme.color;
-    final home = AccountUtils.getUserType() != null ? const HomePage() : const WelcomePage();
 
     // refresh override route
     Global.eventBus.on(EventNameConstants.onRouteRefresh, (arg) {
@@ -117,7 +115,7 @@ class _KiteAppState extends State<KiteApp> {
       return MaterialApp(
         title: title,
         theme: theme,
-        home: home,
+        initialRoute: AccountUtils.getUserType() != null ? RouteTable.home : RouteTable.welcome,
         debugShowCheckedModeBanner: false,
         navigatorKey: Catcher.navigatorKey,
         onGenerateRoute: _onGenerateRoute,
