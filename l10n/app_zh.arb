@@ -241,5 +241,15 @@
   "wechat": "微信",
   "xuhui": "徐汇",
   "xuhuiDistrict": "徐汇区",
-  "yes": "好"
+  "yes": "好",
+  "connectivityConnectedByProxy": "已通过 Http 代理连接到校园网",
+  "connectivityConnectedByVpn": "已通过 VPN 连接到校园网",
+  "address": "地址",
+  "fetching": "获取中",
+  "notLoggedIn": "未登录",
+  "connectivityConnectedByWlan": "",
+  "connectivityConnectFailedError": "无法连接到校园网。疑难解答:\n1. 尝试连接学校的热点: \"i-SIT\",\"i-SIT-1x\" 或 \"eduroam\".\n2. 尝试使用\"EasyConnect\" VPN连接校园网.\n3. 尝试通过自行搭建的代理服务器使用 Http 代理连接校园网.\n如果以上都不起作用，可能因为是学校服务器停机维护或崩溃，请一段时间后重试.",
+  "openWlanSettingsBtn": "",
+  "launchEasyConnectBtn": "",
+  "downloadEasyConnectBtn": ""
 }

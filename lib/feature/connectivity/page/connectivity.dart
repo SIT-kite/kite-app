@@ -19,8 +19,10 @@ import 'package:app_settings/app_settings.dart';
 import 'package:check_vpn_connection/check_vpn_connection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/launch.dart';
 import 'package:kite/storage/init.dart';
+import 'package:kite/util/dsl.dart';
 import 'package:kite/util/logger.dart';
 
 import '../init.dart';
@@ -36,6 +38,7 @@ class ConnectivityPage extends StatefulWidget {
 class _ConnectivityPageState extends State<ConnectivityPage> {
   bool isConnected = false;
   late Future checkConnectivityFuture;
+
   @override
   void initState() {
     super.initState();
@@ -57,29 +60,31 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
     final style = Theme.of(context).textTheme.bodyText1;
 
     Widget buildConnectedByProxy() => Text(
-        '已通过 HTTP 代理连接校园网\n'
-        '地址：${KvStorageInitializer.network.proxy}',
+        '${i18n.connectivityConnectedByVpn}\n'
+        '${i18n.address}：${KvStorageInitializer.network.proxy}',
         textAlign: TextAlign.center,
         style: style);
 
-    Widget buildConnectedByVpnBlock() => Text('已通过 VPN 连接校园网', textAlign: TextAlign.center, style: style);
+    Widget buildConnectedByVpnBlock() =>
+        Text(i18n.connectivityConnectedByVpn, textAlign: TextAlign.center, style: style);
     Widget buildConnectedByWlanBlock() {
       return FutureBuilder(
         future: Network.checkStatus(),
         builder: (context, snapshot) {
-          String ip = '获取中…';
-          String studentId = '获取中…';
+          String ip = i18n.fetching;
+          String studentId = i18n.fetching;
           if (snapshot.connectionState == ConnectionState.done) {
             final info = snapshot.data! as CheckStatusResult;
             ip = info.ip;
-            studentId = info.uid ?? '未登录';
+            studentId = info.uid ?? i18n.notLoggedIn;
           }
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('目前已通过 WLAN 登录', style: style),
+              Text(i18n.connectivityConnectedByWlan, style: style),
               const SizedBox(height: 10),
-              Text('登录用户: $studentId\n登录地址: $ip'),
+              Text('${i18n.studentID}: $studentId'),
+              Text('${i18n.address}: $ip'),
             ],
           );
         },
@@ -107,15 +112,7 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Text(
-        '无法连接到校园网环境，您可以: \n'
-        '1. 连接学校内的 i-SIT, i-SIT-1x 或 eduroam 热点；\n'
-        '2. 打开 EasyConnect App 连接学校 VPN；\n'
-        '3. 自建代理服务器连接HTTP代理。\n'
-        '\n'
-        '如果您确信您的网络环境正常，可能因为学校服务器停机维护或崩溃，此时您可以尝试：\n'
-        '1. 睡一觉；\n'
-        '2. 通过小风筝内置的 “小游戏” 娱乐片刻；\n'
-        '3. 放弃。',
+        i18n.connectivityConnectFailedError,
         textAlign: TextAlign.start,
         style: Theme.of(context).textTheme.bodyText1,
       ),
@@ -130,26 +127,26 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(
+            SizedBox(
               height: 40,
               child: ElevatedButton(
                 onPressed: AppSettings.openWIFISettings,
-                child: Text('打开 WLAN 设置'),
+                child: i18n.openWlanSettingsBtn.txt,
               ),
             ),
             const SizedBox(width: 20),
             SizedBox(
               height: 40,
               child: ElevatedButton(
-                child: const Text('打开 EasyConnect'),
+                child: i18n.launchEasyConnectBtn.txt,
                 onPressed: () => GlobalLauncher.launch('sangfor://easyconnect'),
               ),
             ),
           ],
         ),
         TextButton(
-          onPressed: () => GlobalLauncher.launch('https://www.sit.edu.cn/xxfw/list.htm'),
-          child: const Text('点此下载 EasyConnect'),
+          onPressed: () => GlobalLauncher.launch(R.easyConnectDownloadUrl),
+          child: i18n.downloadEasyConnectBtn.txt,
         ),
       ],
     );
@@ -158,7 +155,7 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('网络工具')),
+      appBar: AppBar(title: i18n.networkTool.txt),
       body: Center(
         child: Center(
           child: Column(

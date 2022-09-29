@@ -151,7 +151,7 @@
       }
     }
   },
-  "expenseTrackerFirstTimeRefreshRequest": "Expense Tracker needs to access school district network to retrieve expense history. You can refresh the expense history manually next time by hitting the \"Refresh\" button at the top right.",
+  "expenseTrackerFirstTimeRefreshRequest": "Expense Tracker needs to access campus network to retrieve expense history. You can refresh the expense history manually next time by hitting the \"Refresh\" button at the top right.",
   "faculty": "Faculty",
   "failed": "Failed",
   "feedback": "Feedback",
@@ -343,7 +343,7 @@
   "settingsFuncRearrangeSub": "Rearrange the order and group of functions on the homepage.",
   "settingsHomepageWallpaperMode": "Homepage Wallpaper Mode",
   "settingsHttpProxy": "Enable Http Proxy",
-  "settingsHttpProxySub": "Connect to the school district network by Http proxy",
+  "settingsHttpProxySub": "Connect to the campus network by Http proxy",
   "settingsLanguage": "Language",
   "settingsLanguageSub": "Select a language for your Kite",
   "settingsLocalStorage": "Local storage",
@@ -391,5 +391,15 @@
   "wechat": "Wechat",
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
-  "yes": "Yes"
+  "yes": "Yes",
+  "connectivityConnectedByProxy": "Connected to campus network by Http proxy.",
+  "connectivityConnectedByVpn": "Connected to campus network by VPN.",
+  "address": "Address",
+  "fetching": "Fetching",
+  "notLoggedIn": "Not Logged In",
+  "connectivityConnectedByWlan": "Connected to campus network by WLAN.",
+  "connectivityConnectFailedError": "Unable to connect to campus network. Troubleshooting:\n1. Attempt to connect to the school's hotspots, \"i-SIT\",\"i-SIT-1x\" or \"eduroam\"\n.2. Attempt to launch \"EasyConnect\" VPN to connect to School.\n3. Attempt to use a self-built proxy server to connect to campus network via Http proxy\nIf they all didn't work, it's probably due to school server downtime for maintenance or even crash, please try again later.",
+  "openWlanSettingsBtn": "Open WLAN settings",
+  "launchEasyConnectBtn": "Launch EasyConnect",
+  "downloadEasyConnectBtn": "Download EasyConnect"
 }

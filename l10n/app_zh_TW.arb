@@ -241,5 +241,15 @@
   "wechat": "微信",
   "xuhui": "徐匯",
   "xuhuiDistrict": "徐匯區",
-  "yes": "好"
+  "yes": "好",
+  "connectivityConnectedByProxy": "",
+  "connectivityConnectedByVpn": "",
+  "address": "",
+  "fetching": "",
+  "notLoggedIn": "",
+  "connectivityConnectedByWlan": "",
+  "connectivityConnectFailedError": "",
+  "openWlanSettingsBtn": "",
+  "launchEasyConnectBtn": "",
+  "downloadEasyConnectBtn": ""
 }

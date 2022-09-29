@@ -167,6 +167,7 @@ class _CampusCardPageState extends State<CampusCardPage> {
       SizedBox(
           height: 30,
           child: Text(
+            // TODO: I18n
             '数据源缺少补办卡信息，结果仅供参考。',
             style: Theme.of(context).textTheme.bodyText1,
           )),
