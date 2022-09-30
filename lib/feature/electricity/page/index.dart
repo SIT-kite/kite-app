@@ -134,7 +134,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: FunctionType.electricity.localized().txt,
+        title: FunctionType.electricityBill.localized().txt,
         actions: <Widget>[
           IconButton(
               onPressed: search,

@@ -90,48 +90,48 @@ class HomeFunctionButton extends StatelessWidget {
 class FunctionButtonFactory {
   static final Map<FunctionType, WidgetBuilder> builders = {
     FunctionType.upgrade: (context) => const UpgradeItem(),
-    FunctionType.notice: (context) => const NoticeItem(),
+    FunctionType.kiteBulletin: (context) => const NoticeItem(),
     FunctionType.timetable: (context) => HomeFunctionButton(
           route: '/timetable',
           icon: 'assets/home/icon_timetable.svg',
           title: FunctionType.timetable.localized(),
           subtitle: FunctionType.timetable.localizedDesc(),
         ),
-    FunctionType.report: (context) => const ReportItem(),
-    FunctionType.exam: (context) => const ExamItem(),
-    FunctionType.classroom: (context) => HomeFunctionButton(
+    FunctionType.reportTemp: (context) => const ReportItem(),
+    FunctionType.examArrangement: (context) => const ExamItem(),
+    FunctionType.classroomBrowser: (context) => HomeFunctionButton(
           route: '/classroom',
           icon: 'assets/home/icon_classroom.svg',
-          title: FunctionType.classroom.localized(),
-          subtitle: FunctionType.classroom.localizedDesc(),
+          title: FunctionType.classroomBrowser.localized(),
+          subtitle: FunctionType.classroomBrowser.localizedDesc(),
         ),
-    FunctionType.event: (context) => HomeFunctionButton(
+    FunctionType.activity: (context) => HomeFunctionButton(
           route: '/event',
           icon: 'assets/home/icon_event.svg',
-          title:  FunctionType.event.localized(),
-          subtitle:  FunctionType.event.localizedDesc(),
+          title:  FunctionType.activity.localized(),
+          subtitle:  FunctionType.activity.localizedDesc(),
         ),
     FunctionType.expense: (context) => const ExpenseItem(),
-    FunctionType.score: (context) => HomeFunctionButton(
+    FunctionType.examResult: (context) => HomeFunctionButton(
           route: '/score',
           icon: 'assets/home/icon_score.svg',
-          title: FunctionType.score.localized(),
-          subtitle: FunctionType.score.localizedDesc(),
+          title: FunctionType.examResult.localized(),
+          subtitle: FunctionType.examResult.localizedDesc(),
         ),
     FunctionType.library: (context) => const LibraryItem(),
-    FunctionType.office: (context) => const OfficeItem(),
-    FunctionType.mail: (context) => const MailItem(),
-    FunctionType.bulletin: (context) => HomeFunctionButton(
+    FunctionType.application: (context) => const OfficeItem(),
+    FunctionType.eduEmail: (context) => const MailItem(),
+    FunctionType.oaAnnouncement: (context) => HomeFunctionButton(
           route: '/bulletin',
           icon: 'assets/home/icon_bulletin.svg',
-          title: FunctionType.bulletin.localized(),
-          subtitle: FunctionType.bulletin.localizedDesc(),
+          title: FunctionType.oaAnnouncement.localized(),
+          subtitle: FunctionType.oaAnnouncement.localizedDesc(),
         ),
-    FunctionType.contact: (context) => HomeFunctionButton(
+    FunctionType.yellowPages: (context) => HomeFunctionButton(
           route: '/contact',
           icon: 'assets/home/icon_contact.svg',
-          title: FunctionType.contact.localized(),
-          subtitle: FunctionType.contact.localizedDesc(),
+          title: FunctionType.yellowPages.localized(),
+          subtitle: FunctionType.yellowPages.localizedDesc(),
         ),
     FunctionType.game: (context) => HomeFunctionButton(
           route: '/game',
@@ -174,12 +174,12 @@ class FunctionButtonFactory {
           title: FunctionType.switchAccount.localized(),
           subtitle:FunctionType.switchAccount.localizedDesc(),
         ),
-    FunctionType.electricity: (context) => const ElectricityItem(),
-    FunctionType.board: (context) => HomeFunctionButton(
+    FunctionType.electricityBill: (context) => const ElectricityItem(),
+    FunctionType.kiteBoard: (context) => HomeFunctionButton(
           route: '/board',
           icon: 'assets/home/icon_board.svg',
-          title: FunctionType.board.localized(),
-          subtitle: FunctionType.board.localizedDesc(),
+          title: FunctionType.kiteBoard.localized(),
+          subtitle: FunctionType.kiteBoard.localizedDesc(),
         ),
   };
 

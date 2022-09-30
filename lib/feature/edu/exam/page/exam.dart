@@ -153,7 +153,7 @@ class _ExamPageState extends State<ExamPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: FunctionType.exam.localized().txt),
+      appBar: AppBar(title: FunctionType.examArrangement.localized().txt),
       body: Column(
         children: [
           buildSemesterSelector(),

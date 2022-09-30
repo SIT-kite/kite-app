@@ -109,7 +109,7 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
       length: categories.length,
       child: Scaffold(
         appBar: AppBar(
-          title: FunctionType.event.localized().txt,
+          title: FunctionType.activity.localized().txt,
           bottom: _buildBarHeader(),
           actions: [
             IconButton(

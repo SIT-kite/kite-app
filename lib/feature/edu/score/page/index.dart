@@ -123,7 +123,7 @@ class _ScorePageState extends State<ScorePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: FunctionType.exam.localized().txt,
+        title: FunctionType.examArrangement.localized().txt,
       ),
       body: _buildBody(),
     );

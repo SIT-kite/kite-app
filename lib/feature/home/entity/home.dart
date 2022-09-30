@@ -34,7 +34,7 @@ enum FunctionType {
 
   /// 公告
   @HiveField(1)
-  notice,
+  kiteBulletin,
 
   /// 课程表
   @HiveField(2)
@@ -42,19 +42,19 @@ enum FunctionType {
 
   /// 体温上报
   @HiveField(3)
-  report,
+  reportTemp,
 
   /// 考试安排
   @HiveField(4)
-  exam,
+  examArrangement,
 
   /// 空教室
   @HiveField(5)
-  classroom,
+  classroomBrowser,
 
   /// 活动
   @HiveField(6)
-  event,
+  activity,
 
   /// 消费查询
   @HiveField(7)
@@ -62,7 +62,7 @@ enum FunctionType {
 
   /// 成绩查询
   @HiveField(8)
-  score,
+  examResult,
 
   /// 图书馆
   @HiveField(9)
@@ -70,19 +70,19 @@ enum FunctionType {
 
   /// 办公
   @HiveField(10)
-  office,
+  application,
 
   /// Edu 邮箱
   @HiveField(11)
-  mail,
+  eduEmail,
 
   /// OA 公告
   @HiveField(12)
-  bulletin,
+  oaAnnouncement,
 
   /// 常用电话
   @HiveField(13)
-  contact,
+  yellowPages,
 
   /// 小游戏
   @HiveField(14)
@@ -114,41 +114,41 @@ enum FunctionType {
 
   /// 风筝时刻
   @HiveField(21)
-  board,
+  kiteBoard,
 
   /// 电费查询
   @HiveField(22)
-  electricity;
+  electricityBill;
 
   String localized() {
     switch (this) {
       case FunctionType.upgrade:
         return i18n.ftype_upgrade;
-      case FunctionType.notice:
+      case FunctionType.kiteBulletin:
         return i18n.ftype_kiteBulletin;
       case FunctionType.timetable:
         return i18n.ftype_timetable;
-      case FunctionType.report:
+      case FunctionType.reportTemp:
         return i18n.ftype_reportTemp;
-      case FunctionType.exam:
+      case FunctionType.examArrangement:
         return i18n.ftype_examArr;
-      case FunctionType.classroom:
+      case FunctionType.classroomBrowser:
         return i18n.ftype_classroomBrowser;
-      case FunctionType.event:
+      case FunctionType.activity:
         return i18n.ftype_activity;
       case FunctionType.expense:
         return i18n.ftype_expense;
-      case FunctionType.score:
+      case FunctionType.examResult:
         return i18n.ftype_examResult;
       case FunctionType.library:
         return i18n.ftype_library;
-      case FunctionType.office:
+      case FunctionType.application:
         return i18n.ftype_application;
-      case FunctionType.mail:
+      case FunctionType.eduEmail:
         return i18n.ftype_eduEmail;
-      case FunctionType.bulletin:
+      case FunctionType.oaAnnouncement:
         return i18n.ftype_oaAnnouncement;
-      case FunctionType.contact:
+      case FunctionType.yellowPages:
         return i18n.ftype_yellowPages;
       case FunctionType.game:
         return i18n.ftype_game;
@@ -164,9 +164,9 @@ enum FunctionType {
         return i18n.ftype_freshman;
       case FunctionType.switchAccount:
         return i18n.ftype_switchAccount;
-      case FunctionType.board:
+      case FunctionType.kiteBoard:
         return i18n.ftype_kiteBoard;
-      case FunctionType.electricity:
+      case FunctionType.electricityBill:
         return i18n.ftype_elecBill;
     }
   }
@@ -175,31 +175,31 @@ enum FunctionType {
     switch (this) {
       case FunctionType.upgrade:
         return i18n.ftype_upgrade_desc;
-      case FunctionType.notice:
+      case FunctionType.kiteBulletin:
         return i18n.ftype_kiteBulletin_desc;
       case FunctionType.timetable:
         return i18n.ftype_timetable_desc;
-      case FunctionType.report:
+      case FunctionType.reportTemp:
         return i18n.ftype_reportTemp_desc;
-      case FunctionType.exam:
+      case FunctionType.examArrangement:
         return i18n.ftype_examArr_desc;
-      case FunctionType.classroom:
+      case FunctionType.classroomBrowser:
         return i18n.ftype_classroomBrowser_desc;
-      case FunctionType.event:
+      case FunctionType.activity:
         return i18n.ftype_activity_desc;
       case FunctionType.expense:
         return i18n.ftype_expense_desc;
-      case FunctionType.score:
+      case FunctionType.examResult:
         return i18n.ftype_examResult_desc;
       case FunctionType.library:
         return i18n.ftype_library_desc;
-      case FunctionType.office:
+      case FunctionType.application:
         return i18n.ftype_application_desc;
-      case FunctionType.mail:
+      case FunctionType.eduEmail:
         return i18n.ftype_eduEmail_desc;
-      case FunctionType.bulletin:
+      case FunctionType.oaAnnouncement:
         return i18n.ftype_oaAnnouncement_desc;
-      case FunctionType.contact:
+      case FunctionType.yellowPages:
         return i18n.ftype_yellowPages_desc;
       case FunctionType.game:
         return i18n.ftype_game_desc;
@@ -215,9 +215,9 @@ enum FunctionType {
         return i18n.ftype_freshman_desc;
       case FunctionType.switchAccount:
         return i18n.ftype_switchAccount_desc;
-      case FunctionType.board:
+      case FunctionType.kiteBoard:
         return i18n.ftype_kiteBoard_desc;
-      case FunctionType.electricity:
+      case FunctionType.electricityBill:
         return i18n.ftype_elecBill_desc;
     }
   }
@@ -234,27 +234,27 @@ class UndergraduateFunctionList implements IUserFunctionList {
   List<FunctionType> getFunctionList() {
     return <FunctionType>[
       FunctionType.upgrade,
-      FunctionType.notice,
+      FunctionType.kiteBulletin,
       FunctionType.timetable,
-      FunctionType.report,
+      FunctionType.reportTemp,
       FunctionType.separator,
-      FunctionType.exam,
-      FunctionType.classroom,
-      FunctionType.event,
+      FunctionType.examArrangement,
+      FunctionType.classroomBrowser,
+      FunctionType.activity,
       FunctionType.expense,
-      FunctionType.electricity,
-      FunctionType.score,
+      FunctionType.electricityBill,
+      FunctionType.examResult,
       FunctionType.library,
-      FunctionType.office,
-      FunctionType.mail,
-      FunctionType.bulletin,
+      FunctionType.application,
+      FunctionType.eduEmail,
+      FunctionType.oaAnnouncement,
       FunctionType.separator,
       FunctionType.freshman,
       FunctionType.scanner,
       FunctionType.bbs,
-      FunctionType.contact,
+      FunctionType.yellowPages,
       FunctionType.game,
-      FunctionType.board,
+      FunctionType.kiteBoard,
       FunctionType.wiki,
       FunctionType.separator,
     ];
@@ -267,23 +267,23 @@ class PostgraduateFunctionList implements IUserFunctionList {
   List<FunctionType> getFunctionList() {
     return <FunctionType>[
       FunctionType.upgrade,
-      FunctionType.notice,
-      FunctionType.report,
+      FunctionType.kiteBulletin,
+      FunctionType.reportTemp,
       FunctionType.separator,
-      FunctionType.classroom,
+      FunctionType.classroomBrowser,
       FunctionType.expense,
-      FunctionType.electricity,
+      FunctionType.electricityBill,
       FunctionType.library,
-      FunctionType.office,
-      FunctionType.mail,
-      FunctionType.bulletin,
+      FunctionType.application,
+      FunctionType.eduEmail,
+      FunctionType.oaAnnouncement,
       FunctionType.separator,
       FunctionType.freshman,
       FunctionType.scanner,
       FunctionType.bbs,
-      FunctionType.contact,
+      FunctionType.yellowPages,
       FunctionType.game,
-      FunctionType.board,
+      FunctionType.kiteBoard,
       FunctionType.wiki,
       FunctionType.separator,
     ];
@@ -296,21 +296,21 @@ class TeacherFunctionList implements IUserFunctionList {
   List<FunctionType> getFunctionList() {
     return <FunctionType>[
       FunctionType.upgrade,
-      FunctionType.notice,
-      FunctionType.report,
+      FunctionType.kiteBulletin,
+      FunctionType.reportTemp,
       FunctionType.separator,
       FunctionType.expense,
-      FunctionType.electricity,
+      FunctionType.electricityBill,
       FunctionType.library,
-      FunctionType.office,
-      FunctionType.mail,
-      FunctionType.bulletin,
+      FunctionType.application,
+      FunctionType.eduEmail,
+      FunctionType.oaAnnouncement,
       FunctionType.separator,
       FunctionType.scanner,
       FunctionType.bbs,
-      FunctionType.contact,
+      FunctionType.yellowPages,
       FunctionType.game,
-      FunctionType.board,
+      FunctionType.kiteBoard,
       FunctionType.wiki,
       FunctionType.separator,
     ];
@@ -323,14 +323,14 @@ class FreshmanFunctionList implements IUserFunctionList {
   List<FunctionType> getFunctionList() {
     return <FunctionType>[
       FunctionType.upgrade,
-      FunctionType.notice,
+      FunctionType.kiteBulletin,
       FunctionType.switchAccount,
       FunctionType.separator,
       FunctionType.freshman,
       FunctionType.scanner,
       FunctionType.bbs,
-      FunctionType.contact,
-      FunctionType.board,
+      FunctionType.yellowPages,
+      FunctionType.kiteBoard,
       FunctionType.wiki,
       FunctionType.separator,
     ];

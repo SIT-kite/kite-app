@@ -51,8 +51,8 @@ class _ElectricityItemState extends State<ElectricityItem> {
     return HomeFunctionButton(
       route: '/electricity',
       icon: 'assets/home/icon_electricity.svg',
-      title: FunctionType.electricity.localized(),
-      subtitle: content ?? FunctionType.electricity.localizedDesc(),
+      title: FunctionType.electricityBill.localized(),
+      subtitle: content ?? FunctionType.electricityBill.localizedDesc(),
     );
   }
 }

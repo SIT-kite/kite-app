@@ -72,8 +72,8 @@ class _NoticeItemState extends State<NoticeItem> {
         return HomeFunctionButton(
           route: '/notice',
           icon: 'assets/home/icon_notice.svg',
-          title: FunctionType.notice.localized(),
-          subtitle: content ?? FunctionType.notice.localizedDesc(),
+          title: FunctionType.kiteBulletin.localized(),
+          subtitle: content ?? FunctionType.kiteBulletin.localizedDesc(),
         );
       },
     );

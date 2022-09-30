@@ -97,7 +97,7 @@ class _OfficeItemState extends State<OfficeItem> {
     return HomeFunctionButton(
         route: '/office',
         icon: 'assets/home/icon_office.svg',
-        title: FunctionType.office.localized(),
-        subtitle: content ?? FunctionType.office.localizedDesc());
+        title: FunctionType.application.localized(),
+        subtitle: content ?? FunctionType.application.localizedDesc());
   }
 }
