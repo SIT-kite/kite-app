@@ -84,7 +84,9 @@ class _ReportItemState extends State<ReportItem> {
         TextButton(onPressed: () {}, child: i18n.notNow.txt),
       ],
     );
+    // 用户没有选择确认上报
     if (select == null || select == 1) return;
+
     if (!mounted) return;
     await Navigator.of(context).pushNamed(RouteTable.report);
     hasWarnedDialog = true;
@@ -92,12 +94,13 @@ class _ReportItemState extends State<ReportItem> {
 
   String _generateContent(ReportHistory history) {
     final today = DateTime.now();
+    // 上次上报时间不等于今日时间，表示未上报
     if (history.date != (today.year * 10000 + today.month * 100 + today.day)) {
       Future.delayed(Duration.zero, dialogRemind);
-      return i18n.reportTempReportedToday;
+      return i18n.reportTempUnreportedToday;
     }
     final tempState = history.isNormal == 0 ? i18n.reportTempNormal : i18n.reportTempAbnormal;
-    return '${i18n.reportTempUnreportedToday}, $tempState ${history.place}';
+    return '${i18n.reportTempReportedToday}, $tempState ${history.place}';
   }
 
   Future<String> _buildContent() async {

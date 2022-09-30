@@ -15,39 +15,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/abstract/abstract_service.dart';
-import 'package:kite/abstract/abstract_session.dart';
-
 import 'dao.dart';
 import 'entity.dart';
 
-class ReportService extends AService implements ReportDao {
-  ReportService(ISession session) : super(session);
-
-  static const String _historyUrl = 'http://xgfy.sit.edu.cn/report/report/getMyReport';
-
+class ReportServiceMock implements ReportDao {
   @override
   Future<List<ReportHistory>> getHistoryList(String userId) async {
-    final response = await session.request(
-      _historyUrl,
-      RequestMethod.post,
-      data: {
-        'usercode': userId,
-        'batchno': '', // TODO：batchno 填入今天日期？yyyyMMdd
-      },
-      options: MyOptions(
-        contentType: HeaderConstants.jsonContentType,
-        responseType: MyResponseType.json,
-      ),
-    );
-
-    final Map<String, dynamic> data = response.data;
-    final responseCode = data['code'];
-    if (responseCode == 0) {
-      final List userHistory = data['data'];
-      return userHistory.map((e) => ReportHistory.fromJson(e as Map<String, dynamic>)).toList();
-    }
-    throw Exception('($responseCode) ${data['msg']}');
+    return [
+      ReportHistory(20220929, '测试地点', 1),
+    ];
   }
 
   // 获取最新一次历史
