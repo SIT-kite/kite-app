@@ -19,7 +19,6 @@
 import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/feature/home/entity/home.dart';
-import 'package:kite/l10n/extension.dart';
 import 'package:kite/util/dsl.dart';
 
 import '../entity/list.dart';
@@ -39,8 +38,8 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
   static const categories = [
     ActivityType.lecture,
     ActivityType.creation,
-    ActivityType.theme,
-    ActivityType.campus,
+    ActivityType.thematicEdu,
+    ActivityType.schoolCulture,
     ActivityType.practice,
     ActivityType.voluntary,
   ];
@@ -60,15 +59,14 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
   }
 
   static bool _filterActivity(Activity activity) {
-    const List<String> blackList = ['补录'];
-    return !blackList.any((element) => activity.title.contains(element));
+    return !ActivityName.blackList.any((element) => activity.title.contains(element));
   }
 
   TabBar _buildBarHeader() {
     return TabBar(
       isScrollable: true,
       controller: _tabController,
-      tabs: categories.map((e) => Tab(text: e.localized())).toList(),
+      tabs: categories.map((e) => Tab(text: e.name)).toList(),
     );
   }
 

@@ -26,11 +26,11 @@ import '../entity/list.dart';
 
 class ScActivityListService extends AService implements ScActivityListDao {
   static const _scActivityType = {
-    ActivityType.campus: '8ab17f543fe626a8013fe6278a880001',
+    ActivityType.schoolCulture: '8ab17f543fe626a8013fe6278a880001',
     ActivityType.creation: 'ff8080814e241104014eb867e1481dc3',
     ActivityType.lecture: '001',
     ActivityType.practice: '8ab17f543fe62d5d013fe62efd3a0002',
-    ActivityType.theme: 'ff808081674ec4720167ce60dda77cea',
+    ActivityType.thematicEdu: 'ff808081674ec4720167ce60dda77cea',
     ActivityType.voluntary: '8ab17f543fe62d5d013fe62e6dc70001',
   };
 

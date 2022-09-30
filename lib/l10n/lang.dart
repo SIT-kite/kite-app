@@ -26,7 +26,7 @@ class Lang {
 
   static final zhNumf = DateFormat("yyyy-M-d", "zh_CN");
   static final zhTwNumf = DateFormat("yyyy-M-d", "zh_TW");
-  static final enNumf = DateFormat("M-d-yy", "en_US");
+  static final enNumf = DateFormat("M-d-yyyy", "en_US");
 
   static final zhFullNumf = DateFormat("yy/MM/dd H:mm::ss", "zh_CN");
   static final zhTwFullNumf = DateFormat("yy/MM/dd H:mm::ss", "zh_TW");
