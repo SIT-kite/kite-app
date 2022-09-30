@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dynamic_color_theme/dynamic_color_theme.dart';
@@ -172,20 +173,21 @@ class SettingPage extends StatelessWidget {
     } else {
       curLocale = savedLocale;
     }
-    return DropDownSettingsTile<Locale>(
+
+    return DropDownSettingsTile<String>(
       title: i18n.settingsLanguage,
       subtitle: i18n.settingsLanguageSub,
       leading: const Icon(Icons.translate_rounded),
       settingKey: PrefKey.locale,
       values: {
-        Lang.enLocale: i18n.language_en,
-        Lang.zhLocale: i18n.language_zh,
-        Lang.zhTwLocale: i18n.language_zh_TW,
+        jsonEncode(Lang.enLocale.toJson()): i18n.language_en,
+        jsonEncode(Lang.zhLocale.toJson()): i18n.language_zh,
+        jsonEncode(Lang.zhTwLocale.toJson()): i18n.language_zh_TW,
       },
-      selected: curLocale,
+      selected: jsonEncode(Lang.zhLocale.toJson()),
       onChange: (value) {
         // TODO: Test on mobile
-          Phoenix.rebirth(ctx);
+        Future.delayed(Duration.zero, () => Phoenix.rebirth(ctx));
       },
     );
   }

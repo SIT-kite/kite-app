@@ -1,8 +1,8 @@
 import 'dart:ui';
 
-class PrefKey{
+class PrefKey {
   PrefKey._();
-  static const locale = "locale";
+  static const locale = "/locale";
 }
 
 abstract class PrefDao {
