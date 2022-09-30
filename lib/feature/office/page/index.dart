@@ -92,8 +92,8 @@ class _OfficePageState extends State<OfficePage> {
 
   Future<List<SimpleFunction>> _fetchFuncList() async {
     if (!OfficeInitializer.session.isLogin) {
-      final username = KvStorageInitializer.auth.currentUsername!;
-      final password = KvStorageInitializer.auth.ssoPassword!;
+      final username = Kv.auth.currentUsername!;
+      final password = Kv.auth.ssoPassword!;
       await OfficeInitializer.session.login(
         username: username,
         password: password,

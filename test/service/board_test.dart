@@ -16,7 +16,7 @@ void main() async {
   });
 
   test('board upload test', () async {
-    Log.info(KvStorageInitializer.jwt.jwtToken);
+    Log.info(Kv.jwt.jwtToken);
 
     final file = File('C:/Users/zzq/Desktop/Snipaste_2022-08-20_00-21-21.png');
     final bs = await file.readAsBytes();

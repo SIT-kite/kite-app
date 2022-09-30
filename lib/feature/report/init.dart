@@ -36,7 +36,7 @@ class ReportInitializer {
     registerAdapter(ReportHistoryAdapter());
     session = ReportSession(
       dio: dio,
-      username: KvStorageInitializer.auth.currentUsername,
+      username: Kv.auth.currentUsername,
     );
     reportService = ReportService(session);
   }

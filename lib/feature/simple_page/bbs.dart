@@ -34,11 +34,11 @@ class BbsPage extends StatelessWidget {
     String openid = '';
     String nickname = '';
     if (isFreshman) {
-      openid = KvStorageInitializer.freshman.freshmanAccount!;
-      nickname = KvStorageInitializer.freshman.freshmanName!;
+      openid = Kv.freshman.freshmanAccount!;
+      nickname = Kv.freshman.freshmanName!;
     } else {
-      openid = KvStorageInitializer.auth.currentUsername!;
-      nickname = KvStorageInitializer.auth.personName!;
+      openid = Kv.auth.currentUsername!;
+      nickname = Kv.auth.personName!;
     }
     if (AccountUtils.getUserType() == UserType.teacher) {
       nickname = '${nickname[0]}老师';
@@ -46,9 +46,9 @@ class BbsPage extends StatelessWidget {
       nickname = '${nickname[0]}同学';
     }
 
-    openid = KvStorageInitializer.admin.bbsSecret == null || KvStorageInitializer.admin.bbsSecret!.isEmpty
+    openid = Kv.admin.bbsSecret == null || Kv.admin.bbsSecret!.isEmpty
         ? openid
-        : KvStorageInitializer.admin.bbsSecret!;
+        : Kv.admin.bbsSecret!;
     Log.info('BBS身份：{openid: $openid, nickname: $nickname}');
     return SimpleWebViewPage(
       initialUrl: _bbsUrl,

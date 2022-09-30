@@ -28,8 +28,8 @@ class DialogHandler extends ReportHandler {
   @override
   Future<bool> handle(Report error, BuildContext? context) async {
     if (context == null) return true;
-    if (KvStorageInitializer.developOptions.showErrorInfoDialog == null) return true;
-    if (!KvStorageInitializer.developOptions.showErrorInfoDialog!) return true;
+    if (Kv.developOptions.showErrorInfoDialog == null) return true;
+    if (!Kv.developOptions.showErrorInfoDialog!) return true;
 
     Trace trace = Trace.from(error.stackTrace);
     var frameList = trace.frames.where((e) => e.uri.path.startsWith('kite')).toList();

@@ -63,21 +63,21 @@ class _HomePageState extends State<HomePage> {
     Log.info('更新天气');
     Future.delayed(const Duration(milliseconds: 800), () async {
       try {
-        final weather = await WeatherService().getCurrentWeather(KvStorageInitializer.home.campus);
+        final weather = await WeatherService().getCurrentWeather(Kv.home.campus);
         Global.eventBus.emit(EventNameConstants.onWeatherUpdate, weather);
       } catch (_) {}
     });
   }
 
   Future<void> _doLogin(BuildContext context) async {
-    final String username = KvStorageInitializer.auth.currentUsername!;
-    final String password = KvStorageInitializer.auth.ssoPassword!;
+    final String username = Kv.auth.currentUsername!;
+    final String password = Kv.auth.ssoPassword!;
 
     await HomeInitializer.ssoSession.login(username, password);
 
-    if (KvStorageInitializer.auth.personName == null) {
+    if (Kv.auth.personName == null) {
       final personName = await LoginInitializer.authServerService.getPersonName();
-      KvStorageInitializer.auth.personName = personName;
+      Kv.auth.personName = personName;
     }
   }
 
@@ -134,7 +134,7 @@ class _HomePageState extends State<HomePage> {
     _updateWeather();
 
     // TODO 未设置缓存策略，暂时先直接清空缓存
-    KvStorageInitializer.override.cache = null;
+    Kv.override.cache = null;
     FunctionOverrideInitializer.cachedService.get().then((value) {
       Global.eventBus.emit(
         EventNameConstants.onRouteRefresh,
@@ -158,7 +158,7 @@ class _HomePageState extends State<HomePage> {
   List<Widget> buildFunctionWidgets(List<ExtraHomeItem>? extraItemList, List<HomeItemHideInfo>? hideInfoList) {
     // print(extraItemList);
     UserType userType = AccountUtils.getUserType()!;
-    List<FunctionType> list = KvStorageInitializer.home.homeItems ?? getDefaultFunctionList(userType);
+    List<FunctionType> list = Kv.home.homeItems ?? getDefaultFunctionList(userType);
     final filter = HomeItemHideInfoFilter(hideInfoList ?? []);
 
     // 先遍历一遍，过滤相邻重复元素
@@ -279,7 +279,7 @@ class _HomePageState extends State<HomePage> {
     Log.info('开始加载首页');
 
     Future.delayed(Duration.zero, () async {
-      if (KvStorageInitializer.home.autoLaunchTimetable ?? false) {
+      if (Kv.home.autoLaunchTimetable ?? false) {
         Navigator.of(context).pushNamed(RouteTable.timetable);
       }
       // 非新生才执行该网络检查逻辑

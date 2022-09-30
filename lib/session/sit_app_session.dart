@@ -57,8 +57,8 @@ class SitAppSession implements ISession {
     } on SitAppApiError catch (e, _) {
       if (e.code == 500) {
         await login(
-          KvStorageInitializer.auth.currentUsername!,
-          KvStorageInitializer.auth.ssoPassword!,
+          Kv.auth.currentUsername!,
+          Kv.auth.ssoPassword!,
         );
       }
       return await normallyRequest();

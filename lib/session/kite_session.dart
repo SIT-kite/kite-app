@@ -65,8 +65,8 @@ class KiteSession implements ISession {
     } on KiteApiError catch (e) {
       if (e.code == 100) {
         await login(
-          KvStorageInitializer.auth.currentUsername!,
-          KvStorageInitializer.auth.ssoPassword!,
+          Kv.auth.currentUsername!,
+          Kv.auth.ssoPassword!,
         );
       }
       return await normallyRequest();

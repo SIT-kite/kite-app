@@ -43,8 +43,8 @@ class GreetingWidget extends StatefulWidget {
 class _GreetingWidgetState extends State<GreetingWidget> {
   // TODO: Update studyDays when current system date changed
   int? studyDays;
-  int campus = KvStorageInitializer.home.campus;
-  Weather currentWeather = KvStorageInitializer.home.lastWeather;
+  int campus = Kv.home.campus;
+  Weather currentWeather = Kv.home.lastWeather;
 
   @override
   void initState() {
@@ -63,7 +63,7 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   }
 
   int _getStudyDays() {
-    final studentId = KvStorageInitializer.auth.currentUsername!;
+    final studentId = Kv.auth.currentUsername!;
 
     if (studentId.isNotEmpty) {
       int entranceYear = 2000 + int.parse(studentId.substring(0, 2));
@@ -89,8 +89,8 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   }
 
   void _onWeatherUpdate(dynamic newWeather) {
-    KvStorageInitializer.home.lastWeather = newWeather;
-    campus = KvStorageInitializer.home.campus;
+    Kv.home.lastWeather = newWeather;
+    campus = Kv.home.campus;
 
     setState(() => currentWeather = newWeather as Weather);
   }

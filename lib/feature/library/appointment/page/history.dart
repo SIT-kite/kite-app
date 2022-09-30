@@ -169,7 +169,7 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget buildMyHistoryList() {
     return MyFutureBuilder<List>(
       future: Future.wait([
-        service.getApplication(username: KvStorageInitializer.auth.currentUsername),
+        service.getApplication(username: Kv.auth.currentUsername),
         service.getCurrentPeriod(),
       ]),
       builder: (context, tuple) {

@@ -111,7 +111,7 @@ class _SemesterSelectorState extends State<SemesterSelector> {
 
   Widget buildYearSelector() {
     // 得到入学年份
-    final grade = KvStorageInitializer.auth.currentUsername!.substring(0, 2);
+    final grade = Kv.auth.currentUsername!.substring(0, 2);
     // 生成经历过的学期并逆序（方便用户选择）
     final List<int> yearList = _generateYearList(int.parse(grade) + 2000).reversed.toList();
     final mapping = yearList.map((e) => MapEntry(e, buildYearString(e)));

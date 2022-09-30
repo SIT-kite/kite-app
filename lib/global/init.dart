@@ -56,15 +56,15 @@ class Initializer {
     // 初始化Hive数据库
     await HiveBoxInitializer.init('kite1/hive');
     await UserEventInitializer.init(userEventBox: HiveBoxInitializer.userEvent);
-    KvStorageInitializer.init(kvStorageBox: HiveBoxInitializer.kv);
+    KvInit.init(kvStorageBox: HiveBoxInitializer.kv);
     SettingInitializer.init(kvStorageBox: HiveBoxInitializer.kv);
     await Global.init(
       userEventStorage: UserEventInitializer.userEventStorage,
-      authSetting: KvStorageInitializer.auth,
+      authSetting: Kv.auth,
     );
     // 初始化用户首次打开时间（而不是应用安装时间）
     // ??= 表示为空时候才赋值
-    KvStorageInitializer.home.installTime ??= DateTime.now();
+    Kv.home.installTime ??= DateTime.now();
 
     BulletinInitializer.init(ssoSession: Global.ssoSession);
     CampusCardInitializer.init(session: Global.ssoSession);
@@ -72,12 +72,12 @@ class Initializer {
 
     final kiteSession = KiteSession(
       Global.dio,
-      KvStorageInitializer.jwt,
-      KvStorageInitializer.kite,
+      Kv.jwt,
+      Kv.kite,
     );
     FunctionOverrideInitializer.init(
       kiteSession: kiteSession,
-      storageDao: KvStorageInitializer.override,
+      storageDao: Kv.override,
     );
 
     await ContactInitializer.init(
@@ -129,7 +129,7 @@ class Initializer {
 
     final sitAppSession = SitAppSession(
       Global.dio,
-      KvStorageInitializer.sitAppJwt,
+      Kv.sitAppJwt,
     );
     SitAppInitializer.init(sitAppSession: sitAppSession);
     BoardInitializer.init(kiteSession: kiteSession);

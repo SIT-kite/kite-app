@@ -33,12 +33,12 @@ class FreshmanInitializer {
   static Future<void> init({
     required ISession kiteSession,
   }) async {
-    freshmanCacheDao = KvStorageInitializer.freshman;
+    freshmanCacheDao = Kv.freshman;
     freshmanSession = FreshmanSession(kiteSession, freshmanCacheDao);
     freshmanCacheManager = FreshmanCacheManager(freshmanCacheDao);
     freshmanDao = CachedFreshmanService(
       freshmanDao: FreshmanService(freshmanSession),
-      freshmanCacheDao: KvStorageInitializer.freshman,
+      freshmanCacheDao: Kv.freshman,
       freshmanCacheManager: freshmanCacheManager,
     );
   }

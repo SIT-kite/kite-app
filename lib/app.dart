@@ -94,8 +94,8 @@ class _KiteAppState extends State<KiteApp> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = KvStorageInitializer.theme.isDarkMode;
-    final primaryColor = KvStorageInitializer.theme.color;
+    final isDark = Kv.theme.isDarkMode;
+    final primaryColor = Kv.theme.color;
 
     // refresh override route
     Global.eventBus.on(EventNameConstants.onRouteRefresh, (arg) {
@@ -121,7 +121,7 @@ class _KiteAppState extends State<KiteApp> {
         onGenerateRoute: _onGenerateRoute,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: Lang.supports,
-        locale: KvStorageInitializer.pref.locale,
+        locale: Kv.pref.locale,
         builder: EasyLoading.init(builder: (context, widget) {
           return MediaQuery(
             // 设置文字大小不随系统设置改变

@@ -7,6 +7,6 @@ void main() async {
   test('kite login', () async {
     final profile = await KiteInitializer.kiteSession.login(username, ssoPassword);
     Log.info(profile);
-    Log.info(KvStorageInitializer.jwt.jwtToken);
+    Log.info(Kv.jwt.jwtToken);
   });
 }

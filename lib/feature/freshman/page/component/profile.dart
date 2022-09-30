@@ -58,7 +58,7 @@ class BasicInfoPageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (KvStorageInitializer.freshman.freshmanSecret == null) {
+    if (Kv.freshman.freshmanSecret == null) {
       // 若无新生信息
       Navigator.of(context).pushReplacementNamed(RouteTable.freshmanLogin);
     }

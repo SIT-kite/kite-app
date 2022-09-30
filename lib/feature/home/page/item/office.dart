@@ -61,13 +61,13 @@ class _OfficeItemState extends State<OfficeItem> {
   void _onHomeRefresh(_) async {
     if (!mounted) return;
     final String result = await _buildContent();
-    KvStorageInitializer.home.lastOfficeStatus = result;
+    Kv.home.lastOfficeStatus = result;
     setState(() => _tryUpdateContent(result));
   }
 
   Future<String> _buildContent() async {
-    final username = KvStorageInitializer.auth.currentUsername!;
-    final password = KvStorageInitializer.auth.ssoPassword!;
+    final username = Kv.auth.currentUsername!;
+    final password = Kv.auth.ssoPassword!;
 
     if (!OfficeInitializer.session.isLogin) {
       try {
@@ -93,7 +93,7 @@ class _OfficeItemState extends State<OfficeItem> {
   @override
   Widget build(BuildContext context) {
     // 如果是首屏加载, 从缓存读
-    _tryUpdateContent(KvStorageInitializer.home.lastOfficeStatus);
+    _tryUpdateContent(Kv.home.lastOfficeStatus);
     return HomeFunctionButton(
         route: '/office',
         icon: 'assets/home/icon_office.svg',

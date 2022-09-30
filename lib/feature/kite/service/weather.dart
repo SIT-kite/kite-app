@@ -29,7 +29,7 @@ class WeatherService implements WeatherDao {
 
   @override
   Future<Weather> getCurrentWeather(int campus) async {
-    var lang = KvStorageInitializer.pref.locale?.languageCode ?? Lang.zh;
+    var lang = Kv.pref.locale?.languageCode ?? Lang.zh;
     final url = _getWeatherUrl(campus, Lang.toCode(lang) ?? Lang.zhCode);
     final response = await Dio().get(url);
     final weather = Weather.fromJson(response.data['data']);

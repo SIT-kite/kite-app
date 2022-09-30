@@ -62,7 +62,7 @@ class _ReportItemState extends State<ReportItem> {
 
   Future<void> dialogRemind() async {
     if (hasWarnedDialog) return;
-    final rs = KvStorageInitializer.report;
+    final rs = Kv.report;
     if (rs.enable == null || rs.enable == false) return;
 
     final now = DateTime.now();
@@ -104,7 +104,7 @@ class _ReportItemState extends State<ReportItem> {
     late ReportHistory? history;
 
     try {
-      history = await ReportInitializer.reportService.getRecentHistory(KvStorageInitializer.auth.currentUsername ?? '');
+      history = await ReportInitializer.reportService.getRecentHistory(Kv.auth.currentUsername ?? '');
     } catch (e) {
       return '${i18n.failed}: ${e.runtimeType}';
     }
@@ -112,7 +112,7 @@ class _ReportItemState extends State<ReportItem> {
       return i18n.reportTempNoReportRecords;
     }
     // 别忘了本地缓存更新一下.
-    KvStorageInitializer.home.lastReport = history;
+    Kv.home.lastReport = history;
     return _generateContent(history);
   }
 
@@ -120,7 +120,7 @@ class _ReportItemState extends State<ReportItem> {
   Widget build(BuildContext context) {
     // 如果是第一次加载 (非下拉导致的渲染), 加载缓存的上报记录.
     if (content == null) {
-      final ReportHistory? lastReport = KvStorageInitializer.home.lastReport;
+      final ReportHistory? lastReport = Kv.home.lastReport;
       // 如果本地没有缓存记录, 加载默认文本. 否则加载记录.
       if (lastReport != null) {
         content = _generateContent(lastReport);

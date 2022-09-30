@@ -231,7 +231,7 @@ class SsoSession with MyDioDownloaderMixin implements ISession {
     isOnline = true;
     _username = username;
     _password = password;
-    KvStorageInitializer.loginTime.sso = DateTime.now();
+    Kv.loginTime.sso = DateTime.now();
     return response;
   }
 

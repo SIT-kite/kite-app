@@ -53,8 +53,8 @@ class _MailPageState extends State<MailPage> {
   }
 
   Future<FetchImapResult> _loadMailList() async {
-    final String studentId = KvStorageInitializer.auth.currentUsername ?? '';
-    final String password = MailInitializer.mail.password ?? (KvStorageInitializer.auth.ssoPassword ?? '');
+    final String studentId = Kv.auth.currentUsername ?? '';
+    final String password = MailInitializer.mail.password ?? (Kv.auth.ssoPassword ?? '');
 
     final email = '$studentId@mail.sit.edu.cn';
     final service = MailService(email, password);
@@ -124,7 +124,7 @@ class _MailPageState extends State<MailPage> {
   }
 
   Widget _buildPopupMenu() {
-    final String studentId = KvStorageInitializer.auth.currentUsername ?? '';
+    final String studentId = Kv.auth.currentUsername ?? '';
     final email = '$studentId@mail.sit.edu.cn';
 
     return PopupMenuButton(itemBuilder: (_) => [PopupMenuItem(child: Text(email))]);

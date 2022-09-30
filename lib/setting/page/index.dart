@@ -82,13 +82,13 @@ class SettingPage extends StatelessWidget {
       XFile? image = await FileUtils.pickImageByImagePicker();
       await image?.saveTo(saveToPath);
     }
-    KvStorageInitializer.home.background = saveToPath;
+    Kv.home.background = saveToPath;
     Global.eventBus.emit(EventNameConstants.onBackgroundChange);
   }
 
   void _testPassword(BuildContext context) async {
-    final user = KvStorageInitializer.auth.currentUsername;
-    final password = KvStorageInitializer.auth.ssoPassword;
+    final user = Kv.auth.currentUsername;
+    final password = Kv.auth.ssoPassword;
     try {
       EasyLoading.instance.userInteractions = false;
       EasyLoading.show(status: i18n.loggingIn);
@@ -124,12 +124,12 @@ class SettingPage extends StatelessWidget {
                 Log.info('退出登录');
 
                 if (isFreshman) {
-                  KvStorageInitializer.freshman
+                  Kv.freshman
                     ..freshmanAccount = null
                     ..freshmanName = null
                     ..freshmanSecret = null;
                 } else {
-                  KvStorageInitializer.auth
+                  Kv.auth
                     ..currentUsername = null
                     ..ssoPassword = null;
                 }
@@ -164,10 +164,10 @@ class SettingPage extends StatelessWidget {
 
   _buildLanguagePrefSelector(BuildContext ctx) {
     final Locale curLocale;
-    final savedLocale = KvStorageInitializer.pref.locale;
+    final savedLocale = Kv.pref.locale;
     if (savedLocale == null) {
       final defaultLocale = Localizations.localeOf(ctx);
-      KvStorageInitializer.pref.locale = defaultLocale;
+      Kv.pref.locale = defaultLocale;
       curLocale = defaultLocale;
     } else {
       curLocale = savedLocale;
@@ -192,7 +192,7 @@ class SettingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _passwordController.text = KvStorageInitializer.auth.ssoPassword ?? '';
+    _passwordController.text = Kv.auth.ssoPassword ?? '';
     return SettingsScreen(title: i18n.settingsTitle, children: [
       // Personalize
       SettingsGroup(
@@ -202,7 +202,7 @@ class SettingPage extends StatelessWidget {
             title: i18n.settingsThemeColor,
             leading: const Icon(Icons.palette_outlined),
             settingKey: ThemeKeys.themeColor,
-            defaultValue: KvStorageInitializer.theme.color,
+            defaultValue: Kv.theme.color,
             onChange: (newColor) => DynamicColorTheme.of(context).setColor(
               color: newColor,
               shouldSave: true, // saves it to shared preferences
@@ -211,7 +211,7 @@ class SettingPage extends StatelessWidget {
           _buildLanguagePrefSelector(context),
           SwitchSettingsTile(
             settingKey: ThemeKeys.isDarkMode,
-            defaultValue: KvStorageInitializer.theme.isDarkMode,
+            defaultValue: Kv.theme.isDarkMode,
             title: i18n.settingsDarkMode,
             subtitle: i18n.settingsDarkModeSub,
             leading: const Icon(Icons.dark_mode),
@@ -230,9 +230,9 @@ class SettingPage extends StatelessWidget {
               1: i18n.realtimeWeather,
               2: i18n.staticPicture,
             },
-            selected: KvStorageInitializer.home.backgroundMode,
+            selected: Kv.home.backgroundMode,
             onChange: (value) {
-              KvStorageInitializer.home.backgroundMode = value;
+              Kv.home.backgroundMode = value;
               Global.eventBus.emit(EventNameConstants.onBackgroundChange);
             },
           ),
@@ -245,9 +245,9 @@ class SettingPage extends StatelessWidget {
               1: i18n.fengxian,
               2: i18n.xuhui,
             },
-            selected: KvStorageInitializer.home.campus,
+            selected: Kv.home.campus,
             onChange: (value) {
-              KvStorageInitializer.home.campus = value;
+              Kv.home.campus = value;
               Global.eventBus.emit(EventNameConstants.onCampusChange);
             },
           ),
@@ -268,23 +268,23 @@ class SettingPage extends StatelessWidget {
       SettingsGroup(title: i18n.networking, children: <Widget>[
         SwitchSettingsTile(
           settingKey: '/network/useProxy',
-          defaultValue: KvStorageInitializer.network.useProxy,
+          defaultValue: Kv.network.useProxy,
           title: i18n.settingsHttpProxy,
           subtitle: i18n.settingsHttpProxySub,
           leading: const Icon(Icons.vpn_key),
           onChange: (value) async {
-            KvStorageInitializer.network.useProxy = value;
+            Kv.network.useProxy = value;
             await Initializer.init();
           },
           childrenIfEnabled: [
             TextInputSettingsTile(
               title: i18n.settingsProxyAddress,
               settingKey: '/network/proxy',
-              initialValue: KvStorageInitializer.network.proxy,
+              initialValue: Kv.network.proxy,
               validator: proxyValidator,
               onChange: (value) async {
-                KvStorageInitializer.network.proxy = value;
-                if (KvStorageInitializer.network.useProxy) {
+                Kv.network.proxy = value;
+                if (Kv.network.useProxy) {
                   await Initializer.init();
                 }
               },
@@ -305,11 +305,11 @@ class SettingPage extends StatelessWidget {
           if (!isFreshman)
             SimpleSettingsTile(
               title: i18n.studentID,
-              subtitle: KvStorageInitializer.auth.currentUsername ?? "",
+              subtitle: Kv.auth.currentUsername ?? "",
               leading: const Icon(Icons.person_rounded),
               onTap: () {
                 // Copy the student ID to clipboard
-                final id = KvStorageInitializer.auth.currentUsername;
+                final id = Kv.auth.currentUsername;
                 if (id != null) {
                   Clipboard.setData(ClipboardData(text: id));
                   showBasicFlash(context, i18n.studentIdCopy2ClipboardTip.txt);
@@ -323,7 +323,7 @@ class SettingPage extends StatelessWidget {
               leading: const Icon(Icons.lock),
               showConfirmation: true,
               onConfirm: () {
-                KvStorageInitializer.auth.ssoPassword = _passwordController.text;
+                Kv.auth.ssoPassword = _passwordController.text;
                 return true;
               },
               children: [
@@ -362,7 +362,7 @@ class SettingPage extends StatelessWidget {
             TextInputSettingsTile(
               title: '"问答" 密钥',
               settingKey: AdminKeys.bbsSecret,
-              initialValue: KvStorageInitializer.admin.bbsSecret ?? '',
+              initialValue: Kv.admin.bbsSecret ?? '',
             ),
           ],
         ),
@@ -371,12 +371,12 @@ class SettingPage extends StatelessWidget {
         children: <Widget>[
           SwitchSettingsTile(
               settingKey: DevelopOptionsKeys.showErrorInfoDialog,
-              defaultValue: KvStorageInitializer.developOptions.showErrorInfoDialog ?? false,
+              defaultValue: Kv.developOptions.showErrorInfoDialog ?? false,
               title: i18n.settingsDetailedXcpDialog,
               subtitle: i18n.settingsDetailedXcpDialogSub,
               leading: const Icon(Icons.info),
               onChange: (value) {
-                KvStorageInitializer.developOptions.showErrorInfoDialog = value;
+                Kv.developOptions.showErrorInfoDialog = value;
               }),
           SimpleSettingsTile(
             title: i18n.settingsLocalStorage,

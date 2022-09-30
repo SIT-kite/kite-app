@@ -202,7 +202,7 @@ class RouteWithNoticeDialog implements IRouteGenerator {
     if (routeNotice.containsKey(routeName)) {
       final notice = routeNotice[routeName]!;
       Future.delayed(Duration.zero, () async {
-        final overrideDb = KvStorageInitializer.override;
+        final overrideDb = Kv.override;
         final confirmedRouteNotice = overrideDb.confirmedRouteNotice ?? [];
         if (confirmedRouteNotice.contains(notice.id)) return;
         final select = await showAlertDialog(

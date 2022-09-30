@@ -73,7 +73,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
 
     try {
       // 先保存登录信息
-      KvStorageInitializer.freshman
+      Kv.freshman
         ..freshmanAccount = account
         ..freshmanSecret = secret;
       // 清空本地缓存
@@ -82,7 +82,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       final info = await freshmanDao.getInfo();
 
       // 登陆成功后赋值名字
-      KvStorageInitializer.freshman.freshmanName = info.name;
+      Kv.freshman.freshmanName = info.name;
 
       // Flutter 官方推荐的在异步函数中使用context需要先检查是否mounted
       if (!mounted) return;
@@ -98,7 +98,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
     } catch (e) {
       // TODO: optimize UX
       // 登陆失败
-      KvStorageInitializer.freshman
+      Kv.freshman
         ..freshmanSecret = null
         ..freshmanAccount = null;
       showBasicFlash(context, Text('${i18n.freshmanLoginFailedWarn}: $e'));
@@ -113,8 +113,8 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
   void initState() {
     super.initState();
 
-    String? account = KvStorageInitializer.freshman.freshmanAccount;
-    String? secret = KvStorageInitializer.freshman.freshmanSecret;
+    String? account = Kv.freshman.freshmanAccount;
+    String? secret = Kv.freshman.freshmanSecret;
     if (account != null) {
       _accountController.text = account;
       _secretController.text = secret ?? '';

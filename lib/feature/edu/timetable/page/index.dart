@@ -117,8 +117,8 @@ class _TimetablePageState extends State<TimetablePage> {
           .then((value) => _onRefresh()),
       _onRefresh,
       _onExport,
-      () => KvStorageInitializer.home.autoLaunchTimetable =
-          !(KvStorageInitializer.home.autoLaunchTimetable ?? false),
+      () => Kv.home.autoLaunchTimetable =
+          !(Kv.home.autoLaunchTimetable ?? false),
     ];
 
     // Widget buildCenterRow(Widget child) =>
@@ -138,7 +138,7 @@ class _TimetablePageState extends State<TimetablePage> {
               ),
           CheckedPopupMenuItem(
             value: 3,
-            checked: KvStorageInitializer.home.autoLaunchTimetable ?? false,
+            checked: Kv.home.autoLaunchTimetable ?? false,
             child: Row(
               children: [
                 const Text('自启课表'),

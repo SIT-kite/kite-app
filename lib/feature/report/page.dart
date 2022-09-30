@@ -33,11 +33,11 @@ const _reportUrlIndex = '${_reportUrlPrefix}pages/index/index';
 class ReminderDialog extends StatelessWidget {
   ReminderDialog({Key? key}) : super(key: key);
   final ValueNotifier<TimeOfDay?> _notifier = ValueNotifier(
-      KvStorageInitializer.report.time == null ? null : TimeOfDay.fromDateTime(KvStorageInitializer.report.time!));
+      Kv.report.time == null ? null : TimeOfDay.fromDateTime(Kv.report.time!));
 
   @override
   Widget build(BuildContext context) {
-    final reportTime = KvStorageInitializer.report.time;
+    final reportTime = Kv.report.time;
     if (reportTime != null) {
       _notifier.value = TimeOfDay(hour: reportTime.hour, minute: reportTime.minute);
     }
@@ -51,8 +51,8 @@ class ReminderDialog extends StatelessWidget {
           children: [
             const Text('启用'),
             MySwitcher(
-              KvStorageInitializer.report.enable ?? false,
-              onChanged: (value) => KvStorageInitializer.report.enable = value,
+              Kv.report.enable ?? false,
+              onChanged: (value) => Kv.report.enable = value,
             ),
           ],
         ),
@@ -68,7 +68,7 @@ class ReminderDialog extends StatelessWidget {
                 );
                 if (selectTime == null) return;
                 _notifier.value = selectTime;
-                KvStorageInitializer.report.time = DateTime(0, 0, 0, selectTime.hour, selectTime.minute);
+                Kv.report.time = DateTime(0, 0, 0, selectTime.hour, selectTime.minute);
               },
               child: ValueListenableBuilder<TimeOfDay?>(
                 valueListenable: _notifier,
@@ -95,7 +95,7 @@ class DailyReportPage extends StatelessWidget {
 
   static Future<String> _getInjectJs() async {
     // TODO: 把 replace 完的 JS 缓存了
-    final String username = KvStorageInitializer.auth.currentUsername ?? '';
+    final String username = Kv.auth.currentUsername ?? '';
     final String css = await rootBundle.loadString('assets/report/inject.css');
     final String js = await rootBundle.loadString('assets/report/inject.js');
     return js.replaceFirst('{{username}}', username).replaceFirst('{{injectCSS}}', css);

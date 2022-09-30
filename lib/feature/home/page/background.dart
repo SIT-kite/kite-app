@@ -45,7 +45,7 @@ class _HomeBackgroundState extends State<HomeBackground> {
 
   @override
   void initState() {
-    _weatherCode = widget.initialWeatherCode ?? int.parse(KvStorageInitializer.home.lastWeather.icon);
+    _weatherCode = widget.initialWeatherCode ?? int.parse(Kv.home.lastWeather.icon);
     super.initState();
     Global.eventBus.on(EventNameConstants.onBackgroundChange, _onBackgroundUpdate);
     Global.eventBus.on(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
@@ -82,7 +82,7 @@ class _HomeBackgroundState extends State<HomeBackground> {
   }
 
   void _onBackgroundUpdate(_) {
-    if (KvStorageInitializer.home.background == null) {
+    if (Kv.home.background == null) {
       showBasicFlash(context, i18n.settingsWallpaperEmptyWarn.txt);
       return;
     }
@@ -93,7 +93,7 @@ class _HomeBackgroundState extends State<HomeBackground> {
     Weather w = newWeather as Weather;
 
     // 天气背景
-    if (KvStorageInitializer.home.backgroundMode == 1) {
+    if (Kv.home.backgroundMode == 1) {
       setState(() => _weatherCode = int.parse(w.icon));
     } else {
       _weatherCode = int.parse(w.icon);
@@ -109,14 +109,14 @@ class _HomeBackgroundState extends State<HomeBackground> {
   }
 
   Widget _buildImageBg() {
-    final path = KvStorageInitializer.home.background!;
+    final path = Kv.home.background!;
     return Image.file(File(path), fit: BoxFit.fill);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (KvStorageInitializer.home.backgroundMode == 2) {
-      if (KvStorageInitializer.home.background != null) {
+    if (Kv.home.backgroundMode == 2) {
+      if (Kv.home.background != null) {
         return _buildImageBg();
       } else {
         Future.delayed(

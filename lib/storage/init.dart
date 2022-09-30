@@ -35,8 +35,7 @@ import 'storage/index.dart';
 
 export 'dao/index.dart';
 export 'storage/index.dart';
-
-class KvStorageInitializer {
+class Kv {
   static late ThemeSettingDao theme;
   static late AuthSettingDao auth;
   static late AdminSettingDao admin;
@@ -54,23 +53,26 @@ class KvStorageInitializer {
 
   static late Box<dynamic> kvStorageBox;
 
+}
+class KvInit{
+
   static Future<void> init({
     required Box<dynamic> kvStorageBox,
   }) async {
-    KvStorageInitializer.kvStorageBox = kvStorageBox;
-    auth = AuthSettingStorage(kvStorageBox);
-    admin = AdminSettingStorage(kvStorageBox);
-    home = HomeSettingStorage(kvStorageBox);
-    theme = ThemeSettingStorage(kvStorageBox);
-    network = NetworkSettingStorage(kvStorageBox);
-    jwt = JwtStorage(kvStorageBox);
-    sitAppJwt = SitAppJwtStorage(kvStorageBox);
-    loginTime = LoginTimeStorage(kvStorageBox);
-    freshman = FreshmanCacheStorage(kvStorageBox);
-    developOptions = DevelopOptionsStorage(kvStorageBox);
-    report = ReportStorage(kvStorageBox);
-    kite = KiteStorage(kvStorageBox);
-    override = FunctionOverrideStorage(kvStorageBox);
-    pref = PrefStorage(kvStorageBox);
+    Kv.kvStorageBox = kvStorageBox;
+    Kv.auth = AuthSettingStorage(kvStorageBox);
+    Kv.admin = AdminSettingStorage(kvStorageBox);
+    Kv.home = HomeSettingStorage(kvStorageBox);
+    Kv.theme = ThemeSettingStorage(kvStorageBox);
+    Kv.network = NetworkSettingStorage(kvStorageBox);
+    Kv.jwt = JwtStorage(kvStorageBox);
+    Kv.sitAppJwt = SitAppJwtStorage(kvStorageBox);
+    Kv.loginTime = LoginTimeStorage(kvStorageBox);
+    Kv.freshman = FreshmanCacheStorage(kvStorageBox);
+    Kv.developOptions = DevelopOptionsStorage(kvStorageBox);
+    Kv.report = ReportStorage(kvStorageBox);
+    Kv.kite = KiteStorage(kvStorageBox);
+    Kv.override = FunctionOverrideStorage(kvStorageBox);
+    Kv.pref = PrefStorage(kvStorageBox);
   }
 }

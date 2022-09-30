@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
     try {
       await LoginInitializer.ssoSession.login(username, password);
       final personName = await LoginInitializer.authServerService.getPersonName();
-      KvStorageInitializer.auth
+      Kv.auth
         ..currentUsername = username
         ..ssoPassword = password
         ..personName = personName;
@@ -102,8 +102,8 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
 
-    String? username = KvStorageInitializer.auth.currentUsername;
-    String? password = KvStorageInitializer.auth.ssoPassword;
+    String? username = Kv.auth.currentUsername;
+    String? password = Kv.auth.ssoPassword;
     if (username != null) {
       _usernameController.text = username;
       _passwordController.text = password ?? '';
@@ -212,7 +212,7 @@ class _LoginPageState extends State<LoginPage> {
         controller.dismiss();
         isProxySettingShown = false;
 
-        KvStorageInitializer.network
+        Kv.network
           ..useProxy = true
           ..proxy = inputText;
         // TODO
@@ -227,7 +227,7 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
     isProxySettingShown = true;
-    _proxyInputController.text = KvStorageInitializer.network.proxy;
+    _proxyInputController.text = Kv.network.proxy;
 
     context.showFlashBar(
       persistent: true,

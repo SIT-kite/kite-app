@@ -33,7 +33,7 @@ class HomeSettingPage extends StatefulWidget {
 
 class _HomeSettingPageState extends State<HomeSettingPage> {
   List<FunctionType> homeItems =
-      KvStorageInitializer.home.homeItems ?? getDefaultFunctionList(AccountUtils.getUserType()!);
+      Kv.home.homeItems ?? getDefaultFunctionList(AccountUtils.getUserType()!);
 
   void _onReorder(int oldIndex, int newIndex) {
     setState(() {
@@ -48,7 +48,7 @@ class _HomeSettingPageState extends State<HomeSettingPage> {
   }
 
   void _onSave() {
-    KvStorageInitializer.home.homeItems = homeItems;
+    Kv.home.homeItems = homeItems;
   }
 
   @override

@@ -36,7 +36,7 @@ class FreshmanItem extends StatelessWidget {
     // 所以只考虑正式学生的情况
     if (userType != UserType.freshman) {
       // 正式学生，获取学号
-      final username = KvStorageInitializer.auth.currentUsername!;
+      final username = Kv.auth.currentUsername!;
       // 取今年的后两位，若今年的后两位大于学号前两位
       // 说明已经不是新生了
       final now = DateTime.now();
@@ -47,8 +47,8 @@ class FreshmanItem extends StatelessWidget {
     }
     return HomeFunctionButton(
       onPressed: () {
-        if (KvStorageInitializer.freshman.freshmanAccount == null ||
-            KvStorageInitializer.freshman.freshmanSecret == null) {
+        if (Kv.freshman.freshmanAccount == null ||
+            Kv.freshman.freshmanSecret == null) {
           Navigator.of(context).pushNamed(RouteTable.freshmanLogin);
         } else {
           Navigator.of(context).pushNamed(RouteTable.freshman);

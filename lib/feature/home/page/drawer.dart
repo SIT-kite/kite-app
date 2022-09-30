@@ -26,13 +26,13 @@ class KiteDrawer extends Drawer {
 
   @override
   Widget build(BuildContext context) {
-    final inDays = DateTime.now().difference(KvStorageInitializer.home.installTime!).inDays;
+    final inDays = DateTime.now().difference(Kv.home.installTime!).inDays;
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: BoxDecoration(color: KvStorageInitializer.theme.color),
+            decoration: BoxDecoration(color: Kv.theme.color),
             child: Align(
                 alignment: Alignment.bottomLeft,
                 child: Text(inDays <= 0 ? i18n.daysKiteWithYouLabel0 : i18n.daysKiteWithYouLabel(inDays),

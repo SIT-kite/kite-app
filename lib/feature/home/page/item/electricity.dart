@@ -32,7 +32,7 @@ class ElectricityItem extends StatefulWidget {
 }
 
 class _ElectricityItemState extends State<ElectricityItem> {
-  final Balance? lastBalance = KvStorageInitializer.home.lastBalance;
+  final Balance? lastBalance = Kv.home.lastBalance;
   String? content;
 
   @override

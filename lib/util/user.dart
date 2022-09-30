@@ -31,15 +31,15 @@ class AccountUtils {
   }
 
   static UserType? getUserType() {
-    final username = KvStorageInitializer.auth.currentUsername;
-    final ssoPassword = KvStorageInitializer.auth.ssoPassword;
+    final username = Kv.auth.currentUsername;
+    final ssoPassword = Kv.auth.ssoPassword;
     // 若用户名存在
     if (username != null && ssoPassword != null) {
       // 已登录用户, 账号格式一定是合法的
       return guessUserType(username)!;
     }
     // 若用户名不存在且新生用户存在
-    if (KvStorageInitializer.freshman.freshmanAccount != null) {
+    if (Kv.freshman.freshmanAccount != null) {
       return UserType.freshman;
     }
     return null;

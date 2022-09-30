@@ -61,7 +61,7 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
 
     Widget buildConnectedByProxy() => Text(
         '${i18n.connectivityConnectedByVpn}\n'
-        '${i18n.address}：${KvStorageInitializer.network.proxy}',
+        '${i18n.address}：${Kv.network.proxy}',
         textAlign: TextAlign.center,
         style: style);
 
@@ -91,7 +91,7 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
       );
     }
 
-    if (KvStorageInitializer.network.useProxy) {
+    if (Kv.network.useProxy) {
       return buildConnectedByProxy();
     }
     return FutureBuilder(

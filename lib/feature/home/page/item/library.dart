@@ -69,7 +69,7 @@ class _LibraryItemState extends State<LibraryItem> {
     final hotItem = monthlyHot[randomIndex];
 
     final result = '${i18n.hotPost}: ${hotItem.hotSearchWord} (${hotItem.count})';
-    KvStorageInitializer.home.lastHotSearch = result;
+    Kv.home.lastHotSearch = result;
     return result;
   }
 
@@ -77,7 +77,7 @@ class _LibraryItemState extends State<LibraryItem> {
   Widget build(BuildContext context) {
     // 如果是首屏加载
     if (content == null) {
-      final lastHotSearch = KvStorageInitializer.home.lastHotSearch;
+      final lastHotSearch = Kv.home.lastHotSearch;
       content = lastHotSearch;
     }
     return HomeFunctionButton(

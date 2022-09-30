@@ -29,7 +29,7 @@ class OfficeMessageService extends AService {
   OfficeMessageService(ISession session) : super(session);
 
   Future<OfficeMessageCount> queryMessageCount() async {
-    String payload = 'code=${KvStorageInitializer.auth.currentUsername}';
+    String payload = 'code=${Kv.auth.currentUsername}';
 
     final response = await session.request(
       serviceMessageCount,
