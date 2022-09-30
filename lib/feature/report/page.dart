@@ -17,21 +17,28 @@
  */
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kite/component/my_switcher.dart';
 import 'package:kite/component/webview.dart';
 import 'package:kite/component/webview_page.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/alert_dialog.dart';
+import 'package:kite/util/dsl.dart';
 import 'package:kite/util/rule.dart';
 
 const _reportUrlPrefix = 'http://xgfy.sit.edu.cn/h5/#/';
 const _reportUrlIndex = '${_reportUrlPrefix}pages/index/index';
 
-class ReminderDialog extends StatelessWidget {
-  ReminderDialog({Key? key}) : super(key: key);
+class ReminderDialog extends StatefulWidget {
+  const ReminderDialog({Key? key}) : super(key: key);
+
+  @override
+  State<ReminderDialog> createState() => _ReminderDialogState();
+}
+
+class _ReminderDialogState extends State<ReminderDialog> {
   final ValueNotifier<TimeOfDay?> _notifier = ValueNotifier(
       KvStorageInitializer.report.time == null ? null : TimeOfDay.fromDateTime(KvStorageInitializer.report.time!));
 
@@ -45,46 +52,50 @@ class ReminderDialog extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Text('打开小风筝时自动检测上报情况，若在设置时间之前未上报，则提醒用户引导其疫情上报'),
+        i18n.reportTempAlarmDesc.txt,
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('启用'),
+            i18n.enable.txt,
             MySwitcher(
               KvStorageInitializer.report.enable ?? false,
-              onChanged: (value) => KvStorageInitializer.report.enable = value,
+              onChanged: (value) {
+                KvStorageInitializer.report.enable = value;
+                setState(() {}); // Notify UI update
+              },
             ),
           ],
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text('提醒时间'),
-            TextButton(
-              onPressed: () async {
-                final selectTime = await showTimePicker(
-                  context: context,
-                  initialTime: TimeOfDay.fromDateTime(reportTime ?? DateTime.now()),
-                );
-                if (selectTime == null) return;
-                _notifier.value = selectTime;
-                KvStorageInitializer.report.time = DateTime(0, 0, 0, selectTime.hour, selectTime.minute);
-              },
-              child: ValueListenableBuilder<TimeOfDay?>(
-                valueListenable: _notifier,
-                builder: (context, data, widget) {
-                  if (data == null) {
-                    return const Text('未选择');
-                  }
-                  final t = _notifier.value!;
-                  final hh = t.hour;
-                  final mm = t.minute;
-                  return Text('$hh:$mm');
+        if (KvStorageInitializer.report.enable ?? false)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              i18n.reportTempRemindTime.txt,
+              TextButton(
+                onPressed: () async {
+                  final selectTime = await showTimePicker(
+                    context: context,
+                    initialTime: TimeOfDay.fromDateTime(reportTime ?? DateTime.now()),
+                  );
+                  if (selectTime == null) return;
+                  _notifier.value = selectTime;
+                  KvStorageInitializer.report.time = DateTime(0, 0, 0, selectTime.hour, selectTime.minute);
                 },
+                child: ValueListenableBuilder<TimeOfDay?>(
+                  valueListenable: _notifier,
+                  builder: (context, data, widget) {
+                    if (data == null) {
+                      return const Text('未选择');
+                    }
+                    final t = _notifier.value!;
+                    final hh = t.hour;
+                    final mm = t.minute;
+                    return Text('$hh:$mm');
+                  },
+                ),
               ),
-            ),
-          ],
-        )
+            ],
+          )
       ],
     );
   }
@@ -112,7 +123,7 @@ class DailyReportPage extends StatelessWidget {
             showAlertDialog(
               context,
               title: '每日上报提醒',
-              content: SingleChildScrollView(
+              content: const SingleChildScrollView(
                 child: ReminderDialog(),
               ),
               actionTextList: ['关闭窗口'],

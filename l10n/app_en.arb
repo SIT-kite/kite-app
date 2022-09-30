@@ -7,6 +7,7 @@
   "addInfoTitle": "Add Info",
   "address": "Address",
   "allowOthersFindMeCheckbox": "Allow others to find me",
+  "appName": "SIT Kite",
   "applicationDesc": "This function is based on \"上应一网通办\".\nFor most of types, you have to do the necessary procedure on the spot although you submitted an application online.",
   "author": "Author",
   "bill": "Bill",
@@ -145,6 +146,7 @@
   "elecBillHourlyChart24": "Last 24 Hours ⚡ Chart",
   "elecBillLast24Hour": "Last 24 hours",
   "elecBillLast7Day": "Last 7 days",
+  "enable": "Enable",
   "examEndTime": "Ent Time",
   "examIsRetake": "Is Retake",
   "examLocation": "Location",
@@ -234,8 +236,8 @@
   "ftype_timetable_desc": "School timetable",
   "ftype_upgrade": "Upgrade Kite",
   "ftype_upgrade_desc": "A new version? Let's check it out!",
-  "ftype_wiki": "Wiki",
-  "ftype_wiki_desc": "Kite Wiki",
+  "ftype_wiki": "Kite Wiki",
+  "ftype_wiki_desc": "A Wiki of everything you want to know",
   "ftype_yellowPages": "Yellow Pages",
   "ftype_yellowPages_desc": "Contact school",
   "fullName": "Full Name",
@@ -281,6 +283,7 @@
   "homepage": "Homepage",
   "homepageCampusNetworkConnected": "Connected to Campus Network",
   "hotPost": "HOT",
+  "htmlPageNoContent": "No Content",
   "kiteBoardReachEndLabel": "wow, you dug through the Earth!",
   "kiteBoardTitle": "Kite Board",
   "kiteBuiltinPinned": "[Pinned]",
@@ -341,7 +344,7 @@
     "description": "Open a file"
   },
   "openWlanSettingsBtn": "Open WLAN settings",
-  "personalInfoDescLabel": "The information on this page would show your roommates and classmate. It's convenient to make friends or create chat rooms.",
+  "personalInfoDescLabel": "The information on this page would show your roommates and classmate. It's convenient to make friends and group chat.",
   "personalInfoSettingBtnTooltip": "Set Personal Info",
   "personalInfoTitle": "Personal Info",
   "personalizeTitle": "Personalize",
@@ -366,12 +369,16 @@
   "@reportTempAbnormal": {
     "description": "For building string: Reported Today Abnormal {place}"
   },
+  "reportTempAlarmDesc": "When launched, Kite will detect whether you have reported today and notify you after the time you set.",
   "reportTempHelper": "Temperature Report Helper",
   "reportTempNoReportRecords": "No report records",
   "reportTempNormal": "Normal",
   "@reportTempNormal": {
     "description": "For building string: Reported Today Normal {place}"
   },
+  "reportTempRemindTime": "Time",
+  "reportTempReminderSwitch": "Notice Me",
+  "reportTempReminderTitle": "Report Alarm",
   "reportTempReportedToday": "Reported Today",
   "@reportTempReportedToday": {
     "description": "For building string: Reported Today Normal {place}"
@@ -428,6 +435,7 @@
   "tel": "TEL.",
   "unfilled": "Unfilled",
   "unknown": "Unknown",
+  "untitled": "Untitled",
   "uploadDoneTip": "Uploaded successfully!",
   "uploadFailedTip": "uh-oh, failed to upload.",
   "uploadingCounter": "Uploaded {done} / {all}",
@@ -446,6 +454,9 @@
   "weather": "Weather",
   "weather_sunny": "Sunny",
   "wechat": "Wechat",
+  "welcomeFreshman": "I'm a freshman",
+  "welcomeLogin": "Login",
+  "welcomeSub": "The Best, The Fastest.",
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
   "yes": "Yes"

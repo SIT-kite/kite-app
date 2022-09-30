@@ -25,7 +25,7 @@ class ScannerPage extends StatefulWidget {
   const ScannerPage({Key? key}) : super(key: key);
 
   @override
-  _ScannerPageState createState() => _ScannerPageState();
+  State<ScannerPage> createState() => _ScannerPageState();
 }
 
 class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStateMixin {
@@ -50,16 +50,18 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
       icon: const Icon(Icons.image),
       iconSize: 32.0,
       onPressed: () async {
-        final ImagePicker _picker = ImagePicker();
+        final ImagePicker picker = ImagePicker();
         // Pick an image
-        final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+        final XFile? image = await picker.pickImage(source: ImageSource.gallery);
         if (image != null) {
           if (await controller.analyzeImage(image.path)) {
+            if (!mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               content: Text('Barcode found!'),
               backgroundColor: Colors.green,
             ));
           } else {
+            if (!mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               content: Text('No barcode found!'),
               backgroundColor: Colors.red,

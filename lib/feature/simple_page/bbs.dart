@@ -18,11 +18,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:kite/component/webview_page.dart';
+import 'package:kite/l10n/extension.dart';
+import 'package:kite/r.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/user.dart';
-
-const _bbsUrl = 'https://support.qq.com/products/386124';
 
 class BbsPage extends StatelessWidget {
   const BbsPage({Key? key}) : super(key: key);
@@ -41,6 +41,8 @@ class BbsPage extends StatelessWidget {
       nickname = KvStorageInitializer.auth.personName!;
     }
     if (AccountUtils.getUserType() == UserType.teacher) {
+      // TODO: Change this behavior?
+      /// No i18n, the name will be shown outside
       nickname = '${nickname[0]}老师';
     } else {
       nickname = '${nickname[0]}同学';
@@ -51,13 +53,13 @@ class BbsPage extends StatelessWidget {
         : KvStorageInitializer.admin.bbsSecret!;
     Log.info('BBS身份：{openid: $openid, nickname: $nickname}');
     return SimpleWebViewPage(
-      initialUrl: _bbsUrl,
+      initialUrl: R.kiteBbsUrl,
       postData: {
         'openid': openid,
         'nickname': nickname,
         'avatar': 'https://txc.qq.com/static/desktop/img/products/def-product-logo.png',
       },
-      fixedTitle: '问答',
+      fixedTitle: i18n.ftype_bbs,
       showLaunchButtonIfUnsupported: false,
     );
   }
