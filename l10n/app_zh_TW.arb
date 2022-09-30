@@ -163,9 +163,9 @@
   "kiteBuiltinPinned": "[釘選]",
   "kiteForgotPwdBtn": "忘記密碼?",
   "kiteLoggedInTip": "",
-  "kiteLoginFailedTip": "",
   "kiteLoginAccountHint": "登入",
   "kiteLoginBtn": "進入小風箏世界",
+  "kiteLoginFailedTip": "",
   "kiteLoginPwdHint": "輸入你的OA密碼",
   "kiteLoginTitle": "歡迎！",
   "kiteStatsBtnTooltip": "統計信息",
@@ -191,6 +191,7 @@
   "name": "名稱",
   "networkError": "",
   "networkTool": "網路工具",
+  "networkXcpWarn": "",
   "networking": "網路",
   "newFriendsTitle": "新朋友",
   "nickName": "暱稱",
@@ -285,6 +286,5 @@
   "wechat": "微信",
   "xuhui": "徐匯",
   "xuhuiDistrict": "徐匯區",
-  "yes": "好",
-  "networkXcpWarn": ""
+  "yes": "好"
 }

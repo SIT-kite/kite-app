@@ -35,7 +35,7 @@ class BaseElectricityChartWidget extends StatelessWidget {
       color: Colors.blueGrey,
       fontSize: 11,
     );
-    String text = '${value.toStringAsFixed(2)}元';
+    String text = '¥${value.toStringAsFixed(2)}';
     return SideTitleWidget(
       axisSide: mate.axisSide,
       child: Text(text, style: style),
