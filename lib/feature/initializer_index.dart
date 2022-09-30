@@ -27,7 +27,7 @@ import 'game/entity.dart';
 import 'home/entity/home.dart';
 import 'kite/entity/weather.dart';
 import 'library/search/entity/search_history.dart';
-import 'report/entity/report.dart';
+import 'report/entity.dart';
 import 'user_event/entity.dart';
 
 export 'activity/init.dart';

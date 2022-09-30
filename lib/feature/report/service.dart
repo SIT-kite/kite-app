@@ -18,8 +18,8 @@
 import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
-import '../dao/report.dart';
-import '../entity/report.dart';
+import 'dao.dart';
+import 'entity.dart';
 
 class ReportService extends AService implements ReportDao {
   ReportService(ISession session) : super(session);

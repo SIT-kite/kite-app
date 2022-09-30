@@ -19,7 +19,7 @@ import 'package:hive/hive.dart';
 import 'package:kite/feature/electricity/entity.dart';
 import 'package:kite/feature/home/entity/home.dart';
 import 'package:kite/feature/kite/entity/weather.dart';
-import 'package:kite/feature/report/entity/report.dart';
+import 'package:kite/feature/report/entity.dart';
 
 import '../dao/home.dart';
 
@@ -55,8 +55,7 @@ class HomeSettingStorage implements HomeSettingDao {
   set background(String? v) => box.put(HomeKeyKeys.background, v);
 
   @override
-  int get backgroundMode =>
-      box.get(HomeKeyKeys.backgroundMode, defaultValue: 1);
+  int get backgroundMode => box.get(HomeKeyKeys.backgroundMode, defaultValue: 1);
 
   @override
   set backgroundMode(int v) => box.put(HomeKeyKeys.backgroundMode, v);
@@ -71,12 +70,10 @@ class HomeSettingStorage implements HomeSettingDao {
   DateTime? get installTime => box.get(HomeKeyKeys.installTime);
 
   @override
-  set installTime(DateTime? dateTime) =>
-      box.put(HomeKeyKeys.installTime, dateTime);
+  set installTime(DateTime? dateTime) => box.put(HomeKeyKeys.installTime, dateTime);
 
   @override
-  Weather get lastWeather =>
-      box.get(HomeKeyKeys.lastWeather, defaultValue: Weather.defaultWeather());
+  Weather get lastWeather => box.get(HomeKeyKeys.lastWeather, defaultValue: Weather.defaultWeather());
 
   @override
   set lastWeather(Weather weather) => box.put(HomeKeyKeys.lastWeather, weather);
@@ -85,37 +82,31 @@ class HomeSettingStorage implements HomeSettingDao {
   ReportHistory? get lastReport => box.get(HomeKeyKeys.lastReport);
 
   @override
-  set lastReport(ReportHistory? reportHistory) =>
-      box.put(HomeKeyKeys.lastReport, reportHistory);
+  set lastReport(ReportHistory? reportHistory) => box.put(HomeKeyKeys.lastReport, reportHistory);
 
   @override
   Balance? get lastBalance => box.get(HomeKeyKeys.lastBalance);
 
   @override
-  set lastBalance(Balance? lastBalance) =>
-      box.put(HomeKeyKeys.lastBalance, lastBalance);
+  set lastBalance(Balance? lastBalance) => box.put(HomeKeyKeys.lastBalance, lastBalance);
 
   @override
   String? get lastHotSearch => box.get(HomeKeyKeys.lastHotSearch);
 
   @override
-  set lastHotSearch(String? expense) =>
-      box.put(HomeKeyKeys.lastHotSearch, expense);
+  set lastHotSearch(String? expense) => box.put(HomeKeyKeys.lastHotSearch, expense);
 
   @override
   String? get lastOfficeStatus => box.get(HomeKeyKeys.lastOfficeStatus);
 
   @override
-  set lastOfficeStatus(String? status) =>
-      box.put(HomeKeyKeys.lastOfficeStatus, status);
+  set lastOfficeStatus(String? status) => box.put(HomeKeyKeys.lastOfficeStatus, status);
 
   @override
-  Set<int>? get readNotice =>
-      box.get(HomeKeyKeys.readNotice, defaultValue: <dynamic>{});
+  Set<int>? get readNotice => box.get(HomeKeyKeys.readNotice, defaultValue: <dynamic>{});
 
   @override
-  set readNotice(Set<int>? noticeSet) =>
-      box.put(HomeKeyKeys.readNotice, noticeSet?.toList());
+  set readNotice(Set<int>? noticeSet) => box.put(HomeKeyKeys.readNotice, noticeSet?.toList());
 
   @override
   List<FunctionType>? get homeItems {
@@ -124,13 +115,11 @@ class HomeSettingStorage implements HomeSettingDao {
   }
 
   @override
-  set homeItems(List<FunctionType>? items) =>
-      box.put(HomeKeyKeys.homeItems, items);
+  set homeItems(List<FunctionType>? items) => box.put(HomeKeyKeys.homeItems, items);
 
   @override
   bool? get autoLaunchTimetable => box.get(HomeKeyKeys.autoLaunchTimetable);
 
   @override
-  set autoLaunchTimetable(bool? foo) =>
-      box.put(HomeKeyKeys.autoLaunchTimetable, foo);
+  set autoLaunchTimetable(bool? foo) => box.put(HomeKeyKeys.autoLaunchTimetable, foo);
 }

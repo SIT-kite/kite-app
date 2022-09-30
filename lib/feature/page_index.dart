@@ -39,7 +39,7 @@ export 'library/index.dart';
 export 'login/page/login.dart';
 export 'mail/page/index.dart';
 export 'office/page/index.dart';
-export 'report/page/report.dart';
+export 'report/page.dart';
 export 'scanner/index.dart';
 export 'simple_page/about.dart';
 export 'simple_page/bbs.dart';
