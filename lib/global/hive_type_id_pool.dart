@@ -34,5 +34,4 @@ class HiveTypeIdPool {
   static const gameRecordItem = 13;
   static const functionTypeItem = 14;
   static const timetableMetaItem = 15;
-  static const locale = 16;
 }
