@@ -34,14 +34,14 @@ class ContactList extends StatelessWidget {
     return ListTile(
       leading: CircleAvatar(
         backgroundColor: Theme.of(context).primaryColor,
+        radius: 20,
         child: Container(
             child: (contact.name ?? '').isEmpty
                 ? Center(child: Icon(Icons.account_circle, size: 40, color: Colors.grey[50]))
                 : Text(contact.name![0], style: avatarStyle)),
-        radius: 20,
       ),
       title: Text('${contact.description}'),
-      subtitle: Text(('${contact.name ?? ' '} ' + contact.phone).trim()),
+      subtitle: Text(('${contact.name ?? ' '} ${contact.phone}').trim()),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

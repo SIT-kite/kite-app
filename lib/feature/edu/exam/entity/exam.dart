@@ -19,7 +19,8 @@ import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'exam.g.dart';
-
+/// REAL. THE PAYLOAD IS IN PINYIN. DONT BLAME ANYONE BUT THE SCHOOL.
+/// More reading: https://github.com/sunnysab/zf-tools/blob/master/TRANSLATION.md
 @JsonSerializable()
 class ExamRoom {
   /// 课程名称

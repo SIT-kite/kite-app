@@ -16,7 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /// 存放所有 hive 的自定义类型的typeId
+// TODO: Rename to HiveTypeId
 class HiveTypeIdPool {
+  HiveTypeIdPool._();
   static const librarySearchHistoryItem = 1;
   static const authItem = 2; // 改为单用户后已不再使用该id
   static const weatherItem = 3;
@@ -32,4 +34,5 @@ class HiveTypeIdPool {
   static const gameRecordItem = 13;
   static const functionTypeItem = 14;
   static const timetableMetaItem = 15;
+  static const locale = 16;
 }

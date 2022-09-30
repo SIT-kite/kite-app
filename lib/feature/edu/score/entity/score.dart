@@ -21,7 +21,8 @@ import '../../common/entity/index.dart';
 import '../../util/convert_util.dart';
 
 part 'score.g.dart';
-
+/// REAL. THE PAYLOAD IS IN PINYIN. DONT BLAME ANYONE BUT THE SCHOOL.
+/// More reading: https://github.com/sunnysab/zf-tools/blob/master/TRANSLATION.md
 @JsonSerializable()
 class Score {
   /// 成绩

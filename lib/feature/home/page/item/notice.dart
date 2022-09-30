@@ -16,8 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/feature/home/entity/home.dart';
 import 'package:kite/feature/kite/notice/entity.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/l10n/extension.dart';
 
 import '../../init.dart';
 import 'index.dart';
@@ -30,8 +32,7 @@ class NoticeItem extends StatefulWidget {
 }
 
 class _NoticeItemState extends State<NoticeItem> {
-  static const defaultContent = '查看小风筝的公告';
-  String content = '加载中';
+  String? content;
 
   @override
   void initState() {
@@ -46,7 +47,7 @@ class _NoticeItemState extends State<NoticeItem> {
   }
 
   void _onHomeRefresh(_) async {
-    final String result = await _buildContent() ?? defaultContent;
+    final String? result = await _buildContent();
     if (!mounted) return;
     setState(() => content = result);
   }
@@ -66,13 +67,13 @@ class _NoticeItemState extends State<NoticeItem> {
       future: _buildContent(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          content = snapshot.data ?? defaultContent;
+          content = snapshot.data;
         }
         return HomeFunctionButton(
           route: '/notice',
           icon: 'assets/home/icon_notice.svg',
-          title: '公告',
-          subtitle: content,
+          title: FunctionType.notice.localized(),
+          subtitle: content ?? FunctionType.notice.localizedDesc(),
         );
       },
     );

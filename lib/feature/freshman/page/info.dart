@@ -19,8 +19,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kite/feature/freshman/page/component/profile.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
 import 'package:kite/util/alert_dialog.dart';
+import 'package:kite/util/dsl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../component/future_builder.dart';
@@ -41,11 +43,11 @@ class FreshmanPage extends StatelessWidget {
 
   void showFirstDialog(BuildContext context) {
     if (!(freshmanCacheDao.disableFirstEnterDialogState ?? false)) {
-      showAlertDialog(context, title: '补充资料', content: [
-        const Text('是否补充个人资料？')
+      showAlertDialog(context, title: i18n.addInfoTitle, content: [
+        i18n.addInfoRequest.txt
       ], actionWidgetList: [
-        ElevatedButton(onPressed: () {}, child: const Text('补充信息')),
-        TextButton(onPressed: () {}, child: const Text('不再提示')),
+        ElevatedButton(onPressed: () {}, child: i18n.yes.txt),
+        TextButton(onPressed: () {}, child: i18n.dontShowThisAgainBtn.txt),
       ]).then((select) {
         if (select == 0) {
           Navigator.of(context).pushNamed(RouteTable.freshmanUpdate);
@@ -75,21 +77,21 @@ class FreshmanPage extends StatelessWidget {
     );
   }
 
-  Widget _buildBody(BuildContext context, FreshmanInfo data) {
+  Widget _buildBody(BuildContext ctx, FreshmanInfo data) {
     return BasicInfoPageWidget(
       name: data.name,
       college: data.college,
       infoItems: [
-        InfoItem(Icons.badge, '学号', data.studentId),
-        InfoItem(Icons.emoji_objects, '专业', data.major),
-        InfoItem(Icons.corporate_fare, '宿舍', '${data.campus} ${data.building}${data.room}-${data.bed}'),
-        InfoItem(Icons.face, '辅导员', data.counselorName),
-        ...buildContactInfoItems(context, data.contact, counselorTel: data.counselorTel),
+        InfoItem(Icons.badge, i18n.studentID, data.studentId),
+        InfoItem(Icons.emoji_objects, i18n.major, data.major),
+        InfoItem(Icons.corporate_fare, i18n.dormitory, i18n.dormitoryDetailed_bbcr(data.room, data.bed, data.building, data.campus)),
+        InfoItem(Icons.face,i18n.counselor, data.counselorName),
+        ...buildContactInfoItems(ctx, data.contact, counselorTel: data.counselorTel),
       ],
-      appBarActions: buildAppBarMenuButton(context),
+      appBarActions: buildAppBarMenuButton(ctx),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.person),
-        onPressed: () => Navigator.of(context).pushNamed(RouteTable.freshmanFriend),
+        onPressed: () => Navigator.of(ctx).pushNamed(RouteTable.freshmanFriend),
       ),
     );
   }

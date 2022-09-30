@@ -22,9 +22,11 @@ import 'package:kite/feature/override/storage.dart';
 import 'package:kite/storage/dao/admin.dart';
 import 'package:kite/storage/dao/develop.dart';
 import 'package:kite/storage/dao/kite.dart';
+import 'package:kite/storage/dao/pref.dart';
 import 'package:kite/storage/storage/admin.dart';
 import 'package:kite/storage/storage/develop.dart';
 import 'package:kite/storage/storage/kite.dart';
+import 'package:kite/storage/storage/pref.dart';
 import 'package:kite/storage/storage/report.dart';
 
 import 'dao/index.dart';
@@ -48,6 +50,7 @@ class KvStorageInitializer {
   static late ReportStorageDao report;
   static late FunctionOverrideStorageDao override;
   static late KiteStorageDao kite;
+  static late PrefDao pref;
 
   static late Box<dynamic> kvStorageBox;
 
@@ -68,5 +71,6 @@ class KvStorageInitializer {
     report = ReportStorage(kvStorageBox);
     kite = KiteStorage(kvStorageBox);
     override = FunctionOverrideStorage(kvStorageBox);
+    pref = PrefStorage(kvStorageBox);
   }
 }

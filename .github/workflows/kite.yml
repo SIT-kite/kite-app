@@ -9,6 +9,8 @@ jobs:
   # flutter pub get + flutter analyze
   lint:
     runs-on: ubuntu-latest
+    # case-insensitive
+    if: ${{ !contains(github.event.head_commit.message,'[NoCI]') }}
     steps:
 
       - uses: actions/checkout@v3
@@ -117,15 +119,16 @@ jobs:
   # iOS
   #
   build-iOS:
-    runs-on: macos-latest
+    runs-on: macos-11
     needs: lint
     steps:
-
       - uses: actions/checkout@v3
 
       - uses: maxim-lobanov/setup-xcode@v1
-        with: { xcode-version: latest-stable }
-
+        with:
+          xcode-version: latest-stable
+          # TODO: Fix `Xcode 14 is not supported`
+          # xcode-version: '14.0.0'
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: 3.0.5

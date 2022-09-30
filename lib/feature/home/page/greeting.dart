@@ -20,13 +20,17 @@ import 'package:flutter_svg/svg.dart';
 import 'package:kite/feature/kite/entity/weather.dart';
 import 'package:kite/feature/simple_page/weather.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/user.dart';
 
 /// 计算入学时间, 默认按 9 月 1 日开学来算. 年份 entranceYear 是完整的年份, 如 2018.
 int _calcStudyDays(int entranceYear) {
-  int days = DateTime.now().difference(DateTime(entranceYear, 9, 1)).inDays;
-  return days;
+  // if now is 2022/9/1, the difference is 0 day
+  final admissionTime = DateTime(entranceYear, 9, 1);
+  final now = DateTime.now();
+  final diff = now.difference(admissionTime);
+  return diff.inDays;
 }
 
 class GreetingWidget extends StatefulWidget {
@@ -37,9 +41,11 @@ class GreetingWidget extends StatefulWidget {
 }
 
 class _GreetingWidgetState extends State<GreetingWidget> {
+  // TODO: Update studyDays when current system date changed
   int? studyDays;
   int campus = KvStorageInitializer.home.campus;
   Weather currentWeather = KvStorageInitializer.home.lastWeather;
+
   @override
   void initState() {
     super.initState();
@@ -67,14 +73,14 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   }
 
   String _getCampusName() {
-    if (campus == 1) return '奉贤校区';
-    return '徐汇';
+    if (campus == 1) return i18n.fengxianDistrict;
+    return i18n.xuhuiDistrict;
   }
 
   Widget _buildWeatherIcon(String iconCode) {
     return GestureDetector(
       onTap: () {
-        final title = '${_getCampusName()}天气';
+        final title = i18n.campusWeatherTitle(_getCampusName());
         Navigator.of(context).push(MaterialPageRoute(builder: (context) => WeatherPage(campus, title: title)));
       },
       child: SvgPicture.asset('assets/weather/$iconCode.svg',
@@ -97,23 +103,37 @@ class _GreetingWidgetState extends State<GreetingWidget> {
           fontSize: 19.0,
           fontWeight: FontWeight.w500,
         );
-
+    final days = studyDays;
+    final List<Widget> sitDate;
+    if (days == null) {
+      sitDate = [
+        Text(i18n.greetingHeader0L1, style: textStyleSmall),
+      ];
+    } else {
+      if (days <= 0) {
+        sitDate = [
+          Text(i18n.greetingHeader0L1, style: textStyleSmall),
+          Text(i18n.greetingHeader0L2, style: textStyleLarge),
+        ];
+      } else {
+        sitDate = [
+          Text(i18n.greetingHeaderL1, style: textStyleSmall),
+          Text(i18n.greetingHeaderL2(yOrNo(i18n.greetingHeaderEnableIncrement) ? days + 1 : days),
+              style: textStyleLarge),
+        ];
+      }
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Flexible(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: (studyDays != null // 天数为null说明不显示天数
-                    ? <Widget>[
-                        Text('今天是你在上应大的', style: textStyleSmall),
-                        Text('第 $studyDays 天', style: textStyleLarge),
-                      ]
-                    : <Widget>[Text('欢迎使用上应小风筝', style: textStyleSmall)]) +
-                <Widget>[
-                  Text('${_getCampusName()} ${currentWeather.weather} ${currentWeather.temperature} °C',
-                      style: textStyleWeather)
-                ],
+            children: [
+              ...sitDate,
+              Text('${_getCampusName()} ${currentWeather.weather} ${currentWeather.temperature} °C',
+                  style: textStyleWeather)
+            ],
           ),
         ),
         SizedBox(child: _buildWeatherIcon(currentWeather.icon)),

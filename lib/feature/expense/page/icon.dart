@@ -23,6 +23,9 @@ Widget buildIcon(ExpenseType type, BuildContext context) {
   IconData icon = Icons.home;
 
   switch (type) {
+    case ExpenseType.all:
+      icon = Icons.loupe_rounded;
+      break;
     case ExpenseType.canteen:
       icon = Icons.food_bank_outlined;
       break;
@@ -40,8 +43,6 @@ Widget buildIcon(ExpenseType type, BuildContext context) {
       break;
     case ExpenseType.unknown:
       icon = Icons.home;
-      break;
-    default:
       break;
   }
   return Icon(icon, size: 30, color: Theme.of(context).primaryColor);

@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/feature/edu/score/init.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/l10n/extension.dart';
 
 import '../../score/page/evaluation.dart';
 import '../../util/icon.dart';
@@ -31,7 +32,7 @@ class ScoreItem extends StatefulWidget {
   const ScoreItem(this._score, {Key? key}) : super(key: key);
 
   @override
-  _ScoreItemState createState() => _ScoreItemState();
+  State<ScoreItem> createState() => _ScoreItemState();
 }
 
 class _ScoreItemState extends State<ScoreItem> {
@@ -63,7 +64,7 @@ class _ScoreItemState extends State<ScoreItem> {
         if (snapshot.hasData) {
           return _buildScoreDetailView(snapshot.data!);
         } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error.runtimeType}');
+          return Text('${i18n.failed}: ${snapshot.error.runtimeType}');
         }
         return const Center(child: CircularProgressIndicator());
       },
@@ -90,6 +91,7 @@ class _ScoreItemState extends State<ScoreItem> {
     }
   }
 
+  // TODO: I18n
   Widget _buildTrailing() {
     final style = Theme.of(context).textTheme.headline4?.copyWith(color: Colors.blue);
 

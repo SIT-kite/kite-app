@@ -62,6 +62,8 @@ class Global {
   static late SsoSession ssoSession;
   static late SsoSession ssoSession2;
 
+  static BuildContext? get buildContext => Catcher.navigatorKey?.currentState?.context;
+
   // 是否正处于网络错误对话框
   static bool inSsoErrorDialog = false;
 

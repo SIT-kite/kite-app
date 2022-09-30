@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 abstract class Drawable {
   /// 绘制
@@ -31,7 +32,8 @@ class WorldRule {
   /// 世界的边界
   Size bound;
 
-  WorldRule(this.bound, {
+  WorldRule(
+    this.bound, {
     this.tickTime = 16,
   });
 }
@@ -115,6 +117,9 @@ abstract class MovableObject extends IObject with Movable {
 class World implements Drawable, ITickHandler {
   WorldRule worldRule;
 
+  // To limit the number of ball for performance
+  int maxBall = UniversalPlatform.isDesktopOrWeb ? 300 : 100;
+
   World(this.worldRule);
 
   /// 可运动的对象集合
@@ -136,7 +141,14 @@ class World implements Drawable, ITickHandler {
   @override
   void tick() {
     // 删除所有过期的对象
-    _objects = _objects.where((o) => !o.outOfDate).toList();
+    final newList = <MovableObject>[];
+    for (int i = _objects.length - 1; 0 <= i && newList.length < maxBall; i--) {
+      var cur = _objects[i];
+      if (!cur.outOfDate) {
+        newList.add(cur);
+      }
+    }
+    _objects = newList;
     // 对每个对象演化一个时间片
     for (final object in _objects) {
       object.tick();
@@ -179,7 +191,8 @@ class DrawablePainter extends CustomPainter {
   OnPaintCallback? beforePaint;
   OnPaintCallback? afterPaint;
 
-  DrawablePainter(this.drawable, {
+  DrawablePainter(
+    this.drawable, {
     this.beforePaint,
     this.afterPaint,
   });

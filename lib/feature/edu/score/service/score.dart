@@ -23,7 +23,8 @@ import '../../common/entity/index.dart';
 import '../../util/convert_util.dart';
 import '../dao/score.dart';
 import '../entity/score.dart';
-
+/// REAL. THE PAYLOAD IS IN PINYIN. DONT BLAME ANYONE BUT THE SCHOOL.
+/// More reading: https://github.com/sunnysab/zf-tools/blob/master/TRANSLATION.md
 class ScoreService extends AService implements ScoreDao {
   static const _scoreUrl = 'http://jwxt.sit.edu.cn/jwglxt/cjcx/cjcx_cxDgXscj.html';
   static const _scoreDetailUrl = 'http://jwxt.sit.edu.cn/jwglxt/cjcx/cjcx_cxCjxqGjh.html';

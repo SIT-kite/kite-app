@@ -23,6 +23,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/component/my_switcher.dart';
 import 'package:kite/feature/freshman/entity.dart';
+import 'package:kite/l10n/extension.dart';
+import 'package:kite/util/dsl.dart';
 import 'package:kite/util/flash.dart';
 
 import '../../../component/future_builder.dart';
@@ -89,14 +91,14 @@ class _FreshmanUpdatePageState extends State<FreshmanUpdatePage> {
     );
     // 销毁后当前组件的context将不存在
     // Catcher中存放了上一个父节点的context可以继续用
-    showBasicFlash(Catcher.navigatorKey!.currentContext!, const Text('信息更新完成'));
+    showBasicFlash(Catcher.navigatorKey!.currentContext!, i18n.userInfoUpdatedTip.txt);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('隐私安全'),
+        title: i18n.personalInfoTitle.txt,
       ),
       body: MyFutureBuilder<FreshmanInfo>(
         future: freshmanDao.getInfo(),
@@ -122,16 +124,16 @@ class _FreshmanUpdatePageState extends State<FreshmanUpdatePage> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            buildTextFormField('微信', Icons.wechat, wechatTextEditingController),
-            buildTextFormField('QQ', Icons.person, qqTextEditingController),
-            buildTextFormField('手机号', Icons.phone, telTextEditingController),
+            buildTextFormField(i18n.wechat, Icons.wechat, wechatTextEditingController),
+            buildTextFormField(i18n.qq, Icons.person, qqTextEditingController),
+            buildTextFormField(i18n.phoneNumber, Icons.phone, telTextEditingController),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '允许可能认识的人发现我',
+                    i18n.allowOthersFindMeCheckbox,
                     style: Theme.of(context).textTheme.headline3,
                   ),
                   MySwitcher(
@@ -143,7 +145,7 @@ class _FreshmanUpdatePageState extends State<FreshmanUpdatePage> {
             ),
             SizedBox(height: 20.h),
             Text(
-              'PS: 本页填写的信息将使同学，舍友之间可见，以方便大家互相添加好友，组建群聊',
+              i18n.personalInfoDescLabel,
               style: Theme.of(context).textTheme.bodyText2,
             ),
           ],
@@ -163,7 +165,7 @@ class _FreshmanUpdatePageState extends State<FreshmanUpdatePage> {
       decoration: InputDecoration(
         labelStyle: const TextStyle(color: Colors.black),
         labelText: fieldName,
-        hintText: '未填写',
+        hintText: i18n.unfilled,
         prefixIcon: Icon(iconData),
       ),
     );

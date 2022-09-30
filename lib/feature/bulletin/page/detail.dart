@@ -18,7 +18,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:kite/component/html_widget.dart';
+import 'package:kite/l10n/extension.dart';
+import 'package:kite/util/dsl.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/url_launcher.dart';
@@ -30,6 +33,7 @@ import '../init.dart';
 
 class DetailPage extends StatefulWidget {
   final BulletinRecord summary;
+
   const DetailPage(this.summary, {Key? key}) : super(key: key);
 
   @override
@@ -39,6 +43,7 @@ class DetailPage extends StatefulWidget {
 class _DetailPageState extends State<DetailPage> {
   static final RegExp _phoneRegex = RegExp(r"(6087\d{4})");
   static final RegExp _mobileRegex = RegExp(r"(\d{12})");
+
   // static final dateFormat = DateFormat('yyyy/MM/dd HH:mm');
 
   String _linkTel(String content) {
@@ -55,7 +60,7 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Future<void> _onDownloadFile(Attachment attachment) async {
-    showBasicFlash(context, const Text('开始下载'), duration: const Duration(seconds: 1));
+    showBasicFlash(context, i18n.downloading.txt, duration: const Duration(seconds: 1));
     Log.info('下载文件: [${attachment.name}](${attachment.url})');
 
     String targetPath = '${(await getTemporaryDirectory()).path}/kite1/downloads/${attachment.name}';
@@ -81,14 +86,14 @@ class _DetailPageState extends State<DetailPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('下载完毕'),
+                i18n.downloadCompleted.txt,
                 Text(attachment.name),
               ],
             ),
           ),
           TextButton(
             onPressed: () => OpenFile.open(targetPath),
-            child: const Text('打开'),
+            child: i18n.open.txt,
           ),
         ],
       ),
@@ -96,7 +101,7 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 
-  Widget _buildCard(BulletinDetail article) {
+  Widget _buildCard(BuildContext context, BulletinDetail article) {
     final valueStyle = Theme.of(context).textTheme.bodyText2;
     final keyStyle = valueStyle?.copyWith(fontWeight: FontWeight.bold);
 
@@ -117,9 +122,10 @@ class _DetailPageState extends State<DetailPage> {
               1: FlexColumnWidth(3),
             },
             children: [
-              buildRow('发布部门', article.department),
-              buildRow('作者', article.author),
-              buildRow('发布时间', article.dateTime.toString()),
+              buildRow(i18n.publishingDepartment, article.department),
+              buildRow(i18n.author, article.author),
+              buildRow(
+                  i18n.publishTime, context.dateText(article.dateTime)),
             ],
           )),
     );
@@ -132,11 +138,12 @@ class _DetailPageState extends State<DetailPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(article.title, style: titleStyle),
-        _buildCard(article),
+        _buildCard(context, article),
         const SizedBox(height: 30),
         MyHtmlWidget(_linkTel(article.content)),
         const SizedBox(height: 30),
-        if (article.attachments.isNotEmpty) Text('该公告包含以下附件', style: titleStyle),
+        if (article.attachments.isNotEmpty)
+          Text(i18n.oaAnnouncementAttachmentTip(article.attachments.length), style: titleStyle),
         if (article.attachments.isNotEmpty)
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,6 +159,7 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   BulletinDetail? article;
+
   Future<BulletinDetail> getBulletinDetail() async {
     if (article == null) {
       Log.info('开始加载OA公告文章');
@@ -184,7 +192,7 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('公告正文'),
+        title: i18n.oaAnnouncementTextTitle.txt,
         actions: [
           IconButton(
             onPressed: () {

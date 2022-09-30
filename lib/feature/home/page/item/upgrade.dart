@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:kite/feature/home/entity/home.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/util/upgrade.dart';
 import 'package:kite/util/url_launcher.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -45,9 +47,9 @@ class UpgradeItem extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done && snapshot.hasData && snapshot.data != null) {
           return HomeFunctionButton(
-            title: '更新',
+            title: FunctionType.upgrade.localized(),
             onPressed: () => onTapUpdate(snapshot.data!),
-            subtitle: '小风筝有新版本了，点此更新',
+            subtitle: FunctionType.upgrade.localizedDesc(),
             icon: 'assets/home/icon_upgrade.svg',
           );
         }

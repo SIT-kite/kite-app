@@ -15,10 +15,66 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'package:kite/l10n/extension.dart';
 
-enum ActivityType { lecture, theme, creation, campus, practice, voluntary, safetyEdu, unknown }
+enum ActivityType {
+  lecture,
+  theme,
+  creation,
+  campus,
+  practice,
+  voluntary,
+  safetyEdu,
+  unknown;
 
-enum ActivityScoreType { lecture, creation, campus, practice, voluntary, safetyEdu }
+  String localized() {
+    switch (this) {
+      case lecture:
+        return i18n.activityLecture;
+      case theme:
+        return i18n.activityThematicEdu;
+      case creation:
+        return i18n.activityCreation;
+      case campus:
+        return i18n.activitySchoolCulture;
+      case practice:
+        return i18n.activityPractice;
+      case voluntary:
+        return i18n.activityVoluntary;
+      case safetyEdu:
+        return i18n.activitySafetyEdu;
+      case unknown:
+        return i18n.activityUnknown;
+    }
+  }
+}
+
+enum ActivityScoreType {
+  lecture,
+  creation,
+  campus,
+  practice,
+  voluntary,
+  safetyEdu;
+  // TODO: No I18n
+/*
+  String localized() {
+    switch (this) {
+      case lecture:
+        return i18n.actLecture;
+      case creation:
+        return i18n.actCreation;
+      case campus:
+        return i18n.actSchoolCulture;
+      case practice:
+        return i18n.actPractice;
+      case voluntary:
+        return i18n.actVoluntary;
+      case safetyEdu:
+        return i18n.actSafetyEdu;
+    }
+  }*/
+}
 
 const Map<String, ActivityScoreType> stringToActivityScoreType = {
   '主题报告': ActivityScoreType.lecture,
@@ -38,17 +94,6 @@ const Map<String, ActivityType> stringToActivityType = {
   '志愿公益': ActivityType.voluntary,
   '安全教育网络教学': ActivityType.safetyEdu,
   '校园文明': ActivityType.campus,
-};
-
-const Map<ActivityType, String> activityTypeToString = {
-  ActivityType.lecture: '讲座报告',
-  ActivityType.campus: '校园文化',
-  ActivityType.unknown: '未知',
-  ActivityType.creation: '创新创业创意',
-  ActivityType.safetyEdu: '校园安全',
-  ActivityType.theme: '主题教育',
-  ActivityType.practice: '社会实践',
-  ActivityType.voluntary: '公益志愿',
 };
 
 class Activity {

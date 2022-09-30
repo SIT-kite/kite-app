@@ -19,14 +19,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/launch.dart';
 import 'package:kite/route.dart';
+import 'package:kite/util/dsl.dart';
 import 'package:kite/util/flash.dart';
 
 import '../../entity.dart';
 import 'profile.dart';
 
-List<InfoItem> buildContactInfoItems(BuildContext context, Contact? contact, {String? counselorTel}) {
+List<InfoItem> buildContactInfoItems(BuildContext ctx, Contact? contact, {String? counselorTel}) {
   final wechat = contact?.wechat;
   final qq = contact?.qq;
   final tel = contact?.tel;
@@ -34,12 +36,12 @@ List<InfoItem> buildContactInfoItems(BuildContext context, Contact? contact, {St
     if (counselorTel != null && counselorTel.isNotEmpty)
       InfoItem(
         Icons.phone_in_talk,
-        '辅导员电话号码',
+        i18n.counselorPhoneNumber,
         counselorTel,
         onTap: () async {
           if (!await GlobalLauncher.launchTel(counselorTel)) {
             Clipboard.setData(ClipboardData(text: counselorTel));
-            showBasicFlash(context, const Text('无法启动电话, 已复制到剪切板'));
+            showBasicFlash(ctx, i18n.cantLaunchPhoneSoNumber2ClipboardTip.txt);
           }
         },
         trailIconData: Icons.phone,
@@ -47,23 +49,23 @@ List<InfoItem> buildContactInfoItems(BuildContext context, Contact? contact, {St
     if (wechat != null && wechat.isNotEmpty)
       InfoItem(
         Icons.wechat,
-        '微信',
+        i18n.wechat,
         wechat,
         onTap: () {
           Clipboard.setData(ClipboardData(text: wechat));
-          showBasicFlash(context, const Text('不支持启动微信, 已复制到剪切板'));
+          showBasicFlash(ctx, i18n.cantLaunchWechatSoNumber2ClipboardTip.txt);
         },
         trailIconData: Icons.copy,
       ),
     if (qq != null && qq.isNotEmpty)
       InfoItem(
         Icons.person,
-        'QQ',
+        i18n.qq,
         qq,
         onTap: () async {
           if (!await GlobalLauncher.launchQqContact(qq)) {
             Clipboard.setData(ClipboardData(text: qq));
-            showBasicFlash(context, const Text('未安装QQ, 已复制到剪切板'));
+            showBasicFlash(ctx, i18n.cantLaunchQqSoNumber2ClipboardTip.txt);
           }
         },
         trailIconData: Icons.open_in_browser,
@@ -71,12 +73,12 @@ List<InfoItem> buildContactInfoItems(BuildContext context, Contact? contact, {St
     if (tel != null && tel.isNotEmpty)
       InfoItem(
         Icons.phone,
-        '电话号码',
+        i18n.phoneNumber,
         tel,
         onTap: () async {
           if (!await GlobalLauncher.launchTel(tel)) {
             Clipboard.setData(ClipboardData(text: tel));
-            showBasicFlash(context, const Text('无法启动电话, 已复制到剪切板'));
+            showBasicFlash(ctx, i18n.cantLaunchPhoneSoNumber2ClipboardTip.txt);
           }
         },
         trailIconData: Icons.phone,
@@ -137,18 +139,16 @@ Widget buildAvatar({Widget? avatar, required String name, Color color = Colors.b
 }
 
 String calcLastSeen(DateTime? lastSeen) {
-  var lastSeenText = '从未登录';
+  // TODO: A potential time zone bug is here.
+  var lastSeenText = i18n.noOnlineRecords;
   if (lastSeen != null) {
     lastSeenText = '';
     final diff = DateTime.now().difference(lastSeen);
-    if (diff.inDays != 0) {
+    if (diff.inDays > 0) {
+      // handle with plural
       lastSeenText += '${diff.inDays}天前';
-    } else if (diff.inHours != 0) {
+    } else if (diff.inHours > 0) {
       lastSeenText += '${diff.inHours}小时前';
-    } else if (diff.inMinutes != 0) {
-      lastSeenText += '${diff.inDays}分钟前';
-    } else {
-      lastSeenText += '${diff.inSeconds}秒前';
     }
   }
   return lastSeenText;
@@ -214,12 +214,12 @@ List<Widget> buildAppBarMenuButton(BuildContext context) {
     IconButton(
       onPressed: () => Navigator.of(context).pushNamed(RouteTable.freshmanAnalysis),
       icon: const Icon(Icons.analytics),
-      tooltip: '风筝报告',
+      tooltip: i18n.kiteStatsBtnTooltip,
     ),
     IconButton(
       onPressed: () => Navigator.of(context).pushNamed(RouteTable.freshmanUpdate),
       icon: const Icon(Icons.menu),
-      tooltip: '联系方式设置',
+      tooltip: i18n.personalInfoSettingBtnTooltip,
     )
   ];
 }

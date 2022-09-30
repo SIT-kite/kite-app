@@ -21,16 +21,21 @@ import 'package:dynamic_color_theme/dynamic_color_theme.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/global/hive_initializer.dart';
 import 'package:kite/global/init.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
+import 'package:kite/storage/dao/pref.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/storage/storage/admin.dart';
 import 'package:kite/storage/storage/develop.dart';
+import 'package:kite/util/dsl.dart';
 import 'package:kite/util/file.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
@@ -48,12 +53,21 @@ class SettingPage extends StatelessWidget {
 
   SettingPage({Key? key}) : super(key: key);
 
-  Widget _negativeActionBuilder(context, controller, _) {
+  Widget _negativeActionBuilderCancel(context, controller, _) {
     return TextButton(
       onPressed: () {
         controller.dismiss();
       },
-      child: const Text('取消'),
+      child: i18n.cancel.txt,
+    );
+  }
+
+  Widget _negativeActionBuilderNotNow(context, controller, _) {
+    return TextButton(
+      onPressed: () {
+        controller.dismiss();
+      },
+      child: i18n.notNow.txt,
     );
   }
 
@@ -77,11 +91,12 @@ class SettingPage extends StatelessWidget {
     final password = KvStorageInitializer.auth.ssoPassword;
     try {
       EasyLoading.instance.userInteractions = false;
-      EasyLoading.show(status: '正在登录');
+      EasyLoading.show(status: i18n.loggingIn);
       await Global.ssoSession.login(user!, password!);
-      EasyLoading.showSuccess('用户名和密码正确');
+      EasyLoading.showSuccess(i18n.loginCredentialsValidatedTip);
     } catch (e) {
-      showBasicFlash(context, Text('登录异常: ${e.toString().split('\n')[0]}'), duration: const Duration(seconds: 3));
+      showBasicFlash(context, Text('${i18n.loginFailedWarn}: ${e.toString().split('\n')[0]}'),
+          duration: const Duration(seconds: 3));
     } finally {
       EasyLoading.dismiss();
       EasyLoading.instance.userInteractions = true;
@@ -100,9 +115,9 @@ class SettingPage extends StatelessWidget {
   void _onLogout(BuildContext context) {
     context.showFlashDialog(
         constraints: const BoxConstraints(maxWidth: 300),
-        title: const Text('退出登录'),
-        content: const Text('您将会退出当前账号，是否继续？'),
-        negativeActionBuilder: _negativeActionBuilder,
+        title: i18n.logout.txt,
+        content: i18n.logoutKiteWarn.txt,
+        negativeActionBuilder: _negativeActionBuilderCancel,
         positiveActionBuilder: (context, controller, _) {
           return TextButton(
               onPressed: () async {
@@ -124,16 +139,17 @@ class SettingPage extends StatelessWidget {
                 controller.dismiss();
                 _gotoWelcome(context);
               },
-              child: const Text('继续'));
+              child: i18n.continue_.txt);
         });
   }
 
   void _onClearStorage(BuildContext context) {
     context.showFlashDialog(
         constraints: const BoxConstraints(maxWidth: 300),
-        title: const Text('清除数据'),
-        content: const Text('此操作将清除您本地的登录信息（不包括网页缓存），并重启本应用。如果你想清除所有数据，请在手机设置的应用管理界面中找到 "上应小风筝" 并重置。'),
-        negativeActionBuilder: _negativeActionBuilder,
+        title: i18n.settingsWipeKiteData.txt,
+        // TODO: Dedicated descriptions for mobile and desktop.
+        content: i18n.settingsWipeKiteDataDesc.txt,
+        negativeActionBuilder: _negativeActionBuilderCancel,
         positiveActionBuilder: (context, controller, _) {
           return TextButton(
               onPressed: () async {
@@ -142,45 +158,77 @@ class SettingPage extends StatelessWidget {
                 await controller.dismiss();
                 _gotoWelcome(context);
               },
-              child: const Text('继续'));
+              child: i18n.continue_.txt);
         });
+  }
+
+  _buildLanguagePrefSelector(BuildContext ctx) {
+    final Locale curLocale;
+    final savedLocale = KvStorageInitializer.pref.locale;
+    if (savedLocale == null) {
+      final defaultLocale = Localizations.localeOf(ctx);
+      KvStorageInitializer.pref.locale = defaultLocale;
+      curLocale = defaultLocale;
+    } else {
+      curLocale = savedLocale;
+    }
+    return DropDownSettingsTile<Locale>(
+      title: i18n.settingsLanguage,
+      subtitle: i18n.settingsLanguageSub,
+      leading: const Icon(Icons.translate_rounded),
+      settingKey: PrefKey.locale,
+      values: {
+        Lang.enLocale: i18n.language_en,
+        Lang.zhLocale: i18n.language_zh,
+        Lang.zhTwLocale: i18n.language_zh_TW,
+      },
+      selected: curLocale,
+      onChange: (value) {
+        // TODO: Test on mobile
+          Phoenix.rebirth(ctx);
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     _passwordController.text = KvStorageInitializer.auth.ssoPassword ?? '';
-    return SettingsScreen(title: '设置', children: [
+    return SettingsScreen(title: i18n.settingsTitle, children: [
+      // Personalize
       SettingsGroup(
-        title: '个性化',
+        title: i18n.personalizeTitle,
         children: <Widget>[
           ColorPickerSettingsTile(
+            title: i18n.settingsThemeColor,
+            leading: const Icon(Icons.palette_outlined),
             settingKey: ThemeKeys.themeColor,
             defaultValue: KvStorageInitializer.theme.color,
-            title: '主题色',
             onChange: (newColor) => DynamicColorTheme.of(context).setColor(
               color: newColor,
               shouldSave: true, // saves it to shared preferences
             ),
           ),
+          _buildLanguagePrefSelector(context),
           SwitchSettingsTile(
             settingKey: ThemeKeys.isDarkMode,
             defaultValue: KvStorageInitializer.theme.isDarkMode,
-            title: '夜间模式',
-            subtitle: '开启夜间模式以保护视力，部分颜色显示可能异常',
+            title: i18n.settingsDarkMode,
+            subtitle: i18n.settingsDarkModeSub,
             leading: const Icon(Icons.dark_mode),
             onChange: (value) => DynamicColorTheme.of(context).setIsDark(isDark: value, shouldSave: false),
           ),
         ],
       ),
+      // TODO: A new personalize system
       SettingsGroup(
-        title: '首页',
+        title: i18n.homepage,
         children: <Widget>[
           RadioSettingsTile<int>(
-            title: '首页背景模式',
+            title: i18n.settingsHomepageWallpaperMode,
             settingKey: HomeKeyKeys.backgroundMode,
-            values: const <int, String>{
-              1: '实时天气',
-              2: '静态图片',
+            values: <int, String>{
+              1: i18n.realtimeWeather,
+              2: i18n.staticPicture,
             },
             selected: KvStorageInitializer.home.backgroundMode,
             onChange: (value) {
@@ -189,12 +237,13 @@ class SettingPage extends StatelessWidget {
             },
           ),
           DropDownSettingsTile<int>(
-            title: '校区',
-            subtitle: '显示对应校区的天气',
+            title: i18n.settingsCampus,
+            subtitle: i18n.settingsCampusSub,
+            leading: const Icon(Icons.location_on),
             settingKey: HomeKeyKeys.campus,
-            values: const <int, String>{
-              1: '奉贤',
-              2: '徐汇',
+            values: <int, String>{
+              1: i18n.fengxian,
+              2: i18n.xuhui,
             },
             selected: KvStorageInitializer.home.campus,
             onChange: (value) {
@@ -202,21 +251,26 @@ class SettingPage extends StatelessWidget {
               Global.eventBus.emit(EventNameConstants.onCampusChange);
             },
           ),
-          SimpleSettingsTile(title: '背景图片', subtitle: '自定义首页背景图片', onTap: _onChangeBgImage),
+          SimpleSettingsTile(
+              title: i18n.settingsWallpaper,
+              subtitle: i18n.settingsWallpaperSub,
+              leading: const Icon(Icons.photo_size_select_actual_outlined),
+              onTap: _onChangeBgImage),
           if (!isFreshman)
             SimpleSettingsTile(
-              title: '功能顺序',
-              subtitle: '自定义首页功能的分组与顺序',
+              title: i18n.settingsFuncRearrange,
+              subtitle: i18n.settingsFuncRearrangeSub,
+              leading: const Icon(Icons.menu),
               onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeSettingPage())),
             ),
         ],
       ),
-      SettingsGroup(title: '网络', children: <Widget>[
+      SettingsGroup(title: i18n.networking, children: <Widget>[
         SwitchSettingsTile(
           settingKey: '/network/useProxy',
           defaultValue: KvStorageInitializer.network.useProxy,
-          title: '使用 HTTP 代理',
-          subtitle: '通过 HTTP 代理连接校园网',
+          title: i18n.settingsHttpProxy,
+          subtitle: i18n.settingsHttpProxySub,
           leading: const Icon(Icons.vpn_key),
           onChange: (value) async {
             KvStorageInitializer.network.useProxy = value;
@@ -224,7 +278,7 @@ class SettingPage extends StatelessWidget {
           },
           childrenIfEnabled: [
             TextInputSettingsTile(
-              title: '代理地址',
+              title: i18n.settingsProxyAddress,
               settingKey: '/network/proxy',
               initialValue: KvStorageInitializer.network.proxy,
               validator: proxyValidator,
@@ -236,28 +290,37 @@ class SettingPage extends StatelessWidget {
               },
             ),
             SimpleSettingsTile(
-                title: '测试连接',
-                subtitle: '检查校园网或网络代理的连接',
+                title: i18n.settingsTestConnect2School,
+                subtitle: i18n.settingsTestConnect2SchoolSub,
                 onTap: () {
                   Navigator.pushNamed(context, '/connectivity');
                 }),
           ],
         ),
       ]),
+      // Account
       SettingsGroup(
-        title: '账户',
+        title: i18n.account,
         children: <Widget>[
           if (!isFreshman)
-            TextInputSettingsTile(
-              title: '学号',
-              settingKey: AuthKeys.currentUsername,
-              initialValue: KvStorageInitializer.auth.currentUsername ?? '',
-              validator: studentIdValidator,
+            SimpleSettingsTile(
+              title: i18n.studentID,
+              subtitle: KvStorageInitializer.auth.currentUsername ?? "",
+              leading: const Icon(Icons.person_rounded),
+              onTap: () {
+                // Copy the student ID to clipboard
+                final id = KvStorageInitializer.auth.currentUsername;
+                if (id != null) {
+                  Clipboard.setData(ClipboardData(text: id));
+                  showBasicFlash(context, i18n.studentIdCopy2ClipboardTip.txt);
+                }
+              },
             ),
           if (!isFreshman)
             ModalSettingsTile(
-              title: '密码',
-              subtitle: '修改小风筝使用的 OA 密码',
+              title: i18n.settingsChangeOaPwd,
+              subtitle: i18n.settingsChangeOaPwdSub,
+              leading: const Icon(Icons.lock),
               showConfirmation: true,
               onConfirm: () {
                 KvStorageInitializer.auth.ssoPassword = _passwordController.text;
@@ -271,17 +334,27 @@ class SettingPage extends StatelessWidget {
               ],
             ),
           if (!isFreshman)
-            SimpleSettingsTile(title: '登录测试', subtitle: '检查用户名密码是否正确', onTap: () => _testPassword(context)),
-          SimpleSettingsTile(title: '退出登录', subtitle: '退出当前账号', onTap: () => _onLogout(context)),
+            SimpleSettingsTile(
+                title: i18n.settingsTestLoginKite,
+                subtitle: i18n.settingsTestLoginKiteSub,
+                leading: const Icon(Icons.login_rounded),
+                onTap: () => _testPassword(context)),
+          SimpleSettingsTile(
+              title: i18n.settingsLogoutKite,
+              subtitle: i18n.settingsLogoutKiteSub,
+              leading: const Icon(Icons.logout_rounded),
+              onTap: () => _onLogout(context)),
         ],
       ),
-      SettingsGroup(title: '数据管理', children: [
+      // Data Management
+      SettingsGroup(title: i18n.dataManagement, children: <Widget>[
         SimpleSettingsTile(
-            title: '清除数据',
+            title: i18n.settingsWipeKiteData,
             leading: const Icon(Icons.remove_circle),
-            subtitle: '清除应用程序保存的账号和设置，但不包括缓存',
+            subtitle: i18n.settingsWipeKiteDataSub,
             onTap: () => _onClearStorage(context)),
       ]),
+      // TODO: Remove this
       if (kDebugMode)
         SettingsGroup(
           title: '管理员选项',
@@ -294,20 +367,20 @@ class SettingPage extends StatelessWidget {
           ],
         ),
       SettingsGroup(
-        title: '开发者选项',
+        title: i18n.devOptions,
         children: <Widget>[
           SwitchSettingsTile(
               settingKey: DevelopOptionsKeys.showErrorInfoDialog,
               defaultValue: KvStorageInitializer.developOptions.showErrorInfoDialog ?? false,
-              title: '启动详细错误对话框',
-              subtitle: '将展示详细的异常栈追踪信息',
+              title: i18n.settingsDetailedXcpDialog,
+              subtitle: i18n.settingsDetailedXcpDialogSub,
               leading: const Icon(Icons.info),
               onChange: (value) {
                 KvStorageInitializer.developOptions.showErrorInfoDialog = value;
               }),
           SimpleSettingsTile(
-            title: '显示本机存储内容',
-            subtitle: '含首页及各模块存储的数据',
+            title: i18n.settingsLocalStorage,
+            subtitle: i18n.settingsLocalStorageSub,
             leading: const Icon(Icons.storage),
             onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const DebugStoragePage())),
           )

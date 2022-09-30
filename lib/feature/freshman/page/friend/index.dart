@@ -18,10 +18,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:kite/feature/freshman/page/component/common.dart';
+import 'package:kite/util/dsl.dart';
 
 import 'classmate.dart';
 import 'familiar.dart';
 import 'roommate.dart';
+import 'package:kite/l10n/extension.dart';
 
 class FreshmanFriendPage extends StatefulWidget {
   const FreshmanFriendPage({Key? key}) : super(key: key);
@@ -44,7 +46,7 @@ class _FreshmanFriendPageState extends State<FreshmanFriendPage> with SingleTick
     return TabBar(
       isScrollable: true,
       controller: _tabController,
-      tabs: const [Tab(text: '舍友'), Text('同学'), Text('可能认识的人')],
+      tabs: [Tab(text: i18n.roommate), Text(i18n.classmate), Text(i18n.friendsRadder)],
     );
   }
 
@@ -54,7 +56,7 @@ class _FreshmanFriendPageState extends State<FreshmanFriendPage> with SingleTick
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('新的朋友'),
+          title: i18n.newFriendsTitle.txt,
           bottom: _buildBarHeader(),
           actions: buildAppBarMenuButton(context),
         ),

@@ -20,6 +20,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/component/simple_search_delegate.dart';
+import 'package:kite/feature/home/entity/home.dart';
+import 'package:kite/l10n/extension.dart';
+import 'package:kite/util/dsl.dart';
 import 'package:kite/util/logger.dart';
 
 import '../entity.dart';
@@ -41,6 +44,7 @@ Widget cardTitle(String title) {
 
 class ElectricityChart extends StatefulWidget {
   final String room;
+
   const ElectricityChart(this.room, {Key? key}) : super(key: key);
 
   @override
@@ -55,7 +59,7 @@ class _ElectricityChartState extends State<ElectricityChart> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        cardTitle('用电视图'),
+        cardTitle(i18n.elecBillElecChart),
         const SizedBox(height: 20),
         ElectricityChartWidget(
           room: widget.room,
@@ -74,12 +78,12 @@ class _ElectricityChartState extends State<ElectricityChart> {
                     onTap: () => setState(() {
                           mode = ElectricityChartMode.hourly;
                         }),
-                    child: const Text('最近24小时')),
+                    child: i18n.elecBillLast24Hour.txt),
                 ButtonBarEntry(
                     onTap: () => setState(() {
                           mode = ElectricityChartMode.daily;
                         }),
-                    child: const Text('最近一周')),
+                    child: i18n.elecBillLast7Day.txt),
               ],
             ))
       ],
@@ -98,6 +102,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
   final storage = ElectricityInitializer.electricityStorage;
 
   String? room;
+
   @override
   void initState() {
     storage.lastRoomList ??= [];
@@ -129,7 +134,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('电费查询'),
+        title: FunctionType.electricity.localized().txt,
         actions: <Widget>[
           IconButton(
               onPressed: search,

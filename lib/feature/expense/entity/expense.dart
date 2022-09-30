@@ -17,6 +17,7 @@
  */
 import 'package:hive/hive.dart';
 import 'package:kite/global/hive_type_id_pool.dart';
+import 'package:kite/l10n/extension.dart';
 
 part 'expense.g.dart';
 
@@ -48,7 +49,30 @@ enum ExpenseType {
   unknown,
 
   /// 全部. (用于消费展示页)
-  all,
+  all;
+
+  String localized() {
+    switch (this) {
+      case ExpenseType.canteen:
+        return i18n.expenseCanteen;
+      case ExpenseType.coffee:
+        return i18n.expenseCafe;
+      case ExpenseType.water:
+        return i18n.expenseHotWater;
+
+      case ExpenseType.shower:
+        return i18n.expenseShower;
+
+      case ExpenseType.store:
+        return i18n.expenseGrocery;
+
+      case ExpenseType.unknown:
+        return i18n.expenseStuff;
+
+      case ExpenseType.all:
+        return i18n.expenseTotal;
+    }
+  }
 }
 
 /// 消费记录
@@ -80,20 +104,9 @@ class ExpenseRecord extends HiveObject {
 
   @override
   String toString() {
-    return 'ExpenseRecord{username: $username, name: $name, place: $place, ts: $ts, amount: $amount, type: ${expenseTypeMapping[type]}}';
+    return 'ExpenseRecord{username: $username, name: $name, place: $place, ts: $ts, amount: $amount, type: $type}}';
   }
 }
-
-/// 消费类型枚举与文字的映射表
-const expenseTypeMapping = {
-  ExpenseType.all: '全部',
-  ExpenseType.canteen: '食堂',
-  ExpenseType.coffee: '咖啡吧',
-  ExpenseType.water: '开水',
-  ExpenseType.shower: '洗浴',
-  ExpenseType.store: '商店',
-  ExpenseType.unknown: '其他',
-};
 
 /// 爬虫获得的消费页
 class OaExpensePage {

@@ -19,60 +19,11 @@
 import 'package:flutter/material.dart';
 import 'package:kite/feature/home/entity/home.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
+import 'package:kite/util/dsl.dart';
 import 'package:kite/util/user.dart';
-
-String functionTypeToString(FunctionType type) {
-  switch (type) {
-    case FunctionType.upgrade:
-      return '更新';
-    case FunctionType.notice:
-      return '公告';
-    case FunctionType.timetable:
-      return '课程表';
-    case FunctionType.report:
-      return '体温上报';
-    case FunctionType.exam:
-      return '考试信息';
-    case FunctionType.classroom:
-      return '课程表';
-    case FunctionType.event:
-      return '活动';
-    case FunctionType.expense:
-      return '消费';
-    case FunctionType.score:
-      return '查成绩';
-    case FunctionType.library:
-      return '图书馆';
-    case FunctionType.office:
-      return '办公';
-    case FunctionType.mail:
-      return '邮件';
-    case FunctionType.bulletin:
-      return 'OA 公告';
-    case FunctionType.contact:
-      return '常用电话';
-    case FunctionType.game:
-      return '小游戏';
-    case FunctionType.wiki:
-      return 'Wiki';
-    case FunctionType.separator:
-      return '分隔符';
-    case FunctionType.bbs:
-      return '上应互助';
-    case FunctionType.scanner:
-      return '扫码';
-    case FunctionType.freshman:
-      return '入学信息';
-    case FunctionType.switchAccount:
-      return '切换账户';
-    case FunctionType.board:
-      return '风筝时刻';
-    case FunctionType.electricity:
-      return '查电费';
-  }
-}
-
+// TODO: Rename to `Rearrange`
 class HomeSettingPage extends StatefulWidget {
   const HomeSettingPage({Key? key}) : super(key: key);
 
@@ -111,7 +62,7 @@ class _HomeSettingPageState extends State<HomeSettingPage> {
             dense: true,
             trailing: const Icon(Icons.menu),
             title: Text(
-              functionTypeToString(homeItems[i]),
+              homeItems[i].localized(),
               style: homeItems[i] == FunctionType.separator ? const TextStyle(color: Colors.cyan) : null,
             ),
           ),
@@ -123,7 +74,7 @@ class _HomeSettingPageState extends State<HomeSettingPage> {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('首页菜单'),
+          title: i18n.settingsFuncRearrange.txt,
           actions: [
             IconButton(
                 onPressed: () {
@@ -134,8 +85,8 @@ class _HomeSettingPageState extends State<HomeSettingPage> {
           ],
         ),
         body: ReorderableListView(
-          children: buildWidgetItems(homeItems),
           onReorder: _onReorder,
+          children: buildWidgetItems(homeItems),
         ),
       ),
       onWillPop: () async {

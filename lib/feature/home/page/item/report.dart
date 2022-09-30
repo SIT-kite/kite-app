@@ -16,12 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/feature/home/entity/home.dart';
 import 'package:kite/feature/initializer_index.dart';
 import 'package:kite/feature/report/entity/report.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/alert_dialog.dart';
+import 'package:kite/util/dsl.dart';
 
 import 'index.dart';
 
@@ -33,7 +36,6 @@ class ReportItem extends StatefulWidget {
 }
 
 class _ReportItemState extends State<ReportItem> {
-  static const String defaultContent = '记得上报哦';
   String? content;
 
   /// 用于限制仅弹出一次对话框
@@ -75,11 +77,11 @@ class _ReportItemState extends State<ReportItem> {
     // 弹框提醒
     final select = await showAlertDialog(
       context,
-      title: '疫情上报提醒小助手',
-      content: const Text('您今日还未完成疫情上报，是否立即上报？'),
+      title: i18n.reportTempHelper,
+      content: i18n.reportTempRequest.txt,
       actionWidgetList: [
-        ElevatedButton(onPressed: () {}, child: const Text('立即前往')),
-        TextButton(onPressed: () {}, child: const Text('关闭对话框')),
+        ElevatedButton(onPressed: () {}, child: i18n.yes.txt),
+        TextButton(onPressed: () {}, child: i18n.notNow.txt),
       ],
     );
     if (select == null || select == 1) return;
@@ -92,10 +94,10 @@ class _ReportItemState extends State<ReportItem> {
     final today = DateTime.now();
     if (history.date != (today.year * 10000 + today.month * 100 + today.day)) {
       Future.delayed(Duration.zero, dialogRemind);
-      return '今日未上报';
+      return i18n.reportTempReportedToday;
     }
-    final normal = history.isNormal == 0 ? '体温正常' : '体温异常';
-    return '今日已上报, $normal (${history.place})';
+    final tempState = history.isNormal == 0 ? i18n.reportTempNormal : i18n.reportTempAbnormal;
+    return '${i18n.reportTempUnreportedToday}, $tempState ${history.place}';
   }
 
   Future<String> _buildContent() async {
@@ -104,10 +106,10 @@ class _ReportItemState extends State<ReportItem> {
     try {
       history = await ReportInitializer.reportService.getRecentHistory(KvStorageInitializer.auth.currentUsername ?? '');
     } catch (e) {
-      return '获取状态失败, ${e.runtimeType}';
+      return '${i18n.failed}: ${e.runtimeType}';
     }
     if (history == null) {
-      return '无上报记录';
+      return i18n.reportTempNoReportRecords;
     }
     // 别忘了本地缓存更新一下.
     KvStorageInitializer.home.lastReport = history;
@@ -120,17 +122,15 @@ class _ReportItemState extends State<ReportItem> {
     if (content == null) {
       final ReportHistory? lastReport = KvStorageInitializer.home.lastReport;
       // 如果本地没有缓存记录, 加载默认文本. 否则加载记录.
-      if (lastReport == null) {
-        content = defaultContent;
-      } else {
+      if (lastReport != null) {
         content = _generateContent(lastReport);
       }
     }
     return HomeFunctionButton(
       route: '/report',
       icon: 'assets/home/icon_report.svg',
-      title: '体温上报',
-      subtitle: content,
+      title: FunctionType.report.localized(),
+      subtitle: content ?? FunctionType.report.localizedDesc(),
     );
   }
 }

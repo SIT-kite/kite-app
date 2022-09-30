@@ -16,7 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/feature/home/entity/home.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/l10n/extension.dart';
 
 import 'index.dart';
 
@@ -28,7 +30,7 @@ class ExamItem extends StatefulWidget {
 }
 
 class _ExamItemState extends State<ExamItem> {
-  late String content = '查看我最近的考试安排';
+  String? content;
 
   @override
   void initState() {
@@ -42,8 +44,8 @@ class _ExamItemState extends State<ExamItem> {
     return HomeFunctionButton(
       route: '/exam',
       icon: 'assets/home/icon_exam.svg',
-      title: '考试安排',
-      subtitle: content,
+      title: FunctionType.exam.localized(),
+      subtitle: content ?? FunctionType.exam.localizedDesc(),
     );
   }
 }

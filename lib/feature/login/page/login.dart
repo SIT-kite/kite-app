@@ -20,9 +20,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/exception/session.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/launch.dart';
 import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
+import 'package:kite/util/dsl.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/validation.dart';
 
@@ -55,10 +57,11 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> onLogin() async {
     bool formValid = (_formKey.currentState as FormState).validate();
     if (!formValid) {
+      // TODO: Where is the validation?
       return;
     }
     if (!isLicenseAccepted) {
-      showBasicFlash(context, const Text('请阅读并同意用户协议'));
+      showBasicFlash(context, i18n.readAndAcceptRequest(R.kiteUserAgreementName).txt);
       return;
     }
 
@@ -80,11 +83,12 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.of(context).pop();
       }
       Navigator.pushReplacementNamed(context, RouteTable.home);
-      GlobalLauncher.launch('https://kite.sunnysab.cn/wiki/kite-app/features/');
+      GlobalLauncher.launch(R.kiteWikiUrl);
     } on CredentialsInvalidException catch (e) {
       showBasicFlash(context, Text(e.msg));
       return;
     } catch (e) {
+      // TODO: Optimize UX
       showBasicFlash(context, Text('未知错误: $e'), duration: const Duration(seconds: 3));
       return;
     } finally {
@@ -107,14 +111,13 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   static void onOpenUserLicense() {
-    const url = 'https://kite.sunnysab.cn/license/';
-    GlobalLauncher.launch(url);
+    GlobalLauncher.launch(R.kiteUserAgreementUrl);
   }
 
   Widget buildTitleLine() {
     return Container(
         alignment: Alignment.centerLeft,
-        child: const Text('欢迎登录', style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold)));
+        child: Text(i18n.kiteLoginTitle, style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold)));
   }
 
   Widget buildLoginForm() {
@@ -127,15 +130,16 @@ class _LoginPageState extends State<LoginPage> {
             controller: _usernameController,
             autofocus: true,
             validator: studentIdValidator,
-            decoration: const InputDecoration(labelText: '账号', hintText: '学号/工号', icon: Icon(Icons.person)),
+            decoration: InputDecoration(
+                labelText: i18n.account, hintText: i18n.kiteLoginAccountHint, icon: const Icon(Icons.person)),
           ),
           TextFormField(
             controller: _passwordController,
             autofocus: true,
             obscureText: !isPasswordClear,
             decoration: InputDecoration(
-              labelText: '密码',
-              hintText: '输入你的密码',
+              labelText: i18n.pwd,
+              hintText: i18n.kiteLoginPwdHint,
               icon: const Icon(Icons.lock),
               suffixIcon: IconButton(
                 // 切换密码明文显示状态的图标按钮
@@ -168,8 +172,11 @@ class _LoginPageState extends State<LoginPage> {
           child: Text.rich(
             TextSpan(
               children: [
-                TextSpan(text: '我已阅读并同意', style: Theme.of(context).textTheme.bodyText1),
-                TextSpan(text: '《上应小风筝用户协议》', style: Theme.of(context).textTheme.bodyText2, recognizer: _recognizer),
+                TextSpan(text: i18n.acceptedAgreementCheckbox, style: Theme.of(context).textTheme.bodyText1),
+                TextSpan(
+                    text: R.kiteUserAgreementName,
+                    style: Theme.of(context).textTheme.bodyText2,
+                    recognizer: _recognizer),
               ],
             ),
           ),
@@ -187,7 +194,7 @@ class _LoginPageState extends State<LoginPage> {
           height: 40.h,
           child: ElevatedButton(
             onPressed: disableLoginButton ? null : onLogin,
-            child: const Text('进入风筝元宇宙'),
+            child: i18n.kiteLoginBtn.txt,
           ),
         ),
       ],
@@ -227,6 +234,7 @@ class _LoginPageState extends State<LoginPage> {
       borderWidth: 3.sm,
       behavior: FlashBehavior.fixed,
       forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+      // TODO: I18n
       title: const Text('设置代理服务'),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -299,20 +307,18 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextButton(
-                    child: const Text(
-                      '忘记密码',
-                      style: TextStyle(color: Colors.grey),
+                    child: Text(
+                      i18n.kiteForgotPwdBtn,
+                      style: const TextStyle(color: Colors.grey),
                     ),
                     onPressed: () {
-                      const String forgetPassword =
-                          'https://authserver.sit.edu.cn/authserver/getBackPasswordMainPage.do?service=https%3A%2F%2Fmyportal.sit.edu.cn%3A443%2F';
-                      GlobalLauncher.launch(forgetPassword);
+                      GlobalLauncher.launch(R.forgotLoginPwdUrl);
                     },
                   ),
                   TextButton(
-                    child: const Text(
-                      '遇到问题',
-                      style: TextStyle(color: Colors.grey),
+                    child: Text(
+                      i18n.feedbackBtn,
+                      style: const TextStyle(color: Colors.grey),
                     ),
                     onPressed: () {
                       Navigator.of(context).pushNamed('/feedback');

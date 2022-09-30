@@ -27,7 +27,7 @@ class ClassroomPage extends StatefulWidget {
   const ClassroomPage({Key? key}) : super(key: key);
 
   @override
-  _ClassroomPageState createState() => _ClassroomPageState();
+  State<ClassroomPage> createState() => _ClassroomPageState();
 }
 
 class _ClassroomPageState extends State<ClassroomPage> {

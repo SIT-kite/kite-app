@@ -24,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
 import 'package:kite/util/user.dart';
 
@@ -32,8 +33,7 @@ import 'feature/override/entity.dart';
 import 'global/global.dart';
 import 'storage/init.dart';
 import 'util/logger.dart';
-
-const title = '上应小风筝';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class KiteApp extends StatefulWidget {
   const KiteApp({Key? key}) : super(key: key);
@@ -113,12 +113,15 @@ class _KiteAppState extends State<KiteApp> {
     });
     buildMaterialWithTheme(ThemeData theme) {
       return MaterialApp(
-        title: title,
+        title: R.appName,
         theme: theme,
         initialRoute: AccountUtils.getUserType() != null ? RouteTable.home : RouteTable.welcome,
         debugShowCheckedModeBanner: false,
         navigatorKey: Catcher.navigatorKey,
         onGenerateRoute: _onGenerateRoute,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: Lang.supports,
+        locale: KvStorageInitializer.pref.locale,
         builder: EasyLoading.init(builder: (context, widget) {
           return MediaQuery(
             // 设置文字大小不随系统设置改变

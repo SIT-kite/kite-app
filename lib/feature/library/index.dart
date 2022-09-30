@@ -18,10 +18,13 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:kite/feature/home/entity/home.dart';
 import 'package:kite/feature/library/appointment/init.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
+import 'package:kite/util/dsl.dart';
 import 'package:kite/util/flash.dart';
+import 'package:kite/util/strings.dart';
 
 import 'appointment/entity.dart';
 import 'appointment/page/notice.dart';
@@ -29,12 +32,18 @@ import 'search/page/constant.dart';
 import 'search/page/search_delegate.dart';
 
 class NoticeWidget extends StatelessWidget {
+  static const noticePreviewCharLimit = 25;
   final ValueNotifier<Notice?> noticeNotifier = ValueNotifier(null);
+
   NoticeWidget({Key? key}) : super(key: key);
 
   Widget buildNone() => Container();
 
+  String genNoticePreview(Notice notice) =>
+      notice.html.substring(0, min(notice.html.length, noticePreviewCharLimit));
+
   Widget buildSome(Notice notice) {
+    final isRealHtml = guessIsHtml(notice.html);
     return Container(
       decoration: const BoxDecoration(
         border: Border.symmetric(
@@ -43,15 +52,16 @@ class NoticeWidget extends StatelessWidget {
       ),
       child: Builder(builder: (context) {
         return ListTile(
-          title: const Text('[图书馆有新公告]', style: TextStyle(color: Colors.blue, fontSize: 18)),
-          subtitle: Text(DateFormat('发布时间: yyyy-MM-dd   HH:mm').format(notice.ts.toLocal())),
+          title: Text(isRealHtml ? i18n.libraryNoticeLabel : genNoticePreview(notice),
+              style: const TextStyle(color: Colors.blue, fontSize: 18)),
+          subtitle: Text(('${i18n.libraryNoticeSendTime}:  ${context.dateFullNum(notice.ts.toLocal())}')),
           trailing: const Icon(
             Icons.notification_important,
             color: Colors.blueAccent,
           ),
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return LibraryNoticePage(notice);
+              return LibraryNoticePage(notice, isHtml: isRealHtml);
             }));
           },
         );
@@ -89,7 +99,7 @@ class LibraryPage extends StatelessWidget {
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
-      title: const Text('图书馆'),
+      title: FunctionType.library.localized().txt,
       actions: [
         IconButton(
           onPressed: () {
@@ -101,7 +111,7 @@ class LibraryPage extends StatelessWidget {
         ),
         IconButton(
           onPressed: () async {
-            showBasicFlash(context, const Text('图书馆账户信息管理，敬请期待'));
+            showBasicFlash(context, i18n.libraryAccountManagementBtnTip.txt);
           },
           icon: const Icon(
             Icons.person,
@@ -118,6 +128,7 @@ class LibraryPage extends StatelessWidget {
 
     return Column(
       children: [
+        // Hardcoded Chinese comma is used. Don't change this.
         ...saying.text.split('，').map((e) {
           return SizedBox(
             width: width,
@@ -149,7 +160,7 @@ class LibraryPage extends StatelessWidget {
     var sayingWidth = screenWidth * 0.5;
     return Stack(
       children: [
-        Align(child: NoticeWidget(), alignment: Alignment.topCenter),
+        Align(alignment: Alignment.topCenter, child: NoticeWidget()),
         Center(
           child: SizedBox(
             height: 400,

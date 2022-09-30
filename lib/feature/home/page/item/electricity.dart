@@ -16,7 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/feature/home/entity/home.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
 
 import '../../../electricity/entity.dart';
@@ -31,7 +33,7 @@ class ElectricityItem extends StatefulWidget {
 
 class _ElectricityItemState extends State<ElectricityItem> {
   final Balance? lastBalance = KvStorageInitializer.home.lastBalance;
-  late String content = '宿舍电费余额和用电记录';
+  String? content;
 
   @override
   void initState() {
@@ -42,15 +44,15 @@ class _ElectricityItemState extends State<ElectricityItem> {
 
   @override
   Widget build(BuildContext context) {
-    if (lastBalance != null) {
-      content =
-          '寝室 ${lastBalance!.room} 上次余额 ${lastBalance!.balance.toStringAsPrecision(2)}';
+    final b = lastBalance;
+    if (b != null) {
+      content = i18n.elecBillContent(b.room, b.balance.toStringAsPrecision(2));
     }
     return HomeFunctionButton(
       route: '/electricity',
       icon: 'assets/home/icon_electricity.svg',
-      title: '查电费',
-      subtitle: content,
+      title: FunctionType.electricity.localized(),
+      subtitle: content ?? FunctionType.electricity.localizedDesc(),
     );
   }
 }

@@ -25,7 +25,9 @@ import 'package:flutter_weather_bg_null_safety/utils/weather_type.dart';
 import 'package:kite/feature/kite/entity/weather.dart';
 import 'package:kite/global/desktop_initializer.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
+import 'package:kite/util/dsl.dart';
 import 'package:kite/util/flash.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -81,7 +83,7 @@ class _HomeBackgroundState extends State<HomeBackground> {
 
   void _onBackgroundUpdate(_) {
     if (KvStorageInitializer.home.background == null) {
-      showBasicFlash(context, const Text('你还没有设置背景图片'));
+      showBasicFlash(context, i18n.settingsWallpaperEmptyWarn.txt);
       return;
     }
     setState(() {});
@@ -119,7 +121,7 @@ class _HomeBackgroundState extends State<HomeBackground> {
       } else {
         Future.delayed(
           Duration.zero,
-          () => showBasicFlash(context, const Text('你还没有设置背景图片')),
+          () => showBasicFlash(context, i18n.settingsWallpaperEmptyWarn.txt),
         );
       }
     }

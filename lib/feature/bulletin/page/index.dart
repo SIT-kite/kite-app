@@ -18,14 +18,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/l10n/extension.dart';
+import 'package:kite/util/dsl.dart';
 
 import '../entity.dart';
 import '../init.dart';
 import 'detail.dart';
 
+// TODO: Rename to OaAnnouncement
 class BulletinPage extends StatelessWidget {
-  static final _dateFormat = DateFormat('yyyy/MM/dd hh:mm');
-
   const BulletinPage({Key? key}) : super(key: key);
 
   Widget _buildBulletinItem(BuildContext context, BulletinRecord record) {
@@ -36,7 +37,7 @@ class BulletinPage extends StatelessWidget {
       padding: const EdgeInsets.all(2),
       child: ListTile(
         title: Text(record.title, style: titleStyle, overflow: TextOverflow.ellipsis),
-        subtitle: Text('${record.department} | ${_dateFormat.format(record.dateTime)}', style: subtitleStyle),
+        subtitle: Text('${record.department} | ${context.dateNum(record.dateTime)}', style: subtitleStyle),
         onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailPage(record))),
       ),
     );
@@ -82,7 +83,7 @@ class BulletinPage extends StatelessWidget {
                   .toList();
               return SingleChildScrollView(child: Column(children: items));
             } else if (snapshot.hasError) {
-              return Center(child: Text('错误类型: ${snapshot.error.runtimeType}'));
+              return Center(child: Text('${i18n.failed}: ${snapshot.error.runtimeType}'));
             }
           }
           return const Center(child: CircularProgressIndicator());
@@ -92,7 +93,7 @@ class BulletinPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('OA 公告')),
+      appBar: AppBar(title: i18n.ftype_oaAnnouncement.txt),
       body: _buildBulletinList(),
     );
   }

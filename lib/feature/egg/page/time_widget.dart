@@ -19,6 +19,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 import 'digit_model.dart';
 import 'simple_world.dart';
@@ -116,10 +117,15 @@ class TimeWidget extends StatefulWidget {
   TimeWidget({Key? key}) : super(key: key);
 
   @override
-  _TimeWidgetState createState() => _TimeWidgetState();
+  State<TimeWidget> createState() => _TimeWidgetState();
 }
 
 class _TimeWidgetState extends State<TimeWidget> {
+  /// 1000 / 60 = 16.666666
+  static const frameDelay = 16;
+  static const summonDelay = 5;
+  /// A timer for summoning limitation
+  int frameCounter = 0;
   late World world;
   Drawable? back;
   bool hasDispose = false;
@@ -223,7 +229,7 @@ class _TimeWidgetState extends State<TimeWidget> {
         }).toList());
 
         currentTimeMs = DateTime.now().millisecondsSinceEpoch - firstTime.millisecondsSinceEpoch;
-        await Future.delayed(const Duration(milliseconds: 16));
+        await Future.delayed(const Duration(milliseconds: frameDelay));
         update();
       }
     });
@@ -272,6 +278,7 @@ class _TimeWidgetState extends State<TimeWidget> {
     });
   }
 
+
   Widget buildMainWidget() {
     return GestureDetector(
       child: CustomPaint(
@@ -287,7 +294,11 @@ class _TimeWidgetState extends State<TimeWidget> {
         ),
       ),
       onPanUpdate: (DragUpdateDetails details) {
-        world.pushMovableObject(generateCircle(details.localPosition));
+        frameCounter++;
+        if (frameCounter > summonDelay) {
+          world.pushMovableObject(generateCircle(details.localPosition));
+          frameCounter -= summonDelay;
+        }
       },
     );
   }

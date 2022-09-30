@@ -48,3 +48,10 @@ class FunctionOverrideMock implements FunctionOverrideServiceDao {
     return FunctionOverrideInfo.fromJson(_json);
   }
 }
+
+class FunctionOverrideDisabled implements FunctionOverrideServiceDao {
+  @override
+  Future<FunctionOverrideInfo> get() async {
+    return FunctionOverrideInfo();
+  }
+}

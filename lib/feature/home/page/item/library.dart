@@ -18,9 +18,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:kite/feature/home/entity/home.dart';
 import 'package:kite/feature/library/search/entity/hot_search.dart';
 import 'package:kite/feature/library/search/init.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
 
 import 'index.dart';
@@ -33,7 +35,6 @@ class LibraryItem extends StatefulWidget {
 }
 
 class _LibraryItemState extends State<LibraryItem> {
-  static const String defaultContent = '馆藏书籍和借阅情况';
   String? content;
 
   @override
@@ -50,24 +51,24 @@ class _LibraryItemState extends State<LibraryItem> {
   }
 
   void _onHomeRefresh(_) async {
-    final String result = await _buildContent();
+    final String? result = await _buildContent();
     if (!mounted) return;
     setState(() => content = result);
   }
 
-  Future<String> _buildContent() async {
+  Future<String?> _buildContent() async {
     late HotSearch hotSearch;
 
     try {
       hotSearch = await LibrarySearchInitializer.hotSearchService.getHotSearch();
     } catch (e) {
-      return defaultContent;
+      return null;
     }
     final monthlyHot = hotSearch.recentMonth;
     final randomIndex = Random().nextInt(monthlyHot.length);
     final hotItem = monthlyHot[randomIndex];
 
-    final result = '热搜: ${hotItem.hotSearchWord} (${hotItem.count})';
+    final result = '${i18n.hotPost}: ${hotItem.hotSearchWord} (${hotItem.count})';
     KvStorageInitializer.home.lastHotSearch = result;
     return result;
   }
@@ -77,8 +78,12 @@ class _LibraryItemState extends State<LibraryItem> {
     // 如果是首屏加载
     if (content == null) {
       final lastHotSearch = KvStorageInitializer.home.lastHotSearch;
-      content = lastHotSearch ?? defaultContent;
+      content = lastHotSearch;
     }
-    return HomeFunctionButton(route: '/library', icon: 'assets/home/icon_library.svg', title: '图书馆', subtitle: content);
+    return HomeFunctionButton(
+        route: '/library',
+        icon: 'assets/home/icon_library.svg',
+        title: FunctionType.library.localized(),
+        subtitle: content ?? FunctionType.library.localizedDesc());
   }
 }

@@ -17,8 +17,10 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/exception/session.dart';
+import 'package:kite/feature/home/entity/home.dart';
 import 'package:kite/feature/office/init.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
 
 import 'index.dart';
@@ -31,7 +33,6 @@ class OfficeItem extends StatefulWidget {
 }
 
 class _OfficeItemState extends State<OfficeItem> {
-  static const defaultContent = '通过应网办办理业务';
   String? content;
 
   @override
@@ -45,12 +46,23 @@ class _OfficeItemState extends State<OfficeItem> {
     Global.eventBus.off(EventNameConstants.onHomeRefresh, _onHomeRefresh);
     super.dispose();
   }
+  void _tryUpdateContent(String? newContent){
+    if (newContent != null) {
+      if (newContent.isEmpty || newContent.trim().isEmpty) {
+        content = null;
+      } else {
+        content = newContent;
+      }
+    } else {
+      content = null;
+    }
+  }
 
   void _onHomeRefresh(_) async {
     if (!mounted) return;
     final String result = await _buildContent();
     KvStorageInitializer.home.lastOfficeStatus = result;
-    setState(() => content = result);
+    setState(() => _tryUpdateContent(result));
   }
 
   Future<String> _buildContent() async {
@@ -71,9 +83,9 @@ class _OfficeItemState extends State<OfficeItem> {
     }
     format(s, x) => x > 0 ? '$s ($x)' : '';
     final totalMessage = await OfficeInitializer.messageService.queryMessageCount();
-    final draftBlock = format('草稿', totalMessage.inDraft);
-    final doingBlock = format('在办', totalMessage.inProgress);
-    final completedBlock = format('完成', totalMessage.completed);
+    final draftBlock = format(i18n.draft, totalMessage.inDraft);
+    final doingBlock = format(i18n.processing, totalMessage.inProgress);
+    final completedBlock = format(i18n.done, totalMessage.completed);
 
     return '$draftBlock $doingBlock $completedBlock'.trim();
   }
@@ -81,10 +93,11 @@ class _OfficeItemState extends State<OfficeItem> {
   @override
   Widget build(BuildContext context) {
     // 如果是首屏加载, 从缓存读
-    if (content == null) {
-      final String? lastOfficeStatus = KvStorageInitializer.home.lastOfficeStatus;
-      content = lastOfficeStatus ?? defaultContent;
-    }
-    return HomeFunctionButton(route: '/office', icon: 'assets/home/icon_office.svg', title: '办公', subtitle: content);
+    _tryUpdateContent(KvStorageInitializer.home.lastOfficeStatus);
+    return HomeFunctionButton(
+        route: '/office',
+        icon: 'assets/home/icon_office.svg',
+        title: FunctionType.office.localized(),
+        subtitle: content ?? FunctionType.office.localizedDesc());
   }
 }

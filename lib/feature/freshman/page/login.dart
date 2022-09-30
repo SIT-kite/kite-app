@@ -18,8 +18,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/launch.dart';
 import 'package:kite/storage/init.dart';
+import 'package:kite/util/dsl.dart';
 
 import '../../../route.dart';
 import '../../../util/flash.dart';
@@ -55,11 +57,11 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
     Log.info('新生登录');
     bool formValid = (_formKey.currentState as FormState).validate();
     if (!formValid) {
-      showBasicFlash(context, const Text('请检查您的输入'));
+      showBasicFlash(context, i18n.validateInputRequest.txt);
       return;
     }
     if (!_isLicenseAccepted) {
-      showBasicFlash(context, const Text('请阅读并同意用户协议'));
+      showBasicFlash(context, i18n.readAndAcceptRequest(R.kiteUserAgreementName).txt);
       return;
     }
 
@@ -94,11 +96,12 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       // GlobalLauncher.launch('https://kite.sunnysab.cn/wiki/kite-app/features/');
       return;
     } catch (e) {
+      // TODO: optimize UX
       // 登陆失败
       KvStorageInitializer.freshman
         ..freshmanSecret = null
         ..freshmanAccount = null;
-      showBasicFlash(context, Text('登陆失败: $e'));
+      showBasicFlash(context, Text('${i18n.freshmanLoginFailedWarn}: $e'));
     } finally {
       if (mounted) {
         setState(() => _disableLoginButton = false);
@@ -119,14 +122,13 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
   }
 
   static void onOpenUserLicense() {
-    const url = 'https://kite.sunnysab.cn/license/';
-    GlobalLauncher.launch(url);
+    GlobalLauncher.launch(R.kiteUserAgreementUrl);
   }
 
   Widget buildTitleLine() {
     return Container(
         alignment: Alignment.centerLeft,
-        child: const Text('欢迎新同学', style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold)));
+        child: Text(i18n.freshmanTitle, style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold)));
   }
 
   Widget buildLoginForm() {
@@ -138,10 +140,10 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
           TextFormField(
             controller: _accountController,
             autofocus: true,
-            decoration: const InputDecoration(
-              labelText: '账号',
-              hintText: '学号/姓名/准考证号',
-              icon: Icon(Icons.person),
+            decoration: InputDecoration(
+              labelText: i18n.account,
+              hintText: i18n.freshmanLoginAccountHint,
+              icon: const Icon(Icons.person),
             ),
           ),
           TextFormField(
@@ -149,8 +151,8 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
             autofocus: true,
             obscureText: !_isPasswordClear,
             decoration: InputDecoration(
-              labelText: '密码',
-              hintText: '身份证号后六位',
+              labelText: i18n.pwd,
+              hintText: i18n.freshmanLoginPwdHint,
               icon: const Icon(Icons.lock),
               suffixIcon: IconButton(
                 // 切换密码明文显示状态的图标按钮
@@ -181,8 +183,11 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
           child: Text.rich(
             TextSpan(
               children: [
-                TextSpan(text: '我已阅读并同意', style: Theme.of(context).textTheme.bodyText1),
-                TextSpan(text: '《上应小风筝用户协议》', style: Theme.of(context).textTheme.bodyText2, recognizer: _recognizer),
+                TextSpan(text: i18n.acceptedAgreementCheckbox, style: Theme.of(context).textTheme.bodyText1),
+                TextSpan(
+                    text: R.kiteUserAgreementName,
+                    style: Theme.of(context).textTheme.bodyText2,
+                    recognizer: _recognizer),
               ],
             ),
           ),
@@ -200,7 +205,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
           height: 40.h,
           child: ElevatedButton(
             onPressed: _disableLoginButton ? null : onLogin,
-            child: const Text('进入风筝元宇宙'),
+            child: i18n.freshmanLoginBtn.txt,
           ),
         ),
       ],
@@ -255,9 +260,9 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextButton(
-                    child: const Text(
-                      '遇到问题',
-                      style: TextStyle(color: Colors.grey),
+                    child: Text(
+                      i18n.feedbackBtn,
+                      style: const TextStyle(color: Colors.grey),
                     ),
                     onPressed: () {
                       Navigator.of(context).pushNamed('/feedback');
