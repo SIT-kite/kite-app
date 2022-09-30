@@ -99,7 +99,7 @@ class LibraryPage extends StatelessWidget {
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
-      title: FunctionType.library.localized().txt,
+      title: i18n.ftype_library.txt,
       actions: [
         IconButton(
           onPressed: () {

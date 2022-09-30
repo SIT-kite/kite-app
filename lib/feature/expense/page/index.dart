@@ -150,7 +150,7 @@ class _ExpensePageState extends State<ExpensePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: FunctionType.expense.localized().txt,
+        title: i18n.ftype_expense.txt,
         actions: [
           _buildRefreshButton(),
           currentIndex == 0 ? _buildPopupMenuItems() : Container(),

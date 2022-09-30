@@ -85,7 +85,7 @@ class NoticePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: FunctionType.notice.localized().txt),
+      appBar: AppBar(title: i18n.ftype_kiteBulletin.txt),
       body: SafeArea(child: _buildBody()),
     );
   }

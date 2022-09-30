@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/feature/home/entity/home.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/util/dsl.dart';
 
 import '../entity/list.dart';
@@ -107,7 +108,7 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
       length: categories.length,
       child: Scaffold(
         appBar: AppBar(
-          title: FunctionType.event.localized().txt,
+          title: i18n.ftype_activity.txt,
           bottom: _buildBarHeader(),
           actions: [
             IconButton(

@@ -132,8 +132,8 @@ class _ReportItemState extends State<ReportItem> {
     return HomeFunctionButton(
       route: '/report',
       icon: 'assets/home/icon_report.svg',
-      title: FunctionType.report.localized(),
-      subtitle: content ?? FunctionType.report.localizedDesc(),
+      title: i18n.ftype_reportTemp,
+      subtitle: content ?? i18n.ftype_reportTemp,
     );
   }
 }

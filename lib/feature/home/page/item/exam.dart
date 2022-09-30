@@ -44,8 +44,8 @@ class _ExamItemState extends State<ExamItem> {
     return HomeFunctionButton(
       route: '/exam',
       icon: 'assets/home/icon_exam.svg',
-      title: FunctionType.exam.localized(),
-      subtitle: content ?? FunctionType.exam.localizedDesc(),
+      title: i18n.ftype_examArr,
+      subtitle: content ?? i18n.ftype_examArr_desc,
     );
   }
 }
