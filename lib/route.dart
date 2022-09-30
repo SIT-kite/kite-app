@@ -35,8 +35,10 @@ import 'feature/page_index.dart';
 import 'feature/simple_page/browser.dart';
 import 'feature/simple_page/html_page.dart';
 import 'setting/page/index.dart';
+import 'util/user.dart';
 
 class RouteTable {
+  static const root = '/';
   static const home = '/home';
   static const report = '/report';
   static const login = '/login';
@@ -152,6 +154,10 @@ final defaultRouteTable = StaticRouteTable(
     },
   },
   onNotFound: (context, routeName, args) => NotFoundPage(routeName),
+  rootRoute: (context, table, args) {
+    final routeName = AccountUtils.getUserType() != null ? RouteTable.home : RouteTable.welcome;
+    return table.onGenerateRoute(routeName, args)(context);
+  },
 );
 
 class DefaultRouteWithOverride implements IRouteGenerator {

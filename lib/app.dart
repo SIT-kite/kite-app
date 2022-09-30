@@ -23,17 +23,16 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
-import 'package:kite/util/user.dart';
 
 import 'abstract/route.dart';
 import 'feature/override/entity.dart';
 import 'global/global.dart';
 import 'storage/init.dart';
 import 'util/logger.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class KiteApp extends StatefulWidget {
   const KiteApp({Key? key}) : super(key: key);
@@ -115,7 +114,7 @@ class _KiteAppState extends State<KiteApp> {
       return MaterialApp(
         title: R.appName,
         theme: theme,
-        initialRoute: AccountUtils.getUserType() != null ? RouteTable.home : RouteTable.welcome,
+        initialRoute: RouteTable.root,
         debugShowCheckedModeBanner: false,
         navigatorKey: Catcher.navigatorKey,
         onGenerateRoute: _onGenerateRoute,
