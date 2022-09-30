@@ -15,8 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'dart:io';
+
+import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:flutter/material.dart';
+import 'package:kite/component/future_builder.dart';
 import 'package:kite/component/webview_page.dart';
+import 'package:kite/global/global.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 const String _feedbackUrl = 'https://support.qq.com/product/377648';
 
@@ -25,10 +31,44 @@ class FeedbackPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SimpleWebViewPage(
-      initialUrl: _feedbackUrl,
-      showLoadInBrowser: true,
-      fixedTitle: '反馈',
+    return MyFutureBuilder<List>(
+      futureGetter: () => Future.wait([
+        () async {
+          try {
+            return await PackageInfo.fromPlatform();
+          } catch (e) {
+            return null;
+          }
+        }(),
+        Global.ssoSession.checkConnectivity(),
+        () async {
+          try {
+            return FkUserAgent.webViewUserAgent;
+          } catch (e) {
+            return null;
+          }
+        }(),
+      ]),
+      builder: (ctx, data) {
+        final PackageInfo? packageInfo = data[0];
+        final bool isConnected = data[1];
+        final String? ua = data[2];
+        final postData = {
+          'clientInfo': packageInfo?.buildSignature ?? '未知',
+          'clientVersion': packageInfo?.version ?? '未知',
+          'os': Platform.operatingSystem,
+          'osVersion': Platform.operatingSystemVersion,
+          'netType': isConnected ? '已连接校园网' : '未连接校园网',
+          'customInfo': ua ?? '无UA信息',
+        };
+        print(postData);
+        return SimpleWebViewPage(
+          initialUrl: _feedbackUrl,
+          showLoadInBrowser: true,
+          fixedTitle: '反馈',
+          postData: postData,
+        );
+      },
     );
   }
 }
