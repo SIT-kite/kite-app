@@ -26,9 +26,11 @@ import 'package:kite/feature/override/entity.dart';
 import 'package:kite/feature/override/init.dart';
 import 'package:kite/feature/quick_button/init.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/launch.dart';
 import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
+import 'package:kite/util/dsl.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/scanner.dart';
@@ -109,14 +111,14 @@ class _HomePageState extends State<HomePage> {
       try {
         await _doLogin(context);
         if (!mounted) return;
-        showBasicFlash(context, const Text('登录成功'));
+        showBasicFlash(context, i18n.kiteLoggedInTip.txt);
       } on Exception catch (e) {
         // 如果是认证相关问题, 弹出相应的错误信息.
         if (e is UnknownAuthException || e is CredentialsInvalidException) {
-          showBasicFlash(context, Text('登录异常: $e'));
+          showBasicFlash(context, Text('${i18n.kiteLoginFailedTip}: $e'));
         } else {
           // 如果是网络问题, 提示检查网络.
-          _showCheckNetwork(context, title: Text('$e: 网络异常'));
+          _showCheckNetwork(context, title: i18n.networkXcpWarn.txt);
         }
       } catch (e, s) {
         Catcher.reportCheckedError(e, s);
@@ -284,7 +286,7 @@ class _HomePageState extends State<HomePage> {
       if (!isFreshman && await HomeInitializer.ssoSession.checkConnectivity()) {
         showBasicFlash(
           context,
-          const Text('当前已连接校园网环境'),
+          i18n.homepageCampusNetworkConnected.txt,
           duration: const Duration(seconds: 3),
         );
       }

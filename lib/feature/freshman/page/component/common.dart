@@ -144,15 +144,11 @@ String calcLastSeen(DateTime? lastSeen) {
   if (lastSeen != null) {
     lastSeenText = '';
     final diff = DateTime.now().difference(lastSeen);
-    if (diff.inDays != 0) {
+    if (diff.inDays > 0) {
       // handle with plural
       lastSeenText += '${diff.inDays}天前';
-    } else if (diff.inHours != 0) {
+    } else if (diff.inHours > 0) {
       lastSeenText += '${diff.inHours}小时前';
-    } else if (diff.inMinutes != 0) {
-      lastSeenText += '${diff.inDays}分钟前';
-    } else {
-      lastSeenText += '${diff.inSeconds}秒前';
     }
   }
   return lastSeenText;
@@ -218,7 +214,7 @@ List<Widget> buildAppBarMenuButton(BuildContext context) {
     IconButton(
       onPressed: () => Navigator.of(context).pushNamed(RouteTable.freshmanAnalysis),
       icon: const Icon(Icons.analytics),
-      tooltip: i18n.kiteStatisticsBtnTooltip,
+      tooltip: i18n.kiteStatsBtnTooltip,
     ),
     IconButton(
       onPressed: () => Navigator.of(context).pushNamed(RouteTable.freshmanUpdate),

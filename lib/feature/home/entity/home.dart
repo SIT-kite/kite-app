@@ -131,13 +131,13 @@ enum FunctionType {
       case FunctionType.report:
         return i18n.ftype_reportTemp;
       case FunctionType.exam:
-        return i18n.ftype_examArrangement;
+        return i18n.ftype_examArr;
       case FunctionType.classroom:
         return i18n.ftype_classroomBrowser;
       case FunctionType.event:
         return i18n.ftype_activity;
       case FunctionType.expense:
-        return i18n.ftype_expenseTracker;
+        return i18n.ftype_expense;
       case FunctionType.score:
         return i18n.ftype_examResult;
       case FunctionType.library:
@@ -167,7 +167,7 @@ enum FunctionType {
       case FunctionType.board:
         return i18n.ftype_kiteBoard;
       case FunctionType.electricity:
-        return i18n.ftype_electricityBill;
+        return i18n.ftype_elecBill;
     }
   }
 
@@ -182,13 +182,13 @@ enum FunctionType {
       case FunctionType.report:
         return i18n.ftype_reportTemp_desc;
       case FunctionType.exam:
-        return i18n.ftype_examArrangement_desc;
+        return i18n.ftype_examArr_desc;
       case FunctionType.classroom:
         return i18n.ftype_classroomBrowser_desc;
       case FunctionType.event:
         return i18n.ftype_activity_desc;
       case FunctionType.expense:
-        return i18n.ftype_expenseTracker_desc;
+        return i18n.ftype_expense_desc;
       case FunctionType.score:
         return i18n.ftype_examResult_desc;
       case FunctionType.library:
@@ -218,7 +218,7 @@ enum FunctionType {
       case FunctionType.board:
         return i18n.ftype_kiteBoard_desc;
       case FunctionType.electricity:
-        return i18n.ftype_electricityBill_desc;
+        return i18n.ftype_elecBill_desc;
     }
   }
 }

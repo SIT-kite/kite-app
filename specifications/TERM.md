@@ -1,4 +1,4 @@
-# Kite Specification
+# Terms of Kite
 
 ## Function Type Terms
 
@@ -8,10 +8,10 @@
 | kiteBulletin     | Kite Bulletin Board    | 风筝布告栏   |
 | timetable        | Timetable              | 课程表     |
 | reportTemp       | Report Temperature     | 体温上报    |
-| examArrangement  | Exam Arrangement       | 考试安排    |
+| examArr          | Exam Arrangement       | 考试安排    |
 | classroomBrowser | Classroom Browser      | 空教室     |
 | activity         | Activity               | 活动      |
-| expenseTracker   | Expense Tracker        | 查消费     |
+| expense          | Expense Tracker        | 查消费     |
 | library          | Library                | 图书馆     |
 | application      | Application            | 办事      |
 | eduEmail         | Edu Email              | Edu 邮箱  |

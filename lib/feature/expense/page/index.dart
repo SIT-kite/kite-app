@@ -18,6 +18,7 @@
 import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:kite/feature/home/entity/home.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/dsl.dart';
@@ -46,22 +47,16 @@ class _ExpensePageState extends State<ExpensePage> {
   void initState() {
     if (ExpenseInitializer.expenseRecord.isEmpty()) {
       Future.delayed(Duration.zero, () async {
-        if (await showAlertDialog(
-              context,
-              title: i18n.refresh,
-              content: [
-                const Text(
-                  '看起来您第一次使用消费查询, \n'
-                  '需要连接学校服务器获取数据, \n'
-                  '下次可点击右上角刷新获取最新数据',
-                ),
-              ],
-              actionWidgetList: [
-                ElevatedButton(onPressed: () {}, child: i18n.refresh.txt),
-                TextButton(onPressed: () {}, child: i18n.notNow.txt),
-              ],
-            ) ==
-            0) {
+        var responseIndex = await showAlertDialog(
+          context,
+          title: i18n.refresh,
+          content: [i18n.expenseFirstTimeRefreshRequest.txt],
+          actionWidgetList: [
+            ElevatedButton(onPressed: () {}, child: i18n.refresh.txt), // index 0
+            TextButton(onPressed: () {}, child: i18n.notNow.txt), // index 1
+          ],
+        );
+        if (responseIndex == 0) {
           await _refresh();
         }
       });
@@ -71,17 +66,15 @@ class _ExpensePageState extends State<ExpensePage> {
 
   /// 筛选按钮
   _buildPopupMenuItems() {
-    final itemMapping = expenseTypeMapping.map((type, display) {
-      final item = PopupMenuItem(
-        value: type,
-        child: Row(children: [buildIcon(type, context), Text(display)]),
-      );
-      return MapEntry(type, item);
-    });
-
-    final List<PopupMenuItem<ExpenseType>> items = itemMapping.values.toList();
+    final items = [
+      for (final type in ExpenseType.values)
+        PopupMenuItem(
+          value: type,
+          child: Row(children: [buildIcon(type, context), type.localized().txt]),
+        )
+    ];
     return PopupMenuButton(
-      tooltip: '筛选',
+      tooltip: i18n.filter,
       onSelected: (ExpenseType v) => setState(() => _filter = v),
       itemBuilder: (_) => items,
     );
@@ -112,10 +105,10 @@ class _ExpensePageState extends State<ExpensePage> {
     try {
       // 关闭用户交互
       EasyLoading.instance.userInteractions = false;
-      EasyLoading.show(status: '正在拉取消费记录');
+      EasyLoading.show(status: i18n.expenseFetchingRecordTip);
       await updateRecords();
     } catch (e, t) {
-      EasyLoading.showError('错误信息: ${e.toString().split('\n')[0]}');
+      EasyLoading.showError('${i18n.failed}: ${e.toString().split('\n')[0]}');
       Catcher.reportCheckedError(e, t);
     } finally {
       // 关闭正在加载对话框
@@ -126,7 +119,7 @@ class _ExpensePageState extends State<ExpensePage> {
   }
 
   Future<void> updateRecords() async {
-    showBasicFlash(context, const Text('正在更新消费数据, 速度受限于学校服务器, 请稍等'));
+    showBasicFlash(context, i18n.expenseFetchingTip.txt);
 
     final DateTime? startDate = ExpenseInitializer.expenseRecord.getLastOne()?.ts;
     final service = ExpenseInitializer.expenseRemote;
@@ -134,17 +127,18 @@ class _ExpensePageState extends State<ExpensePage> {
     final OaExpensePage firstPage = await _fetchAndSave(service, 1, start: startDate);
 
     if (!mounted) return;
+    // TODO: I18n waiting for more discussion
     showBasicFlash(context, Text('已加载 1 页, 共 ${firstPage.total} 页'));
     setState(() {});
 
-    _fetchBillConcurrently(service, 2, firstPage.total - 1);
+     await _fetchBillConcurrently(service, 2, firstPage.total - 1);
 
     EasyLoading.showSuccess('加载成功');
   }
 
   Widget _buildRefreshButton() {
     return IconButton(
-      tooltip: '刷新',
+      tooltip: i18n.refresh,
       icon: const Icon(Icons.refresh),
       onPressed: () => Future.delayed(Duration.zero, () async {
         await _refresh();
@@ -156,7 +150,7 @@ class _ExpensePageState extends State<ExpensePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('消费记录'),
+        title: FunctionType.expense.localized().txt,
         actions: [
           _buildRefreshButton(),
           currentIndex == 0 ? _buildPopupMenuItems() : Container(),
@@ -164,14 +158,14 @@ class _ExpensePageState extends State<ExpensePage> {
       ),
       body: currentIndex == 0 ? BillPage(filter: _filter) : const StatisticsPage(),
       bottomNavigationBar: BottomNavigationBar(
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            label: '账单',
-            icon: Icon(Icons.assignment_rounded),
+            label: i18n.bill,
+            icon: const Icon(Icons.assignment_rounded),
           ),
           BottomNavigationBarItem(
-            label: '统计',
-            icon: Icon(Icons.data_saver_off),
+            label: i18n.stats,
+            icon: const Icon(Icons.data_saver_off),
           )
         ],
         currentIndex: currentIndex,

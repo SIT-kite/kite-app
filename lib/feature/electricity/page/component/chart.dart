@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/feature/electricity/page/component/hourly_chart.dart';
+import 'package:kite/l10n/extension.dart';
+import 'package:kite/util/dsl.dart';
 
 import '../../../../component/future_builder.dart';
 import '../../entity.dart';
@@ -24,7 +26,7 @@ class ElectricityChartWidget extends StatelessWidget {
     data.removeLast();
     return Column(
       children: [
-        const Text('近24小时用电消费统计图'),
+        i18n.elecBillHourlyChart24.txt,
         Container(
           padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
           width: 400,
@@ -40,7 +42,7 @@ class ElectricityChartWidget extends StatelessWidget {
     data.removeLast();
     return Column(
       children: [
-        const Text('近7日用电消费统计图'),
+        i18n.elecBillDailyChart7.txt,
         Container(
           padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
           width: 400,

@@ -46,7 +46,7 @@ class _ElectricityItemState extends State<ElectricityItem> {
   Widget build(BuildContext context) {
     final b = lastBalance;
     if (b != null) {
-      content = i18n.electricityBillContent(b.room, b.balance.toStringAsPrecision(2));
+      content = i18n.elecBillContent(b.room, b.balance.toStringAsPrecision(2));
     }
     return HomeFunctionButton(
       route: '/electricity',

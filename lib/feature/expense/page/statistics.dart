@@ -16,11 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/l10n/extension.dart';
 
 import '../entity/expense.dart';
 import '../init.dart';
 import 'chart.dart';
 import 'icon.dart';
+// TODO: I18n
 
 class StatisticsPage extends StatefulWidget {
   const StatisticsPage({Key? key}) : super(key: key);
@@ -171,7 +173,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
         return ListTile(
           leading: buildIcon(expenseType, context),
-          title: Text(expenseTypeMapping[expenseType]!, style: Theme.of(context).textTheme.subtitle1),
+          title: Text(expenseType.localized(), style: Theme.of(context).textTheme.subtitle1),
           subtitle: LinearProgressIndicator(value: percentage, backgroundColor: backgroundColor),
           // 下方 SizedBox 用于限制文字宽度, 使左侧进度条的右端对齐.
           trailing: Row(
@@ -202,7 +204,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
-            child: Text('支出分类', style: Theme.of(context).textTheme.headline2),
+            child: Text(i18n.expenseCats, style: Theme.of(context).textTheme.headline2),
           ),
           Column(
             children: _buildClassifiedStat(),

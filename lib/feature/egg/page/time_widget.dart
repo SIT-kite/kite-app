@@ -117,7 +117,7 @@ class TimeWidget extends StatefulWidget {
   TimeWidget({Key? key}) : super(key: key);
 
   @override
-  _TimeWidgetState createState() => _TimeWidgetState();
+  State<TimeWidget> createState() => _TimeWidgetState();
 }
 
 class _TimeWidgetState extends State<TimeWidget> {

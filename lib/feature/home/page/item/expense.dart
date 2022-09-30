@@ -46,7 +46,7 @@ class _ExpenseItemState extends State<ExpenseItem> {
   Widget build(BuildContext context) {
     final last = lastExpense;
     if (last != null) {
-      content = i18n.expenseTrackerContent(last.amount.toStringAsPrecision(2), last.place);
+      content = i18n.expenseContent(last.amount.toStringAsPrecision(2), last.place);
     }
     return HomeFunctionButton(
       route: '/expense',

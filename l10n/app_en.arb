@@ -17,6 +17,7 @@
   "allowOthersFindMeCheckbox": "Allow others to find me",
   "applicationDesc": "This function is based on \"上应一网通办\".\n For most of types, you have to do the necessary procedure on the spot although you submitted an application online.",
   "author": "Author",
+  "bill": "Bill",
   "campus": "Campus",
   "campusCardNfcDisabled": "Your device isn't NFC-enabled.",
   "campusCardNfcPrompt": "Please keep the Campus Card close to your phone.",
@@ -136,8 +137,8 @@
   "downloadEasyConnectBtn": "Download EasyConnect",
   "downloading": "Downloading",
   "draft": "Draft",
-  "electricityBillContent": "last {balance}￥ Room {room}",
-  "@electricityBillContent": {
+  "elecBillContent": "last: ¥{balance} Room {room}",
+  "@elecBillContent": {
     "placeholders": {
       "room": {
         "type": "int"
@@ -147,6 +148,11 @@
       }
     }
   },
+  "elecBillDailyChart7": "Last 7 Days ⚡ Chart",
+  "elecBillElecChart": "Electricity Chart",
+  "elecBillHourlyChart24": "Last 24 Hours ⚡ Chart",
+  "elecBillLast24Hour": "Last 24 hours",
+  "elecBillLast7Day": "Last 7 days",
   "examEndTime": "Ent Time",
   "examIsRetake": "Is Retake",
   "examLocation": "Location",
@@ -155,8 +161,12 @@
   "examResultNoResult": "No result record",
   "examSeatNumber": "Seat No.",
   "examStartTime": "Start Time",
-  "expenseTrackerContent": "{amount}￥ {place}",
-  "@expenseTrackerContent": {
+  "expenseBillEmptyTip": "Nothing here\nWhy not hit the Refresh button at top-right corner?",
+  "expenseCafe": "Café",
+  "expenseCanteen": "Canteen",
+  "expenseCats": "Categories",
+  "expenseContent": "¥{amount} {place}",
+  "@expenseContent": {
     "placeholders": {
       "amount": {
         "type": "String"
@@ -166,7 +176,14 @@
       }
     }
   },
-  "expenseTrackerFirstTimeRefreshRequest": "Expense Tracker needs to access campus network to retrieve expense history. You can refresh the expense history manually next time by hitting the \"Refresh\" button at the top right.",
+  "expenseFetchingRecordTip": "Fetching expense record",
+  "expenseFetchingTip": "Fetching expense records from school... Please wait a minute, the network speed depends on the school's server.",
+  "expenseFirstTimeRefreshRequest": "Expense Tracker needs to access campus network to retrieve expense history. You can refresh the expense history manually next time by hitting the \"Refresh\" button at the top-right corner.",
+  "expenseGrocery": "Grocery Store",
+  "expenseHotWater": "Hot Water",
+  "expenseShower": "Shower",
+  "expenseStuff": "Stuff",
+  "expenseTotal": "Total",
   "faculty": "Faculty",
   "failed": "Failed",
   "feedback": "Feedback",
@@ -193,14 +210,14 @@
   "ftype_classroomBrowser_desc": "Is there any empty classroom?",
   "ftype_eduEmail": "Edu Email",
   "ftype_eduEmail_desc": "Check your educational email",
-  "ftype_electricityBill": "Electricity Bill",
-  "ftype_electricityBill_desc": "Dormitory balance and ⚡ history",
-  "ftype_examArrangement": "Exam Arrangement",
-  "ftype_examArrangement_desc": "Recent exam arrangement",
+  "ftype_elecBill": "Electricity Bill",
+  "ftype_elecBill_desc": "Dormitory balance and ⚡ history",
+  "ftype_examArr": "Exam Arrangement",
+  "ftype_examArr_desc": "Recent exam arrangement",
   "ftype_examResult": "Exam Result",
   "ftype_examResult_desc": "Don't stop until you're proud",
-  "ftype_expenseTracker": "Expense Tracker",
-  "ftype_expenseTracker_desc": "School card shopping history",
+  "ftype_expense": "Expense Tracker",
+  "ftype_expense_desc": "School card shopping history",
   "ftype_freshman": "Freshman",
   "ftype_freshman_desc": "To retrieve freshman info",
   "ftype_game": "Game",
@@ -270,16 +287,19 @@
     }
   },
   "homepage": "Homepage",
+  "homepageCampusNetworkConnected": "Connected to Campus Network",
   "hotPost": "HOT",
   "kiteBoardReachEndLabel": "wow, you dug through the Earth!",
   "kiteBoardTitle": "Kite Board",
   "kiteBuiltinPinned": "[Pinned]",
   "kiteForgotPwdBtn": "Forgot password?",
+  "kiteLoggedInTip": "Logged in",
+  "kiteLoginFailedTip": "Failed to log in",
   "kiteLoginAccountHint": "Student ID/Work number",
   "kiteLoginBtn": "Join Kite World",
   "kiteLoginPwdHint": "Enter your password",
   "kiteLoginTitle": "Welcome!",
-  "kiteStatisticsBtnTooltip": "Kite Statistics",
+  "kiteStatsBtnTooltip": "Kite Stats",
   "language": "Language",
   "language_en": "English",
   "language_zh": "中文(简体)",
@@ -406,6 +426,7 @@
   "settingsWipeKiteDataDesc": "Login credentials will be wiped then Kite restarts. If you want to wipe all data of Kite, please go to settings on your device and find \"上应小风筝\" app to reset.",
   "settingsWipeKiteDataSub": "Wipe Kite saved accounts and settings besides cache",
   "staticPicture": "Static Picture",
+  "stats": "Statistics",
   "studentID": "Student ID",
   "studentIdCopy2ClipboardTip": "Your student ID is copied.",
   "studentInfoTitle": "Admission Info",
@@ -434,5 +455,6 @@
   "wechat": "Wechat",
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
-  "yes": "Yes"
+  "yes": "Yes",
+  "networkXcpWarn": "A network error occurred."
 }

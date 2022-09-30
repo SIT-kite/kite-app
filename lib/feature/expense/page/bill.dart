@@ -18,11 +18,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:grouped_list/grouped_list.dart';
+import 'package:kite/l10n/extension.dart';
 
 import '../entity/expense.dart';
 import '../init.dart';
 import 'icon.dart';
-
+// TODO: I18n
 class BillPage extends StatelessWidget {
   final ExpenseType filter;
 
@@ -79,8 +80,9 @@ class BillPage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           // TODO: 不要跨模块使用资源文件.
+          // TODO: Should we make independent asset classes for each module and initialize it outside?
           SvgPicture.asset('assets/game/empty.svg'),
-          Text('这里空空的\n快点击右上角刷新按钮更新数据', style: textStyle, textAlign: TextAlign.center),
+          Text(i18n.expenseBillEmptyTip, style: textStyle, textAlign: TextAlign.center),
         ],
       ),
     );

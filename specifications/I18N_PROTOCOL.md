@@ -12,7 +12,7 @@ By running the commands blow, the mapped-classes of all languages will be genera
 % flutter gen-l10n
 ```
 
-And then the mapped-classes will be found in this [dart-generated](.dart_tool/flutter_gen/gen_l10n)
+And then the mapped-classes will be found in this [dart-generated](../.dart_tool/flutter_gen/gen_l10n)
 folder.
 
 To reference them, you should import those dart files first:
@@ -28,9 +28,9 @@ var response = i18n.yes;
 response = i18n.no;
 ```
 
-You can also add, remove, modify or even support a new language in the [l10n](l10n) folder.
+You can also add, remove, modify or even support a new language in the [l10n](../l10n) folder.
 
-The [app_en.arb](l10n/app_en.arb) is the template localization, hereinafter referred to
+The [app_en.arb](../l10n/app_en.arb) is the template localization, hereinafter referred to
 as `template`, which means any structural change will affect other languages.
 
 There is a tool for i10n that will be mentioned later, please check
@@ -78,6 +78,8 @@ unambiguously.
 3️⃣ Use the common abbreviation instead of a long phrase or any word that has a conventional
 abbreviation.
 
+Please check [the abbreviation](ABBREVIATION.md) Kite used.
+
 ``` json
 // Good
 "food4Cat":"The food for cats",
@@ -88,19 +90,6 @@ abbreviation.
 "AddInformation" "Add Information", // use "Info" instead
 ""
 ```
-
-| Original    | Abbreviation |
-|-------------|--------------|
-| password    | pwd          |
-| exception   | xcp          |
-| information | info         |
-| for         | 4            |
-| to          | 2            |
-| identity    | id           |
-| telephone   | tel          |
-| subtitle    | sub          |
-| button      | btn          |
-| description | desc         |
 
 4️⃣ Avoid third-person singular verbs and plural nouns under unnecessary circumstances.
 
@@ -181,6 +170,7 @@ with a new workflow.
 #### For English
 
 - Perform formal and standard wording.
+- For long words, prefer to use emoji and keep it clear.
 
 #### For Simplified Chinese
 
