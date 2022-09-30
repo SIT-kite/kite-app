@@ -53,20 +53,17 @@ class FeedbackPage extends StatelessWidget {
         final PackageInfo? packageInfo = data[0];
         final bool isConnected = data[1];
         final String? ua = data[2];
-        final postData = {
-          'clientInfo': packageInfo?.buildSignature ?? '未知',
-          'clientVersion': packageInfo?.version ?? '未知',
-          'os': Platform.operatingSystem,
-          'osVersion': Platform.operatingSystemVersion,
-          'netType': isConnected ? '已连接校园网' : '未连接校园网',
-          'customInfo': ua ?? '无UA信息',
-        };
-        print(postData);
         return SimpleWebViewPage(
           initialUrl: _feedbackUrl,
           showLoadInBrowser: true,
           fixedTitle: '反馈',
-          postData: postData,
+          postData: {
+            'clientInfo': ua ?? '无UA信息',
+            'clientVersion': "${packageInfo?.version ?? '未知'}+${packageInfo?.buildNumber ?? '未知'}",
+            'os': Platform.operatingSystem,
+            'osVersion': Platform.operatingSystemVersion,
+            'netType': isConnected ? '已连接校园网' : '未连接校园网',
+          },
         );
       },
     );
