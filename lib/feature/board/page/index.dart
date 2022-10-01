@@ -31,6 +31,7 @@ import 'package:kite/util/file.dart';
 import 'package:kite/util/kite_authorization.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/user.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 
 import '../entity.dart';
 
@@ -73,13 +74,50 @@ class _BoardPageState extends State<BoardPage> {
     loadInitialPicture();
   }
 
+  // TODO: I18n
+  Future<bool?> showUploadDialog(List<String> imagePaths) {
+    return showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("请确认是否要上传以下图片"),
+          content: SizedBox(
+            width: 400,
+            height: 400,
+            child: PhotoViewGallery(
+              pageOptions:
+                  imagePaths.map((e) => PhotoViewGalleryPageOptions(imageProvider: FileImage(File(e)))).toList(),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("确定"),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              }, // 关闭对话框
+            ),
+            TextButton(
+              child: const Text("取消"),
+              onPressed: () {
+                //关闭对话框并返回true
+                Navigator.of(context).pop(false);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> onUploadPicture(BuildContext context) async {
     // 如果用户未同意过, 请求用户确认
     // TODO: I18n
     if (!await signUpIfNecessary(context, '标识图片上传者')) return;
     try {
       final List<String> imagePaths = await FileUtils.pickImagesByFilePicker();
-      if (imagePaths.isEmpty) return;
+      bool? isUpload = await showUploadDialog(imagePaths);
+
+      if (imagePaths.isEmpty || !isUpload!) return;
 
       int size = imagePaths.length;
       EasyLoading.instance.userInteractions = false;
