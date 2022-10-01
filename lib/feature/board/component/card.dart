@@ -38,6 +38,18 @@ class PictureCard extends StatelessWidget {
                 Navigator.of(context).push(MaterialPageRoute(builder: (_) => ViewPage(picture.origin)));
               }),
           const SizedBox(height: 20),
+          Container(
+            padding: const EdgeInsets.all(8),
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Text(picture.publisher),
+              const SizedBox(
+                width: 40,
+              ),
+              const Icon(Icons.thumb_up),
+              const SizedBox(width: 10),
+              const Icon(Icons.delete)
+            ]),
+          )
         ],
       ),
     );
