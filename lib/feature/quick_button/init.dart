@@ -44,7 +44,7 @@ class QuickButton {
   static void init(BuildContext context) {
     _context = context;
     _quickActions.initialize(quickActionHandler);
-
+    // TODO: Add Icons
     _quickActions.setShortcutItems(<ShortcutItem>[
       const ShortcutItem(type: 'report', localizedTitle: '体温上报', icon: null),
       const ShortcutItem(type: 'timetable', localizedTitle: '课表', icon: null),

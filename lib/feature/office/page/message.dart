@@ -31,7 +31,7 @@ class MessagePage extends StatelessWidget {
           .map(
             (e) => ListTile(
               title: Text(e.functionName),
-              subtitle: Text('最近更新: ' + e.recentStep),
+              subtitle: Text('最近更新: ${e.recentStep}'),
               trailing: Text(e.status),
               onTap: () {
                 // 跳转到详情页面

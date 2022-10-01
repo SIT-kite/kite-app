@@ -56,7 +56,7 @@ class _ReminderDialogState extends State<ReminderDialog> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            i18n.enable.txt,
+            i18n.reportTempReminderSwitch.txt,
             MySwitcher(
               KvStorageInitializer.report.enable ?? false,
               onChanged: (value) {
@@ -85,12 +85,9 @@ class _ReminderDialogState extends State<ReminderDialog> {
                   valueListenable: _notifier,
                   builder: (context, data, widget) {
                     if (data == null) {
-                      return const Text('未选择');
+                      return const TimeOfDay(hour: 0, minute: 0).format(context).txt;
                     }
-                    final t = _notifier.value!;
-                    final hh = t.hour;
-                    final mm = t.minute;
-                    return Text('$hh:$mm');
+                    return data.format(context).txt;
                   },
                 ),
               ),
@@ -116,17 +113,16 @@ class DailyReportPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SimpleWebViewPage(
       initialUrl: _reportUrlIndex,
-      fixedTitle: '体温上报',
+      fixedTitle: i18n.ftype_reportTemp,
       otherActions: [
         IconButton(
           onPressed: () {
             showAlertDialog(
               context,
-              title: '每日上报提醒',
+              title: i18n.reportTempReminderTitle,
               content: const SingleChildScrollView(
                 child: ReminderDialog(),
-              ),
-              actionTextList: ['关闭窗口'],
+              )
             );
           },
           icon: const Icon(Icons.sms),
