@@ -52,7 +52,7 @@ class _ReminderDialogState extends State<ReminderDialog> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        i18n.reportTempAlarmDesc.txt,
+        i18n.reportTempReminderDesc.txt,
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

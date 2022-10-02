@@ -42,7 +42,7 @@
   },
   "city": "City",
   "classmate": "Classmate",
-  "connectivityConnectFailedError": "Unable to connect to campus network. Troubleshooting:\n1. Attempt to connect to the school's hotspots, \"i-SIT\",\"i-SIT-1x\" or \"eduroam\"\n.2. Attempt to launch \"EasyConnect\" VPN to connect to School.\n3. Attempt to use a self-built proxy server to connect to campus network via Http proxy\nIf they all didn't work, it's probably due to school server downtime for maintenance or even crash, please try again later.",
+  "connectivityConnectFailedError": "Unable to connect to campus network. Troubleshooting:\n1. Attempt to connect to the school's Wi-Fi, \"i-SIT\",\"i-SIT-1x\" or \"eduroam\"\n.2. Attempt to launch \"EasyConnect\" VPN to connect to School.\n3. Attempt to use a self-built proxy server to connect to campus network via Http proxy\nIf they all didn't work, it's probably due to school server downtime for maintenance or even crash, please try again later.",
   "connectivityConnectedByProxy": "Connected to campus network by Http proxy.",
   "connectivityConnectedByVpn": "Connected to campus network by VPN.",
   "connectivityConnectedByWlan": "Connected to campus network by WLAN.",
@@ -160,7 +160,7 @@
   "examResultNoResult": "No result record",
   "examSeatNumber": "Seat No.",
   "examStartTime": "Start Time",
-  "expenseBillEmptyTip": "Nothing here\nWhy not hit the Refresh button at top-right corner?",
+  "expenseBillEmptyTip": "Nothing here.\nWhy not hit the Refresh button at top-right corner?",
   "expenseCafe": "Café",
   "expenseCanteen": "Canteen",
   "expenseCats": "Categories",
@@ -374,7 +374,6 @@
   "@reportTempAbnormal": {
     "description": "For building string: Reported Today Abnormal {place}"
   },
-  "reportTempAlarmDesc": "When launched, Kite will detect whether you have reported today and notify you after the time you set.",
   "reportTempHelper": "Temperature Report Helper",
   "reportTempNoReportRecords": "No report records",
   "reportTempNormal": "Normal",
@@ -382,7 +381,8 @@
     "description": "For building string: Reported Today Normal {place}"
   },
   "reportTempRemindTime": "Time",
-  "reportTempReminderSwitch": "Notice Me",
+  "reportTempReminderDesc": "When launched, Kite will detect whether you have reported today and notify you, before the time you set.",
+  "reportTempReminderSwitch": "Remind Me",
   "reportTempReminderTitle": "Report Alarm",
   "reportTempReportedToday": "Reported Today",
   "@reportTempReportedToday": {
