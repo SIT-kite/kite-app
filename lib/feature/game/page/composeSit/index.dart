@@ -19,8 +19,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:kite/user_widget/webview.dart';
-import 'package:kite/user_widget/webview_page.dart';
+import 'package:kite/user_widget/webview/view.dart';
+import 'package:kite/user_widget/webview/page.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/rule.dart';
 import 'package:webview_flutter/webview_flutter.dart';

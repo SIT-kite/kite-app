@@ -17,7 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/l10n/extension.dart';
-import 'package:kite/user_widget/webview_page.dart';
+import 'package:kite/user_widget/webview/page.dart';
 import 'package:kite/util/cookie_util.dart';
 
 import '../../init.dart';

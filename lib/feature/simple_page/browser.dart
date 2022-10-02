@@ -18,8 +18,8 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/user_widget/webview.dart';
-import 'package:kite/user_widget/webview_page.dart';
+import 'package:kite/user_widget/webview/view.dart';
+import 'package:kite/user_widget/webview/page.dart';
 import 'package:kite/util/rule.dart';
 
 class BrowserPage extends StatelessWidget {

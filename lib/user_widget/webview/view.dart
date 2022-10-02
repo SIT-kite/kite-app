@@ -26,7 +26,7 @@ import 'package:kite/util/rule.dart';
 import 'package:kite/util/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import 'unsupported_platform_launch.dart';
+import '../unsupported_platform_launch.dart';
 
 /*
  * 上应小风筝  便利校园，一步到位
@@ -212,6 +212,7 @@ class _MyWebViewState extends State<MyWebView> {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Are you sure this wouldn't cause object lifecycle issue?
     return MyPlatformWidget(
       desktopOrWebBuilder: (context) {
         return UnsupportedPlatformUrlLauncher(
