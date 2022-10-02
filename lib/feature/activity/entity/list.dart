@@ -17,83 +17,71 @@
  */
 import 'package:kite/l10n/extension.dart';
 
-enum ActivityType {
-  lecture,
-  theme,
-  creation,
-  campus,
-  practice,
-  voluntary,
-  safetyEdu,
-  unknown;
+/// No I18n for unambiguity among all languages
+class ActivityName {
+  static const lectureReport = "讲座报告";
+  static const thematicReport = "主题报告";
+  static const creation = "三创";
+  static const practice = "社会实践";
+  static const safetyCiviEdu = "校园安全文明";
+  static const cyberSafetyEdu = "安全教育网络教学";
+  static const schoolCulture = "校园文化";
+  static const thematicEdu = "主题教育";
+  static const unknown = "未知";
+  static const voluntary = "志愿公益";
+  static const blackList = ["补录"];
+}
 
-  String localized() {
-    switch (this) {
-      case lecture:
-        return i18n.activityLecture;
-      case theme:
-        return i18n.activityThematicEdu;
-      case creation:
-        return i18n.activityCreation;
-      case campus:
-        return i18n.activitySchoolCulture;
-      case practice:
-        return i18n.activityPractice;
-      case voluntary:
-        return i18n.activityVoluntary;
-      case safetyEdu:
-        return i18n.activitySafetyEdu;
-      case unknown:
-        return i18n.activityUnknown;
-    }
-  }
+enum ActivityType {
+  lecture(ActivityName.lectureReport), // 讲座报告
+  thematicEdu(ActivityName.thematicEdu), // 主题教育
+  creation(ActivityName.creation), // 三创
+  schoolCulture(ActivityName.schoolCulture), // 校园文化
+  practice(ActivityName.practice), // 社会实践
+  voluntary(ActivityName.voluntary), // 志愿公益
+  cyberSafetyEdu(ActivityName.cyberSafetyEdu), // 安全教育网络教学
+  unknown(ActivityName.unknown); // 未知
+
+  final String name;
+
+  const ActivityType(this.name);
 }
 
 enum ActivityScoreType {
-  lecture,
-  creation,
-  campus,
-  practice,
-  voluntary,
-  safetyEdu;
-  // TODO: No I18n
-/*
-  String localized() {
-    switch (this) {
-      case lecture:
-        return i18n.actLecture;
-      case creation:
-        return i18n.actCreation;
-      case campus:
-        return i18n.actSchoolCulture;
-      case practice:
-        return i18n.actPractice;
-      case voluntary:
-        return i18n.actVoluntary;
-      case safetyEdu:
-        return i18n.actSafetyEdu;
-    }
-  }*/
+  thematicReport(ActivityName.thematicReport), // 讲座报告
+  creation(ActivityName.creation), // 三创
+  schoolCulture(ActivityName.schoolCulture), // 校园文化
+  practice(ActivityName.practice), // 社会实践
+  voluntary(ActivityName.voluntary), // 志愿公益
+  safetyCiviEdu(ActivityName.safetyCiviEdu); // 校园安全文明
+
+  final String name;
+
+  const ActivityScoreType(this.name);
 }
 
+/// Don't Change this.
+/// Strings from school API
 const Map<String, ActivityScoreType> stringToActivityScoreType = {
-  '主题报告': ActivityScoreType.lecture,
+  '主题报告': ActivityScoreType.thematicReport,
   '社会实践': ActivityScoreType.practice,
-  '创新创业创意': ActivityScoreType.creation,
-  '校园文化': ActivityScoreType.campus,
+  '创新创业创意': ActivityScoreType.creation, // 三创
+  '校园文化': ActivityScoreType.schoolCulture,
   '公益志愿': ActivityScoreType.voluntary,
-  '校园安全文明': ActivityScoreType.safetyEdu,
+  '校园安全文明': ActivityScoreType.safetyCiviEdu,
 };
 
+/// Don't Change this.
+/// Strings from school API
 const Map<String, ActivityType> stringToActivityType = {
   '讲座报告': ActivityType.lecture,
-  '主题教育': ActivityType.theme,
-  '校园文化活动': ActivityType.campus,
-  '创新创业创意': ActivityType.creation,
+  '主题教育': ActivityType.thematicEdu,
+  '校园文化活动': ActivityType.schoolCulture,
+  '创新创业创意': ActivityType.creation, // 三创
   '社会实践': ActivityType.practice,
   '志愿公益': ActivityType.voluntary,
-  '安全教育网络教学': ActivityType.safetyEdu,
-  '校园文明': ActivityType.campus,
+  '安全教育网络教学': ActivityType.cyberSafetyEdu,
+  '校园文明': ActivityType.schoolCulture,
 };
 
 class Activity {

@@ -132,7 +132,7 @@ class _BookInfoPageState extends State<BookInfoPage> {
           },
         );
       },
-      onErrorBuilder: (context, error) {
+      onErrorBuilder: (context, fb, error, stack) {
         return const SizedBox();
       },
     );

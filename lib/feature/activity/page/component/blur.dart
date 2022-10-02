@@ -40,7 +40,7 @@ class BlurRectWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _BlurRectWidgetState createState() => _BlurRectWidgetState();
+  State<BlurRectWidget> createState() => _BlurRectWidgetState();
 }
 
 class _BlurRectWidgetState extends State<BlurRectWidget> {

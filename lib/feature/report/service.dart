@@ -50,6 +50,7 @@ class ReportService extends AService implements ReportDao {
     throw Exception('($responseCode) ${data['msg']}');
   }
 
+  // 获取最新一次历史
   @override
   Future<ReportHistory?> getRecentHistory(String userId) async {
     final historyList = await getHistoryList(userId);

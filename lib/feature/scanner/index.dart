@@ -19,13 +19,15 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kite/l10n/extension.dart';
+import 'package:kite/util/dsl.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class ScannerPage extends StatefulWidget {
   const ScannerPage({Key? key}) : super(key: key);
 
   @override
-  _ScannerPageState createState() => _ScannerPageState();
+  State<ScannerPage> createState() => _ScannerPageState();
 }
 
 class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStateMixin {
@@ -50,18 +52,20 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
       icon: const Icon(Icons.image),
       iconSize: 32.0,
       onPressed: () async {
-        final ImagePicker _picker = ImagePicker();
+        final ImagePicker picker = ImagePicker();
         // Pick an image
-        final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+        final XFile? image = await picker.pickImage(source: ImageSource.gallery);
         if (image != null) {
           if (await controller.analyzeImage(image.path)) {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text('Barcode found!'),
+            if (!mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: i18n.scannerBarcodeRecognized.txt,
               backgroundColor: Colors.green,
             ));
           } else {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text('No barcode found!'),
+            if (!mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: i18n.scannerBarcodeNotRecognized.txt,
               backgroundColor: Colors.red,
             ));
           }

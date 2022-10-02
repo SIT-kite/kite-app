@@ -38,7 +38,7 @@ class BoardService extends AService implements BoardDao {
   }
 
   Future<void> submitPictures(List<MultipartFile> files, {ProgressCallback? onProgress}) async {
-    int sc = 0, st = 0, rc = 0, rt = 0;
+    int sc = 0, st = 0;
     await session.request(
       '$_boardUrl/new',
       RequestMethod.post,
@@ -48,12 +48,10 @@ class BoardService extends AService implements BoardDao {
       onSendProgress: (c, t) {
         sc = c;
         st = t;
-        if (onProgress != null) onProgress(sc + rc, st + rt);
+        if (onProgress != null) onProgress(sc, st);
       },
       onReceiveProgress: (c, t) {
-        rc = c;
-        rt = t;
-        if (onProgress != null) onProgress(sc + rc, st + rt);
+        if (onProgress != null) onProgress(sc + c, st + t);
       },
     );
   }

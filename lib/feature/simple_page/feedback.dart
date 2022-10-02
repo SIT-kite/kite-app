@@ -15,20 +15,56 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:flutter/material.dart';
-import 'package:kite/component/webview_page.dart';
+import 'dart:io';
 
-const String _feedbackUrl = 'https://support.qq.com/product/377648';
+import 'package:fk_user_agent/fk_user_agent.dart';
+import 'package:flutter/material.dart';
+import 'package:kite/component/future_builder.dart';
+import 'package:kite/component/webview_page.dart';
+import 'package:kite/global/global.dart';
+import 'package:kite/l10n/extension.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class FeedbackPage extends StatelessWidget {
   const FeedbackPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const SimpleWebViewPage(
-      initialUrl: _feedbackUrl,
-      showLoadInBrowser: true,
-      fixedTitle: '反馈',
+    return MyFutureBuilder<List>(
+      futureGetter: () => Future.wait([
+        () async {
+          try {
+            return await PackageInfo.fromPlatform();
+          } catch (e) {
+            return null;
+          }
+        }(),
+        Global.ssoSession.checkConnectivity(),
+        () async {
+          try {
+            return FkUserAgent.webViewUserAgent;
+          } catch (e) {
+            return null;
+          }
+        }(),
+      ]),
+      builder: (ctx, data) {
+        final PackageInfo? packageInfo = data[0];
+        final bool isConnected = data[1];
+        final String? ua = data[2];
+        return SimpleWebViewPage(
+          initialUrl: R.kiteFeedbackUrl,
+          showLoadInBrowser: true,
+          fixedTitle: i18n.feedback,
+          postData: {
+            'clientInfo': ua ?? '无UA信息',
+            'clientVersion': "${packageInfo?.version ?? '未知'}+${packageInfo?.buildNumber ?? '未知'}",
+            'os': Platform.operatingSystem,
+            'osVersion': Platform.operatingSystemVersion,
+            'netType': isConnected ? '已连接校园网' : '未连接校园网',
+          },
+        );
+      },
     );
   }
 }

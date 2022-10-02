@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.of(context).pop();
       }
       Navigator.pushReplacementNamed(context, RouteTable.home);
-      GlobalLauncher.launch(R.kiteWikiUrl);
+      GlobalLauncher.launch(R.kiteWikiUrlFeatures);
     } on CredentialsInvalidException catch (e) {
       showBasicFlash(context, Text(e.msg));
       return;
@@ -173,9 +173,10 @@ class _LoginPageState extends State<LoginPage> {
             TextSpan(
               children: [
                 TextSpan(text: i18n.acceptedAgreementCheckbox, style: Theme.of(context).textTheme.bodyText1),
+                const TextSpan(text: " "),
                 TextSpan(
                     text: R.kiteUserAgreementName,
-                    style: Theme.of(context).textTheme.bodyText2,
+                    style: Theme.of(context).textTheme.bodyText2?.copyWith(decoration: TextDecoration.underline),
                     recognizer: _recognizer),
               ],
             ),

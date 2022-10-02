@@ -20,6 +20,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:kite/l10n/extension.dart';
 
 import '../../entity/list.dart';
 import '../detail.dart';
@@ -28,8 +29,6 @@ import 'blur.dart';
 import 'util.dart';
 
 class EventCard extends StatelessWidget {
-  static final dateFormat = DateFormat('yyyy-MM-dd');
-
   final Activity activity;
 
   const EventCard(this.activity, {Key? key}) : super(key: key);
@@ -88,7 +87,7 @@ class EventCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _buildTagRow(context, tags),
-                Text(dateFormat.format(activity.ts), style: subtitleStyle),
+                Text(context.dateNum(activity.ts), style: subtitleStyle),
               ],
             ),
           ),

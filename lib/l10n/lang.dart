@@ -2,6 +2,25 @@ import 'dart:ui';
 
 import 'package:intl/intl.dart';
 
+Locale buildLocaleFromJson(Map<String, dynamic> json) {
+  print(['测试', json]);
+  return Locale.fromSubtags(
+    languageCode: json['languageCode'],
+    scriptCode: json['scriptCode'],
+    countryCode: json['countryCode'],
+  );
+}
+
+extension LocaleToJson on Locale {
+  Map<String, dynamic> toJson() {
+    return {
+      'languageCode': languageCode,
+      'scriptCode': scriptCode,
+      'countryCode': countryCode,
+    };
+  }
+}
+
 ///
 /// `Lang` provides a list of all languages Kite supports as well as a da
 class Lang {
@@ -26,7 +45,7 @@ class Lang {
 
   static final zhNumf = DateFormat("yyyy-M-d", "zh_CN");
   static final zhTwNumf = DateFormat("yyyy-M-d", "zh_TW");
-  static final enNumf = DateFormat("M-d-yy", "en_US");
+  static final enNumf = DateFormat("M-d-yyyy", "en_US");
 
   static final zhFullNumf = DateFormat("yy/MM/dd H:mm::ss", "zh_CN");
   static final zhTwFullNumf = DateFormat("yy/MM/dd H:mm::ss", "zh_TW");

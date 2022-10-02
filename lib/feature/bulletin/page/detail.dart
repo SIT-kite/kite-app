@@ -18,7 +18,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:kite/component/future_builder.dart';
 import 'package:kite/component/html_widget.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/util/dsl.dart';
@@ -124,8 +124,7 @@ class _DetailPageState extends State<DetailPage> {
             children: [
               buildRow(i18n.publishingDepartment, article.department),
               buildRow(i18n.author, article.author),
-              buildRow(
-                  i18n.publishTime, context.dateText(article.dateTime)),
+              buildRow(i18n.publishTime, context.dateText(article.dateTime)),
             ],
           )),
     );
@@ -174,18 +173,15 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Widget _buildBody(BulletinRecord summary) {
-    return FutureBuilder<BulletinDetail>(
-        future: getBulletinDetail(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasData) {
-              return SingleChildScrollView(child: _buildArticle(context, snapshot.data!));
-            } else if (snapshot.hasError) {
-              return Text(snapshot.error.runtimeType.toString());
-            }
-          }
-          return const Center(child: CircularProgressIndicator());
-        });
+    return MyFutureBuilder<BulletinDetail>(
+      futureGetter: () => getBulletinDetail(),
+      builder: (context, data) {
+        return SingleChildScrollView(child: _buildArticle(context, data));
+      },
+      onErrorBuilder: (context, fb, error, stack) {
+        return Text(error.runtimeType.toString());
+      },
+    );
   }
 
   @override

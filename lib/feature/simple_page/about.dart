@@ -20,10 +20,11 @@ import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/component/html_widget.dart';
 import 'package:kite/component/webview_page.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/launch.dart';
+import 'package:kite/r.dart';
+import 'package:kite/util/dsl.dart';
 import 'package:universal_platform/universal_platform.dart';
-
-const String _aboutUrl = 'https://kite.sunnysab.cn/about/';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({Key? key}) : super(key: key);
@@ -31,16 +32,16 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!UniversalPlatform.isDesktop) {
-      return const SimpleWebViewPage(
-        initialUrl: _aboutUrl,
-        fixedTitle: '关于',
+      return SimpleWebViewPage(
+        initialUrl: R.kiteAboutUrl,
+        fixedTitle: i18n.about,
       );
     }
 
     final controller = MyFutureBuilderController();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('关于'),
+        title: i18n.about.txt,
         actions: [
           IconButton(
             onPressed: () => controller.refresh(),
@@ -51,13 +52,13 @@ class AboutPage extends StatelessWidget {
       body: MyFutureBuilder<Response<String>>(
         controller: controller,
         enablePullRefresh: true,
-        future: Dio().get(_aboutUrl),
+        future: Dio().get(R.kiteAboutUrl),
         builder: (ctx, data) {
           return MyHtmlWidget(data.data.toString());
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => GlobalLauncher.launch(_aboutUrl),
+        onPressed: () => GlobalLauncher.launch(R.kiteAboutUrl),
         child: const Icon(Icons.open_in_browser),
       ),
     );

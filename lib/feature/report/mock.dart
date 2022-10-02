@@ -15,37 +15,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:flutter/material.dart';
-import 'package:kite/feature/home/entity/home.dart';
-import 'package:kite/global/global.dart';
-import 'package:kite/l10n/extension.dart';
+import 'dao.dart';
+import 'entity.dart';
 
-import 'index.dart';
-
-class ExamItem extends StatefulWidget {
-  const ExamItem({Key? key}) : super(key: key);
-
+class ReportServiceMock implements ReportDao {
   @override
-  State<StatefulWidget> createState() => _ExamItemState();
-}
-
-class _ExamItemState extends State<ExamItem> {
-  String? content;
-
-  @override
-  void initState() {
-    Global.eventBus.on(EventNameConstants.onHomeRefresh, (arg) {});
-
-    return super.initState();
+  Future<List<ReportHistory>> getHistoryList(String userId) async {
+    return [
+      ReportHistory(20220929, '测试地点', 1),
+    ];
   }
 
+  // 获取最新一次历史
   @override
-  Widget build(BuildContext context) {
-    return HomeFunctionButton(
-      route: '/exam',
-      icon: 'assets/home/icon_exam.svg',
-      title: i18n.ftype_examArr,
-      subtitle: content ?? i18n.ftype_examArr_desc,
-    );
+  Future<ReportHistory?> getRecentHistory(String userId) async {
+    final historyList = await getHistoryList(userId);
+    ReportHistory? result;
+    try {
+      // 元素不存在时，first getter 会抛出异常.
+      result = historyList.first;
+    } catch (_) {}
+    return result;
   }
 }

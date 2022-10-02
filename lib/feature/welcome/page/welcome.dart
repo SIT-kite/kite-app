@@ -17,6 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
 
 class WelcomePage extends StatelessWidget {
@@ -72,21 +73,21 @@ class WelcomePage extends StatelessWidget {
               children: [
                 // Title
                 Text(
-                  '上应小风筝',
+                  i18n.appName,
                   style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: Colors.white),
                 ),
                 // Subtitle
                 Text(
-                  '便利校园，一步到位',
+                  i18n.welcomeSub,
                   style: Theme.of(context).textTheme.headline5?.copyWith(color: Colors.white),
                 ),
                 // Space
                 SizedBox(height: 40.h),
                 // Login button
                 Row(children: [
-                  buildEntryButton(context, '登录', RouteTable.login),
+                  buildEntryButton(context, i18n.welcomeLogin, RouteTable.login),
                   SizedBox(width: 10.h),
-                  buildEntryButton(context, '新生入口', RouteTable.freshmanLogin),
+                  buildEntryButton(context,i18n.welcomeFreshman, RouteTable.freshmanLogin),
                 ]),
               ],
             ),

@@ -1,16 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
-typedef TextSelectCallback = void Function(String);
+/// 搜索对象的WidgetBuilder
+typedef SearchItemBuilder<T> = Widget Function(T itemData, String highlighted);
 
-class SimpleTextSearchDelegate extends SearchDelegate {
-  final List<String> recentList, suggestionList;
+/// 搜索对象文档化
+typedef SearchItemDocumented<T> = String Function(T itemData);
+
+class SimpleTextSearchDelegate<T> extends SearchDelegate {
+  final List<T> recentList, suggestionList;
+  SearchItemBuilder<T>? searchItemBuilder;
+  SearchItemDocumented<T>? searchItemDocumented;
   final bool onlyUseSuggestion;
+
   SimpleTextSearchDelegate({
     required this.recentList,
     required this.suggestionList,
+    this.searchItemBuilder,
+    this.searchItemDocumented,
     this.onlyUseSuggestion = true,
-  });
+  }) {
+    searchItemDocumented ??= (item) => item.toString();
+    searchItemBuilder ??= (item, highlight) => ListTile(title: HtmlWidget(highlight));
+  }
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -39,48 +51,56 @@ class SimpleTextSearchDelegate extends SearchDelegate {
     return Container();
   }
 
-  Widget buildRecentList({TextSelectCallback? onSelect}) {
+  Widget buildRecentList(BuildContext context) {
     return ListView(
-      children: recentList.map((e) {
-        return ListTile(
-          title: Text(e),
-          onTap: () {
-            if (onSelect != null) {
-              onSelect(e);
-            }
-          },
-        );
-      }).toList(),
-    );
+        children: recentList.map((e) {
+      return GestureDetector(
+        child: searchItemBuilder!(e, searchItemDocumented!(e)),
+        onTap: () => close(context, e),
+      );
+    }).toList());
   }
 
-  Widget buildSearchList({TextSelectCallback? onSelect}) {
-    return ListView(
-      children: suggestionList.where((input) => input.contains(query)).map((e) {
-        final splitTextList = e.split(query).map((e1) => "<span style='color:grey'>$e1</span>");
-        final highlight = "<span style='color:black;font-weight: bold'>$query</span>";
-        return [
-          e, // 原文
-          splitTextList.join(highlight), // 带有高亮信息的文字
-        ];
-      }).map((e) {
-        return ListTile(
-          title: HtmlWidget(e[1]),
-          onTap: () {
-            if (onSelect != null) onSelect(e[0]);
-          },
-        );
-      }).toList(),
-    );
+  String highlight(String e) {
+    final splitTextList = e.split(query).map((e1) => "<span style='color:grey'>$e1</span>");
+    final highlight = "<span style='color:black;font-weight: bold'>$query</span>";
+    return splitTextList.join(highlight);
+  }
+
+  Widget buildSearchList(BuildContext context) {
+    List<Widget> children = [];
+    for (int i = 0; i < suggestionList.length; i++) {
+      // 获取对象
+      final item = suggestionList[i];
+
+      // 文档化对象
+      final documented = searchItemDocumented!(item);
+
+      // 过滤
+      if (!documented.contains(query)) continue;
+
+      // 高亮化
+      final highlighted = highlight(documented);
+
+      // 搜索结果Widget构建
+      final widget = GestureDetector(
+        child: searchItemBuilder!(item, highlighted),
+        onTap: () => close(context, item),
+      );
+
+      children.add(widget);
+    }
+
+    return ListView(children: children);
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
     // 用户未输入
     if (query.isEmpty) {
-      return buildRecentList(onSelect: (select) => close(context, select));
+      return buildRecentList(context);
     } else {
-      return buildSearchList(onSelect: (select) => close(context, select));
+      return buildSearchList(context);
     }
   }
 }
