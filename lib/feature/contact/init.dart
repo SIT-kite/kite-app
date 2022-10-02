@@ -17,7 +17,7 @@
  */
 
 import 'package:hive/hive.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
 import 'dao/contact.dart';
 import 'entity/contact.dart';
@@ -29,7 +29,7 @@ class ContactInitializer {
   static late ContactRemoteDao contactRemoteDao;
 
   static Future<void> init({
-    required ISession kiteSession,
+    required Session kiteSession,
     required Box<ContactData> contactDataBox,
   }) async {
     contactStorageDao = ContactDataStorage(contactDataBox);

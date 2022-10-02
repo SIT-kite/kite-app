@@ -19,13 +19,13 @@
 import 'package:dio/dio.dart';
 import 'package:kite/feature/board/entity.dart';
 
-import '../../abstract/abstract_session.dart';
+import '../../network/session.dart';
 import 'dao.dart';
 
 class BoardService implements BoardDao {
   static const _boardUrl = '/board';
 
-  final ISession session;
+  final Session session;
   BoardService(this.session);
 
   @override

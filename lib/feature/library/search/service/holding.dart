@@ -17,7 +17,7 @@
  */
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
 import '../dao/holding.dart';
 import '../entity/holding.dart';
@@ -217,7 +217,7 @@ class _BookHoldingInfo {
 }
 
 class HoldingInfoService implements HoldingInfoDao {
-  final ISession session;
+  final Session session;
 
   const HoldingInfoService(this.session);
 

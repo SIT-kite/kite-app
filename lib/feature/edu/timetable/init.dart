@@ -17,7 +17,7 @@
  */
 
 import 'package:hive/hive.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 import 'package:kite/feature/edu/timetable/kite_service.dart';
 import 'package:kite/feature/edu/timetable/storage.dart';
 
@@ -31,8 +31,8 @@ class TimetableInitializer {
   static late TableCache tableCache;
 
   static void init({
-    required ISession eduSession,
-    required ISession kiteSession,
+    required Session eduSession,
+    required Session kiteSession,
     required Box<dynamic> timetableBox,
   }) {
     timetableService = TimetableService(eduSession);

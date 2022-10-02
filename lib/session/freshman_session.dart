@@ -16,12 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
 
-class FreshmanSession extends ISession {
-  final ISession _session;
+class FreshmanSession extends Session {
+  final Session _session;
   final FreshmanCacheDao _freshmanCacheDao;
 
   FreshmanSession(this._session, this._freshmanCacheDao) {
@@ -34,7 +34,7 @@ class FreshmanSession extends ISession {
     RequestMethod method, {
     Map<String, String>? queryParameters,
     data,
-    MyOptions? options,
+    SessionOptions? options,
     MyProgressCallback? onSendProgress,
     MyProgressCallback? onReceiveProgress,
   }) async {

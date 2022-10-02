@@ -19,11 +19,11 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
 import 'dio_common.dart';
 
-class ReportSession extends ISession {
+class ReportSession extends Session {
   final Dio dio;
   String? username;
 
@@ -78,7 +78,7 @@ class ReportSession extends ISession {
     RequestMethod method, {
     Map<String, String>? queryParameters,
     data,
-    MyOptions? options,
+    SessionOptions? options,
     MyProgressCallback? onSendProgress,
     MyProgressCallback? onReceiveProgress,
   }) async {

@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 import 'package:kite/session/sso/index.dart';
 import 'package:kite/util/logger.dart';
 
-class EduSession extends ISession {
+class EduSession extends Session {
   final SsoSession ssoSession;
 
   EduSession(this.ssoSession) {
@@ -40,7 +40,7 @@ class EduSession extends ISession {
     RequestMethod method, {
     Map<String, String>? queryParameters,
     data,
-    MyOptions? options,
+    SessionOptions? options,
     MyProgressCallback? onSendProgress,
     MyProgressCallback? onReceiveProgress,
   }) async {

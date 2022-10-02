@@ -20,7 +20,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:encrypt/encrypt.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 import 'package:kite/exception/session.dart';
 import 'package:kite/util/dio_utils.dart';
 import 'package:kite/util/logger.dart';

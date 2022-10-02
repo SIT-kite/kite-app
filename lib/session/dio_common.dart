@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
+
+import '../network/download.dart';
 
 extension RequestMethodEnumToString on RequestMethod {
   String toUpperCaseString() {
@@ -18,7 +20,7 @@ extension MyResponseTypeToDioResponseType on MyResponseType {
   }
 }
 
-extension MyOptionsToDioOptions on MyOptions {
+extension MyOptionsToDioOptions on SessionOptions {
   Options toDioOptions() {
     return Options(
       method: method,
@@ -41,7 +43,7 @@ extension DioResponseToMyResponse on Response {
   }
 }
 
-class MyDioDownloader implements IDownloader {
+class MyDioDownloader implements Downloader {
   Dio dio;
   MyDioDownloader(this.dio);
 
@@ -52,7 +54,7 @@ class MyDioDownloader implements IDownloader {
     MyProgressCallback? onReceiveProgress,
     Map<String, String>? queryParameters,
     data,
-    MyOptions? options,
+    SessionOptions? options,
   }) async {
     await dio.download(
       url,
@@ -65,7 +67,7 @@ class MyDioDownloader implements IDownloader {
   }
 }
 
-mixin MyDioDownloaderMixin implements IDownloader {
+mixin MyDioDownloaderMixin implements Downloader {
   Dio get dio;
 
   @override
@@ -75,7 +77,7 @@ mixin MyDioDownloaderMixin implements IDownloader {
     MyProgressCallback? onReceiveProgress,
     Map<String, String>? queryParameters,
     data,
-    MyOptions? options,
+    SessionOptions? options,
   }) async {
     await MyDioDownloader(dio).download(
       url,
@@ -88,7 +90,7 @@ mixin MyDioDownloaderMixin implements IDownloader {
   }
 }
 
-class DefaultDioSession with MyDioDownloaderMixin implements ISession {
+class DefaultDioSession with MyDioDownloaderMixin implements Session {
   @override
   Dio dio;
 
@@ -100,7 +102,7 @@ class DefaultDioSession with MyDioDownloaderMixin implements ISession {
     RequestMethod method, {
     Map<String, String>? queryParameters,
     data,
-    MyOptions? options,
+    SessionOptions? options,
     MyProgressCallback? onSendProgress,
     MyProgressCallback? onReceiveProgress,
   }) async {

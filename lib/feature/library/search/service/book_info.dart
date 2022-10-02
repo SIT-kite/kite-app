@@ -18,14 +18,14 @@
 import 'dart:collection';
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
 import '../dao/book_info.dart';
 import '../entity/book_info.dart';
 import 'constant.dart';
 
 class BookInfoService implements BookInfoDao {
-  final ISession session;
+  final Session session;
 
   const BookInfoService(this.session);
 

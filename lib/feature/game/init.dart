@@ -17,7 +17,7 @@
  */
 
 import 'package:hive/hive.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 import 'package:kite/feature/game/service.dart';
 
 import 'page/entry.dart';
@@ -28,7 +28,7 @@ class GameInitializer {
   static late RankingService rankingService;
   static GameManager gameManager = GameManager();
 
-  static init({required Box<dynamic> gameBox, required ISession kiteSession}) async {
+  static init({required Box<dynamic> gameBox, required Session kiteSession}) async {
     gameRecord = GameStorage(gameBox);
     rankingService = RankingService(kiteSession);
     // 注册游戏

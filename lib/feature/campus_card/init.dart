@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
 import 'dao/campus_card.dart';
 import 'service/campus_card.dart';
@@ -24,7 +24,7 @@ import 'service/campus_card.dart';
 class CampusCardInitializer {
   static late CampusCardDao campusCardService;
 
-  static void init({required ISession session}) {
+  static void init({required Session session}) {
     campusCardService = CampusCardService(session);
   }
 }

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
 import 'dao.dart';
 import 'entity.dart';
@@ -23,7 +23,7 @@ import 'entity.dart';
 class NoticeService implements NoticeServiceDao {
   static const String _noticePath = '/notice';
 
-  final ISession session;
+  final Session session;
 
   const NoticeService(this.session);
 

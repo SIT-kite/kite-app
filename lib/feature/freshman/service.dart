@@ -18,13 +18,13 @@
 
 import 'dart:convert';
 
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 import 'package:kite/feature/freshman/dao.dart';
 import 'package:kite/feature/freshman/entity.dart';
 import 'package:kite/mock/index.dart';
 
 class FreshmanService implements FreshmanDao {
-  final ISession session;
+  final Session session;
 
   const FreshmanService(this.session);
 

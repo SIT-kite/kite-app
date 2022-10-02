@@ -18,7 +18,7 @@
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
 import '../dao/score.dart';
 import '../entity/list.dart';
@@ -45,7 +45,7 @@ class ScScoreService implements ScScoreDao {
   static final dateFormatParser = DateFormat('yyyy-MM-dd hh:mm:ss');
   static final activityIdRe = RegExp(r'activityId=(\d+)');
 
-  final ISession session;
+  final Session session;
 
   const ScScoreService(this.session);
 

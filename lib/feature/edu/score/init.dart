@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 import 'package:kite/feature/edu/score/service/evaluation.dart';
 
 import 'dao/evaluation.dart';
@@ -27,7 +27,7 @@ class ScoreInitializer {
   static late ScoreDao scoreService;
   static late CourseEvaluationDao courseEvaluationService;
 
-  static void init(ISession eduSession) {
+  static void init(Session eduSession) {
     scoreService = ScoreService(eduSession);
     courseEvaluationService = CourseEvaluationService(eduSession);
   }

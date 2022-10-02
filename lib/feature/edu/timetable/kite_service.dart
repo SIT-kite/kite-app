@@ -1,7 +1,7 @@
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
 class KiteTimetableService {
-  final ISession session;
+  final Session session;
 
   const KiteTimetableService(this.session);
 

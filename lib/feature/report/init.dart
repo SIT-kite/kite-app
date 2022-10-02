@@ -17,7 +17,7 @@
  */
 
 import 'package:dio/dio.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 import 'package:kite/session/report_session.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/hive_register_adapter.dart';
@@ -27,7 +27,7 @@ import 'entity.dart';
 import 'service.dart';
 
 class ReportInitializer {
-  static late ISession session;
+  static late Session session;
   static late ReportDao reportService;
 
   static void init({

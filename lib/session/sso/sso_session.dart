@@ -21,7 +21,7 @@ import 'dart:typed_data';
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart' hide Lock;
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 import 'package:kite/exception/session.dart';
 import 'package:kite/feature/kite/service/ocr.dart';
 import 'package:kite/session/dio_common.dart';
@@ -34,7 +34,7 @@ import 'encryption.dart';
 
 typedef SsoSessionErrorCallback = void Function(Object e, StackTrace t);
 
-class SsoSession with MyDioDownloaderMixin implements ISession {
+class SsoSession with MyDioDownloaderMixin implements Session {
   static const int _maxRetryCount = 5;
   static const String _authServerUrl = 'https://authserver.sit.edu.cn/authserver';
   static const String _loginUrl = '$_authServerUrl/login';
@@ -361,7 +361,7 @@ class SsoSession with MyDioDownloaderMixin implements ISession {
     RequestMethod method, {
     Map<String, String>? queryParameters,
     data,
-    MyOptions? options,
+    SessionOptions? options,
     MyProgressCallback? onSendProgress,
     MyProgressCallback? onReceiveProgress,
   }) async {

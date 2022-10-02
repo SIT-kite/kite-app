@@ -17,7 +17,7 @@
  */
 import 'dart:convert';
 
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 import 'package:kite/storage/init.dart';
 
 import '../entity/index.dart';
@@ -25,7 +25,7 @@ import '../entity/index.dart';
 const String serviceMessageCount = 'https://xgfy.sit.edu.cn/unifri-flow/user/queryFlowCount';
 
 class OfficeMessageService {
-  final ISession session;
+  final Session session;
 
   const OfficeMessageService(this.session);
 
@@ -36,7 +36,7 @@ class OfficeMessageService {
       serviceMessageCount,
       RequestMethod.post,
       data: payload,
-      options: MyOptions(
+      options: SessionOptions(
         contentType: 'application/x-www-form-urlencoded;charset=utf-8',
         responseType: MyResponseType.json,
       ),
@@ -54,7 +54,7 @@ class OfficeMessageService {
       url,
       RequestMethod.post,
       data: payload,
-      options: MyOptions(
+      options: SessionOptions(
         contentType: 'application/x-www-form-urlencoded',
         responseType: MyResponseType.json,
       ),

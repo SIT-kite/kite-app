@@ -17,10 +17,10 @@
  */
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
 class AuthServerService {
-  final ISession session;
+  final Session session;
 
   const AuthServerService(this.session);
 
@@ -28,7 +28,7 @@ class AuthServerService {
     final response = await session.request(
       'https://authserver.sit.edu.cn/authserver/index.do',
       RequestMethod.get,
-      options: MyOptions(
+      options: SessionOptions(
         headers: {
           'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:46.0) Gecko/20100101 Firefox/46.0',
         },

@@ -19,7 +19,7 @@
 import 'dart:convert';
 
 import 'package:intl/intl.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 import 'package:kite/feature/library/appointment/dao.dart';
 import 'package:kite/feature/library/appointment/entity.dart';
 import 'package:kite/util/date_format.dart';
@@ -29,7 +29,7 @@ class AppointmentService implements AppointmentDao {
   static const _application = '$_library/application';
   static const _notice = '$_library/notice';
   static const _status = '$_library/status';
-  final ISession session;
+  final Session session;
 
   const AppointmentService(this.session);
 

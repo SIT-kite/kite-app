@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
 import 'dao.dart';
 import 'entity.dart';
@@ -23,7 +23,7 @@ import 'entity.dart';
 class ElectricityService implements ElectricityServiceDao {
   static const String _baseUrl = '/electricity/room';
 
-  final ISession session;
+  final Session session;
 
   const ElectricityService(this.session);
 

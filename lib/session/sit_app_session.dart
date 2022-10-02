@@ -19,13 +19,13 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
 
 import 'dio_common.dart';
 
-class SitAppSession implements ISession {
+class SitAppSession implements Session {
   final Dio dio;
   final JwtDao jwtDao;
 
@@ -138,7 +138,7 @@ class SitAppSession implements ISession {
     RequestMethod method, {
     Map<String, String>? queryParameters,
     data,
-    MyOptions? options,
+    SessionOptions? options,
     MyProgressCallback? onSendProgress,
     MyProgressCallback? onReceiveProgress,
   }) async {

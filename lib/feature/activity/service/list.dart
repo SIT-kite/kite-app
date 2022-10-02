@@ -18,7 +18,7 @@
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
 import '../dao/list.dart';
 import '../entity/list.dart';
@@ -37,7 +37,7 @@ class ScActivityListService implements ScActivityListDao {
   static String selector = '.ul_7 li > a';
   static DateFormat dateFormatParser = DateFormat('yyyy-MM-dd hh:mm:ss');
 
-  final ISession session;
+  final Session session;
 
   const ScActivityListService(this.session);
 

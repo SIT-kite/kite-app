@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
 import 'dao/exam.dart';
 import 'service/exam.dart';
@@ -24,7 +24,7 @@ import 'service/exam.dart';
 class ExamInitializer {
   static late ExamDao examService;
 
-  static void init(ISession eduSession) {
+  static void init(Session eduSession) {
     examService = ExamService(eduSession);
   }
 }

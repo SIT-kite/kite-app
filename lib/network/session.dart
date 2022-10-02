@@ -19,6 +19,7 @@
 class MyResponse<T> {
   T data;
   Uri realUri;
+
   MyResponse({
     required this.data,
     required this.realUri,
@@ -33,7 +34,7 @@ class HeaderConstants {
   static const textPlainContentType = 'text/plain';
 }
 
-class MyOptions {
+class SessionOptions {
   String? method;
   int? sendTimeout;
   int? receiveTimeout;
@@ -42,7 +43,7 @@ class MyOptions {
   MyResponseType? responseType;
   String? contentType;
 
-  MyOptions({
+  SessionOptions({
     this.method,
     this.sendTimeout,
     this.receiveTimeout,
@@ -64,25 +65,14 @@ enum RequestMethod {
   put,
 }
 
-abstract class ISession {
+abstract class Session {
   Future<MyResponse> request(
     String url,
     RequestMethod method, {
     Map<String, String>? queryParameters,
     dynamic data,
-    MyOptions? options,
+    SessionOptions? options,
     MyProgressCallback? onSendProgress,
     MyProgressCallback? onReceiveProgress,
-  });
-}
-
-abstract class IDownloader {
-  Future<void> download(
-    String url, {
-    String? savePath,
-    MyProgressCallback? onReceiveProgress,
-    Map<String, String>? queryParameters,
-    dynamic data,
-    MyOptions? options,
   });
 }

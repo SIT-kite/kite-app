@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
 import '../../common/entity/index.dart';
 import '../../util/convert_util.dart';
@@ -43,7 +43,7 @@ class ScoreService implements ScoreDao {
   static const _scoreFormSelector = 'td:nth-child(1)';
   static const _scorePercentageSelector = 'td:nth-child(3)';
   static const _scoreValueSelector = 'td:nth-child(5)';
-  final ISession session;
+  final Session session;
 
   const ScoreService(this.session);
 

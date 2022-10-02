@@ -16,11 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import '../abstract/abstract_session.dart';
+import '../network/session.dart';
 import '../util/logger.dart';
 
-class ScSession extends ISession {
-  final ISession _session;
+class ScSession extends Session {
+  final Session _session;
 
   ScSession(this._session) {
     Log.info('初始化 ScSession');
@@ -43,7 +43,7 @@ class ScSession extends ISession {
     RequestMethod method, {
     Map<String, String>? queryParameters,
     data,
-    MyOptions? options,
+    SessionOptions? options,
     MyProgressCallback? onSendProgress,
     MyProgressCallback? onReceiveProgress,
   }) async {

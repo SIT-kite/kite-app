@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
 import '../entity/index.dart';
 
@@ -24,7 +24,7 @@ const String serviceFunctionList = 'https://xgfy.sit.edu.cn/app/public/queryAppM
 const String serviceFunctionDetail = 'https://xgfy.sit.edu.cn/app/public/queryAppFormJson';
 
 class OfficeFunctionService {
-  final ISession session;
+  final Session session;
 
   const OfficeFunctionService(this.session);
 
@@ -35,7 +35,7 @@ class OfficeFunctionService {
       serviceFunctionList,
       RequestMethod.post,
       data: payload,
-      options: MyOptions(responseType: MyResponseType.json),
+      options: SessionOptions(responseType: MyResponseType.json),
     );
 
     final Map<String, dynamic> data = response.data;
@@ -60,7 +60,7 @@ class OfficeFunctionService {
       serviceFunctionDetail,
       RequestMethod.post,
       data: payload,
-      options: MyOptions(responseType: MyResponseType.json),
+      options: SessionOptions(responseType: MyResponseType.json),
     );
     final Map<String, dynamic> data = response.data;
     final List<FunctionDetailSection> sections =

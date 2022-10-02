@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 import 'package:kite/util/logger.dart';
 
 import 'dao.dart';
@@ -26,7 +26,7 @@ class RankingService implements RankingServiceDao {
   static const _rankingPrefix = '/game/ranking/';
   static const _uploadScore = '/game/record';
 
-  final ISession session;
+  final Session session;
 
   const RankingService(this.session);
 

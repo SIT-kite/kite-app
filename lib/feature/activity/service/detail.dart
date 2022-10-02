@@ -20,7 +20,7 @@ import 'dart:collection';
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
 import '../dao/detail.dart';
 import '../entity/detail.dart';
@@ -34,7 +34,7 @@ class ScActivityDetailService implements ScActivityDetailDao {
   static String selectorBanner = 'div[style=" color:#7a7a7a; text-align:center"]';
   static String selectorDescription = 'div[style="padding:30px 50px; font-size:14px;"]';
 
-  final ISession session;
+  final Session session;
 
   const ScActivityDetailService(this.session);
 

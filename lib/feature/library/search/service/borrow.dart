@@ -19,14 +19,14 @@
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:intl/intl.dart';
 
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
 import '../dao/borrow.dart';
 import '../entity/borrow.dart';
 import 'constant.dart';
 
 class LibraryBorrowService implements LibraryBorrowDao {
-  final ISession session;
+  final Session session;
   const LibraryBorrowService(this.session);
 
   @override

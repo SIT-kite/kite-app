@@ -18,7 +18,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 import 'package:kite/common/entity/kite_user.dart';
 import 'package:kite/storage/dao/kite.dart';
 import 'package:kite/storage/init.dart';
@@ -28,7 +28,7 @@ import 'dio_common.dart';
 
 const String _baseUrl = 'https://kite.sunnysab.cn/api/v2';
 
-class KiteSession implements ISession {
+class KiteSession implements Session {
   final Dio dio;
   final JwtDao jwtDao;
   final KiteStorageDao kiteDao;
@@ -144,7 +144,7 @@ class KiteSession implements ISession {
     RequestMethod method, {
     Map<String, String>? queryParameters,
     data,
-    MyOptions? options,
+    SessionOptions? options,
     MyProgressCallback? onSendProgress,
     MyProgressCallback? onReceiveProgress,
   }) async {

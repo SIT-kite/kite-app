@@ -18,7 +18,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
 import '../dao/campus_card.dart';
 import '../entity/campus_card.dart';
@@ -26,7 +26,7 @@ import '../entity/campus_card.dart';
 const String _cardService = 'http://210.35.98.178:7101/LMWeb/WebApi/HYongHu.ashx';
 
 class CampusCardService implements CampusCardDao {
-  final ISession session;
+  final Session session;
 
   const CampusCardService(this.session);
 

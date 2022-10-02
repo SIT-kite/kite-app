@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
 import '../../session/sc_session.dart';
 import 'dao/index.dart';
@@ -31,7 +31,7 @@ class ScInitializer {
   static late ScScoreDao scScoreService;
 
   static void init({
-    required ISession ssoSession,
+    required Session ssoSession,
   }) {
     session = ScSession(ssoSession);
     scActivityListService = ScActivityListService(session);

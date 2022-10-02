@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 import 'package:kite/storage/init.dart';
 
 import '../../session/freshman_session.dart';
@@ -31,7 +31,7 @@ class FreshmanInitializer {
   static late FreshmanCacheDao freshmanCacheDao;
 
   static Future<void> init({
-    required ISession kiteSession,
+    required Session kiteSession,
   }) async {
     freshmanCacheDao = Kv.freshman;
     freshmanSession = FreshmanSession(kiteSession, freshmanCacheDao);

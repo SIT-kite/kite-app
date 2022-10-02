@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
 import '../dao/classroom.dart';
 import '../entity/classroom.dart';
@@ -24,7 +24,7 @@ import '../entity/classroom.dart';
 class ClassroomService implements ClassroomRemoteDao {
   static const _classroomUrl = '/classroom/available';
 
-  final ISession session;
+  final Session session;
   const ClassroomService(this.session);
 
   @override

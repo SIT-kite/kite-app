@@ -45,7 +45,7 @@ But for [some reasons][Migrate], we have to migrate to this one.
 
 The source codes and configurations are open source under [GPL v3](LICENSE).
 
-As to Kite, the use for competition and paper purposes are strongly unrecommended.
+As to Kite, the direct use for competition and paper purposes are strongly unrecommended.
 
 The copyright of icons, logos, names, signs and other assets Kite used are correspondingly reserved by
 the original authors and SIT YiBan Workstation.

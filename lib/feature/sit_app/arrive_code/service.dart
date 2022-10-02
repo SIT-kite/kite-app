@@ -16,12 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
 import 'dao.dart';
 
 class ArriveCodeService implements ArriveCodeDao {
-  final ISession session;
+  final Session session;
 
   const ArriveCodeService(this.session);
 

@@ -1,11 +1,11 @@
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 import 'package:kite/util/logger.dart';
 
 import 'entity.dart';
 import 'interface.dart';
 
 class FunctionOverrideService implements FunctionOverrideServiceDao {
-  final ISession session;
+  final Session session;
 
   const FunctionOverrideService(this.session);
 

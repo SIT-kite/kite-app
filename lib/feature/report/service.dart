@@ -16,13 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
 import 'dao.dart';
 import 'entity.dart';
 
 class ReportService implements ReportDao {
-  final ISession session;
+  final Session session;
 
   const ReportService(this.session);
 
@@ -37,7 +37,7 @@ class ReportService implements ReportDao {
         'usercode': userId,
         'batchno': '', // TODO：batchno 填入今天日期？yyyyMMdd
       },
-      options: MyOptions(
+      options: SessionOptions(
         contentType: HeaderConstants.jsonContentType,
         responseType: MyResponseType.json,
       ),

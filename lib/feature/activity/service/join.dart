@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
 import '../dao/join.dart';
 
@@ -36,7 +36,7 @@ class ScJoinActivityService implements ScJoinActivityDao {
     '对不起，您不在该活动的范围内！',
   ];
 
-  final ISession session;
+  final Session session;
 
   const ScJoinActivityService(this.session);
 

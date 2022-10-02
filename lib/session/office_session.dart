@@ -19,7 +19,7 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 import 'package:kite/exception/session.dart';
 
 import 'dio_common.dart';
@@ -27,7 +27,7 @@ import 'dio_common.dart';
 /// 应网办登录地址, POST 请求
 const String _officeLoginUrl = 'https://xgfy.sit.edu.cn/unifri-flow/login';
 
-class OfficeSession extends ISession {
+class OfficeSession extends Session {
   bool isLogin = false;
   String? username;
   String? jwtToken;
@@ -71,7 +71,7 @@ class OfficeSession extends ISession {
     RequestMethod method, {
     Map<String, String>? queryParameters,
     dynamic data,
-    MyOptions? options,
+    SessionOptions? options,
     MyProgressCallback? onSendProgress,
     MyProgressCallback? onReceiveProgress,
   }) async {

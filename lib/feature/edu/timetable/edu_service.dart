@@ -17,7 +17,7 @@
  */
 import 'dart:core';
 
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
 import '../common/entity/index.dart';
 import '../util/convert_util.dart';
@@ -26,7 +26,7 @@ import 'entity.dart';
 class TimetableService {
   static const _timetableUrl = 'http://jwxt.sit.edu.cn/jwglxt/kbcx/xskbcx_cxXsgrkb.html';
 
-  final ISession session;
+  final Session session;
   TimetableService(this.session);
 
   static List<Course> _parseTimetable(Map<String, dynamic> json) {

@@ -17,7 +17,7 @@
  */
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:enough_convert/enough_convert.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 import 'package:kite/util/date_format.dart';
 
 import '../dao/expense.dart';
@@ -35,7 +35,7 @@ class ExpenseRemoteService implements ExpenseRemoteDao {
   };
   static const _codec = GbkCodec();
 
-  final ISession session;
+  final Session session;
 
   const ExpenseRemoteService(this.session);
 
@@ -53,7 +53,7 @@ class ExpenseRemoteService implements ExpenseRemoteDao {
         'from': start.yyyyMMdd,
         'to': end.yyyyMMdd,
       },
-      options: MyOptions(responseType: MyResponseType.bytes),
+      options: SessionOptions(responseType: MyResponseType.bytes),
     );
 
     return _parseExpenseDetail(_codec.decode(response.data));

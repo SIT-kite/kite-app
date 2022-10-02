@@ -17,7 +17,7 @@
  */
 import 'dart:convert';
 
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
 import '../dao/image_search.dart';
 import '../entity/book_image.dart';
@@ -25,7 +25,7 @@ import 'constant.dart';
 
 /// 本类提供了一系列，通过查询图书图片的方法，返回结果类型为字典，以ISBN为键
 class BookImageSearchService implements BookImageSearchDao {
-  final ISession session;
+  final Session session;
 
   const BookImageSearchService(this.session);
 
@@ -44,7 +44,7 @@ class BookImageSearchService implements BookImageSearchDao {
         'type': '0',
         'isbns': isbnStr,
       },
-      options: MyOptions(responseType: MyResponseType.plain),
+      options: SessionOptions(responseType: MyResponseType.plain),
     );
     var responseStr = (response.data as String).trim();
     responseStr = responseStr.substring(1, responseStr.length - 1);
