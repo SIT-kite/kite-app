@@ -1,5 +1,11 @@
 # Contribution Guide
 
+## Dependency
+### Flutter
+Kite always works with the latest Flutter.
+As of press time, Kite uses:
+- Flutter 3.3.3
+
 ## Code Style
 
 ### Dart

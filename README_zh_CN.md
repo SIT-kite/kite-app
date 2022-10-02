@@ -2,7 +2,7 @@
 
 # 上应小风筝 App
 
-English | [Chinese](README_zh_CN.md)
+[English](README.md) | Chinese
 
 这是一个由上海应用技术大学易班工作站主导开发、服务上海应用技术大学学生的应用。
 我们致力于将其打造为校内最现代、最实用的 App。
