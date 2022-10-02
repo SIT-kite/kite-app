@@ -1,9 +1,24 @@
 # Contribution Guide
 
+## Getting Started
+
+``` shell
+git clone https://github.com/SIT-kite/kite-app kite
+cd ./kite
+
+flutter pub get
+
+flutter pub run build_runner build
+flutter pub run flutter_native_splash:create
+```
+
 ## Dependency
+
 ### Flutter
+
 Kite always works with the latest Flutter.
 As of press time, Kite uses:
+
 - Flutter 3.3.3
 
 ## Code Style
@@ -13,6 +28,7 @@ As of press time, Kite uses:
 Please follow what `dart format` does.
 
 The dedicated configuration for Kite is:
+
 - Line length: 120
 
 ```shell

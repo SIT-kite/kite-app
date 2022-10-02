@@ -96,7 +96,7 @@ flutter run
 | [kite-agent][kite-agent]   | 后端数据获取工具（在 App 场景下被废弃） |
 | [kite-string][kite-string] | 校园网网络工具 |
 
-部分项目已在 Gitee 上设立镜像，访问速度会快一些。
+部分项目已在 Gitee 上设立镜像，访问速度会快一些。 https://gitee.com/SIT-kite/kite-app
 
 [kite-server]: https://github.com/SIT-kite/kite-server
 
