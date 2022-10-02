@@ -18,7 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/component/future_builder.dart';
+import 'package:kite/user_widget/future_builder.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/util/dsl.dart';
 

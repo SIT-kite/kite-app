@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/component/future_builder.dart';
+import 'package:kite/user_widget/future_builder.dart';
 
 import '../entity/book_info.dart';
 import '../entity/book_search.dart';

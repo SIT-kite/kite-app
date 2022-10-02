@@ -17,9 +17,9 @@
  */
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/component/future_builder.dart';
-import 'package:kite/component/html_widget.dart';
-import 'package:kite/component/webview_page.dart';
+import 'package:kite/user_widget/future_builder.dart';
+import 'package:kite/user_widget/html_widget.dart';
+import 'package:kite/user_widget/webview_page.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/launch.dart';
 import 'package:kite/r.dart';

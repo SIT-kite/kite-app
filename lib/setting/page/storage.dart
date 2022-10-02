@@ -19,9 +19,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hive/hive.dart';
-import 'package:kite/component/future_builder.dart';
 import 'package:kite/feature/contact/entity/contact.dart';
 import 'package:kite/feature/library/search/entity/search_history.dart';
+import 'package:kite/user_widget/future_builder.dart';
 import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/logger.dart';
 

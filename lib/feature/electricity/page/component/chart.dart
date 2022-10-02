@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/feature/electricity/page/component/hourly_chart.dart';
 import 'package:kite/l10n/extension.dart';
+import 'package:kite/user_widget/future_builder.dart';
 import 'package:kite/util/dsl.dart';
 
-import '../../../../component/future_builder.dart';
 import '../../entity.dart';
 import '../../init.dart';
 import 'daily_chart.dart';

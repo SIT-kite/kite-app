@@ -21,13 +21,12 @@ import 'dart:core';
 import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/component/my_switcher.dart';
+import 'package:kite/user_widget/future_builder.dart';
+import 'package:kite/user_widget/my_switcher.dart';
 import 'package:kite/feature/freshman/entity.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/util/dsl.dart';
 import 'package:kite/util/flash.dart';
-
-import '../../../component/future_builder.dart';
 import '../dao.dart';
 import '../init.dart';
 

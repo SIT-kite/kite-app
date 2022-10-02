@@ -2,7 +2,7 @@
 
 # SIT-Kite App
 
-English | [Chinese](README_zh.md)
+English | [中文](README_zh.md)
 
 #### A multiplatform app for SIT students, developed by SIT YIBan Workstation.
 

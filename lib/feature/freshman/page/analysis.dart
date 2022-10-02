@@ -19,7 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:kite/component/future_builder.dart';
+import 'package:kite/user_widget/future_builder.dart';
 import 'package:kite/feature/freshman/cache.dart';
 import 'package:kite/feature/freshman/entity.dart';
 

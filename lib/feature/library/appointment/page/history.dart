@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:kite/component/future_builder.dart';
+import 'package:kite/user_widget/future_builder.dart';
 import 'package:kite/feature/library/appointment/init.dart';
 import 'package:kite/feature/library/appointment/page/qrcode.dart';
 import 'package:kite/storage/init.dart';

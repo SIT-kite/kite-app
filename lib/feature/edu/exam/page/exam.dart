@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/component/future_builder.dart';
+import 'package:kite/user_widget/future_builder.dart';
 import 'package:kite/feature/home/entity/home.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/util/dsl.dart';

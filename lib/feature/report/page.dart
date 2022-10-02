@@ -19,9 +19,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kite/component/my_switcher.dart';
-import 'package:kite/component/webview.dart';
-import 'package:kite/component/webview_page.dart';
+import 'package:kite/user_widget/my_switcher.dart';
+import 'package:kite/user_widget/webview.dart';
+import 'package:kite/user_widget/webview_page.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/alert_dialog.dart';
