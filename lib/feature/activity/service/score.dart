@@ -18,14 +18,13 @@
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
 import '../dao/score.dart';
 import '../entity/list.dart';
 import '../entity/score.dart';
 
-class ScScoreService extends AService implements ScScoreDao {
+class ScScoreService implements ScScoreDao {
   static const _scHomeUrl = 'http://sc.sit.edu.cn/public/init/index.action';
   static const _scScoreUrl = 'http://sc.sit.edu.cn/public/pcenter/scoreDetail.action';
   static const _scMyEventUrl = 'http://sc.sit.edu.cn/public/pcenter/activityOrderList.action?pageSize=999';
@@ -46,7 +45,9 @@ class ScScoreService extends AService implements ScScoreDao {
   static final dateFormatParser = DateFormat('yyyy-MM-dd hh:mm:ss');
   static final activityIdRe = RegExp(r'activityId=(\d+)');
 
-  ScScoreService(ISession session) : super(session);
+  final ISession session;
+
+  const ScScoreService(this.session);
 
   /// 获取第二课堂分数
   @override

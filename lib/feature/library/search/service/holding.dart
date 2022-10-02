@@ -17,7 +17,6 @@
  */
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
 import '../dao/holding.dart';
@@ -217,8 +216,10 @@ class _BookHoldingInfo {
   Map<String, dynamic> toJson() => _$BookHoldingInfoToJson(this);
 }
 
-class HoldingInfoService extends AService implements HoldingInfoDao {
-  HoldingInfoService(ISession session) : super(session);
+class HoldingInfoService implements HoldingInfoDao {
+  final ISession session;
+
+  const HoldingInfoService(this.session);
 
   @override
   Future<HoldingInfo> queryByBookId(String bookId) async {

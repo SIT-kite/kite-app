@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/abstract/abstract_service.dart';
+
 import 'package:kite/abstract/abstract_session.dart';
 
 import '../entity/index.dart';
@@ -23,8 +23,10 @@ import '../entity/index.dart';
 const String serviceFunctionList = 'https://xgfy.sit.edu.cn/app/public/queryAppManageJson';
 const String serviceFunctionDetail = 'https://xgfy.sit.edu.cn/app/public/queryAppFormJson';
 
-class OfficeFunctionService extends AService {
-  OfficeFunctionService(ISession session) : super(session);
+class OfficeFunctionService {
+  final ISession session;
+
+  const OfficeFunctionService(this.session);
 
   Future<List<SimpleFunction>> selectFunctions() async {
     String payload = '{"appObject":"student","appName":null}';

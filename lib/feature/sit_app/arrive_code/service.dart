@@ -16,13 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
 import 'dao.dart';
 
-class ArriveCodeService extends AService implements ArriveCodeDao {
-  ArriveCodeService(ISession session) : super(session);
+class ArriveCodeService implements ArriveCodeDao {
+  final ISession session;
+
+  const ArriveCodeService(this.session);
 
   @override
   Future<String> arrive(String code) async {

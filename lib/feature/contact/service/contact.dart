@@ -15,16 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
 import '../dao/contact.dart';
 import '../entity/contact.dart';
 
-class ContactRemoteService extends AService implements ContactRemoteDao {
+class ContactRemoteService implements ContactRemoteDao {
   static const _contactUrl = '/contact';
+  final ISession session;
 
-  ContactRemoteService(ISession session) : super(session);
+  const ContactRemoteService(this.session);
 
   @override
   Future<List<ContactData>> getAllContacts() async {

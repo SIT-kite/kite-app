@@ -18,13 +18,12 @@
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
 import '../dao/list.dart';
 import '../entity/list.dart';
 
-class ScActivityListService extends AService implements ScActivityListDao {
+class ScActivityListService implements ScActivityListDao {
   static const _scActivityType = {
     ActivityType.schoolCulture: '8ab17f543fe626a8013fe6278a880001',
     ActivityType.creation: 'ff8080814e241104014eb867e1481dc3',
@@ -38,7 +37,9 @@ class ScActivityListService extends AService implements ScActivityListDao {
   static String selector = '.ul_7 li > a';
   static DateFormat dateFormatParser = DateFormat('yyyy-MM-dd hh:mm:ss');
 
-  ScActivityListService(ISession session) : super(session);
+  final ISession session;
+
+  const ScActivityListService(this.session);
 
   /// 获取第二课堂活动列表date
   @override

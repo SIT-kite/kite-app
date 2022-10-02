@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
 import '../../common/entity/index.dart';
@@ -25,10 +24,11 @@ import '../dao/exam.dart';
 import '../entity/exam.dart';
 /// REAL. THE PAYLOAD IS IN PINYIN. DONT BLAME ANYONE BUT THE SCHOOL.
 /// More reading: https://github.com/sunnysab/zf-tools/blob/master/TRANSLATION.md
-class ExamService extends AService implements ExamDao {
+class ExamService implements ExamDao {
   static const _examRoomUrl = 'http://jwxt.sit.edu.cn/jwglxt/kwgl/kscx_cxXsksxxIndex.html';
+  final ISession session;
 
-  ExamService(ISession session) : super(session);
+  const ExamService(this.session);
 
   /// 获取考场信息
   @override

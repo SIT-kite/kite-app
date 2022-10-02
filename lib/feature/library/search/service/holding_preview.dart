@@ -15,15 +15,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/abstract/abstract_service.dart';
+
 import 'package:kite/abstract/abstract_session.dart';
 
 import '../dao/holding_preview.dart';
 import '../entity/holding_preview.dart';
 import 'constant.dart';
 
-class HoldingPreviewService extends AService implements HoldingPreviewDao {
-  HoldingPreviewService(ISession session) : super(session);
+class HoldingPreviewService implements HoldingPreviewDao {
+  final ISession session;
+
+  const HoldingPreviewService(this.session);
 
   @override
   Future<HoldingPreviews> getHoldingPreviews(List<String> bookIdList) async {

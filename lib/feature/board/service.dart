@@ -19,14 +19,14 @@
 import 'package:dio/dio.dart';
 import 'package:kite/feature/board/entity.dart';
 
-import '../../abstract/abstract_service.dart';
 import '../../abstract/abstract_session.dart';
 import 'dao.dart';
 
-class BoardService extends AService implements BoardDao {
+class BoardService implements BoardDao {
   static const _boardUrl = '/board';
 
-  BoardService(ISession session) : super(session);
+  final ISession session;
+  BoardService(this.session);
 
   @override
   Future<List<PictureSummary>> getPictureList({int page = 1, int count = 20}) async {

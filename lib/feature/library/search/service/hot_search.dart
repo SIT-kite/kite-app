@@ -16,15 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
-import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
 import '../dao/hot_search.dart';
 import '../entity/hot_search.dart';
 import 'constant.dart';
 
-class HotSearchService extends AService implements HotSearchDao {
-  HotSearchService(ISession session) : super(session);
+class HotSearchService implements HotSearchDao {
+  final ISession session;
+
+  const HotSearchService(this.session);
 
   HotSearchItem _parse(String rawText) {
     final texts = rawText.split('(').map((e) => e.trim()).toList();

@@ -17,7 +17,6 @@
  */
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:enough_convert/enough_convert.dart';
-import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/util/date_format.dart';
 
@@ -25,7 +24,7 @@ import '../dao/expense.dart';
 import '../entity/expense.dart';
 import '../init.dart';
 
-class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
+class ExpenseRemoteService implements ExpenseRemoteDao {
   static const _expenseUrl = 'http://card.sit.edu.cn/personalxiaofei.jsp';
   static const _typeKeywords = {
     '开水': ExpenseType.water,
@@ -36,7 +35,9 @@ class ExpenseRemoteService extends AService implements ExpenseRemoteDao {
   };
   static const _codec = GbkCodec();
 
-  ExpenseRemoteService(ISession session) : super(session);
+  final ISession session;
+
+  const ExpenseRemoteService(this.session);
 
   @override
   Future<OaExpensePage> getExpensePage(

@@ -16,18 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/util/logger.dart';
 
 import 'dao.dart';
 import 'entity.dart';
 
-class RankingService extends AService implements RankingServiceDao {
+class RankingService implements RankingServiceDao {
   static const _rankingPrefix = '/game/ranking/';
   static const _uploadScore = '/game/record';
 
-  RankingService(ISession session) : super(session);
+  final ISession session;
+
+  const RankingService(this.session);
 
   ///发送请求，获取游戏排名
   @override

@@ -20,13 +20,12 @@ import 'dart:collection';
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
 import '../dao/detail.dart';
 import '../entity/detail.dart';
 
-class ScActivityDetailService extends AService implements ScActivityDetailDao {
+class ScActivityDetailService implements ScActivityDetailDao {
   static const _scDetailUrlBase = 'http://sc.sit.edu.cn/public/activity/activityDetail.action?activityId=';
 
   static RegExp reSpaces = RegExp(r'\s{2}\s+');
@@ -35,7 +34,9 @@ class ScActivityDetailService extends AService implements ScActivityDetailDao {
   static String selectorBanner = 'div[style=" color:#7a7a7a; text-align:center"]';
   static String selectorDescription = 'div[style="padding:30px 50px; font-size:14px;"]';
 
-  ScActivityDetailService(ISession session) : super(session);
+  final ISession session;
+
+  const ScActivityDetailService(this.session);
 
   /// 获取第二课堂活动详情
   @override

@@ -18,15 +18,16 @@
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/abstract/abstract_service.dart';
+
 import 'package:kite/abstract/abstract_session.dart';
 
 import '../dao/borrow.dart';
 import '../entity/borrow.dart';
 import 'constant.dart';
 
-class LibraryBorrowService extends AService implements LibraryBorrowDao {
-  LibraryBorrowService(ISession session) : super(session);
+class LibraryBorrowService implements LibraryBorrowDao {
+  final ISession session;
+  const LibraryBorrowService(this.session);
 
   @override
   Future<List<HistoryBorrowBookItem>> getHistoryBorrowBookList(int page, int rows) async {

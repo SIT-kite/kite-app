@@ -15,16 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
 import '../dao/evaluation.dart';
 import '../entity/evaluation.dart';
 
-class CourseEvaluationService extends AService implements CourseEvaluationDao {
+class CourseEvaluationService implements CourseEvaluationDao {
   static const _serviceUrl = 'http://jwxt.sit.edu.cn/jwglxt/xspjgl/xspj_cxXspjIndex.html?doType=query&gnmkdm=N401605';
+  final ISession session;
 
-  CourseEvaluationService(ISession session) : super(session);
+  const CourseEvaluationService(this.session);
 
   List<CourseToEvaluate> _parseEvaluationList(Map<String, dynamic> page) {
     final List evaluationList = page['items'];

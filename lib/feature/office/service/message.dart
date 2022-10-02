@@ -17,7 +17,6 @@
  */
 import 'dart:convert';
 
-import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/storage/init.dart';
 
@@ -25,8 +24,10 @@ import '../entity/index.dart';
 
 const String serviceMessageCount = 'https://xgfy.sit.edu.cn/unifri-flow/user/queryFlowCount';
 
-class OfficeMessageService extends AService {
-  OfficeMessageService(ISession session) : super(session);
+class OfficeMessageService {
+  final ISession session;
+
+  const OfficeMessageService(this.session);
 
   Future<OfficeMessageCount> queryMessageCount() async {
     String payload = 'code=${Kv.auth.currentUsername}';

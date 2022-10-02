@@ -16,15 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
-import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
 import '../dao/book_search.dart';
 import '../entity/book_search.dart';
 import 'constant.dart';
 
-class BookSearchService extends AService implements BookSearchDao {
-  BookSearchService(ISession session) : super(session);
+class BookSearchService implements BookSearchDao {
+  final ISession session;
+
+  const BookSearchService(this.session);
 
   static String _searchWayToString(SearchWay sw) {
     return {

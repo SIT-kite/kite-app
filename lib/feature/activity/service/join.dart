@@ -16,12 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
 import '../dao/join.dart';
 
-class ScJoinActivityService extends AService implements ScJoinActivityDao {
+class ScJoinActivityService implements ScJoinActivityDao {
   static const _applyCheck = 'http://sc.sit.edu.cn/public/pcenter/check.action?activityId=';
   static const _applyRequest = 'http://sc.sit.edu.cn/public/pcenter/applyActivity.action?activityId=';
 
@@ -37,7 +36,9 @@ class ScJoinActivityService extends AService implements ScJoinActivityDao {
     '对不起，您不在该活动的范围内！',
   ];
 
-  ScJoinActivityService(ISession session) : super(session);
+  final ISession session;
+
+  const ScJoinActivityService(this.session);
 
   /// 提交最后的活动申请
   Future<String> _sendFinalRequest(int activityId) async {

@@ -15,21 +15,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
 import 'dao.dart';
 import 'entity.dart';
 
-class ElectricityService extends AService implements ElectricityServiceDao {
+class ElectricityService implements ElectricityServiceDao {
   static const String _baseUrl = '/electricity/room';
 
-  ElectricityService(ISession session) : super(session);
+  final ISession session;
+
+  const ElectricityService(this.session);
 
   @override
   Future<Balance> getBalance(String room) async {
-    final response =
-        await session.request('$_baseUrl/$room', RequestMethod.get);
+    final response = await session.request('$_baseUrl/$room', RequestMethod.get);
 
     Balance balance = Balance.fromJson(response.data);
 
@@ -38,24 +38,21 @@ class ElectricityService extends AService implements ElectricityServiceDao {
 
   @override
   Future<List<DailyBill>> getDailyBill(String room) async {
-    final response =
-        await session.request('$_baseUrl/$room/bill/days', RequestMethod.get);
+    final response = await session.request('$_baseUrl/$room/bill/days', RequestMethod.get);
     List<dynamic> list = response.data;
     return list.map((e) => DailyBill.fromJson(e)).toList();
   }
 
   @override
   Future<List<HourlyBill>> getHourlyBill(String room) async {
-    final response =
-        await session.request('$_baseUrl/$room/bill/hours', RequestMethod.get);
+    final response = await session.request('$_baseUrl/$room/bill/hours', RequestMethod.get);
     List<dynamic> list = response.data;
     return list.map((e) => HourlyBill.fromJson(e)).toList();
   }
 
   @override
   Future<Rank> getRank(String room) async {
-    final response =
-        await session.request('$_baseUrl/$room/rank', RequestMethod.get);
+    final response = await session.request('$_baseUrl/$room/rank', RequestMethod.get);
     final rank = Rank.fromJson(response.data);
 
     return rank;

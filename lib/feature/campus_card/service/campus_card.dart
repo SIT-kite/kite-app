@@ -18,7 +18,6 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
 import '../dao/campus_card.dart';
@@ -26,8 +25,10 @@ import '../entity/campus_card.dart';
 
 const String _cardService = 'http://210.35.98.178:7101/LMWeb/WebApi/HYongHu.ashx';
 
-class CampusCardService extends AService implements CampusCardDao {
-  CampusCardService(ISession session) : super(session);
+class CampusCardService implements CampusCardDao {
+  final ISession session;
+
+  const CampusCardService(this.session);
 
   /// 卡id转字符串
   String _cardId2String(int cardId) {

@@ -15,16 +15,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
 import 'dao.dart';
 import 'entity.dart';
 
-class NoticeService extends AService implements NoticeServiceDao {
+class NoticeService implements NoticeServiceDao {
   static const String _noticePath = '/notice';
 
-  NoticeService(ISession session) : super(session);
+  final ISession session;
+
+  const NoticeService(this.session);
 
   /// 对通知排序, 优先放置置顶通知, 其次是新通知.
   void _sort(List<KiteNotice> noticeList) {

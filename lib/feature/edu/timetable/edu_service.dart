@@ -17,17 +17,17 @@
  */
 import 'dart:core';
 
-import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
 import '../common/entity/index.dart';
 import '../util/convert_util.dart';
 import 'entity.dart';
 
-class TimetableService extends AService {
+class TimetableService {
   static const _timetableUrl = 'http://jwxt.sit.edu.cn/jwglxt/kbcx/xskbcx_cxXsgrkb.html';
 
-  TimetableService(ISession session) : super(session);
+  final ISession session;
+  TimetableService(this.session);
 
   static List<Course> _parseTimetable(Map<String, dynamic> json) {
     final List<dynamic> courseList = json['kbList'];

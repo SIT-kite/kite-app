@@ -1,12 +1,13 @@
-import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/util/logger.dart';
 
 import 'entity.dart';
 import 'interface.dart';
 
-class FunctionOverrideService extends AService implements FunctionOverrideServiceDao {
-  FunctionOverrideService(super.session);
+class FunctionOverrideService implements FunctionOverrideServiceDao {
+  final ISession session;
+
+  const FunctionOverrideService(this.session);
 
   @override
   Future<FunctionOverrideInfo> get() async {

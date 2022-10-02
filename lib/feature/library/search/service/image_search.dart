@@ -17,7 +17,6 @@
  */
 import 'dart:convert';
 
-import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
 import '../dao/image_search.dart';
@@ -25,8 +24,10 @@ import '../entity/book_image.dart';
 import 'constant.dart';
 
 /// 本类提供了一系列，通过查询图书图片的方法，返回结果类型为字典，以ISBN为键
-class BookImageSearchService extends AService implements BookImageSearchDao {
-  BookImageSearchService(ISession session) : super(session);
+class BookImageSearchService implements BookImageSearchDao {
+  final ISession session;
+
+  const BookImageSearchService(this.session);
 
   @override
   Future<Map<String, BookImage>> searchByIsbnList(List<String> isbnList) async {

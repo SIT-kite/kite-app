@@ -17,14 +17,15 @@
  */
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
 import 'dao.dart';
 import 'entity.dart';
 
-class BulletinService extends AService implements BulletinDao {
-  BulletinService(ISession session) : super(session);
+class BulletinService implements BulletinDao {
+  final ISession session;
+
+  const BulletinService(this.session);
 
   List<Attachment> _parseAttachment(Bs4Element element) {
     return element.find('#containerFrame > table')!.findAll('a').map((e) {

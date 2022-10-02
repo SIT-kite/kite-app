@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
-import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
 import '../../common/entity/index.dart';
@@ -25,7 +24,7 @@ import '../dao/score.dart';
 import '../entity/score.dart';
 /// REAL. THE PAYLOAD IS IN PINYIN. DONT BLAME ANYONE BUT THE SCHOOL.
 /// More reading: https://github.com/sunnysab/zf-tools/blob/master/TRANSLATION.md
-class ScoreService extends AService implements ScoreDao {
+class ScoreService implements ScoreDao {
   static const _scoreUrl = 'http://jwxt.sit.edu.cn/jwglxt/cjcx/cjcx_cxDgXscj.html';
   static const _scoreDetailUrl = 'http://jwxt.sit.edu.cn/jwglxt/cjcx/cjcx_cxCjxqGjh.html';
 
@@ -43,8 +42,9 @@ class ScoreService extends AService implements ScoreDao {
   static const _scoreFormSelector = 'td:nth-child(1)';
   static const _scorePercentageSelector = 'td:nth-child(3)';
   static const _scoreValueSelector = 'td:nth-child(5)';
+  final ISession session;
 
-  ScoreService(ISession session) : super(session);
+  const ScoreService(this.session);
 
   /// 获取成绩
   @override

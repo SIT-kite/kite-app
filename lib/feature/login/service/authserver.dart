@@ -17,11 +17,12 @@
  */
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
-import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 
-class AuthServerService extends AService {
-  AuthServerService(ISession session) : super(session);
+class AuthServerService {
+  final ISession session;
+
+  const AuthServerService(this.session);
 
   Future<String> getPersonName() async {
     final response = await session.request(

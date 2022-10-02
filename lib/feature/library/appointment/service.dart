@@ -19,19 +19,19 @@
 import 'dart:convert';
 
 import 'package:intl/intl.dart';
-import 'package:kite/abstract/abstract_service.dart';
 import 'package:kite/abstract/abstract_session.dart';
 import 'package:kite/feature/library/appointment/dao.dart';
 import 'package:kite/feature/library/appointment/entity.dart';
 import 'package:kite/util/date_format.dart';
 
-class AppointmentService extends AService implements AppointmentDao {
+class AppointmentService implements AppointmentDao {
   static const _library = '/library';
   static const _application = '$_library/application';
   static const _notice = '$_library/notice';
   static const _status = '$_library/status';
+  final ISession session;
 
-  AppointmentService(ISession session) : super(session);
+  const AppointmentService(this.session);
 
   @override
   Future<ApplyResponse> apply(int period) async {
