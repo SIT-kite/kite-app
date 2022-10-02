@@ -35,6 +35,7 @@ import 'storage/index.dart';
 
 export 'dao/index.dart';
 export 'storage/index.dart';
+
 class Kv {
   static late ThemeSettingDao theme;
   static late AuthSettingDao auth;
@@ -52,10 +53,9 @@ class Kv {
   static late PrefDao pref;
 
   static late Box<dynamic> kvStorageBox;
-
 }
-class KvInit{
 
+class KvInit {
   static Future<void> init({
     required Box<dynamic> kvStorageBox,
   }) async {

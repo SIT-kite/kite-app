@@ -108,8 +108,8 @@ class FunctionButtonFactory {
     FunctionType.activity: (context) => HomeFunctionButton(
           route: '/event',
           icon: 'assets/home/icon_event.svg',
-          title:  FunctionType.activity.localized(),
-          subtitle:  FunctionType.activity.localizedDesc(),
+          title: FunctionType.activity.localized(),
+          subtitle: FunctionType.activity.localizedDesc(),
         ),
     FunctionType.expense: (context) => const ExpenseItem(),
     FunctionType.examResult: (context) => HomeFunctionButton(
@@ -172,7 +172,7 @@ class FunctionButtonFactory {
           route: RouteTable.login,
           iconWidget: Icon(Icons.switch_account, size: 30.h, color: Theme.of(context).primaryColor),
           title: FunctionType.switchAccount.localized(),
-          subtitle:FunctionType.switchAccount.localizedDesc(),
+          subtitle: FunctionType.switchAccount.localizedDesc(),
         ),
     FunctionType.electricityBill: (context) => const ElectricityItem(),
     FunctionType.kiteBoard: (context) => HomeFunctionButton(

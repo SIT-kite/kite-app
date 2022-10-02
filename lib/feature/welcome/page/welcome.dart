@@ -87,7 +87,7 @@ class WelcomePage extends StatelessWidget {
                 Row(children: [
                   buildEntryButton(context, i18n.welcomeLogin, RouteTable.login),
                   SizedBox(width: 10.h),
-                  buildEntryButton(context,i18n.welcomeFreshman, RouteTable.freshmanLogin),
+                  buildEntryButton(context, i18n.welcomeFreshman, RouteTable.freshmanLogin),
                 ]),
               ],
             ),

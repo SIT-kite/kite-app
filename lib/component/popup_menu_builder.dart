@@ -31,7 +31,8 @@ class _PopupMenuItem {
 class SimplePopupMenuButtonBuilder {
   final List<_PopupMenuItem> popupMenuItems = [];
 
-  SimplePopupMenuButtonBuilder add(Widget child, {
+  SimplePopupMenuButtonBuilder add(
+    Widget child, {
     VoidCallback? onTap,
   }) {
     popupMenuItems.add(_PopupMenuItem(

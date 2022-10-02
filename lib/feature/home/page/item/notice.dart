@@ -73,7 +73,7 @@ class _NoticeItemState extends State<NoticeItem> {
           route: '/notice',
           icon: 'assets/home/icon_notice.svg',
           title: i18n.ftype_kiteBulletin,
-          subtitle: content ??  i18n.ftype_kiteBulletin_desc,
+          subtitle: content ?? i18n.ftype_kiteBulletin_desc,
         );
       },
     );

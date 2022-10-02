@@ -143,8 +143,7 @@ class _TimetableViewerState extends State<TimetableViewer> {
       return DailyTimetable(
         key: currentKey,
         allCourses: tableCoursesState,
-        initialDate:
-            tableMetaState == null ? DateTime.now() : tableMetaState!.startDate,
+        initialDate: tableMetaState == null ? DateTime.now() : tableMetaState!.startDate,
         tableCache: widget.tableCache,
         viewChangingCallback: switchDisplayMode,
       );
@@ -152,8 +151,7 @@ class _TimetableViewerState extends State<TimetableViewer> {
     return WeeklyTimetable(
       key: currentKey,
       allCourses: tableCoursesState,
-      initialDate:
-          tableMetaState == null ? DateTime.now() : tableMetaState!.startDate,
+      initialDate: tableMetaState == null ? DateTime.now() : tableMetaState!.startDate,
       tableCache: widget.tableCache,
     );
   }

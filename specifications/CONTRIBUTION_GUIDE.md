@@ -10,5 +10,5 @@ The dedicated configuration for Kite is:
 - Line length: 120
 
 ```shell
-dart foramt -l 120
+dart format . -l 120
 ```

@@ -39,8 +39,7 @@ class NoticeWidget extends StatelessWidget {
 
   Widget buildNone() => Container();
 
-  String genNoticePreview(Notice notice) =>
-      notice.html.substring(0, min(notice.html.length, noticePreviewCharLimit));
+  String genNoticePreview(Notice notice) => notice.html.substring(0, min(notice.html.length, noticePreviewCharLimit));
 
   Widget buildSome(Notice notice) {
     final isRealHtml = guessIsHtml(notice.html);

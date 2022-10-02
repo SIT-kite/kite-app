@@ -81,8 +81,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
 
   /// 设置页面为对应日期页.
   void _setDate(DateTime theDay) {
-    int days =
-        theDay.clearTime().difference(dateSemesterStart.clearTime()).inDays;
+    int days = theDay.clearTime().difference(dateSemesterStart.clearTime()).inDays;
 
     int week = days ~/ 7 + 1;
     if (days >= 0 && 1 <= week && week <= 20) {
@@ -155,8 +154,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
     dateSemesterStart = widget.initialDate;
 
     _setDate(DateTime.now());
-    _pageController =
-        PageController(initialPage: _currentWeek - 1, keepPage: false);
+    _pageController = PageController(initialPage: _currentWeek - 1, keepPage: false);
 
     return PageView.builder(
       controller: _pageController,

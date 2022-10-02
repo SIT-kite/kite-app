@@ -69,8 +69,7 @@ class DailyTimetableState extends State<DailyTimetable> {
   /// 设置页面为对应日期页.
   void _setDate(DateTime theDay) {
     // 求一下过了多少天
-    int days =
-        theDay.clearTime().difference(widget.initialDate.clearTime()).inDays;
+    int days = theDay.clearTime().difference(widget.initialDate.clearTime()).inDays;
 
     int week = days ~/ 7 + 1, day = days % 7 + 1;
     if (days >= 0 && 1 <= week && week <= 20 && 1 <= day && day <= 7) {
@@ -103,14 +102,12 @@ class DailyTimetableState extends State<DailyTimetable> {
     jumpToDay(week, _currentDay);
   }
 
-  Widget _buildCourseCard(
-      BuildContext context, Course course, List<Course> allCourses) {
+  Widget _buildCourseCard(BuildContext context, Course course, List<Course> allCourses) {
     final TextStyle? textStyle = Theme.of(context).textTheme.bodyText2;
-    final Widget courseIcon = Image.asset(
-        '$_courseIconPath${CourseCategory.query(course.courseName)}.png');
+    final Widget courseIcon = Image.asset('$_courseIconPath${CourseCategory.query(course.courseName)}.png');
     final timetable = getBuildingTimetable(course.campus, course.place);
-    final description = formatTimeIndex(timetable, course.timeIndex,
-        '${course.weekText} 周${weekWord[course.dayIndex - 1]}\nss-ee');
+    final description =
+        formatTimeIndex(timetable, course.timeIndex, '${course.weekText} 周${weekWord[course.dayIndex - 1]}\nss-ee');
     return Card(
         margin: const EdgeInsets.all(8),
         shape: const RoundedRectangleBorder(
@@ -123,25 +120,18 @@ class DailyTimetableState extends State<DailyTimetable> {
           onTap: () => showModalBottomSheet(
             isScrollControlled: true,
             backgroundColor: Colors.transparent,
-            builder: (BuildContext context) =>
-                Sheet(course.courseId, allCourses),
+            builder: (BuildContext context) => Sheet(course.courseId, allCourses),
             context: context,
           ),
           leading: courseIcon,
-          title: Text(course.courseName,
-              textScaleFactor: 1.1,
-              style: textStyle?.copyWith(color: Colors.black54)),
-          subtitle:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          title: Text(course.courseName, textScaleFactor: 1.1, style: textStyle?.copyWith(color: Colors.black54)),
+          subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(course.teacher.join(','), style: textStyle),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(description, style: textStyle),
-                Text(formatPlace(course.place),
-                    softWrap: true,
-                    overflow: TextOverflow.ellipsis,
-                    style: textStyle),
+                Text(formatPlace(course.place), softWrap: true, overflow: TextOverflow.ellipsis, style: textStyle),
               ],
             ),
           ]),
@@ -168,12 +158,10 @@ class DailyTimetableState extends State<DailyTimetable> {
   }
 
   /// 构建第 index 页视图
-  Widget _pageBuilder(
-      BuildContext context, int index, List<Course> allCourses) {
+  Widget _pageBuilder(BuildContext context, int index, List<Course> allCourses) {
     int week = index ~/ 7 + 1;
     int day = index % 7 + 1;
-    final List<Course> todayCourse =
-        widget.tableCache.filterCourseOnDay(allCourses, week, day);
+    final List<Course> todayCourse = widget.tableCache.filterCourseOnDay(allCourses, week, day);
 
     return Column(
       children: [
@@ -195,10 +183,7 @@ class DailyTimetableState extends State<DailyTimetable> {
               ? ListView(
                   controller: ScrollController(),
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  children: todayCourse
-                      .map((e) =>
-                          _buildCourseCard(context, e, widget.allCourses))
-                      .toList())
+                  children: todayCourse.map((e) => _buildCourseCard(context, e, widget.allCourses)).toList())
               : _buildEmptyPage(),
         )
       ],
@@ -208,15 +193,13 @@ class DailyTimetableState extends State<DailyTimetable> {
   @override
   Widget build(BuildContext context) {
     _setDate(DateTime.now());
-    _pageController = PageController(
-        initialPage: (_currentWeek - 1) * 7 + _currentDay - 1, keepPage: false);
+    _pageController = PageController(initialPage: (_currentWeek - 1) * 7 + _currentDay - 1, keepPage: false);
     return PageView.builder(
       controller: _pageController,
       scrollDirection: Axis.horizontal,
       // TODO: 存储
       itemCount: 20 * 7,
-      itemBuilder: (_, int index) =>
-          _pageBuilder(context, index, widget.allCourses),
+      itemBuilder: (_, int index) => _pageBuilder(context, index, widget.allCourses),
     );
   }
 }

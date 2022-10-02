@@ -131,7 +131,7 @@ class _ExpensePageState extends State<ExpensePage> {
     showBasicFlash(context, Text('已加载 1 页, 共 ${firstPage.total} 页'));
     setState(() {});
 
-     await _fetchBillConcurrently(service, 2, firstPage.total - 1);
+    await _fetchBillConcurrently(service, 2, firstPage.total - 1);
 
     EasyLoading.showSuccess('加载成功');
   }

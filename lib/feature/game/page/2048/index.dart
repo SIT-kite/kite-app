@@ -44,6 +44,7 @@ final boxColors = <int, Color>{
   512: Colors.orange[800]!,
   1024: Colors.orange[900]!,
 };
+
 // TODO: I18n game
 // TODO: Keep a stateless widget from any state
 class Game2048Page extends StatelessWidget {

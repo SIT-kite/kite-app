@@ -12,8 +12,7 @@ class DailyElectricityChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseElectricityChartWidget(
       values: data.map((e) => e.consumption).toList(),
-      bottomTitles:
-          data.map((e) => DateFormat('MM/dd').format(e.date)).toList(),
+      bottomTitles: data.map((e) => DateFormat('MM/dd').format(e.date)).toList(),
     );
   }
 }

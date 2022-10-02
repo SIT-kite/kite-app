@@ -112,13 +112,10 @@ class _TimetablePageState extends State<TimetablePage> {
   ///更多菜单回调方法
   PopupMenuButton _buildPopupMenu(BuildContext context) {
     final List<Function()> callback = [
-      () => Navigator.of(context)
-          .pushNamed(RouteTable.timetableImport)
-          .then((value) => _onRefresh()),
+      () => Navigator.of(context).pushNamed(RouteTable.timetableImport).then((value) => _onRefresh()),
       _onRefresh,
       _onExport,
-      () => Kv.home.autoLaunchTimetable =
-          !(Kv.home.autoLaunchTimetable ?? false),
+      () => Kv.home.autoLaunchTimetable = !(Kv.home.autoLaunchTimetable ?? false),
     ];
 
     // Widget buildCenterRow(Widget child) =>
@@ -174,8 +171,7 @@ class _TimetablePageState extends State<TimetablePage> {
     List weekList = Iterable.generate(20, (i) => i).toList();
 
     return PopupMenuButton(
-      onSelected: (index) =>
-          tableViewerController.jumpToWeeK(int.parse(index.toString()) + 1),
+      onSelected: (index) => tableViewerController.jumpToWeeK(int.parse(index.toString()) + 1),
       itemBuilder: (BuildContext context) {
         return weekList
             .map((e) => PopupMenuItem(
@@ -203,11 +199,7 @@ class _TimetablePageState extends State<TimetablePage> {
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () => tableViewerController.jumpToToday(),
-          child: Text('今',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline2
-                  ?.copyWith(color: Colors.white))),
+          child: Text('今', style: Theme.of(context).textTheme.headline2?.copyWith(color: Colors.white))),
       body: TimetableViewer(
         key: UniqueKey(),
         controller: tableViewerController,

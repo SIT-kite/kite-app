@@ -84,8 +84,9 @@ class FreshmanPage extends StatelessWidget {
       infoItems: [
         InfoItem(Icons.badge, i18n.studentID, data.studentId),
         InfoItem(Icons.emoji_objects, i18n.major, data.major),
-        InfoItem(Icons.corporate_fare, i18n.dormitory, i18n.dormitoryDetailed_bbcr(data.room, data.bed, data.building, data.campus)),
-        InfoItem(Icons.face,i18n.counselor, data.counselorName),
+        InfoItem(Icons.corporate_fare, i18n.dormitory,
+            i18n.dormitoryDetailed_bbcr(data.room, data.bed, data.building, data.campus)),
+        InfoItem(Icons.face, i18n.counselor, data.counselorName),
         ...buildContactInfoItems(ctx, data.contact, counselorTel: data.counselorTel),
       ],
       appBarActions: buildAppBarMenuButton(ctx),

@@ -124,6 +124,7 @@ class _TimeWidgetState extends State<TimeWidget> {
   /// 1000 / 60 = 16.666666
   static const frameDelay = 16;
   static const summonDelay = 5;
+
   /// A timer for summoning limitation
   int frameCounter = 0;
   late World world;
@@ -277,7 +278,6 @@ class _TimeWidgetState extends State<TimeWidget> {
       );
     });
   }
-
 
   Widget buildMainWidget() {
     return GestureDetector(

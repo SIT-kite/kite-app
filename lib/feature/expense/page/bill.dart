@@ -23,6 +23,7 @@ import 'package:kite/l10n/extension.dart';
 import '../entity/expense.dart';
 import '../init.dart';
 import 'icon.dart';
+
 // TODO: I18n
 class BillPage extends StatelessWidget {
   final ExpenseType filter;

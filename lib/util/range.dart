@@ -50,7 +50,8 @@ class Range<T extends num> extends Iterable<T> {
   Iterator<T> get iterator => RangeIterator<T>(this);
 }
 
-Range<T> range<T extends num>(T arg1, [
+Range<T> range<T extends num>(
+  T arg1, [
   num? arg2,
   num? arg3,
 ]) {

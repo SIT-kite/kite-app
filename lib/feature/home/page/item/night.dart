@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 
 import 'index.dart';
+
 // TODO: Finish this in the future
 class NightItem extends StatelessWidget {
   final String content = '不早了，互道一句晚安早点休息吧';

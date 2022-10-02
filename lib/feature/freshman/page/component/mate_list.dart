@@ -33,6 +33,7 @@ class MateListWidget extends StatelessWidget {
   final RefreshController _refreshController = RefreshController();
 
   MateListWidget(this.mateList, {this.callBack, this.showDormitory = true, Key? key}) : super(key: key);
+
   /// 打开个人详情页
   void loadMoreInfo(BuildContext context, Mate mate) {
     final lastSeenText = calcLastSeen(mate.lastSeen);
@@ -43,7 +44,8 @@ class MateListWidget extends StatelessWidget {
         infoItems: [
           InfoItem(Icons.emoji_objects, i18n.faculty, mate.major),
           InfoItem(Icons.bed, i18n.dormitory, i18n.dormitoryDetailed_bbr(mate.room, mate.bed, mate.building)),
-          InfoItem(mate.gender == 'M' ? Icons.male : Icons.female, i18n.gender, mate.gender == 'M' ? i18n.male : i18n.female),
+          InfoItem(mate.gender == 'M' ? Icons.male : Icons.female, i18n.gender,
+              mate.gender == 'M' ? i18n.male : i18n.female),
           if (mate.province != null) InfoItem(Icons.location_city, i18n.province, mate.province!),
           if (mate.lastSeen != null) InfoItem(Icons.location_city, i18n.lastOnlineTime, lastSeenText),
           ...buildContactInfoItems(context, mate.contact), // unpack

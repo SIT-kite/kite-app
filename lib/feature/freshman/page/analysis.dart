@@ -94,6 +94,7 @@ class FreshmanAnalysisPage extends StatelessWidget {
       ],
     );
   }
+
   // TODO: I18n
   /// 文字列抽离
   Widget buildTextColumn(BuildContext context, Analysis data, FreshmanInfo info) {

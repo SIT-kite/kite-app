@@ -39,8 +39,8 @@ class ReminderDialog extends StatefulWidget {
 }
 
 class _ReminderDialogState extends State<ReminderDialog> {
-  final ValueNotifier<TimeOfDay?> _notifier = ValueNotifier(
-      Kv.report.time == null ? null : TimeOfDay.fromDateTime(Kv.report.time!));
+  final ValueNotifier<TimeOfDay?> _notifier =
+      ValueNotifier(Kv.report.time == null ? null : TimeOfDay.fromDateTime(Kv.report.time!));
 
   @override
   Widget build(BuildContext context) {
@@ -117,13 +117,11 @@ class DailyReportPage extends StatelessWidget {
       otherActions: [
         IconButton(
           onPressed: () {
-            showAlertDialog(
-              context,
-              title: i18n.reportTempReminderTitle,
-              content: const SingleChildScrollView(
-                child: ReminderDialog(),
-              )
-            );
+            showAlertDialog(context,
+                title: i18n.reportTempReminderTitle,
+                content: const SingleChildScrollView(
+                  child: ReminderDialog(),
+                ));
           },
           icon: const Icon(Icons.sms),
         ),

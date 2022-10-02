@@ -47,15 +47,14 @@ class FreshmanItem extends StatelessWidget {
     }
     return HomeFunctionButton(
       onPressed: () {
-        if (Kv.freshman.freshmanAccount == null ||
-            Kv.freshman.freshmanSecret == null) {
+        if (Kv.freshman.freshmanAccount == null || Kv.freshman.freshmanSecret == null) {
           Navigator.of(context).pushNamed(RouteTable.freshmanLogin);
         } else {
           Navigator.of(context).pushNamed(RouteTable.freshman);
         }
       },
       iconWidget: Icon(Icons.people, size: 30.h, color: Theme.of(context).primaryColor),
-      title:i18n.ftype_freshman,
+      title: i18n.ftype_freshman,
       subtitle: i18n.ftype_freshman_desc,
     );
   }

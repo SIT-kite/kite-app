@@ -30,7 +30,8 @@ void _addEventForCourse(ICalendar cal, Course course, DateTime startDate, Durati
   final timeStart = timetable[indexStart - 1].start;
   final timeEnd = timetable[indexEnd - 1].end;
 
-  final description = '第 ${indexStart == indexEnd ? indexStart : '$indexStart-$indexEnd'} 节，${course.place}，${course.teacher.join(' ')}';
+  final description =
+      '第 ${indexStart == indexEnd ? indexStart : '$indexStart-$indexEnd'} 节，${course.place}，${course.teacher.join(' ')}';
 
   // 一学期最多有 20 周
   for (int currentWeek = 1; currentWeek < 20; ++currentWeek) {

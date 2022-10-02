@@ -49,7 +49,8 @@ class _RoommateWidgetState extends State<RoommateWidget> {
       children: [
         buildInfoItemRow(
           iconData: Icons.home,
-          text: '${i18n.currentDormitoryLabel}:  ${i18n.dormitoryDetailed_bcr(myInfo.room, myInfo.building, myInfo.campus)}',
+          text:
+              '${i18n.currentDormitoryLabel}:  ${i18n.dormitoryDetailed_bcr(myInfo.room, myInfo.building, myInfo.campus)}',
           context: context,
         ).withTitleBarStyle(context),
         Expanded(child: MateListWidget(mateList, callBack: onRefresh, showDormitory: false)),

@@ -128,8 +128,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
     showSearch(
       context: context,
       delegate: SimpleTextSearchDelegate(
-        recentList:
-            storage.lastRoomList!.reversed.toList(), // 最近查询(需要从hive里获取)，也可留空
+        recentList: storage.lastRoomList!.reversed.toList(), // 最近查询(需要从hive里获取)，也可留空
         suggestionList: roomList, // 待搜索提示的列表(需要从服务器获取，可以缓存至数据库)
         onlyUseSuggestion: true, // 只允许使用搜索建议里的
       ),
@@ -149,7 +148,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:i18n.ftype_elecBill.txt,
+        title: i18n.ftype_elecBill.txt,
         actions: <Widget>[
           IconButton(
               onPressed: search,
@@ -208,16 +207,12 @@ class _ElectricityPageState extends State<ElectricityPage> {
           height: 80,
           width: 400,
           alignment: AlignmentDirectional.centerEnd,
-          decoration: BoxDecoration(
-              color: Colors.blueAccent.withAlpha(70),
-              borderRadius: BorderRadius.circular(10)),
+          decoration: BoxDecoration(color: Colors.blueAccent.withAlpha(70), borderRadius: BorderRadius.circular(10)),
           child: Row(
             children: [
               Container(
                 padding: const EdgeInsets.fromLTRB(18, 5, 10, 5),
-                decoration: const BoxDecoration(
-                    border: Border(
-                        right: BorderSide(width: 2, color: Colors.black87))),
+                decoration: const BoxDecoration(border: Border(right: BorderSide(width: 2, color: Colors.black87))),
                 height: 60,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -227,8 +222,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
                       '剩余电量',
                       '${data.power.toStringAsFixed(2)}度',
                     ),
-                    balanceInfo(Icons.savings, '剩余金额',
-                        '${data.balance.toStringAsFixed(2)}元'),
+                    balanceInfo(Icons.savings, '剩余金额', '${data.balance.toStringAsFixed(2)}元'),
                   ],
                 ),
               ),
@@ -238,11 +232,8 @@ class _ElectricityPageState extends State<ElectricityPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    balanceInfo(Icons.house, '房间号码', data.room.toString(),
-                        width: 90),
-                    balanceInfo(Icons.update, '更新时间',
-                        DateFormat('MM/dd HH:mm').format(data.ts.toLocal()),
-                        width: 90)
+                    balanceInfo(Icons.house, '房间号码', data.room.toString(), width: 90),
+                    balanceInfo(Icons.update, '更新时间', DateFormat('MM/dd HH:mm').format(data.ts.toLocal()), width: 90)
                   ],
                 ),
               ),
@@ -256,8 +247,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
   }
 
   ///余额Row封装
-  Widget balanceInfo(IconData icon, String title, String content,
-      {double? width}) {
+  Widget balanceInfo(IconData icon, String title, String content, {double? width}) {
     return Row(
       children: [
         Icon(icon),
@@ -296,9 +286,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
         padding: const EdgeInsets.all(10),
         width: 400,
         height: 120,
-        decoration: BoxDecoration(
-            color: Colors.blueAccent.withAlpha(70),
-            borderRadius: BorderRadius.circular(20)),
+        decoration: BoxDecoration(color: Colors.blueAccent.withAlpha(70), borderRadius: BorderRadius.circular(20)),
         child: Row(
           children: [
             const Icon(
@@ -311,11 +299,9 @@ class _ElectricityPageState extends State<ElectricityPage> {
               children: [
                 Text(
                   '24小时用电消费： ${data.consumption.toStringAsFixed(2)}元',
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 18),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
-                Text(
-                    '超过了${(data.rank * 100 / data.roomCount).toStringAsFixed(2)}%宿舍')
+                Text('超过了${(data.rank * 100 / data.roomCount).toStringAsFixed(2)}%宿舍')
               ],
             ))
           ],

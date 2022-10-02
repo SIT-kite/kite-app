@@ -23,6 +23,7 @@ import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/dsl.dart';
 import 'package:kite/util/user.dart';
+
 // TODO: Rename to `Rearrange`
 class HomeSettingPage extends StatefulWidget {
   const HomeSettingPage({Key? key}) : super(key: key);
@@ -32,8 +33,7 @@ class HomeSettingPage extends StatefulWidget {
 }
 
 class _HomeSettingPageState extends State<HomeSettingPage> {
-  List<FunctionType> homeItems =
-      Kv.home.homeItems ?? getDefaultFunctionList(AccountUtils.getUserType()!);
+  List<FunctionType> homeItems = Kv.home.homeItems ?? getDefaultFunctionList(AccountUtils.getUserType()!);
 
   void _onReorder(int oldIndex, int newIndex) {
     setState(() {

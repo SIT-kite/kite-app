@@ -29,8 +29,8 @@ class EggPage extends StatelessWidget {
     return UniversalPlatform.isDesktopOrWeb
         ? TimeWidget()
         : RotatedBox(
-      quarterTurns: 1,
-      child: TimeWidget(),
-    );
+            quarterTurns: 1,
+            child: TimeWidget(),
+          );
   }
 }

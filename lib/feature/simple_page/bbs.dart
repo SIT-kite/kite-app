@@ -48,9 +48,7 @@ class BbsPage extends StatelessWidget {
       nickname = '${nickname[0]}同学';
     }
 
-    openid = Kv.admin.bbsSecret == null || Kv.admin.bbsSecret!.isEmpty
-        ? openid
-        : Kv.admin.bbsSecret!;
+    openid = Kv.admin.bbsSecret == null || Kv.admin.bbsSecret!.isEmpty ? openid : Kv.admin.bbsSecret!;
     Log.info('BBS身份：{openid: $openid, nickname: $nickname}');
     return SimpleWebViewPage(
       initialUrl: R.kiteBbsUrl,

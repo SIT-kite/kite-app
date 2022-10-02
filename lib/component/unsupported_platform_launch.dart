@@ -17,6 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/launch.dart';
+
 // TODO: Why not launch the default browser instead?
 class UnsupportedPlatformUrlLauncher extends StatelessWidget {
   final String url;

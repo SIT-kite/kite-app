@@ -46,7 +46,8 @@ class _OfficeItemState extends State<OfficeItem> {
     Global.eventBus.off(EventNameConstants.onHomeRefresh, _onHomeRefresh);
     super.dispose();
   }
-  void _tryUpdateContent(String? newContent){
+
+  void _tryUpdateContent(String? newContent) {
     if (newContent != null) {
       if (newContent.isEmpty || newContent.trim().isEmpty) {
         content = null;
