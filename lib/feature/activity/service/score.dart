@@ -70,13 +70,13 @@ class ScScoreService extends AService implements ScScoreDao {
       final type = stringToActivityScoreType[item.group(2)]!;
 
       switch (type) {
-        case ActivityScoreType.lecture:
+        case ActivityScoreType.thematicReport:
           lecture = score;
           break;
         case ActivityScoreType.creation:
           creation = score;
           break;
-        case ActivityScoreType.campus:
+        case ActivityScoreType.schoolCulture:
           campus = score;
           break;
         case ActivityScoreType.practice:
@@ -85,7 +85,7 @@ class ScScoreService extends AService implements ScScoreDao {
         case ActivityScoreType.voluntary:
           voluntary = score;
           break;
-        case ActivityScoreType.safetyEdu:
+        case ActivityScoreType.safetyCiviEdu:
           safetyEdu = score;
           break;
       }

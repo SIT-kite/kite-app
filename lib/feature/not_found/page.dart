@@ -17,24 +17,27 @@
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
+import 'package:kite/util/dsl.dart';
 
 class NotFoundPage extends StatelessWidget {
   final String routeName;
+
   const NotFoundPage(this.routeName, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('找不到页面'),
+        title: i18n.notFound404.txt,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text('找不到页面路由'),
+            i18n.notFound404.txt,
             Text(routeName),
             SvgPicture.asset(
               'assets/score/not-found.svg',
@@ -43,7 +46,7 @@ class NotFoundPage extends StatelessWidget {
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pushNamed(RouteTable.feedback),
-              child: const Text('点击反馈'),
+              child: i18n.feedbackBtn.txt,
             ),
           ],
         ),

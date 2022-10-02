@@ -233,6 +233,7 @@ jobs:
   # Upload apk
   upload:
     runs-on: ubuntu-latest
+    continue-on-error: true
     if: |
       github.ref == 'refs/heads/master' &&
       github.repository == 'SIT-kite/kite-app'

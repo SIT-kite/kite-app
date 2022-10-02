@@ -22,9 +22,8 @@ import 'package:flutter/material.dart';
 import 'package:kite/component/future_builder.dart';
 import 'package:kite/component/webview_page.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-
-const String _feedbackUrl = 'https://support.qq.com/product/377648';
 
 class FeedbackPage extends StatelessWidget {
   const FeedbackPage({Key? key}) : super(key: key);
@@ -54,9 +53,9 @@ class FeedbackPage extends StatelessWidget {
         final bool isConnected = data[1];
         final String? ua = data[2];
         return SimpleWebViewPage(
-          initialUrl: _feedbackUrl,
+          initialUrl: R.kiteFeedbackUrl,
           showLoadInBrowser: true,
-          fixedTitle: '反馈',
+          fixedTitle: i18n.feedback,
           postData: {
             'clientInfo': ua ?? '无UA信息',
             'clientVersion': "${packageInfo?.version ?? '未知'}+${packageInfo?.buildNumber ?? '未知'}",

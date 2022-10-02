@@ -67,7 +67,7 @@ class _ContactPageState extends State<ContactPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: FunctionType.contact.localized().txt,
+        title: i18n.ftype_yellowPages.txt,
         actions: [
           IconButton(
               onPressed: () => showSearch(context: context, delegate: Search(_contactData)),

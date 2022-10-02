@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
@@ -27,6 +29,20 @@ import 'entity.dart';
 
 class NoticePage extends StatelessWidget {
   const NoticePage({Key? key}) : super(key: key);
+
+  _buildTitleText(BuildContext ctx, String title) {
+    return Text(title, overflow: TextOverflow.ellipsis, style: Theme.of(ctx).textTheme.headline3);
+  }
+
+  _buildBulletinTitle(BuildContext ctx, KiteNotice notice) {
+    if (notice.top) {
+      return Row(
+        children: [const Icon(Icons.push_pin_rounded), _buildTitleText(ctx, notice.title)],
+      );
+    } else {
+      return _buildTitleText(ctx, notice.title);
+    }
+  }
 
   Widget _buildNoticeItem(BuildContext context, KiteNotice notice) {
     return InkWell(
@@ -42,8 +58,7 @@ class NoticePage extends StatelessWidget {
               children: [
                 // 标题, 注意遇到长标题时要折断
                 Expanded(
-                  child: Text((notice.top ? '${i18n.kiteBuiltinPinned} ' : '') + notice.title,
-                      overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.headline3),
+                  child: _buildBulletinTitle(context, notice),
                 ),
                 // 日期
                 Text(context.dateNum(notice.publishTime), style: const TextStyle(color: Colors.grey)),
@@ -85,7 +100,7 @@ class NoticePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: FunctionType.notice.localized().txt),
+      appBar: AppBar(title: i18n.ftype_kiteBulletin.txt),
       body: SafeArea(child: _buildBody()),
     );
   }

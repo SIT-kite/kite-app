@@ -52,7 +52,7 @@ class CampusCardPage extends StatefulWidget {
   const CampusCardPage({Key? key}) : super(key: key);
 
   @override
-  _CampusCardPageState createState() => _CampusCardPageState();
+  State<CampusCardPage> createState() => _CampusCardPageState();
 }
 
 class _CampusCardPageState extends State<CampusCardPage> {

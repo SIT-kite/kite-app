@@ -55,8 +55,8 @@ class FreshmanItem extends StatelessWidget {
         }
       },
       iconWidget: Icon(Icons.people, size: 30.h, color: Theme.of(context).primaryColor),
-      title: FunctionType.freshman.localized(),
-      subtitle: FunctionType.freshman.localizedDesc(),
+      title:i18n.ftype_freshman,
+      subtitle: i18n.ftype_freshman_desc,
     );
   }
 }

@@ -39,8 +39,8 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
   static const categories = [
     ActivityType.lecture,
     ActivityType.creation,
-    ActivityType.theme,
-    ActivityType.campus,
+    ActivityType.thematicEdu,
+    ActivityType.schoolCulture,
     ActivityType.practice,
     ActivityType.voluntary,
   ];
@@ -60,15 +60,14 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
   }
 
   static bool _filterActivity(Activity activity) {
-    const List<String> blackList = ['补录'];
-    return !blackList.any((element) => activity.title.contains(element));
+    return !ActivityName.blackList.any((element) => activity.title.contains(element));
   }
 
   TabBar _buildBarHeader() {
     return TabBar(
       isScrollable: true,
       controller: _tabController,
-      tabs: categories.map((e) => Tab(text: e.localized())).toList(),
+      tabs: categories.map((e) => Tab(text: e.name)).toList(),
     );
   }
 
@@ -109,7 +108,7 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
       length: categories.length,
       child: Scaffold(
         appBar: AppBar(
-          title: FunctionType.event.localized().txt,
+          title: i18n.ftype_activity.txt,
           bottom: _buildBarHeader(),
           actions: [
             IconButton(

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/component/html_widget.dart';
+import 'package:kite/l10n/extension.dart';
 
 class SimpleHtmlPage extends StatelessWidget {
   final ValueNotifier<double> _progressNotifier = ValueNotifier<double>(0);
@@ -12,19 +13,19 @@ class SimpleHtmlPage extends StatelessWidget {
     Key? key,
     this.url,
     this.htmlContent,
-    this.title = '简单富文本预览页',
+    this.title = "",
   }) : super(key: key);
 
   Future<String> fetchHtmlContent() async {
     if (htmlContent != null) return htmlContent!;
-    if (url == null) return '无内容';
+    if (url == null) return i18n.htmlPageNoContent;
     final response = await Dio().get<String>(
       url!,
       onReceiveProgress: (int count, int total) {
         _progressNotifier.value = count / total;
       },
     );
-    return response.data ?? '无内容';
+    return response.data ?? i18n.htmlPageNoContent;
   }
 
   PreferredSizeWidget buildTopIndicator() {

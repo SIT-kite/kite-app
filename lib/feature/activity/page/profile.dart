@@ -19,6 +19,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/future_builder.dart';
+import 'package:kite/l10n/extension.dart';
+import 'package:kite/util/dsl.dart';
 
 import '../dao/index.dart';
 import '../entity/score.dart';
@@ -27,8 +29,6 @@ import 'component/summary.dart';
 import 'detail.dart';
 
 class ProfilePage extends StatelessWidget {
-  final displayDateFormat = DateFormat('yyyy-MM-dd hh:mm');
-
   ProfilePage({Key? key}) : super(key: key);
 
   Widget _buildSummaryCard() {
@@ -66,7 +66,7 @@ class ProfilePage extends StatelessWidget {
       return ListTile(
         title: Text(activity.title, style: titleStyle, maxLines: 2, overflow: TextOverflow.ellipsis),
         subtitle: Text(
-            '申请时间: ${displayDateFormat.format(activity.time)}\n'
+            '申请时间: ${context.dateFullNum(activity.time)}\n'
             '申请编号: ${activity.applyId}',
             style: subtitleStyle),
         trailing: Text(activity.amount.abs() > 0.01 ? activity.amount.toStringAsFixed(2) : activity.status,
@@ -92,7 +92,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('我的第二课堂')),
+      appBar: AppBar(title: i18n.ftype_activity.txt),
       body: _buildEventList(context),
     );
   }

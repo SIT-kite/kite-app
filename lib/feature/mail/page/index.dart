@@ -18,11 +18,15 @@
 import 'package:enough_mail/enough_mail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
+import 'package:kite/util/dsl.dart';
 
 import '../init.dart';
 import '../service/mail.dart';
 import 'item.dart';
+
+String getEduEmail(String studentId) => "$studentId@mail.sit.edu.cn";
 
 class MailPage extends StatefulWidget {
   const MailPage({Key? key}) : super(key: key);
@@ -32,7 +36,9 @@ class MailPage extends StatefulWidget {
 }
 
 class _MailPageState extends State<MailPage> {
-  int _index = 0; // 0 - 邮件列表, 1 - 错误页.
+  static const indexEmailList = 0;
+  static const indexErrorPage = 1;
+  int _index = indexEmailList; // 0 - 邮件列表, 1 - 错误页.
   List<MimeMessage>? _messages;
 
   final TextEditingController _controller = TextEditingController();
@@ -56,7 +62,7 @@ class _MailPageState extends State<MailPage> {
     final String studentId = KvStorageInitializer.auth.currentUsername ?? '';
     final String password = MailInitializer.mail.password ?? (KvStorageInitializer.auth.ssoPassword ?? '');
 
-    final email = '$studentId@mail.sit.edu.cn';
+    final email = getEduEmail(studentId);
     final service = MailService(email, password);
 
     return await service.getInboxMessage(30);
@@ -74,7 +80,7 @@ class _MailPageState extends State<MailPage> {
     return ListView(children: items);
   }
 
-  Widget _buildInputPassword() {
+  Widget _buildPwdInputBoxWhenFailed() {
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -84,6 +90,10 @@ class _MailPageState extends State<MailPage> {
           const SizedBox(height: 20),
           ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 0.75.sw),
+            /**
+             * TODO: Email password?
+             * "eduEmailLoginFailTip": "Failed to log in your edu email with OA Password. Troubleshooting:\n1.If you've never changed it, try all your former password.\n2."
+             */
             child: Text(
               '登录失败，小风筝无法使用 OA 密码登录你的账户。\n'
               '这可能是信息中心未同步你的邮箱密码导致的。如果你未重置过该密码，它可能是你任意一次设置的 OA 密码。',
@@ -99,9 +109,9 @@ class _MailPageState extends State<MailPage> {
             ElevatedButton(
                 onPressed: () {
                   MailInitializer.mail.password = _controller.text;
-                  setState(() => _index = 0);
+                  setState(() => _index = indexEmailList);
                 },
-                child: const Text('继续'))
+                child: i18n.continue_.txt)
           ]),
         ],
       ),
@@ -118,14 +128,15 @@ class _MailPageState extends State<MailPage> {
       }
       // 非首次加载, 即已获取邮件列表, 直接渲染即可
       return _buildMailList();
+    } else {
+      // _index == 1, 显示密码输入页
+      return _buildPwdInputBoxWhenFailed();
     }
-    // _index == 1, 显示密码输入页
-    return _buildInputPassword();
   }
 
   Widget _buildPopupMenu() {
     final String studentId = KvStorageInitializer.auth.currentUsername ?? '';
-    final email = '$studentId@mail.sit.edu.cn';
+    final email = getEduEmail(studentId);
 
     return PopupMenuButton(itemBuilder: (_) => [PopupMenuItem(child: Text(email))]);
   }
@@ -134,7 +145,7 @@ class _MailPageState extends State<MailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('我的邮件'),
+        title: i18n.eduEmailTitle.txt,
         actions: [_buildPopupMenu()],
       ),
       body: _buildBody(context),

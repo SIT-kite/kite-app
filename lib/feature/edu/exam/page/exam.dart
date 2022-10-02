@@ -38,8 +38,6 @@ class ExamPage extends StatefulWidget {
 }
 
 class _ExamPageState extends State<ExamPage> {
-  static final dateFormat = DateFormat('MM月dd日 HH:mm');
-
   /// 四位年份
   late int selectedYear;
 
@@ -70,8 +68,8 @@ class _ExamPageState extends State<ExamPage> {
   Widget buildExamItem(ExamRoom examItem) {
     final itemStyle = Theme.of(context).textTheme.bodyText2;
     final name = examItem.courseName;
-    final strStartTime = examItem.time.isNotEmpty ? dateFormat.format(examItem.time[0]) : '/';
-    final strEndTime = examItem.time.isNotEmpty ? dateFormat.format(examItem.time[1]) : '/';
+    final strStartTime = examItem.time.isNotEmpty ? dateFullNum(examItem.time[0]) : '/';
+    final strEndTime = examItem.time.isNotEmpty ? dateFullNum(examItem.time[1]) : '/';
     final place = examItem.place;
     final seatNumber = examItem.seatNumber;
     final isSecondExam = examItem.isSecondExam;
@@ -153,7 +151,7 @@ class _ExamPageState extends State<ExamPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: FunctionType.exam.localized().txt),
+      appBar: AppBar(title: i18n.ftype_examArr.txt),
       body: Column(
         children: [
           buildSemesterSelector(),
