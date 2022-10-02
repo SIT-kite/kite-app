@@ -57,28 +57,19 @@ As of press time, Kite Team uses:
 
 ### Dart
 
-#### Format
-
-Please follow what `dart format` does.
-
-The dedicated configuration for Kite is:
-
-- Line length: 120
+As to formatting, please follow what `dart format` does.
+The dedicated configuration for Kite is `line length: 120`.
+You can run the command below to format the whole project by this principle.
 
 ```shell
 dart format . -l 120
 ```
 
-#### Naming
-
-Please follow the [official naming convention](https://dart.dev/guides/language/effective-dart/style).
+As to naming principle, please follow
+the [official naming convention](https://dart.dev/guides/language/effective-dart/style).
 
 ### Json
 
-#### Format
+As to formatting, the indent is 2 spaces.
 
-- Indent: 2 spaces
-
-#### Naming
-
-- key: lowerCamelCase
+As to naming, please keep the key `lowerCamelCase`, which can be mapped to a valid dart variable name.

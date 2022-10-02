@@ -20,10 +20,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:kite/feature/board/page/index.dart';
 import 'package:kite/feature/freshman/page/login.dart';
 import 'package:kite/feature/override/entity.dart';
+import 'package:kite/navigation/static_route.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/alert_dialog.dart';
 
-import 'abstract/route.dart';
+import 'navigation/route.dart';
 import 'feature/electricity/page/index.dart';
 import 'feature/freshman/page/analysis.dart';
 import 'feature/freshman/page/friend/index.dart';
@@ -164,6 +165,7 @@ class DefaultRouteWithOverride implements IRouteGenerator {
   final IRouteGenerator defaultRoute;
 
   final Map<String, RouteOverrideItem> indexedOverrideItems;
+
   DefaultRouteWithOverride({
     required this.defaultRoute,
     required List<RouteOverrideItem> overrideItems,
@@ -194,6 +196,7 @@ class RouteWithNoticeDialog implements IRouteGenerator {
   final IRouteGenerator routeGenerator;
   final Map<String, RouteNotice> routeNotice;
   final BuildContext context;
+
   RouteWithNoticeDialog(
     this.context, {
     required this.routeGenerator,

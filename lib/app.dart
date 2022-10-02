@@ -28,7 +28,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
 
-import 'abstract/route.dart';
+import 'navigation/route.dart';
 import 'feature/override/entity.dart';
 import 'global/global.dart';
 import 'storage/init.dart';
