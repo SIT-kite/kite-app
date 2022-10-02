@@ -130,6 +130,11 @@
   "downloadEasyConnectBtn": "Download EasyConnect",
   "downloading": "Downloading",
   "draft": "Draft",
+  "eduEmailNoContent": "No Content",
+  "eduEmailNoSubject": "No Subject",
+  "eduEmailPluralSenderTailing": "...",
+  "eduEmailText": "Text",
+  "eduEmailTitle": "My Email",
   "elecBillContent": "last: ¥{balance} Room {room}",
   "@elecBillContent": {
     "placeholders": {
@@ -391,6 +396,8 @@
   "restartRequest": "Would you like to restart Kite now?",
   "restartRequestTitle": "Restart?",
   "roommate": "Roommate",
+  "scannerBarcodeNotRecognized": "No Barcode",
+  "scannerBarcodeRecognized": "Barcode Recognized",
   "semester": "Semester",
   "settings": "Settings",
   "settingsCampus": "Your Campus",

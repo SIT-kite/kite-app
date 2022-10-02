@@ -19,6 +19,8 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kite/l10n/extension.dart';
+import 'package:kite/util/dsl.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class ScannerPage extends StatefulWidget {
@@ -56,14 +58,14 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
         if (image != null) {
           if (await controller.analyzeImage(image.path)) {
             if (!mounted) return;
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text('Barcode found!'),
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: i18n.scannerBarcodeRecognized.txt,
               backgroundColor: Colors.green,
             ));
           } else {
             if (!mounted) return;
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text('No barcode found!'),
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: i18n.scannerBarcodeNotRecognized.txt,
               backgroundColor: Colors.red,
             ));
           }

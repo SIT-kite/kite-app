@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/component/html_widget.dart';
 import 'package:kite/l10n/extension.dart';
+import 'package:kite/util/dsl.dart';
 
 class DetailPage extends StatelessWidget {
   final MimeMessage _message;
@@ -31,7 +32,7 @@ class DetailPage extends StatelessWidget {
   String _generateHtml(MimeMessage mimeMessage) {
     return mimeMessage.transformToHtml(
       blockExternalImages: false,
-      emptyMessageText: '无邮件内容',
+      emptyMessageText: i18n.eduEmailNoContent,
     );
   }
 
@@ -40,9 +41,12 @@ class DetailPage extends StatelessWidget {
     final titleStyle = Theme.of(context).textTheme.headline2?.copyWith(fontWeight: FontWeight.bold);
     final subtitleStyle = Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.black54);
 
-    final subjectText = _message.decodeSubject() ?? '无主题';
+    final subjectText = _message.decodeSubject() ?? i18n.eduEmailNoSubject;
     final sender = _message.decodeSender();
-    final senderText = sender[0].toString() + (sender.length > 1 ? '等' : '');
+    var senderText = sender[0].toString();
+    if (sender.length > 1) {
+      senderText += i18n.eduEmailPluralSenderTailing;
+    }
     final date = _message.decodeDate();
     final dateText = date != null ? context.dateFullNum(date) : '';
 
@@ -67,7 +71,7 @@ class DetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('正文')),
+      appBar: AppBar(title: i18n.eduEmailText.txt),
       body: _buildBody(context),
     );
   }

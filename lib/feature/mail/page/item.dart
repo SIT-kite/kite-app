@@ -19,12 +19,11 @@
 import 'package:enough_mail/enough_mail.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:kite/l10n/extension.dart';
 
 import 'detail.dart';
 
 class MailItem extends StatelessWidget {
-  static final dateFormat = DateFormat('MM-dd');
-
   final MimeMessage _message;
 
   const MailItem(this._message, {Key? key}) : super(key: key);
@@ -38,7 +37,7 @@ class MailItem extends StatelessWidget {
     final sender = _message.decodeSender();
     final senderText = sender[0].toString() + (sender.length > 1 ? '等' : '');
     final date = _message.decodeDate();
-    final dateText = date != null ? dateFormat.format(date) : '';
+    final dateText = date != null ? context.dateNum(date) : '';
 
     return ListTile(
       leading: CircleAvatar(
