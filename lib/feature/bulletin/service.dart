@@ -55,7 +55,7 @@ class BulletinService extends AService implements BulletinDao {
   }
 
   @override
-  List<BulletinCatalogue> getAllCatalogues() {
+  Future<List<BulletinCatalogue>> getAllCatalogues() async {
     return const [
       BulletinCatalogue('学生事务', 'pe2362'),
       BulletinCatalogue('学习课堂', 'pe2364'),

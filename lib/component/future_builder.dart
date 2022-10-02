@@ -22,7 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 typedef MyWidgetBuilder<T> = Widget Function(BuildContext context, T data);
-typedef MyErrorWidgetBuilder<T> = Widget? Function(
+typedef MyErrorWidgetBuilder = Widget? Function(
   BuildContext context,
   MyFutureBuilder futureBuilder,
   dynamic error,
@@ -42,7 +42,7 @@ class MyFutureBuilder<T> extends StatefulWidget {
 
   final Future<T>? future;
   final MyWidgetBuilder<T>? builder;
-  final MyWidgetBuilder? onErrorBuilder;
+  final MyErrorWidgetBuilder? onErrorBuilder;
   final MyFutureBuilderController? controller;
 
   /// 建议使用该参数代替future, 否则可能无法正常实现刷新功能
@@ -92,13 +92,13 @@ class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
     }
     // 判定是否有单独处理
     if (widget.onErrorBuilder != null) {
-      return widget.onErrorBuilder!(context, error);
+      final r = widget.onErrorBuilder!(context, widget, error, stackTrace);
+      if (r != null) return r;
     }
 
     // 判定是否有全局处理
     if (MyFutureBuilder.globalErrorBuilder != null) {
       final r = MyFutureBuilder.globalErrorBuilder!(context, widget, error, stackTrace);
-      if (r != null) return r;
     }
 
     // 默认处理

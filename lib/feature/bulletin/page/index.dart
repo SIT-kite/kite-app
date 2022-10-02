@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/component/future_builder.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/util/dsl.dart';
 
@@ -48,46 +48,42 @@ class BulletinPage extends StatelessWidget {
     await BulletinInitializer.session.request('https://myportal.sit.edu.cn/', RequestMethod.get);
 
     final service = BulletinInitializer.bulletin;
-    final catalogues = service.getAllCatalogues();
+
+    // 获取所有分类
+    final catalogues = await service.getAllCatalogues();
+
+    // 获取所有分类中的第一页
     final futureResult = await Future.wait(catalogues.map((e) => service.queryBulletinList(page, e.id)));
 
-    final List<BulletinRecord> records = futureResult.fold(<BulletinRecord>[],
-        (List<BulletinRecord> previousValue, BulletinListPage page) => previousValue + page.bulletinItems).toList();
+    // 合并所有分类的第一页的公告项
+    final List<BulletinRecord> records = futureResult.fold(
+      <BulletinRecord>[],
+      (List<BulletinRecord> previousValue, BulletinListPage page) => previousValue + page.bulletinItems,
+    ).toList();
     return records;
   }
 
-  static void _sortBulletinRecord(List<BulletinRecord> recordList) {
-    recordList.sort((a, b) {
-      return b.dateTime.difference(a.dateTime).inSeconds;
-    });
-  }
-
   Widget _buildBulletinList() {
-    final future = _queryBulletinListInAllCategory(1);
+    return MyFutureBuilder<List<BulletinRecord>>(
+      futureGetter: () => _queryBulletinListInAllCategory(1),
+      builder: (context, data) {
+        final records = data;
 
-    return FutureBuilder<List<BulletinRecord>>(
-        future: future,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasData) {
-              final records = snapshot.data!;
-              _sortBulletinRecord(records);
+        // 公告项按时间排序
+        records.sort((a, b) => b.dateTime.difference(a.dateTime).inSeconds);
 
-              final items = records
-                  .map((e) => Column(
-                        children: [
-                          _buildBulletinItem(context, e),
-                          const Divider(),
-                        ],
-                      ))
-                  .toList();
-              return SingleChildScrollView(child: Column(children: items));
-            } else if (snapshot.hasError) {
-              return Center(child: Text('${i18n.failed}: ${snapshot.error.runtimeType}'));
-            }
-          }
-          return const Center(child: CircularProgressIndicator());
-        });
+        final items = records
+            .map((e) => Column(children: [
+                  _buildBulletinItem(context, e),
+                  const Divider(),
+                ]))
+            .toList();
+        return SingleChildScrollView(child: Column(children: items));
+      },
+      onErrorBuilder: (context, fb, error, stack) {
+        return Center(child: Text('${i18n.failed}: ${error.runtimeType}'));
+      },
+    );
   }
 
   @override
