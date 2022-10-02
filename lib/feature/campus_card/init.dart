@@ -24,7 +24,7 @@ import 'service/campus_card.dart';
 class CampusCardInitializer {
   static late CampusCardDao campusCardService;
 
-  static void init({required Session session}) {
+  static void init({required ISession session}) {
     campusCardService = CampusCardService(session);
   }
 }

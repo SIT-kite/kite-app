@@ -20,14 +20,14 @@ import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:kite/network/session.dart';
 
 class AuthServerService {
-  final Session session;
+  final ISession session;
 
   const AuthServerService(this.session);
 
   Future<String> getPersonName() async {
     final response = await session.request(
       'https://authserver.sit.edu.cn/authserver/index.do',
-      RequestMethod.get,
+      ReqMethod.get,
       options: SessionOptions(
         headers: {
           'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:46.0) Gecko/20100101 Firefox/46.0',

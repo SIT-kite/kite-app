@@ -23,7 +23,7 @@ import '../entity/book_search.dart';
 import 'constant.dart';
 
 class BookSearchService implements BookSearchDao {
-  final Session session;
+  final ISession session;
 
   const BookSearchService(this.session);
 
@@ -96,7 +96,7 @@ class BookSearchService implements BookSearchDao {
   }) async {
     var response = await session.request(
       Constants.searchUrl,
-      RequestMethod.get,
+      ReqMethod.get,
       queryParameters: {
         'q': keyword,
         'searchType': 'standard',

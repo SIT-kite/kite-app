@@ -4,7 +4,7 @@ abstract class Downloader {
   Future<void> download(
     String url, {
     String? savePath,
-    MyProgressCallback? onReceiveProgress,
+    SessionProgressCallback? onReceiveProgress,
     Map<String, String>? queryParameters,
     dynamic data,
     SessionOptions? options,

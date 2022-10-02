@@ -25,7 +25,7 @@ import '../entity/index.dart';
 const String serviceMessageCount = 'https://xgfy.sit.edu.cn/unifri-flow/user/queryFlowCount';
 
 class OfficeMessageService {
-  final Session session;
+  final ISession session;
 
   const OfficeMessageService(this.session);
 
@@ -34,11 +34,11 @@ class OfficeMessageService {
 
     final response = await session.request(
       serviceMessageCount,
-      RequestMethod.post,
+      ReqMethod.post,
       data: payload,
       options: SessionOptions(
         contentType: 'application/x-www-form-urlencoded;charset=utf-8',
-        responseType: MyResponseType.json,
+        responseType: SessionResType.json,
       ),
     );
     final Map<String, dynamic> data = response.data;
@@ -52,11 +52,11 @@ class OfficeMessageService {
 
     final response = await session.request(
       url,
-      RequestMethod.post,
+      ReqMethod.post,
       data: payload,
       options: SessionOptions(
         contentType: 'application/x-www-form-urlencoded',
-        responseType: MyResponseType.json,
+        responseType: SessionResType.json,
       ),
     );
     final List data = jsonDecode(response.data);

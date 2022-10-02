@@ -28,7 +28,7 @@ class GameInitializer {
   static late RankingService rankingService;
   static GameManager gameManager = GameManager();
 
-  static init({required Box<dynamic> gameBox, required Session kiteSession}) async {
+  static init({required Box<dynamic> gameBox, required ISession kiteSession}) async {
     gameRecord = GameStorage(gameBox);
     rankingService = RankingService(kiteSession);
     // 注册游戏

@@ -25,7 +25,7 @@ import 'package:kite/util/logger.dart';
 
 import 'dio_common.dart';
 
-class SitAppSession implements Session {
+class SitAppSession implements ISession {
   final Dio dio;
   final JwtDao jwtDao;
 
@@ -133,14 +133,14 @@ class SitAppSession implements Session {
   }
 
   @override
-  Future<MyResponse> request(
+  Future<SessionRes> request(
     String url,
-    RequestMethod method, {
+    ReqMethod method, {
     Map<String, String>? queryParameters,
     data,
     SessionOptions? options,
-    MyProgressCallback? onSendProgress,
-    MyProgressCallback? onReceiveProgress,
+    SessionProgressCallback? onSendProgress,
+    SessionProgressCallback? onReceiveProgress,
   }) async {
     Response response = await _dioRequest(
       url,

@@ -26,7 +26,7 @@ import '../entity/campus_card.dart';
 const String _cardService = 'http://210.35.98.178:7101/LMWeb/WebApi/HYongHu.ashx';
 
 class CampusCardService implements CampusCardDao {
-  final Session session;
+  final ISession session;
 
   const CampusCardService(this.session);
 

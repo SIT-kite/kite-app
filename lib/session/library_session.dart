@@ -71,7 +71,7 @@ class LibrarySession extends DefaultDioSession {
   }
 
   Future<dynamic> _getRSAPublicKey() async {
-    final pemResponse = await request(_pemUrl, RequestMethod.get);
+    final pemResponse = await request(_pemUrl, ReqMethod.get);
     String publicKeyStr = pemResponse.data;
     final pemFileContent = '-----BEGIN PUBLIC KEY-----\n$publicKeyStr\n-----END PUBLIC KEY-----';
 

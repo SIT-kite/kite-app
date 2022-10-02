@@ -29,7 +29,7 @@ class ExpenseInitializer {
   static late ExpenseLocalStorage expenseRecord;
 
   static Future<void> init({
-    required Session ssoSession,
+    required ISession ssoSession,
     required Box<ExpenseRecord> expenseRecordBox,
   }) async {
     expenseRecord = ExpenseLocalStorage(expenseRecordBox);

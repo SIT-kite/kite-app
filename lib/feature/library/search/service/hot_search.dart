@@ -23,7 +23,7 @@ import '../entity/hot_search.dart';
 import 'constant.dart';
 
 class HotSearchService implements HotSearchDao {
-  final Session session;
+  final ISession session;
 
   const HotSearchService(this.session);
 
@@ -37,7 +37,7 @@ class HotSearchService implements HotSearchDao {
 
   @override
   Future<HotSearch> getHotSearch() async {
-    var response = await session.request(Constants.hotSearchUrl, RequestMethod.get);
+    var response = await session.request(Constants.hotSearchUrl, ReqMethod.get);
     var fieldsets = BeautifulSoup(response.data).findAll('fieldset');
 
     List<HotSearchItem> getHotSearchItems(Bs4Element fieldset) {

@@ -19,7 +19,7 @@ import 'package:kite/network/session.dart';
 import 'package:kite/session/sso/index.dart';
 import 'package:kite/util/logger.dart';
 
-class EduSession extends Session {
+class EduSession extends ISession {
   final SsoSession ssoSession;
 
   EduSession(this.ssoSession) {
@@ -27,24 +27,24 @@ class EduSession extends Session {
   }
 
   Future<void> _refreshCookie() async {
-    await ssoSession.request('http://jwxt.sit.edu.cn/sso/jziotlogin', RequestMethod.get);
+    await ssoSession.request('http://jwxt.sit.edu.cn/sso/jziotlogin', ReqMethod.get);
   }
 
-  bool _isRedirectedToLoginPage(MyResponse response) {
+  bool _isRedirectedToLoginPage(SessionRes response) {
     return response.realUri.path == '/jwglxt/xtgl/login_slogin.html';
   }
 
   @override
-  Future<MyResponse> request(
+  Future<SessionRes> request(
     String url,
-    RequestMethod method, {
+    ReqMethod method, {
     Map<String, String>? queryParameters,
     data,
     SessionOptions? options,
-    MyProgressCallback? onSendProgress,
-    MyProgressCallback? onReceiveProgress,
+    SessionProgressCallback? onSendProgress,
+    SessionProgressCallback? onReceiveProgress,
   }) async {
-    Future<MyResponse> fetch() async {
+    Future<SessionRes> fetch() async {
       return await ssoSession.request(
         url,
         method,

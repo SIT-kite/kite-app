@@ -20,8 +20,8 @@ import 'package:kite/network/session.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
 
-class FreshmanSession extends Session {
-  final Session _session;
+class FreshmanSession extends ISession {
+  final ISession _session;
   final FreshmanCacheDao _freshmanCacheDao;
 
   FreshmanSession(this._session, this._freshmanCacheDao) {
@@ -29,16 +29,16 @@ class FreshmanSession extends Session {
   }
 
   @override
-  Future<MyResponse> request(
+  Future<SessionRes> request(
     String url,
-    RequestMethod method, {
+    ReqMethod method, {
     Map<String, String>? queryParameters,
     data,
     SessionOptions? options,
-    MyProgressCallback? onSendProgress,
-    MyProgressCallback? onReceiveProgress,
+    SessionProgressCallback? onSendProgress,
+    SessionProgressCallback? onReceiveProgress,
   }) async {
-    Future<MyResponse> myRequest(
+    Future<SessionRes> myRequest(
       dynamic data1,
       String url1,
       Map<String, String>? queryParameters1,
@@ -66,7 +66,7 @@ class FreshmanSession extends Session {
     final String myUrl = '/freshman/$account$url';
 
     // 如果是GET请求，登录态直接注入到 queryParameters 中
-    if (method == RequestMethod.get) {
+    if (method == ReqMethod.get) {
       final myQuery = queryParameters ?? {};
       myQuery['secret'] = secret;
       return await myRequest(data, myUrl, myQuery);

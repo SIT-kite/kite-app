@@ -31,7 +31,7 @@ class FreshmanInitializer {
   static late FreshmanCacheDao freshmanCacheDao;
 
   static Future<void> init({
-    required Session kiteSession,
+    required ISession kiteSession,
   }) async {
     freshmanCacheDao = Kv.freshman;
     freshmanSession = FreshmanSession(kiteSession, freshmanCacheDao);

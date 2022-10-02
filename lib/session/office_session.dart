@@ -27,7 +27,7 @@ import 'dio_common.dart';
 /// 应网办登录地址, POST 请求
 const String _officeLoginUrl = 'https://xgfy.sit.edu.cn/unifri-flow/login';
 
-class OfficeSession extends Session {
+class OfficeSession extends ISession {
   bool isLogin = false;
   String? username;
   String? jwtToken;
@@ -66,14 +66,14 @@ class OfficeSession extends Session {
   }
 
   @override
-  Future<MyResponse> request(
+  Future<SessionRes> request(
     String url,
-    RequestMethod method, {
+    ReqMethod method, {
     Map<String, String>? queryParameters,
     dynamic data,
     SessionOptions? options,
-    MyProgressCallback? onSendProgress,
-    MyProgressCallback? onReceiveProgress,
+    SessionProgressCallback? onSendProgress,
+    SessionProgressCallback? onReceiveProgress,
   }) async {
     Options newOptions = options?.toDioOptions() ?? Options();
 
@@ -87,7 +87,7 @@ class OfficeSession extends Session {
     };
 
     newOptions.headers == null ? newOptions.headers = newHeaders : newOptions.headers?.addAll(newHeaders);
-    newOptions.method = method.toUpperCaseString();
+    newOptions.method = method.uppercaseName;
 
     final response = await dio.request(
       url,

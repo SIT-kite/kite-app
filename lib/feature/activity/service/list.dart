@@ -37,7 +37,7 @@ class ScActivityListService implements ScActivityListDao {
   static String selector = '.ul_7 li > a';
   static DateFormat dateFormatParser = DateFormat('yyyy-MM-dd hh:mm:ss');
 
-  final Session session;
+  final ISession session;
 
   const ScActivityListService(this.session);
 
@@ -49,7 +49,7 @@ class ScActivityListService implements ScActivityListDao {
     }
 
     final url = _generateUrl(type, page);
-    final response = await session.request(url, RequestMethod.get);
+    final response = await session.request(url, ReqMethod.get);
 
     return _parseActivityList(response.data);
   }
@@ -57,7 +57,7 @@ class ScActivityListService implements ScActivityListDao {
   @override
   Future<List<Activity>> query(String queryString) async {
     const String url = 'http://sc.sit.edu.cn/public/activity/activityList.action';
-    final response = await session.request(url, RequestMethod.post, data: {
+    final response = await session.request(url, ReqMethod.post, data: {
       'activityName': queryString,
     });
 

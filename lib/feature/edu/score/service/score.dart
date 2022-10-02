@@ -43,14 +43,14 @@ class ScoreService implements ScoreDao {
   static const _scoreFormSelector = 'td:nth-child(1)';
   static const _scorePercentageSelector = 'td:nth-child(3)';
   static const _scoreValueSelector = 'td:nth-child(5)';
-  final Session session;
+  final ISession session;
 
   const ScoreService(this.session);
 
   /// 获取成绩
   @override
   Future<List<Score>> getScoreList(SchoolYear schoolYear, Semester semester) async {
-    final response = await session.request(_scoreUrl, RequestMethod.post, queryParameters: {
+    final response = await session.request(_scoreUrl, ReqMethod.post, queryParameters: {
       'gnmkdm': 'N305005',
       'doType': 'query',
     }, data: {
@@ -69,7 +69,7 @@ class ScoreService implements ScoreDao {
   Future<List<ScoreDetail>> getScoreDetail(String classId, SchoolYear schoolYear, Semester semester) async {
     var response = await session.request(
       _scoreDetailUrl,
-      RequestMethod.post,
+      ReqMethod.post,
       queryParameters: {'gnmkdm': 'N305005'},
       data: {
         // 班级

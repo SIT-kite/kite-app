@@ -27,7 +27,7 @@ import 'entity.dart';
 import 'service.dart';
 
 class ReportInitializer {
-  static late Session session;
+  static late ISession session;
   static late ReportDao reportService;
 
   static void init({

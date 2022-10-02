@@ -21,7 +21,7 @@ import 'package:kite/network/session.dart';
 import 'dao.dart';
 
 class ArriveCodeService implements ArriveCodeDao {
-  final Session session;
+  final ISession session;
 
   const ArriveCodeService(this.session);
 
@@ -29,7 +29,7 @@ class ArriveCodeService implements ArriveCodeDao {
   Future<String> arrive(String code) async {
     final response = await session.request(
       'https://xgfy.sit.edu.cn//regist/scan/appAdd',
-      RequestMethod.post,
+      ReqMethod.post,
       data: {'place': code},
     );
     return response.data['msg'];

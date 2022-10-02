@@ -16,17 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class MyResponse<T> {
+class SessionRes<T> {
   T data;
   Uri realUri;
 
-  MyResponse({
+  SessionRes({
     required this.data,
     required this.realUri,
   });
 }
 
-enum MyResponseType { json, stream, plain, bytes }
+enum SessionResType { json, stream, plain, bytes }
 
 class HeaderConstants {
   static const jsonContentType = 'application/json; charset=utf-8';
@@ -40,7 +40,7 @@ class SessionOptions {
   int? receiveTimeout;
   Map<String, dynamic>? extra;
   Map<String, dynamic>? headers;
-  MyResponseType? responseType;
+  SessionResType? responseType;
   String? contentType;
 
   SessionOptions({
@@ -54,25 +54,29 @@ class SessionOptions {
   });
 }
 
-typedef MyProgressCallback = void Function(int count, int total);
+typedef SessionProgressCallback = void Function(int count, int total);
 
-enum RequestMethod {
-  get,
-  post,
-  delete,
-  patch,
-  update,
-  put,
+enum ReqMethod {
+  get("GET"),
+  post("POST"),
+  delete("DELETE"),
+  patch("PATCH"),
+  update("UPDATE"),
+  put("PUT");
+
+  final String uppercaseName;
+
+  const ReqMethod(this.uppercaseName);
 }
 
-abstract class Session {
-  Future<MyResponse> request(
+abstract class ISession {
+  Future<SessionRes> request(
     String url,
-    RequestMethod method, {
+    ReqMethod method, {
     Map<String, String>? queryParameters,
     dynamic data,
     SessionOptions? options,
-    MyProgressCallback? onSendProgress,
-    MyProgressCallback? onReceiveProgress,
+    SessionProgressCallback? onSendProgress,
+    SessionProgressCallback? onReceiveProgress,
   });
 }

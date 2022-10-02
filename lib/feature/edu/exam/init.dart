@@ -24,7 +24,7 @@ import 'service/exam.dart';
 class ExamInitializer {
   static late ExamDao examService;
 
-  static void init(Session eduSession) {
+  static void init(ISession eduSession) {
     examService = ExamService(eduSession);
   }
 }

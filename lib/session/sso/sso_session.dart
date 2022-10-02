@@ -34,7 +34,7 @@ import 'encryption.dart';
 
 typedef SsoSessionErrorCallback = void Function(Object e, StackTrace t);
 
-class SsoSession with MyDioDownloaderMixin implements Session {
+class SsoSession with DioDownloaderMixin implements ISession {
   static const int _maxRetryCount = 5;
   static const String _authServerUrl = 'https://authserver.sit.edu.cn/authserver';
   static const String _loginUrl = '$_authServerUrl/login';
@@ -356,18 +356,18 @@ class SsoSession with MyDioDownloaderMixin implements Session {
   }
 
   @override
-  Future<MyResponse> request(
+  Future<SessionRes> request(
     String url,
-    RequestMethod method, {
+    ReqMethod method, {
     Map<String, String>? queryParameters,
     data,
     SessionOptions? options,
-    MyProgressCallback? onSendProgress,
-    MyProgressCallback? onReceiveProgress,
+    SessionProgressCallback? onSendProgress,
+    SessionProgressCallback? onReceiveProgress,
   }) async {
     Response response = await _dioRequest(
       url,
-      method.toUpperCaseString(),
+      method.uppercaseName,
       queryParameters: queryParameters,
       data: data,
       options: options?.toDioOptions(),

@@ -26,14 +26,14 @@ class RankingService implements RankingServiceDao {
   static const _rankingPrefix = '/game/ranking/';
   static const _uploadScore = '/game/record';
 
-  final Session session;
+  final ISession session;
 
   const RankingService(this.session);
 
   ///发送请求，获取游戏排名
   @override
   Future<List<GameRankingItem>> getGameRanking(int gameId) async {
-    final response = await session.request(_rankingPrefix + gameId.toString(), RequestMethod.get);
+    final response = await session.request(_rankingPrefix + gameId.toString(), ReqMethod.get);
     final List person = response.data;
 
     return person.map((e) => GameRankingItem.fromJson(e as Map<String, dynamic>)).toList();
@@ -42,6 +42,6 @@ class RankingService implements RankingServiceDao {
   @override
   Future<void> postScore(GameRecord record) async {
     Log.info(record.toJson());
-    await session.request(_uploadScore, RequestMethod.post, data: record.toJson());
+    await session.request(_uploadScore, ReqMethod.post, data: record.toJson());
   }
 }

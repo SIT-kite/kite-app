@@ -22,7 +22,7 @@ import '../entity/evaluation.dart';
 
 class CourseEvaluationService implements CourseEvaluationDao {
   static const _serviceUrl = 'http://jwxt.sit.edu.cn/jwglxt/xspjgl/xspj_cxXspjIndex.html?doType=query&gnmkdm=N401605';
-  final Session session;
+  final ISession session;
 
   const CourseEvaluationService(this.session);
 
@@ -43,7 +43,7 @@ class CourseEvaluationService implements CourseEvaluationDao {
       'time': 0
     };
 
-    final response = await session.request(_serviceUrl, RequestMethod.post, data: form);
+    final response = await session.request(_serviceUrl, ReqMethod.post, data: form);
     return _parseEvaluationList(response.data);
   }
 }

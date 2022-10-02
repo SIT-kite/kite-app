@@ -24,12 +24,12 @@ import '../entity/classroom.dart';
 class ClassroomService implements ClassroomRemoteDao {
   static const _classroomUrl = '/classroom/available';
 
-  final Session session;
+  final ISession session;
   const ClassroomService(this.session);
 
   @override
   Future<List<AvailableClassroom>> queryAvailableClassroom(int campus, String date) async {
-    final response = await session.request('$_classroomUrl?campus=$campus&date=$date', RequestMethod.get);
+    final response = await session.request('$_classroomUrl?campus=$campus&date=$date', ReqMethod.get);
     final List classrooms = response.data;
 
     return classrooms.map((e) => AvailableClassroom.fromJson(e as Map<String, dynamic>)).toList();

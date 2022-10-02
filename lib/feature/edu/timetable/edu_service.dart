@@ -26,7 +26,7 @@ import 'entity.dart';
 class TimetableService {
   static const _timetableUrl = 'http://jwxt.sit.edu.cn/jwglxt/kbcx/xskbcx_cxXsgrkb.html';
 
-  final Session session;
+  final ISession session;
   TimetableService(this.session);
 
   static List<Course> _parseTimetable(Map<String, dynamic> json) {
@@ -39,7 +39,7 @@ class TimetableService {
   Future<List<Course>> getTimetable(SchoolYear schoolYear, Semester semester) async {
     final response = await session.request(
       _timetableUrl,
-      RequestMethod.post,
+      ReqMethod.post,
       queryParameters: {'gnmkdm': 'N253508'},
       data: {
         // 学年名

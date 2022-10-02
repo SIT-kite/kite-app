@@ -35,7 +35,7 @@ class ExpenseRemoteService implements ExpenseRemoteDao {
   };
   static const _codec = GbkCodec();
 
-  final Session session;
+  final ISession session;
 
   const ExpenseRemoteService(this.session);
 
@@ -47,13 +47,13 @@ class ExpenseRemoteService implements ExpenseRemoteDao {
   }) async {
     final response = await session.request(
       _expenseUrl,
-      RequestMethod.get,
+      ReqMethod.get,
       queryParameters: {
         'page': page.toString(),
         'from': start.yyyyMMdd,
         'to': end.yyyyMMdd,
       },
-      options: SessionOptions(responseType: MyResponseType.bytes),
+      options: SessionOptions(responseType: SessionResType.bytes),
     );
 
     return _parseExpenseDetail(_codec.decode(response.data));

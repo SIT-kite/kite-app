@@ -28,7 +28,7 @@ import 'dio_common.dart';
 
 const String _baseUrl = 'https://kite.sunnysab.cn/api/v2';
 
-class KiteSession implements Session {
+class KiteSession implements ISession {
   final Dio dio;
   final JwtDao jwtDao;
   final KiteStorageDao kiteDao;
@@ -139,18 +139,18 @@ class KiteSession implements Session {
   }
 
   @override
-  Future<MyResponse> request(
+  Future<SessionRes> request(
     String url,
-    RequestMethod method, {
+    ReqMethod method, {
     Map<String, String>? queryParameters,
     data,
     SessionOptions? options,
-    MyProgressCallback? onSendProgress,
-    MyProgressCallback? onReceiveProgress,
+    SessionProgressCallback? onSendProgress,
+    SessionProgressCallback? onReceiveProgress,
   }) async {
     Response response = await _dioRequest(
       url,
-      method.toUpperCaseString(),
+      method.uppercaseName,
       queryParameters: queryParameters,
       data: data,
       options: options?.toDioOptions(),

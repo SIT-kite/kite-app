@@ -217,13 +217,13 @@ class _BookHoldingInfo {
 }
 
 class HoldingInfoService implements HoldingInfoDao {
-  final Session session;
+  final ISession session;
 
   const HoldingInfoService(this.session);
 
   @override
   Future<HoldingInfo> queryByBookId(String bookId) async {
-    var response = await session.request('${Constants.bookHoldingUrl}/$bookId', RequestMethod.get);
+    var response = await session.request('${Constants.bookHoldingUrl}/$bookId', ReqMethod.get);
 
     var rawBookHoldingInfo = _BookHoldingInfo.fromJson(response.data);
     var result = rawBookHoldingInfo.holdingList.map((rawHoldingItem) {
@@ -267,7 +267,7 @@ class HoldingInfoService implements HoldingInfoDao {
   Future<List<String>> searchNearBookIdList(String bookId) async {
     var response = await session.request(
       Constants.virtualBookshelfUrl,
-      RequestMethod.get,
+      ReqMethod.get,
       queryParameters: {
         'bookrecno': bookId,
 

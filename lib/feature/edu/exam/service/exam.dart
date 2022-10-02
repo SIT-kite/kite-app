@@ -27,7 +27,7 @@ import '../entity/exam.dart';
 /// More reading: https://github.com/sunnysab/zf-tools/blob/master/TRANSLATION.md
 class ExamService implements ExamDao {
   static const _examRoomUrl = 'http://jwxt.sit.edu.cn/jwglxt/kwgl/kscx_cxXsksxxIndex.html';
-  final Session session;
+  final ISession session;
 
   const ExamService(this.session);
 
@@ -36,7 +36,7 @@ class ExamService implements ExamDao {
   Future<List<ExamRoom>> getExamList(SchoolYear schoolYear, Semester semester) async {
     var response = await session.request(
       _examRoomUrl,
-      RequestMethod.post,
+      ReqMethod.post,
       queryParameters: {
         'doType': 'query',
         'gnmkdm': 'N358105',

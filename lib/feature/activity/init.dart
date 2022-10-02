@@ -31,7 +31,7 @@ class ScInitializer {
   static late ScScoreDao scScoreService;
 
   static void init({
-    required Session ssoSession,
+    required ISession ssoSession,
   }) {
     session = ScSession(ssoSession);
     scActivityListService = ScActivityListService(session);

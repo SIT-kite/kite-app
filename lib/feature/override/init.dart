@@ -9,7 +9,7 @@ class FunctionOverrideInitializer {
   static late FunctionOverrideServiceDao cachedService;
 
   static void init({
-    required Session kiteSession,
+    required ISession kiteSession,
     required FunctionOverrideStorageDao storageDao,
   }) {
 /*    cachedService = FunctionOverrideCachedService(

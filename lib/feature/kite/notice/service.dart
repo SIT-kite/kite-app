@@ -23,7 +23,7 @@ import 'entity.dart';
 class NoticeService implements NoticeServiceDao {
   static const String _noticePath = '/notice';
 
-  final Session session;
+  final ISession session;
 
   const NoticeService(this.session);
 
@@ -37,7 +37,7 @@ class NoticeService implements NoticeServiceDao {
 
   @override
   Future<List<KiteNotice>> getNoticeList() async {
-    final response = await session.request(_noticePath, RequestMethod.get);
+    final response = await session.request(_noticePath, ReqMethod.get);
     final List noticeList = response.data;
 
     List<KiteNotice> result = noticeList.map((e) => KiteNotice.fromJson(e)).toList();

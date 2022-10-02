@@ -25,7 +25,7 @@ import '../entity/book_info.dart';
 import 'constant.dart';
 
 class BookInfoService implements BookInfoDao {
-  final Session session;
+  final ISession session;
 
   const BookInfoService(this.session);
 
@@ -44,7 +44,7 @@ class BookInfoService implements BookInfoDao {
 
   @override
   Future<BookInfo> query(String bookId) async {
-    final response = await session.request('${Constants.bookUrl}/$bookId', RequestMethod.get);
+    final response = await session.request('${Constants.bookUrl}/$bookId', ReqMethod.get);
     final html = response.data;
 
     final detailItems = BeautifulSoup(html)

@@ -45,7 +45,7 @@ class BulletinPage extends StatelessWidget {
 
   Future<List<BulletinRecord>> _queryBulletinListInAllCategory(int page) async {
     // Make sure login.
-    await BulletinInitializer.session.request('https://myportal.sit.edu.cn/', RequestMethod.get);
+    await BulletinInitializer.session.request('https://myportal.sit.edu.cn/', ReqMethod.get);
 
     final service = BulletinInitializer.bulletin;
 

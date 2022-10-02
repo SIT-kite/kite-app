@@ -24,7 +24,7 @@ const String serviceFunctionList = 'https://xgfy.sit.edu.cn/app/public/queryAppM
 const String serviceFunctionDetail = 'https://xgfy.sit.edu.cn/app/public/queryAppFormJson';
 
 class OfficeFunctionService {
-  final Session session;
+  final ISession session;
 
   const OfficeFunctionService(this.session);
 
@@ -33,9 +33,9 @@ class OfficeFunctionService {
 
     final response = await session.request(
       serviceFunctionList,
-      RequestMethod.post,
+      ReqMethod.post,
       data: payload,
-      options: SessionOptions(responseType: MyResponseType.json),
+      options: SessionOptions(responseType: SessionResType.json),
     );
 
     final Map<String, dynamic> data = response.data;
@@ -58,9 +58,9 @@ class OfficeFunctionService {
 
     final response = await session.request(
       serviceFunctionDetail,
-      RequestMethod.post,
+      ReqMethod.post,
       data: payload,
-      options: SessionOptions(responseType: MyResponseType.json),
+      options: SessionOptions(responseType: SessionResType.json),
     );
     final Map<String, dynamic> data = response.data;
     final List<FunctionDetailSection> sections =

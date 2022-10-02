@@ -23,7 +23,7 @@ import 'package:kite/network/session.dart';
 
 import 'dio_common.dart';
 
-class ReportSession extends Session {
+class ReportSession extends ISession {
   final Dio dio;
   String? username;
 
@@ -73,18 +73,18 @@ class ReportSession extends Session {
   }
 
   @override
-  Future<MyResponse> request(
+  Future<SessionRes> request(
     String url,
-    RequestMethod method, {
+    ReqMethod method, {
     Map<String, String>? queryParameters,
     data,
     SessionOptions? options,
-    MyProgressCallback? onSendProgress,
-    MyProgressCallback? onReceiveProgress,
+    SessionProgressCallback? onSendProgress,
+    SessionProgressCallback? onReceiveProgress,
   }) async {
     Response response = await _dioRequest(
       url,
-      method.toUpperCaseString(),
+      method.uppercaseName,
       queryParameters: queryParameters,
       data: data,
       options: options?.toDioOptions(),

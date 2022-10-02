@@ -9,7 +9,7 @@ void main() async {
   await login();
   var session = Global.ssoSession;
   test('test login', () async {
-    final index = await session.request('https://myportal.sit.edu.cn/', RequestMethod.get);
+    final index = await session.request('https://myportal.sit.edu.cn/', ReqMethod.get);
     final list = BeautifulSoup(index.data)
         .find('div', class_: 'composer')!
         .findAll('li')

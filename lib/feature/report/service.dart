@@ -22,7 +22,7 @@ import 'dao.dart';
 import 'entity.dart';
 
 class ReportService implements ReportDao {
-  final Session session;
+  final ISession session;
 
   const ReportService(this.session);
 
@@ -32,14 +32,14 @@ class ReportService implements ReportDao {
   Future<List<ReportHistory>> getHistoryList(String userId) async {
     final response = await session.request(
       _historyUrl,
-      RequestMethod.post,
+      ReqMethod.post,
       data: {
         'usercode': userId,
         'batchno': '', // TODO：batchno 填入今天日期？yyyyMMdd
       },
       options: SessionOptions(
         contentType: HeaderConstants.jsonContentType,
-        responseType: MyResponseType.json,
+        responseType: SessionResType.json,
       ),
     );
 

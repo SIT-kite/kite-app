@@ -3,24 +3,18 @@ import 'package:kite/network/session.dart';
 
 import '../network/download.dart';
 
-extension RequestMethodEnumToString on RequestMethod {
-  String toUpperCaseString() {
-    return name.toUpperCase();
-  }
-}
-
-extension MyResponseTypeToDioResponseType on MyResponseType {
+extension DioResTypeConverter on SessionResType {
   ResponseType toDioResponseType() {
-    return {
-      MyResponseType.json: ResponseType.json,
-      MyResponseType.stream: ResponseType.stream,
-      MyResponseType.plain: ResponseType.plain,
-      MyResponseType.bytes: ResponseType.bytes,
-    }[this]!;
+    return (const {
+      SessionResType.json: ResponseType.json,
+      SessionResType.stream: ResponseType.stream,
+      SessionResType.plain: ResponseType.plain,
+      SessionResType.bytes: ResponseType.bytes,
+    })[this]!;
   }
 }
 
-extension MyOptionsToDioOptions on SessionOptions {
+extension DioOptionsConverter on SessionOptions {
   Options toDioOptions() {
     return Options(
       method: method,
@@ -34,24 +28,25 @@ extension MyOptionsToDioOptions on SessionOptions {
   }
 }
 
-extension DioResponseToMyResponse on Response {
-  MyResponse toMyResponse() {
-    return MyResponse(
+extension SessionResConverter on Response {
+  SessionRes toMyResponse() {
+    return SessionRes(
       data: data,
       realUri: realUri,
     );
   }
 }
 
-class MyDioDownloader implements Downloader {
+class DioDownloader implements Downloader {
   Dio dio;
-  MyDioDownloader(this.dio);
+
+  DioDownloader(this.dio);
 
   @override
   Future<void> download(
     String url, {
     String? savePath,
-    MyProgressCallback? onReceiveProgress,
+    SessionProgressCallback? onReceiveProgress,
     Map<String, String>? queryParameters,
     data,
     SessionOptions? options,
@@ -67,19 +62,19 @@ class MyDioDownloader implements Downloader {
   }
 }
 
-mixin MyDioDownloaderMixin implements Downloader {
+mixin DioDownloaderMixin implements Downloader {
   Dio get dio;
 
   @override
   Future<void> download(
     String url, {
     String? savePath,
-    MyProgressCallback? onReceiveProgress,
+    SessionProgressCallback? onReceiveProgress,
     Map<String, String>? queryParameters,
     data,
     SessionOptions? options,
   }) async {
-    await MyDioDownloader(dio).download(
+    await DioDownloader(dio).download(
       url,
       savePath: savePath,
       onReceiveProgress: onReceiveProgress,
@@ -90,21 +85,21 @@ mixin MyDioDownloaderMixin implements Downloader {
   }
 }
 
-class DefaultDioSession with MyDioDownloaderMixin implements Session {
+class DefaultDioSession with DioDownloaderMixin implements ISession {
   @override
   Dio dio;
 
   DefaultDioSession(this.dio);
 
   @override
-  Future<MyResponse> request(
+  Future<SessionRes> request(
     String url,
-    RequestMethod method, {
+    ReqMethod method, {
     Map<String, String>? queryParameters,
     data,
     SessionOptions? options,
-    MyProgressCallback? onSendProgress,
-    MyProgressCallback? onReceiveProgress,
+    SessionProgressCallback? onSendProgress,
+    SessionProgressCallback? onReceiveProgress,
   }) async {
     final response = await dio.request(
       url,
