@@ -1,5 +1,8 @@
 # Contribution Guide
 
+Kite is developed and maintained by the SIT YiBan Workstation,
+hereinafter referred to as Kite Team.
+
 ## Getting Started
 
 ``` shell
@@ -16,8 +19,8 @@ flutter pub run flutter_native_splash:create
 
 ### Flutter
 
-Kite always works with the latest Flutter.
-As of press time, Kite uses:
+Kite Team always works with the latest Flutter.
+As of press time, Kite Team uses:
 
 - Flutter 3.3.3
 

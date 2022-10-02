@@ -25,11 +25,11 @@ But for [some reasons][Migrate], we have to migrate to this one.
 
 ## Related Projects
 
-[`kite-server`][Kite-Server]:  The back-end API server
+[`kite-server`][Kite-Server]  The back-end API server
 
-[`kite-agent`][Kite-Agent]: A legacy back-end crawler
+[`kite-agent`][Kite-Agent] A legacy back-end crawler
 
-[`kite-string`][Kite-String]: A campus network tool
+[`kite-string`][Kite-String] A campus network tool
 
 ## Contact Us
 

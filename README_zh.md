@@ -25,11 +25,11 @@
 
 ## 相关项目
 
-[`kite-server`][Kite-Server]: 后端 API 服务器
+[`kite-server`][Kite-Server] 后端 API 服务器
 
-[`kite-agent`][Kite-Agent]: 遗留的后端数据获取工具
+[`kite-agent`][Kite-Agent] 遗留的后端数据获取工具
 
-[`kite-string`][Kite-String]: 校园网络工具
+[`kite-string`][Kite-String] 校园网络工具
 
 [Gitee 镜像](https://gitee.com/SIT-kite/kite-app)
 
@@ -45,10 +45,11 @@
 
 ## 招募启事
 
-在每年招新期间，你可以关注一下“上海应用技术大学易班”公众号，
-或通过有关QQ群，了解招新信息，加入校易班工作站（欢迎来技术部！）。
+每年招新时，你可以关注`上海应用技术大学易班`微信公众号或QQ群
 
-你也可以直接联系我们，联系方式见上“联系我们”，或对有关项目提交 issue、pull request，留下你的痕迹。
+了解招新信息, 加入校易班工作站, 欢迎加入技术部 !
+
+也可直接通过上述方式联系我们, 或直接提交 issue 或 pull request, 留下你的痕迹.
 
 ### 版权
 
