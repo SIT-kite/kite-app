@@ -21,8 +21,8 @@ import 'package:kite/user_widget/future_builder.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/util/dsl.dart';
 
-import 'entity/bulletin.dart';
-import 'init.dart';
+import '../entity/bulletin.dart';
+import '../init.dart';
 
 class NoticePage extends StatelessWidget {
   const NoticePage({Key? key}) : super(key: key);

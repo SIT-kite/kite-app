@@ -18,7 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/module/shared/entity/weather.dart';
-import 'package:kite/module/simple_page/weather.dart';
+import 'package:kite/module/simple_page/page/weather.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';

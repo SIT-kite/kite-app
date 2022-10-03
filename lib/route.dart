@@ -25,7 +25,7 @@ import 'package:kite/storage/init.dart';
 import 'package:kite/util/alert_dialog.dart';
 
 import 'module/symbol.dart';
-import 'module/simple_page/browser.dart';
+import 'module/simple_page/page/browser.dart';
 import 'navigation/route.dart';
 import 'setting/page/index.dart';
 import 'util/user.dart';
