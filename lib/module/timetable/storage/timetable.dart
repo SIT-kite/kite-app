@@ -21,7 +21,6 @@ import '../entity/course.dart';
 import '../entity/meta.dart';
 import '../using.dart';
 
-
 String buildTableName(SchoolYear schoolYear, Semester semester) => '${schoolYear.year!}-${semester.index}';
 
 class TimetableKeys {

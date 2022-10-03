@@ -21,13 +21,13 @@ import 'package:kite/home/page/index.dart';
 
 import 'package:kite/navigation/static_route.dart';
 import 'package:kite/override/entity.dart';
+import 'package:kite/settings/page/index.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/alert_dialog.dart';
 
 import 'module/symbol.dart';
 import 'module/simple_page/page/browser.dart';
 import 'navigation/route.dart';
-import 'setting/page/index.dart';
 import 'util/user.dart';
 
 class RouteTable {
@@ -103,7 +103,7 @@ final defaultRouteTable = StaticRouteTable(
     RouteTable.market: (context, args) => const MarketPage(),
     RouteTable.timetable: (context, args) => const TimetablePage(),
     RouteTable.timetableImport: (context, args) => const TimetableImportPage(),
-    RouteTable.setting: (context, args) => SettingPage(),
+    RouteTable.setting: (context, args) => SettingsPage(),
     RouteTable.feedback: (context, args) => const FeedbackPage(),
     RouteTable.notice: (context, args) => const NoticePage(),
     RouteTable.contact: (context, args) => const ContactPage(),

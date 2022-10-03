@@ -27,7 +27,7 @@ import 'package:kite/override/init.dart';
 import 'package:kite/session/edu_session.dart';
 import 'package:kite/session/kite_session.dart';
 import 'package:kite/session/sit_app_session.dart';
-import 'package:kite/setting/init.dart';
+import 'package:kite/settings/symbol.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -58,7 +58,7 @@ class Initializer {
     await HiveBoxInitializer.init('kite1/hive');
     await UserEventInitializer.init(userEventBox: HiveBoxInitializer.userEvent);
     KvInit.init(kvStorageBox: HiveBoxInitializer.kv);
-    SettingInitializer.init(kvStorageBox: HiveBoxInitializer.kv);
+    SettingsInitializer.init(kvStorageBox: HiveBoxInitializer.kv);
     await Global.init(
       userEventStorage: UserEventInitializer.userEventStorage,
       authSetting: Kv.auth,

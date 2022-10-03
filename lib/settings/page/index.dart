@@ -48,11 +48,11 @@ import 'package:universal_platform/universal_platform.dart';
 import 'home.dart';
 import 'storage.dart';
 
-class SettingPage extends StatelessWidget {
+class SettingsPage extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
   final bool isFreshman = AccountUtils.getUserType() == UserType.freshman;
 
-  SettingPage({Key? key}) : super(key: key);
+  SettingsPage({Key? key}) : super(key: key);
 
   Widget _negativeActionBuilderCancel(context, controller, _) {
     return TextButton(

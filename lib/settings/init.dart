@@ -20,7 +20,7 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:hive/hive.dart';
 import 'package:kite/util/hive_cache_provider.dart';
 
-class SettingInitializer {
+class SettingsInitializer {
   static void init({
     required Box<dynamic> kvStorageBox,
   }) {

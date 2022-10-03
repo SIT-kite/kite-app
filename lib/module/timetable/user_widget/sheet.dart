@@ -20,7 +20,6 @@ import 'package:flutter/material.dart';
 import '../entity/course.dart';
 import 'util.dart';
 
-
 class Sheet extends StatelessWidget {
   final String courseId;
   final List<Course> allCourses;

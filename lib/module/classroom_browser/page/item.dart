@@ -20,7 +20,6 @@ import 'package:flutter/material.dart';
 
 import '../entity/classroom.dart';
 
-
 class ClassroomItem extends StatelessWidget {
   final AvailableClassroom _classroom;
 
