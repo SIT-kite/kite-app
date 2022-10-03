@@ -21,7 +21,7 @@ import 'package:kite/network/session.dart';
 import 'dao/campus_card.dart';
 import 'service/campus_card.dart';
 
-class CampusCardInitializer {
+class CampusCardInit {
   static late CampusCardDao campusCardService;
 
   static void init({required ISession session}) {

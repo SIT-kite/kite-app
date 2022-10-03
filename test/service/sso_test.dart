@@ -18,7 +18,7 @@ void main() async {
     expect(list[0].contains('姓名'), true);
   });
   test('get person name', () async {
-    final name = await LoginInitializer.authServerService.getPersonName();
+    final name = await LoginInit.authServerService.getPersonName();
     print('姓名: $name');
   });
 }

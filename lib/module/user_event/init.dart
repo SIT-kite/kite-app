@@ -21,7 +21,7 @@ import 'package:hive/hive.dart';
 import 'dao.dart';
 import 'storage.dart';
 
-class UserEventInitializer {
+class UserEventInit {
   static late UserEventStorageDao userEventStorage;
 
   static Future<void> init({

@@ -85,7 +85,7 @@ class _CampusCardPageState extends State<CampusCardPage> {
     final completer = Completer();
     context.showBlockDialog(dismissCompleter: completer);
 
-    CampusCardInitializer.campusCardService.getCardInfo(cardUid).then((cardInfo) {
+    CampusCardInit.campusCardService.getCardInfo(cardUid).then((cardInfo) {
       completer.complete();
 
       setState(() {

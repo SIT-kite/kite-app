@@ -33,7 +33,7 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final GameManager gameManager = GameInitializer.gameManager;
+  final GameManager gameManager = GameInit.gameManager;
 
   @override
   void initState() {

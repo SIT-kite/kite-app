@@ -21,12 +21,12 @@ import 'package:kite/session/sso/sso_session.dart';
 import 'dao/announcement.dart';
 import 'service/announcement.dart';
 
-class BulletinInitializer {
+class OaAnnouncementInit {
   static late BulletinDao bulletin;
   static late SsoSession session;
 
   static void init({required SsoSession ssoSession}) {
-    BulletinInitializer.session = ssoSession;
+    OaAnnouncementInit.session = ssoSession;
     bulletin = BulletinService(session);
   }
 }

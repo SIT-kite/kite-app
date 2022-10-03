@@ -21,10 +21,10 @@ import 'package:kite/network/session.dart';
 import 'dao/exam.dart';
 import 'service/exam.dart';
 
-class ExamInitializer {
+class ExamArrInit {
   static late ExamDao examService;
 
-  static void init(ISession eduSession) {
+  static Future<void> init(ISession eduSession) async {
     examService = ExamService(eduSession);
   }
 }

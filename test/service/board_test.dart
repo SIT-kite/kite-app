@@ -8,7 +8,7 @@ import 'package:kite/storage/init.dart';
 
 void main() async {
   await init();
-  final boardService = BoardInitializer.boardServiceDao;
+  final boardService = BoardInit.boardServiceDao;
 
   test('kite_board get test', () async {
     final list = await boardService.getPictureList(page: 1, count: 20);

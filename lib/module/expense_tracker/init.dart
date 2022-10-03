@@ -24,7 +24,7 @@ import 'entity/expense.dart';
 import 'service/expense.dart';
 import 'storage/expense.dart';
 
-class ExpenseInitializer {
+class ExpenseTrackerInit {
   static late ExpenseRemoteDao expenseRemote;
   static late ExpenseLocalStorage expenseRecord;
 

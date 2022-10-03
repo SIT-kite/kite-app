@@ -33,7 +33,7 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  final service = LibraryAppointmentInitializer.appointmentService;
+  final service = LibraryAppointmentInit.appointmentService;
 
   String periodToString(int period) {
     final a = {1: '上午', 2: '下午', 3: '晚上'}[period % 10] ?? '未知时间段';

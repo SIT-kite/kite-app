@@ -35,11 +35,11 @@ import '../user_widget/profile.dart';
 class FreshmanPage extends StatelessWidget {
   FreshmanPage({Key? key}) : super(key: key);
 
-  final freshmanDao = FreshmanInitializer.freshmanDao;
-  final freshmanCacheManager = FreshmanInitializer.freshmanCacheManager;
+  final freshmanDao = FreshmanInit.freshmanDao;
+  final freshmanCacheManager = FreshmanInit.freshmanCacheManager;
   final refreshController = RefreshController();
   final myFutureBuilderController = MyFutureBuilderController();
-  final freshmanCacheDao = FreshmanInitializer.freshmanCacheDao;
+  final freshmanCacheDao = FreshmanInit.freshmanCacheDao;
 
   void showFirstDialog(BuildContext context) {
     if (!(freshmanCacheDao.disableFirstEnterDialogState ?? false)) {

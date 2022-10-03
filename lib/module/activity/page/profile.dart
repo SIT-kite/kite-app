@@ -33,7 +33,7 @@ class ProfilePage extends StatelessWidget {
 
   Widget _buildSummaryCard() {
     return MyFutureBuilder<ScScoreSummary>(
-      future: ScInitializer.scScoreService.getScScoreSummary(),
+      future: ScInit.scScoreService.getScScoreSummary(),
       builder: (context, summary) {
         return Padding(padding: const EdgeInsets.all(20), child: SummaryCard(summary));
       },
@@ -82,7 +82,7 @@ class ProfilePage extends StatelessWidget {
     }
 
     return MyFutureBuilder<List<ScJoinedActivity>>(
-      future: getMyActivityListJoinScore(ScInitializer.scScoreService),
+      future: getMyActivityListJoinScore(ScInit.scScoreService),
       builder: (context, eventList) {
         return ListView(children: [_buildSummaryCard()] + eventList.map(joinedActivityMapper).toList());
       },

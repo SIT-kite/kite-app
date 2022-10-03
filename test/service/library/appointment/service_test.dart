@@ -4,7 +4,7 @@ import 'package:kite/mock/index.dart';
 void main() async {
   await init();
   await loginKite();
-  final service = LibraryAppointmentInitializer.appointmentService;
+  final service = LibraryAppointmentInit.appointmentService;
 
   test('apply', () async {
     int period = 2203262;

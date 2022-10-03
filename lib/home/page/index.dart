@@ -73,10 +73,10 @@ class _HomePageState extends State<HomePage> {
     final String username = Kv.auth.currentUsername!;
     final String password = Kv.auth.ssoPassword!;
 
-    await HomeInitializer.ssoSession.login(username, password);
+    await HomeInit.ssoSession.login(username, password);
 
     if (Kv.auth.personName == null) {
-      final personName = await LoginInitializer.authServerService.getPersonName();
+      final personName = await LoginInit.authServerService.getPersonName();
       Kv.auth.personName = personName;
     }
   }
@@ -124,7 +124,7 @@ class _HomePageState extends State<HomePage> {
         Catcher.reportCheckedError(e, s);
       }
 
-      if (HomeInitializer.ssoSession.isOnline) {
+      if (HomeInit.ssoSession.isOnline) {
         Global.eventBus.emit(EventNameConstants.onHomeRefresh);
       }
     }
@@ -135,7 +135,7 @@ class _HomePageState extends State<HomePage> {
 
     // TODO 未设置缓存策略，暂时先直接清空缓存
     Kv.override.cache = null;
-    FunctionOverrideInitializer.cachedService.get().then((value) {
+    FunctionOverrideInit.cachedService.get().then((value) {
       Global.eventBus.emit(
         EventNameConstants.onRouteRefresh,
         value,
@@ -283,7 +283,7 @@ class _HomePageState extends State<HomePage> {
         Navigator.of(context).pushNamed(RouteTable.timetable);
       }
       // 非新生才执行该网络检查逻辑
-      if (!isFreshman && await HomeInitializer.ssoSession.checkConnectivity()) {
+      if (!isFreshman && await HomeInit.ssoSession.checkConnectivity()) {
         showBasicFlash(
           context,
           i18n.homepageCampusNetworkConnected.txt,

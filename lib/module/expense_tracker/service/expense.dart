@@ -69,7 +69,7 @@ class ExpenseRemoteService implements ExpenseRemoteDao {
     if (record.isNotEmpty) {
       for (final bill in record.sublist(1)) {
         records.add(_parseExpenseItem(bill));
-        ExpenseInitializer.expenseRecord.add(_parseExpenseItem(bill));
+        ExpenseTrackerInit.expenseRecord.add(_parseExpenseItem(bill));
       }
     }
     // 页号信息

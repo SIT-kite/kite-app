@@ -38,7 +38,7 @@ class SearchBar extends SearchDelegate<String> {
   }
 
   Widget _buildSearch() {
-    final future = ScInitializer.scActivityListService.query(query);
+    final future = ScInit.scActivityListService.query(query);
 
     return FutureBuilder<List<Activity>>(
       future: future,

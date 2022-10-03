@@ -33,8 +33,8 @@ class ClassmateWidget extends StatefulWidget {
 }
 
 class _ClassmateWidgetState extends State<ClassmateWidget> {
-  final FreshmanCacheManager freshmanCacheManager = FreshmanInitializer.freshmanCacheManager;
-  final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
+  final FreshmanCacheManager freshmanCacheManager = FreshmanInit.freshmanCacheManager;
+  final FreshmanDao freshmanDao = FreshmanInit.freshmanDao;
 
   void onRefresh() {
     freshmanCacheManager.clearClassmates();

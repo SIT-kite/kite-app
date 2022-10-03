@@ -82,7 +82,7 @@ class GameRanking extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MyFutureBuilder<List<GameRankingItem>>(
-      futureGetter: () => GameInitializer.rankingService.getGameRanking(gameId),
+      futureGetter: () => GameInit.rankingService.getGameRanking(gameId),
       enablePullRefresh: true,
       builder: (context, list) {
         return _buildRankView(context, list);

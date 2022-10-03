@@ -24,17 +24,17 @@ import 'service/kite.dart';
 import 'service/school.dart';
 import 'storage/timetable.dart';
 
-class TimetableInitializer {
+class TimetableInit {
   static late TimetableService timetableService;
   static late TimetableStorage timetableStorage;
   static late KiteTimetableService kiteTimetableService;
   static late TableCache tableCache;
 
-  static void init({
+  static Future<void> init({
     required ISession eduSession,
     required ISession kiteSession,
     required Box<dynamic> timetableBox,
-  }) {
+  }) async {
     timetableService = TimetableService(eduSession);
     timetableStorage = TimetableStorage(timetableBox);
     tableCache = TableCache();

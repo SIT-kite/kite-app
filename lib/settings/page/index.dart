@@ -154,7 +154,7 @@ class SettingsPage extends StatelessWidget {
         positiveActionBuilder: (context, controller, _) {
           return TextButton(
               onPressed: () async {
-                await HiveBoxInitializer.clear(); // 清除存储
+                await HiveBoxInit.clear(); // 清除存储
                 await Initializer.init();
                 await controller.dismiss();
                 _gotoWelcome(context);

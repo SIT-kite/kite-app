@@ -6,7 +6,7 @@ import 'package:kite/util/logger.dart';
 
 void main() {
   test('test holding previews', () async {
-    var a = await HoldingPreviewService(LibrarySearchInitializer.session).getHoldingPreviews([
+    var a = await HoldingPreviewService(LibrarySearchInit.session).getHoldingPreviews([
       326130,
       170523,
       54387,

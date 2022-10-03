@@ -68,7 +68,7 @@ class _DetailPageState extends State<DetailPage> {
     Log.info('下载到：$targetPath');
     // 如果文件不存在，那么下载文件
     if (!await File(targetPath).exists()) {
-      await BulletinInitializer.session.download(
+      await OaAnnouncementInit.session.download(
         attachment.url,
         savePath: targetPath,
         onReceiveProgress: (int count, int total) {
@@ -164,7 +164,7 @@ class _DetailPageState extends State<DetailPage> {
     if (article == null) {
       Log.info('开始加载OA公告文章');
       article =
-          await BulletinInitializer.bulletin.getBulletinDetail(widget.summary.bulletinCatalogueId, widget.summary.uuid);
+          await OaAnnouncementInit.bulletin.getBulletinDetail(widget.summary.bulletinCatalogueId, widget.summary.uuid);
       Log.info('加载OA公告文章完毕');
     } else {
       Log.info('使用已获取的OA公告文章');

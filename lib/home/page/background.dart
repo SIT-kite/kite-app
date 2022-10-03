@@ -50,7 +50,7 @@ class _HomeBackgroundState extends State<HomeBackground> {
     Global.eventBus.on(EventNameConstants.onBackgroundChange, _onBackgroundUpdate);
     Global.eventBus.on(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
     if (UniversalPlatform.isDesktop) {
-      DesktopInitializer.eventBus.on<Size>(WindowEvent.onWindowResize, _onWindowResize);
+      DesktopInit.eventBus.on<Size>(WindowEvent.onWindowResize, _onWindowResize);
     }
   }
 
@@ -59,7 +59,7 @@ class _HomeBackgroundState extends State<HomeBackground> {
     Global.eventBus.off(EventNameConstants.onBackgroundChange, _onBackgroundUpdate);
     Global.eventBus.off(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
     if (UniversalPlatform.isDesktop) {
-      DesktopInitializer.eventBus.off(WindowEvent.onWindowResize, _onWindowResize);
+      DesktopInit.eventBus.off(WindowEvent.onWindowResize, _onWindowResize);
     }
     super.deactivate();
   }
@@ -69,7 +69,7 @@ class _HomeBackgroundState extends State<HomeBackground> {
     Future.delayed(
       const Duration(milliseconds: 500),
       () {
-        if (!DesktopInitializer.eventBus.contain(WindowEvent.onWindowResize, _onWindowResize)) {
+        if (!DesktopInit.eventBus.contain(WindowEvent.onWindowResize, _onWindowResize)) {
           return;
         }
         setState(() {});

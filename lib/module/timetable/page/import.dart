@@ -44,8 +44,8 @@ class TimetableImportDialog extends StatefulWidget {
 }
 
 class _TimetableImportDialogState extends State<TimetableImportDialog> {
-  final timetableService = TimetableInitializer.timetableService;
-  final timetableStorage = TimetableInitializer.timetableStorage;
+  final timetableService = TimetableInit.timetableService;
+  final timetableStorage = TimetableInit.timetableStorage;
 
   /// 四位年份
   late int selectedYear;
@@ -225,8 +225,8 @@ class TimetableImportPage extends StatefulWidget {
 }
 
 class _TimetableImportPageState extends State<TimetableImportPage> {
-  final timetableStorage = TimetableInitializer.timetableStorage;
-  final kiteTimetableService = TimetableInitializer.kiteTimetableService;
+  final timetableStorage = TimetableInit.timetableStorage;
+  final kiteTimetableService = TimetableInit.kiteTimetableService;
 
   DateTime? defaultStartDate;
 

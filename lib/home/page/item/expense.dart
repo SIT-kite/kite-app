@@ -31,7 +31,7 @@ class ExpenseItem extends StatefulWidget {
 }
 
 class _ExpenseItemState extends State<ExpenseItem> {
-  final ExpenseRecord? lastExpense = ExpenseInitializer.expenseRecord.getLastOne();
+  final ExpenseRecord? lastExpense = ExpenseTrackerInit.expenseRecord.getLastOne();
   String? content;
 
   @override

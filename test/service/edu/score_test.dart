@@ -6,7 +6,7 @@ void main() async {
   await init();
   await login();
   test('score test', () async {
-    final table = await ScoreInitializer.scoreService.getScoreList(
+    final table = await ExamResultInit.scoreService.getScoreList(
       const SchoolYear(2021),
       Semester.firstTerm,
     );
@@ -14,7 +14,7 @@ void main() async {
   });
 
   test('edu detail test', () async {
-    final table = await ScoreInitializer.scoreService.getScoreDetail(
+    final table = await ExamResultInit.scoreService.getScoreDetail(
       "",
       const SchoolYear(2021),
       Semester.firstTerm,

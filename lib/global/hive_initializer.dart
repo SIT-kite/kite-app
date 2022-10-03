@@ -22,8 +22,8 @@ import 'package:kite/module/expense_tracker/entity/expense.dart';
 import 'package:kite/module/init.dart';
 import 'package:kite/module/library/search/entity/search_history.dart';
 
-class HiveBoxInitializer {
-  HiveBoxInitializer._();
+class HiveBoxInit {
+  HiveBoxInit._();
   static late Box<dynamic> userEvent;
   static late Box<LibrarySearchHistoryItem> librarySearchHistory;
   static late Box<ContactData> contactSetting;

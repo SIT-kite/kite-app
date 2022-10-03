@@ -33,8 +33,8 @@ class FreshmanAnalysisPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
-    final FreshmanCacheManager freshmanCacheManager = FreshmanInitializer.freshmanCacheManager;
+    final FreshmanDao freshmanDao = FreshmanInit.freshmanDao;
+    final FreshmanCacheManager freshmanCacheManager = FreshmanInit.freshmanCacheManager;
     return Scaffold(
       body: MyFutureBuilder<List<dynamic>>(
         futureGetter: () => Future.wait([freshmanDao.getAnalysis(), freshmanDao.getInfo()]),

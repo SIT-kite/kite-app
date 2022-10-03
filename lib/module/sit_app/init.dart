@@ -21,14 +21,14 @@ import 'package:kite/session/sit_app_session.dart';
 
 import 'arrive_code/dao.dart';
 
-class SitAppInitializer {
+class SitAppInit {
   static late SitAppSession sitAppSession;
   static late ArriveCodeDao arriveCodeService;
 
   static void init({
     required SitAppSession sitAppSession,
   }) {
-    SitAppInitializer.sitAppSession = sitAppSession;
+    SitAppInit.sitAppSession = sitAppSession;
     arriveCodeService = ArriveCodeService(sitAppSession);
   }
 }

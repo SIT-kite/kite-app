@@ -58,7 +58,7 @@ class _EvaluationPageState extends State<EvaluationPage> {
     return SimpleWebViewPage(
       initialUrl: _evaluationPageUrl,
       fixedTitle: i18n.teacherEvalTitle,
-      initialAsyncCookies: ScoreInitializer.cookieJar.loadAsWebViewCookie(
+      initialAsyncCookies: ExamResultInit.cookieJar.loadAsWebViewCookie(
         Uri.parse('http://jwxt.sit.edu.cn/jwglxt/'),
       ),
       floatingActionButton: FloatingActionButton(

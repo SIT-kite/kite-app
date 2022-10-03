@@ -26,7 +26,7 @@ import 'dao/report.dart';
 import 'entity/record.dart';
 import 'service/report.dart';
 
-class ReportInitializer {
+class ReportTempInit {
   static late ISession session;
   static late ReportDao reportService;
 

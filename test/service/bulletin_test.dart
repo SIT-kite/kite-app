@@ -5,7 +5,7 @@ void main() async {
   await init();
   await login();
 
-  final dao = BulletinInitializer.bulletin;
+  final dao = OaAnnouncementInit.bulletin;
   test('test oa_announcement', () async {
     final list = dao.getAllCatalogues();
     Log.info(list);

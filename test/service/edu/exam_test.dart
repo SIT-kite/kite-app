@@ -6,7 +6,7 @@ void main() async {
   await init();
   await login();
   test('exam test', () async {
-    var table = await ExamInitializer.examService.getExamList(
+    var table = await ExamArrInit.examService.getExamList(
       const SchoolYear(2021),
       Semester.firstTerm,
     );

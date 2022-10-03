@@ -20,14 +20,14 @@ import 'package:kite/module/library/appointment/dao.dart';
 import 'package:kite/module/library/appointment/service.dart';
 import 'package:kite/session/kite_session.dart';
 
-class LibraryAppointmentInitializer {
+class LibraryAppointmentInit {
   static late KiteSession kiteSession;
   static late AppointmentDao appointmentService;
 
   static void init({
     required KiteSession kiteSession,
   }) {
-    LibraryAppointmentInitializer.kiteSession = kiteSession;
+    LibraryAppointmentInit.kiteSession = kiteSession;
     appointmentService = AppointmentService(kiteSession);
   }
 }

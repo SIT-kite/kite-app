@@ -43,7 +43,7 @@ class _TimetablePageState extends State<TimetablePage> {
   // static const int maxWeekCount = 20;
   final tableViewerController = TimetableViewerController();
 
-  final storage = TimetableInitializer.timetableStorage;
+  final storage = TimetableInit.timetableStorage;
 
   // 模式：周课表 日课表
   late DisplayMode displayMode;

@@ -23,7 +23,7 @@ import 'package:kite/mock/index.dart';
 void main() async {
   await init();
   await login();
-  var session = SharedInitializer.kiteSession;
+  var session = SharedInit.kiteSession;
   test('expense_tracker test', () async {
     final contact = await ContactRemoteService(session).getAllContacts();
     Log.info(contact);

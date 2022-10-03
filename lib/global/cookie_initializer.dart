@@ -18,7 +18,7 @@
 
 import 'package:cookie_jar/cookie_jar.dart';
 
-class CookieInitializer {
+class CookieInit {
   static Future<CookieJar> init({String path = '/kite1/cookies/'}) async {
     // final String homeDirectory = (await getApplicationDocumentsDirectory()).path;
     // final FileStorage cookieStorage = FileStorage(homeDirectory + path);

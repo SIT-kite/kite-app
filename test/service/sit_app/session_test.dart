@@ -4,7 +4,7 @@ import 'package:kite/mock/index.dart';
 void main() async {
   await init();
   await loginSitApp();
-  final service = SitAppInitializer.arriveCodeService;
+  final service = SitAppInit.arriveCodeService;
   test('test arrive code', () async {
     print(await service.arrive('FXxzl0001'));
   });

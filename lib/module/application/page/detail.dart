@@ -97,7 +97,7 @@ class DetailPage extends StatelessWidget {
       appBar: AppBar(title: Text(function.name)),
       body: SafeArea(
         child: MyFutureBuilder<FunctionDetail>(
-          future: OfficeInitializer.functionService.getFunctionDetail(function.id),
+          future: ApplicationInit.functionService.getFunctionDetail(function.id),
           builder: (context, data) {
             return buildBody(context, data.sections);
           },

@@ -19,7 +19,7 @@
 import 'package:kite/module/kite_bulletin/dao/remote.dart';
 import 'package:kite/session/sso/index.dart';
 
-class HomeInitializer {
+class HomeInit {
   static late SsoSession ssoSession;
   static late NoticeServiceDao noticeService;
 
@@ -27,7 +27,7 @@ class HomeInitializer {
     required SsoSession ssoSession,
     required NoticeServiceDao noticeService,
   }) {
-    HomeInitializer.ssoSession = ssoSession;
-    HomeInitializer.noticeService = noticeService;
+    HomeInit.ssoSession = ssoSession;
+    HomeInit.noticeService = noticeService;
   }
 }

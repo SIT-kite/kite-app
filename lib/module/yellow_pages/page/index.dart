@@ -32,14 +32,14 @@ class ContactPage extends StatefulWidget {
 }
 
 class _ContactPageState extends State<ContactPage> {
-  final List<ContactData> _contactData = ContactInitializer.contactStorageDao.getAllContacts();
+  final List<ContactData> _contactData = YellowPagesInit.contactStorageDao.getAllContacts();
 
   Future<List<ContactData>> _fetchContactList() async {
-    final service = ContactInitializer.contactRemoteDao;
+    final service = YellowPagesInit.contactRemoteDao;
     final contacts = await service.getAllContacts();
 
-    ContactInitializer.contactStorageDao.clear();
-    ContactInitializer.contactStorageDao.addAll(contacts);
+    YellowPagesInit.contactStorageDao.clear();
+    YellowPagesInit.contactStorageDao.addAll(contacts);
     return contacts;
   }
 

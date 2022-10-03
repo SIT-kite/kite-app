@@ -36,7 +36,7 @@ class MyWindowListener extends WindowListener {
   }
 }
 
-class DesktopInitializer {
+class DesktopInit {
   /// The default window size is small enough for any modern desktop device.
   static const Size defaultSize = Size(500, 800);
 
@@ -46,7 +46,7 @@ class DesktopInitializer {
   static late WindowListener windowListener;
 
   static Future<void> init() async {
-    DesktopInitializer.eventBus = EventBus<WindowEvent>();
+    DesktopInit.eventBus = EventBus<WindowEvent>();
     windowListener = MyWindowListener(eventBus: eventBus);
     windowManager.addListener(windowListener);
     // 必须加上这一行。

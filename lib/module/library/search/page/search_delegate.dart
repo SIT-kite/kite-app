@@ -78,7 +78,7 @@ class SearchBarDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    LibrarySearchInitializer.librarySearchHistory.add(
+    LibrarySearchInit.librarySearchHistory.add(
       LibrarySearchHistoryItem()
         ..keyword = query
         ..time = DateTime.now(),
@@ -115,7 +115,7 @@ class SearchBarDelegate extends SearchDelegate<String> {
             Text('历史记录', style: Theme.of(context).textTheme.bodyText1),
             SuggestionItemView(
               titleItems:
-                  LibrarySearchInitializer.librarySearchHistory.getAllByTimeDesc().map((e) => e.keyword).toList(),
+                  LibrarySearchInit.librarySearchHistory.getAllByTimeDesc().map((e) => e.keyword).toList(),
               onItemTap: (title) => _searchByGiving(context, title),
             ),
             const SizedBox(height: 20),
@@ -128,14 +128,14 @@ class SearchBarDelegate extends SearchDelegate<String> {
                 ],
               ),
               onTap: () async {
-                LibrarySearchInitializer.librarySearchHistory.deleteAll();
+                LibrarySearchInit.librarySearchHistory.deleteAll();
                 close(context, '');
               },
             ),
             const SizedBox(height: 20),
             Text('大家都在搜', style: Theme.of(context).textTheme.bodyText1),
             MyFutureBuilder<HotSearch>(
-              future: LibrarySearchInitializer.hotSearchService.getHotSearch(),
+              future: LibrarySearchInit.hotSearchService.getHotSearch(),
               builder: (BuildContext context, data) {
                 return SuggestionItemView(
                   titleItems: data.recentMonth.map((e) => e.hotSearchWord).toList(),

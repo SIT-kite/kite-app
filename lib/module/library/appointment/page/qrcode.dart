@@ -77,7 +77,7 @@ class QrcodePage extends StatefulWidget {
 }
 
 class _QrcodePageState extends State<QrcodePage> {
-  final service = LibraryAppointmentInitializer.appointmentService;
+  final service = LibraryAppointmentInit.appointmentService;
   final codeNotifier = ValueNotifier<ApplicationRecord?>(null);
   String codeString = '';
 

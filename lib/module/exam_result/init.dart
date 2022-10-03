@@ -25,13 +25,13 @@ import 'dao/score.dart';
 import 'service/evaluation.dart';
 import 'service/score.dart';
 
-class ScoreInitializer {
+class ExamResultInit {
   static late CookieJar cookieJar;
   static late ScoreDao scoreService;
   static late CourseEvaluationDao courseEvaluationService;
 
-  static void init({required CookieJar cookieJar, required ISession eduSession}) {
-    ScoreInitializer.cookieJar = cookieJar;
+  static Future<void> init({required CookieJar cookieJar, required ISession eduSession}) async {
+    ExamResultInit.cookieJar = cookieJar;
     scoreService = ScoreService(eduSession);
     courseEvaluationService = CourseEvaluationService(eduSession);
   }

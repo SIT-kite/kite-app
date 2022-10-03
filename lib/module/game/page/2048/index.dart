@@ -221,7 +221,7 @@ class _GameWidgetState extends State<GameWidget> {
       // 存储游戏记录
       final currentTime = DateTime.now();
       final record = GameRecord(GameType.game2048, _game.score, startTime, currentTime.difference(startTime).inSeconds);
-      GameInitializer.gameRecord.append(record);
+      GameInit.gameRecord.append(record);
 
       uploadGameRecord(context, record);
     }

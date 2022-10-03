@@ -79,7 +79,7 @@ class _WordlePageState extends State<WordlePage> {
                       final currentTime = DateTime.now();
                       final record =
                           GameRecord(GameType.wordle, score, startTime, currentTime.difference(startTime).inSeconds);
-                      GameInitializer.gameRecord.append(record);
+                      GameInit.gameRecord.append(record);
 
                       final result = await showAlertDialog(
                         context,

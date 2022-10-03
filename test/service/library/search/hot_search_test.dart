@@ -6,7 +6,7 @@ import 'package:logger/logger.dart';
 void main() {
   var logger = Logger();
   test('should', () async {
-    var session = LibrarySearchInitializer.session;
+    var session = LibrarySearchInit.session;
     var s = await HotSearchService(session).getHotSearch();
     logger.i(s.toString());
   });

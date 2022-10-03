@@ -47,7 +47,7 @@ class MessagePage extends StatelessWidget {
 
   Widget _buildBody() {
     return MyFutureBuilder<OfficeMessagePage>(
-      future: OfficeInitializer.messageService.getAllMessage(),
+      future: ApplicationInit.messageService.getAllMessage(),
       builder: (context, data) {
         return _buildMessageList(context, data.msgList);
       },

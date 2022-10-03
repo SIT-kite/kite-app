@@ -60,7 +60,7 @@ class _MailPageState extends State<MailPage> {
 
   Future<FetchImapResult> _loadMailList() async {
     final String studentId = Kv.auth.currentUsername ?? '';
-    final String password = MailInitializer.mail.password ?? (Kv.auth.ssoPassword ?? '');
+    final String password = EduEmailInit.mail.password ?? (Kv.auth.ssoPassword ?? '');
 
     final email = getEduEmail(studentId);
     final service = MailService(email, password);
@@ -108,7 +108,7 @@ class _MailPageState extends State<MailPage> {
             ),
             ElevatedButton(
                 onPressed: () {
-                  MailInitializer.mail.password = _controller.text;
+                  EduEmailInit.mail.password = _controller.text;
                   setState(() => _index = indexEmailList);
                 },
                 child: i18n.continue_.txt)

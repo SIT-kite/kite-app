@@ -3,7 +3,7 @@ import 'package:kite/network/session.dart';
 import 'interface.dart';
 import 'mock.dart';
 
-class FunctionOverrideInitializer {
+class FunctionOverrideInit {
   static late FunctionOverrideServiceDao cachedService;
 
   static void init({

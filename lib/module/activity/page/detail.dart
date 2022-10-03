@@ -127,7 +127,7 @@ class DetailPage extends StatelessWidget {
 
   Widget _buildBody(BuildContext context) {
     return FutureBuilder<ActivityDetail>(
-        future: ScInitializer.scActivityDetailService.getActivityDetail(activityId),
+        future: ScInit.scActivityDetailService.getActivityDetail(activityId),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return _buildDetail(context, snapshot.data!);
@@ -138,7 +138,7 @@ class DetailPage extends StatelessWidget {
 
   Future<void> _sendRequest(BuildContext context, bool force) async {
     try {
-      final response = await ScInitializer.scJoinActivityService.join(activityId, force);
+      final response = await ScInit.scJoinActivityService.join(activityId, force);
       showBasicFlash(context, Text(response));
     } catch (e) {
       showBasicFlash(context, Text('错误: ' + e.runtimeType.toString()), duration: const Duration(seconds: 3));

@@ -152,7 +152,7 @@ class _ExamPageState extends State<ExamPage> {
         children: [
           buildSemesterSelector(),
           MyFutureBuilder<List<ExamRoom>>(
-            future: ExamInitializer.examService.getExamList(
+            future: ExamArrInit.examService.getExamList(
               SchoolYear(selectedYear),
               selectedSemester,
             ),

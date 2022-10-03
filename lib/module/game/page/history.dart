@@ -77,7 +77,7 @@ class HistoryPage extends StatelessWidget {
   }
 
   Widget _buildHistory(BuildContext context) {
-    final history = GameInitializer.gameRecord.getAllRecords().reversed.toList();
+    final history = GameInit.gameRecord.getAllRecords().reversed.toList();
     final items = history.map((e) => _buildHistoryItem(context, e)).toList();
 
     if (items.isNotEmpty) {
@@ -95,7 +95,7 @@ class HistoryPage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              GameInitializer.gameRecord.deleteAll();
+              GameInit.gameRecord.deleteAll();
               Navigator.of(context).pop();
             },
             icon: const Icon(Icons.delete),

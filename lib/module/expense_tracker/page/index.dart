@@ -44,7 +44,7 @@ class _ExpensePageState extends State<ExpensePage> {
 
   @override
   void initState() {
-    if (ExpenseInitializer.expenseRecord.isEmpty()) {
+    if (ExpenseTrackerInit.expenseRecord.isEmpty()) {
       Future.delayed(Duration.zero, () async {
         var responseIndex = await showAlertDialog(
           context,
@@ -85,7 +85,7 @@ class _ExpensePageState extends State<ExpensePage> {
     end = end ?? DateTime.now();
 
     final OaExpensePage billPage = await service.getExpensePage(page, start: start, end: end);
-    ExpenseInitializer.expenseRecord.addAll(billPage.records);
+    ExpenseTrackerInit.expenseRecord.addAll(billPage.records);
 
     return billPage;
   }
@@ -120,8 +120,8 @@ class _ExpensePageState extends State<ExpensePage> {
   Future<void> updateRecords() async {
     showBasicFlash(context, i18n.expenseFetchingTip.txt);
 
-    final DateTime? startDate = ExpenseInitializer.expenseRecord.getLastOne()?.ts;
-    final service = ExpenseInitializer.expenseRemote;
+    final DateTime? startDate = ExpenseTrackerInit.expenseRecord.getLastOne()?.ts;
+    final service = ExpenseTrackerInit.expenseRemote;
 
     final OaExpensePage firstPage = await _fetchAndSave(service, 1, start: startDate);
 

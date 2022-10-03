@@ -69,7 +69,7 @@ class NoticeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    LibraryAppointmentInitializer.appointmentService.getNotice().then((value) {
+    LibraryAppointmentInit.appointmentService.getNotice().then((value) {
       noticeNotifier.value = value;
     });
     return ValueListenableBuilder<Notice?>(

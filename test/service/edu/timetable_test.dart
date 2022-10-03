@@ -5,7 +5,7 @@ import 'package:kite/mock/index.dart';
 void main() async {
   await init();
   await login();
-  final timetableDao = TimetableInitializer.timetableService;
+  final timetableDao = TimetableInit.timetableService;
   test('timetable test', () async {
     final table = await timetableDao.getTimetable(
       const SchoolYear(2021),

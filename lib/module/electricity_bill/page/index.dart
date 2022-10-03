@@ -101,7 +101,7 @@ class ElectricityPage extends StatefulWidget {
 }
 
 class _ElectricityPageState extends State<ElectricityPage> {
-  final storage = ElectricityInitializer.electricityStorage;
+  final storage = ElectricityBillInit.electricityStorage;
 
   String? room;
   late List<String> roomList;
@@ -189,7 +189,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
         cardTitle('余额查询'),
         const SizedBox(height: 10),
         MyFutureBuilder<Balance>(
-          future: ElectricityInitializer.electricityService.getBalance(room!),
+          future: ElectricityBillInit.electricityService.getBalance(room!),
           builder: (context, data) {
             return balanceContent(data);
           },
@@ -270,7 +270,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
         cardTitle('用电排名'),
         const SizedBox(height: 10),
         MyFutureBuilder<Rank>(
-          future: ElectricityInitializer.electricityService.getRank(room!),
+          future: ElectricityBillInit.electricityService.getRank(room!),
           builder: (context, data) {
             return rankContent(data);
           },

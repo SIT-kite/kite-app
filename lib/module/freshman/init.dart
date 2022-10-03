@@ -24,7 +24,7 @@ import 'cache.dart';
 import 'dao/Freshman.dart';
 import 'service/freshman.dart';
 
-class FreshmanInitializer {
+class FreshmanInit {
   static late FreshmanSession freshmanSession;
   static late FreshmanDao freshmanDao;
   static late FreshmanCacheManager freshmanCacheManager;

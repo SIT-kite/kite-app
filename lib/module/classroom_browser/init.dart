@@ -21,7 +21,7 @@ import 'package:kite/session/kite_session.dart';
 import '../classroom_browser/service/classroom.dart';
 import 'dao/remote.dart';
 
-class ClassroomBrowserInitializer {
+class ClassroomBrowserInit {
   static late ClassroomRemoteDao classroomService;
 
   static late KiteSession kiteSession;
@@ -29,7 +29,7 @@ class ClassroomBrowserInitializer {
   static Future<void> init({
     required KiteSession kiteSession,
   }) async {
-    ClassroomBrowserInitializer.kiteSession = kiteSession;
+    ClassroomBrowserInit.kiteSession = kiteSession;
     classroomService = ClassroomService(kiteSession);
   }
 }

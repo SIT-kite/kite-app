@@ -46,9 +46,9 @@ class BulletinPage extends StatelessWidget {
 
   Future<List<BulletinRecord>> _queryBulletinListInAllCategory(int page) async {
     // Make sure login.
-    await BulletinInitializer.session.request('https://myportal.sit.edu.cn/', ReqMethod.get);
+    await OaAnnouncementInit.session.request('https://myportal.sit.edu.cn/', ReqMethod.get);
 
-    final service = BulletinInitializer.bulletin;
+    final service = OaAnnouncementInit.bulletin;
 
     // 获取所有分类
     final catalogues = await service.getAllCatalogues();

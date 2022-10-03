@@ -42,7 +42,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
   void initState() {
     selectedYear = now.year;
     selectedMonth = now.month;
-    _expenseBill = ExpenseInitializer.expenseRecord.getAllByTimeDesc();
+    _expenseBill = ExpenseTrackerInit.expenseRecord.getAllByTimeDesc();
     super.initState();
   }
 

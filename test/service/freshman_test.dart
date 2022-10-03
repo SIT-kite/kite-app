@@ -6,7 +6,7 @@ import 'package:kite/storage/init.dart';
 
 void main() async {
   await init();
-  FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
+  FreshmanDao freshmanDao = FreshmanInit.freshmanDao;
   Kv.freshman
     ..freshmanAccount = '龚书羽'
     ..freshmanSecret = '181624';

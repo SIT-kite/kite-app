@@ -104,7 +104,7 @@ class _ScorePageState extends State<ScorePage> {
 
   Widget _buildBody() {
     return MyFutureBuilder<List<Score>>(
-      future: ScoreInitializer.scoreService.getScoreList(SchoolYear(selectedYear), selectedSemester),
+      future: ExamResultInit.scoreService.getScoreList(SchoolYear(selectedYear), selectedSemester),
       builder: (context, data) {
         final scoreList = data;
         return Column(

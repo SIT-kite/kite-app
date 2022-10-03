@@ -23,7 +23,7 @@ import 'dao/index.dart';
 import 'dao/list.dart';
 import 'service/index.dart';
 
-class ScInitializer {
+class ScInit {
   static late ScSession session;
   static late ScActivityListDao scActivityListService;
   static late ScActivityDetailDao scActivityDetailService;

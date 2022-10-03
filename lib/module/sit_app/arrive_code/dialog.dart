@@ -25,7 +25,7 @@ class ArriveCodeDialog {
   static Future<void> scan(BuildContext context, String code) async {
     String msg = '';
     try {
-      final response = await SitAppInitializer.arriveCodeService.arrive(code);
+      final response = await SitAppInit.arriveCodeService.arrive(code);
       msg = response;
     } on SitAppApiError catch (e, _) {
       if (e.code == 301) {

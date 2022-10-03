@@ -91,7 +91,7 @@ class BillPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final records = ExpenseInitializer.expenseRecord.getAllByTimeDesc();
+    final records = ExpenseTrackerInit.expenseRecord.getAllByTimeDesc();
     final recordsToShow = filter == ExpenseType.all ? records : records.where((e) => e.type == filter).toList();
 
     if (recordsToShow.isNotEmpty) {

@@ -37,7 +37,7 @@ class FreshmanLoginPage extends StatefulWidget {
 }
 
 class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
-  FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
+  FreshmanDao freshmanDao = FreshmanInit.freshmanDao;
 
   // Text field controllers.
   final TextEditingController _accountController = TextEditingController();
@@ -77,7 +77,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
         ..freshmanAccount = account
         ..freshmanSecret = secret;
       // 清空本地缓存
-      FreshmanInitializer.freshmanCacheManager.clearAll();
+      FreshmanInit.freshmanCacheManager.clearAll();
 
       final info = await freshmanDao.getInfo();
 

@@ -25,7 +25,7 @@ import 'entity/search_history.dart';
 import 'service/index.dart';
 import 'storage/search_history.dart';
 
-class LibrarySearchInitializer {
+class LibrarySearchInit {
   /// 图书信息访问
   static late BookInfoDao bookInfo;
 

@@ -105,7 +105,7 @@ class _ReportItemState extends State<ReportItem> {
     late ReportHistory? history;
 
     try {
-      history = await ReportInitializer.reportService.getRecentHistory(Kv.auth.currentUsername ?? '');
+      history = await ReportTempInit.reportService.getRecentHistory(Kv.auth.currentUsername ?? '');
     } catch (e) {
       return '${i18n.failed}: ${e.runtimeType}';
     }

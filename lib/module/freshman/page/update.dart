@@ -38,7 +38,7 @@ class FreshmanUpdatePage extends StatefulWidget {
 }
 
 class _FreshmanUpdatePageState extends State<FreshmanUpdatePage> {
-  final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
+  final FreshmanDao freshmanDao = FreshmanInit.freshmanDao;
 
   /// 初始状态
   late String initialQq;

@@ -56,7 +56,7 @@ class _ScoreItemState extends State<ScoreItem> {
 
   Widget _buildScoreDetail() {
     final future =
-        ScoreInitializer.scoreService.getScoreDetail(_score.innerClassId, _score.schoolYear, _score.semester);
+        ExamResultInit.scoreService.getScoreDetail(_score.innerClassId, _score.schoolYear, _score.semester);
 
     return FutureBuilder(
       future: future,
@@ -100,7 +100,7 @@ class _ScoreItemState extends State<ScoreItem> {
     } else {
       // 获取评教列表. 然后找到与当前课程有关的, 将评教页面呈现给用户.
       return MyFutureBuilder<List<CourseToEvaluate>>(
-        future: ScoreInitializer.courseEvaluationService.getEvaluationList(),
+        future: ExamResultInit.courseEvaluationService.getEvaluationList(),
         builder: (context, data) {
           final coursesToEvaluate = data.where((element) => element.dynClassId.startsWith(_score.dynClassId)).toList();
 

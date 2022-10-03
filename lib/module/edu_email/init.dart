@@ -21,7 +21,7 @@ import 'package:hive/hive.dart';
 import 'dao/mail.dart';
 import 'storage/mail.dart';
 
-class MailInitializer {
+class EduEmailInit {
   static late MailStorageDao mail;
 
   static Future<void> init() async {

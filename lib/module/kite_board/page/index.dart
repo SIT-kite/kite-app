@@ -43,7 +43,7 @@ class BoardPage extends StatefulWidget {
 }
 
 class _BoardPageState extends State<BoardPage> {
-  final BoardService boardService = BoardInitializer.boardServiceDao;
+  final BoardService boardService = BoardInit.boardServiceDao;
 
   List<PictureSummary> _pictures = [];
 

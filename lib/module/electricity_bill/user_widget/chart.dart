@@ -58,14 +58,14 @@ class ElectricityChartWidget extends StatelessWidget {
     switch (mode) {
       case ElectricityChartMode.daily:
         return MyFutureBuilder<List<DailyBill>>(
-          future: ElectricityInitializer.electricityService.getDailyBill(room),
+          future: ElectricityBillInit.electricityService.getDailyBill(room),
           builder: (context, data) {
             return buildDailyChart(data);
           },
         );
       case ElectricityChartMode.hourly:
         return MyFutureBuilder<List<HourlyBill>>(
-          future: ElectricityInitializer.electricityService.getHourlyBill(room),
+          future: ElectricityBillInit.electricityService.getHourlyBill(room),
           builder: (context, data) {
             return buildHourlyChart(data);
           },

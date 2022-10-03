@@ -53,7 +53,7 @@ class _NoticeItemState extends State<NoticeItem> {
 
   Future<String?> _buildContent() async {
     try {
-      final List<KiteNotice> list = await HomeInitializer.noticeService.getNoticeList();
+      final List<KiteNotice> list = await HomeInit.noticeService.getNoticeList();
       return list.first.title;
     } catch (_) {
       return null;

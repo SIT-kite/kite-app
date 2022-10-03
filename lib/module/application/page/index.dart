@@ -91,15 +91,15 @@ class _OfficePageState extends State<OfficePage> {
   }
 
   Future<List<SimpleFunction>> _fetchFuncList() async {
-    if (!OfficeInitializer.session.isLogin) {
+    if (!ApplicationInit.session.isLogin) {
       final username = Kv.auth.currentUsername!;
       final password = Kv.auth.ssoPassword!;
-      await OfficeInitializer.session.login(
+      await ApplicationInit.session.login(
         username: username,
         password: password,
       );
     }
-    return await OfficeInitializer.functionService.selectFunctionsByCountDesc();
+    return await ApplicationInit.functionService.selectFunctionsByCountDesc();
   }
 
   Widget _buildFunctionList(List<SimpleFunction> functionList) {
@@ -200,7 +200,7 @@ class _OfficePageState extends State<OfficePage> {
           Expanded(child: _buildBody()),
         ],
       ),
-      floatingActionButton: OfficeInitializer.session.isLogin
+      floatingActionButton: ApplicationInit.session.isLogin
           ? FloatingActionButton(
               onPressed: _navigateMessagePage,
               tooltip: '我的消息',

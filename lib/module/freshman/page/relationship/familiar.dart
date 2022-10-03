@@ -33,8 +33,8 @@ class FamiliarPeopleWidget extends StatefulWidget {
 }
 
 class _FamiliarPeopleWidgetState extends State<FamiliarPeopleWidget> {
-  final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
-  final FreshmanCacheManager freshmanCacheManager = FreshmanInitializer.freshmanCacheManager;
+  final FreshmanDao freshmanDao = FreshmanInit.freshmanDao;
+  final FreshmanCacheManager freshmanCacheManager = FreshmanInit.freshmanCacheManager;
 
   void onRefresh() {
     freshmanCacheManager.clearFamiliars();

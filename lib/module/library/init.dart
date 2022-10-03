@@ -24,13 +24,13 @@ import 'package:kite/session/kite_session.dart';
 import 'search/entity/search_history.dart';
 import 'search/init.dart';
 
-class LibraryInitializer {
+class LibraryInit {
   static Future<void> init({
     required Dio dio,
     required Box<LibrarySearchHistoryItem> searchHistoryBox,
     required KiteSession kiteSession,
   }) async {
-    await LibrarySearchInitializer.init(dio: dio, searchHistoryBox: searchHistoryBox);
-    LibraryAppointmentInitializer.init(kiteSession: kiteSession);
+    await LibrarySearchInit.init(dio: dio, searchHistoryBox: searchHistoryBox);
+    LibraryAppointmentInit.init(kiteSession: kiteSession);
   }
 }

@@ -69,7 +69,7 @@ Future<bool> signUpIfNecessary(BuildContext context, String description) async {
     // 注册用户
     final username = Kv.auth.currentUsername!;
     final password = Kv.auth.ssoPassword!;
-    await SharedInitializer.kiteSession.login(username, password);
+    await SharedInit.kiteSession.login(username, password);
   }
   return true;
 }

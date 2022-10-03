@@ -96,7 +96,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
   final ValueNotifier<DateTime> date = ValueNotifier(DateTime.now());
   final ValueNotifier<CurrentPeriodResponse?> currentPeriod = ValueNotifier(null);
 
-  final service = LibraryAppointmentInitializer.appointmentService;
+  final service = LibraryAppointmentInit.appointmentService;
 
   void loadQrPage(int applyId) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => QrcodePage(applyId: applyId)));

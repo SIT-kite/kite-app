@@ -47,15 +47,15 @@ Future<void> login() async {
 
 /// 图书馆登陆
 Future<void> loginLibrary() async {
-  await LibrarySearchInitializer.session.login(username, libraryPassword);
+  await LibrarySearchInit.session.login(username, libraryPassword);
 }
 
 /// 登陆小风筝服务
 Future<void> loginKite() async {
-  await SharedInitializer.kiteSession.login(username, ssoPassword);
+  await SharedInit.kiteSession.login(username, ssoPassword);
 }
 
 /// 登录上应大App服务
 Future<void> loginSitApp() async {
-  await SitAppInitializer.sitAppSession.login(username, ssoPassword);
+  await SitAppInit.sitAppSession.login(username, ssoPassword);
 }

@@ -37,7 +37,7 @@ class DioConfig {
 }
 
 /// 用于初始化Dio,全局只有一份dio对象
-class DioInitializer {
+class DioInit {
   /// 初始化SessionPool
   static Future<Dio> init({required DioConfig config}) async {
     Log.info('初始化Dio');

@@ -25,7 +25,7 @@ import 'package:kite/mock/index.dart';
 void main() async {
   await init();
   await loginLibrary();
-  final session = LibrarySearchInitializer.session;
+  final session = LibrarySearchInit.session;
   final service = LibraryBorrowService(session);
   test('get history borrow book list', () async {
     final result = await service.getHistoryBorrowBookList(1, 10);

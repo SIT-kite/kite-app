@@ -24,7 +24,7 @@ import 'entity/contact.dart';
 import 'service/contact.dart';
 import 'storage/contact.dart';
 
-class ContactInitializer {
+class YellowPagesInit {
   static late ContactStorageDao contactStorageDao;
   static late ContactRemoteDao contactRemoteDao;
 

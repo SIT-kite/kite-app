@@ -70,8 +70,8 @@ class _LoginPageState extends State<LoginPage> {
     final username = _usernameController.text;
     final password = _passwordController.text;
     try {
-      await LoginInitializer.ssoSession.login(username, password);
-      final personName = await LoginInitializer.authServerService.getPersonName();
+      await LoginInit.ssoSession.login(username, password);
+      final personName = await LoginInit.authServerService.getPersonName();
       Kv.auth
         ..currentUsername = username
         ..ssoPassword = password

@@ -23,7 +23,7 @@ import 'page/entry.dart';
 import 'service/rank.dart';
 import 'storage/record.dart';
 
-class GameInitializer {
+class GameInit {
   static late GameStorage gameRecord;
   static late RankingService rankingService;
   static GameManager gameManager = GameManager();

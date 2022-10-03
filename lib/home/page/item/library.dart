@@ -59,7 +59,7 @@ class _LibraryItemState extends State<LibraryItem> {
     late HotSearch hotSearch;
 
     try {
-      hotSearch = await LibrarySearchInitializer.hotSearchService.getHotSearch();
+      hotSearch = await LibrarySearchInit.hotSearchService.getHotSearch();
     } catch (e) {
       return null;
     }

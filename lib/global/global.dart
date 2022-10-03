@@ -92,8 +92,8 @@ class Global {
     required UserEventStorageDao userEventStorage,
     required AuthSettingDao authSetting,
   }) async {
-    cookieJar = await CookieInitializer.init();
-    dio = await DioInitializer.init(
+    cookieJar = await CookieInit.init();
+    dio = await DioInit.init(
       config: DioConfig()
         ..cookieJar = cookieJar
         ..httpProxy = GlobalConfig.httpProxy
@@ -101,7 +101,7 @@ class Global {
         ..receiveTimeout = 6 * 1000
         ..connectTimeout = 6 * 1000,
     );
-    dio2 = await DioInitializer.init(
+    dio2 = await DioInit.init(
       config: DioConfig()
         ..cookieJar = cookieJar
         ..httpProxy = GlobalConfig.httpProxy

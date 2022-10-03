@@ -24,7 +24,7 @@ import 'dao/remote.dart';
 import 'service/electricity.dart';
 import 'storage/electricity.dart';
 
-class ElectricityInitializer {
+class ElectricityBillInit {
   static late ElectricityStorageDao electricityStorage;
   static late ElectricityServiceDao electricityService;
   static late KiteSession kiteSession;
@@ -32,7 +32,7 @@ class ElectricityInitializer {
     required KiteSession kiteSession,
     required Box<dynamic> electricityBox,
   }) async {
-    ElectricityInitializer.kiteSession = kiteSession;
+    ElectricityBillInit.kiteSession = kiteSession;
 
     electricityService = ElectricityService(kiteSession);
 

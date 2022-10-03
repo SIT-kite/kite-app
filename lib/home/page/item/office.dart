@@ -69,9 +69,9 @@ class _OfficeItemState extends State<OfficeItem> {
     final username = Kv.auth.currentUsername!;
     final password = Kv.auth.ssoPassword!;
 
-    if (!OfficeInitializer.session.isLogin) {
+    if (!ApplicationInit.session.isLogin) {
       try {
-        await OfficeInitializer.session.login(
+        await ApplicationInit.session.login(
           username: username,
           password: password,
         );
@@ -82,7 +82,7 @@ class _OfficeItemState extends State<OfficeItem> {
       }
     }
     format(s, x) => x > 0 ? '$s ($x)' : '';
-    final totalMessage = await OfficeInitializer.messageService.queryMessageCount();
+    final totalMessage = await ApplicationInit.messageService.queryMessageCount();
     final draftBlock = format(i18n.draft, totalMessage.inDraft);
     final doingBlock = format(i18n.processing, totalMessage.inProgress);
     final completedBlock = format(i18n.done, totalMessage.completed);

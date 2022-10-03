@@ -42,7 +42,7 @@ Future<void> uploadGameRecord(BuildContext context, GameRecord record) async {
     // 如果用户未同意过, 请求用户确认
     if (!await signUpIfNecessary(context, '使用学号或工号区分不同用户的游戏记录')) return;
     // 上传记录
-    await GameInitializer.rankingService.postScore(record);
+    await GameInit.rankingService.postScore(record);
     EasyLoading.showInfo('正在上传');
   } catch (e) {
     EasyLoading.showError('上传出错: $e');
