@@ -17,7 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/exception/session.dart';
-import 'package:kite/module/office/init.dart';
+import 'package:kite/module/application/init.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
