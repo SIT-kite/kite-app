@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import '../entity/exam.dart';
-import '../shared.dart';
+import '../using.dart';
 
 abstract class ExamDao {
   Future<List<ExamRoom>> getExamList(SchoolYear schoolYear, Semester semester);

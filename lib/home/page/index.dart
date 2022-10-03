@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/exception/session.dart';
-import 'package:kite/module/kite/service/weather.dart';
+import 'package:kite/module/shared/service/weather.dart';
 import 'package:kite/module/login/init.dart';
 import 'package:kite/module/quick_button/init.dart';
 import 'package:kite/global/global.dart';

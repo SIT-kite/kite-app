@@ -15,33 +15,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/network/session.dart';
 
-import 'dao.dart';
-import 'entity.dart';
+import '../dao/remote.dart';
+import '../entity/classroom.dart';
+import '../using.dart';
 
-class NoticeService implements NoticeServiceDao {
-  static const String _noticePath = '/notice';
+class ClassroomService implements ClassroomRemoteDao {
+  static const _classroomUrl = '/classroom/available';
 
   final ISession session;
-
-  const NoticeService(this.session);
-
-  /// 对通知排序, 优先放置置顶通知, 其次是新通知.
-  void _sort(List<KiteNotice> noticeList) {
-    noticeList.sort((a, b) {
-      // 相同优先级比发布序号
-      return ((a.top == b.top && a.id > b.id) || (a.top && !b.top)) ? -1 : 1;
-    });
-  }
+  const ClassroomService(this.session);
 
   @override
-  Future<List<KiteNotice>> getNoticeList() async {
-    final response = await session.request(_noticePath, ReqMethod.get);
-    final List noticeList = response.data;
+  Future<List<AvailableClassroom>> queryAvailableClassroom(int campus, String date) async {
+    final response = await session.request('$_classroomUrl?campus=$campus&date=$date', ReqMethod.get);
+    final List classrooms = response.data;
 
-    List<KiteNotice> result = noticeList.map((e) => KiteNotice.fromJson(e)).toList();
-    _sort(result);
-    return result;
+    return classrooms.map((e) => AvailableClassroom.fromJson(e as Map<String, dynamic>)).toList();
   }
 }

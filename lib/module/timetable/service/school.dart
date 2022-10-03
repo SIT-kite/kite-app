@@ -1,7 +1,7 @@
 import 'package:kite/network/session.dart';
 
 import '../entity/course.dart';
-import '../shared.dart';
+import '../using.dart';
 
 class TimetableService {
   static const _timetableUrl = 'http://jwxt.sit.edu.cn/jwglxt/kbcx/xskbcx_cxXsgrkb.html';

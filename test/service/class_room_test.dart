@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/module/kite/service/classroom.dart';
+import 'package:kite/module/classroom_browser/service/classroom.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/mock/index.dart';
 

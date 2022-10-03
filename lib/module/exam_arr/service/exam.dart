@@ -20,7 +20,7 @@ import 'package:kite/network/session.dart';
 
 import '../dao/exam.dart';
 import '../entity/exam.dart';
-import '../shared.dart';
+import '../using.dart';
 
 /// REAL. THE PAYLOAD IS IN PINYIN. DONT BLAME ANYONE BUT THE SCHOOL.
 /// More reading: https://github.com/sunnysab/zf-tools/blob/master/TRANSLATION.md

@@ -21,6 +21,7 @@ import 'package:kite/module/freshman/init.dart';
 import 'package:kite/global/desktop_initializer.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/module/kite_board/init.dart';
+import 'package:kite/module/kite_bulletin/init.dart';
 import 'package:kite/module/symbol.dart';
 import 'package:kite/override/init.dart';
 import 'package:kite/session/edu_session.dart';
@@ -94,16 +95,19 @@ class Initializer {
       expenseRecordBox: HiveBoxInitializer.expense,
     );
 
-    await KiteInitializer.init(
+    await SharedInitializer.init(
       kiteSession: kiteSession,
     );
     await GameInitializer.init(
       gameBox: HiveBoxInitializer.game,
       kiteSession: kiteSession,
     );
+    await KiteBulletinInitializer.init(kiteSession: kiteSession);
+    // TODO: Kite Board doesn't work
+    await BoardInitializer.init(kiteSession: kiteSession);
     await HomeInitializer.init(
       ssoSession: Global.ssoSession,
-      noticeService: KiteInitializer.noticeService,
+      noticeService: KiteBulletinInitializer.noticeService,
     );
     await LibraryInitializer.init(
       dio: Global.dio,

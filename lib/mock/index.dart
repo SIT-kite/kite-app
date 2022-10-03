@@ -52,7 +52,7 @@ Future<void> loginLibrary() async {
 
 /// 登陆小风筝服务
 Future<void> loginKite() async {
-  await KiteInitializer.kiteSession.login(username, ssoPassword);
+  await SharedInitializer.kiteSession.login(username, ssoPassword);
 }
 
 /// 登录上应大App服务

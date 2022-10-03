@@ -24,7 +24,7 @@ import 'package:kite/util/dsl.dart';
 
 import '../entity/exam.dart';
 import '../init.dart';
-import '../shared.dart';
+import '../using.dart';
 
 class ExamPage extends StatefulWidget {
   const ExamPage({Key? key}) : super(key: key);

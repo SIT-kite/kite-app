@@ -15,6 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import '../entity/bulletin.dart';
 
-export 'ocr.dart';
-export 'weather.dart';
+// 远程
+abstract class NoticeServiceDao {
+  // 获取电费数据
+  Future<List<KiteNotice>> getNoticeList();
+}

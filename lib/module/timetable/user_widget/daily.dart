@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 
 import '../cache.dart';
 import '../entity/course.dart';
-import '../shared.dart';
+import '../using.dart';
 import 'header.dart';
 import 'sheet.dart';
 import 'util.dart';

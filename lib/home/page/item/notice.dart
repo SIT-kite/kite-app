@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/module/kite/notice/entity.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
+import 'package:kite/module/symbol.dart';
 
 import '../../init.dart';
 import 'index.dart';

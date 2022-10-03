@@ -20,7 +20,7 @@ import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 
 import '../entity/score.dart';
-import '../shared.dart';
+import '../using.dart';
 import '../util.dart';
 
 class GpaBanner extends StatefulWidget {

@@ -15,8 +15,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import '../entity/weather.dart';
 
-abstract class WeatherDao {
-  Future<Weather> getCurrentWeather(int campus);
+import 'package:kite/session/kite_session.dart';
+
+import '../classroom_browser/service/classroom.dart';
+import 'dao/remote.dart';
+
+class ClassroomBrowserInitializer {
+  static late ClassroomRemoteDao classroomService;
+
+  static late KiteSession kiteSession;
+
+  static Future<void> init({
+    required KiteSession kiteSession,
+  }) async {
+    ClassroomBrowserInitializer.kiteSession = kiteSession;
+    classroomService = ClassroomService(kiteSession);
+  }
 }

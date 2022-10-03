@@ -17,9 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:kite/module/shared/init.dart';
 import 'package:kite/storage/init.dart';
-
-import '../module/kite/init.dart';
 
 class AuthorizationDialog extends StatelessWidget {
   final String msg;
@@ -70,7 +69,7 @@ Future<bool> signUpIfNecessary(BuildContext context, String description) async {
     // 注册用户
     final username = Kv.auth.currentUsername!;
     final password = Kv.auth.ssoPassword!;
-    await KiteInitializer.kiteSession.login(username, password);
+    await SharedInitializer.kiteSession.login(username, password);
   }
   return true;
 }

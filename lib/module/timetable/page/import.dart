@@ -25,7 +25,7 @@ import 'package:kite/util/alert_dialog.dart';
 
 import '../entity/meta.dart';
 import '../init.dart';
-import '../shared.dart';
+import '../using.dart';
 import 'preview.dart';
 
 const _semesterDescription = {

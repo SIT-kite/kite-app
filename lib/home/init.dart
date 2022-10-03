@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/module/kite/notice/dao.dart';
+import 'package:kite/module/kite_bulletin/dao/remote.dart';
 import 'package:kite/session/sso/index.dart';
 
 class HomeInitializer {

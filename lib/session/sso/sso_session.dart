@@ -23,7 +23,7 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart' hide Lock;
 import 'package:kite/network/session.dart';
 import 'package:kite/exception/session.dart';
-import 'package:kite/module/kite/service/ocr.dart';
+import 'package:kite/module/flea_market/service/ocr.dart';
 import 'package:kite/session/dio_common.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';

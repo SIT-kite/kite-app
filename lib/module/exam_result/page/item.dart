@@ -21,7 +21,7 @@ import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 
 import '../init.dart';
-import '../shared.dart';
+import '../using.dart';
 import 'evaluation.dart';
 import '../entity/evaluation.dart';
 import '../entity/score.dart';

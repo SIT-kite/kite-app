@@ -15,15 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:kite/user_widget/future_builder.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/util/dsl.dart';
 
-import '../init.dart';
-import 'entity.dart';
+import 'entity/bulletin.dart';
+import 'init.dart';
 
 class NoticePage extends StatelessWidget {
   const NoticePage({Key? key}) : super(key: key);
@@ -88,7 +87,7 @@ class NoticePage extends StatelessWidget {
 
   Widget _buildBody() {
     return MyFutureBuilder<List<KiteNotice>>(
-      future: KiteInitializer.noticeService.getNoticeList(),
+      future: KiteBulletinInitializer.noticeService.getNoticeList(),
       builder: (context, data) {
         return _buildNoticeList(context, data);
       },

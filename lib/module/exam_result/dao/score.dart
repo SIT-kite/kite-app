@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import '../entity/score.dart';
-import '../shared.dart';
+import '../using.dart';
 
 abstract class ScoreDao {
   Future<List<Score>> getScoreList(SchoolYear year, Semester semester);

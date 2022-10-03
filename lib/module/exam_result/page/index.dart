@@ -23,7 +23,7 @@ import 'package:kite/util/dsl.dart';
 
 import '../entity/score.dart';
 import '../init.dart';
-import '../shared.dart';
+import '../using.dart';
 import 'banner.dart';
 import 'item.dart';
 

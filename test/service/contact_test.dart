@@ -16,14 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:kite/module/shared/init.dart';
 import 'package:kite/module/yellow_pages/service/contact.dart';
 import 'package:kite/mock/index.dart';
-import 'package:kite/module/kite/init.dart';
 
 void main() async {
   await init();
   await login();
-  var session = KiteInitializer.kiteSession;
+  var session = SharedInitializer.kiteSession;
   test('expense_tracker test', () async {
     final contact = await ContactRemoteService(session).getAllContacts();
     Log.info(contact);

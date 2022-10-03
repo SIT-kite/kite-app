@@ -19,7 +19,7 @@ import 'package:hive/hive.dart';
 
 import '../entity/course.dart';
 import '../entity/meta.dart';
-import '../shared.dart';
+import '../using.dart';
 
 
 String buildTableName(SchoolYear schoolYear, Semester semester) => '${schoolYear.year!}-${semester.index}';

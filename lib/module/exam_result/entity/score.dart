@@ -17,7 +17,7 @@
  */
 import 'package:json_annotation/json_annotation.dart';
 
-import '../shared.dart';
+import '../using.dart';
 
 part 'score.g.dart';
 
