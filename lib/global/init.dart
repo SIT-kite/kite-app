@@ -16,11 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:catcher/catcher.dart';
-import 'package:kite/feature/board/init.dart';
-import 'package:kite/feature/freshman/init.dart';
-import 'package:kite/feature/initializer_index.dart';
-import 'package:kite/feature/override/init.dart';
-import 'package:kite/feature/sit_app/init.dart';
+import 'package:kite/home/init.dart';
+import 'package:kite/module/board/init.dart';
+import 'package:kite/module/electricity/init.dart';
+import 'package:kite/module/freshman/init.dart';
+import 'package:kite/module/initializer_index.dart';
+import 'package:kite/module/override/init.dart';
+import 'package:kite/module/sit_app/init.dart';
 import 'package:kite/global/desktop_initializer.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/session/kite_session.dart';
@@ -30,7 +32,6 @@ import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-import '../feature/electricity/init.dart';
 import 'hive_initializer.dart';
 
 class Initializer {

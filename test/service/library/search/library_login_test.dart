@@ -18,8 +18,8 @@
  *
  */
 
-import 'package:kite/feature/library/search/init.dart';
-import 'package:kite/feature/library/search/service/borrow.dart';
+import 'package:kite/module/library/search/init.dart';
+import 'package:kite/module/library/search/service/borrow.dart';
 import 'package:kite/mock/index.dart';
 
 void main() async {

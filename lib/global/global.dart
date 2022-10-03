@@ -24,6 +24,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/global/cookie_initializer.dart';
 import 'package:kite/global/dio_initializer.dart';
+import 'package:kite/module/user_event/dao.dart';
 import 'package:kite/route.dart';
 import 'package:kite/session/sso/index.dart';
 import 'package:kite/storage/dao/index.dart';
@@ -32,7 +33,6 @@ import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/event_bus.dart';
 import 'package:kite/util/page_logger.dart';
 
-import '../feature/user_event/dao.dart';
 
 class GlobalConfig {
   static String? httpProxy;

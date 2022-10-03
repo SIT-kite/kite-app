@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/feature/contact/service/contact.dart';
-import 'package:kite/feature/initializer_index.dart';
+import 'package:kite/module/contact/service/contact.dart';
+import 'package:kite/module/initializer_index.dart';
 import 'package:kite/mock/index.dart';
 
 void main() async {

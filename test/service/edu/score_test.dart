@@ -1,5 +1,5 @@
-import 'package:kite/feature/edu/common/entity/index.dart';
-import 'package:kite/feature/edu/score/init.dart';
+import 'package:kite/module/edu/common/entity/index.dart';
+import 'package:kite/module/edu/score/init.dart';
 import 'package:kite/mock/index.dart';
 
 void main() async {

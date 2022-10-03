@@ -17,24 +17,15 @@
  */
 
 import 'package:flutter/cupertino.dart';
-import 'package:kite/feature/board/page/index.dart';
-import 'package:kite/feature/freshman/page/login.dart';
-import 'package:kite/feature/override/entity.dart';
+import 'package:kite/home/page/index.dart';
+
 import 'package:kite/navigation/static_route.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/alert_dialog.dart';
 
+import 'module/meta.dart';
+import 'module/simple_page/browser.dart';
 import 'navigation/route.dart';
-import 'feature/electricity/page/index.dart';
-import 'feature/freshman/page/analysis.dart';
-import 'feature/freshman/page/friend/index.dart';
-import 'feature/freshman/page/info.dart';
-import 'feature/freshman/page/update.dart';
-import 'feature/game/page/tetris/index.dart';
-import 'feature/not_found/page.dart';
-import 'feature/page_index.dart';
-import 'feature/simple_page/browser.dart';
-import 'feature/simple_page/html_page.dart';
 import 'setting/page/index.dart';
 import 'util/user.dart';
 

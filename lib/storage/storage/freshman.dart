@@ -17,7 +17,7 @@
  */
 
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:kite/feature/freshman/entity.dart';
+import 'package:kite/module/freshman/entity.dart';
 
 import '../dao/freshman.dart';
 import 'common.dart';

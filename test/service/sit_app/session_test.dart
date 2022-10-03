@@ -1,4 +1,4 @@
-import 'package:kite/feature/sit_app/init.dart';
+import 'package:kite/module/sit_app/init.dart';
 import 'package:kite/mock/index.dart';
 
 void main() async {

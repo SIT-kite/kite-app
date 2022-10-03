@@ -1,4 +1,4 @@
-import 'package:kite/feature/library/appointment/init.dart';
+import 'package:kite/module/library/appointment/init.dart';
 import 'package:kite/mock/index.dart';
 
 void main() async {

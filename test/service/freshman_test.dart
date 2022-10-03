@@ -1,6 +1,6 @@
-import 'package:kite/feature/freshman/dao.dart';
-import 'package:kite/feature/freshman/entity.dart';
-import 'package:kite/feature/freshman/init.dart';
+import 'package:kite/module/freshman/dao.dart';
+import 'package:kite/module/freshman/entity.dart';
+import 'package:kite/module/freshman/init.dart';
 import 'package:kite/mock/index.dart';
 import 'package:kite/storage/init.dart';
 

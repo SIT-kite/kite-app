@@ -17,10 +17,10 @@
  */
 
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:kite/feature/contact/entity/contact.dart';
-import 'package:kite/feature/expense/entity/expense.dart';
-import 'package:kite/feature/initializer_index.dart';
-import 'package:kite/feature/library/search/entity/search_history.dart';
+import 'package:kite/module/contact/entity/contact.dart';
+import 'package:kite/module/expense/entity/expense.dart';
+import 'package:kite/module/initializer_index.dart';
+import 'package:kite/module/library/search/entity/search_history.dart';
 
 class HiveBoxInitializer {
   static late Box<dynamic> userEvent;

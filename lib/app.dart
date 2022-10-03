@@ -26,10 +26,10 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/l10n/extension.dart';
+import 'package:kite/module/override/entity.dart';
 import 'package:kite/route.dart';
 
 import 'navigation/route.dart';
-import 'feature/override/entity.dart';
 import 'global/global.dart';
 import 'storage/init.dart';
 import 'util/logger.dart';

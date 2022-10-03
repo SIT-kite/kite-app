@@ -1,4 +1,4 @@
-import 'package:kite/feature/expense/service/expense.dart';
+import 'package:kite/module/expense/service/expense.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/mock/index.dart';
 

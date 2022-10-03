@@ -15,10 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/feature/electricity/entity.dart';
-import 'package:kite/feature/home/entity/home.dart';
-import 'package:kite/feature/kite/entity/weather.dart';
-import 'package:kite/feature/report/entity.dart';
+import 'package:kite/module/electricity/entity.dart';
+import 'package:kite/module/kite/entity/weather.dart';
+import 'package:kite/module/report/entity.dart';
+
+import '../../home/entity/home.dart';
 
 abstract class HomeSettingDao {
   int get campus; // 校区

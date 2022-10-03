@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:kite/feature/initializer_index.dart';
+import 'package:kite/module/initializer_index.dart';
 import 'package:kite/storage/init.dart';
 
 class AuthorizationDialog extends StatelessWidget {

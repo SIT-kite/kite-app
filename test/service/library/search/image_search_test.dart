@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kite/feature/library/search/init.dart';
-import 'package:kite/feature/library/search/service/index.dart';
+import 'package:kite/module/library/search/init.dart';
+import 'package:kite/module/library/search/service/index.dart';
 import 'package:logger/logger.dart';
 
 void main() {

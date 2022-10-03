@@ -17,8 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:kite/feature/home/entity/home.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/home/entity/home.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/dsl.dart';

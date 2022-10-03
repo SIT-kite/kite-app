@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
-import 'package:kite/feature/board/init.dart';
+import 'package:kite/module/board/init.dart';
 import 'package:kite/mock/index.dart';
 import 'package:kite/storage/init.dart';
 

@@ -1,4 +1,4 @@
-import 'package:kite/feature/bulletin/init.dart';
+import 'package:kite/module/bulletin/init.dart';
 import 'package:kite/mock/index.dart';
 
 void main() async {
