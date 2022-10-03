@@ -1,5 +1,14 @@
 # Structure of Kite App
 
+## Module
+
+`Module` is a unit of Kite app, independent of each other.
+
+A module has several parts in general:
+- `Entity`: sharing a uniform type system via network communication or serialization.
+- `Service`: including the networking, serialization
+
+
 ## Root
 - The GitHub-related folder: `.github`
 - Each platform specific subproject, such as `winodws`,`linux`, `iOS` ,`macOS`, `android` and `web`.

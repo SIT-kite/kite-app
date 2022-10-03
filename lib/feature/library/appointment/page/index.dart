@@ -42,8 +42,9 @@ class TodayTomorrowSwitch extends StatelessWidget {
   }) : super(key: key);
 
   Widget buildTodayWidget() {
+    // TODO: I18n
     final DateTime today = DateTime.now();
-    final todayWeekText = '周' + _weekText.substring(today.weekday - 1, today.weekday);
+    final todayWeekText = '周${_weekText.substring(today.weekday - 1, today.weekday)}';
     final todayDateText = '${today.month}-${today.day}';
     return Text(
       '今天\n'
@@ -69,12 +70,12 @@ class TodayTomorrowSwitch extends StatelessWidget {
     return MultiButtonSwitch(
       children: [
         Container(
-          child: buildTodayWidget(),
           margin: const EdgeInsets.symmetric(vertical: 8),
+          child: buildTodayWidget(),
         ),
         Container(
-          child: buildTomorrowWidget(),
           margin: const EdgeInsets.symmetric(vertical: 8),
+          child: buildTomorrowWidget(),
         ),
       ],
       onSwitch: (i) {
@@ -133,6 +134,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
         ),
       ],
     );
+    // TODO: Wrong use of BuildContext
     // 确定预约
     if (applyDialogResult == 0) {
       if (!await signUpIfNecessary(context, '预约图书馆')) return;
@@ -227,7 +229,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                 ),
               ],
             ),
-            trailing: SizedBox(child: Center(child: buildTrailingWidget()), width: 50),
+            trailing: SizedBox(width: 50, child: Center(child: buildTrailingWidget())),
             onTap: () async {
               showHasAppointed() {
                 showBasicFlash(context, const Text('您已预约过本场'), duration: const Duration(seconds: 1));
@@ -275,7 +277,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
           builder: (context, data, child) {
             if (data == null) return const CircularProgressIndicator();
             if (data.period == null) {
-              return Text(
+              return const Text(
                 '当前不在进馆时段',
                 textAlign: TextAlign.center,
               );

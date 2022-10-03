@@ -14,7 +14,7 @@ void main() async {
   });
 
   test('test get list', () async {
-    final list = dao.getAllCatalogues();
+    final list = await dao.getAllCatalogues();
     final firstPage = await dao.queryBulletinList(1, list[0].id);
     Log.info(firstPage);
   });

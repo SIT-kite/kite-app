@@ -68,6 +68,10 @@ dart format . -l 120
 As to naming principle, please follow
 the [official naming convention](https://dart.dev/guides/language/effective-dart/style).
 
+To be flexible and easy to reconstruct,
+in side of a [module](STRUCTURE.md#module), `relative import` should be applied,
+meanwhile, `absolute import` should be applied outside.
+
 ### Json
 
 As to formatting, the indent is 2 spaces.
