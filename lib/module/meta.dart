@@ -12,7 +12,7 @@ export 'egg/page/index.dart';
 export 'electricity/page/index.dart';
 export 'expense/page/index.dart';
 export 'freshman/page/analysis.dart';
-export 'freshman/page/friend/index.dart';
+export 'freshman/page/index.dart';
 export 'freshman/page/info.dart';
 export 'freshman/page/login.dart';
 export 'freshman/page/update.dart';

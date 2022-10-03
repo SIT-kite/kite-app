@@ -28,7 +28,8 @@ import 'package:kite/util/url_launcher.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../entity.dart';
+import '../entity/announcement.dart';
+import '../entity/attachment.dart';
 import '../init.dart';
 
 class DetailPage extends StatefulWidget {
@@ -71,7 +72,7 @@ class _DetailPageState extends State<DetailPage> {
         attachment.url,
         savePath: targetPath,
         onReceiveProgress: (int count, int total) {
-          // Log.info('已下载: ${count / (1024 * 1024)}MB');
+          // Log.info.dart('已下载: ${count / (1024 * 1024)}MB');
         },
       );
     }

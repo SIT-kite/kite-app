@@ -26,7 +26,7 @@ import 'package:kite/util/dsl.dart';
 import '../../../route.dart';
 import '../../../util/flash.dart';
 import '../../../util/logger.dart';
-import '../dao.dart';
+import '../dao/Freshman.dart';
 import '../init.dart';
 
 class FreshmanLoginPage extends StatefulWidget {

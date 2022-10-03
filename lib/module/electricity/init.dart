@@ -17,11 +17,12 @@
  */
 
 import 'package:hive/hive.dart';
+import 'package:kite/module/electricity/service/electricity.dart';
+import 'package:kite/module/electricity/storage/electricity.dart';
 
 import '../../session/kite_session.dart';
-import 'dao.dart';
-import 'service.dart';
-import 'storage.dart';
+import 'dao/local.dart';
+import 'dao/remote.dart';
 
 class ElectricityInitializer {
   static late ElectricityStorageDao electricityStorage;

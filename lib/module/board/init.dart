@@ -1,6 +1,6 @@
 import 'package:kite/network/session.dart';
 
-import 'service.dart';
+import 'service/kite_board.dart';
 
 class BoardInitializer {
   static late BoardService boardServiceDao;

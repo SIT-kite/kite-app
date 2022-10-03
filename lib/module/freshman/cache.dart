@@ -16,9 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/module/freshman/dao.dart';
-import 'package:kite/module/freshman/entity.dart';
 import 'package:kite/storage/init.dart';
+
+import 'dao/Freshman.dart';
+import 'entity/info.dart';
+import 'entity/relationship.dart';
+import 'entity/statistics.dart';
 
 class FreshmanCacheManager {
   final FreshmanCacheDao freshmanCacheDao;

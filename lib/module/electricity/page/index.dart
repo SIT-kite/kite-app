@@ -27,9 +27,9 @@ import 'package:kite/l10n/extension.dart';
 import 'package:kite/util/dsl.dart';
 import 'package:kite/util/logger.dart';
 
-import '../entity.dart';
+import '../entity/account.dart';
 import '../init.dart';
-import 'component/chart.dart';
+import '../user_widget/chart.dart';
 
 Widget cardTitle(String title) {
   return Row(

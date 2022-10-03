@@ -10,7 +10,7 @@ void main() async {
       const SchoolYear(2021),
       Semester.firstTerm,
     );
-    // Log.info(table);
+    // Log.info.dart(table);
     print(table);
   });
 }

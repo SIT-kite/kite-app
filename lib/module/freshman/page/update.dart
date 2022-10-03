@@ -23,11 +23,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/user_widget/future_builder.dart';
 import 'package:kite/user_widget/my_switcher.dart';
-import 'package:kite/module/freshman/entity.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/util/dsl.dart';
 import 'package:kite/util/flash.dart';
-import '../dao.dart';
+import '../dao/Freshman.dart';
+import '../entity/info.dart';
 import '../init.dart';
 
 class FreshmanUpdatePage extends StatefulWidget {

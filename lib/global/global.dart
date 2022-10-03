@@ -33,7 +33,6 @@ import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/event_bus.dart';
 import 'package:kite/util/page_logger.dart';
 
-
 class GlobalConfig {
   static String? httpProxy;
   static bool isTestEnv = false;

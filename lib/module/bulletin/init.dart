@@ -18,8 +18,8 @@
 
 import 'package:kite/session/sso/sso_session.dart';
 
-import 'dao.dart';
-import 'service.dart';
+import 'dao/announcement.dart';
+import 'service/announcement.dart';
 
 class BulletinInitializer {
   static late BulletinDao bulletin;

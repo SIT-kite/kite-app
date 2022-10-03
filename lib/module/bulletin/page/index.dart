@@ -21,7 +21,8 @@ import 'package:kite/user_widget/future_builder.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/util/dsl.dart';
 
-import '../entity.dart';
+import '../entity/announcement.dart';
+import '../entity/page.dart';
 import '../init.dart';
 import 'detail.dart';
 

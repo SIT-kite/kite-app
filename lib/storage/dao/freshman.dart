@@ -16,7 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/module/freshman/entity.dart';
+import 'package:kite/module/freshman/entity/info.dart';
+import 'package:kite/module/freshman/entity/relationship.dart';
+import 'package:kite/module/freshman/entity/statistics.dart';
 
 abstract class FreshmanCacheDao {
   Analysis? analysis;

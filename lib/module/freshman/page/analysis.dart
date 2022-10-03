@@ -21,9 +21,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/user_widget/future_builder.dart';
 import 'package:kite/module/freshman/cache.dart';
-import 'package:kite/module/freshman/entity.dart';
 
-import '../dao.dart';
+import '../dao/Freshman.dart';
+import '../entity/info.dart';
+import '../entity/statistics.dart';
 import '../init.dart';
 
 // TODO: Rename this to statistics

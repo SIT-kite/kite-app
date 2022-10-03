@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/module/electricity/entity.dart';
+import 'package:kite/module/electricity/entity/account.dart';
 import 'package:kite/module/kite/entity/weather.dart';
 import 'package:kite/module/report/entity.dart';
 

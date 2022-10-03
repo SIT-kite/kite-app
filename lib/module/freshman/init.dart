@@ -21,8 +21,8 @@ import 'package:kite/storage/init.dart';
 
 import '../../session/freshman_session.dart';
 import 'cache.dart';
-import 'dao.dart';
-import 'service.dart';
+import 'dao/Freshman.dart';
+import 'service/freshman.dart';
 
 class FreshmanInitializer {
   static late FreshmanSession freshmanSession;
@@ -40,6 +40,6 @@ class FreshmanInitializer {
       freshmanDao: FreshmanService(freshmanSession),
       freshmanCacheDao: Kv.freshman,
       freshmanCacheManager: freshmanCacheManager,
-    );
+    ) as FreshmanDao;
   }
 }

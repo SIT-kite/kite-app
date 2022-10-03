@@ -18,7 +18,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kite/module/freshman/page/component/profile.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
 import 'package:kite/user_widget/future_builder.dart';
@@ -28,9 +27,10 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../launch.dart';
 import '../../../util/flash.dart';
-import '../entity.dart';
+import '../entity/info.dart';
 import '../init.dart';
-import 'component/common.dart';
+import '../user_widget/common.dart';
+import '../user_widget/profile.dart';
 
 class FreshmanPage extends StatelessWidget {
   FreshmanPage({Key? key}) : super(key: key);
