@@ -1,4 +1,4 @@
-import 'package:kite/module/bulletin/init.dart';
+import 'package:kite/module/oa_announcement/init.dart';
 import 'package:kite/mock/index.dart';
 
 void main() async {
@@ -6,7 +6,7 @@ void main() async {
   await login();
 
   final dao = BulletinInitializer.bulletin;
-  test('test bulletin', () async {
+  test('test oa_announcement', () async {
     final list = dao.getAllCatalogues();
     Log.info(list);
     final bulletin = await dao.getBulletinDetail('pe2362', '7d227947-6dfc-11ec-9e2f-abfe89c3f6e3');

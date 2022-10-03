@@ -16,10 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/module/expense/entity/expense.dart';
-import 'package:kite/module/expense/init.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
+import 'package:kite/module/expense_tracker/entity/expense.dart';
+import 'package:kite/module/expense_tracker/init.dart';
 
 import 'index.dart';
 
@@ -48,7 +48,7 @@ class _ExpenseItemState extends State<ExpenseItem> {
       content = i18n.expenseContent(last.amount.toStringAsPrecision(2), last.place);
     }
     return HomeFunctionButton(
-      route: '/expense',
+      route: '/expense_tracker',
       icon: 'assets/home/icon_expense.svg',
       title: i18n.ftype_expense,
       subtitle: content ?? i18n.ftype_expense_desc,

@@ -24,7 +24,7 @@ import 'package:kite/override/entity.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/alert_dialog.dart';
 
-import 'module/meta.dart';
+import 'module/symbol.dart';
 import 'module/simple_page/browser.dart';
 import 'navigation/route.dart';
 import 'setting/page/index.dart';
@@ -37,10 +37,10 @@ class RouteTable {
   static const login = '/login';
   static const welcome = '/welcome';
   static const about = '/about';
-  static const expense = '/expense';
+  static const expense = '/expense_tracker';
   static const connectivity = '/connectivity';
   static const campusCard = '/campusCard';
-  static const electricity = '/electricity';
+  static const electricity = '/electricity_bill';
   static const score = '/score';
   static const office = '/office';
   static const game = '/game';
@@ -57,15 +57,15 @@ class RouteTable {
   static const setting = '/setting';
   static const feedback = '/feedback';
   static const notice = '/notice';
-  static const contact = '/contact';
-  static const bulletin = '/bulletin';
+  static const contact = '/yellow_pages';
+  static const bulletin = '/oa_announcement';
   static const mail = '/mail';
   static const night = '/night';
   static const event = '/event';
   static const lostFound = '/lostFound';
   static const classroom = '/classroom';
   static const exam = '/exam';
-  static const egg = '/egg';
+  static const egg = '/easter_egg';
   static const bbs = '/bbs';
   static const scanner = '/scanner';
   static const browser = '/browser';
@@ -74,7 +74,7 @@ class RouteTable {
   static const freshmanUpdate = '$freshman/update';
   static const freshmanAnalysis = '$freshman/analysis';
   static const freshmanFriend = '$freshman/friend';
-  static const board = '/board';
+  static const board = '/kite_board';
   static const notFound = '/not_found';
   static const simpleHtml = '/simple_html';
 }

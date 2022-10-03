@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/module/meta.dart';
+import 'package:kite/module/symbol.dart';
 import 'package:kite/module/library/search/init.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/global/init.dart';

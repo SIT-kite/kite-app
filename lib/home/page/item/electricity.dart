@@ -18,7 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
-import 'package:kite/module/electricity/entity/account.dart';
+import 'package:kite/module/symbol.dart';
 import 'package:kite/storage/init.dart';
 
 import 'index.dart';
@@ -48,7 +48,7 @@ class _ElectricityItemState extends State<ElectricityItem> {
       content = i18n.elecBillContent(b.room, b.balance.toStringAsPrecision(2));
     }
     return HomeFunctionButton(
-      route: '/electricity',
+      route: '/electricity_bill',
       icon: 'assets/home/icon_electricity.svg',
       title: i18n.ftype_elecBill,
       subtitle: content ?? i18n.ftype_elecBill_desc,

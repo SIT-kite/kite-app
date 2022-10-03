@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'rank.g.dart';
+
 @JsonSerializable()
 class GameRankingItem {
   /// 成绩值

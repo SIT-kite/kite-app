@@ -21,7 +21,7 @@ import '../dao/contact.dart';
 import '../entity/contact.dart';
 
 class ContactRemoteService implements ContactRemoteDao {
-  static const _contactUrl = '/contact';
+  static const _contactUrl = '/yellow_pages';
   final ISession session;
 
   const ContactRemoteService(this.session);

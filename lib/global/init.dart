@@ -17,12 +17,12 @@
  */
 import 'package:catcher/catcher.dart';
 import 'package:kite/home/init.dart';
-import 'package:kite/module/board/init.dart';
-import 'package:kite/module/electricity/init.dart';
+import 'package:kite/module/electricity_bill/init.dart';
 import 'package:kite/module/freshman/init.dart';
 import 'package:kite/global/desktop_initializer.dart';
 import 'package:kite/global/global.dart';
-import 'package:kite/module/meta.dart';
+import 'package:kite/module/kite_board/init.dart';
+import 'package:kite/module/symbol.dart';
 import 'package:kite/override/init.dart';
 import 'package:kite/session/kite_session.dart';
 import 'package:kite/session/sit_app_session.dart';

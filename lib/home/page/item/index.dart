@@ -121,13 +121,13 @@ class FunctionButtonFactory {
     FunctionType.application: (context) => const OfficeItem(),
     FunctionType.eduEmail: (context) => const MailItem(),
     FunctionType.oaAnnouncement: (context) => HomeFunctionButton(
-          route: '/bulletin',
+          route: '/oa_announcement',
           icon: 'assets/home/icon_bulletin.svg',
           title: FunctionType.oaAnnouncement.localized(),
           subtitle: FunctionType.oaAnnouncement.localizedDesc(),
         ),
     FunctionType.yellowPages: (context) => HomeFunctionButton(
-          route: '/contact',
+          route: '/yellow_pages',
           icon: 'assets/home/icon_contact.svg',
           title: FunctionType.yellowPages.localized(),
           subtitle: FunctionType.yellowPages.localizedDesc(),
@@ -175,7 +175,7 @@ class FunctionButtonFactory {
         ),
     FunctionType.electricityBill: (context) => const ElectricityItem(),
     FunctionType.kiteBoard: (context) => HomeFunctionButton(
-          route: '/board',
+          route: '/kite_board',
           icon: 'assets/home/icon_board.svg',
           title: FunctionType.kiteBoard.localized(),
           subtitle: FunctionType.kiteBoard.localizedDesc(),

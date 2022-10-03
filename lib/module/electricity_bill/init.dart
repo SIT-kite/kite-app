@@ -17,24 +17,25 @@
  */
 
 import 'package:hive/hive.dart';
-import 'package:kite/network/session.dart';
-import 'package:kite/module/expense/service/expense.dart';
 
-import 'dao/expense.dart';
-import 'entity/expense.dart';
-import 'storage/expense.dart';
+import '../../session/kite_session.dart';
+import 'dao/local.dart';
+import 'dao/remote.dart';
+import 'service/electricity.dart';
+import 'storage/electricity.dart';
 
-class ExpenseInitializer {
-  static late ExpenseRemoteDao expenseRemote;
-  static late ExpenseLocalStorage expenseRecord;
-
+class ElectricityInitializer {
+  static late ElectricityStorageDao electricityStorage;
+  static late ElectricityServiceDao electricityService;
+  static late KiteSession kiteSession;
   static Future<void> init({
-    required ISession ssoSession,
-    required Box<ExpenseRecord> expenseRecordBox,
+    required KiteSession kiteSession,
+    required Box<dynamic> electricityBox,
   }) async {
-    expenseRecord = ExpenseLocalStorage(expenseRecordBox);
+    ElectricityInitializer.kiteSession = kiteSession;
 
-    expenseRemote = ExpenseRemoteService(ssoSession);
-    // expenseRemote = ExpenseMock();
+    electricityService = ElectricityService(kiteSession);
+
+    electricityStorage = ElectricityStorage(electricityBox);
   }
 }

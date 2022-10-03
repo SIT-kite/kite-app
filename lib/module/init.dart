@@ -19,16 +19,7 @@
 import 'package:kite/home/entity/home.dart';
 import 'package:kite/util/hive_register_adapter.dart';
 
-import 'contact/entity/contact.dart';
-import 'edu/timetable/entity.dart';
-import 'electricity/entity/account.dart';
-import 'expense/entity/expense.dart';
-import 'game/entity/record.dart';
-import 'game/entity/type.dart';
-import 'kite/entity/weather.dart';
-import 'library/search/entity/search_history.dart';
-import 'report/entity/record.dart';
-import 'user_event/entity.dart';
+import 'symbol.dart';
 
 void registerAdapters() {
   registerAdapter(ContactDataAdapter());

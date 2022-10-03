@@ -18,9 +18,9 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/module/board/page/view.dart';
 
 import '../entity/picture_summary.dart';
+import '../page/view.dart';
 
 class PictureCard extends StatelessWidget {
   final PictureSummary picture;

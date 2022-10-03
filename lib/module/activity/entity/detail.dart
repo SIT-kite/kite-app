@@ -44,7 +44,7 @@ class ActivityDetail {
   /// Activity manager
   final String? manager;
 
-  /// Manager contact(phone)
+  /// Manager yellow_pages(phone)
   final String? contact;
 
   /// Activity organizer
@@ -64,7 +64,7 @@ class ActivityDetail {
     return 'ActivityDetail{id: $id, category: $category, title: $title, '
         'startTime: $startTime, signStartTime: $signStartTime, '
         'signEndTime: $signEndTime, place: $place, duration: $duration,'
-        'manager: $manager, contact: $contact, organizer: $organizer,'
+        'manager: $manager, yellow_pages: $contact, organizer: $organizer,'
         ' undertaker: $undertaker, description: $description}';
   }
 }

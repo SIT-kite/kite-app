@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
@@ -14,7 +13,7 @@ class ReminderDialog extends StatefulWidget {
 
 class _ReminderDialogState extends State<ReminderDialog> {
   final ValueNotifier<TimeOfDay?> _notifier =
-  ValueNotifier(Kv.report.time == null ? null : TimeOfDay.fromDateTime(Kv.report.time!));
+      ValueNotifier(Kv.report.time == null ? null : TimeOfDay.fromDateTime(Kv.report.time!));
 
   @override
   Widget build(BuildContext context) {

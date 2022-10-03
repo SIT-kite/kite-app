@@ -19,7 +19,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hive/hive.dart';
-import 'package:kite/module/contact/entity/contact.dart';
+import 'package:kite/module/yellow_pages/entity/contact.dart';
 import 'package:kite/module/library/search/entity/search_history.dart';
 import 'package:kite/user_widget/future_builder.dart';
 import 'package:kite/util/alert_dialog.dart';

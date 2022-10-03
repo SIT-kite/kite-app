@@ -1,4 +1,3 @@
-
 import 'package:kite/network/session.dart';
 
 import '../dao/report.dart';

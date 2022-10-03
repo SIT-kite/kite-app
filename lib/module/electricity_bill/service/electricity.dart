@@ -5,7 +5,7 @@ import '../entity/account.dart';
 import '../entity/statistics.dart';
 
 class ElectricityService implements ElectricityServiceDao {
-  static const String _baseUrl = '/electricity/room';
+  static const String _baseUrl = '/electricity_bill/room';
 
   final ISession session;
 

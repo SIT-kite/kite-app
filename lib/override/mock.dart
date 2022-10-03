@@ -19,7 +19,7 @@ const _json = {
   ],
   "homeItemHide": [
     {
-      "nameList": ["electricity"],
+      "nameList": ["electricity_bill"],
       "userTypeList": ["undergraduate", "postgraduate"]
     },
     {
@@ -28,7 +28,7 @@ const _json = {
     }
   ],
   "routeNotice": {
-    "/egg": {
+    "/easter_egg": {
       "id": 1,
       "title": "Egg维护中",
       "msg": "Egg维护中，可能无法正常使用",

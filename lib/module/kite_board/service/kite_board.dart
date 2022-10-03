@@ -17,13 +17,13 @@
  */
 
 import 'package:dio/dio.dart';
-import 'package:kite/module/board/entity/picture_summary.dart';
 
 import '../../../network/session.dart';
 import '../dao/kite_board.dart';
+import '../entity/picture_summary.dart';
 
 class BoardService implements BoardDao {
-  static const _boardUrl = '/board';
+  static const _boardUrl = '/kite_board';
 
   final ISession session;
   BoardService(this.session);

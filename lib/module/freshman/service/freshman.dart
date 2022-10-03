@@ -21,7 +21,7 @@ class FreshmanService implements FreshmanDao {
   @override
   Future<void> update({Contact? contact, bool? visible}) async {
     await session.request('/update', ReqMethod.put, data: {
-      if (contact != null) 'contact': jsonEncode(contact.toJson()),
+      if (contact != null) 'yellow_pages': jsonEncode(contact.toJson()),
       if (visible != null) 'visible': visible,
     });
   }

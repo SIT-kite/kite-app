@@ -22,8 +22,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:kite/module/board/init.dart';
-import 'package:kite/module/board/service/kite_board.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/util/dsl.dart';
 import 'package:kite/util/file.dart';
@@ -33,6 +31,8 @@ import 'package:kite/util/user.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
 import '../entity/picture_summary.dart';
+import '../init.dart';
+import '../service/kite_board.dart';
 import '../user_widget/card.dart';
 
 class BoardPage extends StatefulWidget {
