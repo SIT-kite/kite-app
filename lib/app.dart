@@ -26,7 +26,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/l10n/extension.dart';
-import 'package:kite/module/override/entity.dart';
+import 'package:kite/override/entity.dart';
 import 'package:kite/route.dart';
 
 import 'navigation/route.dart';

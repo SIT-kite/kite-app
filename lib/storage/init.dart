@@ -17,8 +17,8 @@
  */
 
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:kite/module/override/interface.dart';
-import 'package:kite/module/override/storage.dart';
+import 'package:kite/override/interface.dart';
+import 'package:kite/override/storage.dart';
 import 'package:kite/storage/dao/admin.dart';
 import 'package:kite/storage/dao/develop.dart';
 import 'package:kite/storage/dao/kite.dart';

@@ -20,6 +20,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:kite/home/page/index.dart';
 
 import 'package:kite/navigation/static_route.dart';
+import 'package:kite/override/entity.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/alert_dialog.dart';
 

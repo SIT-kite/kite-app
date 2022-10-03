@@ -17,8 +17,9 @@
  */
 
 import 'package:kite/module/contact/service/contact.dart';
-import 'package:kite/module/initializer_index.dart';
+import 'package:kite/module/meta_init.dart';
 import 'package:kite/mock/index.dart';
+import 'package:kite/module/kite/init.dart';
 
 void main() async {
   await init();

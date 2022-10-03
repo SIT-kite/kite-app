@@ -1,5 +1,4 @@
-import 'package:kite/module/override/entity.dart';
-
+import 'entity.dart';
 import 'interface.dart';
 
 const _json = {

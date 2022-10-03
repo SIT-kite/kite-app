@@ -1,5 +1,5 @@
-import 'package:kite/module/initializer_index.dart';
 import 'package:kite/mock/index.dart';
+import 'package:kite/module/meta.dart';
 import 'package:kite/storage/init.dart';
 
 void main() async {

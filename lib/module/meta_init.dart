@@ -30,22 +30,6 @@ import 'library/search/entity/search_history.dart';
 import 'report/entity/record.dart';
 import 'user_event/entity.dart';
 
-export 'activity/init.dart';
-export 'bulletin/init.dart';
-export 'campus_card/init.dart';
-export 'connectivity/init.dart';
-export 'contact/init.dart';
-export 'edu/init.dart';
-export 'expense/init.dart';
-export 'game/init.dart';
-export 'kite/init.dart';
-export 'library/init.dart';
-export 'login/init.dart';
-export 'mail/init.dart';
-export 'office/init.dart';
-export 'report/init.dart';
-export 'user_event/init.dart';
-
 void registerAdapters() {
   registerAdapter(ContactDataAdapter());
   registerAdapter(CourseAdapter());

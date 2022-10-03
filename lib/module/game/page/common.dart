@@ -18,11 +18,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:kite/module/initializer_index.dart';
 import 'package:kite/module/simple_page/wiki.dart';
 import 'package:kite/util/kite_authorization.dart';
 
 import '../entity/record.dart';
+import '../init.dart';
 
 IconButton helpButton(BuildContext context) {
   return IconButton(

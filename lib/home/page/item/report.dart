@@ -16,10 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/module/initializer_index.dart';
+import 'package:kite/module/meta_init.dart';
 import 'package:kite/module/report/entity/record.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
+import 'package:kite/module/report/init.dart';
 import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/alert_dialog.dart';

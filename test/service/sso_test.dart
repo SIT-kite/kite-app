@@ -1,6 +1,6 @@
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
+import 'package:kite/module/login/init.dart';
 import 'package:kite/network/session.dart';
-import 'package:kite/module/initializer_index.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/mock/index.dart';
 
