@@ -55,8 +55,7 @@ class _ScoreItemState extends State<ScoreItem> {
   }
 
   Widget _buildScoreDetail() {
-    final future =
-        ExamResultInit.scoreService.getScoreDetail(_score.innerClassId, _score.schoolYear, _score.semester);
+    final future = ExamResultInit.scoreService.getScoreDetail(_score.innerClassId, _score.schoolYear, _score.semester);
 
     return FutureBuilder(
       future: future,

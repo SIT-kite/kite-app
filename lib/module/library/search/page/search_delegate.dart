@@ -114,8 +114,7 @@ class SearchBarDelegate extends SearchDelegate<String> {
             const SizedBox(height: 20),
             Text('历史记录', style: Theme.of(context).textTheme.bodyText1),
             SuggestionItemView(
-              titleItems:
-                  LibrarySearchInit.librarySearchHistory.getAllByTimeDesc().map((e) => e.keyword).toList(),
+              titleItems: LibrarySearchInit.librarySearchHistory.getAllByTimeDesc().map((e) => e.keyword).toList(),
               onItemTap: (title) => _searchByGiving(context, title),
             ),
             const SizedBox(height: 20),

@@ -88,8 +88,7 @@ class Initializer {
     final sharedEduSession = EduSession(Global.ssoSession);
     await ExamResultInit.init(cookieJar: Global.cookieJar, eduSession: sharedEduSession);
     await ExamArrInit.init(sharedEduSession);
-    await TimetableInit.init(
-        eduSession: sharedEduSession, kiteSession: kiteSession, timetableBox: HiveBoxInit.course);
+    await TimetableInit.init(eduSession: sharedEduSession, kiteSession: kiteSession, timetableBox: HiveBoxInit.course);
     await ExpenseTrackerInit.init(
       ssoSession: Global.ssoSession2,
       expenseRecordBox: HiveBoxInit.expense,
