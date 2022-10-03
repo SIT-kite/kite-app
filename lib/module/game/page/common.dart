@@ -22,7 +22,7 @@ import 'package:kite/module/initializer_index.dart';
 import 'package:kite/module/simple_page/wiki.dart';
 import 'package:kite/util/kite_authorization.dart';
 
-import '../entity.dart';
+import '../entity/record.dart';
 
 IconButton helpButton(BuildContext context) {
   return IconButton(

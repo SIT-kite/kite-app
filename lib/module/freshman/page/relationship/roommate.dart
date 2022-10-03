@@ -19,48 +19,52 @@
 import 'package:flutter/material.dart';
 import 'package:kite/user_widget/future_builder.dart';
 import 'package:kite/module/freshman/cache.dart';
-import 'package:kite/module/freshman/init.dart';
+import 'package:kite/l10n/extension.dart';
 
-import '../dao/Freshman.dart';
-import '../entity/relationship.dart';
-import '../user_widget/familar_list.dart';
+import '../../dao/Freshman.dart';
+import '../../entity/info.dart';
+import '../../entity/relationship.dart';
+import '../../init.dart';
+import '../../user_widget/common.dart';
+import '../../user_widget/mate_list.dart';
 
-class FamiliarPeopleWidget extends StatefulWidget {
-  const FamiliarPeopleWidget({Key? key}) : super(key: key);
+class RoommateWidget extends StatefulWidget {
+  const RoommateWidget({Key? key}) : super(key: key);
 
   @override
-  State<FamiliarPeopleWidget> createState() => _FamiliarPeopleWidgetState();
+  State<RoommateWidget> createState() => _RoommateWidgetState();
 }
 
-class _FamiliarPeopleWidgetState extends State<FamiliarPeopleWidget> {
+class _RoommateWidgetState extends State<RoommateWidget> {
   final FreshmanDao freshmanDao = FreshmanInitializer.freshmanDao;
   final FreshmanCacheManager freshmanCacheManager = FreshmanInitializer.freshmanCacheManager;
 
   void onRefresh() {
-    freshmanCacheManager.clearFamiliars();
+    freshmanCacheManager.clearRoommates();
     setState(() {});
   }
 
-  Widget buildBody(List<Familiar> familiarList) {
+  Widget buildBody(List<Mate> mateList, FreshmanInfo myInfo) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: FamiliarListWidget(
-            familiarList,
-            onRefresh: onRefresh,
-          ),
-        ),
+        buildInfoItemRow(
+          iconData: Icons.home,
+          text:
+              '${i18n.currentDormitoryLabel}:  ${i18n.dormitoryDetailed_bcr(myInfo.room, myInfo.building, myInfo.campus)}',
+          context: context,
+        ).withTitleBarStyle(context),
+        Expanded(child: MateListWidget(mateList, callBack: onRefresh, showDormitory: false)),
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return MyFutureBuilder<List<Familiar>>(
-      future: freshmanDao.getFamiliars(),
+    return MyFutureBuilder<List<dynamic>>(
+      future: Future.wait([freshmanDao.getRoommates(), freshmanDao.getInfo()]),
       builder: (context, data) {
-        return buildBody(data);
+        return buildBody(data[0], data[1]);
       },
     );
   }

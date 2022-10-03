@@ -22,9 +22,9 @@ import 'package:kite/session/report_session.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/hive_register_adapter.dart';
 
-import 'dao.dart';
-import 'entity.dart';
-import 'service.dart';
+import 'dao/report.dart';
+import 'entity/record.dart';
+import 'service/report.dart';
 
 class ReportInitializer {
   static late ISession session;

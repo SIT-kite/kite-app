@@ -18,10 +18,10 @@
 
 import 'package:kite/module/initializer_index.dart';
 import 'package:kite/module/library/search/init.dart';
-import 'package:kite/module/sit_app/init.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/global/init.dart';
 
+import '../module/sit_app/init.dart';
 import 'config.dart';
 
 // 导出一些测试环境下常用的东西

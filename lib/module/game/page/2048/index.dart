@@ -27,7 +27,8 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 
-import '../../entity.dart';
+import '../../entity/record.dart';
+import '../../entity/type.dart';
 import '../../init.dart';
 import '../common.dart';
 import 'logic.dart';

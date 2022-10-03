@@ -18,10 +18,10 @@
 
 import 'package:hive/hive.dart';
 import 'package:kite/network/session.dart';
-import 'package:kite/module/game/service.dart';
 
 import 'page/entry.dart';
-import 'storage.dart';
+import 'service/rank.dart';
+import 'storage/record.dart';
 
 class GameInitializer {
   static late GameStorage gameRecord;

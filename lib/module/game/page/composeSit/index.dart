@@ -25,7 +25,7 @@ import 'package:kite/util/logger.dart';
 import 'package:kite/util/rule.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import '../../entity.dart';
+import '../../entity/record.dart';
 import '../common.dart';
 
 class ComposeSitPage extends StatelessWidget {

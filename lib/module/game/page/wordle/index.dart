@@ -29,7 +29,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kite/util/alert_dialog.dart';
 
-import '../../entity.dart';
+import '../../entity/record.dart';
+import '../../entity/type.dart';
 import '../../init.dart';
 import '../common.dart';
 import 'models/board_model.dart';

@@ -23,10 +23,11 @@ import 'contact/entity/contact.dart';
 import 'edu/timetable/entity.dart';
 import 'electricity/entity/account.dart';
 import 'expense/entity/expense.dart';
-import 'game/entity.dart';
+import 'game/entity/record.dart';
+import 'game/entity/type.dart';
 import 'kite/entity/weather.dart';
 import 'library/search/entity/search_history.dart';
-import 'report/entity.dart';
+import 'report/entity/record.dart';
 import 'user_event/entity.dart';
 
 export 'activity/init.dart';

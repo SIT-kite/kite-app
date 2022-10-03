@@ -17,7 +17,7 @@
  */
 import 'package:kite/module/electricity/entity/account.dart';
 import 'package:kite/module/kite/entity/weather.dart';
-import 'package:kite/module/report/entity.dart';
+import 'package:kite/module/report/entity/record.dart';
 
 import '../../home/entity/home.dart';
 

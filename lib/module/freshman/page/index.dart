@@ -20,11 +20,11 @@ import 'package:flutter/material.dart';
 import 'package:kite/util/dsl.dart';
 
 import '../user_widget/common.dart';
-import 'classmate.dart';
-import 'familiar.dart';
+import 'relationship/classmate.dart';
+import 'relationship/familiar.dart';
 import 'package:kite/l10n/extension.dart';
 
-import 'roommate.dart';
+import 'relationship/roommate.dart';
 
 class FreshmanFriendPage extends StatefulWidget {
   const FreshmanFriendPage({Key? key}) : super(key: key);

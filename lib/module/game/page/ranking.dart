@@ -21,7 +21,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/user_widget/future_builder.dart';
 import 'package:kite/module/initializer_index.dart';
 
-import '../entity.dart';
+import '../entity/rank.dart';
 
 class GameRanking extends StatelessWidget {
   static const _colorMapping = [Colors.red, Colors.deepOrange, Colors.orange];

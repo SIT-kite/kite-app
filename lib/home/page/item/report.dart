@@ -17,7 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/module/initializer_index.dart';
-import 'package:kite/module/report/entity.dart';
+import 'package:kite/module/report/entity/record.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';

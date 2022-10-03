@@ -19,7 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/route.dart';
 
-import '../entity.dart';
+import '../entity/type.dart';
 
 abstract class AGame {
   /// 获取游戏标题

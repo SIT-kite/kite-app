@@ -18,7 +18,6 @@
 
 import 'package:catcher/catcher.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:kite/module/sit_app/arrive_code/dialog.dart';
 import 'package:kite/route.dart';
 import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/launcher.dart';
@@ -26,6 +25,8 @@ import 'package:kite/util/logger.dart';
 import 'package:kite/util/rule.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'module/sit_app/arrive_code/dialog.dart';
 
 class GlobalLauncher {
   static get _context => Catcher.navigatorKey!.currentContext!;
