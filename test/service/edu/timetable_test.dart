@@ -1,5 +1,5 @@
-import 'package:kite/module/edu/common/entity/index.dart';
-import 'package:kite/module/edu/timetable/init.dart';
+import 'package:kite/module/shared/entity/school.dart';
+import 'package:kite/module/symbol.dart';
 import 'package:kite/mock/index.dart';
 
 void main() async {

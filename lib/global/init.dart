@@ -17,13 +17,13 @@
  */
 import 'package:catcher/catcher.dart';
 import 'package:kite/home/init.dart';
-import 'package:kite/module/electricity_bill/init.dart';
 import 'package:kite/module/freshman/init.dart';
 import 'package:kite/global/desktop_initializer.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/module/kite_board/init.dart';
 import 'package:kite/module/symbol.dart';
 import 'package:kite/override/init.dart';
+import 'package:kite/session/edu_session.dart';
 import 'package:kite/session/kite_session.dart';
 import 'package:kite/session/sit_app_session.dart';
 import 'package:kite/setting/init.dart';
@@ -84,12 +84,11 @@ class Initializer {
       kiteSession: kiteSession,
       contactDataBox: HiveBoxInitializer.contactSetting,
     );
-    await EduInitializer.init(
-      ssoSession: Global.ssoSession,
-      kiteSession: kiteSession,
-      cookieJar: Global.cookieJar,
-      timetableBox: HiveBoxInitializer.course,
-    );
+    final sharedEduSession = EduSession(Global.ssoSession);
+    ScoreInitializer.init(cookieJar: Global.cookieJar, eduSession: sharedEduSession);
+    ExamInitializer.init(sharedEduSession);
+    TimetableInitializer.init(
+        eduSession: sharedEduSession, kiteSession: kiteSession, timetableBox: HiveBoxInitializer.course);
     await ExpenseInitializer.init(
       ssoSession: Global.ssoSession2,
       expenseRecordBox: HiveBoxInitializer.expense,

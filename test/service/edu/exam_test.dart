@@ -1,7 +1,6 @@
-import 'package:kite/module/edu/common/entity/index.dart';
-import 'package:kite/module/edu/exam/init.dart';
 import 'package:kite/mock/index.dart';
-
+import 'package:kite/module/shared/entity/school.dart';
+import 'package:kite/module/symbol.dart';
 void main() async {
   await init();
   await login();
