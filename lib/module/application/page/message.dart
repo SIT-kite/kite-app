@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/user_widget/future_builder.dart';
+import '../entity/message.dart';
+import '../using.dart';
 
-import '../entity/index.dart';
 import '../init.dart';
 import 'browser.dart';
 

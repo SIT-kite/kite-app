@@ -17,10 +17,9 @@
  */
 import 'dart:convert';
 
-import 'package:kite/network/session.dart';
-import 'package:kite/storage/init.dart';
+import '../using.dart';
 
-import '../entity/index.dart';
+import '../entity/message.dart';
 
 const String serviceMessageCount = 'https://xgfy.sit.edu.cn/unifri-flow/user/queryFlowCount';
 

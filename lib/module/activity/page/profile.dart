@@ -17,9 +17,9 @@
  */
 
 import 'package:flutter/material.dart';
+import '../dao/score.dart';
 import '../using.dart';
 
-import '../dao/index.dart';
 import '../entity/score.dart';
 import '../init.dart';
 import 'detail.dart';

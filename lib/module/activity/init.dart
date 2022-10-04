@@ -19,7 +19,10 @@
 import 'package:kite/network/session.dart';
 
 import '../../session/sc_session.dart';
-import 'dao/index.dart';
+import 'dao/detail.dart';
+import 'dao/join.dart';
+import 'dao/list.dart';
+import 'dao/score.dart';
 import 'service/detail.dart';
 import 'service/join.dart';
 import 'service/list.dart';
