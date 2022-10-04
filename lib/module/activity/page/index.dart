@@ -17,15 +17,13 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:kite/user_widget/future_builder.dart';
-import 'package:kite/l10n/extension.dart';
-import 'package:kite/util/dsl.dart';
+import '../using.dart';
 
 import '../entity/list.dart';
 import '../init.dart';
-import 'component/card.dart';
-import 'component/search.dart';
+import 'card.dart';
 import 'profile.dart';
+import 'search.dart';
 
 class EventPage extends StatefulWidget {
   const EventPage({Key? key}) : super(key: key);

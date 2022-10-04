@@ -84,7 +84,7 @@ class _ScorePageState extends State<ScorePage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SvgPicture.asset(
-          'assets/exam_result/not-found.svg',
+          'assets/common/not-found.svg',
           width: 260,
           height: 260,
         ),

@@ -19,11 +19,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:kite/l10n/extension.dart';
-
-import '../../entity/list.dart';
-import '../detail.dart';
+import '../using.dart';
+import '../entity/list.dart';
+import 'detail.dart';
 import 'background.dart';
 import 'blur.dart';
 import 'util.dart';

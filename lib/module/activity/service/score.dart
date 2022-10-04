@@ -18,11 +18,11 @@
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/network/session.dart';
 
 import '../dao/score.dart';
 import '../entity/list.dart';
 import '../entity/score.dart';
+import '../using.dart';
 
 class ScScoreService implements ScScoreDao {
   static const _scHomeUrl = 'http://sc.sit.edu.cn/public/init/index.action';

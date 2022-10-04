@@ -18,13 +18,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:kite/util/flash.dart';
-import 'package:kite/util/url_launcher.dart';
 
 import '../entity/detail.dart';
 import '../init.dart';
-import 'component/background.dart';
-import 'component/util.dart';
+import '../using.dart';
+import 'background.dart';
+import 'util.dart';
 
 String _getActivityUrl(int activityId) {
   return 'http://sc.sit.edu.cn/public/activity/activityDetail.action?activityId=$activityId';
@@ -139,9 +138,10 @@ class DetailPage extends StatelessWidget {
   Future<void> _sendRequest(BuildContext context, bool force) async {
     try {
       final response = await ScInit.scJoinActivityService.join(activityId, force);
+      // TODO: Don't share BuildContext.
       showBasicFlash(context, Text(response));
     } catch (e) {
-      showBasicFlash(context, Text('错误: ' + e.runtimeType.toString()), duration: const Duration(seconds: 3));
+      showBasicFlash(context, Text('错误: ${e.runtimeType}'), duration: const Duration(seconds: 3));
       rethrow;
     }
   }

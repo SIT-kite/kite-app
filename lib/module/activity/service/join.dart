@@ -16,9 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/network/session.dart';
-
 import '../dao/join.dart';
+import '../using.dart';
 
 class ScJoinActivityService implements ScJoinActivityDao {
   static const _applyCheck = 'http://sc.sit.edu.cn/public/pcenter/check.action?activityId=';

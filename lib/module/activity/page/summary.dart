@@ -18,9 +18,9 @@
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/storage/init.dart';
 
-import '../../entity/score.dart';
+import '../entity/score.dart';
+import '../using.dart';
 
 ScScoreSummary calcTargetScore(String username) {
   int year = int.parse(username.substring(0, 2));

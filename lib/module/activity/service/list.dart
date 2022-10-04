@@ -18,10 +18,10 @@
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/network/session.dart';
 
 import '../dao/list.dart';
 import '../entity/list.dart';
+import '../using.dart';
 
 class ScActivityListService implements ScActivityListDao {
   static const _scActivityType = {

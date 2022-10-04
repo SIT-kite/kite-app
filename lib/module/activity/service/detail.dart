@@ -20,9 +20,9 @@ import 'dart:collection';
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/network/session.dart';
 
 import '../dao/detail.dart';
+import '../using.dart';
 import '../entity/detail.dart';
 
 class ScActivityDetailService implements ScActivityDetailDao {

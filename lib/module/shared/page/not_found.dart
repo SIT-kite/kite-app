@@ -40,7 +40,7 @@ class NotFoundPage extends StatelessWidget {
             i18n.notFound404.txt,
             Text(routeName),
             SvgPicture.asset(
-              'assets/exam_result/not-found.svg',
+              'assets/common/not-found.svg',
               width: 260,
               height: 260,
             ),

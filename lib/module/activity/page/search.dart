@@ -18,9 +18,9 @@
 
 import 'package:flutter/material.dart';
 
-import '../../entity/list.dart';
-import '../../init.dart';
-import 'card.dart';
+import '../entity/list.dart';
+import '../init.dart';
+import '../page/card.dart';
 
 class SearchBar extends SearchDelegate<String> {
   @override

@@ -17,19 +17,16 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:kite/user_widget/future_builder.dart';
-import 'package:kite/l10n/extension.dart';
-import 'package:kite/util/dsl.dart';
+import '../using.dart';
 
 import '../dao/index.dart';
 import '../entity/score.dart';
 import '../init.dart';
-import 'component/summary.dart';
 import 'detail.dart';
+import 'summary.dart';
 
 class ProfilePage extends StatelessWidget {
-  ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({Key? key}) : super(key: key);
 
   Widget _buildSummaryCard() {
     return MyFutureBuilder<ScScoreSummary>(
