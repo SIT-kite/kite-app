@@ -17,9 +17,6 @@
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:kite/user_widget/future_builder.dart';
-import 'package:kite/l10n/extension.dart';
-import 'package:kite/util/dsl.dart';
 
 import '../entity/score.dart';
 import '../init.dart';

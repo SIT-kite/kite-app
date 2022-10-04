@@ -16,10 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/network/session.dart';
 // TODO: Add cookie_jar to pubspec.yaml
 import 'package:cookie_jar/cookie_jar.dart';
-
+import 'using.dart';
 import 'dao/evaluation.dart';
 import 'dao/score.dart';
 import 'service/evaluation.dart';

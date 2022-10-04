@@ -16,8 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/global/global.dart';
-import 'package:kite/l10n/extension.dart';
 
 import '../entity/score.dart';
 import '../using.dart';
