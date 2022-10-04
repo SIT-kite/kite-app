@@ -19,12 +19,12 @@ import '../dao/remote.dart';
 import '../entity/bulletin.dart';
 import '../using.dart';
 
-class NoticeService implements NoticeServiceDao {
+class KiteBulletinService implements KiteBulletinServiceDao {
   static const String _noticePath = '/notice';
 
   final ISession session;
 
-  const NoticeService(this.session);
+  const KiteBulletinService(this.session);
 
   /// 对通知排序, 优先放置置顶通知, 其次是新通知.
   void _sort(List<KiteNotice> noticeList) {

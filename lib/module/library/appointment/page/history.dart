@@ -17,13 +17,10 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:kite/user_widget/future_builder.dart';
-import 'package:kite/module/library/appointment/init.dart';
-import 'package:kite/module/library/appointment/page/qrcode.dart';
-import 'package:kite/storage/init.dart';
-import 'package:kite/util/alert_dialog.dart';
-
+import '../init.dart';
+import 'qrcode.dart';
 import '../entity.dart';
+import '../../using.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({Key? key}) : super(key: key);

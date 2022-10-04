@@ -17,10 +17,10 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:kite/module/game/page/entry.dart';
 
 import '../init.dart';
 import 'common.dart';
+import 'entry.dart';
 import 'history.dart';
 import 'ranking.dart';
 

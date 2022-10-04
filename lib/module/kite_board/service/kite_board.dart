@@ -17,8 +17,7 @@
  */
 
 import 'package:dio/dio.dart';
-
-import '../../../network/session.dart';
+import '../using.dart';
 import '../dao/kite_board.dart';
 import '../entity/picture_summary.dart';
 

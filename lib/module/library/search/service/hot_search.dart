@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
-import 'package:kite/network/session.dart';
+import '../../using.dart';
 
 import '../dao/hot_search.dart';
 import '../entity/hot_search.dart';

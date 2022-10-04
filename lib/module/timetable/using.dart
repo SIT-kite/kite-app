@@ -17,3 +17,11 @@
 */
 export "package:kite/module/shared/entity/school.dart";
 export "package:kite/module/shared/user_widget/school.dart";
+export '../shared/hive.dart';
+export '../shared/logger.dart';
+export '../shared/dialog.dart';
+export '../shared/launcher.dart';
+export '../shared/file_system.dart';
+export '../shared/route.dart';
+export '../shared/storage.dart';
+export '../shared/networking.dart';

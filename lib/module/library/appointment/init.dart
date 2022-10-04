@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/module/library/appointment/dao.dart';
-import 'package:kite/module/library/appointment/service.dart';
-import 'package:kite/session/kite_session.dart';
+import 'dao.dart';
+import 'service.dart';
+import '../using.dart';
 
 class LibraryAppointmentInit {
   static late KiteSession kiteSession;

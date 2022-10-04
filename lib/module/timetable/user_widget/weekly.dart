@@ -18,7 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/module/timetable/user_widget/util.dart';
+import 'util.dart';
 import '../cache.dart';
 import '../entity/course.dart';
 import 'grid.dart';

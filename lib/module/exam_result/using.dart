@@ -21,4 +21,5 @@ export '../shared/util.dart';
 export '../shared/i18n.dart';
 export '../shared/global.dart';
 export '../shared/networking.dart';
+export '../shared/user_widget/webview.dart';
 export '../shared/user_widget/common.dart';

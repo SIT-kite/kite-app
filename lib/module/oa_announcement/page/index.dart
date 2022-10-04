@@ -16,10 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/network/session.dart';
-import 'package:kite/user_widget/future_builder.dart';
-import 'package:kite/l10n/extension.dart';
-import 'package:kite/util/dsl.dart';
+import '../using.dart';
 
 import '../entity/announcement.dart';
 import '../entity/page.dart';

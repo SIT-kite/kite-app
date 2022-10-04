@@ -18,12 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/user_widget/future_builder.dart';
-import 'package:kite/user_widget/multibutton_switch.dart';
-import 'package:kite/module/library/appointment/init.dart';
-import 'package:kite/util/alert_dialog.dart';
-import 'package:kite/util/flash.dart';
-import 'package:kite/util/kite_authorization.dart';
+import '../init.dart';
+import '../../using.dart';
 
 import '../entity.dart';
 import 'history.dart';

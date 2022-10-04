@@ -19,9 +19,8 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:kite/l10n/extension.dart';
-import 'package:kite/util/dsl.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import '../using.dart';
 
 class ScannerPage extends StatefulWidget {
   const ScannerPage({Key? key}) : super(key: key);

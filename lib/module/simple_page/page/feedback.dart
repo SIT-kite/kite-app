@@ -19,11 +19,8 @@ import 'dart:io';
 
 import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/user_widget/future_builder.dart';
-import 'package:kite/user_widget/webview/page.dart';
-import 'package:kite/global/global.dart';
-import 'package:kite/l10n/extension.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import '../using.dart';
 
 class FeedbackPage extends StatelessWidget {
   const FeedbackPage({Key? key}) : super(key: key);

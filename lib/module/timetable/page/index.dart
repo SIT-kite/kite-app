@@ -17,11 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/route.dart';
-import 'package:kite/storage/init.dart';
-import 'package:kite/util/alert_dialog.dart';
-import 'package:kite/util/flash.dart';
-import 'package:kite/util/logger.dart';
+import '../using.dart';
 
 import '../cache.dart';
 import '../entity/course.dart';

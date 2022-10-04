@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:kite/user_widget/future_builder.dart';
+import '../../using.dart';
 
 import '../../cache.dart';
 import '../../dao/Freshman.dart';

@@ -17,13 +17,13 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:kite/user_widget/future_builder.dart';
-import 'package:kite/module/freshman/cache.dart';
-import 'package:kite/module/freshman/init.dart';
+import '../../cache.dart';
+import '../../init.dart';
+import '../../using.dart';
 
 import '../../dao/Freshman.dart';
 import '../../entity/relationship.dart';
-import '../../user_widget/familar_list.dart';
+import '../../user_widget/familiar_list.dart';
 
 class FamiliarPeopleWidget extends StatefulWidget {
   const FamiliarPeopleWidget({Key? key}) : super(key: key);

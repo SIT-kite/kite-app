@@ -19,10 +19,10 @@ import 'package:flutter/material.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
 
-import '../../entity/book_search.dart';
-import '../../init.dart';
-import '../../util/search.dart';
-import '../book_info.dart';
+import '../entity/book_search.dart';
+import '../init.dart';
+import '../page/book_info.dart';
+import '../util/search.dart';
 import 'search_result_item.dart';
 
 class BookSearchResultWidget extends StatefulWidget {
@@ -42,7 +42,7 @@ class BookSearchResultWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _BookSearchResultWidgetState createState() => _BookSearchResultWidgetState();
+  State<BookSearchResultWidget> createState() => _BookSearchResultWidgetState();
 }
 
 class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {

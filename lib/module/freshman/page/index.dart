@@ -17,12 +17,11 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:kite/util/dsl.dart';
-
 import '../user_widget/common.dart';
+import '../using.dart';
+
 import 'relationship/classmate.dart';
 import 'relationship/familiar.dart';
-import 'package:kite/l10n/extension.dart';
 
 import 'relationship/roommate.dart';
 

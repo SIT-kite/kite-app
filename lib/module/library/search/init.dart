@@ -17,12 +17,22 @@
  */
 
 import 'package:dio/dio.dart';
-import 'package:hive/hive.dart';
-import 'package:kite/session/library_session.dart';
+import '../using.dart';
 
-import 'dao/index.dart';
+import 'dao/book_info.dart';
+import 'dao/book_search.dart';
+import 'dao/holding.dart';
+import 'dao/holding_preview.dart';
+import 'dao/hot_search.dart';
+import 'dao/image_search.dart';
+import 'dao/search_history.dart';
 import 'entity/search_history.dart';
-import 'service/index.dart';
+import 'service/book_info.dart';
+import 'service/book_search.dart';
+import 'service/holding.dart';
+import 'service/holding_preview.dart';
+import 'service/hot_search.dart';
+import 'service/image_search.dart';
 import 'storage/search_history.dart';
 
 class LibrarySearchInit {

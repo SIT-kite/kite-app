@@ -19,10 +19,10 @@
 import 'dart:convert';
 
 import 'package:intl/intl.dart';
-import 'package:kite/network/session.dart';
-import 'package:kite/module/library/appointment/dao.dart';
-import 'package:kite/module/library/appointment/entity.dart';
-import 'package:kite/util/date_format.dart';
+
+import 'dao.dart';
+import 'entity.dart';
+import '../using.dart';
 
 class AppointmentService implements AppointmentDao {
   static const _library = '/library';

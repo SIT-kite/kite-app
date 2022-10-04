@@ -18,14 +18,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/l10n/extension.dart';
-import 'package:kite/launcher.dart';
-import 'package:kite/storage/init.dart';
-import 'package:kite/util/dsl.dart';
-
-import '../../../../route.dart';
-import '../../../../util/flash.dart';
-import '../../../../util/logger.dart';
+import '../../using.dart';
 import '../../dao/Freshman.dart';
 import '../../init.dart';
 
@@ -90,7 +83,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       while (Navigator.of(context).canPop()) {
         Navigator.of(context).pop();
       }
-      Navigator.pushReplacementNamed(context, RouteTable.home);
+      Navigator.pushReplacementNamed(context, "/home");
 
       // 预计需要写一份新生的使用说明
       // GlobalLauncher.launch('https://kite.sunnysab.cn/wiki/kite-app/features/');

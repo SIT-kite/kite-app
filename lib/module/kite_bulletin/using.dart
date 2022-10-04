@@ -16,4 +16,6 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 export '../shared/networking.dart';
-export 'package:kite/session/kite_session.dart';
+export '../shared/i18n.dart';
+export '../shared/util.dart';
+export '../shared/user_widget/common.dart';

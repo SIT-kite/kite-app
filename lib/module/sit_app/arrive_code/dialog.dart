@@ -18,8 +18,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:kite/module/sit_app/init.dart';
-import 'package:kite/session/sit_app_session.dart';
-import 'package:kite/util/alert_dialog.dart';
+import '../using.dart';
 
 class ArriveCodeDialog {
   static Future<void> scan(BuildContext context, String code) async {

@@ -17,9 +17,8 @@
  */
 import 'dart:convert';
 
-import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
-
+import 'using.dart';
 part 'entity.g.dart';
 
 @HiveType(typeId: 10)

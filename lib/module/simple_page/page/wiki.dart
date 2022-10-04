@@ -20,11 +20,7 @@ import 'dart:async';
 import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kite/user_widget/webview/view.dart';
-import 'package:kite/user_widget/webview/page.dart';
-import 'package:kite/l10n/extension.dart';
-import 'package:kite/util/rule.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import '../using.dart';
 
 class WikiPage extends StatelessWidget {
   final _controller = Completer<WebViewController>();

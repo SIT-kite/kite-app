@@ -18,13 +18,13 @@
 
 import 'dart:async';
 import 'dart:convert';
+import '../../using.dart';
 
 import 'package:device_display_brightness/device_display_brightness.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/module/library/appointment/entity.dart';
-import 'package:kite/module/library/appointment/init.dart';
-import 'package:kite/util/logger.dart';
+import '../entity.dart';
+import '../init.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class TimeDisplay extends StatefulWidget {

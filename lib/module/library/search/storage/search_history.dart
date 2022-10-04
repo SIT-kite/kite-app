@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:hive/hive.dart';
+import '../../using.dart';
 
 import '../dao/search_history.dart';
 import '../entity/search_history.dart';

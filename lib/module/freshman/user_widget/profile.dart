@@ -19,10 +19,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/storage/init.dart';
-
-import '../../../../route.dart';
-import 'package:kite/l10n/extension.dart';
+import '../using.dart';
 
 class InfoItem {
   IconData iconData = Icons.person;

@@ -17,13 +17,8 @@
  */
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/user_widget/future_builder.dart';
-import 'package:kite/user_widget/html_widget.dart';
-import 'package:kite/user_widget/webview/page.dart';
-import 'package:kite/l10n/extension.dart';
-import 'package:kite/launcher.dart';
-import 'package:kite/util/dsl.dart';
 import 'package:universal_platform/universal_platform.dart';
+import '../using.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({Key? key}) : super(key: key);

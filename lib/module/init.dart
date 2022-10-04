@@ -36,4 +36,5 @@ void registerAdapters() {
   registerAdapter(UserEventAdapter());
   registerAdapter(UserEventTypeAdapter());
   registerAdapter(TimetableMetaAdapter());
+  registerAdapter(ReportHistoryAdapter());
 }

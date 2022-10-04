@@ -17,7 +17,7 @@
  */
 import 'dart:convert';
 
-import 'package:kite/network/session.dart';
+import '../../using.dart';
 
 import '../dao/image_search.dart';
 import '../entity/book_image.dart';

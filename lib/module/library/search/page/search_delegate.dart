@@ -16,14 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/user_widget/future_builder.dart';
+import '../../using.dart';
 
 import '../entity/book_search.dart';
 import '../entity/hot_search.dart';
 import '../entity/search_history.dart';
 import '../init.dart';
-import 'component/search_result.dart';
-import 'component/suggestion_item.dart';
+import '../user_widget/search_result.dart';
+import '../user_widget/suggestion_item.dart';
 
 class SearchBarDelegate extends SearchDelegate<String> {
   Widget? _suggestionView;

@@ -18,9 +18,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/user_widget/webview/view.dart';
-import 'package:kite/user_widget/webview/page.dart';
-import 'package:kite/util/rule.dart';
+import '../using.dart';
 
 class BrowserPage extends StatelessWidget {
   /// 初始的url

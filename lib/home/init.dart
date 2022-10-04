@@ -21,11 +21,11 @@ import 'package:kite/session/sso/index.dart';
 
 class HomeInit {
   static late SsoSession ssoSession;
-  static late NoticeServiceDao noticeService;
+  static late KiteBulletinServiceDao noticeService;
 
   static init({
     required SsoSession ssoSession,
-    required NoticeServiceDao noticeService,
+    required KiteBulletinServiceDao noticeService,
   }) {
     HomeInit.ssoSession = ssoSession;
     HomeInit.noticeService = noticeService;

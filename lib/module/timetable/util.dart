@@ -18,7 +18,7 @@
 
 import 'package:ical/serializer.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/util/file.dart';
+import 'using.dart';
 
 import 'entity/course.dart';
 import 'entity/meta.dart';

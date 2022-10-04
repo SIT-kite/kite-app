@@ -18,7 +18,7 @@
 import 'dart:collection';
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
-import 'package:kite/network/session.dart';
+import '../../using.dart';
 
 import '../dao/book_info.dart';
 import '../entity/book_info.dart';

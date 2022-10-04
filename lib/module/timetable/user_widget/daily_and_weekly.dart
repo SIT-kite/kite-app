@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:kite/util/logger.dart';
+import '../using.dart';
 
 import '../cache.dart';
 import '../entity/course.dart';

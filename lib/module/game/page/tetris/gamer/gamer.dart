@@ -24,8 +24,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:kite/util/kite_authorization.dart';
-
+import '../../../using.dart';
 import '../../../entity/record.dart';
 import '../../../entity/type.dart';
 import '../../common.dart';

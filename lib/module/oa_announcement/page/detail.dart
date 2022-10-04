@@ -18,18 +18,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:kite/user_widget/future_builder.dart';
-import 'package:kite/user_widget/html_widget.dart';
-import 'package:kite/l10n/extension.dart';
-import 'package:kite/util/dsl.dart';
-import 'package:kite/util/flash.dart';
-import 'package:kite/util/logger.dart';
-import 'package:kite/util/url_launcher.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../entity/announcement.dart';
 import '../entity/attachment.dart';
+import '../using.dart';
 import '../init.dart';
 
 class DetailPage extends StatefulWidget {

@@ -17,13 +17,7 @@
 */
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
-import 'package:kite/l10n/extension.dart';
-import 'package:kite/storage/init.dart';
-import 'package:kite/user_widget/webview/page.dart';
-import 'package:kite/user_widget/webview/view.dart';
-import 'package:kite/util/alert_dialog.dart';
-import 'package:kite/util/rule.dart';
+import '../using.dart';
 
 import 'reminder.dart';
 

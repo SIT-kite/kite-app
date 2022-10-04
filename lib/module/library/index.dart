@@ -18,12 +18,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:kite/module/library/appointment/init.dart';
-import 'package:kite/l10n/extension.dart';
-import 'package:kite/route.dart';
-import 'package:kite/util/dsl.dart';
-import 'package:kite/util/flash.dart';
-import 'package:kite/util/strings.dart';
+import 'appointment/init.dart';
+import 'using.dart';
 
 import 'appointment/entity.dart';
 import 'appointment/page/notice.dart';

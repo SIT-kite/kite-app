@@ -27,7 +27,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kite/util/alert_dialog.dart';
+import '../../using.dart';
 
 import '../../entity/record.dart';
 import '../../entity/type.dart';

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/network/session.dart';
+import '../../using.dart';
 
 import '../dao/holding_preview.dart';
 import '../entity/holding_preview.dart';

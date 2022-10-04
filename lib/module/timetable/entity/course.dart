@@ -15,10 +15,9 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:kite/global/hive_type_id_pool.dart';
 
+import '../using.dart';
 part 'course.g.dart';
 
 /// 课表显示模式

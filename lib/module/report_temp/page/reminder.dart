@@ -16,10 +16,7 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import 'package:flutter/material.dart';
-import 'package:kite/l10n/extension.dart';
-import 'package:kite/storage/init.dart';
-import 'package:kite/user_widget/my_switcher.dart';
-import 'package:kite/util/dsl.dart';
+import '../using.dart';
 
 class ReminderDialog extends StatefulWidget {
   const ReminderDialog({Key? key}) : super(key: key);

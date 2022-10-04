@@ -17,7 +17,7 @@
 */
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/network/session.dart';
+import '../using.dart';
 
 import '../dao/announcement.dart';
 import '../entity/announcement.dart';

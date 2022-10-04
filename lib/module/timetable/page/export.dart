@@ -22,9 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/util/alert_dialog.dart';
-import 'package:kite/util/logger.dart';
-import 'package:kite/util/url_launcher.dart';
+import '../using.dart';
 
 import '../entity/course.dart';
 import '../entity/meta.dart';

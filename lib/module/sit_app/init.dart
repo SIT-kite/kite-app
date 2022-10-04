@@ -16,10 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/module/sit_app/arrive_code/service.dart';
-import 'package:kite/session/sit_app_session.dart';
+import 'arrive_code/service.dart';
 
 import 'arrive_code/dao.dart';
+import 'using.dart';
 
 class SitAppInit {
   static late SitAppSession sitAppSession;

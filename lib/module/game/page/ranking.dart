@@ -18,7 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:kite/user_widget/future_builder.dart';
+import '../using.dart';
 
 import '../entity/rank.dart';
 import '../init.dart';

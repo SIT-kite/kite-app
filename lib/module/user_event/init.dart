@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:hive/hive.dart';
+import 'using.dart';
 
 import 'dao.dart';
 import 'storage.dart';

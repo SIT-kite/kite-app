@@ -22,8 +22,7 @@
 // Imported and commented on 2022.8.28
 
 import 'package:flutter/material.dart';
-import 'package:kite/util/alert_dialog.dart';
-
+import '../../using.dart';
 import 'gamer/gamer.dart';
 import 'gamer/keyboard.dart';
 import 'panel/page_portrait.dart';

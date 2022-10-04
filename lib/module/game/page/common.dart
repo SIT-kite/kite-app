@@ -18,9 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:kite/module/simple_page/page/wiki.dart';
-import 'package:kite/util/kite_authorization.dart';
-
+import '../using.dart';
 import '../entity/record.dart';
 import '../init.dart';
 

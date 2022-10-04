@@ -17,13 +17,10 @@
  */
 
 import 'package:dio/dio.dart';
-import 'package:kite/network/session.dart';
 import 'package:kite/session/report_session.dart';
-import 'package:kite/storage/init.dart';
-import 'package:kite/util/hive_register_adapter.dart';
+import 'using.dart';
 
 import 'dao/report.dart';
-import 'entity/record.dart';
 import 'service/report.dart';
 
 class ReportTempInit {
@@ -33,7 +30,6 @@ class ReportTempInit {
   static void init({
     required Dio dio,
   }) {
-    registerAdapter(ReportHistoryAdapter());
     session = ReportSession(
       dio: dio,
       username: Kv.auth.currentUsername,

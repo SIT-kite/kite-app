@@ -15,8 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/util/logger.dart';
-
+import '../../using.dart';
 import '../dao/holding_preview.dart';
 import '../dao/image_search.dart';
 import '../entity/book_image.dart';

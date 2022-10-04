@@ -17,7 +17,7 @@
  */
 import 'package:flutter/material.dart';
 
-import '../../util/search.dart';
+import '../util/search.dart';
 
 typedef KeyClickCallback = void Function(String key);
 
@@ -60,14 +60,15 @@ class BookItemWidget extends StatelessWidget {
     final row = Row(
       children: [
         Expanded(
+          flex: 3,
           child: Container(
             padding: const EdgeInsets.all(5),
-            child: buildBookCover(bi.image?.resourceLink),
             height: screenHeight / 5,
+            child: buildBookCover(bi.image?.resourceLink),
           ),
-          flex: 3,
         ),
         Expanded(
+          flex: 7,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -105,7 +106,6 @@ class BookItemWidget extends StatelessWidget {
               ),
             ],
           ),
-          flex: 7,
         ),
       ],
     );

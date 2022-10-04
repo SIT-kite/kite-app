@@ -16,10 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/network/session.dart';
-import 'package:kite/storage/init.dart';
-
-import '../../session/freshman_session.dart';
+import 'using.dart';
 import 'cache.dart';
 import 'dao/Freshman.dart';
 import 'service/freshman.dart';

@@ -17,9 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:kite/user_widget/future_builder.dart';
-import 'package:kite/module/freshman/cache.dart';
-import 'package:kite/l10n/extension.dart';
+import '../../cache.dart';
+import '../../using.dart';
 
 import '../../dao/Freshman.dart';
 import '../../entity/info.dart';

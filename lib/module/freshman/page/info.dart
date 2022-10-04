@@ -18,15 +18,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kite/l10n/extension.dart';
-import 'package:kite/route.dart';
-import 'package:kite/user_widget/future_builder.dart';
-import 'package:kite/util/alert_dialog.dart';
-import 'package:kite/util/dsl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import '../using.dart';
 
-import '../../../launcher.dart';
-import '../../../util/flash.dart';
 import '../entity/info.dart';
 import '../init.dart';
 import '../user_widget/common.dart';
