@@ -18,8 +18,8 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:kite/module/user_event/dao.dart';
-import 'package:kite/module/user_event/entity.dart';
+import 'package:kite/module/user_event/dao/user_event.dart';
+import 'package:kite/module/user_event/entity/user_event.dart';
 import 'package:kite/module/user_event/init.dart';
 import 'package:uuid/uuid.dart';
 

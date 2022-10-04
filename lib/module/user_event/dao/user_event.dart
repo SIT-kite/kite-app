@@ -15,18 +15,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import '../entity/user_event.dart';
 
-import 'using.dart';
+abstract class UserEventStorageDao {
+  String? get uuid;
 
-import 'dao/user_event.dart';
-import 'storage/user_event.dart';
+  set uuid(String? uuid);
 
-class UserEventInit {
-  static late UserEventStorageDao userEventStorage;
+  /// 获取本地事件总数
+  int getEventCount();
 
-  static Future<void> init({
-    required Box<dynamic> userEventBox,
-  }) async {
-    userEventStorage = UserEventStorage(userEventBox);
-  }
+  /// 获取事件列表
+  List<UserEvent> getEvents();
+
+  /// 清除本地所有事件
+  void clear();
+
+  /// 追加事件记录
+  void append(UserEvent event);
+
+  /// 追加多条事件记录
+  void appendAll(List<UserEvent> eventList);
 }

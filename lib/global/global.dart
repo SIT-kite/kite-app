@@ -24,7 +24,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/global/cookie_initializer.dart';
 import 'package:kite/global/dio_initializer.dart';
-import 'package:kite/module/user_event/dao.dart';
+import 'package:kite/module/user_event/dao/user_event.dart';
 import 'package:kite/route.dart';
 import 'package:kite/session/sso/index.dart';
 import 'package:kite/storage/dao/index.dart';
