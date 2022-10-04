@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/user_widget/future_builder.dart';
@@ -40,12 +41,6 @@ class _ScorePageState extends State<ScorePage> {
 
   /// 要查询的学期
   Semester selectedSemester = Semester.all;
-
-  final Widget _notFoundPicture = SvgPicture.asset(
-    'assets/exam_result/not-found.svg',
-    width: 260,
-    height: 260,
-  );
 
   @override
   void initState() {
@@ -89,8 +84,10 @@ class _ScorePageState extends State<ScorePage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
-          child: _notFoundPicture,
+        SvgPicture.asset(
+          'assets/exam_result/not-found.svg',
+          width: 260,
+          height: 260,
         ),
         Text(i18n.examResultNoResult, style: const TextStyle(color: Colors.grey)),
         Container(
@@ -104,7 +101,9 @@ class _ScorePageState extends State<ScorePage> {
 
   Widget _buildBody() {
     return MyFutureBuilder<List<Score>>(
+      // TODO: Fix this. The service will throw an uncaptured exception.
       future: ExamResultInit.scoreService.getScoreList(SchoolYear(selectedYear), selectedSemester),
+      //future: SynchronousFuture([]),
       builder: (context, data) {
         final scoreList = data;
         return Column(

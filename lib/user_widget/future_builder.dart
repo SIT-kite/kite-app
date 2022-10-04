@@ -123,11 +123,13 @@ class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
   }
 
   Future<T> fetchData() async {
-    if (widget.futureGetter != null) {
-      return await widget.futureGetter!();
+    var getter = widget.futureGetter;
+    if (getter != null) {
+      return await getter();
     }
-    if (widget.future != null) {
-      return await widget.future!;
+    var future = widget.future;
+    if (future != null) {
+      return await future;
     }
     throw UnsupportedError('MyFutureBuilder must set a future or futureGetter');
   }
