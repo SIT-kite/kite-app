@@ -18,9 +18,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:kite/user_widget/future_builder.dart';
-import 'package:kite/l10n/extension.dart';
-import 'package:kite/util/dsl.dart';
 
 import '../entity/exam.dart';
 import '../init.dart';

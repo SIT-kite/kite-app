@@ -17,3 +17,7 @@
 */
 export "package:kite/module/shared/entity/school.dart";
 export "package:kite/module/shared/user_widget/school.dart";
+export '../shared/util.dart';
+export '../shared/i18n.dart';
+export '../shared/networking.dart';
+export '../shared/user_widget/common.dart';
