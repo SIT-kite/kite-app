@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/home/page/item/electricity.dart';
-import 'package:kite/launch.dart';
+import 'package:kite/launcher.dart';
 import 'package:kite/override/entity.dart';
 import 'package:kite/route.dart';
 import 'package:kite/util/logger.dart';

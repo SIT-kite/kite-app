@@ -18,12 +18,9 @@
 import 'package:enough_mail/enough_mail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/l10n/extension.dart';
-import 'package:kite/storage/init.dart';
-import 'package:kite/util/dsl.dart';
-
+import '../using.dart';
 import '../init.dart';
-import '../service/mail.dart';
+import '../service/email.dart';
 import 'item.dart';
 
 String getEduEmail(String studentId) => "$studentId@mail.sit.edu.cn";

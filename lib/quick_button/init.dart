@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/launch.dart';
+import 'package:kite/launcher.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/scanner.dart';
 import 'package:quick_actions/quick_actions.dart';

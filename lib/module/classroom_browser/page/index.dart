@@ -18,9 +18,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/module/classroom_browser/init.dart';
 
 import '../entity/classroom.dart';
+import '../init.dart';
 import 'item.dart';
 
 class ClassroomPage extends StatefulWidget {

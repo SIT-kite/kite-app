@@ -18,8 +18,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:kite/network/session.dart';
-
+import '../using.dart';
 import '../dao/campus_card.dart';
 import '../entity/campus_card.dart';
 

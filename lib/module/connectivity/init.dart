@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/session/sso/index.dart';
+import 'using.dart';
 
 class ConnectivityInit {
   static late SsoSession ssoSession;

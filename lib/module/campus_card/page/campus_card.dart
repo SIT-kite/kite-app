@@ -20,11 +20,8 @@ import 'dart:typed_data';
 
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/l10n/extension.dart';
-import 'package:kite/util/dsl.dart';
-import 'package:kite/util/flash.dart';
 import 'package:nfc_manager/nfc_manager.dart';
-
+import '../using.dart';
 import '../init.dart';
 
 class CampusCardRecord {

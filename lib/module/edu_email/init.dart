@@ -18,11 +18,11 @@
 
 import 'package:hive/hive.dart';
 
-import 'dao/mail.dart';
+import 'dao/email.dart';
 import 'storage/mail.dart';
 
 class EduEmailInit {
-  static late MailStorageDao mail;
+  static late EmailStorageDao mail;
 
   static Future<void> init() async {
     final mailStorage = await Hive.openBox<dynamic>('mail');

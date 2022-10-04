@@ -21,7 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/exception/session.dart';
 import 'package:kite/l10n/extension.dart';
-import 'package:kite/launch.dart';
+import 'package:kite/launcher.dart';
 import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/dsl.dart';

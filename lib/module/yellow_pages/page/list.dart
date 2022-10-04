@@ -19,7 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grouped_list/grouped_list.dart';
-import 'package:kite/launch.dart';
+import 'package:kite/launcher.dart';
 
 import '../entity/contact.dart';
 

@@ -19,12 +19,8 @@ import 'package:app_settings/app_settings.dart';
 import 'package:check_vpn_connection/check_vpn_connection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:kite/l10n/extension.dart';
-import 'package:kite/launch.dart';
-import 'package:kite/storage/init.dart';
-import 'package:kite/util/dsl.dart';
-import 'package:kite/util/logger.dart';
 
+import '../using.dart';
 import '../init.dart';
 import '../service/network.dart';
 

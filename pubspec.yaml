@@ -152,7 +152,6 @@ flutter:
     - assets/fonts/
     - assets/weather/
     - assets/wiki/
-    - assets/exam_result/
     - assets/library/
     - assets/timetable/
     - assets/course/

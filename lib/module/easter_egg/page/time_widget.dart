@@ -19,7 +19,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:universal_platform/universal_platform.dart';
 
 import 'digit_model.dart';
 import 'simple_world.dart';

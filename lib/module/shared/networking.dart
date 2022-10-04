@@ -17,3 +17,4 @@
 */
 export 'package:kite/network/session.dart';
 export 'package:kite/session/kite_session.dart';
+export 'package:kite/session/sso/sso_session.dart';

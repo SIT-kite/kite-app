@@ -18,8 +18,7 @@
 
 import 'package:enough_mail/enough_mail.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:kite/l10n/extension.dart';
+import '../using.dart';
 
 import 'detail.dart';
 

@@ -24,7 +24,7 @@ import 'package:kite/module/shared/service/weather.dart';
 import 'package:kite/module/login/init.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
-import 'package:kite/launch.dart';
+import 'package:kite/launcher.dart';
 import 'package:kite/override/entity.dart';
 import 'package:kite/override/init.dart';
 import 'package:kite/quick_button/init.dart';

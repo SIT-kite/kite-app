@@ -18,8 +18,8 @@
 
 import 'package:kite/session/kite_session.dart';
 
-import '../classroom_browser/service/classroom.dart';
 import 'dao/remote.dart';
+import 'service/classroom.dart';
 
 class ClassroomBrowserInit {
   static late ClassroomRemoteDao classroomService;
