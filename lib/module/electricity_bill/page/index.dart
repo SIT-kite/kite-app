@@ -21,11 +21,7 @@ import 'package:animated_button_bar/animated_button_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/user_widget/future_builder.dart';
-import 'package:kite/user_widget/simple_search_delegate.dart';
-import 'package:kite/l10n/extension.dart';
-import 'package:kite/util/dsl.dart';
-import 'package:kite/util/logger.dart';
+import '../using.dart';
 
 import '../entity/account.dart';
 import '../init.dart';

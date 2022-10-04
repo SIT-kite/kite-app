@@ -17,8 +17,7 @@
  */
 
 import 'package:hive/hive.dart';
-
-import '../../session/kite_session.dart';
+import 'using.dart';
 import 'dao/local.dart';
 import 'dao/remote.dart';
 import 'service/electricity.dart';

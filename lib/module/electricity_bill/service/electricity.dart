@@ -15,8 +15,7 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import 'package:kite/network/session.dart';
-
+import '../using.dart';
 import '../dao/remote.dart';
 import '../entity/account.dart';
 import '../entity/statistics.dart';
