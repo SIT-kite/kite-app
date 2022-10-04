@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/user_widget/future_builder.dart';
@@ -101,9 +100,7 @@ class _ScorePageState extends State<ScorePage> {
 
   Widget _buildBody() {
     return MyFutureBuilder<List<Score>>(
-      // TODO: Fix this. The service will throw an uncaptured exception.
       future: ExamResultInit.scoreService.getScoreList(SchoolYear(selectedYear), selectedSemester),
-      //future: SynchronousFuture([]),
       builder: (context, data) {
         final scoreList = data;
         return Column(

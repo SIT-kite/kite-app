@@ -124,7 +124,7 @@ class Global {
     // 全局FutureBuilder异常处理
     MyFutureBuilder.globalErrorBuilder = (context, futureBuilder, error, stacktrace) {
       // 单独处理网络连接错误，且不上报
-      if (error is DioError && [DioErrorType.connectTimeout, DioErrorType.other].contains((error).type)) {
+      if (error is DioError && const [DioErrorType.connectTimeout, DioErrorType.other].contains((error).type)) {
         return Center(
           child: Column(
             children: [
