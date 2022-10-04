@@ -18,7 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:grouped_list/grouped_list.dart';
-import 'package:kite/l10n/extension.dart';
+import '../using.dart';
 
 import '../entity/expense.dart';
 import '../init.dart';

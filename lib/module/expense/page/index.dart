@@ -18,11 +18,7 @@
 import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:kite/l10n/extension.dart';
-import 'package:kite/util/alert_dialog.dart';
-import 'package:kite/util/dsl.dart';
-import 'package:kite/util/flash.dart';
-
+import '../using.dart';
 import '../dao/expense.dart';
 import '../entity/expense.dart';
 import '../init.dart';

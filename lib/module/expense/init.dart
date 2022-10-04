@@ -16,9 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:hive/hive.dart';
-import 'package:kite/network/session.dart';
-
+import 'using.dart';
 import 'dao/expense.dart';
 import 'entity/expense.dart';
 import 'service/expense.dart';
