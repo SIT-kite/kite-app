@@ -18,17 +18,18 @@
 import 'package:flutter/material.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
+import 'package:kite/route.dart';
 
 import 'index.dart';
 
-class ExamItem extends StatefulWidget {
-  const ExamItem({Key? key}) : super(key: key);
+class ExamArrangementItem extends StatefulWidget {
+  const ExamArrangementItem({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _ExamItemState();
+  State<StatefulWidget> createState() => _ExamArrangementItemState();
 }
 
-class _ExamItemState extends State<ExamItem> {
+class _ExamArrangementItemState extends State<ExamArrangementItem> {
   String? content;
 
   @override
@@ -41,7 +42,7 @@ class _ExamItemState extends State<ExamItem> {
   @override
   Widget build(BuildContext context) {
     return HomeFunctionButton(
-      route: '/exam',
+      route: RouteTable.examArrangement,
       icon: 'assets/home/icon_exam.svg',
       title: i18n.ftype_examArr,
       subtitle: content ?? i18n.ftype_examArr_desc,

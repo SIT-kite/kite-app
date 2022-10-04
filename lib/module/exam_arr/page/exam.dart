@@ -26,14 +26,14 @@ import '../entity/exam.dart';
 import '../init.dart';
 import '../using.dart';
 
-class ExamPage extends StatefulWidget {
-  const ExamPage({Key? key}) : super(key: key);
+class ExamArrangementPage extends StatefulWidget {
+  const ExamArrangementPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _ExamPageState();
+  State<StatefulWidget> createState() => _ExamArrangementPageState();
 }
 
-class _ExamPageState extends State<ExamPage> {
+class _ExamArrangementPageState extends State<ExamArrangementPage> {
   /// 四位年份
   late int selectedYear;
 

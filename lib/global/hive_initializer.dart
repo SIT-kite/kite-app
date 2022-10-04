@@ -17,8 +17,8 @@
  */
 
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:kite/module/expense/symbol.dart';
 import 'package:kite/module/yellow_pages/entity/contact.dart';
-import 'package:kite/module/expense_tracker/entity/expense.dart';
 import 'package:kite/module/init.dart';
 import 'package:kite/module/library/search/entity/search_history.dart';
 

@@ -148,18 +148,18 @@ flutter:
     - assets/welcome/
     - assets/connectivity/
     - assets/campus_card/
-    - assets/report/
+    - assets/report_temp/
     - assets/fonts/
     - assets/weather/
     - assets/wiki/
-    - assets/score/
+    - assets/exam_result/
     - assets/library/
     - assets/timetable/
     - assets/course/
     - assets/night/
     - assets/game/
     - assets/game/tetris/
-    - assets/mail/
+    - assets/edu_email/
     - assets/scanner/
     - assets/freshman/
     # Prompt sound.

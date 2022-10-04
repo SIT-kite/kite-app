@@ -42,7 +42,7 @@ class _ScorePageState extends State<ScorePage> {
   Semester selectedSemester = Semester.all;
 
   final Widget _notFoundPicture = SvgPicture.asset(
-    'assets/score/not-found.svg',
+    'assets/exam_result/not-found.svg',
     width: 260,
     height: 260,
   );

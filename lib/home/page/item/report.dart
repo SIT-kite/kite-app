@@ -26,14 +26,14 @@ import 'package:kite/util/dsl.dart';
 
 import 'index.dart';
 
-class ReportItem extends StatefulWidget {
-  const ReportItem({Key? key}) : super(key: key);
+class ReportTempItem extends StatefulWidget {
+  const ReportTempItem({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _ReportItemState();
+  State<StatefulWidget> createState() => _ReportTempItemState();
 }
 
-class _ReportItemState extends State<ReportItem> {
+class _ReportTempItemState extends State<ReportTempItem> {
   String? content;
 
   /// 用于限制仅弹出一次对话框
@@ -86,7 +86,7 @@ class _ReportItemState extends State<ReportItem> {
     if (select == null || select == 1) return;
 
     if (!mounted) return;
-    await Navigator.of(context).pushNamed(RouteTable.report);
+    await Navigator.of(context).pushNamed(RouteTable.reportTemp);
     hasWarnedDialog = true;
   }
 
@@ -128,7 +128,7 @@ class _ReportItemState extends State<ReportItem> {
       }
     }
     return HomeFunctionButton(
-      route: '/report',
+      route: RouteTable.reportTemp,
       icon: 'assets/home/icon_report.svg',
       title: i18n.ftype_reportTemp,
       subtitle: content ?? i18n.ftype_reportTemp,

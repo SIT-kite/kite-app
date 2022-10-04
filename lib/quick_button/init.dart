@@ -26,8 +26,8 @@ class QuickButton {
   static const QuickActions _quickActions = QuickActions();
 
   static void quickActionHandler(String type) {
-    if (type == 'report') {
-      Navigator.of(_context!).pushNamed('/report');
+    if (type == 'reportTemp') {
+      Navigator.of(_context!).pushNamed('/report_temp');
     } else if (type == 'timetable') {
       Navigator.of(_context!).pushNamed('/timetable');
     } else if (type == 'library') {
@@ -46,7 +46,7 @@ class QuickButton {
     _quickActions.initialize(quickActionHandler);
     // TODO: Add Icons
     _quickActions.setShortcutItems(<ShortcutItem>[
-      const ShortcutItem(type: 'report', localizedTitle: '体温上报', icon: null),
+      const ShortcutItem(type: 'reportTemp', localizedTitle: '体温上报', icon: null),
       const ShortcutItem(type: 'timetable', localizedTitle: '课表', icon: null),
       const ShortcutItem(type: 'library', localizedTitle: '图书馆', icon: null),
       const ShortcutItem(type: 'scanner', localizedTitle: '扫码', icon: null),

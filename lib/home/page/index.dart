@@ -149,7 +149,7 @@ class _HomePageState extends State<HomePage> {
       alignment: Alignment.centerLeft,
       child: GestureDetector(
         onTap: () => _scaffoldKey.currentState?.openDrawer(),
-        onDoubleTap: () => Navigator.of(context).pushNamed(RouteTable.egg),
+        onDoubleTap: () => Navigator.of(context).pushNamed(RouteTable.easterEgg),
         child: Center(child: SvgPicture.asset('assets/home/kite.svg', width: 80.w, height: 80.h)),
       ),
     );

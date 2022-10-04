@@ -25,7 +25,7 @@ export 'edu_email/symbol.dart';
 export 'electricity_bill/symbol.dart';
 export 'exam_arr/symbol.dart';
 export 'exam_result/symbol.dart';
-export 'expense_tracker/symbol.dart';
+export 'expense/symbol.dart';
 export 'flea_market/symbol.dart';
 export 'freshman/symbol.dart';
 export 'game/symbol.dart';

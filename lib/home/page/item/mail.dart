@@ -21,14 +21,14 @@ import 'package:kite/l10n/extension.dart';
 
 import 'index.dart';
 
-class MailItem extends StatefulWidget {
-  const MailItem({Key? key}) : super(key: key);
+class EduEmailItem extends StatefulWidget {
+  const EduEmailItem({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _MailItemState();
+  State<StatefulWidget> createState() => _EduEmailItemState();
 }
 
-class _MailItemState extends State<MailItem> {
+class _EduEmailItemState extends State<EduEmailItem> {
   String? content;
 
   @override
@@ -48,7 +48,7 @@ class _MailItemState extends State<MailItem> {
   @override
   Widget build(BuildContext context) {
     return HomeFunctionButton(
-      route: '/mail',
+      route: '/eduEmail',
       icon: 'assets/home/icon_mail.svg',
       title: i18n.ftype_eduEmail,
       subtitle: content ?? i18n.ftype_eduEmail_desc,

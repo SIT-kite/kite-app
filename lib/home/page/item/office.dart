@@ -20,18 +20,19 @@ import 'package:kite/exception/session.dart';
 import 'package:kite/module/application/init.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
+import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
 
 import 'index.dart';
 
-class OfficeItem extends StatefulWidget {
-  const OfficeItem({Key? key}) : super(key: key);
+class ApplicationItem extends StatefulWidget {
+  const ApplicationItem({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _OfficeItemState();
+  State<StatefulWidget> createState() => _ApplicationItemState();
 }
 
-class _OfficeItemState extends State<OfficeItem> {
+class _ApplicationItemState extends State<ApplicationItem> {
   String? content;
 
   @override
@@ -95,7 +96,7 @@ class _OfficeItemState extends State<OfficeItem> {
     // 如果是首屏加载, 从缓存读
     _tryUpdateContent(Kv.home.lastOfficeStatus);
     return HomeFunctionButton(
-        route: '/office',
+        route: RouteTable.application,
         icon: 'assets/home/icon_office.svg',
         title: i18n.ftype_application,
         subtitle: content ?? i18n.ftype_application_desc);

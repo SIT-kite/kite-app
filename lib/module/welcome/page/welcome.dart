@@ -78,7 +78,7 @@ class WelcomePage extends StatelessWidget {
                 ),
                 // Subtitle
                 Text(
-                  i18n.welcomeSub,
+                  i18n.welcomeSlogan,
                   style: Theme.of(context).textTheme.headline5?.copyWith(color: Colors.white),
                 ),
                 // Space

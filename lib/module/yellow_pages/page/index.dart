@@ -24,14 +24,14 @@ import '../init.dart';
 import 'list.dart';
 import 'search.dart';
 
-class ContactPage extends StatefulWidget {
-  const ContactPage({Key? key}) : super(key: key);
+class YellowPagesPage extends StatefulWidget {
+  const YellowPagesPage({Key? key}) : super(key: key);
 
   @override
-  State<ContactPage> createState() => _ContactPageState();
+  State<YellowPagesPage> createState() => _YellowPagesPageState();
 }
 
-class _ContactPageState extends State<ContactPage> {
+class _YellowPagesPageState extends State<YellowPagesPage> {
   final List<ContactData> _contactData = YellowPagesInit.contactStorageDao.getAllContacts();
 
   Future<List<ContactData>> _fetchContactList() async {
@@ -52,7 +52,10 @@ class _ContactPageState extends State<ContactPage> {
       future: _fetchContactList(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          _contactData.addAll(snapshot.data!);
+          var data = snapshot.data;
+          if (data != null) {
+            _contactData.addAll(data);
+          }
           return ContactList(_contactData);
         } else if (snapshot.hasError) {
           return Center(child: Text(snapshot.error.toString()));

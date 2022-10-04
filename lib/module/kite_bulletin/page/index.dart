@@ -24,8 +24,8 @@ import 'package:kite/util/dsl.dart';
 import '../entity/bulletin.dart';
 import '../init.dart';
 
-class NoticePage extends StatelessWidget {
-  const NoticePage({Key? key}) : super(key: key);
+class KiteBulletinPage extends StatelessWidget {
+  const KiteBulletinPage({Key? key}) : super(key: key);
 
   _buildTitleText(BuildContext ctx, String title) {
     return Text(title, overflow: TextOverflow.ellipsis, style: Theme.of(ctx).textTheme.headline3);

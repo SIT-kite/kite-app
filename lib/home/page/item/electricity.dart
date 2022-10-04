@@ -23,14 +23,14 @@ import 'package:kite/storage/init.dart';
 
 import 'index.dart';
 
-class ElectricityItem extends StatefulWidget {
-  const ElectricityItem({Key? key}) : super(key: key);
+class ElectricityBillItem extends StatefulWidget {
+  const ElectricityBillItem({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _ElectricityItemState();
+  State<StatefulWidget> createState() => _ElectricityBillItemState();
 }
 
-class _ElectricityItemState extends State<ElectricityItem> {
+class _ElectricityBillItemState extends State<ElectricityBillItem> {
   final Balance? lastBalance = Kv.home.lastBalance;
   String? content;
 

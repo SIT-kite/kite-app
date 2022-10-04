@@ -36,8 +36,8 @@ class DailyReportPage extends StatelessWidget {
   static Future<String> _getInjectJs() async {
     // TODO: 把 replace 完的 JS 缓存了
     final String username = Kv.auth.currentUsername ?? '';
-    final String css = await rootBundle.loadString('assets/report/inject.css');
-    final String js = await rootBundle.loadString('assets/report/inject.js');
+    final String css = await rootBundle.loadString('assets/report_temp/inject.css');
+    final String js = await rootBundle.loadString('assets/report_temp/inject.js');
     return js.replaceFirst('{{username}}', username).replaceFirst('{{injectCSS}}', css);
   }
 

@@ -31,18 +31,19 @@ import 'navigation/route.dart';
 import 'util/user.dart';
 
 class RouteTable {
+  RouteTable._();
   static const root = '/';
   static const home = '/home';
-  static const report = '/report';
+  static const reportTemp = '/report_temp';
   static const login = '/login';
   static const welcome = '/welcome';
   static const about = '/about';
   static const expense = '/expense';
   static const connectivity = '/connectivity';
   static const campusCard = '/campusCard';
-  static const electricity = '/electricity';
-  static const score = '/score';
-  static const office = '/office';
+  static const electricityBill = '/electricity_bill';
+  static const examResult = '/exam_result';
+  static const application = '/application';
   static const game = '/game';
   static const game2048 = '$game/2048';
   static const gameWordle = '$game/wordle';
@@ -54,18 +55,18 @@ class RouteTable {
   static const market = '/market';
   static const timetable = '/timetable';
   static const timetableImport = '$timetable/import';
-  static const setting = '/setting';
+  static const settings = '/settings';
   static const feedback = '/feedback';
-  static const notice = '/notice';
-  static const contact = '/contact';
-  static const bulletin = '/bulletin';
-  static const mail = '/mail';
-  static const night = '/night';
-  static const event = '/event';
-  static const lostFound = '/lostFound';
-  static const classroom = '/classroom';
-  static const exam = '/exam';
-  static const egg = '/egg';
+  static const kiteBulletin = '/kite_bulletin';
+  static const yellowPages = '/yellow_pages';
+  static const oaAnnouncement = '/oa_announcement';
+  static const eduEmail = '/eduEmail';
+  static const goodNight = '/good_night';
+  static const activity = '/activity';
+  static const lostFound = '/lost_found';
+  static const classroomBrowser = '/classroom_browser';
+  static const examArrangement = '/exam_arrangement';
+  static const easterEgg = '/easter_egg';
   static const bbs = '/bbs';
   static const scanner = '/scanner';
   static const browser = '/browser';
@@ -74,7 +75,7 @@ class RouteTable {
   static const freshmanUpdate = '$freshman/update';
   static const freshmanAnalysis = '$freshman/analysis';
   static const freshmanFriend = '$freshman/friend';
-  static const board = '/board';
+  static const kiteBoard = '/kite_board';
   static const notFound = '/not_found';
   static const simpleHtml = '/simple_html';
 }
@@ -82,16 +83,16 @@ class RouteTable {
 final defaultRouteTable = StaticRouteTable(
   table: {
     RouteTable.home: (context, args) => const HomePage(),
-    RouteTable.report: (context, args) => const DailyReportPage(),
+    RouteTable.reportTemp: (context, args) => const DailyReportPage(),
     RouteTable.login: (context, args) => const LoginPage(),
     RouteTable.welcome: (context, args) => const WelcomePage(),
     RouteTable.about: (context, args) => const AboutPage(),
     RouteTable.expense: (context, args) => const ExpensePage(),
     RouteTable.connectivity: (context, args) => const ConnectivityPage(),
     RouteTable.campusCard: (context, args) => const CampusCardPage(),
-    RouteTable.electricity: (context, args) => const ElectricityPage(),
-    RouteTable.score: (context, args) => const ScorePage(),
-    RouteTable.office: (context, args) => const OfficePage(),
+    RouteTable.electricityBill: (context, args) => const ElectricityPage(),
+    RouteTable.examResult: (context, args) => const ScorePage(),
+    RouteTable.application: (context, args) => const OfficePage(),
     RouteTable.game: (context, args) => const GamePage(),
     RouteTable.game2048: (context, args) => Game2048Page(),
     RouteTable.gameWordle: (context, args) => const WordlePage(),
@@ -103,18 +104,18 @@ final defaultRouteTable = StaticRouteTable(
     RouteTable.market: (context, args) => const MarketPage(),
     RouteTable.timetable: (context, args) => const TimetablePage(),
     RouteTable.timetableImport: (context, args) => const TimetableImportPage(),
-    RouteTable.setting: (context, args) => SettingsPage(),
+    RouteTable.settings: (context, args) => SettingsPage(),
     RouteTable.feedback: (context, args) => const FeedbackPage(),
-    RouteTable.notice: (context, args) => const NoticePage(),
-    RouteTable.contact: (context, args) => const ContactPage(),
-    RouteTable.bulletin: (context, args) => const BulletinPage(),
-    RouteTable.mail: (context, args) => const MailPage(),
-    RouteTable.night: (context, args) => const NightPage(),
-    RouteTable.event: (context, args) => const EventPage(),
+    RouteTable.kiteBulletin: (context, args) => const KiteBulletinPage(),
+    RouteTable.yellowPages: (context, args) => const YellowPagesPage(),
+    RouteTable.oaAnnouncement: (context, args) => const BulletinPage(),
+    RouteTable.eduEmail: (context, args) => const MailPage(),
+    RouteTable.goodNight: (context, args) => const NightPage(),
+    RouteTable.activity: (context, args) => const EventPage(),
     RouteTable.lostFound: (context, args) => const LostFoundPage(),
-    RouteTable.classroom: (context, args) => const ClassroomPage(),
-    RouteTable.exam: (context, args) => const ExamPage(),
-    RouteTable.egg: (context, args) => const EggPage(),
+    RouteTable.classroomBrowser: (context, args) => const ClassroomPage(),
+    RouteTable.examArrangement: (context, args) => const ExamArrangementPage(),
+    RouteTable.easterEgg: (context, args) => const EggPage(),
     RouteTable.bbs: (context, args) => const BbsPage(),
     RouteTable.scanner: (context, args) => const ScannerPage(),
     RouteTable.browser: (context, args) {
@@ -136,7 +137,7 @@ final defaultRouteTable = StaticRouteTable(
     RouteTable.freshmanLogin: (context, args) => const FreshmanLoginPage(),
     RouteTable.freshmanUpdate: (context, args) => const FreshmanUpdatePage(),
     RouteTable.freshmanFriend: (context, args) => const FreshmanFriendPage(),
-    RouteTable.board: (context, args) => const BoardPage(),
+    RouteTable.kiteBoard: (context, args) => const BoardPage(),
     RouteTable.notFound: (context, args) => NotFoundPage(args['routeName']),
     RouteTable.simpleHtml: (context, args) {
       return SimpleHtmlPage(

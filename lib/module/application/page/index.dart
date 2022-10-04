@@ -22,6 +22,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/exception/session.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
+import 'package:kite/util/dsl.dart';
 
 import '../entity/index.dart';
 import '../init.dart';
@@ -191,7 +192,7 @@ class _OfficePageState extends State<OfficePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('办公'),
+        title: i18n.ftype_application.txt,
         actions: [_buildMenuButton(context)],
       ),
       body: Column(

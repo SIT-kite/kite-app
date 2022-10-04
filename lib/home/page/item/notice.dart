@@ -19,18 +19,19 @@ import 'package:flutter/material.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/module/symbol.dart';
+import 'package:kite/route.dart';
 
 import '../../init.dart';
 import 'index.dart';
 
-class NoticeItem extends StatefulWidget {
-  const NoticeItem({Key? key}) : super(key: key);
+class KiteBulletinItem extends StatefulWidget {
+  const KiteBulletinItem({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _NoticeItemState();
+  State<StatefulWidget> createState() => _KiteBulletinItemState();
 }
 
-class _NoticeItemState extends State<NoticeItem> {
+class _KiteBulletinItemState extends State<KiteBulletinItem> {
   String? content;
 
   @override
@@ -69,7 +70,7 @@ class _NoticeItemState extends State<NoticeItem> {
           content = snapshot.data;
         }
         return HomeFunctionButton(
-          route: '/notice',
+          route: RouteTable.kiteBulletin,
           icon: 'assets/home/icon_notice.svg',
           title: i18n.ftype_kiteBulletin,
           subtitle: content ?? i18n.ftype_kiteBulletin_desc,
