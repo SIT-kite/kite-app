@@ -23,7 +23,7 @@ import '../dao/kite_board.dart';
 import '../entity/picture_summary.dart';
 
 class BoardService implements BoardDao {
-  static const _boardUrl = '/kite_board';
+  static const _boardUrl = '/board';
 
   final ISession session;
   BoardService(this.session);

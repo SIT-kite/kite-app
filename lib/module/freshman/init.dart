@@ -40,6 +40,6 @@ class FreshmanInit {
       freshmanDao: FreshmanService(freshmanSession),
       freshmanCacheDao: Kv.freshman,
       freshmanCacheManager: freshmanCacheManager,
-    ) as FreshmanDao;
+    );
   }
 }
