@@ -20,7 +20,6 @@ import 'dart:ui';
 import 'package:intl/intl.dart';
 
 Locale buildLocaleFromJson(Map<String, dynamic> json) {
-  print(['测试', json]);
   return Locale.fromSubtags(
     languageCode: json['languageCode'],
     scriptCode: json['scriptCode'],
