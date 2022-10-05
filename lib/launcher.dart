@@ -17,7 +17,7 @@
  */
 
 import 'package:catcher/catcher.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:kite/route.dart';
 import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/launcher.dart';

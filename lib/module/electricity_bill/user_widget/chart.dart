@@ -15,12 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../using.dart';
 
 import '../entity/statistics.dart';
 import '../init.dart';
+import '../using.dart';
 import 'daily_chart.dart';
 import 'hourly_chart.dart';
 

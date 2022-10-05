@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../using.dart';
 
 class InfoItem {
@@ -158,7 +158,7 @@ class BasicInfoPageWidget extends StatelessWidget {
                   Text(
                     '$college ${i18n.freshman}',
                     textAlign: TextAlign.left,
-                    style: const TextStyle(color: CupertinoColors.white, fontSize: 16, decoration: TextDecoration.none),
+                    style: const TextStyle(color: Colors.white, fontSize: 16, decoration: TextDecoration.none),
                   )
                 ],
               ),

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:kite/home/page/index.dart';
 
 import 'package:kite/navigation/static_route.dart';
