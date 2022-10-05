@@ -48,46 +48,37 @@ class ScoreService implements ScoreDao {
   /// 获取成绩
   @override
   Future<List<Score>> getScoreList(SchoolYear schoolYear, Semester semester) async {
-    // TODO: I try-catch this to solve the white screen issue due to uncaptured exception. Why must I do this?
-    try {
-      final response = await session.request(_scoreUrl, ReqMethod.post, queryParameters: {
-        'gnmkdm': 'N305005',
-        'doType': 'query',
-      }, data: {
-        // 学年名
-        'xnm': schoolYear.toString(),
-        // 学期名
-        'xqm': semesterToFormField(semester),
-        // 获取成绩最大数量
-        'queryModel.showCount': 100,
-      });
-      return _parseScoreListPage(response.data);
-    } catch (e) {
-      return const [];
-    }
+    final response = await session.request(_scoreUrl, ReqMethod.post, queryParameters: {
+      'gnmkdm': 'N305005',
+      'doType': 'query',
+    }, data: {
+      // 学年名
+      'xnm': schoolYear.toString(),
+      // 学期名
+      'xqm': semesterToFormField(semester),
+      // 获取成绩最大数量
+      'queryModel.showCount': 100,
+    });
+    return _parseScoreListPage(response.data);
   }
 
   /// 获取成绩详情
   @override
   Future<List<ScoreDetail>> getScoreDetail(String classId, SchoolYear schoolYear, Semester semester) async {
-    try {
-      var response = await session.request(
-        _scoreDetailUrl,
-        ReqMethod.post,
-        queryParameters: {'gnmkdm': 'N305005'},
-        data: {
-          // 班级
-          'jxb_id': classId,
-          // 学年名
-          'xnm': schoolYear.toString(),
-          // 学期名
-          'xqm': semesterToFormField(semester)
-        },
-      );
-      return _parseDetailPage(response.data);
-    } catch (e) {
-      return const [];
-    }
+    var response = await session.request(
+      _scoreDetailUrl,
+      ReqMethod.post,
+      queryParameters: {'gnmkdm': 'N305005'},
+      data: {
+        // 班级
+        'jxb_id': classId,
+        // 学年名
+        'xnm': schoolYear.toString(),
+        // 学期名
+        'xqm': semesterToFormField(semester)
+      },
+    );
+    return _parseDetailPage(response.data);
   }
 
   static List<Score> _parseScoreListPage(Map<String, dynamic> jsonPage) {
