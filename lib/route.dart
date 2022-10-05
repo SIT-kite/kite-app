@@ -18,15 +18,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:kite/home/page/index.dart';
-
 import 'package:kite/navigation/static_route.dart';
 import 'package:kite/override/entity.dart';
 import 'package:kite/settings/page/index.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/alert_dialog.dart';
 
-import 'module/symbol.dart';
 import 'module/simple_page/page/browser.dart';
+import 'module/symbol.dart';
 import 'navigation/route.dart';
 import 'util/user.dart';
 
@@ -78,6 +77,7 @@ class RouteTable {
   static const kiteBoard = '/kite_board';
   static const notFound = '/not_found';
   static const simpleHtml = '/simple_html';
+  static const serviceStatus = '/service_status';
 }
 
 final defaultRouteTable = StaticRouteTable(
@@ -146,6 +146,7 @@ final defaultRouteTable = StaticRouteTable(
         htmlContent: args['htmlContent'],
       );
     },
+    RouteTable.serviceStatus: (context, args) => const ServiceStatusPage(),
   },
   onNotFound: (context, routeName, args) => NotFoundPage(routeName),
   rootRoute: (context, table, args) {
