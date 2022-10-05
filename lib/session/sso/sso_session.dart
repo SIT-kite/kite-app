@@ -21,9 +21,9 @@ import 'dart:typed_data';
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart' hide Lock;
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 import 'package:kite/exception/session.dart';
-import 'package:kite/feature/kite/service/ocr.dart';
+import 'package:kite/module/flea_market/service/ocr.dart';
 import 'package:kite/session/dio_common.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
@@ -34,7 +34,7 @@ import 'encryption.dart';
 
 typedef SsoSessionErrorCallback = void Function(Object e, StackTrace t);
 
-class SsoSession with MyDioDownloaderMixin implements ISession {
+class SsoSession with DioDownloaderMixin implements ISession {
   static const int _maxRetryCount = 5;
   static const String _authServerUrl = 'https://authserver.sit.edu.cn/authserver';
   static const String _loginUrl = '$_authServerUrl/login';
@@ -231,7 +231,7 @@ class SsoSession with MyDioDownloaderMixin implements ISession {
     isOnline = true;
     _username = username;
     _password = password;
-    KvStorageInitializer.loginTime.sso = DateTime.now();
+    Kv.loginTime.sso = DateTime.now();
     return response;
   }
 
@@ -356,18 +356,18 @@ class SsoSession with MyDioDownloaderMixin implements ISession {
   }
 
   @override
-  Future<MyResponse> request(
+  Future<SessionRes> request(
     String url,
-    RequestMethod method, {
+    ReqMethod method, {
     Map<String, String>? queryParameters,
     data,
-    MyOptions? options,
-    MyProgressCallback? onSendProgress,
-    MyProgressCallback? onReceiveProgress,
+    SessionOptions? options,
+    SessionProgressCallback? onSendProgress,
+    SessionProgressCallback? onReceiveProgress,
   }) async {
     Response response = await _dioRequest(
       url,
-      method.toUpperCaseString(),
+      method.uppercaseName,
       queryParameters: queryParameters,
       data: data,
       options: options?.toDioOptions(),

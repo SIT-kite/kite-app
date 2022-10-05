@@ -19,7 +19,7 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 import 'package:kite/exception/session.dart';
 
 import 'dio_common.dart';
@@ -66,14 +66,14 @@ class OfficeSession extends ISession {
   }
 
   @override
-  Future<MyResponse> request(
+  Future<SessionRes> request(
     String url,
-    RequestMethod method, {
+    ReqMethod method, {
     Map<String, String>? queryParameters,
     dynamic data,
-    MyOptions? options,
-    MyProgressCallback? onSendProgress,
-    MyProgressCallback? onReceiveProgress,
+    SessionOptions? options,
+    SessionProgressCallback? onSendProgress,
+    SessionProgressCallback? onReceiveProgress,
   }) async {
     Options newOptions = options?.toDioOptions() ?? Options();
 
@@ -87,7 +87,7 @@ class OfficeSession extends ISession {
     };
 
     newOptions.headers == null ? newOptions.headers = newHeaders : newOptions.headers?.addAll(newHeaders);
-    newOptions.method = method.toUpperCaseString();
+    newOptions.method = method.uppercaseName;
 
     final response = await dio.request(
       url,

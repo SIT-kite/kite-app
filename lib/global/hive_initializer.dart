@@ -17,12 +17,13 @@
  */
 
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:kite/feature/contact/entity/contact.dart';
-import 'package:kite/feature/expense/entity/expense.dart';
-import 'package:kite/feature/initializer_index.dart';
-import 'package:kite/feature/library/search/entity/search_history.dart';
+import 'package:kite/module/expense/symbol.dart';
+import 'package:kite/module/yellow_pages/entity/contact.dart';
+import 'package:kite/module/init.dart';
+import 'package:kite/module/library/search/entity/search_history.dart';
 
-class HiveBoxInitializer {
+class HiveBoxInit {
+  HiveBoxInit._();
   static late Box<dynamic> userEvent;
   static late Box<LibrarySearchHistoryItem> librarySearchHistory;
   static late Box<ContactData> contactSetting;

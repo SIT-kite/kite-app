@@ -1,16 +1,16 @@
-import 'package:kite/feature/edu/common/entity/index.dart';
-import 'package:kite/feature/edu/exam/init.dart';
 import 'package:kite/mock/index.dart';
+import 'package:kite/module/shared/entity/school.dart';
+import 'package:kite/module/symbol.dart';
 
 void main() async {
   await init();
   await login();
   test('exam test', () async {
-    var table = await ExamInitializer.examService.getExamList(
+    var table = await ExamArrInit.examService.getExamList(
       const SchoolYear(2021),
       Semester.firstTerm,
     );
-    // Log.info(table);
+    // Log.info.dart(table);
     print(table);
   });
 }

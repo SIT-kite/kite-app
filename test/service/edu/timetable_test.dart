@@ -1,11 +1,11 @@
-import 'package:kite/feature/edu/common/entity/index.dart';
-import 'package:kite/feature/edu/timetable/init.dart';
+import 'package:kite/module/shared/entity/school.dart';
+import 'package:kite/module/symbol.dart';
 import 'package:kite/mock/index.dart';
 
 void main() async {
   await init();
   await login();
-  final timetableDao = TimetableInitializer.timetableService;
+  final timetableDao = TimetableInit.timetableService;
   test('timetable test', () async {
     final table = await timetableDao.getTimetable(
       const SchoolYear(2021),

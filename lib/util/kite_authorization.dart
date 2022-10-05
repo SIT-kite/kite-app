@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:kite/feature/initializer_index.dart';
+import 'package:kite/module/shared/init.dart';
 import 'package:kite/storage/init.dart';
 
 class AuthorizationDialog extends StatelessWidget {
@@ -51,12 +51,12 @@ class AuthorizationDialog extends StatelessWidget {
 }
 
 bool hasSignedKite() {
-  return KvStorageInitializer.jwt.jwtToken != null;
+  return Kv.jwt.jwtToken != null;
 }
 
 Future<bool> signUpIfNecessary(BuildContext context, String description) async {
   // 如果用户未同意过, 请求用户确认
-  if (KvStorageInitializer.jwt.jwtToken == null) {
+  if (Kv.jwt.jwtToken == null) {
     final bool? check = await showDialog<bool>(
       context: context,
       builder: (BuildContext context) => AuthorizationDialog(description),
@@ -67,9 +67,9 @@ Future<bool> signUpIfNecessary(BuildContext context, String description) async {
     }
 
     // 注册用户
-    final username = KvStorageInitializer.auth.currentUsername!;
-    final password = KvStorageInitializer.auth.ssoPassword!;
-    await KiteInitializer.kiteSession.login(username, password);
+    final username = Kv.auth.currentUsername!;
+    final password = Kv.auth.ssoPassword!;
+    await SharedInit.kiteSession.login(username, password);
   }
   return true;
 }

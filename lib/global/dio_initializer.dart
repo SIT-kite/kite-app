@@ -37,7 +37,7 @@ class DioConfig {
 }
 
 /// 用于初始化Dio,全局只有一份dio对象
-class DioInitializer {
+class DioInit {
   /// 初始化SessionPool
   static Future<Dio> init({required DioConfig config}) async {
     Log.info('初始化Dio');
@@ -110,7 +110,7 @@ class KiteHttpOverrides extends HttpOverrides {
     final client = super.createHttpClient(context);
 
     // 设置证书检查
-    if (config.allowBadCertificate || KvStorageInitializer.network.useProxy || config.httpProxy != null) {
+    if (config.allowBadCertificate || Kv.network.useProxy || config.httpProxy != null) {
       client.badCertificateCallback = (cert, host, port) => true;
     }
 
@@ -126,9 +126,9 @@ class KiteHttpOverrides extends HttpOverrides {
         // 不行
         Log.info('测试环境代理服务器为空或不合法，将不使用代理服务器');
       }
-    } else if (KvStorageInitializer.network.useProxy && KvStorageInitializer.network.proxy.isNotEmpty) {
+    } else if (Kv.network.useProxy && Kv.network.proxy.isNotEmpty) {
       Log.info('线上设置代理: ${config.httpProxy}');
-      client.findProxy = (url) => getProxyPolicyByUrl(url, KvStorageInitializer.network.proxy);
+      client.findProxy = (url) => getProxyPolicyByUrl(url, Kv.network.proxy);
     }
     return client;
   }

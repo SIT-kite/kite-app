@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 import 'package:kite/session/sso/index.dart';
 import 'package:kite/util/logger.dart';
 
@@ -27,24 +27,24 @@ class EduSession extends ISession {
   }
 
   Future<void> _refreshCookie() async {
-    await ssoSession.request('http://jwxt.sit.edu.cn/sso/jziotlogin', RequestMethod.get);
+    await ssoSession.request('http://jwxt.sit.edu.cn/sso/jziotlogin', ReqMethod.get);
   }
 
-  bool _isRedirectedToLoginPage(MyResponse response) {
+  bool _isRedirectedToLoginPage(SessionRes response) {
     return response.realUri.path == '/jwglxt/xtgl/login_slogin.html';
   }
 
   @override
-  Future<MyResponse> request(
+  Future<SessionRes> request(
     String url,
-    RequestMethod method, {
+    ReqMethod method, {
     Map<String, String>? queryParameters,
     data,
-    MyOptions? options,
-    MyProgressCallback? onSendProgress,
-    MyProgressCallback? onReceiveProgress,
+    SessionOptions? options,
+    SessionProgressCallback? onSendProgress,
+    SessionProgressCallback? onReceiveProgress,
   }) async {
-    Future<MyResponse> fetch() async {
+    Future<SessionRes> fetch() async {
       return await ssoSession.request(
         url,
         method,

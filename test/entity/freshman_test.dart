@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:kite/feature/freshman/entity.dart';
 import 'package:kite/mock/index.dart';
+import 'package:kite/module/freshman/entity/info.dart';
 
 void main() {
   String json = '''

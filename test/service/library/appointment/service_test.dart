@@ -1,10 +1,10 @@
-import 'package:kite/feature/library/appointment/init.dart';
+import 'package:kite/module/library/appointment/init.dart';
 import 'package:kite/mock/index.dart';
 
 void main() async {
   await init();
   await loginKite();
-  final service = LibraryAppointmentInitializer.appointmentService;
+  final service = LibraryAppointmentInit.appointmentService;
 
   test('apply', () async {
     int period = 2203262;

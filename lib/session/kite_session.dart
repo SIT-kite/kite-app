@@ -18,7 +18,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 import 'package:kite/common/entity/kite_user.dart';
 import 'package:kite/storage/dao/kite.dart';
 import 'package:kite/storage/init.dart';
@@ -65,8 +65,8 @@ class KiteSession implements ISession {
     } on KiteApiError catch (e) {
       if (e.code == 100) {
         await login(
-          KvStorageInitializer.auth.currentUsername!,
-          KvStorageInitializer.auth.ssoPassword!,
+          Kv.auth.currentUsername!,
+          Kv.auth.ssoPassword!,
         );
       }
       return await normallyRequest();
@@ -139,18 +139,18 @@ class KiteSession implements ISession {
   }
 
   @override
-  Future<MyResponse> request(
+  Future<SessionRes> request(
     String url,
-    RequestMethod method, {
+    ReqMethod method, {
     Map<String, String>? queryParameters,
     data,
-    MyOptions? options,
-    MyProgressCallback? onSendProgress,
-    MyProgressCallback? onReceiveProgress,
+    SessionOptions? options,
+    SessionProgressCallback? onSendProgress,
+    SessionProgressCallback? onReceiveProgress,
   }) async {
     Response response = await _dioRequest(
       url,
-      method.toUpperCaseString(),
+      method.uppercaseName,
       queryParameters: queryParameters,
       data: data,
       options: options?.toDioOptions(),

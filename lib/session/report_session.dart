@@ -19,7 +19,7 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
 import 'dio_common.dart';
 
@@ -73,18 +73,18 @@ class ReportSession extends ISession {
   }
 
   @override
-  Future<MyResponse> request(
+  Future<SessionRes> request(
     String url,
-    RequestMethod method, {
+    ReqMethod method, {
     Map<String, String>? queryParameters,
     data,
-    MyOptions? options,
-    MyProgressCallback? onSendProgress,
-    MyProgressCallback? onReceiveProgress,
+    SessionOptions? options,
+    SessionProgressCallback? onSendProgress,
+    SessionProgressCallback? onReceiveProgress,
   }) async {
     Response response = await _dioRequest(
       url,
-      method.toUpperCaseString(),
+      method.uppercaseName,
       queryParameters: queryParameters,
       data: data,
       options: options?.toDioOptions(),

@@ -1,24 +1,37 @@
+/*
+ *    上应小风筝(SIT-kite)  便利校园，一步到位
+ *    Copyright (C) 2022 上海应用技术大学 上应小风筝团队
+ *
+ *    This program is free software: you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation, either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 import 'package:dio/dio.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 
-extension RequestMethodEnumToString on RequestMethod {
-  String toUpperCaseString() {
-    return name.toUpperCase();
-  }
-}
+import '../network/download.dart';
 
-extension MyResponseTypeToDioResponseType on MyResponseType {
+extension DioResTypeConverter on SessionResType {
   ResponseType toDioResponseType() {
-    return {
-      MyResponseType.json: ResponseType.json,
-      MyResponseType.stream: ResponseType.stream,
-      MyResponseType.plain: ResponseType.plain,
-      MyResponseType.bytes: ResponseType.bytes,
-    }[this]!;
+    return (const {
+      SessionResType.json: ResponseType.json,
+      SessionResType.stream: ResponseType.stream,
+      SessionResType.plain: ResponseType.plain,
+      SessionResType.bytes: ResponseType.bytes,
+    })[this]!;
   }
 }
 
-extension MyOptionsToDioOptions on MyOptions {
+extension DioOptionsConverter on SessionOptions {
   Options toDioOptions() {
     return Options(
       method: method,
@@ -32,27 +45,28 @@ extension MyOptionsToDioOptions on MyOptions {
   }
 }
 
-extension DioResponseToMyResponse on Response {
-  MyResponse toMyResponse() {
-    return MyResponse(
+extension SessionResConverter on Response {
+  SessionRes toMyResponse() {
+    return SessionRes(
       data: data,
       realUri: realUri,
     );
   }
 }
 
-class MyDioDownloader implements IDownloader {
+class DioDownloader implements Downloader {
   Dio dio;
-  MyDioDownloader(this.dio);
+
+  DioDownloader(this.dio);
 
   @override
   Future<void> download(
     String url, {
     String? savePath,
-    MyProgressCallback? onReceiveProgress,
+    SessionProgressCallback? onReceiveProgress,
     Map<String, String>? queryParameters,
     data,
-    MyOptions? options,
+    SessionOptions? options,
   }) async {
     await dio.download(
       url,
@@ -65,19 +79,19 @@ class MyDioDownloader implements IDownloader {
   }
 }
 
-mixin MyDioDownloaderMixin implements IDownloader {
+mixin DioDownloaderMixin implements Downloader {
   Dio get dio;
 
   @override
   Future<void> download(
     String url, {
     String? savePath,
-    MyProgressCallback? onReceiveProgress,
+    SessionProgressCallback? onReceiveProgress,
     Map<String, String>? queryParameters,
     data,
-    MyOptions? options,
+    SessionOptions? options,
   }) async {
-    await MyDioDownloader(dio).download(
+    await DioDownloader(dio).download(
       url,
       savePath: savePath,
       onReceiveProgress: onReceiveProgress,
@@ -88,21 +102,21 @@ mixin MyDioDownloaderMixin implements IDownloader {
   }
 }
 
-class DefaultDioSession with MyDioDownloaderMixin implements ISession {
+class DefaultDioSession with DioDownloaderMixin implements ISession {
   @override
   Dio dio;
 
   DefaultDioSession(this.dio);
 
   @override
-  Future<MyResponse> request(
+  Future<SessionRes> request(
     String url,
-    RequestMethod method, {
+    ReqMethod method, {
     Map<String, String>? queryParameters,
     data,
-    MyOptions? options,
-    MyProgressCallback? onSendProgress,
-    MyProgressCallback? onReceiveProgress,
+    SessionOptions? options,
+    SessionProgressCallback? onSendProgress,
+    SessionProgressCallback? onReceiveProgress,
   }) async {
     final response = await dio.request(
       url,

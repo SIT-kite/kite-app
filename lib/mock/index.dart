@@ -16,9 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/feature/initializer_index.dart';
-import 'package:kite/feature/library/search/init.dart';
-import 'package:kite/feature/sit_app/init.dart';
+import 'package:kite/module/symbol.dart';
+import 'package:kite/module/library/search/init.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/global/init.dart';
 
@@ -48,15 +47,15 @@ Future<void> login() async {
 
 /// 图书馆登陆
 Future<void> loginLibrary() async {
-  await LibrarySearchInitializer.session.login(username, libraryPassword);
+  await LibrarySearchInit.session.login(username, libraryPassword);
 }
 
 /// 登陆小风筝服务
 Future<void> loginKite() async {
-  await KiteInitializer.kiteSession.login(username, ssoPassword);
+  await SharedInit.kiteSession.login(username, ssoPassword);
 }
 
 /// 登录上应大App服务
 Future<void> loginSitApp() async {
-  await SitAppInitializer.sitAppSession.login(username, ssoPassword);
+  await SitAppInit.sitAppSession.login(username, ssoPassword);
 }

@@ -22,17 +22,16 @@ import 'package:catcher/catcher.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/component/future_builder.dart';
 import 'package:kite/global/cookie_initializer.dart';
 import 'package:kite/global/dio_initializer.dart';
+import 'package:kite/module/user_event/dao/user_event.dart';
 import 'package:kite/route.dart';
 import 'package:kite/session/sso/index.dart';
 import 'package:kite/storage/dao/index.dart';
+import 'package:kite/user_widget/future_builder.dart';
 import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/event_bus.dart';
 import 'package:kite/util/page_logger.dart';
-
-import '../feature/user_event/dao.dart';
 
 class GlobalConfig {
   static String? httpProxy;
@@ -93,8 +92,8 @@ class Global {
     required UserEventStorageDao userEventStorage,
     required AuthSettingDao authSetting,
   }) async {
-    cookieJar = await CookieInitializer.init();
-    dio = await DioInitializer.init(
+    cookieJar = await CookieInit.init();
+    dio = await DioInit.init(
       config: DioConfig()
         ..cookieJar = cookieJar
         ..httpProxy = GlobalConfig.httpProxy
@@ -102,7 +101,7 @@ class Global {
         ..receiveTimeout = 6 * 1000
         ..connectTimeout = 6 * 1000,
     );
-    dio2 = await DioInitializer.init(
+    dio2 = await DioInit.init(
       config: DioConfig()
         ..cookieJar = cookieJar
         ..httpProxy = GlobalConfig.httpProxy
@@ -125,7 +124,7 @@ class Global {
     // 全局FutureBuilder异常处理
     MyFutureBuilder.globalErrorBuilder = (context, futureBuilder, error, stacktrace) {
       // 单独处理网络连接错误，且不上报
-      if (error is DioError && [DioErrorType.connectTimeout, DioErrorType.other].contains((error).type)) {
+      if (error is DioError && const [DioErrorType.connectTimeout, DioErrorType.other].contains((error).type)) {
         return Center(
           child: Column(
             children: [
@@ -134,7 +133,7 @@ class Global {
                 onPressed: () => Navigator.of(context).pushReplacementNamed(RouteTable.connectivity),
                 child: const Text('进入网络工具检查'),
               ),
-              if (futureBuilder.futureGetter != null && futureBuilder.controller != null)
+              if (futureBuilder.futureGetter != null)
                 TextButton(
                   onPressed: () => futureBuilder.controller?.refresh(),
                   child: const Text('刷新页面'),

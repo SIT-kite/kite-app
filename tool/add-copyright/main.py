@@ -19,7 +19,7 @@ COPYRIGHT_STRING = \
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-""";
+"""
 
 
 def already_has_copyright(content: str) -> bool:
@@ -33,7 +33,7 @@ def add_copyright(content: str) -> str:
 
 def walk(file: str):
     if not file.endswith('.dart') or file.endswith('.g.dart'):
-        return 
+        return
 
     with open(file, 'r', encoding='utf-8') as fp:
         content = fp.read()

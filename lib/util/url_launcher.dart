@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:kite/component/webview_page.dart';
+import 'package:kite/user_widget/webview/page.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import 'logger.dart';

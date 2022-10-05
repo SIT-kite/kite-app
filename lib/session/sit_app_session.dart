@@ -19,7 +19,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
 
@@ -57,8 +57,8 @@ class SitAppSession implements ISession {
     } on SitAppApiError catch (e, _) {
       if (e.code == 500) {
         await login(
-          KvStorageInitializer.auth.currentUsername!,
-          KvStorageInitializer.auth.ssoPassword!,
+          Kv.auth.currentUsername!,
+          Kv.auth.ssoPassword!,
         );
       }
       return await normallyRequest();
@@ -133,14 +133,14 @@ class SitAppSession implements ISession {
   }
 
   @override
-  Future<MyResponse> request(
+  Future<SessionRes> request(
     String url,
-    RequestMethod method, {
+    ReqMethod method, {
     Map<String, String>? queryParameters,
     data,
-    MyOptions? options,
-    MyProgressCallback? onSendProgress,
-    MyProgressCallback? onReceiveProgress,
+    SessionOptions? options,
+    SessionProgressCallback? onSendProgress,
+    SessionProgressCallback? onReceiveProgress,
   }) async {
     Response response = await _dioRequest(
       url,

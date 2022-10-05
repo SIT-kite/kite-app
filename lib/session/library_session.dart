@@ -20,7 +20,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:encrypt/encrypt.dart';
-import 'package:kite/abstract/abstract_session.dart';
+import 'package:kite/network/session.dart';
 import 'package:kite/exception/session.dart';
 import 'package:kite/util/dio_utils.dart';
 import 'package:kite/util/logger.dart';
@@ -71,7 +71,7 @@ class LibrarySession extends DefaultDioSession {
   }
 
   Future<dynamic> _getRSAPublicKey() async {
-    final pemResponse = await request(_pemUrl, RequestMethod.get);
+    final pemResponse = await request(_pemUrl, ReqMethod.get);
     String publicKeyStr = pemResponse.data;
     final pemFileContent = '-----BEGIN PUBLIC KEY-----\n$publicKeyStr\n-----END PUBLIC KEY-----';
 

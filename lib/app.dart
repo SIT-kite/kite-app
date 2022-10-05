@@ -26,10 +26,10 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/l10n/extension.dart';
+import 'package:kite/override/entity.dart';
 import 'package:kite/route.dart';
 
-import 'abstract/route.dart';
-import 'feature/override/entity.dart';
+import 'navigation/route.dart';
 import 'global/global.dart';
 import 'storage/init.dart';
 import 'util/logger.dart';
@@ -93,8 +93,8 @@ class _KiteAppState extends State<KiteApp> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = KvStorageInitializer.theme.isDarkMode;
-    final primaryColor = KvStorageInitializer.theme.color;
+    final isDark = Kv.theme.isDarkMode;
+    final primaryColor = Kv.theme.color;
 
     // refresh override route
     Global.eventBus.on(EventNameConstants.onRouteRefresh, (arg) {
@@ -120,7 +120,7 @@ class _KiteAppState extends State<KiteApp> {
         onGenerateRoute: _onGenerateRoute,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: Lang.supports,
-        locale: KvStorageInitializer.pref.locale,
+        locale: Kv.pref.locale,
         builder: EasyLoading.init(builder: (context, widget) {
           return MediaQuery(
             // 设置文字大小不随系统设置改变
