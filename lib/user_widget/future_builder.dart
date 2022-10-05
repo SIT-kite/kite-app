@@ -163,11 +163,14 @@ class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
       result = SmartRefresher(
         controller: refreshController,
         onRefresh: () async {
-          completer = Completer();
-          if (widget.onPreRefresh != null) await widget.onPreRefresh!();
-          await refresh();
-          refreshController.refreshCompleted();
-          if (widget.onPostRefresh != null) await widget.onPostRefresh!();
+          try {
+            completer = Completer();
+            if (widget.onPreRefresh != null) await widget.onPreRefresh!();
+            await refresh();
+            if (widget.onPostRefresh != null) await widget.onPostRefresh!();
+          } finally {
+            refreshController.refreshCompleted();
+          }
         },
         child: result,
       );
