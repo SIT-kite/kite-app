@@ -55,16 +55,15 @@ class KiteDrawer extends Drawer {
               Navigator.of(context).pushNamed(RouteTable.connectivity);
             },
           ),
-          UniversalPlatform.isAndroid
-              ? ListTile(
-                  title: i18n.campusCardTool.txt,
-                  leading: const Icon(Icons.credit_card),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.of(context).pushNamed(RouteTable.campusCard);
-                  },
-                )
-              : const SizedBox(height: 0),
+          if (UniversalPlatform.isAndroid)
+            ListTile(
+              title: i18n.campusCardTool.txt,
+              leading: const Icon(Icons.credit_card),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).pushNamed(RouteTable.campusCard);
+              },
+            ),
           // Feedback
           ListTile(
             title: i18n.feedback.txt,
@@ -72,6 +71,15 @@ class KiteDrawer extends Drawer {
             onTap: () {
               Navigator.pop(context);
               Navigator.of(context).pushNamed(RouteTable.feedback);
+            },
+          ),
+          // Service status
+          ListTile(
+            title: i18n.serviceStatus.txt,
+            leading: const Icon(Icons.monitor_heart),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context).pushNamed(RouteTable.serviceStatus);
             },
           ),
           // About

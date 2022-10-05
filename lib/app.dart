@@ -30,6 +30,7 @@ import 'package:kite/override/entity.dart';
 import 'package:kite/route.dart';
 
 import 'global/desktop_initializer.dart';
+import 'navigation/route.dart';
 import 'global/global.dart';
 import 'navigation/route.dart';
 import 'storage/init.dart';

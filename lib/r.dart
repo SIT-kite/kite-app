@@ -26,6 +26,7 @@ class R {
       "https://authserver.sit.edu.cn/authserver/getBackPasswordMainPage.do?service=https%3A%2F%2Fmyportal.sit.edu.cn%3A443%2F";
   static const easyConnectDownloadUrl = "https://www.sit.edu.cn/xxfw/list.htm";
   static const kiteAboutUrl = "https://kite.sunnysab.cn/about/";
+  static const kiteStatusUrl = "http://status.kite.sunnysab.cn/status/current";
   static const kiteBbsUrl = "https://support.qq.com/products/386124";
   static const kiteFeedbackUrl = "https://support.qq.com/product/377648";
   static const kiteWikiUrl = "https://kite.sunnysab.cn/wiki/";

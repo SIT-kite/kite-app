@@ -44,7 +44,6 @@ class MyWindowListener extends WindowListener {
 
 class DesktopInit {
   static bool resizing = false;
-
   /// The default window size is small enough for any modern desktop device.
   static const Size defaultSize = Size(500, 800);
 
@@ -56,7 +55,6 @@ class DesktopInit {
     windowManager.addListener(MyWindowListener(eventBus: eventBus));
     eventBus.on(WindowEvent.onWindowResize, (args) => resizing = true);
     eventBus.on(WindowEvent.onWindowResized, (args) => resizing = false);
-
     // 必须加上这一行。
     await windowManager.ensureInitialized();
     windowManager.waitUntilReadyToShow().then((_) async {

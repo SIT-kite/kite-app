@@ -399,6 +399,7 @@
   "scannerBarcodeNotRecognized": "No Barcode",
   "scannerBarcodeRecognized": "Barcode Recognized",
   "semester": "Semester",
+  "serviceStatus": "Service Status",
   "settings": "Settings",
   "settingsCampus": "Your Campus",
   "settingsCampusSub": "To display the weather",

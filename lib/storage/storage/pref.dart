@@ -17,7 +17,7 @@
 */
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:kite/l10n/lang.dart';
 import 'package:kite/storage/storage/common.dart';
@@ -29,7 +29,8 @@ class PrefStorage extends JsonStorage implements PrefDao {
 
   @override
   Locale? get locale {
-    return getModel<Locale>(PrefKey.locale, buildLocaleFromJson) ?? Lang.enLocale;
+    return getModel<Locale>(PrefKey.locale, buildLocaleFromJson) ??
+        Lang.enLocale;
   }
 
   @override
