@@ -29,8 +29,9 @@ import 'package:kite/l10n/extension.dart';
 import 'package:kite/override/entity.dart';
 import 'package:kite/route.dart';
 
-import 'navigation/route.dart';
+import 'global/desktop_initializer.dart';
 import 'global/global.dart';
+import 'navigation/route.dart';
 import 'storage/init.dart';
 import 'util/logger.dart';
 
@@ -50,8 +51,10 @@ class _KiteAppState extends State<KiteApp> {
       builder: (context) {
         final args = settings.arguments as Map<String, dynamic>? ?? {};
         final argsJson = jsonEncode(args);
-        Log.info('跳转路由: ${settings.name}, 参数: $argsJson');
-        Global.pageLogger.page(settings.name ?? 'Unknown', argsJson);
+        if (!DesktopInit.resizing) {
+          Log.info('跳转路由: ${settings.name}, 参数: $argsJson');
+          Global.pageLogger.page(settings.name ?? 'Unknown', argsJson);
+        }
         return routeGenerator.onGenerateRoute(settings.name!, args)(context);
       },
       settings: settings,

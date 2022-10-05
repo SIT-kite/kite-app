@@ -22,6 +22,7 @@ import 'package:window_manager/window_manager.dart';
 
 enum WindowEvent {
   onWindowResize,
+  onWindowResized,
 }
 
 class MyWindowListener extends WindowListener {
@@ -34,21 +35,28 @@ class MyWindowListener extends WindowListener {
     final size = await windowManager.getSize();
     eventBus.emit<Size>(WindowEvent.onWindowResize, size);
   }
+
+  @override
+  void onWindowResized() {
+    eventBus.emit(WindowEvent.onWindowResized);
+  }
 }
 
 class DesktopInit {
+  static bool resizing = false;
+
   /// The default window size is small enough for any modern desktop device.
   static const Size defaultSize = Size(500, 800);
 
   /// If the window was resized to too small accidentally, this will keep a minimum function area.
   static const Size minSize = Size(300, 400);
-  static late EventBus<WindowEvent> eventBus;
-  static late WindowListener windowListener;
+  static EventBus<WindowEvent> eventBus = EventBus<WindowEvent>();
 
   static Future<void> init() async {
-    DesktopInit.eventBus = EventBus<WindowEvent>();
-    windowListener = MyWindowListener(eventBus: eventBus);
-    windowManager.addListener(windowListener);
+    windowManager.addListener(MyWindowListener(eventBus: eventBus));
+    eventBus.on(WindowEvent.onWindowResize, (args) => resizing = true);
+    eventBus.on(WindowEvent.onWindowResized, (args) => resizing = false);
+
     // 必须加上这一行。
     await windowManager.ensureInitialized();
     windowManager.waitUntilReadyToShow().then((_) async {
