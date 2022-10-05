@@ -99,6 +99,7 @@ class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
     // 判定是否有全局处理
     if (MyFutureBuilder.globalErrorBuilder != null) {
       final r = MyFutureBuilder.globalErrorBuilder!(context, widget, error, stackTrace);
+      if (r != null) return r;
     }
 
     // 默认处理
