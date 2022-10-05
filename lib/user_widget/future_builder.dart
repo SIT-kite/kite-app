@@ -43,7 +43,7 @@ class MyFutureBuilder<T> extends StatefulWidget {
   final Future<T>? future;
   final MyWidgetBuilder<T>? builder;
   final MyErrorWidgetBuilder? onErrorBuilder;
-  final MyFutureBuilderController? controller;
+  MyFutureBuilderController? controller;
 
   /// 建议使用该参数代替future, 否则可能无法正常实现刷新功能
   final Future<T> Function()? futureGetter;
@@ -57,7 +57,7 @@ class MyFutureBuilder<T> extends StatefulWidget {
   /// 是否启用下拉刷新
   final bool enablePullRefresh;
 
-  const MyFutureBuilder({
+  MyFutureBuilder({
     Key? key,
     this.future,
     required this.builder,
@@ -67,7 +67,9 @@ class MyFutureBuilder<T> extends StatefulWidget {
     this.onPreRefresh,
     this.onPostRefresh,
     this.futureGetter,
-  }) : super(key: key);
+  }) : super(key: key) {
+    controller = MyFutureBuilderController();
+  }
 
   @override
   State<MyFutureBuilder<T>> createState() => _MyFutureBuilderState<T>();

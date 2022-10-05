@@ -133,7 +133,7 @@ class Global {
                 onPressed: () => Navigator.of(context).pushReplacementNamed(RouteTable.connectivity),
                 child: const Text('进入网络工具检查'),
               ),
-              if (futureBuilder.futureGetter != null && futureBuilder.controller != null)
+              if (futureBuilder.futureGetter != null)
                 TextButton(
                   onPressed: () => futureBuilder.controller?.refresh(),
                   child: const Text('刷新页面'),
