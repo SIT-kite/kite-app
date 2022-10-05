@@ -231,8 +231,8 @@ class _TimetableImportPageState extends State<TimetableImportPage> {
 
   @override
   void initState() {
-    // 静默赋值
-    kiteTimetableService.getSemesterDefaultStartDate().then((value) => defaultStartDate = value);
+    // 静默赋值(忽略异常信息)
+    kiteTimetableService.getSemesterDefaultStartDate().then((value) => defaultStartDate = value).ignore();
     super.initState();
   }
 
