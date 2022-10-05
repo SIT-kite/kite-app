@@ -17,6 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/l10n/extension.dart';
+import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/dsl.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -43,7 +44,7 @@ class KiteDrawer extends Drawer {
             leading: const Icon(Icons.settings),
             onTap: () {
               Navigator.pop(context);
-              Navigator.of(context).pushNamed('/setting');
+              Navigator.of(context).pushNamed(RouteTable.settings);
             },
           ),
           ListTile(
@@ -51,7 +52,7 @@ class KiteDrawer extends Drawer {
             leading: const Icon(Icons.lan),
             onTap: () {
               Navigator.pop(context);
-              Navigator.of(context).pushNamed('/connectivity');
+              Navigator.of(context).pushNamed(RouteTable.connectivity);
             },
           ),
           UniversalPlatform.isAndroid
@@ -60,7 +61,7 @@ class KiteDrawer extends Drawer {
                   leading: const Icon(Icons.credit_card),
                   onTap: () {
                     Navigator.pop(context);
-                    Navigator.of(context).pushNamed('/campusCard');
+                    Navigator.of(context).pushNamed(RouteTable.campusCard);
                   },
                 )
               : const SizedBox(height: 0),
@@ -70,7 +71,7 @@ class KiteDrawer extends Drawer {
             leading: const Icon(Icons.feedback_rounded),
             onTap: () {
               Navigator.pop(context);
-              Navigator.of(context).pushNamed('/feedback');
+              Navigator.of(context).pushNamed(RouteTable.feedback);
             },
           ),
           // About
@@ -79,7 +80,7 @@ class KiteDrawer extends Drawer {
             leading: const Icon(Icons.info_rounded),
             onTap: () {
               Navigator.pop(context);
-              Navigator.of(context).pushNamed('/about');
+              Navigator.of(context).pushNamed(RouteTable.about);
             },
           ),
         ],
