@@ -44,6 +44,7 @@ class MyWindowListener extends WindowListener {
 
 class DesktopInit {
   static bool resizing = false;
+
   /// The default window size is small enough for any modern desktop device.
   static const Size defaultSize = Size(500, 800);
 

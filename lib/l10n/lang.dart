@@ -122,9 +122,9 @@ class Lang {
   }
 
   static const supports = [
+    enLocale, // generic English 'en'
     zhLocale, // generic Chinese 'zh'
     zhTwLocale, // generic traditional Chinese 'zh_Hant'
-    enLocale, // generic English 'en'
   ];
 
   static Locale redirectLocale(Locale old) {

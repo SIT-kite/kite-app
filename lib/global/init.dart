@@ -57,7 +57,7 @@ class Initializer {
     // 初始化Hive数据库
     await HiveBoxInit.init('kite1/hive');
     await UserEventInit.init(userEventBox: HiveBoxInit.userEvent);
-    KvInit.init(kvStorageBox: HiveBoxInit.kv);
+    Kv.init(kvStorageBox: HiveBoxInit.kv);
     SettingsInit.init(kvStorageBox: HiveBoxInit.kv);
     await Global.init(
       userEventStorage: UserEventInit.userEventStorage,

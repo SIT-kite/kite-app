@@ -53,9 +53,6 @@ class Kv {
   static late PrefDao pref;
 
   static late Box<dynamic> kvStorageBox;
-}
-
-class KvInit {
   static Future<void> init({
     required Box<dynamic> kvStorageBox,
   }) async {

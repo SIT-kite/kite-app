@@ -43,22 +43,18 @@ class _HomeBackgroundState extends State<HomeBackground> {
 
   @override
   void initState() {
-    _weatherCode =
-        widget.initialWeatherCode ?? int.parse(Kv.home.lastWeather.icon);
+    _weatherCode = widget.initialWeatherCode ?? int.parse(Kv.home.lastWeather.icon);
     super.initState();
-    Global.eventBus
-        .on(EventNameConstants.onBackgroundChange, _onBackgroundUpdate);
+    Global.eventBus.on(EventNameConstants.onBackgroundChange, _onBackgroundUpdate);
     Global.eventBus.on(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
     if (UniversalPlatform.isDesktop) {
-      DesktopInit.eventBus
-          .on<Size>(WindowEvent.onWindowResize, _onWindowResize);
+      DesktopInit.eventBus.on<Size>(WindowEvent.onWindowResize, _onWindowResize);
     }
   }
 
   @override
   void deactivate() {
-    Global.eventBus
-        .off(EventNameConstants.onBackgroundChange, _onBackgroundUpdate);
+    Global.eventBus.off(EventNameConstants.onBackgroundChange, _onBackgroundUpdate);
     Global.eventBus.off(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
     if (UniversalPlatform.isDesktop) {
       DesktopInit.eventBus.off(WindowEvent.onWindowResize, _onWindowResize);
@@ -71,8 +67,7 @@ class _HomeBackgroundState extends State<HomeBackground> {
     Future.delayed(
       const Duration(milliseconds: 500),
       () {
-        if (!DesktopInit.eventBus
-            .contain(WindowEvent.onWindowResize, _onWindowResize)) {
+        if (!DesktopInit.eventBus.contain(WindowEvent.onWindowResize, _onWindowResize)) {
           return;
         }
         setState(() {});
