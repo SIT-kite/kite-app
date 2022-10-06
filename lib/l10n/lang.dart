@@ -18,6 +18,7 @@
 import 'dart:ui';
 
 import 'package:intl/intl.dart';
+import 'package:kite/storage/init.dart';
 
 Locale buildLocaleFromJson(Map<String, dynamic> json) {
   return Locale.fromSubtags(
@@ -121,8 +122,42 @@ class Lang {
   }
 
   static const supports = [
-    Locale.fromSubtags(languageCode: 'en'), // generic English 'en'
-    Locale.fromSubtags(languageCode: 'zh', countryCode: 'TW'), // generic traditional Chinese 'zh_Hant'
-    Locale.fromSubtags(languageCode: 'zh'), // generic Chinese 'zh'
+    zhLocale, // generic Chinese 'zh'
+    zhTwLocale, // generic traditional Chinese 'zh_Hant'
+    enLocale, // generic English 'en'
   ];
+
+  static Locale redirectLocale(Locale old) {
+    if (supports.contains(old)) {
+      return old;
+    }
+    if (old.languageCode == zh) {
+      if (old.countryCode == tw || old.scriptCode == "Hant") {
+        return zhTwLocale;
+      } else {
+        return zhLocale;
+      }
+    } else {
+      return enLocale;
+    }
+  }
+
+  static setCurrentLocale(Locale cur) {
+    Kv.pref.locale = redirectLocale(cur);
+  }
+
+  static Locale getOrSetCurrentLocale(Locale fallback) {
+    var cur = Kv.pref.locale;
+    if (cur == null) {
+      var redirected = redirectLocale(fallback);
+      Kv.pref.locale = redirected;
+      return redirected;
+    } else {
+      return cur;
+    }
+  }
+
+  static setCurrentLocaleIfAbsent(Locale cur) {
+    Kv.pref.locale ??= redirectLocale(cur);
+  }
 }

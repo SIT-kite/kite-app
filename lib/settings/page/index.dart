@@ -164,15 +164,7 @@ class SettingsPage extends StatelessWidget {
   }
 
   _buildLanguagePrefSelector(BuildContext ctx) {
-    final Locale curLocale;
-    final savedLocale = Kv.pref.locale;
-    if (savedLocale == null) {
-      final defaultLocale = Localizations.localeOf(ctx);
-      Kv.pref.locale = defaultLocale;
-      curLocale = defaultLocale;
-    } else {
-      curLocale = savedLocale;
-    }
+    final Locale curLocale = Lang.getOrSetCurrentLocale(Localizations.localeOf(ctx));
 
     return DropDownSettingsTile<String>(
       title: i18n.settingsLanguage,
@@ -184,7 +176,7 @@ class SettingsPage extends StatelessWidget {
         jsonEncode(Lang.zhLocale.toJson()): i18n.language_zh,
         jsonEncode(Lang.zhTwLocale.toJson()): i18n.language_zh_TW,
       },
-      selected: jsonEncode(Lang.zhLocale.toJson()),
+      selected: jsonEncode(curLocale.toJson()),
       onChange: (value) {
         // TODO: Test on mobile
         Future.delayed(Duration.zero, () => Phoenix.rebirth(ctx));

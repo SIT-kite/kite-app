@@ -32,7 +32,6 @@ import 'package:kite/route.dart';
 import 'global/desktop_initializer.dart';
 import 'navigation/route.dart';
 import 'global/global.dart';
-import 'navigation/route.dart';
 import 'storage/init.dart';
 import 'util/logger.dart';
 
@@ -96,6 +95,14 @@ class _KiteAppState extends State<KiteApp> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Lang.setCurrentLocaleIfAbsent(Localizations.localeOf(context));
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final isDark = Kv.theme.isDarkMode;
     final primaryColor = Kv.theme.color;
@@ -126,6 +133,8 @@ class _KiteAppState extends State<KiteApp> {
         supportedLocales: Lang.supports,
         locale: Kv.pref.locale,
         builder: EasyLoading.init(builder: (context, widget) {
+          // A workaround to get the system locale.
+          Kv.pref.locale = Lang.redirectLocale(Localizations.localeOf(context));
           return MediaQuery(
             // 设置文字大小不随系统设置改变
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),

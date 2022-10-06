@@ -29,8 +29,7 @@ class PrefStorage extends JsonStorage implements PrefDao {
 
   @override
   Locale? get locale {
-    return getModel<Locale>(PrefKey.locale, buildLocaleFromJson) ??
-        Lang.enLocale;
+    return getModel<Locale>(PrefKey.locale, buildLocaleFromJson);
   }
 
   @override
