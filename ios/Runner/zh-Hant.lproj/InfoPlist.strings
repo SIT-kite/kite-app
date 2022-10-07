@@ -1,0 +1,13 @@
+/*
+  InfoPlist.strings
+  Kite App info.plist localization file.
+
+  Created by peanuts on 2022/2/10.
+
+*/
+
+NSCalendarsUsageDescription = "小风筝需要行事曆权限。";
+NSCameraUsageDescription = "小風箏需要相機權限。";
+NSPhotoLibraryUsageDescription = "小風箏需要相簿權限。";
+CFBundleDisplayName = "上應小風箏";
+NFCReaderUsageDescription = "小風箏需要NFC權限。";
