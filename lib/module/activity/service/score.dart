@@ -29,7 +29,7 @@ class ScScoreService implements ScScoreDao {
   static const _scScoreUrl = 'http://sc.sit.edu.cn/public/pcenter/scoreDetail.action';
   static const _scMyEventUrl = 'http://sc.sit.edu.cn/public/pcenter/activityOrderList.action?pageSize=999';
 
-  static const totalScore = '#content-box > div.user-info.dart > div:nth-child(3) > font';
+  static const totalScore = '#content-box > div.user-info > div:nth-child(3) > font';
   static const spanScore = '#span_score';
   static const scoreDetailPage = '#div1 > div.table_style_4 > form > table:nth-child(7) > tbody > tr';
   static const idDetail = 'td:nth-child(7)';

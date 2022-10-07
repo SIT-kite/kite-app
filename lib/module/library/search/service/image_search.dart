@@ -48,7 +48,7 @@ class BookImageSearchService implements BookImageSearchDao {
     );
     var responseStr = (response.data as String).trim();
     responseStr = responseStr.substring(1, responseStr.length - 1);
-    // Log.info.dart(responseStr);
+    // Log.info(responseStr);
     var result = <String, BookImage>{};
     (jsonDecode(responseStr)['result'] as List<dynamic>).map((e) => BookImage.fromJson(e)).forEach(
       (e) {

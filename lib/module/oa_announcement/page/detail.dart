@@ -66,7 +66,7 @@ class _DetailPageState extends State<DetailPage> {
         attachment.url,
         savePath: targetPath,
         onReceiveProgress: (int count, int total) {
-          // Log.info.dart('已下载: ${count / (1024 * 1024)}MB');
+          // Log.info('已下载: ${count / (1024 * 1024)}MB');
         },
       );
     }

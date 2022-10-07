@@ -40,7 +40,7 @@ class BulletinService implements BulletinDao {
   BulletinDetail _parseBulletinDetail(Bs4Element item) {
     final dateFormat = DateFormat('yyyy年MM月dd日 hh:mm');
 
-    String metaHtml = item.find('div', class_: 'oa_announcement-info.dart')?.innerHtml ?? '';
+    String metaHtml = item.find('div', class_: 'bulletin-info')?.innerHtml ?? '';
     // 删除注释
     metaHtml = metaHtml.replaceAll('<!--', '').replaceAll(r'-->', '');
     String meta = BeautifulSoup(metaHtml).text;
@@ -48,8 +48,8 @@ class BulletinService implements BulletinDao {
     final metaList = meta.split('|').map((e) => e.trim()).toList();
 
     return BulletinDetail()
-      ..title = item.find('div', class_: 'oa_announcement-title')?.text.trim() ?? ''
-      ..content = item.find('div', class_: 'oa_announcement-content')?.innerHtml ?? ''
+      ..title = item.find('div', class_: 'bulletin-title')?.text.trim() ?? ''
+      ..content = item.find('div', class_: 'bulletin-content')?.innerHtml ?? ''
       ..attachments = _parseAttachment(item)
       ..dateTime = dateFormat.parse(metaList[0].substring(5))
       ..department = metaList[1].substring(5)
