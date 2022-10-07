@@ -44,6 +44,14 @@ flutter build linux     # build for Linux
 flutter build apk       # build for Android
 ```
 
+### iOS Build
+
+Kite for iOS requires `Xcode 13.4.1`, the latest Xcode 13.
+You can download it [here](https://developer.apple.com/download/all/?q=Xcode%2013.4.1).
+
+Be aware that Xcode 14 or higher doesn't work due to the compatibility issue of some dependencies.
+
+
 ## Dependency
 
 ### Flutter

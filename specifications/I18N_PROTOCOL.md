@@ -177,14 +177,12 @@ with a new workflow.
 - Perform friendly and cute wording.
 - Perform a bit of Internet slang.
 
-- 使用 "与" 代替 "和"
 - 使用 "你" 代替 "您"
 
 #### For Traditional Chinese
 
 - Perform more localized wording
 
-- 使用 "和" 代替 "与"
 - 用可爱的句末语气词
 
 #### Wording
