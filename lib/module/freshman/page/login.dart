@@ -18,9 +18,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../using.dart';
-import '../../dao/Freshman.dart';
-import '../../init.dart';
+import '../using.dart';
+import '../dao/Freshman.dart';
+import '../init.dart';
 
 class FreshmanLoginPage extends StatefulWidget {
   const FreshmanLoginPage({Key? key}) : super(key: key);
@@ -149,7 +149,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
               icon: const Icon(Icons.lock),
               suffixIcon: IconButton(
                 // 切换密码明文显示状态的图标按钮
-                icon: Icon(_isPasswordClear ? Icons.visibility_off : Icons.visibility),
+                icon: Icon(_isPasswordClear ? Icons.visibility : Icons.visibility_off),
                 onPressed: () {
                   setState(() => _isPasswordClear = !_isPasswordClear);
                 },

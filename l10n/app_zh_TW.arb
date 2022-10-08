@@ -1,4 +1,5 @@
 {
+  "@@locale": "zh_TW",
   "about": "關於",
   "academicYear": "學年",
   "acceptedAgreementCheckbox": "我已經閱讀並認可",
@@ -31,6 +32,7 @@
   "connectivityConnectedByVpn": "已通過 VPN 連接校園網路",
   "connectivityConnectedByWlan": "已通過 WLAN 連接校園網路",
   "continue_": "繼續",
+  "counselor": "輔導員",
   "counselorPhoneNumber": "輔導員電話號碼",
   "currentDormitoryLabel": "當前宿舍",
   "dataManagement": "數據管理",

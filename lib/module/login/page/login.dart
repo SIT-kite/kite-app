@@ -136,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
               icon: const Icon(Icons.lock),
               suffixIcon: IconButton(
                 // 切换密码明文显示状态的图标按钮
-                icon: Icon(isPasswordClear ? Icons.visibility_off : Icons.visibility),
+                icon: Icon(isPasswordClear ? Icons.visibility : Icons.visibility_off),
                 onPressed: () {
                   setState(() {
                     isPasswordClear = !isPasswordClear;
