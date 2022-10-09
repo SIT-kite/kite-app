@@ -17,8 +17,12 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:kite/common/annotation.dart';
 import 'package:kite/util/event_bus.dart';
+import 'package:universal_platform/universal_platform.dart';
 import 'package:window_manager/window_manager.dart';
+
+import 'global.dart';
 
 enum WindowEvent {
   onWindowResize,
@@ -66,5 +70,12 @@ class DesktopInit {
       await windowManager.setMinimumSize(minSize);
       await windowManager.show();
     });
+  }
+
+  @desktopSafe
+  static setTitle(String title) async {
+    if (UniversalPlatform.isDesktop) {
+      await windowManager.setTitle(title);
+    }
   }
 }
