@@ -43,19 +43,19 @@
       "size" : "256x256"
     },
     {
-      "filename" : "kitex512 2.png",
+      "filename" : "kitex512 1.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "256x256"
     },
     {
-      "filename" : "kitex512 1.png",
+      "filename" : "kitex512.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "512x512"
     },
     {
-      "filename" : "kitex1024 1.png",
+      "filename" : "kitex1024.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "512x512"
