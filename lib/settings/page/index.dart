@@ -179,7 +179,6 @@ class SettingsPage extends StatelessWidget {
       },
       selected: jsonEncode(curLocale.toJson()),
       onChange: (value) {
-        // TODO: Test on mobile
         Future.delayed(Duration.zero, () => Phoenix.rebirth(ctx));
       },
     );

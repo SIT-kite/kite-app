@@ -14,7 +14,7 @@
 | expense          |             | Expense Tracker        | 查消费     |
 | library          |             | Library                | 图书馆     |
 | application      | office      | Application            | 办事      |
-| eduEmail         | mail        | Edu Email              | 学校邮箱  |
+| eduEmail         | mail        | Edu Email              | 学校邮箱    |
 | oaAnnouncement   | bulletin    | OA Announcement        | OA 公告   |
 | yellowPages      | contact     | Yellow Pages           | 常用电话    |
 | game             |             | Game                   | 小游戏     |
