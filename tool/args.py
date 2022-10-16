@@ -62,7 +62,7 @@ class Args:
         consuming the head
         """
         for i, arg in enumerate(self._args):
-            yield Arg(arg), Args(self._args[i + 1:])
+            yield Arg.by(arg), Args(self._args[i + 1:])
 
     def pop(self) -> tuple[Arg | None, "Args"]:
         """
@@ -78,7 +78,7 @@ class Args:
         consuming the last
         """
         for i, arg in enumerate(reversed(self._args)):
-            yield Arg(arg), Args(self._args[0:-1])
+            yield Arg.by(arg), Args(self._args[0:-1])
 
     def __iter__(self):
         return iter(self._args)

@@ -67,6 +67,12 @@ class ComponentType:
         else:
             raise Exception(f"unknown module creation mode {mode}")
 
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return self.name
+
 
 # noinspection SpellCheckingInspection
 class UsingDeclare:
@@ -79,11 +85,18 @@ class UsingDeclare:
             refs
         self.refs = refs
 
+    # TODO: Known issue: it can't resolve the relative path of submodule
     def create(self, usingfi: File):
         with StringIO() as l:
             for ref in self.refs:
                 l.write(f"export '{ref}'\n")
             usingfi.append(l.getvalue())
+
+    def __str__(self):
+        return f"{self.name},{self.refs}"
+
+    def __repr__(self):
+        return self.name
 
 
 class Module:

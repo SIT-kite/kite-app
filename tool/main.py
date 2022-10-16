@@ -7,7 +7,7 @@ from cmd import CommandList
 from filesystem import File, Directory, isdir
 from typing import Sequence
 
-from flutter import Proj
+from flutter import Proj, ComponentType
 from ui import Terminal, BashTerminal
 
 logo = """
@@ -67,6 +67,11 @@ def shell(*, proj: Proj, terminal: Terminal, cmds: CommandList, args: Sequence[s
     proj.pubspec = yml.load(proj.pubspec_fi().read())
     terminal.both << f'Project loaded: "{proj.name} {proj.version}".'
     terminal.both << f'Description: "{proj.desc}".'
+    import kite.using
+    kite.using.load()
+    import kite.compoenet
+    kite.compoenet.load()
+    terminal.both << f'{ComponentType.all}'
 
 
 def main():
