@@ -17,6 +17,11 @@
 |      |   第二课堂   | 校内常用电话 | 新生信息 |   游戏   |
 |      |          | 一网通办业务 |      |  Wiki  |
 
+## 截图
+
+![1](screenshot/KiteApp 1.png)  ![2](screenshot/KiteApp 2.png)  ![3](screenshot/KiteApp 3.png)  ![4](screenshot/KiteApp 4.png)  ![5](screenshot/KiteApp 5.png)  ![6](screenshot/KiteApp 6.png)
+
+
 ## 声明
 
 小风筝App源于[上应小风筝小程序][Kite-MicroApp],

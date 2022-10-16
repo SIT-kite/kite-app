@@ -17,6 +17,10 @@ English | [中文](README_zh.md)
 |                  | Second Class |   Yellow Pages    | Freshman Related  |       Games        |
 |                  |              |    Application    |                   |        Wiki        |
 
+## Screenshots
+
+![1](screenshot/KiteApp 1.png)  ![2](screenshot/KiteApp 2.png)  ![3](screenshot/KiteApp 3.png)  ![4](screenshot/KiteApp 4.png)  ![5](screenshot/KiteApp 5.png)  ![6](screenshot/KiteApp 6.png)
+
 ## Announcement
 
 Kite App is derived from [SIT-Kite MicroApp][Kite-MicroApp].
