@@ -1,12 +1,13 @@
+import ntpath
+import os.path
 import sys
 
 import log
 from cmd import CommandList
-from filesystem import File, Directory, is_dir
+from filesystem import File, Directory, isdir
 from typing import Sequence
 
 from flutter import Proj
-from strings import s
 from ui import Terminal, BashTerminal
 
 logo = """
@@ -60,20 +61,26 @@ def find_project_root(start: str | Directory, max_depth=20) -> Directory | None:
 
 
 def shell(*, proj: Proj, terminal: Terminal, cmds: CommandList, args: Sequence[str]):
-    terminal.loging << f"Project root found at {s(proj.root)}."
-    terminal.both << f"Kite Tool v{version}"
+    terminal.loging << f'Project root found at "{proj.root}".'
+    terminal.both << f'Kite Tool v{version}'
     import yml
     proj.pubspec = yml.load(proj.pubspec_fi().read())
-    terminal.both << f"Project loaded: \"{proj.name} {proj.version}\"."
-    terminal.both << f"Description: \"{proj.desc}\"."
+    terminal.both << f'Project loaded: "{proj.name} {proj.version}".'
+    terminal.both << f'Description: "{proj.desc}".'
 
 
 def main():
+    script_path = sys.argv[0]
+    script_abs_path = os.path.abspath(script_path)
+    parent, _ = ntpath.split(script_abs_path)
     cmdargs = sys.argv[1:] if len(sys.argv) > 1 else ()
-    root = find_project_root(start=".")
+    # finding starts with the parent folder of main.py
+    root = find_project_root(start=parent)
     if root is not None:
         proj = Proj(root)
         logger = log.FileLogger(proj.kite_log())
+        File.logger = logger
+        Directory.logger = logger
         t = BashTerminal(logger)
         cmds = CommandList()
         shell(proj=proj, terminal=t, cmds=cmds, args=cmdargs)

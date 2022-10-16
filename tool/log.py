@@ -31,6 +31,6 @@ class FileLogger(Logger):
         logfi.ensure()
         if logfi.ensure():
             try:
-                logfi.append(content)
+                logfi.append(content, silent=True)
             except:
                 pass

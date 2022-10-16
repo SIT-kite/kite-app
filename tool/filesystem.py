@@ -1,6 +1,6 @@
 import ntpath
-import os.path as p
 import os
+import os.path as p
 from pathlib import Path
 from typing import Union, Optional
 
@@ -32,6 +32,7 @@ class Pathable:
 
 
 class File(Pathable):
+    logger = None
 
     def exists(self):
         return p.isfile(self.path)
@@ -64,38 +65,58 @@ class File(Pathable):
         else:
             return File(path)
 
-    def read(self, mode="r"):
+    def read(self, mode="r", silent=False):
         with open(self.path, mode=mode, encoding="UTF-8") as f:
+            File.log(f"{self.path} file was read.", silent=silent)
             return f.read()
 
-    def try_read(self, mode="r", fallback: str | None = None) -> None | str:
+    def try_read(self, mode="r", fallback: str | None = None, silent=False) -> None | str:
         if os.path.isfile(self.path):
-            return self.read(mode)
+            return self.read(mode, silent=silent)
         else:
+            File.log(f"{self.path} file isn't a file to read.", silent=silent)
             return fallback
 
-    def write(self, content: str, mode="w"):
+    def write(self, content: str, mode="w", silent=False):
+        if not self.exists():
+            File.log(f"{self.path} file will be created for writing.", silent=silent)
         with open(self.path, mode=mode, encoding="UTF-8") as f:
             f.write(content)
+            File.log(f"{self.path} file was written smth.", silent=silent)
 
-    def append(self, content: str, mode="a"):
-        with open(self.path, mode=mode, encoding="UTF-8") as f:
-            f.write(content)
+    def append(self, content: str, mode="a", silent=False):
+        self.write(content, mode, silent)
 
     def ensure(self):
         return self.parent().ensure()
 
-    def delete(self) -> bool:
-        if os.path.isfile(self.path):
-            try:
-                os.unlink(self.path)
-                return True
-            except:
+    def delete(self, silent=False) -> bool:
+        if os.path.exists(self.path):
+            if os.path.isfile(self.path):
+                try:
+                    os.unlink(self.path)
+                    File.log(f"{self.path} file was deleted.", silent=silent)
+                    return True
+                except Exception as e:
+                    File.log(f"{self.path} file can't deleted.", e, silent=silent)
+                    return False
+            else:  # it exists but isn't a file
+                File.log(f"{self.path} file can't deleted because it isn't a file.", silent=silent)
                 return False
-        return True
+        else:
+            File.log(f"{self.path} file doesn't exists or has been deleted.", silent=silent)
+            return True
+
+    @staticmethod
+    def log(*args, **kwargs):
+        silent = kwargs["silent"] if "silent" in kwargs else False
+        if File.logger is not None and not silent:
+            File.logger.log(*args)
 
 
 class Directory(Pathable):
+    logger = None
+
     def exists(self):
         return p.isdir(self.path)
 
@@ -138,16 +159,10 @@ class Directory(Pathable):
         return res
 
     def subfi(self, *name) -> File:
-        cur = self.path
-        for part in name:
-            cur = ntpath.join(cur, part)
-        return File(cur)
+        return File(ntpath.join(self.path, *name))
 
     def subdir(self, *name) -> "Directory":
-        cur = self.path
-        for part in name:
-            cur = ntpath.join(cur, part)
-        return Directory(cur)
+        return Directory(ntpath.join(self.path, *name))
 
     def sub_exists(self, name) -> bool:
         return p.exists(ntpath.join(self.path, name))
@@ -165,7 +180,7 @@ class Directory(Pathable):
         else:
             return Directory(path)
 
-    def ensure(self):
+    def ensure(self, silent=False):
         if os.path.exists(self.path):
             if os.path.isdir(self.path):
                 return True
@@ -173,16 +188,31 @@ class Directory(Pathable):
                 return False
         else:
             Path(self.path).mkdir(parents=True, exist_ok=True)
+            File.log(f"{self.path} dir was created.", silent=silent)
             return True
 
-    def delete(self) -> bool:
-        if os.path.isdir(self.path):
-            try:
-                os.rmdir(self.path)
-                return True
-            except:
+    def delete(self, silent=False) -> bool:
+        if os.path.exists(self.path):
+            if os.path.isdir(self.path):
+                try:
+                    os.rmdir(self.path)
+                    File.log(f"{self.path} dir was deleted.", silent=silent)
+                    return True
+                except Exception as e:
+                    File.log(f"{self.path} dir can't deleted.", e, silent=silent)
+                    return False
+            else:  # it exists but isn't a dir
+                File.log(f"{self.path} dir can't deleted because it isn't a dir.", silent=silent)
                 return False
-        return True
+        else:
+            File.log(f"{self.path} dir doesn't exists or has been deleted.", silent=silent)
+            return True
+
+    @staticmethod
+    def log(*args, **kwargs):
+        silent = kwargs["silent"] if "silent" in kwargs else False
+        if Directory.logger is not None and not silent:
+            Directory.logger.log(*args)
 
 
 def to_path(target: str | Directory) -> str:
@@ -192,14 +222,14 @@ def to_path(target: str | Directory) -> str:
         return target
 
 
-def is_dir(folder: str | Directory) -> bool:
+def isdir(folder: str | Directory) -> bool:
     if isinstance(folder, str):
         return p.isdir(folder)
     else:
         return folder.exists()
 
 
-def is_file(file: str | File) -> bool:
+def isfile(file: str | File) -> bool:
     if isinstance(file, str):
         return p.isfile(file)
     else:

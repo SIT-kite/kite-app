@@ -1,3 +1,6 @@
+import re
+from typing import Sequence, Literal
+
 from filesystem import Directory, File
 
 dart_tool = ".dart_tool"
@@ -12,6 +15,7 @@ class Proj:
         else:
             self.root = root
         self.pubspec = None
+        self.modules = None
 
     @property
     def name(self) -> str:
@@ -37,4 +41,65 @@ class Proj:
     def kite_log(self) -> File:
         from datetime import date
         d = date.today().isoformat()
-        return self.root.subfi(dart_tool, kite_tool, f"{d}.log")
+        return self.root.subfi(dart_tool, kite_tool, "log", f"{d}.log")
+
+    def lib_folder(self) -> Directory:
+        return self.root.subdir("lib")
+
+    def module_folder(self) -> Directory:
+        return self.root.subdir("lib", "module")
+
+
+# noinspection SpellCheckingInspection
+class ComponentType:
+    all: dict[str, "ComponentType"] = {}
+
+    def __init__(self, name: str):
+        self.name = name
+        ComponentType.all[name] = self
+
+    def create(self, moduledir: Directory, mode: Literal["file", "dir"]) -> bool:
+        if mode == "file":
+            pass
+        elif mode == "dir":
+            pass
+        raise Exception(f"unknown module creation mode {mode}")
+
+
+class UsingDeclare:
+    all: dict[str, "UsingDeclare"] = {}
+
+    def __init__(self, name: str):
+        self.name = name
+        UsingDeclare.all[name] = self
+
+
+class Module:
+    pass
+
+
+Components = Sequence[ComponentType]
+Usings = Sequence[UsingDeclare]
+
+
+class ModuleCreation:
+    def __init__(self, name: str, components: Components, usings: Usings):
+        self.name = name
+        self.components = components
+        self.usings = usings
+
+    def __str__(self):
+        components = self.components
+        usings = self.usings
+        return f"{components=},{usings=}"
+
+    def __repr__(self):
+        return str(self)
+
+
+class Modules:
+    def __init__(self, proj: Proj):
+        self.proj = proj
+
+    def create(self, creation: ModuleCreation) -> bool:
+        pass
