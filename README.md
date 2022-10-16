@@ -19,7 +19,14 @@ English | [中文](README_zh.md)
 
 ## Screenshots
 
-![1](screenshot/KiteApp 1.png)  ![2](screenshot/KiteApp 2.png)  ![3](screenshot/KiteApp 3.png)  ![4](screenshot/KiteApp 4.png)  ![5](screenshot/KiteApp 5.png)  ![6](screenshot/KiteApp 6.png)
+
+| ![1](./screenshots/KiteApp%201.png) | ![2](screenshots/KiteApp%202.png) | ![3](screenshots/KiteApp%203.png) |
+|---|---|---|
+
+| ![4](screenshots/KiteApp%204.png) | ![5](screenshots/KiteApp%205.png) | ![6](screenshots/KiteApp%206.png)|
+|---|---|---|
+
+
 
 ## Announcement
 
