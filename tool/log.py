@@ -28,7 +28,6 @@ class FileLogger(Logger):
         now = datetime.now().strftime("%H:%M:%S")
         content = f"[{now}] {content}\n"
         logfi = File.cast(self.path)
-        logfi.ensure()
         if logfi.ensure():
             try:
                 logfi.append(content, silent=True)

@@ -1,4 +1,5 @@
 import re
+from io import StringIO
 from typing import Sequence, Literal
 
 from filesystem import Directory, File
@@ -58,20 +59,31 @@ class ComponentType:
         self.name = name
         ComponentType.all[name] = self
 
-    def create(self, moduledir: Directory, mode: Literal["file", "dir"]) -> bool:
+    def create(self, moduledir: Directory, mode: str | Literal["file", "dir"]):
         if mode == "file":
-            pass
+            moduledir.createfi(f"{self.name}.dart")
         elif mode == "dir":
-            pass
-        raise Exception(f"unknown module creation mode {mode}")
+            moduledir.createdir(self.name)
+        else:
+            raise Exception(f"unknown module creation mode {mode}")
 
 
+# noinspection SpellCheckingInspection
 class UsingDeclare:
     all: dict[str, "UsingDeclare"] = {}
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, refs: list[str] = None):
         self.name = name
         UsingDeclare.all[name] = self
+        if refs is None:
+            refs
+        self.refs = refs
+
+    def create(self, usingfi: File):
+        with StringIO() as l:
+            for ref in self.refs:
+                l.write(f"export '{ref}'\n")
+            usingfi.append(l.getvalue())
 
 
 class Module:
@@ -83,15 +95,17 @@ Usings = Sequence[UsingDeclare]
 
 
 class ModuleCreation:
-    def __init__(self, name: str, components: Components, usings: Usings):
-        self.name = name
+    def __init__(self, name: str, components: Components, usings: Usings, simple=False):
+        self.name = name.strip()
         self.components = components
         self.usings = usings
+        self.simple = simple
 
     def __str__(self):
         components = self.components
         usings = self.usings
-        return f"{components=},{usings=}"
+        simple = self.simple
+        return f"{components=},{usings=},{simple=}"
 
     def __repr__(self):
         return str(self)
@@ -100,6 +114,15 @@ class ModuleCreation:
 class Modules:
     def __init__(self, proj: Proj):
         self.proj = proj
+        self.name2modules = {}
 
-    def create(self, creation: ModuleCreation) -> bool:
-        pass
+    def create(self, creation: ModuleCreation):
+        name = creation.name
+        if name in self.name2modules:
+            raise Exception(f"duplicate module name {name}")
+        moduledir = self.proj.module_folder().subdir(name)
+        for component in creation.components:
+            mode = "file" if creation.simple else "dir"
+            component.create(moduledir, mode)
+        for using in creation.usings:
+            using.create(moduledir.subfi("using.dart"))

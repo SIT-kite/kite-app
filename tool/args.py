@@ -49,19 +49,41 @@ class Args:
         return self.size > 0
 
     def poll(self) -> tuple[Arg | None, "Args"]:
+        """
+        consume the head
+        """
         if len(self._args) == 0:
             return None, Args(())
         else:
             return Arg.by(self._args[0]), Args(self._args[1:])
 
-    def __iter__(self):
-        return iter(self._args)
-
     def polling(self) -> Iterable[tuple[Arg, "Args"]]:
+        """
+        consuming the head
+        """
         for i, arg in enumerate(self._args):
             yield Arg(arg), Args(self._args[i + 1:])
 
-    def peek(self) -> Arg | None:
+    def pop(self) -> tuple[Arg | None, "Args"]:
+        """
+        consume the last
+        """
+        if len(self._args) == 0:
+            return None, Args(())
+        else:
+            return Arg.by(self._args[-1]), Args(self._args[0:-1])
+
+    def popping(self) -> Iterable[tuple[Arg, "Args"]]:
+        """
+        consuming the last
+        """
+        for i, arg in enumerate(reversed(self._args)):
+            yield Arg(arg), Args(self._args[0:-1])
+
+    def __iter__(self):
+        return iter(self._args)
+
+    def peekhead(self) -> Arg | None:
         if self.hasmore:
             return Arg.by(self._args[0])
         else:

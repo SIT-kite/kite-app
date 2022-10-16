@@ -87,7 +87,7 @@ class File(Pathable):
     def append(self, content: str, mode="a", silent=False):
         self.write(content, mode, silent)
 
-    def ensure(self):
+    def ensure(self) -> bool:
         return self.parent().ensure()
 
     def delete(self, silent=False) -> bool:
@@ -161,6 +161,17 @@ class Directory(Pathable):
     def subfi(self, *name) -> File:
         return File(ntpath.join(self.path, *name))
 
+    def createfi(self, *name) -> File:
+        fi = File(ntpath.join(self.path, *name))
+        fi.ensure()
+        fi.write("")
+        return fi
+
+    def createdir(self, *name) -> "Directory":
+        folder = Directory(ntpath.join(self.path, *name))
+        folder.ensure()
+        return folder
+
     def subdir(self, *name) -> "Directory":
         return Directory(ntpath.join(self.path, *name))
 
@@ -180,7 +191,7 @@ class Directory(Pathable):
         else:
             return Directory(path)
 
-    def ensure(self, silent=False):
+    def ensure(self, silent=False) -> bool:
         if os.path.exists(self.path):
             if os.path.isdir(self.path):
                 return True
@@ -188,7 +199,7 @@ class Directory(Pathable):
                 return False
         else:
             Path(self.path).mkdir(parents=True, exist_ok=True)
-            File.log(f"{self.path} dir was created.", silent=silent)
+            Directory.log(f"{self.path} dir was created.", silent=silent)
             return True
 
     def delete(self, silent=False) -> bool:
@@ -196,16 +207,16 @@ class Directory(Pathable):
             if os.path.isdir(self.path):
                 try:
                     os.rmdir(self.path)
-                    File.log(f"{self.path} dir was deleted.", silent=silent)
+                    Directory.log(f"{self.path} dir was deleted.", silent=silent)
                     return True
                 except Exception as e:
-                    File.log(f"{self.path} dir can't deleted.", e, silent=silent)
+                    Directory.log(f"{self.path} dir can't deleted.", e, silent=silent)
                     return False
             else:  # it exists but isn't a dir
-                File.log(f"{self.path} dir can't deleted because it isn't a dir.", silent=silent)
+                Directory.log(f"{self.path} dir can't deleted because it isn't a dir.", silent=silent)
                 return False
         else:
-            File.log(f"{self.path} dir doesn't exists or has been deleted.", silent=silent)
+            Directory.log(f"{self.path} dir doesn't exists or has been deleted.", silent=silent)
             return True
 
     @staticmethod

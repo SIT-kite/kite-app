@@ -47,7 +47,7 @@ def process(args: Args) -> tuple[Components, Usings]:
 
     mode = None
     while cur_args.hasmore:
-        mode_pos = check_mode(cur_args.peek())
+        mode_pos = check_mode(cur_args.peekhead())
         if mode_pos is not None:
             mode = mode_pos
             _, cur_args = cur_args.poll()
@@ -82,6 +82,7 @@ class AddModuleCmd:
             raise CommandArgsError(AddModuleCmd, ctx.args, "module name not given")
         components, usings = process(extra)
         res = ModuleCreation(name.key, components, usings)
+        ctx.proj.modules.create(res)
 
     @staticmethod
     def create():
