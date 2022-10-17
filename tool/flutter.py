@@ -49,6 +49,16 @@ class Proj:
     def module_folder(self) -> Directory:
         return self.root.subdir("lib", "module")
 
+    def __str__(self):
+        name = self.name
+        if name is None:
+            return "UNLOADED PROJECT"
+        else:
+            return name
+
+    def __repr__(self):
+        return str(self)
+
 
 # noinspection SpellCheckingInspection
 class ComponentType:

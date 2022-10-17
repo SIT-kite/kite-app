@@ -1,20 +1,32 @@
+from io import StringIO
 from typing import Callable
 
 import fuzzy
-from args import Args
+import strings
+from args import Args, Arg
 from flutter import Proj
 from ui import Terminal
 
 
 class CmdContext:
-    def __init__(self, proj: Proj, terminal: Terminal, args: Args = None):
+    def __init__(self, proj: Proj, terminal: Terminal, cmdlist: "CommandList", args: Args = None):
         self.proj = proj
         self.term = terminal
+        self.cmdlist = cmdlist
         self.args = args
 
     @property
     def is_cli(self) -> bool:
         return self.args is not None
+
+    def __str__(self):
+        return f"{self.proj},{self.args}"
+
+    def __repr__(self):
+        return str(self)
+
+    def __copy__(self) -> "CmdContext":
+        return CmdContext(self.proj, self.term, self.cmdlist, self.args)
 
 
 CommandFunc = Callable[[CmdContext], None]
@@ -24,11 +36,14 @@ class Command:
     """
     Command is a protocol, you don't need to inherit it,
     and you can even implement it as a class object.
+    So DO NOT check the hierarchy of any command.
 
-    Command protocol:
     - name:str -- the name of command
+
     - help(ctx) -- help info of command
+
     - execute(ctx) -- execute the command
+
     - call as a function, args: [ctx]. the same as execute(ctx)
     """
 
@@ -93,11 +108,9 @@ class CommandList:
     def __iter__(self):
         return iter(self.name2cmd.items())
 
-    @property
     def keys(self):
         return iter(self.name2cmd.keys())
 
-    @property
     def values(self):
         return iter(self.name2cmd.values())
 
@@ -109,19 +122,25 @@ class CommandList:
             return self.name2cmd[candidate]
 
 
-class CommandArgsParseError(Exception):
-    def __init__(self, cmd: CommandProtocol, args: Args, *more):
-        super(CommandArgsParseError, self).__init__(cmd.name, args, *more)
-        self.cmd = cmd
-
-
-class CommandArgsError(Exception):
-    def __init__(self, cmd: CommandProtocol, args: Args, *more):
-        super(CommandArgsError, self).__init__(cmd.name, args, *more)
+class CommandArgError(Exception):
+    def __init__(self, cmd: CommandProtocol, arg: Arg | None, *more):
+        super(CommandArgError, self).__init__(*more)
+        self.arg = arg
         self.cmd = cmd
 
 
 class CommandExecuteError(Exception):
     def __init__(self, cmd: CommandProtocol, *args):
-        super(CommandExecuteError, self).__init__(cmd.name, *args)
+        super(CommandExecuteError, self).__init__(*args)
         self.cmd = cmd
+
+
+def print_cmdarg_error(t: Terminal, e: CommandArgError):
+    index = e.arg.raw_index
+    full, pos = e.arg.root.located_full(index)
+    t.both << full
+    with StringIO() as s:
+        strings.repeat(s, pos.start)
+        strings.repeat(s, pos.end - pos.start, "^")
+        t.both << s.getvalue()
+    t.both << f"{type(e).__name__}: {' '.join(e.args)}"

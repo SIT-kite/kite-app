@@ -94,6 +94,9 @@ class BashTerminal(Terminal):
 
 # noinspection SpellCheckingInspection
 class BashTerminalWrapper(Terminal):
+    """
+    An example of wrapping a ternimal
+    """
 
     def __init__(self, inner: Terminal):
         super().__init__()

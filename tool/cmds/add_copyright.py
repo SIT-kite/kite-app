@@ -1,4 +1,4 @@
-from cmd import CmdContext
+from cmd import CmdContext, CommandArgError
 from filesystem import File
 
 COPYRIGHT_STRING = """
@@ -36,6 +36,8 @@ class AddCopyRightCmd:
 
     @staticmethod
     def execute(ctx: CmdContext):
+        if ctx.args.size > 0:
+            raise CommandArgError(AddCopyRightCmd, ctx.args[0], "no arg required")
         for source in ctx.proj.lib_folder().walking(when=need_copyright):
             content = source.read(silent=True)
             if not already_has_copyright(content):
@@ -45,4 +47,4 @@ class AddCopyRightCmd:
 
     @staticmethod
     def help(ctx: CmdContext):
-        pass
+        ctx.term << "insert copyright at head of .dart files in /lib."

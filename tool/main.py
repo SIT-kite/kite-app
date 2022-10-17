@@ -2,9 +2,10 @@ import ntpath
 import os.path
 import sys
 
+import cmd
 import log
 import strings
-from cmd import CommandList, CmdContext, CommandProtocol
+from cmd import CommandList, CmdContext, CommandProtocol, CommandExecuteError, CommandArgError
 from filesystem import File, Directory, isdir
 from typing import Sequence
 
@@ -64,6 +65,8 @@ def find_project_root(start: str | Directory, max_depth=20) -> Directory | None:
 def load_cmds(*, proj: Proj, cmdlist: CommandList, terminal: Terminal):
     import cmds
     cmds.load_static_cmd(cmdlist)
+    from cmds.help import HelpCmd
+    cmdlist << HelpCmd(cmdlist)
 
 
 _header_entry_cache = {}
@@ -119,9 +122,14 @@ def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequ
                 terminal.both << f'command<{command.key}> not found.'
                 return
             else:
-                ctx = CmdContext(proj, terminal, args)
+                ctx = CmdContext(proj, terminal, cmdlist, args)
                 terminal.both << _get_header_entry(executable)
-                executable.execute(ctx)
+                try:
+                    executable.execute(ctx)
+                except CommandArgError as e:
+                    cmd.print_cmdarg_error(terminal, e)
+                except CommandExecuteError as e:
+                    pass
                 terminal.both << _get_header_existence(executable)
 
 

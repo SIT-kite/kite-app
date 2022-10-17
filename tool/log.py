@@ -5,7 +5,8 @@ from filesystem import File
 
 class Logger:
     """
-    Logger is a protocol, you don't need to really implement this.
+    Logger is a protocol, you don't need to inherit it,
+    So DO NOT check the hierarchy of any logger.
     """
 
     def log(self, *args):

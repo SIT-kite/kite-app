@@ -2,7 +2,7 @@ from typing import Callable, Sequence
 
 import cmd
 from args import Args, Arg
-from cmd import CmdContext, CommandArgsParseError, CommandArgsError
+from cmd import CmdContext, CommandArgError, CommandArgError
 from flutter import ComponentType, UsingDeclare, ModuleCreation, Usings, Components
 from utils import Ref
 
@@ -23,7 +23,7 @@ def process(args: Args) -> tuple[Components, Usings, bool]:
                 included.add(c)
         else:
             if module not in ComponentType.all:
-                raise CommandArgsError(AddModuleCmd, cur_args, f"{module} isn't a module")
+                raise CommandArgError(AddModuleCmd, arg, f"{module} isn't a module")
             included.add(ComponentType.all[module])
 
     def exclude_mode(arg: Arg):
@@ -33,7 +33,7 @@ def process(args: Args) -> tuple[Components, Usings, bool]:
                 excluded.add(c)
         else:
             if module not in ComponentType.all:
-                raise CommandArgsError(AddModuleCmd, cur_args, f"{module} isn't a module")
+                raise CommandArgError(AddModuleCmd, arg, f"{module} isn't a module")
             excluded.add(ComponentType.all[module])
 
     def using_mode(arg: Arg):
@@ -43,7 +43,7 @@ def process(args: Args) -> tuple[Components, Usings, bool]:
                 used.add(u)
         else:
             if using not in UsingDeclare.all:
-                raise CommandArgsError(AddModuleCmd, cur_args, f"{using} isn't a using")
+                raise CommandArgError(AddModuleCmd, arg, f"{using} isn't a using")
             used.add(UsingDeclare.all[using])
 
     def simple_mode(arg: Arg):
@@ -65,16 +65,17 @@ def process(args: Args) -> tuple[Components, Usings, bool]:
 
     mode = None
     while cur_args.hasmore:
-        mode_pos = check_mode(cur_args.peekhead())
+        head_arg = cur_args.peekhead()
+        mode_pos = check_mode(head_arg)
         if mode_pos is not None:
             mode = mode_pos
             _, cur_args = cur_args.poll()
         if mode is None:
-            raise CommandArgsParseError(AddModuleCmd, cur_args, "invalid args")
+            raise CommandArgError(AddModuleCmd, head_arg, "invalid args")
         else:
             cur_arg, cur_args = cur_args.poll()
             if cur_arg.ispair:
-                raise CommandArgsParseError(AddModuleCmd, cur_args, f"{cur_arg} can't be a pair")
+                raise CommandArgError(AddModuleCmd, cur_arg, f"{cur_arg} can't be a pair")
             mode(cur_arg)
     return tuple(included - excluded), tuple(used), simple_module.e
 
@@ -97,7 +98,7 @@ class AddModuleCmd:
     def cli(ctx: CmdContext):
         name, extra = ctx.args.poll()
         if name is None:
-            raise CommandArgsError(AddModuleCmd, ctx.args, "module name not given")
+            raise CommandArgError(AddModuleCmd, None, "module name not given")
         components, usings, simple = process(extra)
         res = ModuleCreation(name.key, components, usings)
         ctx.proj.modules.create(res)
