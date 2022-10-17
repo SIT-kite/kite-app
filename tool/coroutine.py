@@ -1,3 +1,4 @@
+from enum import Enum, auto
 from typing import Iterator, Callable
 
 STOP = object()
@@ -14,6 +15,11 @@ class Task:
         return self.execute()
 
 
+class DispatcherState(Enum):
+    Abort = auto()
+    End = auto()
+
+
 class TaskDispatcher:
     def __init__(self):
         self.call_stack: list[Iterator] = []
@@ -21,7 +27,7 @@ class TaskDispatcher:
     def run(self, task: Iterator):
         self.call_stack.append(task)
 
-    def dispatch(self):
+    def dispatch(self) -> DispatcherState:
         call_stack = self.call_stack
         while True:
             if len(call_stack) == 0:
@@ -51,9 +57,10 @@ class TaskDispatcher:
                     call_stack.append(co)
                 elif new_task is STOP:
                     # instantly break the coroutine
-                    break
+                    return DispatcherState.Abort
                 elif new_task is None:
                     # return None as default, which means task over.
                     pass
                 else:
                     raise Exception(f"unsupported coroutine type {type(new_task).__name__} {new_task}")
+        return DispatcherState.End

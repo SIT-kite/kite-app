@@ -1,6 +1,8 @@
 from difflib import SequenceMatcher
 from typing import Iterable
 
+at_least = 0.4
+
 
 def match(target: str, candidates: Iterable[str]) -> tuple[str, float]:
     largest = None

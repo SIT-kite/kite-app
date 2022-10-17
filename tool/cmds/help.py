@@ -1,8 +1,8 @@
 import copy
 from typing import Iterable
 
+import build
 from cmd import Command, CmdContext, CommandList, CommandArgError
-from tasks import InputTask
 from ui import Terminal
 
 
@@ -36,22 +36,16 @@ class HelpCmd(Command):
         all_cmd = ', '.join(ctx.cmdlist.keys())
         ctx.term << f"all commands = [{all_cmd}]"
         while True:
-            ctx.term << f'plz select a command to show info or "*" to show all.'
-            input_task = InputTask(ctx.term, "I want=")
-            yield input_task
-            selected = input_task.result.lower()
+            ctx.term << f'plz select commands to show info.'
+            select_task = build.select_many(ctx.cmdlist.name2cmd, ctx.term, prompt="I want=")
+            yield select_task
+            ctx.term.line(48)
+            selected = select_task.result
             help_ctx = copy.copy(ctx)
             help_ctx.term = HelpBoxTerminal(ctx.term)
-            if selected == "*":
-                for cmd_obj in ctx.cmdlist.values():
-                    HelpCmd.show_help_info(cmd_obj, ctx, help_ctx)
-            else:
-                cmd = ctx.cmdlist[selected]
-                if cmd is not None:
-                    HelpCmd.show_help_info(cmd, ctx, help_ctx)
-                    yield None
-                else:
-                    ctx.term << f"command<{selected}> not found"
+            for cmd in selected:
+                HelpCmd.show_help_info(cmd, ctx, help_ctx)
+            ctx.term.line(48)
 
     def execute_cli(self, ctx: CmdContext):
         cmd, args = ctx.args.poll()
@@ -65,7 +59,7 @@ class HelpCmd(Command):
         else:
             cmd_obj = ctx.cmdlist[cmd.key]
             if cmd_obj is None:
-                raise CommandArgError(self, cmd, f"command<{cmd.name}> not found")
+                raise CommandArgError(self, cmd, f"❌ command<{cmd.name}> not found")
             HelpCmd.show_help_info(cmd_obj, ctx, help_ctx)
 
     @staticmethod

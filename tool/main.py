@@ -1,17 +1,17 @@
 import ntpath
 import os.path
 import sys
+from typing import Sequence, Iterator
 
+import build
 import cmd
 import log
 import strings
 from args import Args
 from cmd import CommandList, CmdContext, CommandProtocol, CommandExecuteError, CommandArgError
-from coroutine import Task, TaskDispatcher
-from filesystem import File, Directory, isdir
-from typing import Sequence, Iterator, Callable
-
-from flutter import Proj, ComponentType
+from coroutine import TaskDispatcher, DispatcherState
+from filesystem import File, Directory
+from flutter import Proj
 from ui import Terminal, BashTerminal
 
 logo = """
@@ -110,12 +110,12 @@ def main():
         cmds = CommandList(logger=logger)
         shell(proj=proj, cmdlist=cmds, terminal=t, cmdargs=cmdargs)
     else:
-        print(f"project root not found")
+        print(f"❌ project root not found")
 
 
 def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequence[str]):
     terminal.logging << f'Project root found at "{proj.root}".'
-    terminal.both << f'Kite Tool v{version}'
+    terminal.both << f'🪁 Kite Tool v{version}'
     import yml
     proj.pubspec = yml.load(proj.pubspec_fi().read())
     terminal.both << f'Project loaded: "{proj.name} {proj.version}".'
@@ -125,12 +125,11 @@ def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequ
     import kite.compoenet
     kite.compoenet.load()
     load_cmds(proj=proj, cmdlist=cmdlist, terminal=terminal)
-    from args import Args
     if len(cmdargs) == 0:
         interactive_mode(proj=proj, cmdlist=cmdlist, terminal=terminal)
     else:
         cli_mode(proj=proj, cmdlist=cmdlist, terminal=terminal, cmdargs=cmdargs)
-    terminal.both << "Kite tool exits."
+    terminal.both << "🪁 Kite Tool exits."
 
 
 def cli_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequence[str]):
@@ -143,7 +142,7 @@ def cli_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: S
     else:
         executable = cmdlist[command.key]
         if executable is None:
-            terminal.both << f'command<{command.key}> not found.'
+            terminal.both << f'❗ command<{command.key}> not found.'
             return
         else:
             ctx = CmdContext(proj, terminal, cmdlist, args)
@@ -158,22 +157,32 @@ def cli_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: S
 
 
 def interactive_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal):
-    terminal << 'interactive mode is on, enter "#" to exit current layer.'
+    terminal.line(48)
+    terminal << '[interactive mode], enter "#" to exit current layer.'
     all_cmd = ', '.join(cmdlist.keys())
     all_cmd_prompt = f"all commands = [{all_cmd}]"
-    while True:
-        terminal << all_cmd_prompt
-        selected_cmd = terminal.input("cmd=")
-        if selected_cmd == "#":
-            return
-        executable = cmdlist[selected_cmd]
-        if executable is not None:
+
+    def running() -> Iterator:
+        dispatcher = TaskDispatcher()
+        while True:
+            terminal << all_cmd_prompt
+            select_task = build.select_one(cmdlist.name2cmd, terminal, prompt="cmd=", fuzzy_match=True)
+            yield select_task
+            executable: CommandProtocol = select_task.result
             terminal.both << _get_header_entry(executable)
             ctx = CmdContext(proj, terminal, cmdlist)
-            dispatcher = TaskDispatcher()
             dispatcher.run(executable.execute_inter(ctx))
-            dispatcher.dispatch()
+            state = dispatcher.dispatch()
             terminal.both << _get_header_existence(executable)
+            if state == DispatcherState.Abort:
+                yield
+
+    global_dispatcher = TaskDispatcher()
+    while True:
+        global_dispatcher.run(running())
+        global_state = global_dispatcher.dispatch()
+        if global_state == DispatcherState.Abort:
+            return
 
 
 if __name__ == '__main__':

@@ -36,6 +36,8 @@ class AddCopyRightCmd:
 
     @staticmethod
     def execute_cli(ctx: CmdContext):
+        if ctx.args.size > 0:
+            raise CommandArgError(AddCopyRightCmd, ctx.args[0], "no arg required")
         AddCopyRightCmd.execute(ctx)
 
     @staticmethod
@@ -44,14 +46,12 @@ class AddCopyRightCmd:
 
     @staticmethod
     def execute(ctx: CmdContext):
-        if ctx.args.size > 0:
-            raise CommandArgError(AddCopyRightCmd, ctx.args[0], "no arg required")
         for source in ctx.proj.lib_folder().walking(when=need_copyright):
             content = source.read(silent=True)
             if not already_has_copyright(content):
                 new = COPYRIGHT_STRING + content
                 source.write(new)
-                ctx.term.both << f"{source}"
+                ctx.term.both << f"📄 {source}"
 
     @staticmethod
     def help(ctx: CmdContext):
