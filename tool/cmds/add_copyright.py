@@ -31,14 +31,13 @@ def need_copyright(fi: File) -> bool:
     return fi.extendswith(".dart") and not fi.extendswith("g.dart")
 
 
-# noinspection SpellCheckingInspection
 class AddCopyRightCmd:
     name = "addcopyright"
 
     @staticmethod
     def execute(ctx: CmdContext):
-        for source in ctx.proj.lib_folder().walking(predicate=need_copyright):
-            content = source.read()
+        for source in ctx.proj.lib_folder().walking(when=need_copyright):
+            content = source.read(silent=True)
             if not already_has_copyright(content):
                 new = COPYRIGHT_STRING + content
                 source.write(new)

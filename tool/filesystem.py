@@ -244,12 +244,12 @@ class Directory(Pathable):
         if Directory.logger is not None and not silent:
             Directory.logger.log(*args)
 
-    def walking(self, predicate: Callable[[File], bool] = lambda _: True) -> Iterable[File]:
+    def walking(self, when: Callable[[File], bool] = lambda _: True) -> Iterable[File]:
         for root, dirs, files in os.walk(self.path, topdown=False):
             for name in files:
                 fipath = ntpath.join(root, name)
                 fi = File(fipath)
-                if predicate(fi):
+                if when(fi):
                     yield fi
 
 

@@ -1,4 +1,3 @@
-import re
 from io import StringIO
 from typing import Sequence, Literal
 
@@ -87,10 +86,10 @@ class UsingDeclare:
 
     # TODO: Known issue: it can't resolve the relative path of submodule
     def create(self, usingfi: File):
-        with StringIO() as l:
+        with StringIO() as res:
             for ref in self.refs:
-                l.write(f"export '{ref}'\n")
-            usingfi.append(l.getvalue())
+                res.write(f"export '{ref}'\n")
+            usingfi.append(res.getvalue())
 
     def __str__(self):
         return f"{self.name},{self.refs}"

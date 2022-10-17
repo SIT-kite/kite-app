@@ -3,7 +3,8 @@ import os.path
 import sys
 
 import log
-from cmd import CommandList, CmdContext
+import strings
+from cmd import CommandList, CmdContext, CommandProtocol
 from filesystem import File, Directory, isdir
 from typing import Sequence
 
@@ -60,6 +61,34 @@ def find_project_root(start: str | Directory, max_depth=20) -> Directory | None:
         layer += 1
 
 
+def load_cmds(*, proj: Proj, cmdlist: CommandList, terminal: Terminal):
+    import cmds
+    cmds.load_static_cmd(cmdlist)
+
+
+_header_entry_cache = {}
+_header_existence_cache = {}
+_header_length = 48
+
+
+def _get_header_entry(cmd: CommandProtocol) -> str:
+    if cmd in _header_entry_cache:
+        return _header_entry_cache[cmd]
+    else:
+        line = strings.center_text_in_line(f">>[{cmd.name}]<<", length=_header_length)
+        _header_entry_cache[cmd] = line
+        return line
+
+
+def _get_header_existence(cmd: CommandProtocol) -> str:
+    if cmd in _header_existence_cache:
+        return _header_existence_cache[cmd]
+    else:
+        line = strings.center_text_in_line(f"<<[{cmd.name}]>>", length=_header_length)
+        _header_existence_cache[cmd] = line
+        return line
+
+
 def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequence[str]):
     terminal.logging << f'Project root found at "{proj.root}".'
     terminal.both << f'Kite Tool v{version}'
@@ -71,8 +100,7 @@ def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequ
     kite.using.load()
     import kite.compoenet
     kite.compoenet.load()
-    import cmds
-    cmds.load_static_cmd(cmdlist)
+    load_cmds(proj=proj, cmdlist=cmdlist, terminal=terminal)
     from args import Args
     if len(cmdargs) == 0:
         # interactive mode
@@ -92,7 +120,9 @@ def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequ
                 return
             else:
                 ctx = CmdContext(proj, terminal, args)
+                terminal.both << _get_header_entry(executable)
                 executable.execute(ctx)
+                terminal.both << _get_header_existence(executable)
 
 
 def main():
