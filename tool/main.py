@@ -3,7 +3,7 @@ import os.path
 import sys
 
 import log
-from cmd import CommandList
+from cmd import CommandList, CmdContext
 from filesystem import File, Directory, isdir
 from typing import Sequence
 
@@ -60,8 +60,8 @@ def find_project_root(start: str | Directory, max_depth=20) -> Directory | None:
         layer += 1
 
 
-def shell(*, proj: Proj, terminal: Terminal, cmds: CommandList, args: Sequence[str]):
-    terminal.loging << f'Project root found at "{proj.root}".'
+def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequence[str]):
+    terminal.logging << f'Project root found at "{proj.root}".'
     terminal.both << f'Kite Tool v{version}'
     import yml
     proj.pubspec = yml.load(proj.pubspec_fi().read())
@@ -71,7 +71,28 @@ def shell(*, proj: Proj, terminal: Terminal, cmds: CommandList, args: Sequence[s
     kite.using.load()
     import kite.compoenet
     kite.compoenet.load()
-    terminal.both << f'{ComponentType.all}'
+    import cmds
+    cmds.load_static_cmd(cmdlist)
+    from args import Args
+    if len(cmdargs) == 0:
+        # interactive mode
+        pass
+    else:
+        # cli mode
+        args = Args(cmdargs)
+        # read first args as command
+        command, args = args.poll()
+        if command.ispair:
+            terminal.both << f'invalid command format "{command}".'
+            return
+        else:
+            executable = cmdlist[command.key]
+            if executable is None:
+                terminal.both << f'command<{command.key}> not found.'
+                return
+            else:
+                ctx = CmdContext(proj, terminal, args)
+                executable.execute(ctx)
 
 
 def main():
@@ -87,8 +108,8 @@ def main():
         File.logger = logger
         Directory.logger = logger
         t = BashTerminal(logger)
-        cmds = CommandList()
-        shell(proj=proj, terminal=t, cmds=cmds, args=cmdargs)
+        cmds = CommandList(logger=logger)
+        shell(proj=proj, cmdlist=cmds, terminal=t, cmdargs=cmdargs)
     else:
         print(f"project root not found")
 

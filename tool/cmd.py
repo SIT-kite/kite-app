@@ -7,9 +7,9 @@ from ui import Terminal
 
 
 class CmdContext:
-    def __init__(self, terminal: Terminal, proj: Proj, args: Args = None):
-        self.terminal = terminal
+    def __init__(self, proj: Proj, terminal: Terminal, args: Args = None):
         self.proj = proj
+        self.term = terminal
         self.args = args
 
     @property
@@ -53,10 +53,16 @@ CommandProtocol = Command | type
 class CommandList:
     name2cmd: dict[str, CommandProtocol]
 
-    def __init__(self):
+    def __init__(self, logger=None):
         self.name2cmd = {}
+        self.logger = logger
+
+    def log(self, *args):
+        if self.logger is not None:
+            self.logger.log(*args)
 
     def __setitem__(self, key: str, cmd: CommandProtocol):
+        self.log(f"command<{key}> loaded.")
         self.name2cmd[key] = cmd
 
     def __getitem__(self, name: str) -> CommandProtocol | None:
@@ -64,6 +70,14 @@ class CommandList:
             return None
         else:
             return self.name2cmd[name]
+
+    def add(self, cmd: CommandProtocol):
+        name = cmd.name
+        self.log(f"command<{name}> loaded.")
+        self.name2cmd[name] = cmd
+
+    def __lshift__(self, cmd: CommandProtocol):
+        self.add(cmd)
 
     @property
     def size(self):

@@ -2,7 +2,7 @@ import ntpath
 import os
 import os.path as p
 from pathlib import Path
-from typing import Union, Optional
+from typing import Union, Optional, Iterable, Callable
 
 
 class Pathable:
@@ -31,6 +31,7 @@ class Pathable:
         return self.path
 
 
+# noinspection SpellCheckingInspection
 class File(Pathable):
     logger = None
 
@@ -57,6 +58,23 @@ class File(Pathable):
     def parent(self) -> "Directory":
         parent, _ = p.split(self.path)
         return Directory(parent)
+
+    @property
+    def extension(self) -> str:
+        purename, extension = ntpath.splitext(self.path)
+        return extension.removeprefix(".")
+
+    @property
+    def basename(self) -> str:
+        return ntpath.basename(self.path)
+
+    @property
+    def name_without_extension(self) -> str:
+        name, extension = ntpath.splitext(self.basename)
+        return name
+
+    def extendswith(self, extension: str) -> bool:
+        return self.path.endswith(extension)
 
     @staticmethod
     def cast(path: Union[str, "File"]) -> "File":
@@ -114,6 +132,7 @@ class File(Pathable):
             File.logger.log(*args)
 
 
+# noinspection SpellCheckingInspection
 class Directory(Pathable):
     logger = None
 
@@ -224,6 +243,14 @@ class Directory(Pathable):
         silent = kwargs["silent"] if "silent" in kwargs else False
         if Directory.logger is not None and not silent:
             Directory.logger.log(*args)
+
+    def walking(self, predicate: Callable[[File], bool] = lambda _: True) -> Iterable[File]:
+        for root, dirs, files in os.walk(self.path, topdown=False):
+            for name in files:
+                fipath = ntpath.join(root, name)
+                fi = File(fipath)
+                if predicate(fi):
+                    yield fi
 
 
 def to_path(target: str | Directory) -> str:

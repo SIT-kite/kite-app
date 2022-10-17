@@ -5,7 +5,7 @@ from typing import Any, Sequence, Iterable
 # noinspection SpellCheckingInspection
 class Terminal:
     def __init__(self):
-        self.loging = LoggerWrapper(self)
+        self.logging = LoggerWrapper(self)
         self.both = BothWrapper(self)
 
     def print(self, *args):
