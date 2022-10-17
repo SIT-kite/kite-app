@@ -42,23 +42,28 @@ class Command:
 
     - help(ctx) -- help info of command
 
-    - execute(ctx) -- execute the command
+    - execute_cli(ctx) -- execute the command in cli mode
 
-    - call as a function, args: [ctx]. the same as execute(ctx)
+    - execute_inter(ctx) -- execute the command in interactive mode. return an Iterator as a coroutine
+
+    - call as a function, args: [ctx]. the same as execute_cli(ctx)
     """
 
     def __init__(self, func: CommandFunc = None):
         self.func = func
         self.name = "__default__"
 
-    def execute(self, ctx: CmdContext):
+    def execute_cli(self, ctx: CmdContext):
+        self.func(ctx)
+
+    def execute_inter(self, ctx: CmdContext):
         self.func(ctx)
 
     def help(self, ctx: CmdContext):
         self.func(ctx)
 
     def __call__(self, *args, **kwargs):
-        self.execute(*args, **kwargs)
+        self.execute_cli(*args, **kwargs)
 
 
 CommandProtocol = Command | type
@@ -77,6 +82,7 @@ class CommandList:
             self.logger.log(*args)
 
     def __setitem__(self, key: str, cmd: CommandProtocol):
+        key = key.lower()
         self.log(f"command<{key}> loaded.")
         self.name2cmd[key] = cmd
 
@@ -87,7 +93,7 @@ class CommandList:
             return self.name2cmd[name]
 
     def add(self, cmd: CommandProtocol):
-        name = cmd.name
+        name = cmd.name.lower()
         self.log(f"command<{name}> loaded.")
         self.name2cmd[name] = cmd
 

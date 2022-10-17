@@ -5,9 +5,11 @@ import sys
 import cmd
 import log
 import strings
+from args import Args
 from cmd import CommandList, CmdContext, CommandProtocol, CommandExecuteError, CommandArgError
+from coroutine import Task, TaskDispatcher
 from filesystem import File, Directory, isdir
-from typing import Sequence
+from typing import Sequence, Iterator, Callable
 
 from flutter import Proj, ComponentType
 from ui import Terminal, BashTerminal
@@ -74,63 +76,22 @@ _header_existence_cache = {}
 _header_length = 48
 
 
-def _get_header_entry(cmd: CommandProtocol) -> str:
-    if cmd in _header_entry_cache:
-        return _header_entry_cache[cmd]
+def _get_header_entry(command: CommandProtocol) -> str:
+    if command in _header_entry_cache:
+        return _header_entry_cache[command]
     else:
-        line = strings.center_text_in_line(f">>[{cmd.name}]<<", length=_header_length)
-        _header_entry_cache[cmd] = line
+        line = strings.center_text_in_line(f">>[{command.name}]<<", length=_header_length)
+        _header_entry_cache[command] = line
         return line
 
 
-def _get_header_existence(cmd: CommandProtocol) -> str:
-    if cmd in _header_existence_cache:
-        return _header_existence_cache[cmd]
+def _get_header_existence(command: CommandProtocol) -> str:
+    if command in _header_existence_cache:
+        return _header_existence_cache[command]
     else:
-        line = strings.center_text_in_line(f"<<[{cmd.name}]>>", length=_header_length)
-        _header_existence_cache[cmd] = line
+        line = strings.center_text_in_line(f"<<[{command.name}]>>", length=_header_length)
+        _header_existence_cache[command] = line
         return line
-
-
-def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequence[str]):
-    terminal.logging << f'Project root found at "{proj.root}".'
-    terminal.both << f'Kite Tool v{version}'
-    import yml
-    proj.pubspec = yml.load(proj.pubspec_fi().read())
-    terminal.both << f'Project loaded: "{proj.name} {proj.version}".'
-    terminal.both << f'Description: "{proj.desc}".'
-    import kite.using
-    kite.using.load()
-    import kite.compoenet
-    kite.compoenet.load()
-    load_cmds(proj=proj, cmdlist=cmdlist, terminal=terminal)
-    from args import Args
-    if len(cmdargs) == 0:
-        # interactive mode
-        pass
-    else:
-        # cli mode
-        args = Args(cmdargs)
-        # read first args as command
-        command, args = args.poll()
-        if command.ispair:
-            terminal.both << f'invalid command format "{command}".'
-            return
-        else:
-            executable = cmdlist[command.key]
-            if executable is None:
-                terminal.both << f'command<{command.key}> not found.'
-                return
-            else:
-                ctx = CmdContext(proj, terminal, cmdlist, args)
-                terminal.both << _get_header_entry(executable)
-                try:
-                    executable.execute(ctx)
-                except CommandArgError as e:
-                    cmd.print_cmdarg_error(terminal, e)
-                except CommandExecuteError as e:
-                    pass
-                terminal.both << _get_header_existence(executable)
 
 
 def main():
@@ -150,6 +111,69 @@ def main():
         shell(proj=proj, cmdlist=cmds, terminal=t, cmdargs=cmdargs)
     else:
         print(f"project root not found")
+
+
+def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequence[str]):
+    terminal.logging << f'Project root found at "{proj.root}".'
+    terminal.both << f'Kite Tool v{version}'
+    import yml
+    proj.pubspec = yml.load(proj.pubspec_fi().read())
+    terminal.both << f'Project loaded: "{proj.name} {proj.version}".'
+    terminal.both << f'Description: "{proj.desc}".'
+    import kite.using
+    kite.using.load()
+    import kite.compoenet
+    kite.compoenet.load()
+    load_cmds(proj=proj, cmdlist=cmdlist, terminal=terminal)
+    from args import Args
+    if len(cmdargs) == 0:
+        interactive_mode(proj=proj, cmdlist=cmdlist, terminal=terminal)
+    else:
+        cli_mode(proj=proj, cmdlist=cmdlist, terminal=terminal, cmdargs=cmdargs)
+    terminal.both << "Kite tool exits."
+
+
+def cli_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequence[str]):
+    args = Args(cmdargs)
+    # read first args as command
+    command, args = args.poll()
+    if command.ispair:
+        terminal.both << f'invalid command format "{command}".'
+        return
+    else:
+        executable = cmdlist[command.key]
+        if executable is None:
+            terminal.both << f'command<{command.key}> not found.'
+            return
+        else:
+            ctx = CmdContext(proj, terminal, cmdlist, args)
+            terminal.both << _get_header_entry(executable)
+            try:
+                executable.execute(ctx)
+            except CommandArgError as e:
+                cmd.print_cmdarg_error(terminal, e)
+            except CommandExecuteError as e:
+                pass
+            terminal.both << _get_header_existence(executable)
+
+
+def interactive_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal):
+    terminal << 'interactive mode is on, enter "#" to exit current layer.'
+    all_cmd = ', '.join(cmdlist.keys())
+    all_cmd_prompt = f"all commands = [{all_cmd}]"
+    while True:
+        terminal << all_cmd_prompt
+        selected_cmd = terminal.input("cmd=")
+        if selected_cmd == "#":
+            return
+        executable = cmdlist[selected_cmd]
+        if executable is not None:
+            terminal.both << _get_header_entry(executable)
+            ctx = CmdContext(proj, terminal, cmdlist)
+            dispatcher = TaskDispatcher()
+            dispatcher.run(executable.execute_inter(ctx))
+            dispatcher.dispatch()
+            terminal.both << _get_header_existence(executable)
 
 
 if __name__ == '__main__':

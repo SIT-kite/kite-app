@@ -84,24 +84,17 @@ class AddModuleCmd:
     name = "addmodule"
 
     @staticmethod
-    def execute(ctx: CmdContext):
-        if ctx.is_cli:
-            AddModuleCmd.cli(ctx)
-        else:
-            AddModuleCmd.interactive(ctx)
-
-    @staticmethod
-    def interactive(ctx: CmdContext):
-        pass
-
-    @staticmethod
-    def cli(ctx: CmdContext):
+    def execute_cli(ctx: CmdContext):
         name, extra = ctx.args.poll()
         if name is None:
             raise CommandArgError(AddModuleCmd, None, "module name not given")
         components, usings, simple = process(extra)
         res = ModuleCreation(name.key, components, usings)
         ctx.proj.modules.create(res)
+
+    @staticmethod
+    def execute_inter(ctx: CmdContext):
+        pass
 
     @staticmethod
     def create():

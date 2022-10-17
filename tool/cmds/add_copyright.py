@@ -35,6 +35,14 @@ class AddCopyRightCmd:
     name = "addcopyright"
 
     @staticmethod
+    def execute_cli(ctx: CmdContext):
+        AddCopyRightCmd.execute(ctx)
+
+    @staticmethod
+    def execute_inter(ctx: CmdContext):
+        AddCopyRightCmd.execute(ctx)
+
+    @staticmethod
     def execute(ctx: CmdContext):
         if ctx.args.size > 0:
             raise CommandArgError(AddCopyRightCmd, ctx.args[0], "no arg required")

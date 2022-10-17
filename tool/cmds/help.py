@@ -1,6 +1,8 @@
 import copy
+from typing import Iterable
 
 from cmd import Command, CmdContext, CommandList, CommandArgError
+from tasks import InputTask
 from ui import Terminal
 
 
@@ -30,16 +32,28 @@ class HelpCmd(Command):
         self.name = "help"
         self.cmdlist = cmdlist
 
-    def execute(self, ctx: CmdContext):
-        if ctx.is_cli:
-            self.cli(ctx)
-        else:
-            self.interactive(ctx)
+    def execute_inter(self, ctx: CmdContext) -> Iterable:
+        all_cmd = ', '.join(ctx.cmdlist.keys())
+        ctx.term << f"all commands = [{all_cmd}]"
+        while True:
+            ctx.term << f'plz select a command to show info or "*" to show all.'
+            input_task = InputTask(ctx.term, "I want=")
+            yield input_task
+            selected = input_task.result.lower()
+            help_ctx = copy.copy(ctx)
+            help_ctx.term = HelpBoxTerminal(ctx.term)
+            if selected == "*":
+                for cmd_obj in ctx.cmdlist.values():
+                    HelpCmd.show_help_info(cmd_obj, ctx, help_ctx)
+            else:
+                cmd = ctx.cmdlist[selected]
+                if cmd is not None:
+                    HelpCmd.show_help_info(cmd, ctx, help_ctx)
+                    yield None
+                else:
+                    ctx.term << f"command<{selected}> not found"
 
-    def interactive(self, ctx: CmdContext):
-        pass
-
-    def cli(self, ctx: CmdContext):
+    def execute_cli(self, ctx: CmdContext):
         cmd, args = ctx.args.poll()
         if cmd.ispair:
             raise CommandArgError(self, cmd, "pair arg isn't allowed")

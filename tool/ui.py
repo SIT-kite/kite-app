@@ -79,13 +79,13 @@ class BashTerminal(Terminal):
         self.logger = logger
 
     def print(self, *args):
-        print("|> ", *args)
+        print("|>", *args)
 
     def log(self, *args):
         self.logger.log(*args)
 
     def input(self, prompt: str) -> str:
-        return input(f"|> {prompt}")
+        return input(f"|>  {prompt}")
 
     def print_log(self, *args):
         self.print(*args)
@@ -103,13 +103,13 @@ class BashTerminalWrapper(Terminal):
         self.inner = inner
 
     def print(self, *args):
-        self.inner.print("|> ", *args)
+        self.inner.print("|>", *args)
 
     def log(self, *args):
         self.inner.log(*args)
 
     def input(self, prompt: str) -> str:
-        return self.inner.input(f"|> {prompt}")
+        return self.inner.input(f"|>{prompt}")
 
     def print_log(self, *args):
         self.print(*args)
