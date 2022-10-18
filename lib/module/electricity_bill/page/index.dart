@@ -21,11 +21,11 @@ import 'package:animated_button_bar/animated_button_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import '../using.dart';
 
 import '../entity/account.dart';
 import '../init.dart';
 import '../user_widget/chart.dart';
+import '../using.dart';
 
 Widget cardTitle(String title) {
   return Row(
@@ -217,7 +217,8 @@ class _ElectricityPageState extends State<ElectricityPage> {
                       '剩余电量',
                       '${data.power.toStringAsFixed(2)}度',
                     ),
-                    balanceInfo(Icons.savings, '剩余金额', '${data.balance.toStringAsFixed(2)}元'),
+                    balanceInfo(Icons.savings, '剩余金额', '${data.balance.toStringAsFixed(2)}元',
+                        color: data.balance < 10 ? Colors.red : null),
                   ],
                 ),
               ),
@@ -228,7 +229,8 @@ class _ElectricityPageState extends State<ElectricityPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     balanceInfo(Icons.house, '房间号码', data.room.toString(), width: 90),
-                    balanceInfo(Icons.update, '更新时间', DateFormat('MM/dd HH:mm').format(data.ts.toLocal()), width: 90)
+                    balanceInfo(Icons.update, '更新时间', DateFormat('MM/dd HH:mm').format(data.ts.toLocal()),
+                        width: 90, color: data.ts.difference(DateTime.now()).inDays > 1 ? Colors.red : null)
                   ],
                 ),
               ),
@@ -242,12 +244,12 @@ class _ElectricityPageState extends State<ElectricityPage> {
   }
 
   ///余额Row封装
-  Widget balanceInfo(IconData icon, String title, String content, {double? width}) {
+  Widget balanceInfo(IconData icon, String title, String content, {double? width, Color? color}) {
     return Row(
       children: [
         Icon(icon),
         const SizedBox(width: 2),
-        Text(title),
+        Text(title, style: (color != null) ? TextStyle(color: color) : null),
         SizedBox(
           width: width ?? 70,
           child: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
@@ -296,7 +298,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
                   '24小时用电消费： ${data.consumption.toStringAsFixed(2)}元',
                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
-                Text('超过了${(data.rank * 100 / data.roomCount).toStringAsFixed(2)}%宿舍')
+                Text('超过了 ${(data.rank * 100 / data.roomCount).toStringAsFixed(2)}% 宿舍')
               ],
             ))
           ],
