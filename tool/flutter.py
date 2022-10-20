@@ -1,3 +1,4 @@
+from enum import Enum, auto
 from io import StringIO
 from typing import Sequence, Literal
 
@@ -16,6 +17,9 @@ class Proj:
             self.root = root
         self.pubspec = None
         self.modules = None
+        self.usings: dict[str, "UsingDeclare"] = {}
+        self.comps: dict[str, "CompType"] = {}
+        self.uncomps: set[str] = set()
 
     @property
     def name(self) -> str:
@@ -29,23 +33,33 @@ class Proj:
     def desc(self) -> str:
         return self.pubspec["description"]
 
+    @property
     def pubspec_fi(self) -> File:
         return self.root.subfi(pubspec_yaml)
 
+    @property
     def dart_tool(self) -> Directory:
         return self.root.subdir(dart_tool)
 
+    @property
     def kite_tool(self) -> Directory:
         return self.root.subdir(dart_tool, kite_tool)
 
+    @property
+    def kite_log_dir(self) -> Directory:
+        return self.root.subdir(dart_tool, kite_tool, "log")
+
+    @property
     def kite_log(self) -> File:
         from datetime import date
         d = date.today().isoformat()
         return self.root.subfi(dart_tool, kite_tool, "log", f"{d}.log")
 
+    @property
     def lib_folder(self) -> Directory:
         return self.root.subdir("lib")
 
+    @property
     def module_folder(self) -> Directory:
         return self.root.subdir("lib", "module")
 
@@ -61,12 +75,10 @@ class Proj:
 
 
 # noinspection SpellCheckingInspection
-class ComponentType:
-    all: dict[str, "ComponentType"] = {}
+class CompType:
 
     def __init__(self, name: str):
         self.name = name
-        ComponentType.all[name] = self
 
     def create(self, moduledir: Directory, mode: str | Literal["file", "dir"]):
         if mode == "file":
@@ -74,7 +86,7 @@ class ComponentType:
         elif mode == "dir":
             moduledir.createdir(self.name)
         else:
-            raise Exception(f"unknown module creation mode {mode}")
+            raise BaseException(f"unknown module creation mode {mode}")
 
     def __str__(self):
         return self.name
@@ -85,11 +97,9 @@ class ComponentType:
 
 # noinspection SpellCheckingInspection
 class UsingDeclare:
-    all: dict[str, "UsingDeclare"] = {}
 
     def __init__(self, name: str, refs: list[str] = None):
         self.name = name
-        UsingDeclare.all[name] = self
         if refs is None:
             refs
         self.refs = refs
@@ -108,11 +118,36 @@ class UsingDeclare:
         return self.name
 
 
+class CompPageType(Enum):
+    File = auto()
+    Dir = auto()
+
+
+# noinspection PyTypeChecker
+class CompPage:
+    def __init__(self, file: Directory | File, typec: CompPageType):
+        self.file = file
+        self.type = typec
+
+
 class Module:
-    pass
+    def __init__(self):
+        self.uncomps: dict[str, File] = {}
+        self.components: dict[CompType, CompPage] = {}
+        self.sub: dict[str, Module] = {}
+        self.parent: Module | None = None
+
+    def __getitem__(self, item: CompType) -> CompPage | None:
+        if item in self:
+            return self.components[item]
+        else:
+            return None
+
+    def __contains__(self, item: CompType) -> bool:
+        return item in self.components
 
 
-Components = Sequence[ComponentType]
+Components = Sequence[CompType]
 Usings = Sequence[UsingDeclare]
 
 
@@ -141,8 +176,8 @@ class Modules:
     def create(self, creation: ModuleCreation):
         name = creation.name
         if name in self.name2modules:
-            raise Exception(f"duplicate module name {name}")
-        moduledir = self.proj.module_folder().subdir(name)
+            raise BaseException(f"duplicate module name {name}")
+        moduledir = self.proj.module_folder.subdir(name)
         for component in creation.components:
             mode = "file" if creation.simple else "dir"
             component.create(moduledir, mode)

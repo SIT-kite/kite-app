@@ -1,6 +1,8 @@
+import datetime
 import ntpath
 import os.path
 import sys
+import traceback
 from typing import Sequence, Iterator
 
 import build
@@ -54,7 +56,7 @@ def find_project_root(start: str | Directory, max_depth=20) -> Directory | None:
         if layer > max_depth:
             return None
         import flutter
-        if cur.sub_isfile(flutter.pubspec_yaml):
+        if cur.sub_isfi(flutter.pubspec_yaml):
             return cur
         parent, _ = cur.split()
         if parent is None:
@@ -94,6 +96,14 @@ def _get_header_existence(command: CommandProtocol) -> str:
         return line
 
 
+def clear_old_log(log_dir: Directory):
+    now = datetime.datetime.now()
+    for logfi in log_dir.listing_fis():
+        delta = now - logfi.modify_datetime
+        if delta.days > 7:
+            logfi.delete()
+
+
 def main():
     script_path = sys.argv[0]
     script_abs_path = os.path.abspath(script_path)
@@ -103,7 +113,8 @@ def main():
     root = find_project_root(start=parent)
     if root is not None:
         proj = Proj(root)
-        logger = log.FileLogger(proj.kite_log())
+        clear_old_log(proj.kite_log_dir)
+        logger = log.FileLogger(proj.kite_log)
         File.logger = logger
         Directory.logger = logger
         t = BashTerminal(logger)
@@ -117,7 +128,7 @@ def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequ
     terminal.logging << f'Project root found at "{proj.root}".'
     terminal.both << f'🪁 Kite Tool v{version}'
     import yml
-    proj.pubspec = yml.load(proj.pubspec_fi().read())
+    proj.pubspec = yml.load(proj.pubspec_fi.read())
     terminal.both << f'Project loaded: "{proj.name} {proj.version}".'
     terminal.both << f'Description: "{proj.desc}".'
     import kite.using
@@ -130,6 +141,12 @@ def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequ
     else:
         cli_mode(proj=proj, cmdlist=cmdlist, terminal=terminal, cmdargs=cmdargs)
     terminal.both << "🪁 Kite Tool exits."
+
+
+def log_traceback(terminal: Terminal):
+    if terminal.has_logger:
+        terminal.logging << traceback.format_exc()
+        terminal << "ℹ️ full traceback was printed into log."
 
 
 def cli_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequence[str]):
@@ -148,11 +165,12 @@ def cli_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: S
             ctx = CmdContext(proj, terminal, cmdlist, args)
             terminal.both << _get_header_entry(executable)
             try:
-                executable.execute(ctx)
+                executable.execute_cli(ctx)
             except CommandArgError as e:
                 cmd.print_cmdarg_error(terminal, e)
+                log_traceback(terminal)
             except CommandExecuteError as e:
-                pass
+                log_traceback(terminal)
             terminal.both << _get_header_existence(executable)
 
 

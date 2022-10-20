@@ -91,7 +91,7 @@ class Args:
                 res.parent = self
                 return res
             else:
-                raise Exception("args is empty")
+                raise BaseException("args is empty")
         if isinstance(item, slice):
             start = 0 if item.start is None else item.start
             start = max(0, start)
@@ -104,7 +104,7 @@ class Args:
             arg.parent = self
             arg.parent_index = index
             return arg
-        raise Exception(f"unsupported type {type(item)}")
+        raise BaseException(f"unsupported type {type(item)}")
 
     @property
     def total_loffset(self) -> int:
@@ -188,7 +188,7 @@ class Args:
         if self.isroot:
             return _join(self._args, target)
         else:
-            raise Exception(f"{self} isn't a root args")
+            raise BaseException(f"{self} isn't a root args")
 
     def __str__(self):
         return shlex.join(self._args)

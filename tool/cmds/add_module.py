@@ -3,15 +3,15 @@ from typing import Callable, Sequence
 import cmd
 from args import Args, Arg
 from cmd import CmdContext, CommandArgError, CommandArgError
-from flutter import ComponentType, UsingDeclare, ModuleCreation, Usings, Components
+from flutter import CompType, UsingDeclare, ModuleCreation, Usings, Components
 from utils import Ref
 
 Mode = Callable[[Arg], None]
 
 
 def process(args: Args) -> tuple[Components, Usings, bool]:
-    excluded: set[ComponentType] = set()
-    included: set[ComponentType] = set()
+    excluded: set[CompType] = set()
+    included: set[CompType] = set()
     used: set[UsingDeclare] = set()
     simple_module = Ref(False)
     cur_args = args
@@ -19,22 +19,22 @@ def process(args: Args) -> tuple[Components, Usings, bool]:
     def include_mode(arg: Arg):
         module = arg.key
         if module == "*":
-            for c in ComponentType.all.values():
+            for c in CompType.all.values():
                 included.add(c)
         else:
-            if module not in ComponentType.all:
+            if module not in CompType.all:
                 raise CommandArgError(AddModuleCmd, arg, f"{module} isn't a module")
-            included.add(ComponentType.all[module])
+            included.add(CompType.all[module])
 
     def exclude_mode(arg: Arg):
         module = arg.key
         if module == "*":
-            for c in ComponentType.all.values():
+            for c in CompType.all.values():
                 excluded.add(c)
         else:
-            if module not in ComponentType.all:
+            if module not in CompType.all:
                 raise CommandArgError(AddModuleCmd, arg, f"{module} isn't a module")
-            excluded.add(ComponentType.all[module])
+            excluded.add(CompType.all[module])
 
     def using_mode(arg: Arg):
         using = arg.key

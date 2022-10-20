@@ -8,6 +8,10 @@ class Terminal:
         self.logging = LoggerWrapper(self)
         self.both = BothWrapper(self)
 
+    @property
+    def has_logger(self):
+        return False
+
     def print(self, *args):
         print(*args)
 
@@ -78,6 +82,10 @@ class BashTerminal(Terminal):
         super().__init__()
         self.logger = logger
 
+    @property
+    def has_logger(self):
+        return True
+
     def print(self, *args):
         print("|>", *args)
 
@@ -101,6 +109,10 @@ class BashTerminalWrapper(Terminal):
     def __init__(self, inner: Terminal):
         super().__init__()
         self.inner = inner
+
+    @property
+    def has_logger(self):
+        return False
 
     def print(self, *args):
         self.inner.print("|>", *args)

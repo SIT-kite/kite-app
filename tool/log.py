@@ -25,7 +25,7 @@ class FileLogger(Logger):
         return self.fi
 
     def log(self, *args):
-        content = ' '.join(args)
+        content = ' '.join(str(arg) for arg in args)
         now = datetime.now().strftime("%H:%M:%S")
         content = f"[{now}] {content}\n"
         logfi = File.cast(self.path)

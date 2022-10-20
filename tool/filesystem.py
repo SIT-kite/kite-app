@@ -1,6 +1,7 @@
 import ntpath
 import os
 import os.path as p
+from datetime import datetime
 from pathlib import Path
 from typing import Union, Optional, Iterable, Callable
 
@@ -29,6 +30,32 @@ class Pathable:
 
     def __str__(self):
         return self.path
+
+
+class FileStat:
+    def __init__(self, stat: os.stat_result):
+        self.stat = stat
+
+    @property
+    def modify_time(self) -> float:
+        """
+        :return: time of last modification
+        """
+        return self.stat.st_mtime
+
+    @property
+    def access_time(self) -> float:
+        """
+        :return: time of last access
+        """
+        return self.stat.st_atime
+
+    @property
+    def file_size(self) -> int:
+        """
+        :return: file size in bytes
+        """
+        return self.stat.st_size
 
 
 # noinspection SpellCheckingInspection
@@ -85,22 +112,22 @@ class File(Pathable):
 
     def read(self, mode="r", silent=False):
         with open(self.path, mode=mode, encoding="UTF-8") as f:
-            File.log(f"{self.path} file was read.", silent=silent)
+            File.log(f"file[{self.path}] was read.", silent=silent)
             return f.read()
 
     def try_read(self, mode="r", fallback: str | None = None, silent=False) -> None | str:
         if os.path.isfile(self.path):
             return self.read(mode, silent=silent)
         else:
-            File.log(f"{self.path} file isn't a file to read.", silent=silent)
+            File.log(f"file[{self.path}] isn't a file to read.", silent=silent)
             return fallback
 
     def write(self, content: str, mode="w", silent=False):
         if not self.exists():
-            File.log(f"{self.path} file will be created for writing.", silent=silent)
+            File.log(f"file[{self.path}] will be created for writing.", silent=silent)
         with open(self.path, mode=mode, encoding="UTF-8") as f:
             f.write(content)
-            File.log(f"{self.path} file was written smth.", silent=silent)
+            File.log(f"file[{self.path}] was written smth.", silent=silent)
 
     def append(self, content: str, mode="a", silent=False):
         self.write(content, mode, silent)
@@ -113,16 +140,16 @@ class File(Pathable):
             if os.path.isfile(self.path):
                 try:
                     os.unlink(self.path)
-                    File.log(f"{self.path} file was deleted.", silent=silent)
+                    File.log(f"file[{self.path}] was deleted.", silent=silent)
                     return True
-                except Exception as e:
-                    File.log(f"{self.path} file can't deleted.", e, silent=silent)
+                except BaseException as e:
+                    File.log(f"file[{self.path}] can't deleted.", e, silent=silent)
                     return False
             else:  # it exists but isn't a file
-                File.log(f"{self.path} file can't deleted because it isn't a file.", silent=silent)
+                File.log(f"file[{self.path}] can't deleted because it isn't a file.", silent=silent)
                 return False
         else:
-            File.log(f"{self.path} file doesn't exists or has been deleted.", silent=silent)
+            File.log(f"file[{self.path}] doesn't exists or has been deleted.", silent=silent)
             return True
 
     @staticmethod
@@ -131,10 +158,53 @@ class File(Pathable):
         if File.logger is not None and not silent:
             File.logger.log(*args)
 
+    @property
+    def stat(self) -> FileStat:
+        return FileStat(os.stat(self.path))
+
+    @property
+    def modify_time(self) -> float:
+        """
+        :return: time of last modification
+        """
+        return os.stat(self.path).st_mtime
+
+    @property
+    def modify_datetime(self) -> datetime:
+        """
+        :return: time of last modification
+        """
+        return datetime.fromtimestamp(self.modify_time)
+
+    @property
+    def access_time(self) -> float:
+        """
+        :return: time of last access
+        """
+        return os.stat(self.path).st_atime
+
+    @property
+    def access_datetime(self) -> datetime:
+        """
+        :return: time of last access
+        """
+        return datetime.fromtimestamp(self.access_time)
+
+    @property
+    def file_size(self) -> int:
+        """
+        :return: file size in bytes
+        """
+        return os.stat(self.path).st_size
+
 
 # noinspection SpellCheckingInspection
 class Directory(Pathable):
     logger = None
+
+    @property
+    def basename(self) -> str:
+        return ntpath.basename(self.path)
 
     def exists(self):
         return p.isdir(self.path)
@@ -149,19 +219,18 @@ class Directory(Pathable):
     def to_abs(self) -> "Directory":
         return Directory(self.abs_path)
 
-    def lists(self, rtype=File) -> list[Union[File, "Directory"]] | list[str]:
-        files = os.listdir(self.path)
-        if rtype == str:
-            return files
-        res = []
-        for f in files:
+    def lists(self) -> tuple[list[File], list["Directory"]]:
+        loaded = os.listdir(self.path)
+        files = []
+        dirs = []
+        for f in loaded:
             if p.isfile(f):
-                res.append(File(f))
+                files.append(File(f))
             elif p.isdir(f):
-                res.append(Directory(f))
-        return res
+                dirs.append(Directory(f))
+        return files, dirs
 
-    def lists_files(self) -> list[File]:
+    def lists_fis(self) -> list[File]:
         files = os.listdir(self.path)
         res = []
         for f in files:
@@ -176,6 +245,18 @@ class Directory(Pathable):
             if p.isdir(f):
                 res.append(Directory(f))
         return res
+
+    def listing_fis(self) -> Iterable[File]:
+        files = os.listdir(self.path)
+        for f in files:
+            if p.isfile(f):
+                yield File(f)
+
+    def listing_dirs(self) -> Iterable["Directory"]:
+        files = os.listdir(self.path)
+        for f in files:
+            if p.isdir(f):
+                yield Directory(f)
 
     def subfi(self, *name) -> File:
         return File(ntpath.join(self.path, *name))
@@ -200,7 +281,7 @@ class Directory(Pathable):
     def sub_isdir(self, name) -> bool:
         return p.isdir(ntpath.join(self.path, name))
 
-    def sub_isfile(self, name) -> bool:
+    def sub_isfi(self, name) -> bool:
         return p.isfile(ntpath.join(self.path, name))
 
     @staticmethod
@@ -218,7 +299,7 @@ class Directory(Pathable):
                 return False
         else:
             Path(self.path).mkdir(parents=True, exist_ok=True)
-            Directory.log(f"{self.path} dir was created.", silent=silent)
+            Directory.log(f"dir[{self.path}] was created.", silent=silent)
             return True
 
     def delete(self, silent=False) -> bool:
@@ -226,16 +307,16 @@ class Directory(Pathable):
             if os.path.isdir(self.path):
                 try:
                     os.rmdir(self.path)
-                    Directory.log(f"{self.path} dir was deleted.", silent=silent)
+                    Directory.log(f"dir[{self.path}] was deleted.", silent=silent)
                     return True
-                except Exception as e:
-                    Directory.log(f"{self.path} dir can't deleted.", e, silent=silent)
+                except BaseException as e:
+                    Directory.log(f"dir[{self.path}] can't deleted.", e, silent=silent)
                     return False
             else:  # it exists but isn't a dir
-                Directory.log(f"{self.path} dir can't deleted because it isn't a dir.", silent=silent)
+                Directory.log(f"dir[{self.path}] can't deleted because it isn't a dir.", silent=silent)
                 return False
         else:
-            Directory.log(f"{self.path} dir doesn't exists or has been deleted.", silent=silent)
+            Directory.log(f"dir[{self.path}] doesn't exists or has been deleted.", silent=silent)
             return True
 
     @staticmethod
@@ -267,7 +348,7 @@ def isdir(folder: str | Directory) -> bool:
         return folder.exists()
 
 
-def isfile(file: str | File) -> bool:
+def isfi(file: str | File) -> bool:
     if isinstance(file, str):
         return p.isfile(file)
     else:

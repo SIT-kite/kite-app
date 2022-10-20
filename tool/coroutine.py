@@ -25,7 +25,7 @@ class TaskDispatcher:
         self.call_stack: list[Iterator] = []
 
     def run(self, task: Iterator):
-        self.call_stack.append(task)
+        self.call_stack = [task]
 
     def dispatch(self) -> DispatcherState:
         call_stack = self.call_stack
@@ -62,5 +62,5 @@ class TaskDispatcher:
                     # return None as default, which means task over.
                     pass
                 else:
-                    raise Exception(f"unsupported coroutine type {type(new_task).__name__} {new_task}")
+                    raise BaseException(f"unsupported coroutine type {type(new_task).__name__} {new_task}")
         return DispatcherState.End

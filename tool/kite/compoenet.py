@@ -1,16 +1,16 @@
-from flutter import ComponentType
+from flutter import CompType
 
-entity: ComponentType
-dao: ComponentType
-storage: ComponentType
-service: ComponentType
-page: ComponentType
+entity: CompType
+dao: CompType
+storage: CompType
+service: CompType
+page: CompType
 
 
 def load():
     global entity, dao, storage, service, page
-    entity = ComponentType("entity")
-    dao = ComponentType("dao")
-    storage = ComponentType("storage")
-    service = ComponentType("service")
-    page = ComponentType("page")
+    entity = CompType("entity")
+    dao = CompType("dao")
+    storage = CompType("storage")
+    service = CompType("service")
+    page = CompType("page")

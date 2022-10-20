@@ -81,10 +81,15 @@ class CommandList:
         if self.logger is not None:
             self.logger.log(*args)
 
+    def add_cmd(self, name: str, cmd: CommandProtocol):
+        name = name.lower()
+        if name in self.name2cmd:
+            raise BaseException(f"{name} command has already registered")
+        self.log(f"command<{name}> loaded.")
+        self.name2cmd[name] = cmd
+
     def __setitem__(self, key: str, cmd: CommandProtocol):
-        key = key.lower()
-        self.log(f"command<{key}> loaded.")
-        self.name2cmd[key] = cmd
+        self.add_cmd(key, cmd)
 
     def __getitem__(self, name: str) -> CommandProtocol | None:
         if name not in self.name2cmd:
@@ -93,9 +98,7 @@ class CommandList:
             return self.name2cmd[name]
 
     def add(self, cmd: CommandProtocol):
-        name = cmd.name.lower()
-        self.log(f"command<{name}> loaded.")
-        self.name2cmd[name] = cmd
+        self.add_cmd(cmd.name, cmd)
 
     def __lshift__(self, cmd: CommandProtocol):
         self.add(cmd)
@@ -128,14 +131,14 @@ class CommandList:
             return self.name2cmd[candidate]
 
 
-class CommandArgError(Exception):
+class CommandArgError(BaseException):
     def __init__(self, cmd: CommandProtocol, arg: Arg | None, *more):
         super(CommandArgError, self).__init__(*more)
         self.arg = arg
         self.cmd = cmd
 
 
-class CommandExecuteError(Exception):
+class CommandExecuteError(BaseException):
     def __init__(self, cmd: CommandProtocol, *args):
         super(CommandExecuteError, self).__init__(*args)
         self.cmd = cmd

@@ -46,7 +46,7 @@ class AddCopyRightCmd:
 
     @staticmethod
     def execute(ctx: CmdContext):
-        for source in ctx.proj.lib_folder().walking(when=need_copyright):
+        for source in ctx.proj.lib_folder.walking(when=need_copyright):
             content = source.read(silent=True)
             if not already_has_copyright(content):
                 new = COPYRIGHT_STRING + content
