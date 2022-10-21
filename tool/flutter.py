@@ -2,6 +2,7 @@ from enum import Enum, auto
 from io import StringIO
 from typing import Sequence, Literal
 
+from dart import DartFi
 from filesystem import Directory, File
 
 dart_tool = ".dart_tool"
@@ -19,14 +20,10 @@ class Proj:
         self.modules = None
         self.usings: dict[str, "UsingDeclare"] = {}
         self.comps: dict[str, "CompType"] = {}
-        self.essentials: set[str] = set()
         self.unmodules: set[str] = set()
 
     def add_module(self, module: "Module"):
         self.modules[module.name] = module
-
-    def add_essentials(self, name: str):
-        self.essentials.add(name)
 
     def add_unmodule(self, name: str):
         self.unmodules.add(name)
@@ -104,7 +101,7 @@ class CompType:
         else:
             raise Exception(f"unknown module creation mode {mode}")
 
-    def make_page(self, file: Directory | File) -> "CompPage":
+    def make_page(self, file: Directory | DartFi) -> "CompPage":
         t = CompPageType.File if isinstance(file, File) else CompPageType.Dir
         return CompPage(self.name, file, t)
 
@@ -145,27 +142,43 @@ class CompPageType(Enum):
 
 # noinspection PyTypeChecker
 class CompPage:
-    def __init__(self, name: str, file: Directory | File, typec: CompPageType):
+    def __init__(self, name: str, file: Directory | DartFi, typec: CompPageType):
         self.name = name
         self.file = file
         self.type = typec
 
     def __str__(self):
-        return f"[{self.type}]{self.name}({self.file})"
+        return f"{self.name}[{self.file}]"
 
     def __repr__(self):
         return str(self)
 
 
 class Module:
+    pinned = {"init", "using", "symbol"}
+
     def __init__(self, name: str):
         self.name = name
-        self.essentials: dict[str, File] = {}
         self.components: dict[CompType, CompPage] = {}
         self.sub: dict[str, Module] = {}
         self.parent: Module | None = None
+        self.init_dart: DartFi | None = None
+        self.using_dart: DartFi | None = None
+        self.symbol_dart: DartFi | None = None
 
-    def add_page(self, comp: CompType, fi: File | Directory):
+    def try_pin(self, fi: DartFi) -> bool:
+        sourcename = fi.sourcename
+        if sourcename in Module.pinned:
+            setattr(self, f"{sourcename}_dart", fi)
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def form(folder: Directory) -> bool:
+        return folder.sub_isfi("using.dart") or folder.sub_isfi("symbol.dart")
+
+    def add_page(self, comp: CompType, fi: DartFi | Directory):
         self.components[comp] = comp.make_page(fi)
 
     @property
@@ -182,7 +195,10 @@ class Module:
         return item in self.components
 
     def __str__(self):
-        return f"{self.name}"
+        if len(self.sub) == 0:
+            return f"{self.name}"
+        else:
+            return f"{self.name}[{', '.join(self.sub.keys())}]"
 
     def __repr__(self):
         return str(self)
@@ -225,3 +241,9 @@ class Modules:
             component.create(moduledir, mode)
         for using in creation.usings:
             using.create(moduledir.subfi("using.dart"))
+
+    def __str__(self):
+        return f"{self.proj.name}:{len(self.name2modules)} modules"
+
+    def __repr__(self):
+        return str(self)

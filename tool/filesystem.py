@@ -101,7 +101,10 @@ class File(Pathable):
         return name
 
     def extendswith(self, extension: str) -> bool:
-        return self.path.endswith(extension)
+        return self.extension == extension
+
+    def endswith(self, ending: str) -> bool:
+        return self.path.endswith(ending)
 
     @staticmethod
     def cast(path: Union[str, "File"]) -> "File":

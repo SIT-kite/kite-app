@@ -133,9 +133,15 @@ def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequ
     terminal.both << f'Description: "{proj.desc}".'
     import kite
     kite.load(proj)
-    import loader
-    loader.load_modules(terminal, proj)
     load_cmds(proj=proj, cmdlist=cmdlist, terminal=terminal)
+    import loader
+    from loader import DuplicateNameCompError
+    try:
+        loader.load_modules(terminal, proj)
+    except DuplicateNameCompError as e:
+        terminal.both << f"Duplicate component<{e.comp}> of module<{e.module}> detected."
+        log_traceback(terminal)
+        return
     if len(cmdargs) == 0:
         interactive_mode(proj=proj, cmdlist=cmdlist, terminal=terminal)
     else:

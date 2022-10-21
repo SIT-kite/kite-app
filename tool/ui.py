@@ -1,22 +1,24 @@
 from io import StringIO
-from typing import Any, Sequence, Iterable
+from typing import Any, Sequence
 
 
 # noinspection SpellCheckingInspection
 class Terminal:
-    def __init__(self):
+    def __init__(self, logger=None):
+        self.logger = logger
         self.logging = LoggerWrapper(self)
         self.both = BothWrapper(self)
 
     @property
     def has_logger(self):
-        return False
+        return self.logger is not None
 
     def print(self, *args):
         print(*args)
 
     def log(self, *args):
-        pass
+        if self.logger is not None:
+            self.logger.log(*args)
 
     def input(self, prompt: str) -> str:
         return input(prompt)
@@ -77,14 +79,6 @@ class BothWrapper:
 
 # noinspection SpellCheckingInspection
 class BashTerminal(Terminal):
-
-    def __init__(self, logger):
-        super().__init__()
-        self.logger = logger
-
-    @property
-    def has_logger(self):
-        return True
 
     def print(self, *args):
         print("|>", *args)

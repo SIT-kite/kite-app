@@ -28,7 +28,7 @@ def already_has_copyright(content: str) -> bool:
 
 
 def need_copyright(fi: File) -> bool:
-    return fi.extendswith(".dart") and not fi.extendswith("g.dart")
+    return fi.extendswith(".dart") and not fi.endswith("g.dart")
 
 
 class AddCopyRightCmd:

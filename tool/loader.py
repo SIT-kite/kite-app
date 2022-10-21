@@ -1,3 +1,4 @@
+from dart import DartFi
 from filesystem import Directory
 from flutter import Module, CompPage, CompPageType, Proj, Modules
 from ui import Terminal
@@ -26,30 +27,27 @@ def load(t: Terminal, proj: Proj, module_name: str, parent: Directory) -> Module
     module = Module(module_name)
     files, dirs = parent.lists()
     for fi in files:
-        if not fi.extendswith("dart") or fi.path.endswith("g.dart"):
-            # only detect .dart file and ignore .g.dart
+        dart = DartFi.cast_dart(fi)
+        if dart is None or dart.is_gen:
             continue
-        name = fi.name_without_extension
+        name = dart.sourcename
         if name in proj.comps:
             # the file is a component
             comp = proj.comps[name]
             if comp in module.components:
-                raise DuplicateNameCompError(comp.name)
-            module.add_page(comp, fi)
-        elif name in proj.essentials:
-            # the file is an essential
-            module.essentials[name] = fi
+                raise DuplicateNameCompError(module.name, comp.name)
+            module.add_page(comp, dart)
         else:
-            t.both << f"❓ {fi.name} isn't a component or an essential in {parent}."
+            module.try_pin(dart)
     for folder in dirs:
         name = folder.name
         if name in proj.comps:
             # the folder is a component
             comp = proj.comps[name]
             if comp in module.components:
-                raise DuplicateNameCompError(comp.name)
+                raise DuplicateNameCompError(module.name, comp.name)
             module.add_page(comp, folder)
-        elif is_submodule(folder):
+        elif Module.form(folder):
             # the folder is a submodule
             sub = load(t, proj, module_name=name, parent=folder)
             sub.parent = module
@@ -57,12 +55,9 @@ def load(t: Terminal, proj: Proj, module_name: str, parent: Directory) -> Module
     return module
 
 
-def is_submodule(folder: Directory) -> bool:
-    return folder.sub_isfi("using.dart") or folder.sub_isfi("symbol.dart")
-
-
 class DuplicateNameCompError(Exception):
 
-    def __init__(self, name: str, *args: object) -> None:
+    def __init__(self, module: str, comp: str, *args: object) -> None:
         super().__init__(*args)
-        self.name = name
+        self.module = module
+        self.comp = comp

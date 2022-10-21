@@ -45,8 +45,6 @@ class Command:
     - execute_cli(ctx) -- execute the command in cli mode
 
     - execute_inter(ctx) -- execute the command in interactive mode. return an Iterator as a coroutine
-
-    - call as a function, args: [ctx]. the same as execute_cli(ctx)
     """
 
     def __init__(self, func: CommandFunc = None):
@@ -61,9 +59,6 @@ class Command:
 
     def help(self, ctx: CmdContext):
         self.func(ctx)
-
-    def __call__(self, *args, **kwargs):
-        self.execute_cli(*args, **kwargs)
 
 
 CommandProtocol = Command | type
@@ -129,6 +124,12 @@ class CommandList:
             return None
         else:
             return self.name2cmd[candidate]
+
+    def __str__(self):
+        return f"[{', '.join(self.name2cmd.keys())}]"
+
+    def __repr__(self):
+        return str(self)
 
 
 class CommandArgError(Exception):
