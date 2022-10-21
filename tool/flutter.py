@@ -21,6 +21,7 @@ class Proj:
         self.usings: dict[str, "UsingDeclare"] = {}
         self.comps: dict[str, "CompType"] = {}
         self.unmodules: set[str] = set()
+        self.scripts = ScriptManger()
 
     def add_module(self, module: "Module"):
         self.modules[module.name] = module
@@ -59,6 +60,10 @@ class Proj:
         return self.root.subdir(dart_tool, kite_tool)
 
     @property
+    def scripts_dir(self) -> Directory:
+        return self.root.subdir("scripts")
+
+    @property
     def kite_log_dir(self) -> Directory:
         return self.root.subdir(dart_tool, kite_tool, "log")
 
@@ -77,11 +82,10 @@ class Proj:
         return self.root.subdir("lib", "module")
 
     def __str__(self):
-        name = self.name
-        if name is None:
+        if self.pubspec is None or "name" not in self.pubspec:
             return "UNLOADED PROJECT"
         else:
-            return name
+            return self.name
 
     def __repr__(self):
         return str(self)
@@ -247,3 +251,40 @@ class Modules:
 
     def __repr__(self):
         return str(self)
+
+
+class PyScript:
+    def __init__(self, fi: File):
+        self.file = fi
+
+
+class KiteScript:
+    def __init__(self, fi: File):
+        self.file = fi
+
+
+class ScriptManger:
+    def __init__(self):
+        self._pyscripts: dict[str, PyScript] = {}
+        self._kitescripts: dict[str, KiteScript] = {}
+        self._scripts: dict[str, KiteScript | PyScript] = {}
+
+    def __getitem__(self, name: str) -> KiteScript | PyScript | None:
+        if name in self._kitescripts:
+            return self._kitescripts[name]
+        elif name in self._pyscripts:
+            return self._pyscripts[name]
+        else:
+            return None
+
+    def add_py(self, fi: File):
+        name = fi.name_without_extension
+        script = PyScript(fi)
+        self._pyscripts[name] = script
+        self._scripts[name] = script
+
+    def add_kite(self, fi: File):
+        name = fi.name_without_extension
+        script = KiteScript(fi)
+        self._kitescripts[name] = script
+        self._scripts[name] = script

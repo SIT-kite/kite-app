@@ -5,6 +5,7 @@ def load(proj: Proj):
     load_comps(proj)
     load_usings(proj)
     load_unmodule(proj)
+    load_scripts(proj)
 
 
 def load_comps(proj: Proj):
@@ -26,5 +27,14 @@ def load_usings(proj: Proj):
         "../shared/networking.dart"
     ]))
 
+
 def load_unmodule(proj: Proj):
     proj.add_unmodule("shared")
+
+
+def load_scripts(proj: Proj):
+    for fi in proj.scripts_dir.listing_fis():
+        if fi.extendswith("py"):
+            proj.scripts.add_py(fi)
+        elif fi.extendswith("kites"):
+            proj.scripts.add_kite(fi)

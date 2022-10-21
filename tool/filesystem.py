@@ -58,7 +58,7 @@ class FileStat:
         return self.stat.st_size
 
 
-# noinspection SpellCheckingInspection
+# noinspection SpellCheckingInspection,PyBroadException
 class File(Pathable):
     logger = None
 
@@ -113,14 +113,18 @@ class File(Pathable):
         else:
             return File(path)
 
-    def read(self, mode="r", silent=False):
+    def read(self, mode="r", silent=False) -> str:
         with open(self.path, mode=mode, encoding="UTF-8") as f:
             File.log(f"file[{self.path}] was read.", silent=silent)
             return f.read()
 
     def try_read(self, mode="r", fallback: str | None = None, silent=False) -> None | str:
         if os.path.isfile(self.path):
-            return self.read(mode, silent=silent)
+            try:
+                return self.read(mode, silent=silent)
+            except:
+                File.log(f"file[{self.path}] can't be read.", silent=silent)
+                return fallback
         else:
             File.log(f"file[{self.path}] isn't a file to read.", silent=silent)
             return fallback

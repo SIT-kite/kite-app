@@ -10,7 +10,7 @@ import cmd
 import log
 import strings
 from args import Args
-from cmd import CommandList, CmdContext, CommandProtocol, CommandExecuteError, CommandArgError
+from cmd import CommandList, CmdContext, CommandProtocol, CommandExecuteError, CommandArgError, CommandEmptyArgsError
 from coroutine import TaskDispatcher, DispatcherState
 from filesystem import File, Directory
 from flutter import Proj
@@ -175,7 +175,11 @@ def cli_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: S
             except CommandArgError as e:
                 cmd.print_cmdarg_error(terminal, e)
                 log_traceback(terminal)
+            except CommandEmptyArgsError as e:
+                cmd.print_cmdargs_empty_error(terminal, e)
+                log_traceback(terminal)
             except CommandExecuteError as e:
+                terminal.both << f"{type(e).__name__}: {e}"
                 log_traceback(terminal)
             terminal.both << _get_header_existence(executable)
 

@@ -11,7 +11,7 @@ def load_modules(t: Terminal, proj: Proj):
         if name not in proj.unmodules:
             module = load(t, proj, module_name=name, parent=folder)
             modules.name2modules[name] = module
-    t.both << f"modules loaded: [{', '.join(modules.name2modules.keys())}]"
+    t.logging << f"modules loaded: [{', '.join(modules.name2modules.keys())}]"
     proj.modules = modules
 
 

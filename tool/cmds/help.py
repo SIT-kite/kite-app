@@ -1,4 +1,3 @@
-import copy
 from typing import Iterable
 
 import build
@@ -41,8 +40,7 @@ class HelpCmd(Command):
             yield select_task
             ctx.term.line(48)
             selected = select_task.result
-            help_ctx = copy.copy(ctx)
-            help_ctx.term = HelpBoxTerminal(ctx.term)
+            help_ctx = ctx.copy(term = HelpBoxTerminal(ctx.term))
             for cmd in selected:
                 HelpCmd.show_help_info(cmd, ctx, help_ctx)
             ctx.term.line(48)
@@ -51,8 +49,7 @@ class HelpCmd(Command):
         cmd, args = ctx.args.poll()
         if cmd.ispair:
             raise CommandArgError(self, cmd, "pair arg isn't allowed")
-        help_ctx = copy.copy(ctx)
-        help_ctx.term = HelpBoxTerminal(ctx.term)
+        help_ctx = ctx.copy(term = HelpBoxTerminal(ctx.term))
         if cmd.name == "*":
             for cmd_obj in ctx.cmdlist.values():
                 HelpCmd.show_help_info(cmd_obj, ctx, help_ctx)

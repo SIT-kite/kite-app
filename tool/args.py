@@ -131,6 +131,13 @@ class Args:
 
     @property
     def size(self):
+        return len(self)
+
+    @property
+    def isempty(self) -> bool:
+        return len(self) == 0
+
+    def __len__(self):
         return len(self._args)
 
     @property
@@ -187,6 +194,12 @@ class Args:
     def located_full(self, target: int) -> tuple[str, ArgPosition]:
         if self.isroot:
             return _join(self._args, target)
+        else:
+            raise Exception(f"{self} isn't a root args")
+
+    def full(self) -> str:
+        if self.isroot:
+            return shlex.join(self._args)
         else:
             raise Exception(f"{self} isn't a root args")
 

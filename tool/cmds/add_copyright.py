@@ -36,7 +36,7 @@ class AddCopyRightCmd:
 
     @staticmethod
     def execute_cli(ctx: CmdContext):
-        if ctx.args.size > 0:
+        if not ctx.args.isempty:
             raise CommandArgError(AddCopyRightCmd, ctx.args[0], "no arg required")
         AddCopyRightCmd.execute(ctx)
 

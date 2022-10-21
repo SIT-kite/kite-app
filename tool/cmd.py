@@ -1,5 +1,5 @@
 from io import StringIO
-from typing import Callable
+from typing import Callable, Iterable
 
 import fuzzy
 import strings
@@ -28,6 +28,12 @@ class CmdContext:
     def __copy__(self) -> "CmdContext":
         return CmdContext(self.proj, self.term, self.cmdlist, self.args)
 
+    def copy(self, **kwargs) -> "CmdContext":
+        cloned = self.__copy__()
+        for k, v in kwargs.items():
+            setattr(cloned, k, v)
+        return cloned
+
 
 CommandFunc = Callable[[CmdContext], None]
 
@@ -47,18 +53,17 @@ class Command:
     - execute_inter(ctx) -- execute the command in interactive mode. return an Iterator as a coroutine
     """
 
-    def __init__(self, func: CommandFunc = None):
-        self.func = func
+    def __init__(self):
         self.name = "__default__"
 
     def execute_cli(self, ctx: CmdContext):
-        self.func(ctx)
+        pass
 
-    def execute_inter(self, ctx: CmdContext):
-        self.func(ctx)
+    def execute_inter(self, ctx: CmdContext) -> Iterable:
+        pass
 
     def help(self, ctx: CmdContext):
-        self.func(ctx)
+        pass
 
 
 CommandProtocol = Command | type
@@ -139,6 +144,13 @@ class CommandArgError(Exception):
         self.cmd = cmd
 
 
+class CommandEmptyArgsError(Exception):
+    def __init__(self, cmd: CommandProtocol, cmdargs: Args, *more):
+        super(CommandEmptyArgsError, self).__init__(*more)
+        self.cmdargs = cmdargs
+        self.cmd = cmd
+
+
 class CommandExecuteError(Exception):
     def __init__(self, cmd: CommandProtocol, *args):
         super(CommandExecuteError, self).__init__(*args)
@@ -153,4 +165,14 @@ def print_cmdarg_error(t: Terminal, e: CommandArgError):
         strings.repeat(s, pos.start)
         strings.repeat(s, pos.end - pos.start, "^")
         t.both << s.getvalue()
-    t.both << f"{type(e).__name__}: {' '.join(e.args)}"
+    t.both << f"{type(e).__name__}: {e}"
+
+
+def print_cmdargs_empty_error(t: Terminal, e: CommandEmptyArgsError):
+    full = e.cmdargs.root.full()
+    t.both << full
+    with StringIO() as s:
+        strings.repeat(s, len(full))
+        s.write("^")
+        t.both << s.getvalue()
+    t.both << f"{type(e).__name__}: {e}"
