@@ -131,10 +131,10 @@ def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequ
     proj.pubspec = yml.load(proj.pubspec_fi.read())
     terminal.both << f'Project loaded: "{proj.name} {proj.version}".'
     terminal.both << f'Description: "{proj.desc}".'
-    import kite.using
-    kite.using.load()
-    import kite.compoenet
-    kite.compoenet.load()
+    import kite
+    kite.load(proj)
+    import loader
+    loader.load_modules(terminal, proj)
     load_cmds(proj=proj, cmdlist=cmdlist, terminal=terminal)
     if len(cmdargs) == 0:
         interactive_mode(proj=proj, cmdlist=cmdlist, terminal=terminal)

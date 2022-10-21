@@ -19,7 +19,23 @@ class Proj:
         self.modules = None
         self.usings: dict[str, "UsingDeclare"] = {}
         self.comps: dict[str, "CompType"] = {}
-        self.uncomps: set[str] = set()
+        self.essentials: set[str] = set()
+        self.unmodules: set[str] = set()
+
+    def add_module(self, module: "Module"):
+        self.modules[module.name] = module
+
+    def add_essentials(self, name: str):
+        self.essentials.add(name)
+
+    def add_unmodule(self, name: str):
+        self.unmodules.add(name)
+
+    def add_using(self, using: "UsingDeclare"):
+        self.usings[using.name] = using
+
+    def add_comp(self, comp: "CompType"):
+        self.comps[comp.name] = comp
 
     @property
     def name(self) -> str:
@@ -86,7 +102,11 @@ class CompType:
         elif mode == "dir":
             moduledir.createdir(self.name)
         else:
-            raise BaseException(f"unknown module creation mode {mode}")
+            raise Exception(f"unknown module creation mode {mode}")
+
+    def make_page(self, file: Directory | File) -> "CompPage":
+        t = CompPageType.File if isinstance(file, File) else CompPageType.Dir
+        return CompPage(self.name, file, t)
 
     def __str__(self):
         return self.name
@@ -125,17 +145,32 @@ class CompPageType(Enum):
 
 # noinspection PyTypeChecker
 class CompPage:
-    def __init__(self, file: Directory | File, typec: CompPageType):
+    def __init__(self, name: str, file: Directory | File, typec: CompPageType):
+        self.name = name
         self.file = file
         self.type = typec
 
+    def __str__(self):
+        return f"[{self.type}]{self.name}({self.file})"
+
+    def __repr__(self):
+        return str(self)
+
 
 class Module:
-    def __init__(self):
-        self.uncomps: dict[str, File] = {}
+    def __init__(self, name: str):
+        self.name = name
+        self.essentials: dict[str, File] = {}
         self.components: dict[CompType, CompPage] = {}
         self.sub: dict[str, Module] = {}
         self.parent: Module | None = None
+
+    def add_page(self, comp: CompType, fi: File | Directory):
+        self.components[comp] = comp.make_page(fi)
+
+    @property
+    def isroot(self) -> bool:
+        return self.parent is None
 
     def __getitem__(self, item: CompType) -> CompPage | None:
         if item in self:
@@ -145,6 +180,12 @@ class Module:
 
     def __contains__(self, item: CompType) -> bool:
         return item in self.components
+
+    def __str__(self):
+        return f"{self.name}"
+
+    def __repr__(self):
+        return str(self)
 
 
 Components = Sequence[CompType]
@@ -172,11 +213,12 @@ class Modules:
     def __init__(self, proj: Proj):
         self.proj = proj
         self.name2modules = {}
+        self.symbol: File | None = None
 
     def create(self, creation: ModuleCreation):
         name = creation.name
         if name in self.name2modules:
-            raise BaseException(f"duplicate module name {name}")
+            raise Exception(f"duplicate module name {name}")
         moduledir = self.proj.module_folder.subdir(name)
         for component in creation.components:
             mode = "file" if creation.simple else "dir"

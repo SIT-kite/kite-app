@@ -62,5 +62,5 @@ class TaskDispatcher:
                     # return None as default, which means task over.
                     pass
                 else:
-                    raise BaseException(f"unsupported coroutine type {type(new_task).__name__} {new_task}")
+                    raise Exception(f"unsupported coroutine type {type(new_task).__name__} {new_task}")
         return DispatcherState.End

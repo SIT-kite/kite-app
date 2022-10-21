@@ -84,7 +84,7 @@ class CommandList:
     def add_cmd(self, name: str, cmd: CommandProtocol):
         name = name.lower()
         if name in self.name2cmd:
-            raise BaseException(f"{name} command has already registered")
+            raise Exception(f"{name} command has already registered")
         self.log(f"command<{name}> loaded.")
         self.name2cmd[name] = cmd
 
@@ -131,14 +131,14 @@ class CommandList:
             return self.name2cmd[candidate]
 
 
-class CommandArgError(BaseException):
+class CommandArgError(Exception):
     def __init__(self, cmd: CommandProtocol, arg: Arg | None, *more):
         super(CommandArgError, self).__init__(*more)
         self.arg = arg
         self.cmd = cmd
 
 
-class CommandExecuteError(BaseException):
+class CommandExecuteError(Exception):
     def __init__(self, cmd: CommandProtocol, *args):
         super(CommandExecuteError, self).__init__(*args)
         self.cmd = cmd
