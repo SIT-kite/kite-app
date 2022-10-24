@@ -1,7 +1,9 @@
 import re
 import shlex
 from io import StringIO
-from typing import Sequence, Iterable, Optional, Union
+from typing import Sequence, Iterable, Optional, Union, TypeVar, Callable
+
+_empty_args = ()
 
 
 class Arg:
@@ -13,6 +15,18 @@ class Arg:
         self.parent: Optional["Args"] = None
         self.parent_index = 0
 
+    def __copy__(self) -> "Arg":
+        new = Arg(self.key, self.value)
+        new.parent = self.parent
+        new.parent_index = self.parent_index
+        return new
+
+    def copy(self, **kwargs) -> "Arg":
+        cloned = self.__copy__()
+        for k, v in kwargs.items():
+            setattr(cloned, k, v)
+        return cloned
+
     @property
     def name(self) -> str:
         return self.key
@@ -20,6 +34,18 @@ class Arg:
     @property
     def ispair(self) -> bool:
         return self.value is not None
+
+    def startswith(self, prefix: str) -> bool:
+        return self.key.startswith(prefix)
+
+    def endswith(self, suffix: str) -> bool:
+        return self.key.endswith(suffix)
+
+    def removeprefix(self, prefix) -> str:
+        return self.key.removeprefix(prefix)
+
+    def removesuffix(self, suffix) -> str:
+        return self.key.removesuffix(suffix)
 
     @staticmethod
     def by(arg: str) -> "Arg":
@@ -31,7 +57,7 @@ class Arg:
 
     def __str__(self):
         if self.ispair:
-            return f"{self.key}:{self.value}"
+            return f"{self.key}={self.value}"
         else:
             return f"{self.key}"
 
@@ -51,6 +77,28 @@ class Arg:
         else:
             return self.parent_index + self.parent.total_loffset
 
+    # noinspection PyProtectedMember
+    def __add__(self, args: "Args") -> "Args":
+        """
+        plus operator overloading
+        :param args:  added at last
+        :return: a new Args object with no parent
+        """
+        inner = list(args._args)
+        inner.append(self)
+        res = Args.lateinit()
+        res._args = res.copy_args(inner)
+        return res
+
+    def __eq__(self, b):
+        if isinstance(b, Arg):
+            return self.key == b.key and \
+                   self.value == b.value and \
+                   self.parent == b.parent and \
+                   self.parent_index == b.parent_index
+        else:
+            return False
+
 
 class ArgPosition:
     def __init__(self, start: int, end: int):
@@ -60,8 +108,18 @@ class ArgPosition:
 
 # noinspection SpellCheckingInspection
 class Args:
-    def __init__(self, ordered: Sequence[str]):
-        self._args = ordered
+    """
+    Args is a pure data class whose fields are immutable
+    and all methods are pure that return a new Args object.
+
+    You should never change the inner list [Args.ordered].
+    """
+
+    def __init__(self, args: Sequence[Arg]):
+        """
+        :param args: [lateinit] whose parent and parent_index should be initialized to this.
+        """
+        self._args = args
         self.parent: Args | None = None
         self.loffset = 0
         """
@@ -77,7 +135,11 @@ class Args:
         :param start: included
         :param end: excluded
         """
-        sub = Args(self._args[start:end])
+        subargs = []
+        sub = Args.lateinit()
+        for i, arg in enumerate(self._args[start:end]):
+            subargs.append(arg.copy(parent=sub, parent_index=i))
+        sub._args = subargs
         sub.parent = self
         sub.loffset = start
         sub.roffset = len(self._args) - end
@@ -97,13 +159,13 @@ class Args:
             start = max(0, start)
             end = size if item.stop is None else item.stop
             end = min(end, size)
-            return self.sub(start, end)
+            if start <= end:
+                return self.sub(start, end)
+            else:
+                raise IndexError(f"[{start},{end}) is out of range [0,{size})")
         elif isinstance(item, int):
             index = item % size
-            arg = Arg.by(self._args[index])
-            arg.parent = self
-            arg.parent_index = index
-            return arg
+            return self._args[index]
         raise Exception(f"unsupported type {type(item)}")
 
     @property
@@ -125,9 +187,35 @@ class Args:
         return total
 
     @staticmethod
-    def by(*, full: str) -> "Args":
-        args = shlex.split(full)
-        return Args(args)
+    def by(*, full: str = None, seq: Sequence[str] = None) -> "Args":
+        if full is not None:
+            args = shlex.split(full)
+        elif seq is not None:
+            args = seq
+        else:
+            raise ValueError("neither full nor seq is given")
+        res = Args.lateinit()
+        res._args = res.gen_args(args)
+        return res
+
+    @staticmethod
+    def lateinit() -> "Args":
+        return Args(_empty_args)
+
+    def gen_args(self, raw: Sequence[str]) -> Sequence[Arg]:
+        res = []
+        for i, s in enumerate(raw):
+            arg = Arg.by(s)
+            arg.parent = self
+            arg.parent_index = i
+            res.append(arg)
+        return res
+
+    def copy_args(self, args: Sequence[Arg]) -> Sequence[Arg]:
+        res = []
+        for i, arg in enumerate(args):
+            res.append(arg.copy(parent=self, parent_index=i))
+        return res
 
     @property
     def size(self):
@@ -157,11 +245,8 @@ class Args:
         """
         consuming the head
         """
-        for i, arg in enumerate(self._args):
-            res = Arg.by(arg)
-            res.parent = self
-            res.parent_index = i
-            yield res, self[i + 1:]
+        for i in range(len(self._args)):
+            yield self[i], self[i + 1:]
 
     def pop(self) -> tuple[Arg | None, "Args"]:
         """
@@ -176,13 +261,24 @@ class Args:
         """
         consuming the last
         """
-        for i, arg in enumerate(reversed(self._args)):
-            res = Arg.by(arg)
-            res.parent = self
-            res.parent_index = i % len(self._args)
-            yield res, self[0:-1]
+        for i in range(len(self._args)):
+            yield self[-i], self[0:-i]
 
-    def __iter__(self):
+    def __add__(self, arg: Arg | str) -> "Args":
+        """
+        plus operator overloading
+        :param arg: added at last
+        :return: a new Args object with no parent
+        """
+        if isinstance(arg, str):
+            arg = Arg.by(arg)
+        inner = list(self._args)
+        inner.insert(0, arg)
+        res = Args.lateinit()
+        res._args = res.copy_args(inner)
+        return res
+
+    def __iter__(self) -> Iterable[Arg]:
         return iter(self._args)
 
     def peekhead(self) -> Arg | None:
@@ -193,18 +289,18 @@ class Args:
 
     def located_full(self, target: int) -> tuple[str, ArgPosition]:
         if self.isroot:
-            return _join(self._args, target)
+            return _join_pos(self._args, target, mapping=str)
         else:
             raise Exception(f"{self} isn't a root args")
 
     def full(self) -> str:
         if self.isroot:
-            return shlex.join(self._args)
+            return _join(self._args, mapping=str)
         else:
             raise Exception(f"{self} isn't a root args")
 
     def __str__(self):
-        return shlex.join(self._args)
+        return _join(self._args, mapping=str)
 
     def __repr__(self):
         return str(self)
@@ -221,7 +317,15 @@ class Args:
         return cur
 
 
-def _join(split_command: Sequence[str], target: int) -> tuple[str, ArgPosition]:
+T = TypeVar("T")
+
+
+def _join(split_command, mapping: Callable[[T], str] = None):
+    """Return a shell-escaped string from *split_command*."""
+    return ' '.join(_quote(arg) if mapping is None else _quote(mapping(arg)) for arg in split_command)
+
+
+def _join_pos(split_command: Sequence[T], target: int, mapping: Callable[[T], str] = None) -> tuple[str, ArgPosition]:
     """
     Return a tuple:
 
@@ -237,6 +341,8 @@ def _join(split_command: Sequence[str], target: int) -> tuple[str, ArgPosition]:
         for i, arg in enumerate(split_command):
             if i == target:
                 start = counter
+            if mapping is not None:
+                arg = mapping(arg)
             quoted = _quote(arg)
             counter += len(quoted)
             if i == target:
@@ -261,3 +367,46 @@ def _quote(s):
     # use single quotes, and put single quotes into double quotes
     # the string $'b is then quoted as '$'"'"'b'
     return "'" + s.replace("'", "'\"'\"'") + "'"
+
+
+def split_multicmd(full: Args, separator="+") -> Sequence[Args]:
+    """
+    split multi-cmd by [separator].
+    :return a list of cmd args with no parent
+    """
+    res = []
+    queue = []
+    args = Args.lateinit()
+    total = 0
+    for i, arg in enumerate(full):
+        if not arg.ispair and arg.key == separator:
+            if len(queue) > 0:
+                args._args = queue
+                res.append(args)
+                args = Args.lateinit()
+                queue = []
+        else:
+            queue.append(arg.copy(parent=args, parent_inex=total - i))
+        total += 1
+    if len(queue) > 0:
+        args._args = queue
+        res.append(args)
+    return res
+
+
+def group_args(args: Args) -> dict[str, Args]:
+    """
+    group by --xxx.
+    the rightmost will overwrite what was parsed formally
+    """
+    allcmd = []
+    res = {}
+    group = None
+    start_index = 0
+    for i, arg in enumerate(args):
+        if not arg.ispair and arg.startswith("--"):
+            group = arg.removeprefix("--")
+            start_index = i
+        else:
+            pass
+    return res

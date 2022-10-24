@@ -1,6 +1,6 @@
 from dart import DartFi
 from filesystem import Directory
-from flutter import Module, CompPage, CompPageType, Proj, Modules
+from flutter import Module, Proj, Modules
 from ui import Terminal
 
 

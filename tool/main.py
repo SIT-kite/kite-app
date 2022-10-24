@@ -7,9 +7,10 @@ from typing import Sequence, Iterator
 
 import build
 import cmd
+import fuzzy
 import log
 import strings
-from args import Args
+from args import Args, split_multicmd
 from cmd import CommandList, CmdContext, CommandProtocol, CommandExecuteError, CommandArgError, CommandEmptyArgsError
 from coroutine import TaskDispatcher, DispatcherState
 from filesystem import File, Directory
@@ -156,32 +157,61 @@ def log_traceback(terminal: Terminal):
 
 
 def cli_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequence[str]):
-    args = Args(cmdargs)
-    # read first args as command
-    command, args = args.poll()
-    if command.ispair:
-        terminal.both << f'invalid command format "{command}".'
-        return
-    else:
-        executable = cmdlist[command.key]
+    fullargs = Args.by(seq=cmdargs)
+    all_cmdargs = split_multicmd(fullargs)
+    cmd_size = len(all_cmdargs)
+    if cmd_size == 0:
+        terminal.both << f"no command given in CLI mode."
+    elif cmd_size == 1:
+        # read first args as command
+        args = all_cmdargs[0]
+        command, args = args.poll()
+        if command.ispair:
+            terminal.both << f'invalid command format "{command}".'
+            return
+        cmdname = command.key
+        executable = cmdlist[cmdname]
         if executable is None:
-            terminal.both << f'❗ command<{command.key}> not found.'
+            terminal.both << f'❗ command<{cmdname}> not found.'
+            matched, ratio = fuzzy.match(cmdname, cmdlist.name2cmd.keys())
+            if matched is not None and ratio > fuzzy.at_least:
+                terminal << f'👀 do you mean command<{matched}>?'
             return
         else:
-            ctx = CmdContext(proj, terminal, cmdlist, args)
-            terminal.both << _get_header_entry(executable)
-            try:
-                executable.execute_cli(ctx)
-            except CommandArgError as e:
-                cmd.print_cmdarg_error(terminal, e)
-                log_traceback(terminal)
-            except CommandEmptyArgsError as e:
-                cmd.print_cmdargs_empty_error(terminal, e)
-                log_traceback(terminal)
-            except CommandExecuteError as e:
-                terminal.both << f"{type(e).__name__}: {e}"
-                log_traceback(terminal)
-            terminal.both << _get_header_existence(executable)
+            cli_execute_cmd(proj=proj, cmdlist=cmdlist, terminal=terminal, executable=executable, args=args)
+    else:
+        # prepare commands to run
+        exe_args = []
+        # check if all of them are executable
+        for command, args in (args.poll() for args in all_cmdargs):
+            if command.ispair:
+                terminal.both << f'invalid command format "{command}".'
+                return
+            cmdname = command.key
+            executable = cmdlist[cmdname]
+            if executable is None:
+                terminal.both << f'❗ command<{cmdname}> not found.'
+                return
+            exe_args.append((executable, args))
+        for command, args in exe_args:
+            cli_execute_cmd(proj=proj, cmdlist=cmdlist, terminal=terminal, executable=command, args=args)
+
+
+def cli_execute_cmd(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, executable: CommandProtocol, args: Args):
+    ctx = CmdContext(proj, terminal, cmdlist, args)
+    terminal.both << _get_header_entry(executable)
+    try:
+        executable.execute_cli(ctx)
+    except CommandArgError as e:
+        cmd.print_cmdarg_error(terminal, e)
+        log_traceback(terminal)
+    except CommandEmptyArgsError as e:
+        cmd.print_cmdargs_empty_error(terminal, e)
+        log_traceback(terminal)
+    except CommandExecuteError as e:
+        terminal.both << f"{type(e).__name__}: {e}"
+        log_traceback(terminal)
+    terminal.both << _get_header_existence(executable)
 
 
 def interactive_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal):
