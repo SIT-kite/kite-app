@@ -17,13 +17,14 @@
  */
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:kite/backend.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:version/version.dart';
 
 import 'logger.dart';
 
-const String appVersionUrl = 'https://kite.sunnysab.cn/version.txt';
+const String appVersionUrl = '${Backend.kite}/version.txt';
 
 class AppVersion {
   String platform;

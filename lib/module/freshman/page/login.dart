@@ -86,7 +86,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       Navigator.pushReplacementNamed(context, "/home");
 
       // 预计需要写一份新生的使用说明
-      // GlobalLauncher.launch('https://kite.sunnysab.cn/wiki/kite-app/features/');
+      // GlobalLauncher.launch('${Backend.kite}/wiki/kite-app/features/');
       return;
     } catch (e) {
       // TODO: optimize UX

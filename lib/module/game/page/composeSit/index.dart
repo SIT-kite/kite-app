@@ -30,7 +30,7 @@ class ComposeSitPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SimpleWebViewPage(
-      initialUrl: 'https://kite.sunnysab.cn/game/composeSit',
+      initialUrl: '${Backend.kite}/game/composeSit',
       showLoadInBrowser: true,
       injectJsRules: [
         InjectJsRuleItem(injectTime: InjectJsTime.onPageStarted, rule: FunctionalRule((x) => true), javascript: '''

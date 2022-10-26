@@ -97,6 +97,10 @@ def _get_header_existence(command: CommandProtocol) -> str:
         return line
 
 
+def _get_header_switch(pre: CommandProtocol, nxt: CommandProtocol) -> str:
+    return strings.center_text_in_line(f"<<[{pre.name}]>>[{nxt.name}]<<", length=_header_length)
+
+
 def clear_old_log(log_dir: Directory):
     now = datetime.datetime.now()
     for logfi in log_dir.listing_fis():
@@ -178,7 +182,9 @@ def cli_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: S
                 terminal << f'👀 do you mean command<{matched}>?'
             return
         else:
+            terminal.both << _get_header_entry(command)
             cli_execute_cmd(proj=proj, cmdlist=cmdlist, terminal=terminal, executable=executable, args=args)
+            terminal.both << _get_header_existence(command)
     else:
         # prepare commands to run
         exe_args = []
@@ -193,13 +199,21 @@ def cli_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: S
                 terminal.both << f'❗ command<{cmdname}> not found.'
                 return
             exe_args.append((executable, args))
-        for command, args in exe_args:
+        last = None
+        for i, pair in enumerate(exe_args):
+            command, args = pair
+            if last is None:
+                terminal.both << _get_header_entry(command)
+            else:
+                terminal.both << _get_header_switch(last, command)
             cli_execute_cmd(proj=proj, cmdlist=cmdlist, terminal=terminal, executable=command, args=args)
+            if i == len(exe_args) - 1:
+                terminal.both << _get_header_existence(command)
+            last = command
 
 
 def cli_execute_cmd(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, executable: CommandProtocol, args: Args):
     ctx = CmdContext(proj, terminal, cmdlist, args)
-    terminal.both << _get_header_entry(executable)
     try:
         executable.execute_cli(ctx)
     except CommandArgError as e:
@@ -211,7 +225,6 @@ def cli_execute_cmd(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, exe
     except CommandExecuteError as e:
         terminal.both << f"{type(e).__name__}: {e}"
         log_traceback(terminal)
-    terminal.both << _get_header_existence(executable)
 
 
 def interactive_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal):

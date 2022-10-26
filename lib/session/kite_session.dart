@@ -24,9 +24,10 @@ import 'package:kite/storage/dao/kite.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
 
+import '../module/activity/using.dart';
 import 'dio_common.dart';
 
-const String _baseUrl = 'https://kite.sunnysab.cn/api/v2';
+const String _baseUrl = '${Backend.kite}/api/v2';
 
 class KiteSession implements ISession {
   final Dio dio;

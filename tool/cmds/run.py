@@ -74,7 +74,7 @@ class RunCmd:
     def help(ctx: CmdContext):
         t = ctx.term
         t << "run <script name>"
-        t << "|-- run a script"
+        t << "| run a script"
 
 
 def build_globals(g: dict[str, Any]):

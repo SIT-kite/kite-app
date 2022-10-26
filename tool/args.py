@@ -372,7 +372,7 @@ def _quote(s):
 def split_multicmd(full: Args, separator="+") -> Sequence[Args]:
     """
     split multi-cmd by [separator].
-    :return a list of cmd args with no parent
+    :return: a list of cmd args with no parent
     """
     res = []
     queue = []

@@ -12,13 +12,13 @@ class HelpBoxTerminal(Terminal):
         self.inner = inner
 
     def print(self, *args):
-        self.inner.print("|--", *args)
+        self.inner.print("|", *args)
 
     def log(self, *args):
         self.inner.log(*args)
 
     def input(self, prompt: str) -> str:
-        return self.inner.input(f"|-- {prompt}")
+        return self.inner.input(f"| {prompt}")
 
     def print_log(self, *args):
         self.print(*args)
@@ -66,4 +66,4 @@ class HelpCmd(Command):
 
     def help(self, ctx: CmdContext):
         ctx.term << 'help <command name>'
-        ctx.term << "|- show help info of a command"
+        ctx.term << "| show help info of a command"
