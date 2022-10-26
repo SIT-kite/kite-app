@@ -153,6 +153,7 @@ def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequ
         interactive_mode(proj=proj, cmdlist=cmdlist, terminal=terminal)
     else:
         cli_mode(proj=proj, cmdlist=cmdlist, terminal=terminal, cmdargs=cmdargs)
+    proj.settings.save()
     terminal.both << "🪁 Kite Tool exits."
 
 

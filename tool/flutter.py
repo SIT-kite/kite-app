@@ -2,7 +2,7 @@ from enum import Enum, auto
 from io import StringIO
 from typing import Sequence, Literal
 
-from dart import DartFi
+from dart import DartFi, DartRunner
 from filesystem import Directory, File
 from serialize import Serializer
 from settings import SettingsBox
@@ -26,6 +26,7 @@ class Proj:
         self.scripts = ScriptManger()
         self.serializer = Serializer()
         self.settings = SettingsBox(self.serializer, self.settings_fi)
+        self.runner = DartRunner(self.root)
 
     def add_module(self, module: "Module"):
         self.modules[module.name] = module

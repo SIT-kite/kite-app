@@ -154,7 +154,7 @@ class Args:
             elif isinstance(item, int):
                 return None
             else:
-                raise Exception("args is empty")
+                return self.sub_empty()
         if isinstance(item, slice):
             start = 0 if item.start is None else item.start
             start = max(0, start)
