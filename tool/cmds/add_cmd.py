@@ -1,27 +1,21 @@
 from typing import Iterable
 
-from cmd import CmdContext, CommandArgError
-from flutter import Proj
+from cmd import CmdContext
 
 
-def lint(ctx: CmdContext):
-    pass
-
-
-class LintCmd:
-    name = "lint"
+class AddCmdCmd:
+    name = "addcmd"
 
     @staticmethod
     def execute_cli(ctx: CmdContext):
-        lint(ctx)
+        pass
 
     @staticmethod
     def execute_inter(ctx: CmdContext) -> Iterable:
-        lint(ctx)
         yield
 
     @staticmethod
     def help(ctx: CmdContext):
         t = ctx.term
-        t << "lint"
-        t << "|-- format .dart files"
+        t << "addcmd <script name>"
+        t << "|-- run a script"

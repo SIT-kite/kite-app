@@ -253,11 +253,6 @@ class Modules:
         return str(self)
 
 
-class PyScript:
-    def __init__(self, fi: File):
-        self.file = fi
-
-
 class KiteScript:
     def __init__(self, fi: File):
         self.file = fi
@@ -265,26 +260,18 @@ class KiteScript:
 
 class ScriptManger:
     def __init__(self):
-        self._pyscripts: dict[str, PyScript] = {}
         self._kitescripts: dict[str, KiteScript] = {}
-        self._scripts: dict[str, KiteScript | PyScript] = {}
 
-    def __getitem__(self, name: str) -> KiteScript | PyScript | None:
+    def __getitem__(self, name: str) -> KiteScript | None:
         if name in self._kitescripts:
             return self._kitescripts[name]
-        elif name in self._pyscripts:
-            return self._pyscripts[name]
         else:
             return None
 
-    def add_py(self, fi: File):
-        name = fi.name_without_extension
-        script = PyScript(fi)
-        self._pyscripts[name] = script
-        self._scripts[name] = script
-
-    def add_kite(self, fi: File):
+    def add(self, fi: File):
         name = fi.name_without_extension
         script = KiteScript(fi)
         self._kitescripts[name] = script
-        self._scripts[name] = script
+
+class Settings:
+    pass
