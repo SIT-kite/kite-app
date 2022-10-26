@@ -1,7 +1,15 @@
 from types import NoneType
 from typing import Any
 import json
-from pydoc import locate
+
+# noinspection PyBroadException
+try:
+    # noinspection PyProtectedMember
+    from pydoc import locate
+
+    _locate_enabled = True
+except:
+    _locate_enabled = False
 
 _primitives = (str, int, float, bool, list, dict, tuple, NoneType)
 
@@ -47,7 +55,9 @@ class Serializer:
         return None
 
     def __lshift__(self, t: type):
-        name = get_fullname(t)
+        self.add_type(get_fullname(t), t)
+
+    def add_type(self, name: str, t: type):
         self._name2type[name] = t
         self._type2name[t] = name
 
@@ -56,8 +66,10 @@ class Serializer:
         typename = self[t]
         if typename is not None:
             return typename
-        elif self.auto_type:
-            return get_fullname(obj)
+        elif self.auto_type and _locate_enabled:
+            typename = get_fullname(obj)
+            self.add_type(typename, t)
+            return typename
         else:
             raise ValueError(f"type<{t}> isn't registered")
 
@@ -66,8 +78,10 @@ class Serializer:
         t = self[name]
         if t is not None:
             return t
-        elif self.auto_type:
-            return locate(name)
+        elif self.auto_type and _locate_enabled:
+            t = locate(name)
+            self.add_type(name, t)
+            return t
         else:
             raise ValueError(f"type name<{name}> isn't registered")
 

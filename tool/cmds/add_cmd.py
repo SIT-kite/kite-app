@@ -3,6 +3,11 @@ from typing import Iterable
 from cmd import CmdContext
 
 
+class ExtraCommandsSettings:
+    def __init__(self):
+        self.name2cmdargs: dict[str, str] = {}
+
+
 class AddCmdCmd:
     name = "addcmd"
 

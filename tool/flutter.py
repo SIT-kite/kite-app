@@ -4,6 +4,8 @@ from typing import Sequence, Literal
 
 from dart import DartFi
 from filesystem import Directory, File
+from serialize import Serializer
+from settings import SettingsBox
 
 dart_tool = ".dart_tool"
 kite_tool = ".kite_tool"
@@ -22,6 +24,8 @@ class Proj:
         self.comps: dict[str, "CompType"] = {}
         self.unmodules: set[str] = set()
         self.scripts = ScriptManger()
+        self.serializer = Serializer()
+        self.settings = SettingsBox(self.serializer, self.settings_fi)
 
     def add_module(self, module: "Module"):
         self.modules[module.name] = module
@@ -62,6 +66,10 @@ class Proj:
     @property
     def scripts_dir(self) -> Directory:
         return self.root.subdir("scripts")
+
+    @property
+    def settings_fi(self) -> File:
+        return self.root.subfi(dart_tool, kite_tool, "settings.json")
 
     @property
     def kite_log_dir(self) -> Directory:
@@ -272,6 +280,3 @@ class ScriptManger:
         name = fi.name_without_extension
         script = KiteScript(fi)
         self._kitescripts[name] = script
-
-class Settings:
-    pass
