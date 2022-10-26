@@ -14,7 +14,7 @@ except:
 _primitives = (str, int, float, bool, list, dict, tuple, NoneType)
 
 
-class Object:
+class FallbackType:
     pass
 
 
@@ -22,8 +22,8 @@ def is_primitive(obj: Any) -> bool:
     return isinstance(obj, _primitives)
 
 
-def get_fullname(obj: Any):
-    klass = obj.__class__
+def get_fullname(clz: Any):
+    klass = clz.__class__
     module = klass.__module__
     if module == 'builtins':
         return klass.__qualname__  # avoid outputs like 'builtins.str'
@@ -40,6 +40,7 @@ class Serializer:
         self._type2name: dict[type, str] = {}
         self.respect_private = None
         self.auto_type = True
+        self.fallback = True
 
     def __setitem__(self, name: str, t: type):
         self._name2type[name] = t
@@ -70,6 +71,10 @@ class Serializer:
             typename = get_fullname(obj)
             self.add_type(typename, t)
             return typename
+        elif self.fallback:
+            typename = get_fullname(FallbackType)
+            self.add_type(typename, t)
+            return typename
         else:
             raise ValueError(f"type<{t}> isn't registered")
 
@@ -80,8 +85,12 @@ class Serializer:
             return t
         elif self.auto_type and _locate_enabled:
             t = locate(name)
-            self.add_type(name, t)
-            return t
+            if t is not None:
+                self.add_type(name, t)
+                return t
+        if self.fallback:
+            self.add_type(name, FallbackType)
+            return FallbackType
         else:
             raise ValueError(f"type name<{name}> isn't registered")
 
@@ -109,17 +118,20 @@ class Serializer:
             typename = d["type"]
             t = self.name2type(typename)
             obj = t()
+            is_fallback = t == FallbackType
             for k, v in d.items():
                 if k == "type":
                     continue
-                if hasattr(obj, k):
+                if is_fallback or hasattr(obj, k):
                     if isinstance(v, dict):
                         v = self.dict2obj(v)
                     setattr(obj, k, v)
             return obj
         else:
-            obj = Object()
+            obj = FallbackType()
             for k, v in d.items():
+                if isinstance(v, dict):
+                    v = self.dict2obj(v)
                 setattr(obj, k, v)
             return obj
 

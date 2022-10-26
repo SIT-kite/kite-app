@@ -51,7 +51,10 @@ class AddCopyRightCmd:
         if not ctx.args.isempty:
             raise CommandArgError(AddCopyRightCmd, ctx.args[0], "no arg required")
         total = try_addcopyright(ctx)
-        ctx.term << f"files changed: {total}"
+        if total == 0:
+            ctx.term << "no file changed"
+        else:
+            ctx.term << f"files changed: {total}"
 
     @staticmethod
     def execute_inter(ctx: CmdContext):

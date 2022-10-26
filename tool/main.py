@@ -134,6 +134,7 @@ def main():
 def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequence[str]):
     terminal.logging << f'Project root found at "{proj.root}".'
     terminal.both << f'🪁 Kite Tool v{version}'
+    proj.settings.load()
     import yml
     proj.pubspec = yml.load(proj.pubspec_fi.read())
     terminal.both << f'Project loaded: "{proj.name} {proj.version}".'

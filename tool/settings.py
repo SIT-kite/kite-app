@@ -1,10 +1,16 @@
 import json
-from typing import TypeVar, Any
+from typing import Any
 
 from filesystem import File
-from serialize import Serializer
+from serialize import Serializer, FallbackType
 
-T = TypeVar("T")
+
+def _cast_type(source: FallbackType, t: type):
+    res = t()
+    for k, v in vars(source).items():
+        if hasattr(res, k):
+            setattr(res, k, v)
+    return res
 
 
 class SettingsBox:
@@ -28,9 +34,13 @@ class SettingsBox:
         content = json.dumps(res, ensure_ascii=False, indent=2)
         self.box.write(content)
 
-    def get(self, name: str, settings_type: T = Any) -> T:
+    def get(self, name: str, settings_type: type = Any) -> Any:
         if name in self._name2settings:
-            return self._name2settings[name]
+            recast = self._name2settings[name]
+            if not isinstance(recast, settings_type):
+                recast = _cast_type(recast, settings_type)
+                self._name2settings[name] = recast
+            return recast
         else:
             settings = settings_type()
             self._name2settings[name] = settings
