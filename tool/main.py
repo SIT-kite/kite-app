@@ -80,20 +80,22 @@ _header_length = 48
 
 
 def _get_header_entry(command: CommandProtocol) -> str:
-    if command in _header_entry_cache:
-        return _header_entry_cache[command]
+    name = command.name
+    if name in _header_entry_cache:
+        return _header_entry_cache[name]
     else:
-        line = strings.center_text_in_line(f">>[{command.name}]<<", length=_header_length)
-        _header_entry_cache[command] = line
+        line = strings.center_text_in_line(f">>[{name}]<<", length=_header_length)
+        _header_entry_cache[name] = line
         return line
 
 
 def _get_header_existence(command: CommandProtocol) -> str:
-    if command in _header_existence_cache:
-        return _header_existence_cache[command]
+    name = command.name
+    if name in _header_existence_cache:
+        return _header_existence_cache[name]
     else:
-        line = strings.center_text_in_line(f"<<[{command.name}]>>", length=_header_length)
-        _header_existence_cache[command] = line
+        line = strings.center_text_in_line(f"<<[{name}]>>", length=_header_length)
+        _header_existence_cache[name] = line
         return line
 
 

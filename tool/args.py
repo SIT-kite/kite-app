@@ -4,6 +4,7 @@ from io import StringIO
 from typing import Sequence, Iterable, Optional, Union, TypeVar, Callable
 
 _empty_args = ()
+T = TypeVar("T")
 
 
 class Arg:
@@ -145,13 +146,13 @@ class Args:
         sub.roffset = len(self._args) - end
         return sub
 
-    def __getitem__(self, item: slice | int) -> Union["Args", Arg]:
+    def __getitem__(self, item: slice | int) -> Union["Args", Arg, None]:
         size = len(self._args)
         if size == 0:
             if isinstance(item, slice) and item.start is None and item.stop is None and item.step is None:
-                res = Args(())
-                res.parent = self
-                return res
+                return self.sub_empty()
+            elif isinstance(item, int):
+                return None
             else:
                 raise Exception("args is empty")
         if isinstance(item, slice):
@@ -162,7 +163,7 @@ class Args:
             if start <= end:
                 return self.sub(start, end)
             else:
-                raise IndexError(f"[{start},{end}) is out of range [0,{size})")
+                return self.sub_empty()
         elif isinstance(item, int):
             index = item % size
             return self._args[index]
@@ -197,6 +198,11 @@ class Args:
         res = Args.lateinit()
         res._args = res.gen_args(args)
         return res
+
+    def sub_empty(self) -> "Args":
+        sub = Args(_empty_args)
+        sub.parent = self
+        return sub
 
     @staticmethod
     def lateinit() -> "Args":
@@ -237,7 +243,7 @@ class Args:
         consume the head
         """
         if len(self._args) == 0:
-            return None, Args(())
+            return None, self.sub_empty()
         else:
             return self[0], self[1:]
 
@@ -253,7 +259,7 @@ class Args:
         consume the last
         """
         if len(self._args) == 0:
-            return None, Args(())
+            return None, self.sub_empty()
         else:
             return self[-1], self[0:-1]
 
@@ -315,9 +321,6 @@ class Args:
         while cur.parent is not None:
             cur = cur.parent
         return cur
-
-
-T = TypeVar("T")
 
 
 def _join(split_command, mapping: Callable[[T], str] = None):
@@ -394,19 +397,42 @@ def split_multicmd(full: Args, separator="+") -> Sequence[Args]:
     return res
 
 
-def group_args(args: Args) -> dict[str, Args]:
+def _get_or(di: dict, key, fallback) -> T:
+    if key in di:
+        return di[key]
+    else:
+        v = fallback()
+        di[key] = v
+        return v
+
+
+def _append_group(di, group, args):
+    grouped: list[Args] = _get_or(di, group, fallback=list)
+    grouped.append(args)
+
+
+def group_args(args: Args, group_head: str = "--") -> dict[str | None, list[Args]]:
     """
-    group by --xxx.
-    the rightmost will overwrite what was parsed formally
+    grouped by "--xxx" as default.
+    :return: {*group_name:[*matched_args],None:[ungrouped]}
     """
-    allcmd = []
     res = {}
     group = None
-    start_index = 0
+    grouped_start = -1
+    cur_group_start = 0
     for i, arg in enumerate(args):
-        if not arg.ispair and arg.startswith("--"):
-            group = arg.removeprefix("--")
-            start_index = i
-        else:
-            pass
+        if not arg.ispair and arg.startswith(group_head):
+            if grouped_start < 0:
+                grouped_start = i
+            # it's a group. now group up the former.
+            if group is not None:
+                # plus 1 to ignore group name itself
+                _append_group(res, group, args[cur_group_start + 1:i])
+            group = arg.removeprefix(group_head)
+            cur_group_start = i
+    if group is not None:
+        _append_group(res, group, args[cur_group_start + 1:args.size])
+    if grouped_start < 0:
+        grouped_start = args.size
+    _append_group(res, None, args[0:grouped_start])
     return res

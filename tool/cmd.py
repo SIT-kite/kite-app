@@ -136,6 +136,23 @@ class CommandList:
     def __repr__(self):
         return str(self)
 
+    def __len__(self) -> int:
+        return self.size
+
+    def browse_by_page(self, cmd_per_page: int) -> Iterable[tuple[int, Iterable[CommandProtocol]]]:
+        cur = []
+        for i, cmd in enumerate(self.name2cmd.values()):
+            if i % cmd_per_page == 0 and i != 0:
+                yield i // cmd_per_page, cur
+                cur.clear()
+            else:
+                cur.append(cmd)
+        if len(cur) > 0:
+            yield (self.size - 1) // cmd_per_page, cur
+
+    def calc_total_page(self, cmd_per_page: int) -> int:
+        return self.size // cmd_per_page
+
 
 class CommandArgError(Exception):
     def __init__(self, cmd: CommandProtocol, arg: Arg | None, *more):
