@@ -10,6 +10,7 @@ from settings import SettingsBox
 dart_tool = ".dart_tool"
 kite_tool = ".kite_tool"
 pubspec_yaml = "pubspec.yaml"
+extra_commands = "extra_commands"
 
 
 class Proj:
@@ -284,10 +285,10 @@ class ScriptManger:
 
 
 class ExtraCommandEntry:
-    def __init__(self):
-        self.name = "__default__"
-        self.fullargs = ""
-        self.helpinfo = ""
+    def __init__(self, name="__default__", fullargs="", helpinfo=""):
+        self.name = name
+        self.fullargs = fullargs
+        self.helpinfo = helpinfo
 
 
 class ExtraCommandsConf:
@@ -302,3 +303,6 @@ class ExtraCommandsConf:
             return self.name2commands[key]
         else:
             return None
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.name2commands

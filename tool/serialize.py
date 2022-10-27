@@ -101,7 +101,13 @@ class Serializer:
 
     def obj2dict(self, obj: Any) -> Any:
         if is_primitive(obj):
-            return obj
+            if isinstance(obj, dict):
+                res = {}
+                for k, v in obj.items():
+                    res[k] = self.obj2dict(v)
+                return res
+            else:
+                return obj
         else:
             res = {
                 "type": self.get_typename(obj)

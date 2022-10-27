@@ -8,7 +8,8 @@ T = TypeVar("T")
 
 
 class Arg:
-    def __init__(self, key: str, value: str = None):
+    def __init__(self, full: str, key: str, value: str = None):
+        self.full = full
         self.key = key.strip()
         if value is not None:
             value = value.strip()
@@ -17,7 +18,7 @@ class Arg:
         self.parent_index = 0
 
     def __copy__(self) -> "Arg":
-        new = Arg(self.key, self.value)
+        new = Arg(full=self.full, key=self.key, value=self.value)
         new.parent = self.parent
         new.parent_index = self.parent_index
         return new
@@ -52,15 +53,12 @@ class Arg:
     def by(arg: str) -> "Arg":
         parts = arg.split("=")
         if len(parts) == 1:
-            return Arg(key=parts[0])
+            return Arg(full=arg, key=parts[0])
         else:
-            return Arg(key=parts[0], value=parts[1])
+            return Arg(full=arg, key=parts[0], value=parts[1])
 
     def __str__(self):
-        if self.ispair:
-            return f"{self.key}={self.value}"
-        else:
-            return f"{self.key}"
+        return self.full
 
     def __repr__(self):
         return str(self)

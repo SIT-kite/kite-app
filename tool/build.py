@@ -38,7 +38,7 @@ def _build_contents(t: Terminal, candidates: dict[str, Any], row: int):
     for i, pair in enumerate(li):
         key, value = pair
         if i != 0 and i % row == 0:
-            t << s.getvalue()
+            t << f"👀 {s.getvalue()}"
             s.close()
             s = StringIO()
         else:

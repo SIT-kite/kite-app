@@ -21,12 +21,16 @@ class SettingsBox:
         self.serializer = serializer
         self._name2settings = {}
 
+    # noinspection PyBroadException
     def load(self):
         content = self.box.read()
-        di: dict[str, Any] = json.loads(content)
-        for name, v in di.items():
-            settings = self.serializer.dict2obj(v)
-            self._name2settings[name] = settings
+        try:
+            di: dict[str, Any] = json.loads(content)
+            for name, v in di.items():
+                settings = self.serializer.dict2obj(v)
+                self._name2settings[name] = settings
+        except:
+            pass
 
     def save(self):
         res = {}

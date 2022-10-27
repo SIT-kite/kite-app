@@ -67,15 +67,20 @@ def find_project_root(start: str | Directory, max_depth=20) -> Directory | None:
         layer += 1
 
 
-def load_cmds(*, proj: Proj, cmdlist: CommandList, terminal: Terminal):
+def load_cmds(*, proj: Proj, cmdlist: CommandList, t: Terminal):
     import cmds
     cmds.load_static_cmd(cmdlist)
     from cmds.help import HelpCmd
     cmdlist << HelpCmd(cmdlist)
-    # load custom commands
-    extra = proj.settings.get("extra_commands", settings_type=ExtraCommandsConf)
+    builtin = set(cmdlist.keys())
+    # load extra commands
+    import flutter
+    extra = proj.settings.get(flutter.extra_commands, settings_type=ExtraCommandsConf)
     for name, entry in extra.name2commands.items():
-        cmdlist << cmd.CommandDelegate(name, entry.fullargs, entry.helpinfo)
+        if name in builtin:
+            t.both << f"builtin command<{name}> can't be overriden."
+        else:
+            cmdlist << cmd.CommandDelegate(name, entry.fullargs, entry.helpinfo)
 
 
 _header_entry_cache = {}
@@ -135,7 +140,7 @@ def main():
         print(f"❌ project root not found")
 
 
-def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequence[str]):
+def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequence[str] | Args):
     terminal.logging << f'Project root found at "{proj.root}".'
     terminal.both << f'🪁 Kite Tool v{version}'
     proj.settings.load()
@@ -145,7 +150,7 @@ def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequ
     terminal.both << f'Description: "{proj.desc}".'
     import kite
     kite.load(proj)
-    load_cmds(proj=proj, cmdlist=cmdlist, terminal=terminal)
+    load_cmds(proj=proj, cmdlist=cmdlist, t=terminal)
     import loader
     from loader import DuplicateNameCompError
     try:
@@ -157,7 +162,11 @@ def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequ
     if len(cmdargs) == 0:
         interactive_mode(proj=proj, cmdlist=cmdlist, terminal=terminal)
     else:
-        cli_mode(proj=proj, cmdlist=cmdlist, terminal=terminal, cmdargs=cmdargs)
+        if isinstance(cmdargs, Args):
+            fullargs = cmdargs
+        else:
+            fullargs = Args.by(seq=cmdargs)
+        cli_mode(proj=proj, cmdlist=cmdlist, terminal=terminal, cmdargs=fullargs)
     proj.settings.save()
     terminal.both << "🪁 Kite Tool exits."
 
@@ -168,9 +177,8 @@ def log_traceback(terminal: Terminal):
         terminal << "ℹ️ full traceback was printed into log."
 
 
-def cli_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequence[str]):
-    fullargs = Args.by(seq=cmdargs)
-    all_cmdargs = split_multicmd(fullargs)
+def cli_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Args):
+    all_cmdargs = split_multicmd(cmdargs)
     cmd_size = len(all_cmdargs)
     if cmd_size == 0:
         terminal.both << f"no command given in CLI mode."
@@ -238,13 +246,13 @@ def cli_execute_cmd(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, exe
 def interactive_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal):
     terminal.line(48)
     terminal << '[interactive mode], enter "#" to exit current layer.'
-    all_cmd = ', '.join(cmdlist.keys())
-    all_cmd_prompt = f"all commands = [{all_cmd}]"
+    # all_cmd = ', '.join(cmdlist.keys())
+    # all_cmd_prompt = f"all commands = [{all_cmd}]"
 
     def running() -> Iterator:
         dispatcher = TaskDispatcher()
         while True:
-            terminal << all_cmd_prompt
+            # terminal << all_cmd_prompt
             select_task = build.select_one(cmdlist.name2cmd, terminal, prompt="cmd=", fuzzy_match=True)
             yield select_task
             executable: CommandProtocol = select_task.result

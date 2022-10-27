@@ -41,8 +41,8 @@ class HelpCmd(Command):
         self.cmd_per_page = 5
 
     def execute_inter(self, ctx: CmdContext) -> Iterable:
-        all_cmd = ', '.join(ctx.cmdlist.keys())
-        ctx.term << f"all commands = [{all_cmd}]"
+        # all_cmd = ', '.join(ctx.cmdlist.keys())
+        # ctx.term << f"all commands = [{all_cmd}]"
         while True:
             ctx.term << f'plz select commands to show info.'
             select_task = build.select_many(ctx.cmdlist.name2cmd, ctx.term, prompt="I want=")
