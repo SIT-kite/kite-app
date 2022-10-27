@@ -3,7 +3,7 @@ from typing import Callable, Iterable
 
 import fuzzy
 import strings
-from args import Args, Arg
+from args import Args, Arg, split_multicmd
 from flutter import Proj
 from ui import Terminal
 
@@ -53,8 +53,8 @@ class Command:
     - execute_inter(ctx) -- execute the command in interactive mode. return an Iterator as a coroutine
     """
 
-    def __init__(self):
-        self.name = "__default__"
+    def __init__(self, name="__default__"):
+        self.name = name
 
     def execute_cli(self, ctx: CmdContext):
         pass
@@ -122,6 +122,9 @@ class CommandList:
 
     def values(self):
         return iter(self.name2cmd.values())
+
+    def items(self):
+        return iter(self.name2cmd.items())
 
     def fuzzy_match(self, name: str, threshold: float) -> CommandProtocol | None:
         candidate, radio = fuzzy.match(name, self.name2cmd.keys())
@@ -193,3 +196,40 @@ def print_cmdargs_empty_error(t: Terminal, e: CommandEmptyArgsError):
         s.write("^")
         t.both << s.getvalue()
     t.both << f"{type(e).__name__}: {e}"
+
+
+class CommandDelegate(Command):
+    def __init__(self, name: str, fullargs: str, helpinfo: str):
+        super().__init__(name)
+        self.fullargs = fullargs
+        self.helpinfo = helpinfo
+
+    def execute(self, ctx: CmdContext):
+        args = Args.by(full=self.fullargs)
+        all_cmdargs = split_multicmd(args)
+        # prepare commands to run
+        exe_args = []
+        # check if all of them are executable
+        for command, args in (args.poll() for args in all_cmdargs):
+            if command.ispair:
+                raise CommandArgError(self, command, f"command name can't be a pair ")
+            cmdname = command.key
+            executable = ctx.cmdlist[cmdname]
+            if executable is None:
+                raise CommandArgError(self, command, f"command<{cmdname}> not found")
+            exe_args.append((executable, args))
+        for i, pair in enumerate(exe_args):
+            executable, args = pair
+            subctx = ctx.copy(args=args)
+            executable.execute_cli(subctx)
+
+    def execute_cli(self, ctx: CmdContext):
+        self.execute(ctx)
+
+    def execute_inter(self, ctx: CmdContext) -> Iterable:
+        self.execute(ctx)
+        yield
+
+    def help(self, ctx: CmdContext):
+        for line in self.helpinfo.splitlines():
+            ctx.term << line

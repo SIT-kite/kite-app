@@ -14,7 +14,7 @@ from args import Args, split_multicmd
 from cmd import CommandList, CmdContext, CommandProtocol, CommandExecuteError, CommandArgError, CommandEmptyArgsError
 from coroutine import TaskDispatcher, DispatcherState
 from filesystem import File, Directory
-from flutter import Proj
+from flutter import Proj, ExtraCommandsConf
 from ui import Terminal, BashTerminal
 
 logo = """
@@ -72,6 +72,10 @@ def load_cmds(*, proj: Proj, cmdlist: CommandList, terminal: Terminal):
     cmds.load_static_cmd(cmdlist)
     from cmds.help import HelpCmd
     cmdlist << HelpCmd(cmdlist)
+    # load custom commands
+    extra = proj.settings.get("extra_commands", settings_type=ExtraCommandsConf)
+    for name, entry in extra.name2commands.items():
+        cmdlist << cmd.CommandDelegate(name, entry.fullargs, entry.helpinfo)
 
 
 _header_entry_cache = {}
@@ -205,15 +209,15 @@ def cli_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: S
             exe_args.append((executable, args))
         last = None
         for i, pair in enumerate(exe_args):
-            command, args = pair
+            executable, args = pair
             if last is None:
-                terminal.both << _get_header_entry(command)
+                terminal.both << _get_header_entry(executable)
             else:
-                terminal.both << _get_header_switch(last, command)
-            cli_execute_cmd(proj=proj, cmdlist=cmdlist, terminal=terminal, executable=command, args=args)
+                terminal.both << _get_header_switch(last, executable)
+            cli_execute_cmd(proj=proj, cmdlist=cmdlist, terminal=terminal, executable=executable, args=args)
             if i == len(exe_args) - 1:
-                terminal.both << _get_header_existence(command)
-            last = command
+                terminal.both << _get_header_existence(executable)
+            last = executable
 
 
 def cli_execute_cmd(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, executable: CommandProtocol, args: Args):

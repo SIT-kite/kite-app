@@ -127,13 +127,13 @@ class Serializer:
                         v = self.dict2obj(v)
                     setattr(obj, k, v)
             return obj
-        else:
-            obj = FallbackType()
+        else:  # it's a literal dictionary
+            res = {}
             for k, v in d.items():
                 if isinstance(v, dict):
                     v = self.dict2obj(v)
-                setattr(obj, k, v)
-            return obj
+                res[k] = v
+            return res
 
     def json2obj(self, j: str) -> Any:
         d = json.loads(j)

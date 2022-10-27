@@ -36,8 +36,7 @@ def create_page4show(cmdlist: CommandList, page: set[int], cmd_per_page: int) ->
 
 class HelpCmd(Command):
     def __init__(self, cmdlist: CommandList):
-        super().__init__()
-        self.name = "help"
+        super().__init__(name="help")
         self.cmdlist = cmdlist
         self.cmd_per_page = 5
 

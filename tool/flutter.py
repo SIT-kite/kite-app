@@ -281,3 +281,24 @@ class ScriptManger:
         name = fi.name_without_extension
         script = KiteScript(fi)
         self._kitescripts[name] = script
+
+
+class ExtraCommandEntry:
+    def __init__(self):
+        self.name = "__default__"
+        self.fullargs = ""
+        self.helpinfo = ""
+
+
+class ExtraCommandsConf:
+    def __init__(self):
+        self.name2commands: dict[str, ExtraCommandEntry] = {}
+
+    def __setitem__(self, key: str, cmd: ExtraCommandEntry):
+        self.name2commands[key] = cmd
+
+    def __getitem__(self, key: str) -> ExtraCommandEntry | None:
+        if key in self.name2commands:
+            return self.name2commands[key]
+        else:
+            return None

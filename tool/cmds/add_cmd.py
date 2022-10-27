@@ -1,11 +1,6 @@
 from typing import Iterable
 
-from cmd import CmdContext
-
-
-class ExtraCommandsSettings:
-    def __init__(self):
-        self.name2cmdargs: dict[str, str] = {}
+from cmd import CmdContext, CommandEmptyArgsError, CommandArgError, CommandProtocol
 
 
 class AddCmdCmd:
@@ -13,7 +8,8 @@ class AddCmdCmd:
 
     @staticmethod
     def execute_cli(ctx: CmdContext):
-        pass
+        if ctx.args.isempty:
+            raise CommandEmptyArgsError(AddCmdCmd, ctx.args, "no command name given")
 
     @staticmethod
     def execute_inter(ctx: CmdContext) -> Iterable:
@@ -22,5 +18,5 @@ class AddCmdCmd:
     @staticmethod
     def help(ctx: CmdContext):
         t = ctx.term
-        t << "addcmd <script name>"
-        t << "|-- run a script"
+        t << "addcmd -n <cmd name> -args <full args>"
+        t << "|-- add a custom cmd with args"
