@@ -5,6 +5,8 @@ import fuzzy
 import strings
 from args import Args, Arg, split_multicmd
 from flutter import Proj
+from tui.colortxt import FG
+from tui.colortxt.txt import Palette
 from ui import Terminal
 
 
@@ -181,25 +183,36 @@ class CommandExecuteError(Exception):
         self.cmd = cmd
 
 
+_er = Palette(fg=FG.Red)
+_er0 = _er.tint('×').get()
+_er1 = _er.tint('│').get()
+_er2 = _er.tint('╰─>').get()
+
+_arr = Palette(fg=FG.Gold)
+_arrow = _arr.tint("^").get()
+
+_highlight = Palette(fg=FG.Cyan)
+
+
 def print_cmdarg_error(t: Terminal, e: CommandArgError):
     index = e.arg.raw_index
     full, pos = e.arg.root.located_full(index)
-    t.both << f"× {full}"
+    t.both << f"{_er0} {_highlight.tint(full[pos.start:pos.end]).get()}{full[pos.end:]}"
     with StringIO() as s:
         s.write(strings.repeat(pos.start))
-        s.write(strings.repeat(pos.end - pos.start, "^"))
-        t.both << f"│ {s.getvalue()}"
-    t.both << f"╰─> {type(e).__name__}: {e}"
+        s.write(_arr.tint(strings.repeat(pos.end - pos.start, "^")).get())
+        t.both << f"{_er1} {s.getvalue()}"
+    t.both << _er.tint(f'╰─> {type(e).__name__}: {e}').get()
 
 
 def print_cmdargs_empty_error(t: Terminal, e: CommandEmptyArgsError):
     full = e.cmdargs.root.full()
-    t.both << f"× {full}"
+    t.both << f"{_er0} {full}"
     with StringIO() as s:
         strings.repeat(len(full))
-        s.write("^")
-        t.both << f"│ {s.getvalue()}"
-    t.both << f"╰─> {type(e).__name__}: {e}"
+        s.write(_arrow)
+        t.both << f"{_er1} {s.getvalue()}"
+    t.both << _er.tint(f'╰─> {type(e).__name__}: {e}').get()
 
 
 class CommandDelegate(Command):

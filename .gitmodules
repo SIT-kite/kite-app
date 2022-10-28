@@ -1,0 +1,3 @@
+[submodule "tool/tui"]
+	path = tool/tui
+	url = https://github.com/liplum/pytui.git
