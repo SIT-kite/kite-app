@@ -1,10 +1,19 @@
 from io import StringIO
-from typing import Iterator, Any, Collection
+from typing import Iterator, Any, Collection, Callable, Protocol
 
 import fuzzy
+import utils
 from coroutine import Task, STOP
 from ui import Terminal
 from utils import cast_int, cast_bool
+
+
+# TaskLike = Callable[[],Iterator]
+class TaskLike(Protocol):
+    result: Any
+
+    def __call__(self, *args, **kwargs) -> Iterator:
+        pass
 
 
 class InputTask(Task):
@@ -67,7 +76,7 @@ class SelectOneTask(Task):
             _build_contents(t, self.candidates, self.row)
             input_task = await_input(t, self.prompt)
             yield input_task
-            inputted = input_task.result
+            inputted = input_task.result.strip()
             if inputted.startswith("#"):
                 # numeric mode
                 inputted = inputted.removeprefix("#")
@@ -94,7 +103,7 @@ class SelectOneTask(Task):
                         t << f'do you mean "{matched}"?'
                         input_task = await_input(t, prompt="y/n=")
                         yield input_task
-                        inputted = input_task.result
+                        inputted = input_task.result.strip()
                         yes = inputted == "" or cast_bool(inputted)
                         if yes:
                             self.result = self.candidates[matched]
@@ -126,7 +135,7 @@ class SelectManyTask(Task):
             t << '[multi-select] enter "*" to select all or split each by ",".'
             input_task = await_input(t, self.prompt)
             yield input_task
-            inputted = input_task.result
+            inputted = input_task.result.strip()
             if inputted == "*":
                 self.result = self.candidates.values()
                 yield
@@ -178,3 +187,36 @@ def select_one(
         row=4
 ) -> SelectOneTask:
     return SelectOneTask(candidates, terminal, prompt, fuzzy_match, ignore_case, row)
+
+
+def input_multiline(
+        terminal: Terminal, prompt: Callable[[list[str]], str],
+        end_sign="EOF"
+) -> TaskLike:
+    lines = []
+
+    def task() -> Iterator:
+        while True:
+            inputted = InputTask(terminal, prompt=prompt(lines))
+            yield inputted
+            line = inputted.result.strip()
+            if line == end_sign:
+                break
+            lines.append(line)
+        yield
+
+    task.result = lines
+    return task
+
+
+def yes_no(
+        t: Terminal, *, ref: utils.Ref
+) -> TaskLike:
+    def task() -> Iterator:
+        inputted = InputTask(t, prompt="y/n=")
+        yield inputted
+        reply = inputted.result.strip()
+        ref.obj = utils.cast_bool(reply)
+        yield
+
+    return task

@@ -129,6 +129,10 @@ class Args:
         the right offset relative to the parent
         """
 
+    @staticmethod
+    def empty() -> "Args":
+        return Args(_empty_args)
+
     def sub(self, start: int, end: int) -> "Args":
         """
         :param start: included

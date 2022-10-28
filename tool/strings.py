@@ -7,9 +7,8 @@ class Align(Enum):
     Right = auto()
 
 
-def repeat(s: StringIO, num: int, repeater: str = " "):
-    for i in range(num):
-        s.write(repeater)
+def repeat(num: int, repeater: str = " "):
+    return repeater * num
 
 
 def center_text_in_line(
@@ -26,7 +25,7 @@ def center_text_in_line(
         left = rest - half
         right = half
     with StringIO() as s:
-        repeat(s, left, repeater)
+        s.write(repeat(left, repeater))
         s.write(text)
-        repeat(s, right, repeater)
+        s.write(repeat(right, repeater))
         return s.getvalue()

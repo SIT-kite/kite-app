@@ -40,7 +40,7 @@ class HelpCmd(Command):
         self.cmdlist = cmdlist
         self.cmd_per_page = 5
 
-    def execute_inter(self, ctx: CmdContext) -> Iterable:
+    def execute_interactive(self, ctx: CmdContext) -> Iterable:
         # all_cmd = ', '.join(ctx.cmdlist.keys())
         # ctx.term << f"all commands = [{all_cmd}]"
         while True:

@@ -66,7 +66,7 @@ class RunCmd:
             execute_kitescript(ctx, script)
 
     @staticmethod
-    def execute_inter(ctx: CmdContext) -> Iterable:
+    def execute_interactive(ctx: CmdContext) -> Iterable:
         pass
 
     @staticmethod

@@ -19,7 +19,7 @@ class LintCmd:
         lint(ctx)
 
     @staticmethod
-    def execute_inter(ctx: CmdContext) -> Iterable:
+    def execute_interactive(ctx: CmdContext) -> Iterable:
         lint(ctx)
         yield
 

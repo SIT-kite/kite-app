@@ -47,7 +47,7 @@ def process(args: Args) -> tuple[Components, Usings, bool]:
             used.add(UsingDeclare.all[using])
 
     def simple_mode(arg: Arg):
-        simple_module.e = True
+        simple_module.obj = True
 
     name2mode = {
         "include": include_mode,
@@ -77,7 +77,7 @@ def process(args: Args) -> tuple[Components, Usings, bool]:
             if cur_arg.ispair:
                 raise CommandArgError(AddModuleCmd, cur_arg, f"{cur_arg} can't be a pair")
             mode(cur_arg)
-    return tuple(included - excluded), tuple(used), simple_module.e
+    return tuple(included - excluded), tuple(used), simple_module.obj
 
 
 class AddModuleCmd:
@@ -93,7 +93,7 @@ class AddModuleCmd:
         ctx.proj.modules.create(res)
 
     @staticmethod
-    def execute_inter(ctx: CmdContext):
+    def execute_interactive(ctx: CmdContext):
         pass
 
     @staticmethod

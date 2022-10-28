@@ -50,7 +50,7 @@ class Command:
 
     - execute_cli(ctx) -- execute the command in cli mode
 
-    - execute_inter(ctx) -- execute the command in interactive mode. return an Iterator as a coroutine
+    - execute_interactive(ctx) -- execute the command in interactive mode. return an Iterator as a coroutine
     """
 
     def __init__(self, name="__default__"):
@@ -59,7 +59,7 @@ class Command:
     def execute_cli(self, ctx: CmdContext):
         pass
 
-    def execute_inter(self, ctx: CmdContext) -> Iterable:
+    def execute_interactive(self, ctx: CmdContext) -> Iterable:
         pass
 
     def help(self, ctx: CmdContext):
@@ -75,6 +75,7 @@ class CommandList:
 
     def __init__(self, logger=None):
         self.name2cmd = {}
+        self.builtins = set()
         self.logger = logger
 
     def log(self, *args):
@@ -87,6 +88,9 @@ class CommandList:
             raise Exception(f"{name} command has already registered")
         self.log(f"command<{name}> loaded.")
         self.name2cmd[name] = cmd
+
+    def is_builtin(self, name: str) -> bool:
+        return name in self.builtins
 
     def __setitem__(self, key: str, cmd: CommandProtocol):
         self.add_cmd(key, cmd)
@@ -180,22 +184,22 @@ class CommandExecuteError(Exception):
 def print_cmdarg_error(t: Terminal, e: CommandArgError):
     index = e.arg.raw_index
     full, pos = e.arg.root.located_full(index)
-    t.both << full
+    t.both << f"× {full}"
     with StringIO() as s:
-        strings.repeat(s, pos.start)
-        strings.repeat(s, pos.end - pos.start, "^")
-        t.both << s.getvalue()
-    t.both << f"{type(e).__name__}: {e}"
+        strings.repeat(pos.start)
+        strings.repeat(pos.end - pos.start, "^")
+        t.both << f"│ {s.getvalue()}"
+    t.both << f"╰─> {type(e).__name__}: {e}"
 
 
 def print_cmdargs_empty_error(t: Terminal, e: CommandEmptyArgsError):
     full = e.cmdargs.root.full()
-    t.both << full
+    t.both << f"× {full}"
     with StringIO() as s:
-        strings.repeat(s, len(full))
+        strings.repeat(len(full))
         s.write("^")
-        t.both << s.getvalue()
-    t.both << f"{type(e).__name__}: {e}"
+        t.both << f"│ {s.getvalue()}"
+    t.both << f"╰─> {type(e).__name__}: {e}"
 
 
 class CommandDelegate(Command):
@@ -226,7 +230,7 @@ class CommandDelegate(Command):
     def execute_cli(self, ctx: CmdContext):
         self.execute(ctx)
 
-    def execute_inter(self, ctx: CmdContext) -> Iterable:
+    def execute_interactive(self, ctx: CmdContext) -> Iterable:
         self.execute(ctx)
         yield
 

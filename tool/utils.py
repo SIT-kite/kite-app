@@ -1,6 +1,6 @@
 class Ref:
-    def __init__(self, e):
-        self.e = e
+    def __init__(self, obj=None):
+        self.obj = obj
 
 
 # noinspection PyBroadException

@@ -72,12 +72,12 @@ def load_cmds(*, proj: Proj, cmdlist: CommandList, t: Terminal):
     cmds.load_static_cmd(cmdlist)
     from cmds.help import HelpCmd
     cmdlist << HelpCmd(cmdlist)
-    builtin = set(cmdlist.keys())
+    cmdlist.builtins = set(cmdlist.keys())
     # load extra commands
     import flutter
     extra = proj.settings.get(flutter.extra_commands, settings_type=ExtraCommandsConf)
     for name, entry in extra.name2commands.items():
-        if name in builtin:
+        if cmdlist.is_builtin(name):
             t.both << f"builtin command<{name}> can't be overriden."
         else:
             cmdlist << cmd.CommandDelegate(name, entry.fullargs, entry.helpinfo)
@@ -246,6 +246,7 @@ def cli_execute_cmd(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, exe
 def interactive_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal):
     terminal.line(48)
     terminal << '[interactive mode], enter "#" to exit current layer.'
+
     # all_cmd = ', '.join(cmdlist.keys())
     # all_cmd_prompt = f"all commands = [{all_cmd}]"
 
@@ -258,7 +259,7 @@ def interactive_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal):
             executable: CommandProtocol = select_task.result
             terminal.both << _get_header_entry(executable)
             ctx = CmdContext(proj, terminal, cmdlist)
-            dispatcher.run(executable.execute_inter(ctx))
+            dispatcher.run(executable.execute_interactive(ctx))
             state = dispatcher.dispatch()
             terminal.both << _get_header_existence(executable)
             if state == DispatcherState.Abort:

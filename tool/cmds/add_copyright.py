@@ -57,7 +57,7 @@ class AddCopyRightCmd:
             ctx.term << f"files changed: {total}"
 
     @staticmethod
-    def execute_inter(ctx: CmdContext):
+    def execute_interactive(ctx: CmdContext):
         try_addcopyright(ctx)
 
     @staticmethod
