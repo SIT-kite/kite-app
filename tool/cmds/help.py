@@ -1,10 +1,10 @@
 from typing import Iterable
 
 import build
-import utils
 from args import group_args, Args
 from cmd import Command, CmdContext, CommandList, CommandArgError, CommandEmptyArgsError, CommandProtocol
 from ui import Terminal
+from utils import useRef, cast_int
 
 
 class HelpBoxTerminal(Terminal):
@@ -45,10 +45,9 @@ class HelpCmd(Command):
         # ctx.term << f"all commands = [{all_cmd}]"
         while True:
             ctx.term << f'plz select commands to show info.'
-            select_task = build.select_many(ctx.cmdlist.name2cmd, ctx.term, prompt="I want=")
-            yield select_task
+            selected: CommandProtocol = useRef()
+            yield build.select_many(ctx.cmdlist.name2cmd, ctx.term, prompt="I want=", ref=selected)
             ctx.term.line(48)
-            selected = select_task.result
             help_ctx = ctx.copy(term=HelpBoxTerminal(ctx.term))
             for cmd in selected:
                 HelpCmd.show_help_info(cmd, ctx, help_ctx)
@@ -75,7 +74,7 @@ class HelpCmd(Command):
                     if pagenum_arg is not None:
                         if pagenum_arg.ispair:
                             raise CommandArgError(self, pagenum_arg, "❌ arg<p> can't be a pair")
-                        pagenum = utils.cast_int(pagenum_arg.key)
+                        pagenum = cast_int(pagenum_arg.key)
                         if pagenum is None:
                             raise CommandArgError(
                                 self, pagenum_arg, f"❌ {pagenum_arg.key} isn't valid page number")

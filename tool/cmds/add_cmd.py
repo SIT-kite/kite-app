@@ -2,10 +2,10 @@ from typing import Iterable
 
 import flutter
 from args import group_args, Args
-from build import InputTask, input_multiline, yes_no
-from cmd import CmdContext, CommandEmptyArgsError, CommandArgError, CommandProtocol
+from build import input_multiline, yes_no, await_input
+from cmd import CmdContext, CommandEmptyArgsError, CommandArgError
 from flutter import ExtraCommandEntry, ExtraCommandsConf
-from utils import Ref
+from utils import Ref, useRef
 
 
 def _get_arg(grouped: dict[str | None, list[Args]], argname: str, allow_empty=False) -> str | None:
@@ -59,45 +59,41 @@ class AddCmdCmd:
     @staticmethod
     def execute_interactive(ctx: CmdContext) -> Iterable:
         t = ctx.term
+        # Enter name
         t << f"plz enter a unique name."
         while True:
-            inputted = InputTask(t, prompt="name=")
-            yield inputted
-            name = inputted.result.strip()
+            inputted: str = useRef()
+            yield await_input(t, prompt="name=", ref=inputted)
+            name = inputted.strip()
             if ctx.cmdlist.is_builtin(name):
                 t << f"❌ {name} is a builtin command."
             else:
                 break
         t.logging << f"name is {name}"
         t << f'plz enter cmd&args, enter "EOF" to end multi-line.'
-        lines = []
-        while True:
-            prompt = "+ " if len(lines) > 0 else "args="
-            inputted = InputTask(t, prompt=prompt)
-            yield inputted
-            line = inputted.result.strip()
-            if line == "EOF":
-                break
-            lines.append(line)
+        # Enter args
+        inputted: Ref = useRef()
+        yield input_multiline(t, prompt=lambda res: "+ " if len(res) > 0 else "args=", ref=inputted)
+        lines: list[str] = inputted.obj
         fullargs = " + ".join(lines)
         t.logging << f"fullargs is {fullargs}"
+        # Enter help into
         t << f'plz enter help info, enter "EOF" to end multi-line.'
-        inputted = input_multiline(t, prompt=lambda res: "\\n " if len(res) > 0 else "info=")
-        yield inputted
-        info: list[str] = inputted.result
+        inputted: Ref = useRef()
+        yield input_multiline(t, prompt=lambda res: "\\n " if len(res) > 0 else "info=", ref=inputted)
+        info: list[str] = inputted.obj
         helpinfo = "\n".join(info)
         t.logging << f"helpinfo is {helpinfo}"
         conf = ctx.proj.settings.get(flutter.extra_commands, settings_type=ExtraCommandsConf)
-        overridden = name in conf
-        if overridden:
-            reply = Ref()
-            t << f"{name} already exists, comfort to override it?"
-            yield yes_no(t, ref=reply)
-            if not reply.obj:
+        if name in conf:
+            confirm: bool = useRef()
+            t << f"{name} already exists, confirm to override it?"
+            yield yes_no(t, ref=confirm)
+            if not confirm:
                 t.both << f"adding command<{name}> aborted"
                 return
-        t.both << AddCmdCmd.add_cmd(conf, name, fullargs, helpinfo)
-        t.both << f'command<{name}> added."'
+        AddCmdCmd.add_cmd(conf, name, fullargs, helpinfo)
+        t.both << f'command<{name}> added.'
 
     @staticmethod
     def help(ctx: CmdContext):

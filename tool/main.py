@@ -16,6 +16,7 @@ from coroutine import TaskDispatcher, DispatcherState
 from filesystem import File, Directory
 from flutter import Proj, ExtraCommandsConf
 from ui import Terminal, BashTerminal
+from utils import useRef
 
 logo = """
     ██╗  ██╗ ██╗ ████████╗ ███████╗
@@ -254,14 +255,13 @@ def interactive_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal):
         dispatcher = TaskDispatcher()
         while True:
             # terminal << all_cmd_prompt
-            select_task = build.select_one(cmdlist.name2cmd, terminal, prompt="cmd=", fuzzy_match=True)
-            yield select_task
-            executable: CommandProtocol = select_task.result
-            terminal.both << _get_header_entry(executable)
+            selected: CommandProtocol = useRef()
+            yield build.select_one(cmdlist.name2cmd, terminal, prompt="cmd=", fuzzy_match=True, ref=selected)
+            terminal.both << _get_header_entry(selected)
             ctx = CmdContext(proj, terminal, cmdlist)
-            dispatcher.run(executable.execute_interactive(ctx))
+            dispatcher.run(selected.execute_interactive(ctx))
             state = dispatcher.dispatch()
-            terminal.both << _get_header_existence(executable)
+            terminal.both << _get_header_existence(selected)
             if state == DispatcherState.Abort:
                 yield
 

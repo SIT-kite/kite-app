@@ -1,18 +1,13 @@
 from enum import Enum, auto
-from typing import Iterator, Callable
+from typing import Iterator, Callable, Protocol
 
 STOP = object()
 
 
-class Task:
-    def __init__(self):
-        self.result = None
-
-    def execute(self) -> Iterator:
-        yield None
+class Task(Protocol):
 
     def __call__(self, *args, **kwargs) -> Iterator:
-        return self.execute()
+        yield
 
 
 class DispatcherState(Enum):
