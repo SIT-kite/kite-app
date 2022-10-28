@@ -3,7 +3,7 @@ import ntpath
 import os.path
 import sys
 import traceback
-from typing import Sequence, Iterator
+from typing import Sequence, Iterator, Callable, Any
 
 import build
 import cmd
@@ -200,7 +200,8 @@ def cli_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: A
             return
         else:
             terminal.both << _get_header_entry(command)
-            cli_execute_cmd(proj=proj, cmdlist=cmdlist, terminal=terminal, executable=executable, args=args)
+            ctx = CmdContext(proj=proj, cmdlist=cmdlist, terminal=terminal, args=args)
+            catch_executing(ctx, executing=lambda: executable.execute_cli(ctx))
             terminal.both << _get_header_existence(command)
     else:
         # prepare commands to run
@@ -223,25 +224,28 @@ def cli_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: A
                 terminal.both << _get_header_entry(executable)
             else:
                 terminal.both << _get_header_switch(last, executable)
-            cli_execute_cmd(proj=proj, cmdlist=cmdlist, terminal=terminal, executable=executable, args=args)
+            ctx = CmdContext(proj=proj, cmdlist=cmdlist, terminal=terminal, args=args)
+            catch_executing(ctx, executing=lambda: executable.execute_cli(ctx))
             if i == len(exe_args) - 1:
                 terminal.both << _get_header_existence(executable)
             last = executable
 
 
-def cli_execute_cmd(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, executable: CommandProtocol, args: Args):
-    ctx = CmdContext(proj, terminal, cmdlist, args)
+def catch_executing(
+        ctx: CmdContext,
+        executing: Callable[[], Any]
+) -> Any:
     try:
-        executable.execute_cli(ctx)
+        return executing()
     except CommandArgError as e:
-        cmd.print_cmdarg_error(terminal, e)
-        log_traceback(terminal)
+        cmd.print_cmdarg_error(ctx.term, e)
+        log_traceback(ctx.term)
     except CommandEmptyArgsError as e:
-        cmd.print_cmdargs_empty_error(terminal, e)
-        log_traceback(terminal)
+        cmd.print_cmdargs_empty_error(ctx.term, e)
+        log_traceback(ctx.term)
     except CommandExecuteError as e:
-        terminal.both << f"{type(e).__name__}: {e}"
-        log_traceback(terminal)
+        ctx.term.both << f"{type(e).__name__}: {e}"
+        log_traceback(ctx.term)
 
 
 def interactive_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal):
@@ -260,7 +264,7 @@ def interactive_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal):
             terminal.both << _get_header_entry(selected)
             ctx = CmdContext(proj, terminal, cmdlist)
             dispatcher.run(selected.execute_interactive(ctx))
-            state = dispatcher.dispatch()
+            state = catch_executing(ctx, executing=lambda: dispatcher.dispatch())
             terminal.both << _get_header_existence(selected)
             if state == DispatcherState.Abort:
                 yield

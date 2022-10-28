@@ -186,8 +186,8 @@ def print_cmdarg_error(t: Terminal, e: CommandArgError):
     full, pos = e.arg.root.located_full(index)
     t.both << f"× {full}"
     with StringIO() as s:
-        strings.repeat(pos.start)
-        strings.repeat(pos.end - pos.start, "^")
+        s.write(strings.repeat(pos.start))
+        s.write(strings.repeat(pos.end - pos.start, "^"))
         t.both << f"│ {s.getvalue()}"
     t.both << f"╰─> {type(e).__name__}: {e}"
 

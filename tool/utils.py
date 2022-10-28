@@ -7,6 +7,9 @@ class Ref(Generic[T]):
     def __init__(self, obj=None):
         self.obj = obj
 
+    def deref(self) -> T:
+        return self.obj
+
     def __eq__(self, other):
         if isinstance(other, Ref):
             return self.obj == other.obj

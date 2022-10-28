@@ -77,7 +77,7 @@ def process(args: Args) -> tuple[Components, Usings, bool]:
             if cur_arg.ispair:
                 raise CommandArgError(AddModuleCmd, cur_arg, f"{cur_arg} can't be a pair")
             mode(cur_arg)
-    return tuple(included - excluded), tuple(used), simple_module.obj
+    return tuple(included - excluded), tuple(used), simple_module.deref()
 
 
 class AddModuleCmd:

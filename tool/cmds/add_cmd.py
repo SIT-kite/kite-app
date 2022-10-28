@@ -74,16 +74,16 @@ class AddCmdCmd:
         # Enter args
         inputted: Ref = useRef()
         yield input_multiline(t, prompt=lambda res: "+ " if len(res) > 0 else "args=", ref=inputted)
-        lines: list[str] = inputted.obj
+        lines: list[str] = inputted.deref()
         fullargs = " + ".join(lines)
-        t.logging << f"fullargs is {fullargs}"
+        t.logging << f"{fullargs=}"
         # Enter help into
         t << f'plz enter help info, enter "EOF" to end multi-line.'
         inputted: Ref = useRef()
         yield input_multiline(t, prompt=lambda res: "\\n " if len(res) > 0 else "info=", ref=inputted)
-        info: list[str] = inputted.obj
+        info: list[str] = inputted.deref()
         helpinfo = "\n".join(info)
-        t.logging << f"helpinfo is {helpinfo}"
+        t.logging << f"{helpinfo=}"
         conf = ctx.proj.settings.get(flutter.extra_commands, settings_type=ExtraCommandsConf)
         if name in conf:
             confirm: bool = useRef()
