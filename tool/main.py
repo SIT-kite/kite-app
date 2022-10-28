@@ -147,6 +147,7 @@ def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequ
     proj.settings.load()
     import yml
     proj.pubspec = yml.load(proj.pubspec_fi.read())
+    proj.l10n = yml.load(proj.l10n_yaml.read())
     terminal.both << f'Project loaded: "{proj.name} {proj.version}".'
     terminal.both << f'Description: "{proj.desc}".'
     import kite

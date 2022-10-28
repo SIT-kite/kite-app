@@ -123,6 +123,6 @@ class AddModuleCmd:
     def help(ctx: CmdContext):
         t = ctx.term
         t << "addmodule --n <name> --c <..components> --u <..using>"
-        t << '| ..components: *=all, "~"-prefix=exclude'
-        t << '| ..using: *=all, "~"-prefix=exclude'
-        t << '| eg: addmodule --n test --c entity service dao --u l10n'
+        t << '|-- ..components: *=all, "~"-prefix=exclude'
+        t << '|-- ..using: *=all, "~"-prefix=exclude'
+        t << '|-- eg: addmodule --n test --c entity service dao --u l10n'

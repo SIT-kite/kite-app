@@ -11,6 +11,7 @@ dart_tool = ".dart_tool"
 kite_tool = ".kite_tool"
 pubspec_yaml = "pubspec.yaml"
 extra_commands = "extra_commands"
+l10n_yaml = "l10n.yaml"
 
 
 class Proj:
@@ -20,6 +21,7 @@ class Proj:
         else:
             self.root = root
         self.pubspec = None
+        self.l10n = None
         self.modules: Modules | None = None
         self.usings: dict[str, "UsingDeclare"] = {}
         self.comps: dict[str, "CompType"] = {}
@@ -83,6 +85,18 @@ class Proj:
     @property
     def lib_folder(self) -> Directory:
         return self.root.subdir("lib")
+
+    @property
+    def l10n_yaml(self) -> File:
+        return self.root.subfi(l10n_yaml)
+
+    @property
+    def l10n_dir(self) -> Directory:
+        return self.root.subdir(self.l10n["arb-dir"])
+
+    @property
+    def template_arb_fi(self) -> File:
+        return self.l10n_dir.subfi(self.l10n["template-arb-file"])
 
     @property
     def module_folder(self) -> Directory:
