@@ -197,11 +197,13 @@ _highlight = Palette(fg=FG.Cyan)
 def print_cmdarg_error(t: Terminal, e: CommandArgError):
     index = e.arg.raw_index
     full, pos = e.arg.root.located_full(index)
-    t.both << f"{_er0} {_highlight.tint(full[pos.start:pos.end]).get()}{full[pos.end:]}"
+    t.both << f"{_er0} {full[:pos.start]}{_highlight.tint(full[pos.start:pos.end]).get()}{full[pos.end:]}"
     with StringIO() as s:
+        s.write(_er1)
+        s.write(" ")
         s.write(strings.repeat(pos.start))
         s.write(_arr.tint(strings.repeat(pos.end - pos.start, "^")).get())
-        t.both << f"{_er1} {s.getvalue()}"
+        t.both << s.getvalue()
     t.both << _er.tint(f'╰─> {type(e).__name__}: {e}').get()
 
 
@@ -209,7 +211,7 @@ def print_cmdargs_empty_error(t: Terminal, e: CommandEmptyArgsError):
     full = e.cmdargs.root.full()
     t.both << f"{_er0} {full}"
     with StringIO() as s:
-        strings.repeat(len(full))
+        s.write(strings.repeat(len(full)))
         s.write(_arrow)
         t.both << f"{_er1} {s.getvalue()}"
     t.both << _er.tint(f'╰─> {type(e).__name__}: {e}').get()

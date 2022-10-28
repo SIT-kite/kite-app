@@ -1,4 +1,4 @@
-from typing import Callable, TypeVar
+from typing import Callable, TypeVar, Sequence
 
 from args import Args, Arg, group_args, flatten_args
 from cmd import CmdContext, CommandEmptyArgsError, CommandArgError
@@ -11,9 +11,7 @@ def _check_name(ctx: CmdContext, name_argslist: list[Args]) -> tuple[Arg, str]:
     size = len(name_argslist)
     if size == 0:
         raise CommandEmptyArgsError(AddModuleCmd, ctx.args, "no arg<n> given")
-    elif size > 0:
-        raise CommandArgError(AddModuleCmd, name_argslist[1][0], "duplicate name specified")
-    else:
+    elif size == 1:
         name_args = name_argslist[0]
         if name_args.size > 1:
             raise CommandArgError(AddModuleCmd, name_args[1], "duplicate name specified")
@@ -23,11 +21,15 @@ def _check_name(ctx: CmdContext, name_argslist: list[Args]) -> tuple[Arg, str]:
                 raise CommandArgError(AddModuleCmd, name_arg, "arg<n> can't be a pair")
             else:
                 return name_arg, name_arg.key
+    else:
+        raise CommandArgError(AddModuleCmd, name_argslist[1][0], "duplicate name specified")
 
 
-def _get_list(ctx: CmdContext, name: str, grouped: dict[str, list[Args]]) -> list[Arg]:
+def _get_list(ctx: CmdContext, name: str, grouped: dict[str, list[Args]], optional=False) -> Sequence[Arg]:
     if name not in grouped:
-        raise CommandEmptyArgsError(AddModuleCmd, ctx.args, "no arg<c> given")
+        if optional:
+            return ()
+        raise CommandEmptyArgsError(AddModuleCmd, ctx.args, f"no arg<{name}> given")
     else:
         return flatten_args(grouped[name])
 
@@ -35,7 +37,7 @@ def _get_list(ctx: CmdContext, name: str, grouped: dict[str, list[Args]]) -> lis
 T = TypeVar("T")
 
 
-def _resolve(total: dict[str, T], args: list[Arg], kind: str) -> tuple[T]:
+def _resolve(total: dict[str, T], args: Sequence[Arg], kind: str) -> tuple[T]:
     included = set()
     excluded = set()
 
@@ -75,13 +77,17 @@ class AddModuleCmd:
             raise CommandArgError(AddModuleCmd, name_arg, f"module<{name}> already exists")
         # get names
         component_names = _get_list(ctx, "c", grouped)
-        using_names = _get_list(ctx, "u", grouped)
+        using_names = _get_list(ctx, "u", grouped, optional=True)
         # resolve
         components = _resolve(ctx.proj.comps, component_names, "component")
-        usings = _resolve(ctx.proj.usings, using_names, "usings")
+        usings = _resolve(ctx.proj.usings, using_names, "using")
         # creating
         res = ModuleCreation(name, components, usings)
+        ctx.term << f"{name=}."
+        ctx.term << f"{components=}."
+        ctx.term << f"{usings=}."
         ctx.proj.modules.create(res)
+        ctx.term << f"module<{name}> added."
 
     @staticmethod
     def execute_interactive(ctx: CmdContext):
