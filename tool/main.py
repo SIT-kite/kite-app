@@ -250,7 +250,7 @@ def catch_executing(
 
 def interactive_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal):
     terminal.line(48)
-    terminal << '[Interactive] enter "#" to exit current layer.'
+    terminal << '[interactive] enter "#" to exit current layer.'
 
     # all_cmd = ', '.join(cmdlist.keys())
     # all_cmd_prompt = f"all commands = [{all_cmd}]"

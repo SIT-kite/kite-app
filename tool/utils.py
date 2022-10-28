@@ -28,6 +28,9 @@ class Ref(Generic[T]):
     def __bool__(self) -> bool:
         return bool(self.obj)
 
+    def __iter__(self):
+        return iter(self.obj)
+
 
 def useRef(obj=None) -> Any | Ref: return Ref(obj)
 

@@ -87,7 +87,7 @@ class BashTerminal(Terminal):
         self.logger.log(*args)
 
     def input(self, prompt: str) -> str:
-        return input(f"|>  %{prompt}")
+        return input(f"|>  % {prompt}")
 
     def print_log(self, *args):
         self.print(*args)

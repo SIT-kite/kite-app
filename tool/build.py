@@ -15,6 +15,7 @@ class InputTask:
     when input is a hash sign "#", the coroutine will abort instantly
     """
     abort_sign = "#"
+    palette = Palette(fg=FG.Pink)
 
     def __init__(self, t: Terminal, prompt: str, ref: Ref):
         self.terminal = t
@@ -22,8 +23,8 @@ class InputTask:
         self.ref = ref
 
     def __call__(self, *args, **kwargs) -> Iterator:
-        inputted = self.terminal.input(self.prompt)
-        if inputted == InputTask.abort_sign:
+        inputted = self.terminal.input(self.palette.tint(self.prompt))
+        if inputted == self.abort_sign:
             yield STOP
         else:
             self.ref.obj = inputted

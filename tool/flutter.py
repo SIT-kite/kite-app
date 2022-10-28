@@ -29,9 +29,6 @@ class Proj:
         self.settings = SettingsBox(self.serializer, self.settings_fi)
         self.runner = DartRunner(self.root)
 
-    def add_module(self, module: "Module"):
-        self.modules[module.name] = module
-
     def add_unmodule(self, name: str):
         self.unmodules.add(name)
 
@@ -139,7 +136,7 @@ class UsingDeclare:
     def create(self, usingfi: File):
         with StringIO() as res:
             for ref in self.refs:
-                res.write(f"export '{ref}'\n")
+                res.write(f"export '{ref};'\n")
             usingfi.append(res.getvalue())
 
     def __str__(self):
@@ -189,7 +186,7 @@ class Module:
             return False
 
     @staticmethod
-    def form(folder: Directory) -> bool:
+    def validate(folder: Directory) -> bool:
         return folder.sub_isfi("using.dart") or folder.sub_isfi("symbol.dart")
 
     def add_page(self, comp: CompType, fi: DartFi | Directory):
@@ -253,8 +250,9 @@ class Modules:
         for component in creation.components:
             mode = "file" if creation.simple else "dir"
             component.create(moduledir, mode)
+        usingfi = moduledir.subfi("using.dart")
         for using in creation.usings:
-            using.create(moduledir.subfi("using.dart"))
+            using.create(usingfi)
 
     def __contains__(self, name: str):
         return name in self.name2modules

@@ -9,8 +9,9 @@ def load_modules(t: Terminal, proj: Proj):
     for folder in proj.module_folder.listing_dirs():
         name = folder.name
         if name not in proj.unmodules:
-            module = load(t, proj, module_name=name, parent=folder)
-            modules.name2modules[name] = module
+            if Module.validate(folder):
+                module = load(t, proj, module_name=name, parent=folder)
+                modules.name2modules[name] = module
     t.logging << f"modules loaded: [{', '.join(modules.name2modules.keys())}]"
     proj.modules = modules
 
@@ -47,7 +48,7 @@ def load(t: Terminal, proj: Proj, module_name: str, parent: Directory) -> Module
             if comp in module.components:
                 raise DuplicateNameCompError(module.name, comp.name)
             module.add_page(comp, folder)
-        elif Module.form(folder):
+        elif Module.validate(folder):
             # the folder is a submodule
             sub = load(t, proj, module_name=name, parent=folder)
             sub.parent = module

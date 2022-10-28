@@ -1,9 +1,9 @@
 from typing import Callable, TypeVar, Sequence, Iterable
 
 from args import Args, Arg, group_args, flatten_args
-from build import await_input
+from build import await_input, select_many
 from cmd import CmdContext, CommandEmptyArgsError, CommandArgError
-from flutter import ModuleCreation
+from flutter import ModuleCreation, CompType, UsingDeclare
 from utils import useRef
 
 Mode = Callable[[Arg], None]
@@ -103,7 +103,21 @@ class AddModuleCmd:
                 t << f"module<{name}> already exists, plz select another one"
             else:
                 break
-        yield
+        t << "plz enter what components to add"
+        components: Sequence[CompType] = useRef()
+        yield select_many(ctx.proj.comps, t, prompt="comps=", ref=components)
+        components = tuple(components)
+        t << "plz enter what features to import"
+        usings: Sequence[UsingDeclare] = useRef()
+        yield select_many(ctx.proj.usings, t, prompt="import ", ref=usings)
+        usings = tuple(usings)
+        # creating
+        res = ModuleCreation(name, components, usings)
+        ctx.term << f"{name=}."
+        ctx.term << f"{components=}."
+        ctx.term << f"{usings=}."
+        ctx.proj.modules.create(res)
+        ctx.term << f"module<{name}> added."
 
     @staticmethod
     def help(ctx: CmdContext):
