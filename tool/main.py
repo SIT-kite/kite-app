@@ -250,7 +250,7 @@ def catch_executing(
 
 def interactive_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal):
     terminal.line(48)
-    terminal << '[interactive mode], enter "#" to exit current layer.'
+    terminal << '[Interactive] enter "#" to exit current layer.'
 
     # all_cmd = ', '.join(cmdlist.keys())
     # all_cmd_prompt = f"all commands = [{all_cmd}]"
@@ -260,7 +260,7 @@ def interactive_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal):
         while True:
             # terminal << all_cmd_prompt
             selected: CommandProtocol = useRef()
-            yield build.select_one(cmdlist.name2cmd, terminal, prompt="cmd=", fuzzy_match=True, ref=selected)
+            yield build.select_one_cmd(cmdlist.name2cmd, terminal, prompt="cmd=", fuzzy_match=True, ref=selected)
             terminal.both << _get_header_entry(selected)
             ctx = CmdContext(proj, terminal, cmdlist)
             dispatcher.run(selected.execute_interactive(ctx))

@@ -53,6 +53,9 @@ class Command:
     - execute_cli(ctx) -- execute the command in cli mode
 
     - execute_interactive(ctx) -- execute the command in interactive mode. return an Iterator as a coroutine
+
+    optional:
+    - created_by_user -> bool -- whether this command is created by user, [False] as default.
     """
 
     def __init__(self, name="__default__"):
@@ -184,12 +187,12 @@ class CommandExecuteError(Exception):
 
 
 _er = Palette(fg=FG.Red)
-_er0 = _er.tint('×').get()
-_er1 = _er.tint('│').get()
-_er2 = _er.tint('╰─>').get()
+_er0 = _er.tint('×')
+_er1 = _er.tint('│')
+_er2 = _er.tint('╰─>')
 
 _arr = Palette(fg=FG.Gold)
-_arrow = _arr.tint("^").get()
+_arrow = _arr.tint("^")
 
 _highlight = Palette(fg=FG.Cyan)
 
@@ -197,14 +200,14 @@ _highlight = Palette(fg=FG.Cyan)
 def print_cmdarg_error(t: Terminal, e: CommandArgError):
     index = e.arg.raw_index
     full, pos = e.arg.root.located_full(index)
-    t.both << f"{_er0} {full[:pos.start]}{_highlight.tint(full[pos.start:pos.end]).get()}{full[pos.end:]}"
+    t.both << f"{_er0} {full[:pos.start]}{_highlight.tint(full[pos.start:pos.end])}{full[pos.end:]}"
     with StringIO() as s:
         s.write(_er1)
         s.write(" ")
         s.write(strings.repeat(pos.start))
-        s.write(_arr.tint(strings.repeat(pos.end - pos.start, "^")).get())
+        s.write(_arr.tint(strings.repeat(pos.end - pos.start, "^")))
         t.both << s.getvalue()
-    t.both << _er.tint(f'╰─> {type(e).__name__}: {e}').get()
+    t.both << _er.tint(f'╰─> {type(e).__name__}: {e}')
 
 
 def print_cmdargs_empty_error(t: Terminal, e: CommandEmptyArgsError):
@@ -214,10 +217,12 @@ def print_cmdargs_empty_error(t: Terminal, e: CommandEmptyArgsError):
         s.write(strings.repeat(len(full)))
         s.write(_arrow)
         t.both << f"{_er1} {s.getvalue()}"
-    t.both << _er.tint(f'╰─> {type(e).__name__}: {e}').get()
+    t.both << _er.tint(f'╰─> {type(e).__name__}: {e}')
 
 
 class CommandDelegate(Command):
+    created_by_user = True
+
     def __init__(self, name: str, fullargs: str, helpinfo: str):
         super().__init__(name)
         self.fullargs = fullargs

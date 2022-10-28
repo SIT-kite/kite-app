@@ -46,7 +46,7 @@ class HelpCmd(Command):
         while True:
             ctx.term << f'plz select commands to show info.'
             selected: CommandProtocol = useRef()
-            yield build.select_many(ctx.cmdlist.name2cmd, ctx.term, prompt="I want=", ref=selected)
+            yield build.select_many_cmds(ctx.cmdlist.name2cmd, ctx.term, prompt="I want=", ref=selected)
             ctx.term.line(48)
             help_ctx = ctx.copy(term=HelpBoxTerminal(ctx.term))
             for cmd in selected:

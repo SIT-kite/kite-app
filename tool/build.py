@@ -1,8 +1,11 @@
 from io import StringIO
-from typing import Iterator, Any, Collection, Callable, Protocol
+from typing import Iterator, Any, Callable
 
 import fuzzy
+from cmd import CommandProtocol
 from coroutine import Task, STOP
+from tui.colortxt import FG
+from tui.colortxt.txt import Palette
 from ui import Terminal
 from utils import cast_int, cast_bool, useRef, Ref
 
@@ -33,19 +36,34 @@ def await_input(
     return InputTask(terminal, prompt, ref)
 
 
+_num = Palette(fg=FG.Emerald)
+_name = Palette(fg=FG.Azure)
+_usrcmd = Palette(fg=FG.Gold)
+
+
+def _tint_cmd(cmd: CommandProtocol) -> str:
+    if hasattr(cmd, "created_by_user"):
+        if getattr(cmd, "created_by_user"):
+            return _usrcmd.tint(cmd.name)
+    return _name.tint(cmd.name)
+
+
+_TintFunc = Callable[[str], str]
+
+
 def _build_contents(
-        t: Terminal, candidates: dict[str, Any], row: int
+        t: Terminal, candidates: dict[str, Any], row: int,
+        tint_num: _TintFunc, tint_name: _TintFunc,
 ):
-    li = list(candidates.items())
     s = StringIO()
-    for i, pair in enumerate(li):
+    for i, pair in enumerate(candidates.items()):
         key, value = pair
         if i != 0 and i % row == 0:
             t << f"👀 {s.getvalue()}"
             s.close()
             s = StringIO()
         else:
-            s.write(f"#{i}={key}, ")
+            s.write(f"{tint_num(f'#{i}')}={tint_name(key)}\t")
     if s.readable():
         t << f"👀 {s.getvalue()}"
         s.close()
@@ -57,9 +75,40 @@ def select_many(
         *, ignore_case=True,
         row=4, ref: Ref | Any
 ) -> Task:
+    return _select_many(
+        candidates,
+        t, prompt, ignore_case=ignore_case,
+        row=row, ref=ref,
+        tint_num=lambda num: _num.tint(num),
+        tint_name=lambda name: _name.tint(name)
+    )
+
+
+def select_many_cmds(
+        candidates: dict[str, CommandProtocol],
+        t: Terminal, prompt: str,
+        *, ignore_case=True,
+        row=4, ref: Ref | Any
+) -> Task:
+    return _select_many(
+        candidates,
+        t, prompt, ignore_case=ignore_case,
+        row=row, ref=ref,
+        tint_num=lambda num: _num.tint(num),
+        tint_name=lambda cmd: _tint_cmd(candidates[cmd]) if cmd in candidates else _name.tint(cmd)
+    )
+
+
+def _select_many(
+        candidates: dict[str, Any],
+        t: Terminal, prompt: str,
+        *, ignore_case=True,
+        row=4, ref: Ref | Any,
+        tint_num: _TintFunc, tint_name: _TintFunc,
+) -> Task:
     li = list(candidates.items())
     while True:
-        _build_contents(t, candidates, row)
+        _build_contents(t, candidates, row, tint_num, tint_name)
         t << '[multi-select] enter "*" to select all or split each by ",".'
         inputted: str = useRef()
         yield await_input(t, prompt, ref=inputted)
@@ -98,6 +147,23 @@ def select_many(
             yield
 
 
+def select_one_cmd(
+        candidates: dict[str, Any],
+        t: Terminal, prompt: str,
+        *, ignore_case=True,
+        fuzzy_match=False,
+        row=4, ref: Ref | Any
+) -> Task:
+    return _select_one(
+        candidates,
+        t, prompt, ignore_case=ignore_case,
+        fuzzy_match=fuzzy_match,
+        row=row, ref=ref,
+        tint_num=lambda num: _num.tint(num),
+        tint_name=lambda cmd: _tint_cmd(candidates[cmd]) if cmd in candidates else _name.tint(cmd)
+    )
+
+
 def select_one(
         candidates: dict[str, Any],
         t: Terminal, prompt: str,
@@ -105,10 +171,28 @@ def select_one(
         fuzzy_match=False,
         row=4, ref: Ref | Any
 ) -> Task:
+    return _select_one(
+        candidates,
+        t, prompt, ignore_case=ignore_case,
+        fuzzy_match=fuzzy_match,
+        row=row, ref=ref,
+        tint_num=lambda num: _num.tint(num),
+        tint_name=lambda cmd: _name.tint(cmd)
+    )
+
+
+def _select_one(
+        candidates: dict[str, Any],
+        t: Terminal, prompt: str,
+        *, ignore_case=True,
+        fuzzy_match=False,
+        row=4, ref: Ref | Any,
+        tint_num: _TintFunc, tint_name: _TintFunc,
+) -> Task:
     def task() -> Iterator:
         li = list(candidates.items())
         while True:
-            _build_contents(t, candidates, row)
+            _build_contents(t, candidates, row, tint_num, tint_name)
             inputted: str = useRef()
             yield await_input(t, prompt, ref=inputted)
             inputted = inputted.strip()

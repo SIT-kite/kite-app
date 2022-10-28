@@ -1,8 +1,10 @@
-from typing import Callable, TypeVar, Sequence
+from typing import Callable, TypeVar, Sequence, Iterable
 
 from args import Args, Arg, group_args, flatten_args
+from build import await_input
 from cmd import CmdContext, CommandEmptyArgsError, CommandArgError
 from flutter import ModuleCreation
+from utils import useRef
 
 Mode = Callable[[Arg], None]
 
@@ -90,12 +92,18 @@ class AddModuleCmd:
         ctx.term << f"module<{name}> added."
 
     @staticmethod
-    def execute_interactive(ctx: CmdContext):
-        pass
-
-    @staticmethod
-    def create():
-        pass
+    def execute_interactive(ctx: CmdContext) -> Iterable:
+        t = ctx.term
+        t << "plz enter a unique module name"
+        while True:
+            nameRef: str = useRef()
+            yield await_input(t, "name=", ref=nameRef)
+            name = nameRef.strip()
+            if name in ctx.proj.modules:
+                t << f"module<{name}> already exists, plz select another one"
+            else:
+                break
+        yield
 
     @staticmethod
     def help(ctx: CmdContext):
