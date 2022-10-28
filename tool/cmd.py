@@ -1,8 +1,9 @@
 from io import StringIO
-from typing import Callable, Iterable
+from typing import Iterable, runtime_checkable, Protocol, Iterator, Any
 
 import fuzzy
 import strings
+import style
 from args import Args, Arg, split_multicmd
 from flutter import Proj
 from tui.colortxt import FG
@@ -37,10 +38,8 @@ class CmdContext:
         return cloned
 
 
-CommandFunc = Callable[[CmdContext], None]
-
-
-class Command:
+@runtime_checkable
+class CommandLike(Protocol):
     """
     Command is a protocol, you don't need to inherit it,
     and you can even implement it as a class object.
@@ -57,26 +56,21 @@ class Command:
     optional:
     - created_by_user -> bool -- whether this command is created by user, [False] as default.
     """
-
-    def __init__(self, name="__default__"):
-        self.name = name
+    name: str
 
     def execute_cli(self, ctx: CmdContext):
         pass
 
-    def execute_interactive(self, ctx: CmdContext) -> Iterable:
+    def execute_interactive(self, ctx: CmdContext) -> Iterator:
         pass
 
     def help(self, ctx: CmdContext):
         pass
 
 
-CommandProtocol = Command | type
-
-
 # noinspection SpellCheckingInspection
 class CommandList:
-    name2cmd: dict[str, CommandProtocol]
+    name2cmd: dict[str, CommandLike]
 
     def __init__(self, logger=None):
         self.name2cmd = {}
@@ -87,7 +81,7 @@ class CommandList:
         if self.logger is not None:
             self.logger.log(*args)
 
-    def add_cmd(self, name: str, cmd: CommandProtocol):
+    def add_cmd(self, name: str, cmd: CommandLike):
         name = name.lower()
         if name in self.name2cmd:
             raise Exception(f"{name} command has already registered")
@@ -97,19 +91,19 @@ class CommandList:
     def is_builtin(self, name: str) -> bool:
         return name in self.builtins
 
-    def __setitem__(self, key: str, cmd: CommandProtocol):
+    def __setitem__(self, key: str, cmd: CommandLike):
         self.add_cmd(key, cmd)
 
-    def __getitem__(self, name: str) -> CommandProtocol | None:
+    def __getitem__(self, name: str) -> CommandLike | None:
         if name not in self.name2cmd:
             return None
         else:
             return self.name2cmd[name]
 
-    def add(self, cmd: CommandProtocol):
+    def add(self, cmd: CommandLike):
         self.add_cmd(cmd.name, cmd)
 
-    def __lshift__(self, cmd: CommandProtocol):
+    def __lshift__(self, cmd: CommandLike):
         self.add(cmd)
 
     @property
@@ -135,7 +129,7 @@ class CommandList:
     def items(self):
         return iter(self.name2cmd.items())
 
-    def fuzzy_match(self, name: str, threshold: float) -> CommandProtocol | None:
+    def fuzzy_match(self, name: str, threshold: float) -> CommandLike | None:
         candidate, radio = fuzzy.match(name, self.name2cmd.keys())
         if radio < threshold:
             return None
@@ -151,7 +145,7 @@ class CommandList:
     def __len__(self) -> int:
         return self.size
 
-    def browse_by_page(self, cmd_per_page: int) -> Iterable[tuple[int, Iterable[CommandProtocol]]]:
+    def browse_by_page(self, cmd_per_page: int) -> Iterable[tuple[int, Iterable[CommandLike]]]:
         cur = []
         for i, cmd in enumerate(self.name2cmd.values()):
             if i % cmd_per_page == 0 and i != 0:
@@ -167,29 +161,28 @@ class CommandList:
 
 
 class CommandArgError(Exception):
-    def __init__(self, cmd: CommandProtocol, arg: Arg | None, *more):
+    def __init__(self, cmd: CommandLike | Any, arg: Arg | None, *more):
         super(CommandArgError, self).__init__(*more)
         self.arg = arg
         self.cmd = cmd
 
 
 class CommandEmptyArgsError(Exception):
-    def __init__(self, cmd: CommandProtocol, cmdargs: Args, *more):
+    def __init__(self, cmd: CommandLike | Any, cmdargs: Args, *more):
         super(CommandEmptyArgsError, self).__init__(*more)
         self.cmdargs = cmdargs
         self.cmd = cmd
 
 
 class CommandExecuteError(Exception):
-    def __init__(self, cmd: CommandProtocol, *args):
+    def __init__(self, cmd: CommandLike | Any, *args):
         super(CommandExecuteError, self).__init__(*args)
         self.cmd = cmd
 
 
-_er = Palette(fg=FG.Red)
-_er0 = _er.tint('×')
-_er1 = _er.tint('│')
-_er2 = _er.tint('╰─>')
+_er0 = style.error('×')
+_er1 = style.error('│')
+_er2 = style.error('╰─>')
 
 _arr = Palette(fg=FG.Gold)
 _arrow = _arr.tint("^")
@@ -207,7 +200,7 @@ def print_cmdarg_error(t: Terminal, e: CommandArgError):
         s.write(strings.repeat(pos.start))
         s.write(_arr.tint(strings.repeat(pos.end - pos.start, "^")))
         t.both << s.getvalue()
-    t.both << _er.tint(f'╰─> {type(e).__name__}: {e}')
+    t.both << style.error(f'╰─> {type(e).__name__}: {e}')
 
 
 def print_cmdargs_empty_error(t: Terminal, e: CommandEmptyArgsError):
@@ -217,14 +210,14 @@ def print_cmdargs_empty_error(t: Terminal, e: CommandEmptyArgsError):
         s.write(strings.repeat(len(full)))
         s.write(_arrow)
         t.both << f"{_er1} {s.getvalue()}"
-    t.both << _er.tint(f'╰─> {type(e).__name__}: {e}')
+    t.both << style.error(f'╰─> {type(e).__name__}: {e}')
 
 
-class CommandDelegate(Command):
+class CommandDelegate(CommandLike):
     created_by_user = True
 
     def __init__(self, name: str, fullargs: str, helpinfo: str):
-        super().__init__(name)
+        self.name = name
         self.fullargs = fullargs
         self.helpinfo = helpinfo
 

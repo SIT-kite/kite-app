@@ -11,7 +11,7 @@ import fuzzy
 import log
 import strings
 from args import Args, split_multicmd
-from cmd import CommandList, CmdContext, CommandProtocol, CommandExecuteError, CommandArgError, CommandEmptyArgsError
+from cmd import CommandList, CmdContext, CommandLike, CommandExecuteError, CommandArgError, CommandEmptyArgsError
 from coroutine import TaskDispatcher, DispatcherState
 from filesystem import File, Directory
 from flutter import Proj, ExtraCommandsConf
@@ -89,7 +89,7 @@ _header_existence_cache = {}
 _header_length = 48
 
 
-def _get_header_entry(command: CommandProtocol) -> str:
+def _get_header_entry(command: CommandLike) -> str:
     name = command.name
     if name in _header_entry_cache:
         return _header_entry_cache[name]
@@ -99,7 +99,7 @@ def _get_header_entry(command: CommandProtocol) -> str:
         return line
 
 
-def _get_header_existence(command: CommandProtocol) -> str:
+def _get_header_existence(command: CommandLike) -> str:
     name = command.name
     if name in _header_existence_cache:
         return _header_existence_cache[name]
@@ -109,7 +109,7 @@ def _get_header_existence(command: CommandProtocol) -> str:
         return line
 
 
-def _get_header_switch(pre: CommandProtocol, nxt: CommandProtocol) -> str:
+def _get_header_switch(pre: CommandLike, nxt: CommandLike) -> str:
     return strings.center_text_in_line(f"<<[{pre.name}]>>[{nxt.name}]<<", length=_header_length)
 
 
@@ -200,10 +200,10 @@ def cli_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: A
                 terminal << f'👀 do you mean command<{matched}>?'
             return
         else:
-            terminal.both << _get_header_entry(command)
+            terminal.both << _get_header_entry(executable)
             ctx = CmdContext(proj=proj, cmdlist=cmdlist, terminal=terminal, args=args)
             catch_executing(ctx, executing=lambda: executable.execute_cli(ctx))
-            terminal.both << _get_header_existence(command)
+            terminal.both << _get_header_existence(executable)
     else:
         # prepare commands to run
         exe_args = []
@@ -260,7 +260,7 @@ def interactive_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal):
         dispatcher = TaskDispatcher()
         while True:
             # terminal << all_cmd_prompt
-            selected: CommandProtocol = useRef()
+            selected: CommandLike = useRef()
             yield build.select_one_cmd(cmdlist.name2cmd, terminal, prompt="cmd=", fuzzy_match=True, ref=selected)
             terminal.both << _get_header_entry(selected)
             ctx = CmdContext(proj, terminal, cmdlist)

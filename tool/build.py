@@ -2,7 +2,8 @@ from io import StringIO
 from typing import Iterator, Any, Callable
 
 import fuzzy
-from cmd import CommandProtocol
+import style
+from cmd import CommandLike
 from coroutine import Task, STOP
 from tui.colortxt import FG
 from tui.colortxt.txt import Palette
@@ -15,7 +16,6 @@ class InputTask:
     when input is a hash sign "#", the coroutine will abort instantly
     """
     abort_sign = "#"
-    palette = Palette(fg=FG.Pink)
 
     def __init__(self, t: Terminal, prompt: str, ref: Ref):
         self.terminal = t
@@ -23,7 +23,7 @@ class InputTask:
         self.ref = ref
 
     def __call__(self, *args, **kwargs) -> Iterator:
-        inputted = self.terminal.input(self.palette.tint(self.prompt))
+        inputted = self.terminal.input(style.inputting(self.prompt))
         if inputted == self.abort_sign:
             yield STOP
         else:
@@ -37,16 +37,11 @@ def await_input(
     return InputTask(terminal, prompt, ref)
 
 
-_num = Palette(fg=FG.Emerald)
-_name = Palette(fg=FG.Azure)
-_usrcmd = Palette(fg=FG.Gold)
-
-
-def _tint_cmd(cmd: CommandProtocol) -> str:
+def _tint_cmd(cmd: CommandLike) -> str:
     if hasattr(cmd, "created_by_user"):
         if getattr(cmd, "created_by_user"):
-            return _usrcmd.tint(cmd.name)
-    return _name.tint(cmd.name)
+            return style.usrcmdname(cmd.name)
+    return style.cmdname(cmd.name)
 
 
 _TintFunc = Callable[[str], str]
@@ -63,8 +58,7 @@ def _build_contents(
             t << f"👀 {s.getvalue()}"
             s.close()
             s = StringIO()
-        else:
-            s.write(f"{tint_num(f'#{i}')}={tint_name(key)}\t")
+        s.write(f"{tint_num(f'#{i}')}={tint_name(key)}\t")
     if s.readable():
         t << f"👀 {s.getvalue()}"
         s.close()
@@ -80,13 +74,13 @@ def select_many(
         candidates,
         t, prompt, ignore_case=ignore_case,
         row=row, ref=ref,
-        tint_num=lambda num: _num.tint(num),
-        tint_name=lambda name: _name.tint(name)
+        tint_num=lambda num: style.number(num),
+        tint_name=lambda name: style.cmdname(name)
     )
 
 
 def select_many_cmds(
-        candidates: dict[str, CommandProtocol],
+        candidates: dict[str, CommandLike],
         t: Terminal, prompt: str,
         *, ignore_case=True,
         row=4, ref: Ref | Any
@@ -95,8 +89,8 @@ def select_many_cmds(
         candidates,
         t, prompt, ignore_case=ignore_case,
         row=row, ref=ref,
-        tint_num=lambda num: _num.tint(num),
-        tint_name=lambda cmd: _tint_cmd(candidates[cmd]) if cmd in candidates else _name.tint(cmd)
+        tint_num=lambda num: style.number(num),
+        tint_name=lambda cmd: _tint_cmd(candidates[cmd]) if cmd in candidates else style.cmdname(cmd)
     )
 
 
@@ -160,8 +154,8 @@ def select_one_cmd(
         t, prompt, ignore_case=ignore_case,
         fuzzy_match=fuzzy_match,
         row=row, ref=ref,
-        tint_num=lambda num: _num.tint(num),
-        tint_name=lambda cmd: _tint_cmd(candidates[cmd]) if cmd in candidates else _name.tint(cmd)
+        tint_num=lambda num: style.number(num),
+        tint_name=lambda cmd: _tint_cmd(candidates[cmd]) if cmd in candidates else style.cmdname(cmd)
     )
 
 
@@ -177,8 +171,8 @@ def select_one(
         t, prompt, ignore_case=ignore_case,
         fuzzy_match=fuzzy_match,
         row=row, ref=ref,
-        tint_num=lambda num: _num.tint(num),
-        tint_name=lambda cmd: _name.tint(cmd)
+        tint_num=lambda num: style.number(num),
+        tint_name=lambda cmd: style.cmdname(cmd)
     )
 
 

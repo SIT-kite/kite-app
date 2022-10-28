@@ -4,6 +4,7 @@ from typing import Sequence, Literal
 
 from dart import DartFi, DartRunner
 from filesystem import Directory, File
+from kernal import Kernel
 from serialize import Serializer
 from settings import SettingsBox
 
@@ -30,6 +31,7 @@ class Proj:
         self.serializer = Serializer()
         self.settings = SettingsBox(self.serializer, self.settings_fi)
         self.runner = DartRunner(self.root)
+        self.kernel = Kernel()
 
     def add_unmodule(self, name: str):
         self.unmodules.add(name)

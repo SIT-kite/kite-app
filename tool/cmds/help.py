@@ -2,7 +2,7 @@ from typing import Iterable
 
 import build
 from args import group_args, Args
-from cmd import Command, CmdContext, CommandList, CommandArgError, CommandEmptyArgsError, CommandProtocol
+from cmd import CmdContext, CommandList, CommandArgError, CommandEmptyArgsError, CommandLike
 from ui import Terminal
 from utils import useRef, cast_int
 
@@ -27,16 +27,16 @@ class HelpBoxTerminal(Terminal):
         self.log(*args)
 
 
-def create_page4show(cmdlist: CommandList, page: set[int], cmd_per_page: int) -> Iterable[CommandProtocol]:
+def create_page4show(cmdlist: CommandList, page: set[int], cmd_per_page: int) -> Iterable[CommandLike]:
     for pagenum, cmds in cmdlist.browse_by_page(cmd_per_page):
         if pagenum in page:
             for cmd in cmds:
                 yield cmd
 
 
-class HelpCmd(Command):
+class HelpCmd(CommandLike):
     def __init__(self, cmdlist: CommandList):
-        super().__init__(name="help")
+        self.name = "help"
         self.cmdlist = cmdlist
         self.cmd_per_page = 5
 
@@ -45,7 +45,7 @@ class HelpCmd(Command):
         # ctx.term << f"all commands = [{all_cmd}]"
         while True:
             ctx.term << f'plz select commands to show info.'
-            selected: CommandProtocol = useRef()
+            selected: CommandLike = useRef()
             yield build.select_many_cmds(ctx.cmdlist.name2cmd, ctx.term, prompt="I want=", ref=selected)
             ctx.term.line(48)
             help_ctx = ctx.copy(term=HelpBoxTerminal(ctx.term))
@@ -95,7 +95,7 @@ class HelpCmd(Command):
             HelpCmd.show_help_info(cmd_obj, ctx, help_ctx)
 
     @staticmethod
-    def show_help_info(cmd: Command, ctx: CmdContext, help_box: CmdContext):
+    def show_help_info(cmd: CommandLike, ctx: CmdContext, help_box: CmdContext):
         ctx.term << cmd.name
         cmd.help(help_box)
 

@@ -1,6 +1,7 @@
 from typing import Iterable
 
 import flutter
+import style
 from args import group_args, Args
 from build import input_multiline, yes_no, await_input
 from cmd import CmdContext, CommandEmptyArgsError, CommandArgError
@@ -87,7 +88,7 @@ class AddCmdCmd:
         conf = ctx.proj.settings.get(flutter.extra_commands, settings_type=ExtraCommandsConf)
         if name in conf:
             confirm: bool = useRef()
-            t << f"{name} already exists, confirm to override it?"
+            t << f"{style.usrcmdname(name)} already exists, confirm to override it?"
             yield yes_no(t, ref=confirm)
             if not confirm:
                 t.both << f"adding command<{name}> aborted"

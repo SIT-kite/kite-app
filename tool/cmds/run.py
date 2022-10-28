@@ -1,7 +1,7 @@
 from typing import Iterable, Any
 
 from args import Args
-from cmd import CmdContext, CommandProtocol, CommandArgError, CommandExecuteError, CommandEmptyArgsError
+from cmd import CmdContext, CommandLike, CommandArgError, CommandExecuteError, CommandEmptyArgsError
 from flutter import KiteScript
 from ui import Terminal
 

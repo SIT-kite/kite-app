@@ -1,17 +1,29 @@
-from typing import Iterable, Any, Callable
+from threading import Thread
+from typing import Iterable, Callable
 
-from cmd import CmdContext, CommandArgError, CommandEmptyArgsError
+from cmd import CmdContext, CommandArgError, CommandEmptyArgsError, CommandLike
+from filesystem import File
 from flutter import Proj
 
 
-def template_and_others(proj: Proj) -> tuple[str, list[str]]:
+class ServeTask:
+    name = "l10n_serve"
+
+    def __init__(self):
+        self.running = True
+
+    def terminate(self):
+        self.running = False
+
+
+def template_and_others(proj: Proj) -> tuple[File, list[File]]:
     template = proj.template_arb_fi
     template_name = template.name
     others = []
     for fi in proj.l10n_dir.listing_fis():
         if fi.name != template_name:
-            others.append(fi.path)
-    return template.path, others
+            others.append(fi)
+    return template, others
 
 
 def resort(ctx: CmdContext):
@@ -20,12 +32,23 @@ def resort(ctx: CmdContext):
         if fi.extendswith("arb"):
             new = res.resort(fi.read(), res.methods[res.Alphabetical])
             fi.write(new)
+            ctx.term << f"{fi.path} resorted."
 
 
 def serve(ctx: CmdContext):
     import l10n.serve as ser
     template, others = template_and_others(ctx.proj)
-    ser.start(template, others, terminal=ctx.term)
+    task = ServeTask()
+    thread = Thread(
+        target=lambda: ser.start(
+            template.path,
+            [f.path for f in others],
+            terminal=ctx.term,
+            is_running=lambda: task.running)
+    )
+    thread.daemon = True
+    ctx.proj.kernel.background << task
+    ctx.term << "l10n is serving in background"
 
 
 feature2function: dict[str, Callable[[CmdContext], None]] = {
