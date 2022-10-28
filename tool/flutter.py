@@ -20,7 +20,7 @@ class Proj:
         else:
             self.root = root
         self.pubspec = None
-        self.modules = None
+        self.modules: Modules | None = None
         self.usings: dict[str, "UsingDeclare"] = {}
         self.comps: dict[str, "CompType"] = {}
         self.unmodules: set[str] = set()
@@ -111,7 +111,7 @@ class CompType:
         if mode == "file":
             moduledir.createfi(f"{self.name}.dart")
         elif mode == "dir":
-            moduledir.createdir(self.name)
+            moduledir.createdir(self.name).createfi(f"{self.name}.dart")
         else:
             raise Exception(f"unknown module creation mode {mode}")
 
@@ -248,13 +248,16 @@ class Modules:
     def create(self, creation: ModuleCreation):
         name = creation.name
         if name in self.name2modules:
-            raise Exception(f"duplicate module name {name}")
+            raise Exception(f"module<{name}> already exists")
         moduledir = self.proj.module_folder.subdir(name)
         for component in creation.components:
             mode = "file" if creation.simple else "dir"
             component.create(moduledir, mode)
         for using in creation.usings:
             using.create(moduledir.subfi("using.dart"))
+
+    def __contains__(self, name: str):
+        return name in self.name2modules
 
     def __str__(self):
         return f"{self.proj.name}:{len(self.name2modules)} modules"

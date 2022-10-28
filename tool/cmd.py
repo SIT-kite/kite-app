@@ -228,9 +228,7 @@ class CommandDelegate(Command):
         exe_args = []
         # check if all of them are executable
         for command, args in (args.poll() for args in all_cmdargs):
-            if command.ispair:
-                raise CommandArgError(self, command, f"command name can't be a pair ")
-            cmdname = command.key
+            cmdname = command.full
             executable = ctx.cmdlist[cmdname]
             if executable is None:
                 raise CommandArgError(self, command, f"command<{cmdname}> not found")

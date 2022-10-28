@@ -56,12 +56,11 @@ class RunCmd:
     def execute_cli(ctx: CmdContext):
         if ctx.args.isempty:
             raise CommandEmptyArgsError(RunCmd, ctx.args, "no script name given")
-        name = ctx.args[0]
-        if name.ispair:
-            raise CommandArgError(RunCmd, name, "script name can't be a pair")
-        script = ctx.proj.scripts[name.key]
+        name_arg = ctx.args[0]
+        name = name_arg.full
+        script = ctx.proj.scripts[name]
         if script is None:
-            raise CommandArgError(RunCmd, name, f"script<{name.key}> not found")
+            raise CommandArgError(RunCmd, name_arg, f"script<{name}> not found")
         if isinstance(script, KiteScript):
             execute_kitescript(ctx, script)
 

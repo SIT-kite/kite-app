@@ -1,7 +1,7 @@
 import re
 import shlex
 from io import StringIO
-from typing import Sequence, Iterable, Optional, Union, TypeVar, Callable
+from typing import Sequence, Iterable, Optional, Union, TypeVar, Callable, Generic
 
 _empty_args = ()
 T = TypeVar("T")
@@ -55,7 +55,10 @@ class Arg:
         if len(parts) == 1:
             return Arg(full=arg, key=parts[0])
         else:
-            return Arg(full=arg, key=parts[0], value=parts[1])
+            if len(parts[0]) == 0:
+                return Arg(full=arg, key=parts[1])
+            else:
+                return Arg(full=arg, key=parts[0], value=parts[1])
 
     def __str__(self):
         return self.full
@@ -105,8 +108,11 @@ class ArgPosition:
         self.end = end
 
 
+TArg = TypeVar("TArg", bound=Arg)
+
+
 # noinspection SpellCheckingInspection
-class Args:
+class Args(Iterable[TArg]):
     """
     Args is a pure data class whose fields are immutable
     and all methods are pure that return a new Args object.
@@ -286,7 +292,7 @@ class Args:
         res._args = res.copy_args(inner)
         return res
 
-    def __iter__(self) -> Iterable[Arg]:
+    def __iter__(self):
         return iter(self._args)
 
     def peekhead(self) -> Arg | None:
@@ -438,3 +444,10 @@ def group_args(args: Args, group_head: str = "--") -> dict[str | None, list[Args
         grouped_start = args.size
     _append_group(res, None, args[0:grouped_start])
     return res
+
+
+def flatten_args(
+        argslist: list[Args],
+        mapping: Callable[[Arg], T] = lambda arg: arg
+) -> list[T]:
+    return [(item if mapping is None else mapping(item)) for sublist in argslist for item in sublist]

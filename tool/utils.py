@@ -1,4 +1,4 @@
-from typing import Generic, TypeVar, Any
+from typing import Generic, TypeVar, Any, Callable, Iterable
 
 T = TypeVar("T")
 
@@ -47,3 +47,7 @@ true_list = {
 
 def cast_bool(s: str) -> bool:
     return s.lower() in true_list
+
+
+def flatten(li: Iterable[Iterable[T]], mapping: Callable[[T], Any] = None) -> list[T] | list[Any]:
+    return [(item if mapping is None else mapping(item)) for sublist in li for item in sublist]

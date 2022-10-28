@@ -132,7 +132,7 @@ def _get_line(length: int):
     else:
         with StringIO() as s:
             for i in range(length):
-                s.write("-")
+                s.write("━")
             res = s.getvalue()
             _lines[length] = res
             return res

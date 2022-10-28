@@ -1,83 +1,62 @@
-from typing import Callable, Sequence
+from typing import Callable, TypeVar
 
-import cmd
-from args import Args, Arg
-from cmd import CmdContext, CommandArgError, CommandArgError
-from flutter import CompType, UsingDeclare, ModuleCreation, Usings, Components
-from utils import Ref
+from args import Args, Arg, group_args, flatten_args
+from cmd import CmdContext, CommandEmptyArgsError, CommandArgError
+from flutter import ModuleCreation
 
 Mode = Callable[[Arg], None]
 
 
-def process(args: Args) -> tuple[Components, Usings, bool]:
-    excluded: set[CompType] = set()
-    included: set[CompType] = set()
-    used: set[UsingDeclare] = set()
-    simple_module = Ref(False)
-    cur_args = args
+def _check_name(ctx: CmdContext, name_argslist: list[Args]) -> tuple[Arg, str]:
+    size = len(name_argslist)
+    if size == 0:
+        raise CommandEmptyArgsError(AddModuleCmd, ctx.args, "no arg<n> given")
+    elif size > 0:
+        raise CommandArgError(AddModuleCmd, name_argslist[1][0], "duplicate name specified")
+    else:
+        name_args = name_argslist[0]
+        if name_args.size > 1:
+            raise CommandArgError(AddModuleCmd, name_args[1], "duplicate name specified")
+        else:
+            name_arg = name_args[0]
+            if name_arg.ispair:
+                raise CommandArgError(AddModuleCmd, name_arg, "arg<n> can't be a pair")
+            else:
+                return name_arg, name_arg.key
 
-    def include_mode(arg: Arg):
-        module = arg.key
-        if module == "*":
-            for c in CompType.all.values():
+
+def _get_list(ctx: CmdContext, name: str, grouped: dict[str, list[Args]]) -> list[Arg]:
+    if name not in grouped:
+        raise CommandEmptyArgsError(AddModuleCmd, ctx.args, "no arg<c> given")
+    else:
+        return flatten_args(grouped[name])
+
+
+T = TypeVar("T")
+
+
+def _resolve(total: dict[str, T], args: list[Arg], kind: str) -> tuple[T]:
+    included = set()
+    excluded = set()
+
+    def try_find() -> T:
+        if name not in total:
+            raise CommandArgError(AddModuleCmd, arg, f"{name} isn't a {kind}")
+        else:
+            return total[name]
+
+    for arg in args:
+        name = arg.full
+        if name == "*":
+            for c in total.values():
                 included.add(c)
         else:
-            if module not in CompType.all:
-                raise CommandArgError(AddModuleCmd, arg, f"{module} isn't a module")
-            included.add(CompType.all[module])
-
-    def exclude_mode(arg: Arg):
-        module = arg.key
-        if module == "*":
-            for c in CompType.all.values():
-                excluded.add(c)
-        else:
-            if module not in CompType.all:
-                raise CommandArgError(AddModuleCmd, arg, f"{module} isn't a module")
-            excluded.add(CompType.all[module])
-
-    def using_mode(arg: Arg):
-        using = arg.key
-        if using == "*":
-            for u in UsingDeclare.all.values():
-                used.add(u)
-        else:
-            if using not in UsingDeclare.all:
-                raise CommandArgError(AddModuleCmd, arg, f"{using} isn't a using")
-            used.add(UsingDeclare.all[using])
-
-    def simple_mode(arg: Arg):
-        simple_module.obj = True
-
-    name2mode = {
-        "include": include_mode,
-        "exclude": exclude_mode,
-        "using": using_mode,
-        "simple": simple_mode,
-    }
-
-    def check_mode(arg: Arg) -> Mode | None:
-        if not arg.ispair and arg.key.startswith("--"):
-            mode_name = arg.key.removeprefix("--")
-            if mode_name in name2mode:
-                return name2mode[mode_name]
-        return None
-
-    mode = None
-    while cur_args.hasmore:
-        head_arg = cur_args.peekhead()
-        mode_pos = check_mode(head_arg)
-        if mode_pos is not None:
-            mode = mode_pos
-            _, cur_args = cur_args.poll()
-        if mode is None:
-            raise CommandArgError(AddModuleCmd, head_arg, "invalid args")
-        else:
-            cur_arg, cur_args = cur_args.poll()
-            if cur_arg.ispair:
-                raise CommandArgError(AddModuleCmd, cur_arg, f"{cur_arg} can't be a pair")
-            mode(cur_arg)
-    return tuple(included - excluded), tuple(used), simple_module.deref()
+            if name.startswith("~"):
+                name = name.removeprefix("~")
+                excluded.add(try_find())
+            else:
+                included.add(try_find())
+    return tuple(included - excluded)
 
 
 class AddModuleCmd:
@@ -85,11 +64,23 @@ class AddModuleCmd:
 
     @staticmethod
     def execute_cli(ctx: CmdContext):
-        name, extra = ctx.args.poll()
-        if name is None:
-            raise CommandArgError(AddModuleCmd, None, "module name not given")
-        components, usings, simple = process(extra)
-        res = ModuleCreation(name.key, components, usings)
+        grouped = group_args(ctx.args)
+        # find name
+        if "n" in grouped:
+            name_arg, name = _check_name(ctx, grouped["n"])
+        else:
+            ungrouped = grouped[None]
+            name_arg, name = _check_name(ctx, ungrouped)
+        if name in ctx.proj.modules:
+            raise CommandArgError(AddModuleCmd, name_arg, f"module<{name}> already exists")
+        # get names
+        component_names = _get_list(ctx, "c", grouped)
+        using_names = _get_list(ctx, "u", grouped)
+        # resolve
+        components = _resolve(ctx.proj.comps, component_names, "component")
+        usings = _resolve(ctx.proj.usings, using_names, "usings")
+        # creating
+        res = ModuleCreation(name, components, usings)
         ctx.proj.modules.create(res)
 
     @staticmethod
@@ -102,4 +93,8 @@ class AddModuleCmd:
 
     @staticmethod
     def help(ctx: CmdContext):
-        pass
+        t = ctx.term
+        t << "addmodule --n <name> --c <..components> --u <..using>"
+        t << '| ..components: *=all, "~"-prefix=exclude'
+        t << '| ..using: *=all, "~"-prefix=exclude'
+        t << '| eg: addmodule --n test --c entity service dao --u l10n'

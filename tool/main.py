@@ -94,7 +94,7 @@ def _get_header_entry(command: CommandProtocol) -> str:
     if name in _header_entry_cache:
         return _header_entry_cache[name]
     else:
-        line = strings.center_text_in_line(f">>[{name}]<<", length=_header_length)
+        line = strings.center_text_in_line(f">>[{name}]<<", length=_header_length, repeater="━")
         _header_entry_cache[name] = line
         return line
 
@@ -104,7 +104,7 @@ def _get_header_existence(command: CommandProtocol) -> str:
     if name in _header_existence_cache:
         return _header_existence_cache[name]
     else:
-        line = strings.center_text_in_line(f"<<[{name}]>>", length=_header_length)
+        line = strings.center_text_in_line(f"<<[{name}]>>", length=_header_length, repeater="━")
         _header_existence_cache[name] = line
         return line
 
