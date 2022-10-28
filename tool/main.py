@@ -152,7 +152,13 @@ def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequ
     terminal.both << f'Description: "{proj.desc}".'
     import kite
     kite.load(proj)
-    load_cmds(proj=proj, cmdlist=cmdlist, t=terminal)
+
+    def load_cmds_func():
+        cmdlist.name2cmd.clear()
+        load_cmds(proj=proj, cmdlist=cmdlist, t=terminal)
+
+    load_cmds_func()
+    proj.kernel.reloader.reload_cmds = load_cmds_func
     import loader
     from loader import DuplicateNameCompError
     try:

@@ -1,9 +1,11 @@
 from threading import Thread
 from typing import Iterable, Callable
 
+from build import select_one
 from cmd import CmdContext, CommandArgError, CommandEmptyArgsError, CommandLike
 from filesystem import File
 from flutter import Proj
+from utils import useRef
 
 
 class ServeTask:
@@ -51,7 +53,7 @@ def serve(ctx: CmdContext):
     ctx.term << "l10n is serving in background"
 
 
-feature2function: dict[str, Callable[[CmdContext], None]] = {
+name2function: dict[str, Callable[[CmdContext], None]] = {
     "resort": resort,
     "serve": serve
 }
@@ -67,17 +69,19 @@ class L10nCmd:
             raise CommandEmptyArgsError(L10nCmd, args, "no function specified")
         elif len(args) == 1:
             func_name = args[0].full.removeprefix("--")
-            if func_name not in feature2function:
+            if func_name not in name2function:
                 raise CommandArgError(L10nCmd, args[0], f"function<{func_name}> not found")
             else:
-                func = feature2function[func_name]
+                func = name2function[func_name]
                 func(ctx)
         else:  # including None
             raise CommandArgError(L10nCmd, args[1], "only allow one function")
 
     @staticmethod
     def execute_interactive(ctx: CmdContext) -> Iterable:
-        yield
+        selected = useRef()
+        yield select_one(name2function, ctx.term, prompt="func=", fuzzy_match=True, ref=selected)
+        selected(ctx)
 
     @staticmethod
     def help(ctx: CmdContext):

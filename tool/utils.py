@@ -31,6 +31,9 @@ class Ref(Generic[T]):
     def __iter__(self):
         return iter(self.obj)
 
+    def __call__(self, *args, **kwargs):
+        return self.obj(*args, **kwargs)
+
 
 def useRef(obj=None) -> Any | Ref: return Ref(obj)
 

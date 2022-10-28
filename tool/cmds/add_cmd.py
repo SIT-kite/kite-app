@@ -56,6 +56,7 @@ class AddCmdCmd:
             info = ""
         conf = ctx.proj.settings.get(flutter.extra_commands, settings_type=ExtraCommandsConf)
         AddCmdCmd.add_cmd(conf, name, args, info)
+        ctx.proj.kernel.reloader.reload_cmds()
 
     @staticmethod
     def execute_interactive(ctx: CmdContext) -> Iterable:
@@ -95,7 +96,7 @@ class AddCmdCmd:
                 return
         AddCmdCmd.add_cmd(conf, name, fullargs, helpinfo)
         t.both << f'command<{name}> added.'
-
+        ctx.proj.kernel.reloader.reload_cmds()
     @staticmethod
     def help(ctx: CmdContext):
         t = ctx.term

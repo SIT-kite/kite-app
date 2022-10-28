@@ -1,6 +1,12 @@
 from typing import Protocol
 
 
+class Kernel:
+    def __init__(self):
+        self.background = Background()
+        self.reloader = Reloader()
+
+
 class BackgroundTask(Protocol):
     name: str
 
@@ -25,6 +31,9 @@ class Background:
         self._tasks[name] = task
 
 
-class Kernel:
+def _do_nothing(): pass
+
+
+class Reloader:
     def __init__(self):
-        self.background = Background()
+        self.reload_cmds = _do_nothing
