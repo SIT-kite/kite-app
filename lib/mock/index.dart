@@ -16,10 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/module/symbol.dart';
-import 'package:kite/module/library/search/init.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/global/init.dart';
+import 'package:kite/module/library/search/init.dart';
+import 'package:kite/module/symbol.dart';
 
 import 'config.dart';
 
@@ -45,12 +45,12 @@ Future<void> login() async {
   await Global.ssoSession.login(username, ssoPassword);
 }
 
-/// 图书馆登陆
+/// 图书馆登录
 Future<void> loginLibrary() async {
   await LibrarySearchInit.session.login(username, libraryPassword);
 }
 
-/// 登陆小风筝服务
+/// 登录小风筝服务
 Future<void> loginKite() async {
   await SharedInit.kiteSession.login(username, ssoPassword);
 }
