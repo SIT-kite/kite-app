@@ -11,12 +11,12 @@ from utils import Ref, useRef
 def _get_arg(grouped: dict[str | None, list[Args]], argname: str, allow_empty=False) -> str | None:
     n_argslist = grouped[argname]
     if len(n_argslist) > 1:
-        raise CommandArgError(AddCmdCmd, n_argslist[1][0], f"duplicate arg<{argname}> provided")
+        raise CommandArgError(AliasCmd, n_argslist[1][0], f"duplicate arg<{argname}> provided")
     n_args = n_argslist[0]
     if n_args.size == 0:
         if allow_empty:
             return None
-        raise CommandEmptyArgsError(AddCmdCmd, n_args, f"arg<{argname}> is empty")
+        raise CommandEmptyArgsError(AliasCmd, n_args, f"arg<{argname}> is empty")
     elif n_args.size == 1:
         n_arg = n_args[0]
         return n_arg.full
@@ -24,8 +24,8 @@ def _get_arg(grouped: dict[str | None, list[Args]], argname: str, allow_empty=Fa
         return n_args.full()
 
 
-class AddCmdCmd:
-    name = "addcmd"
+class AliasCmd:
+    name = "alias"
 
     @staticmethod
     def add_cmd(conf: ExtraCommandsConf, name: str, fullargs: str, helpinfo: str):
@@ -35,27 +35,25 @@ class AddCmdCmd:
     @staticmethod
     def execute_cli(ctx: CmdContext):
         if ctx.args.isempty:
-            raise CommandEmptyArgsError(AddCmdCmd, ctx.args, "no command name given")
+            raise CommandEmptyArgsError(AliasCmd, ctx.args, "no command name given")
         t = ctx.term
         grouped = group_args(ctx.args)
         ungrouped_args = grouped[None][0]
         if not ungrouped_args.isempty:
-            name_arg = ungrouped_args[0]
-            if name_arg.ispair:
-                if name_arg.key == "name":
-                    name = name_arg.key
-                else:
-                    raise CommandArgError(AddCmdCmd, name_arg, "name is a pair but without a key<name>")
+            alias_arg = ungrouped_args[0]
+            if not alias_arg.ispair:
+                raise CommandArgError(AliasCmd, alias_arg, 'plz match <cmd_name="full args"> format')
             else:
-                name = name_arg.key
+                name = alias_arg.key
+                args = alias_arg.value
         else:
             name = _get_arg(grouped, argname="n", allow_empty=False)
-        args = _get_arg(grouped, argname="args", allow_empty=False)
+            args = _get_arg(grouped, argname="args", allow_empty=False)
         info = _get_arg(grouped, argname="info", allow_empty=True)
         if info is None:
             info = ""
         conf = ctx.proj.settings.get(flutter.extra_commands, settings_type=ExtraCommandsConf)
-        AddCmdCmd.add_cmd(conf, name, args, info)
+        AliasCmd.add_cmd(conf, name, args, info)
         t.both << f'command<{name}> added.'
         ctx.proj.kernel.reloader.reload_cmds()
 
@@ -95,12 +93,13 @@ class AddCmdCmd:
             if not confirm:
                 t.both << f"adding command<{name}> aborted"
                 return
-        AddCmdCmd.add_cmd(conf, name, fullargs, helpinfo)
+        AliasCmd.add_cmd(conf, name, fullargs, helpinfo)
         t.both << f'command<{name}> added.'
         ctx.proj.kernel.reloader.reload_cmds()
 
     @staticmethod
     def help(ctx: CmdContext):
         t = ctx.term
-        t << "addcmd --n <cmd name> --args <full args> --info <help info>"
-        t << "|-- add a custom cmd with args"
+        t << "add an alias of commands"
+        t << "| alias --n <cmd name> --args <full args> [--info <help info>]"
+        t << '| alias cmd_name="full args" [--info <help info>]'

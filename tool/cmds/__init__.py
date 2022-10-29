@@ -2,7 +2,7 @@ from cmds.add_copyright import AddCopyRightCmd
 from cmds.add_module import AddModuleCmd
 from cmds.lint import LintCmd
 from cmds.run import RunCmd
-from cmds.add_cmd import AddCmdCmd
+from cmds.alias import AliasCmd
 from cmds.l10n import L10nCmd
 from cmds.cli import CliCmd
 from cmd import CommandList
@@ -13,6 +13,6 @@ def load_static_cmd(cmdlist: CommandList):
     cmdlist << AddModuleCmd
     cmdlist << RunCmd
     cmdlist << LintCmd
-    cmdlist << AddCmdCmd
+    cmdlist << AliasCmd
     cmdlist << L10nCmd
     cmdlist << CliCmd
