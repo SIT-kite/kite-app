@@ -165,7 +165,7 @@ def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequ
         loader.load_modules(terminal, proj)
     except DuplicateNameCompError as e:
         terminal.both << f"Duplicate component<{e.comp}> of module<{e.module}> detected."
-        log_traceback(terminal)
+        cmd.log_traceback(terminal)
         return
     if len(cmdargs) == 0:
         interactive_mode(proj=proj, cmdlist=cmdlist, terminal=terminal)
@@ -177,12 +177,6 @@ def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequ
         cli_mode(proj=proj, cmdlist=cmdlist, terminal=terminal, cmdargs=fullargs)
     proj.settings.save()
     terminal.both << "🪁 Kite Tool exits."
-
-
-def log_traceback(terminal: Terminal):
-    if terminal.has_logger:
-        terminal.logging << traceback.format_exc()
-        terminal << "ℹ️ full traceback was printed into log."
 
 
 def cli_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Args):
@@ -208,7 +202,7 @@ def cli_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: A
         else:
             terminal.both << _get_header_entry(executable)
             ctx = CmdContext(proj=proj, cmdlist=cmdlist, terminal=terminal, args=args)
-            catch_executing(ctx, executing=lambda: executable.execute_cli(ctx))
+            cmd.catch_executing(ctx, executing=lambda: executable.execute_cli(ctx))
             terminal.both << _get_header_existence(executable)
     else:
         # prepare commands to run
@@ -232,27 +226,10 @@ def cli_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: A
             else:
                 terminal.both << _get_header_switch(last, executable)
             ctx = CmdContext(proj=proj, cmdlist=cmdlist, terminal=terminal, args=args)
-            catch_executing(ctx, executing=lambda: executable.execute_cli(ctx))
+            cmd.catch_executing(ctx, executing=lambda: executable.execute_cli(ctx))
             if i == len(exe_args) - 1:
                 terminal.both << _get_header_existence(executable)
             last = executable
-
-
-def catch_executing(
-        ctx: CmdContext,
-        executing: Callable[[], Any]
-) -> Any:
-    try:
-        return executing()
-    except CommandArgError as e:
-        cmd.print_cmdarg_error(ctx, e)
-        log_traceback(ctx.term)
-    except CommandEmptyArgsError as e:
-        cmd.print_cmdargs_empty_error(ctx, e)
-        log_traceback(ctx.term)
-    except CommandExecuteError as e:
-        ctx.term.both << f"{type(e).__name__}: {e}"
-        log_traceback(ctx.term)
 
 
 def interactive_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal):
@@ -271,7 +248,7 @@ def interactive_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal):
             yield build.select_one_cmd(cmdlist.name2cmd, ctx, prompt="cmd=", fuzzy_match=True, ref=selected)
             terminal.both << _get_header_entry(selected)
             dispatcher.run(selected.execute_interactive(ctx))
-            state = catch_executing(ctx, executing=lambda: dispatcher.dispatch())
+            state = cmd.catch_executing(ctx, executing=lambda: dispatcher.dispatch())
             terminal.both << _get_header_existence(selected)
             if state == DispatcherState.Abort:
                 yield

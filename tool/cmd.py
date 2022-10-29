@@ -1,5 +1,6 @@
+import traceback
 from io import StringIO
-from typing import Iterable, runtime_checkable, Protocol, Iterator, Any
+from typing import Iterable, runtime_checkable, Protocol, Iterator, Any, Callable
 
 import fuzzy
 import strings
@@ -103,10 +104,10 @@ class CommandList:
         else:
             return self.name2cmd[name]
 
-    def add(self, cmd: CommandLike):
+    def add(self, cmd: CommandLike | Any):
         self.add_cmd(cmd.name, cmd)
 
-    def __lshift__(self, cmd: CommandLike):
+    def __lshift__(self, cmd: CommandLike | Any):
         self.add(cmd)
 
     @property
@@ -236,7 +237,7 @@ class CommandDelegate(CommandLike):
             cmdname = command.full
             executable = ctx.cmdlist[cmdname]
             if executable is None:
-                raise CommandArgError(self, command, f"command<{cmdname}> not found")
+                raise CommandArgError(self, command, f"command not found")
             exe_args.append((executable, args))
         for i, pair in enumerate(exe_args):
             executable, args = pair
@@ -253,3 +254,26 @@ class CommandDelegate(CommandLike):
     def help(self, ctx: CmdContext):
         for line in self.helpinfo.splitlines():
             ctx.term << line
+
+
+def log_traceback(t: Terminal):
+    if t.has_logger:
+        t.logging << traceback.format_exc()
+        t << "ℹ️ full traceback was printed into log."
+
+
+def catch_executing(
+        ctx: CmdContext,
+        executing: Callable[[], Any]
+) -> Any:
+    try:
+        return executing()
+    except CommandArgError as e:
+        print_cmdarg_error(ctx, e)
+        log_traceback(ctx.term)
+    except CommandEmptyArgsError as e:
+        print_cmdargs_empty_error(ctx, e)
+        log_traceback(ctx.term)
+    except CommandExecuteError as e:
+        ctx.term.both << f"{type(e).__name__}: {e}"
+        log_traceback(ctx.term)

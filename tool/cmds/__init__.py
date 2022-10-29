@@ -4,6 +4,7 @@ from cmds.lint import LintCmd
 from cmds.run import RunCmd
 from cmds.add_cmd import AddCmdCmd
 from cmds.l10n import L10nCmd
+from cmds.cli import CliCmd
 from cmd import CommandList
 
 
@@ -14,3 +15,4 @@ def load_static_cmd(cmdlist: CommandList):
     cmdlist << LintCmd
     cmdlist << AddCmdCmd
     cmdlist << L10nCmd
+    cmdlist << CliCmd

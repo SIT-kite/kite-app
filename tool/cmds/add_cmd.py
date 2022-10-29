@@ -1,7 +1,6 @@
 from typing import Iterable
 
 import flutter
-import style
 from args import group_args, Args
 from build import input_multiline, yes_no, await_input
 from cmd import CmdContext, CommandEmptyArgsError, CommandArgError
@@ -37,6 +36,7 @@ class AddCmdCmd:
     def execute_cli(ctx: CmdContext):
         if ctx.args.isempty:
             raise CommandEmptyArgsError(AddCmdCmd, ctx.args, "no command name given")
+        t = ctx.term
         grouped = group_args(ctx.args)
         ungrouped_args = grouped[None][0]
         if not ungrouped_args.isempty:
@@ -56,6 +56,7 @@ class AddCmdCmd:
             info = ""
         conf = ctx.proj.settings.get(flutter.extra_commands, settings_type=ExtraCommandsConf)
         AddCmdCmd.add_cmd(conf, name, args, info)
+        t.both << f'command<{name}> added.'
         ctx.proj.kernel.reloader.reload_cmds()
 
     @staticmethod

@@ -210,8 +210,7 @@ def _select_one(
                         inputted = useRef()
                         yield await_input(ctx, prompt="y/n=", ref=inputted)
                         inputted = inputted.strip()
-                        yes = inputted == "" or cast_bool(inputted)
-                        if yes:
+                        if inputted == "" or cast_bool(inputted):
                             ref.obj = candidates[matched]
                             yield
                         else:
