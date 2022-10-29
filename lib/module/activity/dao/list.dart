@@ -19,8 +19,6 @@
 import '../entity/list.dart';
 
 abstract class ScActivityListDao {
-  Future<void> refreshCookie();
-
   Future<List<Activity>> getActivityList(ActivityType type, int page);
 
   Future<List<Activity>> query(String queryString);

@@ -25,6 +25,75 @@ import 'card.dart';
 import 'profile.dart';
 import 'search.dart';
 
+class EventList extends StatefulWidget {
+  final ActivityType type;
+
+  const EventList(this.type, {super.key});
+
+  @override
+  State<StatefulWidget> createState() => _EventListState();
+}
+
+class _EventListState extends State<EventList> {
+  int _lastPage = 1;
+  bool _atEnd = false;
+  List<Activity> _activityList = [];
+
+  final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+        if (!_atEnd) {
+          loadMoreActivities();
+        }
+      } else {
+        setState(() {
+          _atEnd = false;
+        });
+      }
+    });
+    loadInitialActivities();
+    super.initState();
+  }
+
+  void loadInitialActivities() async {
+    _lastPage = 1;
+    _activityList = await ScInit.scActivityListService.getActivityList(widget.type, 1);
+    _lastPage++;
+    if (!mounted) return;
+    setState(() {});
+  }
+
+  void loadMoreActivities() async {
+    if (_atEnd) return;
+
+    final lastActivities = await ScInit.scActivityListService.getActivityList(widget.type, _lastPage);
+
+    if (!mounted) return;
+    if (lastActivities.isEmpty) {
+      setState(() => _atEnd = true);
+      return;
+    }
+
+    _lastPage++;
+    setState(() => _activityList.addAll(lastActivities));
+  }
+
+  Widget _buildEventResult(List<Activity> activities) {
+    return ListView(
+      controller: _scrollController,
+      children: activities.map((e) => EventCard(e)).toList(),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildEventResult(_activityList);
+  }
+}
+
 class EventPage extends StatefulWidget {
   const EventPage({Key? key}) : super(key: key);
 
@@ -57,55 +126,11 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
     super.initState();
   }
 
-  static bool _filterActivity(Activity activity) {
-    return !ActivityName.blackList.any((element) => activity.title.contains(element));
-  }
-
   TabBar _buildBarHeader() {
     return TabBar(
       isScrollable: true,
       controller: _tabController,
       tabs: categories.map((e) => Tab(text: e.name)).toList(),
-    );
-  }
-
-  Widget _buildEventResult(List<Activity> activities) {
-    return ListView(
-      controller: ScrollController(),
-      children: activities.map((e) => EventCard(e)).toList(),
-    );
-  }
-
-  Widget _buildEventList(ActivityType type) {
-    if (!init) {
-      Future.wait([
-        () async {
-          await ScInit.scActivityListService.refreshCookie();
-        }()
-      ]);
-      init = true;
-    }
-
-    return MyFutureBuilder<List<Activity>>(
-      future: ScInit.scActivityListService.getActivityList(type, 1),
-      builder: (context, data) {
-        final result = data.where(_filterActivity).toList();
-        return _buildEventResult(result);
-      },
-    );
-  }
-
-  Widget _buildBody(BuildContext context) {
-    return TabBarView(
-      controller: _tabController,
-      children: categories.map((e) {
-        return ValueListenableBuilder(
-          valueListenable: pageChangeNotifier,
-          builder: (a, b, c) {
-            return _buildEventList(e);
-          },
-        );
-      }).toList(),
     );
   }
 
@@ -124,11 +149,21 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
             ),
             IconButton(
               icon: const Icon(Icons.person),
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => ProfilePage())),
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ProfilePage())),
             )
           ],
         ),
-        body: _buildBody(context),
+        body: TabBarView(
+          controller: _tabController,
+          children: categories.map((selectedActivityType) {
+            return ValueListenableBuilder(
+              valueListenable: pageChangeNotifier,
+              builder: (context, index, child) {
+                return EventList(selectedActivityType);
+              },
+            );
+          }).toList(),
+        ),
       ),
     );
   }
