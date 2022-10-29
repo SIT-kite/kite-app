@@ -32,32 +32,37 @@ class ScActivityListService implements ScActivityListDao {
     ActivityType.thematicEdu: 'ff808081674ec4720167ce60dda77cea',
     ActivityType.voluntary: '8ab17f543fe62d5d013fe62e6dc70001',
   };
-
   static RegExp re = RegExp(r"(\d){7}");
   static String selector = '.ul_7 li > a';
   static DateFormat dateFormatParser = DateFormat('yyyy-MM-dd hh:mm:ss');
+
+  static bool _initializedCookie = false;
 
   final ISession session;
 
   const ScActivityListService(this.session);
 
-  Future<void> refreshCookie() async {
+  Future<void> _refreshCookie() async {
     Future<void> getHomePage() async {
       const String url = 'http://sc.sit.edu.cn/';
       await session.request(url, ReqMethod.get);
     }
 
-    await getHomePage();
+    if (!_initializedCookie) {
+      await getHomePage();
+      _initializedCookie = true;
+    }
   }
 
   /// 获取第二课堂活动列表
   @override
   Future<List<Activity>> getActivityList(ActivityType type, int page) async {
-    String _generateUrl(ActivityType category, int page, [int pageSize = 20]) {
+    String generateUrl(ActivityType category, int page, [int pageSize = 20]) {
       return 'http://sc.sit.edu.cn/public/activity/activityList.action?pageNo=$page&pageSize=$pageSize&categoryId=${_scActivityType[category]}';
     }
 
-    final url = _generateUrl(type, page);
+    await _refreshCookie();
+    final url = generateUrl(type, page);
     final response = await session.request(url, ReqMethod.get);
 
     return _parseActivityList(response.data);
@@ -66,6 +71,8 @@ class ScActivityListService implements ScActivityListDao {
   @override
   Future<List<Activity>> query(String queryString) async {
     const String url = 'http://sc.sit.edu.cn/public/activity/activityList.action';
+
+    await _refreshCookie();
     final response = await session.request(url, ReqMethod.post, data: {
       'activityName': queryString,
     });

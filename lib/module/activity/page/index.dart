@@ -25,8 +25,6 @@ import 'card.dart';
 import 'profile.dart';
 import 'search.dart';
 
-bool _initializedCookie = false;
-
 class EventList extends StatefulWidget {
   final ActivityType type;
 
@@ -62,10 +60,6 @@ class _EventListState extends State<EventList> {
 
   void loadInitialActivities() async {
     _lastPage = 1;
-    if (!_initializedCookie) {
-      await ScInit.scActivityListService.refreshCookie();
-      _initializedCookie = true;
-    }
     _activityList = await ScInit.scActivityListService.getActivityList(widget.type, 1);
     _lastPage++;
     if (!mounted) return;
