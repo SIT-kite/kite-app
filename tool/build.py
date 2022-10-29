@@ -2,56 +2,46 @@ from io import StringIO
 from typing import Iterator, Any, Callable
 
 import fuzzy
-import style
-from cmd import CommandLike
+from cmd import CommandLike, CmdContext
 from coroutine import Task, STOP
-from tui.colortxt import FG
-from tui.colortxt.txt import Palette
-from ui import Terminal
 from utils import cast_int, cast_bool, useRef, Ref
 
 
-class InputTask:
+def await_input(
+        ctx: CmdContext, prompt: str, *, ref: useRef,
+        abort_sign="#"
+) -> Task:
     """
     when input is a hash sign "#", the coroutine will abort instantly
     """
-    abort_sign = "#"
 
-    def __init__(self, t: Terminal, prompt: str, ref: Ref):
-        self.terminal = t
-        self.prompt = prompt
-        self.ref = ref
-
-    def __call__(self, *args, **kwargs) -> Iterator:
-        inputted = self.terminal.input(style.inputting(self.prompt))
-        if inputted == self.abort_sign:
+    def task():
+        inputted = ctx.term.input(ctx.style.inputting(prompt))
+        if inputted == abort_sign:
             yield STOP
         else:
-            self.ref.obj = inputted
+            ref.obj = inputted
             yield
 
-
-def await_input(
-        terminal: Terminal, prompt: str, *, ref: useRef
-) -> InputTask:
-    return InputTask(terminal, prompt, ref)
+    return task
 
 
-def _tint_cmd(cmd: CommandLike) -> str:
+def _tint_cmd(ctx: CmdContext, cmd: CommandLike) -> str:
     if hasattr(cmd, "created_by_user"):
         if getattr(cmd, "created_by_user"):
-            return style.usrcmdname(cmd.name)
-    return style.cmdname(cmd.name)
+            return ctx.style.usrcmdname(cmd.name)
+    return ctx.style.cmdname(cmd.name)
 
 
 _TintFunc = Callable[[str], str]
 
 
 def _build_contents(
-        t: Terminal, candidates: dict[str, Any], row: int,
+        ctx: CmdContext, candidates: dict[str, Any], row: int,
         tint_num: _TintFunc, tint_name: _TintFunc,
 ):
     s = StringIO()
+    t = ctx.term
     for i, pair in enumerate(candidates.items()):
         key, value = pair
         if i != 0 and i % row == 0:
@@ -66,47 +56,48 @@ def _build_contents(
 
 def select_many(
         candidates: dict[str, Any],
-        t: Terminal, prompt: str,
+        ctx: CmdContext, prompt: str,
         *, ignore_case=True,
         row=4, ref: Ref | Any
 ) -> Task:
     return _select_many(
         candidates,
-        t, prompt, ignore_case=ignore_case,
+        ctx, prompt, ignore_case=ignore_case,
         row=row, ref=ref,
-        tint_num=lambda num: style.number(num),
-        tint_name=lambda name: style.cmdname(name)
+        tint_num=lambda num: ctx.style.number(num),
+        tint_name=lambda name: ctx.style.cmdname(name)
     )
 
 
 def select_many_cmds(
         candidates: dict[str, CommandLike],
-        t: Terminal, prompt: str,
+        ctx: CmdContext, prompt: str,
         *, ignore_case=True,
         row=4, ref: Ref | Any
 ) -> Task:
     return _select_many(
         candidates,
-        t, prompt, ignore_case=ignore_case,
+        ctx, prompt, ignore_case=ignore_case,
         row=row, ref=ref,
-        tint_num=lambda num: style.number(num),
-        tint_name=lambda cmd: _tint_cmd(candidates[cmd]) if cmd in candidates else style.cmdname(cmd)
+        tint_num=lambda num: ctx.style.number(num),
+        tint_name=lambda cmd: _tint_cmd(ctx, candidates[cmd]) if cmd in candidates else ctx.style.cmdname(cmd)
     )
 
 
 def _select_many(
         candidates: dict[str, Any],
-        t: Terminal, prompt: str,
+        ctx: CmdContext, prompt: str,
         *, ignore_case=True,
         row=4, ref: Ref | Any,
         tint_num: _TintFunc, tint_name: _TintFunc,
 ) -> Task:
     li = list(candidates.items())
+    t = ctx.term
     while True:
-        _build_contents(t, candidates, row, tint_num, tint_name)
+        _build_contents(ctx, candidates, row, tint_num, tint_name)
         t << '[multi-select] enter "*" to select all or split each by ",".'
         inputted: str = useRef()
-        yield await_input(t, prompt, ref=inputted)
+        yield await_input(ctx, prompt, ref=inputted)
         inputted = inputted.strip()
         if inputted == "*":
             ref.obj = candidates.values()
@@ -144,52 +135,53 @@ def _select_many(
 
 def select_one_cmd(
         candidates: dict[str, Any],
-        t: Terminal, prompt: str,
+        ctx: CmdContext, prompt: str,
         *, ignore_case=True,
         fuzzy_match=False,
         row=4, ref: Ref | Any
 ) -> Task:
     return _select_one(
         candidates,
-        t, prompt, ignore_case=ignore_case,
+        ctx, prompt, ignore_case=ignore_case,
         fuzzy_match=fuzzy_match,
         row=row, ref=ref,
-        tint_num=lambda num: style.number(num),
-        tint_name=lambda cmd: _tint_cmd(candidates[cmd]) if cmd in candidates else style.cmdname(cmd)
+        tint_num=lambda num: ctx.style.number(num),
+        tint_name=lambda cmd: _tint_cmd(ctx, candidates[cmd]) if cmd in candidates else ctx.style.cmdname(cmd)
     )
 
 
 def select_one(
         candidates: dict[str, Any],
-        t: Terminal, prompt: str,
+        ctx: CmdContext, prompt: str,
         *, ignore_case=True,
         fuzzy_match=False,
         row=4, ref: Ref | Any
 ) -> Task:
     return _select_one(
         candidates,
-        t, prompt, ignore_case=ignore_case,
+        ctx, prompt, ignore_case=ignore_case,
         fuzzy_match=fuzzy_match,
         row=row, ref=ref,
-        tint_num=lambda num: style.number(num),
-        tint_name=lambda cmd: style.cmdname(cmd)
+        tint_num=lambda num: ctx.style.number(num),
+        tint_name=lambda cmd: ctx.style.cmdname(cmd)
     )
 
 
 def _select_one(
         candidates: dict[str, Any],
-        t: Terminal, prompt: str,
+        ctx: CmdContext, prompt: str,
         *, ignore_case=True,
         fuzzy_match=False,
         row=4, ref: Ref | Any,
         tint_num: _TintFunc, tint_name: _TintFunc,
 ) -> Task:
     def task() -> Iterator:
+        t = ctx.term
         li = list(candidates.items())
         while True:
-            _build_contents(t, candidates, row, tint_num, tint_name)
+            _build_contents(ctx, candidates, row, tint_num, tint_name)
             inputted: str = useRef()
-            yield await_input(t, prompt, ref=inputted)
+            yield await_input(ctx, prompt, ref=inputted)
             inputted = inputted.strip()
             if inputted.startswith("#"):
                 # numeric mode
@@ -216,7 +208,7 @@ def _select_one(
                     if radio >= fuzzy.at_least:
                         t << f'do you mean "{matched}"?'
                         inputted = useRef()
-                        yield await_input(t, prompt="y/n=", ref=inputted)
+                        yield await_input(ctx, prompt="y/n=", ref=inputted)
                         inputted = inputted.strip()
                         yes = inputted == "" or cast_bool(inputted)
                         if yes:
@@ -233,7 +225,7 @@ def _select_one(
 
 
 def input_multiline(
-        terminal: Terminal, prompt: Callable[[list[str]], str],
+        ctx: CmdContext, prompt: Callable[[list[str]], str],
         end_sign="EOF", *, ref: Ref | Any
 ) -> Task:
     lines = []
@@ -241,7 +233,7 @@ def input_multiline(
     def task() -> Iterator:
         while True:
             inputted = useRef()
-            yield await_input(terminal, prompt=prompt(lines), ref=inputted)
+            yield await_input(ctx, prompt=prompt(lines), ref=inputted)
             line = inputted.strip()
             if line == end_sign:
                 break
@@ -253,11 +245,11 @@ def input_multiline(
 
 
 def yes_no(
-        t: Terminal, *, ref: Ref | Any
+        ctx: CmdContext, *, ref: Ref | Any
 ) -> Task:
     def task() -> Iterator:
         inputted: str = useRef()
-        yield await_input(t, prompt="y/n=", ref=inputted)
+        yield await_input(ctx, prompt="y/n=", ref=inputted)
         reply = inputted.strip()
         ref.obj = cast_bool(reply)
         yield

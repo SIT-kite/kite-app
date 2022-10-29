@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterable, Iterator
 
 import build
 from args import group_args, Args
@@ -40,13 +40,13 @@ class HelpCmd(CommandLike):
         self.cmdlist = cmdlist
         self.cmd_per_page = 5
 
-    def execute_interactive(self, ctx: CmdContext) -> Iterable:
+    def execute_interactive(self, ctx: CmdContext) -> Iterator:
         # all_cmd = ', '.join(ctx.cmdlist.keys())
         # ctx.term << f"all commands = [{all_cmd}]"
         while True:
             ctx.term << f'plz select commands to show info.'
-            selected: CommandLike = useRef()
-            yield build.select_many_cmds(ctx.cmdlist.name2cmd, ctx.term, prompt="I want=", ref=selected)
+            selected: list[CommandLike] = useRef()
+            yield build.select_many_cmds(ctx.cmdlist.name2cmd, ctx, prompt="I want=", ref=selected)
             ctx.term.line(48)
             help_ctx = ctx.copy(term=HelpBoxTerminal(ctx.term))
             for cmd in selected:

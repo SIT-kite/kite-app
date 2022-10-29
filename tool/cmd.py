@@ -3,20 +3,23 @@ from typing import Iterable, runtime_checkable, Protocol, Iterator, Any
 
 import fuzzy
 import strings
-import style
 from args import Args, Arg, split_multicmd
 from flutter import Proj
-from tui.colortxt import FG
-from tui.colortxt.txt import Palette
+from style import Style
 from ui import Terminal
+
+_default_style = Style()
 
 
 class CmdContext:
-    def __init__(self, proj: Proj, terminal: Terminal, cmdlist: "CommandList", args: Args = None):
+    def __init__(
+            self, proj: Proj, terminal: Terminal, cmdlist: "CommandList",
+            args: Args = None, style: Style = _default_style):
         self.proj = proj
         self.term = terminal
         self.cmdlist = cmdlist
         self.args = args
+        self.style = style
 
     @property
     def is_cli(self) -> bool:
@@ -180,37 +183,39 @@ class CommandExecuteError(Exception):
         self.cmd = cmd
 
 
-_er0 = style.error('×')
-_er1 = style.error('│')
-_er2 = style.error('╰─>')
-
-_arr = Palette(fg=FG.Gold)
-_arrow = _arr.tint("^")
-
-_highlight = Palette(fg=FG.Cyan)
-
-
-def print_cmdarg_error(t: Terminal, e: CommandArgError):
+def print_cmdarg_error(ctx: CmdContext, e: CommandArgError):
     index = e.arg.raw_index
     full, pos = e.arg.root.located_full(index)
-    t.both << f"{_er0} {full[:pos.start]}{_highlight.tint(full[pos.start:pos.end])}{full[pos.end:]}"
+    t = ctx.term
+    _er0 = ctx.style.error('×')
+    _er1 = ctx.style.error('│')
+    _er2 = ctx.style.error('╰─>')
+
+    t.both << f"{_er0} {full[:pos.start]}{ctx.style.highlight(full[pos.start:pos.end])}{full[pos.end:]}"
     with StringIO() as s:
         s.write(_er1)
         s.write(" ")
         s.write(strings.repeat(pos.start))
-        s.write(_arr.tint(strings.repeat(pos.end - pos.start, "^")))
+        s.write(ctx.style.arrow(strings.repeat(pos.end - pos.start, "^")))
         t.both << s.getvalue()
-    t.both << style.error(f'╰─> {type(e).__name__}: {e}')
+    t.both << ctx.style.error(f'╰─> {type(e).__name__}: {e}')
 
 
-def print_cmdargs_empty_error(t: Terminal, e: CommandEmptyArgsError):
+def print_cmdargs_empty_error(ctx: CmdContext, e: CommandEmptyArgsError):
     full = e.cmdargs.root.full()
+    t = ctx.term
+    _er0 = ctx.style.error('×')
+    _er1 = ctx.style.error('│')
+    _er2 = ctx.style.error('╰─>')
+
+    _arrow = ctx.style.arrow("^")
+
     t.both << f"{_er0} {full}"
     with StringIO() as s:
         s.write(strings.repeat(len(full)))
         s.write(_arrow)
         t.both << f"{_er1} {s.getvalue()}"
-    t.both << style.error(f'╰─> {type(e).__name__}: {e}')
+    t.both << ctx.style.error(f'╰─> {type(e).__name__}: {e}')
 
 
 class CommandDelegate(CommandLike):
@@ -241,7 +246,7 @@ class CommandDelegate(CommandLike):
     def execute_cli(self, ctx: CmdContext):
         self.execute(ctx)
 
-    def execute_interactive(self, ctx: CmdContext) -> Iterable:
+    def execute_interactive(self, ctx: CmdContext) -> Iterator:
         self.execute(ctx)
         yield
 

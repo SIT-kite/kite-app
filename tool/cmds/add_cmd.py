@@ -65,7 +65,7 @@ class AddCmdCmd:
         t << f"plz enter a unique name."
         while True:
             inputted: str = useRef()
-            yield await_input(t, prompt="name=", ref=inputted)
+            yield await_input(ctx, prompt="name=", ref=inputted)
             name = inputted.strip()
             if ctx.cmdlist.is_builtin(name):
                 t << f"❌ {name} is a builtin command."
@@ -75,28 +75,29 @@ class AddCmdCmd:
         t << f'plz enter cmd&args, enter "EOF" to end multi-line.'
         # Enter args
         inputted: Ref = useRef()
-        yield input_multiline(t, prompt=lambda res: "+ " if len(res) > 0 else "args=", ref=inputted)
+        yield input_multiline(ctx, prompt=lambda res: "+ " if len(res) > 0 else "args=", ref=inputted)
         lines: list[str] = inputted.deref()
         fullargs = " + ".join(lines)
         t.logging << f"{fullargs=}"
         # Enter help into
         t << f'plz enter help info, enter "EOF" to end multi-line.'
         inputted: Ref = useRef()
-        yield input_multiline(t, prompt=lambda res: "\\n " if len(res) > 0 else "info=", ref=inputted)
+        yield input_multiline(ctx, prompt=lambda res: "\\n " if len(res) > 0 else "info=", ref=inputted)
         info: list[str] = inputted.deref()
         helpinfo = "\n".join(info)
         t.logging << f"{helpinfo=}"
         conf = ctx.proj.settings.get(flutter.extra_commands, settings_type=ExtraCommandsConf)
         if name in conf:
             confirm: bool = useRef()
-            t << f"{style.usrcmdname(name)} already exists, confirm to override it?"
-            yield yes_no(t, ref=confirm)
+            t << f"{ctx.style.usrcmdname(name)} already exists, confirm to override it?"
+            yield yes_no(ctx, ref=confirm)
             if not confirm:
                 t.both << f"adding command<{name}> aborted"
                 return
         AddCmdCmd.add_cmd(conf, name, fullargs, helpinfo)
         t.both << f'command<{name}> added.'
         ctx.proj.kernel.reloader.reload_cmds()
+
     @staticmethod
     def help(ctx: CmdContext):
         t = ctx.term

@@ -245,10 +245,10 @@ def catch_executing(
     try:
         return executing()
     except CommandArgError as e:
-        cmd.print_cmdarg_error(ctx.term, e)
+        cmd.print_cmdarg_error(ctx, e)
         log_traceback(ctx.term)
     except CommandEmptyArgsError as e:
-        cmd.print_cmdargs_empty_error(ctx.term, e)
+        cmd.print_cmdargs_empty_error(ctx, e)
         log_traceback(ctx.term)
     except CommandExecuteError as e:
         ctx.term.both << f"{type(e).__name__}: {e}"
@@ -267,9 +267,9 @@ def interactive_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal):
         while True:
             # terminal << all_cmd_prompt
             selected: CommandLike = useRef()
-            yield build.select_one_cmd(cmdlist.name2cmd, terminal, prompt="cmd=", fuzzy_match=True, ref=selected)
-            terminal.both << _get_header_entry(selected)
             ctx = CmdContext(proj, terminal, cmdlist)
+            yield build.select_one_cmd(cmdlist.name2cmd, ctx, prompt="cmd=", fuzzy_match=True, ref=selected)
+            terminal.both << _get_header_entry(selected)
             dispatcher.run(selected.execute_interactive(ctx))
             state = catch_executing(ctx, executing=lambda: dispatcher.dispatch())
             terminal.both << _get_header_existence(selected)

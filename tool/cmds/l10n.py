@@ -80,12 +80,11 @@ class L10nCmd:
     @staticmethod
     def execute_interactive(ctx: CmdContext) -> Iterable:
         selected = useRef()
-        yield select_one(name2function, ctx.term, prompt="func=", fuzzy_match=True, ref=selected)
+        yield select_one(name2function, ctx, prompt="func=", fuzzy_match=True, ref=selected)
         selected(ctx)
 
     @staticmethod
     def help(ctx: CmdContext):
         t = ctx.term
-        t << "l10 --<function>"
-        t << "|-- resort: resort .arb files alphabetically"
-        t << "|-- serve: watch the change of .arb files"
+        t << "l10 resort: resort .arb files alphabetically"
+        t << "l10 serve: watch the change of .arb files"
