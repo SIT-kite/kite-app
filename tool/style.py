@@ -4,10 +4,12 @@ from tui.colortxt.txt import Palette
 
 class Style:
     number = Palette(fg=FG.Emerald)
-    cmdname = Palette(fg=FG.Azure)
-    usrcmdname = Palette(fg=FG.Gold)
+    type = Palette(fg=FG.Emerald)
+    name = Palette(fg=FG.Azure)
+    usrname = Palette(fg=FG.Gold)
     error = Palette(fg=FG.Red)
     inputting = Palette(fg=FG.Rose)
+    value = Palette(fg=FG.Rose)
     arrow = Palette(fg=FG.Gold)
     highlight = Palette(fg=FG.Cyan)
 

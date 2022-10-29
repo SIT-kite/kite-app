@@ -46,6 +46,14 @@ def cast_int(s: str) -> int | None:
         return None
 
 
+# noinspection PyBroadException
+def cast_float(s: str) -> float | None:
+    try:
+        return float(s)
+    except:
+        return None
+
+
 true_list = {
     "y", "yes", "true", "yep", "yeah", "ok"
 }

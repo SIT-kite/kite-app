@@ -105,11 +105,11 @@ class AddModuleCmd:
                 break
         t << "plz enter what components to add"
         components: Sequence[CompType] = useRef()
-        yield select_many(ctx.proj.comps, ctx, prompt="comps=", ref=components)
+        yield select_many(ctx, ctx.proj.comps, prompt="comps=", ref=components)
         components = tuple(components)
         t << "plz enter what features to import"
         usings: Sequence[UsingDeclare] = useRef()
-        yield select_many(ctx.proj.usings, ctx, prompt="import ", ref=usings)
+        yield select_many(ctx, ctx.proj.usings, prompt="import ", ref=usings)
         usings = tuple(usings)
         # creating
         res = ModuleCreation(name, components, usings)

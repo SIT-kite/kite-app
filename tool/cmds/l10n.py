@@ -80,7 +80,7 @@ class L10nCmd:
     @staticmethod
     def execute_interactive(ctx: CmdContext) -> Iterable:
         selected = useRef()
-        yield select_one(name2function, ctx, prompt="func=", fuzzy_match=True, ref=selected)
+        yield select_one(ctx, name2function, prompt="func=", fuzzy_match=True, ref=selected)
         selected(ctx)
 
     @staticmethod

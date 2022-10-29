@@ -244,7 +244,7 @@ def interactive_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal):
             # terminal << all_cmd_prompt
             selected: CommandLike = useRef()
             ctx = CmdContext(proj, terminal, cmdlist)
-            yield build.select_one_cmd(cmdlist.name2cmd, ctx, prompt="cmd=", fuzzy_match=True, ref=selected)
+            yield build.select_one_cmd(ctx, cmdlist.name2cmd, prompt="cmd=", fuzzy_match=True, ref=selected)
             terminal.both << _get_header_entry(selected)
             dispatcher.run(selected.execute_interactive(ctx))
             state = cmd.catch_executing(ctx, executing=lambda: dispatcher.dispatch())

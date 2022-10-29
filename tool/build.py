@@ -1,10 +1,14 @@
 from io import StringIO
-from typing import Iterator, Any, Callable
+from typing import Iterator, Any, Callable, TypeVar, Generic
 
+import converter
+from converter import Type2Converters
 import fuzzy
 from cmd import CommandLike, CmdContext
 from coroutine import Task, STOP
 from utils import cast_int, cast_bool, useRef, Ref
+
+T = TypeVar("T")
 
 
 def await_input(
@@ -29,8 +33,8 @@ def await_input(
 def _tint_cmd(ctx: CmdContext, cmd: CommandLike) -> str:
     if hasattr(cmd, "created_by_user"):
         if getattr(cmd, "created_by_user"):
-            return ctx.style.usrcmdname(cmd.name)
-    return ctx.style.cmdname(cmd.name)
+            return ctx.style.usrname(cmd.name)
+    return ctx.style.name(cmd.name)
 
 
 _TintFunc = Callable[[str], str]
@@ -55,38 +59,41 @@ def _build_contents(
 
 
 def select_many(
+        ctx: CmdContext,
         candidates: dict[str, Any],
-        ctx: CmdContext, prompt: str,
+        prompt: str,
         *, ignore_case=True,
         row=4, ref: Ref | Any
 ) -> Task:
     return _select_many(
-        candidates,
-        ctx, prompt, ignore_case=ignore_case,
+        ctx, candidates,
+        prompt, ignore_case=ignore_case,
         row=row, ref=ref,
         tint_num=lambda num: ctx.style.number(num),
-        tint_name=lambda name: ctx.style.cmdname(name)
+        tint_name=lambda name: ctx.style.name(name)
     )
 
 
 def select_many_cmds(
+        ctx: CmdContext,
         candidates: dict[str, CommandLike],
-        ctx: CmdContext, prompt: str,
+        prompt: str,
         *, ignore_case=True,
         row=4, ref: Ref | Any
 ) -> Task:
     return _select_many(
-        candidates,
-        ctx, prompt, ignore_case=ignore_case,
+        ctx, candidates,
+        prompt, ignore_case=ignore_case,
         row=row, ref=ref,
         tint_num=lambda num: ctx.style.number(num),
-        tint_name=lambda cmd: _tint_cmd(ctx, candidates[cmd]) if cmd in candidates else ctx.style.cmdname(cmd)
+        tint_name=lambda cmd: _tint_cmd(ctx, candidates[cmd]) if cmd in candidates else ctx.style.name(cmd)
     )
 
 
 def _select_many(
+        ctx: CmdContext,
         candidates: dict[str, Any],
-        ctx: CmdContext, prompt: str,
+        prompt: str,
         *, ignore_case=True,
         row=4, ref: Ref | Any,
         tint_num: _TintFunc, tint_name: _TintFunc,
@@ -134,42 +141,45 @@ def _select_many(
 
 
 def select_one_cmd(
+        ctx: CmdContext,
         candidates: dict[str, Any],
-        ctx: CmdContext, prompt: str,
+        prompt: str,
         *, ignore_case=True,
         fuzzy_match=False,
         row=4, ref: Ref | Any
 ) -> Task:
     return _select_one(
-        candidates,
-        ctx, prompt, ignore_case=ignore_case,
+        ctx, candidates,
+        prompt, ignore_case=ignore_case,
         fuzzy_match=fuzzy_match,
         row=row, ref=ref,
         tint_num=lambda num: ctx.style.number(num),
-        tint_name=lambda cmd: _tint_cmd(ctx, candidates[cmd]) if cmd in candidates else ctx.style.cmdname(cmd)
+        tint_name=lambda cmd: _tint_cmd(ctx, candidates[cmd]) if cmd in candidates else ctx.style.name(cmd)
     )
 
 
 def select_one(
+        ctx: CmdContext,
         candidates: dict[str, Any],
-        ctx: CmdContext, prompt: str,
+        prompt: str,
         *, ignore_case=True,
         fuzzy_match=False,
         row=4, ref: Ref | Any
 ) -> Task:
     return _select_one(
-        candidates,
-        ctx, prompt, ignore_case=ignore_case,
+        ctx, candidates,
+        prompt, ignore_case=ignore_case,
         fuzzy_match=fuzzy_match,
         row=row, ref=ref,
         tint_num=lambda num: ctx.style.number(num),
-        tint_name=lambda cmd: ctx.style.cmdname(cmd)
+        tint_name=lambda cmd: ctx.style.name(cmd)
     )
 
 
 def _select_one(
+        ctx: CmdContext,
         candidates: dict[str, Any],
-        ctx: CmdContext, prompt: str,
+        prompt: str,
         *, ignore_case=True,
         fuzzy_match=False,
         row=4, ref: Ref | Any,
@@ -225,15 +235,16 @@ def _select_one(
 
 def input_multiline(
         ctx: CmdContext, prompt: Callable[[list[str]], str],
-        end_sign="EOF", *, ref: Ref | Any
+        end_sign="#END", *, ref: Ref | Any
 ) -> Task:
     lines = []
 
     def task() -> Iterator:
         while True:
-            inputted = useRef()
-            yield await_input(ctx, prompt=prompt(lines), ref=inputted)
-            line = inputted.strip()
+            end_sign_tip = ctx.style.highlight("#END")
+            ctx.term << f'enter "{end_sign_tip}" to end multi-line'
+            yield await_input(ctx, prompt=prompt(lines), ref=(line := useRef()))
+            line = line.strip()
             if line == end_sign:
                 break
             lines.append(line)
@@ -251,6 +262,54 @@ def yes_no(
         yield await_input(ctx, prompt="y/n=", ref=inputted)
         reply = inputted.strip()
         ref.obj = cast_bool(reply)
+        yield
+
+    return task
+
+
+Viewer = Callable[[T], Iterator[tuple[str, Any]]]
+
+
+def respect_private_viewer(obj: Any) -> Iterator[tuple[str, Any]]:
+    for name, value in vars(obj).items():
+        if not name.startswith("_"):
+            yield name, value
+
+
+def replace_settings(
+        ctx: CmdContext, *,
+        obj: T, viewer: Viewer = respect_private_viewer,
+        converters: Type2Converters | Callable[[], Type2Converters] = lambda: converter.builtins
+) -> Task:
+    def task() -> Iterator:
+        s = ctx.style
+        skip_sign_tip = s.highlight("#SKIP")
+        end_sign_tip = s.highlight("#END")
+        ctx.term << f'enter "{skip_sign_tip}" to skip, "{end_sign_tip}" to interrupt'
+        type2cnvt = converters if isinstance(converters, dict) else converters()
+        end = False
+        for name, value in viewer(obj):
+            t = type(value)
+            cnvt = type2cnvt[t]
+            ctx.term << f"{s.name(name)}:{s.type(t.__name__)}={s.value(cnvt.to_str(value))}"
+            while True:
+                yield await_input(ctx, prompt=f"{name}=", ref=(ref := useRef()))
+                new_raw = ref.deref()
+                if new_raw == "#SKIP":
+                    break
+                elif new_raw == "#END":
+                    end = True
+                    break
+                else:
+                    new_value = cnvt.from_str(new_raw)
+                    if new_value is None:
+                        ctx.term << "failed to convert, plz try again."
+                        continue
+                    else:
+                        setattr(obj, name, new_value)
+                        break
+            if end:
+                break
         yield
 
     return task

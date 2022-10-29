@@ -17,5 +17,6 @@ class BgCmd:
     @staticmethod
     def help(ctx: CmdContext):
         t = ctx.term
+        t << "bg <..args>: run a command in background"
         t << "bg --l: list all background tasks"
         t << "bg --kill <regex>: kill all tasks matched"

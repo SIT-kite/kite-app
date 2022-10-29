@@ -13,6 +13,8 @@ except:
 
 _primitives = (str, int, float, bool, list, dict, tuple, NoneType)
 
+meta_type = "@type"
+
 
 class FallbackType:
     pass
@@ -110,7 +112,7 @@ class Serializer:
                 return obj
         else:
             res = {
-                "type": self.get_typename(obj)
+                meta_type: self.get_typename(obj)
             }
             for k, v in vars(obj).items():
                 k: str
@@ -120,13 +122,13 @@ class Serializer:
             return res
 
     def dict2obj(self, d: dict[str, Any]) -> Any:
-        if "type" in d:
-            typename = d["type"]
+        if meta_type in d:
+            typename = d[meta_type]
             t = self.name2type(typename)
             obj = t()
             is_fallback = t == FallbackType
             for k, v in d.items():
-                if k == "type":
+                if k == meta_type:
                     continue
                 if is_fallback or hasattr(obj, k):
                     if isinstance(v, dict):
