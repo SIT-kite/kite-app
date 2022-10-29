@@ -18,9 +18,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../using.dart';
+
 import '../dao/Freshman.dart';
 import '../init.dart';
+import '../using.dart';
 
 class FreshmanLoginPage extends StatefulWidget {
   const FreshmanLoginPage({Key? key}) : super(key: key);
@@ -74,7 +75,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
 
       final info = await freshmanDao.getInfo();
 
-      // 登陆成功后赋值名字
+      // 登录成功后赋值名字
       Kv.freshman.freshmanName = info.name;
 
       // Flutter 官方推荐的在异步函数中使用context需要先检查是否mounted
@@ -90,7 +91,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       return;
     } catch (e) {
       // TODO: optimize UX
-      // 登陆失败
+      // 登录失败
       Kv.freshman
         ..freshmanSecret = null
         ..freshmanAccount = null;
