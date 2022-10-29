@@ -41,7 +41,16 @@ class ScActivityListService implements ScActivityListDao {
 
   const ScActivityListService(this.session);
 
-  /// 获取第二课堂活动列表date
+  Future<void> refreshCookie() async {
+    Future<void> getHomePage() async {
+      const String url = 'http://sc.sit.edu.cn/';
+      await session.request(url, ReqMethod.get);
+    }
+
+    await getHomePage();
+  }
+
+  /// 获取第二课堂活动列表
   @override
   Future<List<Activity>> getActivityList(ActivityType type, int page) async {
     String _generateUrl(ActivityType category, int page, [int pageSize = 20]) {

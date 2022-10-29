@@ -17,10 +17,10 @@
  */
 
 import 'package:flutter/material.dart';
-import '../using.dart';
 
 import '../entity/list.dart';
 import '../init.dart';
+import '../using.dart';
 import 'card.dart';
 import 'profile.dart';
 import 'search.dart';
@@ -45,6 +45,7 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
   late TabController _tabController;
 
   final pageChangeNotifier = ValueNotifier(0);
+  bool init = false;
 
   @override
   void initState() {
@@ -76,6 +77,15 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
   }
 
   Widget _buildEventList(ActivityType type) {
+    if (!init) {
+      Future.wait([
+        () async {
+          await ScInit.scActivityListService.refreshCookie();
+        }()
+      ]);
+      init = true;
+    }
+
     return MyFutureBuilder<List<Activity>>(
       future: ScInit.scActivityListService.getActivityList(type, 1),
       builder: (context, data) {
