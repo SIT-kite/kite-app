@@ -2,8 +2,7 @@ import datetime
 import ntpath
 import os.path
 import sys
-import traceback
-from typing import Sequence, Iterator, Callable, Any
+from typing import Sequence, Iterator
 
 import build
 import cmd

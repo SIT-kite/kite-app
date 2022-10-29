@@ -9,6 +9,8 @@ from utils import Ref, useRef
 
 
 def _get_arg(grouped: dict[str | None, list[Args]], argname: str, allow_empty=False) -> str | None:
+    if argname not in grouped and allow_empty:
+        return None
     n_argslist = grouped[argname]
     if len(n_argslist) > 1:
         raise CommandArgError(AliasCmd, n_argslist[1][0], f"duplicate arg<{argname}> provided")

@@ -11,6 +11,8 @@ from ui import Terminal
 
 _default_style = Style()
 
+max_ctx_depth = 64
+
 
 class CmdContext:
     def __init__(
@@ -21,6 +23,7 @@ class CmdContext:
         self.cmdlist = cmdlist
         self.args = args
         self.style = style
+        self.depth = 0
 
     @property
     def is_cli(self) -> bool:
@@ -36,39 +39,35 @@ class CmdContext:
         return CmdContext(self.proj, self.term, self.cmdlist, self.args)
 
     def copy(self, **kwargs) -> "CmdContext":
+        """
+        return a recursion-aware copy
+        """
         cloned = self.__copy__()
         for k, v in kwargs.items():
             setattr(cloned, k, v)
+        cloned.depth = self.depth + 1
         return cloned
 
 
 @runtime_checkable
 class CommandLike(Protocol):
     """
-    Command is a protocol, you don't need to inherit it,
-    and you can even implement it as a class object.
-    So DO NOT check the hierarchy of any command.
-
-    - name:str -- the name of command
-
-    - help(ctx) -- help info of command
-
-    - execute_cli(ctx) -- execute the command in cli mode
-
-    - execute_interactive(ctx) -- execute the command in interactive mode. return an Iterator as a coroutine
-
     optional:
-    - created_by_user -> bool -- whether this command is created by user, [False] as default.
+    - created_by_user: bool -- whether this command is created by user, [False] as default.
     """
     name: str
+    """the name of command"""
 
     def execute_cli(self, ctx: CmdContext):
+        """execute the command in cli mode"""
         pass
 
     def execute_interactive(self, ctx: CmdContext) -> Iterator:
+        """execute the command in interactive mode. return an Iterator as a coroutine"""
         pass
 
     def help(self, ctx: CmdContext):
+        """help info of command"""
         pass
 
 
@@ -228,6 +227,8 @@ class CommandDelegate(CommandLike):
         self.helpinfo = helpinfo
 
     def execute(self, ctx: CmdContext):
+        if ctx.depth >= max_ctx_depth:
+            raise CommandExecuteError(self, "recursive executing detected")
         args = Args.by(full=self.fullargs)
         all_cmdargs = split_multicmd(args)
         # prepare commands to run
@@ -275,5 +276,5 @@ def catch_executing(
         print_cmdargs_empty_error(ctx, e)
         log_traceback(ctx.term)
     except CommandExecuteError as e:
-        ctx.term.both << f"{type(e).__name__}: {e}"
+        ctx.term.both << ctx.style.error(f"{type(e).__name__}: {e}")
         log_traceback(ctx.term)
