@@ -104,6 +104,10 @@ class Proj:
     def module_folder(self) -> Directory:
         return self.root.subdir("lib", "module")
 
+    @property
+    def android_build_gradle(self) -> File:
+        return self.root.subfi("android", "app", "build.gradle")
+
     def __str__(self):
         if self.pubspec is None or "name" not in self.pubspec:
             return "UNLOADED PROJECT"

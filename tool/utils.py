@@ -1,4 +1,4 @@
-from typing import Generic, TypeVar, Any, Callable, Iterable
+from typing import Generic, TypeVar, Any, Callable, Iterable, Tuple
 
 T = TypeVar("T")
 
@@ -10,11 +10,104 @@ class Ref(Generic[T]):
     def deref(self) -> T:
         return self.obj
 
+    def __lshift__(self, other):
+        return self.obj.__lshift__(other)
+
+    def __rshift__(self, other):
+        return self.obj.__rshift__(other)
+
+    def __add__(self, other):
+        return self.obj.__add__(other)
+
+    def __sub__(self, other):
+        return self.obj.__sub__(other)
+
+    def __mul__(self, other):
+        return self.obj.__mul__(other)
+
+    def __mod__(self, other):
+        return self.obj.__mod__(other)
+
+    def __and__(self, other):
+        return self.obj.__and__(other)
+
+    def __or__(self, other):
+        return self.obj.__or__(other)
+
+    def __len__(self):
+        return self.obj.__len__()
+
+    def __float__(self):
+        return self.obj.__float__()
+
+    def __floor__(self):
+        return self.obj.__floor__()
+
+    def __floordiv__(self, other):
+        return self.obj.__floordiv__(other)
+
+    def __ceil__(self):
+        return self.obj.__ceil__()
+
+    def __ge__(self, other):
+        return self.obj.__ge__(other)
+
+    def __le__(self, other):
+        return self.obj.__le__(other)
+
+    def __lt__(self, other):
+        return self.obj.__lt__(other)
+
+    def __next__(self):
+        return self.obj.__next__()
+
+    def __int__(self):
+        return self.obj.__int__()
+
+    def __setitem__(self, key, value):
+        return self.obj.__setitem__(key, value)
+
+    def __getitem__(self, item):
+        return self.obj.__getitem__(item)
+
+    def __ne__(self, other: object) -> bool:
+        if isinstance(other, Ref):
+            return self.obj.__ne__(other.obj)
+        else:
+            return self.obj.__ne__(other)
+
+    def __str__(self) -> str:
+        return self.obj.__str__()
+
+    def __repr__(self) -> str:
+        return self.obj.__repr__()
+
+    def __hash__(self) -> int:
+        return self.obj.__hash__()
+
+    def __format__(self, format_spec: str) -> str:
+        return self.obj.__format__(format_spec)
+
+    def __delattr__(self, name: str) -> None:
+        self.obj.__delattr__(name)
+
+    def __sizeof__(self) -> int:
+        return self.obj.__sizeof__()
+
+    def __reduce__(self) -> str | Tuple[Any, ...]:
+        return self.obj.__reduce__()
+
+    def __reduce_ex__(self, protocol) -> str | Tuple[Any, ...]:
+        return self.obj.__reduce_ex__(protocol)
+
+    def __dir__(self) -> Iterable[str]:
+        return self.obj.__dir__()
+
     def __eq__(self, other):
         if isinstance(other, Ref):
-            return self.obj == other.obj
+            return self.obj.__eq__(other.obj)
         else:
-            return self.obj == other
+            return self.obj.__eq__(other)
 
     def __getattr__(self, item):
         return getattr(self.obj, item)
@@ -26,13 +119,13 @@ class Ref(Generic[T]):
             setattr(self.obj, key, value)
 
     def __bool__(self) -> bool:
-        return bool(self.obj)
+        return self.obj.__bool__()
 
     def __iter__(self):
-        return iter(self.obj)
+        return self.obj.__iter__()
 
     def __call__(self, *args, **kwargs):
-        return self.obj(*args, **kwargs)
+        return self.obj.__call__(*args, **kwargs)
 
 
 def useRef(obj=None) -> Any | Ref: return Ref(obj)
