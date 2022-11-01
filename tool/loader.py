@@ -28,7 +28,7 @@ def load(t: Terminal, proj: Proj, module_name: str, parent: Directory) -> Module
     module = Module(module_name)
     files, dirs = parent.lists()
     for fi in files:
-        dart = DartFi.cast_dart(fi)
+        dart = DartFi.cast(fi)
         if dart is None or dart.is_gen:
             continue
         name = dart.sourcename

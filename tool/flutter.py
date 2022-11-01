@@ -93,6 +93,10 @@ class Proj:
         return self.root.subfi(l10n_yaml)
 
     @property
+    def backend_dart(self) -> DartFi:
+        return DartFi.cast(self.lib_folder.subfi("backend.dart"))
+
+    @property
     def l10n_dir(self) -> Directory:
         return self.root.subdir(self.l10n["arb-dir"])
 

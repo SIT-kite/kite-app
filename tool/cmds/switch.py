@@ -1,9 +1,10 @@
 import re
-from typing import Iterator
+from typing import Iterator, Callable
 
-from args import Args, group_args2
+from args import group_args2
 from build import select_one, replace_settings, await_input, settings_from_str
 from cmd import CmdContext, CommandArgError, CommandEmptyArgsError
+from dart import DartFi
 from filesystem import File
 from utils import useRef
 
@@ -123,6 +124,9 @@ class SwitchCmd:
 
 def switch_to(ctx: CmdContext, to: Version):
     set_android_applicationId(ctx.proj.android_build_gradle, to.applicationId)
+    set_backend_config(ctx.proj.backend_dart, {
+        "kite": f'"{to.kiteIP}"'
+    })
 
 
 _appid_rex = re.compile(r'(?<=applicationId\s[\"\']).*(?=[\"\'])')
@@ -137,3 +141,22 @@ def set_android_applicationId(gradle: File, new: str):
             appid = found[0]
             lines[i] = line.replace(appid, new)
     gradle.write('\n'.join(lines))
+
+
+_field_rex = re.compile(f'(?<=static const).*(?=;)')
+_field_name_rex = re.compile(r'(?<=static const ).*(?= =)')
+_field_value_rex = re.compile(r'(?<== ).*(?=;)')
+
+
+def set_backend_config(fi: DartFi, setting: dict[str, str]):
+    full = fi.read()
+    lines = full.splitlines()
+    for i, line in enumerate(lines):
+        found = _field_rex.search(line)
+        if found:  # it's a field
+            field_name = _field_name_rex.findall(line)[0]
+            if field_name in setting:
+                field_value = _field_value_rex.findall(line)[0]
+                new_value = setting[field_name]
+                lines[i] = line.replace(field_value, new_value)
+    fi.write('\n'.join(lines))

@@ -26,7 +26,7 @@ class DartFi(File):
         return fi.extendswith("dart")
 
     @staticmethod
-    def cast_dart(fi: File) -> Optional["DartFi"]:
+    def cast(fi: File) -> Optional["DartFi"]:
         if DartFi.is_dart(fi):
             return DartFi(fi)
         else:
