@@ -96,7 +96,7 @@ class HelpCmd(CommandLike):
 
     @staticmethod
     def show_help_info(cmd: CommandLike, ctx: CmdContext, help_box: CmdContext):
-        ctx.term << cmd.name
+        ctx.term << build.tint_cmdname(ctx, cmd)
         cmd.help(help_box)
 
     def help(self, ctx: CmdContext):

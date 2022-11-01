@@ -1,6 +1,5 @@
 from io import StringIO
-from typing import TypeVar, Protocol, runtime_checkable
-from types import MappingProxyType
+from typing import TypeVar, Protocol, runtime_checkable, Callable, Any, Iterator
 
 T = TypeVar("T")
 

@@ -1,8 +1,8 @@
 import re
 from typing import Iterator
 
-from args import group_args, Args
-from build import select_one, replace_settings, await_input
+from args import Args, group_args2
+from build import select_one, replace_settings, await_input, settings_from_str
 from cmd import CmdContext, CommandArgError, CommandEmptyArgsError
 from filesystem import File
 from utils import useRef
@@ -28,34 +28,48 @@ def get_all_versions(ctx: CmdContext) -> dict[str, Version]:
     return conf
 
 
-def _get_arg(grouped: dict[str | None, list[Args]], argname: str, allow_empty=False) -> str | None:
-    if argname not in grouped and allow_empty:
-        return None
-    n_argslist = grouped[argname]
-    if len(n_argslist) > 1:
-        raise CommandArgError(SwitchCmd, n_argslist[1][0], f"duplicate arg<{argname}> provided")
-    n_args = n_argslist[0]
-    if n_args.size == 0:
-        if allow_empty:
-            return None
-        raise CommandEmptyArgsError(SwitchCmd, n_args, f"arg<{argname}> is empty")
-    elif n_args.size == 1:
-        n_arg = n_args[0]
-        return n_arg.full
-    else:
-        return n_args.full()
-
-
 class SwitchCmd:
     name = "switch"
 
     @staticmethod
     def execute_cli(ctx: CmdContext):
-        grouped = group_args(ctx.args)
-        if "set" in grouped:
-            set_argslist = grouped["set"]
-            if len(set_argslist) == 0:
-                raise CommandEmptyArgsError(SwitchCmd, "")
+        groups = group_args2(ctx.args)
+        versions = get_all_versions(ctx)
+        # set then to would be nice
+        if groups.has(args="set"):
+            settings = groups.get_args(name="set")
+            real_settings = []
+            name = None
+            for setting in settings:
+                if setting.ispair:
+                    real_settings.append(setting)
+                else:
+                    name = setting.name
+            if name is None:
+                raise CommandEmptyArgsError(SwitchCmd, ctx.args, "no version name given")
+            name4display = ctx.style.name(name)
+            if name not in versions:
+                version = Version()
+                ctx.term << f"version<{name4display}> created."
+            else:
+                version = versions[name]
+            settings_from_str(version, {pair.key: pair.value for pair in settings})
+            ctx.term << f"version<{name4display}> updated."
+        if groups.has(args="to"):
+            name_arglist = groups.get_args(name="to")
+            if len(name_arglist) > 1:
+                raise CommandArgError(SwitchCmd, name_arglist[1], "redundant arg<to> given")
+            name_arg = name_arglist[0]
+            if name_arg.ispair:
+                raise CommandArgError(SwitchCmd, name_arg, "arg<to> can't be a pair")
+            name = name_arg.key
+            if name not in versions:
+                raise CommandArgError(SwitchCmd, name_arg, f"version<{name}> not found")
+            else:
+                name4display = ctx.style.name(name)
+                version = versions[name]
+                switch_to(ctx, version)
+                ctx.term << f"switched to version<{name4display}>."
 
     @staticmethod
     def execute_interactive(ctx: CmdContext) -> Iterator:

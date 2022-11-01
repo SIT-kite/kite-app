@@ -3,6 +3,8 @@ import shlex
 from io import StringIO
 from typing import Sequence, Iterable, Optional, Union, TypeVar, Callable, Generic
 
+from indexed import IndexedOrderedDict
+
 _empty_args = ()
 T = TypeVar("T")
 
@@ -168,7 +170,7 @@ class Args(Iterable[TArg]):
             start = max(0, start)
             end = size if item.stop is None else item.stop
             end = min(end, size)
-            if start <= end:
+            if start < end:
                 return self.sub(start, end)
             else:
                 return self.sub_empty()
@@ -419,6 +421,200 @@ def _append_group(di, group, args):
     grouped.append(args)
 
 
+class ArgsList:
+    """
+    ArgsList can't be empty.
+    """
+
+    def __init__(self, *, first: Args):
+        """
+        :param first: inevitably initialize the ArgsList with at least one Args
+        """
+        self.argslist: list[Args] = [first]
+        """
+        all args in the list.
+        """
+
+    def __getitem__(self, index: int) -> Args:
+        return self.argslist[index]
+
+    def add(self, args: Args):
+        """
+        add the args only if it's not empty
+        """
+        if not args.isempty:
+            self.argslist.append(args)
+
+    @property
+    def not_only_one(self) -> Arg | None:
+        """
+        check whether the argslist has 2+ args.
+
+        You can directly check the return value in the if-statement as a bool
+        :return: the first arg in the second args if argslist has 2+,
+         otherwise, None will be returned.
+        """
+        if len(self.argslist) == 1:
+            return None
+        else:
+            return self.argslist[1][0]
+
+    def __str__(self):
+        return str(self.argslist)
+
+    def __repr__(self):
+        return repr(self.argslist)
+
+    def compose(self) -> list[Arg]:
+        return flatten_args(self.argslist)
+
+
+class ArgGroup:
+    def __init__(self, name: str, raw: Arg):
+        self.name = name
+        self.raw = raw
+
+    @staticmethod
+    def by(raw: Arg, prefix: str = "--") -> "ArgGroup":
+        return ArgGroup(raw.key.removeprefix(prefix), raw)
+
+
+class ArgsGroups:
+    def __init__(self):
+        self.name2argslist: dict[str, ArgsList] = IndexedOrderedDict()
+        """
+        group name corresponds to all args in the group.
+        """
+        self.name2group: dict[str, Arg] = IndexedOrderedDict()
+        """
+        group name corresponds to its arg.
+        Only the first-come group leader arg is recorded. 
+        """
+        self.ungrouped: Args | None = None
+        """
+        None means there is nothing ungrouped.
+        """
+
+    def add_group(self, leader: Arg, body: Args, head: str = "--"):
+        name = leader.key.removeprefix(head)
+        if name not in self.name2group:
+            self.name2group[name] = leader
+        if not body.isempty:
+            if name not in self.name2argslist:
+                argslist = ArgsList(first=body)
+                self.name2argslist[name] = argslist
+            else:
+                self.name2argslist[name].add(body)
+
+    def has_ungrouped(self) -> bool:
+        return self.ungrouped is not None
+
+    @property
+    def groups_size(self) -> int:
+        return len(self.name2group)
+
+    @property
+    def argslist_size(self) -> int:
+
+        return len(self.name2argslist)
+
+    def get_args(self, name: str) -> Sequence[Arg]:
+        if name in self.name2argslist:
+            return self.name2argslist[name].compose()
+        else:
+            return ()
+
+    # noinspection PyUnresolvedReferences
+    def __getitem__(self, item: str | int) -> Arg:
+        if isinstance(item, str):
+            return self.name2group[item]
+        else:
+            return self.name2group.values()[item]
+
+    def has(self, *, group: str = None, args: str = None) -> bool:
+        if group is not None:
+            return group in self.name2group
+        elif args is not None:
+            return args in self.name2argslist
+        else:
+            raise Exception('no "group" or "args" given')
+
+    def __str__(self):
+        with StringIO() as s:
+            s.write("[")
+            if self.ungrouped is not None:
+                s.write("ungrouped")
+                s.write(",")
+            size = len(self.name2group)
+            for i, group_name in enumerate(self.name2group.keys()):
+                s.write(group_name)
+                if i < size - 1:
+                    s.write(",")
+            s.write("]")
+            return s.getvalue()
+
+    def __repr__(self):
+        return self.__str__()
+
+
+def it_ungrouped(args: Args, group_head: str = "--") -> Iterable[Arg]:
+    for arg in args:
+        if not arg.startswith(group_head):
+            yield arg
+        else:
+            break
+
+
+def it_grouped(args: Args, group_head: str = "--") -> Iterable[Arg]:
+    enable = False
+    for arg in args:
+        if enable or arg.startswith(group_head):
+            enable = True
+            yield arg
+
+
+def separate_grouped_or_not(args: Args, group_head: str = "--") -> tuple[Args, Args]:
+    """
+    :return: grouped, ungrouped
+    """
+    for i, arg in enumerate(args):
+        if not arg.ispair and arg.startswith(group_head):
+            return args[i:], args[0:i]
+    return args.sub_empty(), args[0:]
+
+
+def indexing_groups(grouped: Args, group_head: str = "--") -> tuple[int, int]:
+    start = 0
+    init_group = grouped[0]
+    cur_group = init_group
+    for i, arg in enumerate(grouped):
+        if not arg.ispair and arg.startswith(group_head):
+            if cur_group != arg:
+                cur_group = arg
+                yield start, i
+                start = i
+    if init_group == cur_group:
+        yield 0, grouped.size
+    else:
+        yield start, grouped.size
+
+
+def group_args2(args: Args, group_head: str = "--") -> ArgsGroups:
+    """
+    grouped by "--xxx" as default.
+    """
+    groups = ArgsGroups()
+    grouped, ungrouped = separate_grouped_or_not(args)
+    if ungrouped.size > 0:
+        groups.ungrouped = ungrouped
+    if grouped.size > 0:
+        for start, end in indexing_groups(grouped):
+            group_leader = grouped[start]
+            group_body = grouped[start + 1:end]
+            groups.add_group(group_leader, group_body, group_head)
+    return groups
+
+
 def group_args(args: Args, group_head: str = "--") -> dict[str | None, list[Args]]:
     """
     grouped by "--xxx" as default.
@@ -451,3 +647,5 @@ def flatten_args(
         mapping: Callable[[Arg], T] = lambda arg: arg
 ) -> list[T]:
     return [(item if mapping is None else mapping(item)) for sublist in argslist for item in sublist]
+
+

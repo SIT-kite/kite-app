@@ -1,8 +1,8 @@
 from io import StringIO
-from typing import Iterator, Any, Callable, TypeVar, Generic
+from typing import Iterator, Any, Callable, TypeVar
 
-import converter
-from converter import Type2Converters
+import convert
+from convert import Type2Converters
 import fuzzy
 from cmd import CommandLike, CmdContext
 from coroutine import Task, STOP
@@ -30,7 +30,7 @@ def await_input(
     return task
 
 
-def _tint_cmd(ctx: CmdContext, cmd: CommandLike) -> str:
+def tint_cmdname(ctx: CmdContext, cmd: CommandLike) -> str:
     if hasattr(cmd, "created_by_user"):
         if getattr(cmd, "created_by_user"):
             return ctx.style.usrname(cmd.name)
@@ -86,7 +86,7 @@ def select_many_cmds(
         prompt, ignore_case=ignore_case,
         row=row, ref=ref,
         tint_num=lambda num: ctx.style.number(num),
-        tint_name=lambda cmd: _tint_cmd(ctx, candidates[cmd]) if cmd in candidates else ctx.style.name(cmd)
+        tint_name=lambda cmd: tint_cmdname(ctx, candidates[cmd]) if cmd in candidates else ctx.style.name(cmd)
     )
 
 
@@ -154,7 +154,7 @@ def select_one_cmd(
         fuzzy_match=fuzzy_match,
         row=row, ref=ref,
         tint_num=lambda num: ctx.style.number(num),
-        tint_name=lambda cmd: _tint_cmd(ctx, candidates[cmd]) if cmd in candidates else ctx.style.name(cmd)
+        tint_name=lambda cmd: tint_cmdname(ctx, candidates[cmd]) if cmd in candidates else ctx.style.name(cmd)
     )
 
 
@@ -267,7 +267,7 @@ def yes_no(
     return task
 
 
-Viewer = Callable[[T], Iterator[tuple[str, Any]]]
+AttrViewer = Callable[[T], Iterator[tuple[str, Any]]]
 
 
 def respect_private_viewer(obj: Any) -> Iterator[tuple[str, Any]]:
@@ -278,8 +278,8 @@ def respect_private_viewer(obj: Any) -> Iterator[tuple[str, Any]]:
 
 def replace_settings(
         ctx: CmdContext, *,
-        obj: T, viewer: Viewer = respect_private_viewer,
-        converters: Type2Converters | Callable[[], Type2Converters] = lambda: converter.builtins
+        obj: T, viewer: AttrViewer = respect_private_viewer,
+        converters: Type2Converters | Callable[[], Type2Converters] = lambda: convert.builtins
 ) -> Task:
     def task() -> Iterator:
         s = ctx.style
@@ -313,3 +313,15 @@ def replace_settings(
         yield
 
     return task
+
+
+def settings_from_str(
+        obj: Any, settings: dict[str, str],
+        converters: Type2Converters | Callable[[], Type2Converters] = lambda: convert.builtins,
+):
+    type2cnvt = converters if isinstance(converters, dict) else converters()
+    for name, value in settings.items():
+        if hasattr(obj, name):
+            original = getattr(obj, name)
+            cnvt = type2cnvt[type(original)]
+            setattr(obj, name, cnvt.from_str(value))

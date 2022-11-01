@@ -13,7 +13,7 @@ def _get_arg(grouped: dict[str | None, list[Args]], argname: str, allow_empty=Fa
         return None
     n_argslist = grouped[argname]
     if len(n_argslist) > 1:
-        raise CommandArgError(AliasCmd, n_argslist[1][0], f"duplicate arg<{argname}> provided")
+        raise CommandArgError(AliasCmd, n_argslist[1][0], f"redundant arg<{argname}> provided")
     n_args = n_argslist[0]
     if n_args.size == 0:
         if allow_empty:

@@ -11,28 +11,52 @@ class Ref(Generic[T]):
         return self.obj
 
     def __lshift__(self, other):
-        return self.obj.__lshift__(other)
+        if isinstance(other, Ref):
+            return self.obj.__lshift__(other.obj)
+        else:
+            return self.obj.__lshift__(other)
 
     def __rshift__(self, other):
-        return self.obj.__rshift__(other)
+        if isinstance(other, Ref):
+            return self.obj.__rshift__(other.obj)
+        else:
+            return self.obj.__rshift__(other)
 
     def __add__(self, other):
-        return self.obj.__add__(other)
+        if isinstance(other, Ref):
+            return self.obj.__add__(other.obj)
+        else:
+            return self.obj.__add__(other)
 
     def __sub__(self, other):
-        return self.obj.__sub__(other)
+        if isinstance(other, Ref):
+            return self.obj.__sub__(other.obj)
+        else:
+            return self.obj.__sub__(other)
 
     def __mul__(self, other):
-        return self.obj.__mul__(other)
+        if isinstance(other, Ref):
+            return self.obj.__mul__(other.obj)
+        else:
+            return self.obj.__mul__(other)
 
     def __mod__(self, other):
-        return self.obj.__mod__(other)
+        if isinstance(other, Ref):
+            return self.obj.__mod__(other.obj)
+        else:
+            return self.obj.__mod__(other)
 
     def __and__(self, other):
-        return self.obj.__and__(other)
+        if isinstance(other, Ref):
+            return self.obj.__and__(other.obj)
+        else:
+            return self.obj.__and__(other)
 
     def __or__(self, other):
-        return self.obj.__or__(other)
+        if isinstance(other, Ref):
+            return self.obj.__or__(other.obj)
+        else:
+            return self.obj.__or__(other)
 
     def __len__(self):
         return self.obj.__len__()
@@ -44,19 +68,31 @@ class Ref(Generic[T]):
         return self.obj.__floor__()
 
     def __floordiv__(self, other):
-        return self.obj.__floordiv__(other)
+        if isinstance(other, Ref):
+            return self.obj.__floordiv__(other.obj)
+        else:
+            return self.obj.__floordiv__(other)
 
     def __ceil__(self):
         return self.obj.__ceil__()
 
     def __ge__(self, other):
-        return self.obj.__ge__(other)
+        if isinstance(other, Ref):
+            return self.obj.__ge__(other.obj)
+        else:
+            return self.obj.__ge__(other)
 
     def __le__(self, other):
-        return self.obj.__le__(other)
+        if isinstance(other, Ref):
+            return self.obj.__le__(other.obj)
+        else:
+            return self.obj.__le__(other)
 
     def __lt__(self, other):
-        return self.obj.__lt__(other)
+        if isinstance(other, Ref):
+            return self.obj.__lt__(other.obj)
+        else:
+            return self.obj.__lt__(other)
 
     def __next__(self):
         return self.obj.__next__()
@@ -65,10 +101,16 @@ class Ref(Generic[T]):
         return self.obj.__int__()
 
     def __setitem__(self, key, value):
-        return self.obj.__setitem__(key, value)
+        if isinstance(value, Ref):
+            return self.obj.__setitem__(key, value.obj)
+        else:
+            return self.obj.__setitem__(key, value)
 
     def __getitem__(self, item):
-        return self.obj.__getitem__(item)
+        if isinstance(item, Ref):
+            return self.obj.__getitem__(item.obj)
+        else:
+            return self.obj.__getitem__(item)
 
     def __ne__(self, other: object) -> bool:
         if isinstance(other, Ref):

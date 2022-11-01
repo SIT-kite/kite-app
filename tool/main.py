@@ -163,7 +163,7 @@ def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequ
     try:
         loader.load_modules(terminal, proj)
     except DuplicateNameCompError as e:
-        terminal.both << f"Duplicate component<{e.comp}> of module<{e.module}> detected."
+        terminal.both << f"duplicate component<{e.comp}> of module<{e.module}> detected."
         cmd.log_traceback(terminal)
         return
     if len(cmdargs) == 0:

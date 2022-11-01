@@ -16,7 +16,7 @@ def _check_name(ctx: CmdContext, name_argslist: list[Args]) -> tuple[Arg, str]:
     elif size == 1:
         name_args = name_argslist[0]
         if name_args.size > 1:
-            raise CommandArgError(AddModuleCmd, name_args[1], "duplicate name specified")
+            raise CommandArgError(AddModuleCmd, name_args[1], "redundant name specified")
         else:
             name_arg = name_args[0]
             if name_arg.ispair:
@@ -24,7 +24,7 @@ def _check_name(ctx: CmdContext, name_argslist: list[Args]) -> tuple[Arg, str]:
             else:
                 return name_arg, name_arg.key
     else:
-        raise CommandArgError(AddModuleCmd, name_argslist[1][0], "duplicate name specified")
+        raise CommandArgError(AddModuleCmd, name_argslist[1][0], "redundant name specified")
 
 
 def _get_list(ctx: CmdContext, name: str, grouped: dict[str, list[Args]], optional=False) -> Sequence[Arg]:
