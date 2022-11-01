@@ -22,11 +22,11 @@ class GitCmd:
 
     @staticmethod
     def execute_interactive(ctx: CmdContext) -> Iterable:
-        yield await_input(ctx, prompt="git ", ref=(argsRef := useRef()))
-        args = Args.by(full=argsRef.deref())
-        git_args = Arg.by("git") + args
-        run_git_cmd(ctx, git_args)
-        yield
+        while True:
+            yield await_input(ctx, prompt="git ", ref=(argsRef := useRef()))
+            args = Args.by(full=argsRef.deref())
+            git_args = Arg.by("git") + args
+            run_git_cmd(ctx, git_args)
 
     @staticmethod
     def help(ctx: CmdContext):
