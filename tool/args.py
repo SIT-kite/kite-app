@@ -315,6 +315,9 @@ class Args(Iterable[TArg]):
         else:
             raise Exception(f"{self} isn't a root args")
 
+    def compose(self) -> Sequence[str]:
+        return tuple(arg.full for arg in self._args)
+
     def __str__(self):
         return _join(self._args, mapping=str)
 
@@ -617,6 +620,8 @@ def group_args2(args: Args, group_head: str = "--") -> ArgsGroups:
 
 def group_args(args: Args, group_head: str = "--") -> dict[str | None, list[Args]]:
     """
+    DEPRECATED, see [group_args2]
+
     grouped by "--xxx" as default.
     :return: {*group_name:[*matched_args],None:[ungrouped]}
     """
@@ -647,5 +652,3 @@ def flatten_args(
         mapping: Callable[[Arg], T] = lambda arg: arg
 ) -> list[T]:
     return [(item if mapping is None else mapping(item)) for sublist in argslist for item in sublist]
-
-

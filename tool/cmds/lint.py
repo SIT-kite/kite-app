@@ -26,5 +26,4 @@ class LintCmd:
     @staticmethod
     def help(ctx: CmdContext):
         t = ctx.term
-        t << "lint"
-        t << "|-- format .dart files"
+        t << "lint: format .dart files"
