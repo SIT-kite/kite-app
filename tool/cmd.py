@@ -5,7 +5,7 @@ from typing import Iterable, runtime_checkable, Protocol, Iterator, Any, Callabl
 import fuzzy
 import strings
 from args import Args, Arg, split_multicmd
-from flutter import Proj
+from project import Proj
 from style import Style
 from ui import Terminal
 

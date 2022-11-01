@@ -3,7 +3,7 @@ from typing import Callable, TypeVar, Sequence, Iterable
 from args import Args, Arg, group_args, flatten_args
 from build import await_input, select_many
 from cmd import CmdContext, CommandEmptyArgsError, CommandArgError
-from flutter import ModuleCreation, CompType, UsingDeclare
+from project import ModuleCreation, CompType, UsingDeclare
 from utils import useRef
 
 Mode = Callable[[Arg], None]

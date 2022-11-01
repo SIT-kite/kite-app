@@ -3,13 +3,13 @@ from typing import Iterable
 from args import Args, Arg
 from build import await_input
 from cmd import CmdContext
+from cmds.shared import print_stdout
 from utils import useRef
 
 
 def run_git_cmd(ctx: CmdContext, git_args: Args):
     proc = ctx.proj.runner.run(seq=git_args.compose())
-    for line in proc.stdout:
-        ctx.term << line.decode("utf-8").splitlines()[0]
+    print_stdout(ctx, proc)
 
 
 class GitCmd:
@@ -22,7 +22,7 @@ class GitCmd:
 
     @staticmethod
     def execute_interactive(ctx: CmdContext) -> Iterable:
-        await_input(ctx, prompt="git ", ref=(argsRef := useRef()))
+        yield await_input(ctx, prompt="git ", ref=(argsRef := useRef()))
         args = Args.by(full=argsRef.deref())
         git_args = Arg.by("git") + args
         run_git_cmd(ctx, git_args)

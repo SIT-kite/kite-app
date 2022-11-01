@@ -4,7 +4,7 @@ from typing import Iterable, Callable
 from build import select_one
 from cmd import CmdContext, CommandArgError, CommandEmptyArgsError, CommandLike
 from filesystem import File
-from flutter import Proj
+from project import Proj
 from utils import useRef
 
 

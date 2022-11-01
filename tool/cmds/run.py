@@ -2,7 +2,7 @@ from typing import Iterable, Any
 
 from args import Args
 from cmd import CmdContext, CommandLike, CommandArgError, CommandExecuteError, CommandEmptyArgsError
-from flutter import KiteScript
+from project import KiteScript
 from ui import Terminal
 
 
@@ -79,5 +79,5 @@ def build_globals(g: dict[str, Any]):
     g["int"] = int
     g["type"] = type
     g["str"] = str
-    from flutter import Proj
+    from project import Proj
     g["Proj"] = Proj

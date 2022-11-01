@@ -89,7 +89,7 @@ class Arg:
         :return: a new Args object with no parent
         """
         inner = list(args._args)
-        inner.append(self)
+        inner.insert(0, self)
         res = Args.lateinit()
         res._args = res.copy_args(inner)
         return res

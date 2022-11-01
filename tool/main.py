@@ -13,7 +13,7 @@ from args import Args, split_multicmd
 from cmd import CommandList, CmdContext, CommandLike, CommandExecuteError, CommandArgError, CommandEmptyArgsError
 from coroutine import TaskDispatcher, DispatcherState
 from filesystem import File, Directory
-from flutter import Proj, ExtraCommandsConf
+from project import Proj, ExtraCommandsConf
 from ui import Terminal, BashTerminal
 from utils import useRef
 
@@ -56,8 +56,8 @@ def find_project_root(start: str | Directory, max_depth=20) -> Directory | None:
     while True:
         if layer > max_depth:
             return None
-        import flutter
-        if cur.sub_isfi(flutter.pubspec_yaml):
+        import project
+        if cur.sub_isfi(project.pubspec_yaml):
             return cur
         parent, _ = cur.split()
         if parent is None:
@@ -74,8 +74,8 @@ def load_cmds(*, proj: Proj, cmdlist: CommandList, t: Terminal):
     cmdlist << HelpCmd(cmdlist)
     cmdlist.builtins = set(cmdlist.keys())
     # load extra commands
-    import flutter
-    extra = proj.settings.get(flutter.extra_commands, settings_type=ExtraCommandsConf)
+    import project
+    extra = proj.settings.get(project.extra_commands, settings_type=ExtraCommandsConf)
     for name, entry in extra.name2commands.items():
         if cmdlist.is_builtin(name):
             t.both << f"builtin command<{name}> can't be overriden."

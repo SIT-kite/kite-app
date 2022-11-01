@@ -1,4 +1,4 @@
-from flutter import CompType, Proj, UsingDeclare
+from project import CompType, Proj, UsingDeclare
 
 
 def load(proj: Proj):

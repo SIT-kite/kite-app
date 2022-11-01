@@ -1,10 +1,10 @@
 from typing import Iterable
 
-import flutter
+import project
 from args import group_args, Args
 from build import input_multiline, yes_no, await_input
 from cmd import CmdContext, CommandEmptyArgsError, CommandArgError
-from flutter import ExtraCommandEntry, ExtraCommandsConf
+from project import ExtraCommandEntry, ExtraCommandsConf
 from utils import Ref, useRef
 
 
@@ -54,7 +54,7 @@ class AliasCmd:
         info = _get_arg(grouped, argname="info", allow_empty=True)
         if info is None:
             info = ""
-        conf = ctx.proj.settings.get(flutter.extra_commands, settings_type=ExtraCommandsConf)
+        conf = ctx.proj.settings.get(project.extra_commands, settings_type=ExtraCommandsConf)
         AliasCmd.add_cmd(conf, name, args, info)
         t.both << f'command<{name}> added.'
         ctx.proj.kernel.reloader.reload_cmds()
@@ -87,7 +87,7 @@ class AliasCmd:
         info: list[str] = inputted.deref()
         helpinfo = "\n".join(info)
         t.logging << f"{helpinfo=}"
-        conf = ctx.proj.settings.get(flutter.extra_commands, settings_type=ExtraCommandsConf)
+        conf = ctx.proj.settings.get(project.extra_commands, settings_type=ExtraCommandsConf)
         if name in conf:
             confirm: bool = useRef()
             t << f"{ctx.style.usrname(name)} already exists, confirm to override it?"
