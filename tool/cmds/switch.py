@@ -160,3 +160,4 @@ def set_backend_config(fi: DartFi, setting: dict[str, str]):
                 new_value = setting[field_name]
                 lines[i] = line.replace(field_value, new_value)
     fi.write('\n'.join(lines))
+    fi.write("\n")
