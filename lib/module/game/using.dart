@@ -22,6 +22,7 @@ export '../shared/logger.dart';
 export '../shared/math.dart';
 export '../shared/route.dart';
 export '../shared/dialog.dart';
+export '../shared/networking.dart';
 export '../shared/user_widget/webview.dart';
 export '../shared/user_widget/common.dart';
 export '../simple_page/page/wiki.dart';

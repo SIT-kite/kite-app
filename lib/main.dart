@@ -23,8 +23,9 @@ import 'package:kite/util/catcher_dialog_handler.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import 'app.dart';
+import 'backend.dart';
 
-const exceptionLogUrl = 'https://kite.sunnysab.cn/api/v2/report/exception';
+const exceptionLogUrl = '${Backend.kite}/api/v2/report/exception';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

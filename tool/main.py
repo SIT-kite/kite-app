@@ -2,19 +2,20 @@ import datetime
 import ntpath
 import os.path
 import sys
-import traceback
 from typing import Sequence, Iterator
 
 import build
 import cmd
+import fuzzy
 import log
 import strings
-from args import Args
-from cmd import CommandList, CmdContext, CommandProtocol, CommandExecuteError, CommandArgError
+from args import Args, split_multicmd
+from cmd import CommandList, CmdContext, CommandLike, CommandExecuteError, CommandArgError, CommandEmptyArgsError
 from coroutine import TaskDispatcher, DispatcherState
 from filesystem import File, Directory
-from flutter import Proj
+from project import Proj, ExtraCommandsConf
 from ui import Terminal, BashTerminal
+from utils import useRef
 
 logo = """
     ██╗  ██╗ ██╗ ████████╗ ███████╗
@@ -55,8 +56,8 @@ def find_project_root(start: str | Directory, max_depth=20) -> Directory | None:
     while True:
         if layer > max_depth:
             return None
-        import flutter
-        if cur.sub_isfi(flutter.pubspec_yaml):
+        import project
+        if cur.sub_isfi(project.pubspec_yaml):
             return cur
         parent, _ = cur.split()
         if parent is None:
@@ -66,11 +67,20 @@ def find_project_root(start: str | Directory, max_depth=20) -> Directory | None:
         layer += 1
 
 
-def load_cmds(*, proj: Proj, cmdlist: CommandList, terminal: Terminal):
+def load_cmds(*, proj: Proj, cmdlist: CommandList, t: Terminal):
     import cmds
     cmds.load_static_cmd(cmdlist)
     from cmds.help import HelpCmd
     cmdlist << HelpCmd(cmdlist)
+    cmdlist.builtins = set(cmdlist.keys())
+    # load extra commands
+    import project
+    extra = proj.settings.get(project.extra_commands, settings_type=ExtraCommandsConf)
+    for name, entry in extra.name2commands.items():
+        if cmdlist.is_builtin(name):
+            t.both << f"builtin command<{name}> can't be overriden."
+        else:
+            cmdlist << cmd.CommandDelegate(name, entry.fullargs, entry.helpinfo)
 
 
 _header_entry_cache = {}
@@ -78,22 +88,28 @@ _header_existence_cache = {}
 _header_length = 48
 
 
-def _get_header_entry(command: CommandProtocol) -> str:
-    if command in _header_entry_cache:
-        return _header_entry_cache[command]
+def _get_header_entry(command: CommandLike) -> str:
+    name = command.name
+    if name in _header_entry_cache:
+        return _header_entry_cache[name]
     else:
-        line = strings.center_text_in_line(f">>[{command.name}]<<", length=_header_length)
-        _header_entry_cache[command] = line
+        line = strings.center_text_in_line(f">>[{name}]<<", length=_header_length, repeater="━")
+        _header_entry_cache[name] = line
         return line
 
 
-def _get_header_existence(command: CommandProtocol) -> str:
-    if command in _header_existence_cache:
-        return _header_existence_cache[command]
+def _get_header_existence(command: CommandLike) -> str:
+    name = command.name
+    if name in _header_existence_cache:
+        return _header_existence_cache[name]
     else:
-        line = strings.center_text_in_line(f"<<[{command.name}]>>", length=_header_length)
-        _header_existence_cache[command] = line
+        line = strings.center_text_in_line(f"<<[{name}]>>", length=_header_length, repeater="━")
+        _header_existence_cache[name] = line
         return line
+
+
+def _get_header_switch(pre: CommandLike, nxt: CommandLike) -> str:
+    return strings.center_text_in_line(f"<<[{pre.name}]>>[{nxt.name}]<<", length=_header_length)
 
 
 def clear_old_log(log_dir: Directory):
@@ -124,74 +140,115 @@ def main():
         print(f"❌ project root not found")
 
 
-def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequence[str]):
+def shell(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequence[str] | Args):
     terminal.logging << f'Project root found at "{proj.root}".'
     terminal.both << f'🪁 Kite Tool v{version}'
+    proj.settings.load()
     import yml
     proj.pubspec = yml.load(proj.pubspec_fi.read())
+    proj.l10n = yml.load(proj.l10n_yaml.read())
     terminal.both << f'Project loaded: "{proj.name} {proj.version}".'
     terminal.both << f'Description: "{proj.desc}".'
-    import kite.using
-    kite.using.load()
-    import kite.compoenet
-    kite.compoenet.load()
-    load_cmds(proj=proj, cmdlist=cmdlist, terminal=terminal)
+    import kite
+    kite.load(proj)
+
+    def load_cmds_func():
+        cmdlist.name2cmd.clear()
+        load_cmds(proj=proj, cmdlist=cmdlist, t=terminal)
+
+    load_cmds_func()
+    proj.kernel.reloader.reload_cmds = load_cmds_func
+    import loader
+    from loader import DuplicateNameCompError
+    try:
+        loader.load_modules(terminal, proj)
+    except DuplicateNameCompError as e:
+        terminal.both << f"duplicate component<{e.comp}> of module<{e.module}> detected."
+        cmd.log_traceback(terminal)
+        return
     if len(cmdargs) == 0:
         interactive_mode(proj=proj, cmdlist=cmdlist, terminal=terminal)
     else:
-        cli_mode(proj=proj, cmdlist=cmdlist, terminal=terminal, cmdargs=cmdargs)
+        if isinstance(cmdargs, Args):
+            fullargs = cmdargs
+        else:
+            fullargs = Args.by(seq=cmdargs)
+        cli_mode(proj=proj, cmdlist=cmdlist, terminal=terminal, cmdargs=fullargs)
+    proj.settings.save()
     terminal.both << "🪁 Kite Tool exits."
 
 
-def log_traceback(terminal: Terminal):
-    if terminal.has_logger:
-        terminal.logging << traceback.format_exc()
-        terminal << "ℹ️ full traceback was printed into log."
-
-
-def cli_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Sequence[str]):
-    args = Args(cmdargs)
-    # read first args as command
-    command, args = args.poll()
-    if command.ispair:
-        terminal.both << f'invalid command format "{command}".'
-        return
-    else:
-        executable = cmdlist[command.key]
+def cli_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal, cmdargs: Args):
+    all_cmdargs = split_multicmd(cmdargs)
+    cmd_size = len(all_cmdargs)
+    if cmd_size == 0:
+        terminal.both << f"no command given in CLI mode."
+    elif cmd_size == 1:
+        # read first args as command
+        args = all_cmdargs[0]
+        command, args = args.poll()
+        if command.ispair:
+            terminal.both << f'invalid command format "{command}".'
+            return
+        cmdname = command.key
+        executable = cmdlist[cmdname]
         if executable is None:
-            terminal.both << f'❗ command<{command.key}> not found.'
+            terminal.both << f'❗ command<{cmdname}> not found.'
+            matched, ratio = fuzzy.match(cmdname, cmdlist.name2cmd.keys())
+            if matched is not None and ratio > fuzzy.at_least:
+                terminal << f'👀 do you mean command<{matched}>?'
             return
         else:
-            ctx = CmdContext(proj, terminal, cmdlist, args)
             terminal.both << _get_header_entry(executable)
-            try:
-                executable.execute_cli(ctx)
-            except CommandArgError as e:
-                cmd.print_cmdarg_error(terminal, e)
-                log_traceback(terminal)
-            except CommandExecuteError as e:
-                log_traceback(terminal)
+            ctx = CmdContext(proj=proj, cmdlist=cmdlist, terminal=terminal, args=args)
+            cmd.catch_executing(ctx, executing=lambda: executable.execute_cli(ctx))
             terminal.both << _get_header_existence(executable)
+    else:
+        # prepare commands to run
+        exe_args = []
+        # check if all of them are executable
+        for command, args in (args.poll() for args in all_cmdargs):
+            if command.ispair:
+                terminal.both << f'invalid command format "{command}".'
+                return
+            cmdname = command.key
+            executable = cmdlist[cmdname]
+            if executable is None:
+                terminal.both << f'❗ command<{cmdname}> not found.'
+                return
+            exe_args.append((executable, args))
+        last = None
+        for i, pair in enumerate(exe_args):
+            executable, args = pair
+            if last is None:
+                terminal.both << _get_header_entry(executable)
+            else:
+                terminal.both << _get_header_switch(last, executable)
+            ctx = CmdContext(proj=proj, cmdlist=cmdlist, terminal=terminal, args=args)
+            cmd.catch_executing(ctx, executing=lambda: executable.execute_cli(ctx))
+            if i == len(exe_args) - 1:
+                terminal.both << _get_header_existence(executable)
+            last = executable
 
 
 def interactive_mode(*, proj: Proj, cmdlist: CommandList, terminal: Terminal):
     terminal.line(48)
-    terminal << '[interactive mode], enter "#" to exit current layer.'
-    all_cmd = ', '.join(cmdlist.keys())
-    all_cmd_prompt = f"all commands = [{all_cmd}]"
+    terminal << '[interactive] enter "#" to exit current layer.'
+
+    # all_cmd = ', '.join(cmdlist.keys())
+    # all_cmd_prompt = f"all commands = [{all_cmd}]"
 
     def running() -> Iterator:
         dispatcher = TaskDispatcher()
         while True:
-            terminal << all_cmd_prompt
-            select_task = build.select_one(cmdlist.name2cmd, terminal, prompt="cmd=", fuzzy_match=True)
-            yield select_task
-            executable: CommandProtocol = select_task.result
-            terminal.both << _get_header_entry(executable)
+            # terminal << all_cmd_prompt
+            selected: CommandLike = useRef()
             ctx = CmdContext(proj, terminal, cmdlist)
-            dispatcher.run(executable.execute_inter(ctx))
-            state = dispatcher.dispatch()
-            terminal.both << _get_header_existence(executable)
+            yield build.select_one_cmd(ctx, cmdlist.name2cmd, prompt="cmd=", fuzzy_match=True, ref=selected)
+            terminal.both << _get_header_entry(selected)
+            dispatcher.run(selected.execute_interactive(ctx))
+            state = cmd.catch_executing(ctx, executing=lambda: dispatcher.dispatch())
+            terminal.both << _get_header_existence(selected)
             if state == DispatcherState.Abort:
                 yield
 

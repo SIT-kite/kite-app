@@ -18,6 +18,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:kite/backend.dart';
 import 'package:kite/module/user_event/dao/user_event.dart';
 import 'package:kite/module/user_event/entity/user_event.dart';
 import 'package:kite/module/user_event/init.dart';
@@ -25,7 +26,7 @@ import 'package:uuid/uuid.dart';
 
 import 'logger.dart';
 
-const String reportEventUrl = 'https://kite.sunnysab.cn/api/v2/report/event';
+const String reportEventUrl = '${Backend.kite}/api/v2/report/event';
 const int maxCacheSize = 10;
 
 class PageLogger {

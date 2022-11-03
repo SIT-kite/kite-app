@@ -34,3 +34,10 @@ class FileLogger(Logger):
                 logfi.append(content, silent=True)
             except:
                 pass
+
+
+class StdoutLogger(Logger):
+
+    def log(self, *args):
+        content = ' '.join(str(arg) for arg in args)
+        print(content)

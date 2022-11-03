@@ -15,9 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'dart:ui';
-
 import 'package:dio/dio.dart';
+import 'package:kite/backend.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
 
@@ -25,7 +24,7 @@ import '../dao/weather.dart';
 import '../entity/weather.dart';
 
 class WeatherService implements WeatherDao {
-  static String _getWeatherUrl(int campus, int lang) => 'https://kite.sunnysab.cn/api/v2/weather/$campus?lang=$lang';
+  static String _getWeatherUrl(int campus, int lang) => '${Backend.kite}/api/v2/weather/$campus?lang=$lang';
 
   @override
   Future<Weather> getCurrentWeather(int campus) async {

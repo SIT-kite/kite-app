@@ -15,6 +15,7 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+import 'package:kite/backend.dart';
 import 'package:kite/network/session.dart';
 import 'package:kite/util/logger.dart';
 
@@ -29,7 +30,7 @@ class FunctionOverrideService implements FunctionOverrideServiceDao {
   @override
   Future<FunctionOverrideInfo> get() async {
     Log.info('获取拉取动态路由配置');
-    final response = await session.request('https://kite.sunnysab.cn/override.json', ReqMethod.get);
+    final response = await session.request('${Backend.kite}/override.json', ReqMethod.get);
     return FunctionOverrideInfo.fromJson(response.data);
   }
 }

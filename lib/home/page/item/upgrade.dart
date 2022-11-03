@@ -22,9 +22,10 @@ import 'package:kite/util/upgrade.dart';
 import 'package:kite/util/url_launcher.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+import '../../../backend.dart';
 import 'index.dart';
 
-const String appUpgradeUrl = 'https://kite.sunnysab.cn/upgrade/';
+const String appUpgradeUrl = '${Backend.kite}/upgrade/';
 
 class UpgradeItem extends StatelessWidget {
   const UpgradeItem({Key? key}) : super(key: key);

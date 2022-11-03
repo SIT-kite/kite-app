@@ -27,7 +27,7 @@ IconButton helpButton(BuildContext context) {
     onPressed: () {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => WikiPage(customWikiUrl: 'https://kite.sunnysab.cn/wiki/kite-app/game/'),
+          builder: (context) => WikiPage(customWikiUrl: '${Backend.kite}/wiki/kite-app/game/'),
         ),
       );
     },

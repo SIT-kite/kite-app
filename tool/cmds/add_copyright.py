@@ -28,7 +28,19 @@ def already_has_copyright(content: str) -> bool:
 
 
 def need_copyright(fi: File) -> bool:
-    return fi.extendswith(".dart") and not fi.extendswith("g.dart")
+    return fi.extendswith(".dart") and not fi.endswith("g.dart")
+
+
+def try_addcopyright(ctx: CmdContext) -> int:
+    total = 0
+    for source in ctx.proj.lib_folder.walking(when=need_copyright):
+        content = source.read(silent=True)
+        if not already_has_copyright(content):
+            new = COPYRIGHT_STRING + content
+            source.write(new)
+            ctx.term.both << f"📄 {source}"
+            total += 1
+    return total
 
 
 class AddCopyRightCmd:
@@ -36,22 +48,17 @@ class AddCopyRightCmd:
 
     @staticmethod
     def execute_cli(ctx: CmdContext):
-        if ctx.args.size > 0:
+        if not ctx.args.isempty:
             raise CommandArgError(AddCopyRightCmd, ctx.args[0], "no arg required")
-        AddCopyRightCmd.execute(ctx)
+        total = try_addcopyright(ctx)
+        if total == 0:
+            ctx.term << "no file changed"
+        else:
+            ctx.term << f"files changed: {total}"
 
     @staticmethod
-    def execute_inter(ctx: CmdContext):
-        AddCopyRightCmd.execute(ctx)
-
-    @staticmethod
-    def execute(ctx: CmdContext):
-        for source in ctx.proj.lib_folder.walking(when=need_copyright):
-            content = source.read(silent=True)
-            if not already_has_copyright(content):
-                new = COPYRIGHT_STRING + content
-                source.write(new)
-                ctx.term.both << f"📄 {source}"
+    def execute_interactive(ctx: CmdContext):
+        try_addcopyright(ctx)
 
     @staticmethod
     def help(ctx: CmdContext):

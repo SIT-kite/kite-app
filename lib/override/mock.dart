@@ -15,6 +15,8 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+import 'package:kite/backend.dart';
+
 import 'entity.dart';
 import 'interface.dart';
 
@@ -31,7 +33,7 @@ const _json = {
       "title": "func1",
       "route": "/abc",
       "description": "description1234",
-      "iconUrl": "https://kite.sunnysab.cn/page/assets/assets/home/icon_exam.svg"
+      "iconUrl": "${Backend.kite}/page/assets/assets/home/icon_exam.svg"
     }
   ],
   "homeItemHide": [

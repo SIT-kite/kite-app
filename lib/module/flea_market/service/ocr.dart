@@ -17,6 +17,8 @@
  */
 import 'package:dio/dio.dart';
 
+import '../../../backend.dart';
+
 class OcrRecognizeException implements Exception {
   final int code;
   final String msg;
@@ -25,7 +27,7 @@ class OcrRecognizeException implements Exception {
 }
 
 class OcrServer {
-  static const _ocrServerUrl = 'https://kite.sunnysab.cn/api/ocr/captcha';
+  static const _ocrServerUrl = '${Backend.kite}/api/ocr/captcha';
 
   static Future<String> recognize(String imageBase64) async {
     final response = await Dio().post(_ocrServerUrl, data: imageBase64);

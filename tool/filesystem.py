@@ -58,7 +58,7 @@ class FileStat:
         return self.stat.st_size
 
 
-# noinspection SpellCheckingInspection
+# noinspection SpellCheckingInspection,PyBroadException
 class File(Pathable):
     logger = None
 
@@ -92,16 +92,19 @@ class File(Pathable):
         return extension.removeprefix(".")
 
     @property
-    def basename(self) -> str:
+    def name(self) -> str:
         return ntpath.basename(self.path)
 
     @property
     def name_without_extension(self) -> str:
-        name, extension = ntpath.splitext(self.basename)
+        name, extension = ntpath.splitext(self.name)
         return name
 
     def extendswith(self, extension: str) -> bool:
-        return self.path.endswith(extension)
+        return self.extension == extension
+
+    def endswith(self, ending: str) -> bool:
+        return self.path.endswith(ending)
 
     @staticmethod
     def cast(path: Union[str, "File"]) -> "File":
@@ -110,14 +113,18 @@ class File(Pathable):
         else:
             return File(path)
 
-    def read(self, mode="r", silent=False):
+    def read(self, mode="r", silent=False) -> str:
         with open(self.path, mode=mode, encoding="UTF-8") as f:
             File.log(f"file[{self.path}] was read.", silent=silent)
             return f.read()
 
     def try_read(self, mode="r", fallback: str | None = None, silent=False) -> None | str:
         if os.path.isfile(self.path):
-            return self.read(mode, silent=silent)
+            try:
+                return self.read(mode, silent=silent)
+            except:
+                File.log(f"file[{self.path}] can't be read.", silent=silent)
+                return fallback
         else:
             File.log(f"file[{self.path}] isn't a file to read.", silent=silent)
             return fallback
@@ -142,7 +149,7 @@ class File(Pathable):
                     os.unlink(self.path)
                     File.log(f"file[{self.path}] was deleted.", silent=silent)
                     return True
-                except BaseException as e:
+                except Exception as e:
                     File.log(f"file[{self.path}] can't deleted.", e, silent=silent)
                     return False
             else:  # it exists but isn't a file
@@ -203,7 +210,7 @@ class Directory(Pathable):
     logger = None
 
     @property
-    def basename(self) -> str:
+    def name(self) -> str:
         return ntpath.basename(self.path)
 
     def exists(self):
@@ -224,39 +231,44 @@ class Directory(Pathable):
         files = []
         dirs = []
         for f in loaded:
-            if p.isfile(f):
-                files.append(File(f))
-            elif p.isdir(f):
-                dirs.append(Directory(f))
+            full = ntpath.join(self.path, f)
+            if p.isfile(full):
+                files.append(self.subfi(f))
+            elif p.isdir(full):
+                dirs.append(self.subdir(f))
         return files, dirs
 
     def lists_fis(self) -> list[File]:
-        files = os.listdir(self.path)
         res = []
+        files = os.listdir(self.path)
         for f in files:
-            if p.isfile(f):
-                res.append(File(f))
+            full = ntpath.join(self.path, f)
+            if p.isfile(full):
+                res.append(self.subfi(f))
         return res
 
     def lists_dirs(self) -> list["Directory"]:
-        files = os.listdir(self.path)
         res = []
+        files = os.listdir(self.path)
         for f in files:
-            if p.isdir(f):
-                res.append(Directory(f))
+            full = ntpath.join(self.path, f)
+            if p.isdir(full):
+                res.append(self.subdir(f))
         return res
 
     def listing_fis(self) -> Iterable[File]:
         files = os.listdir(self.path)
         for f in files:
-            if p.isfile(f):
-                yield File(f)
+            full = ntpath.join(self.path, f)
+            if p.isfile(full):
+                yield self.subfi(f)
 
     def listing_dirs(self) -> Iterable["Directory"]:
         files = os.listdir(self.path)
         for f in files:
-            if p.isdir(f):
-                yield Directory(f)
+            full = ntpath.join(self.path, f)
+            if p.isdir(full):
+                yield self.subdir(f)
 
     def subfi(self, *name) -> File:
         return File(ntpath.join(self.path, *name))
@@ -309,7 +321,7 @@ class Directory(Pathable):
                     os.rmdir(self.path)
                     Directory.log(f"dir[{self.path}] was deleted.", silent=silent)
                     return True
-                except BaseException as e:
+                except Exception as e:
                     Directory.log(f"dir[{self.path}] can't deleted.", e, silent=silent)
                     return False
             else:  # it exists but isn't a dir
