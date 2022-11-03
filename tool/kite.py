@@ -33,7 +33,7 @@ def load_unmodule(proj: Proj):
 
 
 def load_scripts(proj: Proj):
-    for fi in proj.scripts_dir.listing_fis():
+    for fi in proj.scripts_dir.ensure().listing_fis():
         if fi.extendswith("py"):
             proj.scripts.add_py(fi)
         elif fi.extendswith("kites"):

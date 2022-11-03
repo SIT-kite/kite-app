@@ -23,7 +23,7 @@ class SettingsBox:
 
     # noinspection PyBroadException
     def load(self):
-        content = self.box.read()
+        content = self.box.try_read(fallback="{}")
         try:
             di: dict[str, Any] = json.loads(content)
             for name, v in di.items():

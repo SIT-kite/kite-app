@@ -49,21 +49,16 @@ def find_project_root(start: str | Directory, max_depth=20) -> Directory | None:
     # Go through until upper bound
     if isinstance(start, str):
         start = Directory(start)
-    start = start.to_abs()
     max_depth = max(0, max_depth)
     layer = 0
     cur = start
     while True:
-        if layer > max_depth:
+        if layer > max_depth or cur.isroot:
             return None
         import project
         if cur.sub_isfi(project.pubspec_yaml):
             return cur
-        parent, _ = cur.split()
-        if parent is None:
-            return None
-        else:
-            cur = parent
+        cur = cur.parent
         layer += 1
 
 
@@ -114,6 +109,7 @@ def _get_header_switch(pre: CommandLike, nxt: CommandLike) -> str:
 
 def clear_old_log(log_dir: Directory):
     now = datetime.datetime.now()
+    log_dir.ensure()
     for logfi in log_dir.listing_fis():
         delta = now - logfi.modify_datetime
         if delta.days > 7:
