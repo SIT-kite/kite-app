@@ -98,6 +98,8 @@ class File(Pathable):
         return self.path.stem
 
     def extendswith(self, extension: str) -> bool:
+        if not extension.startswith("."):
+            extension = f".{extension}"
         return self.extension == extension
 
     def endswith(self, ending: str) -> bool:

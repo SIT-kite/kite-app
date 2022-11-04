@@ -1,5 +1,5 @@
 import re
-from typing import Iterator, Callable
+from typing import Iterator
 
 from args import group_args2
 from build import select_one, replace_settings, await_input, settings_from_str
@@ -160,4 +160,4 @@ def set_backend_config(fi: DartFi, setting: dict[str, str]):
                 new_value = setting[field_name]
                 lines[i] = line.replace(field_value, new_value)
     fi.write('\n'.join(lines))
-    fi.write("\n")
+    fi.append("\n")
