@@ -77,21 +77,22 @@ class SwitchCmd:
         versions = get_all_versions(ctx)
         view = dict(versions)
         view.update(_builtins)
-        ctx.term << "enter a name to edit or perform."
-        yield select_one(ctx, view, prompt="version=", ref=(versionRef := useRef()))
-        version = versionRef.deref()
+        while True:
+            ctx.term << "enter a name to edit or perform."
+            yield select_one(ctx, view, prompt="version=", ref=(versionRef := useRef()))
+            version = versionRef.deref()
 
-        if version == _new:
-            version = Version()
-            yield SwitchCmd.create_version(ctx, versions, new=version)
-            yield replace_settings(ctx, obj=version)
-            ctx.term << "version updated."
-        elif version == _to:
-            yield SwitchCmd.switch_to(ctx, versions)
-            ctx.term << "switch succeeded."
-        else:
-            yield replace_settings(ctx, obj=version)
-            ctx.term << "version updated."
+            if version == _new:
+                version = Version()
+                yield SwitchCmd.create_version(ctx, versions, new=version)
+                yield replace_settings(ctx, obj=version)
+                ctx.term << "version updated."
+            elif version == _to:
+                yield SwitchCmd.switch_to(ctx, versions)
+                ctx.term << "switch succeeded."
+            else:
+                yield replace_settings(ctx, obj=version)
+                ctx.term << "version updated."
 
     @staticmethod
     def switch_to(ctx: CmdContext, versions: dict[str, Version]) -> Iterator:
