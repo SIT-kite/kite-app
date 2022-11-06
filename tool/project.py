@@ -162,7 +162,7 @@ class UsingDeclare:
     def create(self, usingfi: File):
         with StringIO() as res:
             for ref in self.refs:
-                res.write(f"export '{ref};'\n")
+                res.write(f"export '{ref}';\n")
             usingfi.append(res.getvalue())
 
     def __str__(self):
