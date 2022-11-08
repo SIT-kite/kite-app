@@ -16,7 +16,7 @@ class TransactionRaw {
   /// transaction time
   /// example: "114745"
   /// format: hhmmss
-  String transtiem = "";
+  String transtime = "";
 
   /// customer id
   /// example: 11045158
