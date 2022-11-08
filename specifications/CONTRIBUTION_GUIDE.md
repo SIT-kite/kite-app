@@ -51,7 +51,6 @@ You can download it [here](https://developer.apple.com/download/all/?q=Xcode%201
 
 Be aware that Xcode 14 or higher doesn't work due to the compatibility issue of some dependencies.
 
-
 ## Dependency
 
 ### Flutter
@@ -84,4 +83,30 @@ meanwhile, `absolute import` should be applied outside.
 
 As to formatting, the indent is 2 spaces.
 
-As to naming, please keep the key `lowerCamelCase`, which can be mapped to a valid dart variable name.
+As to naming, please keep the key `lowerCamelCase`,
+which can be mapped to a valid dart variable name.
+
+### Kite Tool
+
+Kite tool always works on the latest python.
+Requirements:
+
+```
+ruamel.yaml
+#IF Windows
+    pywin32
+#ELSE
+    curses
+#ENDIF
+```
+
+The [entry point](/tool/main.py) is located in [tool folder](/tool).
+
+If the current working directory is [the root of project](..).
+
+```shell
+python ./tool/main.py
+```
+
+Kite tool will locate the project automatically,
+so you can run the [main.py](/tool/main.py) anywhere.
