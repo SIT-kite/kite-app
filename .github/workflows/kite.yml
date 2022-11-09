@@ -173,10 +173,11 @@ jobs:
       - run: flutter pub get
       - run: flutter pub run build_runner build --delete-conflicting-outputs
       - run: flutter build windows
-      - name: Upload File
+
+      - name: Upload Windows build file
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.BRANCH_NAME }}-${{ env.SHA }}-windows-x86_64
+          name: ${{ env.BRANCH_NAME }}-${{ env.SHA }}-windows-x86_64.zip
           path: build/windows/runner/Release
 
   ######################
@@ -266,19 +267,22 @@ jobs:
           mv app-x86_64-release-signed.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-x86_64-release-signed.apk
 
       
-      - name: Upload File
+      - name: Upload android-x86_64 apk artifact File
         uses: actions/upload-artifact@v3
         with:
+          name: ${{ env.BRANCH_NAME }}-${{ env.SHA }}-x86_64-release-signed.apk
           path: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-x86_64-release-signed.apk
 
-      - name: Upload File
+      - name: Upload android-armeabi-v7a apk artifact File
         uses: actions/upload-artifact@v3
         with:
+          name: ${{ env.BRANCH_NAME }}-${{ env.SHA }}-armeabi-v7a-release-signed.apk
           path: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-armeabi-v7a-release-signed.apk
 
-      - name: Upload File
+      - name: Upload android-arm64-v8a apk artifact File
         uses: actions/upload-artifact@v3
         with:
+          name: ${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk
           path: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk
 
 
