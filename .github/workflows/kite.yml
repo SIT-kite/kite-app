@@ -173,6 +173,11 @@ jobs:
       - run: flutter pub get
       - run: flutter pub run build_runner build --delete-conflicting-outputs
       - run: flutter build windows
+      - name: Upload File
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.BRANCH_NAME }}-${{ env.SHA }}-windows-x86_64
+          path: build/windows/runner/Release
 
   ######################
   # macOS
@@ -260,27 +265,22 @@ jobs:
           mv app-arm64-v8a-release-signed.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk
           mv app-x86_64-release-signed.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-x86_64-release-signed.apk
 
-      - name: Copy file via SSH
-        uses: appleboy/scp-action@v0.1.2
+      
+      - name: Upload File
+        uses: actions/upload-artifact@v3
         with:
-          host: ${{ secrets.SERVER_HOST }}
-          port: ${{ secrets.PORT }}
-          username: ${{ secrets.SERVER_USER }}
-          password: ${{ secrets.SERVER_SECRET }}
-          source: ./build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk
-          target: /var/kite/web/apk/
-          strip_components: 5
+          path: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-x86_64-release-signed.apk
 
-      - name: SSH Remote Rename apk
-        uses: appleboy/ssh-action@v0.1.2
+      - name: Upload File
+        uses: actions/upload-artifact@v3
         with:
-          host: ${{ secrets.SERVER_HOST }}
-          port: ${{ secrets.PORT }}
-          username: ${{ secrets.SERVER_USER }}
-          password: ${{ secrets.SERVER_SECRET }}
-          script: |
-            rm /var/kite/web/apk/sit-kite-arm64-v8a-release-latest.apk
-            mv /var/kite/web/apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk /var/kite/web/apk/sit-kite-arm64-v8a-release-latest.apk
+          path: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-armeabi-v7a-release-signed.apk
+
+      - name: Upload File
+        uses: actions/upload-artifact@v3
+        with:
+          path: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk
+
 
       - name: 🤖 Upload apk by bot
         uses: appleboy/telegram-action@v0.1.1
@@ -305,6 +305,29 @@ jobs:
           token: ${{ secrets.BOT_TOKEN }}
           document: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk
           message: "🚀 Android arm64-v8a Apk Build by Github Actions"
+
+      - name: Copy file via SSH
+        uses: appleboy/scp-action@v0.1.2
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          port: ${{ secrets.PORT }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_SECRET }}
+          source: ./build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk
+          target: /var/kite/web/apk/
+          strip_components: 5
+
+      - name: SSH Remote Rename apk
+        uses: appleboy/ssh-action@v0.1.2
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          port: ${{ secrets.PORT }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_SECRET }}
+          script: |
+            rm /var/kite/web/apk/sit-kite-arm64-v8a-release-latest.apk
+            mv /var/kite/web/apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk /var/kite/web/apk/sit-kite-arm64-v8a-release-latest.apk
+
 
   # Send notification
   notification:
