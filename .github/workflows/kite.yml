@@ -161,6 +161,11 @@ jobs:
     runs-on: windows-latest
     needs: lint
     steps:
+      - uses: nelonoel/branch-name@v1.0.1
+      - uses: benjlevesque/short-sha@v1.2
+        id: short-sha
+        with: { length: 7 }
+
       - uses: actions/checkout@v3
 
       - uses: subosito/flutter-action@v2
@@ -226,6 +231,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: lint
     steps:
+      - uses: nelonoel/branch-name@v1.0.1
+
+      - uses: benjlevesque/short-sha@v1.2
+        id: short-sha
+        with: { length: 7 }
+
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
         with: { channel: stable, cache: true }
@@ -235,6 +246,13 @@ jobs:
       - run: flutter pub get
       - run: flutter pub run build_runner build --delete-conflicting-outputs
       - run: flutter build linux
+
+      - name: Upload linux build File
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.BRANCH_NAME }}-${{ env.SHA }}-linux-x86_64.zip
+          path: build/linux/x64/release/bundle
+
 
   # Upload apk
   upload:
