@@ -161,6 +161,11 @@ jobs:
     runs-on: windows-latest
     needs: lint
     steps:
+      - uses: nelonoel/branch-name@v1.0.1
+      - uses: benjlevesque/short-sha@v1.2
+        id: short-sha
+        with: { length: 7 }
+
       - uses: actions/checkout@v3
 
       - uses: subosito/flutter-action@v2
@@ -173,6 +178,12 @@ jobs:
       - run: flutter pub get
       - run: flutter pub run build_runner build --delete-conflicting-outputs
       - run: flutter build windows
+
+      - name: Upload Windows build file
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.BRANCH_NAME }}-${{ env.SHA }}-windows-x86_64.zip
+          path: build/windows/runner/Release
 
   ######################
   # macOS
@@ -216,10 +227,23 @@ jobs:
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k SIT_KITE_PWD build.keychain
           echo "Sign the app"
           /usr/bin/codesign --force --deep -s MJGX7ZZ3AG ./$MACOS_APP_RELEASE_PATH/上应小风筝.app
+
+      - name: Upload web File
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.BRANCH_NAME }}-${{ env.SHA }}-macos.zip
+          path: build/macos/Build/Products/Release
+
   build-Linux:
     runs-on: ubuntu-latest
     needs: lint
     steps:
+      - uses: nelonoel/branch-name@v1.0.1
+
+      - uses: benjlevesque/short-sha@v1.2
+        id: short-sha
+        with: { length: 7 }
+
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
         with: { channel: stable, cache: true }
@@ -229,6 +253,32 @@ jobs:
       - run: flutter pub get
       - run: flutter pub run build_runner build --delete-conflicting-outputs
       - run: flutter build linux
+
+      - name: Upload linux build File
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.BRANCH_NAME }}-${{ env.SHA }}-linux-x86_64.zip
+          path: build/linux/x64/release/bundle
+
+  build-Web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: nelonoel/branch-name@v1.0.1
+      - uses: benjlevesque/short-sha@v1.2
+        id: short-sha
+        with: { length: 7 }
+
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with: { channel: stable, cache: true }
+      - run: |
+          flutter pub get
+          flutter build web --no-source-maps --no-null-assertions --no-native-null-assertions --release
+      - name: Upload web File
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.BRANCH_NAME }}-${{ env.SHA }}-web.zip
+          path: build/web
 
   # Upload apk
   upload:
@@ -260,27 +310,25 @@ jobs:
           mv app-arm64-v8a-release-signed.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk
           mv app-x86_64-release-signed.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-x86_64-release-signed.apk
 
-      - name: Copy file via SSH
-        uses: appleboy/scp-action@v0.1.2
+      
+      - name: Upload android-x86_64 apk artifact File
+        uses: actions/upload-artifact@v3
         with:
-          host: ${{ secrets.SERVER_HOST }}
-          port: ${{ secrets.PORT }}
-          username: ${{ secrets.SERVER_USER }}
-          password: ${{ secrets.SERVER_SECRET }}
-          source: ./build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk
-          target: /var/kite/web/apk/
-          strip_components: 5
+          name: ${{ env.BRANCH_NAME }}-${{ env.SHA }}-x86_64-release-signed.apk
+          path: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-x86_64-release-signed.apk
 
-      - name: SSH Remote Rename apk
-        uses: appleboy/ssh-action@v0.1.2
+      - name: Upload android-armeabi-v7a apk artifact File
+        uses: actions/upload-artifact@v3
         with:
-          host: ${{ secrets.SERVER_HOST }}
-          port: ${{ secrets.PORT }}
-          username: ${{ secrets.SERVER_USER }}
-          password: ${{ secrets.SERVER_SECRET }}
-          script: |
-            rm /var/kite/web/apk/sit-kite-arm64-v8a-release-latest.apk
-            mv /var/kite/web/apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk /var/kite/web/apk/sit-kite-arm64-v8a-release-latest.apk
+          name: ${{ env.BRANCH_NAME }}-${{ env.SHA }}-armeabi-v7a-release-signed.apk
+          path: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-armeabi-v7a-release-signed.apk
+
+      - name: Upload android-arm64-v8a apk artifact File
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk
+          path: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk
+
 
       - name: 🤖 Upload apk by bot
         uses: appleboy/telegram-action@v0.1.1
@@ -305,6 +353,29 @@ jobs:
           token: ${{ secrets.BOT_TOKEN }}
           document: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk
           message: "🚀 Android arm64-v8a Apk Build by Github Actions"
+
+      - name: Copy file via SSH
+        uses: appleboy/scp-action@v0.1.2
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          port: ${{ secrets.PORT }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_SECRET }}
+          source: ./build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk
+          target: /var/kite/web/apk/
+          strip_components: 5
+
+      - name: SSH Remote Rename apk
+        uses: appleboy/ssh-action@v0.1.2
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          port: ${{ secrets.PORT }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_SECRET }}
+          script: |
+            rm /var/kite/web/apk/sit-kite-arm64-v8a-release-latest.apk
+            mv /var/kite/web/apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk /var/kite/web/apk/sit-kite-arm64-v8a-release-latest.apk
+
 
   # Send notification
   notification:

@@ -33,6 +33,8 @@ import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/event_bus.dart';
 import 'package:kite/util/page_logger.dart';
 
+import '../util/upgrade.dart';
+
 class GlobalConfig {
   static String? httpProxy;
   static bool isTestEnv = false;
@@ -52,6 +54,8 @@ enum EventNameConstants {
 
 /// 应用程序全局数据对象
 class Global {
+  static late AppVersion currentVersion;
+
   static final eventBus = EventBus<EventNameConstants>();
   static late PageLogger pageLogger;
 
@@ -92,6 +96,7 @@ class Global {
     required UserEventStorageDao userEventStorage,
     required AuthSettingDao authSetting,
   }) async {
+    currentVersion = await getCurrentVersion();
     cookieJar = await CookieInit.init();
     dio = await DioInit.init(
       config: DioConfig()

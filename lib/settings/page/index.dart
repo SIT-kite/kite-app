@@ -27,7 +27,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:kite/global/desktop_initializer.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/global/hive_initializer.dart';
 import 'package:kite/global/init.dart';
@@ -52,6 +51,7 @@ import 'storage.dart';
 class SettingsPage extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
   final bool isFreshman = AccountUtils.getUserType() == UserType.freshman;
+  final String currentVersion = '${Global.currentVersion.version} （on ${Global.currentVersion.platform})';
 
   SettingsPage({Key? key}) : super(key: key);
 
@@ -380,6 +380,14 @@ class SettingsPage extends StatelessWidget {
           )
         ],
       ),
+      // TODO: i18n
+      SettingsGroup(title: '状态', children: <Widget>[
+        SimpleSettingsTile(
+          title: '当前版本',
+          subtitle: currentVersion,
+          leading: const Icon(Icons.settings_applications),
+        ),
+      ])
     ]);
   }
 }
