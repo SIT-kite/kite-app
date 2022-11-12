@@ -227,6 +227,13 @@ jobs:
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k SIT_KITE_PWD build.keychain
           echo "Sign the app"
           /usr/bin/codesign --force --deep -s MJGX7ZZ3AG ./$MACOS_APP_RELEASE_PATH/上应小风筝.app
+
+      - name: Upload web File
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.BRANCH_NAME }}-${{ env.SHA }}-macos.zip
+          path: build/macos/Build/Products/Release
+
   build-Linux:
     runs-on: ubuntu-latest
     needs: lint
@@ -253,6 +260,25 @@ jobs:
           name: ${{ env.BRANCH_NAME }}-${{ env.SHA }}-linux-x86_64.zip
           path: build/linux/x64/release/bundle
 
+  build-Web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: nelonoel/branch-name@v1.0.1
+      - uses: benjlevesque/short-sha@v1.2
+        id: short-sha
+        with: { length: 7 }
+
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with: { channel: stable, cache: true }
+      - run: |
+          flutter pub get
+          flutter build web --no-source-maps --no-null-assertions --no-native-null-assertions --release
+      - name: Upload web File
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.BRANCH_NAME }}-${{ env.SHA }}-web.zip
+          path: build/web
 
   # Upload apk
   upload:
