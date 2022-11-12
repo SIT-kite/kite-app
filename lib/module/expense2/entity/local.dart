@@ -17,4 +17,3 @@ class Transaction {
 }
 
 enum TransactionType { consume, topUp, subsidy, other }
-
