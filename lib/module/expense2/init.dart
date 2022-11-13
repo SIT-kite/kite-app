@@ -15,8 +15,9 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+import 'package:kite/module/connectivity/using.dart';
+
 import 'service/getter.dart';
-import 'using.dart';
 import 'dao/getter.dart';
 import 'storage/local.dart';
 
@@ -24,9 +25,12 @@ class Expense2Init {
   static late ExpenseGetDao remote;
   static late ExpenseStorage local;
 
-  static void init({
-    required KiteSession session,
-  }) {
+  static Future<void> init({
+    required ISession session,
+  }) async{
     remote = ExpenseGetService(session);
+    Log.debug(await remote.get("221042Y221",
+        from: DateTime(2022, 9, 22, 0, 0, 0),
+        to: DateTime(2022, 11, 14, 0, 0, 0)));
   }
 }

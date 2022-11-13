@@ -17,6 +17,7 @@
  */
 import 'package:catcher/catcher.dart';
 import 'package:kite/home/init.dart';
+import 'package:kite/module/expense2/init.dart';
 import 'package:kite/module/freshman/init.dart';
 import 'package:kite/global/desktop_initializer.dart';
 import 'package:kite/global/global.dart';
@@ -46,7 +47,7 @@ class Initializer {
         Log.error([error, stackTrace]);
       }
     }
-  }
+   }
 
   static Future<void> _init() async {
     // Initialize the window size before others for a better experience when loading.
@@ -86,13 +87,18 @@ class Initializer {
       contactDataBox: HiveBoxInit.contactSetting,
     );
     final sharedEduSession = EduSession(Global.ssoSession);
-    await ExamResultInit.init(cookieJar: Global.cookieJar, eduSession: sharedEduSession);
+    await ExamResultInit.init(
+        cookieJar: Global.cookieJar, eduSession: sharedEduSession);
     await ExamArrInit.init(sharedEduSession);
-    await TimetableInit.init(eduSession: sharedEduSession, kiteSession: kiteSession, timetableBox: HiveBoxInit.course);
+    await TimetableInit.init(
+        eduSession: sharedEduSession,
+        kiteSession: kiteSession,
+        timetableBox: HiveBoxInit.course);
     await ExpenseTrackerInit.init(
       ssoSession: Global.ssoSession2,
       expenseRecordBox: HiveBoxInit.expense,
     );
+    await Expense2Init.init(session: Global.ssoSession2);
 
     await SharedInit.init(
       kiteSession: kiteSession,
