@@ -1,4 +1,5 @@
 import 'package:kite/module/expense2/entity/local.dart';
+import 'package:kite/module/expense2/entity/page.dart';
 
 import '../dao/local.dart';
 
@@ -26,4 +27,7 @@ class ExpenseStorage implements ExpenseLocalDao {
   // TODO: implement last
   Transaction? get last => throw UnimplementedError();
 
+  @override
+  // TODO: implement pages
+  Pages get pages => throw UnimplementedError();
 }

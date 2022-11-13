@@ -119,7 +119,7 @@ def clear_old_log(log_dir: Directory):
 def main():
     script_path = sys.argv[0]
     script_abs_path = os.path.abspath(script_path)
-    parent, _ = ntpath.split(script_abs_path)
+    parent, _ = os.path.split(script_abs_path)
     cmdargs = sys.argv[1:] if len(sys.argv) > 1 else ()
     # finding starts with the parent folder of main.py
     root = find_project_root(start=parent)

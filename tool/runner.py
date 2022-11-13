@@ -19,7 +19,7 @@ class Runner:
         return subprocess.Popen(
             args=args,
             bufsize=-1, shell=True,
-            cwd=self.root.abs_path,
+            cwd=str(self.root),
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         )

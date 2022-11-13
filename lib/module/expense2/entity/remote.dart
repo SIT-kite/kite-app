@@ -18,6 +18,7 @@ class DatapackRaw {
 @JsonSerializable()
 class TransactionRaw {
   TransactionRaw();
+
   /// example: "20221102"
   /// transaction data
   /// format: yyyymmdd
