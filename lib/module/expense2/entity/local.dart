@@ -1,8 +1,7 @@
 import './remote.dart';
+import 'shared.dart';
 
 class Transaction {
-  static DateTime defaultDateTime = DateTime.utc(0);
-
   /// The compound of [TransactionRaw.transdate] and [TransactionRaw.transtime].
   DateTime datetime = defaultDateTime;
 

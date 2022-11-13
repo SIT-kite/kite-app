@@ -15,10 +15,8 @@
 1. Adding TypeMark, `Food`, `TopUp`, `Subsidy` and so on, which can be modified manually by users.
 
 ### Persistence
+- Option A: Serializing the local classes into Hive with generated TypeAdapter.
+- Option B: Serializing the local classes in json for the future needs.
 
-#### Option A
-
-Serializing the local classes into Hive with generated TypeAdapter.
-
-#### Option B
-Serializing the local classes in json for the future needs.
+## Display
+Transactions are page-splitted by month to display with an endless lazy column.
