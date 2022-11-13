@@ -1,13 +1,23 @@
-/// The analysis of expense tracker is [here](https://github.com/SIT-kite/expense-tracker).
+import 'package:json_annotation/json_annotation.dart';
 
+part 'remote.g.dart';
+
+/// The analysis of expense tracker is [here](https://github.com/SIT-kite/expense-tracker).
+@JsonSerializable()
 class DatapackRaw {
+  DatapackRaw();
   int retcode = 0;
   int retcount = 0;
   List<TransactionRaw> retdata = [];
   String retmsg = "";
+  factory DatapackRaw.fromJson(Map<String, dynamic> json) => _$DatapackRawFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DatapackRawToJson(this);
 }
 
+@JsonSerializable()
 class TransactionRaw {
+  TransactionRaw();
   /// example: "20221102"
   /// transaction data
   /// format: yyyymmdd
@@ -37,4 +47,8 @@ class TransactionRaw {
   /// transaction name
   /// example: "pos消费", "支付宝充值", "补助领取", "批量销户" or "卡冻结", "下发补助" or "补助撤销"
   String transname = "";
+
+  factory TransactionRaw.fromJson(Map<String, dynamic> json) => _$TransactionRawFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TransactionRawToJson(this);
 }
