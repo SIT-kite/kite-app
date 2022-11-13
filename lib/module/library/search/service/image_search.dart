@@ -38,7 +38,7 @@ class BookImageSearchService implements BookImageSearchDao {
     var response = await session.request(
       Constants.bookImageInfoUrl,
       ReqMethod.get,
-      queryParameters: {
+      para: {
         'glc': 'U1SH021060',
         'cmdACT': 'getImages',
         'type': '0',

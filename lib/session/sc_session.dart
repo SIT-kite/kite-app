@@ -41,7 +41,7 @@ class ScSession extends ISession {
   Future<SessionRes> request(
     String url,
     ReqMethod method, {
-    Map<String, String>? queryParameters,
+    Map<String, String>? para,
     data,
     SessionOptions? options,
     SessionProgressCallback? onSendProgress,
@@ -51,7 +51,7 @@ class ScSession extends ISession {
       return await _session.request(
         url,
         method,
-        queryParameters: queryParameters,
+        para: para,
         data: data,
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,

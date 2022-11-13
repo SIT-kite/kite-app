@@ -136,7 +136,7 @@ class SitAppSession implements ISession {
   Future<SessionRes> request(
     String url,
     ReqMethod method, {
-    Map<String, String>? queryParameters,
+    Map<String, String>? para,
     data,
     SessionOptions? options,
     SessionProgressCallback? onSendProgress,
@@ -145,7 +145,7 @@ class SitAppSession implements ISession {
     Response response = await _dioRequest(
       url,
       method.toString().toUpperCase(),
-      queryParameters: queryParameters,
+      queryParameters: para,
       data: data,
       options: options?.toDioOptions(),
       onSendProgress: onSendProgress,

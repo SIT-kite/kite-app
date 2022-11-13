@@ -268,7 +268,7 @@ class HoldingInfoService implements HoldingInfoDao {
     var response = await session.request(
       Constants.virtualBookshelfUrl,
       ReqMethod.get,
-      queryParameters: {
+      para: {
         'bookrecno': bookId,
 
         // 1 表示不出现同一本书的重复书籍

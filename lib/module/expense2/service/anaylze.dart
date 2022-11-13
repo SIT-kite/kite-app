@@ -15,21 +15,30 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import './remote.dart';
-import 'shared.dart';
+import '../entity/local.dart';
 
-class Transaction {
-  /// The compound of [TransactionRaw.transdate] and [TransactionRaw.transtime].
-  DateTime datetime = defaultDateTime;
+// TODO: "图书馆"?
+const deviceName2Type = {
+  '开水': TransactionType.water,
+  '浴室': TransactionType.shower,
+  '咖啡吧': TransactionType.coffee,
+  '食堂': TransactionType.food,
+  '超市': TransactionType.store,
+};
 
-  /// [TransactionRaw.custid]
-  int consumerId = 0;
-  TransactionType type = TransactionType.consume;
-  int balanceBefore = 0;
-  int balanceAfter = 0;
-  int deltaAmount = 0;
-  String deviceName = "";
-  String note = "";
+TransactionType analyzeType(Transaction trans) {
+  if (trans.note.contains("充值")) {
+    return TransactionType.topUp;
+  } else if (trans.note.contains("补助")) {
+    return TransactionType.subsidy;
+  } else if (trans.note.contains("消费")) {
+    for (MapEntry<String, TransactionType> entry in deviceName2Type.entries) {
+      String name = entry.key;
+      TransactionType type = entry.value;
+      if (trans.deviceName.contains(name)) {
+        return type;
+      }
+    }
+  }
+  return TransactionType.other;
 }
-
-enum TransactionType { consume, water, shower, food, store, topUp, subsidy, coffee, other }

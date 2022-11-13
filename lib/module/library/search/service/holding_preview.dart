@@ -32,7 +32,7 @@ class HoldingPreviewService implements HoldingPreviewDao {
     var response = await session.request(
       Constants.bookHoldingPreviewsUrl,
       ReqMethod.get,
-      queryParameters: {
+      para: {
         'bookrecnos': bookIdList.join(','),
         'curLibcodes': '',
         'return_fmt': 'json',

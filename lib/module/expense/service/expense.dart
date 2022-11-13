@@ -46,7 +46,7 @@ class ExpenseRemoteService implements ExpenseRemoteDao {
     final response = await session.request(
       _expenseUrl,
       ReqMethod.get,
-      queryParameters: {
+      para: {
         'page': page.toString(),
         'from': start.yyyyMMdd,
         'to': end.yyyyMMdd,

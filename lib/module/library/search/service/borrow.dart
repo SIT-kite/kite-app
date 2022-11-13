@@ -33,7 +33,7 @@ class LibraryBorrowService implements LibraryBorrowDao {
     final response = await session.request(
       Constants.historyLoanListUrl,
       ReqMethod.get,
-      queryParameters: {
+      para: {
         'page': page.toString(),
         'rows': rows.toString(),
       },
@@ -62,7 +62,7 @@ class LibraryBorrowService implements LibraryBorrowDao {
     final response = await session.request(
       Constants.currentLoanListUrl,
       ReqMethod.get,
-      queryParameters: {
+      para: {
         'page': page.toString(),
         'rows': rows.toString(),
       },

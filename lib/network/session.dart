@@ -73,7 +73,7 @@ abstract class ISession {
   Future<SessionRes> request(
     String url,
     ReqMethod method, {
-    Map<String, String>? queryParameters,
+    Map<String, String>? para,
     dynamic data,
     SessionOptions? options,
     SessionProgressCallback? onSendProgress,

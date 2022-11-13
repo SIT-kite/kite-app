@@ -112,7 +112,7 @@ class DefaultDioSession with DioDownloaderMixin implements ISession {
   Future<SessionRes> request(
     String url,
     ReqMethod method, {
-    Map<String, String>? queryParameters,
+    Map<String, String>? para,
     data,
     SessionOptions? options,
     SessionProgressCallback? onSendProgress,
@@ -120,7 +120,7 @@ class DefaultDioSession with DioDownloaderMixin implements ISession {
   }) async {
     final response = await dio.request(
       url,
-      queryParameters: queryParameters,
+      queryParameters: para,
       data: data,
       options: options?.toDioOptions().copyWith(
             method: method.name.toUpperCase(),

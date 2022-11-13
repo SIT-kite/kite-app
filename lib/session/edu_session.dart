@@ -38,7 +38,7 @@ class EduSession extends ISession {
   Future<SessionRes> request(
     String url,
     ReqMethod method, {
-    Map<String, String>? queryParameters,
+    Map<String, String>? para,
     data,
     SessionOptions? options,
     SessionProgressCallback? onSendProgress,
@@ -48,7 +48,7 @@ class EduSession extends ISession {
       return await ssoSession.request(
         url,
         method,
-        queryParameters: queryParameters,
+        para: para,
         data: data,
         options: options,
         onSendProgress: onSendProgress,

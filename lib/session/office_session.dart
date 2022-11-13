@@ -69,7 +69,7 @@ class OfficeSession extends ISession {
   Future<SessionRes> request(
     String url,
     ReqMethod method, {
-    Map<String, String>? queryParameters,
+    Map<String, String>? para,
     dynamic data,
     SessionOptions? options,
     SessionProgressCallback? onSendProgress,
@@ -91,7 +91,7 @@ class OfficeSession extends ISession {
 
     final response = await dio.request(
       url,
-      queryParameters: queryParameters,
+      queryParameters: para,
       data: data,
       options: newOptions,
       onSendProgress: onSendProgress,

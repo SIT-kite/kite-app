@@ -64,7 +64,7 @@ class AppointmentService implements AppointmentDao {
     if (date != null) {
       queryParameters['date'] = DateFormat('yyyyMMdd').format(date);
     }
-    final response = await session.request('$_application/', ReqMethod.get, queryParameters: queryParameters);
+    final response = await session.request('$_application/', ReqMethod.get, para: queryParameters);
     List raw = response.data;
     return raw.map((e) => ApplicationRecord.fromJson(e)).toList();
   }
