@@ -39,18 +39,18 @@ class DioConfig {
 /// 用于初始化Dio,全局只有一份dio对象
 class DioInit {
   /// 初始化SessionPool
-  static Future<Dio> init({required DioConfig config}) async {
+  static Future<Dio> init({required DioConfig config, bool? debug}) async {
     Log.info('初始化Dio');
     // dio初始化完成后，才能初始化 UA
-    final dio = _initDioInstance(config: config);
+    final dio = _initDioInstance(config: config, debug: debug);
     await _initUserAgentString(dio: dio);
 
     return dio;
   }
 
-  static Dio _initDioInstance({required DioConfig config}) {
+  static Dio _initDioInstance({required DioConfig config, bool? debug}) {
     // 设置 HTTP 代理
-    HttpOverrides.global = KiteHttpOverrides(config: config);
+    HttpOverrides.global = KiteHttpOverrides(config: config, debug: debug);
 
     Dio dio = Dio();
     // 添加拦截器
@@ -83,7 +83,9 @@ class DioInit {
 
 class KiteHttpOverrides extends HttpOverrides {
   final DioConfig config;
-  KiteHttpOverrides({required this.config});
+  final bool? debug;
+
+  KiteHttpOverrides({required this.config, this.debug});
 
   String getProxyPolicyByUrl(Uri url, String httpProxy) {
     // 使用代理访问的网站规则
@@ -96,7 +98,7 @@ class KiteHttpOverrides extends HttpOverrides {
         .sum(const EqualRule('210.35.98.178')); // 门禁
 
     final host = url.host;
-    if (rule.accept(host)) {
+    if ((debug ?? false) || rule.accept(host)) {
       Log.info('使用代理访问 $url');
       return 'PROXY $httpProxy';
     } else {

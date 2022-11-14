@@ -31,13 +31,13 @@ export 'package:kite/util/logger.dart';
 export 'config.dart';
 
 /// 测试前调用该函数做初始化
-Future<void> init() async {
+Future<void> init({bool? debugNetwork}) async {
   GlobalConfig.isTestEnv = true;
   if (httpProxy.isNotEmpty) {
     /// 使用代理
     GlobalConfig.httpProxy = httpProxy;
   }
-  await Initializer.init();
+  await Initializer.init(debugNetwork: debugNetwork);
 }
 
 /// 如果需要登录，调用该函数

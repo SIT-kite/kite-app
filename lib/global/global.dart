@@ -92,10 +92,8 @@ class Global {
     }
   }
 
-  static Future<void> init({
-    required UserEventStorageDao userEventStorage,
-    required AuthSettingDao authSetting,
-  }) async {
+  static Future<void> init(
+      {required UserEventStorageDao userEventStorage, required AuthSettingDao authSetting, bool? debugNetwork}) async {
     currentVersion = await getCurrentVersion();
     cookieJar = await CookieInit.init();
     dio = await DioInit.init(
@@ -105,6 +103,7 @@ class Global {
         ..sendTimeout = 6 * 1000
         ..receiveTimeout = 6 * 1000
         ..connectTimeout = 6 * 1000,
+      debug: debugNetwork,
     );
     dio2 = await DioInit.init(
       config: DioConfig()
@@ -113,6 +112,7 @@ class Global {
         ..connectTimeout = 30 * 1000
         ..sendTimeout = 30 * 1000
         ..receiveTimeout = 30 * 1000,
+      debug: debugNetwork,
     );
     ssoSession = SsoSession(dio: dio, cookieJar: cookieJar, onError: onSsoError);
     ssoSession2 = SsoSession(dio: dio2, cookieJar: cookieJar, onError: onSsoError);
