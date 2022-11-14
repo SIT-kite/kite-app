@@ -15,6 +15,7 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
@@ -58,8 +59,10 @@ class ExpenseGetService implements ExpenseGetDao {
   }
 
   DatapackRaw anaylzeJson(dynamic data) {
-    var jsonData = utf8.decode(data);
-    var res = json.decode(jsonData);
+    var res = HashMap<String, dynamic>.of(data);
+    var retdataRaw = res["retdata"];
+    var retdata = json.decode(retdataRaw);
+    res["retdata"] = retdata;
     return DatapackRaw.fromJson(res);
   }
 

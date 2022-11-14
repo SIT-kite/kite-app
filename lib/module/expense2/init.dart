@@ -27,10 +27,10 @@ class Expense2Init {
 
   static Future<void> init({
     required ISession session,
-  }) async{
+  }) async {
     remote = ExpenseGetService(session);
-    Log.debug(await remote.get("221042Y221",
-        from: DateTime(2022, 9, 22, 0, 0, 0),
-        to: DateTime(2022, 11, 14, 0, 0, 0)));
+    var datapackRaw =
+        await remote.get("1910200427", from: DateTime(2022, 9, 22, 0, 0, 0), to: DateTime(2022, 11, 14, 0, 0, 0));
+    datapackRaw.retdata;
   }
 }

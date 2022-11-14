@@ -50,13 +50,20 @@ class TransactionRaw {
   /// example: 11045158
   int custid = 0;
 
-  /// card before balance
-  /// example: 100
+  /// transaction flag
   int transflag = 0;
 
+  /// card before balance
+  /// example: 76.5
+  double cardbefbal = 0;
+
+  /// the amount of this transaction performed
+  /// example: 70.5
+  double cardaftbal = 0;
+
   /// card after balance
-  /// example: 76
-  int cardbefbal = 0;
+  /// example: 6
+  double amount = 0;
 
   /// device name
   /// example: "奉贤一食堂一楼汇多pos4（新）", "多媒体-3-4号楼", "上海应用技术学院"
