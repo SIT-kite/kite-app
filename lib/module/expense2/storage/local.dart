@@ -46,5 +46,5 @@ class ExpenseStorage implements ExpenseLocalDao {
 
   @override
   // TODO: implement pages
-  Pages get pages => throw UnimplementedError();
+  CardBalance get pages => throw UnimplementedError();
 }

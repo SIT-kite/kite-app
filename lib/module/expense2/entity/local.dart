@@ -15,6 +15,8 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+import 'package:flutter/material.dart';
+
 import './remote.dart';
 import 'shared.dart';
 
@@ -25,11 +27,28 @@ class Transaction {
   /// [TransactionRaw.custid]
   int consumerId = 0;
   TransactionType type = TransactionType.consume;
-  int balanceBefore = 0;
-  int balanceAfter = 0;
-  int deltaAmount = 0;
+  double balanceBefore = 0;
+  double balanceAfter = 0;
+  double deltaAmount = 0;
+
+  bool get isConsume => (balanceAfter - balanceBefore) < 0;
   String deviceName = "";
   String note = "";
 }
 
-enum TransactionType { consume, water, shower, food, store, topUp, subsidy, coffee, other }
+enum TransactionType {
+  consume(Icons.shopping_bag_outlined),
+  water(Icons.water_damage_outlined),
+  shower(Icons.shower_outlined),
+  food(Icons.restaurant),
+  store(Icons.store_outlined),
+  topUp(Icons.savings),
+  subsidy(Icons.handshake_outlined),
+  coffee(Icons.coffee_rounded),
+  library(Icons.import_contacts_outlined),
+  other(Icons.menu_rounded);
+
+  final IconData icon;
+
+  const TransactionType(this.icon);
+}

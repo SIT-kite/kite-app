@@ -29,5 +29,5 @@ abstract class ExpenseLocalDao {
 
   bool get isEmpty;
 
-  Pages get pages;
+  CardBalance get pages;
 }
