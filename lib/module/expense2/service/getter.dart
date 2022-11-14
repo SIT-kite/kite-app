@@ -18,47 +18,42 @@
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
-import 'package:intl/intl.dart';
+
 import '../dao/getter.dart';
 import '../entity/remote.dart';
-
 import '../using.dart';
 
 class ExpenseGetService implements ExpenseGetDao {
   String al2(int v) => v < 10 ? "0$v" : "$v";
 
-  String format(DateTime d) =>
-      "${d.year}${al2(d.month)}${al2(d.day)}${al2(d.hour)}${al2(d.minute)}${al2(d.second)}";
+  String format(DateTime d) => "${d.year}${al2(d.month)}${al2(d.day)}${al2(d.hour)}${al2(d.minute)}${al2(d.second)}";
 
-  static const String magicNumberX =
-      "YWRjNGFjNjgyMmZkNDYyNzgwZjg3OGI4NmNiOTQ2ODg=";
-  static const urlX =
-      "aHR0cHM6Ly94Z2Z5LnNpdC5lZHUuY24veWt0YXBpL3NlcnZpY2VzL3F1ZXJ5dHJhbnNzZXJ2aWNlL3F1ZXJ5dHJhbnM=";
-  static const ua =
-      "User-Agent': 'Mozilla/5.0 (Linux; Android 11; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/105.0.5195.136 Mobile Safari/537.36 uni-app Html5Plus/1.0 (Immersed/35.555553)";
+  static const String magicNumberX = "YWRjNGFjNjgyMmZkNDYyNzgwZjg3OGI4NmNiOTQ2ODg=";
+  static const urlPath = "https://xgfy.sit.edu.cn/yktapi/services/querytransservice/querytrans";
   final ISession session;
 
   ExpenseGetService(this.session);
 
   @override
-  Future<DatapackRaw> get(String studentID,
-      {required DateTime from, required DateTime to}) async {
-    // TODO: It doesn't work
+  Future<DatapackRaw> get(String studentID, {required DateTime from, required DateTime to}) async {
     String curTs = format(DateTime.now());
     String fromTs = format(from);
     String toTs = format(to);
     String auth = composeAuth(studentID, fromTs, toTs, curTs);
-    String url = utf8.decode(base64.decode(urlX));
-    final res = await session.request(url, ReqMethod.post,
-        para: {
-          'timestamp': curTs,
-          'starttime': fromTs,
-          'endtime': toTs,
-          'sign': auth,
-          'sign_method': 'HMAC',
-          'stuempno': studentID,
-        },
-        options: SessionOptions(headers: {"User-Agent": ua}));
+
+    final res = await session.request(
+      urlPath,
+      ReqMethod.post,
+      para: {
+        'timestamp': curTs,
+        'starttime': fromTs,
+        'endtime': toTs,
+        'sign': auth,
+        'sign_method': 'HMAC',
+        'stuempno': studentID,
+      },
+      options: SessionOptions(contentType: 'text/plain'),
+    );
     return anaylzeJson(res.data);
   }
 
@@ -72,7 +67,7 @@ class ExpenseGetService implements ExpenseGetDao {
     String magicNumber = utf8.decode(base64.decode(magicNumberX));
     String full = studentId + from + to + cur;
     var msg = utf8.encode(full);
-    var key = utf8. encode(magicNumber);
+    var key = utf8.encode(magicNumber);
     var hmac = Hmac(sha1, key);
     return hmac.convert(msg).toString();
   }

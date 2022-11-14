@@ -21,9 +21,9 @@ import 'dart:typed_data';
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart' hide Lock;
-import 'package:kite/network/session.dart';
 import 'package:kite/exception/session.dart';
 import 'package:kite/module/flea_market/service/ocr.dart';
+import 'package:kite/network/session.dart';
 import 'package:kite/session/dio_common.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
@@ -166,7 +166,7 @@ class SsoSession with DioDownloaderMixin implements ISession {
         url,
         queryParameters: queryParameters,
         options: options!.copyWith(
-          contentType: Headers.formUrlEncodedContentType,
+          // contentType: Headers.formUrlEncodedContentType,
           headers: options.headers,
           method: method,
           followRedirects: false,
