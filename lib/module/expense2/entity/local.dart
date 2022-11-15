@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 
 import './remote.dart';
+import '../using.dart';
 import 'shared.dart';
 
 class Transaction {
@@ -51,4 +52,32 @@ enum TransactionType {
   final IconData icon;
 
   const TransactionType(this.icon);
+
+  String localized() {
+    switch (this) {
+      case TransactionType.food:
+        return i18n.expenseCanteen;
+      case TransactionType.coffee:
+        return i18n.expenseCafe;
+      case TransactionType.water:
+        return i18n.expenseHotWater;
+
+      case TransactionType.shower:
+        return i18n.expenseShower;
+
+      case TransactionType.store:
+        return i18n.expenseGrocery;
+
+      case TransactionType.other:
+        return i18n.expenseStuff;
+      case TransactionType.consume:
+        return "TODO";
+      case TransactionType.topUp:
+        return "TODO";
+      case TransactionType.subsidy:
+        return "TODO";
+      case TransactionType.library:
+        return "TODO";
+    }
+  }
 }
