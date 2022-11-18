@@ -273,7 +273,8 @@ jobs:
         with: { channel: stable, cache: true }
 
       - name: 🏗️ Build Web
-      - run: flutter build web --no-source-maps --no-null-assertions --no-native-null-assertions --release
+        run: flutter build web --no-source-maps --no-null-assertions --no-native-null-assertions --release
+
       - name: Upload web File
         uses: actions/upload-artifact@v3
         with:
