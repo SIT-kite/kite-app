@@ -22,7 +22,7 @@ jobs:
           cache: true
 
       - name: 📌 Restore pub cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.pub-cache/
@@ -43,7 +43,7 @@ jobs:
           flutter pub run flutter_native_splash:create
 
       - name: 📌 Cache pub
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.pub-cache/
@@ -55,7 +55,7 @@ jobs:
           key: pub-${{ github.ref }}-${{ github.sha }}
 
       - name: 📌 Cache Workspace
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             lib/
@@ -80,7 +80,7 @@ jobs:
           cache: true
 
       - name: 📌 Restore pub cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.pub-cache/
@@ -92,7 +92,7 @@ jobs:
           key: pub-${{ github.ref }}-${{ github.sha }}
 
       - name: 📌 Restore Workspace
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             lib/
@@ -110,7 +110,7 @@ jobs:
           keyStorePassword: ${{ secrets.APK_SIGN_PASS }}
 
       - name: 📌 Cache Build
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: build/
           key: apk-${{ github.ref }}-${{ github.sha }}
@@ -136,7 +136,7 @@ jobs:
           cache: true
 
       - name: 📌 Restore pub cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.pub-cache/
@@ -148,7 +148,7 @@ jobs:
           key: pub-${{ github.ref }}-${{ github.sha }}
 
       - name: 📌 Restore Workspace
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             lib/
@@ -299,7 +299,7 @@ jobs:
         with: { length: 7 }
 
       - name: 📌 Get apk from cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: build/
           key: apk-${{ github.ref }}-${{ github.sha }}
