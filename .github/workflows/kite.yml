@@ -39,6 +39,7 @@ jobs:
       - name: 📌 Flutter Code Generate
         run: |
           flutter pub get
+          flutter pub run build_runner build --delete-conflicting-outputs
           flutter pub run flutter_native_splash:create
 
       - name: 📌 Cache pub
@@ -99,6 +100,7 @@ jobs:
 
       - name: 🏗️ Build Apk (arm64,android-x64)
         run: |
+          flutter pub get
           flutter pub run build_runner build --delete-conflicting-outputs
           flutter build apk --split-per-abi --target-platform android-arm64,android-x64,android-arm
 
@@ -157,6 +159,8 @@ jobs:
 
       - name: 🏗️ Build iOS
         run: |
+          flutter pub get
+          flutter pub run build_runner build --delete-conflicting-outputs
           flutter build ios --no-codesign
 
   build-Windows:
@@ -178,6 +182,7 @@ jobs:
 
       - name: 🏗️ Build Windows
         run: |
+          flutter pub get
           flutter pub run build_runner build --delete-conflicting-outputs
           flutter build windows
 
@@ -206,6 +211,7 @@ jobs:
       # Building
       - name: 🏗️ Build macOS
         run: |
+          flutter pub get
           flutter pub run build_runner build --delete-conflicting-outputs
           flutter build macos --release
       # Signing
@@ -232,7 +238,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.BRANCH_NAME }}-${{ env.SHA }}-macos.zip
-          path: build/macos/Build/Products/Release
+          path: $MACOS_APP_RELEASE_PATH/上应小风筝.app
   ######################
   # Linux
   #
@@ -255,6 +261,7 @@ jobs:
 
       - name: 🏗️ Build Linux
         run: |
+          flutter pub get
           flutter pub run build_runner build --delete-conflicting-outputs
           flutter build linux
 
