@@ -16,12 +16,18 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 import './remote.dart';
 import '../using.dart';
 import 'shared.dart';
 
+part 'local.g.dart';
+
+@JsonSerializable()
 class Transaction {
+  Transaction();
+
   /// The compound of [TransactionRaw.transdate] and [TransactionRaw.transtime].
   DateTime datetime = defaultDateTime;
 
@@ -35,6 +41,10 @@ class Transaction {
   bool get isConsume => (balanceAfter - balanceBefore) < 0;
   String deviceName = "";
   String note = "";
+
+  factory Transaction.fromJson(Map<String, dynamic> json) => _$TransactionFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TransactionToJson(this);
 }
 
 enum TransactionType {

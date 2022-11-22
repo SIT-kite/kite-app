@@ -15,8 +15,12 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import '../entity/remote.dart';
+import '../entity/local.dart';
 
 abstract class ExpenseGetDao {
-  Future<DatapackRaw> get(String studentID, {required DateTime from, required DateTime to});
+  Future<List<Transaction>> fetch({
+    required String studentID,
+    required DateTime from,
+    required DateTime to,
+  });
 }

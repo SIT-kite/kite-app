@@ -17,8 +17,8 @@
 */
 import 'package:kite/module/connectivity/using.dart';
 
-import 'service/getter.dart';
 import 'dao/getter.dart';
+import 'service/getter.dart';
 import 'storage/local.dart';
 
 class Expense2Init {
@@ -29,8 +29,10 @@ class Expense2Init {
     required ISession session,
   }) async {
     remote = ExpenseGetService(session);
-    var datapackRaw =
-        await remote.get("1910200427", from: DateTime(2022, 9, 22, 0, 0, 0), to: DateTime(2022, 11, 14, 0, 0, 0));
-    datapackRaw.retdata;
+    final data = await remote.fetch(
+      studentID: "1910200427",
+      from: DateTime(2022, 9, 22, 0, 0, 0),
+      to: DateTime(2022, 11, 14, 0, 0, 0),
+    );
   }
 }

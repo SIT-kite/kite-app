@@ -15,36 +15,36 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+import 'package:hive/hive.dart';
 import 'package:kite/module/expense2/entity/local.dart';
 import 'package:kite/module/expense2/entity/page.dart';
 
-import '../dao/local.dart';
+class ExpenseStorage {
+  final Box<Map<String, dynamic>> box;
+  ExpenseStorage(this.box);
 
-class ExpenseStorage implements ExpenseLocalDao {
-  @override
   void add(Transaction record) {
-    // TODO: implement add
+    box.put(record.datetime.hashCode, record.toJson());
   }
 
-  @override
   void addAll(Iterable<Transaction> records) {
-    // TODO: implement addAll
+    for (final e in records) {
+      add(e);
+    }
   }
 
-  @override
   void clear() {
-    // TODO: implement clear
+    box.clear();
   }
 
-  @override
-  // TODO: implement isEmpty
-  bool get isEmpty => throw UnimplementedError();
+  bool get isEmpty => box.isEmpty;
 
-  @override
-  // TODO: implement last
-  Transaction? get last => throw UnimplementedError();
+  Transaction? get last {
+    final list = box.values.map(Transaction.fromJson).toList();
+    list.sort((a, b) => a.datetime.compareTo(b.datetime));
+    if (list.isEmpty) return null;
+    return list.last;
+  }
 
-  @override
-  // TODO: implement pages
   CardBalance get pages => throw UnimplementedError();
 }

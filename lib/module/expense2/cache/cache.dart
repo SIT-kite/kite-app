@@ -15,3 +15,27 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+import 'package:kite/module/expense2/dao/getter.dart';
+import 'package:kite/module/expense2/entity/local.dart';
+
+import '../storage/local.dart';
+
+class CachedExpenseGetDao implements ExpenseGetDao {
+  final ExpenseGetDao remoteDao;
+  final ExpenseStorage storage;
+  CachedExpenseGetDao({
+    required this.remoteDao,
+    required this.storage,
+  });
+
+  @override
+  Future<List<Transaction>> fetch({
+    required String studentID,
+    required DateTime from,
+    required DateTime to,
+  }) async {
+    // TODO编写缓存策略
+    return remoteDao.fetch(studentID: studentID, from: from, to: to);
+  }
+}

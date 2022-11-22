@@ -21,8 +21,10 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 
 import '../dao/getter.dart';
+import '../entity/local.dart';
 import '../entity/remote.dart';
 import '../using.dart';
+import 'anaylze.dart';
 
 class ExpenseGetService implements ExpenseGetDao {
   String al2(int v) => v < 10 ? "0$v" : "$v";
@@ -36,7 +38,11 @@ class ExpenseGetService implements ExpenseGetDao {
   ExpenseGetService(this.session);
 
   @override
-  Future<DatapackRaw> get(String studentID, {required DateTime from, required DateTime to}) async {
+  Future<List<Transaction>> fetch({
+    required String studentID,
+    required DateTime from,
+    required DateTime to,
+  }) async {
     String curTs = format(DateTime.now());
     String fromTs = format(from);
     String toTs = format(to);
@@ -55,7 +61,8 @@ class ExpenseGetService implements ExpenseGetDao {
       },
       options: SessionOptions(contentType: 'text/plain'),
     );
-    return anaylzeJson(res.data);
+    final raw = anaylzeJson(res.data);
+    return raw.retdata.map(analyzeFull).toList();
   }
 
   DatapackRaw anaylzeJson(dynamic data) {
