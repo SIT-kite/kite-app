@@ -18,5 +18,42 @@
 - Option A: Serializing the local classes into Hive with generated TypeAdapter.
 - Option B: Serializing the local classes in json for the future needs.
 
+## 本地缓存
+
+### 本地缓存策略概述
+
+requestSet = 使用请求的时间区间
+
+cachedSet = 本地已缓存的时间区间
+
+targetSet = requestSet - cachedSet = 新的时间区间
+
+若targetSet为空集，则直接走缓存，否则拉取targetSet时间区间的消费情况并加入本地缓存
+
+### 缓存层存储设计
+
+所有交易记录的索引，记录所有的交易时间，需要保证有序
++ /expense/transactionIdList
+
+所有交易记录
++ /expense/transactions/:id
+
+   id为主键，不能重复，可认为交易时间不会重复，故可选用交易时间的时间戳的hex为主键
+
+获取已缓存的时间区间
+
+根据/expense/transactionIdList列表的头尾可抽象出逻辑上的计算属性来获得时间区间
+
+### 代码结构设计
+
+建立抽象的Fetch接口，Remote层实现Fetch接口来拉取数据，Cache层也需要实现Fetch接口来拉取数据。
+
+Storage层用来封装抽象`缓存层存储设计`的接口和实现。
+
+Cache层的类构造函数需要传入`Remote层Fetch接口实现`和`持久化存储接口实现`。
+
+Cache层自身也作为一个Fetch接口的实现，其中的fetch方法需要基于remote层与持久化层编写缓存策略的代码逻辑，体现了一种装饰器模式的思想。
+
 ## Display
 Transactions are page-splitted by month to display with an endless lazy column.
+

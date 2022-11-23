@@ -36,12 +36,6 @@ class CachedExpenseGetDao implements ExpenseGetDao {
     required DateTime to,
   }) async {
     // TODO: 编写缓存策略
-    // requestSet = 使用请求的时间区间
-    // cachedSet = 本地已缓存的时间区间
-    // targetSet = requestSet - cachedSet = 新的时间区间
-    // 若targetSet为空集，则直接走缓存
-    // 否则拉取targetSet时间区间的消费情况并加入本地缓存
-
     return remoteDao.fetch(studentID: studentID, from: from, to: to);
   }
 }
