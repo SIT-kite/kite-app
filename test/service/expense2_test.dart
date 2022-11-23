@@ -6,7 +6,11 @@ import 'package:kite/session/dio_common.dart';
 void main() async {
   final session = DefaultDioSession(Dio());
   test('expense_tracker2 test', () async {
-    final expense = await ExpenseGetService(session).get('1910400401', from: DateTime(2010), to: DateTime.now());
-    Log.info(expense.toJson());
+    final expense = await ExpenseGetService(session).fetch(
+      studentID: '1910400401',
+      from: DateTime(2010),
+      to: DateTime.now(),
+    );
+    Log.info(expense);
   });
 }
