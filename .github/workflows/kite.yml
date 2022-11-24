@@ -260,26 +260,6 @@ jobs:
           name: ${{ env.BRANCH_NAME }}-${{ env.SHA }}-linux-x86_64.zip
           path: build/linux/x64/release/bundle
 
-  build-Web:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: nelonoel/branch-name@v1.0.1
-      - uses: benjlevesque/short-sha@v1.2
-        id: short-sha
-        with: { length: 7 }
-
-      - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2
-        with: { channel: stable, cache: true }
-      - run: |
-          flutter pub get
-          flutter build web --no-source-maps --no-null-assertions --no-native-null-assertions --release
-      - name: Upload web File
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.BRANCH_NAME }}-${{ env.SHA }}-web.zip
-          path: build/web
-
   # Upload apk
   upload:
     runs-on: ubuntu-latest
@@ -310,7 +290,7 @@ jobs:
           mv app-arm64-v8a-release-signed.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk
           mv app-x86_64-release-signed.apk ${{ env.BRANCH_NAME }}-${{ env.SHA }}-x86_64-release-signed.apk
 
-      
+
       - name: Upload android-x86_64 apk artifact File
         uses: actions/upload-artifact@v3
         with:
