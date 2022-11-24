@@ -40,9 +40,13 @@ targetSet = requestSet - cachedSet = 新的时间区间
 
    id为主键，不能重复，可认为交易时间不会重复，故可选用交易时间的时间戳的hex为主键
 
-获取已缓存的时间区间
+已缓存的时间区间
 
-根据/expense/transactionIdList列表的头尾可抽象出逻辑上的计算属性来获得时间区间
+由于可能用户在某一段时间区间内确实未进行消费，故这里必须持久化存储已缓存的时间区间
+
++ /expense/cachedTsRange/start
+
++ /expense/cachedTsRange/end
 
 ### 代码结构设计
 
