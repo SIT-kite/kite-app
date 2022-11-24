@@ -29,6 +29,16 @@ class CachedExpenseGetDao implements ExpenseGetDao {
     required this.storage,
   });
 
+  Future<List<Transaction>> _fetchAndSave({
+    required String studentID,
+    required DateTime from,
+    required DateTime to,
+  }) async {
+    final fetchedData = await remoteDao.fetch(studentID: studentID, from: from, to: to);
+    storage.merge(records: fetchedData, start: from, end: to);
+    return fetchedData;
+  }
+
   @override
   Future<List<Transaction>> fetch({
     required String studentID,
@@ -36,6 +46,13 @@ class CachedExpenseGetDao implements ExpenseGetDao {
     required DateTime to,
   }) async {
     // TODO: 编写缓存策略
+    final cachedStart = storage.cachedTsStart;
+    final cachedEnd = storage.cachedTsEnd;
+    if (cachedStart == null && cachedEnd == null) {
+      // 第一次获取数据
+      return _fetchAndSave(studentID: studentID, from: from, to: to);
+    }
+
     return remoteDao.fetch(studentID: studentID, from: from, to: to);
   }
 }

@@ -33,7 +33,7 @@ targetSet = requestSet - cachedSet = 新的时间区间
 ### 缓存层存储设计
 
 所有交易记录的索引，记录所有的交易时间，需要保证有序
-+ /expense/transactionIdList
++ /expense/transactionTsList
 
 所有交易记录
 + /expense/transactions/:id
