@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/module/expense2/storage/local.dart';
 import 'package:kite/storage/init.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../cache/cache.dart';
 import '../entity/local.dart';
@@ -19,12 +20,13 @@ class _BillPageState extends State<BillPage> {
 
   CachedExpenseGetDao get cache => Expense2Init.cache;
 
+  final refreshController = RefreshController();
+
   List<Transaction> records = [];
 
-  @override
-  Widget build(BuildContext context) {
+  Widget buildListView() {
     return ListView(
-      children: records.map((e) {
+      children: records.reversed.map((e) {
         return Column(
           children: [
             ListTile(
@@ -52,19 +54,35 @@ class _BillPageState extends State<BillPage> {
   }
 
   @override
+  Widget build(BuildContext context) {
+    return SmartRefresher(
+      controller: refreshController,
+      child: buildListView(),
+      onRefresh: () async {
+        await refresh();
+        refreshController.refreshCompleted();
+      },
+    );
+  }
+
+  Future<void> refresh() async {
+    records = await cache.fetch(
+      studentID: Kv.auth.currentUsername!,
+      from: DateTime(2010),
+      to: DateTime.now(),
+      onLocalQuery: (result) {
+        if (!mounted) return;
+        setState(() => records = result);
+      },
+    );
+    if (!mounted) return;
+    setState(() {});
+  }
+
+  @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      records = await cache.fetch(
-        studentID: Kv.auth.currentUsername!,
-        from: DateTime(2010),
-        to: DateTime.now(),
-        onLocalQuery: (result) {
-          if (!mounted) return;
-          setState(() => records = result);
-        },
-      );
-      if (!mounted) return;
-      setState(() {});
+      await refresh();
     });
     super.initState();
   }

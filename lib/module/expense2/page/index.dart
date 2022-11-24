@@ -38,16 +38,6 @@ class _IndexPageState extends State<IndexPage> {
     //TODO
   }
 
-  Widget _buildRefreshButton() {
-    return IconButton(
-      tooltip: i18n.refresh,
-      icon: const Icon(Icons.refresh),
-      onPressed: () => Future.delayed(Duration.zero, () async {
-        await _refresh();
-      }),
-    );
-  }
-
   _buildFilterButtons() {
     final items = [
       for (final type in TransactionType.values)
@@ -76,13 +66,12 @@ class _IndexPageState extends State<IndexPage> {
       appBar: AppBar(
         title: i18n.ftype_expense.txt,
         actions: [
-          _buildRefreshButton(),
           currentIndex == 0 ? _buildFilterButtons() : Container(),
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: currentIndex == 0 ? BillPage() : const StatisticsPage(),
+        child: currentIndex == 0 ? const BillPage() : const StatisticsPage(),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: [
