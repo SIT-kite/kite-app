@@ -92,7 +92,10 @@ class Initializer {
       ssoSession: Global.ssoSession2,
       expenseRecordBox: HiveBoxInit.expense,
     );
-    await Expense2Init.init(session: Global.ssoSession2);
+    await Expense2Init.init(
+      session: Global.ssoSession2,
+      expenseBox: HiveBoxInit.expense2,
+    );
 
     await SharedInit.init(
       kiteSession: kiteSession,

@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/cupertino.dart';
-import 'package:kite/home/page/index.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/home/page/index.dart';
 import 'package:kite/navigation/static_route.dart';
@@ -25,6 +24,7 @@ import 'package:kite/settings/page/index.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/alert_dialog.dart';
 
+import 'module/expense2/page/index.dart';
 import 'module/simple_page/page/browser.dart';
 import 'module/symbol.dart';
 import 'navigation/route.dart';
@@ -88,7 +88,7 @@ final defaultRouteTable = StaticRouteTable(
     RouteTable.login: (context, args) => const LoginPage(),
     RouteTable.welcome: (context, args) => const WelcomePage(),
     RouteTable.about: (context, args) => const AboutPage(),
-    RouteTable.expense: (context, args) => const ExpensePage(),
+    RouteTable.expense: (context, args) => const IndexPage(),
     RouteTable.connectivity: (context, args) => const ConnectivityPage(),
     RouteTable.campusCard: (context, args) => const CampusCardPage(),
     RouteTable.electricityBill: (context, args) => const ElectricityPage(),

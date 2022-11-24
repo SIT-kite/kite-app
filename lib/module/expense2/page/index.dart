@@ -80,7 +80,10 @@ class _IndexPageState extends State<IndexPage> {
           currentIndex == 0 ? _buildFilterButtons() : Container(),
         ],
       ),
-      body: currentIndex == 0 ? BillPage() : const StatisticsPage(),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: currentIndex == 0 ? BillPage() : const StatisticsPage(),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(

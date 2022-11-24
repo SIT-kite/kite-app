@@ -17,6 +17,7 @@
 */
 import 'package:kite/module/connectivity/using.dart';
 
+import 'cache/cache.dart';
 import 'dao/getter.dart';
 import 'service/getter.dart';
 import 'storage/local.dart';
@@ -24,15 +25,14 @@ import 'storage/local.dart';
 class Expense2Init {
   static late ExpenseGetDao remote;
   static late ExpenseStorage local;
+  static late CachedExpenseGetDao cache;
 
   static Future<void> init({
     required ISession session,
+    required Box expenseBox,
   }) async {
     remote = ExpenseGetService(session);
-    final data = await remote.fetch(
-      studentID: "1910200427",
-      from: DateTime(2022, 9, 22, 0, 0, 0),
-      to: DateTime(2022, 11, 14, 0, 0, 0),
-    );
+    local = ExpenseStorage(expenseBox);
+    cache = CachedExpenseGetDao(remoteDao: remote, storage: local);
   }
 }
