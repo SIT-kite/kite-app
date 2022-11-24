@@ -15,8 +15,6 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import 'dart:convert';
-
 import 'package:hive/hive.dart';
 import 'package:kite/module/expense2/entity/local.dart';
 
@@ -46,15 +44,20 @@ class ExpenseStorage {
     required DateTime end,
   }) {
     // 需要实现records中的时间与transactionTsList中的时间的合并并保证合并后有序
-    final result = [...records.map((e) => e.datetime), ...transactionTsList];
+    final result = {...records.map((e) => e.datetime), ...transactionTsList}.toList();
     result.sort((a, b) => a.compareTo(b));
     box.put(ExpenseStorageKeys.transactionTsList, result);
-    cachedTsStart ??= start;
-    cachedTsEnd ??= end;
+    // 空集赋值
+    if (cachedTsStart == null) _cachedTsStart = start;
+    if (cachedTsEnd == null) _cachedTsEnd = end;
     // start 比 cachedTsStart 还靠前
-    if (start.isBefore(cachedTsStart!)) cachedTsStart = start;
+    if (start.isBefore(cachedTsStart!)) _cachedTsStart = start;
     // end 比 cachedTsEnd 还靠后
-    if (end.isAfter(cachedTsEnd!)) cachedTsEnd = end;
+    if (end.isAfter(cachedTsEnd!)) _cachedTsEnd = end;
+
+    for (final record in records) {
+      box.put(ExpenseStorageKeys.buildTransactionsKeyByTs(record.datetime), record.toJson());
+    }
   }
 
   /// 所有交易记录的索引，记录所有的交易时间，需要保证有序，以实现二分查找
@@ -79,14 +82,14 @@ class ExpenseStorage {
   Transaction? getTransactionByTs(DateTime ts) {
     final json = box.get(ExpenseStorageKeys.buildTransactionsKeyByTs(ts));
     if (json == null) return null;
-    return Transaction.fromJson(jsonDecode(json));
+    return Transaction.fromJson((json as Map).cast<String, dynamic>());
   }
 
   /// 获取已缓存的交易起始时间
   DateTime? get cachedTsStart => box.get(ExpenseStorageKeys.cachedTsStart);
-  set cachedTsStart(DateTime? v) => box.put(ExpenseStorageKeys.cachedTsStart, v);
+  set _cachedTsStart(DateTime? v) => box.put(ExpenseStorageKeys.cachedTsStart, v);
 
   /// 获取已缓存的交易结束时间
   DateTime? get cachedTsEnd => box.get(ExpenseStorageKeys.cachedTsEnd);
-  set cachedTsEnd(DateTime? v) => box.put(ExpenseStorageKeys.cachedTsEnd, v);
+  set _cachedTsEnd(DateTime? v) => box.put(ExpenseStorageKeys.cachedTsEnd, v);
 }

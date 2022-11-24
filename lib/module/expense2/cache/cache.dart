@@ -45,7 +45,6 @@ class CachedExpenseGetDao implements ExpenseGetDao {
     required DateTime from,
     required DateTime to,
   }) async {
-    // TODO: 编写缓存策略
     final cachedStart = storage.cachedTsStart;
     final cachedEnd = storage.cachedTsEnd;
     if (cachedStart == null && cachedEnd == null) {
@@ -53,6 +52,9 @@ class CachedExpenseGetDao implements ExpenseGetDao {
       return _fetchAndSave(studentID: studentID, from: from, to: to);
     }
 
-    return remoteDao.fetch(studentID: studentID, from: from, to: to);
+    if (to.isAfter(cachedEnd!)) await _fetchAndSave(studentID: studentID, from: cachedEnd, to: to);
+    if (from.isBefore(cachedStart!)) await _fetchAndSave(studentID: studentID, from: from, to: cachedStart);
+
+    return storage.getTransactionTsByRange(start: from, end: to).map((e) => storage.getTransactionByTs(e)!).toList();
   }
 }
