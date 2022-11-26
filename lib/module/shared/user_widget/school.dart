@@ -83,7 +83,7 @@ class _SemesterSelectorState extends State<SemesterSelector> {
 
   /// 构建选择下拉框.
   /// alternatives 是一个字典, key 为实际值, value 为显示值.
-  Widget buildSelector<T>(Map<T, String> alternatives, T initialValue, void Function(T?) callback) {
+  Widget buildSelector<T>(BuildContext ctx, Map<T, String> alternatives, T initialValue, void Function(T?) callback) {
     final items = alternatives.keys
         .map(
           (k) => DropdownMenuItem<T>(
@@ -96,17 +96,16 @@ class _SemesterSelectorState extends State<SemesterSelector> {
     return DropdownButton<T>(
       value: initialValue,
       icon: const Icon(Icons.keyboard_arrow_down_outlined),
-      style: const TextStyle(),
       underline: Container(
         height: 2,
-        color: Colors.blue,
+        color: Theme.of(ctx).primaryColor,
       ),
       onChanged: callback,
       items: items,
     );
   }
 
-  Widget buildYearSelector() {
+  Widget buildYearSelector(BuildContext ctx) {
     // 得到入学年份
     final grade = Kv.auth.currentUsername!.substring(0, 2);
     // 生成经历过的学期并逆序（方便用户选择）
@@ -114,7 +113,7 @@ class _SemesterSelectorState extends State<SemesterSelector> {
     final mapping = yearList.map((e) => MapEntry(e, buildYearString(e)));
 
     // 保证显示上初始选择年份、实际加载的年份、selectedYear 变量一致.
-    return buildSelector<int>(Map.fromEntries(mapping), selectedYear, (int? selected) {
+    return buildSelector<int>(ctx, Map.fromEntries(mapping), selectedYear, (int? selected) {
       if (selected != null && selected != selectedYear) {
         setState(() => selectedYear = selected);
         widget.yearSelectCallback(selectedYear);
@@ -122,7 +121,7 @@ class _SemesterSelectorState extends State<SemesterSelector> {
     });
   }
 
-  Widget buildSemesterSelector() {
+  Widget buildSemesterSelector(BuildContext ctx) {
     const semesterDescription = {
       Semester.all: '全学年',
       Semester.firstTerm: '第一学期',
@@ -137,7 +136,7 @@ class _SemesterSelectorState extends State<SemesterSelector> {
     }
     final semesterItems = Map.fromEntries(semesters.map((e) => MapEntry(e, semesterDescription[e]!)));
     // 保证显示上初始选择学期、实际加载的学期、selectedSemester 变量一致.
-    return buildSelector<Semester>(semesterItems, selectedSemester, (Semester? selected) {
+    return buildSelector<Semester>(ctx,semesterItems, selectedSemester, (Semester? selected) {
       if (selected != null && selected != selectedSemester) {
         setState(() => selectedSemester = selected);
         widget.semesterSelectCallback(selectedSemester);
@@ -149,11 +148,11 @@ class _SemesterSelectorState extends State<SemesterSelector> {
   Widget build(BuildContext context) {
     return Row(children: [
       Container(
-        child: buildYearSelector(),
+        child: buildYearSelector(context),
       ),
       Container(
         margin: const EdgeInsets.only(left: 15),
-        child: buildSemesterSelector(),
+        child: buildSemesterSelector(context),
       ),
     ]);
   }

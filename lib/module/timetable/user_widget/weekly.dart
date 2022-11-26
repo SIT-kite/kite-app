@@ -302,11 +302,8 @@ class _TimetableColumnState extends State<TimetableColumn> {
     return SizedBox(
       width: cellWidth,
       height: cellHeight * 11,
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: grids.length,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (BuildContext context, int index) => _buildCourseCell(context, grids[index]),
+      child: Column(
+        children: [for (int index = 0; index < grids.length; index++) _buildCourseCell(context, grids[index])],
       ),
     );
   }
