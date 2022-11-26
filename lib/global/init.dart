@@ -19,6 +19,7 @@ import 'package:catcher/catcher.dart';
 import 'package:kite/global/desktop_initializer.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/home/init.dart';
+
 import 'package:kite/module/expense2/init.dart';
 import 'package:kite/module/freshman/init.dart';
 import 'package:kite/module/kite_board/init.dart';
@@ -84,6 +85,8 @@ class Initializer {
       kiteSession: kiteSession,
       contactDataBox: HiveBoxInit.contactSetting,
     );
+    await ClassroomBrowserInit.init(kiteSession: kiteSession);
+
     final sharedEduSession = EduSession(Global.ssoSession);
     await ExamResultInit.init(cookieJar: Global.cookieJar, eduSession: sharedEduSession);
     await ExamArrInit.init(sharedEduSession);

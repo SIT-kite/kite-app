@@ -7,7 +7,7 @@ on:
 jobs:
 
   # flutter pub get + flutter analyze
-  lint:
+  prebuild:
     runs-on: ubuntu-latest
     # case-insensitive
     if: ${{ !contains(github.event.head_commit.message,'[NoCI]') }}
@@ -17,12 +17,12 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.0.5
+          flutter-version: 3.3.8
           channel: stable
           cache: true
 
       - name: 📌 Restore pub cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.pub-cache/
@@ -43,7 +43,7 @@ jobs:
           flutter pub run flutter_native_splash:create
 
       - name: 📌 Cache pub
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.pub-cache/
@@ -55,7 +55,7 @@ jobs:
           key: pub-${{ github.ref }}-${{ github.sha }}
 
       - name: 📌 Cache Workspace
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             lib/
@@ -66,7 +66,7 @@ jobs:
   # Android
   #
   build-Android:
-    needs: lint
+    needs: prebuild
     runs-on: ubuntu-latest
     if: github.repository == 'SIT-kite/kite-app'
     steps:
@@ -75,12 +75,12 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.0.5
+          flutter-version: 3.3.8
           channel: stable
           cache: true
 
       - name: 📌 Restore pub cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.pub-cache/
@@ -92,14 +92,17 @@ jobs:
           key: pub-${{ github.ref }}-${{ github.sha }}
 
       - name: 📌 Restore Workspace
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             lib/
           key: app-${{ github.ref }}-${{ github.sha }}
 
       - name: 🏗️ Build Apk (arm64,android-x64)
-        run: flutter build apk --split-per-abi --target-platform android-arm64,android-x64,android-arm
+        run: |
+          flutter pub get
+          flutter pub run build_runner build --delete-conflicting-outputs
+          flutter build apk --split-per-abi --target-platform android-arm64,android-x64,android-arm
 
       - uses: r0adkll/sign-android-release@v1
         name: Sign APK
@@ -110,7 +113,7 @@ jobs:
           keyStorePassword: ${{ secrets.APK_SIGN_PASS }}
 
       - name: 📌 Cache Build
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: build/
           key: apk-${{ github.ref }}-${{ github.sha }}
@@ -119,8 +122,9 @@ jobs:
   # iOS
   #
   build-iOS:
-    runs-on: macos-11
-    needs: lint
+    # TODO: update to macos-12
+    runs-on: macos-latest
+    needs: prebuild
     steps:
       - uses: actions/checkout@v3
 
@@ -131,12 +135,12 @@ jobs:
           # xcode-version: '14.0.0'
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.0.5
+          flutter-version: 3.3.8
           channel: stable
           cache: true
 
       - name: 📌 Restore pub cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.pub-cache/
@@ -148,21 +152,24 @@ jobs:
           key: pub-${{ github.ref }}-${{ github.sha }}
 
       - name: 📌 Restore Workspace
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             lib/
           key: app-${{ github.ref }}-${{ github.sha }}
 
       - name: 🏗️ Build iOS
-        run: flutter build ios --no-codesign
+        run: |
+          flutter pub get
+          flutter pub run build_runner build --delete-conflicting-outputs
+          flutter build ios --no-codesign
 
   build-Windows:
     runs-on: windows-latest
-    needs: lint
+    needs: prebuild
     steps:
       - uses: nelonoel/branch-name@v1.0.1
-      - uses: benjlevesque/short-sha@v1.2
+      - uses: benjlevesque/short-sha@v2.1
         id: short-sha
         with: { length: 7 }
 
@@ -170,14 +177,15 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.0.5
+          flutter-version: 3.3.8
           channel: stable
           cache: true
 
-      - run: flutter config --enable-windows-desktop
-      - run: flutter pub get
-      - run: flutter pub run build_runner build --delete-conflicting-outputs
-      - run: flutter build windows
+      - name: 🏗️ Build Windows
+        run: |
+          flutter pub get
+          flutter pub run build_runner build --delete-conflicting-outputs
+          flutter build windows
 
       - name: Upload Windows build file
         uses: actions/upload-artifact@v3
@@ -190,7 +198,7 @@ jobs:
   #
   build-macOS:
     runs-on: macos-latest
-    needs: lint
+    needs: prebuild
     env:
       MACOS_APP_RELEASE_PATH: build/macos/Build/Products/Release
     steps:
@@ -198,13 +206,12 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.0.5
+          flutter-version: 3.3.8
           channel: stable
           cache: true
       # Building
-      - name: Build macOS
+      - name: 🏗️ Build macOS
         run: |
-          flutter config --enable-macos-desktop
           flutter pub get
           flutter pub run build_runner build --delete-conflicting-outputs
           flutter build macos --release
@@ -228,19 +235,21 @@ jobs:
           echo "Sign the app"
           /usr/bin/codesign --force --deep -s MJGX7ZZ3AG ./$MACOS_APP_RELEASE_PATH/上应小风筝.app
 
-      - name: Upload web File
+      - name: Upload macOS File
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.BRANCH_NAME }}-${{ env.SHA }}-macos.zip
-          path: build/macos/Build/Products/Release
-
+          path: ./$MACOS_APP_RELEASE_PATH/上应小风筝.app
+  ######################
+  # Linux
+  #
   build-Linux:
     runs-on: ubuntu-latest
-    needs: lint
+    needs: prebuild
     steps:
       - uses: nelonoel/branch-name@v1.0.1
 
-      - uses: benjlevesque/short-sha@v1.2
+      - uses: benjlevesque/short-sha@v2.1
         id: short-sha
         with: { length: 7 }
 
@@ -250,9 +259,12 @@ jobs:
       - run: |
           sudo apt-get update -y
           sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
-      - run: flutter pub get
-      - run: flutter pub run build_runner build --delete-conflicting-outputs
-      - run: flutter build linux
+
+      - name: 🏗️ Build Linux
+        run: |
+          flutter pub get
+          flutter pub run build_runner build --delete-conflicting-outputs
+          flutter build linux
 
       - name: Upload linux build File
         uses: actions/upload-artifact@v3
@@ -273,12 +285,12 @@ jobs:
 
       - uses: nelonoel/branch-name@v1.0.1
 
-      - uses: benjlevesque/short-sha@v1.2
+      - uses: benjlevesque/short-sha@v2.1
         id: short-sha
         with: { length: 7 }
 
       - name: 📌 Get apk from cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: build/
           key: apk-${{ github.ref }}-${{ github.sha }}
@@ -369,7 +381,7 @@ jobs:
 
       - uses: technote-space/workflow-conclusion-action@v2
       - uses: nelonoel/branch-name@v1.0.1
-      - uses: benjlevesque/short-sha@v1.2
+      - uses: benjlevesque/short-sha@v2.1
         id: short-sha
         with: { length: 7 }
 

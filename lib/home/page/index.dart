@@ -17,14 +17,15 @@
  */
 import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/exception/session.dart';
-import 'package:kite/module/shared/service/weather.dart';
-import 'package:kite/module/login/init.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/launcher.dart';
+import 'package:kite/module/login/init.dart';
+import 'package:kite/module/shared/service/weather.dart';
 import 'package:kite/override/entity.dart';
 import 'package:kite/override/init.dart';
 import 'package:kite/quick_button/init.dart';
@@ -243,16 +244,23 @@ class _HomePageState extends State<HomePage> {
               SliverAppBar(
                 // AppBar
                 actions: [
-                  if (!UniversalPlatform.isDesktopOrWeb)
-                    IconButton(
-                      onPressed: () async {
-                        final result = await scan(context);
-                        Log.info('扫码结果: $result');
-                        if (result != null) GlobalLauncher.launch(result);
-                      },
-                      icon: const Icon(Icons.qr_code_scanner_outlined),
-                      iconSize: 30,
-                    )
+                  IconButton(
+                    onPressed: () async {
+                      if (UniversalPlatform.isDesktopOrWeb) {
+                        EasyLoading.showToast('该功能桌面端不受支持');
+                        return;
+                      }
+                      final result = await scan(context);
+                      Log.info('扫码结果: $result');
+                      if (result != null) GlobalLauncher.launch(result);
+                    },
+                    icon: const Icon(Icons.qr_code_scanner_outlined),
+                    iconSize: 30,
+                  ),
+                  IconButton(
+                    onPressed: () => Navigator.of(context).pushNamed(RouteTable.settings),
+                    icon: const Icon(Icons.settings),
+                  ),
                 ],
                 automaticallyImplyLeading: false,
                 flexibleSpace: FlexibleSpaceBar(
