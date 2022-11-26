@@ -52,9 +52,7 @@ class Sheet extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(0, 25, 0, 5),
       child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-        ),
+        decoration: const BoxDecoration(),
         child: Text(classes[0].courseName, style: titleStyle),
       ),
     );
@@ -91,9 +89,9 @@ class Sheet extends StatelessWidget {
     return SingleChildScrollView(
       physics: const NeverScrollableScrollPhysics(),
       child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
+        decoration: BoxDecoration(
+          color: Theme.of(context).backgroundColor,
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(15.0),
             topRight: Radius.circular(15.0),
           ),

@@ -70,9 +70,14 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
           String ip = i18n.fetching;
           String studentId = i18n.fetching;
           if (snapshot.connectionState == ConnectionState.done) {
-            final info = snapshot.data! as CheckStatusResult;
-            ip = info.ip;
-            studentId = info.uid ?? i18n.notLoggedIn;
+            final data = snapshot.data;
+            if (data is CheckStatusResult) {
+              ip = data.ip;
+              studentId = data.uid ?? i18n.notLoggedIn;
+            } else {
+              ip = i18n.unknown;
+              studentId = i18n.unknown;
+            }
           }
           return Column(
             mainAxisSize: MainAxisSize.min,

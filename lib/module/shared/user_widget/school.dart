@@ -96,9 +96,7 @@ class _SemesterSelectorState extends State<SemesterSelector> {
     return DropdownButton<T>(
       value: initialValue,
       icon: const Icon(Icons.keyboard_arrow_down_outlined),
-      style: const TextStyle(
-        color: Color(0xFF002766),
-      ),
+      style: const TextStyle(),
       underline: Container(
         height: 2,
         color: Colors.blue,
