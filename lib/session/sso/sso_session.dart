@@ -166,7 +166,6 @@ class SsoSession with DioDownloaderMixin implements ISession {
         url,
         queryParameters: queryParameters,
         options: options!.copyWith(
-          // contentType: Headers.formUrlEncodedContentType,
           headers: options.headers,
           method: method,
           followRedirects: false,

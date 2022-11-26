@@ -44,6 +44,8 @@ class EduSession extends ISession {
     SessionProgressCallback? onSendProgress,
     SessionProgressCallback? onReceiveProgress,
   }) async {
+    options ??= SessionOptions();
+    options.contentType = 'application/x-www-form-urlencoded;charset=utf-8';
     Future<SessionRes> fetch() async {
       return await ssoSession.request(
         url,
