@@ -19,21 +19,17 @@ import 'package:flutter/material.dart';
 
 final List<String> weekWord = ['一', '二', '三', '四', '五', '六', '日'];
 
-final List<Color> colorList = [
-  const Color.fromARGB(178, 251, 83, 82),
-  const Color.fromARGB(153, 115, 123, 250),
-  const Color.fromARGB(178, 116, 185, 255),
-  const Color.fromARGB(178, 118, 126, 253),
-  const Color.fromARGB(178, 245, 175, 77),
-  const Color.fromARGB(178, 187, 137, 106),
-  const Color.fromARGB(178, 232, 67, 147),
-  const Color.fromARGB(178, 188, 140, 240),
-  const Color.fromARGB(178, 116, 185, 255)
+const List<Color> colorList = [
+  Color.fromARGB(178, 251, 83, 82),
+  Color.fromARGB(153, 115, 123, 250),
+  Color.fromARGB(178, 116, 185, 255),
+  Color.fromARGB(178, 118, 126, 253),
+  Color.fromARGB(178, 245, 175, 77),
+  Color.fromARGB(178, 187, 137, 106),
+  Color.fromARGB(178, 232, 67, 147),
+  Color.fromARGB(178, 188, 140, 240),
+  Color.fromARGB(178, 116, 185, 255)
 ];
-
-Color getBeautifulColor(int hashCode) {
-  return colorList[hashCode % colorList.length];
-}
 
 class Time {
   /// 小时
@@ -197,4 +193,9 @@ extension DateTimeUtil on DateTime {
   DateTime clearTime([int hour = 0, int minute = 0, int second = 0]) {
     return DateTime(year, month, day, hour, minute, second);
   }
+}
+
+/// Repalce the fullwidth brackets to ASCII one
+String stylizeCourseName(String name) {
+  return name.replaceAll("（", "(").replaceAll("）", ")");
 }

@@ -23,7 +23,7 @@ import '../cache.dart';
 import '../entity/course.dart';
 import '../entity/meta.dart';
 import '../init.dart';
-import '../user_widget/daily_and_weekly.dart';
+import '../user_widget/tiemtable.dart';
 import 'export.dart';
 
 class TimetablePage extends StatefulWidget {
@@ -81,7 +81,7 @@ class _TimetablePageState extends State<TimetablePage> {
   @override
   void initState() {
     Log.info('Timetable init');
-    displayMode = storage.lastMode ?? DisplayMode.daily;
+    displayMode = storage.lastMode ?? DisplayMode.weekly;
     storage.lastMode = displayMode;
     courses = storage.currentTableCourses ?? [];
     meta = storage.currentTableMeta;
@@ -195,7 +195,9 @@ class _TimetablePageState extends State<TimetablePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: () => tableViewerController.jumpToToday(),
+          onPressed: () {
+            tableViewerController.jumpToToday();
+          },
           child: Text('今', style: Theme.of(context).textTheme.headline2?.copyWith(color: Colors.white))),
       body: TimetableViewer(
         key: UniqueKey(),

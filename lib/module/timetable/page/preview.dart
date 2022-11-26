@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import '../cache.dart';
 import '../entity/course.dart';
 import '../entity/meta.dart';
-import '../user_widget/daily_and_weekly.dart';
+import '../user_widget/tiemtable.dart';
 
 class TimetablePreviewPage extends StatelessWidget {
   final TimetableMeta meta;

@@ -53,9 +53,8 @@ class _DateHeaderState extends State<DateHeader> {
   }
 
   BoxDecoration getDecoration(int day) {
-    return BoxDecoration(
-      color: selectedDay == day ? Theme.of(context).primaryColor.withOpacity(0.7) : Colors.white,
-      borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+    return const BoxDecoration(
+      borderRadius: BorderRadius.all(Radius.circular(12.0)),
     );
   }
 

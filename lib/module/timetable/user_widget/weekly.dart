@@ -18,10 +18,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'colors.dart';
+import 'sheet.dart';
 import 'util.dart';
 import '../cache.dart';
 import '../entity/course.dart';
-import 'grid.dart';
 import 'header.dart';
 
 class WeeklyTimetable extends StatefulWidget {
@@ -54,13 +55,12 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
   /// 布局左侧边栏, 显示节次
   Widget _buildLeftColumn() {
     /// 构建每一个格子
-    Widget buildGrid(BuildContext context, int index) {
+    Widget buildCell(BuildContext context, int index) {
       final textStyle = Theme.of(context).textTheme.bodyText2;
       const border = BorderSide(color: Colors.black12, width: 0.8);
 
       return Container(
         decoration: const BoxDecoration(
-          color: Colors.white,
           border: Border(top: border, right: border),
         ),
         child: Center(child: Text((index + 1).toString(), style: textStyle)),
@@ -75,7 +75,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
           crossAxisCount: 1,
           childAspectRatio: 22 / 23 * (1.sw) / (1.sh),
         ),
-        itemBuilder: buildGrid);
+        itemBuilder: buildCell);
   }
 
   /// 设置页面为对应日期页.
@@ -118,6 +118,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
       children: [
         Expanded(
             flex: 1,
+            // Display the week name on top
             child: DateHeader(
               currentWeek: week,
               selectedDay: -1,
@@ -135,10 +136,10 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
                       Expanded(flex: 2, child: _buildLeftColumn()),
                       Expanded(
                           flex: 21,
-                          child: TableGrids(
-                            widget.allCourses,
-                            week,
-                            widget.tableCache,
+                          child: TimetableColumn(
+                            allCourses: widget.allCourses,
+                            currentWeek: week,
+                            cache: widget.tableCache,
                           ))
                     ],
                   ),
@@ -160,6 +161,150 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
       scrollDirection: Axis.horizontal,
       itemCount: 20,
       itemBuilder: (BuildContext context, int index) => _pageBuilder(index + 1),
+    );
+  }
+}
+
+class TimetableColumn extends StatefulWidget {
+  final List<Course> allCourses;
+  final TableCache cache;
+
+  final int currentWeek;
+
+  const TimetableColumn({super.key, required this.allCourses, required this.currentWeek, required this.cache});
+
+  @override
+  State<StatefulWidget> createState() => _TimetableColumnState();
+}
+
+class _TimetableColumnState extends State<TimetableColumn> {
+  Size rawCellSize = Size.zero;
+
+  double calcuCellWidth({required Size by}) => rawCellSize.width * 3 / 23;
+
+  double calcuCellHeight({required Size by}) => rawCellSize.height / 11;
+
+  double get cellWidth => calcuCellWidth(by: rawCellSize);
+
+  double get cellHeight => calcuCellHeight(by: rawCellSize);
+
+  Widget _buildCourseCell(BuildContext context, Course? grid) {
+    final textStyle = Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold);
+    final textStyle2 = Theme.of(context).textTheme.bodyText2;
+    Widget buildCourseGrid(Course course) {
+      Text buildText(text, maxLines, {TextStyle? myTextStyle}) => Text(
+            text,
+            softWrap: true,
+            overflow: TextOverflow.ellipsis,
+            maxLines: maxLines,
+            style: myTextStyle ?? textStyle,
+          );
+      final decoration = BoxDecoration(
+        color: CourseColor.get(from: Theme.of(context), by: course.courseId.hashCode),
+        borderRadius: const BorderRadius.all(Radius.circular(3.0)),
+        border: const Border(),
+      );
+
+      return InkWell(
+        onTap: () {
+          showModalBottomSheet(
+              backgroundColor: Colors.transparent,
+              builder: (BuildContext context) => Sheet(course.courseId, widget.allCourses),
+              context: context);
+        },
+        child: Container(
+          width: cellWidth - 3,
+          height: cellHeight * course.duration - 4,
+          decoration: decoration,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                buildText(stylizeCourseName(course.courseName), 3),
+                const SizedBox(height: 3),
+                buildText(formatPlace(course.place), 2, myTextStyle: textStyle2),
+                const SizedBox(height: 3),
+                buildText(course.teacher.join(','), 2, myTextStyle: textStyle2),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    Widget buildEmptyGrid() {
+      return SizedBox(
+        width: cellWidth - 3,
+        height: cellHeight - 4,
+      );
+    }
+
+    return Container(
+      width: cellWidth,
+      height: (grid?.duration ?? 1) * cellHeight,
+      alignment: const Alignment(0, 0),
+      child: grid != null ? buildCourseGrid(grid) : buildEmptyGrid(),
+    );
+  }
+
+  /// 该函数就是用来计算有课程和无课程格子数量, 供 ListView 使用
+  ///
+  /// 如：1-2, 5-6, 7-8
+  /// 合并得：[duration = 2, null, null, duration = 2, duration = 2]
+  List<Course?> _buildGrids(List<Course> dayCourseList) {
+    // 使用列表, 将每一门课放到其开始的节次上.
+    final List<Course?> l = List.filled(11, null, growable: true);
+    for (final course in dayCourseList) {
+      l[getIndexStart(course.timeIndex) - 1] = course;
+    }
+
+    // 此时 l 为 [duration = 2, null, null, null, duration = 2, null, duration = 2, null]
+    for (int i = 0; i < l.length; ++i) {
+      if (l[i] != null) {
+        l.removeRange(i + 1, i + l[i]!.duration);
+      }
+    }
+    return l;
+  }
+
+  /// 构建某一天的那一列格子.
+  Widget _buildDay(BuildContext context, int day) {
+    // 该日的课程列表
+    final List<Course> dayCourseList = widget.cache.filterCourseOnDay(widget.allCourses, widget.currentWeek, day);
+    // 该日的格子列表
+    final List<Course?> grids = _buildGrids(dayCourseList);
+
+    return SizedBox(
+      width: cellWidth,
+      height: cellHeight * 11,
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: grids.length,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (BuildContext context, int index) => _buildCourseCell(context, grids[index]),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    setState(() {
+      rawCellSize = MediaQuery.of(context).size;
+    });
+
+    return SizedBox(
+      width: cellWidth * 7,
+      height: rawCellSize.height,
+      child: ListView.builder(
+        itemCount: 7,
+        padding: const EdgeInsets.only(left: 1.0),
+        scrollDirection: Axis.horizontal,
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemBuilder: (BuildContext context, int index) => _buildDay(context, index + 1),
+      ),
     );
   }
 }
