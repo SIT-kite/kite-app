@@ -24,11 +24,7 @@ jobs:
           format: markdown
           message: |
             🏷️ [KiteApp](https://github.com/SIT-kite/kite-app) Prepare to push Beta Build to TestFlight
-
-            Please request for @sunnysab or @peanut996's  approval.
-
-            ⚠️ Freeze master branch more than 20 minutes.
-
+            Please request for administrators approval.
 
   push:
     runs-on: macos-latest
@@ -47,7 +43,7 @@ jobs:
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.0.5'
+          flutter-version: '3.3.8'
           channel: 'stable'
 
       - name: Prepare to build
