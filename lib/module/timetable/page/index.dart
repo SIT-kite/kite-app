@@ -34,6 +34,8 @@ class TimetablePage extends StatefulWidget {
 }
 
 class _TimetablePageState extends State<TimetablePage> {
+  final ValueNotifier<bool> $isTodayView = ValueNotifier(true);
+
   /// 最大周数
   /// TODO 还没用上
   // static const int maxWeekCount = 20;
@@ -159,7 +161,7 @@ class _TimetablePageState extends State<TimetablePage> {
   Widget _buildModeSwitchButton() {
     return IconButton(
       icon: const Icon(Icons.swap_horiz),
-      onPressed: tableViewerController.switchDisplayMode,
+      onPressed: tableViewerController.toggleDisplayMode,
     );
   }
 
@@ -168,7 +170,7 @@ class _TimetablePageState extends State<TimetablePage> {
     List weekList = Iterable.generate(20, (i) => i).toList();
 
     return PopupMenuButton(
-      onSelected: (index) => tableViewerController.jumpToWeeK(int.parse(index.toString()) + 1),
+      onSelected: (index) => tableViewerController.jumpToWeek(int.parse(index.toString()) + 1),
       itemBuilder: (BuildContext context) {
         return weekList
             .map((e) => PopupMenuItem(
@@ -194,17 +196,27 @@ class _TimetablePageState extends State<TimetablePage> {
           _buildPopupMenu(context),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            tableViewerController.jumpToToday();
+      floatingActionButton: ValueListenableBuilder<bool>(
+          builder: (BuildContext context, bool value, Widget? child) {
+            return AnimatedOpacity(
+              opacity: $isTodayView.value ? 0.0 : 1.0,
+              duration: const Duration(milliseconds: 100),
+              child: FloatingActionButton(
+                onPressed: () {
+                  tableViewerController.jumpToToday();
+                },
+                child: const Icon(Icons.undo_rounded),
+              ),
+            );
           },
-          child: Text('今', style: Theme.of(context).textTheme.headline2?.copyWith(color: Colors.white))),
+          valueListenable: $isTodayView),
       body: TimetableViewer(
         key: UniqueKey(),
         controller: tableViewerController,
         initialTableMeta: meta,
         initialTableCourses: courses,
         tableCache: TableCache(),
+        $isTodayView: $isTodayView,
         initialDisplayMode: displayMode,
         onDisplayChanged: (DisplayMode displayMode) {
           storage.lastMode = displayMode;

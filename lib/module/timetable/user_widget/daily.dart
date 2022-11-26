@@ -22,13 +22,15 @@ import '../entity/course.dart';
 import '../using.dart';
 import 'header.dart';
 import 'sheet.dart';
-import 'util.dart';
+import 'tiemtable.dart';
+import 'utils.dart';
 
-class DailyTimetable extends StatefulWidget {
+class DailyTimetable extends StatefulWidget implements InitialTimeProtocol {
   /// 教务系统课程列表
   final List<Course> allCourses;
 
   /// 初始日期
+  @override
   final DateTime initialDate;
 
   /// 课表缓存
@@ -39,17 +41,19 @@ class DailyTimetable extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => DailyTimetableState();
+  final ValueNotifier<bool>? $isTodayView;
 
   const DailyTimetable({
-    Key? key,
+    super.key,
     required this.allCourses,
     required this.initialDate,
     required this.tableCache,
+    this.$isTodayView,
     this.viewChangingCallback,
-  }) : super(key: key);
+  });
 }
 
-class DailyTimetableState extends State<DailyTimetable> {
+class DailyTimetableState extends State<DailyTimetable> implements ITimetableView {
   static const String _courseIconPath = 'assets/course/';
 
   /// 课表应该显示的周（页数 + 1）
@@ -61,45 +65,70 @@ class DailyTimetableState extends State<DailyTimetable> {
   /// 翻页控制
   late PageController _pageController;
 
-  void _setWeekDay(int week, int day) {
-    _currentWeek = week;
-    _currentDay = day;
+  int weekNDay2Page(int week, int day) => (week - 1) * 7 + day - 1;
+
+  void onPageChange() {
+    setState(() {
+      final page = (_pageController.page ?? 0).round();
+      final newWeek = (page + 1) ~/ 7;
+      final newDay = page % 7 + 1;
+      if (newWeek != _currentWeek || newDay != _currentDay) {
+        _currentWeek = newWeek;
+        _currentDay = newDay;
+        widget.$isTodayView?.value = isTodayView;
+      }
+    });
   }
 
-  /// 设置页面为对应日期页.
-  void _setDate(DateTime theDay) {
-    // 求一下过了多少天
-    int days = theDay.clearTime().difference(widget.initialDate.clearTime()).inDays;
-
-    int week = days ~/ 7 + 1, day = days % 7 + 1;
-    if (days >= 0 && 1 <= week && week <= 20 && 1 <= day && day <= 7) {
-      _setWeekDay(week, day);
-    } else {
-      _setWeekDay(1, 1);
-    }
+  @override
+  void initState() {
+    super.initState();
+    final pos = widget.locateInTimetable(DateTime.now());
+    _currentWeek = pos.week;
+    _currentDay = pos.day;
+    _pageController = PageController(initialPage: (_currentWeek - 1) * 7 + _currentDay - 1, keepPage: false)
+      ..addListener(onPageChange);
   }
 
   /// 跳转到指定星期与天
-  void jumpToDay(int week, int day) {
+  @override
+  void jumpToDay(int targetWeek, int targetDay) {
     if (_pageController.hasClients) {
+      final targetPos = weekNDay2Page(targetWeek, targetDay);
+      final currentPos = _pageController.page ?? targetPos;
+      final distance = (targetPos - currentPos).abs();
       _pageController.animateToPage(
-        (week - 1) * 7 + day - 1,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.linearToEaseOut,
+        targetPos,
+        duration: calcuSwitchAnimationDuration(distance),
+        curve: Curves.easeOut,
       );
     }
+    setState(() {
+      _currentWeek = targetWeek;
+      _currentDay = targetDay;
+    });
   }
 
   /// 跳转到今天
-  void jumpToday() {
-    _setDate(DateTime.now());
-    jumpToDay(_currentWeek, _currentDay);
+  @override
+  void jumpToToday() {
+    var pos = widget.locateInTimetable(DateTime.now());
+    jumpToDay(pos.week, pos.day);
   }
 
   /// 跳到某一周
-  void jumpWeek(int week) {
-    _setWeekDay(week, _currentDay);
-    jumpToDay(week, _currentDay);
+  @override
+  void jumpToWeek(int targetWeek) {
+    jumpToDay(targetWeek, _currentDay);
+    setState(() {
+      _currentWeek = targetWeek;
+    });
+  }
+
+  @override
+  bool get isTodayView {
+    var pos = widget.locateInTimetable(DateTime.now());
+    return _currentWeek == pos.week && _currentDay == pos.day;
   }
 
   Widget _buildCourseCard(BuildContext context, Course course, List<Course> allCourses) {
@@ -192,8 +221,6 @@ class DailyTimetableState extends State<DailyTimetable> {
 
   @override
   Widget build(BuildContext context) {
-    _setDate(DateTime.now());
-    _pageController = PageController(initialPage: (_currentWeek - 1) * 7 + _currentDay - 1, keepPage: false);
     return PageView.builder(
       controller: _pageController,
       scrollDirection: Axis.horizontal,

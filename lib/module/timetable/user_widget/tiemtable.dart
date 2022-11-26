@@ -17,13 +17,76 @@
  */
 
 import 'package:flutter/material.dart';
-import '../using.dart';
+import 'utils.dart';
 
 import '../cache.dart';
 import '../entity/course.dart';
 import '../entity/meta.dart';
+import '../using.dart';
 import 'daily.dart';
 import 'weekly.dart';
+
+abstract class InitialTimeProtocol {
+  DateTime get initialDate;
+}
+
+extension InitialTimeUtils on InitialTimeProtocol {
+  TimetablePosition locateInTimetable(DateTime target) => TimetablePosition.locate(initialDate, target);
+}
+
+class TimetablePosition {
+  final int week;
+  final int day;
+
+  const TimetablePosition({required this.week, required this.day});
+
+  static TimetablePosition locate(DateTime initial, DateTime time) {
+    // 求一下过了多少天
+    int days = time.clearTime().difference(initial.clearTime()).inDays;
+
+    int week = days ~/ 7 + 1;
+    int day = days % 7 + 1;
+    if (days >= 0 && 1 <= week && week <= 20 && 1 <= day && day <= 7) {
+      return TimetablePosition(week: week, day: day);
+    } else {
+      return const TimetablePosition(week: 1, day: 1);
+    }
+  }
+}
+
+abstract class ITimetableView {
+  void jumpToToday();
+
+  void jumpToWeek(int targetWeek);
+
+  void jumpToDay(int targetWeek, int targetDay);
+
+  bool get isTodayView;
+}
+
+class TimetableViewerController {
+  _TimetableViewerState? _state;
+
+  TimetableViewerController();
+
+  void toggleDisplayMode() {
+    _state?.switchDisplayMode();
+  }
+
+  void jumpToToday() {
+    _state?.jumpToday();
+  }
+
+  void jumpToWeek(int week) {
+    _state?.jumpWeek(week);
+  }
+
+  bool get isTodayView => _state?.isTodayView ?? true;
+
+  void _bindState(State<TimetableViewer> state) {
+    _state = state as _TimetableViewerState;
+  }
+}
 
 class TimetableViewer extends StatefulWidget {
   /// 初始课表元数据
@@ -34,6 +97,7 @@ class TimetableViewer extends StatefulWidget {
 
   /// 初始显示模式
   final DisplayMode initialDisplayMode;
+  final ValueNotifier<bool>? $isTodayView;
 
   /// 显示模式被更改的回调
   final void Function(DisplayMode)? onDisplayChanged;
@@ -50,6 +114,7 @@ class TimetableViewer extends StatefulWidget {
     required this.initialTableCourses,
     required this.initialDisplayMode,
     required this.tableCache,
+    this.$isTodayView,
     this.onDisplayChanged,
     this.onJumpedToday,
     this.controller,
@@ -60,27 +125,6 @@ class TimetableViewer extends StatefulWidget {
   State<TimetableViewer> createState() => _TimetableViewerState();
 }
 
-class TimetableViewerController {
-  _TimetableViewerState? _state;
-  TimetableViewerController();
-
-  void switchDisplayMode() {
-    _state?.switchDisplayMode();
-  }
-
-  void jumpToToday() {
-    _state?.jumpToday();
-  }
-
-  void jumpToWeeK(int week) {
-    _state?.jumpWeek(week);
-  }
-
-  void _bindState(State<TimetableViewer> state) {
-    _state = state as _TimetableViewerState;
-  }
-}
-
 class _TimetableViewerState extends State<TimetableViewer> {
   /// 最大周数
   /// TODO 还没用上
@@ -88,7 +132,9 @@ class _TimetableViewerState extends State<TimetableViewer> {
 
   final cache = TableCache();
 
-  final currentKey = GlobalKey();
+  GlobalKey get currentKey => displayModeState == DisplayMode.daily ? dailyTimetableKey : weeklyTimetableKey;
+  final dailyTimetableKey = GlobalKey();
+  final weeklyTimetableKey = GlobalKey();
 
   /// 模式：周课表 日课表
   late DisplayMode displayModeState;
@@ -102,10 +148,10 @@ class _TimetableViewerState extends State<TimetableViewer> {
   @override
   void initState() {
     Log.info('TimetableViewer init');
+    super.initState();
     displayModeState = widget.initialDisplayMode;
     tableCoursesState = widget.initialTableCourses;
     tableMetaState = widget.initialTableMeta;
-    super.initState();
     widget.controller?._bindState(this);
   }
 
@@ -122,38 +168,35 @@ class _TimetableViewerState extends State<TimetableViewer> {
 
   ///跳到今天的方法
   void jumpToday() {
-    if (displayModeState == DisplayMode.daily) {
-      (currentKey.currentState as DailyTimetableState).jumpToday();
-    } else {
-      (currentKey.currentState as WeeklyTimetableState).jumpToday();
-    }
+    (currentKey.currentState as ITimetableView?)?.jumpToToday();
   }
 
   /// 跳到某一周
   void jumpWeek(int week) {
-    if (displayModeState == DisplayMode.daily) {
-      (currentKey.currentState as DailyTimetableState).jumpWeek(week);
-    } else {
-      (currentKey.currentState as WeeklyTimetableState).jumpWeek(week);
-    }
+    (currentKey.currentState as ITimetableView?)?.jumpToWeek(week);
   }
+
+  bool get isTodayView => (currentKey.currentState as ITimetableView?)?.isTodayView ?? true;
 
   @override
   Widget build(BuildContext context) {
-    if (displayModeState == DisplayMode.daily) {
-      return DailyTimetable(
-        key: currentKey,
-        allCourses: tableCoursesState,
-        initialDate: tableMetaState == null ? DateTime.now() : tableMetaState!.startDate,
-        tableCache: widget.tableCache,
-        viewChangingCallback: switchDisplayMode,
-      );
-    }
-    return WeeklyTimetable(
-      key: currentKey,
-      allCourses: tableCoursesState,
-      initialDate: tableMetaState == null ? DateTime.now() : tableMetaState!.startDate,
-      tableCache: widget.tableCache,
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 300),
+      switchInCurve: Curves.ease,
+      child: (displayModeState == DisplayMode.daily)
+          ? DailyTimetable(
+              key: dailyTimetableKey,
+              allCourses: tableCoursesState,
+              initialDate: tableMetaState == null ? DateTime.now() : tableMetaState!.startDate,
+              tableCache: widget.tableCache,
+              viewChangingCallback: switchDisplayMode,
+              $isTodayView: widget.$isTodayView)
+          : WeeklyTimetable(
+              key: weeklyTimetableKey,
+              allCourses: tableCoursesState,
+              initialDate: tableMetaState == null ? DateTime.now() : tableMetaState!.startDate,
+              tableCache: widget.tableCache,
+              $isTodayView: widget.$isTodayView),
     );
   }
 }

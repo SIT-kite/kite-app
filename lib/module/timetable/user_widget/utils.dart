@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 final List<String> weekWord = ['一', '二', '三', '四', '五', '六', '日'];
@@ -198,4 +200,9 @@ extension DateTimeUtil on DateTime {
 /// Repalce the fullwidth brackets to ASCII one
 String stylizeCourseName(String name) {
   return name.replaceAll("（", "(").replaceAll("）", ")");
+}
+
+Duration calcuSwitchAnimationDuration(num distance) {
+  final time = sqrt(max(1, distance) * 100000);
+  return Duration(milliseconds: time.toInt());
 }

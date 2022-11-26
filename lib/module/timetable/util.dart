@@ -22,7 +22,7 @@ import 'using.dart';
 
 import 'entity/course.dart';
 import 'entity/meta.dart';
-import 'user_widget/util.dart';
+import 'user_widget/utils.dart';
 
 void _addEventForCourse(ICalendar cal, Course course, DateTime startDate, Duration? alarmBefore) {
   final timetable = getBuildingTimetable(course.campus, course.place);

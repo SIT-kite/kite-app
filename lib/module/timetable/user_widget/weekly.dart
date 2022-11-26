@@ -20,20 +20,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'colors.dart';
 import 'sheet.dart';
-import 'util.dart';
+import 'tiemtable.dart';
+import 'utils.dart';
 import '../cache.dart';
 import '../entity/course.dart';
 import 'header.dart';
 
-class WeeklyTimetable extends StatefulWidget {
+class WeeklyTimetable extends StatefulWidget implements InitialTimeProtocol {
   /// 教务系统课程列表
   final List<Course> allCourses;
 
   /// 初始日期
+  @override
   final DateTime initialDate;
 
   /// 课表缓存
   final TableCache tableCache;
+  final ValueNotifier<bool>? $isTodayView;
 
   @override
   State<StatefulWidget> createState() => WeeklyTimetableState();
@@ -43,14 +46,74 @@ class WeeklyTimetable extends StatefulWidget {
     required this.allCourses,
     required this.initialDate,
     required this.tableCache,
+    this.$isTodayView,
   }) : super(key: key);
 }
 
-class WeeklyTimetableState extends State<WeeklyTimetable> {
+class WeeklyTimetableState extends State<WeeklyTimetable> implements ITimetableView {
   late PageController _pageController;
   late DateTime dateSemesterStart;
 
   int _currentWeek = 1;
+
+  int page2Week(int page) => page + 1;
+
+  int week2Page(int week) => week - 1;
+
+  void onPageChange() {
+    setState(() {
+      final page = (_pageController.page ?? 0).round();
+      final newWeek = page2Week(page);
+      if (newWeek != _currentWeek) {
+        _currentWeek = newWeek;
+        widget.$isTodayView?.value = isTodayView;
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    dateSemesterStart = widget.initialDate;
+    final pos = widget.locateInTimetable(DateTime.now());
+    _currentWeek = pos.week;
+    _pageController = PageController(initialPage: _currentWeek - 1, keepPage: false)..addListener(onPageChange);
+  }
+
+  @override
+  bool get isTodayView {
+    var pos = widget.locateInTimetable(DateTime.now());
+    return _currentWeek == pos.week;
+  }
+
+  @override
+  void jumpToDay(int targetWeek, int targetDay) {
+    jumpToWeek(targetWeek);
+  }
+
+  @override
+  void jumpToToday() {
+    var pos = widget.locateInTimetable(DateTime.now());
+    jumpToWeek(pos.week);
+  }
+
+  /// 跳到某一周
+  @override
+  void jumpToWeek(int targetWeek) {
+    if (_pageController.hasClients) {
+      final targetPos = week2Page(targetWeek);
+      final currentPos = _pageController.page ?? targetPos;
+      final distance = (targetPos - currentPos).abs();
+      _pageController.animateToPage(
+        targetPos,
+        duration: calcuSwitchAnimationDuration(distance),
+        curve: Curves.easeOut,
+      );
+    }
+    setState(() {
+      _currentWeek = targetWeek;
+    });
+  }
 
   /// 布局左侧边栏, 显示节次
   Widget _buildLeftColumn() {
@@ -78,42 +141,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
         itemBuilder: buildCell);
   }
 
-  /// 设置页面为对应日期页.
-  void _setDate(DateTime theDay) {
-    int days = theDay.clearTime().difference(dateSemesterStart.clearTime()).inDays;
-
-    int week = days ~/ 7 + 1;
-    if (days >= 0 && 1 <= week && week <= 20) {
-      _currentWeek = week;
-    } else {
-      _currentWeek = 1;
-    }
-  }
-
-  void jumpToday() {
-    _setDate(DateTime.now());
-    if (_pageController.hasClients) {
-      _pageController.animateToPage(
-        _currentWeek - 1,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.linearToEaseOut,
-      );
-    }
-  }
-
-  /// 跳到某一周
-  void jumpWeek(int week) {
-    _currentWeek = week;
-    if (_pageController.hasClients) {
-      _pageController.animateToPage(
-        _currentWeek - 1,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.linearToEaseOut,
-      );
-    }
-  }
-
-  Widget _pageBuilder(int week) {
+  Widget _buildPage(int week) {
     return Column(
       children: [
         Expanded(
@@ -151,16 +179,11 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
 
   @override
   Widget build(BuildContext context) {
-    dateSemesterStart = widget.initialDate;
-
-    _setDate(DateTime.now());
-    _pageController = PageController(initialPage: _currentWeek - 1, keepPage: false);
-
     return PageView.builder(
       controller: _pageController,
       scrollDirection: Axis.horizontal,
       itemCount: 20,
-      itemBuilder: (BuildContext context, int index) => _pageBuilder(index + 1),
+      itemBuilder: (BuildContext context, int index) => _buildPage(index + 1),
     );
   }
 }

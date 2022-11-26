@@ -42,7 +42,7 @@ class TimetablePreviewPage extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.swap_horiz),
-            onPressed: tableViewerController.switchDisplayMode,
+            onPressed: tableViewerController.toggleDisplayMode,
           ),
         ],
       ),
