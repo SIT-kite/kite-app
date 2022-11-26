@@ -16,9 +16,13 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import 'package:catcher/core/catcher.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/module/expense2/entity/local.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:kite/module/expense2/init.dart';
 
+import '../../../storage/init.dart';
+import '../entity/local.dart';
 import '../using.dart';
 import 'bill.dart';
 import 'statistics.dart';
@@ -32,32 +36,31 @@ class IndexPage extends StatefulWidget {
 
 class _IndexPageState extends State<IndexPage> {
   int currentIndex = 0;
-  TransactionType? _filter;
 
-  Future<void> _refresh() async {
-    //TODO
+  final cache = Expense2Init.cache;
+
+  List<Transaction> allRecords = [];
+
+  Future<void> fetch(DateTime start, DateTime end) async {
+    allRecords = await cache.fetch(
+      studentID: Kv.auth.currentUsername!,
+      from: start,
+      to: end,
+      onLocalQuery: (result) {
+        if (!mounted) return;
+        setState(() => allRecords = result);
+      },
+    );
+    if (!mounted) return;
+    setState(() {});
   }
 
-  _buildFilterButtons() {
-    final items = [
-      for (final type in TransactionType.values)
-        PopupMenuItem(
-          value: type,
-          child: Row(children: [
-            Icon(
-              type.icon,
-              size: 30,
-              color: Theme.of(context).primaryColor,
-            ),
-            type.localized().txt
-          ]),
-        )
-    ];
-    return PopupMenuButton(
-      tooltip: i18n.filter,
-      onSelected: (TransactionType v) => setState(() => _filter = v),
-      itemBuilder: (_) => items,
-    );
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await fetch(DateTime(2010), DateTime.now());
+    });
+    super.initState();
   }
 
   @override
@@ -66,12 +69,37 @@ class _IndexPageState extends State<IndexPage> {
       appBar: AppBar(
         title: i18n.ftype_expense.txt,
         actions: [
-          currentIndex == 0 ? _buildFilterButtons() : Container(),
+          PopupMenuButton(
+            itemBuilder: (ctx) => [
+              PopupMenuItem(
+                child: const Text('强制刷新'),
+                onTap: () async {
+                  try {
+                    // 关闭用户交互
+                    EasyLoading.instance.userInteractions = false;
+                    EasyLoading.show(status: i18n.expenseFetchingRecordTip);
+                    Expense2Init.local
+                      ..cachedTsEnd = null
+                      ..cachedTsStart = null;
+                    await fetch(DateTime(2010), DateTime.now());
+                  } catch (e, t) {
+                    EasyLoading.showError('${i18n.failed}: ${e.toString().split('\n')[0]}');
+                    Catcher.reportCheckedError(e, t);
+                  } finally {
+                    // 关闭正在加载对话框
+                    EasyLoading.dismiss();
+                    // 开启用户交互
+                    EasyLoading.instance.userInteractions = true;
+                  }
+                },
+              ),
+            ],
+          ),
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: currentIndex == 0 ? const BillPage() : const StatisticsPage(),
+        child: currentIndex == 0 ? BillPage(records: allRecords) : StatisticsPage(records: allRecords),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: [

@@ -48,12 +48,12 @@ class ExpenseStorage {
     result.sort((a, b) => a.compareTo(b));
     box.put(ExpenseStorageKeys.transactionTsList, result);
     // 空集赋值
-    if (cachedTsStart == null) _cachedTsStart = start;
-    if (cachedTsEnd == null) _cachedTsEnd = end;
+    cachedTsStart ??= start;
+    cachedTsEnd ??= end;
     // start 比 cachedTsStart 还靠前
-    if (start.isBefore(cachedTsStart!)) _cachedTsStart = start;
+    if (start.isBefore(cachedTsStart!)) cachedTsStart = start;
     // end 比 cachedTsEnd 还靠后
-    if (end.isAfter(cachedTsEnd!)) _cachedTsEnd = end;
+    if (end.isAfter(cachedTsEnd!)) cachedTsEnd = end;
 
     for (final record in records) {
       box.put(ExpenseStorageKeys.buildTransactionsKeyByTs(record.datetime), record.toJson());
@@ -87,9 +87,9 @@ class ExpenseStorage {
 
   /// 获取已缓存的交易起始时间
   DateTime? get cachedTsStart => box.get(ExpenseStorageKeys.cachedTsStart);
-  set _cachedTsStart(DateTime? v) => box.put(ExpenseStorageKeys.cachedTsStart, v);
+  set cachedTsStart(DateTime? v) => box.put(ExpenseStorageKeys.cachedTsStart, v);
 
   /// 获取已缓存的交易结束时间
   DateTime? get cachedTsEnd => box.get(ExpenseStorageKeys.cachedTsEnd);
-  set _cachedTsEnd(DateTime? v) => box.put(ExpenseStorageKeys.cachedTsEnd, v);
+  set cachedTsEnd(DateTime? v) => box.put(ExpenseStorageKeys.cachedTsEnd, v);
 }
