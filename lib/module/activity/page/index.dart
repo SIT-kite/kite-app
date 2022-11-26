@@ -39,6 +39,8 @@ class _EventListState extends State<EventList> {
   bool _atEnd = false;
   List<Activity> _activityList = [];
 
+  bool loading = true;
+
   final _scrollController = ScrollController();
 
   @override
@@ -62,6 +64,7 @@ class _EventListState extends State<EventList> {
     _lastPage = 1;
     _activityList = await ScInit.scActivityListService.getActivityList(widget.type, 1);
     _lastPage++;
+    loading = false;
     if (!mounted) return;
     setState(() {});
   }
@@ -90,6 +93,7 @@ class _EventListState extends State<EventList> {
 
   @override
   Widget build(BuildContext context) {
+    if (loading) return const Center(child: CircularProgressIndicator());
     return _buildEventResult(_activityList);
   }
 }
