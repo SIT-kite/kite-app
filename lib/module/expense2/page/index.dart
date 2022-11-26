@@ -79,6 +79,7 @@ class _IndexPageState extends State<IndexPage> {
                     EasyLoading.instance.userInteractions = false;
                     EasyLoading.show(status: i18n.expenseFetchingRecordTip);
                     Expense2Init.local
+                      ..clear()
                       ..cachedTsEnd = null
                       ..cachedTsStart = null;
                     await fetch(DateTime(2010), DateTime.now());
