@@ -15,15 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-// 来源于 https://github.com/linuxsong/game2048
-// 作者是 linuxsong, 版权归原作者所有.
-// 在迁移到 kite-app (github.com/SIT-kite/kite-app) 时, 做了一些 null-safety 的适配
-// 并更新了 dart 中列表相关的写法.
-//
-// sunnysab (sunnysab.cn)
-// 2022.1.14
-
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 
@@ -210,8 +201,8 @@ class _GameWidgetState extends State<GameWidget> {
   }
 
   Future<void> playStepSound() async {
-    AudioPlayer player = AudioPlayer();
-    await player.play(AssetSource('game/step.mp3'));
+    // AudioPlayer player = AudioPlayer();
+    // await player.play(AssetSource('game/step.mp3'));
   }
 
   void checkGameOver() {

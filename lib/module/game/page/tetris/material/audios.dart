@@ -16,20 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Source from https://github.com/boyan01/flutter-tetris
-// All rights kept for original author.
-//
-// Imported and commented on 2022.8.28
-
-import 'package:audioplayers/audioplayers.dart';
-
 class Sound {
   bool mute = false;
 
   void _play(String name) {
     if (!mute) {
-      AudioPlayer player = AudioPlayer();
-      player.play(AssetSource('game/tetris/$name'));
+      // AudioPlayer player = AudioPlayer();
+      // player.play(AssetSource('game/tetris/$name'));
     }
   }
 
