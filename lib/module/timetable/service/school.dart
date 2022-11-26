@@ -36,7 +36,7 @@ class TimetableService {
     final response = await session.request(
       _timetableUrl,
       ReqMethod.post,
-      queryParameters: {'gnmkdm': 'N253508'},
+      para: {'gnmkdm': 'N253508'},
       data: {
         // 学年名
         'xnm': schoolYear.toString(),

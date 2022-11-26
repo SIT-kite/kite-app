@@ -48,7 +48,7 @@ class ScoreService implements ScoreDao {
   /// 获取成绩
   @override
   Future<List<Score>> getScoreList(SchoolYear schoolYear, Semester semester) async {
-    final response = await session.request(_scoreUrl, ReqMethod.post, queryParameters: {
+    final response = await session.request(_scoreUrl, ReqMethod.post, para: {
       'gnmkdm': 'N305005',
       'doType': 'query',
     }, data: {
@@ -68,7 +68,7 @@ class ScoreService implements ScoreDao {
     var response = await session.request(
       _scoreDetailUrl,
       ReqMethod.post,
-      queryParameters: {'gnmkdm': 'N305005'},
+      para: {'gnmkdm': 'N305005'},
       data: {
         // 班级
         'jxb_id': classId,

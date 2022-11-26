@@ -21,5 +21,3 @@ A module has several parts in general:
 
 ## Folder lib
 The following are in alphabetical order.
-
--

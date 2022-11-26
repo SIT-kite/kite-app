@@ -143,7 +143,7 @@ class KiteSession implements ISession {
   Future<SessionRes> request(
     String url,
     ReqMethod method, {
-    Map<String, String>? queryParameters,
+    Map<String, String>? para,
     data,
     SessionOptions? options,
     SessionProgressCallback? onSendProgress,
@@ -152,7 +152,7 @@ class KiteSession implements ISession {
     Response response = await _dioRequest(
       url,
       method.uppercaseName,
-      queryParameters: queryParameters,
+      queryParameters: para,
       data: data,
       options: options?.toDioOptions(),
       onSendProgress: onSendProgress,

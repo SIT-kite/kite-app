@@ -35,7 +35,7 @@ class ExamService implements ExamDao {
     var response = await session.request(
       _examRoomUrl,
       ReqMethod.post,
-      queryParameters: {
+      para: {
         'doType': 'query',
         'gnmkdm': 'N358105',
       },

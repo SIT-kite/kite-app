@@ -19,7 +19,8 @@ import 'package:catcher/catcher.dart';
 import 'package:kite/global/desktop_initializer.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/home/init.dart';
-import 'package:kite/module/classroom_browser/init.dart';
+
+import 'package:kite/module/expense2/init.dart';
 import 'package:kite/module/freshman/init.dart';
 import 'package:kite/module/kite_board/init.dart';
 import 'package:kite/module/kite_bulletin/init.dart';
@@ -36,10 +37,10 @@ import 'package:universal_platform/universal_platform.dart';
 import 'hive_initializer.dart';
 
 class Initializer {
-  static Future<void> init() async {
+  static Future<void> init({bool? debugNetwork}) async {
     // 运行前初始化
     try {
-      await _init();
+      await _init(debugNetwork: debugNetwork);
     } on Exception catch (error, stackTrace) {
       try {
         Catcher.reportCheckedError(error, stackTrace);
@@ -49,7 +50,7 @@ class Initializer {
     }
   }
 
-  static Future<void> _init() async {
+  static Future<void> _init({bool? debugNetwork}) async {
     // Initialize the window size before others for a better experience when loading.
     if (UniversalPlatform.isDesktop && !GlobalConfig.isTestEnv) {
       await DesktopInit.init();
@@ -61,9 +62,7 @@ class Initializer {
     Kv.init(kvStorageBox: HiveBoxInit.kv);
     SettingsInit.init(kvStorageBox: HiveBoxInit.kv);
     await Global.init(
-      userEventStorage: UserEventInit.userEventStorage,
-      authSetting: Kv.auth,
-    );
+        userEventStorage: UserEventInit.userEventStorage, authSetting: Kv.auth, debugNetwork: debugNetwork);
     // 初始化用户首次打开时间（而不是应用安装时间）
     // ??= 表示为空时候才赋值
     Kv.home.installTime ??= DateTime.now();
@@ -95,6 +94,10 @@ class Initializer {
     await ExpenseTrackerInit.init(
       ssoSession: Global.ssoSession2,
       expenseRecordBox: HiveBoxInit.expense,
+    );
+    await Expense2Init.init(
+      session: Global.ssoSession2,
+      expenseBox: HiveBoxInit.expense2,
     );
 
     await SharedInit.init(

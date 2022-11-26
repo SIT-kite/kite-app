@@ -18,10 +18,10 @@
 import 'package:flutter/material.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
-import 'package:kite/module/expense/entity/expense.dart';
-import 'package:kite/module/expense/init.dart';
 import 'package:kite/route.dart';
 
+import '../../../module/expense2/entity/local.dart';
+import '../../../module/expense2/init.dart';
 import 'index.dart';
 
 class ExpenseItem extends StatefulWidget {
@@ -32,7 +32,11 @@ class ExpenseItem extends StatefulWidget {
 }
 
 class _ExpenseItemState extends State<ExpenseItem> {
-  final ExpenseRecord? lastExpense = ExpenseTrackerInit.expenseRecord.getLastOne();
+  final Transaction? lastExpense = () {
+    final tsl = Expense2Init.local.transactionTsList;
+    if (tsl.isEmpty) return null;
+    return Expense2Init.local.getTransactionByTs(tsl.last);
+  }();
   String? content;
 
   @override
@@ -46,7 +50,7 @@ class _ExpenseItemState extends State<ExpenseItem> {
   Widget build(BuildContext context) {
     final last = lastExpense;
     if (last != null) {
-      content = i18n.expenseContent(last.amount.toStringAsPrecision(2), last.place);
+      content = i18n.expenseContent(last.deltaAmount.toStringAsFixed(2), last.note);
     }
     return HomeFunctionButton(
       route: RouteTable.expense,

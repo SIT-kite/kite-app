@@ -97,7 +97,7 @@ class BookSearchService implements BookSearchDao {
     var response = await session.request(
       Constants.searchUrl,
       ReqMethod.get,
-      queryParameters: {
+      para: {
         'q': keyword,
         'searchType': 'standard',
         'isFacet': 'true',

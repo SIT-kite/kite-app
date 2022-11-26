@@ -16,11 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'using.dart';
 import 'dao/expense.dart';
 import 'entity/expense.dart';
+import 'mock/expense.dart';
 import 'service/expense.dart';
 import 'storage/expense.dart';
+import 'using.dart';
 
 class ExpenseTrackerInit {
   static late ExpenseRemoteDao expenseRemote;
@@ -33,6 +34,6 @@ class ExpenseTrackerInit {
     expenseRecord = ExpenseLocalStorage(expenseRecordBox);
 
     expenseRemote = ExpenseRemoteService(ssoSession);
-    // expenseRemote = ExpenseMock();
+    expenseRemote = ExpenseMock();
   }
 }

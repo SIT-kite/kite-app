@@ -32,7 +32,7 @@ class FreshmanSession extends ISession {
   Future<SessionRes> request(
     String url,
     ReqMethod method, {
-    Map<String, String>? queryParameters,
+    Map<String, String>? para,
     data,
     SessionOptions? options,
     SessionProgressCallback? onSendProgress,
@@ -46,7 +46,7 @@ class FreshmanSession extends ISession {
       return await _session.request(
         url1,
         method,
-        queryParameters: queryParameters1,
+        para: queryParameters1,
         data: data1,
         options: options,
         onSendProgress: onSendProgress,
@@ -56,7 +56,7 @@ class FreshmanSession extends ISession {
 
     // 如果不存在新生信息，那就不管了
     if (_freshmanCacheDao.freshmanAccount == null || _freshmanCacheDao.freshmanSecret == null) {
-      return await myRequest(data, url, queryParameters);
+      return await myRequest(data, url, para);
     }
 
     // 新生信息
@@ -67,7 +67,7 @@ class FreshmanSession extends ISession {
 
     // 如果是GET请求，登录态直接注入到 queryParameters 中
     if (method == ReqMethod.get) {
-      final myQuery = queryParameters ?? {};
+      final myQuery = para ?? {};
       myQuery['secret'] = secret;
       return await myRequest(data, myUrl, myQuery);
     }
@@ -79,10 +79,10 @@ class FreshmanSession extends ISession {
       myData['secret'] = secret;
 
       // 修改url
-      return await myRequest(myData, myUrl, queryParameters);
+      return await myRequest(myData, myUrl, para);
     }
 
     // 其他情况不动data,但是url还是得边
-    return await myRequest(data, myUrl, queryParameters);
+    return await myRequest(data, myUrl, para);
   }
 }

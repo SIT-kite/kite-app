@@ -15,6 +15,22 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-class Backend {
-  static const kite = "https://kite.sunnysab.cn";
+import 'local.dart';
+import 'shared.dart';
+
+class Page {
+  DateTime month = defaultDateTime;
+  List<Transaction> descending = [];
+
+  bool get isEmpty => descending.isEmpty;
+
+  double get lastBalance => descending.isEmpty ? 0 : descending.last.balanceAfter;
+}
+
+class CardBalance {
+  double get lastBalance => descending.isEmpty ? 0 : descending.last.lastBalance;
+
+  List<Page> descending = [];
+
+  bool get isEmpty => descending.isEmpty;
 }

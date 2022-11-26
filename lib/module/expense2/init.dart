@@ -15,4 +15,24 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-// TODO: Convert all DateTime to UTC
+import 'package:kite/module/connectivity/using.dart';
+
+import 'cache/cache.dart';
+import 'dao/getter.dart';
+import 'service/getter.dart';
+import 'storage/local.dart';
+
+class Expense2Init {
+  static late ExpenseGetDao remote;
+  static late ExpenseStorage local;
+  static late CachedExpenseGetDao cache;
+
+  static Future<void> init({
+    required ISession session,
+    required Box expenseBox,
+  }) async {
+    remote = ExpenseGetService(session);
+    local = ExpenseStorage(expenseBox);
+    cache = CachedExpenseGetDao(remoteDao: remote, storage: local);
+  }
+}

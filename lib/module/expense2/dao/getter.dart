@@ -15,6 +15,12 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-class Backend {
-  static const kite = "https://kite.sunnysab.cn";
+import '../entity/local.dart';
+
+abstract class ExpenseGetDao {
+  Future<List<Transaction>> fetch({
+    required String studentID,
+    required DateTime from,
+    required DateTime to,
+  });
 }
