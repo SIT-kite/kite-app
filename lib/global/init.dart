@@ -19,7 +19,7 @@ import 'package:catcher/catcher.dart';
 import 'package:kite/global/desktop_initializer.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/home/init.dart';
-
+import 'package:kite/module/classroom_browser/init.dart';
 import 'package:kite/module/expense2/init.dart';
 import 'package:kite/module/freshman/init.dart';
 import 'package:kite/module/kite_board/init.dart';
