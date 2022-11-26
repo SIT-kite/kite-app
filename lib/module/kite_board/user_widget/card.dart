@@ -42,12 +42,12 @@ class PictureCard extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Text(picture.publisher),
-              const SizedBox(
-                width: 40,
-              ),
-              const Icon(Icons.thumb_up),
-              const SizedBox(width: 10),
-              const Icon(Icons.delete)
+              // const SizedBox(
+              //   width: 40,
+              // ),
+              // const Icon(Icons.thumb_up),
+              // const SizedBox(width: 10),
+              // const Icon(Icons.delete)
             ]),
           )
         ],
