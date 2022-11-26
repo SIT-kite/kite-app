@@ -43,7 +43,6 @@ class ExpenseGetService implements ExpenseGetDao {
     required DateTime from,
     required DateTime to,
   }) async {
-    studentID = '1910400401';
     String curTs = format(DateTime.now());
     String fromTs = format(from);
     String toTs = format(to);
