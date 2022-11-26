@@ -150,7 +150,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
               icon: const Icon(
                 Icons.search_rounded,
               )),
-          IconButton(icon: const Icon(Icons.share), onPressed: () {}),
+          // IconButton(icon: const Icon(Icons.share), onPressed: () {}),
         ],
       ),
       body: _buildBody(),
