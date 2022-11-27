@@ -34,3 +34,7 @@ List<String> extractTitle(String fullTitle) {
   result.add(fullTitle.substring(lastPos));
   return result;
 }
+
+List<String> cleanDuplicate(List<String> tags) {
+  return tags.toSet().toList();
+}

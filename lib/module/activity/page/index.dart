@@ -130,11 +130,15 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
     super.initState();
   }
 
-  TabBar _buildBarHeader() {
+  TabBar _buildBarHeader(BuildContext ctx) {
     return TabBar(
       isScrollable: true,
       controller: _tabController,
-      tabs: categories.map((e) => Tab(text: e.name)).toList(),
+      tabs: categories
+          .map((e) => Tab(
+                child: Text(e.name, style: Theme.of(ctx).textTheme.bodyLarge),
+              ))
+          .toList(),
     );
   }
 
@@ -145,7 +149,7 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
       child: Scaffold(
         appBar: AppBar(
           title: i18n.ftype_activity.txt,
-          bottom: _buildBarHeader(),
+          bottom: _buildBarHeader(context),
           actions: [
             IconButton(
               icon: const Icon(Icons.search),

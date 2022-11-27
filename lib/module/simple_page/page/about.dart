@@ -48,7 +48,10 @@ class AboutPage extends StatelessWidget {
         enablePullRefresh: true,
         future: Dio().get(R.kiteAboutUrl),
         builder: (ctx, data) {
-          return MyHtmlWidget(data.data.toString());
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            child: MyHtmlWidget(data.data.toString()),
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(

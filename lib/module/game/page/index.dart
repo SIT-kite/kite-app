@@ -41,11 +41,15 @@ class _GamePageState extends State<GamePage> with SingleTickerProviderStateMixin
     super.initState();
   }
 
-  TabBar _buildBarHeader() {
+  TabBar _buildBarHeader(BuildContext ctx) {
     return TabBar(
       isScrollable: true,
       controller: _tabController,
-      tabs: gameManager.gameList.map((e) => Text(e.title)).toList(),
+      tabs: gameManager.gameList
+          .map((e) => Tab(
+                child: Text(e.title, style: Theme.of(ctx).textTheme.bodyLarge),
+              ))
+          .toList(),
     );
   }
 
@@ -77,7 +81,7 @@ class _GamePageState extends State<GamePage> with SingleTickerProviderStateMixin
       child: Scaffold(
         appBar: AppBar(
           title: const Text('小游戏'),
-          bottom: _buildBarHeader(),
+          bottom: _buildBarHeader(context),
           actions: [
             IconButton(
                 onPressed: () {

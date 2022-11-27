@@ -20,6 +20,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/home/page/item/electricity.dart';
 import 'package:kite/launcher.dart';
+import 'package:kite/module/timetable/using.dart';
 import 'package:kite/override/entity.dart';
 import 'package:kite/route.dart';
 import 'package:kite/util/logger.dart';
@@ -60,8 +61,8 @@ class HomeFunctionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final titleStyle = Theme.of(context).textTheme.headline4?.copyWith(color: Colors.black54);
-    final subtitleStyle = Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.black54);
+    final titleStyle = Theme.of(context).textTheme.headline4?.copyWith(color: context.themeColor);
+    final subtitleStyle = Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.black87);
 
     return Container(
       decoration: BoxDecoration(color: Colors.white.withOpacity(0.6)),
@@ -199,7 +200,7 @@ Widget buildHomeFunctionButtonByExtraHomeItem(BuildContext context, ExtraHomeIte
       item.iconUrl,
       height: 30.h,
       width: 30.w,
-      color: Theme.of(context).primaryColor,
+      color: context.themeColor,
     ),
     route: item.route,
   );

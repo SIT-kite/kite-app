@@ -25,7 +25,7 @@ class HomeItemGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(24),
       child: Column(children: _items),
     );
   }

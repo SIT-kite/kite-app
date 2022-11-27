@@ -20,20 +20,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kite/design/utils.dart';
 import 'package:kite/exception/session.dart';
 import 'package:kite/global/global.dart';
-import 'package:kite/l10n/extension.dart';
-import 'package:kite/launcher.dart';
 import 'package:kite/module/login/init.dart';
 import 'package:kite/module/shared/service/weather.dart';
+import 'package:kite/module/timetable/using.dart';
 import 'package:kite/override/entity.dart';
 import 'package:kite/override/init.dart';
 import 'package:kite/quick_button/init.dart';
-import 'package:kite/route.dart';
-import 'package:kite/storage/init.dart';
 import 'package:kite/util/dsl.dart';
-import 'package:kite/util/flash.dart';
-import 'package:kite/util/logger.dart';
 import 'package:kite/util/scanner.dart';
 import 'package:kite/util/user.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -231,10 +227,16 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildBody(BuildContext context) {
+  Widget buildBody(BuildContext context) {
     return Stack(
       children: [
-        const HomeBackground(),
+        ColorFiltered(
+          colorFilter: ColorFilter.mode(
+            Colors.black.withAlpha(0x3F),
+            Theme.of(context).isDark ? BlendMode.colorBurn : BlendMode.dst,
+          ),
+          child: const HomeBackground(),
+        ),
         SmartRefresher(
           enablePullDown: true,
           enablePullUp: false,
@@ -254,12 +256,15 @@ class _HomePageState extends State<HomePage> {
                       Log.info('扫码结果: $result');
                       if (result != null) GlobalLauncher.launch(result);
                     },
-                    icon: const Icon(Icons.qr_code_scanner_outlined),
+                    icon: Icon(
+                      Icons.qr_code_scanner_outlined,
+                      color: context.themeColor,
+                    ),
                     iconSize: 30,
                   ),
                   IconButton(
                     onPressed: () => Navigator.of(context).pushNamed(RouteTable.settings),
-                    icon: const Icon(Icons.settings),
+                    icon: Icon(Icons.settings, color: context.themeColor),
                   ),
                 ],
                 automaticallyImplyLeading: false,
@@ -338,7 +343,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       key: _scaffoldKey,
       body: GestureDetector(
-        child: _buildBody(context),
+        child: buildBody(context),
         onHorizontalDragEnd: (d) {
           // 速度达标，展示drawer
           if (d.velocity.pixelsPerSecond.dx > 100) {

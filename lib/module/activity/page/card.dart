@@ -34,10 +34,15 @@ class EventCard extends StatelessWidget {
   Widget _buildTagRow(BuildContext context, List<String> tags) {
     final backgroundColor = Theme.of(context).primaryColor.withAlpha(128);
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      decoration: BoxDecoration(color: backgroundColor, borderRadius: BorderRadius.circular(4)),
-      child: Text(tags.sublist(0, min(2, tags.length)).join('  ')),
+    return Wrap(
+      spacing: 10,
+      children: tags
+          .sublist(0, min(2, tags.length))
+          .map((e) => Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              decoration: BoxDecoration(color: backgroundColor, borderRadius: BorderRadius.circular(6)),
+              child: Text(e)))
+          .toList(),
     );
   }
 
@@ -50,7 +55,7 @@ class EventCard extends StatelessWidget {
     final title = titleList.last;
 
     titleList.removeLast();
-    final tags = titleList;
+    final tags = cleanDuplicate(titleList);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -102,7 +107,10 @@ class EventCard extends StatelessWidget {
       },
       child: Card(
         margin: const EdgeInsets.all(10),
-        child: _buildBasicInfo(context),
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: _buildBasicInfo(context)
+        ),
       ),
     );
   }

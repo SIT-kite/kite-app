@@ -63,7 +63,7 @@ class _ExamArrangementPageState extends State<ExamArrangementPage> {
     final name = stylizeCourseName(examItem.courseName);
     final strStartTime = examItem.time.isNotEmpty ? dateFullNum(examItem.time[0]) : '/';
     final strEndTime = examItem.time.isNotEmpty ? dateFullNum(examItem.time[1]) : '/';
-    final place = examItem.place;
+    final place = stylizeCourseName(examItem.place);
     final seatNumber = examItem.seatNumber;
     final isSecondExam = examItem.isSecondExam;
 
