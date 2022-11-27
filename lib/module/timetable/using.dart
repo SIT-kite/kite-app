@@ -25,3 +25,4 @@ export '../shared/file_system.dart';
 export '../shared/route.dart';
 export '../shared/storage.dart';
 export '../shared/networking.dart';
+export '../shared/design.dart';

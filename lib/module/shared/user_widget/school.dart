@@ -136,7 +136,7 @@ class _SemesterSelectorState extends State<SemesterSelector> {
     }
     final semesterItems = Map.fromEntries(semesters.map((e) => MapEntry(e, semesterDescription[e]!)));
     // 保证显示上初始选择学期、实际加载的学期、selectedSemester 变量一致.
-    return buildSelector<Semester>(ctx,semesterItems, selectedSemester, (Semester? selected) {
+    return buildSelector<Semester>(ctx, semesterItems, selectedSemester, (Semester? selected) {
       if (selected != null && selected != selectedSemester) {
         setState(() => selectedSemester = selected);
         widget.semesterSelectCallback(selectedSemester);

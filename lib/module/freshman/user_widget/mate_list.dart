@@ -88,8 +88,7 @@ class MateListWidget extends StatelessWidget {
         children: [
           Text(
             mate.name,
-            style: const TextStyle(
-                fontSize: 30, fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),
+            style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),
           ),
           SizedBox(
             height: 4.h,

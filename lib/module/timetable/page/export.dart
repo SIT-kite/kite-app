@@ -26,7 +26,7 @@ import '../using.dart';
 
 import '../entity/course.dart';
 import '../entity/meta.dart';
-import '../util.dart';
+import '../utils.dart';
 
 class ExportDialog {
   final BuildContext context;

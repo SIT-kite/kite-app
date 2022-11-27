@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/design/colors.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
@@ -33,7 +34,7 @@ class KiteDrawer extends Drawer {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: BoxDecoration(color: Kv.theme.color),
+            decoration: BoxDecoration(color: context.themeColor),
             child: Align(
                 alignment: Alignment.bottomLeft,
                 child: Text(inDays <= 0 ? i18n.daysKiteWithYouLabel0 : i18n.daysKiteWithYouLabel(inDays),
