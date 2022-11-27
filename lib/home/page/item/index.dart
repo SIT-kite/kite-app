@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kite/design/utils.dart';
 import 'package:kite/home/page/item/electricity.dart';
 import 'package:kite/launcher.dart';
 import 'package:kite/module/timetable/using.dart';
@@ -61,14 +62,27 @@ class HomeFunctionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final titleStyle = Theme.of(context).textTheme.headline4?.copyWith(color: context.themeColor);
-    final subtitleStyle = Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.black87);
-
+    final theme = Theme.of(context);
+    final TextStyle? titleStyle;
+    final TextStyle? subtitleStyle;
+    final Color bg;
+    final Color iconColor;
+    if (theme.isLight) {
+      titleStyle = theme.textTheme.headline4?.copyWith(color: theme.textTheme.headline2?.color);
+      subtitleStyle = theme.textTheme.bodyText2?.copyWith(color: Colors.black87);
+      bg = Colors.white.withOpacity(0.6);
+      iconColor = context.themeColor;
+    } else {
+      titleStyle = theme.textTheme.headline4?.copyWith(color: theme.textTheme.headline2?.color);
+      subtitleStyle = theme.textTheme.bodyText2?.copyWith(color: theme.textTheme.headline4?.color);
+      bg = Colors.black87.withOpacity(0.2);
+      iconColor = Colors.white70;
+    }
     return Container(
-      decoration: BoxDecoration(color: Colors.white.withOpacity(0.6)),
+      decoration: BoxDecoration(color: bg),
       child: ListTile(
         leading:
-            iconWidget ?? SvgPicture.asset(icon!, height: 30.h, width: 30.w, color: Theme.of(context).primaryColor),
+            iconWidget ?? SvgPicture.asset(icon!, height: 30.h, width: 30.w, color: iconColor),
         title: Text(title, style: titleStyle),
         subtitle: Text(subtitle ?? '', style: subtitleStyle, maxLines: 1, overflow: TextOverflow.ellipsis),
         // dense: true,
