@@ -50,17 +50,17 @@ class _FreshmanRelationshipPageState extends State<FreshmanRelationshipPage> wit
         Tab(
             child: Text(
           i18n.roommate,
-          style: TextStyle(color: ctx.themeColor),
+          style: Theme.of(ctx).textTheme.bodyLarge,
         )),
         Tab(
             child: Text(
           i18n.classmate,
-          style: TextStyle(color: ctx.themeColor),
+          style: Theme.of(ctx).textTheme.bodyLarge,
         )),
         Tab(
             child: Text(
           i18n.friendsRadder,
-          style: TextStyle(color: ctx.themeColor),
+          style: Theme.of(ctx).textTheme.bodyLarge,
         )),
       ],
     );

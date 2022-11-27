@@ -18,13 +18,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'sheet.dart';
+import '../user_widget/sheet.dart';
 import 'tiemtable.dart';
-import 'utils.dart';
 import '../using.dart';
 import '../cache.dart';
 import '../entity/course.dart';
-import 'header.dart';
+import '../user_widget/header.dart';
 
 class WeeklyTimetable extends StatefulWidget implements InitialTimeProtocol {
   /// 教务系统课程列表
@@ -78,6 +77,12 @@ class WeeklyTimetableState extends State<WeeklyTimetable> implements ITimetableV
     final pos = widget.locateInTimetable(DateTime.now());
     _currentWeek = pos.week;
     _pageController = PageController(initialPage: _currentWeek - 1, keepPage: false)..addListener(onPageChange);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
   }
 
   @override

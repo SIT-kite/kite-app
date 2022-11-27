@@ -33,6 +33,10 @@ class CourseColor {
     ColorPair(Color(0xFFffa2d2), Color(0xFF8e004a)), // rose #b50060
     ColorPair(Color(0xFFfbe365), Color(0xFF524700)), // lemon #b09e40
     ColorPair(Color(0xFF75f8e2), Color(0xFF005047)), // cyan #008f7f
+    ColorPair(Color(0xFFb4ebff), Color(0xFF004e5f)), // ice #b3c7cf
+    ColorPair(Color(0xFFb4ebff), Color(0xFF004e5f)), // cyan #d4bdce
+    ColorPair(Color(0xFFffd7f5), Color(0xFF7c157a)), // mauve #ff8df3
+    ColorPair(Color(0xFFcdf141), Color(0xFF3e4c00)), // toxic #a2c300
   ];
 
   static get({required ThemeData from, required int by}) {

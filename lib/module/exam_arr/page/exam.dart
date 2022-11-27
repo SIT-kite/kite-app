@@ -60,7 +60,7 @@ class _ExamArrangementPageState extends State<ExamArrangementPage> {
 
   Widget buildExamItem(ExamRoom examItem) {
     final itemStyle = Theme.of(context).textTheme.bodyText2;
-    final name = examItem.courseName;
+    final name = stylizeCourseName(examItem.courseName);
     final strStartTime = examItem.time.isNotEmpty ? dateFullNum(examItem.time[0]) : '/';
     final strEndTime = examItem.time.isNotEmpty ? dateFullNum(examItem.time[1]) : '/';
     final place = examItem.place;

@@ -17,13 +17,14 @@
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kite/module/activity/using.dart';
 import '../using.dart';
 
 import '../cache.dart';
 import '../entity/course.dart';
 import '../entity/meta.dart';
 import '../init.dart';
-import '../user_widget/tiemtable.dart';
+import 'tiemtable.dart';
 import 'export.dart';
 
 class TimetablePage extends StatefulWidget {
@@ -117,9 +118,6 @@ class _TimetablePageState extends State<TimetablePage> {
       () => Kv.home.autoLaunchTimetable = !(Kv.home.autoLaunchTimetable ?? false),
     ];
 
-    // Widget buildCenterRow(Widget child) =>
-    //     Row(mainAxisAlignment: MainAxisAlignment.center, children: [child]);
-
     ///更多菜单按钮
     return PopupMenuButton(
       onSelected: (index) => callback[index](),
@@ -189,7 +187,7 @@ class _TimetablePageState extends State<TimetablePage> {
     Log.info('Timetable build');
     return Scaffold(
       appBar: AppBar(
-        title: const Text('课程表'),
+        title: i18n.ftype_timetable.txt,
         actions: <Widget>[
           _buildSwitchWeekButton(),
           _buildModeSwitchButton(),
@@ -218,8 +216,9 @@ class _TimetablePageState extends State<TimetablePage> {
         tableCache: TableCache(),
         $isTodayView: $isTodayView,
         initialDisplayMode: displayMode,
-        onDisplayChanged: (DisplayMode displayMode) {
-          storage.lastMode = displayMode;
+        onDisplayChanged: (DisplayMode newMode) {
+          displayMode = newMode;
+          storage.lastMode = newMode;
         },
       ),
     );

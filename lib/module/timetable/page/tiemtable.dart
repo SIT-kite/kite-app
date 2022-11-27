@@ -17,7 +17,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'utils.dart';
 
 import '../cache.dart';
 import '../entity/course.dart';

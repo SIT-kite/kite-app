@@ -20,10 +20,9 @@ import 'package:flutter/material.dart';
 import '../cache.dart';
 import '../entity/course.dart';
 import '../using.dart';
-import 'header.dart';
-import 'sheet.dart';
+import '../user_widget/header.dart';
+import '../user_widget/sheet.dart';
 import 'tiemtable.dart';
-import 'utils.dart';
 
 class DailyTimetable extends StatefulWidget implements InitialTimeProtocol {
   /// 教务系统课程列表
@@ -90,6 +89,12 @@ class DailyTimetableState extends State<DailyTimetable> implements ITimetableVie
       ..addListener(onPageChange);
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
+  }
+
   /// 跳转到指定星期与天
   @override
   void jumpToDay(int targetWeek, int targetDay) {
@@ -143,7 +148,7 @@ class DailyTimetableState extends State<DailyTimetable> implements ITimetableVie
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
         clipBehavior: Clip.antiAlias,
-        color: const Color.fromARGB(255, 228, 235, 245),
+        color: CourseColor.get(from: Theme.of(context), by: course.courseId.hashCode),
         child: ListTile(
           // 点击卡片打开课程详情.
           onTap: () => showModalBottomSheet(
@@ -153,7 +158,7 @@ class DailyTimetableState extends State<DailyTimetable> implements ITimetableVie
             context: context,
           ),
           leading: courseIcon,
-          title: Text(course.courseName, textScaleFactor: 1.1, style: textStyle?.copyWith(color: Colors.black54)),
+          title: Text(stylizeCourseName(course.courseName), textScaleFactor: 1.1),
           subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(course.teacher.join(','), style: textStyle),
             Row(
