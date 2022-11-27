@@ -33,6 +33,7 @@ void showBasicFlash(
         behavior: flashStyle,
         position: FlashPosition.bottom,
         boxShadows: kElevationToShadow[4],
+        backgroundColor: Theme.of(context).backgroundColor,
         horizontalDismissDirection: HorizontalDismissDirection.horizontal,
         child: FlashBar(
           content: content,

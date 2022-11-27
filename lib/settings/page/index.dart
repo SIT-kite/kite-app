@@ -105,11 +105,11 @@ class SettingsPage extends StatelessWidget {
     }
   }
 
-  void _gotoWelcome(BuildContext context) {
-    while (Navigator.of(context).canPop()) {
-      Navigator.of(context).pop();
+  void _gotoWelcome(NavigatorState navigator) {
+    while (navigator.canPop()) {
+      navigator.pop();
     }
-    Navigator.of(context).pushReplacementNamed(RouteTable.welcome);
+    navigator.pushReplacementNamed(RouteTable.welcome);
 
     Log.info('重启成功');
   }
@@ -123,6 +123,7 @@ class SettingsPage extends StatelessWidget {
         positiveActionBuilder: (context, controller, _) {
           return TextButton(
               onPressed: () async {
+                final navigator = Navigator.of(context);
                 Log.info('退出登录');
 
                 if (isFreshman) {
@@ -139,7 +140,7 @@ class SettingsPage extends StatelessWidget {
                 await Initializer.init();
 
                 controller.dismiss();
-                _gotoWelcome(context);
+                _gotoWelcome(navigator);
               },
               child: i18n.continue_.txt);
         });
@@ -155,10 +156,11 @@ class SettingsPage extends StatelessWidget {
         positiveActionBuilder: (context, controller, _) {
           return TextButton(
               onPressed: () async {
+                final navigator = Navigator.of(context);
                 await HiveBoxInit.clear(); // 清除存储
                 await Initializer.init();
                 await controller.dismiss();
-                _gotoWelcome(context);
+                _gotoWelcome(navigator);
               },
               child: i18n.continue_.txt);
         });

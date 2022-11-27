@@ -96,8 +96,15 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   }
 
   Widget buildAll(BuildContext context) {
-    final textStyleSmall = Theme.of(context).textTheme.headline6?.copyWith(color: Colors.white60, fontSize: 15.0);
-    final textStyleLarge = Theme.of(context).textTheme.headline6?.copyWith(color: Colors.white70, fontSize: 24.0);
+    final textStyleSmall = Theme.of(context).textTheme.headline6?.copyWith(
+          color: Colors.white60,
+          fontSize: 16.0,
+          fontWeight: FontWeight.w500,
+        );
+    final textStyleLarge = Theme.of(context)
+        .textTheme
+        .headline6
+        ?.copyWith(color: Colors.white70, fontSize: 24.0, fontWeight: FontWeight.w700);
     final textStyleWeather = Theme.of(context).textTheme.subtitle1?.copyWith(
           color: Colors.white70,
           fontSize: 19.0,
