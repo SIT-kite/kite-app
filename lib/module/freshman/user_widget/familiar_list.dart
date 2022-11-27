@@ -26,17 +26,17 @@ import 'common.dart';
 import 'profile.dart';
 import 'package:kite/l10n/extension.dart';
 
-class FamiliarListWidget extends StatefulWidget {
+class FriendsRadderWidget extends StatefulWidget {
   final List<Familiar> familiarList;
   final VoidCallback? onRefresh;
 
-  const FamiliarListWidget(this.familiarList, {this.onRefresh, Key? key}) : super(key: key);
+  const FriendsRadderWidget(this.familiarList, {this.onRefresh, Key? key}) : super(key: key);
 
   @override
-  State<FamiliarListWidget> createState() => _FamiliarListWidgetState();
+  State<FriendsRadderWidget> createState() => _FriendsRadderWidgetState();
 }
 
-class _FamiliarListWidgetState extends State<FamiliarListWidget> {
+class _FriendsRadderWidgetState extends State<FriendsRadderWidget> {
   final RefreshController _refreshController = RefreshController();
 
   ///加载更多
@@ -97,7 +97,7 @@ class _FamiliarListWidgetState extends State<FamiliarListWidget> {
           children: [
             Text(
               familiar.name,
-              style: const TextStyle(fontSize: 35, color: Colors.black54, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
             ),
             SizedBox(
               height: 8.h,

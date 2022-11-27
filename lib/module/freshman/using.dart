@@ -26,3 +26,4 @@ export '../shared/launcher.dart';
 export '../shared/route.dart';
 export '../shared/user_widget/common.dart';
 export 'package:kite/session/freshman_session.dart';
+export '../shared/design.dart';

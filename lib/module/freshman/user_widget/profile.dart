@@ -106,7 +106,7 @@ class BasicInfoPageWidget extends StatelessWidget {
               children: [
                 Container(
                   height: bgHeight,
-                  decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+                  decoration: BoxDecoration(color: context.themeColor),
                 ),
               ],
             ),
@@ -170,13 +170,11 @@ class BasicInfoPageWidget extends StatelessWidget {
   /// 构造列表项
   Widget _buildItem(BuildContext context, InfoItem infoItem) {
     return ListTile(
-      textColor: Colors.black,
       leading: SizedBox(
           width: 45,
           height: 45,
           child: ClipOval(
             child: CircleAvatar(
-              backgroundColor: Theme.of(context).primaryColor,
               child: Icon(
                 infoItem.iconData,
                 color: Colors.white,

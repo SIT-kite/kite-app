@@ -179,7 +179,7 @@
   "expenseFetchingRecordTip": "Fetching expense record",
   "expenseFetchingTip": "Fetching expense records from school... Please wait a minute, the network speed depends on the school's server.",
   "expenseFirstTimeRefreshRequest": "Expense Tracker needs to access campus network to retrieve expense history. You can refresh the expense history manually next time by hitting the \"Refresh\" button at the top-right corner.",
-  "expenseGrocery": "Grocery Store",
+  "expenseGrocery": "Grocery Shopping",
   "expenseHotWater": "Hot Water",
   "expenseShower": "Shower",
   "expenseStuff": "Stuff",

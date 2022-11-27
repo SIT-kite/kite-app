@@ -24,6 +24,8 @@ import 'shared.dart';
 
 part 'local.g.dart';
 
+const abosute = Object();
+
 @JsonSerializable()
 class Transaction {
   Transaction();
@@ -36,9 +38,9 @@ class Transaction {
   TransactionType type = TransactionType.consume;
   double balanceBefore = 0;
   double balanceAfter = 0;
+  @abosute
   double deltaAmount = 0;
 
-  bool get isConsume => (balanceAfter - balanceBefore) < 0;
   String deviceName = "";
   String note = "";
 
@@ -48,6 +50,28 @@ class Transaction {
 
   @override
   String toString() => toJson().toString();
+}
+
+extension TransactionEnchanced on Transaction {
+  bool get isConsume => (balanceAfter - balanceBefore) < 0;
+
+  String? get bestTitle {
+    if (deviceName.isNotEmpty) {
+      return deviceName;
+    } else {
+      return note;
+    }
+  }
+
+  Color get billColor => isConsume ? Colors.red : Colors.green;
+
+  String toReadableString() {
+    if (deltaAmount == 0) {
+      return deltaAmount.toStringAsFixed(2);
+    } else {
+      return "${isConsume ? '-' : '+'}${deltaAmount.toStringAsFixed(2)}";
+    }
+  }
 }
 
 enum TransactionType {

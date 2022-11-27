@@ -107,7 +107,7 @@ class PersonItemWidget extends StatelessWidget {
             child: Stack(children: [
               Align(
                 alignment: const Alignment(0, -0.7),
-                child: buildAvatar(name: name, color: Theme.of(context).primaryColor),
+                child: buildAvatar(context,name: name),
               ),
               Positioned(
                 top: 120,

@@ -46,7 +46,7 @@ class _FamiliarPeopleWidgetState extends State<FamiliarPeopleWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
-          child: FamiliarListWidget(
+          child: FriendsRadderWidget(
             familiarList,
             onRefresh: onRefresh,
           ),

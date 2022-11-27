@@ -21,6 +21,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/launcher.dart';
+import 'package:kite/module/freshman/using.dart';
 import 'package:kite/route.dart';
 import 'package:kite/util/dsl.dart';
 import 'package:kite/util/flash.dart';
@@ -101,13 +102,9 @@ Widget buildListItemDefaultAvatar(BuildContext context, String name) {
 }
 
 /// 构造默认头像
-Widget buildDefaultAvatar(String name, {required Color defaultColor}) {
+Widget buildDefaultAvatar(BuildContext ctx, String name) {
   return Container(
-    decoration: BoxDecoration(
-      shape: BoxShape.circle,
-      color: defaultColor,
-      boxShadow: const [BoxShadow(color: Colors.black54, offset: Offset(1.0, 1.0), blurRadius: 2.0)],
-    ),
+    decoration: BoxDecoration(shape: BoxShape.circle, color: ctx.themeColor),
     child: Container(
       alignment: const Alignment(0, 0),
       child: name.isEmpty
@@ -127,14 +124,14 @@ Widget buildDefaultAvatar(String name, {required Color defaultColor}) {
 }
 
 /// 构造头像
-Widget buildAvatar({Widget? avatar, required String name, Color color = Colors.blueAccent}) {
+Widget buildAvatar(BuildContext ctx, {Widget? avatar, required String name}) {
   return Container(
     width: 70,
     height: 70,
     decoration: const BoxDecoration(
       shape: BoxShape.circle,
     ),
-    child: avatar ?? buildDefaultAvatar(name, defaultColor: color),
+    child: avatar ?? buildDefaultAvatar(ctx, name),
   );
 }
 
@@ -168,14 +165,13 @@ Widget buildInfoItemRow({
       children: [
         Icon(
           iconData,
-          color: Theme.of(context).primaryColor,
+          color: Theme.of(context).colorScheme.onPrimary,
           size: iconSize ?? IconTheme.of(context).size,
         ),
         Expanded(
           child: Text(
             ' $text',
             style: TextStyle(
-              color: Colors.black87,
               fontSize: fontSize ?? 14,
               overflow: TextOverflow.ellipsis,
             ),
@@ -189,8 +185,6 @@ Widget buildInfoItemRow({
 extension Styles on Widget {
   Widget withTitleBarStyle(BuildContext context) {
     return Container(
-      decoration:
-          const BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(color: Colors.grey, offset: Offset(1, 1.0))]),
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(5),
       child: this,
@@ -201,7 +195,6 @@ extension Styles on Widget {
     return Container(
       padding: const EdgeInsets.fromLTRB(10, 1, 20, 1),
       alignment: const Alignment(-1, 0),
-      decoration: BoxDecoration(color: Colors.white.withOpacity(0.4)),
       width: 200.w,
       child: this,
     );

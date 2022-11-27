@@ -30,14 +30,14 @@ import '../dao/Freshman.dart';
 import '../entity/info.dart';
 import '../init.dart';
 
-class FreshmanUpdatePage extends StatefulWidget {
-  const FreshmanUpdatePage({Key? key}) : super(key: key);
+class PersonalInfoPage extends StatefulWidget {
+  const PersonalInfoPage({Key? key}) : super(key: key);
 
   @override
-  State<FreshmanUpdatePage> createState() => _FreshmanUpdatePageState();
+  State<PersonalInfoPage> createState() => _PersonalInfoPageState();
 }
 
-class _FreshmanUpdatePageState extends State<FreshmanUpdatePage> {
+class _PersonalInfoPageState extends State<PersonalInfoPage> {
   final FreshmanDao freshmanDao = FreshmanInit.freshmanDao;
 
   /// 初始状态
@@ -145,7 +145,7 @@ class _FreshmanUpdatePageState extends State<FreshmanUpdatePage> {
             SizedBox(height: 20.h),
             Text(
               i18n.personalInfoDescLabel,
-              style: Theme.of(context).textTheme.bodyText2,
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
           ],
         ),
@@ -162,7 +162,6 @@ class _FreshmanUpdatePageState extends State<FreshmanUpdatePage> {
       autofocus: true,
       controller: textEditingController,
       decoration: InputDecoration(
-        labelStyle: const TextStyle(color: Colors.black),
         labelText: fieldName,
         hintText: i18n.unfilled,
         prefixIcon: Icon(iconData),

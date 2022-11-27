@@ -136,8 +136,8 @@ final defaultRouteTable = StaticRouteTable(
     RouteTable.freshman: (context, args) => FreshmanPage(),
     RouteTable.freshmanAnalysis: (context, args) => const FreshmanAnalysisPage(),
     RouteTable.freshmanLogin: (context, args) => const FreshmanLoginPage(),
-    RouteTable.freshmanUpdate: (context, args) => const FreshmanUpdatePage(),
-    RouteTable.freshmanFriend: (context, args) => const FreshmanFriendPage(),
+    RouteTable.freshmanUpdate: (context, args) => const PersonalInfoPage(),
+    RouteTable.freshmanFriend: (context, args) => const FreshmanRelationshipPage(),
     RouteTable.kiteBoard: (context, args) => const BoardPage(),
     RouteTable.notFound: (context, args) => NotFoundPage(args['routeName']),
     RouteTable.simpleHtml: (context, args) {

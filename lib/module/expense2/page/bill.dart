@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
+import 'package:kite/l10n/extension.dart';
+import 'package:kite/module/expense2/using.dart';
 
 import '../entity/local.dart';
 
 class BillPage extends StatefulWidget {
   final List<Transaction> records;
+
   const BillPage({
     Key? key,
     required this.records,
@@ -26,26 +29,6 @@ class _BillPageState extends State<BillPage> {
       useStickyGroupSeparators: true,
       order: GroupedListOrder.DESC,
       itemComparator: (item1, item2) => item1.datetime.compareTo(item2.datetime),
-      // 生成账单项
-      itemBuilder: (context, e) {
-        return ListTile(
-          title: Text(e.deviceName),
-          subtitle: Text(DateFormat('yyyy-MM-dd  HH:mm:ss').format(e.datetime)),
-          leading: Transform.scale(scale: 1.5, child: Icon(e.type.icon, color: Theme.of(context).primaryColor)),
-          trailing: () {
-            final delta = e.balanceAfter - e.balanceBefore;
-            final text = '${delta > 0 ? '+' : ''}${delta.toStringAsFixed(2)}';
-            final color = delta > 0 ? Colors.green : Colors.red;
-            return Transform.scale(
-              scale: 1.2,
-              child: Text(
-                text,
-                style: TextStyle(color: color, fontWeight: FontWeight.bold),
-              ),
-            );
-          }(),
-        );
-      },
       // 生成每一组的头部
       groupHeaderBuilder: (Transaction firstGroupRecord) {
         double totalOutcome = 0;
@@ -55,11 +38,10 @@ class _BillPageState extends State<BillPage> {
 
         for (final element in widget.records) {
           if (element.datetime.month == month && element.datetime.year == year) {
-            final delta = element.balanceAfter - element.balanceBefore;
-            if (delta < 0) {
-              totalOutcome += delta;
+            if (element.isConsume) {
+              totalOutcome += element.deltaAmount;
             } else {
-              totalIncome += delta;
+              totalIncome += element.deltaAmount;
             }
           }
         }
@@ -68,6 +50,21 @@ class _BillPageState extends State<BillPage> {
           subtitle: Text(
             '支出: ${totalOutcome.toStringAsFixed(2)} 元  收入: ${totalIncome.toStringAsFixed(2)} 元',
             style: groupSubtitleStyle,
+          ),
+        );
+      },
+      // 生成账单项
+      itemBuilder: (context, e) {
+        return ListTile(
+          title: Text(e.bestTitle ?? i18n.unknown),
+          subtitle: Text(DateFormat('yyyy-MM-dd  HH:mm:ss').format(e.datetime)),
+          leading: Transform.scale(scale: 1.5, child: Icon(e.type.icon, color: context.themeColor)),
+          trailing: Transform.scale(
+            scale: 1.2,
+            child: Text(
+              e.toReadableString(),
+              style: TextStyle(color: e.billColor, fontWeight: FontWeight.bold),
+            ),
           ),
         );
       },

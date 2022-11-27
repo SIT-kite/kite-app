@@ -25,14 +25,14 @@ import 'relationship/familiar.dart';
 
 import 'relationship/roommate.dart';
 
-class FreshmanFriendPage extends StatefulWidget {
-  const FreshmanFriendPage({Key? key}) : super(key: key);
+class FreshmanRelationshipPage extends StatefulWidget {
+  const FreshmanRelationshipPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _FreshmanFriendPageState();
+  State<StatefulWidget> createState() => _FreshmanRelationshipPageState();
 }
 
-class _FreshmanFriendPageState extends State<FreshmanFriendPage> with SingleTickerProviderStateMixin {
+class _FreshmanRelationshipPageState extends State<FreshmanRelationshipPage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override

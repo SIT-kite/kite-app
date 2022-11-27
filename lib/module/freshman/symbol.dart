@@ -16,7 +16,7 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 export 'page/analysis.dart';
-export 'page/index.dart';
+export 'page/relationship.dart';
 export 'page/info.dart';
 export 'page/login.dart';
 export 'page/update.dart';
