@@ -24,6 +24,7 @@ class NetworkKeys {
   static const namespace = '/network';
   static const networkProxy = '$namespace/proxy';
   static const networkUseProxy = '$namespace/useProxy';
+  static const networkIsGlobalProxy = '$namespace/isGlobalProxy';
 }
 
 class NetworkSettingStorage implements NetworkSettingDao {
@@ -44,5 +45,13 @@ class NetworkSettingStorage implements NetworkSettingDao {
   set useProxy(bool foo) {
     Log.info('使用代理：$foo');
     box.put(NetworkKeys.networkUseProxy, foo);
+  }
+
+  @override
+  bool get isGlobalProxy => box.get(NetworkKeys.networkIsGlobalProxy, defaultValue: false);
+
+  @override
+  set isGlobalProxy(bool foo) {
+    box.put(NetworkKeys.networkIsGlobalProxy, foo);
   }
 }

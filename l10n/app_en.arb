@@ -415,6 +415,8 @@
   "settingsHomepageWallpaperMode": "Homepage Wallpaper Mode",
   "settingsHttpProxy": "Enable Http Proxy",
   "settingsHttpProxySub": "Connect to the campus network by Http proxy",
+  "settingsHttpProxyGlobal": "Use as global proxy",
+  "settingsHttpProxyGlobalSub": "For debugging, exclude Webview",
   "settingsLanguage": "Language",
   "settingsLanguageSub": "Select a language for your Kite",
   "settingsLocalStorage": "Local storage",

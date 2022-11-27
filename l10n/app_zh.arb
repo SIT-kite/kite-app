@@ -255,6 +255,8 @@
   "settingsHomepageWallpaperMode": "主页壁纸模式",
   "settingsHttpProxy": "启用 Http 代理",
   "settingsHttpProxySub": "通过 Http 代理连接校园网",
+  "settingsHttpProxyGlobal": "代理全部请求",
+  "settingsHttpProxyGlobalSub": "调试用，不包含 Webview 发出的请求",
   "settingsLanguage": "语言",
   "settingsLanguageSub": "为你的小风筝选择语言",
   "settingsLocalStorage": "本地存储",

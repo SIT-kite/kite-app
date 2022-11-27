@@ -271,6 +271,17 @@ class SettingsPage extends StatelessWidget {
             await Initializer.init();
           },
           childrenIfEnabled: [
+            SwitchSettingsTile(
+              settingKey: '/network/isGlobalProxy',
+              defaultValue: Kv.network.isGlobalProxy,
+              title: i18n.settingsHttpProxyGlobal,
+              subtitle: i18n.settingsHttpProxyGlobalSub,
+              leading: const Icon(Icons.network_check),
+              onChange: (value) async {
+                Kv.network.isGlobalProxy = value;
+                await Initializer.init(debugNetwork: value);
+              },
+            ),
             TextInputSettingsTile(
               title: i18n.settingsProxyAddress,
               settingKey: '/network/proxy',
