@@ -25,4 +25,9 @@ abstract class NetworkSettingDao {
   bool get useProxy;
 
   set useProxy(bool foo);
+
+  // 全局模式（无视 dio 初始化时的代理规则）
+  bool get isGlobalProxy;
+
+  set isGlobalProxy(bool foo);
 }

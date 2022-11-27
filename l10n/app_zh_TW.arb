@@ -255,6 +255,8 @@
   "settingsHomepageWallpaperMode": "主頁的桌布模式",
   "settingsHttpProxy": "開啟 Http Proxy",
   "settingsHttpProxySub": "開啟 Http Proxy連接校園網路",
+  "settingsHttpProxyGlobal": "代理全部请求",
+  "settingsHttpProxyGlobalSub": "调试用，不包含 Webview 发出的请求",
   "settingsLanguage": "語言",
   "settingsLanguageSub": "為你的小風箏選擇語言",
   "settingsLocalStorage": "本地儲存",
