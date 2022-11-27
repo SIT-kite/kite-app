@@ -40,7 +40,7 @@ window.addEventListener('load', () => {
 
   // login
   if (route.is('guide') && userName !== '') {
-    localStorage.setItem('userInfo', JSON.stringify({ code: userName, ayz: '1893427200000unifri' }));
+    localStorage.setItem('userInfo', JSON.stringify({ code: userName, ayz: 'MTg5MzQyNzIwMDAwMHVuaWZyaQ==' }));
     localStorage.setItem('logcurrent', '1893427200000');
     localStorage.setItem('version', '4.0');
     localStorage.setItem('loginIn', '4');
