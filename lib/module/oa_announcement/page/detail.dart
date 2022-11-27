@@ -18,6 +18,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:kite/design/utils.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -108,7 +110,7 @@ class _DetailPageState extends State<DetailPage> {
         );
 
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 2),
+      margin: const EdgeInsets.fromLTRB(2, 10, 2, 2),
       child: Padding(
           padding: const EdgeInsets.all(10),
           child: Table(
@@ -126,15 +128,18 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Widget _buildArticle(BuildContext context, BulletinDetail article) {
-    final titleStyle = Theme.of(context).textTheme.headline2;
+    final theme = Theme.of(context);
+    final titleStyle = theme.textTheme.headline2;
 
+    final htmlContent = _linkTel(article.content);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(article.title, style: titleStyle),
         _buildCard(context, article),
-        const SizedBox(height: 30),
-        MyHtmlWidget(_linkTel(article.content)),
+        const SizedBox(height: 10),
+        if (theme.isDark) DarkModeSafeHtmlWidget(htmlContent) else MyHtmlWidget(htmlContent),
+        //MyHtmlWidget(htmlContent),
         const SizedBox(height: 30),
         if (article.attachments.isNotEmpty)
           Text(i18n.oaAnnouncementAttachmentTip(article.attachments.length), style: titleStyle),
@@ -197,5 +202,68 @@ class _DetailPageState extends State<DetailPage> {
       ),
       body: Padding(padding: const EdgeInsets.all(12), child: _buildBody(widget.summary)),
     );
+  }
+}
+
+class DarkModeSafeHtmlWidget extends StatefulWidget {
+  final String html;
+
+  const DarkModeSafeHtmlWidget(
+    this.html, {
+    super.key,
+  });
+
+  @override
+  State<DarkModeSafeHtmlWidget> createState() => _DarkModeSafeHtmlWidgetState();
+}
+
+class _DarkModeSafeHtmlWidgetState extends State<DarkModeSafeHtmlWidget> {
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final bgColor = theme.backgroundColor;
+    final textColor = theme.textTheme.bodyText2?.color ?? Colors.white;
+    final fontFamilly = theme.textTheme.bodyText2?.fontFamily ?? "";
+    final fontSizeNumber = theme.textTheme.bodyText2?.fontSize;
+    final fontSize = fontSizeNumber != null ? FontSize(fontSizeNumber) : FontSize.large;
+    return SingleChildScrollView(
+        child: SelectableHtml(
+            data: widget.html,
+            onLinkTap: (url, context, attributes, element) async {
+              if (url != null) {
+                await GlobalLauncher.launch(url);
+              }
+            },
+            style: {
+              "p": Style(
+                backgroundColor: bgColor,
+                color: textColor,
+                fontSize: fontSize,
+                fontFamily: fontFamilly,
+              ),
+              "div": Style(
+                color: textColor,
+                backgroundColor: bgColor,
+                fontSize: fontSize,
+                fontFamily: fontFamilly,
+              ),
+              "span": Style(
+                color: textColor,
+                backgroundColor: bgColor,
+                fontSize: fontSize,
+                fontFamily: fontFamilly,
+              ),
+              "b": Style(
+                color: textColor,
+                backgroundColor: bgColor,
+                fontSize: fontSize,
+                fontFamily: fontFamilly,
+              ),
+            },
+            tagsList: filterTags([...Html.tags])));
+  }
+
+  List<String> filterTags(List<String> tags) {
+    return tags;
   }
 }

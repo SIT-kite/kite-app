@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:kite/launcher.dart';
 import 'package:kite/util/logger.dart';
@@ -25,6 +26,7 @@ class MyHtmlWidget extends StatefulWidget {
   final String html;
   final bool isSelectable;
   final RenderMode renderMode;
+
   const MyHtmlWidget(
     this.html, {
     Key? key,
@@ -44,9 +46,10 @@ class _MyHtmlWidgetState extends State<MyHtmlWidget> {
         widget.html,
         isSelectable: widget.isSelectable,
         renderMode: widget.renderMode,
+        customStylesBuilder: (e) => {"background-color": ""},
         textStyle: Theme.of(context).textTheme.bodyText2,
-        onTapUrl: (url) {
-          GlobalLauncher.launch(url);
+        onTapUrl: (url) async {
+          await GlobalLauncher.launch(url);
           return true;
         },
         onTapImage: (ImageMetadata image) {

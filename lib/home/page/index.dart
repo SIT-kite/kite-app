@@ -40,8 +40,21 @@ import '../init.dart';
 import 'background.dart';
 import 'drawer.dart';
 import 'greeting.dart';
-import 'group.dart';
 import 'item/index.dart';
+
+class HomeItemGroup extends StatelessWidget {
+  final List<Widget> _items;
+
+  const HomeItemGroup(this._items, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(24),
+      child: Column(children: _items),
+    );
+  }
+}
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

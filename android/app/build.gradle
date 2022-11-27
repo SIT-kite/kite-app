@@ -56,7 +56,7 @@ android {
   defaultConfig {
     applicationId "cn.edu.sit.kite"
     minSdkVersion 21
-    targetSdkVersion 32
+    targetSdkVersion 33
     versionCode flutterVersionCode.toInteger()
     versionName flutterVersionName
   }

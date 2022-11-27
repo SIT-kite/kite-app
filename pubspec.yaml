@@ -114,6 +114,7 @@ dependencies:
 
   # Desktop support
   window_manager: ^0.2.0
+  flutter_html: ^3.0.0-alpha.6
 
 
 

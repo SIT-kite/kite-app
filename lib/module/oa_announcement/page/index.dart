@@ -23,13 +23,12 @@ import '../entity/page.dart';
 import '../init.dart';
 import 'detail.dart';
 
-// TODO: Rename to OaAnnouncement
-class BulletinPage extends StatelessWidget {
-  const BulletinPage({Key? key}) : super(key: key);
+class OaAnnouncePage extends StatelessWidget {
+  const OaAnnouncePage({Key? key}) : super(key: key);
 
   Widget _buildBulletinItem(BuildContext context, BulletinRecord record) {
     final titleStyle = Theme.of(context).textTheme.headline4;
-    final subtitleStyle = Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.black54);
+    final subtitleStyle = Theme.of(context).textTheme.bodyText1;
 
     return Padding(
       padding: const EdgeInsets.all(2),
@@ -70,12 +69,7 @@ class BulletinPage extends StatelessWidget {
         // 公告项按时间排序
         records.sort((a, b) => b.dateTime.difference(a.dateTime).inSeconds);
 
-        final items = records
-            .map((e) => Column(children: [
-                  _buildBulletinItem(context, e),
-                  const Divider(),
-                ]))
-            .toList();
+        final items = records.map((e) => Card(child: _buildBulletinItem(context, e))).toList();
         return SingleChildScrollView(child: Column(children: items));
       },
       onErrorBuilder: (context, fb, error, stack) {
