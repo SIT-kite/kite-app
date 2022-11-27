@@ -89,7 +89,7 @@ class _KiteAppState extends State<KiteApp> {
       colorSchemeSeed: primaryColor,
       textTheme: _buildTextTheme(isDark, primaryColor),
       brightness: isDark ? Brightness.dark : Brightness.light,
-      useMaterial3: false,
+      useMaterial3: true,
       scaffoldBackgroundColor: isDark ? null : const Color.fromARGB(255, grey, grey, grey),
     );
   }

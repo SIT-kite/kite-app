@@ -165,7 +165,7 @@ Widget buildInfoItemRow({
       children: [
         Icon(
           iconData,
-          color: Theme.of(context).colorScheme.onPrimary,
+          color: context.themeColor,
           size: iconSize ?? IconTheme.of(context).size,
         ),
         Expanded(

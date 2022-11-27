@@ -143,10 +143,13 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
               ),
             ),
             SizedBox(height: 20.h),
-            Text(
-              i18n.personalInfoDescLabel,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                i18n.personalInfoDescLabel,
+                style: Theme.of(context).textTheme.headline3,
+              ),
+            )
           ],
         ),
       ),

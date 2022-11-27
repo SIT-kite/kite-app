@@ -25,14 +25,14 @@ import '../../entity/relationship.dart';
 import '../../init.dart';
 import '../../user_widget/mate_list.dart';
 
-class ClassmateWidget extends StatefulWidget {
-  const ClassmateWidget({Key? key}) : super(key: key);
+class ClassmatePage extends StatefulWidget {
+  const ClassmatePage({Key? key}) : super(key: key);
 
   @override
-  State<ClassmateWidget> createState() => _ClassmateWidgetState();
+  State<ClassmatePage> createState() => _ClassmatePageState();
 }
 
-class _ClassmateWidgetState extends State<ClassmateWidget> {
+class _ClassmatePageState extends State<ClassmatePage> {
   final FreshmanCacheManager freshmanCacheManager = FreshmanInit.freshmanCacheManager;
   final FreshmanDao freshmanDao = FreshmanInit.freshmanDao;
 

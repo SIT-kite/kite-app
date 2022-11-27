@@ -27,14 +27,14 @@ import '../../init.dart';
 import '../../user_widget/common.dart';
 import '../../user_widget/mate_list.dart';
 
-class RoommateWidget extends StatefulWidget {
-  const RoommateWidget({Key? key}) : super(key: key);
+class RoommatePage extends StatefulWidget {
+  const RoommatePage({Key? key}) : super(key: key);
 
   @override
-  State<RoommateWidget> createState() => _RoommateWidgetState();
+  State<RoommatePage> createState() => _RoommatePageState();
 }
 
-class _RoommateWidgetState extends State<RoommateWidget> {
+class _RoommatePageState extends State<RoommatePage> {
   final FreshmanDao freshmanDao = FreshmanInit.freshmanDao;
   final FreshmanCacheManager freshmanCacheManager = FreshmanInit.freshmanCacheManager;
 

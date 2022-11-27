@@ -17,13 +17,13 @@
  */
 
 import 'package:flutter/material.dart';
-import '../user_widget/common.dart';
-import '../using.dart';
+import '../../user_widget/common.dart';
+import '../../using.dart';
 
-import 'relationship/classmate.dart';
-import 'relationship/familiar.dart';
+import 'classmate.dart';
+import 'familiar.dart';
 
-import 'relationship/roommate.dart';
+import 'roommate.dart';
 
 class FreshmanRelationshipPage extends StatefulWidget {
   const FreshmanRelationshipPage({Key? key}) : super(key: key);
@@ -42,11 +42,27 @@ class _FreshmanRelationshipPageState extends State<FreshmanRelationshipPage> wit
     super.initState();
   }
 
-  TabBar _buildBarHeader() {
+  TabBar _buildBarHeader(BuildContext ctx) {
     return TabBar(
       isScrollable: true,
       controller: _tabController,
-      tabs: [Tab(text: i18n.roommate), Text(i18n.classmate), Text(i18n.friendsRadder)],
+      tabs: [
+        Tab(
+            child: Text(
+          i18n.roommate,
+          style: TextStyle(color: ctx.themeColor),
+        )),
+        Tab(
+            child: Text(
+          i18n.classmate,
+          style: TextStyle(color: ctx.themeColor),
+        )),
+        Tab(
+            child: Text(
+          i18n.friendsRadder,
+          style: TextStyle(color: ctx.themeColor),
+        )),
+      ],
     );
   }
 
@@ -57,15 +73,15 @@ class _FreshmanRelationshipPageState extends State<FreshmanRelationshipPage> wit
       child: Scaffold(
         appBar: AppBar(
           title: i18n.newFriendsTitle.txt,
-          bottom: _buildBarHeader(),
+          bottom: _buildBarHeader(context),
           actions: buildAppBarMenuButton(context),
         ),
         body: TabBarView(
           controller: _tabController,
           children: const [
-            RoommateWidget(),
-            ClassmateWidget(),
-            FamiliarPeopleWidget(),
+            RoommatePage(),
+            ClassmatePage(),
+            FamiliarPeoplePage(),
           ],
         ),
       ),

@@ -25,14 +25,14 @@ import '../../dao/Freshman.dart';
 import '../../entity/relationship.dart';
 import '../../user_widget/familiar_list.dart';
 
-class FamiliarPeopleWidget extends StatefulWidget {
-  const FamiliarPeopleWidget({Key? key}) : super(key: key);
+class FamiliarPeoplePage extends StatefulWidget {
+  const FamiliarPeoplePage({Key? key}) : super(key: key);
 
   @override
-  State<FamiliarPeopleWidget> createState() => _FamiliarPeopleWidgetState();
+  State<FamiliarPeoplePage> createState() => _FamiliarPeoplePageState();
 }
 
-class _FamiliarPeopleWidgetState extends State<FamiliarPeopleWidget> {
+class _FamiliarPeoplePageState extends State<FamiliarPeoplePage> {
   final FreshmanDao freshmanDao = FreshmanInit.freshmanDao;
   final FreshmanCacheManager freshmanCacheManager = FreshmanInit.freshmanCacheManager;
 
