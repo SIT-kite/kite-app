@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:kite/design/utils.dart';
 import '../using.dart';
 
 class DateHeader extends StatefulWidget {
@@ -52,9 +53,36 @@ class _DateHeaderState extends State<DateHeader> {
     super.initState();
   }
 
-  BoxDecoration getDecoration(int day) {
-    return const BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(12.0)),
+  Widget buildDayHeader(BuildContext ctx, int day, String name) {
+    var theme = Theme.of(context);
+    final Color bgColor;
+    final Color textColor;
+    final isSelected = day == selectedDay;
+    if (theme.isDark) {
+      if (isSelected) {
+        bgColor = theme.secondaryHeaderColor;
+      } else {
+        bgColor = theme.primaryColor;
+      }
+      textColor = Colors.white;
+    } else {
+      if (isSelected) {
+        bgColor = theme.primaryColor;
+        textColor = Colors.white;
+      } else {
+        bgColor = theme.backgroundColor;
+        textColor = Colors.black;
+      }
+    }
+    return Container(
+      decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(12.0)), color: bgColor),
+      child: Padding(
+          padding: const EdgeInsets.only(top: 5, bottom: 5),
+          child: Text(
+            name,
+            textAlign: TextAlign.center,
+            style: TextStyle(inherit: true, color: textColor),
+          )),
     );
   }
 
@@ -67,11 +95,10 @@ class _DateHeaderState extends State<DateHeader> {
   Widget _buildDayColumn(int day) {
     final date = getDateFromWeekDay(widget.startDate, widget.currentWeek, day);
     final dateString = '${date.month}/${date.day}';
-
-    TextStyle? style = Theme.of(context).textTheme.bodyText2;
+/*    TextStyle? style = Theme.of(context).textTheme.bodyText2;
     if (day == selectedDay) {
       style = style?.copyWith(color: Colors.white);
-    }
+    }*/
     final onTapCallback = widget.onTap != null
         ? () {
             setState(() {
@@ -82,15 +109,7 @@ class _DateHeaderState extends State<DateHeader> {
         : null;
     return Expanded(
       flex: 3,
-      child: InkWell(
-        onTap: onTapCallback,
-        child: Container(
-          decoration: getDecoration(day),
-          child: Padding(
-              padding: const EdgeInsets.only(top: 5, bottom: 5),
-              child: Text('周${weekWord[day - 1]}\n$dateString', style: style, textAlign: TextAlign.center)),
-        ),
-      ),
+      child: InkWell(onTap: onTapCallback, child: buildDayHeader(context, day, '周${weekWord[day - 1]}\n$dateString')),
     );
   }
 
