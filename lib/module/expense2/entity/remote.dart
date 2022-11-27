@@ -57,11 +57,12 @@ class TransactionRaw {
   /// example: 76.5
   double cardbefbal = 0;
 
-  /// the amount of this transaction performed
+  /// card after balance
   /// example: 70.5
   double cardaftbal = 0;
 
-  /// card after balance
+  /// the amount of this transaction performed
+  /// It's abosute.
   /// example: 6
   double amount = 0;
 

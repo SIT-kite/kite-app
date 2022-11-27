@@ -40,7 +40,7 @@ class FreshmanItem extends StatelessWidget {
       // 说明已经不是新生了
       final now = DateTime.now();
       // 到了 12 月，也把迎新入口隐藏掉
-      if (now.year % 100 > int.parse(username.substring(0, 2)) || now.month > 11) {
+      if (now.year % 100 > (int.tryParse(username.substring(0, 2)) ?? 0) || now.month > 11) {
         return Container();
       }
     }

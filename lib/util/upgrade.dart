@@ -36,8 +36,22 @@ class AppVersion {
 /// 获取当前 app 版本
 Future<AppVersion> getCurrentVersion() async {
   final packageInfo = await PackageInfo.fromPlatform();
-  final platform = UniversalPlatform.isAndroid ? 'Android' : (UniversalPlatform.isIOS ? 'iOS' : 'Unknown');
-
+  final String platform;
+  if (UniversalPlatform.isAndroid) {
+    platform = "Android";
+  } else if (UniversalPlatform.isIOS) {
+    platform = "iOS";
+  } else if (UniversalPlatform.isMacOS) {
+    platform = "macOS";
+  } else if (UniversalPlatform.isLinux) {
+    platform = "Linux";
+  } else if (UniversalPlatform.isWindows) {
+    platform = "Windows";
+  } else if (UniversalPlatform.isWeb) {
+    platform = "Web";
+  } else {
+    platform = "Unknown";
+  }
   return AppVersion(platform, packageInfo.version);
 }
 

@@ -97,9 +97,9 @@ class _HomePageState extends State<HomePage> {
       context,
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         const Icon(Icons.dangerous),
-        title ?? const Text('请检查当前是否处于校园网环境，例如已连接 EasyConnect'),
+        title ?? i18n.checkCampusNetworkConnection.txt,
         TextButton(
-          child: const Text('检查网络'),
+          child: i18n.openNetworkToolBtn.txt,
           onPressed: () => Navigator.of(context).pushNamed('/connectivity'),
         )
       ]),
@@ -240,6 +240,28 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget buildScannerButton(BuildContext context) {
+    return IconButton(
+      onPressed: () async {
+        final result = await scan(context);
+        Log.info('扫码结果: $result');
+        if (result != null) GlobalLauncher.launch(result);
+      },
+      icon: Icon(
+        Icons.qr_code_scanner_outlined,
+        color: context.themeColor,
+      ),
+      iconSize: 30,
+    );
+  }
+
+  Widget buildSettingsButton(BuildContext context) {
+    return IconButton(
+      onPressed: () => Navigator.of(context).pushNamed(RouteTable.settings),
+      icon: Icon(Icons.settings, color: context.themeColor),
+    );
+  }
+
   Widget buildBody(BuildContext context) {
     return Stack(
       children: [
@@ -259,26 +281,8 @@ class _HomePageState extends State<HomePage> {
               SliverAppBar(
                 // AppBar
                 actions: [
-                  IconButton(
-                    onPressed: () async {
-                      if (UniversalPlatform.isDesktopOrWeb) {
-                        EasyLoading.showToast('该功能桌面端不受支持');
-                        return;
-                      }
-                      final result = await scan(context);
-                      Log.info('扫码结果: $result');
-                      if (result != null) GlobalLauncher.launch(result);
-                    },
-                    icon: Icon(
-                      Icons.qr_code_scanner_outlined,
-                      color: context.themeColor,
-                    ),
-                    iconSize: 30,
-                  ),
-                  IconButton(
-                    onPressed: () => Navigator.of(context).pushNamed(RouteTable.settings),
-                    icon: Icon(Icons.settings, color: context.themeColor),
-                  ),
+                  if (!UniversalPlatform.isDesktopOrWeb) buildScannerButton(context),
+                  buildSettingsButton(context),
                 ],
                 automaticallyImplyLeading: false,
                 flexibleSpace: FlexibleSpaceBar(

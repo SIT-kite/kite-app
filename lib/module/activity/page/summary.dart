@@ -105,7 +105,7 @@ class SummaryCard extends StatelessWidget {
 
     final scoreValues = buildScoreList(summary);
     final totals = buildScoreList(calcTargetScore(Kv.auth.currentUsername!));
-    final scoreTitles = ['志愿', '校园文化', '三创', '安全文明', '讲座', '社会实践'].asMap().entries.map((e) {
+    final scoreTitles = (const ['志愿', '校园文化', '三创', '安全文明', '讲座', '社会实践']).asMap().entries.map((e) {
       int index = e.key;
       String text = e.value;
       return '$text\n'

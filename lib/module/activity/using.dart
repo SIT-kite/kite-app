@@ -21,4 +21,5 @@ export '../shared/dialog.dart';
 export '../shared/util.dart';
 export '../shared/storage.dart';
 export '../shared/networking.dart';
+export '../shared/design.dart';
 export '../shared/user_widget/common.dart';

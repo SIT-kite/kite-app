@@ -22,8 +22,6 @@ import 'package:kite/util/event_bus.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:window_manager/window_manager.dart';
 
-import 'global.dart';
-
 enum WindowEvent {
   onWindowResize,
   onWindowResized,

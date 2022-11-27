@@ -17,8 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
-import '../dao/score.dart';
 import '../using.dart';
+import '../dao/score.dart';
 
 import '../entity/score.dart';
 import '../init.dart';
@@ -32,7 +32,7 @@ class ProfilePage extends StatelessWidget {
     return MyFutureBuilder<ScScoreSummary>(
       future: ScInit.scScoreService.getScScoreSummary(),
       builder: (context, summary) {
-        return Padding(padding: const EdgeInsets.all(20), child: SummaryCard(summary));
+        return Padding(padding: const EdgeInsets.fromLTRB(20, 20, 20, 0), child: SummaryCard(summary));
       },
     );
   }
@@ -57,15 +57,18 @@ class ProfilePage extends StatelessWidget {
     final subtitleStyle = Theme.of(context).textTheme.bodyText2;
 
     Widget joinedActivityMapper(ScJoinedActivity activity) {
-      final color = activity.status == '通过' ? Colors.green : Theme.of(context).primaryColor;
+      final color = activity.isPassed ? Colors.green : context.themeColor;
       final trailingStyle = Theme.of(context).textTheme.headline6?.copyWith(color: color);
 
-      return ListTile(
+      final tile = ListTile(
         title: Text(activity.title, style: titleStyle, maxLines: 2, overflow: TextOverflow.ellipsis),
-        subtitle: Text(
-            '申请时间: ${context.dateFullNum(activity.time)}\n'
-            '申请编号: ${activity.applyId}',
-            style: subtitleStyle),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('${i18n.activityApplicationTime}: ${context.dateFullNum(activity.time)}', style: subtitleStyle),
+            Text('${i18n.activityApplicationID}: ${activity.applyId}', style: subtitleStyle),
+          ],
+        ),
         trailing: Text(activity.amount.abs() > 0.01 ? activity.amount.toStringAsFixed(2) : activity.status,
             style: trailingStyle),
         onTap: activity.activityId != -1
@@ -76,12 +79,19 @@ class ProfilePage extends StatelessWidget {
               }
             : null,
       );
+      return Card(
+        child: tile,
+      );
     }
 
     return MyFutureBuilder<List<ScJoinedActivity>>(
       future: getMyActivityListJoinScore(ScInit.scScoreService),
       builder: (context, eventList) {
-        return ListView(children: [_buildSummaryCard()] + eventList.map(joinedActivityMapper).toList());
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child:
+              ListView(children: [_buildSummaryCard(), const Divider()] + eventList.map(joinedActivityMapper).toList()),
+        );
       },
     );
   }
@@ -89,7 +99,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: i18n.ftype_activity.txt),
+      appBar: AppBar(title: i18n.activityMyApplication.txt),
       body: _buildEventList(context),
     );
   }

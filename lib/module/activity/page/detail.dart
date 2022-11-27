@@ -22,7 +22,7 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import '../entity/detail.dart';
 import '../init.dart';
 import '../using.dart';
-import 'background.dart';
+import '../user_widgets/card.dart';
 import 'util.dart';
 
 String _getActivityUrl(int activityId) {
@@ -37,7 +37,7 @@ class DetailPage extends StatelessWidget {
 
   AppBar _buildAppBar() {
     return AppBar(
-      title: const Text('活动详情'),
+      title: i18n.activityDetails.txt,
       actions: [
         IconButton(
           icon: const Icon(Icons.open_in_browser),
@@ -76,14 +76,15 @@ class DetailPage extends StatelessWidget {
               1: FlexColumnWidth(3),
             },
             children: [
-              buildRow('活动编号', detail.id.toString()),
-              buildRow('地点', detail.place.toString()),
-              buildRow('负责人', detail.undertaker.toString()),
-              buildRow('管理方', detail.manager.toString()),
-              buildRow('联系方式', detail.contact.toString()),
-              buildRow('开始时间', detail.startTime.toString()),
-              buildRow('时长', detail.duration.toString()),
-              buildRow('标签', titleSections.join('\n')),
+              buildRow(i18n.activityID, detail.id.toString()),
+              buildRow(i18n.activityLocation, detail.place.toString()),
+              buildRow(i18n.activityPrincipal, detail.principal.toString()),
+              buildRow(i18n.activityOrganizer, detail.organizer.toString()),
+              buildRow(i18n.activityUndertaker, detail.undertaker.toString()),
+              buildRow(i18n.activityContactInfo, detail.contactInfo.toString()),
+              buildRow(i18n.activityStartTime, detail.startTime.toString()),
+              buildRow(i18n.activityDuration, detail.duration.toString()),
+              buildRow(i18n.activityTags, titleSections.join('\n')),
             ],
           ),
         ],
@@ -96,7 +97,7 @@ class DetailPage extends StatelessWidget {
       children: [
         const AspectRatio(
           aspectRatio: 1.8,
-          child: Background(),
+          child: CardCoverBackground(),
         ),
         Padding(
           padding: const EdgeInsets.all(20),
@@ -134,7 +135,7 @@ class DetailPage extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         });
   }
-
+  // TODO: Redesign UI with Dialog
   Future<void> _sendRequest(BuildContext context, bool force) async {
     try {
       final response = await ScInit.scJoinActivityService.join(activityId, force);
@@ -153,19 +154,17 @@ class DetailPage extends StatelessWidget {
       body: _buildBody(context),
       floatingActionButton: !hideApplyButton
           ? InkWell(
-              splashColor: Colors.blue,
-              onTap: () async {
-                // 常规模式报名活动
-                _sendRequest(context, false);
-              },
-              onDoubleTap: () {
+              /*onDoubleTap: () {
                 // 报名活动（强制模式）
                 _sendRequest(context, true);
-              },
-              child: const FloatingActionButton.extended(
-                icon: Icon(Icons.person_add),
-                label: Text('报名'),
-                onPressed: null,
+              },*/
+              child: FloatingActionButton.extended(
+                icon: const Icon(Icons.person_add),
+                label: i18n.activityApplyBtn.txt,
+                onPressed: () async {
+                  // 常规模式报名活动
+                  _sendRequest(context, false);
+                },
               ),
             )
           : null,

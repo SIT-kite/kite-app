@@ -21,18 +21,47 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import '../using.dart';
 import '../entity/list.dart';
-import 'detail.dart';
-import 'background.dart';
-import 'blur.dart';
-import 'util.dart';
+import '../page/detail.dart';
+import '../page/blur.dart';
+import '../page/util.dart';
 
+import 'package:geopattern_flutter/geopattern_flutter.dart';
+import 'package:geopattern_flutter/patterns/overlapping_circles.dart';
+
+class CardCoverBackground extends StatelessWidget {
+  const CardCoverBackground({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final gen = Random();
+        final pattern = OverlappingCircles(
+          radius: 60,
+          nx: 6,
+          ny: 6,
+          fillColors: List.generate(
+              36,
+                  (_) => Color.fromARGB(10 + (gen.nextDouble() * 100).round(), 50 + gen.nextInt(2) * 150,
+                  50 + gen.nextInt(2) * 150, 50 + gen.nextInt(2) * 150)),
+        );
+        return ClipRect(
+          child: CustomPaint(
+            willChange: true,
+            painter: FullPainter(pattern: pattern, background: Colors.yellow),
+            child: SizedBox(width: constraints.maxWidth, height: constraints.maxHeight),
+          ),
+        );
+      },
+    );
+  }
+}
 class EventCard extends StatelessWidget {
   final Activity activity;
 
   const EventCard(this.activity, {Key? key}) : super(key: key);
 
   Widget _buildTagRow(BuildContext context, List<String> tags) {
-    final backgroundColor = Theme.of(context).primaryColor.withAlpha(128);
 
     return Wrap(
       spacing: 10,
@@ -40,7 +69,6 @@ class EventCard extends StatelessWidget {
           .sublist(0, min(2, tags.length))
           .map((e) => Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
-              decoration: BoxDecoration(color: backgroundColor, borderRadius: BorderRadius.circular(6)),
               child: Text(e)))
           .toList(),
     );
@@ -65,7 +93,7 @@ class EventCard extends StatelessWidget {
           child: Stack(
             children: [
               const BlurRectWidget(
-                Background(),
+                CardCoverBackground(),
                 sigmaX: 10,
                 sigmaY: 10,
                 opacity: 0.75,

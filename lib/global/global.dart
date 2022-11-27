@@ -24,6 +24,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/global/cookie_initializer.dart';
 import 'package:kite/global/dio_initializer.dart';
+import 'package:kite/l10n/extension.dart';
+import 'package:kite/module/activity/using.dart';
 import 'package:kite/module/user_event/dao/user_event.dart';
 import 'package:kite/route.dart';
 import 'package:kite/session/sso/index.dart';
@@ -79,12 +81,11 @@ class Global {
       inSsoErrorDialog = true;
       showAlertDialog(
         context,
-        title: '网络连接超时',
+        title: i18n.networkConnecionTimeoutError,
         content: [
-          const Text('连接超时，该功能需要您连接校园网环境；\n\n'
-              '注意：学校服务器崩溃或停机维护也会产生这个问题。'),
+          i18n.networkConnectionTimeoutErrorDesc.txt,
         ],
-        actionTextList: ['进入网络工具检查', '取消'],
+        actionTextList: [i18n.openNetworkToolBtn, i18n.cancel],
       ).then((select) {
         if (select == 0) Navigator.of(context).popAndPushNamed('/connectivity');
         inSsoErrorDialog = false;
@@ -133,15 +134,15 @@ class Global {
         return Center(
           child: Column(
             children: [
-              const Text('网络连接超时，请检查是否连接到校园网环境(也有可能学校临时维护服务器，请以网页登录结果为准)'),
+              i18n.networkConnecionTimeoutError.txt,
               ElevatedButton(
                 onPressed: () => Navigator.of(context).pushReplacementNamed(RouteTable.connectivity),
-                child: const Text('进入网络工具检查'),
+                child: i18n.openNetworkToolBtn.txt,
               ),
               if (futureBuilder.futureGetter != null)
                 TextButton(
                   onPressed: () => futureBuilder.controller?.refresh(),
-                  child: const Text('刷新页面'),
+                  child: i18n.refresh.txt,
                 ),
             ],
           ),

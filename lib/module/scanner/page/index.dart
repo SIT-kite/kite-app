@@ -79,7 +79,7 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
       icon: ValueListenableBuilder(
         valueListenable: controller.cameraFacingState,
         builder: (context, state, child) {
-          switch (state as CameraFacing) {
+          switch (state) {
             case CameraFacing.front:
               return const Icon(Icons.camera_front);
             case CameraFacing.back:

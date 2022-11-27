@@ -42,10 +42,10 @@ class ActivityDetail {
   final String? duration;
 
   /// Activity manager
-  final String? manager;
+  final String? principal;
 
   /// Manager yellow_pages(phone)
-  final String? contact;
+  final String? contactInfo;
 
   /// Activity organizer
   final String? organizer;
@@ -56,15 +56,27 @@ class ActivityDetail {
   /// Description in text[]
   final String? description;
 
-  const ActivityDetail(this.id, this.category, this.title, this.startTime, this.signStartTime, this.signEndTime,
-      this.place, this.duration, this.manager, this.contact, this.organizer, this.undertaker, this.description);
+  const ActivityDetail(
+      {required this.id,
+      required this.category,
+      required this.title,
+      required this.startTime,
+      required this.signStartTime,
+      required this.signEndTime,
+      this.place,
+      this.duration,
+      this.principal,
+      this.contactInfo,
+      this.organizer,
+      this.undertaker,
+      this.description});
 
   @override
   String toString() {
     return 'ActivityDetail{id: $id, category: $category, title: $title, '
         'startTime: $startTime, signStartTime: $signStartTime, '
         'signEndTime: $signEndTime, place: $place, duration: $duration,'
-        'manager: $manager, yellow_pages: $contact, organizer: $organizer,'
+        'principal: $principal, contactInfo: $contactInfo, organizer: $organizer,'
         ' undertaker: $undertaker, description: $description}';
   }
 }

@@ -1,4 +1,4 @@
-/*
+ /*
  * 上应小风筝  便利校园，一步到位
  * Copyright (C) 2022 上海应用技术大学 上应小风筝团队
  *
@@ -21,7 +21,7 @@ import 'package:flutter/material.dart';
 import '../entity/list.dart';
 import '../init.dart';
 import '../using.dart';
-import 'card.dart';
+import '../user_widgets/card.dart';
 import 'profile.dart';
 import 'search.dart';
 

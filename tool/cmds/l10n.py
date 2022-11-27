@@ -3,6 +3,7 @@ from typing import Iterable, Callable
 
 from build import select_one
 from cmd import CmdContext, CommandArgError, CommandEmptyArgsError, CommandLike
+from cmds.shared import print_stdout
 from filesystem import File
 from project import Proj
 from utils import useRef
@@ -41,21 +42,33 @@ def serve(ctx: CmdContext):
     import l10n.serve as ser
     template, others = template_and_others(ctx.proj)
     task = ServeTask()
-    thread = Thread(
-        target=lambda: ser.start(
-            template.path,
-            [f.path for f in others],
-            terminal=ctx.term,
-            is_running=lambda: task.running)
-    )
+
+    def run():
+        try:
+            ser.start(
+                str(template.path),
+                [str(f.path) for f in others],
+                terminal=ctx.term,
+                is_running=lambda: task.running)
+        except Exception as e:
+            ctx.term << str(e)
+
+    thread = Thread(target=run)
     thread.daemon = True
+    thread.start()
     ctx.proj.kernel.background << task
     ctx.term << "l10n is serving in background"
 
 
+def gen(ctx: CmdContext):
+    proc = ctx.proj.dartRunner.flutter(["gen-l10n"])
+    print_stdout(ctx, proc)
+
+
 name2function: dict[str, Callable[[CmdContext], None]] = {
     "resort": resort,
-    "serve": serve
+    "serve": serve,
+    "gen": gen
 }
 
 
@@ -79,9 +92,10 @@ class L10nCmd:
 
     @staticmethod
     def execute_interactive(ctx: CmdContext) -> Iterable:
-        selected = useRef()
-        yield select_one(ctx, name2function, prompt="func=", fuzzy_match=True, ref=selected)
-        selected(ctx)
+        while True:
+            selected = useRef()
+            yield select_one(ctx, name2function, prompt="func=", fuzzy_match=True, ref=selected)
+            selected(ctx)
 
     @staticmethod
     def help(ctx: CmdContext):

@@ -1,4 +1,4 @@
-from typing import Union, Optional
+from typing import Union, Optional, Sequence
 
 from filesystem import File, Pathable
 
@@ -50,3 +50,6 @@ class DartRunner:
             args.append("-l")
             args.append(str(length))
         return self.runner.run(seq=args)
+
+    def flutter(self, args: Sequence[str]) -> subprocess.Popen:
+        return self.runner.run(seq=["flutter"] + list(args))
