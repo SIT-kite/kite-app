@@ -168,7 +168,7 @@ class _HomePageState extends State<HomePage> {
   List<Widget> buildFunctionWidgets(List<ExtraHomeItem>? extraItemList, List<HomeItemHideInfo>? hideInfoList) {
     // print(extraItemList);
     UserType userType = AccountUtils.getUserType()!;
-    List<FType> list = Kv.home.homeItems ?? getDefaultFunctionList(userType);
+    List<FType> list = Kv.home.homeItems ?? makeDefaultBricks(userType);
     final filter = HomeItemHideInfoFilter(hideInfoList ?? []);
 
     // 先遍历一遍，过滤相邻重复元素
@@ -182,7 +182,7 @@ class _HomePageState extends State<HomePage> {
       }
     }
 
-    final separator = SizedBox(height: 20.h);
+    final separator = SizedBox(height: 12.h);
     final List<Widget> result = [];
     List<Widget> currentGroup = [];
 

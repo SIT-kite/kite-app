@@ -83,7 +83,7 @@ Future<int?> showAlertDialog(
       content: contentWidget,
       actions: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: actions,
         ),
       ],

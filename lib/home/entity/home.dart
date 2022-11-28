@@ -224,14 +224,14 @@ enum FType {
 }
 
 /// 用户的功能列表
-abstract class IUserFunctionList {
-  List<FType> getFunctionList();
+abstract class IUserBricks {
+  List<FType> make();
 }
 
 /// 本、专科生默认功能列表
-class UndergraduateFunctionList implements IUserFunctionList {
+class UndergraduateBricks implements IUserBricks {
   @override
-  List<FType> getFunctionList() {
+  List<FType> make() {
     return <FType>[
       FType.upgrade,
       FType.kiteBulletin,
@@ -262,9 +262,9 @@ class UndergraduateFunctionList implements IUserFunctionList {
 }
 
 /// 研究生默认功能列表
-class PostgraduateFunctionList implements IUserFunctionList {
+class PostgraduateBricks implements IUserBricks {
   @override
-  List<FType> getFunctionList() {
+  List<FType> make() {
     return <FType>[
       FType.upgrade,
       FType.kiteBulletin,
@@ -291,9 +291,9 @@ class PostgraduateFunctionList implements IUserFunctionList {
 }
 
 /// 教师账户默认功能列表
-class TeacherFunctionList implements IUserFunctionList {
+class TeacherBricks implements IUserBricks {
   @override
-  List<FType> getFunctionList() {
+  List<FType> make() {
     return <FType>[
       FType.upgrade,
       FType.kiteBulletin,
@@ -318,9 +318,9 @@ class TeacherFunctionList implements IUserFunctionList {
 }
 
 /// 新生功能列表
-class FreshmanFunctionList implements IUserFunctionList {
+class FreshmanBricks implements IUserBricks {
   @override
-  List<FType> getFunctionList() {
+  List<FType> make() {
     return <FType>[
       FType.upgrade,
       FType.kiteBulletin,
@@ -337,24 +337,24 @@ class FreshmanFunctionList implements IUserFunctionList {
   }
 }
 
-class UserFunctionListFactory {
-  static final _cache = HashMap<UserType, IUserFunctionList>();
+class UserBricksFactory {
+  static final _cache = HashMap<UserType, IUserBricks>();
 
-  static IUserFunctionList getUserFunctionList(UserType userType) {
-    if (_cache.containsKey(userType)) {
-      return _cache[userType]!;
+  static IUserBricks create({required UserType by}) {
+    if (_cache.containsKey(by)) {
+      return _cache[by]!;
     }
-    _cache[userType] = {
-      UserType.undergraduate: () => UndergraduateFunctionList(),
-      UserType.postgraduate: () => PostgraduateFunctionList(),
-      UserType.teacher: () => TeacherFunctionList(),
-      UserType.freshman: () => FreshmanFunctionList(),
-    }[userType]!();
+    _cache[by] = {
+      UserType.undergraduate: () => UndergraduateBricks(),
+      UserType.postgraduate: () => PostgraduateBricks(),
+      UserType.teacher: () => TeacherBricks(),
+      UserType.freshman: () => FreshmanBricks(),
+    }[by]!();
 
-    return _cache[userType]!;
+    return _cache[by]!;
   }
 }
 
-List<FType> getDefaultFunctionList(UserType userType) {
-  return UserFunctionListFactory.getUserFunctionList(userType).getFunctionList();
+List<FType> makeDefaultBricks(UserType? userType) {
+  return UserBricksFactory.create(by: userType ?? UserType.freshman).make();
 }

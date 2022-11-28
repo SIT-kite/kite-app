@@ -17,6 +17,7 @@
  */
 import 'dart:convert';
 
+import 'package:animations/animations.dart';
 import 'package:catcher/core/catcher.dart';
 import 'package:dynamic_color_theme/dynamic_color_theme.dart';
 import 'package:flutter/gestures.dart';
@@ -116,7 +117,17 @@ class _KiteAppState extends State<KiteApp> {
     buildMaterialWithTheme(ThemeData theme) {
       return MaterialApp(
         title: R.appName,
-        theme: theme,
+        theme: theme.copyWith(
+            pageTransitionsTheme: const PageTransitionsTheme(
+              builders: {
+                TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+                TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+                TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
+                TargetPlatform.linux: FadeThroughPageTransitionsBuilder(),
+                TargetPlatform.windows: FadeThroughPageTransitionsBuilder(),
+              },
+            ),
+            visualDensity: VisualDensity.comfortable),
         initialRoute: RouteTable.root,
         debugShowCheckedModeBanner: false,
         navigatorKey: Catcher.navigatorKey,

@@ -45,7 +45,7 @@ import 'package:kite/util/validation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-import 'home.dart';
+import 'home_rearrange.dart';
 import 'storage.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -257,7 +257,7 @@ class SettingsPage extends StatelessWidget {
               title: i18n.settingsHomepageRearrange,
               subtitle: i18n.settingsHomepageRearrangeSub,
               leading: const Icon(Icons.menu),
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeSettingPage())),
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeRearrangePage())),
             ),
         ],
       ),
