@@ -17,79 +17,17 @@
  */
 import 'dart:convert';
 
-import 'package:animated_button_bar/animated_button_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:kite/design/colors.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../entity/account.dart';
 import '../init.dart';
+import '../user_widget/card.dart';
 import '../user_widget/chart.dart';
+import '../user_widget/rank.dart';
 import '../using.dart';
-
-Widget cardTitle(String title) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.start,
-    children: [
-      const SizedBox(width: 10),
-      Text(
-        title,
-        style: const TextStyle(fontWeight: FontWeight.bold),
-      )
-    ],
-  );
-}
-
-class ElectricityChart extends StatefulWidget {
-  final String room;
-
-  const ElectricityChart(this.room, {Key? key}) : super(key: key);
-
-  @override
-  State<ElectricityChart> createState() => _ElectricityChartState();
-}
-
-class _ElectricityChartState extends State<ElectricityChart> {
-  ElectricityChartMode mode = ElectricityChartMode.hourly;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        cardTitle(i18n.elecBillElecChart),
-        const SizedBox(height: 20),
-        SizedBox(
-            width: 300,
-            child: AnimatedButtonBar(
-              radius: 20,
-              invertedSelection: true,
-              foregroundColor: context.isDarkMode ? null : context.themeColor,
-              children: [
-                ButtonBarEntry(
-                    onTap: () => setState(() {
-                          mode = ElectricityChartMode.hourly;
-                        }),
-                    child: i18n.elecBillLast24Hour.txt),
-                ButtonBarEntry(
-                    onTap: () => setState(() {
-                          mode = ElectricityChartMode.daily;
-                        }),
-                    child: i18n.elecBillLast7Day.txt),
-              ],
-            )),
-        const SizedBox(height: 20),
-        ElectricityChartWidget(
-          room: widget.room,
-          mode: mode,
-        ),
-        const SizedBox(height: 5),
-      ],
-    );
-  }
-}
 
 class ElectricityPage extends StatefulWidget {
   const ElectricityPage({Key? key}) : super(key: key);
@@ -103,11 +41,14 @@ class _ElectricityPageState extends State<ElectricityPage> {
   final updateTimeFormatter = DateFormat('MM/dd HH:mm');
   String? room;
   late List<String> roomList;
+  Balance? _balance;
+  final RefreshController _refreshController = RefreshController();
+  final _rankViewKey = GlobalKey();
+  final _chartKey = GlobalKey();
 
   Future<List> getRoomList() async {
     String jsonData = await rootBundle.loadString("assets/roomlist.json");
     List list = await jsonDecode(jsonData);
-
     return list;
   }
 
@@ -121,6 +62,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
     getRoomList().then((value) {
       roomList = value.map((e) => e.toString()).toList();
     });
+    _onRefresh();
   }
 
   void search() {
@@ -143,7 +85,79 @@ class _ElectricityPageState extends State<ElectricityPage> {
     });
   }
 
-  final RefreshController _refreshController = RefreshController();
+  void setRankViewState(void Function(RankViewState state) setter) {
+    final state = _rankViewKey.currentState;
+    if (state is RankViewState) {
+      state.setState(() {
+        setter(state);
+      });
+    }
+  }
+
+  void setChartState(void Function(ElectricityChartState state) setter) {
+    final state = _chartKey.currentState;
+    if (state is ElectricityChartState) {
+      state.setState(() {
+        setter(state);
+      });
+    }
+  }
+
+  ElectricityChartState? getChartState() {
+    final state = _chartKey.currentState;
+    if (state is ElectricityChartState) {
+      return state;
+    }
+    return null;
+  }
+
+  void _onRefresh() async {
+    final selectedRoom = room;
+    if (selectedRoom == null) return;
+    setState(() {
+      _balance = null;
+    });
+    setChartState((state) {
+      state.dailyBill = null;
+      state.hourlyBill = null;
+    });
+    setRankViewState((state) {
+      state.curRank = null;
+    });
+    await Future.wait([
+      Future(() async {
+        final newBalance = await ElectricityBillInit.electricityService.getBalance(selectedRoom);
+        setState(() {
+          _balance = newBalance;
+        });
+      }),
+      Future(() async {
+        final newRank = await ElectricityBillInit.electricityService.getRank(selectedRoom);
+        setRankViewState((state) {
+          state.curRank = newRank;
+        });
+      }),
+      Future(() async {
+        final chartState = getChartState();
+        if (chartState != null) {
+          if (chartState.mode == ElectricityChartMode.daily) {
+            final newDailyBill = await ElectricityBillInit.electricityService.getDailyBill(selectedRoom);
+            if (newDailyBill.isNotEmpty) newDailyBill.removeLast();
+            setChartState((state) {
+              state.dailyBill = newDailyBill;
+            });
+          } else {
+            final newHouilyBill = await ElectricityBillInit.electricityService.getHourlyBill(selectedRoom);
+            if (newHouilyBill.isNotEmpty) newHouilyBill.removeLast();
+            setChartState((state) {
+              state.hourlyBill = newHouilyBill;
+            });
+          }
+        }
+      })
+    ]);
+    _refreshController.refreshCompleted();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -164,6 +178,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
             : SmartRefresher(
                 controller: _refreshController,
                 scrollDirection: Axis.vertical,
+                onRefresh: _onRefresh,
                 header: const ClassicHeader(),
                 child: _buildBody(context, selectedRoom),
               ));
@@ -187,51 +202,54 @@ class _ElectricityPageState extends State<ElectricityPage> {
   }
 
   Widget _buildBody(BuildContext ctx, String room) {
+    final balance = _balance;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
       child: Column(
         children: [
           const SizedBox(height: 5),
-          buildBalanceCard(ctx, room),
+          buildBalanceCard(ctx),
           const SizedBox(height: 5),
-          buildRankCard(ctx, room),
+          RankView(key: _rankViewKey),
           const SizedBox(height: 25),
-          ElectricityChart(room),
+          ElectricityChart(key: _chartKey, room: room),
+          if (balance == null)
+            Container()
+          else
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: buildUpdateTime(context, balance.ts),
+            )
         ],
       ),
     );
   }
 
-  Widget buildBalanceCard(BuildContext ctx, String room) {
-    return Card(
-        child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
-            child: Column(children: [cardTitle(i18n.electricityBillBalance), _buildBalanceCardContent(ctx, room)])));
+  Widget buildBalanceCard(BuildContext ctx) {
+    return buildCard(i18n.electricityBillBalance, _buildBalanceCardContent(ctx));
   }
 
-  Widget _buildBalanceCardContent(BuildContext ctx, String room) {
-    return PlaceholderFutureBuilder<Balance>(
-        future: ElectricityBillInit.electricityService.getBalance(room),
-        builder: (context, balance, placeholder) {
-          return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Column(
-                children: [
-                  if (balance == null)
-                    _buildBalanceInfoRowWithPlaceholder(
-                        Icons.offline_bolt, i18n.electricityBillRemainingPower, placeholder)
-                  else
-                    _buildBalanceInfoRow(Icons.offline_bolt, i18n.electricityBillRemainingPower,
-                        i18n.powerKwh(balance.power.toStringAsFixed(2))),
-                  if (balance == null)
-                    _buildBalanceInfoRowWithPlaceholder(Icons.savings, i18n.electricityBillBalance, placeholder)
-                  else
-                    _buildBalanceInfoRow(
-                        Icons.savings, i18n.electricityBillBalance, '¥${balance.balance.toStringAsFixed(2)}',
-                        color: balance.balance < 10 ? Colors.red : null),
-                ],
-              ));
-        });
+  Widget _buildBalanceCardContent(BuildContext ctx) {
+    final balance = _balance;
+
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 30),
+        child: Column(
+          children: [
+            if (balance == null)
+              _buildBalanceInfoRowWithPlaceholder(Icons.offline_bolt, i18n.electricityBillRemainingPower,
+                  const Center(child: CircularProgressIndicator()))
+            else
+              _buildBalanceInfoRow(Icons.offline_bolt, i18n.electricityBillRemainingPower,
+                  i18n.powerKwh(balance.power.toStringAsFixed(2))),
+            if (balance == null)
+              _buildBalanceInfoRowWithPlaceholder(
+                  Icons.savings, i18n.electricityBillBalance, const Center(child: CircularProgressIndicator()))
+            else
+              _buildBalanceInfoRow(Icons.savings, i18n.electricityBillBalance, '¥${balance.balance.toStringAsFixed(2)}',
+                  color: balance.balance < 10 ? Colors.red : null),
+          ],
+        ));
   }
 
   Widget _buildBalanceInfoRow(IconData icon, String title, String content, {Color? color}) {
@@ -274,58 +292,22 @@ class _ElectricityPageState extends State<ElectricityPage> {
     );
   }
 
-  Widget buildUpdateTime(Balance balance, {Color? color}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(children: [
-          const Icon(Icons.update),
-          const SizedBox(width: 10),
-          Text(i18n.electricityBillUpdateTime,
-              style: TextStyle(color: balance.ts.difference(DateTime.now()).inDays > 1 ? Colors.redAccent : null)),
-        ]),
-        Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-          Text(updateTimeFormatter.format(balance.ts.toLocal())),
-        ]),
-      ],
-    );
-  }
-
-  Widget buildRankCard(BuildContext ctx, String room) {
-    return Card(
-        child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
-            child: Column(children: [cardTitle(i18n.electricityBillRank), _buildRankContent(ctx, room)])));
-  }
-
-  ///排名内容
-  Widget _buildRankContent(BuildContext ctx, String room) {
+  Widget buildUpdateTime(BuildContext ctx, DateTime time) {
     return Padding(
-        padding: const EdgeInsets.all(10),
-        child: Row(children: [
-          Icon(
-            Icons.stacked_bar_chart,
-            size: 100,
-            color: context.fgColor,
-          ),
-          Expanded(
-              child: PlaceholderFutureBuilder<Rank>(
-            future: ElectricityBillInit.electricityService.getRank(room),
-            builder: (context, rank, placeholder) {
-              if (rank == null) return placeholder;
-              final percent = rank.rank * 100 / rank.roomCount;
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    i18n.electricityBill24hBill(rank.consumption.toStringAsFixed(2)),
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  ),
-                  Text(i18n.electricityBillRankAbove(percent.toStringAsFixed(2)))
-                ],
-              );
-            },
-          ))
-        ]));
+        padding: EdgeInsets.symmetric(horizontal: 50),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(children: [
+              const Icon(Icons.update),
+              const SizedBox(width: 10),
+              Text(i18n.electricityBillUpdateTime,
+                  style: TextStyle(color: time.difference(DateTime.now()).inDays > 1 ? Colors.redAccent : null)),
+            ]),
+            Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+              Text(updateTimeFormatter.format(time.toLocal())),
+            ]),
+          ],
+        ));
   }
 }
