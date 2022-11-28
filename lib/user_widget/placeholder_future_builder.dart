@@ -23,7 +23,6 @@ import 'package:flutter/material.dart';
 typedef PlaceholderWidgetBuilder<T> = Widget Function(BuildContext context, T? data, Widget placeholder);
 typedef ErrorWidgetBuilder = Widget? Function(
   BuildContext context,
-  PlaceholderFutureBuilder futureBuilder,
   dynamic error,
   dynamic stackTrace,
 );
@@ -41,7 +40,7 @@ class PlaceholderFutureBuilder<T> extends StatefulWidget {
 
   final Future<T>? future;
   final PlaceholderWidgetBuilder<T> builder;
-  final ErrorWidgetBuilder? onErrorBuilder;
+  final ErrorWidgetBuilder? onError;
   final PlaceholderBuilderController? controller;
 
   final Future<T> Function()? futureGetter;
@@ -53,7 +52,7 @@ class PlaceholderFutureBuilder<T> extends StatefulWidget {
     this.future,
     required this.builder,
     this.placeholder,
-    this.onErrorBuilder,
+    this.onError,
     this.controller,
     this.futureGetter,
   });
@@ -75,8 +74,8 @@ class _PlaceholderFutureBuilderState<T> extends State<PlaceholderFutureBuilder<T
     return widget.builder(context, data as T, const SizedBox.shrink());
   }
 
-  Widget buildWhenLoading() {
-    return widget.builder(context, null, _buildPlaceHolder());
+  Widget buildWithPlaceholder(Widget placeholder) {
+    return widget.builder(context, null, placeholder);
   }
 
   Widget _buildPlaceHolder() {
@@ -88,30 +87,22 @@ class _PlaceholderFutureBuilderState<T> extends State<PlaceholderFutureBuilder<T
     }
   }
 
-  Widget buildWhenError(error, stackTrace) {
+  Widget? buildWhenError(error, stackTrace) {
     if (!completer.isCompleted) {
       completer.completeError(error, stackTrace);
     }
-    var onError = widget.onErrorBuilder;
+    var onError = widget.onError;
     if (onError != null) {
-      final r = onError(context, widget, error, stackTrace);
+      final r = onError(context, error, stackTrace);
       if (r != null) return r;
     }
     var global = PlaceholderFutureBuilder.globalErrorBuilder;
     if (global != null) {
-      final r = global(context, widget, error, stackTrace);
+      final r = global(context, error, stackTrace);
       if (r != null) return r;
     }
 
-    return Expanded(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Text(error.toString()),
-          ],
-        ),
-      ),
-    );
+    return null;
   }
 
   Widget buildWhenOther(AsyncSnapshot<T> snapshot) {
@@ -141,12 +132,17 @@ class _PlaceholderFutureBuilderState<T> extends State<PlaceholderFutureBuilder<T
           if (snapshot.hasData) {
             return buildWhenSuccessful(snapshot.data);
           } else if (snapshot.hasError) {
-            return buildWhenError(snapshot.error, snapshot.stackTrace);
+            final errorWidget = buildWhenError(snapshot.error, snapshot.stackTrace);
+            if (errorWidget == null) {
+              return buildWithPlaceholder(const Center(child: CircularProgressIndicator()));
+            } else {
+              return buildWithPlaceholder(errorWidget);
+            }
           } else {
             return buildWhenOther(snapshot);
           }
         }
-        return buildWhenLoading();
+        return buildWithPlaceholder(_buildPlaceHolder());
       },
     );
   }

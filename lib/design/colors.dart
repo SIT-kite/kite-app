@@ -29,6 +29,9 @@ Color getThemeColor(BuildContext ctx) {
 
 extension DesignExtension on BuildContext {
   Color get themeColor => getThemeColor(this);
+  ThemeData get theme => Theme.of(this);
+  bool get isDarkMode => theme.isDark;
+  bool get isLightMode => theme.isLight;
 }
 
 class ColorPair {

@@ -36,35 +36,50 @@ class ElectricityChartWidget extends StatelessWidget {
   });
 
   /// 小时模式
-  Widget buildHourlyChart(List<HourlyBill> data) {
-    data.removeLast();
+  Widget buildHourlyChart(BuildContext ctx) {
     return Column(
       children: [
         i18n.elecBillHourlyChart24.txt,
-        Container(
-          padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
-          width: 400,
-          height: 200,
-          child: HourlyElectricityChart(data),
-        ),
+        Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: PlaceholderFutureBuilder<List<HourlyBill>>(
+              future: ElectricityBillInit.electricityService.getHourlyBill(room),
+              builder: (context, data, placeholder) {
+                if (data == null) return placeholder;
+                data.removeLast();
+                return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
+                      width: 400,
+                      height: 200,
+                      child: HourlyElectricityChart(data),
+                    ));
+              },
+            ))
       ],
     );
   }
 
   /// 天模式
-  Widget buildDailyChart(List<DailyBill> data) {
-    data.removeLast();
-    return Column(
-      children: [
-        i18n.elecBillDailyChart7.txt,
-        Container(
-          padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
-          width: 400,
-          height: 200,
-          child: DailyElectricityChart(data),
-        ),
-      ],
-    );
+  Widget buildDailyChart(BuildContext ctx) {
+    return Column(children: [
+      i18n.elecBillDailyChart7.txt,
+      Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: PlaceholderFutureBuilder<List<DailyBill>>(
+              future: ElectricityBillInit.electricityService.getDailyBill(room),
+              builder: (context, data, placeholder) {
+                if (data == null) return placeholder;
+                data.removeLast();
+                return Container(
+                  padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
+                  width: 400,
+                  height: 200,
+                  child: DailyElectricityChart(data),
+                );
+              }))
+    ]);
   }
 
   @override
@@ -72,19 +87,9 @@ class ElectricityChartWidget extends StatelessWidget {
     // TODO: cache this
     switch (mode) {
       case ElectricityChartMode.daily:
-        return MyFutureBuilder<List<DailyBill>>(
-          future: ElectricityBillInit.electricityService.getDailyBill(room),
-          builder: (context, data) {
-            return buildDailyChart(data);
-          },
-        );
+        return buildDailyChart(context);
       case ElectricityChartMode.hourly:
-        return MyFutureBuilder<List<HourlyBill>>(
-          future: ElectricityBillInit.electricityService.getHourlyBill(room),
-          builder: (context, data) {
-            return buildHourlyChart(data);
-          },
-        );
+        return buildHourlyChart(context);
     }
   }
 }
