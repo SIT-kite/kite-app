@@ -517,7 +517,8 @@
     }
   },
   "electricityBillRemainingPower": "Remaining",
-  "electricityBillTitle": "Bill of {room}",
+  "electricityBillTitle": "Bill of #{room}",
+  "electricityBillInitialTip": "Please search your room number",
   "@electricityBillTitle": {
     "placeholders": {
       "room": {

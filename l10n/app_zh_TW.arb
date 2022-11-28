@@ -334,6 +334,7 @@
   "electricityBillRankAbove": "",
   "electricityBillRemainingPower": "",
   "electricityBillTitle": "",
+  "electricityBillInitialTip": "",
   "electricityBillRank": "",
   "powerKwh": "",
   "kiteLoginIncorrectIDFormat": "",

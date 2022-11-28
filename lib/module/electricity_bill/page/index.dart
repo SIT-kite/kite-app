@@ -114,7 +114,9 @@ class _ElectricityPageState extends State<ElectricityPage> {
   @override
   void initState() {
     storage.lastRoomList ??= [];
-    if (storage.lastRoomList!.isNotEmpty) room = storage.lastRoomList!.last;
+    if (storage.lastRoomList!.isNotEmpty) {
+      room = storage.lastRoomList!.last;
+    }
     super.initState();
     getRoomList().then((value) {
       roomList = value.map((e) => e.toString()).toList();
@@ -147,43 +149,54 @@ class _ElectricityPageState extends State<ElectricityPage> {
   Widget build(BuildContext context) {
     final selectedRoom = room;
     return Scaffold(
-      appBar: AppBar(
-        title: selectedRoom != null ? i18n.electricityBillTitle(selectedRoom).txt : i18n.ftype_elecBill.txt,
-        actions: <Widget>[
-          IconButton(
-              onPressed: search,
-              icon: const Icon(
-                Icons.search_rounded,
-              )),
-          // IconButton(icon: const Icon(Icons.share), onPressed: () {}),
+        appBar: AppBar(
+          title: selectedRoom != null ? i18n.electricityBillTitle(selectedRoom).txt : i18n.ftype_elecBill.txt,
+          actions: <Widget>[
+            IconButton(
+                onPressed: search,
+                icon: const Icon(
+                  Icons.search_rounded,
+                )),
+          ],
+        ),
+        body: selectedRoom == null
+            ? _buildEmptyBody(context)
+            : SmartRefresher(
+                controller: _refreshController,
+                scrollDirection: Axis.vertical,
+                header: const ClassicHeader(),
+                child: _buildBody(context, selectedRoom),
+              ));
+  }
+
+  Widget _buildEmptyBody(BuildContext ctx) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Padding(
+              padding: const EdgeInsets.all(20),
+              child: Icon(Icons.electric_bolt_rounded, size: 120, color: electricityColor.by(ctx))),
+          Text(
+            i18n.electricityBillInitialTip,
+            style: ctx.theme.textTheme.titleLarge,
+          ),
         ],
-      ),
-      body: SmartRefresher(
-        controller: _refreshController,
-        scrollDirection: Axis.vertical,
-        header: const ClassicHeader(),
-        child: _buildBody(context),
       ),
     );
   }
 
-  Widget _buildBody(BuildContext ctx) {
-    final selectedRoom = room;
-    if (selectedRoom == null) {
-      return const Center(
-        child: Text('未指定房间号'),
-      );
-    }
+  Widget _buildBody(BuildContext ctx, String room) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
       child: Column(
         children: [
           const SizedBox(height: 5),
-          buildBalanceCard(ctx, selectedRoom),
+          buildBalanceCard(ctx, room),
           const SizedBox(height: 5),
-          buildRankCard(ctx, selectedRoom),
+          buildRankCard(ctx, room),
           const SizedBox(height: 25),
-          ElectricityChart(selectedRoom),
+          ElectricityChart(room),
         ],
       ),
     );

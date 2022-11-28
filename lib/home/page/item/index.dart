@@ -176,15 +176,14 @@ class FunctionButtonFactory {
               Log.info('扫码结果: $result');
               if (result != null) GlobalLauncher.launch(result);
             },
-            // icon: 'assets/home/icon_bbs.svg',
-            iconWidget: Icon(Icons.qr_code_scanner, size: 30.h, color: Theme.of(context).primaryColor),
+            iconWidget: Icon(Icons.qr_code_scanner, size: 30.h, color: context.fgColor),
             title: FunctionType.scanner.localized(),
             subtitle: FunctionType.scanner.localizedDesc(),
           ),
     FunctionType.freshman: (context) => const FreshmanItem(),
     FunctionType.switchAccount: (context) => HomeFunctionButton(
           route: RouteTable.login,
-          iconWidget: Icon(Icons.switch_account, size: 30.h, color: Theme.of(context).primaryColor),
+          iconWidget: Icon(Icons.switch_account, size: 30.h, color: context.fgColor),
           title: FunctionType.switchAccount.localized(),
           subtitle: FunctionType.switchAccount.localizedDesc(),
         ),

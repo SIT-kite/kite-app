@@ -38,9 +38,13 @@ Color getFgColor(BuildContext ctx) {
 
 extension DesignExtension on BuildContext {
   Color get themeColor => getThemeColor(this);
+
   Color get fgColor => getFgColor(this);
+
   ThemeData get theme => Theme.of(this);
+
   bool get isDarkMode => theme.isDark;
+
   bool get isLightMode => theme.isLight;
 }
 
@@ -53,6 +57,12 @@ class ColorPair {
   factory ColorPair.from(int light, int dark) {
     return ColorPair(Color(light), Color(dark));
   }
+}
+
+extension ColorPairHelper on ColorPair {
+  Color by(BuildContext ctx) => ctx.isDarkMode ? dark : light;
+
+  Color byTheme(ThemeData theme) => theme.isDark ? dark : light;
 }
 
 /// https://m3.material.io/theme-builder#/custom
@@ -73,12 +83,7 @@ class CourseColor {
     ColorPair(Color(0xFFcdf141), Color(0xFF3e4c00)), // toxic #a2c300
   ];
 
-  static get({required ThemeData from, required int by}) {
-    final pair = all[by.abs() % all.length];
-    if (from.brightness == Brightness.light) {
-      return pair.light;
-    } else {
-      return pair.dark;
-    }
-  }
+  static get({required ThemeData from, required int by}) => all[by.abs() % all.length].byTheme(from);
 }
+
+const electricityColor = ColorPair(Color(0xFFffd200), Color(0xFFfffc00));
