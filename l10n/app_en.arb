@@ -534,5 +534,8 @@
       }
     }
   },
-  "kiteLoginIncorrectIDFormat": "Incorrect ID format"
+  "kiteLoginIncorrectIDFormat": "Incorrect ID format",
+  "semester1st": "Fall Semester",
+  "semester2rd": "Spring Semester",
+  "fullAcademicYear": "Full Year"
 }

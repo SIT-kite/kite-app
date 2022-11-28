@@ -27,8 +27,18 @@ Color getThemeColor(BuildContext ctx) {
   }
 }
 
+Color getFgColor(BuildContext ctx) {
+  var theme = Theme.of(ctx);
+  if (theme.isLight) {
+    return theme.primaryColor;
+  } else {
+    return theme.colorScheme.onSurface;
+  }
+}
+
 extension DesignExtension on BuildContext {
   Color get themeColor => getThemeColor(this);
+  Color get fgColor => getFgColor(this);
   ThemeData get theme => Theme.of(this);
   bool get isDarkMode => theme.isDark;
   bool get isLightMode => theme.isLight;

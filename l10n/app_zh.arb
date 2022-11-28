@@ -336,5 +336,8 @@
   "electricityBillTitle": "查 {room} 电费",
   "electricityBillRank": "用电排名",
   "powerKwh": "{amount} 度",
-  "kiteLoginIncorrectIDFormat": "账号格式不正确"
+  "kiteLoginIncorrectIDFormat": "账号格式不正确",
+  "semester1st": "第一学期",
+  "semester2rd": "第二学期",
+  "fullAcademicYear": "全学年"
 }

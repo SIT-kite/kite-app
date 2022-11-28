@@ -35,7 +35,7 @@ import 'expense.dart';
 import 'freshman.dart';
 import 'library.dart';
 import 'mail.dart';
-import 'notice.dart';
+import 'bulletin.dart';
 import 'office.dart';
 import 'report.dart';
 import 'upgrade.dart';
@@ -214,7 +214,7 @@ Widget buildHomeFunctionButtonByExtraHomeItem(BuildContext context, ExtraHomeIte
       item.iconUrl,
       height: 30.h,
       width: 30.w,
-      color: context.themeColor,
+      color: context.fgColor,
     ),
     route: item.route,
   );

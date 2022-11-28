@@ -28,7 +28,7 @@ class KiteBulletinPage extends StatelessWidget {
     return Text(title, overflow: TextOverflow.ellipsis, style: Theme.of(ctx).textTheme.headline3);
   }
 
-  _buildBulletinTitle(BuildContext ctx, KiteNotice notice) {
+  _buildBulletinTitle(BuildContext ctx, KiteBulletin notice) {
     if (notice.top) {
       return Row(
         children: [const Icon(Icons.push_pin_rounded), _buildTitleText(ctx, notice.title)],
@@ -38,7 +38,7 @@ class KiteBulletinPage extends StatelessWidget {
     }
   }
 
-  Widget _buildNoticeItem(BuildContext context, KiteNotice notice) {
+  Widget _buildBulletinItem(BuildContext context, KiteBulletin notice) {
     return InkWell(
       onTap: () {},
       child: Padding(
@@ -67,15 +67,12 @@ class KiteBulletinPage extends StatelessWidget {
     );
   }
 
-  Widget _buildNoticeList(BuildContext context, List<KiteNotice> noticeList) {
+  Widget _buildNoticeList(BuildContext context, List<KiteBulletin> noticeList) {
     return SingleChildScrollView(
       child: Column(
         children: noticeList
-            .map((e) => Column(
-                  children: [
-                    _buildNoticeItem(context, e),
-                    const Divider(),
-                  ],
+            .map((e) => Card(
+                  child: _buildBulletinItem(context, e),
                 ))
             .toList(),
       ),
@@ -83,7 +80,7 @@ class KiteBulletinPage extends StatelessWidget {
   }
 
   Widget _buildBody() {
-    return MyFutureBuilder<List<KiteNotice>>(
+    return MyFutureBuilder<List<KiteBulletin>>(
       future: KiteBulletinInit.noticeService.getNoticeList(),
       builder: (context, data) {
         return _buildNoticeList(context, data);

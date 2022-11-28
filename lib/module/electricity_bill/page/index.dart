@@ -198,28 +198,27 @@ class _ElectricityPageState extends State<ElectricityPage> {
 
   Widget _buildBalanceCardContent(BuildContext ctx, String room) {
     return PlaceholderFutureBuilder<Balance>(
-      future: ElectricityBillInit.electricityService.getBalance(room),
-      builder: (context, balance, placeholder) {
-        return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Column(
-              children: [
-                if (balance == null)
-                  _buildBalanceInfoRowWithPlaceholder(
-                      Icons.offline_bolt, i18n.electricityBillRemainingPower, placeholder)
-                else
-                  _buildBalanceInfoRow(Icons.offline_bolt, i18n.electricityBillRemainingPower,
-                      i18n.powerKwh(balance.power.toStringAsFixed(2))),
-                if (balance == null)
-                  _buildBalanceInfoRowWithPlaceholder(Icons.savings, i18n.electricityBillBalance, placeholder)
-                else
-                  _buildBalanceInfoRow(
-                      Icons.savings, i18n.electricityBillBalance, '¥${balance.balance.toStringAsFixed(2)}',
-                      color: balance.balance < 10 ? Colors.red : null),
-              ],
-            ));
-      }
-    );
+        future: ElectricityBillInit.electricityService.getBalance(room),
+        builder: (context, balance, placeholder) {
+          return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Column(
+                children: [
+                  if (balance == null)
+                    _buildBalanceInfoRowWithPlaceholder(
+                        Icons.offline_bolt, i18n.electricityBillRemainingPower, placeholder)
+                  else
+                    _buildBalanceInfoRow(Icons.offline_bolt, i18n.electricityBillRemainingPower,
+                        i18n.powerKwh(balance.power.toStringAsFixed(2))),
+                  if (balance == null)
+                    _buildBalanceInfoRowWithPlaceholder(Icons.savings, i18n.electricityBillBalance, placeholder)
+                  else
+                    _buildBalanceInfoRow(
+                        Icons.savings, i18n.electricityBillBalance, '¥${balance.balance.toStringAsFixed(2)}',
+                        color: balance.balance < 10 ? Colors.red : null),
+                ],
+              ));
+        });
   }
 
   Widget _buildBalanceInfoRow(IconData icon, String title, String content, {Color? color}) {
@@ -228,7 +227,10 @@ class _ElectricityPageState extends State<ElectricityPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(children: [
-          Icon(icon),
+          Icon(
+            icon,
+            color: context.fgColor,
+          ),
           const SizedBox(width: 10),
           Text(title, style: style),
         ]),
@@ -245,7 +247,10 @@ class _ElectricityPageState extends State<ElectricityPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(children: [
-          Icon(icon),
+          Icon(
+            icon,
+            color: context.fgColor,
+          ),
           const SizedBox(width: 10),
           Text(title, style: style),
         ]),
@@ -285,9 +290,10 @@ class _ElectricityPageState extends State<ElectricityPage> {
     return Padding(
         padding: const EdgeInsets.all(10),
         child: Row(children: [
-          const Icon(
+          Icon(
             Icons.stacked_bar_chart,
             size: 100,
+            color: context.fgColor,
           ),
           Expanded(
               child: PlaceholderFutureBuilder<Rank>(

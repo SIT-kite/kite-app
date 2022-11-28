@@ -336,5 +336,8 @@
   "electricityBillTitle": "",
   "electricityBillRank": "",
   "powerKwh": "",
-  "kiteLoginIncorrectIDFormat": ""
+  "kiteLoginIncorrectIDFormat": "",
+  "semester1st": "",
+  "semester2rd": "",
+  "fullAcademicYear": ""
 }

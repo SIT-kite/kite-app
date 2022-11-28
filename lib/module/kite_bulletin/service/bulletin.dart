@@ -27,7 +27,7 @@ class KiteBulletinService implements KiteBulletinServiceDao {
   const KiteBulletinService(this.session);
 
   /// 对通知排序, 优先放置置顶通知, 其次是新通知.
-  void _sort(List<KiteNotice> noticeList) {
+  void _sort(List<KiteBulletin> noticeList) {
     noticeList.sort((a, b) {
       // 相同优先级比发布序号
       return ((a.top == b.top && a.id > b.id) || (a.top && !b.top)) ? -1 : 1;
@@ -35,11 +35,11 @@ class KiteBulletinService implements KiteBulletinServiceDao {
   }
 
   @override
-  Future<List<KiteNotice>> getNoticeList() async {
+  Future<List<KiteBulletin>> getNoticeList() async {
     final response = await session.request(_noticePath, ReqMethod.get);
     final List noticeList = response.data;
 
-    List<KiteNotice> result = noticeList.map((e) => KiteNotice.fromJson(e)).toList();
+    List<KiteBulletin> result = noticeList.map((e) => KiteBulletin.fromJson(e)).toList();
     _sort(result);
     return result;
   }

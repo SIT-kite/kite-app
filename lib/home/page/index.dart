@@ -249,7 +249,7 @@ class _HomePageState extends State<HomePage> {
       },
       icon: Icon(
         Icons.qr_code_scanner_outlined,
-        color: context.themeColor,
+        color: context.fgColor,
       ),
       iconSize: 30,
     );
@@ -258,7 +258,7 @@ class _HomePageState extends State<HomePage> {
   Widget buildSettingsButton(BuildContext context) {
     return IconButton(
       onPressed: () => Navigator.of(context).pushNamed(RouteTable.settings),
-      icon: Icon(Icons.settings, color: context.themeColor),
+      icon: Icon(Icons.settings, color: context.fgColor),
     );
   }
 

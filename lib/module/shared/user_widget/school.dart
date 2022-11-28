@@ -16,6 +16,7 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import 'package:flutter/material.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
 
 import '../entity/school.dart';
@@ -122,10 +123,10 @@ class _SemesterSelectorState extends State<SemesterSelector> {
   }
 
   Widget buildSemesterSelector(BuildContext ctx) {
-    const semesterDescription = {
-      Semester.all: '全学年',
-      Semester.firstTerm: '第一学期',
-      Semester.secondTerm: '第二学期',
+    final semesterDescription = {
+      Semester.all: i18n.fullAcademicYear,
+      Semester.firstTerm: i18n.semester1st,
+      Semester.secondTerm: i18n.semester2rd,
     };
     List<Semester> semesters;
     // 不显示学年
