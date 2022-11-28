@@ -17,8 +17,10 @@
 */
 import 'package:kite/network/session.dart';
 
+import 'cache.dart';
 import 'interface.dart';
 import 'mock.dart';
+import 'service.dart';
 
 class FunctionOverrideInit {
   static late FunctionOverrideServiceDao cachedService;
@@ -27,10 +29,10 @@ class FunctionOverrideInit {
     required ISession kiteSession,
     required FunctionOverrideStorageDao storageDao,
   }) {
-/*    cachedService = FunctionOverrideCachedService(
+    cachedService = FunctionOverrideCachedService(
       serviceDao: FunctionOverrideService(kiteSession),
       storageDao: storageDao,
-    );*/
+    );
     // TODO: Temporarily disabled for I18n development
     cachedService = FunctionOverrideDisabled();
     // cachedService = FunctionOverrideMock();

@@ -68,7 +68,7 @@ class Lang {
   static final zhTwFullNumf = DateFormat("yy/MM/dd H:mm:ss", "zh_TW");
   static final enFullNumf = DateFormat("MM/dd/yy H:mm:ss", "en_US");
 
-  static final timef = DateFormat("H:mm::ss");
+  static final timef = DateFormat("H:mm:ss");
 
   static int? toCode(String lang) {
     switch (lang) {
