@@ -22,8 +22,7 @@ import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
-
-import 'index.dart';
+import '../brick.dart';
 
 class ApplicationItem extends StatefulWidget {
   const ApplicationItem({Key? key}) : super(key: key);
@@ -95,7 +94,7 @@ class _ApplicationItemState extends State<ApplicationItem> {
   Widget build(BuildContext context) {
     // 如果是首屏加载, 从缓存读
     _tryUpdateContent(Kv.home.lastOfficeStatus);
-    return HomeFunctionButton(
+    return Brick(
         route: RouteTable.application,
         icon: 'assets/home/icon_office.svg',
         title: i18n.ftype_application,

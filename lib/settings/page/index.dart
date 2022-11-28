@@ -254,8 +254,8 @@ class SettingsPage extends StatelessWidget {
               onTap: _onChangeBgImage),
           if (!isFreshman)
             SimpleSettingsTile(
-              title: i18n.settingsFuncRearrange,
-              subtitle: i18n.settingsFuncRearrangeSub,
+              title: i18n.settingsHomepageRearrange,
+              subtitle: i18n.settingsHomepageRearrangeSub,
               leading: const Icon(Icons.menu),
               onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeSettingPage())),
             ),

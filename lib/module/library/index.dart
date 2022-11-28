@@ -38,29 +38,23 @@ class NoticeWidget extends StatelessWidget {
 
   Widget buildSome(Notice notice) {
     final isRealHtml = guessIsHtml(notice.html);
-    return Container(
-      decoration: const BoxDecoration(
-        border: Border.symmetric(
-          horizontal: BorderSide(color: Colors.black45),
+    return Builder(builder: (context) {
+      return Card(
+          child: ListTile(
+        title: Text(isRealHtml ? i18n.libraryNoticeLabel : genNoticePreview(notice),
+            style: const TextStyle(color: Colors.blue, fontSize: 18)),
+        subtitle: Text(('${i18n.libraryNoticeSendTime}:  ${context.dateFullNum(notice.ts.toLocal())}')),
+        trailing: const Icon(
+          Icons.notification_important,
+          color: Colors.blueAccent,
         ),
-      ),
-      child: Builder(builder: (context) {
-        return ListTile(
-          title: Text(isRealHtml ? i18n.libraryNoticeLabel : genNoticePreview(notice),
-              style: const TextStyle(color: Colors.blue, fontSize: 18)),
-          subtitle: Text(('${i18n.libraryNoticeSendTime}:  ${context.dateFullNum(notice.ts.toLocal())}')),
-          trailing: const Icon(
-            Icons.notification_important,
-            color: Colors.blueAccent,
-          ),
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return LibraryNoticePage(notice, isHtml: isRealHtml);
-            }));
-          },
-        );
-      }),
-    );
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return LibraryNoticePage(notice, isHtml: isRealHtml);
+          }));
+        },
+      ));
+    });
   }
 
   @override

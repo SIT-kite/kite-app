@@ -23,8 +23,7 @@ import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/dsl.dart';
-
-import 'index.dart';
+import '../brick.dart';
 
 class ReportTempItem extends StatefulWidget {
   const ReportTempItem({Key? key}) : super(key: key);
@@ -127,7 +126,7 @@ class _ReportTempItemState extends State<ReportTempItem> {
         content = _generateContent(lastReport);
       }
     }
-    return HomeFunctionButton(
+    return Brick(
       route: RouteTable.reportTemp,
       icon: 'assets/home/icon_report.svg',
       title: i18n.ftype_reportTemp,

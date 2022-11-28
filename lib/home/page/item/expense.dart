@@ -22,7 +22,7 @@ import 'package:kite/route.dart';
 
 import '../../../module/expense2/entity/local.dart';
 import '../../../module/expense2/init.dart';
-import 'index.dart';
+import '../brick.dart';
 
 class ExpenseItem extends StatefulWidget {
   const ExpenseItem({Key? key}) : super(key: key);
@@ -52,7 +52,7 @@ class _ExpenseItemState extends State<ExpenseItem> {
     if (last != null) {
       content = i18n.expenseContent(last.deltaAmount.toStringAsFixed(2), last.note);
     }
-    return HomeFunctionButton(
+    return Brick(
       route: RouteTable.expense,
       icon: 'assets/home/icon_expense.svg',
       title: i18n.ftype_expense,

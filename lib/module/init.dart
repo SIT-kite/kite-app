@@ -28,7 +28,7 @@ void registerAdapters() {
   registerAdapter(ExpenseTypeAdapter());
   registerAdapter(GameTypeAdapter());
   registerAdapter(GameRecordAdapter());
-  registerAdapter(FunctionTypeAdapter());
+  registerAdapter(FTypeAdapter());
   registerAdapter(BalanceAdapter());
   registerAdapter(WeatherAdapter());
   registerAdapter(ReportHistoryAdapter());

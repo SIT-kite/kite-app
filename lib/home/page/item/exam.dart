@@ -19,8 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
-
-import 'index.dart';
+import '../brick.dart';
 
 class ExamArrangementItem extends StatefulWidget {
   const ExamArrangementItem({Key? key}) : super(key: key);
@@ -41,7 +40,7 @@ class _ExamArrangementItemState extends State<ExamArrangementItem> {
 
   @override
   Widget build(BuildContext context) {
-    return HomeFunctionButton(
+    return Brick(
       route: RouteTable.examArrangement,
       icon: 'assets/home/icon_exam.svg',
       title: i18n.ftype_examArr,

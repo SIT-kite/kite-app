@@ -23,8 +23,7 @@ import 'package:kite/module/library/search/init.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
-
-import 'index.dart';
+import '../brick.dart';
 
 class LibraryItem extends StatefulWidget {
   const LibraryItem({Key? key}) : super(key: key);
@@ -79,7 +78,7 @@ class _LibraryItemState extends State<LibraryItem> {
       final lastHotSearch = Kv.home.lastHotSearch;
       content = lastHotSearch;
     }
-    return HomeFunctionButton(
+    return Brick(
         route: '/library',
         icon: 'assets/home/icon_library.svg',
         title: i18n.ftype_library,

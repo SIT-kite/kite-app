@@ -39,7 +39,7 @@ abstract class HomeSettingDao {
   String? lastHotSearch;
   String? lastOfficeStatus;
   Set<int>? readNotice;
-  List<FunctionType>? homeItems;
+  List<FType>? homeItems;
 
   // 启动时是否自动启动课表
   bool? autoLaunchTimetable;

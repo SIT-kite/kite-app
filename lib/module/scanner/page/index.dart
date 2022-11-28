@@ -98,7 +98,7 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
       icon: ValueListenableBuilder(
         valueListenable: controller.torchState,
         builder: (context, state, child) {
-          switch (state as TorchState) {
+          switch (state) {
             case TorchState.off:
               return const Icon(Icons.flash_off, color: Colors.grey);
             case TorchState.on:

@@ -135,6 +135,7 @@ class DetailPage extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         });
   }
+
   // TODO: Redesign UI with Dialog
   Future<void> _sendRequest(BuildContext context, bool force) async {
     try {

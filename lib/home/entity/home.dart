@@ -26,8 +26,8 @@ import 'package:kite/util/user.dart';
 part 'home.g.dart';
 
 // TODO: Rename
-@HiveType(typeId: HiveTypeIdPool.functionTypeItem)
-enum FunctionType {
+@HiveType(typeId: HiveTypeIdPool.ftypeItem)
+enum FType {
   /// 升级
   @HiveField(0)
   upgrade,
@@ -122,102 +122,102 @@ enum FunctionType {
 
   String localized() {
     switch (this) {
-      case FunctionType.upgrade:
+      case FType.upgrade:
         return i18n.ftype_upgrade;
-      case FunctionType.kiteBulletin:
+      case FType.kiteBulletin:
         return i18n.ftype_kiteBulletin;
-      case FunctionType.timetable:
+      case FType.timetable:
         return i18n.ftype_timetable;
-      case FunctionType.reportTemp:
+      case FType.reportTemp:
         return i18n.ftype_reportTemp;
-      case FunctionType.examArrangement:
+      case FType.examArrangement:
         return i18n.ftype_examArr;
-      case FunctionType.classroomBrowser:
+      case FType.classroomBrowser:
         return i18n.ftype_classroomBrowser;
-      case FunctionType.activity:
+      case FType.activity:
         return i18n.ftype_activity;
-      case FunctionType.expense:
+      case FType.expense:
         return i18n.ftype_expense;
-      case FunctionType.examResult:
+      case FType.examResult:
         return i18n.ftype_examResult;
-      case FunctionType.library:
+      case FType.library:
         return i18n.ftype_library;
-      case FunctionType.application:
+      case FType.application:
         return i18n.ftype_application;
-      case FunctionType.eduEmail:
+      case FType.eduEmail:
         return i18n.ftype_eduEmail;
-      case FunctionType.oaAnnouncement:
+      case FType.oaAnnouncement:
         return i18n.ftype_oaAnnouncement;
-      case FunctionType.yellowPages:
+      case FType.yellowPages:
         return i18n.ftype_yellowPages;
-      case FunctionType.game:
+      case FType.game:
         return i18n.ftype_game;
-      case FunctionType.wiki:
+      case FType.wiki:
         return i18n.ftype_wiki;
-      case FunctionType.separator:
+      case FType.separator:
         return i18n.ftype_separator;
-      case FunctionType.bbs:
+      case FType.bbs:
         return i18n.ftype_bbs;
-      case FunctionType.scanner:
+      case FType.scanner:
         return i18n.ftype_scanner;
-      case FunctionType.freshman:
+      case FType.freshman:
         return i18n.ftype_freshman;
-      case FunctionType.switchAccount:
+      case FType.switchAccount:
         return i18n.ftype_switchAccount;
-      case FunctionType.kiteBoard:
+      case FType.kiteBoard:
         return i18n.ftype_kiteBoard;
-      case FunctionType.electricityBill:
+      case FType.electricityBill:
         return i18n.ftype_elecBill;
     }
   }
 
   String localizedDesc() {
     switch (this) {
-      case FunctionType.upgrade:
+      case FType.upgrade:
         return i18n.ftype_upgrade_desc;
-      case FunctionType.kiteBulletin:
+      case FType.kiteBulletin:
         return i18n.ftype_kiteBulletin_desc;
-      case FunctionType.timetable:
+      case FType.timetable:
         return i18n.ftype_timetable_desc;
-      case FunctionType.reportTemp:
+      case FType.reportTemp:
         return i18n.ftype_reportTemp_desc;
-      case FunctionType.examArrangement:
+      case FType.examArrangement:
         return i18n.ftype_examArr_desc;
-      case FunctionType.classroomBrowser:
+      case FType.classroomBrowser:
         return i18n.ftype_classroomBrowser_desc;
-      case FunctionType.activity:
+      case FType.activity:
         return i18n.ftype_activity_desc;
-      case FunctionType.expense:
+      case FType.expense:
         return i18n.ftype_expense_desc;
-      case FunctionType.examResult:
+      case FType.examResult:
         return i18n.ftype_examResult_desc;
-      case FunctionType.library:
+      case FType.library:
         return i18n.ftype_library_desc;
-      case FunctionType.application:
+      case FType.application:
         return i18n.ftype_application_desc;
-      case FunctionType.eduEmail:
+      case FType.eduEmail:
         return i18n.ftype_eduEmail_desc;
-      case FunctionType.oaAnnouncement:
+      case FType.oaAnnouncement:
         return i18n.ftype_oaAnnouncement_desc;
-      case FunctionType.yellowPages:
+      case FType.yellowPages:
         return i18n.ftype_yellowPages_desc;
-      case FunctionType.game:
+      case FType.game:
         return i18n.ftype_game_desc;
-      case FunctionType.wiki:
+      case FType.wiki:
         return i18n.ftype_wiki_desc;
-      case FunctionType.separator:
+      case FType.separator:
         return i18n.ftype_separator_desc;
-      case FunctionType.bbs:
+      case FType.bbs:
         return i18n.ftype_bbs_desc;
-      case FunctionType.scanner:
+      case FType.scanner:
         return i18n.ftype_scanner_desc;
-      case FunctionType.freshman:
+      case FType.freshman:
         return i18n.ftype_freshman_desc;
-      case FunctionType.switchAccount:
+      case FType.switchAccount:
         return i18n.ftype_switchAccount_desc;
-      case FunctionType.kiteBoard:
+      case FType.kiteBoard:
         return i18n.ftype_kiteBoard_desc;
-      case FunctionType.electricityBill:
+      case FType.electricityBill:
         return i18n.ftype_elecBill_desc;
     }
   }
@@ -225,38 +225,38 @@ enum FunctionType {
 
 /// 用户的功能列表
 abstract class IUserFunctionList {
-  List<FunctionType> getFunctionList();
+  List<FType> getFunctionList();
 }
 
 /// 本、专科生默认功能列表
 class UndergraduateFunctionList implements IUserFunctionList {
   @override
-  List<FunctionType> getFunctionList() {
-    return <FunctionType>[
-      FunctionType.upgrade,
-      FunctionType.kiteBulletin,
-      FunctionType.timetable,
-      FunctionType.reportTemp,
-      FunctionType.separator,
-      FunctionType.examArrangement,
-      FunctionType.classroomBrowser,
-      FunctionType.activity,
-      FunctionType.expense,
-      FunctionType.electricityBill,
-      FunctionType.examResult,
-      FunctionType.library,
-      FunctionType.application,
-      FunctionType.eduEmail,
-      FunctionType.oaAnnouncement,
-      FunctionType.separator,
-      FunctionType.freshman,
-      FunctionType.scanner,
-      FunctionType.bbs,
-      FunctionType.yellowPages,
-      FunctionType.game,
-      FunctionType.kiteBoard,
-      FunctionType.wiki,
-      FunctionType.separator,
+  List<FType> getFunctionList() {
+    return <FType>[
+      FType.upgrade,
+      FType.kiteBulletin,
+      FType.timetable,
+      FType.reportTemp,
+      FType.separator,
+      FType.examArrangement,
+      FType.classroomBrowser,
+      FType.activity,
+      FType.expense,
+      FType.electricityBill,
+      FType.examResult,
+      FType.library,
+      FType.application,
+      FType.eduEmail,
+      FType.oaAnnouncement,
+      FType.separator,
+      FType.freshman,
+      FType.scanner,
+      FType.bbs,
+      FType.yellowPages,
+      FType.game,
+      FType.kiteBoard,
+      FType.wiki,
+      FType.separator,
     ];
   }
 }
@@ -264,28 +264,28 @@ class UndergraduateFunctionList implements IUserFunctionList {
 /// 研究生默认功能列表
 class PostgraduateFunctionList implements IUserFunctionList {
   @override
-  List<FunctionType> getFunctionList() {
-    return <FunctionType>[
-      FunctionType.upgrade,
-      FunctionType.kiteBulletin,
-      FunctionType.reportTemp,
-      FunctionType.separator,
-      FunctionType.classroomBrowser,
-      FunctionType.expense,
-      FunctionType.electricityBill,
-      FunctionType.library,
-      FunctionType.application,
-      FunctionType.eduEmail,
-      FunctionType.oaAnnouncement,
-      FunctionType.separator,
-      FunctionType.freshman,
-      FunctionType.scanner,
-      FunctionType.bbs,
-      FunctionType.yellowPages,
-      FunctionType.game,
-      FunctionType.kiteBoard,
-      FunctionType.wiki,
-      FunctionType.separator,
+  List<FType> getFunctionList() {
+    return <FType>[
+      FType.upgrade,
+      FType.kiteBulletin,
+      FType.reportTemp,
+      FType.separator,
+      FType.classroomBrowser,
+      FType.expense,
+      FType.electricityBill,
+      FType.library,
+      FType.application,
+      FType.eduEmail,
+      FType.oaAnnouncement,
+      FType.separator,
+      FType.freshman,
+      FType.scanner,
+      FType.bbs,
+      FType.yellowPages,
+      FType.game,
+      FType.kiteBoard,
+      FType.wiki,
+      FType.separator,
     ];
   }
 }
@@ -293,26 +293,26 @@ class PostgraduateFunctionList implements IUserFunctionList {
 /// 教师账户默认功能列表
 class TeacherFunctionList implements IUserFunctionList {
   @override
-  List<FunctionType> getFunctionList() {
-    return <FunctionType>[
-      FunctionType.upgrade,
-      FunctionType.kiteBulletin,
-      FunctionType.reportTemp,
-      FunctionType.separator,
-      FunctionType.expense,
-      FunctionType.electricityBill,
-      FunctionType.library,
-      FunctionType.application,
-      FunctionType.eduEmail,
-      FunctionType.oaAnnouncement,
-      FunctionType.separator,
-      FunctionType.scanner,
-      FunctionType.bbs,
-      FunctionType.yellowPages,
-      FunctionType.game,
-      FunctionType.kiteBoard,
-      FunctionType.wiki,
-      FunctionType.separator,
+  List<FType> getFunctionList() {
+    return <FType>[
+      FType.upgrade,
+      FType.kiteBulletin,
+      FType.reportTemp,
+      FType.separator,
+      FType.expense,
+      FType.electricityBill,
+      FType.library,
+      FType.application,
+      FType.eduEmail,
+      FType.oaAnnouncement,
+      FType.separator,
+      FType.scanner,
+      FType.bbs,
+      FType.yellowPages,
+      FType.game,
+      FType.kiteBoard,
+      FType.wiki,
+      FType.separator,
     ];
   }
 }
@@ -320,19 +320,19 @@ class TeacherFunctionList implements IUserFunctionList {
 /// 新生功能列表
 class FreshmanFunctionList implements IUserFunctionList {
   @override
-  List<FunctionType> getFunctionList() {
-    return <FunctionType>[
-      FunctionType.upgrade,
-      FunctionType.kiteBulletin,
-      FunctionType.switchAccount,
-      FunctionType.separator,
-      FunctionType.freshman,
-      FunctionType.scanner,
-      FunctionType.bbs,
-      FunctionType.yellowPages,
-      FunctionType.kiteBoard,
-      FunctionType.wiki,
-      FunctionType.separator,
+  List<FType> getFunctionList() {
+    return <FType>[
+      FType.upgrade,
+      FType.kiteBulletin,
+      FType.switchAccount,
+      FType.separator,
+      FType.freshman,
+      FType.scanner,
+      FType.bbs,
+      FType.yellowPages,
+      FType.kiteBoard,
+      FType.wiki,
+      FType.separator,
     ];
   }
 }
@@ -355,6 +355,6 @@ class UserFunctionListFactory {
   }
 }
 
-List<FunctionType> getDefaultFunctionList(UserType userType) {
+List<FType> getDefaultFunctionList(UserType userType) {
   return UserFunctionListFactory.getUserFunctionList(userType).getFunctionList();
 }

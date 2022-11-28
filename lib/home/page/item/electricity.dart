@@ -20,8 +20,7 @@ import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/module/symbol.dart';
 import 'package:kite/storage/init.dart';
-
-import 'index.dart';
+import '../brick.dart';
 
 class ElectricityBillItem extends StatefulWidget {
   const ElectricityBillItem({Key? key}) : super(key: key);
@@ -47,7 +46,7 @@ class _ElectricityBillItemState extends State<ElectricityBillItem> {
     if (b != null) {
       content = i18n.elecBillContent(b.room, b.balance.toStringAsPrecision(2));
     }
-    return HomeFunctionButton(
+    return Brick(
       route: '/electricity_bill',
       icon: 'assets/home/icon_electricity.svg',
       title: i18n.ftype_elecBill,

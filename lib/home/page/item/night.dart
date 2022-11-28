@@ -17,8 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-
-import 'index.dart';
+import '../brick.dart';
 
 // TODO: Remove this
 class NightItem extends StatelessWidget {
@@ -31,7 +30,7 @@ class NightItem extends StatelessWidget {
     final now = DateTime.now();
 
     if (now.hour >= 21 || now.hour < 6) {
-      return HomeFunctionButton(
+      return Brick(
         route: '/night',
         icon: 'assets/home/icon_night.svg',
         title: '晚安',

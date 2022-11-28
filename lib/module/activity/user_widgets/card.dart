@@ -42,7 +42,7 @@ class CardCoverBackground extends StatelessWidget {
           ny: 6,
           fillColors: List.generate(
               36,
-                  (_) => Color.fromARGB(10 + (gen.nextDouble() * 100).round(), 50 + gen.nextInt(2) * 150,
+              (_) => Color.fromARGB(10 + (gen.nextDouble() * 100).round(), 50 + gen.nextInt(2) * 150,
                   50 + gen.nextInt(2) * 150, 50 + gen.nextInt(2) * 150)),
         );
         return ClipRect(
@@ -56,20 +56,18 @@ class CardCoverBackground extends StatelessWidget {
     );
   }
 }
+
 class EventCard extends StatelessWidget {
   final Activity activity;
 
   const EventCard(this.activity, {Key? key}) : super(key: key);
 
   Widget _buildTagRow(BuildContext context, List<String> tags) {
-
     return Wrap(
       spacing: 10,
       children: tags
           .sublist(0, min(2, tags.length))
-          .map((e) => Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: Text(e)))
+          .map((e) => Container(padding: const EdgeInsets.symmetric(horizontal: 5), child: Text(e)))
           .toList(),
     );
   }
@@ -135,10 +133,7 @@ class EventCard extends StatelessWidget {
       },
       child: Card(
         margin: const EdgeInsets.all(10),
-        child: ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: _buildBasicInfo(context)
-        ),
+        child: ClipRRect(borderRadius: BorderRadius.circular(16), child: _buildBasicInfo(context)),
       ),
     );
   }

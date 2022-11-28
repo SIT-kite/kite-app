@@ -22,7 +22,7 @@ import 'package:kite/module/symbol.dart';
 import 'package:kite/route.dart';
 
 import '../../init.dart';
-import 'index.dart';
+import '../brick.dart';
 
 class KiteBulletinItem extends StatefulWidget {
   const KiteBulletinItem({Key? key}) : super(key: key);
@@ -69,7 +69,7 @@ class _KiteBulletinItemState extends State<KiteBulletinItem> {
         if (snapshot.connectionState == ConnectionState.done) {
           content = snapshot.data;
         }
-        return HomeFunctionButton(
+        return Brick(
           route: RouteTable.kiteBulletin,
           icon: 'assets/home/icon_notice.svg',
           title: i18n.ftype_kiteBulletin,

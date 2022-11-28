@@ -17,7 +17,6 @@
  */
 import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/design/utils.dart';
@@ -38,6 +37,7 @@ import 'package:universal_platform/universal_platform.dart';
 import '../entity/home.dart';
 import '../init.dart';
 import 'background.dart';
+import 'homepage_factory.dart';
 import 'drawer.dart';
 import 'greeting.dart';
 import 'item/index.dart';
@@ -168,11 +168,11 @@ class _HomePageState extends State<HomePage> {
   List<Widget> buildFunctionWidgets(List<ExtraHomeItem>? extraItemList, List<HomeItemHideInfo>? hideInfoList) {
     // print(extraItemList);
     UserType userType = AccountUtils.getUserType()!;
-    List<FunctionType> list = Kv.home.homeItems ?? getDefaultFunctionList(userType);
+    List<FType> list = Kv.home.homeItems ?? getDefaultFunctionList(userType);
     final filter = HomeItemHideInfoFilter(hideInfoList ?? []);
 
     // 先遍历一遍，过滤相邻重复元素
-    FunctionType lastItem = list.first;
+    FType lastItem = list.first;
     for (int i = 1; i < list.length; ++i) {
       if (lastItem == list[i]) {
         list.removeAt(i);
@@ -187,12 +187,12 @@ class _HomePageState extends State<HomePage> {
     List<Widget> currentGroup = [];
 
     for (final item in list) {
-      if (item == FunctionType.separator) {
+      if (item == FType.separator) {
         result.addAll([HomeItemGroup(currentGroup), separator]);
         currentGroup = [];
       } else {
         if (!filter.accept(item, userType)) {
-          currentGroup.add(FunctionButtonFactory.createFunctionButton(context, item));
+          currentGroup.add(HomepageFactory.createFunctionButton(context, item));
         }
       }
     }
@@ -200,7 +200,7 @@ class _HomePageState extends State<HomePage> {
     if (extraItemList != null) {
       result.addAll([
         HomeItemGroup(
-          extraItemList.map((e) => buildHomeFunctionButtonByExtraHomeItem(context, e)).toList(),
+          extraItemList.map((e) => buildBricksByExtraHomeItem(context, e)).toList(),
         ),
         separator,
       ]);

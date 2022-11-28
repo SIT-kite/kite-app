@@ -23,7 +23,7 @@ import 'package:kite/util/url_launcher.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import '../../../backend.dart';
-import 'index.dart';
+import '../brick.dart';
 
 const String appUpgradeUrl = '${Backend.kite}/upgrade/';
 
@@ -46,7 +46,7 @@ class UpgradeItem extends StatelessWidget {
       future: future,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done && snapshot.hasData && snapshot.data != null) {
-          return HomeFunctionButton(
+          return Brick(
             title: i18n.ftype_upgrade,
             onPressed: () => onTapUpdate(snapshot.data!),
             subtitle: i18n.ftype_upgrade_desc,

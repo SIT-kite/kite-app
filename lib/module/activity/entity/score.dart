@@ -120,6 +120,6 @@ class ScJoinedActivity {
   ScJoinedActivity(this.applyId, this.activityId, this.title, this.time, this.status, this.amount);
 }
 
-extension ScJoinedActivityHelper on ScJoinedActivity{
+extension ScJoinedActivityHelper on ScJoinedActivity {
   bool get isPassed => status == "通过";
 }

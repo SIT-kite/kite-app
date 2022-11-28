@@ -23,8 +23,7 @@ import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/user.dart';
-
-import 'index.dart';
+import '../brick.dart';
 
 class FreshmanItem extends StatelessWidget {
   const FreshmanItem({Key? key}) : super(key: key);
@@ -45,7 +44,7 @@ class FreshmanItem extends StatelessWidget {
         return Container();
       }
     }
-    return HomeFunctionButton(
+    return Brick(
       onPressed: () {
         if (Kv.freshman.freshmanAccount == null || Kv.freshman.freshmanSecret == null) {
           Navigator.of(context).pushNamed(RouteTable.freshmanLogin);

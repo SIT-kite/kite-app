@@ -33,7 +33,7 @@ class HomeSettingPage extends StatefulWidget {
 }
 
 class _HomeSettingPageState extends State<HomeSettingPage> {
-  List<FunctionType> homeItems = Kv.home.homeItems ?? getDefaultFunctionList(AccountUtils.getUserType()!);
+  List<FType> homeItems = Kv.home.homeItems ?? getDefaultFunctionList(AccountUtils.getUserType()!);
 
   void _onReorder(int oldIndex, int newIndex) {
     setState(() {
@@ -53,7 +53,7 @@ class _HomeSettingPageState extends State<HomeSettingPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> buildWidgetItems(List<FunctionType> homeItems) {
+    List<Widget> buildWidgetItems(List<FType> homeItems) {
       final List<Widget> listItems = [];
       for (int i = 0; i < homeItems.length; ++i) {
         listItems.add(
@@ -63,7 +63,7 @@ class _HomeSettingPageState extends State<HomeSettingPage> {
             trailing: const Icon(Icons.menu),
             title: Text(
               homeItems[i].localized(),
-              style: homeItems[i] == FunctionType.separator ? const TextStyle(color: Colors.cyan) : null,
+              style: homeItems[i] == FType.separator ? const TextStyle(color: Colors.cyan) : null,
             ),
           ),
         );
@@ -74,7 +74,7 @@ class _HomeSettingPageState extends State<HomeSettingPage> {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title: i18n.settingsFuncRearrange.txt,
+          title: i18n.settingsHomepageRearrange.txt,
           actions: [
             IconButton(
                 onPressed: () {

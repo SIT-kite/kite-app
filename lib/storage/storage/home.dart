@@ -107,13 +107,13 @@ class HomeSettingStorage implements HomeSettingDao {
   set readNotice(Set<int>? noticeSet) => box.put(HomeKeyKeys.readNotice, noticeSet?.toList());
 
   @override
-  List<FunctionType>? get homeItems {
+  List<FType>? get homeItems {
     final List? items = box.get(HomeKeyKeys.homeItems);
-    return items?.map((e) => e as FunctionType).toList();
+    return items?.map((e) => e as FType).toList();
   }
 
   @override
-  set homeItems(List<FunctionType>? items) => box.put(HomeKeyKeys.homeItems, items);
+  set homeItems(List<FType>? items) => box.put(HomeKeyKeys.homeItems, items);
 
   @override
   bool? get autoLaunchTimetable => box.get(HomeKeyKeys.autoLaunchTimetable);
