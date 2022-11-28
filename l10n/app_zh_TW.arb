@@ -328,6 +328,13 @@
   "campusCardTip": "",
   "oaPwd": "",
   "electricityBillBalance": "",
+  "electricityBillRoomNumber": "",
+  "electricityBillUpdateTime": "",
+  "electricityBill24hBill": "",
+  "electricityBillRankAbove": "",
   "electricityBillRemainingPower": "",
-  "powerKwh": ""
+  "electricityBillTitle": "",
+  "electricityBillRank": "",
+  "powerKwh": "",
+  "kiteLoginIncorrectIDFormat": ""
 }

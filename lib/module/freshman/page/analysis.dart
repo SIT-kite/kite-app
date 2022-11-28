@@ -152,7 +152,7 @@ class FreshmanAnalysisPage extends StatelessWidget {
         if (![null, ''].contains(analysis))
           Text(
             analysis!,
-            style: TextStyle(fontSize: fontSize, color: Colors.red, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: fontSize, color: Colors.redAccent, fontWeight: FontWeight.bold),
           ),
         if (![null, ''].contains(text2))
           Text(

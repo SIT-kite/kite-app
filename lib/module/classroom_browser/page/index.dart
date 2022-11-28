@@ -73,9 +73,9 @@ class _ClassroomPageState extends State<ClassroomPage> {
         Expanded(
           child: Row(
             children: [
-              ClassroomItem.buildStatusGrid(Colors.green),
+              ClassroomItem.buildStatusGrid(Colors.greenAccent),
               Text('空闲', style: textStyle),
-              ClassroomItem.buildStatusGrid(Colors.red),
+              ClassroomItem.buildStatusGrid(Colors.redAccent),
               Text('有课', style: textStyle)
             ],
           ),

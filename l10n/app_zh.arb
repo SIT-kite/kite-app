@@ -328,6 +328,13 @@
   "campusCardTip": "数据源缺少信息，结果仅供参考。",
   "oaPwd": "OA 密码",
   "electricityBillBalance": "余额",
+  "electricityBillRoomNumber": "房间号码",
+  "electricityBillUpdateTime": "更新时间",
+  "electricityBill24hBill": "24小时用电消费: ¥{amount}",
+  "electricityBillRankAbove": "超过了 {percent}% 的宿舍",
   "electricityBillRemainingPower": "剩余电量",
-  "powerKwh": "{number} 度"
+  "electricityBillTitle": "查 {room} 电费",
+  "electricityBillRank": "用电排名",
+  "powerKwh": "{amount} 度",
+  "kiteLoginIncorrectIDFormat": "账号格式不正确"
 }

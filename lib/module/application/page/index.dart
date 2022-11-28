@@ -44,13 +44,13 @@ const Set<String> _commonUse = <String>{
 };
 
 const List<Color> _iconColors = <Color>[
-  Colors.orange,
-  Colors.red,
-  Colors.blue,
+  Colors.orangeAccent,
+  Colors.redAccent,
+  Colors.blueAccent,
   Colors.grey,
   Colors.black,
   Colors.green,
-  Colors.yellow,
+  Colors.yellowAccent,
   Colors.cyan,
   Colors.purple,
   Colors.teal,

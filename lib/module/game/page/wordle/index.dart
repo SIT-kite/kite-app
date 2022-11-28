@@ -114,7 +114,7 @@ class _WordlePageState extends State<WordlePage> {
                             board.targetWord.toUpperCase(),
                             style: const TextStyle(
                               fontSize: 32,
-                              color: Colors.red,
+                              color: Colors.redAccent,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

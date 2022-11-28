@@ -118,7 +118,7 @@ class _HistoryPageState extends State<HistoryPage> {
     }
 
     Widget buildFailedText() {
-      return const Text('已过期', style: TextStyle(color: Colors.red));
+      return const Text('已过期', style: TextStyle(color: Colors.redAccent));
     }
 
     // 成功打卡了

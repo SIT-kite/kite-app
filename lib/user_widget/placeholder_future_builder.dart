@@ -19,61 +19,50 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-typedef MyWidgetBuilder<T> = Widget Function(BuildContext context, T data);
-typedef MyErrorWidgetBuilder = Widget? Function(
+typedef PlaceholderWidgetBuilder<T> = Widget Function(BuildContext context, T? data, Widget placeholder);
+typedef ErrorWidgetBuilder = Widget? Function(
   BuildContext context,
-  MyFutureBuilder futureBuilder,
+  PlaceholderFutureBuilder futureBuilder,
   dynamic error,
   dynamic stackTrace,
 );
 
-class MyFutureBuilderController<T> {
-  late _MyFutureBuilderState<T> _state;
-  void _bindState(State<MyFutureBuilder<T>> state) => _state = state as _MyFutureBuilderState<T>;
+class PlaceholderBuilderController<T> {
+  late _PlaceholderFutureBuilderState<T> _state;
+
+  void _bindState(State<PlaceholderFutureBuilder<T>> state) => _state = state as _PlaceholderFutureBuilderState<T>;
 
   Future<T> refresh() => _state.refresh();
 }
 
-class MyFutureBuilder<T> extends StatefulWidget {
-  // 全局错误处理
-  static MyErrorWidgetBuilder? globalErrorBuilder;
+class PlaceholderFutureBuilder<T> extends StatefulWidget {
+  static ErrorWidgetBuilder? globalErrorBuilder;
 
   final Future<T>? future;
-  final MyWidgetBuilder<T>? builder;
-  final MyErrorWidgetBuilder? onErrorBuilder;
-  final MyFutureBuilderController? controller;
+  final PlaceholderWidgetBuilder<T> builder;
+  final ErrorWidgetBuilder? onErrorBuilder;
+  final PlaceholderBuilderController? controller;
 
-  /// 建议使用该参数代替future, 否则可能无法正常实现刷新功能
   final Future<T> Function()? futureGetter;
 
-  /// 刷新之前回调
-  final Future<void> Function()? onPreRefresh;
+  final WidgetBuilder? placeholder;
 
-  /// 刷新后回调
-  final Future<void> Function()? onPostRefresh;
-
-  /// 是否启用下拉刷新
-  final bool enablePullRefresh;
-
-  const MyFutureBuilder({
+  const PlaceholderFutureBuilder({
     super.key,
     this.future,
     required this.builder,
+    this.placeholder,
     this.onErrorBuilder,
     this.controller,
-    this.enablePullRefresh = false,
-    this.onPreRefresh,
-    this.onPostRefresh,
     this.futureGetter,
   });
 
   @override
-  State<MyFutureBuilder<T>> createState() => _MyFutureBuilderState<T>();
+  State<PlaceholderFutureBuilder<T>> createState() => _PlaceholderFutureBuilderState<T>();
 }
 
-class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
+class _PlaceholderFutureBuilderState<T> extends State<PlaceholderFutureBuilder<T>> {
   Completer<T> completer = Completer();
 
   Future<T> refresh() {
@@ -83,26 +72,37 @@ class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
 
   Widget buildWhenSuccessful(T? data) {
     if (!completer.isCompleted) completer.complete(data);
-    return widget.builder == null ? Text(data.toString()) : widget.builder!(context, data as T);
+    return widget.builder(context, data as T, const SizedBox.shrink());
+  }
+
+  Widget buildWhenLoading() {
+    return widget.builder(context, null, _buildPlaceHolder());
+  }
+
+  Widget _buildPlaceHolder() {
+    var placeholder = widget.placeholder;
+    if (placeholder != null) {
+      return placeholder(context);
+    } else {
+      return const Center(child: CircularProgressIndicator());
+    }
   }
 
   Widget buildWhenError(error, stackTrace) {
     if (!completer.isCompleted) {
       completer.completeError(error, stackTrace);
     }
-    // 判定是否有单独处理
-    if (widget.onErrorBuilder != null) {
-      final r = widget.onErrorBuilder!(context, widget, error, stackTrace);
+    var onError = widget.onErrorBuilder;
+    if (onError != null) {
+      final r = onError(context, widget, error, stackTrace);
+      if (r != null) return r;
+    }
+    var global = PlaceholderFutureBuilder.globalErrorBuilder;
+    if (global != null) {
+      final r = global(context, widget, error, stackTrace);
       if (r != null) return r;
     }
 
-    // 判定是否有全局处理
-    if (MyFutureBuilder.globalErrorBuilder != null) {
-      final r = MyFutureBuilder.globalErrorBuilder!(context, widget, error, stackTrace);
-      if (r != null) return r;
-    }
-
-    // 默认处理
     return Expanded(
       child: SingleChildScrollView(
         child: Column(
@@ -119,10 +119,6 @@ class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
     throw Exception('snapshot has no data or error');
   }
 
-  Widget buildWhenLoading() {
-    return const Center(child: CircularProgressIndicator());
-  }
-
   Future<T> fetchData() async {
     var getter = widget.futureGetter;
     if (getter != null) {
@@ -132,10 +128,11 @@ class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
     if (future != null) {
       return await future;
     }
-    throw UnsupportedError('MyFutureBuilder must set a future or futureGetter');
+    throw UnsupportedError('PlaceholderFutureBuilder requires a Future or FutureGetter');
   }
 
-  Widget buildFutureBuilder() {
+  @override
+  Widget build(BuildContext context) {
     return FutureBuilder<T>(
       key: UniqueKey(),
       future: fetchData(),
@@ -152,30 +149,6 @@ class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
         return buildWhenLoading();
       },
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    Widget result = buildFutureBuilder();
-
-    RefreshController refreshController = RefreshController();
-    if (widget.enablePullRefresh) {
-      result = SmartRefresher(
-        controller: refreshController,
-        onRefresh: () async {
-          try {
-            completer = Completer();
-            if (widget.onPreRefresh != null) await widget.onPreRefresh!();
-            await refresh();
-            if (widget.onPostRefresh != null) await widget.onPostRefresh!();
-          } finally {
-            refreshController.refreshCompleted();
-          }
-        },
-        child: result,
-      );
-    }
-    return result;
   }
 
   @override

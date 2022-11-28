@@ -24,7 +24,7 @@ import '../entity/rank.dart';
 import '../init.dart';
 
 class GameRanking extends StatelessWidget {
-  static const _colorMapping = [Colors.red, Colors.deepOrange, Colors.orange];
+  static const _colorMapping = [Colors.redAccent, Colors.deepOrange, Colors.orange];
   final int gameId;
 
   const GameRanking(this.gameId, {Key? key}) : super(key: key);

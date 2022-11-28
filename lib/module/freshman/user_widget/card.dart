@@ -48,7 +48,7 @@ class PersonItemWidget extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.fromLTRB(10, 2, 0, 2),
         decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [Colors.red, Colors.orange.shade700]), //背景渐变
+            gradient: LinearGradient(colors: [Colors.redAccent, Colors.orange.shade700]), //背景渐变
             borderRadius: const BorderRadius.horizontal(left: Radius.circular(5.0)), //像素圆角
             boxShadow: const [
               //阴影

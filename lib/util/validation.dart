@@ -17,11 +17,13 @@
  */
 import 'package:kite/util/user.dart';
 
+import '../l10n/extension.dart';
+
 String? studentIdValidator(String? username) {
   if (username != null && username.isNotEmpty) {
     // 仅允许学生学号登录, 并且屏蔽
     if (AccountUtils.guessUserType(username) == null) {
-      return '账号格式不正确';
+      return i18n.kiteLoginIncorrectIDFormat;
     }
   }
   return null;

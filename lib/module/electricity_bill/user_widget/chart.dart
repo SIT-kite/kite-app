@@ -30,10 +30,10 @@ class ElectricityChartWidget extends StatelessWidget {
   final String room;
 
   const ElectricityChartWidget({
-    Key? key,
+    super.key,
     required this.mode,
     required this.room,
-  }) : super(key: key);
+  });
 
   /// 小时模式
   Widget buildHourlyChart(List<HourlyBill> data) {
@@ -69,6 +69,7 @@ class ElectricityChartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: cache this
     switch (mode) {
       case ElectricityChartMode.daily:
         return MyFutureBuilder<List<DailyBill>>(

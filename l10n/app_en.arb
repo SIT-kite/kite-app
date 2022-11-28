@@ -498,13 +498,41 @@
   "campusCardTip": "The data source lacks information, and the results are for reference only.",
   "oaPwd": "OA Password",
   "electricityBillBalance": "Balance",
-  "electricityBillRemainingPower": "Remaining",
-  "powerKwh": "{number} kW·h",
-  "@powerKwh": {
+  "electricityBillRoomNumber": "Room",
+  "electricityBillUpdateTime": "Last Update",
+  "electricityBill24hBill": "Spent ¥{amount} last 24 hours",
+  "@electricityBill24hBill": {
     "placeholders": {
-      "agreement": {
-        "number": "String"
+      "amount": {
+        "type": "String"
       }
     }
-  }
+  },
+  "electricityBillRankAbove": "Above {percent}% of dormitories.",
+  "@electricityBillRankAbove": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "electricityBillRemainingPower": "Remaining",
+  "electricityBillTitle": "Bill of {room}",
+  "@electricityBillTitle": {
+    "placeholders": {
+      "room": {
+        "type": "String"
+      }
+    }
+  },
+  "electricityBillRank": "Rank",
+  "powerKwh": "{amount} kW·h",
+  "@powerKwh": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "kiteLoginIncorrectIDFormat": "Incorrect ID format"
 }

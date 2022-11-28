@@ -63,7 +63,7 @@ extension TransactionEnchanced on Transaction {
     }
   }
 
-  Color get billColor => isConsume ? Colors.red : Colors.green;
+  Color get billColor => isConsume ? Colors.redAccent : Colors.green;
 
   String toReadableString() {
     if (deltaAmount == 0) {

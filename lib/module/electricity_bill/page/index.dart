@@ -21,6 +21,7 @@ import 'package:animated_button_bar/animated_button_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../entity/account.dart';
 import '../init.dart';
@@ -59,11 +60,6 @@ class _ElectricityChartState extends State<ElectricityChart> {
       children: [
         cardTitle(i18n.elecBillElecChart),
         const SizedBox(height: 20),
-        ElectricityChartWidget(
-          room: widget.room,
-          mode: mode,
-        ),
-        const SizedBox(height: 5),
         SizedBox(
             width: 300,
             child: AnimatedButtonBar(
@@ -83,7 +79,13 @@ class _ElectricityChartState extends State<ElectricityChart> {
                         }),
                     child: i18n.elecBillLast7Day.txt),
               ],
-            ))
+            )),
+        const SizedBox(height: 20),
+        ElectricityChartWidget(
+          room: widget.room,
+          mode: mode,
+        ),
+        const SizedBox(height: 5),
       ],
     );
   }
@@ -98,7 +100,7 @@ class ElectricityPage extends StatefulWidget {
 
 class _ElectricityPageState extends State<ElectricityPage> {
   final storage = ElectricityBillInit.electricityStorage;
-
+  final updateTimeFormatter = DateFormat('MM/dd HH:mm');
   String? room;
   late List<String> roomList;
 
@@ -139,11 +141,15 @@ class _ElectricityPageState extends State<ElectricityPage> {
     });
   }
 
+  final RefreshController _refreshController = RefreshController();
+  final ScrollController _refreshScrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
+    final selectedRoom = room;
     return Scaffold(
       appBar: AppBar(
-        title: i18n.ftype_elecBill.txt,
+        title: selectedRoom != null ? i18n.electricityBillTitle(selectedRoom).txt : i18n.ftype_elecBill.txt,
         actions: <Widget>[
           IconButton(
               onPressed: search,
@@ -153,12 +159,19 @@ class _ElectricityPageState extends State<ElectricityPage> {
           // IconButton(icon: const Icon(Icons.share), onPressed: () {}),
         ],
       ),
-      body: _buildBody(),
+      body: SmartRefresher(
+        controller: _refreshController,
+        scrollDirection: Axis.vertical,
+        header: const ClassicHeader(),
+        scrollController: _refreshScrollController,
+        child: _buildBody(context),
+      ),
     );
   }
 
-  Widget _buildBody() {
-    if (room == null) {
+  Widget _buildBody(BuildContext ctx) {
+    final selectedRoom = room;
+    if (selectedRoom == null) {
       return const Center(
         child: Text('未指定房间号'),
       );
@@ -168,142 +181,137 @@ class _ElectricityPageState extends State<ElectricityPage> {
       child: Column(
         children: [
           const SizedBox(height: 5),
-          buildBalanceCard(),
+          buildBalanceCard(ctx, selectedRoom),
           const SizedBox(height: 5),
-          rankCard(),
+          buildRankCard(ctx, selectedRoom),
           const SizedBox(height: 25),
-          ElectricityChart(room!),
+          ElectricityChart(selectedRoom),
         ],
       ),
     );
   }
-/*  Widget buildRoomInfoCard(){
 
-  }*/
-  ///余额卡片
-  Widget buildBalanceCard() {
-    return Column(
-      children: [
-        cardTitle(i18n.electricityBillBalance),
-        const SizedBox(height: 10),
-        MyFutureBuilder<Balance>(
-          future: ElectricityBillInit.electricityService.getBalance(room!),
-          builder: (context, data) {
-            return balanceContent(data);
-          },
-        ),
-      ],
-    );
+  Widget buildBalanceCard(BuildContext ctx, String room) {
+    return Card(
+        child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+            child: Column(children: [
+              cardTitle(i18n.electricityBillBalance),
+              PlaceholderFutureBuilder<Balance>(
+                future: ElectricityBillInit.electricityService.getBalance(room),
+                builder: (context, balance, placeholder) {
+                  return _buildBalanceCardContent(ctx, balance, placeholder);
+                },
+              )
+            ])));
   }
 
-  ///余额内容
-  Widget balanceContent(Balance data) {
-    return Column(
-      children: [
-        Container(
-          height: 80,
-          width: 400,
-          alignment: AlignmentDirectional.centerEnd,
-          decoration: BoxDecoration(color: Colors.blueAccent.withAlpha(70), borderRadius: BorderRadius.circular(10)),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.fromLTRB(18, 5, 10, 5),
-                decoration: const BoxDecoration(border: Border(right: BorderSide(width: 2, color: Colors.black87))),
-                height: 60,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    balanceInfo(
-                      Icons.offline_bolt,
-                      i18n.electricityBillRemainingPower,
-                      i18n.powerKwh(data.power.toStringAsFixed(2)),
-                    ),
-                    balanceInfo(Icons.savings, i18n.electricityBillBalance, '¥${data.balance.toStringAsFixed(2)}',
-                        color: data.balance < 10 ? Colors.red : null),
-                  ],
-                ),
-              ),
-              Container(
-                height: 60,
-                padding: const EdgeInsets.fromLTRB(5, 5, 0, 5),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    balanceInfo(Icons.house, '房间号码', data.room.toString(), width: 90),
-                    balanceInfo(Icons.update, '更新时间', DateFormat('MM/dd HH:mm').format(data.ts.toLocal()),
-                        width: 90, color: data.ts.difference(DateTime.now()).inDays > 1 ? Colors.red : null)
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 3),
-        data.balance > 10 ? const Text('余额充足') : const Text('余额低于10元请尽快充值')
-      ],
-    );
+  Widget _buildBalanceCardContent(BuildContext ctx, Balance? balance, Widget placeholder) {
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 30),
+        child: Column(
+          children: [
+            if (balance == null)
+              _buildBalanceInfoRowWithPlaceholder(Icons.offline_bolt, i18n.electricityBillRemainingPower, placeholder)
+            else
+              _buildBalanceInfoRow(Icons.offline_bolt, i18n.electricityBillRemainingPower,
+                  i18n.powerKwh(balance.power.toStringAsFixed(2))),
+            if (balance == null)
+              _buildBalanceInfoRowWithPlaceholder(Icons.savings, i18n.electricityBillBalance, placeholder)
+            else
+              _buildBalanceInfoRow(Icons.savings, i18n.electricityBillBalance, '¥${balance.balance.toStringAsFixed(2)}',
+                  color: balance.balance < 10 ? Colors.red : null),
+          ],
+        ));
   }
 
-  ///余额Row封装
-  Widget balanceInfo(IconData icon, String title, String content, {double? width, Color? color}) {
+  Widget _buildBalanceInfoRow(IconData icon, String title, String content, {Color? color}) {
+    final style = TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: color);
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Icon(icon),
-        const SizedBox(width: 2),
-        Text(title, style: (color != null) ? TextStyle(color: color) : null),
-        SizedBox(
-          width: width ?? 70,
-          child: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-            Text(content),
-          ]),
-        ),
+        Row(children: [
+          Icon(icon),
+          const SizedBox(width: 10),
+          Text(title, style: style),
+        ]),
+        Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+          Text(content, style: style),
+        ]),
       ],
     );
   }
 
-  ///排名卡片
-  Widget rankCard() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
+  Widget _buildBalanceInfoRowWithPlaceholder(IconData icon, String title, Widget placeholder) {
+    const style = TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        cardTitle('用电排名'),
-        const SizedBox(height: 10),
-        MyFutureBuilder<Rank>(
-          future: ElectricityBillInit.electricityService.getRank(room!),
-          builder: (context, data) {
-            return rankContent(data);
-          },
-        ),
+        Row(children: [
+          Icon(icon),
+          const SizedBox(width: 10),
+          Text(title, style: style),
+        ]),
+        Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+          placeholder,
+        ]),
       ],
     );
+  }
+
+  Widget buildUpdateTime(Balance balance, {Color? color}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(children: [
+          const Icon(Icons.update),
+          const SizedBox(width: 10),
+          Text(i18n.electricityBillUpdateTime,
+              style: TextStyle(color: balance.ts.difference(DateTime.now()).inDays > 1 ? Colors.redAccent : null)),
+        ]),
+        Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+          Text(updateTimeFormatter.format(balance.ts.toLocal())),
+        ]),
+      ],
+    );
+  }
+
+  Widget buildRankCard(BuildContext ctx, String room) {
+    return Card(
+        child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+            child: Column(children: [cardTitle(i18n.electricityBillRank), _buildRankContent(ctx, room)])));
   }
 
   ///排名内容
-  Widget rankContent(Rank data) {
-    return Container(
+  Widget _buildRankContent(BuildContext ctx, String room) {
+    return Padding(
         padding: const EdgeInsets.all(10),
-        width: 400,
-        height: 120,
-        decoration: BoxDecoration(color: Colors.blueAccent.withAlpha(70), borderRadius: BorderRadius.circular(20)),
-        child: Row(
-          children: [
-            const Icon(
-              Icons.stacked_bar_chart,
-              size: 100,
-            ),
-            Expanded(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '24小时用电消费： ${data.consumption.toStringAsFixed(2)}元',
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                ),
-                Text('超过了 ${(data.rank * 100 / data.roomCount).toStringAsFixed(2)}% 宿舍')
-              ],
-            ))
-          ],
-        ));
+        child: Row(children: [
+          const Icon(
+            Icons.stacked_bar_chart,
+            size: 100,
+          ),
+          Expanded(
+              child: PlaceholderFutureBuilder<Rank>(
+            future: ElectricityBillInit.electricityService.getRank(room),
+            builder: (context, rank, placeholder) {
+              if (rank == null) {
+                return placeholder;
+              }
+              final percent = rank.rank * 100 / rank.roomCount;
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    i18n.electricityBill24hBill(rank.consumption.toStringAsFixed(2)),
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                  Text(i18n.electricityBillRankAbove(percent.toStringAsFixed(2)))
+                ],
+              );
+            },
+          ))
+        ]));
   }
 }

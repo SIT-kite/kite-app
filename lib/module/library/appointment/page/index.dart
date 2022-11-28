@@ -163,7 +163,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
       children: periodStatusList.map((e) {
         final a = {1: '上午', 2: '下午', 3: '晚上'}[e.period % 10]!;
         Widget buildTrailingWidget() {
-          Widget buildOutdated() => const Text('已结束', style: TextStyle(color: Colors.red));
+          Widget buildOutdated() => const Text('已结束', style: TextStyle(color: Colors.redAccent));
           Widget buildAppointed() => const Icon(Icons.check, color: Colors.green);
           Widget buildAvailable() => Text(
                 e.applied == e.count ? '已满' : '可预约',

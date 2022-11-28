@@ -201,7 +201,7 @@ class SystemButtonGroup extends StatelessWidget {
           child: _Button(
               size: _SYSTEM_BUTTON_SIZE,
               enableLongPress: false,
-              color: Colors.red,
+              color: Colors.redAccent,
               onTap: () {
                 Game.of(context).reset();
               }),

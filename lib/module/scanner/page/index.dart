@@ -65,7 +65,7 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
             if (!mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: i18n.scannerBarcodeNotRecognized.txt,
-              backgroundColor: Colors.red,
+              backgroundColor: Colors.redAccent,
             ));
           }
         }
