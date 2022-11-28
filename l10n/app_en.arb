@@ -330,7 +330,6 @@
   "no": "No",
   "noLocationLabel": "No location",
   "noOnlineRecords": "No online records",
-  "noTitle": "No title",
   "notFound404": "404 Not Found",
   "notLoggedIn": "Not Logged In",
   "notNow": "Not Now",
@@ -541,5 +540,14 @@
   "kiteLoginIncorrectIDFormat": "Incorrect ID format",
   "semester1st": "Fall Semester",
   "semester2rd": "Spring Semester",
-  "fullAcademicYear": "Full Year"
+  "fullAcademicYear": "Full Year",
+  "gameWordleNoSuchWord": "No such word \"{word}\".",
+  "@gameWordleNoSuchWord": {
+    "placeholders": {
+      "word": {
+        "type": "String"
+      }
+    }
+  },
+  "error": "Error"
 }

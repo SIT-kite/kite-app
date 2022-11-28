@@ -96,7 +96,7 @@ class SimpleWebViewPage extends StatefulWidget {
 
 class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
   final _controllerCompleter = Completer<WebViewController>();
-  String title = i18n.noTitle;
+  String title = i18n.untitled;
   int progress = 0;
 
   void _onRefresh() async {
@@ -180,7 +180,7 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
           onPageFinished: (url) async {
             if (widget.fixedTitle == null) {
               final controller = await _controllerCompleter.future;
-              title = (await controller.getTitle()) ?? i18n.noTitle;
+              title = (await controller.getTitle()) ?? i18n.untitled;
 
               if (mounted) {
                 setState(() {});

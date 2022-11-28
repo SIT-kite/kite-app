@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:kite/module/game/using.dart';
 
 /*
  * 代码来源：
@@ -56,16 +57,32 @@ class _GameBoardState extends State<GameBoard> {
     if (colIdx < widget.board.columns - 1) {
       FocusScope.of(context).nextFocus();
     }
+    const Vibration(milliseconds: 100).emit();
   }
 
-  handleRowSubmit() {
+  Future<bool> validateWord(String word) {
+    return Future(() => widget.board.allWords.contains(word));
+  }
+
+  Future<void> handleRowSubmit() async {
     if (widget.board.isRowComplete()) {
       if (widget.board.isRowTargetWord()) {
         widget.onWin();
       } else if (widget.board.currentRow >= widget.board.rows - 1) {
         widget.onLose();
       } else {
-        setState(() => widget.board.moveToNextRow());
+        final word = widget.board.composeWord();
+        if (await validateWord(word)) {
+          setState(() => widget.board.moveToNextRow());
+        } else {
+          await const Vibration(milliseconds: 400, amplitude: 120).emit();
+          if (mounted) {
+            await showAlertDialog(context,
+                title: i18n.error,
+                content: i18n.gameWordleNoSuchWord(word).txt,
+                actionWidgetList: [TextButton(onPressed: () {}, child: i18n.ok.txt)]);
+          }
+        }
       }
       return;
     }

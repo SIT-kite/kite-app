@@ -199,7 +199,6 @@
   "no": "不",
   "noLocationLabel": "无地点",
   "noOnlineRecords": "从未在线",
-  "noTitle": "无标题",
   "notFound404": "找不到页面",
   "notLoggedIn": "未登录",
   "notNow": "再等等",
@@ -343,5 +342,7 @@
   "kiteLoginIncorrectIDFormat": "账号格式不正确",
   "semester1st": "第一学期",
   "semester2rd": "第二学期",
-  "fullAcademicYear": "全学年"
+  "fullAcademicYear": "全学年",
+  "gameWordleNoSuchWord": "",
+  "error": ""
 }

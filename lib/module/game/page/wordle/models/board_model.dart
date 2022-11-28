@@ -27,10 +27,11 @@ import 'package:flutter/material.dart';
 class BoardModel {
   List<List<String>> state;
   final String targetWord;
+  final List<String> allWords;
   final int rows, columns;
   var currentRow = 0;
 
-  BoardModel(String targetWord, {int? rows})
+  BoardModel(this.allWords, String targetWord, {int? rows})
       : targetWord = targetWord.toUpperCase(),
         columns = targetWord.length,
         rows = rows ?? targetWord.length,
@@ -57,12 +58,16 @@ class BoardModel {
     currentRow = 0;
   }
 
+  String composeWord({int? rowIdx}) {
+    return state[rowIdx ?? currentRow].join('').toLowerCase();
+  }
+
   bool isRowComplete({int? rowIdx}) {
-    return state[rowIdx ?? currentRow].join('').length == columns;
+    return state[rowIdx ?? currentRow].length == columns;
   }
 
   bool isRowTargetWord({int? rowIdx}) {
-    return state[rowIdx ?? currentRow].join('') == targetWord;
+    return composeWord(rowIdx: rowIdx) == targetWord;
   }
 
   Color getColor({required int rowIdx, required int colIdx}) {

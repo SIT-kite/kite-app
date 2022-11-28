@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:kite/module/game/using.dart';
+
 class Sound {
   bool mute = false;
 
@@ -27,22 +29,27 @@ class Sound {
   }
 
   void start() {
+    const Vibration(milliseconds: 100, amplitude: 100).emit();
     _play('start.mp3');
   }
 
   void clear() {
+    const Vibration(milliseconds: 100, amplitude: 100).emit();
     _play('clean.mp3');
   }
 
   void fall() {
+    const Vibration(milliseconds: 200, amplitude: 255).emit();
     _play('drop.mp3');
   }
 
   void rotate() {
+    const Vibration(milliseconds: 80, amplitude: 125).emit();
     _play('rotate.mp3');
   }
 
   void move() {
+    const Vibration(milliseconds: 120, amplitude: 80).emit();
     _play('move.mp3');
   }
 }

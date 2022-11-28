@@ -51,6 +51,13 @@ class _WordlePageState extends State<WordlePage> {
     return words[Random().nextInt(words.length)];
   }
 
+  Future<List<String>> getAllWords() async {
+    final words = jsonDecode(
+      await rootBundle.loadString('assets/game/words.json'),
+    )['5'];
+    return [...words];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +66,10 @@ class _WordlePageState extends State<WordlePage> {
         actions: [helpButton(context)],
       ),
       body: FutureBuilder(
-          future: getRandomWord().then((word) => BoardModel(word, rows: word.length + 1)),
+          future: getAllWords().then((allWords) {
+            final word = allWords[Random().nextInt(allWords.length)];
+            return BoardModel(allWords, word, rows: word.length + 1);
+          }),
           builder: (context, AsyncSnapshot<BoardModel> snapshot) {
             if (snapshot.data == null) return const Text('加载游戏文件失败');
 
@@ -102,7 +112,7 @@ class _WordlePageState extends State<WordlePage> {
                         setState(board.reset);
                       }
 
-                      uploadGameRecord(context, record);
+                      if (mounted) uploadGameRecord(context, record);
                     },
                     onLose: () async {
                       final result = await showAlertDialog(

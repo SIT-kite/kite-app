@@ -278,7 +278,7 @@ class GameControl extends State<Game> with RouteAware {
       if (!hasSignedKite()) {
         pause();
       }
-      uploadGameRecord(context, GameRecord(GameType.tetris, _points, DateTime.now(), 0));
+      if (mounted) uploadGameRecord(context, GameRecord(GameType.tetris, _points, DateTime.now(), 0));
 
       //up level possible when cleared
       int level = (_cleared ~/ 50) + _LEVEL_MIN;

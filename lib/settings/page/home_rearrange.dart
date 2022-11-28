@@ -119,11 +119,11 @@ class _HomeRearrangePageState extends State<HomeRearrangePage> {
   }
 
   void _onReorderStart(int index) async {
-    await const Viration(milliseconds: 100).emit();
+    await const Vibration(milliseconds: 100).emit();
   }
 
   void _onReorderEnd(int index) async {
-    await const Viration(milliseconds: 100).emit();
+    await const Vibration(milliseconds: 100).emit();
   }
 
   void _onSave() {

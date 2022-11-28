@@ -199,7 +199,6 @@
   "no": "不",
   "noLocationLabel": "無地點",
   "noOnlineRecords": "從未上線",
-  "noTitle": "無標題",
   "notFound404": "找不到頁面",
   "notLoggedIn": "未登入",
   "notNow": "現在不行",
@@ -343,5 +342,7 @@
   "kiteLoginIncorrectIDFormat": "",
   "semester1st": "",
   "semester2rd": "",
-  "fullAcademicYear": ""
+  "fullAcademicYear": "",
+  "gameWordleNoSuchWord": "",
+  "error": ""
 }

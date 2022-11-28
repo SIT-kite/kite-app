@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import '../../entity/record.dart';
 import '../../entity/type.dart';
 import '../../init.dart';
+import '../../using.dart';
 import '../common.dart';
 import 'logic.dart';
 
@@ -165,7 +166,7 @@ class _GameWidgetState extends State<GameWidget> {
   }
 
   void moveLeft() {
-    playStepSound();
+    performFeedback();
 
     setState(() {
       _game.moveLeft();
@@ -174,7 +175,7 @@ class _GameWidgetState extends State<GameWidget> {
   }
 
   void moveRight() {
-    playStepSound();
+    performFeedback();
 
     setState(() {
       _game.moveRight();
@@ -183,7 +184,7 @@ class _GameWidgetState extends State<GameWidget> {
   }
 
   void moveUp() {
-    playStepSound();
+    performFeedback();
 
     setState(() {
       _game.moveUp();
@@ -192,7 +193,7 @@ class _GameWidgetState extends State<GameWidget> {
   }
 
   void moveDown() {
-    playStepSound();
+    performFeedback();
 
     setState(() {
       _game.moveDown();
@@ -200,9 +201,10 @@ class _GameWidgetState extends State<GameWidget> {
     });
   }
 
-  Future<void> playStepSound() async {
+  Future<void> performFeedback() async {
     // AudioPlayer player = AudioPlayer();
     // await player.play(AssetSource('game/step.mp3'));
+    const Vibration(milliseconds: 100).emit();
   }
 
   void checkGameOver() {

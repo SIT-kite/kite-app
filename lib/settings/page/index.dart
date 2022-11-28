@@ -257,7 +257,8 @@ class SettingsPage extends StatelessWidget {
               title: i18n.settingsHomepageRearrange,
               subtitle: i18n.settingsHomepageRearrangeSub,
               leading: const Icon(Icons.menu),
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeRearrangePage())),
+              onTap: () =>
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeRearrangePage())),
             ),
         ],
       ),
