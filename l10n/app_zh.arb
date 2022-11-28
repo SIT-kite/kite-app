@@ -320,5 +320,14 @@
   "activitySignInTime": "签到时间",
   "activitySignOutTime": "签退时间",
   "activityApplyBtn": "报名",
-  "activityMyApplication": "我的活动"
+  "activityMyApplication": "我的活动",
+  "applicationMyMailBox": "校内信",
+  "applicationMyMailBoxEmptyTip": "这里什么都没有",
+  "applicationMyMailBoxRecent": "最近更新",
+  "applicationFilerInfrequentlyUsed": "过滤不常用功能",
+  "campusCardTip": "数据源缺少信息，结果仅供参考。",
+  "oaPwd": "OA 密码",
+  "electricityBillBalance": "余额",
+  "electricityBillRemainingPower": "剩余电量",
+  "powerKwh": "{number} 度"
 }

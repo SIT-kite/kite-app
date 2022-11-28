@@ -171,7 +171,7 @@ class _OfficePageState extends State<OfficePage> {
                 AbsorbPointer(
                   child: Checkbox(value: _enableFilter, onChanged: (bool? value) {}),
                 ),
-                const Text('过滤不常用功能'),
+                i18n.applicationFilerInfrequentlyUsed.txt,
               ],
             ),
           ),
@@ -201,7 +201,7 @@ class _OfficePageState extends State<OfficePage> {
       floatingActionButton: ApplicationInit.session.isLogin
           ? FloatingActionButton(
               onPressed: _navigateMessagePage,
-              tooltip: '我的消息',
+              tooltip: i18n.applicationMyMailBox,
               child: const Icon(Icons.mail_outline),
             )
           : null,

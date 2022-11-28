@@ -131,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
             autofocus: true,
             obscureText: !isPasswordClear,
             decoration: InputDecoration(
-              labelText: i18n.pwd,
+              labelText: i18n.oaPwd,
               hintText: i18n.kiteLoginPwdHint,
               icon: const Icon(Icons.lock),
               suffixIcon: IconButton(

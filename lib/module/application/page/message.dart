@@ -31,13 +31,14 @@ class MessagePage extends StatelessWidget {
           .map(
             (e) => ListTile(
               title: Text(e.functionName),
-              subtitle: Text('最近更新: ${e.recentStep}'),
+              subtitle: Text('${i18n.applicationMyMailBoxRecent}: ${e.recentStep}'),
               trailing: Text(e.status),
               onTap: () {
                 // 跳转到详情页面
                 final String resultUrl =
                     'https://xgfy.sit.edu.cn/unifri-flow/WF/mobile/index.html?ismobile=1&FK_Flow=${e.functionId}&WorkID=${e.flowId}&IsReadonly=1&IsView=1';
-                Navigator.of(context).push(MaterialPageRoute(builder: (_) => BrowserPage(e.functionName, resultUrl)));
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => InAppViewPage(title: e.functionName, url: resultUrl)));
               },
             ),
           )
@@ -49,13 +50,22 @@ class MessagePage extends StatelessWidget {
     return MyFutureBuilder<OfficeMessagePage>(
       future: ApplicationInit.messageService.getAllMessage(),
       builder: (context, data) {
-        return _buildMessageList(context, data.msgList);
+        if (data.msgList.isNotEmpty) {
+          return _buildMessageList(context, data.msgList);
+        } else {
+          return Center(
+            child: Text(
+              i18n.applicationMyMailBoxEmptyTip,
+              style: Theme.of(context).textTheme.bodyText2,
+            ),
+          );
+        }
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: const Text('我的消息')), body: _buildBody());
+    return Scaffold(appBar: AppBar(title: i18n.applicationMyMailBox.txt), body: _buildBody());
   }
 }

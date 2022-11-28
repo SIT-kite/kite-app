@@ -23,6 +23,7 @@ import '../entity/classroom.dart';
 import '../init.dart';
 import 'item.dart';
 
+// TODO: i18n
 class ClassroomPage extends StatefulWidget {
   const ClassroomPage({Key? key}) : super(key: key);
 

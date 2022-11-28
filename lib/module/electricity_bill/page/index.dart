@@ -168,7 +168,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
       child: Column(
         children: [
           const SizedBox(height: 5),
-          balanceCard(),
+          buildBalanceCard(),
           const SizedBox(height: 5),
           rankCard(),
           const SizedBox(height: 25),
@@ -177,12 +177,14 @@ class _ElectricityPageState extends State<ElectricityPage> {
       ),
     );
   }
+/*  Widget buildRoomInfoCard(){
 
+  }*/
   ///余额卡片
-  Widget balanceCard() {
+  Widget buildBalanceCard() {
     return Column(
       children: [
-        cardTitle('余额查询'),
+        cardTitle(i18n.electricityBillBalance),
         const SizedBox(height: 10),
         MyFutureBuilder<Balance>(
           future: ElectricityBillInit.electricityService.getBalance(room!),
@@ -214,10 +216,10 @@ class _ElectricityPageState extends State<ElectricityPage> {
                   children: [
                     balanceInfo(
                       Icons.offline_bolt,
-                      '剩余电量',
-                      '${data.power.toStringAsFixed(2)}度',
+                      i18n.electricityBillRemainingPower,
+                      i18n.powerKwh(data.power.toStringAsFixed(2)),
                     ),
-                    balanceInfo(Icons.savings, '剩余金额', '${data.balance.toStringAsFixed(2)}元',
+                    balanceInfo(Icons.savings, i18n.electricityBillBalance, '¥${data.balance.toStringAsFixed(2)}',
                         color: data.balance < 10 ? Colors.red : null),
                   ],
                 ),

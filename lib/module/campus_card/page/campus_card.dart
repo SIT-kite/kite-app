@@ -127,7 +127,7 @@ class _CampusCardPageState extends State<CampusCardPage> {
       // TODO: better NFC tip
       child: Text(
         i18n.campusCardNfcUnavailableOrDisabled,
-        style: Theme.of(context).textTheme.headline3!,
+        style: Theme.of(context).textTheme.headline3,
       ),
     );
   }
@@ -164,8 +164,7 @@ class _CampusCardPageState extends State<CampusCardPage> {
       SizedBox(
           height: 30,
           child: Text(
-            // TODO: I18n
-            '数据源缺少补办卡信息，结果仅供参考。',
+            i18n.campusCardTip,
             style: Theme.of(context).textTheme.bodyText1,
           )),
       ListView(

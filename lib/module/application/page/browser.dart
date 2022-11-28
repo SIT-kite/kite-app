@@ -24,33 +24,29 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import '../init.dart';
 
-class BrowserPage extends StatelessWidget {
-  final String functionName;
+const url = 'http://xgfy.sit.edu.cn/unifri-flow/';
+
+class InAppViewPage extends StatelessWidget {
+  final String title;
   final String url;
 
-  const BrowserPage(this.functionName, this.url, {Key? key}) : super(key: key);
+  const InAppViewPage({super.key, required this.title, required this.url});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(functionName),
+        title: Text(title),
       ),
-      body: UniversalPlatform.isDesktopOrWeb
-          ? const UnsupportedPlatformUrlLauncher(
-              'http://ywb.sit.edu.cn/v1/#/',
-              tip: '电脑端请连接校园网后在下方的浏览器中启动网页版',
-            )
-          : MyFutureBuilder<List<WebViewCookie>>(
-              future: ApplicationInit.cookieJar.loadAsWebViewCookie(Uri.parse('http://xgfy.sit.edu.cn/unifri-flow/')),
-              builder: (context, data) {
-                print(data);
-                return WebView(
-                  initialUrl: url,
-                  initialCookies: data,
-                );
-              },
-            ),
+      body: MyFutureBuilder<List<WebViewCookie>>(
+        future: ApplicationInit.cookieJar.loadAsWebViewCookie(Uri.parse(url)),
+        builder: (context, data) {
+          return WebView(
+            initialUrl: url,
+            initialCookies: data,
+          );
+        },
+      ),
     );
   }
 }

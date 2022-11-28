@@ -89,7 +89,7 @@ class _MailPageState extends State<MailPage> {
             constraints: BoxConstraints(maxWidth: 0.75.sw),
             /**
              * TODO: Email password?
-             * "eduEmailLoginFailTip": "Failed to log in your edu email with OA Password. Troubleshooting:\n1.If you've never changed it, try all your former password.\n2."
+             * "eduEmailLoginFailTip": "Failed to log in your edu email with OA Password. Troubleshooting:\n1.If you've never changed it, try all passwords you ever used.\n2."
              */
             child: Text(
               '登录失败，小风筝无法使用 OA 密码登录你的账户。\n'

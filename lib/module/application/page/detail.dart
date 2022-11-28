@@ -19,8 +19,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:kite/launcher.dart';
 import 'package:kite/user_widget/future_builder.dart';
 import 'package:kite/util/url_launcher.dart';
+import 'package:universal_platform/universal_platform.dart';
 import '../entity/function.dart';
 
 import '../init.dart';
@@ -106,11 +108,15 @@ class DetailPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.east),
         onPressed: () {
-          // 跳转到申请页面
-          final String applyUrl =
-              'https://xgfy.sit.edu.cn/unifri-flow/WF/MyFlow.htm?ismobile=1&out=1&FK_Flow=${function.id}';
-          Navigator.of(context)
-              .pushReplacement(MaterialPageRoute(builder: (_) => BrowserPage(function.name, applyUrl)));
+          if (UniversalPlatform.isDesktopOrWeb) {
+            GlobalLauncher.launch("http://ywb.sit.edu.cn/v1/#/");
+          } else {
+            // 跳转到申请页面
+            final String applyUrl =
+                'https://xgfy.sit.edu.cn/unifri-flow/WF/MyFlow.htm?ismobile=1&out=1&FK_Flow=${function.id}';
+            Navigator.of(context)
+                .pushReplacement(MaterialPageRoute(builder: (_) => InAppViewPage(title: function.name, url: applyUrl)));
+          }
         },
       ),
     );

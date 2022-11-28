@@ -490,5 +490,21 @@
   "activitySignInTime": "Sign-in",
   "activitySignOutTime": "Sign-out",
   "activityApplyBtn": "Apply",
-  "activityMyApplication": "My Applications"
+  "activityMyApplication": "My Applications",
+  "applicationMyMailBox": "My Mailbox",
+  "applicationMyMailBoxEmptyTip": "Here is nothing.",
+  "applicationMyMailBoxRecent": "Recent",
+  "applicationFilerInfrequentlyUsed": "Filter Infrequently-used",
+  "campusCardTip": "The data source lacks information, and the results are for reference only.",
+  "oaPwd": "OA Password",
+  "electricityBillBalance": "Balance",
+  "electricityBillRemainingPower": "Remaining",
+  "powerKwh": "{number} kW·h",
+  "@powerKwh": {
+    "placeholders": {
+      "agreement": {
+        "number": "String"
+      }
+    }
+  }
 }

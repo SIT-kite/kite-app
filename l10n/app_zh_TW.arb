@@ -320,5 +320,14 @@
   "activitySignInTime": "",
   "activitySignOutTime": "",
   "activityApplyBtn": "",
-  "activityMyApplication": ""
+  "activityMyApplication": "",
+  "applicationMyMailBox": "",
+  "applicationMyMailBoxEmptyTip": "",
+  "applicationMyMailBoxRecent": "",
+  "applicationFilerInfrequentlyUsed": "",
+  "campusCardTip": "",
+  "oaPwd": "",
+  "electricityBillBalance": "",
+  "electricityBillRemainingPower": "",
+  "powerKwh": ""
 }
