@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -34,6 +35,7 @@ import 'package:kite/util/user.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+import '../../design/user_widgets/glassmorphic.dart';
 import '../entity/home.dart';
 import '../init.dart';
 import 'background.dart';
@@ -47,12 +49,25 @@ class HomeItemGroup extends StatelessWidget {
 
   const HomeItemGroup(this._items, {Key? key}) : super(key: key);
 
+  Widget buildGlassmorphicBg() {
+    return GlassmorphicBackground(sigmaX: 5, sigmaY: 12, colors: [
+      Color(0xFFffffff).withOpacity(0.8),
+      Color((0xFF000000)).withOpacity(0.8),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(24),
-      child: Column(children: _items),
-    );
+        borderRadius: BorderRadius.circular(24),
+        child: Stack(
+          children: [
+            buildGlassmorphicBg(),
+            Column(
+              children: _items,
+            ),
+          ],
+        ));
   }
 }
 
@@ -165,7 +180,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  List<Widget> buildFunctionWidgets(List<ExtraHomeItem>? extraItemList, List<HomeItemHideInfo>? hideInfoList) {
+  List<Widget> buildBricksWidgets(List<ExtraHomeItem>? extraItemList, List<HomeItemHideInfo>? hideInfoList) {
     // print(extraItemList);
     UserType userType = AccountUtils.getUserType()!;
     List<FType> list = Kv.home.homeItems ?? makeDefaultBricks(userType);
@@ -192,7 +207,7 @@ class _HomePageState extends State<HomePage> {
         currentGroup = [];
       } else {
         if (!filter.accept(item, userType)) {
-          currentGroup.add(HomepageFactory.createFunctionButton(context, item));
+          currentGroup.add(HomepageFactory.buildBrickWidget(context, item));
         }
       }
     }
@@ -200,7 +215,7 @@ class _HomePageState extends State<HomePage> {
     if (extraItemList != null) {
       result.addAll([
         HomeItemGroup(
-          extraItemList.map((e) => buildBricksByExtraHomeItem(context, e)).toList(),
+          extraItemList.map((e) => buildBrickWidgetByExtraHomeItem(context, e)).toList(),
         ),
         separator,
       ]);
@@ -232,7 +247,7 @@ class _HomePageState extends State<HomePage> {
     return ValueListenableBuilder<FunctionOverrideInfo?>(
       valueListenable: overrideFunctionNotifier,
       builder: (context, data, child) => buildByChildren(
-        buildFunctionWidgets(
+        buildBricksWidgets(
           data?.extraHomeItem,
           data?.homeItemHide,
         ),
@@ -247,9 +262,9 @@ class _HomePageState extends State<HomePage> {
         Log.info('扫码结果: $result');
         if (result != null) GlobalLauncher.launch(result);
       },
-      icon: Icon(
+      icon: const Icon(
         Icons.qr_code_scanner_outlined,
-        color: context.fgColor,
+        color: Colors.white70,
       ),
       iconSize: 30,
     );
@@ -258,7 +273,7 @@ class _HomePageState extends State<HomePage> {
   Widget buildSettingsButton(BuildContext context) {
     return IconButton(
       onPressed: () => Navigator.of(context).pushNamed(RouteTable.settings),
-      icon: Icon(Icons.settings, color: context.fgColor),
+      icon: const Icon(Icons.settings, color: Colors.white70),
     );
   }
 
@@ -276,6 +291,7 @@ class _HomePageState extends State<HomePage> {
           enablePullDown: true,
           enablePullUp: false,
           controller: _refreshController,
+          header: BezierHeader(bezierColor: Colors.white54, rectHeight: 20),
           child: CustomScrollView(
             slivers: [
               SliverAppBar(

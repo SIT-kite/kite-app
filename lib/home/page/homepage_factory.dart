@@ -135,7 +135,7 @@ class HomepageFactory {
         ),
   };
 
-  static Widget createFunctionButton(BuildContext context, FType type) {
+  static Widget buildBrickWidget(BuildContext context, FType type) {
     final builder = builders[type];
     if (builder == null) {
       throw UnimplementedError("未实现的功能项: ${type.name}");

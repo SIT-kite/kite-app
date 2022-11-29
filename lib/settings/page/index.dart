@@ -51,7 +51,7 @@ import 'storage.dart';
 class SettingsPage extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
   final bool isFreshman = AccountUtils.getUserType() == UserType.freshman;
-  final String currentVersion = '${Global.currentVersion.version} （on ${Global.currentVersion.platform})';
+  final String currentVersion = 'v${Global.currentVersion.version} on ${Global.currentVersion.platform}';
 
   SettingsPage({Key? key}) : super(key: key);
 
@@ -394,10 +394,9 @@ class SettingsPage extends StatelessWidget {
           )
         ],
       ),
-      // TODO: i18n
-      SettingsGroup(title: '状态', children: <Widget>[
+      SettingsGroup(title: i18n.status, children: <Widget>[
         SimpleSettingsTile(
-          title: '当前版本',
+          title: i18n.currentVersion,
           subtitle: currentVersion,
           leading: const Icon(Icons.settings_applications),
         ),

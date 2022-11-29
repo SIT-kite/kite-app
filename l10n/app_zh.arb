@@ -344,5 +344,7 @@
   "semester2rd": "第二学期",
   "fullAcademicYear": "全学年",
   "gameWordleNoSuchWord": "",
-  "error": ""
+  "error": "",
+  "status": "",
+  "currentVersion": ""
 }

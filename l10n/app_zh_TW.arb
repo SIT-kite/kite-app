@@ -344,5 +344,7 @@
   "semester2rd": "",
   "fullAcademicYear": "",
   "gameWordleNoSuchWord": "",
-  "error": ""
+  "error": "",
+  "status": "",
+  "currentVersion": ""
 }

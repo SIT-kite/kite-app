@@ -62,20 +62,38 @@ class EventCard extends StatelessWidget {
 
   const EventCard(this.activity, {Key? key}) : super(key: key);
 
-  Widget _buildTagRow(BuildContext context, List<String> tags) {
+  Widget _buildTagRow(BuildContext ctx, List<String> tags) {
     return Wrap(
       spacing: 10,
       children: tags
           .sublist(0, min(2, tags.length))
-          .map((e) => Container(padding: const EdgeInsets.symmetric(horizontal: 5), child: Text(e)))
+          .map((e) => Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: Text(
+                e,
+                style: ctx.textTheme.bodySmall,
+              )))
           .toList(),
     );
   }
 
-  Widget _buildBasicInfo(BuildContext context) {
-    final titleStyle =
-        Theme.of(context).textTheme.headline2?.copyWith(color: Colors.white, fontWeight: FontWeight.w500);
-    final subtitleStyle = Theme.of(context).textTheme.headline6?.copyWith(color: Colors.grey);
+  Widget buildGlassmorphicBg(BuildContext ctx) {
+    if (ctx.isLightMode) {
+      return GlassmorphicBackground(sigmaX: 4, sigmaY: 8, colors: [
+        const Color(0xFFf0f0f0).withOpacity(0.1),
+        const Color((0xFF5a5a5a)).withOpacity(0.1),
+      ]);
+    } else {
+      return GlassmorphicBackground(sigmaX: 8, sigmaY: 16, colors: [
+        const Color(0xFFafafaf).withOpacity(0.3),
+        const Color((0xFF0a0a0a)).withOpacity(0.4),
+      ]);
+    }
+  }
+
+  Widget _buildBasicInfo(BuildContext ctx) {
+    final titleStyle = ctx.textTheme.headline2?.copyWith(fontWeight: FontWeight.w500);
+    final subtitleStyle = ctx.textTheme.headline6?.copyWith(color: Colors.grey);
 
     final titleList = extractTitle(activity.title);
     final title = titleList.last;
@@ -96,27 +114,31 @@ class EventCard extends StatelessWidget {
                 sigmaY: 10,
                 opacity: 0.75,
               ),
-              Center(
-                child: Text(
-                  title,
-                  style: titleStyle,
-                  maxLines: 2,
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
+              buildGlassmorphicBg(ctx),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Center(
+                  child: Text(
+                    title,
+                    style: titleStyle,
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
             ],
           ),
         ),
         Container(
-          decoration: const BoxDecoration(color: Colors.white),
+          decoration: BoxDecoration(color: ctx.bgColor),
           child: Padding(
             padding: const EdgeInsets.all(4),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildTagRow(context, tags),
-                Text(context.dateNum(activity.ts), style: subtitleStyle),
+                _buildTagRow(ctx, tags),
+                Text(ctx.dateNum(activity.ts), style: subtitleStyle),
               ],
             ),
           ),

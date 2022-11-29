@@ -25,7 +25,7 @@ import 'package:kite/util/user.dart';
 import '../../entity/home.dart';
 import '../brick.dart';
 
-Widget buildBricksByExtraHomeItem(BuildContext context, ExtraHomeItem item) {
+Widget buildBrickWidgetByExtraHomeItem(BuildContext context, ExtraHomeItem item) {
   return Brick(
     title: item.title,
     subtitle: item.description,

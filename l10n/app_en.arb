@@ -549,5 +549,7 @@
       }
     }
   },
-  "error": "Error"
+  "error": "Error",
+  "status": "Status",
+  "currentVersion": "Current Version"
 }
