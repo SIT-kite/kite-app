@@ -16,10 +16,15 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import 'package:flutter/material.dart';
-import 'package:kite/l10n/extension.dart';
-import 'package:kite/storage/init.dart';
+import 'package:kite/module/activity/using.dart';
 
 import '../entity/school.dart';
+
+Map<Semester, String> makeSemesterL10nName() => {
+      Semester.all: i18n.fullAcademicYear,
+      Semester.firstTerm: i18n.semester1st,
+      Semester.secondTerm: i18n.semester2rd,
+    };
 
 class SemesterSelector extends StatefulWidget {
   final int? initialYear;
@@ -84,12 +89,15 @@ class _SemesterSelectorState extends State<SemesterSelector> {
 
   /// 构建选择下拉框.
   /// alternatives 是一个字典, key 为实际值, value 为显示值.
-  Widget buildSelector<T>(BuildContext ctx, Map<T, String> alternatives, T initialValue, void Function(T?) callback) {
-    final items = alternatives.keys
+  Widget buildSelector<T>(BuildContext ctx, Map<T, String> candidates, T initialValue, void Function(T?) callback) {
+    final items = candidates.keys
         .map(
           (k) => DropdownMenuItem<T>(
             value: k,
-            child: Text(alternatives[k]!),
+            child: Text(
+              candidates[k]!,
+              style: ctx.textTheme.bodyText2,
+            ),
           ),
         )
         .toList();
@@ -123,11 +131,7 @@ class _SemesterSelectorState extends State<SemesterSelector> {
   }
 
   Widget buildSemesterSelector(BuildContext ctx) {
-    final semesterDescription = {
-      Semester.all: i18n.fullAcademicYear,
-      Semester.firstTerm: i18n.semester1st,
-      Semester.secondTerm: i18n.semester2rd,
-    };
+    final semesterNames = makeSemesterL10nName();
     List<Semester> semesters;
     // 不显示学年
     if (!(widget.showEntireYear ?? true)) {
@@ -135,7 +139,7 @@ class _SemesterSelectorState extends State<SemesterSelector> {
     } else {
       semesters = [Semester.all, Semester.firstTerm, Semester.secondTerm];
     }
-    final semesterItems = Map.fromEntries(semesters.map((e) => MapEntry(e, semesterDescription[e]!)));
+    final semesterItems = Map.fromEntries(semesters.map((e) => MapEntry(e, semesterNames[e]!)));
     // 保证显示上初始选择学期、实际加载的学期、selectedSemester 变量一致.
     return buildSelector<Semester>(ctx, semesterItems, selectedSemester, (Semester? selected) {
       if (selected != null && selected != selectedSemester) {
@@ -148,9 +152,7 @@ class _SemesterSelectorState extends State<SemesterSelector> {
   @override
   Widget build(BuildContext context) {
     return Row(children: [
-      Container(
-        child: buildYearSelector(context),
-      ),
+      buildYearSelector(context),
       Container(
         margin: const EdgeInsets.only(left: 15),
         child: buildSemesterSelector(context),

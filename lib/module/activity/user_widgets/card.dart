@@ -22,7 +22,7 @@ import 'package:flutter/material.dart';
 import '../using.dart';
 import '../entity/list.dart';
 import '../page/detail.dart';
-import '../page/blur.dart';
+import 'blur.dart';
 import '../page/util.dart';
 
 import 'package:geopattern_flutter/geopattern_flutter.dart';

@@ -346,5 +346,6 @@
   "gameWordleNoSuchWord": "",
   "error": "",
   "status": "",
-  "currentVersion": ""
+  "currentVersion": "",
+  "timetableMineTitle": ""
 }

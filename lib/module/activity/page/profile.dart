@@ -23,16 +23,20 @@ import '../dao/score.dart';
 import '../entity/score.dart';
 import '../init.dart';
 import 'detail.dart';
-import 'summary.dart';
+import '../user_widgets/summary.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
   Widget _buildSummaryCard() {
-    return MyFutureBuilder<ScScoreSummary>(
+    return PlaceholderFutureBuilder<ScScoreSummary>(
       future: ScInit.scScoreService.getScScoreSummary(),
-      builder: (context, summary) {
-        return Padding(padding: const EdgeInsets.fromLTRB(20, 20, 20, 0), child: SummaryCard(summary));
+      builder: (context, summary, placeholder) {
+        if (summary != null) {
+          return Padding(padding: const EdgeInsets.fromLTRB(20, 20, 20, 0), child: SummaryCard(summary));
+        } else {
+          return Padding(padding: const EdgeInsets.fromLTRB(20, 20, 20, 0), child: placeholder);
+        }
       },
     );
   }
@@ -88,10 +92,10 @@ class ProfilePage extends StatelessWidget {
       future: getMyActivityListJoinScore(ScInit.scScoreService),
       builder: (context, eventList) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          child:
-              ListView(children: [_buildSummaryCard(), const Divider()] + eventList.map(joinedActivityMapper).toList()),
-        );
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: ListView(
+              children: [_buildSummaryCard(), ...eventList.map(joinedActivityMapper)],
+            ));
       },
     );
   }

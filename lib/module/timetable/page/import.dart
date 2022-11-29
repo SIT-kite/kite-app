@@ -341,23 +341,19 @@ class _TimetableImportPageState extends State<TimetableImportPage> {
   Widget _buildTableNameListView(List<String> names) {
     final currentTableName = timetableStorage.currentTableName;
     return ListView(
-      children: names
-          .map((e) {
-            final meta = timetableStorage.getTableMetaByName(e)!;
-            return ListTile(
-              title: Text(e),
+        children: names.map((e) {
+      final meta = timetableStorage.getTableMetaByName(e)!;
+      return Card(
+        child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: ListTile(
+              title: Text(e, overflow: TextOverflow.ellipsis),
               subtitle: ['', '无'].contains(meta.description) ? null : Text(meta.description),
               trailing: e == currentTableName ? const Icon(Icons.check, color: Colors.green) : null,
               onTap: () => showTimetableInfoDialog(meta),
-            );
-          })
-          .map(
-            (e) => Column(
-              children: [e, const Divider()],
-            ),
-          )
-          .toList(),
-    );
+            )),
+      );
+    }).toList());
   }
 
   Widget _buildBody() {

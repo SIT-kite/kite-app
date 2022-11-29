@@ -551,5 +551,6 @@
   },
   "error": "Error",
   "status": "Status",
-  "currentVersion": "Current Version"
+  "currentVersion": "Current Version",
+  "timetableMineTitle": "My Timetables"
 }
