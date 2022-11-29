@@ -45,8 +45,8 @@ class ThemeSettingStorage implements ThemeSettingDao {
   }
 
   @override
-  bool get isDarkMode => box.get(ThemeKeys.isDarkMode, defaultValue: false);
+  bool? get isDarkMode => box.get(ThemeKeys.isDarkMode);
 
   @override
-  set isDarkMode(value) => box.put(ThemeKeys.isDarkMode, value);
+  set isDarkMode(value) => box.put(ThemeKeys.isDarkMode, value ?? false);
 }

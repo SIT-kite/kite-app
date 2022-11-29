@@ -186,14 +186,14 @@ class _TimetableViewerState extends State<TimetableViewer> {
           ? DailyTimetable(
               key: dailyTimetableKey,
               allCourses: tableCoursesState,
-              initialDate: tableMetaState == null ? DateTime.now() : tableMetaState!.startDate,
+              initialDate: tableMetaState?.startDate ?? DateTime.now(),
               tableCache: widget.tableCache,
               viewChangingCallback: switchDisplayMode,
               $isTodayView: widget.$isTodayView)
           : WeeklyTimetable(
               key: weeklyTimetableKey,
               allCourses: tableCoursesState,
-              initialDate: tableMetaState == null ? DateTime.now() : tableMetaState!.startDate,
+              initialDate: tableMetaState?.startDate ?? DateTime.now(),
               tableCache: widget.tableCache,
               $isTodayView: widget.$isTodayView),
     );

@@ -103,7 +103,7 @@ class _ExamArrangementPageState extends State<ExamArrangementPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SvgPicture.asset(
-            'assets/score/not-found.svg',
+            'assets/common/not-found.svg',
             width: 260,
             height: 260,
           ),

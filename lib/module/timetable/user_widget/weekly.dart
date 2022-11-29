@@ -18,12 +18,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../user_widget/sheet.dart';
+import 'sheet.dart';
 import 'tiemtable.dart';
 import '../using.dart';
 import '../cache.dart';
 import '../entity/course.dart';
-import '../user_widget/header.dart';
+import 'header.dart';
 
 class WeeklyTimetable extends StatefulWidget implements InitialTimeProtocol {
   /// 教务系统课程列表

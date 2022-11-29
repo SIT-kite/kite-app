@@ -57,8 +57,7 @@ class _TimetableEditorState extends State<TimetableEditor> {
           TextFormField(
             controller: _metaDescController,
             maxLines: 2,
-            decoration:
-                InputDecoration(labelText: i18n.timetableImportDescFormTitile, border: const OutlineInputBorder()),
+            decoration: InputDecoration(labelText: i18n.timetableDescFormTitile, border: const OutlineInputBorder()),
           )
         ]));
   }
@@ -89,7 +88,12 @@ class _TimetableEditorState extends State<TimetableEditor> {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [buildButton(ctx, i18n.timetableImportSaveBtn), buildButton(ctx, i18n.timetableImportPreviewBtn)],
+            children: [
+              buildButton(ctx, i18n.timetableImportSaveBtn, onPressed: () {
+                widget.meta.description = _metaDescController.text;
+                Navigator.of(ctx).pop(true);
+              }),
+            ],
           ).vwrap()
         ],
       ),

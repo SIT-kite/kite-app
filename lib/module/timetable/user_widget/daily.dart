@@ -20,8 +20,8 @@ import 'package:flutter/material.dart';
 import '../cache.dart';
 import '../entity/course.dart';
 import '../using.dart';
-import '../user_widget/header.dart';
-import '../user_widget/sheet.dart';
+import 'header.dart';
+import 'sheet.dart';
 import 'tiemtable.dart';
 
 class DailyTimetable extends StatefulWidget implements InitialTimeProtocol {

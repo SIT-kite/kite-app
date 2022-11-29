@@ -22,6 +22,7 @@ import 'package:catcher/core/catcher.dart';
 import 'package:dynamic_color_theme/dynamic_color_theme.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -46,6 +47,14 @@ class KiteApp extends StatefulWidget {
 class _KiteAppState extends State<KiteApp> {
   // 先使用默认的路由表
   IRouteGenerator routeGenerator = defaultRouteTable;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialze the app with system theme.
+    var platformBrightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
+    Kv.theme.isDarkMode ??= platformBrightness == Brightness.dark;
+  }
 
   Route<dynamic> _onGenerateRoute(RouteSettings settings) {
     return MaterialPageRoute(
@@ -97,7 +106,7 @@ class _KiteAppState extends State<KiteApp> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Kv.theme.isDarkMode;
+    final isDark = Kv.theme.isDarkMode ?? false;
     final primaryColor = Kv.theme.color;
 
     // refresh override route

@@ -22,7 +22,7 @@ abstract class ThemeSettingDao {
 
   set color(Color value);
 
-  bool get isDarkMode;
+  bool? get isDarkMode;
 
-  set isDarkMode(bool value);
+  set isDarkMode(bool? value);
 }

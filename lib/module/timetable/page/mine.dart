@@ -22,6 +22,7 @@ import 'package:kite/module/symbol.dart';
 import '../../activity/using.dart';
 import '../user_widget/picker.dart';
 import '../user_widget/timetable_editor.dart';
+import 'preview.dart';
 
 class MyTimetablePage extends StatefulWidget {
   const MyTimetablePage({Key? key}) : super(key: key);
@@ -76,7 +77,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
         CupertinoContextMenuAction(
           onPressed: () async {
             Navigator.of(ctx).pop();
-            await showModalBottomSheet(
+            final changed = await showModalBottomSheet(
                 context: ctx,
                 isScrollControlled: true,
                 shape: const ContinuousRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(48))),
@@ -85,6 +86,9 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
                       padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom),
                       child: TimetableEditor(meta: meta));
                 });
+            if (changed == true) {
+              setState(() {});
+            }
           },
           trailingIcon: CupertinoIcons.doc_text,
           child: i18n.timetableEdit.txt,
@@ -95,7 +99,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
             timetableStorage.currentTableName = meta.name;
             setState(() {});
           },
-          trailingIcon: CupertinoIcons.doc_text,
+          trailingIcon: CupertinoIcons.checkmark,
           child: i18n.timetableSetToDefault.txt,
         ),
         CupertinoContextMenuAction(
@@ -109,6 +113,16 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
           },
           trailingIcon: CupertinoIcons.time,
           child: i18n.timetableSetStartDate.txt,
+        ),
+        CupertinoContextMenuAction(
+          onPressed: () async {
+            Navigator.of(ctx).pop();
+            Navigator.of(ctx).push(MaterialPageRoute(
+                builder: (ctx) =>
+                    TimetablePreviewPage(meta: meta, courses: timetableStorage.getTableCourseByName(meta.name) ?? [])));
+          },
+          trailingIcon: CupertinoIcons.eye,
+          child: i18n.timetablePreviewBtn.txt,
         ),
         CupertinoContextMenuAction(
           onPressed: () {

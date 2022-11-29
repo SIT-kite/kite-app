@@ -207,7 +207,7 @@ class SettingsPage extends StatelessWidget {
           _buildLanguagePrefSelector(context),
           SwitchSettingsTile(
             settingKey: ThemeKeys.isDarkMode,
-            defaultValue: Kv.theme.isDarkMode,
+            defaultValue: Kv.theme.isDarkMode ?? false,
             title: i18n.settingsDarkMode,
             subtitle: i18n.settingsDarkModeSub,
             leading: const Icon(Icons.dark_mode),

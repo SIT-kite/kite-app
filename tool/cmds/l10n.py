@@ -37,6 +37,9 @@ def resort(ctx: CmdContext):
             fi.write(new)
             ctx.term << f"{fi.path} resorted."
 
+def rename(ctx: CmdContext):
+    import l10n.migration as res
+
 
 def serve(ctx: CmdContext):
     import l10n.serve as ser

@@ -17,14 +17,14 @@
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/module/activity/using.dart';
+import 'package:kite/design/user_widgets/dialog.dart';
 import '../using.dart';
 
 import '../cache.dart';
 import '../entity/course.dart';
 import '../entity/meta.dart';
 import '../init.dart';
-import 'tiemtable.dart';
+import '../user_widget/tiemtable.dart';
 import 'export.dart';
 
 class TimetablePage extends StatefulWidget {
@@ -59,20 +59,10 @@ class _TimetablePageState extends State<TimetablePage> {
   void checkFirstImportTable() {
     if (courses.isEmpty) {
       Future.delayed(Duration.zero, () async {
-        final select = await showAlertDialog(
-          context,
-          title: '导入课表',
-          content: [
-            const Text(
-              '您似乎是第一次使用小风筝课表，请先完成课表导入吧！',
-            ),
-          ],
-          actionWidgetList: [
-            ElevatedButton(onPressed: () {}, child: const Text('导入课表')),
-            TextButton(onPressed: () {}, child: const Text('暂时不想')),
-          ],
-        );
-        if (select == 0) {
+        final approve =
+            await context.showRequest(title: '导入课表', desc: '您似乎是第一次使用小风筝课表，请先完成课表导入吧！', yes: '导入课表', no: '暂时不想');
+
+        if (approve) {
           if (!mounted) return;
           await Navigator.of(context).pushNamed(RouteTable.timetableImport);
           _onRefresh();
