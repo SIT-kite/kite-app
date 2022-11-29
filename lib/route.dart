@@ -55,6 +55,7 @@ class RouteTable {
   static const market = '/market';
   static const timetable = '/timetable';
   static const timetableImport = '$timetable/import';
+  static const myTimetables = '$timetable/mine';
   static const settings = '/settings';
   static const feedback = '/feedback';
   static const kiteBulletin = '/kite_bulletin';
@@ -105,6 +106,7 @@ final defaultRouteTable = StaticRouteTable(
     RouteTable.market: (context, args) => const MarketPage(),
     RouteTable.timetable: (context, args) => const TimetablePage(),
     RouteTable.timetableImport: (context, args) => const ImportTimetablePage(),
+    RouteTable.myTimetables: (context, args) => const MyTimetablePage(),
     RouteTable.settings: (context, args) => SettingsPage(),
     RouteTable.feedback: (context, args) => const FeedbackPage(),
     RouteTable.kiteBulletin: (context, args) => const KiteBulletinPage(),

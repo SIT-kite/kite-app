@@ -1,58 +1,50 @@
 /*
- * 上应小风筝  便利校园，一步到位
- * Copyright (C) 2022 上海应用技术大学 上应小风筝团队
+ *    上应小风筝(SIT-kite)  便利校园，一步到位
+ *    Copyright (C) 2022 上海应用技术大学 上应小风筝团队
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *    This program is free software: you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation, either version 3 of the License, or
+ *    (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-import 'dart:async';
-
+ *    You should have received a copy of the GNU General Public License
+ *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../entity/course.dart';
 import '../entity/meta.dart';
 import '../init.dart';
+import '../mock/courses.dart';
 import '../using.dart';
-import 'preview.dart';
+import '../user_widget/meta_editor.dart';
 
-const _semesterDescription = {
-  Semester.all: '全学年',
-  Semester.firstTerm: '第一学期',
-  Semester.secondTerm: '第二学期',
-};
-
-class TimetableImportDialog extends StatefulWidget {
-  final DateTime? defaultStartDate;
-
-  const TimetableImportDialog({Key? key, this.defaultStartDate}) : super(key: key);
-
-  @override
-  State<TimetableImportDialog> createState() => _TimetableImportDialogState();
+enum ImportStatus {
+  none,
+  importing,
+  end,
+  failed;
 }
 
-class _TimetableImportDialogState extends State<TimetableImportDialog> {
+class ImportTimetablePage extends StatefulWidget {
+  final DateTime? defaultStartDate;
+
+  const ImportTimetablePage({super.key, this.defaultStartDate});
+
+  @override
+  State<ImportTimetablePage> createState() => _ImportTimetablePageState();
+}
+
+class _ImportTimetablePageState extends State<ImportTimetablePage> {
   final timetableService = TimetableInit.timetableService;
   final timetableStorage = TimetableInit.timetableStorage;
-
-  /// 四位年份
-  late int selectedYear;
-
-  /// 要查询的学期
-  late Semester selectedSemester;
-
-  // 如果没指定默认起始日期，那么走默认日期计算逻辑
+  var _status = ImportStatus.none;
   late ValueNotifier<DateTime> selectedDate = ValueNotifier(
     widget.defaultStartDate != null
         ? widget.defaultStartDate!
@@ -60,212 +52,187 @@ class _TimetableImportDialogState extends State<TimetableImportDialog> {
             return DateTime.now().add(Duration(days: i));
           }).firstWhere((e) => e.weekday == DateTime.monday),
   );
-
-  final tableNameController = TextEditingController();
-  final tableDescriptionController = TextEditingController();
+  late int selectedYear;
+  late Semester selectedSemester;
 
   @override
   void initState() {
+    super.initState();
     DateTime now = DateTime.now();
     now = DateTime(now.year, now.month, now.day, 8, 20);
-
     // 先根据当前时间估算出是哪个学期
     selectedYear = (now.month >= 9 ? now.year : now.year - 1);
     selectedSemester = (now.month >= 3 && now.month <= 7) ? Semester.secondTerm : Semester.firstTerm;
-    _updateTableName();
-    super.initState();
   }
 
-  Widget _buildSemesterSelector() {
-    return Container(
-      margin: const EdgeInsets.only(left: 15),
-      child: SemesterSelector(
-        yearSelectCallback: (year) {
-          setState(() => selectedYear = year);
-          _updateTableName();
-        },
-        semesterSelectCallback: (semester) {
-          setState(() => selectedSemester = semester);
-          _updateTableName();
-        },
-        initialYear: selectedYear,
-        initialSemester: selectedSemester,
-        showEntireYear: false,
-        showNextYear: true,
+  late final semesterNames = makeSemesterL10nName();
+
+  String getTip({required ImportStatus by}) {
+    switch (by) {
+      case ImportStatus.none:
+        return i18n.timetableSelectSemseterTip;
+      case ImportStatus.importing:
+        return i18n.timetableImportImporting;
+      case ImportStatus.end:
+        return i18n.timetableImportEndTip;
+      default:
+        return i18n.timetableImportFailedTip;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: i18n.timetableImportTitle.txt),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+        child: buildImportPage(context),
       ),
+    );
+  }
+
+  Widget buildTip(BuildContext ctx) {
+    final tip = getTip(by: _status);
+    return AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        switchInCurve: Curves.easeIn,
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+        child: Text(
+          key: ValueKey(_status),
+          tip,
+          style: ctx.textTheme.titleLarge,
+        ));
+  }
+
+  Widget buildImportPage(BuildContext ctx) {
+    final isImporting = _status == ImportStatus.importing;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(
+          child: AnimatedContainer(
+            margin: isImporting ? const EdgeInsets.all(60) : EdgeInsets.zero,
+            width: isImporting ? 120.0 : 0.0,
+            height: isImporting ? 120.0 : 0.0,
+            alignment: isImporting ? Alignment.center : AlignmentDirectional.topCenter,
+            duration: const Duration(seconds: 2),
+            curve: Curves.fastOutSlowIn,
+            child: const SizedBox(
+              width: 120,
+              height: 120,
+              child: CircularProgressIndicator(
+                strokeWidth: 12,
+              ),
+            ),
+          ),
+        ),
+        Padding(padding: const EdgeInsets.symmetric(vertical: 30), child: buildTip(ctx)),
+        Padding(
+            padding: const EdgeInsets.symmetric(vertical: 30),
+            child: SemesterSelector(
+              yearSelectCallback: (year) {
+                setState(() => selectedYear = year);
+              },
+              semesterSelectCallback: (semester) {
+                setState(() => selectedSemester = semester);
+              },
+              initialYear: selectedYear,
+              initialSemester: selectedSemester,
+              showEntireYear: false,
+              showNextYear: true,
+            )),
+        Padding(
+          padding: const EdgeInsets.all(24),
+          child: buildImportButton(ctx),
+        )
+      ],
+    );
+  }
+
+  Future<List<Course>> _fetchTimetable(SchoolYear year, Semester semester) async {
+    return await timetableService.getTimetable(year, semester);
+  }
+
+  Future<bool> handleTimetableData(BuildContext ctx, List<Course> courses, int year, Semester semester) async {
+    final defaultName = i18n.timetableInfoDefaultName(semesterNames[semester] ?? "", year, year + 1);
+    final meta = TimetableMeta()
+      ..name = defaultName
+      ..schoolYear = year
+      ..semester = semester.index;
+    final saved = await editingMeta(ctx, meta, SchoolYear(year), semester);
+    if (saved == true) {
+      timetableStorage.addTable(meta, courses);
+      return true;
+    }
+    return false;
+  }
+
+  Widget buildImportButton(BuildContext ctx) {
+    return ElevatedButton(
+      onPressed: _status == ImportStatus.importing
+          ? null
+          : () async {
+              setState(() {
+                _status = ImportStatus.importing;
+              });
+              try {
+                final semester = selectedSemester;
+                await Future.wait([
+                  //_fetchTimetable(year, semester),
+                  fetchMockCourses(),
+                  Future.delayed(const Duration(milliseconds: 5000)),
+                ]).then((value) async {
+                  setState(() {
+                    _status = ImportStatus.end;
+                  });
+                  final saved = await handleTimetableData(ctx, value[0], selectedYear, semester);
+                  if (mounted) Navigator.of(ctx).pop(saved);
+                  setState(() {
+                    _status = ImportStatus.none;
+                  });
+                });
+              } catch (e) {
+                setState(() {
+                  _status = ImportStatus.failed;
+                });
+                if (!mounted) return;
+                await showAlertDialog(ctx,
+                    title: i18n.timetableImportErrorTitle,
+                    content: i18n.timetableImportError.txt,
+                    actionWidgetList: [TextButton(onPressed: () {}, child: i18n.ok.txt)]);
+              } finally {
+                if (_status == ImportStatus.importing) {
+                  setState(() {
+                    _status = ImportStatus.end;
+                  });
+                }
+              }
+            },
+      child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Text(
+            i18n.timetableImportImportBtn,
+            style: ctx.textTheme.titleLarge,
+          )),
     );
   }
 
   void _updateTableName() {
     final year = selectedYear;
     final semester = selectedSemester;
-    tableNameController.text = '$year - ${year + 1} 学年 ${_semesterDescription[semester]} 课表';
   }
 
-  Widget _buildBody() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [const Text('导入学期'), _buildSemesterSelector()],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text('起始日期'),
-            TextButton(
-              child: ValueListenableBuilder<DateTime>(
-                valueListenable: selectedDate,
-                builder: (context, value, child) {
-                  return Text('${value.year} 年 ${value.month} 月 ${value.day} 日');
-                },
-              ),
-              onPressed: () async {
-                final date = await showDatePicker(
-                  context: context,
-                  initialDate: selectedDate.value,
-                  currentDate: DateTime.now(),
-                  firstDate: DateTime(DateTime.now().year),
-                  lastDate: DateTime(DateTime.now().year + 2),
-                  selectableDayPredicate: (DateTime dataTime) => dataTime.weekday == DateTime.monday,
-                );
-                if (date != null) selectedDate.value = DateTime(date.year, date.month, date.day, 8, 20);
-              },
-            ),
-          ],
-        ),
-        Form(
-          child: Column(
-            children: [
-              TextFormField(
-                autofocus: true,
-                controller: tableNameController,
-                decoration: const InputDecoration(labelText: '课表名称'),
-              ),
-              TextFormField(
-                autofocus: true,
-                controller: tableDescriptionController,
-                decoration: const InputDecoration(labelText: '课表备注'),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: 10.h,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () async {
-                // 关闭用户交互
-                EasyLoading.instance.userInteractions = false;
-                EasyLoading.show(status: '正在导入', dismissOnTap: false);
-                try {
-                  final value = await _fetchTimetable();
-                  if (!mounted) return;
-                  Navigator.of(context).pop(value);
-                } catch (e) {
-                  EasyLoading.showError('导入失败');
-                  rethrow;
-                } finally {
-                  // 关闭对话框
-                  EasyLoading.dismiss();
-                  // 允许用户交互
-                  EasyLoading.instance.userInteractions = true;
-                }
-              },
-              child: const Text('导入课表'),
-            ),
-            SizedBox(width: 10.w),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('取消导入'),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Future<dynamic> _fetchTimetable() async {
-    final year = selectedYear;
-    final semester = selectedSemester;
-
-    final tableCourse = await timetableService.getTimetable(SchoolYear(year), semester);
-    final tableMeta = TimetableMeta()
-      ..name = tableNameController.text
-      ..startDate = selectedDate.value
-      ..schoolYear = year
-      ..semester = semester.index
-      ..description = '无';
-    return [tableMeta, tableCourse];
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
-        child: _buildBody(),
-      ),
-    );
-  }
-}
-
-class TimetableImportPage extends StatefulWidget {
-  const TimetableImportPage({Key? key}) : super(key: key);
-
-  @override
-  State<TimetableImportPage> createState() => _TimetableImportPageState();
-}
-
-class _TimetableImportPageState extends State<TimetableImportPage> {
-  final timetableStorage = TimetableInit.timetableStorage;
-  final kiteTimetableService = TimetableInit.kiteTimetableService;
-
-  DateTime? defaultStartDate;
-
-  @override
-  void initState() {
-    // 静默赋值(忽略异常信息)
-    kiteTimetableService.getSemesterDefaultStartDate().then((value) => defaultStartDate = value).ignore();
-    super.initState();
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('导入课表'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return TimetableImportDialog(
-                defaultStartDate: defaultStartDate,
-              );
-            },
-          ).then((value) {
-            if (value == null) return;
-            timetableStorage.addTable(value[0], value[1]);
-            final TimetableMeta meta = value[0];
-            timetableStorage.currentTableName = meta.name;
-            setState(() {});
-          });
-        },
-        child: const Icon(Icons.add),
-      ),
-      body: const Padding(
-        padding: EdgeInsets.all(12),
-        child: SizedBox(),
-      ),
-    );
+  Future<dynamic> editingMeta(BuildContext ctx, TimetableMeta meta, SchoolYear year, Semester semester) async {
+    return await showModalBottomSheet(
+        context: ctx,
+        isScrollControlled: true,
+        shape: const ContinuousRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(48))),
+        builder: (ctx) {
+          return Padding(
+              padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom), child: MetaEditor(meta: meta));
+        });
   }
 }

@@ -82,11 +82,14 @@ class TimetableStorage {
     if (name == currentTableName) {
       currentTableName = null;
     }
-    tableNames = (tableNames ?? []).where((n) => n != name).toList();
-    [
-      TimetableKeys.buildTableMetaKeyByName(name),
-      TimetableKeys.buildTableCoursesKeyByName(name),
-    ].forEach(box.delete);
+    final newTableNames = (tableNames ?? []).where((n) => n != name).toList();
+    box.delete(TimetableKeys.buildTableMetaKeyByName(name));
+    box.delete(TimetableKeys.buildTableCoursesKeyByName(name));
+    // If there is no timetable selected, find next one.
+    if(currentTableName == null && newTableNames.isNotEmpty){
+      currentTableName = newTableNames.first;
+    }
+    tableNames = newTableNames;
   }
 
   String? get currentTableName => box.get(TimetableKeys.currentTableName);

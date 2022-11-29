@@ -112,7 +112,7 @@ class _TimetablePageState extends State<TimetablePage> {
   ///更多菜单回调方法
   PopupMenuButton _buildPopupMenu(BuildContext context) {
     final List<Function()> callback = [
-      () => Navigator.of(context).pushNamed(RouteTable.timetableImport).then((value) => _onRefresh()),
+      () => Navigator.of(context).pushNamed(RouteTable.myTimetables).then((value) => _onRefresh()),
       _onRefresh,
       _onExport,
       () => Kv.home.autoLaunchTimetable = !(Kv.home.autoLaunchTimetable ?? false),
@@ -189,9 +189,9 @@ class _TimetablePageState extends State<TimetablePage> {
       appBar: AppBar(
         title: i18n.ftype_timetable.txt,
         actions: <Widget>[
-          _buildSwitchWeekButton(),
-          _buildModeSwitchButton(),
-          _buildPopupMenu(context),
+          //_buildSwitchWeekButton(),
+          buildSwitchViewButton(context),
+          buildMyTimetablesButton(context),
         ],
       ),
       floatingActionButton: ValueListenableBuilder<bool>(
@@ -222,5 +222,20 @@ class _TimetablePageState extends State<TimetablePage> {
         },
       ),
     );
+  }
+
+  Widget buildSwitchViewButton(BuildContext ctx) {
+    return IconButton(
+      icon: const Icon(Icons.swap_horiz_rounded),
+      onPressed: tableViewerController.toggleDisplayMode,
+    );
+  }
+
+  Widget buildMyTimetablesButton(BuildContext ctx) {
+    return IconButton(
+        icon: const Icon(Icons.person_rounded),
+        onPressed: () {
+          Navigator.of(ctx).pushNamed(RouteTable.myTimetables);
+        });
   }
 }
