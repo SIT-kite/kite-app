@@ -552,5 +552,44 @@
   "error": "Error",
   "status": "Status",
   "currentVersion": "Current Version",
-  "timetableMineTitle": "My Timetables"
+  "timetableMineTitle": "My Timetables",
+  "timetableImportTitle": "Import Timetable",
+  "timetableSetStartDate": "Set Start Date",
+  "timetableDelete": "Delete",
+  "timetableEdit": "Edit",
+  "timetableSetToDefault": "Set to Default",
+  "timetableSelectSemseterTip": "Please select a semester first.",
+  "timetableImportErrorTitle": "Import Error",
+  "timetableImportDescFormTitile": "Description",
+  "timetableImportNameFormTitile": "Name",
+  "timetableImportPreviewBtn": "Preview",
+  "timetableImportSaveBtn": "Save",
+  "timetableImportImportBtn": "Try Import",
+  "timetableImportImporting": "Trying to fetch the timetable...",
+  "timetableImportInfoTitle": "Timetable Info",
+  "timetableImportFailedTip": "Failed to import, please try again.",
+  "timetableImportEndTip": "Please enter the info.",
+  "timetableImportStartDate": "Start with: {date}",
+  "timetableInfoDefaultName": "{semester}, {yearStart}-{yearEnd} Timetable",
+  "@timetableInfoDefaultName": {
+    "placeholders": {
+      "semester": {
+        "type": "String"
+      },
+      "yearStart": {
+        "type": "int"
+      },
+      "yearEnd": {
+        "type": "int"
+      }
+    }
+  },
+  "@timetableImportStartDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "timetableImportError": "Can't import the timetable, please try agian."
 }

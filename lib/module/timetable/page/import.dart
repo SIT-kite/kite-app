@@ -236,139 +236,6 @@ class _TimetableImportPageState extends State<TimetableImportPage> {
     super.initState();
   }
 
-  Widget _buildTableMetaInfo(TimetableMeta meta) {
-    final startDateNotifier = ValueNotifier(meta.startDate);
-
-    final descriptionController = TextEditingController();
-    descriptionController.text = meta.description;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('课表名称：${meta.name}'),
-        Row(
-          children: [
-            const Text('课表描述：'),
-            Expanded(
-              child: TextFormField(
-                controller: descriptionController,
-                decoration: InputDecoration(
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.save, semanticLabel: '保存修改'),
-                    onPressed: () {
-                      meta.description = descriptionController.text;
-                      timetableStorage.addTableMeta(meta.name, meta);
-                      EasyLoading.showSuccess('课表描述保存成功');
-                      setState(() {});
-                    },
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        Text('课表学年：${meta.schoolYear} - ${meta.schoolYear + 1} 学年'),
-        Text('课表学期：${_semesterDescription[Semester.values[meta.semester]]}'),
-        Row(
-          children: [
-            const Text('起始日期：'),
-            TextButton(
-              child: ValueListenableBuilder<DateTime>(
-                valueListenable: startDateNotifier,
-                builder: (context, value, child) {
-                  return Text('${value.year} 年 ${value.month} 月 ${value.day} 日');
-                },
-              ),
-              onPressed: () async {
-                final date = await showDatePicker(
-                  context: context,
-                  initialDate: startDateNotifier.value,
-                  currentDate: DateTime.now(),
-                  firstDate: DateTime(DateTime.now().year),
-                  lastDate: DateTime(DateTime.now().year + 2),
-                  selectableDayPredicate: (DateTime dataTime) => dataTime.weekday == DateTime.monday,
-                );
-                if (date != null) {
-                  startDateNotifier.value = DateTime(date.year, date.month, date.day, 8, 20);
-                  meta.startDate = startDateNotifier.value;
-                  timetableStorage.addTableMeta(meta.name, meta);
-                  EasyLoading.showSuccess('课表起始日期已修改');
-                }
-              },
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  void showTimetableInfoDialog(TimetableMeta meta) {
-    showAlertDialog(
-      context,
-      title: '课表信息',
-      content: [
-        _buildTableMetaInfo(meta),
-        Padding(
-          padding: EdgeInsets.fromLTRB(0, 5.h, 0, 0),
-          child: TextButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-                  return TimetablePreviewPage(
-                    meta: meta,
-                    courses: timetableStorage.getTableCourseByName(meta.name)!,
-                  );
-                }));
-              },
-              child: const Text('预览课表')),
-        ),
-      ],
-      actionWidgetList: [
-        ElevatedButton(onPressed: () {}, child: const Text('设为默认课表')),
-        SizedBox(width: 10.w),
-        ElevatedButton(onPressed: () {}, child: const Text('删除课表')),
-      ],
-    ).then((idx) {
-      if (idx == null) return;
-      [
-        () => timetableStorage.currentTableName = meta.name,
-        () => {},
-        () => timetableStorage.removeTable(meta.name),
-      ][idx]();
-      setState(() {});
-    });
-  }
-
-  Widget _buildTableNameListView(List<String> names) {
-    final currentTableName = timetableStorage.currentTableName;
-    return ListView(
-        children: names.map((e) {
-      final meta = timetableStorage.getTableMetaByName(e)!;
-      return Card(
-        child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: ListTile(
-              title: Text(e, overflow: TextOverflow.ellipsis),
-              subtitle: ['', '无'].contains(meta.description) ? null : Text(meta.description),
-              trailing: e == currentTableName ? const Icon(Icons.check, color: Colors.green) : null,
-              onTap: () => showTimetableInfoDialog(meta),
-            )),
-      );
-    }).toList());
-  }
-
-  Widget _buildBody() {
-    final tableNames = timetableStorage.tableNames ?? [];
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('当前已导入的课表数：${tableNames.length}'),
-        Expanded(
-          child: _buildTableNameListView(tableNames),
-        )
-      ],
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -395,9 +262,9 @@ class _TimetableImportPageState extends State<TimetableImportPage> {
         },
         child: const Icon(Icons.add),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(12),
-        child: _buildBody(),
+      body: const Padding(
+        padding: EdgeInsets.all(12),
+        child: SizedBox(),
       ),
     );
   }

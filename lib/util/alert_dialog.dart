@@ -43,7 +43,9 @@ Future<int?> showAlertDialog(
     );
   } else if (content is Widget) {
     contentWidget = content;
-  } else {
+  } else if (context is String){
+    contentWidget = Text(content);
+  }else{
     throw TypeError();
   }
 

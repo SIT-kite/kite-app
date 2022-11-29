@@ -27,3 +27,4 @@ export '../shared/design.dart';
 export '../shared/entity/school.dart';
 export '../shared/user_widget/school.dart';
 export '../shared/i18n.dart';
+export '../shared/util.dart';

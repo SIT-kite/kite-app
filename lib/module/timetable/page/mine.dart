@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:kite/module/symbol.dart';
 
 import '../../activity/using.dart';
-import '../init.dart';
-import 'editor.dart';
+import '../user_widget/picker.dart';
+import '../user_widget/timetable_editor.dart';
+import 'import2.dart';
 
 class MyTimetablePage extends StatefulWidget {
   const MyTimetablePage({Key? key}) : super(key: key);
@@ -23,7 +24,14 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
         title: i18n.timetableMineTitle.txt,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () async{
+          final changed = await Navigator.of(context).push((MaterialPageRoute(builder: (_) => const ImportTimetablePage())));
+          if(changed == true){
+            setState(() {
+
+            });
+          }
+        },
         child: const Icon(Icons.add_outlined),
       ),
       body: Padding(
@@ -51,9 +59,9 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
     return CupertinoContextMenu(
       actions: [
         CupertinoContextMenuAction(
-          onPressed: () {
-            Navigator.pop(ctx);
-            showModalBottomSheet(
+          onPressed: () async {
+            Navigator.of(ctx).pop();
+            await showModalBottomSheet(
                 context: ctx,
                 isScrollControlled: true,
                 shape: const ContinuousRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(48))),
@@ -64,62 +72,65 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
                 });
           },
           trailingIcon: CupertinoIcons.doc_text,
-          child: Text('Edit'),
+          child: i18n.timetableEdit.txt,
+        ),
+        CupertinoContextMenuAction(
+          onPressed: () {
+            Navigator.of(ctx).pop();
+            timetableStorage.currentTableName = meta.name;
+            setState(() {
+
+            });
+          },
+          trailingIcon: CupertinoIcons.doc_text,
+          child: i18n.timetableSetToDefault.txt,
         ),
         CupertinoContextMenuAction(
           onPressed: () async {
-            Navigator.pop(context);
-            final date = await showDatePicker(
-              context: context,
-              initialDate: meta.startDate,
-              currentDate: DateTime.now(),
-              firstDate: DateTime(DateTime.now().year),
-              lastDate: DateTime(DateTime.now().year + 2),
-              selectableDayPredicate: (DateTime dataTime) => dataTime.weekday == DateTime.monday,
-            );
+            Navigator.of(ctx).pop();
+            final date = await pickDate(context, initial: meta.startDate);
             if (date != null) {
               meta.startDate = DateTime(date.year, date.month, date.day, 8, 20);
               timetableStorage.addTableMeta(meta.name, meta);
             }
           },
           trailingIcon: CupertinoIcons.time,
-          child: Text('Set Start Time'),
+          child: i18n.timetableSetStartDate.txt,
         ),
         CupertinoContextMenuAction(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.of(ctx).pop();
             timetableStorage.removeTable(meta.name);
             setState(() {});
           },
           isDestructiveAction: true,
           trailingIcon: CupertinoIcons.delete,
-          child: Text('Delete'),
+          child: i18n.timetableDelete.txt,
         ),
       ],
       child: Card(
         child: Padding(
             padding: const EdgeInsets.all(20),
             child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                    Text(
-                      meta.name,
-                      overflow: TextOverflow.ellipsis,
-                      style: ctx.textTheme.titleMedium,
-                    ),
-                    if (isSelected) const Icon(Icons.check, color: Colors.green)
-                  ]),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      meta.description,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  )
-                ],
-              ),
-            )),
+                child: Column(
+              children: [
+                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                  Text(
+                    meta.name,
+                    overflow: TextOverflow.ellipsis,
+                    style: ctx.textTheme.titleMedium,
+                  ),
+                  if (isSelected) const Icon(Icons.check, color: Colors.green)
+                ]),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    meta.description,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                )
+              ],
+            ))),
       ),
     );
   }

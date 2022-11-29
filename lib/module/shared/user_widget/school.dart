@@ -104,6 +104,8 @@ class _SemesterSelectorState extends State<SemesterSelector> {
 
     return DropdownButton<T>(
       value: initialValue,
+      enableFeedback: true,
+      alignment: Alignment.center,
       icon: const Icon(Icons.keyboard_arrow_down_outlined),
       underline: Container(
         height: 2,
@@ -151,7 +153,7 @@ class _SemesterSelectorState extends State<SemesterSelector> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       buildYearSelector(context),
       Container(
         margin: const EdgeInsets.only(left: 15),

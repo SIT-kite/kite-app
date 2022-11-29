@@ -100,12 +100,15 @@ class DailyTimetableState extends State<DailyTimetable> implements ITimetableVie
   void jumpToDay(int targetWeek, int targetDay) {
     if (_pageController.hasClients) {
       final targetPos = weekNDay2Page(targetWeek, targetDay);
-      final currentPos = _pageController.page ?? targetPos;
+      /*final currentPos = _pageController.page ?? targetPos;
       final distance = (targetPos - currentPos).abs();
       _pageController.animateToPage(
         targetPos,
         duration: calcuSwitchAnimationDuration(distance),
         curve: Curves.easeOut,
+      );*/
+      _pageController.jumpToPage(
+        targetPos,
       );
     }
     setState(() {

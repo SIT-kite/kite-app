@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/module/symbol.dart';
 
+import 'button.dart';
 import '../using.dart';
 
 class TimetableEditor extends StatefulWidget {
@@ -39,7 +40,8 @@ class _TimetableEditorState extends State<TimetableEditor> {
           TextFormField(
             controller: _metaDescController,
             maxLines: 2,
-            decoration: InputDecoration(labelText: "Description", border: OutlineInputBorder()),
+            decoration:
+                InputDecoration(labelText: i18n.timetableImportDescFormTitile, border: const OutlineInputBorder()),
           )
         ]));
   }
@@ -62,25 +64,16 @@ class _TimetableEditorState extends State<TimetableEditor> {
                 child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
                   Text(year),
                   Text(semster),
-                  Text("Start with: ${ctx.dateNum(widget.meta.startDate)}"),
+                  Text(i18n.timetableImportStartDate(ctx.dateNum(widget.meta.startDate))),
                 ]),
               ),
               Padding(padding: const EdgeInsets.symmetric(vertical: 20), child: buildDescForm(ctx)),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            child: ElevatedButton(
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Text(
-                  "Preview",
-                  style: ctx.textTheme.titleLarge,
-                ),
-              ),
-              onPressed: () {},
-            ),
-          )
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [buildButton(ctx, i18n.timetableImportSaveBtn), buildButton(ctx, i18n.timetableImportPreviewBtn)],
+          ).vwrap()
         ],
       ),
     );

@@ -236,6 +236,7 @@ class _TimetableColumnState extends State<TimetableColumn> {
       return InkWell(
         onTap: () {
           showModalBottomSheet(
+              isScrollControlled: true,
               backgroundColor: Colors.transparent,
               builder: (BuildContext context) => Sheet(course.courseId, widget.allCourses),
               context: context);
