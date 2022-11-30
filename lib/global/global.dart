@@ -74,15 +74,14 @@ class Global {
     if (error is DioError) {
       if (inSsoErrorDialog) return;
       inSsoErrorDialog = true;
-      showAlertDialog(
-        context,
-        title: i18n.networkConnectionTimeoutError,
-        content: [
-          i18n.networkConnectionTimeoutErrorDesc.txt,
-        ],
-        actionTextList: [i18n.openNetworkToolBtn, i18n.cancel],
-      ).then((select) {
-        if (select == 0) Navigator.of(context).popAndPushNamed('/connectivity');
+      context
+          .showRequest(
+              title: i18n.networkConnectionTimeoutError,
+              desc: i18n.networkConnectionTimeoutErrorDesc,
+              yes: i18n.openNetworkToolBtn,
+              no: i18n.cancel)
+          .then((confirm) {
+        if (confirm) Navigator.of(context).popAndPushNamed('/connectivity');
         inSsoErrorDialog = false;
       });
     }

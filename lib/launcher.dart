@@ -19,14 +19,13 @@
 import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/route.dart';
+import 'package:kite/session/sit_app_session.dart';
 import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/launcher.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/rule.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import 'module/sit_app/arrive_code/dialog.dart';
 
 class GlobalLauncher {
   static get _context => Catcher.navigatorKey!.currentContext!;
@@ -47,14 +46,6 @@ class GlobalLauncher {
             if (uri == null) return false;
             return await launchUrl(uri);
           }
-        },
-      ),
-      LaunchScheme(
-        launchRule: FunctionalRule((s) => s.startsWith('QY')),
-        onLaunch: (scheme) async {
-          Log.info('启动场所码');
-          ArriveCodeDialog.scan(_context, scheme.substring(2));
-          return true;
         },
       ),
       LaunchScheme(
@@ -81,17 +72,7 @@ class GlobalLauncher {
       )
     ],
     onNotFound: (scheme) async {
-      showAlertDialog(
-        _context,
-        title: '无法识别',
-        content: [
-          Text(
-            '无法识别的内容: \n'
-            '$scheme',
-          ),
-        ],
-        actionTextList: ['我知道了'],
-      );
+      _context.showTip(title: '无法识别', desc: "无法识别的内容: \n$scheme", ok: '我知道了');
       return true;
     },
   );

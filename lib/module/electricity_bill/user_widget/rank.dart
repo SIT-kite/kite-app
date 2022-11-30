@@ -5,7 +5,6 @@ import '../entity/account.dart';
 import 'card.dart';
 
 class RankView extends StatefulWidget {
-
   const RankView({super.key});
 
   @override

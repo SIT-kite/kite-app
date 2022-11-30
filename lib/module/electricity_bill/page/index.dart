@@ -160,7 +160,8 @@ class _ElectricityPageState extends State<ElectricityPage> {
     ]);
     _refreshController.refreshCompleted();
   }
-final _scrollController = ScrollController();
+
+  final _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     final selectedRoom = room;
@@ -188,8 +189,7 @@ final _scrollController = ScrollController();
   }
 
   Widget _buildEmptyBody(BuildContext ctx) {
-    return buildLeavingBlankBody(ctx,
-        icon: Icons.pageview_outlined, desc: i18n.elecBillInitialTip, onIconTap: search);
+    return buildLeavingBlankBody(ctx, icon: Icons.pageview_outlined, desc: i18n.elecBillInitialTip, onIconTap: search);
   }
 
   Widget _buildBody(BuildContext ctx, String room) {
@@ -230,11 +230,11 @@ final _scrollController = ScrollController();
         child: Column(
           children: [
             if (balance == null)
-              _buildBalanceInfoRowWithPlaceholder(Icons.offline_bolt, i18n.elecBillRemainingPower,
-                  const Center(child: CircularProgressIndicator()))
+              _buildBalanceInfoRowWithPlaceholder(
+                  Icons.offline_bolt, i18n.elecBillRemainingPower, const Center(child: CircularProgressIndicator()))
             else
-              _buildBalanceInfoRow(Icons.offline_bolt, i18n.elecBillRemainingPower,
-                  i18n.powerKwh(balance.power.toStringAsFixed(2))),
+              _buildBalanceInfoRow(
+                  Icons.offline_bolt, i18n.elecBillRemainingPower, i18n.powerKwh(balance.power.toStringAsFixed(2))),
             if (balance == null)
               _buildBalanceInfoRowWithPlaceholder(
                   Icons.savings, i18n.elecBillBalance, const Center(child: CircularProgressIndicator()))

@@ -35,17 +35,19 @@ class FreshmanPage extends StatelessWidget {
   final myFutureBuilderController = MyFutureBuilderController();
   final freshmanCacheDao = FreshmanInit.freshmanCacheDao;
 
-  void showFirstDialog(BuildContext context) {
+  Future<void> showFirstDialog(BuildContext context) async {
     if (!(freshmanCacheDao.disableFirstEnterDialogState ?? false)) {
-      showAlertDialog(context, title: i18n.addInfoTitle, content: [
-        i18n.addInfoRequest.txt
-      ], actionWidgetList: [
-        ElevatedButton(onPressed: () {}, child: i18n.yes.txt),
-        TextButton(onPressed: () {}, child: i18n.dontShowThisAgainBtn.txt),
-      ]).then((select) {
-        if (select == 0) {
+      context
+          .showRequest(
+        title: i18n.addInfoTitle,
+        desc: i18n.addInfoRequest,
+        yes: i18n.yes,
+        no: i18n.dontShowThisAgainBtn,
+      )
+          .then((confirm) {
+        if (confirm) {
           Navigator.of(context).pushNamed(RouteTable.freshmanUpdate);
-        } else if (select == 1) {
+        } else {
           freshmanCacheDao.disableFirstEnterDialogState = true;
         }
       });
@@ -54,7 +56,7 @@ class FreshmanPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration.zero, () => showFirstDialog(context));
+    Future.delayed(Duration.zero, () async => await showFirstDialog(context));
     return MyFutureBuilder<FreshmanInfo>(
       controller: myFutureBuilderController,
       futureGetter: () async {

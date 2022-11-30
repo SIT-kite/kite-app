@@ -135,16 +135,12 @@ class _HomeRearrangePageState extends State<HomeRearrangePage> {
       icon: const Icon(Icons.replay),
       onPressed: () async {
         if (!listEquals(currentHomeItems, defaultOrder)) {
-          final selected = await showAlertDialog(
-            context,
-            title: i18n.settingsHomepageRearrangeResetRequestTitle,
-            content: i18n.settingsHomepageRearrangeResetRequest.txt,
-            actionWidgetList: [
-              ElevatedButton(onPressed: () {}, child: i18n.yes.txt),
-              TextButton(onPressed: () {}, child: i18n.no.txt),
-            ],
-          );
-          if (selected == 0) {
+          final confirm = await context.showRequest(
+              title: i18n.settingsHomepageRearrangeResetRequestTitle,
+              desc: i18n.settingsHomepageRearrangeResetRequest,
+              yes: i18n.yes,
+              no: i18n.no);
+          if (confirm) {
             setState(() {
               isA = !isA;
               currentHomeItems = [...defaultOrder];

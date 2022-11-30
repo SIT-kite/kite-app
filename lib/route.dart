@@ -17,12 +17,12 @@
  */
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kite/design/user_widgets/dialog.dart';
 import 'package:kite/home/page/index.dart';
 import 'package:kite/navigation/static_route.dart';
 import 'package:kite/override/entity.dart';
 import 'package:kite/settings/page/index.dart';
 import 'package:kite/storage/init.dart';
-import 'package:kite/util/alert_dialog.dart';
 
 import 'module/expense2/page/index.dart';
 import 'module/simple_page/page/browser.dart';
@@ -32,6 +32,7 @@ import 'util/user.dart';
 
 class RouteTable {
   RouteTable._();
+
   static const root = '/';
   static const home = '/home';
   static const reportTemp = '/report_temp';
@@ -211,13 +212,8 @@ class RouteWithNoticeDialog implements IRouteGenerator {
         final overrideDb = Kv.override;
         final confirmedRouteNotice = overrideDb.confirmedRouteNotice ?? [];
         if (confirmedRouteNotice.contains(notice.id)) return;
-        final select = await showAlertDialog(
-          context,
-          title: notice.title,
-          content: Text(notice.msg),
-          actionTextList: ['我已收到'],
-        );
-        if (select == 0) {
+        final confirm = await context.showTip(title: notice.title, desc: notice.msg, ok: '我已收到');
+        if (confirm) {
           confirmedRouteNotice.add(notice.id);
           overrideDb.confirmedRouteNotice = confirmedRouteNotice;
         }

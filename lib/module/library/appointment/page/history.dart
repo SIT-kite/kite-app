@@ -49,51 +49,22 @@ class _HistoryPageState extends State<HistoryPage> {
     Widget buildCancelButton() {
       return TextButton(
         onPressed: () async {
-          final select = await showAlertDialog(
-            context,
-            title: '取消预约',
-            content: [
-              const Text('是否想要取消本次预约'),
-            ],
-            actionWidgetList: [
-              ElevatedButton(
-                onPressed: () {},
-                child: const Text('确认取消'),
-              ),
-              TextButton(
-                onPressed: () {},
-                child: const Text('手滑了'),
-              ),
-            ],
-          );
-          if (select == 0) {
+          final confirm = await context.showRequest(title: '取消预约', desc: '是否想要取消本次预约', yes: '确认取消', no: '手滑了');
+          if (confirm) {
             try {
               await service.cancelApplication(applyId);
-              await showAlertDialog(
-                context,
-                title: '取消成功',
-                actionWidgetList: [
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text('知道了'),
-                  ),
-                ],
-              );
+              if (mounted) {
+                await context.showTip(title: '取消预约', desc: '取消成功', ok: '知道了');
+              }
               setState(() {});
             } catch (e) {
-              await showAlertDialog(
-                context,
-                title: '出错了',
-                content: [
-                  Text(e.toString()),
-                ],
-                actionWidgetList: [
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text('知道了'),
-                  ),
-                ],
-              );
+              if (mounted) {
+                await context.showTip(
+                  title: '出错了',
+                  desc: e.toString(),
+                  ok: '知道了',
+                );
+              }
             }
           }
         },

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rettulf/rettulf.dart';
 
-Widget  buildLeavingBlankBody(BuildContext ctx,
+Widget buildLeavingBlankBody(BuildContext ctx,
     {required IconData icon, required String desc, VoidCallback? onIconTap}) {
   return [
     if (onIconTap == null)

@@ -22,6 +22,7 @@ import '../using.dart';
 
 class DateHeader extends StatefulWidget {
   final List<String> dayHeaders;
+
   /// 当前显示的周次
   final int currentWeek;
 
@@ -111,7 +112,8 @@ class _DateHeaderState extends State<DateHeader> {
         : null;
     return Expanded(
       flex: 3,
-      child: InkWell(onTap: onTapCallback, child: buildDayHeader(context, day, '${widget.dayHeaders[day-1]}\n$dateString')),
+      child: InkWell(
+          onTap: onTapCallback, child: buildDayHeader(context, day, '${widget.dayHeaders[day - 1]}\n$dateString')),
     );
   }
 

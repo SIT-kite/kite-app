@@ -42,7 +42,8 @@ class DailyReportPage extends StatelessWidget {
       fixedTitle: i18n.ftype_reportTemp,
       otherActions: [
         IconButton(
-          onPressed: () {
+          onPressed: () async {
+            // TODO: use BuildContext.showTip dialog
             showAlertDialog(context,
                 title: i18n.reportTempReminderTitle,
                 content: const SingleChildScrollView(

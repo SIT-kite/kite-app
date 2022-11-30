@@ -41,10 +41,7 @@ class TimetablePosition {
 
   static TimetablePosition locate(DateTime initial, DateTime time) {
     // 求一下过了多少天
-    int days = time
-        .clearTime()
-        .difference(initial.clearTime())
-        .inDays;
+    int days = time.clearTime().difference(initial.clearTime()).inDays;
 
     int week = days ~/ 7 + 1;
     int day = days % 7 + 1;
@@ -191,16 +188,16 @@ class _TimetableViewerState extends State<TimetableViewer> {
       switchInCurve: Curves.ease,
       child: (displayModeState == DisplayMode.daily)
           ? DailyTimetable(
-          key: dailyTimetableKey,
-          allCourses: tableCoursesState,
-          initialDate: tableMetaState?.startDate ?? DateTime.now(),
-          tableCache: widget.tableCache,
-          viewChangingCallback: switchDisplayMode)
+              key: dailyTimetableKey,
+              allCourses: tableCoursesState,
+              initialDate: tableMetaState?.startDate ?? DateTime.now(),
+              tableCache: widget.tableCache,
+              viewChangingCallback: switchDisplayMode)
           : WeeklyTimetable(
-          key: weeklyTimetableKey,
-          allCourses: tableCoursesState,
-          initialDate: tableMetaState?.startDate ?? DateTime.now(),
-          tableCache: widget.tableCache),
+              key: weeklyTimetableKey,
+              allCourses: tableCoursesState,
+              initialDate: tableMetaState?.startDate ?? DateTime.now(),
+              tableCache: widget.tableCache),
     );
   }
 }

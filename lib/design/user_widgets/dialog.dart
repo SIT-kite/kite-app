@@ -3,18 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:rettulf/rettulf.dart';
 
 extension DialogEx on BuildContext {
-  Future<void> showTip({required String title, required String desc, required String ok}) async {
-    await showDialog(
+  /// return: whether the button was hit
+  Future<bool> showTip({required String title, required String desc, required String ok}) async {
+    final confirm = await showDialog(
       context: this,
-      builder: (_) => AlertDialog(
+      builder: (ctx) => AlertDialog(
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         content: Text(desc, style: const TextStyle()),
         actions: [
-          Align(alignment: Alignment.bottomCenter, child: CupertinoButton(onPressed: () {}, child: Text(ok))),
+          Align(
+              alignment: Alignment.bottomCenter,
+              child: CupertinoButton(
+                  onPressed: () {
+                    Navigator.of(ctx).pop(true);
+                  },
+                  child: Text(ok))),
         ],
       ),
     );
-    return;
+    return confirm == true;
   }
 
   Future<bool> showRequest(

@@ -198,10 +198,8 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
                   _status = ImportStatus.failed;
                 });
                 if (!mounted) return;
-                await showAlertDialog(ctx,
-                    title: i18n.timetableImportErrorTitle,
-                    content: i18n.timetableImportError.txt,
-                    actionWidgetList: [TextButton(onPressed: () {}, child: i18n.ok.txt)]);
+                await context.showTip(
+                    title: i18n.timetableImportErrorTitle, desc: i18n.timetableImportError, ok: i18n.ok);
               } finally {
                 if (_status == ImportStatus.importing) {
                   setState(() {

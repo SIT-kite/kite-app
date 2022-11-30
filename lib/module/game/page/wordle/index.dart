@@ -90,7 +90,7 @@ class _WordlePageState extends State<WordlePage> {
                       final record =
                           GameRecord(GameType.wordle, score, startTime, currentTime.difference(startTime).inSeconds);
                       GameInit.gameRecord.append(record);
-
+                      // TODO: use BuildContext.showTip dialog
                       final result = await showAlertDialog(
                         context,
                         title: '猜中了!',

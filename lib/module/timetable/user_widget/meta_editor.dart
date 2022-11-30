@@ -64,14 +64,12 @@ class _MetaEditorState extends State<MetaEditor> {
           _wrap(TextFormField(
             controller: _nameController,
             maxLines: 1,
-            decoration:
-                InputDecoration(labelText: i18n.timetableNameFormTitle, border: const OutlineInputBorder()),
+            decoration: InputDecoration(labelText: i18n.timetableNameFormTitle, border: const OutlineInputBorder()),
           )),
           _wrap(TextFormField(
             controller: _descController,
             maxLines: 2,
-            decoration:
-                InputDecoration(labelText: i18n.timetableDescFormTitle, border: const OutlineInputBorder()),
+            decoration: InputDecoration(labelText: i18n.timetableDescFormTitle, border: const OutlineInputBorder()),
           )),
         ]));
   }

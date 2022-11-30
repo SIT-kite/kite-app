@@ -52,7 +52,7 @@ class TodayTomorrowSwitch extends StatelessWidget {
   Widget buildTomorrowWidget() {
     final DateTime today = DateTime.now();
     final tomorrow = today.add(const Duration(days: 1));
-    final tomorrowWeekText = '周' + _weekText.substring(tomorrow.weekday - 1, tomorrow.weekday);
+    final tomorrowWeekText = '周${_weekText.substring(tomorrow.weekday - 1, tomorrow.weekday)}';
     final tomorrowDateText = '${tomorrow.month}-${tomorrow.day}';
     return Text(
       '明天\n'
@@ -105,52 +105,40 @@ class _AppointmentPageState extends State<AppointmentPage> {
   }
 
   Future<void> showAppointPeriodDialog(PeriodStatusRecord e) async {
-    final applyDialogResult = await showAlertDialog(
-      context,
-      title: '是否要预约本场',
-      content: [
-        Text('场次编号: ${e.period}\n'
+    final applyDialogResult = await context.showRequest(
+        title: '是否要预约本场',
+        desc: '场次编号: ${e.period}\n'
             '已预约人数: ${e.applied}\n'
             '预计开放座位: ${e.count}\n'
             '开放时间段: ${e.text}\n'
             '\n'
-            '注意: 请务必在预约时段内进馆，未到将影响下一次预约。\n'),
-      ],
-      actionWidgetList: [
-        ElevatedButton(
-          onPressed: () {},
-          child: const Text('确定预约'),
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        TextButton(
-          onPressed: () {},
-          child: const Text('取消预约'),
-        ),
-      ],
-    );
+            '注意: 请务必在预约时段内进馆，未到将影响下一次预约。\n',
+        yes: '确定预约',
+        no: '取消预约');
     // TODO: Wrong use of BuildContext
     // 确定预约
-    if (applyDialogResult == 0) {
-      if (!await signUpIfNecessary(context, '预约图书馆')) return;
-      try {
-        await service.apply(e.period);
-        await showAlertDialog(
-          context,
-          title: '预约成功',
-          actionTextList: ['关闭'],
-        );
-      } catch (e, _) {
-        showAlertDialog(
-          context,
-          title: '预约失败',
-          content: [Text('$e')],
-          actionTextList: ['关闭'],
-        );
-      } finally {
-        setState(() {});
-      }
+    if (applyDialogResult) {
+      if (!mounted) return;
+      final signed = await signUpIfNecessary(context, '预约图书馆');
+      if (signed) return;
+    }
+    try {
+      await service.apply(e.period);
+      if (!mounted) return;
+      await context.showTip(
+        title: "预约图书馆",
+        desc: '预约成功',
+        ok: '关闭',
+      );
+    } catch (e, _) {
+      if (!mounted) return;
+      await context.showTip(
+        title: '预约失败',
+        desc: e.toString(),
+        ok: '关闭',
+      );
+    } finally {
+      setState(() {});
     }
   }
 

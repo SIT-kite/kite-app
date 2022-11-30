@@ -16,13 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/design/user_widgets/dialog.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/module/symbol.dart';
 import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
-import 'package:kite/util/alert_dialog.dart';
-import 'package:kite/util/dsl.dart';
 import '../brick.dart';
 
 class ReportTempItem extends StatefulWidget {
@@ -36,7 +35,7 @@ class _ReportTempItemState extends State<ReportTempItem> {
   String? content;
 
   /// 用于限制仅弹出一次对话框
-  bool hasWarnedDialog = false;
+  static bool hasWarnedDialog = false;
 
   @override
   void initState() {
@@ -72,21 +71,15 @@ class _ReportTempItemState extends State<ReportTempItem> {
     if (actualH * 60 + actualM > expectH * 60 + expectM) return;
 
     // 弹框提醒
-    final select = await showAlertDialog(
-      context,
-      title: i18n.reportTempHelper,
-      content: i18n.reportTempRequest.txt,
-      actionWidgetList: [
-        ElevatedButton(onPressed: () {}, child: i18n.yes.txt),
-        TextButton(onPressed: () {}, child: i18n.notNow.txt),
-      ],
-    );
-    // 用户没有选择确认上报
-    if (select == null || select == 1) return;
 
-    if (!mounted) return;
-    await Navigator.of(context).pushNamed(RouteTable.reportTemp);
-    hasWarnedDialog = true;
+    final confirm = await context.showRequest(
+        title: i18n.reportTempHelper, desc: i18n.reportTempRequest, yes: i18n.yes, no: i18n.notNow);
+    // 用户没有选择确认上报
+    if (confirm) {
+      if (!mounted) return;
+      await Navigator.of(context).pushNamed(RouteTable.reportTemp);
+      hasWarnedDialog = true;
+    }
   }
 
   String _generateContent(ReportHistory history) {

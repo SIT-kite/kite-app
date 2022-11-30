@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:kite/design/user_widgets/dialog.dart';
 import 'package:kite/module/game/using.dart';
 
 /*
@@ -77,10 +78,7 @@ class _GameBoardState extends State<GameBoard> {
         } else {
           await const Vibration(milliseconds: 400, amplitude: 120).emit();
           if (mounted) {
-            await showAlertDialog(context,
-                title: i18n.error,
-                content: i18n.gameWordleNoSuchWord(word).txt,
-                actionWidgetList: [TextButton(onPressed: () {}, child: i18n.ok.txt)]);
+            await context.showTip(title: i18n.error, desc: i18n.gameWordleNoSuchWord(word), ok: i18n.ok);
           }
         }
       }

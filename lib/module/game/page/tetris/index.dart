@@ -22,6 +22,7 @@
 // Imported and commented on 2022.8.28
 
 import 'package:flutter/material.dart';
+import 'package:kite/design/user_widgets/dialog.dart';
 import '../../using.dart';
 import 'gamer/gamer.dart';
 import 'gamer/keyboard.dart';
@@ -40,23 +41,19 @@ class TetrisPage extends StatelessWidget {
         actions: [
           IconButton(
               icon: const Icon(Icons.help),
-              onPressed: () {
-                showAlertDialog(
-                  context,
-                  title: '键位说明',
-                  content: const Text(
-                    '如果您使用键盘，键位如下：'
-                    'W: 旋转\n'
-                    'S: 加速下落\n'
-                    'A: 左移\n'
-                    'D: 右移\n'
-                    '空格: 瞬间下落\n'
-                    'P: 暂停\n'
-                    'O: 关闭/开启音量\n'
-                    'R: 重置游戏\n',
-                  ),
-                  actionTextList: ['知道了'],
-                );
+              onPressed: () async {
+                await context.showTip(
+                    title: '键位说明',
+                    desc: '如果您使用键盘，键位如下：'
+                        'W: 旋转\n'
+                        'S: 加速下落\n'
+                        'A: 左移\n'
+                        'D: 右移\n'
+                        '空格: 瞬间下落\n'
+                        'P: 暂停\n'
+                        'O: 关闭/开启音量\n'
+                        'R: 重置游戏\n',
+                    ok: '知道了');
               })
         ],
       ),

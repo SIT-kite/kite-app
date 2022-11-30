@@ -18,6 +18,7 @@
 import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:kite/design/user_widgets/dialog.dart';
 import '../using.dart';
 import '../dao/expense.dart';
 import '../entity/expense.dart';
@@ -42,16 +43,9 @@ class _ExpensePageState extends State<ExpensePage> {
   void initState() {
     if (ExpenseTrackerInit.expenseRecord.isEmpty()) {
       Future.delayed(Duration.zero, () async {
-        var responseIndex = await showAlertDialog(
-          context,
-          title: i18n.refresh,
-          content: [i18n.expenseFirstTimeRefreshRequest.txt],
-          actionWidgetList: [
-            ElevatedButton(onPressed: () {}, child: i18n.refresh.txt), // index 0
-            TextButton(onPressed: () {}, child: i18n.notNow.txt), // index 1
-          ],
-        );
-        if (responseIndex == 0) {
+        final confirm = await context.showRequest(
+            title: i18n.refresh, desc: i18n.expenseFirstTimeRefreshRequest, yes: i18n.refresh, no: i18n.notNow);
+        if (confirm) {
           await _refresh();
         }
       });

@@ -41,7 +41,6 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
 
   bool isStarted = true;
 
-
   Widget buildImagePicker() {
     return IconButton(
       color: Colors.white,
@@ -127,7 +126,7 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
       onDetect: (barcode, args) {
         controller.dispose();
 
-        Future.delayed(Duration.zero, () async{
+        Future.delayed(Duration.zero, () async {
           await const Vibration(milliseconds: 100).emit();
         });
 
