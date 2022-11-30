@@ -69,7 +69,10 @@ class DetailPage extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: Column(
         children: [
-          Padding(padding: const EdgeInsets.all(10), child: Text(title, style: titleStyle, softWrap: true)),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Text(title, style: titleStyle, softWrap: true),
+          ),
           Table(
             columnWidths: const {
               0: FlexColumnWidth(1),

@@ -183,7 +183,7 @@
   "elecBillDailyChart7": "Last 7 Days ⚡ Chart",
   "elecBillElecChart": "Electricity Chart",
   "elecBillHourlyChart24": "Last 24 Hours ⚡ Chart",
-  "elecBillInitialTip": "Please search your room number",
+  "elecBillInitialTip": "Please search your room number first",
   "elecBillLast24Hour": "Last 24 hours",
   "elecBillLast7Day": "Last 7 days",
   "elecBillRank": "Rank",
@@ -307,7 +307,7 @@
   "ftype_yellowPages_desc": "Contact school",
   "fullAcademicYear": "Full Year",
   "fullName": "Full Name",
-  "gameLeaveRequest": "Confirm To Leave?",
+  "gameLeaveRequest": "Confirm to Leave?",
   "gameLeaveRequestDesc": "You game state will not be saved.",
   "gameWordleNoSuchWord": "No such word \"{word}\".",
   "@gameWordleNoSuchWord": {
@@ -538,8 +538,8 @@
   "timetableDescFormTitle": "Description",
   "timetableEdit": "Edit",
   "timetableImportEndTip": "Please enter the info.",
-  "timetableImportError": "Can't import the timetable, please try again.",
-  "timetableImportErrorTitle": "Import Error",
+  "timetableImportFailedDesc": "Can't import the timetable, please try again.",
+  "timetableImportFailed": "Import Error",
   "timetableImportFailedTip": "Failed to import, please try again.",
   "timetableImportImportBtn": "Try Import",
   "timetableImportImporting": "Trying to fetch the timetable...",
@@ -571,6 +571,7 @@
   "timetableInitialImportRequest": "Import a Timetable",
   "timetableInitialImportRequestDesc": "You seem to use Kite's Timetable first, try import one now?",
   "timetableJumpBtn": "Jump",
+  "timetableJumpFindTodayBtn": "Find Today",
   "timetableMineEmptyTip": "Let's import a new timetable !",
   "timetableMineTitle": "My Timetables",
   "timetableNameFormTitle": "Name",
@@ -627,6 +628,5 @@
   "welcomeSlogan": "Excellent school life, from here.",
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
-  "yes": "Yes",
-  "timetableJumpFindTodayBtn": "Find Today"
+  "yes": "Yes"
 }

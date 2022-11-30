@@ -180,8 +180,8 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
                 final semester = selectedSemester;
                 final year = SchoolYear(selectedYear);
                 await Future.wait([
-                  //_fetchTimetable(year, semester),
-                  fetchMockCourses(),
+                  _fetchTimetable(year, semester),
+                  //fetchMockCourses(),
                   Future.delayed(const Duration(milliseconds: 4500)),
                 ]).then((value) async {
                   setState(() {
@@ -199,7 +199,7 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
                 });
                 if (!mounted) return;
                 await context.showTip(
-                    title: i18n.timetableImportErrorTitle, desc: i18n.timetableImportError, ok: i18n.ok);
+                    title: i18n.timetableImportFailed, desc: i18n.timetableImportFailedDesc, ok: i18n.ok);
               } finally {
                 if (_status == ImportStatus.importing) {
                   setState(() {

@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/design/page/common.dart';
 import '../entity/message.dart';
 import '../using.dart';
 
@@ -53,12 +54,7 @@ class MessagePage extends StatelessWidget {
         if (data.msgList.isNotEmpty) {
           return _buildMessageList(context, data.msgList);
         } else {
-          return Center(
-            child: Text(
-              i18n.applicationMyMailBoxEmptyTip,
-              style: Theme.of(context).textTheme.bodyText2,
-            ),
-          );
+          return buildLeavingBlankBody(context, icon: Icons.upcoming_outlined, desc: i18n.applicationMyMailBoxEmptyTip);
         }
       },
     );
