@@ -75,7 +75,7 @@ class _ReportTempItemState extends State<ReportTempItem> {
     final confirm = await context.showRequest(
         title: i18n.reportTempHelper, desc: i18n.reportTempRequest, yes: i18n.yes, no: i18n.notNow);
     // 用户没有选择确认上报
-    if (confirm) {
+    if (confirm == true) {
       if (!mounted) return;
       await Navigator.of(context).pushNamed(RouteTable.reportTemp);
       hasWarnedDialog = true;

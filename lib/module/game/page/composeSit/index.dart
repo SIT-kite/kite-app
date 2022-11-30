@@ -19,6 +19,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import '../../user_widgets/dialog.dart';
 import '../../using.dart';
 
 import '../../entity/record.dart';
@@ -29,29 +30,31 @@ class ComposeSitPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SimpleWebViewPage(
-      initialUrl: '${Backend.kite}/game/composeSit',
-      showLoadInBrowser: true,
-      injectJsRules: [
-        InjectJsRuleItem(injectTime: InjectJsTime.onPageStarted, rule: FunctionalRule((x) => true), javascript: '''
+    return WillPopScope(
+        onWillPop: () async => await showLeaveGameRequest(context),
+        child: SimpleWebViewPage(
+          initialUrl: '${Backend.kite}/game/composeSit',
+          showLoadInBrowser: true,
+          injectJsRules: [
+            InjectJsRuleItem(injectTime: InjectJsTime.onPageStarted, rule: FunctionalRule((x) => true), javascript: '''
 function uploadGameRecord(obj){
   KiteGame.postMessage(JSON.stringify(obj));
 }''')
-      ],
-      javascriptChannels: {
-        JavascriptChannel(
-          name: 'KiteGame',
-          onMessageReceived: (JavascriptMessage message) async {
-            Log.info('收到上传游戏记录请求${message.message}');
-            final record = GameRecord.fromJson(jsonDecode(message.message));
+          ],
+          javascriptChannels: {
+            JavascriptChannel(
+              name: 'KiteGame',
+              onMessageReceived: (JavascriptMessage message) async {
+                Log.info('收到上传游戏记录请求${message.message}');
+                final record = GameRecord.fromJson(jsonDecode(message.message));
 
-            Log.info('上传游戏记录$record');
-            record.ts = DateTime.now();
+                Log.info('上传游戏记录$record');
+                record.ts = DateTime.now();
 
-            await uploadGameRecord(context, record);
+                await uploadGameRecord(context, record);
+              },
+            ),
           },
-        ),
-      },
-    );
+        ));
   }
 }

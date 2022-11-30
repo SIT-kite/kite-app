@@ -81,7 +81,7 @@ class Global {
               yes: i18n.openNetworkToolBtn,
               no: i18n.cancel)
           .then((confirm) {
-        if (confirm) Navigator.of(context).popAndPushNamed('/connectivity');
+        if (confirm == true) Navigator.of(context).popAndPushNamed('/connectivity');
         inSsoErrorDialog = false;
       });
     }

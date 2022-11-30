@@ -24,7 +24,7 @@ extension DialogEx on BuildContext {
     return confirm == true;
   }
 
-  Future<bool> showRequest(
+  Future<bool?> showRequest(
       {required String title,
       required String desc,
       required String yes,
@@ -54,7 +54,13 @@ extension DialogEx on BuildContext {
         ],
       ),
     );
-    return index == 0;
+    if (index == 0) {
+      return true;
+    } else if (index == 1) {
+      return false;
+    } else {
+      return null;
+    }
   }
 
   Future<dynamic> showSheet(WidgetBuilder builder) async {
@@ -66,14 +72,19 @@ extension DialogEx on BuildContext {
   }
 
   Future<int?> showPicker(
-      {required int count, required String ok, double tagrtHeight = 240, required IndexedWidgetBuilder make}) async {
+      {required int count,
+      required String ok,
+      int? initialIndex,
+      double targetHeight = 240,
+      required IndexedWidgetBuilder make}) async {
     int? number;
     return await navigator.push(
       CupertinoModalPopupRoute(
         builder: (ctx) => CupertinoActionSheet(
           message: SizedBox(
-              height: tagrtHeight,
+              height: targetHeight,
               child: CupertinoPicker(
+                scrollController: initialIndex != null ? FixedExtentScrollController(initialItem: initialIndex) : null,
                 magnification: 1.22,
                 useMagnifier: true,
                 // This is called when selected item is changed.

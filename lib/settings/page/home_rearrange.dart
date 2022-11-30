@@ -136,11 +136,11 @@ class _HomeRearrangePageState extends State<HomeRearrangePage> {
       onPressed: () async {
         if (!listEquals(currentHomeItems, defaultOrder)) {
           final confirm = await context.showRequest(
-              title: i18n.settingsHomepageRearrangeResetRequestTitle,
-              desc: i18n.settingsHomepageRearrangeResetRequest,
+              title: i18n.settingsHomeRearrangeResetRequest,
+              desc: i18n.settingsHomeRearrangeResetRequestDesc,
               yes: i18n.yes,
               no: i18n.no);
-          if (confirm) {
+          if (confirm == true) {
             setState(() {
               isA = !isA;
               currentHomeItems = [...defaultOrder];

@@ -41,7 +41,7 @@ import 'item/report.dart';
 import 'item/upgrade.dart';
 
 class HomepageFactory {
-  static final Map<FType, WidgetBuilder> builders = {
+  static final Map<FType, WidgetBuilder?> builders = {
     FType.upgrade: (context) => const UpgradeItem(),
     FType.kiteBulletin: (context) => const KiteBulletinItem(),
     FType.timetable: (context) => Brick(
@@ -135,11 +135,11 @@ class HomepageFactory {
         ),
   };
 
-  static Widget buildBrickWidget(BuildContext context, FType type) {
-    final builder = builders[type];
-    if (builder == null) {
-      throw UnimplementedError("未实现的功能项: ${type.name}");
+  static Widget? buildBrickWidget(BuildContext context, FType type) {
+    if(!builders.containsKey(type)){
+      throw UnimplementedError("Brick[${type.name}] is not available.");
     }
-    return builder(context);
+    final builder = builders[type];
+    return builder?.call(context);
   }
 }

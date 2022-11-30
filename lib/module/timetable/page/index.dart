@@ -61,7 +61,7 @@ class _TimetablePageState extends State<TimetablePage> {
             yes: i18n.yes,
             no: i18n.notNow);
 
-        if (approve) {
+        if (approve == true) {
           if (!mounted) return;
           await Navigator.of(context).pushNamed(RouteTable.timetableImport);
           _onRefresh();
@@ -98,13 +98,16 @@ class _TimetablePageState extends State<TimetablePage> {
   }
 
   Future<void> selectTimetablePageToJump(BuildContext ctx) async {
+    final currentWeek = tableViewerController.currentWeek;
+    final initialIndex = currentWeek - 1;
     final goto = await ctx.showPicker(
         count: 20,
+        initialIndex: initialIndex,
         ok: i18n.timetableJumpBtn,
         make: (ctx, i) {
           return Text(i18n.timetableWeekOrderedName(i + 1));
         });
-    if (goto != null) {
+    if (goto != null && goto != (initialIndex)) {
       tableViewerController.jumpToWeek(goto + 1);
     }
   }

@@ -50,7 +50,7 @@ class _HistoryPageState extends State<HistoryPage> {
       return TextButton(
         onPressed: () async {
           final confirm = await context.showRequest(title: '取消预约', desc: '是否想要取消本次预约', yes: '确认取消', no: '手滑了');
-          if (confirm) {
+          if (confirm == true) {
             try {
               await service.cancelApplication(applyId);
               if (mounted) {

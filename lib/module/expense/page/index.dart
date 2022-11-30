@@ -45,7 +45,7 @@ class _ExpensePageState extends State<ExpensePage> {
       Future.delayed(Duration.zero, () async {
         final confirm = await context.showRequest(
             title: i18n.refresh, desc: i18n.expenseFirstTimeRefreshRequest, yes: i18n.refresh, no: i18n.notNow);
-        if (confirm) {
+        if (confirm == true) {
           await _refresh();
         }
       });

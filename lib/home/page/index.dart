@@ -205,7 +205,10 @@ class _HomePageState extends State<HomePage> {
         currentGroup = [];
       } else {
         if (!filter.accept(item, userType)) {
-          currentGroup.add(HomepageFactory.buildBrickWidget(context, item));
+          final brick = HomepageFactory.buildBrickWidget(context, item);
+          if (brick != null) {
+            currentGroup.add(brick);
+          }
         }
       }
     }

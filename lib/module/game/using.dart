@@ -23,6 +23,7 @@ export '../shared/logger.dart';
 export '../shared/math.dart';
 export '../shared/route.dart';
 export '../shared/dialog.dart';
+export '../shared/design.dart';
 export '../shared/util.dart';
 export '../shared/networking.dart';
 export '../shared/user_widget/webview.dart';

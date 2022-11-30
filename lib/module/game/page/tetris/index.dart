@@ -23,6 +23,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:kite/design/user_widgets/dialog.dart';
+import '../../user_widgets/dialog.dart';
 import '../../using.dart';
 import 'gamer/gamer.dart';
 import 'gamer/keyboard.dart';
@@ -35,31 +36,32 @@ class TetrisPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('俄罗斯方块'),
-        actions: [
-          IconButton(
-              icon: const Icon(Icons.help),
-              onPressed: () async {
-                await context.showTip(
-                    title: '键位说明',
-                    desc: '如果您使用键盘，键位如下：'
-                        'W: 旋转\n'
-                        'S: 加速下落\n'
-                        'A: 左移\n'
-                        'D: 右移\n'
-                        '空格: 瞬间下落\n'
-                        'P: 暂停\n'
-                        'O: 关闭/开启音量\n'
-                        'R: 重置游戏\n',
-                    ok: '知道了');
-              })
-        ],
-      ),
-      body: Game(
-        child: KeyboardController(child: const PagePortrait()),
-      ),
-    );
+    return WillPopScope(
+        onWillPop: () async => await showLeaveGameRequest(context),
+        child: Scaffold(
+            appBar: AppBar(
+              title: const Text('俄罗斯方块'),
+              actions: [
+                IconButton(
+                    icon: const Icon(Icons.help),
+                    onPressed: () async {
+                      await context.showTip(
+                          title: '键位说明',
+                          desc: '如果您使用键盘，键位如下：'
+                              'W: 旋转\n'
+                              'S: 加速下落\n'
+                              'A: 左移\n'
+                              'D: 右移\n'
+                              '空格: 瞬间下落\n'
+                              'P: 暂停\n'
+                              'O: 关闭/开启音量\n'
+                              'R: 重置游戏\n',
+                          ok: '知道了');
+                    })
+              ],
+            ),
+            body: Game(
+              child: KeyboardController(child: const PagePortrait()),
+            )));
   }
 }

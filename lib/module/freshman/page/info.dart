@@ -45,9 +45,9 @@ class FreshmanPage extends StatelessWidget {
         no: i18n.dontShowThisAgainBtn,
       )
           .then((confirm) {
-        if (confirm) {
+        if (confirm == true) {
           Navigator.of(context).pushNamed(RouteTable.freshmanUpdate);
-        } else {
+        } else if (confirm == false) {
           freshmanCacheDao.disableFirstEnterDialogState = true;
         }
       });

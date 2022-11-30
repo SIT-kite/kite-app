@@ -173,7 +173,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
         yes: i18n.delete,
         no: i18n.cancel,
         highlight: true);
-    if (confirm) {
+    if (confirm == true) {
       timetableStorage.removeTable(meta.name);
       if (mounted) setState(() {});
     }

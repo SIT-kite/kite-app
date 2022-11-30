@@ -27,6 +27,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../user_widgets/dialog.dart';
 import '../../using.dart';
 
 import '../../entity/record.dart';
@@ -60,91 +61,93 @@ class _WordlePageState extends State<WordlePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Wordle'),
-        actions: [helpButton(context)],
-      ),
-      body: FutureBuilder(
-          future: getAllWords().then((allWords) {
-            final word = allWords[Random().nextInt(allWords.length)];
-            return BoardModel(allWords, word, rows: word.length + 1);
-          }),
-          builder: (context, AsyncSnapshot<BoardModel> snapshot) {
-            if (snapshot.data == null) return const Text('加载游戏文件失败');
+    return WillPopScope(
+        onWillPop: () async => await showLeaveGameRequest(context),
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Wordle'),
+            actions: [helpButton(context)],
+          ),
+          body: FutureBuilder(
+              future: getAllWords().then((allWords) {
+                final word = allWords[Random().nextInt(allWords.length)];
+                return BoardModel(allWords, word, rows: word.length + 1);
+              }),
+              builder: (context, AsyncSnapshot<BoardModel> snapshot) {
+                if (snapshot.data == null) return const Text('加载游戏文件失败');
 
-            final board = snapshot.data!;
-            final startTime = DateTime.now();
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SingleChildScrollView(
-                  child: GameBoard(
-                    board: board,
-                    onWin: () async {
-                      final costTime = DateTime.now().difference(startTime).inSeconds;
-                      final score = costTime > 10 * 60 ? 0 : -costTime + 600;
+                final board = snapshot.data!;
+                final startTime = DateTime.now();
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SingleChildScrollView(
+                      child: GameBoard(
+                        board: board,
+                        onWin: () async {
+                          final costTime = DateTime.now().difference(startTime).inSeconds;
+                          final score = costTime > 10 * 60 ? 0 : -costTime + 600;
 
-                      // 存储游戏记录
-                      final currentTime = DateTime.now();
-                      final record =
-                          GameRecord(GameType.wordle, score, startTime, currentTime.difference(startTime).inSeconds);
-                      GameInit.gameRecord.append(record);
-                      // TODO: use BuildContext.showTip dialog
-                      final result = await showAlertDialog(
-                        context,
-                        title: '猜中了!',
-                        actionTextList: ['再来一局?'],
-                        content: [
-                          Text(
-                            board.targetWord.toUpperCase(),
-                            style: const TextStyle(
-                              fontSize: 32,
-                              color: Colors.green,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Text('猜测 ${board.currentRow + 1}/${board.rows} 次'),
-                        ],
-                      );
-                      if (result == 0) {
-                        setState(board.reset);
-                      }
+                          // 存储游戏记录
+                          final currentTime = DateTime.now();
+                          final record = GameRecord(
+                              GameType.wordle, score, startTime, currentTime.difference(startTime).inSeconds);
+                          GameInit.gameRecord.append(record);
+                          // TODO: use BuildContext.showTip dialog
+                          final result = await showAlertDialog(
+                            context,
+                            title: '猜中了!',
+                            actionTextList: ['再来一局?'],
+                            content: [
+                              Text(
+                                board.targetWord.toUpperCase(),
+                                style: const TextStyle(
+                                  fontSize: 32,
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Text('猜测 ${board.currentRow + 1}/${board.rows} 次'),
+                            ],
+                          );
+                          if (result == 0) {
+                            setState(board.reset);
+                          }
 
-                      if (mounted) uploadGameRecord(context, record);
-                    },
-                    onLose: () async {
-                      final result = await showAlertDialog(
-                        context,
-                        title: '答案是',
-                        actionTextList: ['继续?'],
-                        content: [
-                          Text(
-                            board.targetWord.toUpperCase(),
-                            style: const TextStyle(
-                              fontSize: 32,
-                              color: Colors.redAccent,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      );
-                      if (result == 0) {
-                        setState(board.reset);
-                      }
-                    },
-                  ),
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton.icon(
-                  onPressed: () => setState(board.reset),
-                  icon: const Icon(Icons.play_arrow_rounded),
-                  label: const Text('新游戏'),
-                ),
-              ],
-            );
-          }),
-    );
+                          if (mounted) uploadGameRecord(context, record);
+                        },
+                        onLose: () async {
+                          final result = await showAlertDialog(
+                            context,
+                            title: '答案是',
+                            actionTextList: ['继续?'],
+                            content: [
+                              Text(
+                                board.targetWord.toUpperCase(),
+                                style: const TextStyle(
+                                  fontSize: 32,
+                                  color: Colors.redAccent,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          );
+                          if (result == 0) {
+                            setState(board.reset);
+                          }
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton.icon(
+                      onPressed: () => setState(board.reset),
+                      icon: const Icon(Icons.play_arrow_rounded),
+                      label: const Text('新游戏'),
+                    ),
+                  ],
+                );
+              }),
+        ));
   }
 }

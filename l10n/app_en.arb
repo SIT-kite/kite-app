@@ -186,6 +186,7 @@
   "elecBillInitialTip": "Please search your room number",
   "elecBillLast24Hour": "Last 24 hours",
   "elecBillLast7Day": "Last 7 days",
+  "elecBillRank": "Rank",
   "elecBillRankAbove": "Above {percent}% of dormitories.",
   "@elecBillRankAbove": {
     "placeholders": {
@@ -205,7 +206,6 @@
     }
   },
   "elecBillUpdateTime": "Last Update",
-  "elecBillRank": "Rank",
   "enable": "Enable",
   "error": "Error",
   "examEndTime": "Ent Time",
@@ -220,6 +220,7 @@
   "expenseCafe": "Café",
   "expenseCanteen": "Canteen",
   "expenseCats": "Categories",
+  "expenseConsume": "Consume",
   "expenseContent": "¥{amount} {place}",
   "@expenseContent": {
     "placeholders": {
@@ -236,14 +237,12 @@
   "expenseFirstTimeRefreshRequest": "Expense Tracker needs to access campus network to retrieve expense history. You can refresh the expense history manually next time by hitting the \"Refresh\" button at the top-right corner.",
   "expenseGrocery": "Grocery Shopping",
   "expenseHotWater": "Hot Water",
+  "expenseLibrary": "Library",
   "expenseShower": "Shower",
   "expenseStuff": "Stuff",
-  "expenseTotal": "Total",
-  "expenseConsume": "Consume",
-  "expenseTopUp": "Top Up",
   "expenseSubsidy": "Subsidy",
-  "expenseLibrary": "Library",
-
+  "expenseTopUp": "Top Up",
+  "expenseTotal": "Total",
   "faculty": "Faculty",
   "failed": "Failed",
   "feedback": "Feedback",
@@ -308,6 +307,8 @@
   "ftype_yellowPages_desc": "Contact school",
   "fullAcademicYear": "Full Year",
   "fullName": "Full Name",
+  "gameLeaveRequest": "Confirm To Leave?",
+  "gameLeaveRequestDesc": "You game state will not be saved.",
   "gameWordleNoSuchWord": "No such word \"{word}\".",
   "@gameWordleNoSuchWord": {
     "placeholders": {
@@ -475,8 +476,8 @@
   "@reportTempUnreportedToday": {
     "description": "For building string: Unreported Today Today Normal {place}"
   },
-  "restartRequest": "Would you like to restart Kite now?",
-  "restartRequestTitle": "Restart?",
+  "restartRequest": "Restart?",
+  "restartRequestDesc": "Would you like to restart Kite now?",
   "roommate": "Roommate",
   "scannerBarcodeNotRecognized": "No Barcode",
   "scannerBarcodeRecognized": "Barcode Recognized",
@@ -493,9 +494,9 @@
   "settingsDarkModeSub": "Kite will protect your eyes",
   "settingsDetailedXcpDialog": "Enable detailed exception dialog",
   "settingsDetailedXcpDialogSub": "Detailed stacktrace will be shown",
+  "settingsHomeRearrangeResetRequest": "Reset?",
+  "settingsHomeRearrangeResetRequestDesc": "Your layout will be discard.",
   "settingsHomepageRearrange": "Rearrange Home",
-  "settingsHomepageRearrangeResetRequest": "Your layout will be discard.",
-  "settingsHomepageRearrangeResetRequestTitle": "Reset?",
   "settingsHomepageRearrangeSub": "Reorder and regroup the homepage to meet your needs.",
   "settingsHomepageRearrangeTitle": "Rearrange Home",
   "settingsHomepageWallpaperMode": "Homepage Wallpaper Mode",

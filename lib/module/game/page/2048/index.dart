@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 
 import '../../entity/record.dart';
 import '../../entity/type.dart';
 import '../../init.dart';
+import '../../user_widgets/dialog.dart';
 import '../../using.dart';
 import '../common.dart';
 import 'logic.dart';
@@ -39,48 +39,13 @@ final boxColors = <int, Color>{
 };
 
 // TODO: I18n game
-// TODO: Keep a stateless widget from any state
 class Game2048Page extends StatelessWidget {
-  bool flashShown = false;
-
-  Game2048Page({Key? key}) : super(key: key);
-
-  Future<bool> _willPopFlash(BuildContext context) async {
-    bool want = false;
-
-    if (flashShown) {
-      return false;
-    }
-
-    flashShown = true;
-    await context.showFlashBar(
-      persistent: true,
-      behavior: FlashBehavior.fixed,
-      title: const Text('你确定要返回吗？'),
-      content: const Text('这将会导致你的游戏状态丢失'),
-      positiveActionBuilder: (context, controller, callback) => TextButton(
-          onPressed: () {
-            want = true;
-            controller.dismiss();
-          },
-          child: const Text('是')),
-      negativeActionBuilder: (context, controller, callback) => TextButton(
-          onPressed: () {
-            want = false;
-            controller.dismiss();
-          },
-          child: const Text('否')),
-    );
-    flashShown = false;
-    return want;
-  }
+  const Game2048Page({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        return await _willPopFlash(context);
-      },
+      onWillPop: () async => await showLeaveGameRequest(context),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('2048'),

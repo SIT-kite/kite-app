@@ -115,9 +115,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
             '注意: 请务必在预约时段内进馆，未到将影响下一次预约。\n',
         yes: '确定预约',
         no: '取消预约');
-    // TODO: Wrong use of BuildContext
     // 确定预约
-    if (applyDialogResult) {
+    if (applyDialogResult == true) {
       if (!mounted) return;
       final signed = await signUpIfNecessary(context, '预约图书馆');
       if (signed) return;
