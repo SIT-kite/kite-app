@@ -21,6 +21,7 @@ import 'package:kite/design/utils.dart';
 import '../using.dart';
 
 class DateHeader extends StatefulWidget {
+  final List<String> dayHeaders;
   /// 当前显示的周次
   final int currentWeek;
 
@@ -33,12 +34,13 @@ class DateHeader extends StatefulWidget {
   final DateTime startDate;
 
   const DateHeader({
-    this.onTap,
-    Key? key,
+    super.key,
+    required this.dayHeaders,
     required this.currentWeek,
     required this.selectedDay,
     required this.startDate,
-  }) : super(key: key);
+    this.onTap,
+  });
 
   @override
   State<StatefulWidget> createState() => _DateHeaderState();
@@ -109,7 +111,7 @@ class _DateHeaderState extends State<DateHeader> {
         : null;
     return Expanded(
       flex: 3,
-      child: InkWell(onTap: onTapCallback, child: buildDayHeader(context, day, '周${weekWord[day - 1]}\n$dateString')),
+      child: InkWell(onTap: onTapCallback, child: buildDayHeader(context, day, '${widget.dayHeaders[day-1]}\n$dateString')),
     );
   }
 

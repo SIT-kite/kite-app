@@ -80,8 +80,8 @@ class FileUtils {
 
   static Future<List<String>> pickImagesByImagePicker() async {
     final ImagePicker picker = ImagePicker();
-    final List<XFile> images = await picker.pickMultiImage();
-    return images.map((e) => e.path).toList();
+    final List<XFile>? images = await picker.pickMultiImage();
+    return images?.map((e) => e.path).toList() ?? [];
   }
 
   static Future<XFile?> pickImageByImagePicker() async {

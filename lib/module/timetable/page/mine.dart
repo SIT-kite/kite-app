@@ -17,7 +17,6 @@
 */
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/design/user_widgets/dialog.dart';
 import 'package:kite/module/symbol.dart';
 import 'package:rettulf/rettulf.dart';
 
@@ -36,6 +35,13 @@ class MyTimetablePage extends StatefulWidget {
 class _MyTimetablePageState extends State<MyTimetablePage> {
   final timetableStorage = TimetableInit.timetableStorage;
 
+  Future<void> goImport() async {
+    final changed = await Navigator.of(context).push((MaterialPageRoute(builder: (_) => const ImportTimetablePage())));
+    if (changed == true) {
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,13 +49,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
         title: i18n.timetableMineTitle.txt,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final changed =
-              await Navigator.of(context).push((MaterialPageRoute(builder: (_) => const ImportTimetablePage())));
-          if (changed == true) {
-            setState(() {});
-          }
-        },
+        onPressed: goImport,
         child: const Icon(Icons.add_outlined),
       ),
       body: Padding(
@@ -57,6 +57,11 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
         child: buildTimetables(context),
       ),
     );
+  }
+
+  Widget _buildEmptyBody(BuildContext ctx) {
+    return buildLeavingBlankBody(ctx,
+        icon: Icons.calendar_month_rounded, desc: i18n.timetableMineEmptyTip, onIconTap: goImport);
   }
 
   Widget buildTimetables(BuildContext ctx) {
@@ -80,34 +85,30 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
     return CupertinoContextMenu(
       actions: [
         CupertinoContextMenuAction(
+          trailingIcon: CupertinoIcons.doc_text,
           onPressed: () async {
             Navigator.of(ctx).pop();
-            final changed = await showModalBottomSheet(
-                context: ctx,
-                isScrollControlled: true,
-                shape: const ContinuousRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(48))),
-                builder: (ctx) {
-                  return Padding(
-                      padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom),
-                      child: TimetableEditor(meta: meta));
-                });
+            final changed = await ctx
+                .showSheet((context) => TimetableEditor(meta: meta).padOnly(b: MediaQuery.of(ctx).viewInsets.bottom));
+
             if (changed == true) {
               setState(() {});
             }
           },
-          trailingIcon: CupertinoIcons.doc_text,
           child: i18n.timetableEdit.txt,
         ),
+        if (timetableStorage.currentTableName != meta.name)
+          CupertinoContextMenuAction(
+            trailingIcon: CupertinoIcons.checkmark,
+            onPressed: () {
+              Navigator.of(ctx).pop();
+              timetableStorage.currentTableName = meta.name;
+              setState(() {});
+            },
+            child: i18n.timetableSetToDefault.txt,
+          ),
         CupertinoContextMenuAction(
-          onPressed: () {
-            Navigator.of(ctx).pop();
-            timetableStorage.currentTableName = meta.name;
-            setState(() {});
-          },
-          trailingIcon: CupertinoIcons.checkmark,
-          child: i18n.timetableSetToDefault.txt,
-        ),
-        CupertinoContextMenuAction(
+          trailingIcon: CupertinoIcons.time,
           onPressed: () async {
             Navigator.of(ctx).pop();
             final date = await pickDate(context, initial: meta.startDate);
@@ -116,27 +117,26 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
               timetableStorage.addTableMeta(meta.name, meta);
             }
           },
-          trailingIcon: CupertinoIcons.time,
           child: i18n.timetableSetStartDate.txt,
         ),
         CupertinoContextMenuAction(
+          trailingIcon: CupertinoIcons.eye,
           onPressed: () async {
             Navigator.of(ctx).pop();
             Navigator.of(ctx).push(MaterialPageRoute(
                 builder: (ctx) =>
                     TimetablePreviewPage(meta: meta, courses: timetableStorage.getTableCourseByName(meta.name) ?? [])));
           },
-          trailingIcon: CupertinoIcons.eye,
           child: i18n.timetablePreviewBtn.txt,
         ),
         CupertinoContextMenuAction(
+          trailingIcon: CupertinoIcons.delete,
           onPressed: () async {
             Navigator.of(ctx).pop();
             // Have to wait until the aniamtion has been suspended because flutter is buggy without check `mounted` in _CupertinoContextMenuState.
             await showDeleteTimetableRequest(ctx, meta);
           },
           isDestructiveAction: true,
-          trailingIcon: CupertinoIcons.delete,
           child: i18n.timetableDelete.txt,
         ),
       ],
@@ -177,14 +177,5 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
       timetableStorage.removeTable(meta.name);
       if (mounted) setState(() {});
     }
-  }
-
-  Widget _buildEmptyBody(BuildContext ctx) {
-    return [
-      const Icon(Icons.calendar_month_rounded, size: 120).padAll(20),
-      i18n.timetableMineEmptyTip.text(
-        style: ctx.theme.textTheme.titleLarge,
-      ),
-    ].column(maa: MAAlign.spaceAround).center();
   }
 }

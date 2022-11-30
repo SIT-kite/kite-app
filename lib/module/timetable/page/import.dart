@@ -21,8 +21,8 @@ import 'package:rettulf/rettulf.dart';
 import '../entity/course.dart';
 import '../entity/meta.dart';
 import '../init.dart';
-import '../mock/courses.dart';
 import '../using.dart';
+import '../mock/courses.dart';
 import '../user_widget/meta_editor.dart';
 
 enum ImportStatus {
@@ -162,7 +162,7 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
       ..name = defaultName
       ..schoolYear = year
       ..semester = semester.index;
-    final saved = await editingMeta(ctx, meta, SchoolYear(year), semester);
+    final saved = await ctx.showSheet((ctx) => MetaEditor(meta: meta).padOnly(b: MediaQuery.of(ctx).viewInsets.bottom));
     if (saved == true) {
       timetableStorage.addTable(meta, courses);
       return true;
@@ -218,16 +218,5 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
             style: ctx.textTheme.titleLarge,
           )),
     );
-  }
-
-  Future<dynamic> editingMeta(BuildContext ctx, TimetableMeta meta, SchoolYear year, Semester semester) async {
-    return await showModalBottomSheet(
-        context: ctx,
-        isScrollControlled: true,
-        shape: const ContinuousRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(48))),
-        builder: (ctx) {
-          return Padding(
-              padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom), child: MetaEditor(meta: meta));
-        });
   }
 }

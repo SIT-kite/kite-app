@@ -165,9 +165,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
     final selectedRoom = room;
     return Scaffold(
         appBar: AppBar(
-          title: selectedRoom != null ? i18n
-              .electricityBillTitle(selectedRoom)
-              .txt : i18n.ftype_elecBill.txt,
+          title: selectedRoom != null ? i18n.electricityBillTitle(selectedRoom).txt : i18n.ftype_elecBill.txt,
           actions: <Widget>[
             IconButton(
                 onPressed: search,
@@ -179,34 +177,17 @@ class _ElectricityPageState extends State<ElectricityPage> {
         body: selectedRoom == null
             ? _buildEmptyBody(context)
             : SmartRefresher(
-          controller: _refreshController,
-          scrollDirection: Axis.vertical,
-          onRefresh: _onRefresh,
-          header: const ClassicHeader(),
-          child: _buildBody(context, selectedRoom),
-        ));
+                controller: _refreshController,
+                scrollDirection: Axis.vertical,
+                onRefresh: _onRefresh,
+                header: const ClassicHeader(),
+                child: _buildBody(context, selectedRoom),
+              ));
   }
 
   Widget _buildEmptyBody(BuildContext ctx) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          GestureDetector(
-            onTap: () {
-              search();
-            },
-            child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Icon(Icons.pageview_outlined, size: 120)),
-          ),
-          Text(
-            i18n.electricityBillInitialTip,
-            style: ctx.textTheme.titleLarge,
-          ),
-        ],
-      ),
-    );
+    return buildLeavingBlankBody(ctx,
+        icon: Icons.pageview_outlined, desc: i18n.electricityBillInitialTip, onIconTap: search);
   }
 
   Widget _buildBody(BuildContext ctx, String room) {
@@ -310,9 +291,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
               const Icon(Icons.update),
               const SizedBox(width: 10),
               Text(i18n.electricityBillUpdateTime,
-                  style: TextStyle(color: time
-                      .difference(DateTime.now())
-                      .inDays > 1 ? Colors.redAccent : null)),
+                  style: TextStyle(color: time.difference(DateTime.now()).inDays > 1 ? Colors.redAccent : null)),
             ]),
             Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
               Text(updateTimeFormatter.format(time.toLocal())),

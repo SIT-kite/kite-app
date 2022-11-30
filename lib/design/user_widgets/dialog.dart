@@ -48,4 +48,12 @@ extension DialogEx on BuildContext {
     );
     return index == 0;
   }
+
+  Future<dynamic> showSheet(WidgetBuilder builder) async {
+    return await showModalBottomSheet(
+        context: this,
+        isScrollControlled: true,
+        shape: const ContinuousRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(48))),
+        builder: builder);
+  }
 }

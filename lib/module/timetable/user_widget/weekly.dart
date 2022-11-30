@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../utils.dart';
 import 'sheet.dart';
 import 'tiemtable.dart';
 import '../using.dart';
@@ -146,13 +147,14 @@ class WeeklyTimetableState extends State<WeeklyTimetable> implements ITimetableV
         itemBuilder: buildCell);
   }
 
-  Widget _buildPage(int week) {
+  Widget _buildPage(int week, List<String> dayHeaders) {
     return Column(
       children: [
         Expanded(
             flex: 1,
             // Display the week name on top
             child: DateHeader(
+              dayHeaders: dayHeaders,
               currentWeek: week,
               selectedDay: -1,
               startDate: widget.initialDate,
@@ -184,11 +186,12 @@ class WeeklyTimetableState extends State<WeeklyTimetable> implements ITimetableV
 
   @override
   Widget build(BuildContext context) {
+    final dayHeaders = makeWeakdaysShortText();
     return PageView.builder(
       controller: _pageController,
       scrollDirection: Axis.horizontal,
       itemCount: 20,
-      itemBuilder: (BuildContext context, int index) => _buildPage(index + 1),
+      itemBuilder: (BuildContext context, int index) => _buildPage(index + 1, dayHeaders),
     );
   }
 }

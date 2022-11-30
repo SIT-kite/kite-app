@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import '../cache.dart';
 import '../entity/course.dart';
 import '../using.dart';
+import '../utils.dart';
 import 'header.dart';
 import 'sheet.dart';
 import 'tiemtable.dart';
@@ -196,7 +197,7 @@ class DailyTimetableState extends State<DailyTimetable> implements ITimetableVie
   }
 
   /// 构建第 index 页视图
-  Widget _pageBuilder(BuildContext context, int index, List<Course> allCourses) {
+  Widget _pageBuilder(BuildContext context, int index, List<Course> allCourses, List<String> dayHeaders) {
     int week = index ~/ 7 + 1;
     int day = index % 7 + 1;
     final List<Course> todayCourse = widget.tableCache.filterCourseOnDay(allCourses, week, day);
@@ -206,6 +207,7 @@ class DailyTimetableState extends State<DailyTimetable> implements ITimetableVie
         // 翻页不影响选择的星期, 因此沿用 _currentDay.
         Expanded(
           child: DateHeader(
+            dayHeaders: dayHeaders,
             selectedDay: day,
             currentWeek: week,
             startDate: widget.initialDate,
@@ -230,12 +232,13 @@ class DailyTimetableState extends State<DailyTimetable> implements ITimetableVie
 
   @override
   Widget build(BuildContext context) {
+    final dayHeaders = makeWeakdaysShortText();
     return PageView.builder(
       controller: _pageController,
       scrollDirection: Axis.horizontal,
       // TODO: 存储
       itemCount: 20 * 7,
-      itemBuilder: (_, int index) => _pageBuilder(context, index, widget.allCourses),
+      itemBuilder: (_, int index) => _pageBuilder(context, index, widget.allCourses, dayHeaders),
     );
   }
 }

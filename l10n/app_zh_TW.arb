@@ -371,5 +371,21 @@
   "timetableDeleteRequestDesc": "",
   "timetableInfoDefaultName": "",
   "timetableImportError": "",
-  "delete": ""
+  "delete": "",
+  "timetableInitialImportRquest": "",
+  "timetableInitialImportRquestDesc": "",
+  "weekdayShort1": "",
+  "weekdayShort2": "",
+  "weekdayShort3": "",
+  "weekdayShort4": "",
+  "weekdayShort5": "",
+  "weekdayShort6": "",
+  "weekdayShort7": "",
+  "weekday1": "",
+  "weekday2": "",
+  "weekday3": "",
+  "weekday4": "",
+  "weekday5": "",
+  "weekday6": "",
+  "weekday7": ""
 }

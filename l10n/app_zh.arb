@@ -371,5 +371,21 @@
   "timetableDeleteRequestDesc": "",
   "timetableInfoDefaultName": "",
   "timetableImportError": "",
-  "delete": ""
+  "delete": "",
+  "timetableInitialImportRquest": "",
+  "timetableInitialImportRquestDesc": "",
+  "weekdayShort1": "一",
+  "weekdayShort2": "二",
+  "weekdayShort3": "三",
+  "weekdayShort4": "四",
+  "weekdayShort5": "五",
+  "weekdayShort6": "六",
+  "weekdayShort7": "七",
+  "weekday1": "周一",
+  "weekday2": "周二",
+  "weekday3": "周三",
+  "weekday4": "周四",
+  "weekday5": "周五",
+  "weekday6": "周六",
+  "weekday7": "周七"
 }

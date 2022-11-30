@@ -59,8 +59,11 @@ class _TimetablePageState extends State<TimetablePage> {
   void checkFirstImportTable() {
     if (courses.isEmpty) {
       Future.delayed(Duration.zero, () async {
-        final approve =
-            await context.showRequest(title: '导入课表', desc: '您似乎是第一次使用小风筝课表，请先完成课表导入吧！', yes: '导入课表', no: '暂时不想');
+        final approve = await context.showRequest(
+            title: i18n.timetableInitialImportRquest,
+            desc: i18n.timetableInitialImportRquestDesc,
+            yes: i18n.yes,
+            no: i18n.notNow);
 
         if (approve) {
           if (!mounted) return;
@@ -96,61 +99,6 @@ class _TimetablePageState extends State<TimetablePage> {
       courses = storage.currentTableCourses ?? [];
       meta = storage.currentTableMeta;
     });
-    showBasicFlash(context, const Text('加载成功'));
-  }
-
-  ///更多菜单回调方法
-  PopupMenuButton _buildPopupMenu(BuildContext context) {
-    final List<Function()> callback = [
-      () => Navigator.of(context).pushNamed(RouteTable.myTimetables).then((value) => _onRefresh()),
-      _onRefresh,
-      _onExport,
-      () => Kv.home.autoLaunchTimetable = !(Kv.home.autoLaunchTimetable ?? false),
-    ];
-
-    ///更多菜单按钮
-    return PopupMenuButton(
-      onSelected: (index) => callback[index](),
-      itemBuilder: (BuildContext ctx) {
-        return <PopupMenuEntry>[
-          ...['导入课表', '刷新', '导出日历'].asMap().entries.map(
-                (e) => PopupMenuItem(
-                  value: e.key,
-                  padding: EdgeInsets.only(left: 65.w),
-                  child: Text(e.value),
-                ),
-              ),
-          CheckedPopupMenuItem(
-            value: 3,
-            checked: Kv.home.autoLaunchTimetable ?? false,
-            child: Row(
-              children: [
-                const Text('自启课表'),
-                IconButton(
-                  onPressed: () {
-                    showAlertDialog(
-                      context,
-                      title: '自启课表帮助',
-                      content: const Text('如果启用，则打开小风筝时将自动转到课表页面'),
-                      actionTextList: ['OK'],
-                    );
-                  },
-                  icon: const Icon(Icons.help),
-                ),
-              ],
-            ),
-          ),
-        ];
-      },
-    );
-  }
-
-  ///切换按钮
-  Widget _buildModeSwitchButton() {
-    return IconButton(
-      icon: const Icon(Icons.swap_horiz),
-      onPressed: tableViewerController.toggleDisplayMode,
-    );
   }
 
   ///跳转到某一周按钮
@@ -185,19 +133,20 @@ class _TimetablePageState extends State<TimetablePage> {
         ],
       ),
       floatingActionButton: ValueListenableBuilder<bool>(
-          builder: (BuildContext context, bool value, Widget? child) {
-            return AnimatedOpacity(
-              opacity: $isTodayView.value ? 0.0 : 1.0,
-              duration: const Duration(milliseconds: 100),
-              child: FloatingActionButton(
-                onPressed: () {
-                  tableViewerController.jumpToToday();
-                },
-                child: const Icon(Icons.undo_rounded),
-              ),
-            );
-          },
-          valueListenable: $isTodayView),
+        valueListenable: $isTodayView,
+        builder: (BuildContext context, bool value, Widget? child) {
+          return AnimatedOpacity(
+            opacity: value ? 0.0 : 1.0,
+            duration: const Duration(milliseconds: 100),
+            child: FloatingActionButton(
+              onPressed: () {
+                tableViewerController.jumpToToday();
+              },
+              child: const Icon(Icons.undo_rounded),
+            ),
+          );
+        },
+      ),
       body: TimetableViewer(
         key: UniqueKey(),
         controller: tableViewerController,
@@ -224,8 +173,9 @@ class _TimetablePageState extends State<TimetablePage> {
   Widget buildMyTimetablesButton(BuildContext ctx) {
     return IconButton(
         icon: const Icon(Icons.person_rounded),
-        onPressed: () {
-          Navigator.of(ctx).pushNamed(RouteTable.myTimetables);
+        onPressed: () async {
+          await Navigator.of(ctx).pushNamed(RouteTable.myTimetables);
+          _onRefresh();
         });
   }
 }
