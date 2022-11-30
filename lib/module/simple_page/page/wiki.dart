@@ -20,6 +20,7 @@ import 'dart:async';
 import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import '../using.dart';
 
 class WikiPage extends StatelessWidget {
@@ -49,7 +50,7 @@ class WikiPage extends StatelessWidget {
             } catch (e) {
               return '';
             }
-          })() ?? ''} KiteApp',
+          })() ?? ''} KiteApp ${Global.currentVersion.version}',
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.menu),
         onPressed: () async {
