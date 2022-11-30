@@ -66,7 +66,7 @@ class DioInit {
   }
 
   static Future<String> getRandomUa() async {
-    final c = await rootBundle.loadString('ua.txt');
+    final c = await rootBundle.loadString('assets/ua.txt');
     return c.split('\n').randomChooseOne();
   }
 
@@ -77,10 +77,10 @@ class DioInit {
       // 如果非IOS/Android，则该函数将抛异常
       await FkUserAgent.init();
       // 更新 dio 设置的 user-agent 字符串
-      dio.options.headers['User-Agent'] = FkUserAgent.webViewUserAgent ?? getRandomUa();
+      dio.options.headers['User-Agent'] = FkUserAgent.webViewUserAgent ?? await getRandomUa();
     } catch (e) {
       // Desktop端将进入该异常
-      dio.options.headers['User-Agent'] = getRandomUa();
+      dio.options.headers['User-Agent'] = await getRandomUa();
     }
   }
 }
