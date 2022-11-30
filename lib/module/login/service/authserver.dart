@@ -17,6 +17,7 @@
  */
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
+
 import '../using.dart';
 
 class AuthServerService {
@@ -25,19 +26,9 @@ class AuthServerService {
   const AuthServerService(this.session);
 
   Future<String> getPersonName() async {
-    final response = await session.request(
-      'https://authserver.sit.edu.cn/authserver/index.do',
-      ReqMethod.get,
-      options: SessionOptions(
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:46.0) Gecko/20100101 Firefox/46.0',
-        },
-      ),
-    );
+    final response = await session.request('https://authserver.sit.edu.cn/authserver/index.do', ReqMethod.get);
     final result = BeautifulSoup(response.data).find('div', class_: 'auth_username')?.text;
-    if (result != null) {
-      return result.trim();
-    }
+    if (result != null) return result.trim();
     throw Exception('无法获取用户姓名');
   }
 }

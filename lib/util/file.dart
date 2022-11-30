@@ -70,13 +70,18 @@ class FileUtils {
   }
 
   static Future<List<String>> pickImagesByFilePicker() async {
-    final ImagePicker picker = ImagePicker();
-    final List<XFile>? images = await picker.pickMultiImage();
+    return await pickFiles(
+          dialogTitle: '选择图片',
+          type: FileType.image,
+          allowMultiple: true,
+        ) ??
+        [];
+  }
 
-    if (images != null) {
-      return images.map((e) => e.path).toList();
-    }
-    return [];
+  static Future<List<String>> pickImagesByImagePicker() async {
+    final ImagePicker picker = ImagePicker();
+    final List<XFile> images = await picker.pickMultiImage();
+    return images.map((e) => e.path).toList();
   }
 
   static Future<XFile?> pickImageByImagePicker() async {
