@@ -117,6 +117,11 @@
   "expenseShower": "淋浴",
   "expenseStuff": "杂项",
   "expenseTotal": "总计",
+  "expenseConsume": "Consume",
+  "expenseTopUp": "TopUp",
+  "expenseSubsidy": "圈存",
+  "expenseLibrary": "图书馆",
+
   "faculty": "学院",
   "failed": "失败",
   "feedback": "反馈",
