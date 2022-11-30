@@ -1,5 +1,5 @@
 import 'package:kite/module/library/appointment/init.dart';
-import 'package:kite/mock/index.dart';
+import '../../../init.dart';
 
 void main() async {
   await init();

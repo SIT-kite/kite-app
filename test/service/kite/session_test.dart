@@ -1,4 +1,4 @@
-import 'package:kite/mock/index.dart';
+import '../../init.dart';
 import 'package:kite/module/symbol.dart';
 import 'package:kite/storage/init.dart';
 

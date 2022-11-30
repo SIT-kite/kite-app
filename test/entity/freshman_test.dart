@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:kite/mock/index.dart';
+import '../init.dart';
+
 import 'package:kite/module/freshman/entity/info.dart';
 
 void main() {

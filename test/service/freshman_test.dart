@@ -1,7 +1,7 @@
 import 'package:kite/module/freshman/dao/Freshman.dart';
 import 'package:kite/module/freshman/entity/info.dart';
 import 'package:kite/module/freshman/init.dart';
-import 'package:kite/mock/index.dart';
+import '../init.dart';
 import 'package:kite/storage/init.dart';
 
 void main() async {

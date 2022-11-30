@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:kite/mock/index.dart';
+import '../init.dart';
+
 import 'package:kite/module/expense2/cache/cache.dart';
 import 'package:kite/module/expense2/service/getter.dart';
 import 'package:kite/module/expense2/storage/local.dart';

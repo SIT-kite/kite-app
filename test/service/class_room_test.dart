@@ -18,7 +18,7 @@
 
 import 'package:kite/module/classroom_browser/service/classroom.dart';
 import 'package:kite/global/global.dart';
-import 'package:kite/mock/index.dart';
+import '../init.dart';
 
 void main() async {
   await init();

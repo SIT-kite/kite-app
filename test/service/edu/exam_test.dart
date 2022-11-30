@@ -1,4 +1,5 @@
-import 'package:kite/mock/index.dart';
+import '../../init.dart';
+
 import 'package:kite/module/shared/entity/school.dart';
 import 'package:kite/module/symbol.dart';
 

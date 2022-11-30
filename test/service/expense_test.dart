@@ -1,5 +1,5 @@
 import 'package:kite/global/global.dart';
-import 'package:kite/mock/index.dart';
+import '../init.dart';
 import 'package:kite/module/expense/service/expense.dart';
 
 void main() async {
