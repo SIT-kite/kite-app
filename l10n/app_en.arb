@@ -239,6 +239,11 @@
   "expenseShower": "Shower",
   "expenseStuff": "Stuff",
   "expenseTotal": "Total",
+  "expenseConsume": "Consume",
+  "expenseTopUp": "Top Up",
+  "expenseSubsidy": "Subsidy",
+  "expenseLibrary": "Library",
+
   "faculty": "Faculty",
   "failed": "Failed",
   "feedback": "Feedback",

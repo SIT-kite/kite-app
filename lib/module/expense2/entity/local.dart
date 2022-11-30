@@ -108,13 +108,13 @@ enum TransactionType {
       case TransactionType.other:
         return i18n.expenseStuff;
       case TransactionType.consume:
-        return "TODO";
+        return i18n.expenseConsume;
       case TransactionType.topUp:
-        return "TODO";
+        return i18n.expenseTopUp;
       case TransactionType.subsidy:
-        return "TODO";
+        return i18n.expenseSubsidy;
       case TransactionType.library:
-        return "TODO";
+        return i18n.expenseLibrary;
     }
   }
 }
