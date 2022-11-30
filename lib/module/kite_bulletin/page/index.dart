@@ -17,9 +17,12 @@
  */
 
 import 'package:flutter/material.dart';
-import '../using.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:kite/launcher.dart';
+
 import '../entity/bulletin.dart';
 import '../init.dart';
+import '../using.dart';
 
 class KiteBulletinPage extends StatelessWidget {
   const KiteBulletinPage({Key? key}) : super(key: key);
@@ -39,30 +42,33 @@ class KiteBulletinPage extends StatelessWidget {
   }
 
   Widget _buildBulletinItem(BuildContext context, KiteBulletin notice) {
-    return InkWell(
-      onTap: () {},
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // 标题, 注意遇到长标题时要折断
-                Expanded(
-                  child: _buildBulletinTitle(context, notice),
-                ),
-                // 日期
-                Text(context.dateNum(notice.publishTime), style: const TextStyle(color: Colors.grey)),
-              ],
-            ),
-            const SizedBox(height: 10),
-            // 正文
-            Text(notice.content ?? notice.title)
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // 标题, 注意遇到长标题时要折断
+              Expanded(
+                child: _buildBulletinTitle(context, notice),
+              ),
+              // 日期
+              Text(context.dateNum(notice.publishTime), style: const TextStyle(color: Colors.grey)),
+            ],
+          ),
+          const SizedBox(height: 10),
+          // 正文
+          MarkdownBody(
+            data: notice.content ?? notice.title,
+            selectable: true,
+            onTapLink: (String text, String? href, String title) {
+              GlobalLauncher.launch(href ?? '');
+            },
+          ),
+        ],
       ),
     );
   }

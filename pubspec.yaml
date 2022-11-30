@@ -118,6 +118,7 @@ dependencies:
   vibration: ^1.7.6
   animations: ^2.0.7
   rettulf: ^0.0.1
+  flutter_markdown: ^0.6.13
 
 
 

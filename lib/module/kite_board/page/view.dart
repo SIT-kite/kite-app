@@ -18,18 +18,43 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:photo_view/photo_view.dart';
 
 class ViewPage extends StatelessWidget {
   final String url;
 
   const ViewPage(this.url, {Key? key}) : super(key: key);
 
+  Widget buildImageWidget() {
+    return Image(
+      image: CachedNetworkImageProvider(url),
+      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+        if (loadingProgress == null) return child;
+        int currentLength = loadingProgress.cumulativeBytesLoaded;
+        int? totalLength = loadingProgress.expectedTotalBytes;
+        return Center(
+          child: CircularProgressIndicator(value: totalLength != null ? currentLength / totalLength : null),
+        );
+      },
+    );
+  }
+
+  Widget buildBody(BuildContext context) {
+    return GestureDetector(
+      onTap: () => Navigator.of(context).pop(),
+      child: InteractiveViewer(
+        minScale: 1,
+        maxScale: 10.0,
+        child: buildImageWidget(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return PhotoView(
-      imageProvider: CachedNetworkImageProvider(url),
-      onTapUp: (context, details, value) => Navigator.of(context).pop(),
+    return Scaffold(
+      body: SizedBox.expand(
+        child: buildBody(context),
+      ),
     );
   }
 }
