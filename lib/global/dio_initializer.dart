@@ -21,11 +21,11 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:fk_user_agent/fk_user_agent.dart';
+import 'package:flutter/services.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
+import 'package:kite/util/random_util.dart';
 import 'package:kite/util/rule.dart';
-
-const String _defaultUaString = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:46.0) Gecko/20100101 Firefox/46.0';
 
 class DioConfig {
   String? httpProxy;
@@ -65,6 +65,11 @@ class DioInit {
     return dio;
   }
 
+  static Future<String> getRandomUa() async {
+    final c = await rootBundle.loadString('ua.txt');
+    return c.split('\n').randomChooseOne();
+  }
+
   static Future<void> _initUserAgentString({
     required Dio dio,
   }) async {
@@ -72,11 +77,10 @@ class DioInit {
       // 如果非IOS/Android，则该函数将抛异常
       await FkUserAgent.init();
       // 更新 dio 设置的 user-agent 字符串
-      dio.options.headers['User-Agent'] = FkUserAgent.webViewUserAgent ?? _defaultUaString;
+      dio.options.headers['User-Agent'] = FkUserAgent.webViewUserAgent ?? getRandomUa();
     } catch (e) {
       // Desktop端将进入该异常
-      // TODO: 自定义UA
-      dio.options.headers['User-Agent'] = _defaultUaString;
+      dio.options.headers['User-Agent'] = getRandomUa();
     }
   }
 }
