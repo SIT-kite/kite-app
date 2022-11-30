@@ -41,14 +41,12 @@ class DailyTimetable extends StatefulWidget implements InitialTimeProtocol {
 
   @override
   State<StatefulWidget> createState() => DailyTimetableState();
-  final ValueNotifier<bool>? $isTodayView;
 
   const DailyTimetable({
     super.key,
     required this.allCourses,
     required this.initialDate,
     required this.tableCache,
-    this.$isTodayView,
     this.viewChangingCallback,
   });
 }
@@ -75,7 +73,6 @@ class DailyTimetableState extends State<DailyTimetable> implements ITimetableVie
       if (newWeek != _currentWeek || newDay != _currentDay) {
         _currentWeek = newWeek;
         _currentDay = newDay;
-        widget.$isTodayView?.value = isTodayView;
       }
     });
   }
@@ -140,6 +137,9 @@ class DailyTimetableState extends State<DailyTimetable> implements ITimetableVie
     var pos = widget.locateInTimetable(DateTime.now());
     return _currentWeek == pos.week && _currentDay == pos.day;
   }
+
+  @override
+  int get currentWeek => _currentWeek;
 
   Widget _buildCourseCard(BuildContext context, Course course, List<Course> allCourses) {
     final TextStyle? textStyle = Theme.of(context).textTheme.bodyText2;

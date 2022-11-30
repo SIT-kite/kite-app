@@ -387,5 +387,7 @@
   "weekday4": "周四",
   "weekday5": "周五",
   "weekday6": "周六",
-  "weekday7": "周七"
+  "weekday7": "周七",
+  "timetableJumpBtn": "",
+  "timetableWeekOrderedName": ""
 }

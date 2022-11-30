@@ -387,5 +387,7 @@
   "weekday4": "",
   "weekday5": "",
   "weekday6": "",
-  "weekday7": ""
+  "weekday7": "",
+  "timetableJumpBtn": "",
+  "timetableWeekOrderedName": ""
 }

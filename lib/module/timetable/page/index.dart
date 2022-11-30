@@ -15,9 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/design/user_widgets/dialog.dart';
 import '../using.dart';
 
 import '../cache.dart';
@@ -35,8 +34,6 @@ class TimetablePage extends StatefulWidget {
 }
 
 class _TimetablePageState extends State<TimetablePage> {
-  final ValueNotifier<bool> $isTodayView = ValueNotifier(true);
-
   /// 最大周数
   /// TODO 还没用上
   // static const int maxWeekCount = 20;
@@ -120,6 +117,18 @@ class _TimetablePageState extends State<TimetablePage> {
     );
   }
 
+  Future<void> selectTimetablePageToJump(BuildContext ctx) async {
+    final goto = await ctx.showPicker(
+        count: 20,
+        ok: i18n.timetableJumpBtn,
+        make: (ctx, i) {
+          return Text(i18n.timetableWeekOrderedName(i + 1));
+        });
+    if (goto != null) {
+      tableViewerController.jumpToWeek(goto + 1);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Log.info('Timetable build');
@@ -132,28 +141,22 @@ class _TimetablePageState extends State<TimetablePage> {
           buildMyTimetablesButton(context),
         ],
       ),
-      floatingActionButton: ValueListenableBuilder<bool>(
-        valueListenable: $isTodayView,
-        builder: (BuildContext context, bool value, Widget? child) {
-          return AnimatedOpacity(
-            opacity: value ? 0.0 : 1.0,
-            duration: const Duration(milliseconds: 100),
-            child: FloatingActionButton(
-              onPressed: () {
-                tableViewerController.jumpToToday();
-              },
-              child: const Icon(Icons.undo_rounded),
-            ),
-          );
-        },
-      ),
+      floatingActionButton: InkWell(
+          onLongPress: () {
+            tableViewerController.jumpToToday();
+          },
+          child: FloatingActionButton(
+            onPressed: () async {
+              await selectTimetablePageToJump(context);
+            },
+            child: const Icon(Icons.undo_rounded),
+          )),
       body: TimetableViewer(
         key: UniqueKey(),
         controller: tableViewerController,
         initialTableMeta: meta,
         initialTableCourses: courses,
         tableCache: TableCache(),
-        $isTodayView: $isTodayView,
         initialDisplayMode: displayMode,
         onDisplayChanged: (DisplayMode newMode) {
           displayMode = newMode;

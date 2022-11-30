@@ -36,7 +36,6 @@ class WeeklyTimetable extends StatefulWidget implements InitialTimeProtocol {
 
   /// 课表缓存
   final TableCache tableCache;
-  final ValueNotifier<bool>? $isTodayView;
 
   @override
   State<StatefulWidget> createState() => WeeklyTimetableState();
@@ -46,7 +45,6 @@ class WeeklyTimetable extends StatefulWidget implements InitialTimeProtocol {
     required this.allCourses,
     required this.initialDate,
     required this.tableCache,
-    this.$isTodayView,
   }) : super(key: key);
 }
 
@@ -66,7 +64,6 @@ class WeeklyTimetableState extends State<WeeklyTimetable> implements ITimetableV
       final newWeek = page2Week(page);
       if (newWeek != _currentWeek) {
         _currentWeek = newWeek;
-        widget.$isTodayView?.value = isTodayView;
       }
     });
   }
@@ -91,6 +88,9 @@ class WeeklyTimetableState extends State<WeeklyTimetable> implements ITimetableV
     var pos = widget.locateInTimetable(DateTime.now());
     return _currentWeek == pos.week;
   }
+
+  @override
+  int get currentWeek => _currentWeek;
 
   @override
   void jumpToDay(int targetWeek, int targetDay) {

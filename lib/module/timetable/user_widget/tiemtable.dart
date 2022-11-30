@@ -41,7 +41,10 @@ class TimetablePosition {
 
   static TimetablePosition locate(DateTime initial, DateTime time) {
     // 求一下过了多少天
-    int days = time.clearTime().difference(initial.clearTime()).inDays;
+    int days = time
+        .clearTime()
+        .difference(initial.clearTime())
+        .inDays;
 
     int week = days ~/ 7 + 1;
     int day = days % 7 + 1;
@@ -61,6 +64,8 @@ abstract class ITimetableView {
   void jumpToDay(int targetWeek, int targetDay);
 
   bool get isTodayView;
+
+  int get currentWeek;
 }
 
 class TimetableViewerController {
@@ -80,6 +85,8 @@ class TimetableViewerController {
     _state?.jumpWeek(week);
   }
 
+  int get currentWeek => _state?.currentWeek ?? 1;
+
   bool get isTodayView => _state?.isTodayView ?? true;
 
   void _bindState(State<TimetableViewer> state) {
@@ -96,7 +103,6 @@ class TimetableViewer extends StatefulWidget {
 
   /// 初始显示模式
   final DisplayMode initialDisplayMode;
-  final ValueNotifier<bool>? $isTodayView;
 
   /// 显示模式被更改的回调
   final void Function(DisplayMode)? onDisplayChanged;
@@ -113,7 +119,6 @@ class TimetableViewer extends StatefulWidget {
     required this.initialTableCourses,
     required this.initialDisplayMode,
     required this.tableCache,
-    this.$isTodayView,
     this.onDisplayChanged,
     this.onJumpedToday,
     this.controller,
@@ -175,6 +180,8 @@ class _TimetableViewerState extends State<TimetableViewer> {
     (currentKey.currentState as ITimetableView?)?.jumpToWeek(week);
   }
 
+  int get currentWeek => (currentKey.currentState as ITimetableView?)?.currentWeek ?? 1;
+
   bool get isTodayView => (currentKey.currentState as ITimetableView?)?.isTodayView ?? true;
 
   @override
@@ -184,18 +191,16 @@ class _TimetableViewerState extends State<TimetableViewer> {
       switchInCurve: Curves.ease,
       child: (displayModeState == DisplayMode.daily)
           ? DailyTimetable(
-              key: dailyTimetableKey,
-              allCourses: tableCoursesState,
-              initialDate: tableMetaState?.startDate ?? DateTime.now(),
-              tableCache: widget.tableCache,
-              viewChangingCallback: switchDisplayMode,
-              $isTodayView: widget.$isTodayView)
+          key: dailyTimetableKey,
+          allCourses: tableCoursesState,
+          initialDate: tableMetaState?.startDate ?? DateTime.now(),
+          tableCache: widget.tableCache,
+          viewChangingCallback: switchDisplayMode)
           : WeeklyTimetable(
-              key: weeklyTimetableKey,
-              allCourses: tableCoursesState,
-              initialDate: tableMetaState?.startDate ?? DateTime.now(),
-              tableCache: widget.tableCache,
-              $isTodayView: widget.$isTodayView),
+          key: weeklyTimetableKey,
+          allCourses: tableCoursesState,
+          initialDate: tableMetaState?.startDate ?? DateTime.now(),
+          tableCache: widget.tableCache),
     );
   }
 }
