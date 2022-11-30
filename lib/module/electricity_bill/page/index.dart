@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:rettulf/rettulf.dart';
 
 import '../entity/account.dart';
 import '../init.dart';
@@ -164,7 +165,9 @@ class _ElectricityPageState extends State<ElectricityPage> {
     final selectedRoom = room;
     return Scaffold(
         appBar: AppBar(
-          title: selectedRoom != null ? i18n.electricityBillTitle(selectedRoom).txt : i18n.ftype_elecBill.txt,
+          title: selectedRoom != null ? i18n
+              .electricityBillTitle(selectedRoom)
+              .txt : i18n.ftype_elecBill.txt,
           actions: <Widget>[
             IconButton(
                 onPressed: search,
@@ -176,12 +179,12 @@ class _ElectricityPageState extends State<ElectricityPage> {
         body: selectedRoom == null
             ? _buildEmptyBody(context)
             : SmartRefresher(
-                controller: _refreshController,
-                scrollDirection: Axis.vertical,
-                onRefresh: _onRefresh,
-                header: const ClassicHeader(),
-                child: _buildBody(context, selectedRoom),
-              ));
+          controller: _refreshController,
+          scrollDirection: Axis.vertical,
+          onRefresh: _onRefresh,
+          header: const ClassicHeader(),
+          child: _buildBody(context, selectedRoom),
+        ));
   }
 
   Widget _buildEmptyBody(BuildContext ctx) {
@@ -189,12 +192,17 @@ class _ElectricityPageState extends State<ElectricityPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Padding(
-              padding: const EdgeInsets.all(20),
-              child: Icon(Icons.electric_bolt_rounded, size: 120, color: electricityColor.by(ctx))),
+          GestureDetector(
+            onTap: () {
+              search();
+            },
+            child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Icon(Icons.pageview_outlined, size: 120)),
+          ),
           Text(
             i18n.electricityBillInitialTip,
-            style: ctx.theme.textTheme.titleLarge,
+            style: ctx.textTheme.titleLarge,
           ),
         ],
       ),
@@ -302,7 +310,9 @@ class _ElectricityPageState extends State<ElectricityPage> {
               const Icon(Icons.update),
               const SizedBox(width: 10),
               Text(i18n.electricityBillUpdateTime,
-                  style: TextStyle(color: time.difference(DateTime.now()).inDays > 1 ? Colors.redAccent : null)),
+                  style: TextStyle(color: time
+                      .difference(DateTime.now())
+                      .inDays > 1 ? Colors.redAccent : null)),
             ]),
             Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
               Text(updateTimeFormatter.format(time.toLocal())),

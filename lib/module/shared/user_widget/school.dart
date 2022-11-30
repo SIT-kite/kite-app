@@ -17,6 +17,7 @@
 */
 import 'package:flutter/material.dart';
 import 'package:kite/module/activity/using.dart';
+import 'package:rettulf/rettulf.dart';
 
 import '../entity/school.dart';
 

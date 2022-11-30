@@ -19,6 +19,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kite/module/game/using.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../using.dart';
 
@@ -40,10 +41,6 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
 
   bool isStarted = true;
 
-  void play() async {
-    AudioPlayer player = AudioPlayer();
-    await player.play(AssetSource('scanner/beep.mp3'));
-  }
 
   Widget buildImagePicker() {
     return IconButton(
@@ -130,7 +127,10 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
       onDetect: (barcode, args) {
         controller.dispose();
 
-        Future.delayed(Duration.zero, play);
+        Future.delayed(Duration.zero, () async{
+          await const Vibration(milliseconds: 100).emit();
+        });
+
         Navigator.pop(context, barcode.rawValue);
       },
     );

@@ -29,13 +29,11 @@ import 'package:kite/module/timetable/using.dart';
 import 'package:kite/override/entity.dart';
 import 'package:kite/override/init.dart';
 import 'package:kite/quick_button/init.dart';
-import 'package:kite/util/dsl.dart';
 import 'package:kite/util/scanner.dart';
 import 'package:kite/util/user.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-import '../../design/user_widgets/glassmorphic.dart';
 import '../entity/home.dart';
 import '../init.dart';
 import 'background.dart';
@@ -51,8 +49,8 @@ class HomeItemGroup extends StatelessWidget {
 
   Widget buildGlassmorphicBg() {
     return GlassmorphicBackground(sigmaX: 5, sigmaY: 12, colors: [
-      Color(0xFFffffff).withOpacity(0.8),
-      Color((0xFF000000)).withOpacity(0.8),
+      const Color(0xFFffffff).withOpacity(0.8),
+      const Color(0xFF000000).withOpacity(0.8),
     ]);
   }
 

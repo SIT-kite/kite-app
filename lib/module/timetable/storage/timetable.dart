@@ -53,6 +53,7 @@ class TimetableStorage {
   const TimetableStorage(this.box);
 
   List<String>? get tableNames => box.get(TimetableKeys.tableNames);
+
   set tableNames(List<String>? foo) => box.put(TimetableKeys.tableNames, foo);
 
   /// 通过课表名获取课表
@@ -74,6 +75,7 @@ class TimetableStorage {
     tableNames = [meta.name, ...((tableNames ?? []).where((n) => n != meta.name))];
     addTableMeta(meta.name, meta);
     addTableCourses(meta.name, courses);
+    currentTableName ??= meta.name;
   }
 
   /// 删除课表
@@ -86,13 +88,14 @@ class TimetableStorage {
     box.delete(TimetableKeys.buildTableMetaKeyByName(name));
     box.delete(TimetableKeys.buildTableCoursesKeyByName(name));
     // If there is no timetable selected, find next one.
-    if(currentTableName == null && newTableNames.isNotEmpty){
+    if (currentTableName == null && newTableNames.isNotEmpty) {
       currentTableName = newTableNames.first;
     }
     tableNames = newTableNames;
   }
 
   String? get currentTableName => box.get(TimetableKeys.currentTableName);
+
   set currentTableName(String? foo) => box.put(TimetableKeys.currentTableName, foo);
 
   List<Course>? get currentTableCourses {

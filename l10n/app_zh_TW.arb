@@ -348,6 +348,7 @@
   "status": "",
   "currentVersion": "",
   "timetableMineTitle": "",
+  "timetableMineEmptyTip": "",
   "timetableImportTitle": "",
   "timetableSetStartDate": "",
   "timetableDelete": "",
@@ -366,6 +367,9 @@
   "timetableImportFailedTip": "",
   "timetableImportEndTip": "",
   "timetableImportStartDate": "",
+  "timetableDeleteRequest": "",
+  "timetableDeleteRequestDesc": "",
   "timetableInfoDefaultName": "",
-  "timetableImportError": ""
+  "timetableImportError": "",
+  "delete": ""
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rettulf/rettulf.dart';
 
 extension DialogEx on BuildContext {
   Future<void> showTip({required String title, required String desc, required String ok}) async {
@@ -16,7 +17,11 @@ extension DialogEx on BuildContext {
   }
 
   Future<bool> showRequest(
-      {required String title, required String desc, required String yes, required String no}) async {
+      {required String title,
+      required String desc,
+      required String yes,
+      required String no,
+      bool highlight = false}) async {
     final index = await showDialog(
       context: this,
       builder: (ctx) => AlertDialog(
@@ -26,12 +31,16 @@ extension DialogEx on BuildContext {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              ElevatedButton(onPressed: () {
-                Navigator.of(ctx).pop(0);
-              }, child: Text(yes)),
-              TextButton(onPressed: () {
-                Navigator.of(ctx).pop(1);
-              }, child: Text(no))
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(ctx).pop(0);
+                  },
+                  child: yes.text(style: highlight ? const TextStyle(color: Colors.redAccent) : null).padAll(5)),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(ctx).pop(1);
+                  },
+                  child: no.text().padAll(5))
             ],
           )
         ],

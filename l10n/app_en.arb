@@ -553,6 +553,7 @@
   "status": "Status",
   "currentVersion": "Current Version",
   "timetableMineTitle": "My Timetables",
+  "timetableMineEmptyTip": "Let's import a new timetable!",
   "timetableImportTitle": "Import Timetable",
   "timetableSetStartDate": "Set Start Date",
   "timetableDelete": "Delete",
@@ -571,6 +572,8 @@
   "timetableImportFailedTip": "Failed to import, please try again.",
   "timetableImportEndTip": "Please enter the info.",
   "timetableImportStartDate": "Start with: {date}",
+  "timetableDeleteRequest": "Confirm to delete?",
+  "timetableDeleteRequestDesc": "You will lost this timetable permanently.",
   "timetableInfoDefaultName": "{semester}, {yearStart}-{yearEnd} Timetable",
   "@timetableInfoDefaultName": {
     "placeholders": {
@@ -592,5 +595,6 @@
       }
     }
   },
-  "timetableImportError": "Can't import the timetable, please try agian."
+  "timetableImportError": "Can't import the timetable, please try agian.",
+  "delete": "Delete"
 }

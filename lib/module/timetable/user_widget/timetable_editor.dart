@@ -17,6 +17,7 @@
 */
 import 'package:flutter/material.dart';
 import 'package:kite/module/symbol.dart';
+import 'package:rettulf/rettulf.dart';
 
 import 'button.dart';
 import '../using.dart';

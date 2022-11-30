@@ -15,8 +15,8 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:rettulf/rettulf.dart';
 
 import '../entity/course.dart';
 import '../entity/meta.dart';
@@ -218,11 +218,6 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
             style: ctx.textTheme.titleLarge,
           )),
     );
-  }
-
-  void _updateTableName() {
-    final year = selectedYear;
-    final semester = selectedSemester;
   }
 
   Future<dynamic> editingMeta(BuildContext ctx, TimetableMeta meta, SchoolYear year, Semester semester) async {

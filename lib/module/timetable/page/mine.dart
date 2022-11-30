@@ -17,7 +17,9 @@
 */
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kite/design/user_widgets/dialog.dart';
 import 'package:kite/module/symbol.dart';
+import 'package:rettulf/rettulf.dart';
 
 import '../../activity/using.dart';
 import '../user_widget/picker.dart';
@@ -59,6 +61,9 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
 
   Widget buildTimetables(BuildContext ctx) {
     final tableNames = timetableStorage.tableNames ?? [];
+    if (tableNames.isEmpty) {
+      return _buildEmptyBody(ctx);
+    }
     final currentTableName = timetableStorage.currentTableName;
     return ListView(
         children: tableNames.map((e) {
@@ -125,10 +130,10 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
           child: i18n.timetablePreviewBtn.txt,
         ),
         CupertinoContextMenuAction(
-          onPressed: () {
+          onPressed: () async {
             Navigator.of(ctx).pop();
-            timetableStorage.removeTable(meta.name);
-            setState(() {});
+            // Have to wait until the aniamtion has been suspended because flutter is buggy without check `mounted` in _CupertinoContextMenuState.
+            await showDeleteTimetableRequest(ctx, meta);
           },
           isDestructiveAction: true,
           trailingIcon: CupertinoIcons.delete,
@@ -159,5 +164,27 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
             ))),
       ),
     );
+  }
+
+  Future<void> showDeleteTimetableRequest(BuildContext ctx, TimetableMeta meta) async {
+    final confirm = await ctx.showRequest(
+        title: i18n.timetableDeleteRequest,
+        desc: i18n.timetableDeleteRequestDesc,
+        yes: i18n.delete,
+        no: i18n.cancel,
+        highlight: true);
+    if (confirm) {
+      timetableStorage.removeTable(meta.name);
+      if (mounted) setState(() {});
+    }
+  }
+
+  Widget _buildEmptyBody(BuildContext ctx) {
+    return [
+      const Icon(Icons.calendar_month_rounded, size: 120).padAll(20),
+      i18n.timetableMineEmptyTip.text(
+        style: ctx.theme.textTheme.titleLarge,
+      ),
+    ].column(maa: MAAlign.spaceAround).center();
   }
 }

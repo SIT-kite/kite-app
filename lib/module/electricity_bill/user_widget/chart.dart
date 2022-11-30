@@ -18,6 +18,7 @@
 
 import 'package:animated_button_bar/animated_button_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:rettulf/rettulf.dart';
 import '../entity/statistics.dart';
 import '../init.dart';
 import '../using.dart';
