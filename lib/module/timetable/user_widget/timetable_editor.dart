@@ -58,7 +58,7 @@ class _TimetableEditorState extends State<TimetableEditor> {
           TextFormField(
             controller: _metaDescController,
             maxLines: 2,
-            decoration: InputDecoration(labelText: i18n.timetableDescFormTitile, border: const OutlineInputBorder()),
+            decoration: InputDecoration(labelText: i18n.timetableDescFormTitle, border: const OutlineInputBorder()),
           )
         ]));
   }

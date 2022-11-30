@@ -17,7 +17,7 @@ class RankViewState extends State<RankView> {
 
   @override
   Widget build(BuildContext context) {
-    return buildCard(i18n.electricityBillRank, _buildRankContent(context));
+    return buildCard(i18n.elecBillRank, _buildRankContent(context));
   }
 
   Widget _buildRank(BuildContext ctx) {
@@ -31,10 +31,10 @@ class RankViewState extends State<RankView> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            i18n.electricityBill24hBill(rank.consumption.toStringAsFixed(2)),
+            i18n.elecBill24hBill(rank.consumption.toStringAsFixed(2)),
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
           ),
-          Text(i18n.electricityBillRankAbove((rank.rank * 100 / rank.roomCount).toStringAsFixed(2)))
+          Text(i18n.elecBillRankAbove((rank.rank * 100 / rank.roomCount).toStringAsFixed(2)))
         ],
       );
     }

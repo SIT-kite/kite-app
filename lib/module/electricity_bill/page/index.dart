@@ -74,7 +74,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
         suggestionList: roomList, // 待搜索提示的列表(需要从服务器获取，可以缓存至数据库)
         onlyUseSuggestion: true, // 只允许使用搜索建议里的
       ),
-    ).then((value) {
+    ).then((value) async {
       if (value != null) {
         Log.info('选择宿舍：$value');
         final list = storage.lastRoomList!;
@@ -82,6 +82,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
         list.add(value);
         storage.lastRoomList = list;
         setState(() => room = value);
+        await _onRefresh();
       }
     });
   }
@@ -112,7 +113,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
     return null;
   }
 
-  void _onRefresh() async {
+  Future<void> _onRefresh() async {
     final selectedRoom = room;
     if (selectedRoom == null) return;
     setState(() {
@@ -148,10 +149,10 @@ class _ElectricityPageState extends State<ElectricityPage> {
               state.dailyBill = newDailyBill;
             });
           } else {
-            final newHouilyBill = await ElectricityBillInit.electricityService.getHourlyBill(selectedRoom);
-            if (newHouilyBill.isNotEmpty) newHouilyBill.removeLast();
+            final newHourlyBill = await ElectricityBillInit.electricityService.getHourlyBill(selectedRoom);
+            if (newHourlyBill.isNotEmpty) newHourlyBill.removeLast();
             setChartState((state) {
-              state.hourlyBill = newHouilyBill;
+              state.hourlyBill = newHourlyBill;
             });
           }
         }
@@ -159,13 +160,13 @@ class _ElectricityPageState extends State<ElectricityPage> {
     ]);
     _refreshController.refreshCompleted();
   }
-
+final _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     final selectedRoom = room;
     return Scaffold(
         appBar: AppBar(
-          title: selectedRoom != null ? i18n.electricityBillTitle(selectedRoom).txt : i18n.ftype_elecBill.txt,
+          title: selectedRoom != null ? i18n.elecBillTitle(selectedRoom).txt : i18n.ftype_elecBill.txt,
           actions: <Widget>[
             IconButton(
                 onPressed: search,
@@ -181,20 +182,23 @@ class _ElectricityPageState extends State<ElectricityPage> {
                 scrollDirection: Axis.vertical,
                 onRefresh: _onRefresh,
                 header: const ClassicHeader(),
+                scrollController: _scrollController,
                 child: _buildBody(context, selectedRoom),
               ));
   }
 
   Widget _buildEmptyBody(BuildContext ctx) {
     return buildLeavingBlankBody(ctx,
-        icon: Icons.pageview_outlined, desc: i18n.electricityBillInitialTip, onIconTap: search);
+        icon: Icons.pageview_outlined, desc: i18n.elecBillInitialTip, onIconTap: search);
   }
 
   Widget _buildBody(BuildContext ctx, String room) {
     final balance = _balance;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-      child: Column(
+      // TODO: The pull to refresh is hard to use in landscape mode.
+      child: ListView(
+        controller: _scrollController,
         children: [
           const SizedBox(height: 5),
           buildBalanceCard(ctx),
@@ -215,7 +219,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
   }
 
   Widget buildBalanceCard(BuildContext ctx) {
-    return buildCard(i18n.electricityBillBalance, _buildBalanceCardContent(ctx));
+    return buildCard(i18n.elecBillBalance, _buildBalanceCardContent(ctx));
   }
 
   Widget _buildBalanceCardContent(BuildContext ctx) {
@@ -226,16 +230,16 @@ class _ElectricityPageState extends State<ElectricityPage> {
         child: Column(
           children: [
             if (balance == null)
-              _buildBalanceInfoRowWithPlaceholder(Icons.offline_bolt, i18n.electricityBillRemainingPower,
+              _buildBalanceInfoRowWithPlaceholder(Icons.offline_bolt, i18n.elecBillRemainingPower,
                   const Center(child: CircularProgressIndicator()))
             else
-              _buildBalanceInfoRow(Icons.offline_bolt, i18n.electricityBillRemainingPower,
+              _buildBalanceInfoRow(Icons.offline_bolt, i18n.elecBillRemainingPower,
                   i18n.powerKwh(balance.power.toStringAsFixed(2))),
             if (balance == null)
               _buildBalanceInfoRowWithPlaceholder(
-                  Icons.savings, i18n.electricityBillBalance, const Center(child: CircularProgressIndicator()))
+                  Icons.savings, i18n.elecBillBalance, const Center(child: CircularProgressIndicator()))
             else
-              _buildBalanceInfoRow(Icons.savings, i18n.electricityBillBalance, '¥${balance.balance.toStringAsFixed(2)}',
+              _buildBalanceInfoRow(Icons.savings, i18n.elecBillBalance, '¥${balance.balance.toStringAsFixed(2)}',
                   color: balance.balance < 10 ? Colors.red : null),
           ],
         ));
@@ -283,20 +287,20 @@ class _ElectricityPageState extends State<ElectricityPage> {
 
   Widget buildUpdateTime(BuildContext ctx, DateTime time) {
     return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 50),
+        padding: const EdgeInsets.symmetric(horizontal: 50),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(children: [
               const Icon(Icons.update),
               const SizedBox(width: 10),
-              Text(i18n.electricityBillUpdateTime,
+              Text(i18n.elecBillUpdateTime,
                   style: TextStyle(color: time.difference(DateTime.now()).inDays > 1 ? Colors.redAccent : null)),
             ]),
             Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
               Text(updateTimeFormatter.format(time.toLocal())),
             ]),
           ],
-        ));
+        )).center();
   }
 }

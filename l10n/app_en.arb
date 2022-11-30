@@ -4,12 +4,32 @@
   "academicYear": "Academic Year",
   "acceptedAgreementCheckbox": "I have known and accepted",
   "account": "Account",
+  "activityApplicationID": "Application ID",
+  "activityApplicationTime": "Application Time",
+  "activityApplyBtn": "Apply",
+  "activityContactInfo": "Contact Info",
+  "activityDetails": "Activity Details",
+  "activityDuration": "Duration",
+  "activityID": "Activity ID",
+  "activityLocation": "Location",
+  "activityMyApplication": "My Applications",
+  "activityOrganizer": "Organizer",
+  "activityPrincipal": "Principal",
+  "activitySignInTime": "Sign-in",
+  "activitySignOutTime": "Sign-out",
+  "activityStartTime": "Start Time",
+  "activityTags": "Tags",
+  "activityUndertaker": "Undertaker",
   "addInfoRequest": "Would like you add personal information to display?",
   "addInfoTitle": "Add Info",
   "address": "Address",
   "allowOthersFindMeCheckbox": "Allow others to find me",
   "appName": "SIT Kite",
   "applicationDesc": "This function is based on \"上应一网通办\".\nFor most of types, you have to do the necessary procedure on the spot although you submitted an application online.",
+  "applicationFilerInfrequentlyUsed": "Filter Infrequently-used",
+  "applicationMyMailBox": "My Mailbox",
+  "applicationMyMailBoxEmptyTip": "Here is nothing.",
+  "applicationMyMailBoxRecent": "Recent",
   "author": "Author",
   "bill": "Bill",
   "campus": "Campus",
@@ -17,6 +37,7 @@
   "campusCardNfcPrompt": "Please keep the Campus Card close to your device.",
   "campusCardNfcUnavailable": "Your device doesn't have NFC.",
   "campusCardNfcUnavailableOrDisabled": "Your device doesn't have NFC or isn't NFC-enabled.",
+  "campusCardTip": "The data source lacks information, and the results are for reference only.",
   "campusCardTool": "Campus Card Tool",
   "campusCardUnknownCard": "Unknown Card",
   "campusCardUnknownStudent": "Unknown Student",
@@ -41,6 +62,7 @@
   "@cantLaunchWechatSoNumber2ClipboardTip": {
     "description": "Used in Freshman vCard when Wechat.app can't be launched."
   },
+  "checkCampusNetworkConnection": "Please check whether to connect with campus network, or using EasyConnect.",
   "city": "City",
   "classmate": "Classmate",
   "connectivityConnectFailedError": "Unable to connect to campus network. Troubleshooting:\n1. Attempt to connect to the school's Wi-Fi, \"i-SIT\",\"i-SIT-1x\" or \"eduroam\"\n.2. Attempt to launch \"EasyConnect\" VPN to connect to School.\n3. Attempt to use a self-built proxy server to connect to campus network via Http proxy\nIf they all didn't work, it's probably due to school server downtime for maintenance or even crash, please try again later.",
@@ -51,6 +73,7 @@
   "counselor": "Counselor",
   "counselorPhoneNumber": "Counselor Phone Number",
   "currentDormitoryLabel": "Current Dormitory",
+  "currentVersion": "Current Version",
   "dataManagement": "Data Management",
   "daysKiteWithYouLabel": "Kite has accompanied you for {days,plural, =1{1 day} other{{days} days}}",
   "@daysKiteWithYouLabel": {
@@ -61,6 +84,7 @@
     }
   },
   "daysKiteWithYouLabel0": "Kite just met you :)",
+  "delete": "Delete",
   "devOptions": "Development Options",
   "done": "Done",
   "dontShowThisAgainBtn": "Don't show this again",
@@ -136,6 +160,15 @@
   "eduEmailPluralSenderTailing": "...",
   "eduEmailText": "Text",
   "eduEmailTitle": "My Email",
+  "elecBill24hBill": "Spent ¥{amount} last 24 hours",
+  "@elecBill24hBill": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "elecBillBalance": "Balance",
   "elecBillContent": "last: ¥{balance} Room {room}",
   "@elecBillContent": {
     "placeholders": {
@@ -150,9 +183,31 @@
   "elecBillDailyChart7": "Last 7 Days ⚡ Chart",
   "elecBillElecChart": "Electricity Chart",
   "elecBillHourlyChart24": "Last 24 Hours ⚡ Chart",
+  "elecBillInitialTip": "Please search your room number",
   "elecBillLast24Hour": "Last 24 hours",
   "elecBillLast7Day": "Last 7 days",
+  "elecBillRankAbove": "Above {percent}% of dormitories.",
+  "@elecBillRankAbove": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "elecBillRemainingPower": "Remaining",
+  "elecBillRoomNumber": "Room",
+  "elecBillTitle": "Bill of #{room}",
+  "@elecBillTitle": {
+    "placeholders": {
+      "room": {
+        "type": "String"
+      }
+    }
+  },
+  "elecBillUpdateTime": "Last Update",
+  "elecBillRank": "Rank",
   "enable": "Enable",
+  "error": "Error",
   "examEndTime": "Ent Time",
   "examIsRetake": "Is Retake",
   "examLocation": "Location",
@@ -246,7 +301,16 @@
   "ftype_wiki_desc": "A Wiki of everything you want to know",
   "ftype_yellowPages": "Yellow Pages",
   "ftype_yellowPages_desc": "Contact school",
+  "fullAcademicYear": "Full Year",
   "fullName": "Full Name",
+  "gameWordleNoSuchWord": "No such word \"{word}\".",
+  "@gameWordleNoSuchWord": {
+    "placeholders": {
+      "word": {
+        "type": "String"
+      }
+    }
+  },
   "gender": "Gender",
   "go": "Go",
   "gpaPointLabel": "Point of {type}: {point}",
@@ -297,6 +361,7 @@
   "kiteLoginAccountHint": "Student ID/Work number",
   "kiteLoginBtn": "Join Kite World",
   "kiteLoginFailedTip": "Failed to log in",
+  "kiteLoginIncorrectIDFormat": "Incorrect ID format",
   "kiteLoginPwdHint": "Enter your password",
   "kiteLoginTitle": "Welcome !",
   "kiteStatsBtnTooltip": "Kite Stats",
@@ -320,7 +385,8 @@
   "male": "Male",
   "moreInfoTitle": "More Info",
   "name": "Name",
-  "networkConnecionTimeoutError": "Network Timeout",
+  "networkConnectionTimeoutError": "Network Timeout",
+  "networkConnectionTimeoutErrorDesc": "This function requires access to the campus network.\n\nNOTE: It can also occur when the school server crashes or is down for maintenance.",
   "networkError": "Network Error",
   "networkTool": "Network Tool",
   "networkXcpWarn": "A network error occurred.",
@@ -343,18 +409,28 @@
     }
   },
   "oaAnnouncementTextTitle": "Announcement Text",
+  "oaPwd": "OA Password",
   "ok": "OK",
   "online": "Online",
   "open": "Open",
   "@open": {
     "description": "Open a file"
   },
+  "openNetworkToolBtn": "Open Network Tool",
   "openWlanSettingsBtn": "Open WLAN settings",
   "personalInfoDescLabel": "The information on this page would show your roommates and classmate. It's convenient to make friends and group chat.",
   "personalInfoSettingBtnTooltip": "Set Personal Info",
   "personalInfoTitle": "Personal Info",
   "personalizeTitle": "Personalize",
   "phoneNumber": "Phone Number",
+  "powerKwh": "{amount} kW·h",
+  "@powerKwh": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "processing": "Processing",
   "province": "Province",
   "publishTime": "Publish Time",
@@ -400,6 +476,8 @@
   "scannerBarcodeNotRecognized": "No Barcode",
   "scannerBarcodeRecognized": "Barcode Recognized",
   "semester": "Semester",
+  "semester1st": "Fall Semester",
+  "semester2rd": "Spring Semester",
   "serviceStatus": "Service Status",
   "settings": "Settings",
   "settingsCampus": "Your Campus",
@@ -411,10 +489,10 @@
   "settingsDetailedXcpDialog": "Enable detailed exception dialog",
   "settingsDetailedXcpDialogSub": "Detailed stacktrace will be shown",
   "settingsHomepageRearrange": "Rearrange Home",
-  "settingsHomepageRearrangeResetRequestTitle": "Reset?",
   "settingsHomepageRearrangeResetRequest": "Your layout will be discard.",
-  "settingsHomepageRearrangeTitle": "Rearrange Home",
+  "settingsHomepageRearrangeResetRequestTitle": "Reset?",
   "settingsHomepageRearrangeSub": "Reorder and regroup the homepage to meet your needs.",
+  "settingsHomepageRearrangeTitle": "Rearrange Home",
   "settingsHomepageWallpaperMode": "Homepage Wallpaper Mode",
   "settingsHttpProxy": "Enable Http Proxy",
   "settingsHttpProxyGlobal": "Use as global proxy",
@@ -441,12 +519,68 @@
   "settingsWipeKiteDataSub": "Wipe Kite saved accounts and settings besides cache",
   "staticPicture": "Static Picture",
   "stats": "Statistics",
+  "status": "Status",
   "studentID": "Student ID",
   "studentIdCopy2ClipboardTip": "Your student ID is copied.",
   "studentInfoTitle": "Student Info",
   "studentLoginFailedWarn": "Login failed",
   "teacherEvalTitle": "Teacher Evaluation",
   "tel": "TEL.",
+  "timetableDelete": "Delete",
+  "timetableDeleteRequest": "Confirm to delete?",
+  "timetableDeleteRequestDesc": "You will lose this timetable permanently.",
+  "timetableDescFormTitle": "Description",
+  "timetableEdit": "Edit",
+  "timetableImportEndTip": "Please enter the info.",
+  "timetableImportError": "Can't import the timetable, please try again.",
+  "timetableImportErrorTitle": "Import Error",
+  "timetableImportFailedTip": "Failed to import, please try again.",
+  "timetableImportImportBtn": "Try Import",
+  "timetableImportImporting": "Trying to fetch the timetable...",
+  "timetableImportInfoTitle": "Timetable Info",
+  "timetableImportSaveBtn": "Save",
+  "timetableImportStartDate": "Start with: {date}",
+  "@timetableImportStartDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "timetableImportTitle": "Import Timetable",
+  "timetableInfoDefaultName": "{semester}, {yearStart}-{yearEnd} Timetable",
+  "@timetableInfoDefaultName": {
+    "placeholders": {
+      "semester": {
+        "type": "String"
+      },
+      "yearStart": {
+        "type": "int"
+      },
+      "yearEnd": {
+        "type": "int"
+      }
+    }
+  },
+  "timetableInitialImportRequest": "Import a Timetable",
+  "timetableInitialImportRequestDesc": "You seem to use Kite's Timetable first, try import one now?",
+  "timetableJumpBtn": "Jump",
+  "timetableMineEmptyTip": "Let's import a new timetable !",
+  "timetableMineTitle": "My Timetables",
+  "timetableNameFormTitle": "Name",
+  "timetablePreviewBtn": "Preview",
+  "timetablePreviewTitle": "Preview",
+  "timetableSelectSemesterTip": "Please select a semester first.",
+  "timetableSetStartDate": "Set Start Date",
+  "timetableSetToDefault": "Set to Default",
+  "timetableWeekOrderedName": "Week {week}",
+  "@timetableWeekOrderedName": {
+    "placeholders": {
+      "week": {
+        "type": "int"
+      }
+    }
+  },
   "unfilled": "Unfilled",
   "unknown": "Unknown",
   "untitled": "Untitled",
@@ -468,137 +602,13 @@
   "weather": "Weather",
   "weather_sunny": "Sunny",
   "wechat": "Wechat",
-  "welcomeFreshman": "I'm a freshman",
-  "welcomeLogin": "Login",
-  "welcomeSlogan": "Excellent school life, from here.",
-  "xuhui": "Xuhui",
-  "xuhuiDistrict": "Xuhui District",
-  "yes": "Yes",
-  "networkConnectionTimeoutErrorDesc": "This function requires access to the campuse netwok.\n\nNOTE: It can also occur when the school server crashes or is down for maintenance.",
-  "openNetworkToolBtn": "Open Network Tool",
-  "checkCampusNetworkConnection": "Please check whether to connect with canpus network, or using EasyConnect.",
-  "activityApplicationTime": "Application Time",
-  "activityApplicationID": "Application ID",
-  "activityDetails": "Activity Details",
-  "activityID": "Activity ID",
-  "activityLocation": "Location",
-  "activityPrincipal": "Principal",
-  "activityOrganizer": "Organizer",
-  "activityUndertaker": "Undertaker",
-  "activityContactInfo": "Contact Info",
-  "activityStartTime": "Start Time",
-  "activityDuration": "Duration",
-  "activityTags": "Tags",
-  "activitySignInTime": "Sign-in",
-  "activitySignOutTime": "Sign-out",
-  "activityApplyBtn": "Apply",
-  "activityMyApplication": "My Applications",
-  "applicationMyMailBox": "My Mailbox",
-  "applicationMyMailBoxEmptyTip": "Here is nothing.",
-  "applicationMyMailBoxRecent": "Recent",
-  "applicationFilerInfrequentlyUsed": "Filter Infrequently-used",
-  "campusCardTip": "The data source lacks information, and the results are for reference only.",
-  "oaPwd": "OA Password",
-  "electricityBillBalance": "Balance",
-  "electricityBillRoomNumber": "Room",
-  "electricityBillUpdateTime": "Last Update",
-  "electricityBill24hBill": "Spent ¥{amount} last 24 hours",
-  "@electricityBill24hBill": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-  "electricityBillRankAbove": "Above {percent}% of dormitories.",
-  "@electricityBillRankAbove": {
-    "placeholders": {
-      "percent": {
-        "type": "String"
-      }
-    }
-  },
-  "electricityBillRemainingPower": "Remaining",
-  "electricityBillTitle": "Bill of #{room}",
-  "electricityBillInitialTip": "Please search your room number",
-  "@electricityBillTitle": {
-    "placeholders": {
-      "room": {
-        "type": "String"
-      }
-    }
-  },
-  "electricityBillRank": "Rank",
-  "powerKwh": "{amount} kW·h",
-  "@powerKwh": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-  "kiteLoginIncorrectIDFormat": "Incorrect ID format",
-  "semester1st": "Fall Semester",
-  "semester2rd": "Spring Semester",
-  "fullAcademicYear": "Full Year",
-  "gameWordleNoSuchWord": "No such word \"{word}\".",
-  "@gameWordleNoSuchWord": {
-    "placeholders": {
-      "word": {
-        "type": "String"
-      }
-    }
-  },
-  "error": "Error",
-  "status": "Status",
-  "currentVersion": "Current Version",
-  "timetableMineTitle": "My Timetables",
-  "timetableMineEmptyTip": "Let's import a new timetable !",
-  "timetableImportTitle": "Import Timetable",
-  "timetableSetStartDate": "Set Start Date",
-  "timetableDelete": "Delete",
-  "timetableEdit": "Edit",
-  "timetableSetToDefault": "Set to Default",
-  "timetableSelectSemseterTip": "Please select a semester first.",
-  "timetableImportErrorTitle": "Import Error",
-  "timetableDescFormTitile": "Description",
-  "timetableNameFormTitile": "Name",
-  "timetablePreviewBtn": "Preview",
-  "timetablePreviewTitle": "Preview",
-  "timetableImportSaveBtn": "Save",
-  "timetableImportImportBtn": "Try Import",
-  "timetableImportImporting": "Trying to fetch the timetable...",
-  "timetableImportInfoTitle": "Timetable Info",
-  "timetableImportFailedTip": "Failed to import, please try again.",
-  "timetableImportEndTip": "Please enter the info.",
-  "timetableImportStartDate": "Start with: {date}",
-  "timetableDeleteRequest": "Confirm to delete?",
-  "timetableDeleteRequestDesc": "You will lose this timetable permanently.",
-  "timetableInfoDefaultName": "{semester}, {yearStart}-{yearEnd} Timetable",
-  "@timetableInfoDefaultName": {
-    "placeholders": {
-      "semester": {
-        "type": "String"
-      },
-      "yearStart": {
-        "type": "int"
-      },
-      "yearEnd": {
-        "type": "int"
-      }
-    }
-  },
-  "@timetableImportStartDate": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-  "timetableImportError": "Can't import the timetable, please try agian.",
-  "delete": "Delete",
-  "timetableInitialImportRquest":"Import a Timetable",
-  "timetableInitialImportRquestDesc": "You seem to use Kite's Timetable first, try import one now?",
+  "weekday1": "Monday",
+  "weekday2": "Tuesday",
+  "weekday3": "Wednesday",
+  "weekday4": "Thursday",
+  "weekday5": "Friday",
+  "weekday6": "Saturday",
+  "weekday7": "Sunday",
   "weekdayShort1": "MON",
   "weekdayShort2": "TUE",
   "weekdayShort3": "WED",
@@ -606,20 +616,10 @@
   "weekdayShort5": "FRI",
   "weekdayShort6": "SAT",
   "weekdayShort7": "SUN",
-  "weekday1": "Monday",
-  "weekday2": "Tuesday",
-  "weekday3": "Wedsday",
-  "weekday4": "Thursday",
-  "weekday5": "Friday",
-  "weekday6": "Saturday",
-  "weekday7": "Sunday",
-  "timetableJumpBtn": "Jump",
-  "timetableWeekOrderedName": "Week {week}",
-  "@timetableWeekOrderedName": {
-    "placeholders": {
-      "week": {
-        "type": "int"
-      }
-    }
-  }
+  "welcomeFreshman": "I'm a freshman",
+  "welcomeLogin": "Login",
+  "welcomeSlogan": "Excellent school life, from here.",
+  "xuhui": "Xuhui",
+  "xuhuiDistrict": "Xuhui District",
+  "yes": "Yes"
 }

@@ -23,7 +23,7 @@ import '../using.dart';
 import '../utils.dart';
 import 'header.dart';
 import 'sheet.dart';
-import 'tiemtable.dart';
+import 'timetable.dart';
 
 class DailyTimetable extends StatefulWidget implements InitialTimeProtocol {
   /// 教务系统课程列表

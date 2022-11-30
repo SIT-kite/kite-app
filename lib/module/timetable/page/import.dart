@@ -70,7 +70,7 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
   String getTip({required ImportStatus by}) {
     switch (by) {
       case ImportStatus.none:
-        return i18n.timetableSelectSemseterTip;
+        return i18n.timetableSelectSemesterTip;
       case ImportStatus.importing:
         return i18n.timetableImportImporting;
       case ImportStatus.end:
@@ -112,20 +112,18 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SizedBox(
-          child: AnimatedContainer(
-            margin: isImporting ? const EdgeInsets.all(60) : EdgeInsets.zero,
-            width: isImporting ? 120.0 : 0.0,
-            height: isImporting ? 120.0 : 0.0,
-            alignment: isImporting ? Alignment.center : AlignmentDirectional.topCenter,
-            duration: const Duration(seconds: 2),
-            curve: Curves.fastOutSlowIn,
-            child: const SizedBox(
-              width: 120,
-              height: 120,
-              child: CircularProgressIndicator(
-                strokeWidth: 12,
-              ),
+        AnimatedContainer(
+          margin: isImporting ? const EdgeInsets.all(60) : EdgeInsets.zero,
+          width: isImporting ? 120.0 : 0.0,
+          height: isImporting ? 120.0 : 0.0,
+          alignment: isImporting ? Alignment.center : AlignmentDirectional.topCenter,
+          duration: const Duration(seconds: 2),
+          curve: Curves.fastOutSlowIn,
+          child: const SizedBox(
+            width: 120,
+            height: 120,
+            child: CircularProgressIndicator(
+              strokeWidth: 12,
             ),
           ),
         ),
@@ -180,10 +178,11 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
               });
               try {
                 final semester = selectedSemester;
+                final year = SchoolYear(selectedYear);
                 await Future.wait([
                   //_fetchTimetable(year, semester),
                   fetchMockCourses(),
-                  Future.delayed(const Duration(milliseconds: 5000)),
+                  Future.delayed(const Duration(milliseconds: 4500)),
                 ]).then((value) async {
                   setState(() {
                     _status = ImportStatus.end;

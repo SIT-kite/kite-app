@@ -21,7 +21,7 @@ import '../cache.dart';
 import '../using.dart';
 import '../entity/course.dart';
 import '../entity/meta.dart';
-import '../user_widget/tiemtable.dart';
+import '../user_widget/timetable.dart';
 
 class TimetablePreviewPage extends StatelessWidget {
   final TimetableMeta meta;

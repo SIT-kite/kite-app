@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../using.dart';
 
@@ -23,7 +22,7 @@ import '../cache.dart';
 import '../entity/course.dart';
 import '../entity/meta.dart';
 import '../init.dart';
-import '../user_widget/tiemtable.dart';
+import '../user_widget/timetable.dart';
 import 'export.dart';
 
 class TimetablePage extends StatefulWidget {
@@ -57,8 +56,8 @@ class _TimetablePageState extends State<TimetablePage> {
     if (courses.isEmpty) {
       Future.delayed(Duration.zero, () async {
         final approve = await context.showRequest(
-            title: i18n.timetableInitialImportRquest,
-            desc: i18n.timetableInitialImportRquestDesc,
+            title: i18n.timetableInitialImportRequest,
+            desc: i18n.timetableInitialImportRequestDesc,
             yes: i18n.yes,
             no: i18n.notNow);
 
@@ -96,25 +95,6 @@ class _TimetablePageState extends State<TimetablePage> {
       courses = storage.currentTableCourses ?? [];
       meta = storage.currentTableMeta;
     });
-  }
-
-  ///跳转到某一周按钮
-  Widget _buildSwitchWeekButton() {
-    List weekList = Iterable.generate(20, (i) => i).toList();
-
-    return PopupMenuButton(
-      onSelected: (index) => tableViewerController.jumpToWeek(int.parse(index.toString()) + 1),
-      itemBuilder: (BuildContext context) {
-        return weekList
-            .map((e) => PopupMenuItem(
-                  value: e,
-                  child: Text('第${e + 1}周'),
-                ))
-            .toList();
-      },
-      constraints: const BoxConstraints(maxHeight: 400, minWidth: 50),
-      child: const Icon(Icons.scale),
-    );
   }
 
   Future<void> selectTimetablePageToJump(BuildContext ctx) async {

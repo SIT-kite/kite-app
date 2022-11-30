@@ -24,14 +24,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/global/cookie_initializer.dart';
 import 'package:kite/global/dio_initializer.dart';
-import 'package:kite/l10n/extension.dart';
 import 'package:kite/module/activity/using.dart';
 import 'package:kite/module/user_event/dao/user_event.dart';
 import 'package:kite/route.dart';
-import 'package:kite/session/sso/index.dart';
-import 'package:kite/storage/dao/index.dart';
-import 'package:kite/user_widget/future_builder.dart';
-import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/event_bus.dart';
 import 'package:kite/util/page_logger.dart';
 
@@ -81,7 +76,7 @@ class Global {
       inSsoErrorDialog = true;
       showAlertDialog(
         context,
-        title: i18n.networkConnecionTimeoutError,
+        title: i18n.networkConnectionTimeoutError,
         content: [
           i18n.networkConnectionTimeoutErrorDesc.txt,
         ],
@@ -134,7 +129,7 @@ class Global {
         return Center(
           child: Column(
             children: [
-              i18n.networkConnecionTimeoutError.txt,
+              i18n.networkConnectionTimeoutError.txt,
               ElevatedButton(
                 onPressed: () => Navigator.of(context).pushReplacementNamed(RouteTable.connectivity),
                 child: i18n.openNetworkToolBtn.txt,
