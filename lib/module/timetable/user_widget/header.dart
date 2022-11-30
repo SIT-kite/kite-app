@@ -17,10 +17,10 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:kite/design/utils.dart';
+import 'package:rettulf/rettulf.dart';
 import '../using.dart';
 
-class DateHeader extends StatefulWidget {
+class TimetableHeader extends StatefulWidget {
   final List<String> dayHeaders;
 
   /// 当前显示的周次
@@ -33,21 +33,23 @@ class DateHeader extends StatefulWidget {
   final Function(int)? onTap;
 
   final DateTime startDate;
+  final bool leadingSpace;
 
-  const DateHeader({
+  const TimetableHeader({
     super.key,
     required this.dayHeaders,
     required this.currentWeek,
     required this.selectedDay,
     required this.startDate,
+    this.leadingSpace = false,
     this.onTap,
   });
 
   @override
-  State<StatefulWidget> createState() => _DateHeaderState();
+  State<StatefulWidget> createState() => _TimetableHeaderState();
 }
 
-class _DateHeaderState extends State<DateHeader> {
+class _TimetableHeaderState extends State<TimetableHeader> {
   late int selectedDay;
 
   @override
@@ -58,14 +60,12 @@ class _DateHeaderState extends State<DateHeader> {
 
   Widget buildDayHeader(BuildContext ctx, int day, String name) {
     var theme = Theme.of(context);
-    final Color bgColor;
+    Color? bgColor;
     final Color textColor;
     final isSelected = day == selectedDay;
-    if (theme.isDark) {
+    if (ctx.isDarkMode) {
       if (isSelected) {
         bgColor = theme.secondaryHeaderColor;
-      } else {
-        bgColor = theme.primaryColor;
       }
       textColor = Colors.white;
     } else {
@@ -73,12 +73,14 @@ class _DateHeaderState extends State<DateHeader> {
         bgColor = theme.primaryColor;
         textColor = Colors.white;
       } else {
-        bgColor = theme.backgroundColor;
         textColor = Colors.black;
       }
     }
     return Container(
-      decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(12.0)), color: bgColor),
+      decoration: BoxDecoration(
+        color: bgColor,
+        border: Border.all(color: Colors.black12, width: 0.8),
+      ),
       child: Padding(
           padding: const EdgeInsets.only(top: 5, bottom: 5),
           child: Text(
@@ -89,13 +91,12 @@ class _DateHeaderState extends State<DateHeader> {
     );
   }
 
-  Widget _buildWeekColumn() {
-    final style = Theme.of(context).textTheme.bodyText2;
-    return Expanded(flex: 2, child: Text('${widget.currentWeek}\n周', style: style, textAlign: TextAlign.center));
+  Widget buildLeadingSpace() {
+    return Expanded(flex: 2, child: Container());
   }
 
   ///每天的列
-  Widget _buildDayColumn(int day) {
+  Widget buildDayNameHeader(int day) {
     final date = getDateFromWeekDay(widget.startDate, widget.currentWeek, day);
     final dateString = '${date.month}/${date.day}';
 /*    TextStyle? style = Theme.of(context).textTheme.bodyText2;
@@ -122,9 +123,9 @@ class _DateHeaderState extends State<DateHeader> {
   /// 将该行分为 2 + 7 * 3 一共 23 个小份, 左侧的周数占 2 份, 每天的日期占 3 份.
   @override
   Widget build(BuildContext context) {
-    final columns = [_buildWeekColumn()];
+    final columns = <Widget>[if (widget.leadingSpace) buildLeadingSpace()];
     for (int i = 1; i <= 7; ++i) {
-      columns.add(_buildDayColumn(i));
+      columns.add(buildDayNameHeader(i));
     }
     return Row(children: columns);
   }

@@ -74,36 +74,47 @@ extension DialogEx on BuildContext {
   Future<int?> showPicker(
       {required int count,
       required String ok,
-      int? initialIndex,
+      bool Function(int? selected)? okEnabled,
       double targetHeight = 240,
+      FixedExtentScrollController? controller,
+      List<PickerActionWidgetBuilder>? actions,
       required IndexedWidgetBuilder make}) async {
-    int? number;
+    final $selected = ValueNotifier<int?>(controller?.initialItem);
     return await navigator.push(
       CupertinoModalPopupRoute(
         builder: (ctx) => CupertinoActionSheet(
-          message: SizedBox(
-              height: targetHeight,
-              child: CupertinoPicker(
-                scrollController: initialIndex != null ? FixedExtentScrollController(initialItem: initialIndex) : null,
-                magnification: 1.22,
-                useMagnifier: true,
-                // This is called when selected item is changed.
-                onSelectedItemChanged: (int selectedItem) {
-                  number = selectedItem;
-                },
-                squeeze: 1.5,
-                itemExtent: 32.0,
-                children: List<Widget>.generate(count, (int index) {
-                  return make(ctx, index);
-                }),
-              )),
-          cancelButton: CupertinoButton(
-              onPressed: () {
-                Navigator.of(ctx).pop(number);
-              },
-              child: ok.text()),
-        ),
+            message: SizedBox(
+                height: targetHeight,
+                child: CupertinoPicker(
+                  scrollController: controller,
+                  magnification: 1.22,
+                  useMagnifier: true,
+                  // This is called when selected item is changed.
+                  onSelectedItemChanged: (int selectedItem) {
+                    $selected.value = selectedItem;
+                  },
+                  squeeze: 1.5,
+                  itemExtent: 32.0,
+                  children: List<Widget>.generate(count, (int index) {
+                    return make(ctx, index);
+                  }),
+                )),
+            actions: actions
+                ?.map((e) =>
+                    ValueListenableBuilder(valueListenable: $selected, builder: (ctx, value, child) => e(ctx, value)))
+                .toList(),
+            cancelButton: ValueListenableBuilder(
+                valueListenable: $selected,
+                builder: (ctx, value, child) => CupertinoButton(
+                    onPressed: okEnabled?.call(value) ?? true
+                        ? () {
+                            Navigator.of(ctx).pop($selected.value);
+                          }
+                        : null,
+                    child: ok.text()))),
       ),
     );
   }
 }
+
+typedef PickerActionWidgetBuilder = Widget Function(BuildContext context, int? curSelectedIndex);

@@ -36,6 +36,7 @@ class TimetablePreviewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tableViewerController = TimetableViewerController();
+    final ValueNotifier<int> $currentWeek = ValueNotifier(1);
 
     return Scaffold(
       appBar: AppBar(
@@ -46,6 +47,7 @@ class TimetablePreviewPage extends StatelessWidget {
       ),
       body: TimetableViewer(
         controller: tableViewerController,
+        $currentWeek:$currentWeek,
         initialTableMeta: meta,
         initialTableCourses: courses,
         tableCache: TableCache(),

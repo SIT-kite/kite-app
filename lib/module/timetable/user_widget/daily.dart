@@ -24,6 +24,7 @@ import '../utils.dart';
 import 'header.dart';
 import 'sheet.dart';
 import 'timetable.dart';
+import 'package:tuple/tuple.dart';
 
 class DailyTimetable extends StatefulWidget implements InitialTimeProtocol {
   /// 教务系统课程列表
@@ -41,12 +42,14 @@ class DailyTimetable extends StatefulWidget implements InitialTimeProtocol {
 
   @override
   State<StatefulWidget> createState() => DailyTimetableState();
+  final ValueNotifier<int> $currentWeek;
 
   const DailyTimetable({
     super.key,
     required this.allCourses,
     required this.initialDate,
     required this.tableCache,
+    required this.$currentWeek,
     this.viewChangingCallback,
   });
 }
@@ -65,14 +68,22 @@ class DailyTimetableState extends State<DailyTimetable> implements ITimetableVie
 
   int weekNDay2Page(int week, int day) => (week - 1) * 7 + day - 1;
 
+  Tuple2<int, int> page2WeekNDay(int page) {
+    final week = page ~/ 7 + 1;
+    final day = page % 7 + 1;
+    return Tuple2(week, day);
+  }
+
   void onPageChange() {
     setState(() {
       final page = (_pageController.page ?? 0).round();
-      final newWeek = (page + 1) ~/ 7;
-      final newDay = page % 7 + 1;
+      final weekNDay = page2WeekNDay(page);
+      final newWeek = weekNDay.item1;
+      final newDay = weekNDay.item2;
       if (newWeek != _currentWeek || newDay != _currentDay) {
         _currentWeek = newWeek;
         _currentDay = newDay;
+        widget.$currentWeek.value = newWeek;
       }
     });
   }
@@ -83,8 +94,12 @@ class DailyTimetableState extends State<DailyTimetable> implements ITimetableVie
     final pos = widget.locateInTimetable(DateTime.now());
     _currentWeek = pos.week;
     _currentDay = pos.day;
-    _pageController = PageController(initialPage: (_currentWeek - 1) * 7 + _currentDay - 1, keepPage: false)
-      ..addListener(onPageChange);
+    _pageController = PageController(initialPage: weekNDay2Page(pos.week, pos.day))..addListener(onPageChange);
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        widget.$currentWeek.value = _currentWeek;
+      });
+    });
   }
 
   @override
@@ -137,9 +152,6 @@ class DailyTimetableState extends State<DailyTimetable> implements ITimetableVie
     var pos = widget.locateInTimetable(DateTime.now());
     return _currentWeek == pos.week && _currentDay == pos.day;
   }
-
-  @override
-  int get currentWeek => _currentWeek;
 
   Widget _buildCourseCard(BuildContext context, Course course, List<Course> allCourses) {
     final TextStyle? textStyle = Theme.of(context).textTheme.bodyText2;
@@ -206,7 +218,7 @@ class DailyTimetableState extends State<DailyTimetable> implements ITimetableVie
       children: [
         // 翻页不影响选择的星期, 因此沿用 _currentDay.
         Expanded(
-          child: DateHeader(
+          child: TimetableHeader(
             dayHeaders: dayHeaders,
             selectedDay: day,
             currentWeek: week,

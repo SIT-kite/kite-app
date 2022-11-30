@@ -61,8 +61,6 @@ abstract class ITimetableView {
   void jumpToDay(int targetWeek, int targetDay);
 
   bool get isTodayView;
-
-  int get currentWeek;
 }
 
 class TimetableViewerController {
@@ -81,8 +79,6 @@ class TimetableViewerController {
   void jumpToWeek(int week) {
     _state?.jumpWeek(week);
   }
-
-  int get currentWeek => _state?.currentWeek ?? 1;
 
   bool get isTodayView => _state?.isTodayView ?? true;
 
@@ -111,11 +107,14 @@ class TimetableViewer extends StatefulWidget {
   /// 课表控制器
   final TimetableViewerController? controller;
 
+  final ValueNotifier<int> $currentWeek;
+
   const TimetableViewer({
     required this.initialTableMeta,
     required this.initialTableCourses,
     required this.initialDisplayMode,
     required this.tableCache,
+    required this.$currentWeek,
     this.onDisplayChanged,
     this.onJumpedToday,
     this.controller,
@@ -177,8 +176,6 @@ class _TimetableViewerState extends State<TimetableViewer> {
     (currentKey.currentState as ITimetableView?)?.jumpToWeek(week);
   }
 
-  int get currentWeek => (currentKey.currentState as ITimetableView?)?.currentWeek ?? 1;
-
   bool get isTodayView => (currentKey.currentState as ITimetableView?)?.isTodayView ?? true;
 
   @override
@@ -189,12 +186,14 @@ class _TimetableViewerState extends State<TimetableViewer> {
       child: (displayModeState == DisplayMode.daily)
           ? DailyTimetable(
               key: dailyTimetableKey,
+              $currentWeek: widget.$currentWeek,
               allCourses: tableCoursesState,
               initialDate: tableMetaState?.startDate ?? DateTime.now(),
               tableCache: widget.tableCache,
               viewChangingCallback: switchDisplayMode)
           : WeeklyTimetable(
               key: weeklyTimetableKey,
+              $currentWeek: widget.$currentWeek,
               allCourses: tableCoursesState,
               initialDate: tableMetaState?.startDate ?? DateTime.now(),
               tableCache: widget.tableCache),

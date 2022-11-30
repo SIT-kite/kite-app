@@ -19,6 +19,7 @@ import 'package:kite/network/session.dart';
 
 import 'cache.dart';
 import 'interface.dart';
+import 'mock.dart';
 import 'service.dart';
 
 class FunctionOverrideInit {
@@ -33,7 +34,7 @@ class FunctionOverrideInit {
       storageDao: storageDao,
     );
     // TODO: Temporarily disabled for I18n development
-    // cachedService = FunctionOverrideDisabled();
+    cachedService = FunctionOverrideDisabled();
     // cachedService = FunctionOverrideMock();
   }
 }

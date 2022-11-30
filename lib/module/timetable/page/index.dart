@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:rettulf/rettulf.dart';
 import '../using.dart';
 
 import '../cache.dart';
@@ -98,12 +99,26 @@ class _TimetablePageState extends State<TimetablePage> {
   }
 
   Future<void> selectTimetablePageToJump(BuildContext ctx) async {
-    final currentWeek = tableViewerController.currentWeek;
+    final currentWeek = $currentWeek.value;
     final initialIndex = currentWeek - 1;
+    final controller = FixedExtentScrollController(initialItem: initialIndex);
+    final startDate = meta?.startDate;
+    final todayIndex = startDate != null ? TimetablePosition.locate(startDate, DateTime.now()).week - 1 : 0;
     final goto = await ctx.showPicker(
         count: 20,
-        initialIndex: initialIndex,
+        controller: controller,
         ok: i18n.timetableJumpBtn,
+        okEnabled: (curSelected) => curSelected != initialIndex,
+        actions: [
+          if (startDate != null)
+            (ctx, curSelected) => i18n.timetableJumpFindTodayBtn.text().cupertinoButton(
+                onPressed: curSelected == todayIndex
+                    ? null
+                    : () {
+                        controller.animateToItem(todayIndex,
+                            duration: const Duration(milliseconds: 500), curve: Curves.fastOutSlowIn);
+                      })
+        ],
         make: (ctx, i) {
           return Text(i18n.timetableWeekOrderedName(i + 1));
         });
@@ -112,32 +127,35 @@ class _TimetablePageState extends State<TimetablePage> {
     }
   }
 
+  final ValueNotifier<int> $currentWeek = ValueNotifier(1);
+
   @override
   Widget build(BuildContext context) {
     Log.info('Timetable build');
     return Scaffold(
       appBar: AppBar(
-        title: i18n.ftype_timetable.txt,
+        title: ValueListenableBuilder(
+          valueListenable: $currentWeek,
+          builder: (ctx, value, child) {
+            return ("${i18n.ftype_timetable} ${i18n.timetableWeekOrderedName(value)}").text();
+          },
+        ),
         actions: <Widget>[
           //_buildSwitchWeekButton(),
           buildSwitchViewButton(context),
           buildMyTimetablesButton(context),
         ],
       ),
-      floatingActionButton: InkWell(
-          onLongPress: () {
-            tableViewerController.jumpToToday();
-          },
-          child: FloatingActionButton(
-            onPressed: () async {
-              await selectTimetablePageToJump(context);
-            },
-            child: const Icon(Icons.undo_rounded),
-          )),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.undo_rounded),
+        onPressed: () async {
+          await selectTimetablePageToJump(context);
+        },
+      ),
       body: TimetableViewer(
-        key: UniqueKey(),
         controller: tableViewerController,
         initialTableMeta: meta,
+        $currentWeek: $currentWeek,
         initialTableCourses: courses,
         tableCache: TableCache(),
         initialDisplayMode: displayMode,

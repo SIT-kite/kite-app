@@ -39,12 +39,14 @@ class WeeklyTimetable extends StatefulWidget implements InitialTimeProtocol {
 
   @override
   State<StatefulWidget> createState() => WeeklyTimetableState();
+  final ValueNotifier<int> $currentWeek;
 
   const WeeklyTimetable({
     Key? key,
     required this.allCourses,
     required this.initialDate,
     required this.tableCache,
+    required this.$currentWeek,
   }) : super(key: key);
 }
 
@@ -64,6 +66,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> implements ITimetableV
       final newWeek = page2Week(page);
       if (newWeek != _currentWeek) {
         _currentWeek = newWeek;
+        widget.$currentWeek.value = newWeek;
       }
     });
   }
@@ -74,7 +77,12 @@ class WeeklyTimetableState extends State<WeeklyTimetable> implements ITimetableV
     dateSemesterStart = widget.initialDate;
     final pos = widget.locateInTimetable(DateTime.now());
     _currentWeek = pos.week;
-    _pageController = PageController(initialPage: _currentWeek - 1, keepPage: false)..addListener(onPageChange);
+    _pageController = PageController(initialPage: _currentWeek - 1)..addListener(onPageChange);
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        widget.$currentWeek.value = _currentWeek;
+      });
+    });
   }
 
   @override
@@ -88,9 +96,6 @@ class WeeklyTimetableState extends State<WeeklyTimetable> implements ITimetableV
     var pos = widget.locateInTimetable(DateTime.now());
     return _currentWeek == pos.week;
   }
-
-  @override
-  int get currentWeek => _currentWeek;
 
   @override
   void jumpToDay(int targetWeek, int targetDay) {
@@ -122,7 +127,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> implements ITimetableV
   }
 
   /// 布局左侧边栏, 显示节次
-  Widget _buildLeftColumn() {
+  Widget buildLeftColumn() {
     /// 构建每一个格子
     Widget buildCell(BuildContext context, int index) {
       final textStyle = Theme.of(context).textTheme.bodyText2;
@@ -153,8 +158,9 @@ class WeeklyTimetableState extends State<WeeklyTimetable> implements ITimetableV
         Expanded(
             flex: 1,
             // Display the week name on top
-            child: DateHeader(
+            child: TimetableHeader(
               dayHeaders: dayHeaders,
+              leadingSpace: true,
               currentWeek: week,
               selectedDay: -1,
               startDate: widget.initialDate,
@@ -168,7 +174,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> implements ITimetableV
                   child: Row(
                     textDirection: TextDirection.ltr,
                     children: [
-                      Expanded(flex: 2, child: _buildLeftColumn()),
+                      Expanded(flex: 2, child: buildLeftColumn()),
                       Expanded(
                           flex: 21,
                           child: TimetableColumn(
@@ -302,7 +308,7 @@ class _TimetableColumnState extends State<TimetableColumn> {
   }
 
   /// 构建某一天的那一列格子.
-  Widget _buildDay(BuildContext context, int day) {
+  Widget _buildColumnByDay(BuildContext context, int day) {
     // 该日的课程列表
     final List<Course> dayCourseList = widget.cache.filterCourseOnDay(widget.allCourses, widget.currentWeek, day);
     // 该日的格子列表
@@ -332,7 +338,7 @@ class _TimetableColumnState extends State<TimetableColumn> {
         scrollDirection: Axis.horizontal,
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
-        itemBuilder: (BuildContext context, int index) => _buildDay(context, index + 1),
+        itemBuilder: (BuildContext context, int index) => _buildColumnByDay(context, index + 1),
       ),
     );
   }

@@ -49,7 +49,7 @@ class AboutPage extends StatelessWidget {
         future: Dio().get(R.kiteAboutUrl),
         builder: (ctx, data) {
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 25),
             child: MyHtmlWidget(data.data.toString()),
           );
         },

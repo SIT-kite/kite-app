@@ -23,8 +23,8 @@ import 'package:kite/storage/init.dart';
 import 'package:kite/util/dsl.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-class KiteDrawer extends Drawer {
-  const KiteDrawer({Key? key}) : super(key: key);
+class KiteDrawer extends StatelessWidget {
+  const KiteDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {

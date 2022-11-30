@@ -223,7 +223,7 @@ class _DarkModeSafeHtmlWidgetState extends State<DarkModeSafeHtmlWidget> {
     final theme = Theme.of(context);
     final bgColor = theme.backgroundColor;
     final textColor = theme.textTheme.bodyText2?.color ?? Colors.white;
-    final fontFamilly = theme.textTheme.bodyText2?.fontFamily ?? "";
+    final fontFamily = theme.textTheme.bodyText2?.fontFamily ?? "";
     final fontSizeNumber = theme.textTheme.bodyText2?.fontSize;
     final fontSize = fontSizeNumber != null ? FontSize(fontSizeNumber) : FontSize.large;
     return SingleChildScrollView(
@@ -239,25 +239,25 @@ class _DarkModeSafeHtmlWidgetState extends State<DarkModeSafeHtmlWidget> {
                 backgroundColor: bgColor,
                 color: textColor,
                 fontSize: fontSize,
-                fontFamily: fontFamilly,
+                fontFamily: fontFamily,
               ),
               "div": Style(
                 color: textColor,
                 backgroundColor: bgColor,
                 fontSize: fontSize,
-                fontFamily: fontFamilly,
+                fontFamily: fontFamily,
               ),
               "span": Style(
                 color: textColor,
                 backgroundColor: bgColor,
                 fontSize: fontSize,
-                fontFamily: fontFamilly,
+                fontFamily: fontFamily,
               ),
               "b": Style(
                 color: textColor,
                 backgroundColor: bgColor,
                 fontSize: fontSize,
-                fontFamily: fontFamilly,
+                fontFamily: fontFamily,
               ),
             },
             tagsList: filterTags([...Html.tags])));

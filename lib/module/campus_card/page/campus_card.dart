@@ -20,6 +20,7 @@ import 'dart:typed_data';
 
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
+import 'package:kite/design/page/common.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import '../using.dart';
 import '../init.dart';
@@ -122,14 +123,9 @@ class _CampusCardPageState extends State<CampusCardPage> {
     super.dispose();
   }
 
-  Widget buildFailedPrompt() {
-    return Center(
-      // TODO: better NFC tip
-      child: Text(
-        i18n.campusCardNfcUnavailableOrDisabled,
-        style: Theme.of(context).textTheme.headline3,
-      ),
-    );
+  Widget buildFailedPrompt(BuildContext ctx) {
+    return buildLeavingBlankBody(ctx,
+        icon: Icons.credit_card_off_outlined, desc: i18n.campusCardNfcUnavailableOrDisabled);
   }
 
   Widget buildPrompt() {
@@ -180,12 +176,22 @@ class _CampusCardPageState extends State<CampusCardPage> {
 
   @override
   Widget build(BuildContext context) {
+    final Widget content;
+    if (isNfcAvailable) {
+      if (_cardsRead.isNotEmpty) {
+        content = buildCardRecord();
+      } else {
+        content = buildPrompt();
+      }
+    } else {
+      content = buildFailedPrompt(context);
+    }
     return Scaffold(
       appBar: AppBar(title: i18n.campusCardTool.txt),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-          child: isNfcAvailable ? (_cardsRead.isNotEmpty ? buildCardRecord() : buildPrompt()) : buildFailedPrompt(),
+          child: content,
         ),
       ),
     );
