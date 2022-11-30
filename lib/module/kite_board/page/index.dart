@@ -23,12 +23,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'package:universal_platform/universal_platform.dart';
 
-import '../using.dart';
 import '../entity/picture_summary.dart';
 import '../init.dart';
 import '../service/kite_board.dart';
 import '../user_widget/card.dart';
+import '../using.dart';
 
 class BoardPage extends StatefulWidget {
   const BoardPage({Key? key}) : super(key: key);
@@ -109,7 +110,9 @@ class _BoardPageState extends State<BoardPage> {
     // TODO: I18n
     if (!await signUpIfNecessary(context, '标识图片上传者')) return;
     try {
-      final List<String> imagePaths = await FileUtils.pickImagesByFilePicker();
+      final List<String> imagePaths = UniversalPlatform.isDesktopOrWeb
+          ? await FileUtils.pickImagesByFilePicker()
+          : await FileUtils.pickImagesByImagePicker();
       bool? isUpload = await showUploadDialog(imagePaths);
 
       if (imagePaths.isEmpty || !isUpload!) return;
