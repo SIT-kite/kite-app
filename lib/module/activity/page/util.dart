@@ -42,7 +42,7 @@ List<String> cleanDuplicate(List<String> tags) {
   return tags.toSet().toList();
 }
 
-Tuple2<String,List<String>> splitTitleAndTags(String fullTitle){
+Tuple2<String, List<String>> splitTitleAndTags(String fullTitle) {
   final titleParts = extractTitle(fullTitle);
   var realTitle = titleParts.isNotEmpty ? titleParts.last : "";
   /*if (realTitle.startsWith(RegExp(r'[:：]'))) {

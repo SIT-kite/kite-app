@@ -23,6 +23,7 @@ import 'package:kite/l10n/extension.dart';
 import 'package:kite/user_widget/webview/view.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/url_launcher.dart';
+import 'package:rettulf/widget/hero.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class SimpleWebViewPage extends StatefulWidget {
@@ -141,7 +142,7 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
         ),
       ...?widget.otherActions,
     ];
-
+    final curTitle = widget.fixedTitle ?? title;
     return WillPopScope(
       onWillPop: () async {
         final controller = await _controllerCompleter.future;
@@ -153,7 +154,7 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.fixedTitle ?? title),
+          title: Text(curTitle),
           actions: actions,
           bottom: widget.showTopProgressIndicator ? buildTopIndicator() : null,
           leading: IconButton(

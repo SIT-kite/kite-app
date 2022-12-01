@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:rettulf/rettulf.dart';
 import '../using.dart';
 
 import '../entity/announcement.dart';
@@ -25,6 +26,14 @@ import 'detail.dart';
 
 class OaAnnouncePage extends StatelessWidget {
   const OaAnnouncePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: i18n.ftype_oaAnnouncement.txt),
+      body: _buildAnnounceList(),
+    );
+  }
 
   Widget _buildBulletinItem(BuildContext context, BulletinRecord record) {
     final titleStyle = Theme.of(context).textTheme.headline4;
@@ -62,25 +71,16 @@ class OaAnnouncePage extends StatelessWidget {
 
   Widget _buildAnnounceList() {
     return PlaceholderFutureBuilder<List<BulletinRecord>>(
-      futureGetter: () => _queryBulletinListInAllCategory(1),
-      builder: (context, data, placeholder) {
-        if (data == null) return placeholder;
-        final records = data;
+        futureGetter: () => _queryBulletinListInAllCategory(1),
+        builder: (context, data, placeholder) {
+          if (data == null) return placeholder;
+          final records = data;
 
-        // 公告项按时间排序
-        records.sort((a, b) => b.dateTime.difference(a.dateTime).inSeconds);
+          // 公告项按时间排序
+          records.sort((a, b) => b.dateTime.difference(a.dateTime).inSeconds);
 
-        final items = records.map((e) => Card(child: _buildBulletinItem(context, e))).toList();
-        return SingleChildScrollView(child: Column(children: items));
-      }
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: i18n.ftype_oaAnnouncement.txt),
-      body: _buildAnnounceList(),
-    );
+          final items = records.map((e) => Card(child: _buildBulletinItem(context, e))).toList();
+          return SingleChildScrollView(child: Column(children: items));
+        });
   }
 }

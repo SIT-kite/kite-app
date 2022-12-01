@@ -18,13 +18,22 @@
 
 import 'package:flutter/material.dart';
 import 'package:kite/user_widget/markdown_widget.dart';
+import 'package:rettulf/rettulf.dart';
 
 import '../entity/bulletin.dart';
 import '../init.dart';
 import '../using.dart';
 
 class KiteBulletinPage extends StatelessWidget {
-  const KiteBulletinPage({Key? key}) : super(key: key);
+  const KiteBulletinPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: i18n.ftype_kiteBulletin.txt),
+      body: SafeArea(child: _buildBody()),
+    );
+  }
 
   _buildTitleText(BuildContext ctx, String title) {
     return Text(title, overflow: TextOverflow.ellipsis, style: Theme.of(ctx).textTheme.headline3);
@@ -84,14 +93,6 @@ class KiteBulletinPage extends StatelessWidget {
       builder: (context, data) {
         return _buildNoticeList(context, data);
       },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: i18n.ftype_kiteBulletin.txt),
-      body: SafeArea(child: _buildBody()),
     );
   }
 }

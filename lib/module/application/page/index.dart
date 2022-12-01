@@ -64,6 +64,29 @@ class OfficePage extends StatefulWidget {
 }
 
 class _OfficePageState extends State<OfficePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: i18n.ftype_application.txt,
+        actions: [_buildMenuButton(context)],
+      ),
+      body: Column(
+        children: [
+          _buildNotice(),
+          Expanded(child: _buildBody()),
+        ],
+      ),
+      floatingActionButton: ApplicationInit.session.isLogin
+          ? FloatingActionButton(
+              onPressed: _navigateMessagePage,
+              tooltip: i18n.applicationMyMailBox,
+              child: const Icon(Icons.mail_outline),
+            )
+          : null,
+    );
+  }
+
   bool _enableFilter = true;
   List<SimpleFunction> _allFunctions = [];
   String? _lastError;
@@ -183,28 +206,5 @@ class _OfficePageState extends State<OfficePage> {
 
   void _navigateMessagePage() {
     Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MessagePage()));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: i18n.ftype_application.txt,
-        actions: [_buildMenuButton(context)],
-      ),
-      body: Column(
-        children: [
-          _buildNotice(),
-          Expanded(child: _buildBody()),
-        ],
-      ),
-      floatingActionButton: ApplicationInit.session.isLogin
-          ? FloatingActionButton(
-              onPressed: _navigateMessagePage,
-              tooltip: i18n.applicationMyMailBox,
-              child: const Icon(Icons.mail_outline),
-            )
-          : null,
-    );
   }
 }

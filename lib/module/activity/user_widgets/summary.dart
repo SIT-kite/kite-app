@@ -93,7 +93,7 @@ FlTitlesData titlesData(List<String> titles) => FlTitlesData(
       ),
     );
 
-Widget _buildChart(BuildContext ctx,ScScoreSummary? summary,Widget placeholder) {
+Widget _buildChart(BuildContext ctx, ScScoreSummary? summary, Widget placeholder) {
   if (summary == null) {
     return placeholder;
   }
@@ -134,13 +134,13 @@ Widget _buildChart(BuildContext ctx,ScScoreSummary? summary,Widget placeholder) 
   );
 }
 
-Widget buildSummeryCard(BuildContext context, ScScoreSummary? summery,Widget placeholder) {
+Widget buildSummeryCard(BuildContext context, ScScoreSummary? summery, Widget placeholder) {
   return AspectRatio(
     aspectRatio: 1.8,
     child: Card(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20),
-        child: _buildChart(context, summery,placeholder),
+        child: _buildChart(context, summery, placeholder),
       ),
     ),
   );

@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:kite/home/entity/home.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/util/upgrade.dart';
 import 'package:kite/util/url_launcher.dart';
@@ -47,9 +48,9 @@ class UpgradeItem extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done && snapshot.hasData && snapshot.data != null) {
           return Brick(
-            title: i18n.ftype_upgrade,
+            title: FType.upgrade.localized(),
             onPressed: () => onTapUpdate(snapshot.data!),
-            subtitle: i18n.ftype_upgrade_desc,
+            subtitle: FType.upgrade.localizedDesc(),
             icon: 'assets/home/icon_upgrade.svg',
           );
         }

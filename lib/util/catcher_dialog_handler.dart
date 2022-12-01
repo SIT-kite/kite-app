@@ -61,30 +61,32 @@ class DialogHandler extends ReportHandler {
       title: i18n.exceptionInfo,
       ok: i18n.close,
       make: (ctx) => SizedBox(
-        child:SingleChildScrollView(child: Column(
-          children: <Widget>[
-            SelectableText(errorMsg),
-            ...frameList.asMap().entries.map((entry) {
-              final index = entry.key;
-              final e = entry.value;
-              // const githubUrl = 'https://hub.fastgit.xyz';
-              const githubUrl = 'https://github.com';
-              final url =
-                  '$githubUrl/SIT-kite/kite-app/blob/master/lib${e.uri.path.substring(4)}${e.line != null ? '#L${e.line}' : ''}';
-              return Align(
-                alignment: Alignment.centerLeft,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                      splashFactory: NoSplash.splashFactory,
-                      enableFeedback: false,
-                      shape: const RoundedRectangleBorder()),
-                  onPressed: () => GlobalLauncher.launch(url),
-                  child: Text("[#$index] $e"),
-                ),
-              );
-            }).toList(),
-          ],
-        ),) ,
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              SelectableText(errorMsg),
+              ...frameList.asMap().entries.map((entry) {
+                final index = entry.key;
+                final e = entry.value;
+                // const githubUrl = 'https://hub.fastgit.xyz';
+                const githubUrl = 'https://github.com';
+                final url =
+                    '$githubUrl/SIT-kite/kite-app/blob/master/lib${e.uri.path.substring(4)}${e.line != null ? '#L${e.line}' : ''}';
+                return Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                        splashFactory: NoSplash.splashFactory,
+                        enableFeedback: false,
+                        shape: const RoundedRectangleBorder()),
+                    onPressed: () => GlobalLauncher.launch(url),
+                    child: Text("[#$index] $e"),
+                  ),
+                );
+              }).toList(),
+            ],
+          ),
+        ),
       ),
     );
     return true;

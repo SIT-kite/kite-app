@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:rettulf/rettulf.dart';
 
 import '../entity/exam.dart';
 import '../init.dart';
@@ -44,6 +45,36 @@ class _ExamArrangementPageState extends State<ExamArrangementPage> {
     selectedSemester = (now.month >= 3 && now.month <= 7) ? Semester.secondTerm : Semester.firstTerm;
 
     super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: i18n.ftype_examArr.text()),
+      body: Column(
+        children: [
+          buildSemesterSelector(),
+          MyFutureBuilder<List<ExamRoom>>(
+            future: ExamArrInit.examService.getExamList(
+              SchoolYear(selectedYear),
+              selectedSemester,
+            ),
+            builder: (context, data) {
+              data.sort((a, b) {
+                if (a.time.isEmpty || b.time.isEmpty) {
+                  if (a.time.isEmpty != b.time.isEmpty) {
+                    return a.time.isEmpty ? 1 : -1;
+                  }
+                  return 0;
+                }
+                return a.time[0].isAfter(b.time[0]) ? 1 : -1;
+              });
+              return Expanded(child: buildExamItems(data));
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildItem(String icon, String text) {
@@ -133,36 +164,6 @@ class _ExamArrangementPageState extends State<ExamArrangementPage> {
         initialYear: selectedYear,
         initialSemester: selectedSemester,
         showEntireYear: false,
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: i18n.ftype_examArr.txt),
-      body: Column(
-        children: [
-          buildSemesterSelector(),
-          MyFutureBuilder<List<ExamRoom>>(
-            future: ExamArrInit.examService.getExamList(
-              SchoolYear(selectedYear),
-              selectedSemester,
-            ),
-            builder: (context, data) {
-              data.sort((a, b) {
-                if (a.time.isEmpty || b.time.isEmpty) {
-                  if (a.time.isEmpty != b.time.isEmpty) {
-                    return a.time.isEmpty ? 1 : -1;
-                  }
-                  return 0;
-                }
-                return a.time[0].isAfter(b.time[0]) ? 1 : -1;
-              });
-              return Expanded(child: buildExamItems(data));
-            },
-          ),
-        ],
       ),
     );
   }

@@ -111,7 +111,7 @@ class _TimetablePageState extends State<TimetablePage> {
     final initialIndex = currentWeek - 1;
     final controller = FixedExtentScrollController(initialItem: initialIndex);
     final startDate = meta?.startDate;
-    final todayIndex = startDate != null ? TimetablePosition.locate(startDate, DateTime.now()).week - 1: 0;
+    final todayIndex = startDate != null ? TimetablePosition.locate(startDate, DateTime.now()).week - 1 : 0;
     final goto = await ctx.showPicker(
         count: 20,
         controller: controller,
@@ -150,8 +150,7 @@ class _TimetablePageState extends State<TimetablePage> {
             if (mode == DisplayMode.weekly) {
               return i18n.timetableWeekOrderedName(value.week).text();
             } else {
-              return "${i18n.timetableWeekOrderedName(value.week)} ${weekdayText[(value.day - 1) % 7]}"
-                  .text();
+              return "${i18n.timetableWeekOrderedName(value.week)} ${weekdayText[(value.day - 1) % 7]}".text();
             }
           },
         ),

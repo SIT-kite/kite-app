@@ -177,14 +177,14 @@ class _TimetableViewerState extends State<TimetableViewer> {
       child: (widget.$displayMode.value == DisplayMode.daily)
           ? DailyTimetable(
               key: dailyTimetableKey,
-          $currentPos: widget.$currentPos,
+              $currentPos: widget.$currentPos,
               allCourses: tableCoursesState,
               initialDate: tableMetaState?.startDate ?? DateTime.now(),
               tableCache: widget.tableCache,
               viewChangingCallback: switchDisplayMode)
           : WeeklyTimetable(
               key: weeklyTimetableKey,
-          $currentPos: widget.$currentPos,
+              $currentPos: widget.$currentPos,
               allCourses: tableCoursesState,
               initialDate: tableMetaState?.startDate ?? DateTime.now(),
               tableCache: widget.tableCache),

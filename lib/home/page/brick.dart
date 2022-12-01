@@ -20,6 +20,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/design/colors.dart';
 import 'package:kite/design/utils.dart';
+import 'package:rettulf/rettulf.dart';
 
 class Brick extends StatelessWidget {
   final String? route;

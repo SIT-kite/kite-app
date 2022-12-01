@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:rettulf/rettulf.dart';
 
 import '../using.dart';
 import 'list.dart';
@@ -36,7 +37,7 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: i18n.ftype_activity.txt, actions: [
+      appBar: AppBar(title: i18n.ftype_activity.text(), actions: [
         IconButton(
           icon: const Icon(Icons.search),
           onPressed: () => showSearch(context: context, delegate: SearchBar()),

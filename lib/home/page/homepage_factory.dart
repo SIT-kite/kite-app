@@ -28,7 +28,6 @@ import '../../util/scanner.dart';
 import '../entity/home.dart';
 import 'brick.dart';
 import 'item/electricity.dart';
-import 'item/index.dart';
 import 'item/upgrade.dart';
 import 'item/exam.dart';
 import 'item/expense.dart';
@@ -38,7 +37,6 @@ import 'item/mail.dart';
 import 'item/bulletin.dart';
 import 'item/office.dart';
 import 'item/report.dart';
-import 'item/upgrade.dart';
 
 class HomepageFactory {
   static final Map<FType, WidgetBuilder?> builders = {
@@ -51,7 +49,7 @@ class HomepageFactory {
           subtitle: FType.timetable.localizedDesc(),
         ),
     FType.reportTemp: (context) => const ReportTempItem(),
-    FType.examArrangement: (context) => const ExamArrangementItem(),
+    FType.examArr: (context) => const ExamArrangementItem(),
     FType.classroomBrowser: (context) => Brick(
           route: RouteTable.classroomBrowser,
           icon: 'assets/home/icon_classroom.svg',
@@ -99,26 +97,26 @@ class HomepageFactory {
           subtitle: FType.wiki.localizedDesc(),
         ),
     FType.separator: (context) => Container(),
-    FType.bbs: (context) => UniversalPlatform.isDesktopOrWeb
-        ? Container()
-        : Brick(
-            route: RouteTable.bbs,
-            icon: 'assets/home/icon_bbs.svg',
-            title: FType.bbs.localized(),
-            subtitle: FType.bbs.localizedDesc(),
-          ),
-    FType.scanner: (context) => UniversalPlatform.isDesktopOrWeb
-        ? Container()
-        : Brick(
-            onPressed: () async {
-              final result = await scan(context);
-              Log.info('扫码结果: $result');
-              if (result != null) GlobalLauncher.launch(result);
-            },
-            iconWidget: Icon(Icons.qr_code_scanner, size: 30.h, color: context.fgColor),
-            title: FType.scanner.localized(),
-            subtitle: FType.scanner.localizedDesc(),
-          ),
+    FType.bbs: UniversalPlatform.isDesktopOrWeb
+        ? null
+        : (context) => Brick(
+              route: RouteTable.bbs,
+              icon: 'assets/home/icon_bbs.svg',
+              title: FType.bbs.localized(),
+              subtitle: FType.bbs.localizedDesc(),
+            ),
+    FType.scanner: UniversalPlatform.isDesktopOrWeb
+        ? null
+        : (context) => Brick(
+              onPressed: () async {
+                final result = await scan(context);
+                Log.info('扫码结果: $result');
+                if (result != null) GlobalLauncher.launch(result);
+              },
+              iconWidget: Icon(Icons.qr_code_scanner, size: 30.h, color: context.fgColor),
+              title: FType.scanner.localized(),
+              subtitle: FType.scanner.localizedDesc(),
+            ),
     FType.freshman: (context) => const FreshmanItem(),
     FType.switchAccount: (context) => Brick(
           route: RouteTable.login,
@@ -136,7 +134,7 @@ class HomepageFactory {
   };
 
   static Widget? buildBrickWidget(BuildContext context, FType type) {
-    if(!builders.containsKey(type)){
+    if (!builders.containsKey(type)) {
       throw UnimplementedError("Brick[${type.name}] is not available.");
     }
     final builder = builders[type];

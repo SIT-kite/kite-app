@@ -19,6 +19,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+
 typedef PlaceholderGetter = Widget Function(BuildContext context);
 typedef PlaceholderWidgetBuilder<T> = Widget Function(BuildContext context, T? data, Widget placeholder);
 typedef ErrorWidgetBuilder = Widget? Function(

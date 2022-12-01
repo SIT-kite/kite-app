@@ -46,7 +46,7 @@ enum FType {
 
   /// 考试安排
   @HiveField(4)
-  examArrangement,
+  examArr,
 
   /// 空教室
   @HiveField(5)
@@ -130,7 +130,7 @@ enum FType {
         return i18n.ftype_timetable;
       case FType.reportTemp:
         return i18n.ftype_reportTemp;
-      case FType.examArrangement:
+      case FType.examArr:
         return i18n.ftype_examArr;
       case FType.classroomBrowser:
         return i18n.ftype_classroomBrowser;
@@ -181,7 +181,7 @@ enum FType {
         return i18n.ftype_timetable_desc;
       case FType.reportTemp:
         return i18n.ftype_reportTemp_desc;
-      case FType.examArrangement:
+      case FType.examArr:
         return i18n.ftype_examArr_desc;
       case FType.classroomBrowser:
         return i18n.ftype_classroomBrowser_desc;
@@ -238,7 +238,7 @@ class UndergraduateBricks implements IUserBricks {
       FType.timetable,
       FType.reportTemp,
       FType.separator,
-      FType.examArrangement,
+      FType.examArr,
       FType.classroomBrowser,
       FType.activity,
       FType.expense,
