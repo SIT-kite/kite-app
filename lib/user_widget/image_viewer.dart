@@ -19,14 +19,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-class ViewPage extends StatelessWidget {
-  final String url;
+class MyImageViewer extends StatelessWidget {
+  final ImageProvider image;
 
-  const ViewPage(this.url, {Key? key}) : super(key: key);
+  const MyImageViewer({required this.image, Key? key}) : super(key: key);
 
   Widget buildImageWidget() {
     return Image(
-      image: CachedNetworkImageProvider(url),
+      image: image,
       loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
         if (loadingProgress == null) return child;
         int currentLength = loadingProgress.cumulativeBytesLoaded;
@@ -51,10 +51,16 @@ class ViewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SizedBox.expand(
-        child: buildBody(context),
-      ),
-    );
+    return SizedBox.expand(child: buildBody(context));
+  }
+
+  static Future<void> showNetworkImagePage(BuildContext context, String url) async {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return Scaffold(
+        body: MyImageViewer(
+          image: CachedNetworkImageProvider(url),
+        ),
+      );
+    }));
   }
 }

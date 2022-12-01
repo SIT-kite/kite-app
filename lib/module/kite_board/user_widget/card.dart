@@ -18,9 +18,9 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:kite/user_widget/image_viewer.dart';
 
 import '../entity/picture_summary.dart';
-import '../page/view.dart';
 
 class PictureCard extends StatelessWidget {
   final PictureSummary picture;
@@ -33,10 +33,11 @@ class PictureCard extends StatelessWidget {
       child: Column(
         children: [
           GestureDetector(
-              child: CachedNetworkImage(imageUrl: picture.thumbnail),
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (_) => ViewPage(picture.origin)));
-              }),
+            child: CachedNetworkImage(imageUrl: picture.thumbnail),
+            onTap: () {
+              MyImageViewer.showNetworkImagePage(context, picture.origin);
+            },
+          ),
           const SizedBox(height: 20),
           Container(
             padding: const EdgeInsets.all(8),
