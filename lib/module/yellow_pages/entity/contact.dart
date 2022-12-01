@@ -16,13 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:json_annotation/json_annotation.dart';
+
 import '../using.dart';
 
 part 'contact.g.dart';
 
 @JsonSerializable()
 @HiveType(typeId: HiveTypeIdPool.contactItem)
-class ContactData extends HiveObject {
+class ContactData {
   ///部门
   @HiveField(0)
   final String department;

@@ -24,7 +24,7 @@ part 'weather.g.dart';
 
 @JsonSerializable()
 @HiveType(typeId: HiveTypeIdPool.weatherItem)
-class Weather extends HiveObject {
+class Weather {
   @HiveField(0)
   String weather;
   @HiveField(1)
