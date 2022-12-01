@@ -17,6 +17,7 @@
  */
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
+import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 
 import '../dao/list.dart';
@@ -73,9 +74,12 @@ class ScActivityListService implements ScActivityListDao {
     const String url = 'http://sc.sit.edu.cn/public/activity/activityList.action';
 
     await _refreshCookie();
-    final response = await session.request(url, ReqMethod.post, data: {
-      'activityName': queryString,
-    });
+    final response = await session.request(
+      url,
+      ReqMethod.post,
+      data: 'activityName=$queryString',
+      options: SessionOptions(contentType: Headers.formUrlEncodedContentType),
+    );
 
     return _parseActivityList(response.data);
   }
