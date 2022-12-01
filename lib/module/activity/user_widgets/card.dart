@@ -119,8 +119,7 @@ class ActivityCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (_) => DetailPage(activity)));
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => DetailPage(activity, hero: activity.id)));
       },
       child: Card(
         margin: const EdgeInsets.all(10),

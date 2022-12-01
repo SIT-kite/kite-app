@@ -33,11 +33,12 @@ String _getActivityUrl(int activityId) {
 
 class DetailPage extends StatelessWidget {
   final Activity activity;
+  final Object hero;
 
   int get activityId => activity.id;
   final bool hideApplyButton;
 
-  const DetailPage(this.activity, {this.hideApplyButton = false, super.key});
+  const DetailPage(this.activity, {required this.hero, this.hideApplyButton = false, super.key});
 
   AppBar _buildAppBar() {
     return AppBar(
@@ -72,8 +73,8 @@ class DetailPage extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(10),
-            child: Text(activity.realTitle, style: titleStyle, softWrap: true),
-          ).hero(activity.id),
+            child: Text(activity.realTitle, style: titleStyle, softWrap: true).hero(hero),
+          ),
           Table(
             columnWidths: const {
               0: FlexColumnWidth(1),

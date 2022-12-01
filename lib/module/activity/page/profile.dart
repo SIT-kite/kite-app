@@ -68,7 +68,8 @@ class ProfilePage extends StatelessWidget {
       final activity = ActivityParser.parse(rawActivity);
 
       final tile = ListTile(
-        title: Text(activity.realTitle, style: titleStyle, maxLines: 2, overflow: TextOverflow.ellipsis),
+        title: Text(activity.realTitle, style: titleStyle, maxLines: 2, overflow: TextOverflow.ellipsis)
+            .hero(rawActivity.applyId),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -82,7 +83,7 @@ class ProfilePage extends StatelessWidget {
             ? () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                      builder: (_) => DetailPage(activity, hideApplyButton: true)),
+                      builder: (_) => DetailPage(activity, hero: rawActivity.applyId, hideApplyButton: true)),
                 );
               }
             : null,
@@ -107,7 +108,6 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: i18n.activityMyApplication.txt),
       body: _buildEventList(context),
     );
   }

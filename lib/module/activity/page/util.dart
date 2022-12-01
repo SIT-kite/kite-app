@@ -33,6 +33,7 @@ List<String> extractTitle(String fullTitle) {
       lastPos = i + 1;
     }
   }
+
   result.add(fullTitle.substring(lastPos));
   return result;
 }
@@ -43,7 +44,10 @@ List<String> cleanDuplicate(List<String> tags) {
 
 Tuple2<String,List<String>> splitTitleAndTags(String fullTitle){
   final titleParts = extractTitle(fullTitle);
-  final realTitle = titleParts.isNotEmpty ? titleParts.last : "";
+  var realTitle = titleParts.isNotEmpty ? titleParts.last : "";
+  /*if (realTitle.startsWith(RegExp(r'[:：]'))) {
+    realTitle = fullTitle.substring(1);
+  }*/
   if (titleParts.isNotEmpty) titleParts.removeLast();
   final tags = cleanDuplicate(titleParts);
   return Tuple2(realTitle, tags);
