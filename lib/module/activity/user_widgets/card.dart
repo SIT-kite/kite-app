@@ -19,14 +19,17 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:geopattern_flutter/geopattern_flutter.dart';
+import 'package:geopattern_flutter/patterns/overlapping_circles.dart';
 import 'package:rettulf/rettulf.dart';
-import '../using.dart';
+
 import '../entity/list.dart';
 import '../page/detail.dart';
 import 'blur.dart';
 
-import 'package:geopattern_flutter/geopattern_flutter.dart';
-import 'package:geopattern_flutter/patterns/overlapping_circles.dart';
+import '../page/util.dart';
+import '../using.dart';
+import 'blur.dart';
 
 class ActivityCard extends StatelessWidget {
   final Activity activity;

@@ -19,6 +19,7 @@
 import 'package:animated_button_bar/animated_button_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:rettulf/rettulf.dart';
+
 import '../entity/statistics.dart';
 import '../init.dart';
 import '../using.dart';
@@ -63,7 +64,6 @@ class ElectricityChartState extends State<ElectricityChart> {
         child: CircularProgressIndicator(),
       );
     }
-    bill.removeLast();
     return HourlyElectricityChart(bill);
   }
 
@@ -87,7 +87,6 @@ class ElectricityChartState extends State<ElectricityChart> {
         child: CircularProgressIndicator(),
       );
     }
-    bill.removeLast();
     return DailyElectricityChart(bill);
   }
 
@@ -110,16 +109,14 @@ class ElectricityChartState extends State<ElectricityChart> {
     if (room != null) {
       if (newMode == ElectricityChartMode.daily) {
         final newDailyBill = await ElectricityBillInit.electricityService.getDailyBill(room);
-        if (newDailyBill.isNotEmpty) newDailyBill.removeLast();
         setState(() {
           dailyBill = newDailyBill;
           mode = newMode;
         });
       } else {
-        final newHouilyBill = await ElectricityBillInit.electricityService.getHourlyBill(room);
-        if (newHouilyBill.isNotEmpty) newHouilyBill.removeLast();
+        final newHourlyBill = await ElectricityBillInit.electricityService.getHourlyBill(room);
         setState(() {
-          hourlyBill = newHouilyBill;
+          hourlyBill = newHourlyBill;
           mode = newMode;
         });
       }

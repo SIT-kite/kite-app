@@ -53,6 +53,7 @@ class ScSession extends ISession {
         method,
         para: para,
         data: data,
+        options: options,
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
       );
