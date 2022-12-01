@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
@@ -312,6 +313,11 @@ class SsoSession with DioDownloaderMixin implements ISession {
 
     // 首先获取AuthServer首页
     final html = await getAuthServerHtml();
+
+    await cookieJar.saveFromResponse(
+      Uri.parse('https://authserver.sit.edu.cn'),
+      [Cookie('org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE', 'en')],
+    );
 
     // 获取首页验证码
     var captcha = '';
