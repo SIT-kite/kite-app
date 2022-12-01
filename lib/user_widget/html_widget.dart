@@ -17,45 +17,43 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:kite/launcher.dart';
 import 'package:kite/util/logger.dart';
 
-class MyHtmlWidget extends StatefulWidget {
+class MyHtmlWidget extends StatelessWidget {
   final String html;
   final bool isSelectable;
   final RenderMode renderMode;
+  final TextStyle? textStyle;
 
   const MyHtmlWidget(
     this.html, {
     Key? key,
     this.isSelectable = true,
     this.renderMode = RenderMode.column,
+    this.textStyle,
   }) : super(key: key);
 
   @override
-  State<MyHtmlWidget> createState() => _MyHtmlWidgetState();
-}
-
-class _MyHtmlWidgetState extends State<MyHtmlWidget> {
-  @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: HtmlWidget(
-        widget.html,
-        isSelectable: widget.isSelectable,
-        renderMode: widget.renderMode,
-        customStylesBuilder: (e) => {"background-color": ""},
-        textStyle: Theme.of(context).textTheme.bodyText2,
-        onTapUrl: (url) async {
-          await GlobalLauncher.launch(url);
-          return true;
-        },
-        onTapImage: (ImageMetadata image) {
-          Log.info('图片被点击: ${image.sources.toList()[0].url}');
-        },
-      ),
+    Widget widget = HtmlWidget(
+      html,
+      renderMode: renderMode,
+      customStylesBuilder: (e) => {"background-color": ""},
+      textStyle: textStyle ?? Theme.of(context).textTheme.bodyText2,
+      onTapUrl: (url) async {
+        await GlobalLauncher.launch(url);
+        return true;
+      },
+      onTapImage: (ImageMetadata image) {
+        Log.info('图片被点击: ${image.sources.toList()[0].url}');
+      },
     );
+    if (isSelectable) {
+      widget = SelectionArea(child: widget);
+    }
+    widget = SingleChildScrollView(child: widget);
+    return widget;
   }
 }

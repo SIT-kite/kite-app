@@ -17,15 +17,13 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:kite/module/activity/entity/list.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../entity/detail.dart';
 import '../init.dart';
-import '../using.dart';
 import '../user_widgets/card.dart';
-import 'util.dart';
+import '../using.dart';
 
 String _getActivityUrl(int activityId) {
   return 'http://sc.sit.edu.cn/public/activity/activityDetail.action?activityId=$activityId';
@@ -114,10 +112,14 @@ class DetailPage extends StatelessWidget {
   }
 
   Widget _buildArticle(BuildContext context, String html) {
-    final textStyle = Theme.of(context).textTheme.bodyText1;
-
     return Padding(
-        padding: const EdgeInsets.all(20), child: HtmlWidget(html, isSelectable: true, textStyle: textStyle));
+      padding: const EdgeInsets.all(20),
+      child: MyHtmlWidget(
+        html,
+        isSelectable: true,
+        textStyle: Theme.of(context).textTheme.bodyText1,
+      ),
+    );
   }
 
   Widget _buildDetailWithPlaceholder(BuildContext context, ActivityDetail? detail, Widget placeholder) {
