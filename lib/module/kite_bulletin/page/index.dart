@@ -17,8 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:kite/launcher.dart';
+import 'package:kite/user_widget/markdown_widget.dart';
 
 import '../entity/bulletin.dart';
 import '../init.dart';
@@ -61,13 +60,7 @@ class KiteBulletinPage extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           // 正文
-          MarkdownBody(
-            data: notice.content ?? notice.title,
-            selectable: true,
-            onTapLink: (String text, String? href, String title) {
-              GlobalLauncher.launch(href ?? '');
-            },
-          ),
+          MyMarkdownWidget(notice.content ?? ''),
         ],
       ),
     );
