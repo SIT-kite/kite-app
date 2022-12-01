@@ -37,9 +37,9 @@ import 'package:universal_platform/universal_platform.dart';
 import '../entity/home.dart';
 import '../init.dart';
 import 'background.dart';
-import 'homepage_factory.dart';
 import 'drawer.dart';
 import 'greeting.dart';
+import 'homepage_factory.dart';
 import 'item/index.dart';
 
 class HomeItemGroup extends StatelessWidget {
@@ -271,13 +271,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildSettingsButton(BuildContext context) {
-    return IconButton(
-      onPressed: () => Navigator.of(context).pushNamed(RouteTable.settings),
-      icon: const Icon(Icons.settings, color: Colors.white70),
-    );
-  }
-
   Widget buildBody(BuildContext context) {
     return Stack(
       children: [
@@ -296,10 +289,17 @@ class _HomePageState extends State<HomePage> {
           child: CustomScrollView(
             slivers: [
               SliverAppBar(
+                leading: IconButton(
+                  icon: const Icon(Icons.menu, color: Colors.white70),
+                  onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+                ),
                 // AppBar
                 actions: [
                   if (!UniversalPlatform.isDesktopOrWeb) buildScannerButton(context),
-                  buildSettingsButton(context),
+                  IconButton(
+                    onPressed: () => Navigator.of(context).pushNamed(RouteTable.settings),
+                    icon: const Icon(Icons.settings, color: Colors.white70),
+                  ),
                 ],
                 automaticallyImplyLeading: false,
                 flexibleSpace: FlexibleSpaceBar(
