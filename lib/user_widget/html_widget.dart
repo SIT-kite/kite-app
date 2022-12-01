@@ -21,6 +21,8 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:kite/launcher.dart';
 import 'package:kite/util/logger.dart';
 
+import 'image_viewer.dart';
+
 class MyHtmlWidget extends StatelessWidget {
   final String html;
   final bool isSelectable;
@@ -47,7 +49,9 @@ class MyHtmlWidget extends StatelessWidget {
         return true;
       },
       onTapImage: (ImageMetadata image) {
-        Log.info('图片被点击: ${image.sources.toList()[0].url}');
+        final url = image.sources.toList()[0].url;
+        Log.info('图片被点击: $url');
+        MyImageViewer.showNetworkImagePage(context, url);
       },
     );
     if (isSelectable) {
