@@ -178,7 +178,7 @@ class SsoSession with DioDownloaderMixin implements ISession {
         onReceiveProgress: onReceiveProgress,
       );
       // 处理重定向
-      return await DioUtils.processRedirect(dio, response);
+      return await DioUtils.processRedirect(dio, response, headers: neededHeaders);
     }
 
     // 第一次先正常请求
@@ -255,7 +255,7 @@ class SsoSession with DioDownloaderMixin implements ISession {
     debug(m) => Log.debug(m);
 
     /// 提取认证页面中的加密盐
-    String _getSaltFromAuthHtml(String htmlText) {
+    String getSaltFromAuthHtml(String htmlText) {
       final a = RegExp(r'var pwdDefaultEncryptSalt = "(.*?)";');
       final matchResult = a.firstMatch(htmlText)!.group(0)!;
       final salt = matchResult.substring(29, matchResult.length - 2);
@@ -264,7 +264,7 @@ class SsoSession with DioDownloaderMixin implements ISession {
     }
 
     /// 提取认证页面中的Cas Ticket
-    String _getCasTicketFromAuthHtml(String htmlText) {
+    String getCasTicketFromAuthHtml(String htmlText) {
       final a = RegExp(r'<input type="hidden" name="lt" value="(.*?)"');
       final matchResult = a.firstMatch(htmlText)!.group(0)!;
       final casTicket = matchResult.substring(38, matchResult.length - 1);
@@ -273,19 +273,23 @@ class SsoSession with DioDownloaderMixin implements ISession {
     }
 
     /// 获取认证页面内容
-    Future<String> _getAuthServerHtml() async {
-      final response = await dio.get(_loginUrl);
+    Future<String> getAuthServerHtml() async {
+      final response = await dio.get(
+        _loginUrl,
+        options: Options(headers: Map.from(neededHeaders)..remove('Referer')),
+      );
       return response.data;
     }
 
     /// 判断是否需要验证码
-    Future<bool> _needCaptcha(String username) async {
+    Future<bool> needCaptcha(String username) async {
       final response = await dio.get(
         _needCaptchaUrl,
         queryParameters: {
           'username': username,
           'pwdEncrypt2': 'pwdEncryptSalt',
         },
+        options: Options(headers: neededHeaders),
       );
       final needCaptcha = response.data == 'true';
       debug('当前账户: $username, 是否需要验证码: $needCaptcha');
@@ -293,10 +297,13 @@ class SsoSession with DioDownloaderMixin implements ISession {
     }
 
     /// 获取验证码
-    Future<String> _getCaptcha() async {
+    Future<String> getCaptcha() async {
       final response = await dio.get(
         _captchaUrl,
-        options: Options(responseType: ResponseType.bytes),
+        options: Options(
+          responseType: ResponseType.bytes,
+          headers: neededHeaders,
+        ),
       );
       Uint8List captchaData = response.data;
       final b64 = base64Encode(captchaData);
@@ -304,29 +311,40 @@ class SsoSession with DioDownloaderMixin implements ISession {
     }
 
     // 首先获取AuthServer首页
-    final html = await _getAuthServerHtml();
+    final html = await getAuthServerHtml();
 
     // 获取首页验证码
     var captcha = '';
-    if (await _needCaptcha(username)) {
+    if (await needCaptcha(username)) {
       // 识别验证码
       // 一定要让识别到的字符串长度为4
       // 如果不是4，那就再试一次
       do {
-        final captchaImage = await _getCaptcha();
+        final captchaImage = await getCaptcha();
         captcha = await OcrServer.recognize(captchaImage);
         debug('识别验证码结果: $captcha');
       } while (captcha.length != 4);
     }
     // 获取casTicket
-    final casTicket = _getCasTicketFromAuthHtml(html);
+    final casTicket = getCasTicketFromAuthHtml(html);
     // 获取salt
-    final salt = _getSaltFromAuthHtml(html);
+    final salt = getSaltFromAuthHtml(html);
     // 加密密码
     final hashedPwd = hashPassword(salt, password);
     // 登录系统，获得cookie
     return await _postLoginRequest(username, hashedPwd, captcha, casTicket);
   }
+
+  final neededHeaders = {
+    "Accept-Encoding": "gzip, deflate, br",
+    'Origin': 'https://authserver.sit.edu.cn',
+    "Upgrade-Insecure-Requests": "1",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "same-origin",
+    "Sec-Fetch-User": "?1",
+    "Referer": "https://authserver.sit.edu.cn/authserver/login",
+  };
 
   /// 登录统一认证平台
   Future<Response> _postLoginRequest(String username, String hashedPassword, String captcha, String casTicket) async {
@@ -344,14 +362,15 @@ class SsoSession with DioDownloaderMixin implements ISession {
     final res = await dio.post(_loginUrl,
         data: requestBody,
         options: Options(
-          contentType: Headers.formUrlEncodedContentType,
+          contentType: 'application/x-www-form-urlencoded',
           followRedirects: false,
           validateStatus: (status) {
             return status! < 400;
           },
+          headers: neededHeaders,
         ));
     // 处理重定向
-    return await DioUtils.processRedirect(dio, res);
+    return await DioUtils.processRedirect(dio, res, headers: neededHeaders);
   }
 
   @override
