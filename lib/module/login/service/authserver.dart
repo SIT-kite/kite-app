@@ -27,8 +27,11 @@ class AuthServerService {
 
   Future<String> getPersonName() async {
     final response = await session.request('https://authserver.sit.edu.cn/authserver/index.do', ReqMethod.get);
-    final result = BeautifulSoup(response.data).find('div', class_: 'auth_username')?.text;
-    if (result != null) return result.trim();
+    final resultDesktop = BeautifulSoup(response.data).find('div', class_: 'auth_username')?.text ?? '';
+    final resultMobile = BeautifulSoup(response.data).find('div', class_: 'index-nav-name')?.text ?? '';
+
+    final result = resultMobile + resultDesktop;
+    if (result.isNotEmpty) return result.trim();
     throw Exception('无法获取用户姓名');
   }
 }
