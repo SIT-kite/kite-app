@@ -24,8 +24,6 @@ import '../entity/list.dart';
 import '../init.dart';
 import '../using.dart';
 import '../user_widgets/card.dart';
-import 'profile.dart';
-import 'search.dart';
 
 class ActivityListPage extends StatefulWidget {
   const ActivityListPage({Key? key}) : super(key: key);
@@ -65,8 +63,8 @@ class _ActivityListPageState extends State<ActivityListPage> with SingleTickerPr
       controller: _tabController,
       tabs: categories
           .map((e) => Tab(
-        child: Text(e.name, style: Theme.of(ctx).textTheme.bodyLarge),
-      ))
+                child: Text(e.name, style: Theme.of(ctx).textTheme.bodyLarge),
+              ))
           .toList(),
     );
   }
@@ -128,6 +126,16 @@ class _ActivityListState extends State<ActivityList> {
     super.initState();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    if (loading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    return _buildActivityResult(_activityList);
+  }
+
   void loadInitialActivities() async {
     _lastPage = 1;
     _activityList = await ScInit.scActivityListService.getActivityList(widget.type, 1);
@@ -152,28 +160,6 @@ class _ActivityListState extends State<ActivityList> {
     setState(() => _activityList.addAll(lastActivities));
   }
 
-  Widget buildAnimatedActivityCard(
-      BuildContext context,
-      Activity activity,
-      Animation<double> animation,
-      ) =>
-      // For example wrap with fade transition
-  FadeTransition(
-    opacity: Tween<double>(
-      begin: 0,
-      end: 1,
-    ).animate(animation),
-    // And slide transition
-    child: SlideTransition(
-      position: Tween<Offset>(
-        begin: const Offset(0, -0.3),
-        end: Offset.zero,
-      ).animate(animation),
-      // Paste you Widget
-      child: ActivityCard(activity),
-    ),
-  );
-
   Widget _buildActivityResult(List<Activity> activities) {
     return LiveList(
       controller: _scrollController,
@@ -183,9 +169,25 @@ class _ActivityListState extends State<ActivityList> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (loading) return const SizedBox();
-    return _buildActivityResult(_activityList);
-  }
+  Widget buildAnimatedActivityCard(
+    BuildContext ctx,
+    Activity activity,
+    Animation<double> animation,
+  ) =>
+      // For example wrap with fade transition
+      FadeTransition(
+        opacity: Tween<double>(
+          begin: 0,
+          end: 1,
+        ).animate(animation),
+        // And slide transition
+        child: SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0, -0.3),
+            end: Offset.zero,
+          ).animate(animation),
+          // Paste you Widget
+          child: ActivityCard(activity),
+        ),
+      );
 }

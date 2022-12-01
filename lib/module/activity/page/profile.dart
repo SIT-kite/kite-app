@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/module/activity/entity/list.dart';
 import 'package:rettulf/rettulf.dart';
@@ -27,19 +28,20 @@ import '../init.dart';
 import 'detail.dart';
 import '../user_widgets/summary.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
-  Widget _buildSummaryCard() {
-    return PlaceholderFutureBuilder<ScScoreSummary>(
-      future: ScInit.scScoreService.getScScoreSummary(),
-      builder: (context, summary, placeholder) {
-        if (summary != null) {
-          return Padding(padding: const EdgeInsets.fromLTRB(20, 20, 20, 0), child: SummaryCard(summary));
-        } else {
-          return Padding(padding: const EdgeInsets.fromLTRB(20, 20, 20, 0), child: placeholder);
-        }
-      },
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  List<ScJoinedActivity>? joined;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _buildEventList(context),
     );
   }
 
@@ -59,56 +61,111 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _buildEventList(BuildContext context) {
+    //return [buildSummaryCard(context), buildList(context)].listview().padSymmetric(h: 12);
+    return buildList(context).padSymmetric(h: 12);
+  }
+
+  Widget buildJoinedActivity(BuildContext context, ScJoinedActivity rawActivity) {
     final titleStyle = Theme.of(context).textTheme.headline6;
     final subtitleStyle = Theme.of(context).textTheme.bodyText2;
 
-    Widget joinedActivityMapper(ScJoinedActivity rawActivity) {
-      final color = rawActivity.isPassed ? Colors.green : context.themeColor;
-      final trailingStyle = Theme.of(context).textTheme.headline6?.copyWith(color: color);
-      final activity = ActivityParser.parse(rawActivity);
+    final color = rawActivity.isPassed ? Colors.green : context.themeColor;
+    final trailingStyle = Theme.of(context).textTheme.headline6?.copyWith(color: color);
+    final activity = ActivityParser.parse(rawActivity);
 
-      final tile = ListTile(
-        title: Text(activity.realTitle, style: titleStyle, maxLines: 2, overflow: TextOverflow.ellipsis)
-            .hero(rawActivity.applyId),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('${i18n.activityApplicationTime}: ${context.dateFullNum(rawActivity.time)}', style: subtitleStyle),
-            Text('${i18n.activityApplicationID}: ${rawActivity.applyId}', style: subtitleStyle),
-          ],
-        ),
-        trailing: Text(rawActivity.amount.abs() > 0.01 ? rawActivity.amount.toStringAsFixed(2) : rawActivity.status,
-            style: trailingStyle),
-        onTap: rawActivity.activityId != -1
-            ? () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (_) => DetailPage(activity, hero: rawActivity.applyId, hideApplyButton: true)),
-                );
-              }
-            : null,
-      );
-      return Card(
-        child: tile,
-      );
-    }
+    final tile = ListTile(
+      title: Text(activity.realTitle, style: titleStyle, maxLines: 2, overflow: TextOverflow.clip)
+          .hero(rawActivity.applyId),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('${i18n.activityApplicationTime}: ${context.dateFullNum(rawActivity.time)}', style: subtitleStyle),
+          Text('${i18n.activityApplicationID}: ${rawActivity.applyId}', style: subtitleStyle),
+        ],
+      ),
+      trailing: Text(rawActivity.amount.abs() > 0.01 ? rawActivity.amount.toStringAsFixed(2) : rawActivity.status,
+          style: trailingStyle),
+      onTap: rawActivity.activityId != -1
+          ? () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (_) => DetailPage(activity, hero: rawActivity.applyId, hideApplyButton: true)),
+              );
+            }
+          : null,
+    );
+    return Card(
+      child: tile,
+    );
+  }
 
-    return MyFutureBuilder<List<ScJoinedActivity>>(
-      future: getMyActivityListJoinScore(ScInit.scScoreService),
-      builder: (context, eventList) {
+  Widget buildSummaryCard(BuildContext ctx) {
+    return PlaceholderFutureBuilder<ScScoreSummary>(
+      future: ScInit.scScoreService.getScScoreSummary(),
+      builder: (context, summary, placeholder) {
         return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: ListView(
-              children: [_buildSummaryCard(), ...eventList.map(joinedActivityMapper)],
-            ));
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0), child: buildSummeryCard(ctx, summary, placeholder));
       },
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: _buildEventList(context),
+  Widget buildList(BuildContext ctx) {
+    return PlaceholderFutureBuilder<List<ScJoinedActivity>>(
+      future: getMyActivityListJoinScore(ScInit.scScoreService),
+      builder: (context, eventList, placeholder) {
+        if (eventList != null) {
+          return ListView.builder(
+            controller: _scrollController,
+            itemCount: eventList.length,
+            itemBuilder: (ctx, index) => buildJoinedActivity(ctx, eventList[index]),
+          );
+        } else {
+          return placeholder;
+        }
+      },
     );
   }
+
+// Animation
+  final _scrollController = ScrollController();
+
+  Widget buildLiveList(BuildContext ctx) {
+    return PlaceholderFutureBuilder<List<ScJoinedActivity>>(
+      future: getMyActivityListJoinScore(ScInit.scScoreService),
+      builder: (context, eventList, placeholder) {
+        if (eventList != null) {
+          return LiveList(
+            controller: _scrollController,
+            itemCount: eventList.length,
+            showItemDuration: const Duration(milliseconds: 300),
+            itemBuilder: (ctx, index, animation) => buildAnimatedJoinedActivity(ctx, eventList[index], animation),
+          );
+        } else {
+          return placeholder;
+        }
+      },
+    );
+  }
+
+  Widget buildAnimatedJoinedActivity(
+    BuildContext ctx,
+    ScJoinedActivity activity,
+    Animation<double> animation,
+  ) =>
+      // For example wrap with fade transition
+      FadeTransition(
+        opacity: Tween<double>(
+          begin: 0,
+          end: 1,
+        ).animate(animation),
+        // And slide transition
+        child: SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0, -0.3),
+            end: Offset.zero,
+          ).animate(animation),
+          // Paste you Widget
+          child: buildJoinedActivity(ctx, activity),
+        ),
+      );
 }

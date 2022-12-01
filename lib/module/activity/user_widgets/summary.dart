@@ -22,7 +22,7 @@ import 'package:flutter/material.dart';
 import '../entity/score.dart';
 import '../using.dart';
 
-ScScoreSummary calcTargetScore(String username) {
+ScScoreSummary _calcTargetScore(String username) {
   int year = int.parse(username.substring(0, 2));
   const table = {
     13: ScScoreSummary(lecture: 1, campus: 1),
@@ -41,111 +41,107 @@ ScScoreSummary calcTargetScore(String username) {
   }
 }
 
-class SummaryCard extends StatelessWidget {
-  final ScScoreSummary summary;
+FlBorderData _borderData() => FlBorderData(show: false);
 
-  const SummaryCard(this.summary, {Key? key}) : super(key: key);
+FlGridData _gridData() => FlGridData(show: false);
 
-  FlBorderData borderData() => FlBorderData(show: false);
+BarTouchData _barTouchData() => BarTouchData(
+      enabled: true,
+      touchTooltipData: BarTouchTooltipData(
+        tooltipBgColor: Colors.transparent,
+        tooltipPadding: const EdgeInsets.all(0),
+        tooltipMargin: 8,
+        getTooltipItem: (
+          BarChartGroupData group,
+          int groupIndex,
+          BarChartRodData rod,
+          int rodIndex,
+        ) {
+          return BarTooltipItem(
+            rod.toY.round().toString(),
+            const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          );
+        },
+      ),
+    );
 
-  FlGridData gridData() => FlGridData(show: false);
-
-  BarTouchData barTouchData() => BarTouchData(
-        enabled: true,
-        touchTooltipData: BarTouchTooltipData(
-          tooltipBgColor: Colors.transparent,
-          tooltipPadding: const EdgeInsets.all(0),
-          tooltipMargin: 8,
-          getTooltipItem: (
-            BarChartGroupData group,
-            int groupIndex,
-            BarChartRodData rod,
-            int rodIndex,
-          ) {
-            return BarTooltipItem(
-              rod.toY.round().toString(),
-              const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
+FlTitlesData titlesData(List<String> titles) => FlTitlesData(
+      show: true,
+      leftTitles: AxisTitles(),
+      topTitles: AxisTitles(),
+      rightTitles: AxisTitles(),
+      bottomTitles: AxisTitles(
+        sideTitles: SideTitles(
+          showTitles: true,
+          reservedSize: 36,
+          getTitlesWidget: (double value, TitleMeta meta) {
+            const style = TextStyle(
+              color: Color(0xff7589a2),
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            );
+            return Text(
+              titles[value.toInt()],
+              textAlign: TextAlign.center,
+              style: style,
             );
           },
         ),
-      );
-
-  FlTitlesData titlesData(List<String> titles) => FlTitlesData(
-        show: true,
-        leftTitles: AxisTitles(),
-        topTitles: AxisTitles(),
-        rightTitles: AxisTitles(),
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            reservedSize: 36,
-            getTitlesWidget: (double value, TitleMeta meta) {
-              const style = TextStyle(
-                color: Color(0xff7589a2),
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-              );
-              return Text(
-                titles[value.toInt()],
-                textAlign: TextAlign.center,
-                style: style,
-              );
-            },
-          ),
-        ),
-      );
-
-  Widget _buildChart() {
-    List<double> buildScoreList(ScScoreSummary scss) {
-      return [scss.voluntary, scss.campus, scss.creation, scss.safetyEdu, scss.lecture, scss.practice];
-    }
-
-    final scoreValues = buildScoreList(summary);
-    final totals = buildScoreList(calcTargetScore(Kv.auth.currentUsername!));
-    final scoreTitles = (const ['志愿', '校园文化', '三创', '安全文明', '讲座', '社会实践']).asMap().entries.map((e) {
-      int index = e.key;
-      String text = e.value;
-      return '$text\n'
-          '${scoreValues[index]}/${totals[index]}';
-    }).toList();
-
-    List<BarChartGroupData> values = [];
-    for (int i = 0; i < scoreValues.length; ++i) {
-      if (totals[i] == 0) {
-        continue;
-      }
-      values.add(BarChartGroupData(x: i, barRods: [
-        BarChartRodData(
-          toY: scoreValues[i] / totals[i],
-          width: 12,
-        )
-      ]));
-    }
-    return BarChart(
-      BarChartData(
-        maxY: 1,
-        barGroups: values,
-        borderData: borderData(),
-        gridData: gridData(),
-        barTouchData: barTouchData(),
-        titlesData: titlesData(scoreTitles),
       ),
     );
+
+Widget _buildChart(BuildContext ctx,ScScoreSummary? summary,Widget placeholder) {
+  if (summary == null) {
+    return placeholder;
+  }
+  List<double> buildScoreList(ScScoreSummary scss) {
+    return [scss.voluntary, scss.campus, scss.creation, scss.safetyEdu, scss.lecture, scss.practice];
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1.8,
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: _buildChart(),
-        ),
-      ),
-    );
+  final scoreValues = buildScoreList(summary);
+  final totals = buildScoreList(_calcTargetScore(Kv.auth.currentUsername!));
+  final scoreTitles = (const ['志愿', '校园文化', '三创', '安全文明', '讲座', '社会实践']).asMap().entries.map((e) {
+    int index = e.key;
+    String text = e.value;
+    return '$text\n'
+        '${scoreValues[index]}/${totals[index]}';
+  }).toList();
+
+  List<BarChartGroupData> values = [];
+  for (int i = 0; i < scoreValues.length; ++i) {
+    if (totals[i] == 0) {
+      continue;
+    }
+    values.add(BarChartGroupData(x: i, barRods: [
+      BarChartRodData(
+        toY: scoreValues[i] / totals[i],
+        width: 12,
+      )
+    ]));
   }
+  return BarChart(
+    BarChartData(
+      maxY: 1,
+      barGroups: values,
+      borderData: _borderData(),
+      gridData: _gridData(),
+      barTouchData: _barTouchData(),
+      titlesData: titlesData(scoreTitles),
+    ),
+  );
+}
+
+Widget buildSummeryCard(BuildContext context, ScScoreSummary? summery,Widget placeholder) {
+  return AspectRatio(
+    aspectRatio: 1.8,
+    child: Card(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: _buildChart(context, summery,placeholder),
+      ),
+    ),
+  );
 }
