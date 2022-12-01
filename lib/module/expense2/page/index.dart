@@ -20,8 +20,8 @@ import 'package:catcher/core/catcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:kite/module/expense2/init.dart';
+import 'package:kite/storage/init.dart';
 
-import '../../../storage/init.dart';
 import '../entity/local.dart';
 import '../using.dart';
 import 'bill.dart';
@@ -41,18 +41,21 @@ class _IndexPageState extends State<IndexPage> {
 
   List<Transaction> allRecords = [];
 
+  void refreshRecords(List<Transaction> records) {
+    if (!mounted) return;
+    // 过滤支付宝的充值，否则将和圈存机叠加
+    records = records.where((e) => e.type != TransactionType.topUp).toList();
+    setState(() => allRecords = records);
+  }
+
   Future<void> fetch(DateTime start, DateTime end) async {
     allRecords = await cache.fetch(
       studentID: Kv.auth.currentUsername!,
       from: start,
       to: end,
-      onLocalQuery: (result) {
-        if (!mounted) return;
-        setState(() => allRecords = result);
-      },
+      onLocalQuery: refreshRecords,
     );
-    if (!mounted) return;
-    setState(() {});
+    refreshRecords(allRecords);
   }
 
   @override
@@ -63,44 +66,49 @@ class _IndexPageState extends State<IndexPage> {
     super.initState();
   }
 
+  Widget buildMenu() {
+    return PopupMenuButton(
+      itemBuilder: (ctx) => [
+        PopupMenuItem(
+          child: const Text('强制刷新'),
+          onTap: () async {
+            try {
+              // 关闭用户交互
+              EasyLoading.instance.userInteractions = false;
+              EasyLoading.show(status: i18n.expenseFetchingRecordTip);
+              Expense2Init.local
+                ..clear()
+                ..cachedTsEnd = null
+                ..cachedTsStart = null;
+              await fetch(DateTime(2010), DateTime.now());
+            } catch (e, t) {
+              EasyLoading.showError('${i18n.failed}: ${e.toString().split('\n')[0]}');
+              Catcher.reportCheckedError(e, t);
+            } finally {
+              // 关闭正在加载对话框
+              EasyLoading.dismiss();
+              // 开启用户交互
+              EasyLoading.instance.userInteractions = true;
+            }
+          },
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: i18n.ftype_expense.txt,
-        actions: [
-          PopupMenuButton(
-            itemBuilder: (ctx) => [
-              PopupMenuItem(
-                child: const Text('强制刷新'),
-                onTap: () async {
-                  try {
-                    // 关闭用户交互
-                    EasyLoading.instance.userInteractions = false;
-                    EasyLoading.show(status: i18n.expenseFetchingRecordTip);
-                    Expense2Init.local
-                      ..clear()
-                      ..cachedTsEnd = null
-                      ..cachedTsStart = null;
-                    await fetch(DateTime(2010), DateTime.now());
-                  } catch (e, t) {
-                    EasyLoading.showError('${i18n.failed}: ${e.toString().split('\n')[0]}');
-                    Catcher.reportCheckedError(e, t);
-                  } finally {
-                    // 关闭正在加载对话框
-                    EasyLoading.dismiss();
-                    // 开启用户交互
-                    EasyLoading.instance.userInteractions = true;
-                  }
-                },
-              ),
-            ],
-          ),
-        ],
+        actions: [buildMenu()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: currentIndex == 0 ? BillPage(records: allRecords) : StatisticsPage(records: allRecords),
+        child: [
+          BillPage(records: allRecords),
+          StatisticsPage(records: allRecords),
+        ][currentIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: [
@@ -114,9 +122,7 @@ class _IndexPageState extends State<IndexPage> {
           )
         ],
         currentIndex: currentIndex,
-        onTap: (int index) {
-          setState(() => currentIndex = index);
-        },
+        onTap: (int index) => setState(() => currentIndex = index),
       ),
     );
   }
