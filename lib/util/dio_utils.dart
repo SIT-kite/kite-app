@@ -40,7 +40,7 @@ class DioUtils {
         return status! < 400;
       });
 
-  static Future<Response> processRedirect(Dio dio, Response response) async {
+  static Future<Response> processRedirect(Dio dio, Response response, {Map<String, dynamic>? headers}) async {
     //Prevent the redirect being processed by HttpClient, with the 302 response caught manually.
     if (response.statusCode == 302 &&
         response.headers['location'] != null &&
@@ -48,7 +48,7 @@ class DioUtils {
       String location = response.headers['location']![0];
       if (location.isEmpty) return response;
       if (!Uri.parse(location).isAbsolute) {
-        location = response.requestOptions.uri.origin + '/' + location;
+        location = '${response.requestOptions.uri.origin}/$location';
       }
       return processRedirect(
         dio,
@@ -56,8 +56,10 @@ class DioUtils {
           location,
           options: NON_REDIRECT_OPTION_WITH_FORM_TYPE.copyWith(
             responseType: response.requestOptions.responseType,
+            headers: headers,
           ),
         ),
+        headers: headers,
       );
     } else {
       return response;
