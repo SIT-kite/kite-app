@@ -24,7 +24,7 @@ import '../entity/announcement.dart';
 import '../entity/attachment.dart';
 import '../entity/page.dart';
 
-class BulletinService implements BulletinDao {
+class BulletinService implements AnnounceDao {
   final ISession session;
 
   const BulletinService(this.session);
@@ -37,7 +37,7 @@ class BulletinService implements BulletinDao {
     }).toList();
   }
 
-  BulletinDetail _parseBulletinDetail(Bs4Element item) {
+  AnnounceDetail _parseBulletinDetail(Bs4Element item) {
     final dateFormat = DateFormat('yyyy年MM月dd日 hh:mm');
 
     String metaHtml = item.find('div', class_: 'bulletin-info')?.innerHtml ?? '';
@@ -47,7 +47,7 @@ class BulletinService implements BulletinDao {
 
     final metaList = meta.split('|').map((e) => e.trim()).toList();
 
-    return BulletinDetail()
+    return AnnounceDetail()
       ..title = item.find('div', class_: 'bulletin-title')?.text.trim() ?? ''
       ..content = item.find('div', class_: 'bulletin-content')?.innerHtml ?? ''
       ..attachments = _parseAttachment(item)
@@ -58,15 +58,15 @@ class BulletinService implements BulletinDao {
   }
 
   @override
-  Future<List<BulletinCatalogue>> getAllCatalogues() async {
+  Future<List<AnnounceCatalogue>> getAllCatalogues() async {
     return const [
-      BulletinCatalogue('学生事务', 'pe2362'),
-      BulletinCatalogue('学习课堂', 'pe2364'),
-      BulletinCatalogue('二级学院通知', 'pe2368'),
-      BulletinCatalogue('校园文化', 'pe2366'),
-      BulletinCatalogue('公告信息', 'pe2367'),
-      BulletinCatalogue('生活服务', 'pe2365'),
-      BulletinCatalogue('文件下载专区', 'pe2382')
+      AnnounceCatalogue('学生事务', 'pe2362'),
+      AnnounceCatalogue('学习课堂', 'pe2364'),
+      AnnounceCatalogue('二级学院通知', 'pe2368'),
+      AnnounceCatalogue('校园文化', 'pe2366'),
+      AnnounceCatalogue('公告信息', 'pe2367'),
+      AnnounceCatalogue('生活服务', 'pe2365'),
+      AnnounceCatalogue('文件下载专区', 'pe2382')
     ];
   }
 
@@ -75,7 +75,7 @@ class BulletinService implements BulletinDao {
   }
 
   @override
-  Future<BulletinDetail> getBulletinDetail(String bulletinCatalogueId, String uuid) async {
+  Future<AnnounceDetail> getAnnounceDetail(String bulletinCatalogueId, String uuid) async {
     final response = await session.request(_buildBulletinUrl(bulletinCatalogueId, uuid), ReqMethod.get);
     return _parseBulletinDetail(BeautifulSoup(response.data).html!);
   }
@@ -114,7 +114,7 @@ class BulletinService implements BulletinDao {
   }
 
   @override
-  Future<BulletinListPage> queryBulletinList(int pageIndex, String bulletinCatalogueId) async {
+  Future<BulletinListPage> queryAnnounceList(int pageIndex, String bulletinCatalogueId) async {
     final response = await session.request(_buildBulletinListUrl(pageIndex, bulletinCatalogueId), ReqMethod.get);
     return _parseBulletinListPage(BeautifulSoup(response.data).html!);
   }

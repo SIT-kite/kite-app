@@ -42,14 +42,14 @@ class DailyTimetable extends StatefulWidget implements InitialTimeProtocol {
 
   @override
   State<StatefulWidget> createState() => DailyTimetableState();
-  final ValueNotifier<int> $currentWeek;
+  final ValueNotifier<TimetablePosition> $currentPos;
 
   const DailyTimetable({
     super.key,
     required this.allCourses,
     required this.initialDate,
     required this.tableCache,
-    required this.$currentWeek,
+    required this.$currentPos,
     this.viewChangingCallback,
   });
 }
@@ -83,7 +83,7 @@ class DailyTimetableState extends State<DailyTimetable> implements ITimetableVie
       if (newWeek != _currentWeek || newDay != _currentDay) {
         _currentWeek = newWeek;
         _currentDay = newDay;
-        widget.$currentWeek.value = newWeek;
+        widget.$currentPos.value = TimetablePosition(week: newWeek, day: newDay);
       }
     });
   }
@@ -97,7 +97,7 @@ class DailyTimetableState extends State<DailyTimetable> implements ITimetableVie
     _pageController = PageController(initialPage: weekNDay2Page(pos.week, pos.day))..addListener(onPageChange);
     Future.delayed(Duration.zero, () {
       setState(() {
-        widget.$currentWeek.value = _currentWeek;
+        widget.$currentPos.value = TimetablePosition(week: _currentWeek, day: _currentDay);
       });
     });
   }
@@ -244,7 +244,7 @@ class DailyTimetableState extends State<DailyTimetable> implements ITimetableVie
 
   @override
   Widget build(BuildContext context) {
-    final dayHeaders = makeWeakdaysShortText();
+    final dayHeaders = makeWeekdaysShortText();
     return PageView.builder(
       controller: _pageController,
       scrollDirection: Axis.horizontal,

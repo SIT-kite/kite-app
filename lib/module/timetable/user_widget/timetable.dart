@@ -37,7 +37,9 @@ class TimetablePosition {
   final int week;
   final int day;
 
-  const TimetablePosition({required this.week, required this.day});
+  const TimetablePosition({this.week = 1, this.day = 1});
+
+  static const initial = TimetablePosition();
 
   static TimetablePosition locate(DateTime initial, DateTime time) {
     // 求一下过了多少天
@@ -95,10 +97,8 @@ class TimetableViewer extends StatefulWidget {
   final List<Course> initialTableCourses;
 
   /// 初始显示模式
-  final DisplayMode initialDisplayMode;
+  final ValueNotifier<DisplayMode> $displayMode;
 
-  /// 显示模式被更改的回调
-  final void Function(DisplayMode)? onDisplayChanged;
   final VoidCallback? onJumpedToday;
 
   /// 课表视图使用的缓存
@@ -107,15 +107,14 @@ class TimetableViewer extends StatefulWidget {
   /// 课表控制器
   final TimetableViewerController? controller;
 
-  final ValueNotifier<int> $currentWeek;
+  final ValueNotifier<TimetablePosition> $currentPos;
 
   const TimetableViewer({
     required this.initialTableMeta,
     required this.initialTableCourses,
-    required this.initialDisplayMode,
+    required this.$displayMode,
     required this.tableCache,
-    required this.$currentWeek,
-    this.onDisplayChanged,
+    required this.$currentPos,
     this.onJumpedToday,
     this.controller,
     Key? key,
@@ -132,12 +131,9 @@ class _TimetableViewerState extends State<TimetableViewer> {
 
   final cache = TableCache();
 
-  GlobalKey get currentKey => displayModeState == DisplayMode.daily ? dailyTimetableKey : weeklyTimetableKey;
+  GlobalKey get currentKey => widget.$displayMode.value == DisplayMode.daily ? dailyTimetableKey : weeklyTimetableKey;
   final dailyTimetableKey = GlobalKey();
   final weeklyTimetableKey = GlobalKey();
-
-  /// 模式：周课表 日课表
-  late DisplayMode displayModeState;
 
   /// 课程表
   late List<Course> tableCoursesState;
@@ -149,7 +145,6 @@ class _TimetableViewerState extends State<TimetableViewer> {
   void initState() {
     Log.info('TimetableViewer init');
     super.initState();
-    displayModeState = widget.initialDisplayMode;
     tableCoursesState = widget.initialTableCourses;
     tableMetaState = widget.initialTableMeta;
     widget.controller?._bindState(this);
@@ -158,12 +153,8 @@ class _TimetableViewerState extends State<TimetableViewer> {
   void switchDisplayMode() {
     // 显示有0和1两种模式，可通过(x+1) & 2进行来会切换
     setState(() {
-      displayModeState = DisplayMode.values[(displayModeState.index + 1) & 1];
+      widget.$displayMode.value = DisplayMode.values[(widget.$displayMode.value.index + 1) & 1];
     });
-    if (widget.onDisplayChanged != null) {
-      // 通知变更
-      widget.onDisplayChanged!(displayModeState);
-    }
   }
 
   ///跳到今天的方法
@@ -183,17 +174,17 @@ class _TimetableViewerState extends State<TimetableViewer> {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
       switchInCurve: Curves.ease,
-      child: (displayModeState == DisplayMode.daily)
+      child: (widget.$displayMode.value == DisplayMode.daily)
           ? DailyTimetable(
               key: dailyTimetableKey,
-              $currentWeek: widget.$currentWeek,
+          $currentPos: widget.$currentPos,
               allCourses: tableCoursesState,
               initialDate: tableMetaState?.startDate ?? DateTime.now(),
               tableCache: widget.tableCache,
               viewChangingCallback: switchDisplayMode)
           : WeeklyTimetable(
               key: weeklyTimetableKey,
-              $currentWeek: widget.$currentWeek,
+          $currentPos: widget.$currentPos,
               allCourses: tableCoursesState,
               initialDate: tableMetaState?.startDate ?? DateTime.now(),
               tableCache: widget.tableCache),

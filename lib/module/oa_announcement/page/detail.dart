@@ -98,7 +98,7 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 
-  Widget _buildCard(BuildContext context, BulletinDetail article) {
+  Widget _buildCard(BuildContext context, AnnounceDetail article) {
     final valueStyle = Theme.of(context).textTheme.bodyText2;
     final keyStyle = valueStyle?.copyWith(fontWeight: FontWeight.bold);
 
@@ -127,7 +127,7 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 
-  Widget _buildArticle(BuildContext context, BulletinDetail article) {
+  Widget _buildArticle(BuildContext context, AnnounceDetail article) {
     final theme = Theme.of(context);
     final titleStyle = theme.textTheme.headline2;
 
@@ -157,13 +157,13 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 
-  BulletinDetail? article;
+  AnnounceDetail? article;
 
-  Future<BulletinDetail> getBulletinDetail() async {
+  Future<AnnounceDetail> getBulletinDetail() async {
     if (article == null) {
       Log.info('开始加载OA公告文章');
       article =
-          await OaAnnouncementInit.bulletin.getBulletinDetail(widget.summary.bulletinCatalogueId, widget.summary.uuid);
+          await OaAnnouncementInit.bulletin.getAnnounceDetail(widget.summary.bulletinCatalogueId, widget.summary.uuid);
       Log.info('加载OA公告文章完毕');
     } else {
       Log.info('使用已获取的OA公告文章');
@@ -173,7 +173,7 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Widget _buildBody(BulletinRecord summary) {
-    return MyFutureBuilder<BulletinDetail>(
+    return MyFutureBuilder<AnnounceDetail>(
       futureGetter: () => getBulletinDetail(),
       builder: (context, data) {
         return SingleChildScrollView(child: _buildArticle(context, data));

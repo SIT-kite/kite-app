@@ -50,7 +50,7 @@ class OaAnnouncePage extends StatelessWidget {
     final catalogues = await service.getAllCatalogues();
 
     // 获取所有分类中的第一页
-    final futureResult = await Future.wait(catalogues.map((e) => service.queryBulletinList(page, e.id)));
+    final futureResult = await Future.wait(catalogues.map((e) => service.queryAnnounceList(page, e.id)));
 
     // 合并所有分类的第一页的公告项
     final List<BulletinRecord> records = futureResult.fold(
@@ -60,10 +60,11 @@ class OaAnnouncePage extends StatelessWidget {
     return records;
   }
 
-  Widget _buildBulletinList() {
-    return MyFutureBuilder<List<BulletinRecord>>(
+  Widget _buildAnnounceList() {
+    return PlaceholderFutureBuilder<List<BulletinRecord>>(
       futureGetter: () => _queryBulletinListInAllCategory(1),
-      builder: (context, data) {
+      builder: (context, data, placeholder) {
+        if (data == null) return placeholder;
         final records = data;
 
         // 公告项按时间排序
@@ -71,10 +72,7 @@ class OaAnnouncePage extends StatelessWidget {
 
         final items = records.map((e) => Card(child: _buildBulletinItem(context, e))).toList();
         return SingleChildScrollView(child: Column(children: items));
-      },
-      onErrorBuilder: (context, fb, error, stack) {
-        return Center(child: Text('${i18n.failed}: ${error.runtimeType}'));
-      },
+      }
     );
   }
 
@@ -82,7 +80,7 @@ class OaAnnouncePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: i18n.ftype_oaAnnouncement.txt),
-      body: _buildBulletinList(),
+      body: _buildAnnounceList(),
     );
   }
 }

@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/module/timetable/utils.dart';
 import 'package:rettulf/rettulf.dart';
 import '../using.dart';
 
@@ -26,8 +27,10 @@ import '../init.dart';
 import '../user_widget/timetable.dart';
 import 'export.dart';
 
+const DisplayMode defaultMode = DisplayMode.weekly;
+
 class TimetablePage extends StatefulWidget {
-  const TimetablePage({Key? key}) : super(key: key);
+  const TimetablePage({super.key});
 
   @override
   State<TimetablePage> createState() => _TimetablePageState();
@@ -42,7 +45,7 @@ class _TimetablePageState extends State<TimetablePage> {
   final storage = TimetableInit.timetableStorage;
 
   // 模式：周课表 日课表
-  late DisplayMode displayMode;
+  late ValueNotifier<DisplayMode> $displayMode;
 
   // 课程表
   late List<Course> courses;
@@ -74,14 +77,19 @@ class _TimetablePageState extends State<TimetablePage> {
   @override
   void initState() {
     Log.info('Timetable init');
-    displayMode = storage.lastMode ?? DisplayMode.weekly;
-    storage.lastMode = displayMode;
+    final initialMode = storage.lastMode ?? DisplayMode.weekly;
+    $displayMode = ValueNotifier(initialMode);
+    $displayMode.addListener(() {
+      storage.lastMode = $displayMode.value;
+    });
+    storage.lastMode = initialMode;
     courses = storage.currentTableCourses ?? [];
     meta = storage.currentTableMeta;
     checkFirstImportTable();
     super.initState();
   }
 
+  // TODO: Finish this
   void _onExport() {
     if (meta == null || courses.isEmpty) {
       showBasicFlash(context, const Text('你咋没课呢？？'));
@@ -99,11 +107,11 @@ class _TimetablePageState extends State<TimetablePage> {
   }
 
   Future<void> selectTimetablePageToJump(BuildContext ctx) async {
-    final currentWeek = $currentWeek.value;
+    final currentWeek = $currentPos.value.week;
     final initialIndex = currentWeek - 1;
     final controller = FixedExtentScrollController(initialItem: initialIndex);
     final startDate = meta?.startDate;
-    final todayIndex = startDate != null ? TimetablePosition.locate(startDate, DateTime.now()).week - 1 : 0;
+    final todayIndex = startDate != null ? TimetablePosition.locate(startDate, DateTime.now()).week - 1: 0;
     final goto = await ctx.showPicker(
         count: 20,
         controller: controller,
@@ -127,7 +135,7 @@ class _TimetablePageState extends State<TimetablePage> {
     }
   }
 
-  final ValueNotifier<int> $currentWeek = ValueNotifier(1);
+  final ValueNotifier<TimetablePosition> $currentPos = ValueNotifier(TimetablePosition.initial);
 
   @override
   Widget build(BuildContext context) {
@@ -135,9 +143,16 @@ class _TimetablePageState extends State<TimetablePage> {
     return Scaffold(
       appBar: AppBar(
         title: ValueListenableBuilder(
-          valueListenable: $currentWeek,
+          valueListenable: $currentPos,
           builder: (ctx, value, child) {
-            return ("${i18n.ftype_timetable} ${i18n.timetableWeekOrderedName(value)}").text();
+            var weekdayText = makeWeekdaysText();
+            final mode = $displayMode.value;
+            if (mode == DisplayMode.weekly) {
+              return i18n.timetableWeekOrderedName(value.week).text();
+            } else {
+              return "${i18n.timetableWeekOrderedName(value.week)} ${weekdayText[(value.day - 1) % 7]}"
+                  .text();
+            }
           },
         ),
         actions: <Widget>[
@@ -155,14 +170,10 @@ class _TimetablePageState extends State<TimetablePage> {
       body: TimetableViewer(
         controller: tableViewerController,
         initialTableMeta: meta,
-        $currentWeek: $currentWeek,
+        $currentPos: $currentPos,
         initialTableCourses: courses,
         tableCache: TableCache(),
-        initialDisplayMode: displayMode,
-        onDisplayChanged: (DisplayMode newMode) {
-          displayMode = newMode;
-          storage.lastMode = newMode;
-        },
+        $displayMode: $displayMode,
       ),
     );
   }

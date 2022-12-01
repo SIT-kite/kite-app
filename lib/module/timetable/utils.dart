@@ -23,7 +23,7 @@ import 'using.dart';
 import 'entity/course.dart';
 import 'entity/meta.dart';
 
-List<String> makeWeakdaysShortText() => [
+List<String> makeWeekdaysShortText() => [
       i18n.weekdayShort1,
       i18n.weekdayShort2,
       i18n.weekdayShort3,
@@ -32,6 +32,9 @@ List<String> makeWeakdaysShortText() => [
       i18n.weekdayShort6,
       i18n.weekdayShort7
     ];
+
+List<String> makeWeekdaysText() =>
+    [i18n.weekday1, i18n.weekday2, i18n.weekday3, i18n.weekday4, i18n.weekday5, i18n.weekday6, i18n.weekday7];
 
 void _addEventForCourse(ICalendar cal, Course course, DateTime startDate, Duration? alarmBefore) {
   final timetable = getBuildingTimetable(course.campus, course.place);

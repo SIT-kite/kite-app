@@ -22,7 +22,7 @@ import 'dao/announcement.dart';
 import 'service/announcement.dart';
 
 class OaAnnouncementInit {
-  static late BulletinDao bulletin;
+  static late AnnounceDao bulletin;
   static late SsoSession session;
 
   static void init({required SsoSession ssoSession}) {

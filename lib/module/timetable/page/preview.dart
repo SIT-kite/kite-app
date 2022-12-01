@@ -23,6 +23,8 @@ import '../entity/course.dart';
 import '../entity/meta.dart';
 import '../user_widget/timetable.dart';
 
+///
+/// There is no need to persist a preview after activity destroyed.
 class TimetablePreviewPage extends StatelessWidget {
   final TimetableMeta meta;
   final List<Course> courses;
@@ -36,7 +38,8 @@ class TimetablePreviewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tableViewerController = TimetableViewerController();
-    final ValueNotifier<int> $currentWeek = ValueNotifier(1);
+    final ValueNotifier<TimetablePosition> $currentPos = ValueNotifier(TimetablePosition.initial);
+    final ValueNotifier<DisplayMode> $displayMode = ValueNotifier(DisplayMode.weekly);
 
     return Scaffold(
       appBar: AppBar(
@@ -47,11 +50,11 @@ class TimetablePreviewPage extends StatelessWidget {
       ),
       body: TimetableViewer(
         controller: tableViewerController,
-        $currentWeek:$currentWeek,
+        $currentPos: $currentPos,
         initialTableMeta: meta,
         initialTableCourses: courses,
         tableCache: TableCache(),
-        initialDisplayMode: DisplayMode.weekly,
+        $displayMode: $displayMode,
       ),
     );
   }

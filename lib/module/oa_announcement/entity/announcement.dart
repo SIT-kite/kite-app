@@ -17,7 +17,7 @@
 */
 import 'attachment.dart';
 
-class BulletinDetail {
+class AnnounceDetail {
   /// 标题
   String title = '';
 
@@ -46,14 +46,14 @@ class BulletinDetail {
 }
 
 /// 通知分类
-class BulletinCatalogue {
+class AnnounceCatalogue {
   /// 分类名
   final String name;
 
   /// 分类代号(OA上命名为pen，以pe打头)
   final String id;
 
-  const BulletinCatalogue(this.name, this.id);
+  const AnnounceCatalogue(this.name, this.id);
 }
 
 /// 某篇通知的记录信息，根据该信息可寻找到对应文章

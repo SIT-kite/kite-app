@@ -18,13 +18,13 @@
 import '../entity/announcement.dart';
 import '../entity/page.dart';
 
-abstract class BulletinDao {
+abstract class AnnounceDao {
   /// 获取所有的分类信息
-  Future<List<BulletinCatalogue>> getAllCatalogues();
+  Future<List<AnnounceCatalogue>> getAllCatalogues();
 
   /// 获取某篇文章内容
-  Future<BulletinDetail> getBulletinDetail(String bulletinCatalogueId, String uuid);
+  Future<AnnounceDetail> getAnnounceDetail(String catalogueId, String uuid);
 
   /// 检索文章列表
-  Future<BulletinListPage> queryBulletinList(int pageIndex, String bulletinCatalogueId);
+  Future<BulletinListPage> queryAnnounceList(int pageIndex, String catalogueId);
 }

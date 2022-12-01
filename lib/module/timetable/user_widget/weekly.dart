@@ -39,14 +39,14 @@ class WeeklyTimetable extends StatefulWidget implements InitialTimeProtocol {
 
   @override
   State<StatefulWidget> createState() => WeeklyTimetableState();
-  final ValueNotifier<int> $currentWeek;
+  final ValueNotifier<TimetablePosition> $currentPos;
 
   const WeeklyTimetable({
     Key? key,
     required this.allCourses,
     required this.initialDate,
     required this.tableCache,
-    required this.$currentWeek,
+    required this.$currentPos,
   }) : super(key: key);
 }
 
@@ -66,7 +66,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> implements ITimetableV
       final newWeek = page2Week(page);
       if (newWeek != _currentWeek) {
         _currentWeek = newWeek;
-        widget.$currentWeek.value = newWeek;
+        widget.$currentPos.value = TimetablePosition(week: newWeek);
       }
     });
   }
@@ -80,7 +80,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> implements ITimetableV
     _pageController = PageController(initialPage: _currentWeek - 1)..addListener(onPageChange);
     Future.delayed(Duration.zero, () {
       setState(() {
-        widget.$currentWeek.value = _currentWeek;
+        widget.$currentPos.value = TimetablePosition(week: _currentWeek);
       });
     });
   }
@@ -192,7 +192,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> implements ITimetableV
 
   @override
   Widget build(BuildContext context) {
-    final dayHeaders = makeWeakdaysShortText();
+    final dayHeaders = makeWeekdaysShortText();
     return PageView.builder(
       controller: _pageController,
       scrollDirection: Axis.horizontal,
