@@ -15,75 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/module/activity/using.dart';
+import 'package:kite/user_widget/base_line_chart.dart';
 
 import '../entity/local.dart';
 import '../using.dart';
-// TODO: I18n
-
-class ExpenseChart extends StatelessWidget {
-  final List<double>? xAxis;
-  final Widget Function(double value, TitleMeta meta)? bottomTitle;
-  final List<double> dailyExpense;
-  final bool? isZero;
-  const ExpenseChart(this.dailyExpense, {Key? key, this.isZero, this.xAxis, this.bottomTitle}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final primaryColor = Theme.of(context).primaryColor;
-
-    final expenseMapping = dailyExpense.asMap();
-
-    List<FlSpot> spots;
-
-    if (isZero != null && isZero == true) {
-      spots = expenseMapping.keys.map((i) => FlSpot(xAxis?[i] ?? (i).toDouble(), expenseMapping[i] ?? 0.0)).toList();
-    } else {
-      spots =
-          expenseMapping.keys.map((i) => FlSpot(xAxis?[i] ?? (i + 1).toDouble(), expenseMapping[i] ?? 0.0)).toList();
-    }
-
-    return LineChart(
-      LineChartData(
-        ///触摸控制
-        lineTouchData: LineTouchData(
-            touchTooltipData: LineTouchTooltipData(tooltipBgColor: Colors.transparent), touchSpotThreshold: 10),
-        borderData: FlBorderData(
-          border: const Border(
-            bottom: BorderSide(width: 1.0),
-          ),
-        ),
-        lineBarsData: [
-          // 每一个 LineChartBarData 代表一条曲线.
-          LineChartBarData(
-            isStrokeCapRound: true,
-            belowBarData: BarAreaData(
-              show: true,
-              color: Theme.of(context).secondaryHeaderColor.withAlpha(60),
-            ),
-            spots: spots,
-            color: primaryColor,
-            preventCurveOverShooting: false,
-            // isCurved: true, //我觉得折线图更好看一点
-            barWidth: 2,
-            preventCurveOvershootingThreshold: 3.0,
-          ),
-        ],
-
-        titlesData: FlTitlesData(
-            show: true,
-            rightTitles: AxisTitles(),
-            leftTitles: AxisTitles(),
-            topTitles: AxisTitles(),
-            bottomTitles: bottomTitle != null
-                ? AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 25, getTitlesWidget: bottomTitle))
-                : AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 25))),
-      ),
-    );
-  }
-}
 
 class StatisticsPage extends StatefulWidget {
   final List<Transaction> records;
@@ -201,7 +138,14 @@ class _StatisticsPageState extends State<StatisticsPage> {
             ),
             // const SizedBox(height: 5),
             Center(
-              child: SizedBox(height: width * 0.5, width: width, child: ExpenseChart(daysAmount)),
+              child: SizedBox(
+                height: width * 0.5,
+                width: width,
+                child: BaseLineChartWidget(
+                  bottomTitles: List.generate(daysAmount.length, (i) => (i + 1).toString()),
+                  values: daysAmount,
+                ),
+              ),
             ),
             const SizedBox(height: 25),
           ],
