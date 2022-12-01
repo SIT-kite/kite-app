@@ -19,15 +19,15 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:rettulf/rettulf.dart';
-import '../using.dart';
-import '../entity/list.dart';
-import '../page/detail.dart';
-import 'blur.dart';
-import '../page/util.dart';
-
 import 'package:geopattern_flutter/geopattern_flutter.dart';
 import 'package:geopattern_flutter/patterns/overlapping_circles.dart';
+import 'package:rettulf/rettulf.dart';
+
+import '../entity/list.dart';
+import '../page/detail.dart';
+import '../page/util.dart';
+import '../using.dart';
+import 'blur.dart';
 
 class CardCoverBackground extends StatelessWidget {
   const CardCoverBackground({Key? key}) : super(key: key);
@@ -97,10 +97,14 @@ class EventCard extends StatelessWidget {
     final subtitleStyle = ctx.textTheme.headline6?.copyWith(color: Colors.grey);
 
     final titleList = extractTitle(activity.title);
-    final title = titleList.last;
-
-    titleList.removeLast();
+    var title = titleList.removeLast();
     final tags = cleanDuplicate(titleList);
+
+    // Additional string process. 2022.12.1, we meet the raw title like '[xxx]:xxx'
+    // So it's necessary to remove ':' prefix in title
+    if (title.startsWith(RegExp(r'[:：]'))) {
+      title = title.substring(1);
+    }
 
     return Column(
       mainAxisSize: MainAxisSize.min,
