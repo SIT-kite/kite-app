@@ -34,7 +34,7 @@ class SearchBar extends SearchDelegate<String> {
   }
 
   Widget _buildEventResult(List<Activity> activities) {
-    return ListView(children: activities.map((e) => EventCard(e)).toList());
+    return ListView(children: activities.map((e) => ActivityCard(e)).toList());
   }
 
   Widget _buildSearch() {

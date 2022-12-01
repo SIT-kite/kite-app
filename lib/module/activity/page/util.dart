@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:tuple/tuple.dart';
+
 List<String> extractTitle(String fullTitle) {
   List<String> result = [];
 
@@ -37,4 +39,12 @@ List<String> extractTitle(String fullTitle) {
 
 List<String> cleanDuplicate(List<String> tags) {
   return tags.toSet().toList();
+}
+
+Tuple2<String,List<String>> splitTitleAndTags(String fullTitle){
+  final titleParts = extractTitle(fullTitle);
+  final realTitle = titleParts.isNotEmpty ? titleParts.last : "";
+  if (titleParts.isNotEmpty) titleParts.removeLast();
+  final tags = cleanDuplicate(titleParts);
+  return Tuple2(realTitle, tags);
 }

@@ -18,6 +18,7 @@
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:intl/intl.dart';
+import 'package:kite/module/activity/page/util.dart';
 
 import '../dao/list.dart';
 import '../entity/list.dart';
@@ -90,8 +91,14 @@ class ScActivityListService implements ScActivityListDao {
 
         final String? x = re.firstMatch(link)?.group(0).toString();
         final int id = int.parse(x!);
-
-        return Activity(id, ActivityType.unknown, title, dateFormatParser.parse(date));
+        final titleAndTags = splitTitleAndTags(title);
+        return Activity(
+            id: id,
+            category: ActivityType.unknown,
+            title: title,
+            ts: dateFormatParser.parse(date),
+            realTitle: titleAndTags.item1,
+            tags: titleAndTags.item2);
       },
     ).toList();
     return result;

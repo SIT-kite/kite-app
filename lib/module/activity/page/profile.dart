@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:kite/module/activity/entity/list.dart';
+import 'package:rettulf/rettulf.dart';
 import '../using.dart';
 import '../dao/score.dart';
 
@@ -60,25 +62,27 @@ class ProfilePage extends StatelessWidget {
     final titleStyle = Theme.of(context).textTheme.headline6;
     final subtitleStyle = Theme.of(context).textTheme.bodyText2;
 
-    Widget joinedActivityMapper(ScJoinedActivity activity) {
-      final color = activity.isPassed ? Colors.green : context.themeColor;
+    Widget joinedActivityMapper(ScJoinedActivity rawActivity) {
+      final color = rawActivity.isPassed ? Colors.green : context.themeColor;
       final trailingStyle = Theme.of(context).textTheme.headline6?.copyWith(color: color);
+      final activity = ActivityParser.parse(rawActivity);
 
       final tile = ListTile(
-        title: Text(activity.title, style: titleStyle, maxLines: 2, overflow: TextOverflow.ellipsis),
+        title: Text(activity.realTitle, style: titleStyle, maxLines: 2, overflow: TextOverflow.ellipsis),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('${i18n.activityApplicationTime}: ${context.dateFullNum(activity.time)}', style: subtitleStyle),
-            Text('${i18n.activityApplicationID}: ${activity.applyId}', style: subtitleStyle),
+            Text('${i18n.activityApplicationTime}: ${context.dateFullNum(rawActivity.time)}', style: subtitleStyle),
+            Text('${i18n.activityApplicationID}: ${rawActivity.applyId}', style: subtitleStyle),
           ],
         ),
-        trailing: Text(activity.amount.abs() > 0.01 ? activity.amount.toStringAsFixed(2) : activity.status,
+        trailing: Text(rawActivity.amount.abs() > 0.01 ? rawActivity.amount.toStringAsFixed(2) : rawActivity.status,
             style: trailingStyle),
-        onTap: activity.activityId != -1
+        onTap: rawActivity.activityId != -1
             ? () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => DetailPage(activity.activityId, hideApplyButton: true)),
+                  MaterialPageRoute(
+                      builder: (_) => DetailPage(activity, hideApplyButton: true)),
                 );
               }
             : null,

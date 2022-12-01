@@ -18,6 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:kite/module/activity/entity/list.dart';
+import 'package:rettulf/rettulf.dart';
 
 import '../entity/detail.dart';
 import '../init.dart';
@@ -30,10 +32,12 @@ String _getActivityUrl(int activityId) {
 }
 
 class DetailPage extends StatelessWidget {
-  final int activityId;
+  final Activity activity;
+
+  int get activityId => activity.id;
   final bool hideApplyButton;
 
-  const DetailPage(this.activityId, {this.hideApplyButton = false, Key? key}) : super(key: key);
+  const DetailPage(this.activity, {this.hideApplyButton = false, super.key});
 
   AppBar _buildAppBar() {
     return AppBar(
@@ -49,21 +53,18 @@ class DetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildBasicInfo(BuildContext context, ActivityDetail detail) {
+  Widget _buildBasicInfoWithPlaceholder(BuildContext context, ActivityDetail? detail, Widget placeholder) {
     final valueStyle = Theme.of(context).textTheme.bodyText2;
     final keyStyle = valueStyle?.copyWith(fontWeight: FontWeight.bold);
 
-    buildRow(String key, String value) => TableRow(
+    buildRow(String key, Object? value) => TableRow(
           children: [
             Text(key, style: keyStyle),
-            Text(value, style: valueStyle),
+            Text(value?.toString() ?? "...", style: valueStyle),
           ],
         );
 
     final titleStyle = Theme.of(context).textTheme.headline2;
-    final titleSections = extractTitle(detail.title);
-    final title = titleSections.last;
-    titleSections.removeLast();
 
     return Padding(
       padding: const EdgeInsets.all(10),
@@ -71,23 +72,23 @@ class DetailPage extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(10),
-            child: Text(title, style: titleStyle, softWrap: true),
-          ),
+            child: Text(activity.realTitle, style: titleStyle, softWrap: true),
+          ).hero(activity.id),
           Table(
             columnWidths: const {
               0: FlexColumnWidth(1),
               1: FlexColumnWidth(3),
             },
             children: [
-              buildRow(i18n.activityID, detail.id.toString()),
-              buildRow(i18n.activityLocation, detail.place.toString()),
-              buildRow(i18n.activityPrincipal, detail.principal.toString()),
-              buildRow(i18n.activityOrganizer, detail.organizer.toString()),
-              buildRow(i18n.activityUndertaker, detail.undertaker.toString()),
-              buildRow(i18n.activityContactInfo, detail.contactInfo.toString()),
-              buildRow(i18n.activityStartTime, detail.startTime.toString()),
-              buildRow(i18n.activityDuration, detail.duration.toString()),
-              buildRow(i18n.activityTags, titleSections.join('\n')),
+              buildRow(i18n.activityID, detail?.id),
+              buildRow(i18n.activityLocation, detail?.place),
+              buildRow(i18n.activityPrincipal, detail?.principal),
+              buildRow(i18n.activityOrganizer, detail?.organizer),
+              buildRow(i18n.activityUndertaker, detail?.undertaker),
+              buildRow(i18n.activityContactInfo, detail?.contactInfo),
+              buildRow(i18n.activityStartTime, detail?.startTime),
+              buildRow(i18n.activityDuration, detail?.duration),
+              buildRow(i18n.activityTags, activity.tags.join('\n')),
             ],
           ),
         ],
@@ -95,7 +96,7 @@ class DetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoCard(BuildContext context, ActivityDetail detail) {
+  Widget _buildInfoCardWithPlaceholder(BuildContext context, ActivityDetail? detail, Widget placeholder) {
     return Stack(
       children: [
         const AspectRatio(
@@ -104,7 +105,8 @@ class DetailPage extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.all(20),
-          child: Card(margin: const EdgeInsets.all(8), child: _buildBasicInfo(context, detail)),
+          child: Card(
+              margin: const EdgeInsets.all(8), child: _buildBasicInfoWithPlaceholder(context, detail, placeholder)),
         )
       ],
     );
@@ -117,25 +119,21 @@ class DetailPage extends StatelessWidget {
         padding: const EdgeInsets.all(20), child: HtmlWidget(html, isSelectable: true, textStyle: textStyle));
   }
 
-  Widget _buildDetail(BuildContext context, ActivityDetail detail) {
-    final List<Widget> items = [
-      _buildInfoCard(context, detail),
-      _buildArticle(context, detail.description ?? '暂无信息'),
-      const SizedBox(height: 64),
-    ];
+  Widget _buildDetailWithPlaceholder(BuildContext context, ActivityDetail? detail, Widget placeholder) {
     return SingleChildScrollView(
-      child: Column(mainAxisSize: MainAxisSize.min, children: items),
+      child: Column(mainAxisSize: MainAxisSize.min, children: [
+        _buildInfoCardWithPlaceholder(context, detail, placeholder),
+        if (detail != null) _buildArticle(context, detail.description ?? '暂无信息') else placeholder,
+        const SizedBox(height: 64),
+      ]),
     );
   }
 
   Widget _buildBody(BuildContext context) {
-    return FutureBuilder<ActivityDetail>(
+    return PlaceholderFutureBuilder<ActivityDetail>(
         future: ScInit.scActivityDetailService.getActivityDetail(activityId),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return _buildDetail(context, snapshot.data!);
-          }
-          return const Center(child: CircularProgressIndicator());
+        builder: (context, detail, placeholder) {
+          return _buildDetailWithPlaceholder(context, detail, placeholder);
         });
   }
 

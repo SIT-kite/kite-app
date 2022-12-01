@@ -24,44 +24,14 @@ import '../using.dart';
 import '../entity/list.dart';
 import '../page/detail.dart';
 import 'blur.dart';
-import '../page/util.dart';
 
 import 'package:geopattern_flutter/geopattern_flutter.dart';
 import 'package:geopattern_flutter/patterns/overlapping_circles.dart';
 
-class CardCoverBackground extends StatelessWidget {
-  const CardCoverBackground({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final gen = Random();
-        final pattern = OverlappingCircles(
-          radius: 60,
-          nx: 6,
-          ny: 6,
-          fillColors: List.generate(
-              36,
-              (_) => Color.fromARGB(10 + (gen.nextDouble() * 100).round(), 50 + gen.nextInt(2) * 150,
-                  50 + gen.nextInt(2) * 150, 50 + gen.nextInt(2) * 150)),
-        );
-        return ClipRect(
-          child: CustomPaint(
-            willChange: true,
-            painter: FullPainter(pattern: pattern, background: Colors.yellow),
-            child: SizedBox(width: constraints.maxWidth, height: constraints.maxHeight),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class EventCard extends StatelessWidget {
+class ActivityCard extends StatelessWidget {
   final Activity activity;
 
-  const EventCard(this.activity, {Key? key}) : super(key: key);
+  const ActivityCard(this.activity, {Key? key}) : super(key: key);
 
   Widget _buildTagRow(BuildContext ctx, List<String> tags) {
     return Wrap(
@@ -96,12 +66,6 @@ class EventCard extends StatelessWidget {
     final titleStyle = ctx.textTheme.headline2?.copyWith(fontWeight: FontWeight.w500);
     final subtitleStyle = ctx.textTheme.headline6?.copyWith(color: Colors.grey);
 
-    final titleList = extractTitle(activity.title);
-    final title = titleList.last;
-
-    titleList.removeLast();
-    final tags = cleanDuplicate(titleList);
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -120,12 +84,12 @@ class EventCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Center(
                   child: Text(
-                    title,
+                    activity.realTitle,
                     style: titleStyle,
                     maxLines: 2,
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
-                  ),
+                  ).hero(activity.id),
                 ),
               ),
             ],
@@ -138,7 +102,7 @@ class EventCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildTagRow(ctx, tags),
+                _buildTagRow(ctx, activity.tags),
                 Text(ctx.dateNum(activity.ts), style: subtitleStyle),
               ],
             ),
@@ -152,12 +116,42 @@ class EventCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) => DetailPage(activity.id)));
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (_) => DetailPage(activity)));
       },
       child: Card(
         margin: const EdgeInsets.all(10),
         child: ClipRRect(borderRadius: BorderRadius.circular(16), child: _buildBasicInfo(context)),
       ),
+    );
+  }
+}
+
+class CardCoverBackground extends StatelessWidget {
+  const CardCoverBackground({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final gen = Random();
+        final pattern = OverlappingCircles(
+          radius: 60,
+          nx: 6,
+          ny: 6,
+          fillColors: List.generate(
+              36,
+              (_) => Color.fromARGB(10 + (gen.nextDouble() * 100).round(), 50 + gen.nextInt(2) * 150,
+                  50 + gen.nextInt(2) * 150, 50 + gen.nextInt(2) * 150)),
+        );
+        return ClipRect(
+          child: CustomPaint(
+            willChange: true,
+            painter: FullPainter(pattern: pattern, background: Colors.yellow),
+            child: SizedBox(width: constraints.maxWidth, height: constraints.maxHeight),
+          ),
+        );
+      },
     );
   }
 }

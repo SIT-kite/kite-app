@@ -120,6 +120,7 @@ dependencies:
   rettulf: ^0.0.1
   flutter_markdown: ^0.6.13
   tuple: ^2.0.1
+  auto_animated: ^3.1.0
 
 
 

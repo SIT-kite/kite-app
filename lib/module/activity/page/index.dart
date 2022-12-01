@@ -16,7 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
+import 'package:rettulf/rettulf.dart';
 
 import '../entity/list.dart';
 import '../init.dart';
@@ -25,87 +27,14 @@ import '../user_widgets/card.dart';
 import 'profile.dart';
 import 'search.dart';
 
-class EventList extends StatefulWidget {
-  final ActivityType type;
-
-  const EventList(this.type, {super.key});
+class ActivityPage extends StatefulWidget {
+  const ActivityPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _EventListState();
+  State<StatefulWidget> createState() => _ActivityPageState();
 }
 
-class _EventListState extends State<EventList> {
-  int _lastPage = 1;
-  bool _atEnd = false;
-  List<Activity> _activityList = [];
-
-  bool loading = true;
-
-  final _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
-        if (!_atEnd) {
-          loadMoreActivities();
-        }
-      } else {
-        setState(() {
-          _atEnd = false;
-        });
-      }
-    });
-    loadInitialActivities();
-    super.initState();
-  }
-
-  void loadInitialActivities() async {
-    _lastPage = 1;
-    _activityList = await ScInit.scActivityListService.getActivityList(widget.type, 1);
-    _lastPage++;
-    loading = false;
-    if (!mounted) return;
-    setState(() {});
-  }
-
-  void loadMoreActivities() async {
-    if (_atEnd) return;
-
-    final lastActivities = await ScInit.scActivityListService.getActivityList(widget.type, _lastPage);
-
-    if (!mounted) return;
-    if (lastActivities.isEmpty) {
-      setState(() => _atEnd = true);
-      return;
-    }
-
-    _lastPage++;
-    setState(() => _activityList.addAll(lastActivities));
-  }
-
-  Widget _buildEventResult(List<Activity> activities) {
-    return ListView(
-      controller: _scrollController,
-      children: activities.map((e) => EventCard(e)).toList(),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (loading) return const Center(child: CircularProgressIndicator());
-    return _buildEventResult(_activityList);
-  }
-}
-
-class EventPage extends StatefulWidget {
-  const EventPage({Key? key}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() => _EventPageState();
-}
-
-class _EventPageState extends State<EventPage> with SingleTickerProviderStateMixin {
+class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderStateMixin {
   static const categories = [
     ActivityType.lecture,
     ActivityType.creation,
@@ -167,12 +96,109 @@ class _EventPageState extends State<EventPage> with SingleTickerProviderStateMix
             return ValueListenableBuilder(
               valueListenable: pageChangeNotifier,
               builder: (context, index, child) {
-                return EventList(selectedActivityType);
+                return ActivityList(selectedActivityType);
               },
             );
           }).toList(),
         ),
       ),
     );
+  }
+}
+
+class ActivityList extends StatefulWidget {
+  final ActivityType type;
+
+  const ActivityList(this.type, {super.key});
+
+  @override
+  State<StatefulWidget> createState() => _ActivityListState();
+}
+
+class _ActivityListState extends State<ActivityList> {
+  int _lastPage = 1;
+  bool _atEnd = false;
+  List<Activity> _activityList = [];
+
+  bool loading = true;
+
+  final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+        if (!_atEnd) {
+          loadMoreActivities();
+        }
+      } else {
+        setState(() {
+          _atEnd = false;
+        });
+      }
+    });
+    loadInitialActivities();
+    super.initState();
+  }
+
+  void loadInitialActivities() async {
+    _lastPage = 1;
+    _activityList = await ScInit.scActivityListService.getActivityList(widget.type, 1);
+    _lastPage++;
+    loading = false;
+    if (!mounted) return;
+    setState(() {});
+  }
+
+  void loadMoreActivities() async {
+    if (_atEnd) return;
+
+    final lastActivities = await ScInit.scActivityListService.getActivityList(widget.type, _lastPage);
+
+    if (!mounted) return;
+    if (lastActivities.isEmpty) {
+      setState(() => _atEnd = true);
+      return;
+    }
+
+    _lastPage++;
+    setState(() => _activityList.addAll(lastActivities));
+  }
+
+  Widget buildAnimatedActivityCard(
+    BuildContext context,
+    Activity activity,
+    Animation<double> animation,
+  ) =>
+      // For example wrap with fade transition
+      FadeTransition(
+        opacity: Tween<double>(
+          begin: 0,
+          end: 1,
+        ).animate(animation),
+        // And slide transition
+        child: SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0, -0.3),
+            end: Offset.zero,
+          ).animate(animation),
+          // Paste you Widget
+          child: ActivityCard(activity),
+        ),
+      );
+
+  Widget _buildActivityResult(List<Activity> activities) {
+    return LiveList(
+      controller: _scrollController,
+      itemCount: activities.length,
+      showItemDuration: const Duration(milliseconds: 300),
+      itemBuilder: (ctx, index, animation) => buildAnimatedActivityCard(ctx, activities[index], animation),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (loading) return const SizedBox();
+    return _buildActivityResult(_activityList);
   }
 }

@@ -16,6 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import '../page/util.dart';
+import 'score.dart';
+
 /// No I18n for unambiguity among all languages
 class ActivityName {
   static const lectureReport = "讲座报告";
@@ -93,13 +96,35 @@ class Activity {
   /// Title
   final String title;
 
+  final String realTitle;
+  final List<String> tags;
+
   /// Date
   final DateTime ts;
 
-  const Activity(this.id, this.category, this.title, this.ts);
+  const Activity(
+      {required this.id,
+      required this.category,
+      required this.title,
+      required this.ts,
+      required this.realTitle,
+      required this.tags});
 
   @override
   String toString() {
     return 'Activity{id: $id, category: $category}';
+  }
+}
+
+extension ActivityParser on Activity {
+  static Activity parse(ScJoinedActivity activity) {
+    final titleAndTags = splitTitleAndTags(activity.title);
+    return Activity(
+        id: activity.activityId,
+        category: ActivityType.unknown,
+        title: activity.title,
+        ts: activity.time,
+        realTitle: titleAndTags.item1,
+        tags: titleAndTags.item2);
   }
 }
