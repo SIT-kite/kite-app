@@ -18,6 +18,7 @@
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:rettulf/rettulf.dart';
 
 import '../entity/score.dart';
 import '../using.dart';
@@ -46,11 +47,11 @@ FlBorderData _borderData() => FlBorderData(show: false);
 FlGridData _gridData() => FlGridData(show: false);
 
 BarTouchData _barTouchData() => BarTouchData(
-      enabled: true,
-      touchTooltipData: BarTouchTooltipData(
+      enabled: false,
+      /*touchTooltipData: BarTouchTooltipData(
         tooltipBgColor: Colors.transparent,
         tooltipPadding: const EdgeInsets.all(0),
-        tooltipMargin: 8,
+        tooltipMargin: 0,
         getTooltipItem: (
           BarChartGroupData group,
           int groupIndex,
@@ -65,7 +66,7 @@ BarTouchData _barTouchData() => BarTouchData(
             ),
           );
         },
-      ),
+      ),*/
     );
 
 FlTitlesData titlesData(List<String> titles) => FlTitlesData(
@@ -93,9 +94,9 @@ FlTitlesData titlesData(List<String> titles) => FlTitlesData(
       ),
     );
 
-Widget _buildChart(BuildContext ctx, ScScoreSummary? summary, Widget placeholder) {
+Widget _buildChart(BuildContext ctx, ScScoreSummary? summary) {
   if (summary == null) {
-    return placeholder;
+    return Placeholders.loading();
   }
   List<double> buildScoreList(ScScoreSummary scss) {
     return [scss.voluntary, scss.campus, scss.creation, scss.safetyEdu, scss.lecture, scss.practice];
@@ -106,8 +107,9 @@ Widget _buildChart(BuildContext ctx, ScScoreSummary? summary, Widget placeholder
   final scoreTitles = (const ['志愿', '校园文化', '三创', '安全文明', '讲座', '社会实践']).asMap().entries.map((e) {
     int index = e.key;
     String text = e.value;
-    return '$text\n'
-        '${scoreValues[index]}/${totals[index]}';
+    //return '$text\n${scoreValues[index]}${totals[index]}';
+    // Hidden the total score
+    return '$text\n${scoreValues[index]}';
   }).toList();
 
   List<BarChartGroupData> values = [];
@@ -134,14 +136,11 @@ Widget _buildChart(BuildContext ctx, ScScoreSummary? summary, Widget placeholder
   );
 }
 
-Widget buildSummeryCard(BuildContext context, ScScoreSummary? summery, Widget placeholder) {
+Widget buildSummeryCard(BuildContext context, ScScoreSummary? summery) {
   return AspectRatio(
     aspectRatio: 1.8,
     child: Card(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: _buildChart(context, summery, placeholder),
-      ),
+      child: _buildChart(context, summery).padSymmetric(v: 12),
     ),
   );
 }

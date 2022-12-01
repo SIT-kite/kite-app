@@ -11,8 +11,9 @@
   "activityDetails": "活动资料",
   "activityDuration": "活动时长",
   "activityID": "编号",
+  "activityListNavigation": "列表",
   "activityLocation": "地点",
-  "activityMyApplication": "我的活动",
+  "activityMineNavigation": "我的",
   "activityOrganizer": "主办方",
   "activityPrincipal": "负责人",
   "activitySignInTime": "签到时间",
@@ -401,6 +402,5 @@
   "welcomeSlogan": "便利校园，一步到位",
   "xuhui": "徐汇",
   "xuhuiDistrict": "徐汇区",
-  "yes": "好",
-  "activityList": "列表"
+  "yes": "好"
 }

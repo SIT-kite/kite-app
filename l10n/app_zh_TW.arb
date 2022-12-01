@@ -11,8 +11,9 @@
   "activityDetails": "活動詳情",
   "activityDuration": "活動時長",
   "activityID": "活動ID",
+  "activityListNavigation": "列表",
   "activityLocation": "活動地點",
-  "activityMyApplication": "我的申請",
+  "activityMineNavigation": "我的",
   "activityOrganizer": "組織者",
   "activityPrincipal": "主辦方",
   "activitySignInTime": "簽到時間",
@@ -401,6 +402,5 @@
   "welcomeSlogan": "便捷校園, 即刻起航",
   "xuhui": "徐匯",
   "xuhuiDistrict": "徐匯區",
-  "yes": "好",
-  "activityList": "列表"
+  "yes": "好"
 }

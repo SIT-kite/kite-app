@@ -11,8 +11,9 @@
   "activityDetails": "Activity Details",
   "activityDuration": "Duration",
   "activityID": "Activity ID",
+  "activityListNavigation": "List",
   "activityLocation": "Location",
-  "activityMyApplication": "My Applications",
+  "activityMineNavigation": "Mine",
   "activityOrganizer": "Organizer",
   "activityPrincipal": "Principal",
   "activitySignInTime": "Sign-in",
@@ -633,6 +634,5 @@
   "welcomeSlogan": "Excellent school life, from here.",
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
-  "yes": "Yes",
-  "activityList": "List"
+  "yes": "Yes"
 }

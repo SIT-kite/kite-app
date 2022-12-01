@@ -21,7 +21,7 @@ import 'package:rettulf/rettulf.dart';
 
 import '../using.dart';
 import 'list.dart';
-import 'profile.dart';
+import 'mine.dart';
 import 'search.dart';
 
 class ActivityPage extends StatefulWidget {
@@ -43,18 +43,15 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
           onPressed: () => showSearch(context: context, delegate: SearchBar()),
         ),
       ]),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: currentIndex == 0 ? const ActivityListPage() : const ProfilePage(),
-      ),
+      body: currentIndex == 0 ? const ActivityListPage() : const MinePage(),
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
-            label: i18n.activityList,
+            label: i18n.activityListNavigation,
             icon: const Icon(Icons.list_alt_rounded),
           ),
           BottomNavigationBarItem(
-            label: i18n.activityMyApplication,
+            label: i18n.activityMineNavigation,
             icon: const Icon(Icons.person_rounded),
           )
         ],
