@@ -19,6 +19,7 @@ import 'package:app_settings/app_settings.dart';
 import 'package:check_vpn_connection/check_vpn_connection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kite/design/user_widgets/dialog.dart';
 
 import '../using.dart';
 import '../init.dart';
@@ -140,7 +141,21 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
               height: 40,
               child: ElevatedButton(
                 child: i18n.launchEasyConnectBtn.txt,
-                onPressed: () => GlobalLauncher.launch('sangfor://easyconnect'),
+                onPressed: () async {
+                  final launched = await GlobalLauncher.launch('sangfor://easyconnect');
+                  if (!launched) {
+                    if (!mounted) return;
+                    final confirm = await context.showRequest(
+                        title: i18n.easyconnectLaunchFailed,
+                        desc: i18n.easyconnectLaunchFailedDesc,
+                        yes: i18n.download,
+                        no: i18n.notNow,
+                        highlight: true);
+                    if (confirm == true) {
+                      await GlobalLauncher.launch(R.easyConnectDownloadUrl);
+                    }
+                  }
+                },
               ),
             ),
           ],

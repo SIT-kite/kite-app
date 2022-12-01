@@ -18,10 +18,10 @@
 import 'package:catcher/catcher.dart';
 import 'package:catcher/model/platform_type.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kite/design/user_widgets/dialog.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/launcher.dart';
 import 'package:kite/storage/init.dart';
-import 'package:kite/util/alert_dialog.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 import 'logger.dart';
@@ -57,30 +57,36 @@ class DialogHandler extends ReportHandler {
       errorMsg = msgAndSt[0];
       frameList = Trace.parse(msgAndSt[1]).frames.where((e) => e.uri.path.startsWith('kite')).toList();
     }
-
-    showAlertDialog(context, title: '程序异常信息', content: [
-      SizedBox(
-        height: 300.h,
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              SelectableText(errorMsg),
-              ...frameList.map((e) {
-                const githubUrl = 'https://hub.fastgit.xyz';
-                final url =
-                    '$githubUrl/SIT-kite/kite-app/blob/master/lib${e.uri.path.substring(4)}${e.line != null ? '#L${e.line}' : ''}';
-                return TextButton(
+    await context.showAnyTip(
+      title: i18n.exceptionInfo,
+      ok: i18n.close,
+      make: (ctx) => SizedBox(
+        child:SingleChildScrollView(child: Column(
+          children: <Widget>[
+            SelectableText(errorMsg),
+            ...frameList.asMap().entries.map((entry) {
+              final index = entry.key;
+              final e = entry.value;
+              // const githubUrl = 'https://hub.fastgit.xyz';
+              const githubUrl = 'https://github.com';
+              final url =
+                  '$githubUrl/SIT-kite/kite-app/blob/master/lib${e.uri.path.substring(4)}${e.line != null ? '#L${e.line}' : ''}';
+              return Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                      splashFactory: NoSplash.splashFactory,
+                      enableFeedback: false,
+                      shape: const RoundedRectangleBorder()),
                   onPressed: () => GlobalLauncher.launch(url),
-                  child: Text(e.toString()),
-                );
-              }).toList(),
-            ],
-          ),
-        ),
-      )
-    ], actionTextList: [
-      '关闭'
-    ]);
+                  child: Text("[#$index] $e"),
+                ),
+              );
+            }).toList(),
+          ],
+        ),) ,
+      ),
+    );
     return true;
   }
 }

@@ -24,6 +24,26 @@ extension DialogEx on BuildContext {
     return confirm == true;
   }
 
+  Future<bool> showAnyTip({required String title, required WidgetBuilder make, required String ok}) async {
+    final confirm = await showDialog(
+      context: this,
+      builder: (ctx) => AlertDialog(
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+        content: make(ctx),
+        actions: [
+          Align(
+              alignment: Alignment.bottomCenter,
+              child: CupertinoButton(
+                  onPressed: () {
+                    Navigator.of(ctx).pop(true);
+                  },
+                  child: Text(ok))),
+        ],
+      ),
+    );
+    return confirm == true;
+  }
+
   Future<bool?> showRequest(
       {required String title,
       required String desc,
