@@ -19,12 +19,12 @@ import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
 
-class GlassmorphicBackground extends StatelessWidget {
+class GlassmorphismBackground extends StatelessWidget {
   final double sigmaX;
   final double sigmaY;
   final List<Color> colors;
 
-  const GlassmorphicBackground({super.key, required this.sigmaX, required this.sigmaY, required this.colors});
+  const GlassmorphismBackground({super.key, required this.sigmaX, required this.sigmaY, required this.colors});
 
   @override
   Widget build(BuildContext context) {

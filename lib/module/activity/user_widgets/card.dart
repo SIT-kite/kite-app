@@ -36,29 +36,14 @@ class ActivityCard extends StatelessWidget {
 
   const ActivityCard(this.activity, {Key? key}) : super(key: key);
 
-  Widget _buildTagRow(BuildContext ctx, List<String> tags) {
-    return Wrap(
-      spacing: 10,
-      children: tags
-          .sublist(0, min(2, tags.length))
-          .map((e) => Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: Text(
-                e,
-                style: ctx.textTheme.bodySmall,
-              )))
-          .toList(),
-    );
-  }
-
-  Widget buildGlassmorphicBg(BuildContext ctx) {
+  Widget buildGlassmorphismBg(BuildContext ctx) {
     if (ctx.isLightMode) {
-      return GlassmorphicBackground(sigmaX: 4, sigmaY: 8, colors: [
+      return GlassmorphismBackground(sigmaX: 4, sigmaY: 8, colors: [
         const Color(0xFFf0f0f0).withOpacity(0.1),
         const Color((0xFF5a5a5a)).withOpacity(0.1),
       ]);
     } else {
-      return GlassmorphicBackground(sigmaX: 8, sigmaY: 16, colors: [
+      return GlassmorphismBackground(sigmaX: 8, sigmaY: 16, colors: [
         const Color(0xFFafafaf).withOpacity(0.3),
         const Color((0xFF0a0a0a)).withOpacity(0.4),
       ]);
@@ -66,49 +51,51 @@ class ActivityCard extends StatelessWidget {
   }
 
   Widget _buildBasicInfo(BuildContext ctx) {
-    final titleStyle = ctx.textTheme.headline2?.copyWith(fontWeight: FontWeight.w500);
-    final subtitleStyle = ctx.textTheme.headline6?.copyWith(color: Colors.grey);
+    final titleStyle = ctx.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w500);
+    final tagsStyle = ctx.textTheme.titleSmall;
+    final subtitleStyle = ctx.textTheme.bodySmall?.copyWith(color: Colors.grey);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        AspectRatio(
-          aspectRatio: 2.2,
-          child: Stack(
-            children: [
-              const BlurRectWidget(
-                CardCoverBackground(),
-                sigmaX: 10,
-                sigmaY: 10,
-                opacity: 0.75,
+        Stack(
+          children: [
+            const BlurRectWidget(
+              CardCoverBackground(),
+              sigmaX: 10,
+              sigmaY: 10,
+              opacity: 0.75,
+            ),
+            buildGlassmorphismBg(ctx),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Center(
+                child: Text(
+                  activity.realTitle,
+                  style: titleStyle,
+                  maxLines: 3,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                ).hero(activity.id),
               ),
-              buildGlassmorphicBg(ctx),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Center(
-                  child: Text(
-                    activity.realTitle,
-                    style: titleStyle,
-                    maxLines: 2,
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.ellipsis,
-                  ).hero(activity.id),
-                ),
-              ),
-            ],
-          ),
-        ),
+            ),
+          ],
+        ).expended(),
         Container(
           decoration: BoxDecoration(color: ctx.bgColor),
           child: Padding(
-            padding: const EdgeInsets.all(4),
-            child: Row(
+            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 4),
+            child: Flex(
+              direction: Axis.vertical,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildTagRow(ctx, activity.tags),
-                Text(ctx.dateNum(activity.ts), style: subtitleStyle),
+                activity.tags.join(" ").text(style: tagsStyle,maxLines: 2, overflow: TextOverflow.clip),
+                ctx
+                    .dateNum(activity.ts)
+                    .text(style: subtitleStyle, overflow: TextOverflow.clip)
+                    .align(at: Alignment.centerRight).padOnly(r:8),
               ],
-            ),
+            ).align(at: Alignment.bottomCenter),
           ),
         ),
       ],
@@ -117,15 +104,12 @@ class ActivityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) => DetailPage(activity, hero: activity.id)));
-      },
-      child: Card(
-        margin: const EdgeInsets.all(10),
-        child: ClipRRect(borderRadius: BorderRadius.circular(16), child: _buildBasicInfo(context)),
-      ),
-    );
+    return Card(
+      margin: const EdgeInsets.all(10),
+      child: ClipRRect(borderRadius: BorderRadius.circular(16), child: _buildBasicInfo(context)),
+    ).on(tap: () {
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => DetailPage(activity, hero: activity.id)));
+    });
   }
 }
 

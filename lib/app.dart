@@ -51,7 +51,7 @@ class _KiteAppState extends State<KiteApp> {
   @override
   void initState() {
     super.initState();
-    // Initialze the app with system theme.
+    // Initialize the app with system theme.
     var platformBrightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
     Kv.theme.isDarkMode ??= platformBrightness == Brightness.dark;
   }
@@ -149,6 +149,11 @@ class _KiteAppState extends State<KiteApp> {
           final systemLocale = Localizations.localeOf(context);
           Lang.setCurrentLocaleIfAbsent(systemLocale);
           Future.delayed(Duration.zero, () async => await DesktopInit.setTitle(i18n.appName));
+          if (MediaQuery.of(context).orientation == Orientation.portrait) {
+            SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top]);
+          }else{
+            SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+          }
           return MediaQuery(
             // 设置文字大小不随系统设置改变
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),

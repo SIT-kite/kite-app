@@ -102,7 +102,7 @@ class _MinePageState extends State<MinePage> {
             ? () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                      builder: (_) => DetailPage(activity, hero: rawActivity.applyId, hideApplyButton: true)),
+                      builder: (_) => DetailPage(activity, hero: rawActivity.applyId, enableApply: true)),
                 );
               }
             : null,

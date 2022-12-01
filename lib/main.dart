@@ -17,6 +17,7 @@
  */
 import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:kite/global/init.dart';
 import 'package:kite/util/catcher_dialog_handler.dart';

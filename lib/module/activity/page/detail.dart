@@ -34,9 +34,9 @@ class DetailPage extends StatelessWidget {
   final Object hero;
 
   int get activityId => activity.id;
-  final bool hideApplyButton;
+  final bool enableApply;
 
-  const DetailPage(this.activity, {required this.hero, this.hideApplyButton = false, super.key});
+  const DetailPage(this.activity, {required this.hero, this.enableApply = true, super.key});
 
   AppBar _buildAppBar() {
     return AppBar(
@@ -52,7 +52,7 @@ class DetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildBasicInfoWithPlaceholder(BuildContext context, ActivityDetail? detail, Widget placeholder) {
+  Widget _buildBasicInfo(BuildContext context, ActivityDetail? detail) {
     final valueStyle = Theme.of(context).textTheme.bodyText2;
     final keyStyle = valueStyle?.copyWith(fontWeight: FontWeight.bold);
 
@@ -69,13 +69,10 @@ class DetailPage extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Text(activity.realTitle, style: titleStyle, softWrap: true).hero(hero),
-          ),
+          Text(activity.realTitle, style: titleStyle, softWrap: true).hero(hero).padAll(10),
           Table(
             columnWidths: const {
-              0: FlexColumnWidth(1),
+              0: FlexColumnWidth(2),
               1: FlexColumnWidth(3),
             },
             children: [
@@ -89,13 +86,13 @@ class DetailPage extends StatelessWidget {
               buildRow(i18n.activityDuration, detail?.duration),
               buildRow(i18n.activityTags, activity.tags.join('\n')),
             ],
-          ),
+          ).padH(10),
         ],
       ),
     );
   }
 
-  Widget _buildInfoCardWithPlaceholder(BuildContext context, ActivityDetail? detail, Widget placeholder) {
+  Widget _buildInfoCard(BuildContext context, ActivityDetail? detail) {
     return Stack(
       children: [
         const AspectRatio(
@@ -105,7 +102,7 @@ class DetailPage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(20),
           child: Card(
-              margin: const EdgeInsets.all(8), child: _buildBasicInfoWithPlaceholder(context, detail, placeholder)),
+              margin: const EdgeInsets.all(8), child: _buildBasicInfo(context, detail)),
         )
       ],
     );
@@ -122,11 +119,11 @@ class DetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailWithPlaceholder(BuildContext context, ActivityDetail? detail, Widget placeholder) {
+  Widget _buildDetail(BuildContext context, ActivityDetail? detail) {
     return SingleChildScrollView(
       child: Column(mainAxisSize: MainAxisSize.min, children: [
-        _buildInfoCardWithPlaceholder(context, detail, placeholder),
-        if (detail != null) _buildArticle(context, detail.description ?? '暂无信息') else placeholder,
+        _buildInfoCard(context, detail),
+        if (detail != null) _buildArticle(context, detail.description ?? '暂无信息') else Placeholders.loading(),
         const SizedBox(height: 64),
       ]),
     );
@@ -136,7 +133,7 @@ class DetailPage extends StatelessWidget {
     return PlaceholderFutureBuilder<ActivityDetail>(
         future: ScInit.scActivityDetailService.getActivityDetail(activityId),
         builder: (context, detail, placeholder) {
-          return _buildDetailWithPlaceholder(context, detail, placeholder);
+          return _buildDetail(context, detail);
         });
   }
 
@@ -157,7 +154,7 @@ class DetailPage extends StatelessWidget {
     return Scaffold(
       appBar: _buildAppBar(),
       body: _buildBody(context),
-      floatingActionButton: !hideApplyButton
+      floatingActionButton: enableApply
           ? InkWell(
               /*onDoubleTap: () {
                 // 报名活动（强制模式）
@@ -167,7 +164,6 @@ class DetailPage extends StatelessWidget {
                 icon: const Icon(Icons.person_add),
                 label: i18n.activityApplyBtn.txt,
                 onPressed: () async {
-                  // 常规模式报名活动
                   _sendRequest(context, false);
                 },
               ),

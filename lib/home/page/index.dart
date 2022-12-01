@@ -48,7 +48,7 @@ class HomeItemGroup extends StatelessWidget {
   const HomeItemGroup(this._items, {Key? key}) : super(key: key);
 
   Widget buildGlassmorphicBg() {
-    return GlassmorphicBackground(sigmaX: 5, sigmaY: 12, colors: [
+    return GlassmorphismBackground(sigmaX: 5, sigmaY: 12, colors: [
       const Color(0xFFffffff).withOpacity(0.8),
       const Color(0xFF000000).withOpacity(0.8),
     ]);

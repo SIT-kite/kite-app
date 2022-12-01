@@ -18,6 +18,8 @@
 
 import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kite/util/collection.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../entity/list.dart';
@@ -44,7 +46,7 @@ class _ActivityListPageState extends State<ActivityListPage> with SingleTickerPr
 
   late TabController _tabController;
 
-  final pageChangeNotifier = ValueNotifier(0);
+  final $page = ValueNotifier(0);
   bool init = false;
 
   @override
@@ -53,7 +55,7 @@ class _ActivityListPageState extends State<ActivityListPage> with SingleTickerPr
       length: categories.length,
       vsync: this,
     );
-    _tabController.addListener(() => pageChangeNotifier.value = _tabController.index);
+    _tabController.addListener(() => $page.value = _tabController.index);
     super.initState();
   }
 
@@ -62,9 +64,15 @@ class _ActivityListPageState extends State<ActivityListPage> with SingleTickerPr
       isScrollable: true,
       controller: _tabController,
       tabs: categories
-          .map((e) => Tab(
-                child: Text(e.name, style: Theme.of(ctx).textTheme.bodyLarge),
-              ))
+          .mapIndexed((e, i) =>
+              $page <<
+              (ctx, page, child) {
+                return Tab(
+                    child: e.name.text(
+                        style: page == i
+                            ? TextStyle(inherit: true, color: ctx.textColor)
+                            : ctx.theme.textTheme.bodyLarge));
+              })
           .toList(),
     );
   }
@@ -79,7 +87,7 @@ class _ActivityListPageState extends State<ActivityListPage> with SingleTickerPr
           controller: _tabController,
           children: categories.map((selectedActivityType) {
             return ValueListenableBuilder(
-              valueListenable: pageChangeNotifier,
+              valueListenable: $page,
               builder: (context, index, child) {
                 return ActivityList(selectedActivityType);
               },
@@ -161,12 +169,18 @@ class _ActivityListState extends State<ActivityList> {
   }
 
   Widget _buildActivityResult(List<Activity> activities) {
-    return LiveList(
-      controller: _scrollController,
-      itemCount: activities.length,
-      showItemDuration: const Duration(milliseconds: 300),
-      itemBuilder: (ctx, index, animation) => buildAnimatedActivityCard(ctx, activities[index], animation),
-    );
+    return OrientationBuilder(builder: (ctx, o) {
+      final extent = o == Orientation.portrait ? 300.w : 150.w;
+      return LiveGrid(
+        controller: _scrollController,
+        itemCount: activities.length,
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: extent,
+        ),
+        showItemDuration: const Duration(milliseconds: 300),
+        itemBuilder: (ctx, index, animation) => buildAnimatedActivityCard(ctx, activities[index], animation),
+      );
+    });
   }
 
   Widget buildAnimatedActivityCard(

@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/design/utils.dart';
 import 'package:rettulf/rettulf.dart';
+import 'package:tuple/tuple.dart';
 
 Color getThemeColor(BuildContext ctx) {
   var theme = Theme.of(ctx);
@@ -52,6 +53,30 @@ extension DesignExtension on BuildContext {
   Color get fgColor => getFgColor(this);
 
   Color get bgColor => getBgColor(this);
+
+  Color get textColor => isDarkMode ? Colors.white70 : theme.primaryColor;
+
+  Tuple2<Color, Color> makeTabHeaderTextNBgColors(bool isSelected) {
+    final Color textColor;
+    final Color bgColor;
+    if (isDarkMode) {
+      if (isSelected) {
+        bgColor = theme.secondaryHeaderColor;
+      } else {
+        bgColor = Colors.transparent;
+      }
+      textColor = Colors.white;
+    } else {
+      if (isSelected) {
+        bgColor = theme.primaryColor;
+        textColor = Colors.white;
+      } else {
+        bgColor = Colors.transparent;
+        textColor = Colors.black;
+      }
+    }
+    return Tuple2(textColor, bgColor);
+  }
 }
 
 class ColorPair {

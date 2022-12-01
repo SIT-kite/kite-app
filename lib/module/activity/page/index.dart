@@ -16,7 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ThemeData;
+import 'package:flutter/services.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../using.dart';
@@ -36,6 +37,11 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
+    return OrientationBuilder(
+        builder: (ctx, orient) => orient == Orientation.portrait ? buildPortrait(ctx) : buildLandscape(ctx));
+  }
+
+  Widget buildPortrait(BuildContext ctx) {
     return Scaffold(
       appBar: AppBar(title: i18n.ftype_activity.text(), actions: [
         IconButton(
@@ -59,6 +65,46 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
         onTap: (int index) {
           setState(() => currentIndex = index);
         },
+      ),
+    );
+  }
+
+  Widget buildLandscape(BuildContext ctx) {
+    return Scaffold(
+      body: Row(
+        children: <Widget>[
+          NavigationRail(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                context.navigator.pop();
+              },
+            ),
+            selectedIndex: currentIndex,
+            groupAlignment: -1.0,
+            onDestinationSelected: (int index) {
+              setState(() {
+                currentIndex = index;
+              });
+            },
+            labelType: NavigationRailLabelType.all,
+            destinations: <NavigationRailDestination>[
+              NavigationRailDestination(
+                icon: const Icon(Icons.check_box_outline_blank),
+                selectedIcon: const Icon(Icons.list_alt_rounded),
+                label: i18n.activityListNavigation.text(),
+              ),
+              NavigationRailDestination(
+                icon: const Icon(Icons.person_outline_rounded),
+                selectedIcon: const Icon(Icons.person_rounded),
+                label: i18n.activityMineNavigation.text(),
+              ),
+            ],
+          ),
+          const VerticalDivider(thickness: 1, width: 1),
+          // This is the main content.
+          Expanded(child: currentIndex == 0 ? const ActivityListPage() : const MinePage()),
+        ],
       ),
     );
   }

@@ -59,23 +59,11 @@ class _TimetableHeaderState extends State<TimetableHeader> {
   }
 
   Widget buildDayHeader(BuildContext ctx, int day, String name) {
-    var theme = Theme.of(context);
-    Color? bgColor;
-    final Color textColor;
     final isSelected = day == selectedDay;
-    if (ctx.isDarkMode) {
-      if (isSelected) {
-        bgColor = theme.secondaryHeaderColor;
-      }
-      textColor = Colors.white;
-    } else {
-      if (isSelected) {
-        bgColor = theme.primaryColor;
-        textColor = Colors.white;
-      } else {
-        textColor = Colors.black;
-      }
-    }
+    final textNBgColors = ctx.makeTabHeaderTextNBgColors(isSelected);
+    final textColor = textNBgColors.item1;
+    final bgColor = textNBgColors.item2;
+
     return Container(
       decoration: BoxDecoration(
         color: bgColor,
