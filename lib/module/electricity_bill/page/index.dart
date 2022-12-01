@@ -144,13 +144,11 @@ class _ElectricityPageState extends State<ElectricityPage> {
         if (chartState != null) {
           if (chartState.mode == ElectricityChartMode.daily) {
             final newDailyBill = await ElectricityBillInit.electricityService.getDailyBill(selectedRoom);
-            if (newDailyBill.isNotEmpty) newDailyBill.removeLast();
             setChartState((state) {
               state.dailyBill = newDailyBill;
             });
           } else {
             final newHourlyBill = await ElectricityBillInit.electricityService.getHourlyBill(selectedRoom);
-            if (newHourlyBill.isNotEmpty) newHourlyBill.removeLast();
             setChartState((state) {
               state.hourlyBill = newHourlyBill;
             });
