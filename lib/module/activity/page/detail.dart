@@ -22,6 +22,7 @@ import 'package:rettulf/rettulf.dart';
 
 import '../entity/detail.dart';
 import '../init.dart';
+import '../user_widgets/blur.dart';
 import '../user_widgets/card.dart';
 import '../using.dart';
 
@@ -29,86 +30,122 @@ String _getActivityUrl(int activityId) {
   return 'http://sc.sit.edu.cn/public/activity/activityDetail.action?activityId=$activityId';
 }
 
-class DetailPage extends StatelessWidget {
+class DetailPage extends StatefulWidget {
   final Activity activity;
   final Object hero;
-
-  int get activityId => activity.id;
   final bool enableApply;
 
   const DetailPage(this.activity, {required this.hero, this.enableApply = true, super.key});
 
-  AppBar _buildAppBar() {
-    return AppBar(
-      title: i18n.activityDetails.txt,
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.open_in_browser),
-          onPressed: () {
-            launchUrlInBrowser(_getActivityUrl(activityId));
-          },
-        )
-      ],
-    );
+  @override
+  State<StatefulWidget> createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
+  int get activityId => widget.activity.id;
+
+  Activity get activity => widget.activity;
+  ActivityDetail? detail;
+
+  @override
+  void initState() {
+    super.initState();
+    ScInit.scActivityDetailService.getActivityDetail(activityId).then((value) {
+      setState(() {
+        detail = value;
+      });
+    });
   }
 
-  Widget _buildBasicInfo(BuildContext context, ActivityDetail? detail) {
-    final valueStyle = Theme.of(context).textTheme.bodyText2;
-    final keyStyle = valueStyle?.copyWith(fontWeight: FontWeight.bold);
+  @override
+  Widget build(BuildContext context) {
+    return context.orientation == Orientation.portrait ? buildPortrait(context) : buildLandscape(context);
+  }
 
-    buildRow(String key, Object? value) => TableRow(
-          children: [
-            Text(key, style: keyStyle),
-            Text(value?.toString() ?? "...", style: valueStyle),
-          ],
-        );
-
-    final titleStyle = Theme.of(context).textTheme.headline2;
-
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        children: [
-          Text(activity.realTitle, style: titleStyle, softWrap: true).hero(hero).padAll(10),
-          Table(
-            columnWidths: const {
-              0: FlexColumnWidth(2),
-              1: FlexColumnWidth(3),
+  Widget buildPortrait(BuildContext ctx) {
+    return Scaffold(
+      appBar: AppBar(
+        title: i18n.activityDetails.txt,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.open_in_browser),
+            onPressed: () {
+              launchUrlInBrowser(_getActivityUrl(activityId));
             },
-            children: [
-              buildRow(i18n.activityID, detail?.id),
-              buildRow(i18n.activityLocation, detail?.place),
-              buildRow(i18n.activityPrincipal, detail?.principal),
-              buildRow(i18n.activityOrganizer, detail?.organizer),
-              buildRow(i18n.activityUndertaker, detail?.undertaker),
-              buildRow(i18n.activityContactInfo, detail?.contactInfo),
-              buildRow(i18n.activityStartTime, detail?.startTime),
-              buildRow(i18n.activityDuration, detail?.duration),
-              buildRow(i18n.activityTags, activity.tags.join('\n')),
-            ],
-          ).padH(10),
+          )
         ],
       ),
+      body: buildDetailPortrait(ctx, detail),
+      floatingActionButton: widget.enableApply
+          ? FloatingActionButton.extended(
+              icon: const Icon(Icons.person_add),
+              label: i18n.activityApplyBtn.txt,
+              onPressed: () async {
+                await showApplyRequest(ctx);
+              },
+            )
+          : null,
     );
   }
 
-  Widget _buildInfoCard(BuildContext context, ActivityDetail? detail) {
+  Widget buildLandscape(BuildContext ctx) {
+    return Scaffold(
+      appBar: AppBar(
+        title: i18n.activityDetails.txt,
+        actions: [
+          if (widget.enableApply)
+            FloatingActionButton.extended(
+              heroTag: null,
+              icon: const Icon(Icons.person_add),
+              backgroundColor: Colors.transparent,
+              label: i18n.activityApplyBtn.txt,
+              onPressed: () async {
+                await showApplyRequest(ctx);
+              },
+            ),
+          FloatingActionButton.extended(
+            heroTag: null,
+            icon: const Icon(Icons.open_in_browser),
+            backgroundColor: Colors.transparent,
+            label: i18n.open.txt,
+            onPressed: () {
+              launchUrlInBrowser(_getActivityUrl(activityId));
+            },
+          ),
+        ],
+      ),
+      body: buildDetailLandscape(ctx, detail),
+    );
+  }
+
+  Widget buildInfoCardPortrait(BuildContext ctx, ActivityDetail? detail) {
     return Stack(
       children: [
         const AspectRatio(
           aspectRatio: 1.8,
           child: CardCoverBackground(),
         ),
+        buildGlassmorphismBg(ctx),
         Padding(
           padding: const EdgeInsets.all(20),
-          child: Card(
-              margin: const EdgeInsets.all(8), child: _buildBasicInfo(context, detail)),
+          child: Card(margin: const EdgeInsets.all(8), child: buildActivityInfo(ctx, detail)),
         )
       ],
     );
   }
 
-  Widget _buildArticle(BuildContext context, String html) {
+  Widget buildInfoCardLandscape(BuildContext context, ActivityDetail? detail) {
+    return buildActivityInfo(context, detail)
+        .padAll(8)
+        .scrolled(physics: const ClampingScrollPhysics())
+        .inCard()
+        .padAll(10);
+  }
+
+  Widget _buildArticle(BuildContext context, String? html) {
+    if (html == null) {
+      return i18n.activityDetailEmptyTip.text(style: context.textTheme.titleLarge).center();
+    }
     return Padding(
       padding: const EdgeInsets.all(20),
       child: MyHtmlWidget(
@@ -119,29 +156,54 @@ class DetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDetail(BuildContext context, ActivityDetail? detail) {
+  Widget buildDetailPortrait(BuildContext ctx, ActivityDetail? detail) {
     return SingleChildScrollView(
       child: Column(mainAxisSize: MainAxisSize.min, children: [
-        _buildInfoCard(context, detail),
-        if (detail != null) _buildArticle(context, detail.description ?? '暂无信息') else Placeholders.loading(),
+        buildInfoCardPortrait(context, detail),
+        if (detail != null) _buildArticle(context, detail.description) else Placeholders.loading(),
         const SizedBox(height: 64),
       ]),
     );
   }
 
-  Widget _buildBody(BuildContext context) {
-    return PlaceholderFutureBuilder<ActivityDetail>(
-        future: ScInit.scActivityDetailService.getActivityDetail(activityId),
-        builder: (context, detail, placeholder) {
-          return _buildDetail(context, detail);
-        });
+  Widget buildDetailLandscape(BuildContext ctx, ActivityDetail? detail) {
+    return [
+      const CardCoverBackground().padAll(20),
+      buildGlassmorphismBg(ctx),
+      Row(mainAxisSize: MainAxisSize.min, children: [
+        buildInfoCardLandscape(context, detail).expended(),
+        if (detail != null)
+          _buildArticle(context, detail.description).expended()
+        else
+          Placeholders.loading().expended(),
+      ])
+    ].stack();
   }
 
-  // TODO: Redesign UI with Dialog
+  Future<void> showApplyRequest(BuildContext ctx) async {
+    final confirm = await ctx.showRequest(
+        title: i18n.activityApplyRequest,
+        desc: i18n.activityApplyRequestDesc,
+        yes: i18n.confirm,
+        no: i18n.notNow,
+        highlight: true);
+    if (confirm == true) {
+      try {
+        final response = await ScInit.scJoinActivityService.join(activityId);
+        if (!mounted) return;
+        await ctx.showTip(title: i18n.activityApplyReplyTip, desc: response, ok: i18n.ok);
+      } catch (e) {
+        if (!mounted) return;
+        await ctx.showTip(title: i18n.error, desc: e.toString(), ok: i18n.ok);
+        rethrow;
+      }
+    }
+  }
+
   Future<void> _sendRequest(BuildContext context, bool force) async {
     try {
       final response = await ScInit.scJoinActivityService.join(activityId, force);
-      // TODO: Don't share BuildContext.
+      if (!mounted) return;
       showBasicFlash(context, Text(response));
     } catch (e) {
       showBasicFlash(context, Text('错误: ${e.runtimeType}'), duration: const Duration(seconds: 3));
@@ -149,26 +211,40 @@ class DetailPage extends StatelessWidget {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(),
-      body: _buildBody(context),
-      floatingActionButton: enableApply
-          ? InkWell(
-              /*onDoubleTap: () {
-                // 报名活动（强制模式）
-                _sendRequest(context, true);
-              },*/
-              child: FloatingActionButton.extended(
-                icon: const Icon(Icons.person_add),
-                label: i18n.activityApplyBtn.txt,
-                onPressed: () async {
-                  _sendRequest(context, false);
-                },
-              ),
-            )
-          : null,
-    );
+  Widget buildActivityInfo(BuildContext context, ActivityDetail? detail) {
+    final titleStyle = Theme.of(context).textTheme.headline2;
+    final valueStyle = Theme.of(context).textTheme.bodyText2;
+    final keyStyle = valueStyle?.copyWith(fontWeight: FontWeight.bold);
+
+    buildRow(String key, Object? value) => TableRow(
+          children: [
+            Text(key, style: keyStyle),
+            Text(value?.toString() ?? "...", style: valueStyle),
+          ],
+        );
+
+    return Column(
+      children: [
+        Text(activity.realTitle, style: titleStyle, softWrap: true).hero(widget.hero).padAll(10),
+        Table(
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          columnWidths: const {
+            0: FlexColumnWidth(2),
+            1: FlexColumnWidth(3),
+          },
+          children: [
+            buildRow(i18n.activityID, detail?.id),
+            buildRow(i18n.activityLocation, detail?.place),
+            buildRow(i18n.activityPrincipal, detail?.principal),
+            buildRow(i18n.activityOrganizer, detail?.organizer),
+            buildRow(i18n.activityUndertaker, detail?.undertaker),
+            buildRow(i18n.activityContactInfo, detail?.contactInfo),
+            buildRow(i18n.activityStartTime, detail?.startTime),
+            buildRow(i18n.activityDuration, detail?.duration),
+            buildRow(i18n.activityTags, activity.tags.join(' ')),
+          ],
+        ).padH(10),
+      ],
+    ).padAll(10);
   }
 }

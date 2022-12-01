@@ -55,11 +55,13 @@ class _MinePageState extends State<MinePage> {
 
   void onRefresh() {
     ScInit.scScoreService.getScScoreSummary().then((value) {
+      if(!mounted) return;
       setState(() {
         summary = value;
       });
     });
     getMyActivityListJoinScore(ScInit.scScoreService).then((value) {
+      if(!mounted) return;
       setState(() {
         joined = value;
       });

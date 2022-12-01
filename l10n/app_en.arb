@@ -634,5 +634,10 @@
   "welcomeSlogan": "Excellent school life, from here.",
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
-  "yes": "Yes"
+  "yes": "Yes",
+  "activityApplyRequest": "Apply",
+  "activityApplyRequestDesc": "Confirm to apply this activity?",
+  "activityDetailEmptyTip": "No detail given.",
+  "confirm": "Confirm",
+  "activityApplyReplyTip": "Reply from school"
 }

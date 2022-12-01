@@ -27,28 +27,12 @@ import '../entity/list.dart';
 import '../page/detail.dart';
 import 'blur.dart';
 
-import '../page/util.dart';
 import '../using.dart';
-import 'blur.dart';
 
 class ActivityCard extends StatelessWidget {
   final Activity activity;
 
   const ActivityCard(this.activity, {Key? key}) : super(key: key);
-
-  Widget buildGlassmorphismBg(BuildContext ctx) {
-    if (ctx.isLightMode) {
-      return GlassmorphismBackground(sigmaX: 4, sigmaY: 8, colors: [
-        const Color(0xFFf0f0f0).withOpacity(0.1),
-        const Color((0xFF5a5a5a)).withOpacity(0.1),
-      ]);
-    } else {
-      return GlassmorphismBackground(sigmaX: 8, sigmaY: 16, colors: [
-        const Color(0xFFafafaf).withOpacity(0.3),
-        const Color((0xFF0a0a0a)).withOpacity(0.4),
-      ]);
-    }
-  }
 
   Widget _buildBasicInfo(BuildContext ctx) {
     final titleStyle = ctx.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w500);
@@ -89,11 +73,12 @@ class ActivityCard extends StatelessWidget {
               direction: Axis.vertical,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                activity.tags.join(" ").text(style: tagsStyle,maxLines: 2, overflow: TextOverflow.clip),
+                activity.tags.join(" ").text(style: tagsStyle, maxLines: 2, overflow: TextOverflow.clip),
                 ctx
                     .dateNum(activity.ts)
                     .text(style: subtitleStyle, overflow: TextOverflow.clip)
-                    .align(at: Alignment.centerRight).padOnly(r:8),
+                    .align(at: Alignment.centerRight)
+                    .padOnly(r: 8),
               ],
             ).align(at: Alignment.bottomCenter),
           ),

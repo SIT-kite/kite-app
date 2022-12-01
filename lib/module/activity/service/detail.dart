@@ -40,9 +40,11 @@ class ScActivityDetailService implements ScActivityDetailDao {
 
   /// 获取第二课堂活动详情
   @override
-  Future<ActivityDetail> getActivityDetail(int activityId) async {
+  Future<ActivityDetail?> getActivityDetail(int activityId) async {
     final response = await session.request(_scDetailUrlBase + activityId.toString(), ReqMethod.post);
-    return _parseActivityDetail(response.data);
+    final data = response.data;
+    if (data == null) return null;
+    return _parseActivityDetail(data);
   }
 
   static String _cleanText(String banner) {

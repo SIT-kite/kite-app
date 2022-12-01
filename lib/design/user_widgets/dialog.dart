@@ -96,6 +96,7 @@ extension DialogEx on BuildContext {
       required String ok,
       bool Function(int? selected)? okEnabled,
       double targetHeight = 240,
+      bool highlight = false,
       FixedExtentScrollController? controller,
       List<PickerActionWidgetBuilder>? actions,
       required IndexedWidgetBuilder make}) async {
@@ -131,7 +132,7 @@ extension DialogEx on BuildContext {
                             Navigator.of(ctx).pop($selected.value);
                           }
                         : null,
-                    child: ok.text()))),
+                    child: ok.text(style: highlight ? const TextStyle(color: Colors.redAccent) : null)))),
       ),
     );
   }

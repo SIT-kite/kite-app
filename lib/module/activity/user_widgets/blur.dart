@@ -19,6 +19,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:rettulf/buildcontext/theme.dart';
+import '../using.dart';
 
 /// 矩形高斯模糊效果
 class BlurRectWidget extends StatefulWidget {
@@ -63,5 +65,19 @@ class _BlurRectWidgetState extends State<BlurRectWidget> {
         ),
       ),
     );
+  }
+}
+
+Widget buildGlassmorphismBg(BuildContext ctx) {
+  if (ctx.isLightMode) {
+    return GlassmorphismBackground(sigmaX: 4, sigmaY: 8, colors: [
+      const Color(0xFFf0f0f0).withOpacity(0.1),
+      const Color((0xFF5a5a5a)).withOpacity(0.1),
+    ]);
+  } else {
+    return GlassmorphismBackground(sigmaX: 8, sigmaY: 16, colors: [
+      const Color(0xFFafafaf).withOpacity(0.3),
+      const Color((0xFF0a0a0a)).withOpacity(0.4),
+    ]);
   }
 }

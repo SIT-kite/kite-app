@@ -103,7 +103,7 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
           ),
           const VerticalDivider(thickness: 1, width: 1),
           // This is the main content.
-          Expanded(child: currentIndex == 0 ? const ActivityListPage() : const MinePage()),
+          Expanded(child: currentIndex == 0 ? const ActivityListPage() : const MinePage())
         ],
       ),
     );

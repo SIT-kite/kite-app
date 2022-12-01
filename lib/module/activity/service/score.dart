@@ -51,16 +51,20 @@ class ScScoreService implements ScScoreDao {
 
   /// 获取第二课堂分数
   @override
-  Future<ScScoreSummary> getScScoreSummary() async {
+  Future<ScScoreSummary?> getScScoreSummary() async {
     final response = await session.request(_scHomeUrl, ReqMethod.post);
-    return _parseScScoreSummary(response.data);
+    final data = response.data;
+    if (data == null) return null;
+    return _parseScScoreSummary(data);
   }
 
-  static ScScoreSummary _parseScScoreSummary(String htmlPage) {
+  static ScScoreSummary? _parseScScoreSummary(String htmlPage) {
     final BeautifulSoup soup = BeautifulSoup(htmlPage);
 
     // 学分=1.5(主题报告)+2.0(社会实践)+1.5(创新创业创意)+1.0(校园安全文明)+0.0(公益志愿)+2.0(校园文化)
-    final String scoreText = soup.find(spanScore)!.text.toString();
+    final found = soup.find(spanScore);
+    if(found == null) return null;
+    final String scoreText = found.text.toString();
     final regExp = RegExp(r'([\d.]+)\(([\u4e00-\u9fa5]+)\)');
 
     final matches = regExp.allMatches(scoreText);
