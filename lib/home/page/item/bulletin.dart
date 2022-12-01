@@ -20,6 +20,7 @@ import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/module/symbol.dart';
 import 'package:kite/route.dart';
+import 'package:kite/util/logger.dart';
 
 import '../../init.dart';
 import '../brick.dart';
@@ -37,6 +38,7 @@ class _KiteBulletinItemState extends State<KiteBulletinItem> {
   @override
   void initState() {
     Global.eventBus.on(EventNameConstants.onHomeRefresh, _onHomeRefresh);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => _onHomeRefresh(null));
     super.initState();
   }
 
@@ -54,6 +56,7 @@ class _KiteBulletinItemState extends State<KiteBulletinItem> {
 
   Future<String?> _buildContent() async {
     try {
+      Log.info('获取公告');
       final List<KiteBulletin> list = await HomeInit.noticeService.getNoticeList();
       return list.first.title;
     } catch (_) {
@@ -63,19 +66,11 @@ class _KiteBulletinItemState extends State<KiteBulletinItem> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<String?>(
-      future: _buildContent(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          content = snapshot.data;
-        }
-        return Brick(
-          route: RouteTable.kiteBulletin,
-          icon: 'assets/home/icon_notice.svg',
-          title: i18n.ftype_kiteBulletin,
-          subtitle: content ?? i18n.ftype_kiteBulletin_desc,
-        );
-      },
+    return Brick(
+      route: RouteTable.kiteBulletin,
+      icon: 'assets/home/icon_notice.svg',
+      title: i18n.ftype_kiteBulletin,
+      subtitle: content ?? i18n.ftype_kiteBulletin_desc,
     );
   }
 }
