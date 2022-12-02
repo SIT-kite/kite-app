@@ -36,16 +36,24 @@ class _ScorePageState extends State<ScorePage> {
   late int selectedYear;
 
   /// 要查询的学期
-  Semester selectedSemester = Semester.all;
+  late Semester selectedSemester;
+
+  /// 成绩列表
+  List<Score>? scoreList;
 
   @override
   void initState() {
     final now = DateTime.now();
     selectedYear = (now.month >= 9 ? now.year : now.year - 1);
+    selectedSemester = Semester.all;
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      scoreList = await ExamResultInit.scoreService.getScoreList(SchoolYear(selectedYear), selectedSemester);
+      setState(() {});
+    });
     super.initState();
   }
 
-  Widget _buildHeader(List<Score> scoreList) {
+  Widget _buildHeader() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -62,17 +70,26 @@ class _ScorePageState extends State<ScorePage> {
             initialSemester: selectedSemester,
           ),
         ),
-        GpaBanner(selectedSemester, scoreList),
+        GpaBanner(selectedSemester, scoreList!),
       ],
     );
   }
 
-  Widget _buildListView(List<Score> scoreList) {
-    final list = scoreList.map((e) => ScoreItem(e)).toList();
-    return ListView.separated(
-      itemCount: list.length,
-      separatorBuilder: (context, _) => Divider(height: 2.0, color: Theme.of(context).primaryColor.withOpacity(0.4)),
-      itemBuilder: (_, index) => list[index],
+  Widget _buildListView() {
+    return ListView(
+      children: scoreList!
+          .map(
+            (e) => Column(
+              children: [
+                ScoreItem(e),
+                Divider(
+                  height: 2.0,
+                  color: Theme.of(context).primaryColor.withOpacity(0.4),
+                ),
+              ],
+            ),
+          )
+          .toList(),
     );
   }
 
@@ -88,25 +105,13 @@ class _ScorePageState extends State<ScorePage> {
         Text(i18n.examResultNoResult, style: const TextStyle(color: Colors.grey)),
         Container(
           margin: const EdgeInsets.only(left: 40, right: 40),
-          child: Text(i18n.examResultBePatientLabel,
-              textAlign: TextAlign.center, style: const TextStyle(color: Colors.grey)),
+          child: Text(
+            i18n.examResultBePatientLabel,
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.grey),
+          ),
         ),
       ],
-    );
-  }
-
-  Widget _buildBody() {
-    return MyFutureBuilder<List<Score>>(
-      futureGetter: () => ExamResultInit.scoreService.getScoreList(SchoolYear(selectedYear), selectedSemester),
-      builder: (context, data) {
-        final scoreList = data;
-        return Column(
-          children: [
-            _buildHeader(scoreList),
-            Expanded(child: scoreList.isNotEmpty ? _buildListView(scoreList) : _buildNoResult()),
-          ],
-        );
-      },
     );
   }
 
@@ -116,7 +121,14 @@ class _ScorePageState extends State<ScorePage> {
       appBar: AppBar(
         title: i18n.ftype_examResult.txt,
       ),
-      body: _buildBody(),
+      body: scoreList == null
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
+              children: [
+                _buildHeader(),
+                Expanded(child: scoreList!.isNotEmpty ? _buildListView() : _buildNoResult()),
+              ],
+            ),
     );
   }
 }

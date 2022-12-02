@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:universal_platform/universal_platform.dart';
+
 import '../using.dart';
 
 const String _ventuskyUrl = 'https://www.ventusky.com/?p=31.046;121.773;10&l=rain-1h';
@@ -39,7 +41,11 @@ class WeatherPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final url = _getWeatherUrl(campus);
-
+    if (UniversalPlatform.isDesktop) {
+      Navigator.of(context).pop();
+      GlobalLauncher.launch(url);
+      return Container();
+    }
     return SimpleWebViewPage(
       initialUrl: url,
       fixedTitle: title ?? i18n.weather,

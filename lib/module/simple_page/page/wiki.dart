@@ -20,6 +20,7 @@ import 'dart:async';
 import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 import '../using.dart';
 
@@ -31,6 +32,11 @@ class WikiPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (UniversalPlatform.isDesktop) {
+      Navigator.of(context).pop();
+      GlobalLauncher.launch(R.kiteWikiUrl);
+      return Container();
+    }
     return SimpleWebViewPage(
       initialUrl: customWikiUrl ?? R.kiteWikiUrl,
       fixedTitle: i18n.ftype_wiki,
