@@ -50,7 +50,7 @@ class RankViewState extends State<RankView> {
             i18n.elecBill24hBill(rank.consumption.toStringAsFixed(2)),
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
           ),
-          Text(i18n.elecBillRankAbove((rank.rank * 100 / rank.roomCount).toStringAsFixed(2)))
+          Text(i18n.elecBillRankAbove(((1.0 - rank.rank / rank.roomCount) * 100).toStringAsFixed(2)))
         ],
       );
     }

@@ -17,13 +17,15 @@
  */
 import 'package:app_settings/app_settings.dart';
 import 'package:check_vpn_connection/check_vpn_connection.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/design/user_widgets/dialog.dart';
 
-import '../using.dart';
 import '../init.dart';
 import '../service/network.dart';
+import '../using.dart';
 
 class ConnectivityPage extends StatefulWidget {
   const ConnectivityPage({Key? key}) : super(key: key);
@@ -163,6 +165,27 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
         TextButton(
           onPressed: () => GlobalLauncher.launch(R.easyConnectDownloadUrl),
           child: i18n.downloadEasyConnectBtn.txt,
+        ),
+        TextButton(
+          onPressed: () async {
+            EasyLoading.show(status: '正在登录');
+            final username = Kv.auth.currentUsername;
+            final password = Kv.auth.ssoPassword;
+            try {
+              if (username != null && password != null) await Network.login(username, password);
+              if (!mounted) return;
+              setState(() {});
+            } on DioError catch (e) {
+              if (e.type == DioErrorType.connectTimeout) {
+                EasyLoading.showToast('登录请求发生异常: 连接超时');
+              } else {
+                EasyLoading.showToast('登录请求发生异常: ${e.message}');
+              }
+            } finally {
+              EasyLoading.dismiss();
+            }
+          },
+          child: const Text('一键登录i-SIT'),
         ),
       ],
     );

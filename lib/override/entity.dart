@@ -82,6 +82,10 @@ class FunctionOverrideInfo {
   @JsonKey(defaultValue: {})
   Map<String, RouteNotice> routeNotice = {};
 
+  /// 色彩饱和度，设置为0则全黑白，设置为1为全彩色
+  @JsonKey(defaultValue: 1)
+  double homeColorSaturation = 1;
+
   FunctionOverrideInfo();
   factory FunctionOverrideInfo.fromJson(Map<String, dynamic> json) => _$FunctionOverrideInfoFromJson(json);
   Map<String, dynamic> toJson() => _$FunctionOverrideInfoToJson(this);

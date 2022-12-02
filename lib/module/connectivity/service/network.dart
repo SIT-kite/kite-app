@@ -71,8 +71,14 @@ class Network {
   static const _checkStatusUrl = '$_drcomUrl/chkstatus';
   static const _logoutUrl = '$_drcomUrl/logout';
 
+  static final dio = Dio()
+    ..options = BaseOptions(
+      connectTimeout: 3000,
+      sendTimeout: 3000,
+      receiveTimeout: 3000,
+    );
   static Future<Map<String, dynamic>> _get(String url, {Map<String, dynamic>? queryParameters}) async {
-    var response = await Dio().get(
+    var response = await dio.get(
       url,
       queryParameters: queryParameters,
       options: Options(

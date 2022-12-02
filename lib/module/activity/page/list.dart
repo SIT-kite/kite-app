@@ -24,8 +24,8 @@ import 'package:rettulf/rettulf.dart';
 
 import '../entity/list.dart';
 import '../init.dart';
-import '../using.dart';
 import '../user_widgets/card.dart';
+import '../using.dart';
 
 class ActivityListPage extends StatefulWidget {
   const ActivityListPage({Key? key}) : super(key: key);
@@ -176,6 +176,7 @@ class _ActivityListState extends State<ActivityList> {
           maxCrossAxisExtent: extent,
         ),
         showItemDuration: const Duration(milliseconds: 300),
+        showItemInterval: const Duration(milliseconds: 20),
         itemBuilder: (ctx, index, animation) => buildAnimatedActivityCard(ctx, activities[index], animation),
       );
     });
