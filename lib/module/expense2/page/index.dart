@@ -51,7 +51,7 @@ class _IndexPageState extends State<IndexPage> {
   Future<void> fetch(DateTime start, DateTime end) async {
     for (int i = 0; i < 3; i++) {
       try {
-        EasyLoading.showToast('正在获取最新数据');
+        EasyLoading.showToast(i18n.expenseToastLoading);
         allRecords = await cache.fetch(
           studentID: Kv.auth.currentUsername!,
           from: start,
@@ -59,11 +59,11 @@ class _IndexPageState extends State<IndexPage> {
           onLocalQuery: refreshRecords,
         );
         refreshRecords(allRecords);
-        EasyLoading.showToast('已获取最新数据');
+        EasyLoading.showToast(i18n.expenseToastLoadSuccessful);
         return;
       } catch (_) {}
     }
-    EasyLoading.showToast('网络异常，请稍后重试');
+    EasyLoading.showToast(i18n.expenseToastLoadFailed);
   }
 
   @override
@@ -78,7 +78,7 @@ class _IndexPageState extends State<IndexPage> {
     return PopupMenuButton(
       itemBuilder: (ctx) => [
         PopupMenuItem(
-          child: const Text('强制刷新'),
+          child: Text(i18n.expenseRefreshMenuButton),
           onTap: () async {
             try {
               // 关闭用户交互
