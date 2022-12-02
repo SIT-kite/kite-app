@@ -72,8 +72,8 @@ class OaAnnouncePage extends StatelessWidget {
   Widget _buildAnnounceList() {
     return PlaceholderFutureBuilder<List<BulletinRecord>>(
         futureGetter: () => _queryBulletinListInAllCategory(1),
-        builder: (context, data, placeholder) {
-          if (data == null) return placeholder;
+        builder: (context, data, state) {
+          if (data == null) return Placeholders.loading();
           final records = data;
 
           // 公告项按时间排序

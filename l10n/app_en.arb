@@ -399,6 +399,7 @@
   "libraryNoticeSendTime": "Send Time",
   "libraryNoticeTitle": "Library Notice",
   "loading": "Loading",
+  "localStorageTitle": "Local Storage Editor",
   "loggingIn": "Logging in",
   "loginCredentialsValidatedTip": "Account and password is correct",
   "loginFailedWarn": "Login Failed",
@@ -662,5 +663,8 @@
   "welcomeSlogan": "Excellent school life, from here.",
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
-  "yes": "Yes"
+  "yes": "Yes",
+  "emptyContent": "Empty",
+  "edit": "Edit",
+  "save": "Save"
 }

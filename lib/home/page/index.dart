@@ -127,8 +127,7 @@ class _HomePageState extends State<HomePage> {
     BuildContext context, {
     bool loginSso = false, // 默认不登录oa，使用懒加载的方式登录
   }) async {
-    if (isOffline) return;
-    if (isFreshman) {
+    if (isFreshman || isOffline) {
       _refreshController.refreshCompleted(resetFooterState: true);
       _updateWeather();
       return;

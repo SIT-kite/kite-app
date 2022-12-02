@@ -5,23 +5,7 @@ import 'package:rettulf/rettulf.dart';
 extension DialogEx on BuildContext {
   /// return: whether the button was hit
   Future<bool> showTip({required String title, required String desc, required String ok}) async {
-    final confirm = await showDialog(
-      context: this,
-      builder: (ctx) => AlertDialog(
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        content: Text(desc, style: const TextStyle()),
-        actions: [
-          Align(
-              alignment: Alignment.bottomCenter,
-              child: CupertinoButton(
-                  onPressed: () {
-                    Navigator.of(ctx).pop(true);
-                  },
-                  child: Text(ok))),
-        ],
-      ),
-    );
-    return confirm == true;
+    return showAnyTip(title: title, make: (_) => desc.text(style: const TextStyle()), ok: ok);
   }
 
   Future<bool> showAnyTip({required String title, required WidgetBuilder make, required String ok}) async {
@@ -50,11 +34,20 @@ extension DialogEx on BuildContext {
       required String yes,
       required String no,
       bool highlight = false}) async {
+    return await showAnyRequest(title: title, make: (_) => desc.text(style: const TextStyle()), yes: yes, no: no);
+  }
+
+  Future<bool?> showAnyRequest(
+      {required String title,
+      required WidgetBuilder make,
+      required String yes,
+      required String no,
+      bool highlight = false}) async {
     final index = await showDialog(
       context: this,
       builder: (ctx) => AlertDialog(
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        content: Text(desc, style: const TextStyle()),
+        content: make(ctx),
         actions: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

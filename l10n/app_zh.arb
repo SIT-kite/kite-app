@@ -128,7 +128,7 @@
   "expenseGrocery": "商店",
   "expenseHotWater": "热水",
   "expenseLibrary": "图书馆",
-  "expenseRefreshMenuButton": "强制刷新",
+  "expenseRefreshMenuButton": "刷新",
   "expenseShower": "淋浴",
   "expenseStuff": "杂项",
   "expenseSubsidy": "补贴",
@@ -240,6 +240,7 @@
   "libraryNoticeSendTime": "发送时间",
   "libraryNoticeTitle": "图书馆通知",
   "loading": "加载中",
+  "localStorageTitle": "本地存储",
   "loggingIn": "登录中",
   "loginCredentialsValidatedTip": "账号与密码正确",
   "loginFailedWarn": "登录失败",
@@ -416,5 +417,8 @@
   "welcomeSlogan": "便利校园，一步到位",
   "xuhui": "徐汇",
   "xuhuiDistrict": "徐汇区",
-  "yes": "好"
+  "yes": "好",
+  "emptyContent": "空",
+  "edit": "编辑",
+  "save": "保存"
 }

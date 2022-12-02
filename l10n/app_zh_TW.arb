@@ -240,6 +240,7 @@
   "libraryNoticeSendTime": "發送時間",
   "libraryNoticeTitle": "圖書館通知",
   "loading": "加載中",
+  "localStorageTitle": "本地儲存",
   "loggingIn": "登入中",
   "loginCredentialsValidatedTip": "賬號與密碼正確",
   "loginFailedWarn": "登入失敗",
@@ -416,5 +417,8 @@
   "welcomeSlogan": "便捷校園, 即刻起航",
   "xuhui": "徐匯",
   "xuhuiDistrict": "徐匯區",
-  "yes": "好"
+  "yes": "好",
+  "emptyContent": "無",
+  "edit": "編輯",
+  "save": "儲存"
 }

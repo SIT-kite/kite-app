@@ -18,139 +18,33 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:hive/hive.dart';
+import 'package:kite/module/activity/using.dart';
 import 'package:kite/module/library/search/entity/search_history.dart';
-import 'package:kite/user_widget/future_builder.dart';
-import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/logger.dart';
+import 'package:rettulf/rettulf.dart';
 
-class SimpleInputDialog {
-  final BuildContext context;
-  SimpleInputDialog(this.context);
-
-  Future<String?> inputString({String? initialValue}) async {
-    Log.info('inputString');
-    if (initialValue == null) return null;
-    final controller = TextEditingController();
-    controller.text = initialValue;
-    await showAlertDialog(
-      context,
-      content: TextFormField(
-        controller: controller,
-      ),
-      actionTextList: ['提交修改', '取消修改'],
-    );
-    return controller.text;
-  }
-
-  Future<bool?> inputBool({bool? initialValue}) async {
-    if (initialValue == null) return null;
-    ValueNotifier<bool> notifier = ValueNotifier(initialValue);
-    await showAlertDialog(
-      context,
-      content: ValueListenableBuilder<bool>(
-        valueListenable: notifier,
-        builder: (BuildContext context, bool value, Widget? child) {
-          return Checkbox(value: value, onChanged: (v) => notifier.value = v!);
-        },
-      ),
-      actionTextList: ['提交修改', '取消修改'],
-    );
-    return notifier.value;
-  }
-}
-
-class DebugStoragePage extends StatefulWidget {
-  const DebugStoragePage({Key? key}) : super(key: key);
+class StoragePage extends StatefulWidget {
+  const StoragePage({Key? key}) : super(key: key);
 
   @override
-  State<DebugStoragePage> createState() => _DebugStoragePageState();
+  State<StoragePage> createState() => _StoragePageState();
 }
 
-class _DebugStoragePageState extends State<DebugStoragePage> {
-  Future<bool?> modify(BuildContext context, Box<dynamic> box, String key, dynamic value) async {
-    dynamic result = value;
-    final input = SimpleInputDialog(context);
-    if (value is String) {
-      result = await input.inputString(initialValue: value);
-    } else if (value is bool) {
-      result = await input.inputBool(initialValue: value);
-    } else {
-      return null;
-    }
-    // 是否被修改了
-    bool isModified = value != result;
-    if (isModified) box.put(key, result);
-    return isModified;
-  }
+bool _isTypeEditable(dynamic value) {
+  return value is String || value is bool;
+}
 
-  void showContentDialog(BuildContext context, Box<dynamic> box, String key, dynamic value) {
-    showAlertDialog(
-      context,
-      title: key,
-      content: SingleChildScrollView(
-        child: Column(
-          children: [
-            Text(value.toString()),
-            if (kDebugMode)
-              TextButton(
-                onPressed: () async {
-                  final result = await modify(context, box, key, value);
-                  if (result == null) {
-                    EasyLoading.showError('不支持的操作');
-                    return;
-                  }
-                  if (!result) return; // 未修改
-                  if (!mounted) return;
-                  Navigator.pop(context); // 关闭上一层对话框
-                  setState(() {});
-                },
-                child: const Text('修改'),
-              ),
-          ],
-        ),
-      ),
-      actionWidgetList: [
-        ElevatedButton(onPressed: () {}, child: const Text('关闭')),
-      ],
-    );
-  }
-
-  Future<Widget> _buildBoxSection<T>(BuildContext context, String boxName) async {
-    final box = await Hive.openBox<T>(boxName);
-    final items = box.keys.map((e) {
-      final key = e.toString();
-      final value = box.get(e);
-      final type = value.runtimeType.toString();
-
-      return ListTile(
-        title: Text(key, style: Theme.of(context).textTheme.headline3),
-        subtitle: Text(
-          '$value',
-          style: Theme.of(context).textTheme.bodyText2?.copyWith(overflow: TextOverflow.ellipsis),
-        ),
-        trailing: Text(type, style: Theme.of(context).textTheme.bodyText1),
-        dense: true,
-        onTap: () => showContentDialog(context, box, key, value),
-      );
-    }).toList();
-    final sectionBody = items.isNotEmpty ? items : [const Text('无内容')];
-
-    return Card(
-      margin: const EdgeInsets.all(10),
-      child: SizedBox(
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(boxName, style: Theme.of(context).textTheme.headline3),
-              ...sectionBody,
-            ],
-          ),
-        ),
-      ),
+class _StoragePageState extends State<StoragePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: i18n.localStorageTitle.txt),
+      body: Scrollbar(
+          //always show scrollbar
+          thickness: 20,
+          radius: const Radius.circular(12),
+          interactive: true,
+          child: _buildBody(context).scrolled()),
     );
   }
 
@@ -172,11 +66,102 @@ class _DebugStoragePageState extends State<DebugStoragePage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('本机存储内容')),
-      body: SingleChildScrollView(child: _buildBody(context)),
+  Future<void> showContentDialog(BuildContext context, Box<dynamic> box, String key, dynamic value) async {
+    if (_isTypeEditable(value)) {
+      final edit = await context.showAnyRequest(
+          title: key,
+          make: (ctx) => SingleChildScrollView(
+                child: Column(
+                  children: [value.toString().txt],
+                ),
+              ),
+          yes: i18n.edit,
+          no: i18n.close,
+          highlight: true);
+      if (edit == true) {
+        if (!mounted) return;
+        dynamic newValue;
+        if (value is String) {
+          newValue = await context.editString(initialValue: value);
+        } else if (value is bool) {
+          newValue = await context.editBool(initialValue: value);
+        } else {
+          return;
+        }
+        // 是否被修改了
+        bool isModified = value != newValue;
+        if (isModified) box.put(key, newValue);
+        if (!mounted) return;
+        setState(() {});
+      }
+    }
+  }
+
+  Future<Widget> _buildBoxSection<T>(BuildContext context, String boxName) async {
+    final boxNameStyle = context.textTheme.headline1;
+    final routeStyle = context.textTheme.titleMedium;
+    final typeStyle = context.textTheme.bodySmall;
+    final contentStyle = context.textTheme.bodyText2;
+    final box = await Hive.openBox<T>(boxName);
+    final items = box.keys.map((e) {
+      final key = e.toString();
+      final value = box.get(e);
+      final type = value.runtimeType.toString();
+      return [
+        Text(
+          key,
+          style: routeStyle,
+        ),
+        Text(type, style: typeStyle),
+        Text(
+          '$value',
+          maxLines: 3,
+          style: contentStyle?.copyWith(overflow: TextOverflow.ellipsis),
+        ),
+      ]
+          .column(caa: CrossAxisAlignment.start)
+          .align(at: Alignment.topLeft)
+          .padAll(10)
+          .inCard(elevation: 5)
+          .on(tap: kDebugMode ? () async => showContentDialog(context, box, key, value) : null);
+    }).toList();
+    final sectionBody = items.isNotEmpty ? items : [i18n.emptyContent.text().padAll(10)];
+    return [
+      Text(boxName, style: boxNameStyle).padOnly(b: 20),
+      ...sectionBody,
+    ].column(mas: MainAxisSize.min).sized(width: double.infinity).padAll(20).inCard();
+  }
+}
+
+extension _EditDialogEx on BuildContext {
+  Future<String?> editString({String? initialValue}) async {
+    Log.info('inputString');
+    if (initialValue == null) return null;
+    final controller = TextEditingController();
+    controller.text = initialValue;
+    await showAlertDialog(
+      this,
+      content: TextFormField(
+        controller: controller,
+      ),
+      actionTextList: [i18n.save, i18n.cancel],
     );
+    return controller.text;
+  }
+
+  Future<bool?> editBool({bool? initialValue}) async {
+    if (initialValue == null) return null;
+    ValueNotifier<bool> notifier = ValueNotifier(initialValue);
+    await showAlertDialog(
+      this,
+      content: ValueListenableBuilder<bool>(
+        valueListenable: notifier,
+        builder: (BuildContext context, bool value, Widget? child) {
+          return Checkbox(value: value, onChanged: (v) => notifier.value = v!);
+        },
+      ),
+      actionTextList: [i18n.save, i18n.cancel],
+    );
+    return notifier.value;
   }
 }

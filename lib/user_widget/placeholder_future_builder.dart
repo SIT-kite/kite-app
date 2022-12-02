@@ -20,13 +20,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-typedef PlaceholderGetter = Widget Function(BuildContext context);
-typedef PlaceholderWidgetBuilder<T> = Widget Function(BuildContext context, T? data, Widget placeholder);
-typedef ErrorWidgetBuilder = Widget? Function(
-  BuildContext context,
-  dynamic error,
-  dynamic stackTrace,
-);
+enum FutureState { loading, failed, end }
+
+typedef PlaceholderWidgetBuilder<T> = Widget Function(BuildContext context, T? data, FutureState state);
 
 class PlaceholderBuilderController<T> {
   late _PlaceholderFutureBuilderState<T> _state;
@@ -37,23 +33,16 @@ class PlaceholderBuilderController<T> {
 }
 
 class PlaceholderFutureBuilder<T> extends StatefulWidget {
-  static ErrorWidgetBuilder? globalErrorBuilder;
-
   final Future<T>? future;
   final PlaceholderWidgetBuilder<T> builder;
-  final ErrorWidgetBuilder? onError;
   final PlaceholderBuilderController? controller;
 
   final Future<T> Function()? futureGetter;
-
-  final WidgetBuilder? placeholder;
 
   const PlaceholderFutureBuilder({
     super.key,
     this.future,
     required this.builder,
-    this.placeholder,
-    this.onError,
     this.controller,
     this.futureGetter,
   });
@@ -65,50 +54,36 @@ class PlaceholderFutureBuilder<T> extends StatefulWidget {
 class _PlaceholderFutureBuilderState<T> extends State<PlaceholderFutureBuilder<T>> {
   Completer<T> completer = Completer();
 
+  @override
+  void initState() {
+    widget.controller?._bindState(this);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<T>(
+      key: UniqueKey(),
+      future: fetchData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasData) {
+            return widget.builder(context, null, FutureState.end);
+          } else if (snapshot.hasError) {
+            return widget.builder(context, null, FutureState.failed);
+          } else {
+            if (!completer.isCompleted) completer.complete();
+            throw Exception('snapshot has no data or error');
+          }
+        }
+        return widget.builder(context, null, FutureState.end);
+      },
+    );
+  }
+
   Future<T> refresh() {
     setState(() {});
     return completer.future;
-  }
-
-  Widget buildWhenSuccessful(T? data) {
-    if (!completer.isCompleted) completer.complete(data);
-    return widget.builder(context, data as T, const SizedBox.shrink());
-  }
-
-  Widget buildWithPlaceholder(Widget placeholder) {
-    return widget.builder(context, null, placeholder);
-  }
-
-  Widget _buildPlaceHolder() {
-    var placeholder = widget.placeholder;
-    if (placeholder != null) {
-      return placeholder(context);
-    } else {
-      return const Center(child: CircularProgressIndicator());
-    }
-  }
-
-  Widget? buildWhenError(error, stackTrace) {
-    if (!completer.isCompleted) {
-      completer.completeError(error, stackTrace);
-    }
-    var onError = widget.onError;
-    if (onError != null) {
-      final r = onError(context, error, stackTrace);
-      if (r != null) return r;
-    }
-    var global = PlaceholderFutureBuilder.globalErrorBuilder;
-    if (global != null) {
-      final r = global(context, error, stackTrace);
-      if (r != null) return r;
-    }
-
-    return null;
-  }
-
-  Widget buildWhenOther(AsyncSnapshot<T> snapshot) {
-    if (!completer.isCompleted) completer.complete();
-    throw Exception('snapshot has no data or error');
   }
 
   Future<T> fetchData() async {
@@ -121,36 +96,5 @@ class _PlaceholderFutureBuilderState<T> extends State<PlaceholderFutureBuilder<T
       return await future;
     }
     throw UnsupportedError('PlaceholderFutureBuilder requires a Future or FutureGetter');
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<T>(
-      key: UniqueKey(),
-      future: fetchData(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasData) {
-            return buildWhenSuccessful(snapshot.data);
-          } else if (snapshot.hasError) {
-            final errorWidget = buildWhenError(snapshot.error, snapshot.stackTrace);
-            if (errorWidget == null) {
-              return buildWithPlaceholder(const Center(child: CircularProgressIndicator()));
-            } else {
-              return buildWithPlaceholder(errorWidget);
-            }
-          } else {
-            return buildWhenOther(snapshot);
-          }
-        }
-        return buildWithPlaceholder(_buildPlaceHolder());
-      },
-    );
-  }
-
-  @override
-  void initState() {
-    widget.controller?._bindState(this);
-    super.initState();
   }
 }

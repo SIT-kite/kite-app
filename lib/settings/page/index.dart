@@ -19,14 +19,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dynamic_color_theme/dynamic_color_theme.dart';
-import 'package:flash/flash.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kite/design/user_widgets/dialog.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/global/hive_initializer.dart';
 import 'package:kite/global/init.dart';
@@ -34,7 +33,6 @@ import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
 import 'package:kite/storage/dao/pref.dart';
 import 'package:kite/storage/init.dart';
-import 'package:kite/storage/storage/admin.dart';
 import 'package:kite/storage/storage/develop.dart';
 import 'package:kite/util/dsl.dart';
 import 'package:kite/util/file.dart';
@@ -43,35 +41,23 @@ import 'package:kite/util/logger.dart';
 import 'package:kite/util/user.dart';
 import 'package:kite/util/validation.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:rettulf/rettulf.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import 'home_rearrange.dart';
 import 'storage.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
+  const SettingsPage({Key? key}) : super(key: key);
+
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
   final TextEditingController _passwordController = TextEditingController();
   final bool isFreshman = AccountUtils.getAuthUserType() == UserType.freshman;
   final String currentVersion = 'v${Global.currentVersion.version} on ${Global.currentVersion.platform}';
-
-  SettingsPage({Key? key}) : super(key: key);
-
-  Widget _negativeActionBuilderCancel(context, controller, _) {
-    return TextButton(
-      onPressed: () {
-        controller.dismiss();
-      },
-      child: i18n.cancel.txt,
-    );
-  }
-
-  Widget _negativeActionBuilderNotNow(context, controller, _) {
-    return TextButton(
-      onPressed: () {
-        controller.dismiss();
-      },
-      child: i18n.notNow.txt,
-    );
-  }
 
   Future<void> _onChangeBgImage() async {
     final saveToPath = '${(await getApplicationDocumentsDirectory()).path}/kite1/background';
@@ -105,7 +91,8 @@ class SettingsPage extends StatelessWidget {
     }
   }
 
-  void _gotoWelcome(NavigatorState navigator) {
+  void _gotoWelcome(BuildContext ctx) {
+    final navigator = ctx.navigator;
     while (navigator.canPop()) {
       navigator.pop();
     }
@@ -114,56 +101,39 @@ class SettingsPage extends StatelessWidget {
     Log.info('重启成功');
   }
 
-  void _onLogout(BuildContext context) {
-    context.showFlashDialog(
-        constraints: const BoxConstraints(maxWidth: 300),
-        title: i18n.logout.txt,
-        content: i18n.logoutKiteWarn.txt,
-        negativeActionBuilder: _negativeActionBuilderCancel,
-        positiveActionBuilder: (context, controller, _) {
-          return TextButton(
-              onPressed: () async {
-                final navigator = Navigator.of(context);
-                Log.info('退出登录');
+  Future<void> _onLogout(BuildContext context) async {
+    final confirm = await context.showRequest(
+        title: i18n.logout, desc: i18n.logoutKiteWarn, yes: i18n.confirm, no: i18n.notNow, highlight: true);
+    if (confirm == true) {
+      if (!mounted) return;
+      Log.info('退出登录');
 
-                if (isFreshman) {
-                  Kv.freshman
-                    ..freshmanAccount = null
-                    ..freshmanName = null
-                    ..freshmanSecret = null;
-                } else {
-                  Kv.auth
-                    ..currentUsername = null
-                    ..ssoPassword = null;
-                }
+      if (isFreshman) {
+        Kv.freshman
+          ..freshmanAccount = null
+          ..freshmanName = null
+          ..freshmanSecret = null;
+      } else {
+        Kv.auth
+          ..currentUsername = null
+          ..ssoPassword = null;
+      }
 
-                await Initializer.init();
-
-                controller.dismiss();
-                _gotoWelcome(navigator);
-              },
-              child: i18n.continue_.txt);
-        });
+      await Initializer.init();
+      if (!mounted) return;
+      _gotoWelcome(context);
+    }
   }
 
-  void _onClearStorage(BuildContext context) {
-    context.showFlashDialog(
-        constraints: const BoxConstraints(maxWidth: 300),
-        title: i18n.settingsWipeKiteData.txt,
-        // TODO: Dedicated descriptions for mobile and desktop.
-        content: i18n.settingsWipeKiteDataDesc.txt,
-        negativeActionBuilder: _negativeActionBuilderCancel,
-        positiveActionBuilder: (context, controller, _) {
-          return TextButton(
-              onPressed: () async {
-                final navigator = Navigator.of(context);
-                await HiveBoxInit.clear(); // 清除存储
-                await Initializer.init();
-                await controller.dismiss();
-                _gotoWelcome(navigator);
-              },
-              child: i18n.continue_.txt);
-        });
+  void _onClearStorage(BuildContext context) async {
+    final confirm = await context.showRequest(
+        title: i18n.settingsWipeKiteData, desc: i18n.settingsWipeKiteDataDesc, yes: i18n.confirm, no: i18n.notNow);
+    if (confirm == true) {
+      await HiveBoxInit.clear(); // 清除存储
+      await Initializer.init();
+      if (!mounted) return;
+      _gotoWelcome(context);
+    }
   }
 
   _buildLanguagePrefSelector(BuildContext ctx) {
@@ -362,18 +332,6 @@ class SettingsPage extends StatelessWidget {
             subtitle: i18n.settingsWipeKiteDataSub,
             onTap: () => _onClearStorage(context)),
       ]),
-      // TODO: Remove this
-      if (kDebugMode)
-        SettingsGroup(
-          title: '管理员选项',
-          children: <Widget>[
-            TextInputSettingsTile(
-              title: '"问答" 密钥',
-              settingKey: AdminKeys.bbsSecret,
-              initialValue: Kv.admin.bbsSecret ?? '',
-            ),
-          ],
-        ),
       SettingsGroup(
         title: i18n.devOptions,
         children: <Widget>[
@@ -390,7 +348,7 @@ class SettingsPage extends StatelessWidget {
             title: i18n.settingsLocalStorage,
             subtitle: i18n.settingsLocalStorageSub,
             leading: const Icon(Icons.storage),
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const DebugStoragePage())),
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const StoragePage())),
           )
         ],
       ),
