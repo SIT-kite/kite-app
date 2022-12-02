@@ -24,8 +24,6 @@ import 'symbol.dart';
 void registerAdapters() {
   registerAdapter(ContactDataAdapter());
   registerAdapter(CourseAdapter());
-  registerAdapter(ExpenseRecordAdapter());
-  registerAdapter(ExpenseTypeAdapter());
   registerAdapter(GameTypeAdapter());
   registerAdapter(GameRecordAdapter());
   registerAdapter(FTypeAdapter());

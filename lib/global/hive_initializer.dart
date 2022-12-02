@@ -17,7 +17,6 @@
  */
 
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:kite/module/expense/symbol.dart';
 import 'package:kite/module/init.dart';
 import 'package:kite/module/library/search/entity/search_history.dart';
 import 'package:kite/module/yellow_pages/entity/contact.dart';
@@ -28,7 +27,6 @@ class HiveBoxInit {
   static late Box<LibrarySearchHistoryItem> librarySearchHistory;
   static late Box<ContactData> contactSetting;
   static late Box<dynamic> course;
-  static late Box<ExpenseRecord> expense;
   static late Box<dynamic> expense2;
   static late Box<dynamic> game;
   static late Box<dynamic> kv;
@@ -41,7 +39,6 @@ class HiveBoxInit {
     librarySearchHistory = await Hive.openBox('librarySearchHistory');
     contactSetting = await Hive.openBox('contactSetting');
     course = await Hive.openBox<dynamic>('course');
-    expense = await Hive.openBox('expenseSetting');
     expense2 = await Hive.openBox('expense2');
     game = await Hive.openBox<dynamic>('game');
   }
