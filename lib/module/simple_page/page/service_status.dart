@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -26,36 +25,14 @@ class ServiceStatusPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!UniversalPlatform.isDesktop) {
-      return SimpleWebViewPage(
-        initialUrl: R.kiteStatusUrl,
-        fixedTitle: i18n.serviceStatus,
-      );
+    if (UniversalPlatform.isDesktop) {
+      Navigator.of(context).pop();
+      GlobalLauncher.launch(R.kiteStatusUrl);
+      return Container();
     }
-
-    final controller = MyFutureBuilderController();
-    return Scaffold(
-      appBar: AppBar(
-        title: i18n.serviceStatus.txt,
-        actions: [
-          IconButton(
-            onPressed: () => controller.refresh(),
-            icon: const Icon(Icons.refresh),
-          ),
-        ],
-      ),
-      body: MyFutureBuilder<Response<String>>(
-        controller: controller,
-        enablePullRefresh: true,
-        future: Dio().get(R.kiteStatusUrl),
-        builder: (ctx, data) {
-          return MyHtmlWidget(data.data.toString());
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => GlobalLauncher.launch(R.kiteStatusUrl),
-        child: const Icon(Icons.open_in_browser),
-      ),
+    return SimpleWebViewPage(
+      initialUrl: R.kiteStatusUrl,
+      fixedTitle: i18n.serviceStatus,
     );
   }
 }
