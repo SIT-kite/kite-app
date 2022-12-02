@@ -666,5 +666,13 @@
   "yes": "Yes",
   "emptyContent": "Empty",
   "edit": "Edit",
-  "save": "Save"
+  "save": "Save",
+  "expenseBalanceInCard": "¥{balance} in Card",
+  "@expenseBalanceInCard": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      }
+    }
+  }
 }

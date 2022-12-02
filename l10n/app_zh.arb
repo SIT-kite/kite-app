@@ -420,5 +420,6 @@
   "yes": "好",
   "emptyContent": "空",
   "edit": "编辑",
-  "save": "保存"
+  "save": "保存",
+  "expenseBalanceInCard": "卡内余额 ¥{balance}"
 }

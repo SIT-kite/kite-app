@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:kite/module/expense2/init.dart';
 import 'package:kite/storage/init.dart';
+import 'package:rettulf/rettulf.dart';
 
 import '../entity/local.dart';
 import '../using.dart';
@@ -39,12 +40,17 @@ class _IndexPageState extends State<IndexPage> {
 
   final cache = Expense2Init.cache;
 
+  final ValueNotifier<double?> $balance = ValueNotifier(null);
+
   List<Transaction> allRecords = [];
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await fetch(DateTime(2010), DateTime.now());
+      if (allRecords.isNotEmpty) {
+        $balance.value = allRecords.last.balanceAfter;
+      }
     });
     super.initState();
   }
@@ -53,7 +59,8 @@ class _IndexPageState extends State<IndexPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: i18n.ftype_expense.txt,
+        title: buildAppBarTitle(context),
+        centerTitle: true,
         actions: [buildMenu()],
       ),
       body: Padding(
@@ -80,11 +87,24 @@ class _IndexPageState extends State<IndexPage> {
     );
   }
 
+  Widget buildAppBarTitle(BuildContext ctx) {
+    return $balance <<
+        (ctx, v, _) {
+          if (v == null) {
+            return i18n.ftype_expense.text();
+          } else {
+            return i18n.expenseBalanceInCard(v.toStringAsFixed(2)).text();
+          }
+        };
+  }
+
   void refreshRecords(List<Transaction> records) {
     if (!mounted) return;
     // 过滤支付宝的充值，否则将和圈存机叠加
     records = records.where((e) => e.type != TransactionType.topUp).toList();
-    setState(() => allRecords = records);
+    setState(() {
+      allRecords = records;
+    });
   }
 
   Future<void> fetch(DateTime start, DateTime end) async {
