@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/user_widget/markdown_widget.dart';
 import 'package:rettulf/rettulf.dart';
 
@@ -79,7 +80,7 @@ class KiteBulletinPage extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: noticeList
-            .map((e) => _buildBulletinItem(context, e).inCard(elevation: 5))
+            .map((e) => _buildBulletinItem(context, e).inCard(elevation: 5).padSymmetric(h: 10.h, v: 2.h))
             .toList(),
       ),
     );
