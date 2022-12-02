@@ -87,8 +87,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/window_manager/macos
 
 SPEC CHECKSUMS:
-  audio_session: 4812686be7bc77c5726739d4c6a9b4a1f89358c5
-  audioplayers_darwin: b6104d93b918e00864fb2c545ca74a42feb34120
+  audio_session: dea1f41890dbf1718f04a56f1d6150fd50039b72
+  audioplayers_darwin: dcad41de4fbd0099cb3749f7ab3b0cb8f70b810c
   catcher: 0e54b4baacab1ab3fe1e63bd07e0c39a8a2d0e5d
   device_info_plus_macos: 97eeb3077e065dc9630410b98b64b06f0df5cfdd
   FlutterMacOS: ae6af50a8ea7d6103d888583d46bd8328a7e9811
@@ -97,9 +97,9 @@ SPEC CHECKSUMS:
   mobile_scanner: 35dc92ffdbd7934b0dbc411b1c731bc2ef23c2dc
   package_info_plus_macos: 653b96af562fabb349a88935164864b5f16b5b2c
   path_provider_macos: 7f02d5d549750547369e9c68223f954ef3539e72
-  screen_retriever: f2621f2d412a24c3a046a46fe97a90b73919b7af
+  screen_retriever: 59634572a57080243dd1bf715e55b6c54f241a38
   shared_preferences_macos: 33a283075a27b1bb86af262383983fc22dad33af
-  sqflite: 5c95035b48b4152774f4c67ed811f217917bdb47
+  sqflite: a5789cceda41d54d23f31d6de539d65bb14100ea
   url_launcher_macos: eac8bc4a91d00018e866205960559d73736b08dc
   wakelock_macos: 8dafd5425dcdb437fc5a98db9c88198d4e74ff03
   window_manager: 5f68caf0c4a543914a36e0115f072b922928ae77
