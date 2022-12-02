@@ -59,7 +59,7 @@ class _HomeRearrangePageState extends State<HomeRearrangePage> {
   void initState() {
     super.initState();
     defaultOrder = makeDefaultBricks(AccountUtils.getUserType());
-    homeItemsA = Kv.home.homeItems ?? makeDefaultBricks(AccountUtils.getUserType());
+    homeItemsA = Kv.home.homeItems ?? [...defaultOrder];
     homeItemsB = [...homeItemsA];
   }
 

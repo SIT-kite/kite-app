@@ -30,6 +30,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/override/entity.dart';
 import 'package:kite/route.dart';
+import 'package:rettulf/rettulf.dart';
 
 import 'global/desktop_initializer.dart';
 import 'global/global.dart';
@@ -52,7 +53,8 @@ class _KiteAppState extends State<KiteApp> {
   void initState() {
     super.initState();
     // Initialize the app with system theme.
-    var platformBrightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
+    var platformBrightness =
+        SchedulerBinding.instance.platformDispatcher.platformBrightness;
     Kv.theme.isDarkMode ??= platformBrightness == Brightness.dark;
   }
 
@@ -79,14 +81,19 @@ class _KiteAppState extends State<KiteApp> {
       // https://material.io/design/typography/the-type-system.html
       // https://www.mdui.org/design/style/typography.html
       // 12、14、16、20
-      headline1: TextStyle(fontSize: 24.0, color: fullColor, fontWeight: FontWeight.w500),
+      headline1: TextStyle(
+          fontSize: 24.0, color: fullColor, fontWeight: FontWeight.w500),
       headline2: TextStyle(fontSize: 22.0, color: fullColor),
-      headline3: TextStyle(fontSize: 20.0, color: halfColor, fontWeight: FontWeight.w500),
+      headline3: TextStyle(
+          fontSize: 20.0, color: halfColor, fontWeight: FontWeight.w500),
       headline4: TextStyle(fontSize: 20.0, color: halfColor),
       headline5: TextStyle(fontSize: 24.0, color: fullColor),
-      headline6: TextStyle(fontSize: 20.0, color: fullColor, fontWeight: FontWeight.w500),
-      subtitle1: TextStyle(fontSize: 18.0, color: halfColor, fontWeight: FontWeight.w500),
-      subtitle2: TextStyle(fontSize: 16.0, color: halfColor, fontWeight: FontWeight.w500),
+      headline6: TextStyle(
+          fontSize: 20.0, color: fullColor, fontWeight: FontWeight.w500),
+      subtitle1: TextStyle(
+          fontSize: 18.0, color: halfColor, fontWeight: FontWeight.w500),
+      subtitle2: TextStyle(
+          fontSize: 16.0, color: halfColor, fontWeight: FontWeight.w500),
       bodyText1: TextStyle(fontSize: 16.0, color: fullColor),
       bodyText2: TextStyle(fontSize: 14.0, color: fullColor),
       caption: TextStyle(fontSize: 12.0, color: halfColor),
@@ -100,7 +107,8 @@ class _KiteAppState extends State<KiteApp> {
       textTheme: _buildTextTheme(isDark, primaryColor),
       brightness: isDark ? Brightness.dark : Brightness.light,
       useMaterial3: true,
-      scaffoldBackgroundColor: isDark ? null : const Color.fromARGB(255, grey, grey, grey),
+      scaffoldBackgroundColor:
+          isDark ? null : const Color.fromARGB(255, grey, grey, grey),
     );
   }
 
@@ -148,11 +156,14 @@ class _KiteAppState extends State<KiteApp> {
           // A workaround to get the system locale.
           final systemLocale = Localizations.localeOf(context);
           Lang.setCurrentLocaleIfAbsent(systemLocale);
-          Future.delayed(Duration.zero, () async => await DesktopInit.setTitle(i18n.appName));
-          if (MediaQuery.of(context).orientation == Orientation.portrait) {
-            SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top]);
+          Future.delayed(Duration.zero,
+              () async => await DesktopInit.setTitle(i18n.appName));
+          if (context.isPortrait) {
+            SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+                overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
           } else {
-            SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+            SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+                overlays: [SystemUiOverlay.bottom]);
           }
           return MediaQuery(
             // 设置文字大小不随系统设置改变
@@ -177,7 +188,8 @@ class _KiteAppState extends State<KiteApp> {
         onKeyEvent: (event) {
           Log.info('按键事件: ${event.logicalKey}');
 
-          if (event is KeyUpEvent && LogicalKeyboardKey.escape == event.logicalKey) {
+          if (event is KeyUpEvent &&
+              LogicalKeyboardKey.escape == event.logicalKey) {
             Log.info('松开返回键');
             final ctx = Catcher.navigatorKey?.currentContext;
             if (ctx != null && Navigator.canPop(ctx)) {

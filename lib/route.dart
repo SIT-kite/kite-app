@@ -154,7 +154,7 @@ final defaultRouteTable = StaticRouteTable(
   },
   onNotFound: (context, routeName, args) => NotFoundPage(routeName),
   rootRoute: (context, table, args) {
-    final routeName = AccountUtils.getUserType() != null ? RouteTable.home : RouteTable.welcome;
+    final routeName = AccountUtils.getAuthUserType() != null ? RouteTable.home : RouteTable.welcome;
     return table.onGenerateRoute(routeName, args)(context);
   },
 );

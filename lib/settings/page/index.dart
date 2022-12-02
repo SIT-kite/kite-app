@@ -50,7 +50,7 @@ import 'storage.dart';
 
 class SettingsPage extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
-  final bool isFreshman = AccountUtils.getUserType() == UserType.freshman;
+  final bool isFreshman = AccountUtils.getAuthUserType() == UserType.freshman;
   final String currentVersion = 'v${Global.currentVersion.version} on ${Global.currentVersion.platform}';
 
   SettingsPage({Key? key}) : super(key: key);

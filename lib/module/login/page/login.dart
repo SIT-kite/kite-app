@@ -19,6 +19,8 @@ import 'package:flash/flash.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kite/module/expense2/using.dart';
+import 'package:rettulf/rettulf.dart';
 
 import '../init.dart';
 import '../using.dart';
@@ -38,7 +40,8 @@ class _LoginPageState extends State<LoginPage> {
 
   final GlobalKey _formKey = GlobalKey<FormState>();
 
-  final TapGestureRecognizer _recognizer = TapGestureRecognizer()..onTap = onOpenUserLicense;
+  final TapGestureRecognizer _recognizer = TapGestureRecognizer()
+    ..onTap = onOpenUserLicense;
 
   // State
   bool isPasswordClear = false;
@@ -54,7 +57,8 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
     if (!isLicenseAccepted) {
-      showBasicFlash(context, i18n.readAndAcceptRequest(R.kiteUserAgreementName).txt);
+      showBasicFlash(
+          context, i18n.readAndAcceptRequest(R.kiteUserAgreementName).txt);
       return;
     }
 
@@ -82,7 +86,8 @@ class _LoginPageState extends State<LoginPage> {
       return;
     } catch (e) {
       // TODO: Optimize UX
-      showBasicFlash(context, Text('未知错误: $e'), duration: const Duration(seconds: 3));
+      showBasicFlash(context, Text('未知错误: $e'),
+          duration: const Duration(seconds: 3));
       return;
     } finally {
       if (mounted) {
@@ -110,7 +115,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget buildTitleLine() {
     return Container(
         alignment: Alignment.centerLeft,
-        child: Text(i18n.kiteLoginTitle, style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold)));
+        child: Text(i18n.kiteLoginTitle,
+            style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold)));
   }
 
   Widget buildLoginForm() {
@@ -124,7 +130,9 @@ class _LoginPageState extends State<LoginPage> {
             autofocus: true,
             validator: studentIdValidator,
             decoration: InputDecoration(
-                labelText: i18n.account, hintText: i18n.kiteLoginAccountHint, icon: const Icon(Icons.person)),
+                labelText: i18n.account,
+                hintText: i18n.kiteLoginAccountHint,
+                icon: const Icon(Icons.person)),
           ),
           TextFormField(
             controller: _passwordController,
@@ -136,7 +144,8 @@ class _LoginPageState extends State<LoginPage> {
               icon: const Icon(Icons.lock),
               suffixIcon: IconButton(
                 // 切换密码明文显示状态的图标按钮
-                icon: Icon(isPasswordClear ? Icons.visibility : Icons.visibility_off),
+                icon: Icon(
+                    isPasswordClear ? Icons.visibility : Icons.visibility_off),
                 onPressed: () {
                   setState(() {
                     isPasswordClear = !isPasswordClear;
@@ -165,11 +174,16 @@ class _LoginPageState extends State<LoginPage> {
           child: Text.rich(
             TextSpan(
               children: [
-                TextSpan(text: i18n.acceptedAgreementCheckbox, style: Theme.of(context).textTheme.bodyText1),
+                TextSpan(
+                    text: i18n.acceptedAgreementCheckbox,
+                    style: Theme.of(context).textTheme.bodyText1),
                 const TextSpan(text: " "),
                 TextSpan(
                     text: R.kiteUserAgreementName,
-                    style: Theme.of(context).textTheme.bodyText2?.copyWith(decoration: TextDecoration.underline),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText2
+                        ?.copyWith(decoration: TextDecoration.underline),
                     recognizer: _recognizer),
               ],
             ),
@@ -182,20 +196,24 @@ class _LoginPageState extends State<LoginPage> {
   Widget buildLoginButton() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        SizedBox(
-          height: 40.h,
-          child: ElevatedButton(
-            onPressed: disableLoginButton ? null : onLogin,
-            child: i18n.kiteLoginBtn.txt,
-          ),
-        ),
+        ElevatedButton(
+          onPressed: disableLoginButton ? null : onLogin,
+          child: i18n.kiteLoginBtn.txt,
+        ).sized(height: 40.h),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, RouteTable.home);
+          },
+          child: i18n.kiteLoginOfflineModeBtn.text(),
+        ).sized(height: 40.h),
       ],
     );
   }
 
-  Widget _buildProxySetButton(BuildContext context, FlashController<dynamic> controller, _) {
+  Widget _buildProxySetButton(
+      BuildContext context, FlashController<dynamic> controller, _) {
     return IconButton(
       onPressed: () {
         final String inputText = _proxyInputController.text;
@@ -222,7 +240,6 @@ class _LoginPageState extends State<LoginPage> {
     }
     isProxySettingShown = true;
     _proxyInputController.text = Kv.network.proxy;
-
     context.showFlashBar(
       persistent: true,
       borderWidth: 3.sm,

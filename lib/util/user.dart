@@ -29,6 +29,7 @@ enum UserType {
 
   /// 未入学的新生
   freshman,
+  offline,
 }
 
 class AccountUtils {
@@ -37,7 +38,8 @@ class AccountUtils {
   static final RegExp reTeacherId = RegExp(r'^(\d{4})$');
 
   static UserType? guessUserType(String username) {
-    if (username.length == 10 && reUndergraduateId.hasMatch(username.toUpperCase())) {
+    if (username.length == 10 &&
+        reUndergraduateId.hasMatch(username.toUpperCase())) {
       return UserType.undergraduate;
     } else if (username.length == 9 && rePostgraduateId.hasMatch(username)) {
       return UserType.postgraduate;
@@ -47,7 +49,7 @@ class AccountUtils {
     return null;
   }
 
-  static UserType? getUserType() {
+  static UserType? getAuthUserType() {
     final username = Kv.auth.currentUsername;
     final ssoPassword = Kv.auth.ssoPassword;
     // 若用户名存在
@@ -60,5 +62,9 @@ class AccountUtils {
       return UserType.freshman;
     }
     return null;
+  }
+
+  static UserType getUserType() {
+    return getAuthUserType() ?? UserType.offline;
   }
 }

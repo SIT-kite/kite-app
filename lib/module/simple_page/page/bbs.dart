@@ -24,36 +24,50 @@ class BbsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isFreshman = AccountUtils.getUserType() == UserType.freshman;
+    var userType = AccountUtils.getUserType();
+    final isFreshman = userType == UserType.freshman;
 
-    String openid = '';
-    String nickname = '';
+    String? openid;
+    String? nickname;
     if (isFreshman) {
-      openid = Kv.freshman.freshmanAccount!;
-      nickname = Kv.freshman.freshmanName!;
+      openid = Kv.freshman.freshmanAccount;
+      nickname = Kv.freshman.freshmanName;
     } else {
-      openid = Kv.auth.currentUsername!;
-      nickname = Kv.auth.personName!;
+      openid = Kv.auth.currentUsername;
+      nickname = Kv.auth.personName;
     }
-    if (AccountUtils.getUserType() == UserType.teacher) {
-      // TODO: Change this behavior?
-      /// No i18n, the name will be shown outside
-      nickname = '${nickname[0]}老师';
-    } else {
-      nickname = '${nickname[0]}同学';
+    if (nickname != null) {
+      if (userType == UserType.teacher) {
+        // TODO: Change this behavior?
+        /// No i18n, the name will be shown outside
+        nickname = '${nickname[0]}老师';
+      } else {
+        nickname = '${nickname[0]}同学';
+      }
     }
-
-    openid = Kv.admin.bbsSecret == null || Kv.admin.bbsSecret!.isEmpty ? openid : Kv.admin.bbsSecret!;
+    var bbsSecret = Kv.admin.bbsSecret;
+    if (bbsSecret != null && bbsSecret.isNotEmpty) {
+      openid = bbsSecret;
+    }
     Log.info('BBS身份：{openid: $openid, nickname: $nickname}');
-    return SimpleWebViewPage(
-      initialUrl: R.kiteBbsUrl,
-      postData: {
-        'openid': openid,
-        'nickname': nickname,
-        'avatar': 'https://txc.qq.com/static/desktop/img/products/def-product-logo.png',
-      },
-      fixedTitle: i18n.ftype_bbs,
-      showLaunchButtonIfUnsupported: false,
-    );
+    if (openid != null && nickname != null) {
+      return SimpleWebViewPage(
+        initialUrl: R.kiteBbsUrl,
+        postData: {
+          'openid': openid,
+          'nickname': nickname,
+          'avatar':
+              'https://txc.qq.com/static/desktop/img/products/def-product-logo.png',
+        },
+        fixedTitle: i18n.ftype_bbs,
+        showLaunchButtonIfUnsupported: false,
+      );
+    } else {
+      return SimpleWebViewPage(
+        initialUrl: R.kiteBbsUrl,
+        fixedTitle: i18n.ftype_bbs,
+        showLaunchButtonIfUnsupported: false,
+      );
+    }
   }
 }

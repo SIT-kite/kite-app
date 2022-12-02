@@ -17,38 +17,9 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:kite/module/expense2/using.dart';
 import 'package:kite/module/shared/init.dart';
 import 'package:kite/storage/init.dart';
-
-class AuthorizationDialog extends StatelessWidget {
-  final String msg;
-
-  const AuthorizationDialog(this.msg, {Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('授权'),
-      content: Text(
-        '“上应小风筝”将使用您的登录信息，在小风筝服务中为您分配一个账户，以：\n'
-        '\n'
-        '- $msg\n'
-        '\n'
-        '开发团队会遵循《用户协议》与《隐私政策》，不会存储您的密码。',
-      ),
-      actions: [
-        TextButton(
-          child: const Text('取消'),
-          onPressed: () => Navigator.of(context).pop(), //关闭对话框
-        ),
-        ElevatedButton(
-          child: const Text('继续'),
-          onPressed: () => Navigator.of(context).pop(true), //关闭对话框
-        ),
-      ],
-    );
-  }
-}
 
 bool hasSignedKite() {
   return Kv.jwt.jwtToken != null;
@@ -57,19 +28,21 @@ bool hasSignedKite() {
 Future<bool> signUpIfNecessary(BuildContext context, String description) async {
   // 如果用户未同意过, 请求用户确认
   if (Kv.jwt.jwtToken == null) {
-    final bool? check = await showDialog<bool>(
-      context: context,
-      builder: (BuildContext context) => AuthorizationDialog(description),
-    );
-    if (check == null || !check) {
-      // 取消上传
-      return false;
+    final confirm = await context.showRequest(
+        title: '授权',
+        desc: '“上应小风筝”将使用您的登录信息，在小风筝服务中为您分配一个账户，以：\n'
+            '\n'
+            '- $description\n'
+            '\n'
+            '开发团队会遵循《用户协议》与《隐私政策》，不会存储您的密码。',
+        yes: '取消',
+        no: '继续');
+    if (confirm == true) {
+      // 注册用户
+      final username = Kv.auth.currentUsername!;
+      final password = Kv.auth.ssoPassword!;
+      await SharedInit.kiteSession.login(username, password);
     }
-
-    // 注册用户
-    final username = Kv.auth.currentUsername!;
-    final password = Kv.auth.ssoPassword!;
-    await SharedInit.kiteSession.login(username, password);
   }
   return true;
 }

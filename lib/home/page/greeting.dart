@@ -51,7 +51,7 @@ class _GreetingWidgetState extends State<GreetingWidget> {
     super.initState();
     Global.eventBus.on(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
     // 如果用户不是新生或老师，那么就显示学习天数
-    if (![UserType.freshman, UserType.teacher].contains(AccountUtils.getUserType())) {
+    if (![UserType.freshman, UserType.teacher].contains(AccountUtils.getAuthUserType())) {
       studyDays = _getStudyDays();
     }
   }
@@ -63,13 +63,13 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   }
 
   int _getStudyDays() {
-    final studentId = Kv.auth.currentUsername!;
+    final studentId = Kv.auth.currentUsername;
 
-    if (studentId.isNotEmpty) {
+    if (studentId != null && studentId.isNotEmpty) {
       int entranceYear = 2000 + int.parse(studentId.substring(0, 2));
       return _calcStudyDays(entranceYear);
     }
-    return 1;
+    return 0;
   }
 
   String _getCampusName() {

@@ -337,6 +337,27 @@ class FreshmanBricks implements IUserBricks {
   }
 }
 
+/// Offline
+class OfflineBricks implements IUserBricks {
+  @override
+  List<FType> make() {
+    return <FType>[
+      FType.upgrade,
+      FType.kiteBulletin,
+      FType.separator,
+      FType.library,
+      FType.separator,
+      FType.scanner,
+      FType.bbs,
+      FType.yellowPages,
+      FType.game,
+      FType.kiteBoard,
+      FType.wiki,
+      FType.separator,
+    ];
+  }
+}
+
 class UserBricksFactory {
   static final _cache = HashMap<UserType, IUserBricks>();
 
@@ -349,12 +370,13 @@ class UserBricksFactory {
       UserType.postgraduate: () => PostgraduateBricks(),
       UserType.teacher: () => TeacherBricks(),
       UserType.freshman: () => FreshmanBricks(),
+      UserType.offline: () => OfflineBricks(),
     }[by]!();
 
     return _cache[by]!;
   }
 }
 
-List<FType> makeDefaultBricks(UserType? userType) {
-  return UserBricksFactory.create(by: userType ?? UserType.freshman).make();
+List<FType> makeDefaultBricks(UserType userType) {
+  return UserBricksFactory.create(by: userType).make();
 }

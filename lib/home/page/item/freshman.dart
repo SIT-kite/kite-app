@@ -30,9 +30,12 @@ class FreshmanItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userType = AccountUtils.getUserType()!;
+    final userType = AccountUtils.getAuthUserType();
     // 老师根本不会显示这个列表项
     // 所以只考虑正式学生的情况
+    if(userType == null){
+      return const SizedBox();
+    }
     if (userType != UserType.freshman) {
       // 正式学生，获取学号
       final username = Kv.auth.currentUsername!;
@@ -41,7 +44,7 @@ class FreshmanItem extends StatelessWidget {
       final now = DateTime.now();
       // 到了 12 月，也把迎新入口隐藏掉
       if (now.year % 100 > (int.tryParse(username.substring(0, 2)) ?? 0) || now.month > 11) {
-        return Container();
+        return const SizedBox();
       }
     }
     return Brick(

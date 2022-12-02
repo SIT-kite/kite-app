@@ -196,7 +196,7 @@ class _BoardPageState extends State<BoardPage> {
 
   @override
   Widget build(BuildContext context) {
-    final bool showUpload = AccountUtils.getUserType() != UserType.freshman;
+    final bool showUpload = AccountUtils.getAuthUserType() != UserType.freshman;
 
     return Scaffold(
       appBar: AppBar(title: i18n.kiteBoardTitle.txt),

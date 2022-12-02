@@ -353,7 +353,7 @@
       }
     }
   },
-  "greetingHeader0L1": "Welcome !Have a nice day",
+  "greetingHeader0L1": "Welcome ! Have a nice day",
   "greetingHeader0L2": "At SIT",
   "greetingHeaderEnableIncrement": "n",
   "greetingHeaderL1": "SIT has accompanied you",
@@ -656,6 +656,8 @@
   "welcomeSlogan": "Excellent school life, from here.",
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
-  "yes": "Yes"
+  "yes": "Yes",
+  "offline": "Offline",
+  "kiteLoginOfflineModeBtn": "Offline Mode"
 }
 
