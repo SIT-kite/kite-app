@@ -49,34 +49,37 @@ class _MinePageState extends State<MinePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _buildActivityList(context),
+      body: context.orientation == Orientation.portrait ? buildPortrait(context) : buildLandscape(context),
     );
   }
 
   void onRefresh() {
     ScInit.scScoreService.getScScoreSummary().then((value) {
-      if(!mounted) return;
+      if (!mounted) return;
       setState(() {
         summary = value;
       });
     });
     getMyActivityListJoinScore(ScInit.scScoreService).then((value) {
-      if(!mounted) return;
+      if (!mounted) return;
       setState(() {
         joined = value;
       });
     });
   }
 
-  Widget _buildActivityList(BuildContext context) {
-    final orient = MediaQuery.of(context).orientation;
+  Widget buildPortrait(BuildContext context) {
     return [
       Align(
         alignment: Alignment.topCenter,
         child: buildSummeryCard(context, summary),
       ),
-      buildLiveList(context)
-    ].flex(direction: orient == Orientation.portrait ? Axis.vertical : Axis.horizontal);
+      buildLiveList(context).expanded()
+    ].column();
+  }
+
+  Widget buildLandscape(BuildContext context) {
+    return [buildSummeryCard(context, summary).expanded(), buildLiveList(context).expanded()].row();
   }
 
   Widget buildJoinedActivityCard(BuildContext context, ScJoinedActivity rawActivity) {
@@ -103,8 +106,7 @@ class _MinePageState extends State<MinePage> {
         onTap: rawActivity.activityId != -1
             ? () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (_) => DetailPage(activity, hero: rawActivity.applyId, enableApply: true)),
+                  MaterialPageRoute(builder: (_) => DetailPage(activity, hero: rawActivity.applyId, enableApply: true)),
                 );
               }
             : null,
@@ -118,12 +120,8 @@ class _MinePageState extends State<MinePage> {
   Widget buildLiveList(BuildContext ctx) {
     final activities = joined;
     if (activities == null) {
-      return Container();
+      return Placeholders.loading();
     } else {
-      /*     return ListView.builder(
-          itemCount: activities.length,
-          itemBuilder: (ctx, index) => buildJoinedActivityCard(ctx, activities[index])).expended();
-*/
       return ScrollConfiguration(
         behavior: const CupertinoScrollBehavior(),
         child: LiveList(
@@ -132,7 +130,7 @@ class _MinePageState extends State<MinePage> {
           physics: const BouncingScrollPhysics(),
           showItemDuration: const Duration(milliseconds: 300),
           itemBuilder: (ctx, index, animation) => buildAnimatedJoinedActivity(ctx, activities[index], animation),
-        ).expended(),
+        ),
       );
     }
   }

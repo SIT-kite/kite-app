@@ -137,9 +137,7 @@ class _ActivityListState extends State<ActivityList> {
   @override
   Widget build(BuildContext context) {
     if (loading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return Placeholders.loading();
     }
     return _buildActivityResult(_activityList);
   }

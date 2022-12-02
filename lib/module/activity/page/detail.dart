@@ -171,11 +171,11 @@ class _DetailPageState extends State<DetailPage> {
       const CardCoverBackground().padAll(20),
       buildGlassmorphismBg(ctx),
       Row(mainAxisSize: MainAxisSize.min, children: [
-        buildInfoCardLandscape(context, detail).expended(),
+        buildInfoCardLandscape(context, detail).expanded(),
         if (detail != null)
-          _buildArticle(context, detail.description).expended()
+          _buildArticle(context, detail.description).expanded()
         else
-          Placeholders.loading().expended(),
+          Placeholders.loading().expanded(),
       ])
     ].stack();
   }

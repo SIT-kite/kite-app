@@ -64,7 +64,7 @@ class ActivityCard extends StatelessWidget {
               ),
             ),
           ],
-        ).expended(),
+        ).expanded(),
         Container(
           decoration: BoxDecoration(color: ctx.bgColor),
           child: Padding(

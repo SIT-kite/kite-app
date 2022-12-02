@@ -69,32 +69,7 @@ BarTouchData _barTouchData() => BarTouchData(
       ),*/
     );
 
-FlTitlesData titlesData(List<String> titles) => FlTitlesData(
-      show: true,
-      leftTitles: AxisTitles(),
-      topTitles: AxisTitles(),
-      rightTitles: AxisTitles(),
-      bottomTitles: AxisTitles(
-        sideTitles: SideTitles(
-          showTitles: true,
-          reservedSize: 36,
-          getTitlesWidget: (double value, TitleMeta meta) {
-            const style = TextStyle(
-              color: Color(0xff7589a2),
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-            );
-            return Text(
-              titles[value.toInt()],
-              textAlign: TextAlign.center,
-              style: style,
-            );
-          },
-        ),
-      ),
-    );
-
-Widget _buildChart(BuildContext ctx, ScScoreSummary? summary) {
+Widget _buildChart(BuildContext ctx, ScScoreSummary? summary, {bool showTotal = false}) {
   if (summary == null) {
     return Placeholders.loading();
   }
@@ -107,9 +82,11 @@ Widget _buildChart(BuildContext ctx, ScScoreSummary? summary) {
   final scoreTitles = (const ['志愿', '校园文化', '三创', '安全文明', '讲座', '社会实践']).asMap().entries.map((e) {
     int index = e.key;
     String text = e.value;
-    //return '$text\n${scoreValues[index]}${totals[index]}';
-    // Hidden the total score
-    return '$text\n${scoreValues[index]}';
+    if (showTotal) {
+      return '$text\n${scoreValues[index]}\n⎯⎯⎯\n${totals[index]}';
+    } else {
+      return '$text\n${scoreValues[index]}';
+    }
   }).toList();
 
   List<BarChartGroupData> values = [];
@@ -124,6 +101,30 @@ Widget _buildChart(BuildContext ctx, ScScoreSummary? summary) {
       )
     ]));
   }
+  final titlesData = FlTitlesData(
+    show: true,
+    leftTitles: AxisTitles(),
+    topTitles: AxisTitles(),
+    rightTitles: AxisTitles(),
+    bottomTitles: AxisTitles(
+      sideTitles: SideTitles(
+        showTitles: true,
+        reservedSize: showTotal ? 84 : 36,
+        getTitlesWidget: (double value, TitleMeta meta) {
+          const style = TextStyle(
+            color: Color(0xff7589a2),
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+          );
+          return Text(
+            scoreTitles[value.toInt()],
+            textAlign: TextAlign.center,
+            style: style,
+          );
+        },
+      ),
+    ),
+  );
   return BarChart(
     BarChartData(
       maxY: 1,
@@ -131,16 +132,28 @@ Widget _buildChart(BuildContext ctx, ScScoreSummary? summary) {
       borderData: _borderData(),
       gridData: _gridData(),
       barTouchData: _barTouchData(),
-      titlesData: titlesData(scoreTitles),
+      titlesData: titlesData,
     ),
   );
 }
 
-Widget buildSummeryCard(BuildContext context, ScScoreSummary? summery) {
-  return AspectRatio(
-    aspectRatio: 1.8,
-    child: Card(
-      child: _buildChart(context, summery).padSymmetric(v: 12),
-    ),
-  );
+Widget buildSummeryCard(BuildContext ctx, ScScoreSummary? summery) {
+  if (ctx.isPortrait) {
+    return AspectRatio(
+      aspectRatio: 1.8,
+      child: Card(
+        child: _buildChart(ctx, summery).padSymmetric(v: 12),
+      ),
+    );
+  } else {
+    return [
+      i18n.activityMyScoreTitle.text(style: ctx.textTheme.titleLarge).padAll(10),
+      AspectRatio(
+        aspectRatio: 1.2,
+        child: Card(
+          child: _buildChart(ctx, summery, showTotal: true).padSymmetric(v: 12),
+        ),
+      )
+    ].column(mas: MainAxisSize.min);
+  }
 }
