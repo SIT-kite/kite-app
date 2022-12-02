@@ -48,21 +48,21 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
   }
 
   Widget _buildBody(BuildContext context) {
-    final futures = [
-      _buildBoxSection<dynamic>(context, 'setting'),
-      _buildBoxSection<LibrarySearchHistoryItem>(context, 'librarySearchHistory'),
-      _buildBoxSection<dynamic>(context, 'expense2'),
-      _buildBoxSection<dynamic>(context, 'course'),
-      _buildBoxSection<dynamic>(context, 'userEvent'),
-    ];
-    return MyFutureBuilder<List<Widget>>(
-      future: Future.wait(futures),
-      builder: (context, data) {
-        return Column(
-          children: data,
-        );
-      },
-    );
+    final futures = {
+      "setting": Future(() => Hive.openBox<dynamic>("setting")),
+      "librarySearchHistory": Future(() => Hive.openBox<LibrarySearchHistoryItem>("librarySearchHistory")),
+      "expense2": Future(() => Hive.openBox<dynamic>("expense2")),
+      "course": Future(() => Hive.openBox<dynamic>("course")),
+      "userEvent": Future(() => Hive.openBox<dynamic>("userEvent")),
+    };
+    return futures.entries
+        .map((p) => PlaceholderFutureBuilder<Box<dynamic>>(
+            future: p.value,
+            builder: (ctx, box, _) {
+              return buildBoxSection(ctx, box, p.key);
+            }))
+        .toList()
+        .column();
   }
 
   Future<void> showContentDialog(BuildContext context, Box<dynamic> box, String key, dynamic value) async {
@@ -96,34 +96,35 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
     }
   }
 
-  Future<Widget> _buildBoxSection<T>(BuildContext context, String boxName) async {
+  Widget buildBoxSection(BuildContext context, Box<dynamic>? box, String boxName) {
     final boxNameStyle = context.textTheme.headline1;
     final routeStyle = context.textTheme.titleMedium;
     final typeStyle = context.textTheme.bodySmall;
     final contentStyle = context.textTheme.bodyText2;
-    final box = await Hive.openBox<T>(boxName);
-    final items = box.keys.map((e) {
-      final key = e.toString();
-      final value = box.get(e);
-      final type = value.runtimeType.toString();
-      return [
-        Text(
-          key,
-          style: routeStyle,
-        ),
-        Text(type, style: typeStyle),
-        Text(
-          '$value',
-          maxLines: 3,
-          style: contentStyle?.copyWith(overflow: TextOverflow.ellipsis),
-        ),
-      ]
-          .column(caa: CrossAxisAlignment.start)
-          .align(at: Alignment.topLeft)
-          .padAll(10)
-          .inCard(elevation: 5)
-          .on(tap: kDebugMode ? () async => showContentDialog(context, box, key, value) : null);
-    }).toList();
+    final items = box == null
+        ? [Placeholders.loading()]
+        : box.keys.map((e) {
+            final key = e.toString();
+            final value = box.get(e);
+            final type = value.runtimeType.toString();
+            return [
+              Text(
+                key,
+                style: routeStyle,
+              ),
+              Text(type, style: typeStyle),
+              Text(
+                '$value',
+                maxLines: 3,
+                style: contentStyle?.copyWith(overflow: TextOverflow.ellipsis),
+              ),
+            ]
+                .column(caa: CrossAxisAlignment.start)
+                .align(at: Alignment.topLeft)
+                .padAll(10)
+                .inCard(elevation: 5)
+                .on(tap: kDebugMode ? () async => showContentDialog(context, box, key, value) : null);
+          }).toList();
     final sectionBody = items.isNotEmpty ? items : [i18n.emptyContent.text().padAll(10)];
     return [
       Text(boxName, style: boxNameStyle).padOnly(b: 20),

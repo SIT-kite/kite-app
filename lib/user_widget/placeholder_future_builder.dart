@@ -68,7 +68,7 @@ class _PlaceholderFutureBuilderState<T> extends State<PlaceholderFutureBuilder<T
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
-            return widget.builder(context, null, FutureState.end);
+            return widget.builder(context, snapshot.data, FutureState.end);
           } else if (snapshot.hasError) {
             return widget.builder(context, null, FutureState.failed);
           } else {
@@ -76,7 +76,7 @@ class _PlaceholderFutureBuilderState<T> extends State<PlaceholderFutureBuilder<T
             throw Exception('snapshot has no data or error');
           }
         }
-        return widget.builder(context, null, FutureState.end);
+        return widget.builder(context, null, FutureState.loading);
       },
     );
   }
