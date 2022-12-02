@@ -66,7 +66,7 @@ class _TimetableEditorState extends State<TimetableEditor> {
   Widget buildTimetableEditor(BuildContext ctx) {
     final year = '${widget.meta.schoolYear} - ${widget.meta.schoolYear + 1}';
     final semesterNames = makeSemesterL10nName();
-    final semster = semesterNames[Semester.values[widget.meta.semester]] ?? "";
+    final semester = semesterNames[Semester.values[widget.meta.semester]] ?? "";
     return Center(
       heightFactor: 1,
       child: Column(
@@ -80,7 +80,7 @@ class _TimetableEditorState extends State<TimetableEditor> {
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
                   Text(year),
-                  Text(semster),
+                  Text(semester),
                   Text(i18n.timetableImportStartDate(ctx.dateNum(widget.meta.startDate))),
                 ]),
               ),

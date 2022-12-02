@@ -17,24 +17,23 @@
  */
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:kite/module/activity/using.dart';
 import 'package:kite/module/library/search/entity/search_history.dart';
 import 'package:kite/util/logger.dart';
 import 'package:rettulf/rettulf.dart';
 
-class StoragePage extends StatefulWidget {
-  const StoragePage({Key? key}) : super(key: key);
+class LocalStoragePage extends StatefulWidget {
+  const LocalStoragePage({Key? key}) : super(key: key);
 
   @override
-  State<StoragePage> createState() => _StoragePageState();
+  State<LocalStoragePage> createState() => _LocalStoragePageState();
 }
 
 bool _isTypeEditable(dynamic value) {
   return value is String || value is bool;
 }
 
-class _StoragePageState extends State<StoragePage> {
+class _LocalStoragePageState extends State<LocalStoragePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

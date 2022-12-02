@@ -348,7 +348,7 @@ class _SettingsPageState extends State<SettingsPage> {
             title: i18n.settingsLocalStorage,
             subtitle: i18n.settingsLocalStorageSub,
             leading: const Icon(Icons.storage),
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const StoragePage())),
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LocalStoragePage())),
           )
         ],
       ),
