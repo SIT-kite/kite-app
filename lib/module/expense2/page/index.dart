@@ -41,67 +41,12 @@ class _IndexPageState extends State<IndexPage> {
 
   List<Transaction> allRecords = [];
 
-  void refreshRecords(List<Transaction> records) {
-    if (!mounted) return;
-    // 过滤支付宝的充值，否则将和圈存机叠加
-    records = records.where((e) => e.type != TransactionType.topUp).toList();
-    setState(() => allRecords = records);
-  }
-
-  Future<void> fetch(DateTime start, DateTime end) async {
-    for (int i = 0; i < 3; i++) {
-      try {
-        EasyLoading.showToast(i18n.expenseToastLoading);
-        allRecords = await cache.fetch(
-          studentID: Kv.auth.currentUsername!,
-          from: start,
-          to: end,
-          onLocalQuery: refreshRecords,
-        );
-        refreshRecords(allRecords);
-        EasyLoading.showToast(i18n.expenseToastLoadSuccessful);
-        return;
-      } catch (_) {}
-    }
-    EasyLoading.showToast(i18n.expenseToastLoadFailed);
-  }
-
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await fetch(DateTime(2010), DateTime.now());
     });
     super.initState();
-  }
-
-  Widget buildMenu() {
-    return PopupMenuButton(
-      itemBuilder: (ctx) => [
-        PopupMenuItem(
-          child: Text(i18n.expenseRefreshMenuButton),
-          onTap: () async {
-            try {
-              // 关闭用户交互
-              EasyLoading.instance.userInteractions = false;
-              EasyLoading.show(status: i18n.expenseFetchingRecordTip);
-              Expense2Init.local
-                ..clear()
-                ..cachedTsEnd = null
-                ..cachedTsStart = null;
-              await fetch(DateTime(2010), DateTime.now());
-            } catch (e, t) {
-              EasyLoading.showError('${i18n.failed}: ${e.toString().split('\n')[0]}');
-              Catcher.reportCheckedError(e, t);
-            } finally {
-              // 关闭正在加载对话框
-              EasyLoading.dismiss();
-              // 开启用户交互
-              EasyLoading.instance.userInteractions = true;
-            }
-          },
-        ),
-      ],
-    );
   }
 
   @override
@@ -132,6 +77,61 @@ class _IndexPageState extends State<IndexPage> {
         currentIndex: currentIndex,
         onTap: (int index) => setState(() => currentIndex = index),
       ),
+    );
+  }
+
+  void refreshRecords(List<Transaction> records) {
+    if (!mounted) return;
+    // 过滤支付宝的充值，否则将和圈存机叠加
+    records = records.where((e) => e.type != TransactionType.topUp).toList();
+    setState(() => allRecords = records);
+  }
+
+  Future<void> fetch(DateTime start, DateTime end) async {
+    for (int i = 0; i < 3; i++) {
+      try {
+        EasyLoading.showToast(i18n.expenseToastLoading);
+        allRecords = await cache.fetch(
+          studentID: Kv.auth.currentUsername!,
+          from: start,
+          to: end,
+          onLocalQuery: refreshRecords,
+        );
+        refreshRecords(allRecords);
+        EasyLoading.showToast(i18n.expenseToastLoadSuccessful);
+        return;
+      } catch (_) {}
+    }
+    EasyLoading.showToast(i18n.expenseToastLoadFailed);
+  }
+
+  Widget buildMenu() {
+    return PopupMenuButton(
+      itemBuilder: (ctx) => [
+        PopupMenuItem(
+          child: Text(i18n.expenseRefreshMenuButton),
+          onTap: () async {
+            try {
+              // 关闭用户交互
+              EasyLoading.instance.userInteractions = false;
+              EasyLoading.show(status: i18n.expenseFetchingRecordTip);
+              Expense2Init.local
+                ..clear()
+                ..cachedTsEnd = null
+                ..cachedTsStart = null;
+              await fetch(DateTime(2010), DateTime.now());
+            } catch (e, t) {
+              EasyLoading.showError('${i18n.failed}: ${e.toString().split('\n')[0]}');
+              Catcher.reportCheckedError(e, t);
+            } finally {
+              // 关闭正在加载对话框
+              EasyLoading.dismiss();
+              // 开启用户交互
+              EasyLoading.instance.userInteractions = true;
+            }
+          },
+        ),
+      ],
     );
   }
 }

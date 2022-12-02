@@ -79,6 +79,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       Kv.freshman.freshmanName = info.name;
 
       // Flutter 官方推荐的在异步函数中使用context需要先检查是否mounted
+      Kv.home.homeItems = null;
       if (!mounted) return;
       // 后退到就剩一个栈内元素
       while (Navigator.of(context).canPop()) {

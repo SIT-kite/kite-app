@@ -34,7 +34,8 @@ extension DialogEx on BuildContext {
       required String yes,
       required String no,
       bool highlight = false}) async {
-    return await showAnyRequest(title: title, make: (_) => desc.text(style: const TextStyle()), yes: yes, no: no);
+    return await showAnyRequest(
+        title: title, make: (_) => desc.text(style: const TextStyle()), yes: yes, no: no, highlight: highlight);
   }
 
   Future<bool?> showAnyRequest(

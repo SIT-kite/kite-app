@@ -332,9 +332,10 @@ class _HomePageState extends State<HomePage> {
     Log.info('开始加载首页');
 
     Future.delayed(Duration.zero, () async {
-      if (Kv.home.autoLaunchTimetable ?? false) {
+      // Remove auto launch timetable function permanently
+     /* if (Kv.home.autoLaunchTimetable ?? false) {
         Navigator.of(context).pushNamed(RouteTable.timetable);
-      }
+      }*/
       // 非新生才执行该网络检查逻辑
       if (!isFreshman && await HomeInit.ssoSession.checkConnectivity()) {
         showBasicFlash(

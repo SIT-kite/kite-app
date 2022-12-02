@@ -71,7 +71,8 @@ class _LoginPageState extends State<LoginPage> {
         ..currentUsername = username
         ..ssoPassword = password
         ..personName = personName;
-
+      // Reset the home
+      Kv.home.homeItems = null;
       if (!mounted) return;
       // 后退到就剩一个栈内元素
       while (Navigator.of(context).canPop()) {

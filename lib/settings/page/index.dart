@@ -118,7 +118,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ..currentUsername = null
           ..ssoPassword = null;
       }
-
+      Kv.home.homeItems = null;
       await Initializer.init();
       if (!mounted) return;
       _gotoWelcome(context);
