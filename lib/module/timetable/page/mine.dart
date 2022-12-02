@@ -105,7 +105,6 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
             onPressed: () {
               Navigator.of(ctx).pop();
               timetableStorage.currentTableName = meta.name;
-              eventBus.fire(DefaultTimetableChangeEvent(selected: meta));
               setState(() {});
             },
             child: i18n.timetableSetToDefault.txt,
@@ -136,7 +135,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
           trailingIcon: CupertinoIcons.delete,
           onPressed: () async {
             Navigator.of(ctx).pop();
-            // Have to wait until the aniamtion has been suspended because flutter is buggy without check `mounted` in _CupertinoContextMenuState.
+            // Have to wait until the animation has been suspended because flutter is buggy without check `mounted` in _CupertinoContextMenuState.
             await showDeleteTimetableRequest(ctx, meta);
           },
           isDestructiveAction: true,

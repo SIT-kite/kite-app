@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rettulf/rettulf.dart';
 
+typedef PickerActionWidgetBuilder = Widget Function(BuildContext context, int? curSelectedIndex);
+
 extension DialogEx on BuildContext {
   /// return: whether the button was hit
   Future<bool> showTip({required String title, required String desc, required String ok}) async {
@@ -131,5 +133,3 @@ extension DialogEx on BuildContext {
     );
   }
 }
-
-typedef PickerActionWidgetBuilder = Widget Function(BuildContext context, int? curSelectedIndex);

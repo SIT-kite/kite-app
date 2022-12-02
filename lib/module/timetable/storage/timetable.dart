@@ -18,6 +18,7 @@
 
 import '../entity/course.dart';
 import '../entity/meta.dart';
+import '../events.dart';
 import '../using.dart';
 
 String buildTableName(SchoolYear schoolYear, Semester semester) => '${schoolYear.year!}-${semester.index}';
@@ -96,7 +97,10 @@ class TimetableStorage {
 
   String? get currentTableName => box.get(TimetableKeys.currentTableName);
 
-  set currentTableName(String? foo) => box.put(TimetableKeys.currentTableName, foo);
+  set currentTableName(String? name) {
+    eventBus.fire(DefaultTimetableChangeEvent(selected: name));
+    box.put(TimetableKeys.currentTableName, name);
+  }
 
   List<Course>? get currentTableCourses {
     if (currentTableName == null) return null;

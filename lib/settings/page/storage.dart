@@ -19,7 +19,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/module/activity/using.dart';
 import 'package:kite/module/library/search/entity/search_history.dart';
-import 'package:kite/util/logger.dart';
 import 'package:rettulf/rettulf.dart';
 
 class LocalStoragePage extends StatefulWidget {
@@ -27,10 +26,6 @@ class LocalStoragePage extends StatefulWidget {
 
   @override
   State<LocalStoragePage> createState() => _LocalStoragePageState();
-}
-
-bool _isTypeEditable(dynamic value) {
-  return value is String || value is bool;
 }
 
 class _LocalStoragePageState extends State<LocalStoragePage> {
@@ -59,108 +54,76 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
         .map((p) => PlaceholderFutureBuilder<Box<dynamic>>(
             future: p.value,
             builder: (ctx, box, _) {
-              return buildBoxSection(ctx, box, p.key);
+              return BoxSection(box: box, boxName: p.key);
             }))
         .toList()
         .column();
   }
+}
 
-  Future<void> showContentDialog(BuildContext context, Box<dynamic> box, String key, dynamic value) async {
-    if (_isTypeEditable(value)) {
-      final edit = await context.showAnyRequest(
-          title: key,
-          make: (ctx) => SingleChildScrollView(
-                child: Column(
-                  children: [value.toString().txt],
-                ),
-              ),
-          yes: i18n.edit,
-          no: i18n.close,
-          highlight: true);
-      if (edit == true) {
-        if (!mounted) return;
-        dynamic newValue;
-        if (value is String) {
-          newValue = await context.editString(initialValue: value);
-        } else if (value is bool) {
-          newValue = await context.editBool(initialValue: value);
-        } else {
-          return;
-        }
-        // 是否被修改了
-        bool isModified = value != newValue;
-        if (isModified) box.put(key, newValue);
-        if (!mounted) return;
-        setState(() {});
-      }
-    }
-  }
+class BoxSection extends StatefulWidget {
+  final Box<dynamic>? box;
+  final String boxName;
 
-  Widget buildBoxSection(BuildContext context, Box<dynamic>? box, String boxName) {
+  const BoxSection({super.key, required this.boxName, this.box});
+
+  @override
+  State<BoxSection> createState() => _BoxSectionState();
+}
+
+class _BoxSectionState extends State<BoxSection> {
+  @override
+  Widget build(BuildContext context) {
     final boxNameStyle = context.textTheme.headline1;
     final routeStyle = context.textTheme.titleMedium;
     final typeStyle = context.textTheme.bodySmall;
     final contentStyle = context.textTheme.bodyText2;
-    final items = box == null
-        ? [Placeholders.loading()]
-        : box.keys.map((e) {
-            final key = e.toString();
-            final value = box.get(e);
-            final type = value.runtimeType.toString();
-            return [
-              Text(
-                key,
-                style: routeStyle,
-              ),
-              Text(type, style: typeStyle),
-              Text(
-                '$value',
-                maxLines: 3,
-                style: contentStyle?.copyWith(overflow: TextOverflow.ellipsis),
-              ),
-            ]
-                .column(caa: CrossAxisAlignment.start)
-                .align(at: Alignment.topLeft)
-                .padAll(10)
-                .inCard(elevation: 5)
-                .on(tap: kDebugMode ? () async => showContentDialog(context, box, key, value) : null);
-          }).toList();
+    final box = widget.box;
+    final List<Widget> items;
+    if (box == null) {
+      items = [Placeholders.loading()];
+    } else {
+      items = box.keys.map((e) {
+        final key = e.toString();
+        final value = box.get(e);
+        final type = value.runtimeType.toString();
+        return [
+          Text(
+            key,
+            style: routeStyle,
+          ),
+          Text(type, style: typeStyle?.copyWith(color: Editor.isSupport(value) ? Colors.green : null)),
+          Text(
+            '$value',
+            maxLines: 3,
+            style: contentStyle?.copyWith(overflow: TextOverflow.ellipsis),
+          ),
+        ]
+            .column(caa: CrossAxisAlignment.start)
+            .align(at: Alignment.topLeft)
+            .padAll(10)
+            .inCard(elevation: 5)
+            .on(tap: kDebugMode ? () async => showContentDialog(context, box, key, value) : null);
+      }).toList();
+    }
     final sectionBody = items.isNotEmpty ? items : [i18n.emptyContent.text().padAll(10)];
     return [
-      Text(boxName, style: boxNameStyle).padOnly(b: 20),
+      Text(widget.boxName, style: boxNameStyle).padOnly(b: 20),
       ...sectionBody,
     ].column(mas: MainAxisSize.min).sized(width: double.infinity).padAll(20).inCard();
   }
-}
 
-extension _EditDialogEx on BuildContext {
-  Future<String?> editString({String? initialValue}) async {
-    if (initialValue == null) return null;
-    final controller = TextEditingController();
-    controller.text = initialValue;
-    await showAlertDialog(
-      this,
-      content: TextFormField(
-        controller: controller,
-      ),
-      actionTextList: [i18n.save, i18n.cancel],
-    );
-    return controller.text;
-  }
-
-  Future<bool?> editBool({bool? initialValue}) async {
-    if (initialValue == null) return null;
-    ValueNotifier<bool> notifier = ValueNotifier(initialValue);
-    await showAlertDialog(
-      this,
-      content: ValueListenableBuilder<bool>(
-        valueListenable: notifier,
-        builder: (BuildContext context, bool value, Widget? child) {
-          return Checkbox(value: value, onChanged: (v) => notifier.value = v!);
-        },
-      ),
-      actionTextList: [i18n.save, i18n.cancel],
-    );
-    return notifier.value;
+  Future<void> showContentDialog(BuildContext context, Box<dynamic> box, String key, dynamic value) async {
+    if (Editor.isSupport(value)) {
+      final newValue = await Editor.showAnyEditor(context, value, desc: key, readonlyIfNotSupport: false);
+      bool isModified = value != newValue;
+      if (isModified) {
+        box.put(key, newValue);
+        if (!mounted) return;
+        setState(() {});
+      }
+    } else {
+      await Editor.showAnyEditor(context, value, desc: key, readonlyIfNotSupport: true);
+    }
   }
 }

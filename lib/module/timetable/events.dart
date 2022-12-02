@@ -5,7 +5,7 @@ import 'entity/meta.dart';
 EventBus eventBus = EventBus();
 
 class DefaultTimetableChangeEvent {
-  TimetableMeta? selected;
+  String? selected;
 
   DefaultTimetableChangeEvent({this.selected});
 }

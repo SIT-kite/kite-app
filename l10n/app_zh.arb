@@ -421,5 +421,6 @@
   "emptyContent": "空",
   "edit": "编辑",
   "save": "保存",
-  "expenseBalanceInCard": "卡内余额 ¥{balance}"
+  "expenseBalanceInCard": "卡内余额 ¥{balance}",
+  "submit": "提交"
 }
