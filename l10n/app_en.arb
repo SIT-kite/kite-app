@@ -228,9 +228,6 @@
   "examSeatNumber": "Seat No.",
   "examStartTime": "Start Time",
   "exceptionInfo": "Exception Info",
-  "expenseToastLoading": "Loading...",
-  "expenseToastLoadSuccessful": "Successful!",
-  "expenseToastLoadFailed": "Network error",
   "expenseBillEmptyTip": "Nothing here.\nWhy not hit the Refresh button at top-right corner?",
   "expenseCafe": "Café",
   "expenseCanteen": "Canteen",
@@ -253,12 +250,15 @@
   "expenseGrocery": "Grocery Shopping",
   "expenseHotWater": "Hot Water",
   "expenseLibrary": "Library",
+  "expenseRefreshMenuButton": "Force Refresh",
   "expenseShower": "Shower",
   "expenseStuff": "Stuff",
   "expenseSubsidy": "Subsidy",
+  "expenseToastLoadFailed": "Network error",
+  "expenseToastLoadSuccessful": "Successful!",
+  "expenseToastLoading": "Loading...",
   "expenseTopUp": "Top Up",
   "expenseTotal": "Total",
-  "expenseRefreshMenuButton": "Force Refresh",
   "faculty": "Faculty",
   "failed": "Failed",
   "feedback": "Feedback",
@@ -384,6 +384,7 @@
   "kiteLoginBtn": "Join Kite World",
   "kiteLoginFailedTip": "Failed to log in",
   "kiteLoginIncorrectIDFormat": "Incorrect ID format",
+  "kiteLoginOfflineModeBtn": "Offline Mode",
   "kiteLoginPwdHint": "Enter your password",
   "kiteLoginTitle": "Welcome !",
   "kiteStatsBtnTooltip": "Kite Stats",
@@ -432,6 +433,7 @@
   },
   "oaAnnouncementTextTitle": "Announcement Text",
   "oaPwd": "OA Password",
+  "offline": "Offline",
   "ok": "OK",
   "online": "Online",
   "open": "Open",
@@ -552,6 +554,22 @@
   "timetableDeleteRequest": "Confirm to delete?",
   "timetableDeleteRequestDesc": "You will lose this timetable permanently.",
   "timetableDescFormTitle": "Description",
+  "timetableDetailClassId": "Class Code {classId}",
+  "@timetableDetailClassId": {
+    "placeholders": {
+      "classId": {
+        "type": "String"
+      }
+    }
+  },
+  "timetableDetailCourseId": "Course Code {courseId}",
+  "@timetableDetailCourseId": {
+    "placeholders": {
+      "courseId": {
+        "type": "String"
+      }
+    }
+  },
   "timetableEdit": "Edit",
   "timetableImportEndTip": "Please enter the info.",
   "timetableImportFailed": "Import Error",
@@ -604,22 +622,6 @@
       }
     }
   },
-  "timetableDetailCourseId": "Course Code {courseId}",
-  "@timetableDetailCourseId": {
-    "placeholders": {
-      "courseId": {
-        "type": "String"
-      }
-    }
-  },
-  "timetableDetailClassId": "Class Code {classId}",
-  "@timetableDetailClassId": {
-    "placeholders": {
-      "classId": {
-        "type": "String"
-      }
-    }
-  },
   "unfilled": "Unfilled",
   "unknown": "Unknown",
   "untitled": "Untitled",
@@ -660,8 +662,5 @@
   "welcomeSlogan": "Excellent school life, from here.",
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
-  "yes": "Yes",
-  "offline": "Offline",
-  "kiteLoginOfflineModeBtn": "Offline Mode"
+  "yes": "Yes"
 }
-

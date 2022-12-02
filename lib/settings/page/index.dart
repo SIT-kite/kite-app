@@ -313,7 +313,7 @@ class SettingsPage extends StatelessWidget {
           if (!isFreshman)
             SimpleSettingsTile(
               title: i18n.studentID,
-              subtitle: Kv.auth.currentUsername ?? "",
+              subtitle: Kv.auth.currentUsername ?? i18n.offline,
               leading: const Icon(Icons.person_rounded),
               onTap: () {
                 // Copy the student ID to clipboard

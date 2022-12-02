@@ -36,7 +36,7 @@ Future<bool> signUpIfNecessary(BuildContext context, String description) async {
             '\n'
             '开发团队会遵循《用户协议》与《隐私政策》，不会存储您的密码。',
         yes: '取消',
-        no: '继续');
+        no: '继续',highlight: true);
     if (confirm == true) {
       // 注册用户
       final username = Kv.auth.currentUsername!;
