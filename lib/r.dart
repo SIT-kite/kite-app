@@ -26,7 +26,7 @@ class R {
   static const kiteWikiUrlFeatures = "${Backend.kite}/wiki/kite-app/features/";
   static const forgotLoginPwdUrl =
       "https://authserver.sit.edu.cn/authserver/getBackPasswordMainPage.do?service=https%3A%2F%2Fmyportal.sit.edu.cn%3A443%2F";
-  static const easyConnectDownloadUrl = "https://www.sit.edu.cn/xxfw/list.htm";
+  static const easyConnectDownloadUrl = "https://vpn1.sit.edu.cn/com/installClient.html";
   static const kiteAboutUrl = "${Backend.kite}/about/";
   static const kiteStatusUrl = "http://status.kite.sunnysab.cn/status/current";
   static const kiteBbsUrl = "https://support.qq.com/products/386124";
