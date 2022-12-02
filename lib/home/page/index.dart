@@ -29,6 +29,7 @@ import 'package:kite/module/timetable/using.dart';
 import 'package:kite/override/entity.dart';
 import 'package:kite/override/init.dart';
 import 'package:kite/quick_button/init.dart';
+import 'package:kite/user_widget/color_saturation_widget.dart';
 import 'package:kite/util/scanner.dart';
 import 'package:kite/util/user.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -81,6 +82,7 @@ class _HomePageState extends State<HomePage> {
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
   final overrideFunctionNotifier = ValueNotifier<FunctionOverrideInfo?>(null);
   late bool isFreshman;
+  double saturation = 1;
 
   void _updateWeather() {
     Log.info('更新天气');
@@ -163,6 +165,7 @@ class _HomePageState extends State<HomePage> {
         EventNameConstants.onRouteRefresh,
         value,
       );
+      setState(() => saturation = value.homeColorSaturation);
       overrideFunctionNotifier.value = value;
     });
   }
@@ -374,19 +377,22 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Log.info('Build Home');
-    return Scaffold(
-      key: _scaffoldKey,
-      body: GestureDetector(
-        child: buildBody(context),
-        onHorizontalDragEnd: (d) {
-          // 速度达标，展示drawer
-          if (d.velocity.pixelsPerSecond.dx > 100) {
-            _scaffoldKey.currentState?.openDrawer();
-          }
-        },
+    return ColorSaturationFilteredWidget(
+      saturation: saturation,
+      child: Scaffold(
+        key: _scaffoldKey,
+        body: GestureDetector(
+          child: buildBody(context),
+          onHorizontalDragEnd: (d) {
+            // 速度达标，展示drawer
+            if (d.velocity.pixelsPerSecond.dx > 100) {
+              _scaffoldKey.currentState?.openDrawer();
+            }
+          },
+        ),
+        drawer: const KiteDrawer(),
+        floatingActionButton: buildFloatingActionButton(),
       ),
-      drawer: const KiteDrawer(),
-      floatingActionButton: buildFloatingActionButton(),
     );
   }
 }

@@ -57,7 +57,8 @@ const _json = {
       "title": "公告维护中",
       "msg": "公告维护中，可能无法正常使用",
     }
-  }
+  },
+  "homeColorSaturation": 1.0,
 };
 
 class FunctionOverrideMock implements FunctionOverrideServiceDao {

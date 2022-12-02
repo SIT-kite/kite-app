@@ -16,10 +16,10 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import 'package:kite/network/session.dart';
+import 'package:kite/override/service.dart';
 
 import 'cache.dart';
 import 'interface.dart';
-import 'service.dart';
 
 class FunctionOverrideInit {
   static late FunctionOverrideServiceDao cachedService;

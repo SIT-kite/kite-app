@@ -32,8 +32,8 @@ import 'package:kite/override/entity.dart';
 import 'package:kite/route.dart';
 
 import 'global/desktop_initializer.dart';
-import 'navigation/route.dart';
 import 'global/global.dart';
+import 'navigation/route.dart';
 import 'storage/init.dart';
 import 'util/logger.dart';
 
@@ -151,7 +151,7 @@ class _KiteAppState extends State<KiteApp> {
           Future.delayed(Duration.zero, () async => await DesktopInit.setTitle(i18n.appName));
           if (MediaQuery.of(context).orientation == Orientation.portrait) {
             SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top]);
-          }else{
+          } else {
             SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
           }
           return MediaQuery(
@@ -198,9 +198,7 @@ class _KiteAppState extends State<KiteApp> {
           return _buildTheme(context, color, isDark);
         },
         themedWidgetBuilder: (BuildContext context, ThemeData theme) {
-          return buildWidgetWithKeyboardListener(
-            buildMaterialWithTheme(theme),
-          );
+          return buildWidgetWithKeyboardListener(buildMaterialWithTheme(theme));
         },
       ),
     );
