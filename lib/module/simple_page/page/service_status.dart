@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:universal_platform/universal_platform.dart';
 
 import '../using.dart';
 
@@ -25,11 +24,6 @@ class ServiceStatusPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (UniversalPlatform.isDesktop) {
-      Navigator.of(context).pop();
-      GlobalLauncher.launch(R.kiteStatusUrl);
-      return Container();
-    }
     return SimpleWebViewPage(
       initialUrl: R.kiteStatusUrl,
       fixedTitle: i18n.serviceStatus,

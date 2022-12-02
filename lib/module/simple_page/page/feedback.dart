@@ -20,7 +20,6 @@ import 'dart:io';
 import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:universal_platform/universal_platform.dart';
 
 import '../using.dart';
 
@@ -29,11 +28,6 @@ class FeedbackPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (UniversalPlatform.isDesktop) {
-      Navigator.of(context).pop();
-      GlobalLauncher.launch(R.kiteFeedbackUrl);
-      return Container();
-    }
     return MyFutureBuilder<List>(
       futureGetter: () => Future.wait([
         () async {

@@ -20,10 +20,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:kite/l10n/extension.dart';
+import 'package:kite/launcher.dart';
 import 'package:kite/user_widget/webview/view.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/url_launcher.dart';
-import 'package:rettulf/widget/hero.dart';
+import 'package:universal_platform/universal_platform.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class SimpleWebViewPage extends StatefulWidget {
@@ -124,6 +125,11 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (UniversalPlatform.isDesktop) {
+      Navigator.of(context).pop();
+      GlobalLauncher.launch(widget.initialUrl);
+      return Container();
+    }
     final actions = <Widget>[
       if (widget.showSharedButton)
         IconButton(
