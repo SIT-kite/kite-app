@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/module/activity/using.dart';
@@ -29,8 +30,20 @@ class LocalStoragePage extends StatefulWidget {
 }
 
 class _LocalStoragePageState extends State<LocalStoragePage> {
+  static final name2Box = {
+    "setting": Future(() => Hive.openBox<dynamic>("setting")),
+    "librarySearchHistory": Future(() => Hive.openBox<LibrarySearchHistoryItem>("librarySearchHistory")),
+    "expense2": Future(() => Hive.openBox<dynamic>("expense2")),
+    "course": Future(() => Hive.openBox<dynamic>("course")),
+    "userEvent": Future(() => Hive.openBox<dynamic>("userEvent")),
+  };
+
   @override
   Widget build(BuildContext context) {
+    return context.isPortrait ? buildPortrait(context) : buildLandscape(context);
+  }
+
+  Widget buildPortrait(BuildContext ctx) {
     return Scaffold(
       appBar: AppBar(title: i18n.localStorageTitle.txt),
       body: Scrollbar(
@@ -38,19 +51,97 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
           thickness: 20,
           radius: const Radius.circular(12),
           interactive: true,
-          child: _buildBody(context).scrolled()),
+          child: buildPortraitBody(ctx).scrolled()),
     );
   }
 
-  Widget _buildBody(BuildContext context) {
-    final futures = {
-      "setting": Future(() => Hive.openBox<dynamic>("setting")),
-      "librarySearchHistory": Future(() => Hive.openBox<LibrarySearchHistoryItem>("librarySearchHistory")),
-      "expense2": Future(() => Hive.openBox<dynamic>("expense2")),
-      "course": Future(() => Hive.openBox<dynamic>("course")),
-      "userEvent": Future(() => Hive.openBox<dynamic>("userEvent")),
-    };
-    return futures.entries
+  String? selectedBoxName;
+
+  Widget buildLandscape(BuildContext ctx) {
+    return Scaffold(
+        //appBar: AppBar(title: i18n.localStorageTitle.txt),
+        body: [
+      Scaffold(
+        appBar: AppBar(
+          title: i18n.localStorageTitle.text(),
+          elevation: 10,
+        ),
+        body: buildBoxIntroduction(ctx),
+      ).expanded(),
+      buildAnimatedBoxContentView(ctx).padAll(10).expanded()
+    ].row());
+  }
+
+  Widget buildBoxIntroduction(BuildContext ctx) {
+    final boxNameStyle = context.textTheme.headline4;
+    final name2BoxList = name2Box.entries.toList();
+    return ListView.builder(
+        itemCount: name2Box.length,
+        itemBuilder: (ctx, i) {
+          final name2Box = name2BoxList[i];
+          final color = name2Box.key == selectedBoxName ? ctx.theme.secondaryHeaderColor : null;
+          return name2Box.key.text(style: boxNameStyle).padAll(10).inCard(elevation: 5, color: color).on(tap: () {
+            setState(() {
+              selectedBoxName = name2Box.key;
+            });
+          });
+        });
+  }
+
+  Widget buildAnimatedBoxContentView(BuildContext ctx) {
+    return AnimatedSwitcher(duration: const Duration(milliseconds: 500), child: buildBoxContentView(ctx));
+  }
+
+  Widget buildBoxContentView(BuildContext ctx) {
+    final name = selectedBoxName;
+    if (name == null) {
+      return _buildUnselectBoxTip(ctx);
+    } else {
+      final boxGetter = name2Box[name];
+      if (boxGetter == null) {
+        return _buildUnselectBoxTip(ctx);
+      } else {
+        final routeStyle = context.textTheme.titleMedium;
+        final typeStyle = context.textTheme.bodySmall;
+        final contentStyle = context.textTheme.bodyText2;
+        return PlaceholderFutureBuilder<Box<dynamic>>(
+            key: UniqueKey(),
+            future: boxGetter,
+            builder: (ctx, box, _) {
+              final List<Widget> items;
+              if (box == null) {
+                items = [];
+              } else {
+                if (box.isEmpty) {
+                  items = [_buildEmptyBoxTip(ctx)];
+                } else {
+                  items = box.keys
+                      .map((e) => BoxItem(
+                            boxKey: e,
+                            box: box,
+                            routeStyle: routeStyle,
+                            typeStyle: typeStyle,
+                            contentStyle: contentStyle,
+                          ))
+                      .toList();
+                }
+              }
+              return items.column().scrolled();
+            });
+      }
+    }
+  }
+
+  Widget _buildUnselectBoxTip(BuildContext ctx) {
+    return LeavingBlank(key: const ValueKey(1), icon: Icons.unarchive_outlined, desc: i18n.settingsStorageSelectTip);
+  }
+
+  Widget _buildEmptyBoxTip(BuildContext ctx) {
+    return LeavingBlank(key: const ValueKey(2), icon: Icons.inbox_outlined, desc: i18n.emptyContent).sized(height: 300);
+  }
+
+  Widget buildPortraitBody(BuildContext context) {
+    return name2Box.entries
         .map((p) => PlaceholderFutureBuilder<Box<dynamic>>(
             future: p.value,
             builder: (ctx, box, _) {
@@ -61,56 +152,103 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
   }
 }
 
-class BoxSection extends StatefulWidget {
-  final Box<dynamic>? box;
+class BoxSection extends StatelessWidget {
   final String boxName;
+  final Box<dynamic>? box;
 
-  const BoxSection({super.key, required this.boxName, this.box});
+  const BoxSection({super.key, this.box, required this.boxName});
 
-  @override
-  State<BoxSection> createState() => _BoxSectionState();
-}
-
-class _BoxSectionState extends State<BoxSection> {
   @override
   Widget build(BuildContext context) {
     final boxNameStyle = context.textTheme.headline1;
+    return [
+      Text(boxName, style: boxNameStyle).padOnly(b: 20),
+      BoxItemList(
+        box: box,
+        emptyPlaceholder: (ctx) => i18n.emptyContent.text(style: context.textTheme.displayMedium),
+      ),
+    ].column(mas: MainAxisSize.min).sized(width: double.infinity).padAll(20).inCard();
+  }
+}
+
+class BoxItemList extends StatefulWidget {
+  final Box<dynamic>? box;
+  final WidgetBuilder emptyPlaceholder;
+
+  const BoxItemList({super.key, this.box, required this.emptyPlaceholder});
+
+  @override
+  State<BoxItemList> createState() => _BoxItemListState();
+}
+
+class _BoxItemListState extends State<BoxItemList> {
+  @override
+  Widget build(BuildContext context) {
     final routeStyle = context.textTheme.titleMedium;
     final typeStyle = context.textTheme.bodySmall;
     final contentStyle = context.textTheme.bodyText2;
     final box = widget.box;
     final List<Widget> items;
     if (box == null) {
-      items = [Placeholders.loading()];
+      items = [];
     } else {
-      items = box.keys.map((e) {
-        final key = e.toString();
-        final value = box.get(e);
-        final type = value.runtimeType.toString();
-        return [
-          Text(
-            key,
-            style: routeStyle,
-          ),
-          Text(type, style: typeStyle?.copyWith(color: Editor.isSupport(value) ? Colors.green : null)),
-          Text(
-            '$value',
-            maxLines: 3,
-            style: contentStyle?.copyWith(overflow: TextOverflow.ellipsis),
-          ),
-        ]
-            .column(caa: CrossAxisAlignment.start)
-            .align(at: Alignment.topLeft)
-            .padAll(10)
-            .inCard(elevation: 5)
-            .on(tap: kDebugMode ? () async => showContentDialog(context, box, key, value) : null);
-      }).toList();
+      if (box.isEmpty) {
+        items = [widget.emptyPlaceholder.call(context)];
+      } else {
+        items = box.keys
+            .map((e) => BoxItem(
+                  boxKey: e,
+                  box: box,
+                  routeStyle: routeStyle,
+                  typeStyle: typeStyle,
+                  contentStyle: contentStyle,
+                ))
+            .toList();
+      }
     }
-    final sectionBody = items.isNotEmpty ? items : [i18n.emptyContent.text().padAll(10)];
+
+    return items.column();
+  }
+}
+
+class BoxItem extends StatefulWidget {
+  final TextStyle? routeStyle;
+
+  final TextStyle? typeStyle;
+  final TextStyle? contentStyle;
+  final dynamic boxKey;
+  final Box<dynamic> box;
+
+  const BoxItem(
+      {super.key, this.routeStyle, this.typeStyle, this.contentStyle, required this.boxKey, required this.box});
+
+  @override
+  State<BoxItem> createState() => _BoxItemState();
+}
+
+class _BoxItemState extends State<BoxItem> {
+  @override
+  Widget build(BuildContext context) {
+    final key = widget.boxKey.toString();
+    final value = widget.box.get(widget.boxKey);
+    final type = value.runtimeType.toString();
     return [
-      Text(widget.boxName, style: boxNameStyle).padOnly(b: 20),
-      ...sectionBody,
-    ].column(mas: MainAxisSize.min).sized(width: double.infinity).padAll(20).inCard();
+      Text(
+        key,
+        style: widget.routeStyle,
+      ),
+      Text(type, style: widget.typeStyle?.copyWith(color: Editor.isSupport(value) ? Colors.green : null)),
+      Text(
+        '$value',
+        maxLines: 3,
+        style: widget.contentStyle?.copyWith(overflow: TextOverflow.ellipsis),
+      ),
+    ]
+        .column(caa: CrossAxisAlignment.start)
+        .align(at: Alignment.topLeft)
+        .padAll(10)
+        .inCard(elevation: 5)
+        .on(tap: kDebugMode ? () async => showContentDialog(context, widget.box, key, value) : null);
   }
 
   Future<void> showContentDialog(BuildContext context, Box<dynamic> box, String key, dynamic value) async {

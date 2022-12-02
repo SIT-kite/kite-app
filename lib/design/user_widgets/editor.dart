@@ -26,128 +26,233 @@ class Editor {
   }
 
   static Future<bool> showBoolEditor(BuildContext ctx, String? desc, bool initial) async {
-    final $value = ValueNotifier(initial);
-    final isSubmit = await showEditorSkeleton(
-      ctx,
-      (context) => ListTile(
-        title: desc.text(style: ctx.textTheme.bodyText2),
-        trailing: $value <<
-            (ctx, v, _) {
-              return CupertinoSwitch(
-                value: v,
-                onChanged: (newValue) {
-                  $value.value = newValue;
-                },
-              );
-            },
-      ),
-    );
-    if (isSubmit) {
-      return $value.value;
-    } else {
-      return initial;
-    }
+    return await ctx.showDialog(
+        builder: (ctx) => _BoolEditor(
+              initial: initial,
+              desc: desc,
+            ));
   }
 
   static Future<String> showStringEditor(BuildContext ctx, String? desc, String initial) async {
-    final controller = TextEditingController(text: initial);
-    final lines = initial.length ~/ 40 + 1;
-    final isSubmit = await showEditorSkeleton(
-        ctx,
-        title: desc,
-        (context) => TextFormField(
-              maxLines: lines,
-              controller: controller,
-              style: ctx.textTheme.bodyMedium,
+    return await ctx.showDialog(
+        builder: (ctx) => _StringEditor(
+              initial: initial,
+              title: desc,
             ));
-    if (isSubmit) {
-      return controller.text;
-    } else {
-      return initial;
-    }
   }
 
   static Future<void> showReadonlyEditor(BuildContext ctx, String? desc, dynamic value) async {
-    await showEditorSkeleton(ctx, title: desc, readonly: true, (context) => value.toString().text().scrolled());
+    await ctx.showDialog(
+        builder: (ctx) => _readonlyEditor(ctx, (ctx) => value.toString().text().scrolled(), title: desc));
   }
 
   static Future<int> showIntEditor(BuildContext ctx, String? desc, int initial) async {
-    int number = initial;
-    final controller = TextEditingController(text: number.toString());
-    final isSubmit = await showEditorSkeleton(
-        ctx,
-        title: desc,
-        (context) => Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                CupertinoButton(
-                  child: const Icon(Icons.remove),
-                  onPressed: () {
-                    number -= 1;
-                    controller.text = number.toString();
-                  },
-                ),
-                TextFormField(
-                  controller: controller,
-                  onChanged: (v) {
-                    final newV = int.tryParse(v);
-                    if (newV != null) {
-                      number = newV;
-                    }
-                  },
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                  ],
-                ).sized(width: 100, height: 50),
-                CupertinoButton(
-                  child: const Icon(Icons.add),
-                  onPressed: () {
-                    number += 1;
-                    controller.text = number.toString();
-                  },
-                ),
-              ],
+    return await ctx.showDialog(
+        builder: (ctx) => _IntEditor(
+              initial: initial,
+              title: desc,
             ));
-    if (isSubmit) {
-      return number;
-    } else {
-      return initial;
-    }
   }
+}
 
-  static Future<bool> showEditorSkeleton(BuildContext ctx, WidgetBuilder make,
-      {String? title, bool readonly = false}) async {
-    final isSubmit = await ctx.showDialog(builder: (ctx) {
-      final Widget action;
-      if (readonly) {
-        action = Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+Widget _readonlyEditor(BuildContext ctx, WidgetBuilder make, {String? title}) {
+  return AlertDialog(
+      scrollable: true,
+      title: title?.text(style: const TextStyle(fontWeight: FontWeight.bold)),
+      content: make(ctx),
+      actions: [
+        Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           CupertinoButton(
               onPressed: () {
                 ctx.navigator.pop(false);
               },
               child: i18n.close.text(style: const TextStyle(color: Colors.redAccent))),
-        ]);
-      } else {
-        action = Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-          CupertinoButton(
+        ])
+      ]);
+}
+
+class _IntEditor extends StatefulWidget {
+  final int initial;
+  final String? title;
+
+  const _IntEditor({required this.initial, this.title});
+
+  @override
+  State<_IntEditor> createState() => _IntEditorState();
+}
+
+class _IntEditorState extends State<_IntEditor> {
+  late TextEditingController controller;
+  late int value = widget.initial;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = TextEditingController(text: widget.initial.toString());
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+        scrollable: true,
+        title: widget.title?.text(style: const TextStyle(fontWeight: FontWeight.bold)),
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            CupertinoButton(
+              child: const Icon(Icons.remove),
               onPressed: () {
-                ctx.navigator.pop(true);
+                setState(() {
+                  value -= 1;
+                  controller.text = value.toString();
+                });
               },
-              child: i18n.submit.text(style: const TextStyle(color: Colors.redAccent))),
-          CupertinoButton(
-            onPressed: () {
-              Navigator.of(ctx).pop(false);
-            },
-            child: i18n.cancel.text(),
-          )
+            ),
+            TextFormField(
+              controller: controller,
+              onChanged: (v) {
+                final newV = int.tryParse(v);
+                if (newV != null) {
+                  setState(() {
+                    value = newV;
+                  });
+                }
+              },
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+              ],
+            ).sized(width: 100, height: 50),
+            CupertinoButton(
+              child: const Icon(Icons.add),
+              onPressed: () {
+                setState(() {
+                  value += 1;
+                  controller.text = value.toString();
+                });
+              },
+            ),
+          ],
+        ),
+        actions: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+            CupertinoButton(
+                onPressed: () {
+                  context.navigator.pop(value);
+                },
+                child: i18n.submit.text(style: const TextStyle(color: Colors.redAccent))),
+            CupertinoButton(
+              onPressed: () {
+                context.navigator.pop(widget.initial);
+              },
+              child: i18n.cancel.text(),
+            )
+          ])
         ]);
-      }
-      return AlertDialog(
-          title: title?.text(style: const TextStyle(fontWeight: FontWeight.bold)),
-          content: make(ctx),
-          actions: [action]);
-    });
-    return isSubmit == true;
+  }
+}
+
+class _BoolEditor extends StatefulWidget {
+  final bool initial;
+  final String? desc;
+
+  const _BoolEditor({required this.initial, this.desc});
+
+  @override
+  State<_BoolEditor> createState() => _BoolEditorState();
+}
+
+class _BoolEditorState extends State<_BoolEditor> {
+  late bool value = widget.initial;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+        scrollable: true,
+        content: ListTile(
+            title: widget.desc.text(style: context.textTheme.bodyText2),
+            trailing: CupertinoSwitch(
+              value: value,
+              onChanged: (newValue) {
+                setState(() {
+                  value = newValue;
+                });
+              },
+            )),
+        actions: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+            CupertinoButton(
+                onPressed: () {
+                  context.navigator.pop(value);
+                },
+                child: i18n.submit.text(style: const TextStyle(color: Colors.redAccent))),
+            CupertinoButton(
+              onPressed: () {
+                context.navigator.pop(widget.initial);
+              },
+              child: i18n.cancel.text(),
+            )
+          ])
+        ]);
+  }
+}
+
+class _StringEditor extends StatefulWidget {
+  final String initial;
+  final String? title;
+
+  const _StringEditor({required this.initial, this.title});
+
+  @override
+  State<_StringEditor> createState() => _StringEditorState();
+}
+
+class _StringEditorState extends State<_StringEditor> {
+  late TextEditingController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = TextEditingController(text: widget.initial);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final lines = context.isPortrait ? widget.initial.length ~/ 40 + 1 : widget.initial.length ~/ 120 + 1;
+    return AlertDialog(
+        scrollable: true,
+        title: widget.title?.text(style: const TextStyle(fontWeight: FontWeight.bold)),
+        content: TextFormField(
+          maxLines: lines,
+          controller: controller,
+          style: context.textTheme.bodyMedium,
+        ),
+        actions: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+            CupertinoButton(
+                onPressed: () {
+                  context.navigator.pop(controller.text);
+                },
+                child: i18n.submit.text(style: const TextStyle(color: Colors.redAccent))),
+            CupertinoButton(
+              onPressed: () {
+                context.navigator.pop(widget.initial);
+              },
+              child: i18n.cancel.text(),
+            )
+          ])
+        ]);
   }
 }

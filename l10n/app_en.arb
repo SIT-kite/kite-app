@@ -166,6 +166,7 @@
   "draft": "Draft",
   "easyconnectLaunchFailed": "Launch Failed",
   "easyconnectLaunchFailedDesc": "Failed to launch EasyConnect, have you installed it or just download it now?",
+  "edit": "Edit",
   "eduEmailNoContent": "No Content",
   "eduEmailNoSubject": "No Subject",
   "eduEmailPluralSenderTailing": "...",
@@ -217,6 +218,7 @@
     }
   },
   "elecBillUpdateTime": "Last Update",
+  "emptyContent": "Empty",
   "enable": "Enable",
   "error": "Error",
   "examEndTime": "Ent Time",
@@ -228,6 +230,14 @@
   "examSeatNumber": "Seat No.",
   "examStartTime": "Start Time",
   "exceptionInfo": "Exception Info",
+  "expenseBalanceInCard": "¥{balance} in Card",
+  "@expenseBalanceInCard": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
   "expenseBillEmptyTip": "Nothing here.\nWhy not hit the Refresh button at top-right corner?",
   "expenseCafe": "Café",
   "expenseCanteen": "Canteen",
@@ -498,6 +508,7 @@
   "restartRequest": "Restart?",
   "restartRequestDesc": "Would you like to restart Kite now?",
   "roommate": "Roommate",
+  "save": "Save",
   "scannerBarcodeNotRecognized": "No Barcode",
   "scannerBarcodeRecognized": "Barcode Recognized",
   "semester": "Semester",
@@ -530,6 +541,7 @@
   "settingsLogoutKite": "Logout Kite",
   "settingsLogoutKiteSub": "Logout current Kite account",
   "settingsProxyAddress": "Proxy Address",
+  "settingsStorageSelectTip": "Please select a box first.",
   "settingsTestConnect2School": "Test Connectivity",
   "settingsTestConnect2SchoolSub": "Test connectivity to school",
   "settingsTestLoginKite": "Test Login Kite",
@@ -549,6 +561,7 @@
   "studentIdCopy2ClipboardTip": "Your student ID is copied.",
   "studentInfoTitle": "Student Info",
   "studentLoginFailedWarn": "Login failed",
+  "submit": "Submit",
   "teacherEvalTitle": "Teacher Evaluation",
   "tel": "TEL.",
   "timetableDelete": "Delete",
@@ -663,17 +676,5 @@
   "welcomeSlogan": "Excellent school life, from here.",
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
-  "yes": "Yes",
-  "emptyContent": "Empty",
-  "edit": "Edit",
-  "save": "Save",
-  "expenseBalanceInCard": "¥{balance} in Card",
-  "@expenseBalanceInCard": {
-    "placeholders": {
-      "balance": {
-        "type": "String"
-      }
-    }
-  },
-  "submit": "Submit"
+  "yes": "Yes"
 }

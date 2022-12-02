@@ -36,3 +36,29 @@ Widget buildLeavingBlankBody(BuildContext ctx,
         .expanded(),
   ].column(maa: MAAlign.spaceAround).center();
 }
+
+class LeavingBlank extends StatelessWidget {
+  final IconData icon;
+  final String desc;
+  final VoidCallback? onIconTap;
+
+  const LeavingBlank({super.key, required this.icon, required this.desc, this.onIconTap});
+
+  @override
+  Widget build(BuildContext context) {
+    Widget iconWidget = icon.make(size: 120).padAll(20);
+    if (onIconTap != null) {
+      iconWidget = iconWidget.on(tap: onIconTap);
+    }
+    return [
+      iconWidget.expanded(),
+      desc
+          .text(
+            style: context.theme.textTheme.titleLarge,
+          )
+          .center()
+          .padAll(10)
+          .expanded(),
+    ].column(maa: MAAlign.spaceAround).center();
+  }
+}
