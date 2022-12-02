@@ -17,11 +17,11 @@
  */
 import 'package:flutter/material.dart';
 
+import '../entity/evaluation.dart';
+import '../entity/score.dart';
 import '../init.dart';
 import '../using.dart';
 import 'evaluation.dart';
-import '../entity/evaluation.dart';
-import '../entity/score.dart';
 
 class ScoreItem extends StatefulWidget {
   final Score _score;
@@ -91,28 +91,24 @@ class _ScoreItemState extends State<ScoreItem> {
   Widget _buildTrailing() {
     final style = Theme.of(context).textTheme.headline4?.copyWith(color: Colors.blue);
 
-    if (!_score.value.isNaN) {
-      return Text(_score.value.toString(), style: style);
-    } else {
-      // 获取评教列表. 然后找到与当前课程有关的, 将评教页面呈现给用户.
-      return MyFutureBuilder<List<CourseToEvaluate>>(
-        future: ExamResultInit.courseEvaluationService.getEvaluationList(),
-        builder: (context, data) {
-          final coursesToEvaluate = data.where((element) => element.dynClassId.startsWith(_score.dynClassId)).toList();
+    if (!_score.value.isNaN) return Text(_score.value.toString(), style: style);
 
-          if (coursesToEvaluate.isNotEmpty) {
-            return GestureDetector(
-              child: Text('去评教', style: style),
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (_) => EvaluationPage(coursesToEvaluate)));
-              },
-            );
-          } else {
-            return const Text('评教不可用');
-          }
-        },
-      );
-    }
+    // 获取评教列表. 然后找到与当前课程有关的, 将评教页面呈现给用户.
+    return MyFutureBuilder<List<CourseToEvaluate>>(
+      futureGetter: ExamResultInit.courseEvaluationService.getEvaluationList,
+      builder: (context, data) {
+        final coursesToEvaluate = data.where((element) => element.dynClassId.startsWith(_score.dynClassId)).toList();
+
+        if (coursesToEvaluate.isEmpty) return const Text('评教不可用');
+
+        return GestureDetector(
+          child: Text('去评教', style: style),
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (_) => EvaluationPage(coursesToEvaluate)));
+          },
+        );
+      },
+    );
   }
 
   @override
