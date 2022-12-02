@@ -18,13 +18,13 @@
 import 'package:flutter/material.dart';
 import 'package:kite/module/timetable/utils.dart';
 import 'package:rettulf/rettulf.dart';
-import '../using.dart';
 
 import '../cache.dart';
 import '../entity/course.dart';
 import '../entity/meta.dart';
 import '../init.dart';
 import '../user_widget/timetable.dart';
+import '../using.dart';
 import 'export.dart';
 
 const DisplayMode defaultMode = DisplayMode.weekly;
@@ -100,10 +100,7 @@ class _TimetablePageState extends State<TimetablePage> {
 
   /// 根据本地缓存刷新课表
   void _onRefresh() {
-    setState(() {
-      courses = storage.currentTableCourses ?? [];
-      meta = storage.currentTableMeta;
-    });
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const TimetablePage()));
   }
 
   Future<void> selectTimetablePageToJump(BuildContext ctx) async {
