@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cookie_jar/cookie_jar.dart';
@@ -66,8 +67,8 @@ class DioInit {
   }
 
   static Future<String> getRandomUa() async {
-    final c = await rootBundle.loadString('assets/ua.txt');
-    return c.split('\n').randomChooseOne();
+    final c = await rootBundle.loadString('assets/ua.json');
+    return (jsonDecode(c) as List).randomChooseOne().trim();
   }
 
   static Future<void> _initUserAgentString({

@@ -49,13 +49,21 @@ class _IndexPageState extends State<IndexPage> {
   }
 
   Future<void> fetch(DateTime start, DateTime end) async {
-    allRecords = await cache.fetch(
-      studentID: Kv.auth.currentUsername!,
-      from: start,
-      to: end,
-      onLocalQuery: refreshRecords,
-    );
-    refreshRecords(allRecords);
+    for (int i = 0; i < 3; i++) {
+      try {
+        EasyLoading.showToast(i18n.expenseToastLoading);
+        allRecords = await cache.fetch(
+          studentID: Kv.auth.currentUsername!,
+          from: start,
+          to: end,
+          onLocalQuery: refreshRecords,
+        );
+        refreshRecords(allRecords);
+        EasyLoading.showToast(i18n.expenseToastLoadSuccessful);
+        return;
+      } catch (_) {}
+    }
+    EasyLoading.showToast(i18n.expenseToastLoadFailed);
   }
 
   @override
@@ -70,7 +78,7 @@ class _IndexPageState extends State<IndexPage> {
     return PopupMenuButton(
       itemBuilder: (ctx) => [
         PopupMenuItem(
-          child: const Text('强制刷新'),
+          child: Text(i18n.expenseRefreshMenuButton),
           onTap: () async {
             try {
               // 关闭用户交互

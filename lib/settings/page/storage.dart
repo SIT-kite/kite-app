@@ -19,7 +19,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hive/hive.dart';
-import 'package:kite/module/yellow_pages/entity/contact.dart';
 import 'package:kite/module/library/search/entity/search_history.dart';
 import 'package:kite/user_widget/future_builder.dart';
 import 'package:kite/util/alert_dialog.dart';
@@ -159,7 +158,7 @@ class _DebugStoragePageState extends State<DebugStoragePage> {
     final futures = [
       _buildBoxSection<dynamic>(context, 'setting'),
       _buildBoxSection<LibrarySearchHistoryItem>(context, 'librarySearchHistory'),
-      _buildBoxSection<ContactData>(context, 'contactSetting'),
+      _buildBoxSection<dynamic>(context, 'expense2'),
       _buildBoxSection<dynamic>(context, 'course'),
       _buildBoxSection<dynamic>(context, 'userEvent'),
     ];

@@ -23,7 +23,7 @@ import 'package:kite/module/expense2/using.dart';
 
 import '../entity/local.dart';
 
-class BillPage extends StatefulWidget {
+class BillPage extends StatelessWidget {
   final List<Transaction> records;
 
   const BillPage({
@@ -32,16 +32,12 @@ class BillPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<BillPage> createState() => _BillPageState();
-}
-
-class _BillPageState extends State<BillPage> {
-  Widget buildListView() {
+  Widget build(BuildContext context) {
     final groupTitleStyle = Theme.of(context).textTheme.headline2;
     final groupSubtitleStyle = Theme.of(context).textTheme.headline6;
 
     return GroupedListView<Transaction, int>(
-      elements: widget.records,
+      elements: records,
       groupBy: (element) => element.datetime.year * 12 + element.datetime.month,
       useStickyGroupSeparators: true,
       order: GroupedListOrder.DESC,
@@ -53,7 +49,7 @@ class _BillPageState extends State<BillPage> {
         int month = firstGroupRecord.datetime.month;
         int year = firstGroupRecord.datetime.year;
 
-        for (final element in widget.records) {
+        for (final element in records) {
           if (element.datetime.month == month && element.datetime.year == year) {
             if (element.isConsume) {
               totalOutcome += element.deltaAmount;
@@ -86,10 +82,5 @@ class _BillPageState extends State<BillPage> {
         );
       },
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return buildListView();
   }
 }
