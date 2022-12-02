@@ -50,6 +50,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: goImport,
+        elevation: 10,
         child: const Icon(Icons.add_outlined),
       ),
       body: Padding(
@@ -140,29 +141,22 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
           child: i18n.timetableDelete.txt,
         ),
       ],
-      child: Card(
-        child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: SingleChildScrollView(
-                child: Column(
-              children: [
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Expanded(
-                      child: Text(
-                    meta.name,
-                    style: ctx.textTheme.titleMedium,
-                  )),
-                  if (isSelected) const Icon(Icons.check, color: Colors.green)
-                ]),
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Expanded(
-                      child: Text(
-                    meta.description,
-                  )),
-                ])
-              ],
-            ))),
-      ),
+      child: [
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Expanded(
+              child: Text(
+            meta.name,
+            style: ctx.textTheme.titleMedium,
+          )),
+          if (isSelected) const Icon(Icons.check, color: Colors.green)
+        ]),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Expanded(
+              child: Text(
+            meta.description,
+          )),
+        ])
+      ].column().scrolled().padAll(20).inCard(elevation: 5),
     );
   }
 

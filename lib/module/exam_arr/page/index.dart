@@ -143,10 +143,8 @@ class _ExamArrangementPageState extends State<ExamArrangementPage> {
       );
     }
     return ListView.builder(
-      itemBuilder: (BuildContext context, int index) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Card(child: Padding(padding: const EdgeInsets.fromLTRB(16, 8, 16, 8), child: widgets[index])),
-      ),
+      itemBuilder: (BuildContext context, int index) =>
+          widgets[index].padSymmetric(v: 8, h: 16).inCard(elevation: 5).padH(16),
       itemCount: widgets.length,
     );
   }

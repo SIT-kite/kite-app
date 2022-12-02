@@ -79,9 +79,7 @@ class KiteBulletinPage extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: noticeList
-            .map((e) => Card(
-                  child: _buildBulletinItem(context, e),
-                ))
+            .map((e) => _buildBulletinItem(context, e).inCard(elevation: 5))
             .toList(),
       ),
     );

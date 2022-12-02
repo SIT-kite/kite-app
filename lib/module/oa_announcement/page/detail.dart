@@ -22,6 +22,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:kite/design/utils.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:rettulf/widget/hero.dart';
 
 import '../entity/announcement.dart';
 import '../entity/attachment.dart';
@@ -111,6 +112,7 @@ class _DetailPageState extends State<DetailPage> {
 
     return Card(
       margin: const EdgeInsets.fromLTRB(2, 10, 2, 2),
+      elevation: 3,
       child: Padding(
           padding: const EdgeInsets.all(10),
           child: Table(
@@ -131,11 +133,16 @@ class _DetailPageState extends State<DetailPage> {
     final theme = Theme.of(context);
     final titleStyle = theme.textTheme.headline2;
 
+    final title = Text(article.title, style: titleStyle);
+    final heroKey = widget.key;
+    if (heroKey != null) {
+      title.hero(heroKey);
+    }
     final htmlContent = _linkTel(article.content);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(article.title, style: titleStyle),
+        title,
         _buildCard(context, article),
         const SizedBox(height: 10),
         if (theme.isDark) DarkModeSafeHtmlWidget(htmlContent) else MyHtmlWidget(htmlContent),

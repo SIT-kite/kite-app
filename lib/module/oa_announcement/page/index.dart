@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/util/collection.dart';
 import 'package:rettulf/rettulf.dart';
 import '../using.dart';
 
@@ -32,20 +33,6 @@ class OaAnnouncePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: i18n.ftype_oaAnnouncement.txt),
       body: _buildAnnounceList(),
-    );
-  }
-
-  Widget _buildBulletinItem(BuildContext context, BulletinRecord record) {
-    final titleStyle = Theme.of(context).textTheme.headline4;
-    final subtitleStyle = Theme.of(context).textTheme.bodyText1;
-
-    return Padding(
-      padding: const EdgeInsets.all(2),
-      child: ListTile(
-        title: Text(record.title, style: titleStyle, overflow: TextOverflow.ellipsis),
-        subtitle: Text('${record.department} | ${context.dateNum(record.dateTime)}', style: subtitleStyle),
-        onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailPage(record))),
-      ),
     );
   }
 
@@ -79,8 +66,22 @@ class OaAnnouncePage extends StatelessWidget {
           // 公告项按时间排序
           records.sort((a, b) => b.dateTime.difference(a.dateTime).inSeconds);
 
-          final items = records.map((e) => Card(child: _buildBulletinItem(context, e))).toList();
+          final items = records.mapIndexed((e, i) => Card(child: _buildBulletinItem(context, UniqueKey(), e))).toList();
           return SingleChildScrollView(child: Column(children: items));
         });
+  }
+
+  Widget _buildBulletinItem(BuildContext context, Key key, BulletinRecord record) {
+    final titleStyle = Theme.of(context).textTheme.headline4;
+    final subtitleStyle = Theme.of(context).textTheme.bodyText1;
+
+    return Padding(
+      padding: const EdgeInsets.all(2),
+      child: ListTile(
+        title: Text(record.title, style: titleStyle, overflow: TextOverflow.ellipsis).hero(key),
+        subtitle: Text('${record.department} | ${context.dateNum(record.dateTime)}', style: subtitleStyle),
+        onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailPage(record,key: key,))),
+      ),
+    );
   }
 }
