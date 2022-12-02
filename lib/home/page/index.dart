@@ -79,8 +79,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
   final overrideFunctionNotifier = ValueNotifier<FunctionOverrideInfo?>(null);
   late bool isFreshman;
   late bool isOffline;
@@ -90,8 +89,7 @@ class _HomePageState extends State<HomePage> {
     Log.info('更新天气');
     Future.delayed(const Duration(milliseconds: 800), () async {
       try {
-        final weather =
-            await WeatherService().getCurrentWeather(Kv.home.campus);
+        final weather = await WeatherService().getCurrentWeather(Kv.home.campus);
         Global.eventBus.emit(EventNameConstants.onWeatherUpdate, weather);
       } catch (_) {}
     });
@@ -179,17 +177,13 @@ class _HomePageState extends State<HomePage> {
       alignment: Alignment.centerLeft,
       child: GestureDetector(
         onTap: () => _scaffoldKey.currentState?.openDrawer(),
-        onDoubleTap: () =>
-            Navigator.of(context).pushNamed(RouteTable.easterEgg),
-        child: Center(
-            child: SvgPicture.asset('assets/home/kite.svg',
-                width: 80.w, height: 80.h)),
+        onDoubleTap: () => Navigator.of(context).pushNamed(RouteTable.easterEgg),
+        child: Center(child: SvgPicture.asset('assets/home/kite.svg', width: 80.w, height: 80.h)),
       ),
     );
   }
 
-  List<Widget> buildBricksWidgets(List<ExtraHomeItem>? extraItemList,
-      List<HomeItemHideInfo>? hideInfoList) {
+  List<Widget> buildBricksWidgets(List<ExtraHomeItem>? extraItemList, List<HomeItemHideInfo>? hideInfoList) {
     // print(extraItemList);
     UserType userType = AccountUtils.getUserType();
     List<FType> list = Kv.home.homeItems ?? makeDefaultBricks(userType);
@@ -227,9 +221,7 @@ class _HomePageState extends State<HomePage> {
     if (extraItemList != null) {
       result.addAll([
         HomeItemGroup(
-          extraItemList
-              .map((e) => buildBrickWidgetByExtraHomeItem(context, e))
-              .toList(),
+          extraItemList.map((e) => buildBrickWidgetByExtraHomeItem(context, e)).toList(),
         ),
         separator,
       ]);
@@ -308,11 +300,9 @@ class _HomePageState extends State<HomePage> {
                 ),
                 // AppBar
                 actions: [
-                  if (!UniversalPlatform.isDesktopOrWeb)
-                    buildScannerButton(context),
+                  if (!UniversalPlatform.isDesktopOrWeb) buildScannerButton(context),
                   IconButton(
-                    onPressed: () =>
-                        Navigator.of(context).pushNamed(RouteTable.settings),
+                    onPressed: () => Navigator.of(context).pushNamed(RouteTable.settings),
                     icon: const Icon(Icons.settings, color: Colors.white70),
                   ),
                 ],
@@ -358,14 +348,11 @@ class _HomePageState extends State<HomePage> {
 
     _onHomeRefresh(context);
     // 非新生且使用手机
-    if (!isFreshman &&
-        (UniversalPlatform.isAndroid || UniversalPlatform.isIOS)) {
+    if (!isFreshman && (UniversalPlatform.isAndroid || UniversalPlatform.isIOS)) {
       QuickButton.init(context);
     }
-    Global.eventBus
-        .on(EventNameConstants.onCampusChange, (_) => _updateWeather());
-    Global.eventBus
-        .on(EventNameConstants.onHomeItemReorder, (_) => setState(() {}));
+    Global.eventBus.on(EventNameConstants.onCampusChange, (_) => _updateWeather());
+    Global.eventBus.on(EventNameConstants.onHomeItemReorder, (_) => setState(() {}));
     super.initState();
   }
 
@@ -385,9 +372,7 @@ class _HomePageState extends State<HomePage> {
               Log.info('浮动按钮被点击');
               // 触发下拉刷新
               final pos = _refreshController.position!;
-              await pos.animateTo(-100,
-                  duration: const Duration(milliseconds: 800),
-                  curve: Curves.linear);
+              await pos.animateTo(-100, duration: const Duration(milliseconds: 800), curve: Curves.linear);
             },
           )
         : null;

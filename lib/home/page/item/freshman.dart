@@ -33,7 +33,7 @@ class FreshmanItem extends StatelessWidget {
     final userType = AccountUtils.getAuthUserType();
     // 老师根本不会显示这个列表项
     // 所以只考虑正式学生的情况
-    if(userType == null){
+    if (userType == null) {
       return const SizedBox();
     }
     if (userType != UserType.freshman) {

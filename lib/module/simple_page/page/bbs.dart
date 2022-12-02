@@ -56,8 +56,7 @@ class BbsPage extends StatelessWidget {
         postData: {
           'openid': openid,
           'nickname': nickname,
-          'avatar':
-              'https://txc.qq.com/static/desktop/img/products/def-product-logo.png',
+          'avatar': 'https://txc.qq.com/static/desktop/img/products/def-product-logo.png',
         },
         fixedTitle: i18n.ftype_bbs,
         showLaunchButtonIfUnsupported: false,

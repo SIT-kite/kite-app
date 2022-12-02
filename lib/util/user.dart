@@ -38,8 +38,7 @@ class AccountUtils {
   static final RegExp reTeacherId = RegExp(r'^(\d{4})$');
 
   static UserType? guessUserType(String username) {
-    if (username.length == 10 &&
-        reUndergraduateId.hasMatch(username.toUpperCase())) {
+    if (username.length == 10 && reUndergraduateId.hasMatch(username.toUpperCase())) {
       return UserType.undergraduate;
     } else if (username.length == 9 && rePostgraduateId.hasMatch(username)) {
       return UserType.postgraduate;

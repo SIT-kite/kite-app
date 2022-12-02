@@ -44,8 +44,7 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
   void initState() {
     super.initState();
 
-    checkConnectivityFuture =
-        ConnectivityInit.ssoSession.checkConnectivity().then((value) {
+    checkConnectivityFuture = ConnectivityInit.ssoSession.checkConnectivity().then((value) {
       Log.info('当前是否连接校园网：$value');
       if (!mounted) return;
       setState(() => isConnected = value);
@@ -55,8 +54,7 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
   Widget buildFigure(BuildContext context) {
     final Color primaryColor = Theme.of(context).primaryColor;
     final Color color = isConnected ? primaryColor : Colors.grey;
-    return SvgPicture.asset('assets/connectivity/not-available.svg',
-        width: 240, height: 240, color: color);
+    return SvgPicture.asset('assets/connectivity/not-available.svg', width: 180.h, height: 180.h, color: color);
   }
 
   List<Widget> buildConnectedBlock() {
@@ -68,8 +66,8 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
         textAlign: TextAlign.center,
         style: style);
 
-    Widget buildConnectedByVpnBlock() => Text(i18n.connectivityConnectedByVpn,
-        textAlign: TextAlign.center, style: style);
+    Widget buildConnectedByVpnBlock() =>
+        Text(i18n.connectivityConnectedByVpn, textAlign: TextAlign.center, style: style);
     Widget buildConnectedByWlanBlock() {
       return FutureBuilder(
         future: Network.checkStatus(),
@@ -142,8 +140,7 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
           ElevatedButton(
               child: i18n.launchEasyConnectBtn.txt,
               onPressed: () async {
-                final launched =
-                    await GlobalLauncher.launch('sangfor://easyconnect');
+                final launched = await GlobalLauncher.launch('sangfor://easyconnect');
                 if (!launched) {
                   if (!mounted) return;
                   final confirm = await context.showRequest(
@@ -185,8 +182,7 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
 
   @override
   Widget build(BuildContext context) {
-    final block =
-        isConnected ? buildConnectedBlock() : buildDisconnectedBlock();
+    final block = isConnected ? buildConnectedBlock() : buildDisconnectedBlock();
     return Scaffold(
       appBar: AppBar(title: i18n.networkTool.txt),
       body: Column(

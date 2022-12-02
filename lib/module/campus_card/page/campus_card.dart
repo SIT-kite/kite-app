@@ -18,6 +18,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:app_settings/app_settings.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/design/page/common.dart';
@@ -125,7 +126,9 @@ class _CampusCardPageState extends State<CampusCardPage> {
 
   Widget buildFailedPrompt(BuildContext ctx) {
     return buildLeavingBlankBody(ctx,
-        icon: Icons.credit_card_off_outlined, desc: i18n.campusCardNfcUnavailableOrDisabled);
+        icon: Icons.credit_card_off_outlined, desc: i18n.campusCardNfcUnavailableOrDisabled, onIconTap: () async {
+      await AppSettings.openNFCSettings();
+    });
   }
 
   Widget buildPrompt() {

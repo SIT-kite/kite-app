@@ -16,17 +16,23 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rettulf/rettulf.dart';
 
 Widget buildLeavingBlankBody(BuildContext ctx,
     {required IconData icon, required String desc, VoidCallback? onIconTap}) {
+  Widget iconWidget = icon.make(size: 120).padAll(20);
+  if (onIconTap != null) {
+    iconWidget = iconWidget.on(tap: onIconTap);
+  }
   return [
-    if (onIconTap == null)
-      icon.make(size: 120).padAll(20)
-    else
-      GestureDetector(onTap: onIconTap, child: Icon(icon, size: 120).padAll(20)),
-    desc.text(
-      style: ctx.theme.textTheme.titleLarge,
-    ),
+    iconWidget.expanded(),
+    desc
+        .text(
+          style: ctx.theme.textTheme.titleLarge,
+        )
+        .center()
+        .padAll(10)
+        .expanded(),
   ].column(maa: MAAlign.spaceAround).center();
 }
