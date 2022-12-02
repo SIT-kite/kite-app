@@ -19,11 +19,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/design/user_widgets/dialog.dart';
 import 'package:kite/home/page/index.dart';
+import 'package:kite/module/pure_function/launch_in_browser.dart';
 import 'package:kite/navigation/static_route.dart';
 import 'package:kite/override/entity.dart';
 import 'package:kite/settings/page/index.dart';
 import 'package:kite/storage/init.dart';
 
+import 'module/pure_function/launcher.dart';
 import 'module/simple_page/page/browser.dart';
 import 'module/symbol.dart';
 import 'navigation/route.dart';
@@ -80,6 +82,8 @@ class RouteTable {
   static const notFound = '/not_found';
   static const simpleHtml = '/simple_html';
   static const serviceStatus = '/service_status';
+  static const pureFunctionLauncher = '/pure_function/launch';
+  static const pureFunctionLaunchInBrowser = '/pure_function/launchInBrowser';
 }
 
 final defaultRouteTable = StaticRouteTable(
@@ -150,6 +154,8 @@ final defaultRouteTable = StaticRouteTable(
       );
     },
     RouteTable.serviceStatus: (context, args) => const ServiceStatusPage(),
+    RouteTable.pureFunctionLauncher: (context, args) => LauncherFunction(args['schemeText']),
+    RouteTable.pureFunctionLaunchInBrowser: (context, args) => LaunchInBrowserFunction(args['url']),
   },
   onNotFound: (context, routeName, args) => NotFoundPage(routeName),
   rootRoute: (context, table, args) {
