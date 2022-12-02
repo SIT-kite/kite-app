@@ -17,13 +17,10 @@
  */
 import 'package:app_settings/app_settings.dart';
 import 'package:check_vpn_connection/check_vpn_connection.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/design/user_widgets/dialog.dart';
-import 'package:rettulf/rettulf.dart';
 
 import '../init.dart';
 import '../service/network.dart';
@@ -185,12 +182,14 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
     final block = isConnected ? buildConnectedBlock() : buildDisconnectedBlock();
     return Scaffold(
       appBar: AppBar(title: i18n.networkTool.txt),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          buildFigure(context),
-          ...block,
-        ],
+      body: SizedBox.expand(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            buildFigure(context),
+            ...block,
+          ],
+        ),
       ),
     );
   }
