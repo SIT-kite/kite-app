@@ -378,6 +378,8 @@
   "timetableSetStartDate": "設定起始日期",
   "timetableSetToDefault": "設為預設",
   "timetableWeekOrderedName": "第 {week} 周",
+  "timetableDetailCourseId": "课程代码 {courseId}",
+  "timetableDetailClassId": "班级 {classId}",
   "unfilled": "未輸入",
   "unknown": "未知",
   "untitled": "無標題",

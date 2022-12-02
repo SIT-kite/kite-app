@@ -600,6 +600,22 @@
       }
     }
   },
+  "timetableDetailCourseId": "Course Code {courseId}",
+  "@timetableDetailCourseId": {
+    "placeholders": {
+      "courseId": {
+        "type": "String"
+      }
+    }
+  },
+  "timetableDetailClassId": "Class Code {classId}",
+  "@timetableDetailClassId": {
+    "placeholders": {
+      "classId": {
+        "type": "String"
+      }
+    }
+  },
   "unfilled": "Unfilled",
   "unknown": "Unknown",
   "untitled": "Untitled",
@@ -642,3 +658,4 @@
   "xuhuiDistrict": "Xuhui District",
   "yes": "Yes"
 }
+
