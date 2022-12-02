@@ -49,13 +49,21 @@ class _IndexPageState extends State<IndexPage> {
   }
 
   Future<void> fetch(DateTime start, DateTime end) async {
-    allRecords = await cache.fetch(
-      studentID: Kv.auth.currentUsername!,
-      from: start,
-      to: end,
-      onLocalQuery: refreshRecords,
-    );
-    refreshRecords(allRecords);
+    for (int i = 0; i < 3; i++) {
+      try {
+        EasyLoading.showToast('正在获取最新数据');
+        allRecords = await cache.fetch(
+          studentID: Kv.auth.currentUsername!,
+          from: start,
+          to: end,
+          onLocalQuery: refreshRecords,
+        );
+        refreshRecords(allRecords);
+        EasyLoading.showToast('已获取最新数据');
+        return;
+      } catch (_) {}
+    }
+    EasyLoading.showToast('网络异常，请稍后重试');
   }
 
   @override
