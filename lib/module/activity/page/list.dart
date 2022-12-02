@@ -175,8 +175,7 @@ class _ActivityListState extends State<ActivityList> {
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: extent,
         ),
-        showItemDuration: const Duration(milliseconds: 300),
-        showItemInterval: const Duration(milliseconds: 20),
+        showItemInterval: const Duration(milliseconds: 40),
         itemBuilder: (ctx, index, animation) => buildAnimatedActivityCard(ctx, activities[index], animation),
       );
     });

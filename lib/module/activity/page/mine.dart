@@ -128,8 +128,7 @@ class _MinePageState extends State<MinePage> {
           controller: _scrollController,
           itemCount: activities.length,
           physics: const BouncingScrollPhysics(),
-          showItemDuration: const Duration(milliseconds: 300),
-          showItemInterval: const Duration(milliseconds: 20),
+          showItemInterval: const Duration(milliseconds: 40),
           itemBuilder: (ctx, index, animation) => buildAnimatedJoinedActivity(ctx, activities[index], animation),
         ),
       );
