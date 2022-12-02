@@ -17,7 +17,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:universal_platform/universal_platform.dart';
 
 import '../using.dart';
 
@@ -41,11 +40,6 @@ class WeatherPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final url = _getWeatherUrl(campus);
-    if (UniversalPlatform.isDesktop) {
-      Navigator.of(context).pop();
-      GlobalLauncher.launch(url);
-      return Container();
-    }
     return SimpleWebViewPage(
       initialUrl: url,
       fixedTitle: title ?? i18n.weather,
