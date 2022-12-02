@@ -16,7 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/module/timetable/utils.dart';
+import '../events.dart';
+import '../utils.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../cache.dart';
@@ -68,7 +69,6 @@ class _TimetablePageState extends State<TimetablePage> {
         if (approve == true) {
           if (!mounted) return;
           await Navigator.of(context).pushNamed(RouteTable.timetableImport);
-          _onRefresh();
         }
       });
     }
@@ -85,6 +85,13 @@ class _TimetablePageState extends State<TimetablePage> {
     storage.lastMode = initialMode;
     courses = storage.currentTableCourses ?? [];
     meta = storage.currentTableMeta;
+    eventBus.on<DefaultTimetableChangeEvent>().listen((event) {
+      if (!mounted) return;
+      setState(() {
+        courses = storage.currentTableCourses ?? [];
+        meta = storage.currentTableMeta;
+      });
+    });
     checkFirstImportTable();
     super.initState();
   }
@@ -96,11 +103,6 @@ class _TimetablePageState extends State<TimetablePage> {
       return;
     }
     exportDialog.export();
-  }
-
-  /// 根据本地缓存刷新课表
-  void _onRefresh() {
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const TimetablePage()));
   }
 
   Future<void> selectTimetablePageToJump(BuildContext ctx) async {
@@ -186,7 +188,6 @@ class _TimetablePageState extends State<TimetablePage> {
         icon: const Icon(Icons.person_rounded),
         onPressed: () async {
           await Navigator.of(ctx).pushNamed(RouteTable.myTimetables);
-          _onRefresh();
         });
   }
 }

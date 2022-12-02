@@ -135,7 +135,6 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
 
 extension _EditDialogEx on BuildContext {
   Future<String?> editString({String? initialValue}) async {
-    Log.info('inputString');
     if (initialValue == null) return null;
     final controller = TextEditingController();
     controller.text = initialValue;

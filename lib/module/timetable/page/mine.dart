@@ -18,6 +18,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/module/symbol.dart';
+import 'package:kite/module/timetable/events.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../../activity/using.dart';
@@ -104,6 +105,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
             onPressed: () {
               Navigator.of(ctx).pop();
               timetableStorage.currentTableName = meta.name;
+              eventBus.fire(DefaultTimetableChangeEvent(selected: meta));
               setState(() {});
             },
             child: i18n.timetableSetToDefault.txt,

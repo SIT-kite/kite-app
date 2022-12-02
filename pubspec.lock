@@ -464,7 +464,7 @@ packages:
     source: hosted
     version: "2.0.5"
   event_bus:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: event_bus
       url: "https://pub.dartlang.org"
@@ -933,13 +933,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.7"
-  kt_dart:
-    dependency: "direct main"
-    description:
-      name: kt_dart
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
   lints:
     dependency: transitive
     description:
