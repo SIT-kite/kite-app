@@ -21,13 +21,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/module/activity/entity/list.dart';
 import 'package:rettulf/rettulf.dart';
-import '../using.dart';
 
 import '../entity/score.dart';
 import '../init.dart';
+import '../user_widgets/summary.dart';
+import '../using.dart';
 import '../utils.dart';
 import 'detail.dart';
-import '../user_widgets/summary.dart';
 
 class MinePage extends StatefulWidget {
   const MinePage({Key? key}) : super(key: key);
@@ -55,13 +55,13 @@ class _MinePageState extends State<MinePage> {
 
   void onRefresh() {
     ScInit.scScoreService.getScScoreSummary().then((value) {
-      if(!mounted) return;
+      if (!mounted) return;
       setState(() {
         summary = value;
       });
     });
     getMyActivityListJoinScore(ScInit.scScoreService).then((value) {
-      if(!mounted) return;
+      if (!mounted) return;
       setState(() {
         joined = value;
       });
@@ -89,7 +89,7 @@ class _MinePageState extends State<MinePage> {
 
     return Card(
       child: ListTile(
-        title: Text(activity.realTitle, style: titleStyle, maxLines: 2, overflow: TextOverflow.clip)
+        title: Text(activity.realTitle, style: titleStyle, maxLines: 2, overflow: TextOverflow.ellipsis)
             .hero(rawActivity.applyId),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,8 +103,7 @@ class _MinePageState extends State<MinePage> {
         onTap: rawActivity.activityId != -1
             ? () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (_) => DetailPage(activity, hero: rawActivity.applyId, enableApply: true)),
+                  MaterialPageRoute(builder: (_) => DetailPage(activity, hero: rawActivity.applyId, enableApply: true)),
                 );
               }
             : null,
@@ -131,6 +130,7 @@ class _MinePageState extends State<MinePage> {
           itemCount: activities.length,
           physics: const BouncingScrollPhysics(),
           showItemDuration: const Duration(milliseconds: 300),
+          showItemInterval: const Duration(milliseconds: 20),
           itemBuilder: (ctx, index, animation) => buildAnimatedJoinedActivity(ctx, activities[index], animation),
         ).expended(),
       );
