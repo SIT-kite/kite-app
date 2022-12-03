@@ -19,6 +19,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/module/activity/using.dart';
 import 'package:kite/module/library/search/entity/search_history.dart';
+import 'package:kite/module/yellow_pages/entity/contact.dart';
 import 'package:rettulf/rettulf.dart';
 
 class LocalStoragePage extends StatefulWidget {
@@ -34,7 +35,9 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
     "librarySearchHistory": Future(() => Hive.openBox<LibrarySearchHistoryItem>("librarySearchHistory")),
     "expense2": Future(() => Hive.openBox<dynamic>("expense2")),
     "course": Future(() => Hive.openBox<dynamic>("course")),
+    "game": Future(() => Hive.openBox<dynamic>("game")),
     "userEvent": Future(() => Hive.openBox<dynamic>("userEvent")),
+    "contactSetting": Future(() => Hive.openBox<ContactData>("contactSetting")),
   };
 
   @override
