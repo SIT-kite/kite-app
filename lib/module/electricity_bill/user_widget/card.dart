@@ -32,6 +32,7 @@ Widget cardTitle(String title) {
 
 Widget buildCard(String title, Widget content) {
   return Card(
+    elevation: 3,
       child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
           child: Column(children: [cardTitle(title), content])));

@@ -105,7 +105,7 @@ class _ElectricityBillPageState extends State<ElectricityBillPage> {
               },
             ),
             selectedIndex: currentNavigation,
-            groupAlignment: -1.0,
+            groupAlignment: 1.0,
             onDestinationSelected: (int index) {
               if (selectedRoom == null && index == searchPageIndex) {
                 search();

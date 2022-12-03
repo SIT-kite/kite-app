@@ -82,7 +82,7 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
               },
             ),
             selectedIndex: currentNavigation,
-            groupAlignment: -1.0,
+            groupAlignment: 1.0,
             onDestinationSelected: (int index) {
               setState(() {
                 currentNavigation = index;

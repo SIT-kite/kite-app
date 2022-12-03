@@ -427,5 +427,6 @@
   "elecBillBillNavigation": "电费",
   "elecBillSearchNavigation": "搜索",
   "warning": "警告",
-  "localStorageEmptyValueDesc": "当心！你正准备清空这个值，确定要这样做吗？"
+  "localStorageEmptyValueDesc": "当心！你正准备清空这个值，确定要这样做吗？",
+  "rmb": "¥{amount}"
 }

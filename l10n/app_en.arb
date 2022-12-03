@@ -680,5 +680,13 @@
   "elecBillBillNavigation": "Bill",
   "elecBillSearchNavigation": "Search",
   "warning": "Warning",
-  "localStorageEmptyValueDesc": "BEWARE! YOU ARE TRYING TO EMPTY THE VALUE! ARE YOU SURE?"
+  "localStorageEmptyValueDesc": "BEWARE! YOU ARE TRYING TO EMPTY THE VALUE! ARE YOU SURE?",
+  "rmb": "¥{amount}",
+  "@rmb": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  }
 }
