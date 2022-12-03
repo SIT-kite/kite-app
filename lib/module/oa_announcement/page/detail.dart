@@ -83,10 +83,10 @@ class _DetailPageState extends State<DetailPage> {
     final theme = ctx.theme;
     final titleStyle = theme.textTheme.headline2;
     return [
-      summary.title.text(style: titleStyle).hero(summary.uuid),
-      buildInfoCard(ctx),
+      [summary.title.text(style: titleStyle), buildInfoCard(ctx)].wrap().hero(summary.uuid),
       AnimatedSwitcher(
-        duration: const Duration(milliseconds: 800),switchInCurve: Curves.easeOut,
+        duration: const Duration(milliseconds: 800),
+        switchInCurve: Curves.easeOut,
         child: _detail != null ? buildDetailArticle(ctx) : Placeholders.loading(),
       )
     ].column().scrolled();

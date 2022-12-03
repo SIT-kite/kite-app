@@ -92,8 +92,7 @@ class _MinePageState extends State<MinePage> {
 
     return Card(
       child: ListTile(
-        title: Text(activity.realTitle, style: titleStyle, maxLines: 2, overflow: TextOverflow.ellipsis)
-            ,
+        title: Text(activity.realTitle, style: titleStyle, maxLines: 2, overflow: TextOverflow.ellipsis),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -129,31 +128,10 @@ class _MinePageState extends State<MinePage> {
           itemCount: activities.length,
           physics: const BouncingScrollPhysics(),
           showItemInterval: const Duration(milliseconds: 40),
-          itemBuilder: (ctx, index, animation) => buildAnimatedJoinedActivity(ctx, activities[index], animation),
+          itemBuilder: (ctx, index, animation) =>
+              buildJoinedActivityCard(ctx, activities[index]).aliveWith(animation),
         ),
       );
     }
   }
-
-  Widget buildAnimatedJoinedActivity(
-    BuildContext ctx,
-    ScJoinedActivity activity,
-    Animation<double> animation,
-  ) =>
-      // For example wrap with fade transition
-      FadeTransition(
-        opacity: Tween<double>(
-          begin: 0,
-          end: 1,
-        ).animate(animation),
-        // And slide transition
-        child: SlideTransition(
-          position: Tween<Offset>(
-            begin: const Offset(0, -0.3),
-            end: Offset.zero,
-          ).animate(animation),
-          // Paste you Widget
-          child: buildJoinedActivityCard(ctx, activity),
-        ),
-      );
 }

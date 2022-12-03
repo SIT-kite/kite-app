@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/util/collection.dart';
 import 'package:rettulf/rettulf.dart';
@@ -66,12 +67,16 @@ class OaAnnouncePage extends StatelessWidget {
           // 公告项按时间排序
           records.sort((a, b) => b.dateTime.difference(a.dateTime).inSeconds);
 
-          final items = records.mapIndexed((e, i) => Card(child: _buildBulletinItem(context, e))).toList();
-          return SingleChildScrollView(child: Column(children: items));
+          final items = records.mapIndexed((e, i) => _buildAnnounceItem(context, e).inCard()).toList();
+          return LiveList(
+              itemCount: items.length,
+              showItemInterval: const Duration(milliseconds: 50),
+              showItemDuration: const Duration(milliseconds: 300),
+              itemBuilder: (ctx, index, animation) => items[index].aliveWith(animation));
         });
   }
 
-  Widget _buildBulletinItem(BuildContext context, AnnounceRecord record) {
+  Widget _buildAnnounceItem(BuildContext context, AnnounceRecord record) {
     final titleStyle = Theme.of(context).textTheme.headline4;
     final subtitleStyle = Theme.of(context).textTheme.bodyText1;
 
