@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/module/activity/using.dart';
@@ -127,7 +126,7 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
                 }
               }
               return items.column().scrolled();
-            });
+            }).align(at: Alignment.topCenter);
       }
     }
   }

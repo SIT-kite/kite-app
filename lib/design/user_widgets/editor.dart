@@ -26,19 +26,29 @@ class Editor {
   }
 
   static Future<bool> showBoolEditor(BuildContext ctx, String? desc, bool initial) async {
-    return await ctx.showDialog(
+    final newValue = await ctx.showDialog(
         builder: (ctx) => _BoolEditor(
               initial: initial,
               desc: desc,
             ));
+    if (newValue != null) {
+      return newValue;
+    } else {
+      return initial;
+    }
   }
 
   static Future<String> showStringEditor(BuildContext ctx, String? desc, String initial) async {
-    return await ctx.showDialog(
+    final newValue = await ctx.showDialog(
         builder: (ctx) => _StringEditor(
               initial: initial,
               title: desc,
             ));
+    if (newValue != null) {
+      return newValue;
+    } else {
+      return initial;
+    }
   }
 
   static Future<void> showReadonlyEditor(BuildContext ctx, String? desc, dynamic value) async {
@@ -47,11 +57,16 @@ class Editor {
   }
 
   static Future<int> showIntEditor(BuildContext ctx, String? desc, int initial) async {
-    return await ctx.showDialog(
+    final newValue = await ctx.showDialog(
         builder: (ctx) => _IntEditor(
               initial: initial,
               title: desc,
             ));
+    if (newValue == null) {
+      return initial;
+    } else {
+      return newValue;
+    }
   }
 }
 
