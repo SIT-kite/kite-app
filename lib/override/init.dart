@@ -32,7 +32,6 @@ class FunctionOverrideInit {
       serviceDao: FunctionOverrideService(kiteSession),
       storageDao: storageDao,
     );
-    // TODO: Temporarily disabled for I18n development
     // cachedService = FunctionOverrideDisabled();
     // cachedService = FunctionOverrideMock();
   }

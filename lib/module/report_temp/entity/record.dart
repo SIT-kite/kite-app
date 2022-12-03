@@ -22,7 +22,7 @@ part 'record.g.dart';
 /// REAL. THE PAYLOAD IS IN PINYIN. DONT BLAME ANYONE BUT THE SCHOOL.
 /// More reading: https://github.com/sunnysab/zf-tools/blob/master/TRANSLATION.md
 @JsonSerializable()
-@HiveType(typeId: HiveTypeIdPool.reportHistoryItem)
+@HiveType(typeId: HiveTypeId.reportHistoryItem)
 class ReportHistory {
   /// 上报日期 "yyyyMMdd"
   @JsonKey(name: 'batchno')

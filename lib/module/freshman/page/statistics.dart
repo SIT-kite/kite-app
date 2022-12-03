@@ -27,9 +27,8 @@ import '../entity/info.dart';
 import '../entity/statistics.dart';
 import '../init.dart';
 
-// TODO: Rename this to statistics
-class FreshmanAnalysisPage extends StatelessWidget {
-  const FreshmanAnalysisPage({Key? key}) : super(key: key);
+class FreshmanStatisticsPage extends StatelessWidget {
+  const FreshmanStatisticsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -105,40 +104,40 @@ class FreshmanAnalysisPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        buildAnalysisTextRow(text: '终于等到你 ', analysis: info.name),
-        buildAnalysisTextRow(text: '欢迎来到上海应用技术大学'),
+        _row(text: '终于等到你 ', n: info.name),
+        _row(text: '欢迎来到上海应用技术大学'),
         SizedBox(height: 15.h),
-        buildAnalysisTextRow(text: '有 ', analysis: data.collegeCount.toString(), text2: '人和你一起'),
-        buildAnalysisTextRow(text: '来到了 ', analysis: info.college),
-        buildAnalysisTextRow(text: '你的专业共有 ', analysis: data.major.total.toString(), text2: '人'),
+        _row(text: '有 ', n: data.collegeCount.toString(), text2: '人和你一起'),
+        _row(text: '来到了 ', n: info.college),
+        _row(text: '你的专业共有 ', n: data.major.total.toString(), text2: '人'),
         Row(
           children: [
-            buildAnalysisTextRow(text: '其中男生', analysis: data.major.boys.toString(), text2: '人，'),
-            buildAnalysisTextRow(text: '女生', analysis: data.major.girls.toString(), text2: '人'),
+            _row(text: '其中男生', n: data.major.boys.toString(), text2: '人，'),
+            _row(text: '女生', n: data.major.girls.toString(), text2: '人'),
           ],
         ),
         SizedBox(height: 15.h),
         if (data.sameCity > 0)
-          buildAnalysisTextRow(text: '还有 ', analysis: data.sameCity.toString(), text2: '人和你来自同一座城市'),
+          _row(text: '还有 ', n: data.sameCity.toString(), text2: '人和你来自同一座城市'),
         if (data.sameHighSchool > 0)
-          buildAnalysisTextRow(text: '其他 ', analysis: data.sameHighSchool.toString(), text2: '人是你的高中校友'),
-        if (data.sameHighSchool > 0 || data.sameCity > 0) buildAnalysisTextRow(text: '有时间可以认识一下哦'),
+          _row(text: '其他 ', n: data.sameHighSchool.toString(), text2: '人是你的高中校友'),
+        if (data.sameHighSchool > 0 || data.sameCity > 0) _row(text: '有时间可以认识一下哦'),
         SizedBox(height: 15.h),
-        if (data.sameName > 0) buildAnalysisTextRow(text: '哦，还有', analysis: data.sameName.toString(), text2: '人和你同名'),
-        if (data.sameName > 0) buildAnalysisTextRow(text: '也许会在某一不期而遇'),
+        if (data.sameName > 0) _row(text: '哦，还有', n: data.sameName.toString(), text2: '人和你同名'),
+        if (data.sameName > 0) _row(text: '也许会在某一不期而遇'),
         SizedBox(height: 20.h),
-        buildAnalysisTextRow(text: '生活是一种绵延不绝的渴望,', style: italicText),
-        buildAnalysisTextRow(text: '渴望不断上升，', style: italicText),
-        buildAnalysisTextRow(text: '变得更伟大而高贵。', style: italicText),
-        buildAnalysisTextRow(text: '--杜伽尔', style: italicText),
+        _row(text: '生活是一种绵延不绝的渴望,', style: italicText),
+        _row(text: '渴望不断上升，', style: italicText),
+        _row(text: '变得更伟大而高贵。', style: italicText),
+        _row(text: '--杜伽尔', style: italicText),
       ],
     );
   }
 
   /// 文字行抽离
-  Widget buildAnalysisTextRow({
+  Widget _row({
     required String text,
-    String? analysis,
+    String? n,
     String? text2,
     TextStyle? style,
     double fontSize = 18,
@@ -149,9 +148,9 @@ class FreshmanAnalysisPage extends StatelessWidget {
           text,
           style: style ?? TextStyle(fontSize: fontSize),
         ),
-        if (![null, ''].contains(analysis))
+        if (![null, ''].contains(n))
           Text(
-            analysis!,
+            n!,
             style: TextStyle(fontSize: fontSize, color: Colors.redAccent, fontWeight: FontWeight.bold),
           ),
         if (![null, ''].contains(text2))

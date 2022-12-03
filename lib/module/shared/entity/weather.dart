@@ -23,7 +23,7 @@ import 'package:kite/l10n/extension.dart';
 part 'weather.g.dart';
 
 @JsonSerializable()
-@HiveType(typeId: HiveTypeIdPool.weatherItem)
+@HiveType(typeId: HiveTypeId.weatherItem)
 class Weather {
   @HiveField(0)
   String weather;

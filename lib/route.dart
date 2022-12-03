@@ -137,7 +137,7 @@ final defaultRouteTable = StaticRouteTable(
       );
     },
     RouteTable.freshman: (context, args) => FreshmanPage(),
-    RouteTable.freshmanAnalysis: (context, args) => const FreshmanAnalysisPage(),
+    RouteTable.freshmanAnalysis: (context, args) => const FreshmanStatisticsPage(),
     RouteTable.freshmanLogin: (context, args) => const FreshmanLoginPage(),
     RouteTable.freshmanUpdate: (context, args) => const PersonalInfoPage(),
     RouteTable.freshmanFriend: (context, args) => const FreshmanRelationshipPage(),

@@ -19,6 +19,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:rettulf/rettulf.dart';
 import '../using.dart';
 
 import '../entity/function.dart';
@@ -66,6 +67,32 @@ class OfficePage extends StatefulWidget {
 class _OfficePageState extends State<OfficePage> {
   @override
   Widget build(BuildContext context) {
+    return context.isPortrait ? buildPortrait(context) : buildLandscape(context);
+  }
+
+  Widget buildPortrait(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: i18n.ftype_application.txt,
+        actions: [_buildMenuButton(context)],
+      ),
+      body: Column(
+        children: [
+          _buildNotice(),
+          Expanded(child: _buildBody()),
+        ],
+      ),
+      floatingActionButton: ApplicationInit.session.isLogin
+          ? FloatingActionButton(
+              onPressed: _navigateMessagePage,
+              tooltip: i18n.applicationMyMailBox,
+              child: const Icon(Icons.mail_outline),
+            )
+          : null,
+    );
+  }
+
+  Widget buildLandscape(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: i18n.ftype_application.txt,

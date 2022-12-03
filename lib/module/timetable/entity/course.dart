@@ -27,7 +27,7 @@ enum DisplayMode {
   weekly,
 }
 
-@HiveType(typeId: HiveTypeIdPool.courseItem)
+@HiveType(typeId: HiveTypeId.courseItem)
 @JsonSerializable()
 class Course {
   static final Map<String, int> _weekMapping = {'星期一': 1, '星期二': 2, '星期三': 3, '星期四': 4, '星期五': 5, '星期六': 6, '星期日': 7};

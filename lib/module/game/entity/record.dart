@@ -20,7 +20,7 @@ import '../using.dart';
 import 'type.dart';
 part 'record.g.dart';
 
-@HiveType(typeId: HiveTypeIdPool.gameRecordItem)
+@HiveType(typeId: HiveTypeId.gameRecordItem)
 @JsonSerializable()
 class GameRecord {
   /// 游戏类型

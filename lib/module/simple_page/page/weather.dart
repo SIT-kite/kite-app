@@ -27,22 +27,26 @@ String _getWeatherUrl(int campus) {
   return 'https://widget-page.qweather.net/h5/index.html?md=0123456&bg=1&lc=$location&key=f96261862c08497c90c0dea53467f511';
 }
 
-class WeatherPage extends StatelessWidget {
+class WeatherPage extends StatefulWidget {
   final int campus;
   final String? title;
 
-  // TODO: Don't change any state in a stateless widget
+  const WeatherPage(this.campus, {this.title, super.key});
+
+  @override
+  State<WeatherPage> createState() => _WeatherPageState();
+}
+
+class _WeatherPageState extends State<WeatherPage> {
   bool simple = true;
   late WebViewController controller;
 
-  WeatherPage(this.campus, {this.title, Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    final url = _getWeatherUrl(campus);
+    final url = _getWeatherUrl(widget.campus);
     return SimpleWebViewPage(
       initialUrl: url,
-      fixedTitle: title ?? i18n.weather,
+      fixedTitle: widget.title ?? i18n.weather,
       onWebViewCreated: (controller) {
         this.controller = controller;
       },

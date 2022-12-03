@@ -25,8 +25,7 @@ import 'package:kite/util/user.dart';
 
 part 'home.g.dart';
 
-// TODO: Rename
-@HiveType(typeId: HiveTypeIdPool.ftypeItem)
+@HiveType(typeId: HiveTypeId.ftypeItem)
 enum FType {
   /// 升级
   @HiveField(0)

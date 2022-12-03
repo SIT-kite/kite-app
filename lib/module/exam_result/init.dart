@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// TODO: Add cookie_jar to pubspec.yaml
 import 'package:cookie_jar/cookie_jar.dart';
 import 'using.dart';
 import 'dao/evaluation.dart';

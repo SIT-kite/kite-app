@@ -19,7 +19,7 @@ import '../using.dart';
 
 part 'type.g.dart';
 
-@HiveType(typeId: HiveTypeIdPool.gameTypeItem)
+@HiveType(typeId: HiveTypeId.gameTypeItem)
 enum GameType {
   /// 2048 游戏
   @HiveField(0)

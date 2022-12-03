@@ -107,7 +107,6 @@ class Initializer {
       kiteSession: kiteSession,
     );
     await KiteBulletinInit.init(kiteSession: kiteSession);
-    // TODO: Kite Board doesn't work
     await BoardInit.init(kiteSession: kiteSession);
     await HomeInit.init(
       ssoSession: Global.ssoSession,

@@ -21,7 +21,7 @@ import '../using.dart';
 part 'account.g.dart';
 
 @JsonSerializable()
-@HiveType(typeId: HiveTypeIdPool.balanceItem)
+@HiveType(typeId: HiveTypeId.balanceItem)
 class Balance {
   /// 余额
   @JsonKey()
