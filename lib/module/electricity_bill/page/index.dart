@@ -44,9 +44,15 @@ class _ElectricityPageState extends State<ElectricityPage> {
   String? room;
   late List<String> roomList;
   Balance? _balance;
-  final RefreshController _refreshController = RefreshController();
   final _rankViewKey = GlobalKey();
   final _chartKey = GlobalKey();
+
+  final _scrollController = ScrollController();
+  final _portraitRefreshController = RefreshController();
+  final _landscapeRefreshController = RefreshController();
+
+  RefreshController getCurrentRefreshController(BuildContext ctx) =>
+      ctx.isPortrait ? _portraitRefreshController : _landscapeRefreshController;
 
   Future<List> getRoomList() async {
     String jsonData = await rootBundle.loadString("assets/roomlist.json");
@@ -67,30 +73,64 @@ class _ElectricityPageState extends State<ElectricityPage> {
     _onRefresh();
   }
 
-  void search() {
-    showSearch(
-      context: context,
-      delegate: SimpleTextSearchDelegate(
-        recentList: storage.lastRoomList!.reversed.toList(),
-        // 最近查询(需要从hive里获取)，也可留空
-        suggestionList: roomList,
-        // 待搜索提示的列表(需要从服务器获取，可以缓存至数据库)
-        onlyUseSuggestion: true,
-        // 只允许使用搜索建议里的
-        childAspectRatio: 2.0,
-        maxCrossAxisExtent: 150.0,
-      ),
-    ).then((value) async {
-      if (value != null) {
-        Log.info('选择宿舍：$value');
-        final list = storage.lastRoomList!;
-        list.remove(value);
-        list.add(value);
-        storage.lastRoomList = list;
-        setState(() => room = value);
-        await _onRefresh();
-      }
-    });
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+    _portraitRefreshController.dispose();
+    _landscapeRefreshController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return context.isPortrait ? buildPortrait(context) : buildLandscape(context);
+  }
+
+  Widget buildPortrait(BuildContext context) {
+    final selectedRoom = room;
+    return Scaffold(
+        appBar: AppBar(
+          title: selectedRoom != null ? i18n.elecBillTitle(selectedRoom).text() : i18n.ftype_elecBill.text(),
+          actions: <Widget>[
+            IconButton(
+                onPressed: search,
+                icon: const Icon(
+                  Icons.search_rounded,
+                )),
+          ],
+        ),
+        body: selectedRoom == null
+            ? _buildEmptyBody(context)
+            : SmartRefresher(
+                controller: _portraitRefreshController,
+                scrollDirection: Axis.vertical,
+                onRefresh: _onRefresh,
+                header: const ClassicHeader(),
+                scrollController: _scrollController,
+                child: buildBodyPortrait(context, selectedRoom),
+              ));
+  }
+
+  Widget buildLandscape(BuildContext context) {
+    final selectedRoom = room;
+    return Scaffold(
+        floatingActionButton: PlainButton(
+          child: const Icon(Icons.arrow_back),
+          tap: () {
+            context.navigator.pop();
+          },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+        body: selectedRoom == null
+            ? _buildEmptyBody(context)
+            : SmartRefresher(
+                controller: _landscapeRefreshController,
+                scrollDirection: Axis.vertical,
+                onRefresh: _onRefresh,
+                header: const ClassicHeader(),
+                scrollController: _scrollController,
+                child: buildBodyLandscape(context, selectedRoom),
+              ).padAll(20));
   }
 
   void setRankViewState(void Function(RankViewState state) setter) {
@@ -162,61 +202,8 @@ class _ElectricityPageState extends State<ElectricityPage> {
         }
       })
     ]);
-    _refreshController.refreshCompleted();
-  }
-  // TODO: It's buggy when rotate the screen.
-  final _scrollController = ScrollController();
-
-  @override
-  Widget build(BuildContext context) {
-    return context.isPortrait ? buildPortrait(context) : buildLandscape(context);
-  }
-
-  Widget buildPortrait(BuildContext context) {
-    final selectedRoom = room;
-    return Scaffold(
-        appBar: AppBar(
-          title: selectedRoom != null ? i18n.elecBillTitle(selectedRoom).text() : i18n.ftype_elecBill.text(),
-          actions: <Widget>[
-            IconButton(
-                onPressed: search,
-                icon: const Icon(
-                  Icons.search_rounded,
-                )),
-          ],
-        ),
-        body: selectedRoom == null
-            ? _buildEmptyBody(context)
-            : SmartRefresher(
-                controller: _refreshController,
-                scrollDirection: Axis.vertical,
-                onRefresh: _onRefresh,
-                header: const ClassicHeader(),
-                scrollController: _scrollController,
-                child: buildBodyPortrait(context, selectedRoom),
-              ));
-  }
-
-  Widget buildLandscape(BuildContext context) {
-    final selectedRoom = room;
-    return Scaffold(
-        floatingActionButton: PlainButton(
-          child: const Icon(Icons.arrow_back),
-          tap: () {
-            context.navigator.pop();
-          },
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
-        body: selectedRoom == null
-            ? _buildEmptyBody(context)
-            : SmartRefresher(
-                controller: _refreshController,
-                scrollDirection: Axis.vertical,
-                onRefresh: _onRefresh,
-                header: const ClassicHeader(),
-                scrollController: _scrollController,
-                child: buildBodyLandscape(context, selectedRoom),
-              ).padAll(20));
+    if (!mounted) return;
+    getCurrentRefreshController(context).refreshCompleted();
   }
 
   Widget _buildEmptyBody(BuildContext ctx) {
@@ -225,18 +212,15 @@ class _ElectricityPageState extends State<ElectricityPage> {
 
   Widget buildBodyPortrait(BuildContext ctx, String room) {
     final balance = _balance;
-    return ListView(
-      controller: _scrollController,
-      children: [
-        const SizedBox(height: 5),
-        buildBalanceCard(ctx),
-        const SizedBox(height: 5),
-        RankView(key: _rankViewKey),
-        const SizedBox(height: 25),
-        ElectricityChart(key: _chartKey, room: room),
-        buildUpdateTime(context, balance?.ts).align(at: Alignment.bottomCenter),
-      ],
-    ).padSymmetric(v: 8, h: 20);
+    return [
+      const SizedBox(height: 5),
+      buildBalanceCard(ctx),
+      const SizedBox(height: 5),
+      RankView(key: _rankViewKey),
+      const SizedBox(height: 25),
+      ElectricityChart(key: _chartKey, room: room),
+      buildUpdateTime(context, balance?.ts).align(at: Alignment.bottomCenter),
+    ].column().scrolled().padSymmetric(v: 8, h: 20);
   }
 
   Widget buildBodyLandscape(BuildContext ctx, String room) {
@@ -341,5 +325,31 @@ class _ElectricityPageState extends State<ElectricityPage> {
             ]),
           ],
         )).center();
+  }
+
+  void search() {
+    showSearch(
+      context: context,
+      delegate: SimpleTextSearchDelegate(
+        recentList: storage.lastRoomList!.reversed.toList(),
+        // 最近查询(需要从hive里获取)，也可留空
+        suggestionList: roomList,
+        // 待搜索提示的列表(需要从服务器获取，可以缓存至数据库)
+        onlyUseSuggestion: true,
+        // 只允许使用搜索建议里的
+        childAspectRatio: 2.0,
+        maxCrossAxisExtent: 150.0,
+      ),
+    ).then((value) async {
+      if (value != null) {
+        Log.info('选择宿舍：$value');
+        final list = storage.lastRoomList!;
+        list.remove(value);
+        list.add(value);
+        storage.lastRoomList = list;
+        setState(() => room = value);
+        await _onRefresh();
+      }
+    });
   }
 }

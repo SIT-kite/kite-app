@@ -154,6 +154,6 @@ Widget buildSummeryCard(BuildContext ctx, ScScoreSummary? summery) {
           child: _buildChart(ctx, summery, showTotal: true).padSymmetric(v: 12),
         ),
       )
-    ].column(mas: MainAxisSize.min);
+    ].column();
   }
 }

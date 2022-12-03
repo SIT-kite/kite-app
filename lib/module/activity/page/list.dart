@@ -167,13 +167,13 @@ class _ActivityListState extends State<ActivityList> {
   }
 
   Widget _buildActivityResult(List<Activity> activities) {
-    return OrientationBuilder(builder: (ctx, o) {
-      final extent = o == Orientation.portrait ? 300.w : 150.w;
+    return LayoutBuilder(builder: (ctx, constraints) {
+      final count = constraints.maxWidth ~/ 180;
       return LiveGrid(
         controller: _scrollController,
         itemCount: activities.length,
-        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: extent,
+        gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: count,
         ),
         showItemInterval: const Duration(milliseconds: 40),
         itemBuilder: (ctx, index, animation) => buildAnimatedActivityCard(ctx, activities[index], animation),
