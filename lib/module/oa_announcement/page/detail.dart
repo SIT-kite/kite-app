@@ -22,7 +22,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:kite/design/utils.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:rettulf/widget/hero.dart';
+import 'package:rettulf/rettulf.dart';
 
 import '../entity/announcement.dart';
 import '../entity/attachment.dart';
@@ -30,9 +30,9 @@ import '../using.dart';
 import '../init.dart';
 
 class DetailPage extends StatefulWidget {
-  final BulletinRecord summary;
+  final AnnounceRecord summary;
 
-  const DetailPage(this.summary, {Key? key}) : super(key: key);
+  const DetailPage(this.summary, {super.key});
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -41,6 +41,80 @@ class DetailPage extends StatefulWidget {
 class _DetailPageState extends State<DetailPage> {
   static final RegExp _phoneRegex = RegExp(r"(6087\d{4})");
   static final RegExp _mobileRegex = RegExp(r"(\d{12})");
+  AnnounceDetail? _detail;
+
+  AnnounceRecord get summary => widget.summary;
+  late final url =
+      'https://myportal.sit.edu.cn/detach.portal?action=bulletinBrowser&.ia=false&.pmn=view&.pen=${summary.bulletinCatalogueId}&bulletinId=${summary.uuid}';
+
+  Future<AnnounceDetail> fetchAnnounceDetail() async {
+    return await OaAnnouncementInit.bulletin.getAnnounceDetail(widget.summary.bulletinCatalogueId, widget.summary.uuid);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchAnnounceDetail().then((value) {
+      setState(() {
+        _detail = value;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: i18n.oaAnnouncementTextTitle.txt,
+        actions: [
+          IconButton(
+            onPressed: () {
+              launchUrlInBrowser(url);
+            },
+            icon: const Icon(Icons.open_in_browser),
+          ),
+        ],
+      ),
+      body: buildBody(context).padAll(12),
+    );
+  }
+
+  Widget buildBody(BuildContext ctx) {
+    final theme = ctx.theme;
+    final titleStyle = theme.textTheme.headline2;
+    return [summary.title.text(style: titleStyle).hero(summary.uuid), buildInfoCard(ctx), buildDetailArticle(ctx)]
+        .column().scrolled();
+  }
+
+  Widget buildInfoCard(BuildContext ctx) {
+    final valueStyle = Theme.of(context).textTheme.bodyText2;
+    final keyStyle = valueStyle?.copyWith(fontWeight: FontWeight.bold);
+
+    TableRow buildRow(String key, String value) => TableRow(
+          children: [
+            Text(key, style: keyStyle),
+            Text(value, style: valueStyle),
+          ],
+        );
+
+    return Card(
+      margin: const EdgeInsets.fromLTRB(2, 10, 2, 2),
+      elevation: 3,
+      child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Table(
+            columnWidths: const {
+              0: FlexColumnWidth(1),
+              1: FlexColumnWidth(3),
+            },
+            children: [
+              buildRow(i18n.publishingDepartment, summary.department),
+              buildRow(i18n.author, _detail?.author ?? "..."),
+              buildRow(i18n.publishTime, context.dateText(summary.dateTime)),
+            ],
+          )),
+    );
+  }
 
   // static final dateFormat = DateFormat('yyyy/MM/dd HH:mm');
 
@@ -99,116 +173,31 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 
-  Widget _buildCard(BuildContext context, AnnounceDetail article) {
-    final valueStyle = Theme.of(context).textTheme.bodyText2;
-    final keyStyle = valueStyle?.copyWith(fontWeight: FontWeight.bold);
-
-    TableRow buildRow(String key, String value) => TableRow(
-          children: [
-            Text(key, style: keyStyle),
-            Text(value, style: valueStyle),
-          ],
-        );
-
-    return Card(
-      margin: const EdgeInsets.fromLTRB(2, 10, 2, 2),
-      elevation: 3,
-      child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Table(
-            columnWidths: const {
-              0: FlexColumnWidth(1),
-              1: FlexColumnWidth(3),
-            },
-            children: [
-              buildRow(i18n.publishingDepartment, article.department),
-              buildRow(i18n.author, article.author),
-              buildRow(i18n.publishTime, context.dateText(article.dateTime)),
-            ],
-          )),
-    );
-  }
-
-  Widget _buildArticle(BuildContext context, AnnounceDetail article) {
-    final theme = Theme.of(context);
+  Widget buildDetailArticle(BuildContext ctx) {
+    final detail = _detail;
+    if (detail == null) {
+      return Placeholders.loading();
+    }
+    final theme = context.theme;
     final titleStyle = theme.textTheme.headline2;
-
-    final title = Text(article.title, style: titleStyle);
-    final heroKey = widget.key;
-    if (heroKey != null) {
-      title.hero(heroKey);
-    }
-    final htmlContent = _linkTel(article.content);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        title,
-        _buildCard(context, article),
-        const SizedBox(height: 10),
-        if (theme.isDark) DarkModeSafeHtmlWidget(htmlContent) else MyHtmlWidget(htmlContent),
-        //MyHtmlWidget(htmlContent),
-        const SizedBox(height: 30),
-        if (article.attachments.isNotEmpty)
-          Text(i18n.oaAnnouncementAttachmentTip(article.attachments.length), style: titleStyle),
-        if (article.attachments.isNotEmpty)
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: article.attachments.map((e) {
-              return TextButton(
-                onPressed: () async => _onDownloadFile(e),
-                child: Text(e.name),
-              );
-            }).toList(),
-          ),
-      ],
-    );
-  }
-
-  AnnounceDetail? article;
-
-  Future<AnnounceDetail> getBulletinDetail() async {
-    if (article == null) {
-      Log.info('开始加载OA公告文章');
-      article =
-          await OaAnnouncementInit.bulletin.getAnnounceDetail(widget.summary.bulletinCatalogueId, widget.summary.uuid);
-      Log.info('加载OA公告文章完毕');
-    } else {
-      Log.info('使用已获取的OA公告文章');
-    }
-
-    return article!;
-  }
-
-  Widget _buildBody(BulletinRecord summary) {
-    return MyFutureBuilder<AnnounceDetail>(
-      futureGetter: () => getBulletinDetail(),
-      builder: (context, data) {
-        return SingleChildScrollView(child: _buildArticle(context, data));
-      },
-      onErrorBuilder: (context, fb, error, stack) {
-        return Text(error.runtimeType.toString());
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: i18n.oaAnnouncementTextTitle.txt,
-        actions: [
-          IconButton(
-            onPressed: () {
-              final url =
-                  'https://myportal.sit.edu.cn/detach.portal?action=bulletinBrowser&.ia=false&.pmn=view&.pen=${widget.summary.bulletinCatalogueId}&bulletinId=${widget.summary.uuid}';
-              launchUrlInBrowser(url);
-            },
-            icon: const Icon(Icons.open_in_browser),
-          ),
-        ],
-      ),
-      body: Padding(padding: const EdgeInsets.all(12), child: _buildBody(widget.summary)),
-    );
+    final htmlContent = _linkTel(detail.content);
+    return [
+      if (theme.isDark) DarkModeSafeHtmlWidget(htmlContent) else MyHtmlWidget(htmlContent),
+      //MyHtmlWidget(htmlContent),
+      const SizedBox(height: 30),
+      if (detail.attachments.isNotEmpty)
+        Text(i18n.oaAnnouncementAttachmentTip(detail.attachments.length), style: titleStyle),
+      if (detail.attachments.isNotEmpty)
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: detail.attachments.map((e) {
+            return TextButton(
+              onPressed: () async => _onDownloadFile(e),
+              child: Text(e.name),
+            );
+          }).toList(),
+        )
+    ].column();
   }
 }
 

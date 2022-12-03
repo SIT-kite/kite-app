@@ -21,7 +21,7 @@ import 'announcement.dart';
 class BulletinListPage {
   int currentPage = 1;
   int totalPage = 10;
-  List<BulletinRecord> bulletinItems = [];
+  List<AnnounceRecord> bulletinItems = [];
 
   @override
   String toString() {

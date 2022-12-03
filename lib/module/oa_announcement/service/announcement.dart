@@ -95,7 +95,7 @@ class BulletinService implements AnnounceDao {
       final titleElement = e.find('a', class_: 'rss-title')!;
       final uri = Uri.parse(titleElement.attributes['href']!);
 
-      return BulletinRecord()
+      return AnnounceRecord()
         ..title = titleElement.text.trim()
         ..department = department
         ..dateTime = DateFormat('yyyy-MM-dd').parse(date)

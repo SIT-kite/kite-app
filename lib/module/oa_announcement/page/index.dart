@@ -36,7 +36,7 @@ class OaAnnouncePage extends StatelessWidget {
     );
   }
 
-  Future<List<BulletinRecord>> _queryBulletinListInAllCategory(int page) async {
+  Future<List<AnnounceRecord>> _queryBulletinListInAllCategory(int page) async {
     // Make sure login.
     await OaAnnouncementInit.session.request('https://myportal.sit.edu.cn/', ReqMethod.get);
 
@@ -49,15 +49,15 @@ class OaAnnouncePage extends StatelessWidget {
     final futureResult = await Future.wait(catalogues.map((e) => service.queryAnnounceList(page, e.id)));
 
     // 合并所有分类的第一页的公告项
-    final List<BulletinRecord> records = futureResult.fold(
-      <BulletinRecord>[],
-      (List<BulletinRecord> previousValue, BulletinListPage page) => previousValue + page.bulletinItems,
+    final List<AnnounceRecord> records = futureResult.fold(
+      <AnnounceRecord>[],
+      (List<AnnounceRecord> previousValue, BulletinListPage page) => previousValue + page.bulletinItems,
     ).toList();
     return records;
   }
 
   Widget _buildAnnounceList() {
-    return PlaceholderFutureBuilder<List<BulletinRecord>>(
+    return PlaceholderFutureBuilder<List<AnnounceRecord>>(
         futureGetter: () => _queryBulletinListInAllCategory(1),
         builder: (context, data, state) {
           if (data == null) return Placeholders.loading();
@@ -66,21 +66,24 @@ class OaAnnouncePage extends StatelessWidget {
           // 公告项按时间排序
           records.sort((a, b) => b.dateTime.difference(a.dateTime).inSeconds);
 
-          final items = records.mapIndexed((e, i) => Card(child: _buildBulletinItem(context, UniqueKey(), e))).toList();
+          final items = records.mapIndexed((e, i) => Card(child: _buildBulletinItem(context, e))).toList();
           return SingleChildScrollView(child: Column(children: items));
         });
   }
 
-  Widget _buildBulletinItem(BuildContext context, Key key, BulletinRecord record) {
+  Widget _buildBulletinItem(BuildContext context, AnnounceRecord record) {
     final titleStyle = Theme.of(context).textTheme.headline4;
     final subtitleStyle = Theme.of(context).textTheme.bodyText1;
 
     return Padding(
       padding: const EdgeInsets.all(2),
       child: ListTile(
-        title: Text(record.title, style: titleStyle, overflow: TextOverflow.ellipsis).hero(key),
+        title: Text(record.title, style: titleStyle, overflow: TextOverflow.ellipsis).hero(record.uuid),
         subtitle: Text('${record.department} | ${context.dateNum(record.dateTime)}', style: subtitleStyle),
-        onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailPage(record,key: key,))),
+        onTap: () => Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => DetailPage(
+                  record,
+                ))),
       ),
     );
   }

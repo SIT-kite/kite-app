@@ -57,7 +57,7 @@ class AnnounceCatalogue {
 }
 
 /// 某篇通知的记录信息，根据该信息可寻找到对应文章
-class BulletinRecord {
+class AnnounceRecord {
   /// 标题
   String title = '';
 
