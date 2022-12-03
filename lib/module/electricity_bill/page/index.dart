@@ -73,6 +73,8 @@ class _ElectricityPageState extends State<ElectricityPage> {
         recentList: storage.lastRoomList!.reversed.toList(), // 最近查询(需要从hive里获取)，也可留空
         suggestionList: roomList, // 待搜索提示的列表(需要从服务器获取，可以缓存至数据库)
         onlyUseSuggestion: true, // 只允许使用搜索建议里的
+        childAspectRatio : 2.0,
+        maxCrossAxisExtent : 150.0,
       ),
     ).then((value) async {
       if (value != null) {
@@ -160,6 +162,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
   }
 
   final _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     final selectedRoom = room;

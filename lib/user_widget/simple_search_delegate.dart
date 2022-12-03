@@ -30,6 +30,8 @@ class SimpleTextSearchDelegate<T> extends SearchDelegate {
   SearchItemBuilder<T>? searchItemBuilder;
   SearchItemDocumented<T>? searchItemDocumented;
   final bool onlyUseSuggestion;
+  final double maxCrossAxisExtent;
+  final double childAspectRatio;
 
   SimpleTextSearchDelegate({
     required this.recentList,
@@ -37,6 +39,8 @@ class SimpleTextSearchDelegate<T> extends SearchDelegate {
     this.searchItemBuilder,
     this.searchItemDocumented,
     this.onlyUseSuggestion = true,
+    this.maxCrossAxisExtent = 150.0,
+    this.childAspectRatio = 2.0,
   }) {
     searchItemDocumented ??= (item) => item.toString();
     searchItemBuilder ??= (item, highlight) => ListTile(title: HtmlWidget(highlight));
@@ -109,7 +113,11 @@ class SimpleTextSearchDelegate<T> extends SearchDelegate {
       children.add(widget);
     }
 
-    return ListView(children: children);
+    return GridView(
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: maxCrossAxisExtent, childAspectRatio: childAspectRatio),
+      children: children,
+    );
   }
 
   @override

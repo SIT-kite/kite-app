@@ -18,6 +18,7 @@
 
 import 'package:animated_button_bar/animated_button_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../entity/statistics.dart';
@@ -101,6 +102,7 @@ class ElectricityChartState extends State<ElectricityChart> {
   }
 
   void onSetMode(ElectricityChartMode newMode) async {
+    if (newMode == mode) return;
     var room = widget.room;
     setState(() {
       dailyBill = null;
@@ -135,7 +137,7 @@ class ElectricityChartState extends State<ElectricityChart> {
         cardTitle(i18n.elecBillElecChart),
         const SizedBox(height: 20),
         SizedBox(
-            width: 300,
+            width: 300.w,
             child: AnimatedButtonBar(
               radius: 20,
               invertedSelection: true,
