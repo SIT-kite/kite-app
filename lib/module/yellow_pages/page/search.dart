@@ -17,7 +17,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:kite/module/yellow_pages/page/NaviagtionContactList.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../entity/contact.dart';

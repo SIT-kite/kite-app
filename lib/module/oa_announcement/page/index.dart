@@ -101,7 +101,7 @@ class _OaAnnouncePageState extends State<OaAnnouncePage> {
         itemCount: items.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: count,
-          childAspectRatio: 4.5,
+          childAspectRatio: 4,
         ),
         showItemInterval: const Duration(milliseconds: 40),
         itemBuilder: (ctx, index, animation) => items[index].aliveWith(animation),
