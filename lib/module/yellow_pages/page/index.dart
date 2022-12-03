@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/module/yellow_pages/page/NaviagtionContactList.dart';
+import 'package:rettulf/rettulf.dart';
 
 import '../entity/contact.dart';
 import '../using.dart';
@@ -31,7 +33,7 @@ class YellowPagesPage extends StatefulWidget {
 }
 
 class _YellowPagesPageState extends State<YellowPagesPage> {
-  final List<ContactData> _contactData = YellowPagesInit.contactStorageDao.getAllContacts();
+  List<ContactData>? _contacts;
 
   Future<List<ContactData>> _fetchContactList() async {
     final service = YellowPagesInit.contactRemoteDao;
@@ -42,42 +44,52 @@ class _YellowPagesPageState extends State<YellowPagesPage> {
     return contacts;
   }
 
-  Widget _buildBody() {
-    if (_contactData.isNotEmpty) {
-      return ContactList(_contactData);
-    }
-
-    return FutureBuilder<List<ContactData>>(
-      future: _fetchContactList(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          var data = snapshot.data;
-          if (data != null) {
-            _contactData.addAll(data);
-          }
-          return ContactList(_contactData);
-        } else if (snapshot.hasError) {
-          return Center(child: Text(snapshot.error.toString()));
-        }
-        return const Center(child: CircularProgressIndicator());
-      },
-    );
+  @override
+  void initState() {
+    super.initState();
+      _contacts = YellowPagesInit.contactStorageDao.getAllContacts();
+    _fetchContactList().then((value) {
+      if (!mounted) return;
+      setState(() {
+        _contacts = value;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final contacts = _contacts;
     return Scaffold(
       appBar: AppBar(
         title: i18n.ftype_yellowPages.txt,
         actions: [
-          IconButton(
-              onPressed: () => showSearch(context: context, delegate: Search(_contactData)),
-              icon: const Icon(Icons.search)),
+          if (contacts != null)
+            IconButton(
+                onPressed: () => showSearch(context: context, delegate: Search(contacts)),
+                icon: const Icon(Icons.search)),
           _buildRefreshButton(),
         ],
       ),
-      body: _buildBody(),
+      body: context.isPortrait ? buildPortraitBody(context) : buildLandscapeBody(context),
     );
+  }
+
+  Widget buildPortraitBody(BuildContext ctx) {
+    final contacts = _contacts;
+    if (contacts == null || contacts.isEmpty) {
+      return Placeholders.loading();
+    } else {
+      return GroupedContactList(contacts);
+    }
+  }
+
+  Widget buildLandscapeBody(BuildContext ctx) {
+    final contacts = _contacts;
+    if (contacts == null || contacts.isEmpty) {
+      return Placeholders.loading();
+    } else {
+      return NavigationContactList(contacts);
+    }
   }
 
   Widget _buildRefreshButton() {
@@ -85,8 +97,12 @@ class _YellowPagesPageState extends State<YellowPagesPage> {
       tooltip: i18n.refresh,
       icon: const Icon(Icons.refresh),
       onPressed: () {
-        _contactData.clear();
-        setState(() {});
+        _fetchContactList().then((value) {
+          if (!mounted) return;
+          setState(() {
+            _contacts = value;
+          });
+        });
       },
     );
   }

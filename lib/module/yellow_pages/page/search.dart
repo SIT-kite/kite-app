@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:kite/module/yellow_pages/page/NaviagtionContactList.dart';
+import 'package:rettulf/rettulf.dart';
 
 import '../entity/contact.dart';
 import '../page/list.dart';
@@ -38,18 +40,29 @@ class Search extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return ContactList(contacts.where((e) => _search(query, e)).toList());
+    final searched = contacts.where((e) => _search(query, e)).toList();
+    return context.isPortrait ? GroupedContactList(searched) : NavigationContactList(searched);
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return query.isNotEmpty ? ContactList(contacts.where((e) => _search(query, e)).toList()) : Container();
+    if (query.isNotEmpty) {
+      final searched = contacts.where((e) => _search(query, e)).toList();
+      if (searched.isNotEmpty) {
+        return context.isPortrait ? GroupedContactList(searched) : NavigationContactList(searched);
+      }
+    }
+    return const SizedBox();
   }
 
   bool _search(String query, ContactData contactData) {
-    return contactData.department.contains(query) ||
-        (contactData.name == null ? false : contactData.name!.contains(query)) ||
-        contactData.description!.contains(query) ||
+    query = query.toLowerCase();
+    final name = contactData.name?.toLowerCase();
+    final department = contactData.department.toLowerCase();
+    final description = contactData.description?.toLowerCase();
+    return department.contains(query) ||
+        (name != null && name.contains(query)) ||
+        (description != null && description.contains(query)) ||
         contactData.phone.contains(query);
   }
 }

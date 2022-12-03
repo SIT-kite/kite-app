@@ -19,49 +19,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grouped_list/grouped_list.dart';
+import '../user_widgets/contact.dart';
 import '../using.dart';
 
 import '../entity/contact.dart';
 
-class ContactList extends StatelessWidget {
+class GroupedContactList extends StatelessWidget {
   final List<ContactData> contacts;
 
-  const ContactList(this.contacts, {Key? key}) : super(key: key);
-
-  Widget _buildContactItem(BuildContext context, ContactData contact) {
-    final avatarStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.grey[50]);
-
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: Theme.of(context).primaryColor,
-        radius: 20,
-        child: Container(
-            child: (contact.name ?? '').isEmpty
-                ? Center(child: Icon(Icons.account_circle, size: 40, color: Colors.grey[50]))
-                : Text(contact.name![0], style: avatarStyle)),
-      ),
-      title: Text('${contact.description}'),
-      subtitle: Text(('${contact.name ?? ' '} ${contact.phone}').trim()),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            icon: const Icon(Icons.content_copy),
-            color: Theme.of(context).primaryColor,
-            onPressed: () => Clipboard.setData(ClipboardData(text: contact.phone)),
-          ),
-          IconButton(
-            icon: const Icon(Icons.phone),
-            color: Theme.of(context).primaryColor,
-            onPressed: () {
-              final phone = contact.phone;
-              GlobalLauncher.launch('tel:${(phone.length == 8 ? '021' : '') + phone}');
-            },
-          )
-        ],
-      ),
-    );
-  }
+  const GroupedContactList(this.contacts, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +39,7 @@ class ContactList extends StatelessWidget {
       useStickyGroupSeparators: true,
       order: GroupedListOrder.DESC,
       // 生成电话列表
-      itemBuilder: _buildContactItem,
+      itemBuilder: (ctx, contact) => ContactTile(contact),
       groupHeaderBuilder: (ContactData c) => ListTile(title: Text(c.department, style: titleStyle)),
     );
   }

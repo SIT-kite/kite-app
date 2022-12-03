@@ -122,6 +122,7 @@ dependencies:
   auto_animated: ^3.1.0
   markdown: ^6.0.1
   event_bus: ^2.0.0
+  collection: ^1.16.0
 
 
 dev_dependencies:

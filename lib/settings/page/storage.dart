@@ -63,11 +63,14 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
       Scaffold(
         appBar: AppBar(
           title: i18n.localStorageTitle.text(),
-          elevation: 10,
+          elevation: 0,
         ),
         body: buildBoxIntroduction(ctx),
       ).expanded(),
-      buildAnimatedBoxContentView(ctx).padAll(10).expanded()
+      const VerticalDivider(
+        thickness: 5,
+      ),
+      buildBoxContentView(ctx).padAll(10).expanded()
     ].row());
   }
 
@@ -79,16 +82,14 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
         itemBuilder: (ctx, i) {
           final name2Box = name2BoxList[i];
           final color = name2Box.key == selectedBoxName ? ctx.theme.secondaryHeaderColor : null;
-          return name2Box.key.text(style: boxNameStyle).padAll(10).inCard(elevation: 5, color: color).on(tap: () {
-            setState(() {
-              selectedBoxName = name2Box.key;
-            });
+          return name2Box.key.text(style: boxNameStyle).padAll(10).inCard(elevation: 3, color: color).on(tap: () {
+            if (selectedBoxName != name2Box.key) {
+              setState(() {
+                selectedBoxName = name2Box.key;
+              });
+            }
           });
         });
-  }
-
-  Widget buildAnimatedBoxContentView(BuildContext ctx) {
-    return AnimatedSwitcher(duration: const Duration(milliseconds: 500), child: buildBoxContentView(ctx));
   }
 
   Widget buildBoxContentView(BuildContext ctx) {
@@ -104,7 +105,7 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
         final typeStyle = context.textTheme.bodySmall;
         final contentStyle = context.textTheme.bodyText2;
         return PlaceholderFutureBuilder<Box<dynamic>>(
-            key: UniqueKey(),
+            key: ValueKey(name),
             future: boxGetter,
             builder: (ctx, box, _) {
               final List<Widget> items;

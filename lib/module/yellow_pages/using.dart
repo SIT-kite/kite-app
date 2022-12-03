@@ -17,6 +17,7 @@
 */
 export '../shared/hive.dart';
 export '../shared/i18n.dart';
+export '../shared/design.dart';
 export '../shared/util.dart';
 export '../shared/launcher.dart';
 export '../shared/networking.dart';
