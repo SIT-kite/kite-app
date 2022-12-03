@@ -94,24 +94,18 @@ class _DetailPageState extends State<DetailPage> {
         title: i18n.activityDetails.txt,
         actions: [
           if (widget.enableApply)
-            FloatingActionButton.extended(
-              heroTag: null,
-              icon: const Icon(Icons.person_add),
-              backgroundColor: Colors.transparent,
-              label: i18n.activityApplyBtn.txt,
-              onPressed: () async {
-                await showApplyRequest(ctx);
-              },
-            ),
-          FloatingActionButton.extended(
-            heroTag: null,
-            icon: const Icon(Icons.open_in_browser),
-            backgroundColor: Colors.transparent,
-            label: i18n.open.txt,
-            onPressed: () {
-              launchUrlInBrowser(_getActivityUrl(activityId));
-            },
-          ),
+            PlainExtendedButton(
+                label: i18n.open.text(),
+                icon: const Icon(Icons.person_add),
+                tap: () async {
+                  await showApplyRequest(ctx);
+                }),
+          PlainExtendedButton(
+              label: i18n.open.text(),
+              icon: const Icon(Icons.open_in_browser),
+              tap: () {
+                launchUrlInBrowser(_getActivityUrl(activityId));
+              })
         ],
       ),
       body: buildDetailLandscape(ctx, detail),
@@ -128,7 +122,7 @@ class _DetailPageState extends State<DetailPage> {
         buildGlassmorphismBg(ctx),
         Padding(
           padding: const EdgeInsets.all(20),
-          child: Card(margin: const EdgeInsets.all(8), child: buildActivityInfo(ctx, detail)),
+          child: buildActivityInfo(ctx, detail).padAll(8).inCard().hero(widget.hero),
         )
       ],
     );
@@ -225,7 +219,7 @@ class _DetailPageState extends State<DetailPage> {
 
     return Column(
       children: [
-        Text(activity.realTitle, style: titleStyle, softWrap: true).hero(widget.hero).padAll(10),
+        Text(activity.realTitle, style: titleStyle, softWrap: true).padAll(10),
         Table(
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           columnWidths: const {
@@ -233,7 +227,7 @@ class _DetailPageState extends State<DetailPage> {
             1: FlexColumnWidth(3),
           },
           children: [
-            buildRow(i18n.activityID, detail?.id),
+            buildRow(i18n.activityID, activity.id),
             buildRow(i18n.activityLocation, detail?.place),
             buildRow(i18n.activityPrincipal, detail?.principal),
             buildRow(i18n.activityOrganizer, detail?.organizer),
@@ -245,6 +239,6 @@ class _DetailPageState extends State<DetailPage> {
           ],
         ).padH(10),
       ],
-    ).padAll(10);
+    ).scrolled(physics: const NeverScrollableScrollPhysics()).padAll(10);
   }
 }

@@ -82,8 +82,14 @@ class _DetailPageState extends State<DetailPage> {
   Widget buildBody(BuildContext ctx) {
     final theme = ctx.theme;
     final titleStyle = theme.textTheme.headline2;
-    return [summary.title.text(style: titleStyle).hero(summary.uuid), buildInfoCard(ctx), buildDetailArticle(ctx)]
-        .column().scrolled();
+    return [
+      summary.title.text(style: titleStyle).hero(summary.uuid),
+      buildInfoCard(ctx),
+      AnimatedSwitcher(
+        duration: const Duration(milliseconds: 800),switchInCurve: Curves.easeOut,
+        child: _detail != null ? buildDetailArticle(ctx) : Placeholders.loading(),
+      )
+    ].column().scrolled();
   }
 
   Widget buildInfoCard(BuildContext ctx) {
@@ -176,14 +182,14 @@ class _DetailPageState extends State<DetailPage> {
   Widget buildDetailArticle(BuildContext ctx) {
     final detail = _detail;
     if (detail == null) {
-      return Placeholders.loading();
+      return const SizedBox();
     }
     final theme = context.theme;
     final titleStyle = theme.textTheme.headline2;
     final htmlContent = _linkTel(detail.content);
     return [
+      // DarkModeSafe sometimes isn't safe.
       if (theme.isDark) DarkModeSafeHtmlWidget(htmlContent) else MyHtmlWidget(htmlContent),
-      //MyHtmlWidget(htmlContent),
       const SizedBox(height: 30),
       if (detail.attachments.isNotEmpty)
         Text(i18n.oaAnnouncementAttachmentTip(detail.attachments.length), style: titleStyle),

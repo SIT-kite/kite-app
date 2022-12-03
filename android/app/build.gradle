@@ -54,7 +54,7 @@ android {
 //    }
 //  }
   defaultConfig {
-    applicationId "cn.edu.sit.kite"
+    applicationId "cn.edu.sit.kite.be"
     minSdkVersion 21
     targetSdkVersion 33
     versionCode flutterVersionCode.toInteger()

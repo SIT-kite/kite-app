@@ -93,7 +93,7 @@ class _MinePageState extends State<MinePage> {
     return Card(
       child: ListTile(
         title: Text(activity.realTitle, style: titleStyle, maxLines: 2, overflow: TextOverflow.ellipsis)
-            .hero(rawActivity.applyId),
+            ,
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -111,7 +111,7 @@ class _MinePageState extends State<MinePage> {
               }
             : null,
       ),
-    ).padSymmetric(h: 8);
+    ).hero(rawActivity.applyId).padSymmetric(h: 8);
   }
 
 // Animation

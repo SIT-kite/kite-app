@@ -60,7 +60,7 @@ class ActivityCard extends StatelessWidget {
                   maxLines: 3,
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
-                ).hero(activity.id),
+                ),
               ),
             ),
           ],
@@ -92,7 +92,7 @@ class ActivityCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.all(10),
       child: ClipRRect(borderRadius: BorderRadius.circular(16), child: _buildBasicInfo(context)),
-    ).on(tap: () {
+    ).hero(activity.id).on(tap: () {
       Navigator.of(context).push(MaterialPageRoute(builder: (_) => DetailPage(activity, hero: activity.id)));
     });
   }
