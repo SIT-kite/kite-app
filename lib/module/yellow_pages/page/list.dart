@@ -17,10 +17,9 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:grouped_list/grouped_list.dart';
+import 'package:kite/design/colors.dart';
 import '../user_widgets/contact.dart';
-import '../using.dart';
 
 import '../entity/contact.dart';
 
@@ -31,16 +30,20 @@ class GroupedContactList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final titleStyle = Theme.of(context).textTheme.bodyText2;
-
     return GroupedListView<ContactData, int>(
       elements: contacts,
       groupBy: (element) => element.department.hashCode,
       useStickyGroupSeparators: true,
+      stickyHeaderBackgroundColor: context.bgColor,
       order: GroupedListOrder.DESC,
       // 生成电话列表
       itemBuilder: (ctx, contact) => ContactTile(contact),
-      groupHeaderBuilder: (ContactData c) => ListTile(title: Text(c.department, style: titleStyle)),
+      groupHeaderBuilder: (ContactData c) => ListTile(
+        title: Text(
+          c.department,
+          //style: titleStyle,
+        ),
+      ),
     );
   }
 }

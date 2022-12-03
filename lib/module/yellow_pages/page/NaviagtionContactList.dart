@@ -1,6 +1,8 @@
+import 'package:auto_animated/auto_animated.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kite/design/colors.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../entity/contact.dart';
@@ -36,7 +38,7 @@ class _NavigationContactListState extends State<NavigationContactList> {
           .scrolled()
           .constrained(BoxConstraints(minWidth: 50.w, maxWidth: 50.w))
           .align(at: Alignment.topCenter),
-      const VerticalDivider(),
+      const VerticalDivider(width: 0),
       buildListView(context).expanded()
     ].row();
   }
@@ -63,7 +65,12 @@ class _NavigationContactListState extends State<NavigationContactList> {
       if (list == null) {
         return Container();
       }
-      return ListView.builder(itemCount: list.length, itemBuilder: (ctx, index) => ContactTile(list[index]));
+      return LiveList(
+          key: ValueKey(selected),
+          itemCount: list.length,
+          showItemInterval: const Duration(milliseconds: 100),
+          showItemDuration: const Duration(milliseconds: 300),
+          itemBuilder: (ctx, index, animation) => ContactTile(list[index]).withAnimation(animation));
     }
   }
 }

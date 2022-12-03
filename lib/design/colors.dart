@@ -47,12 +47,22 @@ Color getBgColor(BuildContext ctx) {
   }
 }
 
+Color getChessBoardColor(BuildContext ctx, int index) {
+  if (ctx.isLightMode) {
+    return index.isOdd ? Colors.white : Colors.black12;
+  } else {
+    return index.isOdd ? Colors.black38 : Colors.white12;
+  }
+}
+
 extension DesignExtension on BuildContext {
   Color get themeColor => getThemeColor(this);
 
   Color get fgColor => getFgColor(this);
 
   Color get bgColor => getBgColor(this);
+
+  Color chessBoardColor({required int at}) => getChessBoardColor(this, at);
 
   Color get textColor => isDarkMode ? Colors.white70 : theme.primaryColor;
 
