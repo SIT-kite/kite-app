@@ -18,10 +18,12 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rettulf/rettulf.dart';
 
 class BaseLineChartWidget extends StatelessWidget {
   final List<String> bottomTitles;
   final List<double> values;
+
   const BaseLineChartWidget({
     Key? key,
     required this.bottomTitles,
@@ -29,7 +31,7 @@ class BaseLineChartWidget extends StatelessWidget {
   }) : super(key: key);
 
   ///底部标题栏
-  Widget bottomTitle(double value, TitleMeta mate) {
+  Widget bottomTitle(BuildContext ctx, double value, TitleMeta mate) {
     if ((value * 10).toInt() % 10 == 5) {
       return Container();
     }
@@ -38,16 +40,15 @@ class BaseLineChartWidget extends StatelessWidget {
       axisSide: mate.axisSide,
       child: Text(
         bottomTitles[value.toInt()],
-        style: TextStyle(
+        style: ctx.textTheme.bodySmall?.copyWith(
           color: Colors.blueGrey,
-          fontSize: 11.sp,
         ),
       ),
     );
   }
 
   ///左边部标题栏
-  Widget leftTitle(double value, TitleMeta mate) {
+  Widget leftTitle(BuildContext ctx, double value, TitleMeta mate) {
     const style = TextStyle(
       color: Colors.blueGrey,
       fontSize: 11,
@@ -115,7 +116,7 @@ class BaseLineChartWidget extends StatelessWidget {
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 50,
-              getTitlesWidget: leftTitle,
+              getTitlesWidget: (v, meta) => leftTitle(context, v, meta),
             ),
           ),
           topTitles: AxisTitles(),
@@ -123,7 +124,7 @@ class BaseLineChartWidget extends StatelessWidget {
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 55,
-              getTitlesWidget: bottomTitle,
+              getTitlesWidget: (v, meta) => bottomTitle(context, v, meta),
             ),
           ),
         ),

@@ -48,14 +48,14 @@ class ElectricityChartState extends State<ElectricityChart> {
   Widget buildHourlyChart(BuildContext ctx) {
     final bill = hourlyBill;
     return Column(children: [
-      i18n.elecBillHourlyChart24.txt,
-      Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: Container(
-              padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
-              width: 400,
-              height: 200,
-              child: _buildHourlyChartContent(ctx, bill)))
+      i18n.elecBillHourlyChart24.text(),
+      _buildHourlyChartContent(ctx, bill)
+          .padFromLTRB(0, 20, 10, 0)
+          .container(
+            width: 400,
+            height: 200,
+          )
+          .padV(20)
     ]);
   }
 

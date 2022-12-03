@@ -19,6 +19,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:rettulf/rettulf.dart';
@@ -70,11 +71,14 @@ class _ElectricityPageState extends State<ElectricityPage> {
     showSearch(
       context: context,
       delegate: SimpleTextSearchDelegate(
-        recentList: storage.lastRoomList!.reversed.toList(), // 最近查询(需要从hive里获取)，也可留空
-        suggestionList: roomList, // 待搜索提示的列表(需要从服务器获取，可以缓存至数据库)
-        onlyUseSuggestion: true, // 只允许使用搜索建议里的
-        childAspectRatio : 2.0,
-        maxCrossAxisExtent : 150.0,
+        recentList: storage.lastRoomList!.reversed.toList(),
+        // 最近查询(需要从hive里获取)，也可留空
+        suggestionList: roomList,
+        // 待搜索提示的列表(需要从服务器获取，可以缓存至数据库)
+        onlyUseSuggestion: true,
+        // 只允许使用搜索建议里的
+        childAspectRatio: 2.0,
+        maxCrossAxisExtent: 150.0,
       ),
     ).then((value) async {
       if (value != null) {
@@ -160,15 +164,19 @@ class _ElectricityPageState extends State<ElectricityPage> {
     ]);
     _refreshController.refreshCompleted();
   }
-
+  // TODO: It's buggy when rotate the screen.
   final _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
+    return context.isPortrait ? buildPortrait(context) : buildLandscape(context);
+  }
+
+  Widget buildPortrait(BuildContext context) {
     final selectedRoom = room;
     return Scaffold(
         appBar: AppBar(
-          title: selectedRoom != null ? i18n.elecBillTitle(selectedRoom).txt : i18n.ftype_elecBill.txt,
+          title: selectedRoom != null ? i18n.elecBillTitle(selectedRoom).text() : i18n.ftype_elecBill.text(),
           actions: <Widget>[
             IconButton(
                 onPressed: search,
@@ -185,38 +193,68 @@ class _ElectricityPageState extends State<ElectricityPage> {
                 onRefresh: _onRefresh,
                 header: const ClassicHeader(),
                 scrollController: _scrollController,
-                child: _buildBody(context, selectedRoom),
+                child: buildBodyPortrait(context, selectedRoom),
               ));
+  }
+
+  Widget buildLandscape(BuildContext context) {
+    final selectedRoom = room;
+    return Scaffold(
+        floatingActionButton: PlainButton(
+          child: const Icon(Icons.arrow_back),
+          tap: () {
+            context.navigator.pop();
+          },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+        body: selectedRoom == null
+            ? _buildEmptyBody(context)
+            : SmartRefresher(
+                controller: _refreshController,
+                scrollDirection: Axis.vertical,
+                onRefresh: _onRefresh,
+                header: const ClassicHeader(),
+                scrollController: _scrollController,
+                child: buildBodyLandscape(context, selectedRoom),
+              ).padAll(20));
   }
 
   Widget _buildEmptyBody(BuildContext ctx) {
     return buildLeavingBlankBody(ctx, icon: Icons.pageview_outlined, desc: i18n.elecBillInitialTip, onIconTap: search);
   }
 
-  Widget _buildBody(BuildContext ctx, String room) {
+  Widget buildBodyPortrait(BuildContext ctx, String room) {
     final balance = _balance;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-      // TODO: The pull to refresh is hard to use in landscape mode.
-      child: ListView(
-        controller: _scrollController,
-        children: [
-          const SizedBox(height: 5),
-          buildBalanceCard(ctx),
-          const SizedBox(height: 5),
-          RankView(key: _rankViewKey),
-          const SizedBox(height: 25),
-          ElectricityChart(key: _chartKey, room: room),
-          if (balance == null)
-            Container()
-          else
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: buildUpdateTime(context, balance.ts),
-            )
-        ],
-      ),
-    );
+    return ListView(
+      controller: _scrollController,
+      children: [
+        const SizedBox(height: 5),
+        buildBalanceCard(ctx),
+        const SizedBox(height: 5),
+        RankView(key: _rankViewKey),
+        const SizedBox(height: 25),
+        ElectricityChart(key: _chartKey, room: room),
+        buildUpdateTime(context, balance?.ts).align(at: Alignment.bottomCenter),
+      ],
+    ).padSymmetric(v: 8, h: 20);
+  }
+
+  Widget buildBodyLandscape(BuildContext ctx, String room) {
+    final balance = _balance;
+    return [
+      [
+        i18n.elecBillTitle(room).text(style: ctx.textTheme.titleSmall),
+        const SizedBox(height: 5),
+        buildUpdateTime(context, balance?.ts).align(at: Alignment.bottomCenter),
+        const SizedBox(height: 5),
+        buildBalanceCard(ctx),
+        const SizedBox(height: 5),
+        RankView(key: _rankViewKey)
+      ].column().align(at: Alignment.topCenter).expanded(),
+      SizedBox(width: 10.w),
+      ElectricityChart(key: _chartKey, room: room).padV(12.h).expanded(),
+      //if (balance == null) Container() else buildUpdateTime(context, balance.ts).align(at: Alignment.bottomCenter)
+    ].row(maa: MainAxisAlignment.spaceEvenly).scrolled();
   }
 
   Widget buildBalanceCard(BuildContext ctx) {
@@ -286,7 +324,8 @@ class _ElectricityPageState extends State<ElectricityPage> {
     );
   }
 
-  Widget buildUpdateTime(BuildContext ctx, DateTime time) {
+  Widget buildUpdateTime(BuildContext ctx, DateTime? time) {
+    final outOfDateColor = time != null && time.difference(DateTime.now()).inDays > 1 ? Colors.redAccent : null;
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 50),
         child: Row(
@@ -295,11 +334,10 @@ class _ElectricityPageState extends State<ElectricityPage> {
             Row(children: [
               const Icon(Icons.update),
               const SizedBox(width: 10),
-              Text(i18n.elecBillUpdateTime,
-                  style: TextStyle(color: time.difference(DateTime.now()).inDays > 1 ? Colors.redAccent : null)),
+              Text(i18n.elecBillUpdateTime, style: TextStyle(color: outOfDateColor)),
             ]),
             Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-              Text(updateTimeFormatter.format(time.toLocal())),
+              Text(time != null ? updateTimeFormatter.format(time.toLocal()) : "..."),
             ]),
           ],
         )).center();

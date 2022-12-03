@@ -70,11 +70,11 @@ class _YellowPagesPageState extends State<YellowPagesPage> {
           _buildRefreshButton(),
         ],
       ),
-      body: context.isPortrait ? buildPortraitBody(context) : buildLandscapeBody(context),
+      body: context.isPortrait ? buildBodyPortrait(context) : buildBodyLandscape(context),
     );
   }
 
-  Widget buildPortraitBody(BuildContext ctx) {
+  Widget buildBodyPortrait(BuildContext ctx) {
     final contacts = _contacts;
     if (contacts == null || contacts.isEmpty) {
       return Placeholders.loading();
@@ -83,7 +83,7 @@ class _YellowPagesPageState extends State<YellowPagesPage> {
     }
   }
 
-  Widget buildLandscapeBody(BuildContext ctx) {
+  Widget buildBodyLandscape(BuildContext ctx) {
     final contacts = _contacts;
     if (contacts == null || contacts.isEmpty) {
       return Placeholders.loading();
