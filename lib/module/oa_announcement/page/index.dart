@@ -26,8 +26,27 @@ import '../entity/page.dart';
 import '../init.dart';
 import 'detail.dart';
 
-class OaAnnouncePage extends StatelessWidget {
+class OaAnnouncePage extends StatefulWidget {
   const OaAnnouncePage({Key? key}) : super(key: key);
+
+  @override
+  State<OaAnnouncePage> createState() => _OaAnnouncePageState();
+}
+
+class _OaAnnouncePageState extends State<OaAnnouncePage> {
+  List<AnnounceRecord>? _records;
+
+  @override
+  void initState() {
+    super.initState();
+    _queryBulletinListInAllCategory(1).then((value) {
+      setState(() {
+        // 公告项按时间排序
+        value.sort((a, b) => b.dateTime.difference(a.dateTime).inSeconds);
+        _records = value;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,38 +77,50 @@ class OaAnnouncePage extends StatelessWidget {
   }
 
   Widget _buildAnnounceList() {
-    return PlaceholderFutureBuilder<List<AnnounceRecord>>(
-        futureGetter: () => _queryBulletinListInAllCategory(1),
-        builder: (context, data, state) {
-          if (data == null) return Placeholders.loading();
-          final records = data;
+    final records = _records;
+    if (records == null) return Placeholders.loading();
 
-          // 公告项按时间排序
-          records.sort((a, b) => b.dateTime.difference(a.dateTime).inSeconds);
+    return _buildAnnounceLiveGrid(records);
+  }
 
-          final items = records.mapIndexed((e, i) => _buildAnnounceItem(context, e).inCard()).toList();
-          return LiveList(
-              itemCount: items.length,
-              showItemInterval: const Duration(milliseconds: 50),
-              showItemDuration: const Duration(milliseconds: 300),
-              itemBuilder: (ctx, index, animation) => items[index].aliveWith(animation));
-        });
+  Widget _buildAnnounceLiveList(List<AnnounceRecord> records) {
+    final items = records.mapIndexed((e, i) => _buildAnnounceItem(context, e).inCard()).toList();
+
+    return LiveList(
+        itemCount: items.length,
+        showItemInterval: const Duration(milliseconds: 50),
+        showItemDuration: const Duration(milliseconds: 300),
+        itemBuilder: (ctx, index, animation) => items[index].aliveWith(animation));
+  }
+
+  Widget _buildAnnounceLiveGrid(List<AnnounceRecord> records) {
+    final items = records.mapIndexed((e, i) => _buildAnnounceItem(context, e).inCard()).toList();
+    return LayoutBuilder(builder: (ctx, constraints) {
+      final count = constraints.maxWidth ~/ 300;
+      return LiveGrid(
+        itemCount: items.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: count,
+          childAspectRatio: 4.5,
+        ),
+        showItemInterval: const Duration(milliseconds: 40),
+        itemBuilder: (ctx, index, animation) => items[index].aliveWith(animation),
+      );
+    });
   }
 
   Widget _buildAnnounceItem(BuildContext context, AnnounceRecord record) {
     final titleStyle = Theme.of(context).textTheme.headline4;
     final subtitleStyle = Theme.of(context).textTheme.bodyText1;
 
-    return Padding(
-      padding: const EdgeInsets.all(2),
-      child: ListTile(
-        title: Text(record.title, style: titleStyle, overflow: TextOverflow.ellipsis).hero(record.uuid),
-        subtitle: Text('${record.department} | ${context.dateNum(record.dateTime)}', style: subtitleStyle),
-        onTap: () => Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => DetailPage(
-                  record,
-                ))),
-      ),
-    );
+    return ListTile(
+      title: Text(record.title, style: titleStyle, overflow: TextOverflow.ellipsis).hero(record.uuid),
+      subtitle: Text('${record.department} | ${context.dateNum(record.dateTime)}',
+          style: subtitleStyle, overflow: TextOverflow.ellipsis),
+      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => DetailPage(
+                record,
+              ))),
+    ).padAll(2);
   }
 }
