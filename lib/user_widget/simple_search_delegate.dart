@@ -17,6 +17,7 @@
 */
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:rettulf/rettulf.dart';
 
 /// 搜索对象的WidgetBuilder
 typedef SearchItemBuilder<T> = Widget Function(T itemData, String highlighted);
@@ -78,9 +79,9 @@ class SimpleTextSearchDelegate<T> extends SearchDelegate {
     }).toList());
   }
 
-  String highlight(String e) {
+  String highlight(BuildContext ctx, String e) {
     final splitTextList = e.split(query).map((e1) => "<span style='color:grey'>$e1</span>");
-    final highlight = "<span style='color:black;font-weight: bold'>$query</span>";
+    final highlight = "<span style='color:${ctx.highlightColor};font-weight: bold'>$query</span>";
     return splitTextList.join(highlight);
   }
 
@@ -97,7 +98,7 @@ class SimpleTextSearchDelegate<T> extends SearchDelegate {
       if (!documented.contains(query)) continue;
 
       // 高亮化
-      final highlighted = highlight(documented);
+      final highlighted = highlight(context, documented);
 
       // 搜索结果Widget构建
       final widget = GestureDetector(
@@ -120,4 +121,8 @@ class SimpleTextSearchDelegate<T> extends SearchDelegate {
       return buildSearchList(context);
     }
   }
+}
+
+extension _CssColorEx on BuildContext {
+  String get highlightColor => isDarkMode ? "white" : "black";
 }
