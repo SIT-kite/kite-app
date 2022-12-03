@@ -161,3 +161,4 @@ class Lang {
     Kv.pref.locale ??= redirectLocale(cur);
   }
 }
+

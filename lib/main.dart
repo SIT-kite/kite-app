@@ -15,9 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'dart:ui';
+
 import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:kite/global/init.dart';
 import 'package:kite/util/catcher_dialog_handler.dart';
@@ -30,7 +31,6 @@ const exceptionLogUrl = '${Backend.kite}/api/v2/report/exception';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await Initializer.init();
 
   Catcher(

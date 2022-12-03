@@ -15,11 +15,19 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+import 'dart:ui';
+
+import 'package:kite/l10n/lang.dart';
+
 import 'backend.dart';
 
 class R {
   R._();
 
+  static const appNameZhCn = "上应小风筝";
+  static const appNameZhTw = "上應小風箏";
+  static const appNameEn = "SIT Kite";
+  static final locale2AppName = {Lang.enLocale: appNameEn, Lang.zhLocale: appNameZhCn, Lang.zhTwLocale: appNameZhTw};
   static const appName = "上应小风筝";
   static const kiteUserAgreementName = "《上应小风筝用户协议》";
   static const kiteUserAgreementUrl = "${Backend.kite}/license/";
@@ -32,6 +40,11 @@ class R {
   static const kiteBbsUrl = "https://support.qq.com/products/386124";
   static const kiteFeedbackUrl = "https://support.qq.com/product/377648";
   static const kiteWikiUrl = "${Backend.kite}/wiki/";
+
+  static String getAppName({required Locale by}) {
+    final locale = Lang.redirectLocale(by);
+    return locale2AppName[locale] ?? appNameEn;
+  }
 }
 
 class CampusCode {

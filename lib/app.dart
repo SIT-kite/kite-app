@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:animations/animations.dart';
 import 'package:catcher/core/catcher.dart';
@@ -126,7 +127,7 @@ class _KiteAppState extends State<KiteApp> {
     });
     buildMaterialWithTheme(ThemeData theme) {
       return MaterialApp(
-        title: R.appName,
+        title: R.getAppName(by: window.locale),
         theme: theme.copyWith(
             pageTransitionsTheme: const PageTransitionsTheme(
               builders: {
