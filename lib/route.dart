@@ -41,7 +41,7 @@ class RouteTable {
   static const about = '/about';
   static const expense = '/expense';
   static const connectivity = '/connectivity';
-  static const campusCard = '/campusCard';
+  static const campusCard = '/campusCard'; // TODO: A weird name
   static const electricityBill = '/electricity_bill';
   static const examResult = '/exam_result';
   static const application = '/application';
@@ -93,7 +93,7 @@ final defaultRouteTable = StaticRouteTable(
     RouteTable.expense: (context, args) => const IndexPage(),
     RouteTable.connectivity: (context, args) => const ConnectivityPage(),
     RouteTable.campusCard: (context, args) => const CampusCardPage(),
-    RouteTable.electricityBill: (context, args) => const ElectricityPage(),
+    RouteTable.electricityBill: (context, args) => const ElectricityBillPage(),
     RouteTable.examResult: (context, args) => const ScorePage(),
     RouteTable.application: (context, args) => const OfficePage(),
     RouteTable.game: (context, args) => const GamePage(),

@@ -17,7 +17,7 @@
 */
 // 本地存储
 abstract class ElectricityStorageDao {
-  List<String>? get lastRoomList;
+  List<String>? get searchHistory;
 
-  set lastRoomList(List<String>? room);
+  set searchHistory(List<String>? room);
 }

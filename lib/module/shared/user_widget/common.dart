@@ -18,6 +18,6 @@
 export 'package:kite/user_widget/future_builder.dart';
 export 'package:kite/user_widget/placeholder_future_builder.dart';
 export 'package:kite/user_widget/html_widget.dart';
-export 'package:kite/user_widget/simple_search_delegate.dart';
+export 'package:kite/user_widget/search.dart';
 export 'package:kite/user_widget/multibutton_switch.dart';
 export 'package:kite/user_widget/my_switcher.dart';

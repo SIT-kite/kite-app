@@ -62,8 +62,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
   }
 
   Widget _buildEmptyBody(BuildContext ctx) {
-    return buildLeavingBlankBody(ctx,
-        icon: Icons.calendar_month_rounded, desc: i18n.timetableMineEmptyTip, onIconTap: goImport);
+    return LeavingBlank(icon: Icons.calendar_month_rounded, desc: i18n.timetableMineEmptyTip, onIconTap: goImport);
   }
 
   Widget buildTimetables(BuildContext ctx) {

@@ -54,7 +54,7 @@ class MessagePage extends StatelessWidget {
         if (data.msgList.isNotEmpty) {
           return _buildMessageList(context, data.msgList);
         } else {
-          return buildLeavingBlankBody(context, icon: Icons.upcoming_outlined, desc: i18n.applicationMyMailBoxEmptyTip);
+          return LeavingBlank(icon: Icons.upcoming_outlined, desc: i18n.applicationMyMailBoxEmptyTip);
         }
       },
     );

@@ -232,7 +232,7 @@ class _BoxItemState extends State<BoxItem> {
     final key = widget.boxKey.toString();
     final value = widget.box.get(widget.boxKey);
     final type = value.runtimeType.toString();
-    return [
+    Widget res = [
       Text(
         key,
         style: widget.routeStyle,
@@ -243,12 +243,30 @@ class _BoxItemState extends State<BoxItem> {
         maxLines: 3,
         style: widget.contentStyle?.copyWith(overflow: TextOverflow.ellipsis),
       ),
-    ]
-        .column(caa: CrossAxisAlignment.start)
-        .align(at: Alignment.topLeft)
-        .padAll(10)
-        .inCard(elevation: 5)
-        .on(tap: kDebugMode ? () async => showContentDialog(context, widget.box, key, value) : null);
+    ].column(caa: CrossAxisAlignment.start).align(at: Alignment.topLeft).padAll(10).inCard(elevation: 5);
+    if (kDebugMode) {
+      res = res.on(tap: () async => showContentDialog(context, widget.box, key, value));
+      res = Dismissible(
+        key: ValueKey(key),
+        direction: DismissDirection.startToEnd,
+        confirmDismiss: (dir) async {
+          final confirm = await context.showRequest(
+              title: i18n.warning,
+              desc: i18n.localStorageEmptyValueDesc,
+              yes: i18n.confirm,
+              no: i18n.cancel,
+              highlight: true);
+          if (confirm == true) {
+            widget.box.put(key, _emptyValue(value));
+            if (!mounted) return false;
+            setState(() {});
+          }
+          return false;
+        },
+        child: res,
+      );
+    }
+    return res;
   }
 
   Future<void> showContentDialog(BuildContext context, Box<dynamic> box, String key, dynamic value) async {
@@ -263,5 +281,29 @@ class _BoxItemState extends State<BoxItem> {
     } else {
       await Editor.showAnyEditor(context, value, desc: key, readonlyIfNotSupport: true);
     }
+  }
+}
+
+/// THIS IS VERY DANGEROUS!!!
+dynamic _emptyValue(dynamic value) {
+  if (value is String) {
+    return "";
+  } else if (value is bool) {
+    return false;
+  } else if (value is int) {
+    return 0;
+  } else if (value is double) {
+    return 0.0;
+  } else if (value is List) {
+    value.clear();
+    return value;
+  } else if (value is Set) {
+    value.clear();
+    return value;
+  } else if (value is Map) {
+    value.clear();
+    return value;
+  } else {
+    return null;
   }
 }

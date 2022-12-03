@@ -125,10 +125,12 @@ class _CampusCardPageState extends State<CampusCardPage> {
   }
 
   Widget buildFailedPrompt(BuildContext ctx) {
-    return buildLeavingBlankBody(ctx,
-        icon: Icons.credit_card_off_outlined, desc: i18n.campusCardNfcUnavailableOrDisabled, onIconTap: () async {
-      await AppSettings.openNFCSettings();
-    });
+    return LeavingBlank(
+        icon: Icons.credit_card_off_outlined,
+        desc: i18n.campusCardNfcUnavailableOrDisabled,
+        onIconTap: () async {
+          await AppSettings.openNFCSettings();
+        });
   }
 
   Widget buildPrompt() {

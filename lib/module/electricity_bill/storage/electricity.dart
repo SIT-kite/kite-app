@@ -25,8 +25,8 @@ class ElectricityStorage implements ElectricityStorageDao {
   ElectricityStorage(this.box);
 
   @override
-  List<String>? get lastRoomList => box.get('/lastRoomList');
+  List<String>? get searchHistory => box.get('/lastRoomList');
 
   @override
-  set lastRoomList(List<String>? roomList) => box.put('/lastRoomList', roomList);
+  set searchHistory(List<String>? roomList) => box.put('/lastRoomList', roomList);
 }

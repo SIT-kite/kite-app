@@ -676,5 +676,9 @@
   "welcomeSlogan": "Excellent school life, from here.",
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
-  "yes": "Yes"
+  "yes": "Yes",
+  "elecBillBillNavigation": "Bill",
+  "elecBillSearchNavigation": "Search",
+  "warning": "Warning",
+  "localStorageEmptyValueDesc": "BEWARE! YOU ARE TRYING TO EMPTY THE VALUE! ARE YOU SURE?"
 }

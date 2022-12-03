@@ -150,6 +150,12 @@ class _KiteAppState extends State<KiteApp> {
           final systemLocale = Localizations.localeOf(context);
           Lang.setCurrentLocaleIfAbsent(systemLocale);
           Future.delayed(Duration.zero, () async => await DesktopInit.setTitle(i18n.appName));
+          if (context.isPortrait) {
+            SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+                overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+          } else {
+            SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.bottom]);
+          }
           return MediaQuery(
             // 设置文字大小不随系统设置改变
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),

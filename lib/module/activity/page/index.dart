@@ -33,7 +33,8 @@ class ActivityPage extends StatefulWidget {
 }
 
 class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderStateMixin {
-  int currentIndex = 0;
+  /// For landscape mode.
+  int currentNavigation = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +50,7 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
           onPressed: () => showSearch(context: context, delegate: SearchBar()),
         ),
       ]),
-      body: currentIndex == 0 ? const ActivityListPage() : const MinePage(),
+      body: currentNavigation == 0 ? const ActivityListPage() : const MinePage(),
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
@@ -61,9 +62,9 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
             icon: const Icon(Icons.person_rounded),
           )
         ],
-        currentIndex: currentIndex,
+        currentIndex: currentNavigation,
         onTap: (int index) {
-          setState(() => currentIndex = index);
+          setState(() => currentNavigation = index);
         },
       ),
     );
@@ -80,11 +81,11 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
                 context.navigator.pop();
               },
             ),
-            selectedIndex: currentIndex,
+            selectedIndex: currentNavigation,
             groupAlignment: -1.0,
             onDestinationSelected: (int index) {
               setState(() {
-                currentIndex = index;
+                currentNavigation = index;
               });
             },
             labelType: NavigationRailLabelType.all,
@@ -103,7 +104,7 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
           ),
           const VerticalDivider(thickness: 1, width: 1),
           // This is the main content.
-          Expanded(child: currentIndex == 0 ? const ActivityListPage() : const MinePage())
+          Expanded(child: currentNavigation == 0 ? const ActivityListPage() : const MinePage())
         ],
       ),
     );

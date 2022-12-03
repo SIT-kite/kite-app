@@ -248,7 +248,7 @@
   "loginCredentialsValidatedTip": "賬號與密碼正確",
   "loginFailedWarn": "登入失敗",
   "logout": "登出",
-  "logoutKiteWarn": "確定要離開小風箏嗎?",
+  "logoutKiteWarn": "確認要離開小風箏嗎?",
   "major": "專業",
   "male": "男",
   "moreInfoTitle": "更多資訊",
@@ -423,5 +423,9 @@
   "welcomeSlogan": "便捷校園, 即刻起航",
   "xuhui": "徐匯",
   "xuhuiDistrict": "徐匯區",
-  "yes": "好"
+  "yes": "好",
+  "elecBillBillNavigation": "電費",
+  "elecBillSearchNavigation": "搜尋",
+  "warning": "警告",
+  "localStorageEmptyValueDesc": "謹防失誤！你正在嘗試清空該值！確認嗎？"
 }

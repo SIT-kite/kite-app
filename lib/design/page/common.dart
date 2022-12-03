@@ -19,24 +19,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rettulf/rettulf.dart';
 
-Widget buildLeavingBlankBody(BuildContext ctx,
-    {required IconData icon, required String desc, VoidCallback? onIconTap}) {
-  Widget iconWidget = icon.make(size: 120).padAll(20);
-  if (onIconTap != null) {
-    iconWidget = iconWidget.on(tap: onIconTap);
-  }
-  return [
-    iconWidget.expanded(),
-    desc
-        .text(
-          style: ctx.theme.textTheme.titleLarge,
-        )
-        .center()
-        .padAll(10)
-        .expanded(),
-  ].column(maa: MAAlign.spaceAround).center();
-}
-
 class LeavingBlank extends StatelessWidget {
   final IconData icon;
   final String desc;
@@ -54,7 +36,7 @@ class LeavingBlank extends StatelessWidget {
       iconWidget.expanded(),
       desc
           .text(
-            style: context.theme.textTheme.titleLarge,
+            style: context.textTheme.titleLarge,
           )
           .center()
           .padAll(10)

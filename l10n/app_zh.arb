@@ -423,5 +423,9 @@
   "welcomeSlogan": "便利校园，一步到位",
   "xuhui": "徐汇",
   "xuhuiDistrict": "徐汇区",
-  "yes": "好"
+  "yes": "好",
+  "elecBillBillNavigation": "电费",
+  "elecBillSearchNavigation": "搜索",
+  "warning": "警告",
+  "localStorageEmptyValueDesc": "当心！你正准备清空这个值，确定要这样做吗？"
 }
