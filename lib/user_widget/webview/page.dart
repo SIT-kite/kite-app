@@ -96,7 +96,7 @@ class SimpleWebViewPage extends StatefulWidget {
     this.javascriptChannels,
     this.showLaunchButtonIfUnsupported = true,
     this.otherActions,
-    this.followDarkMode = true,
+    this.followDarkMode = false,
   }) : super(key: key);
 
   @override
@@ -187,9 +187,8 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
             }
           },
           injectJsRules: () {
-            if (!widget.followDarkMode) return null;
             return [
-              if (Theme.of(context).isDark)
+              if (widget.followDarkMode && Theme.of(context).isDark)
                 InjectJsRuleItem(
                   rule: const ConstRule(true),
                   asyncJavascript: rootBundle.loadString('assets/webview/dark.js'),
