@@ -18,6 +18,7 @@
 import 'package:catcher/catcher.dart';
 import 'package:kite/global/desktop_init.dart';
 import 'package:kite/global/global.dart';
+import 'package:kite/hive/init.dart';
 import 'package:kite/home/init.dart';
 import 'package:kite/module/classroom_browser/init.dart';
 import 'package:kite/module/symbol.dart';
@@ -28,10 +29,10 @@ import 'package:kite/session/sit_app_session.dart';
 import 'package:kite/settings/symbol.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
+import 'package:path/path.dart' as path;
 import 'package:universal_platform/universal_platform.dart';
 
-import 'package:kite/hive/init.dart';
-import 'package:path/path.dart' as path;
+import '../session/dio_common.dart';
 
 class Initializer {
   static Future<void> init({bool? debugNetwork}) async {
@@ -111,7 +112,7 @@ class Initializer {
       gameBox: HiveBoxInit.game,
       kiteSession: kiteSession,
     );
-    await KiteBulletinInit.init(kiteSession: kiteSession);
+    await KiteBulletinInit.init(session: DefaultDioSession(Global.dio));
     await BoardInit.init(kiteSession: kiteSession);
     await HomeInit.init(
       ssoSession: Global.ssoSession,

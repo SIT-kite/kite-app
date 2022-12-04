@@ -20,7 +20,7 @@ import '../entity/bulletin.dart';
 import '../using.dart';
 
 class KiteBulletinService implements KiteBulletinServiceDao {
-  static const String _noticePath = '/notice';
+  static const String _noticePath = '${Backend.kite}/bulletin.json';
 
   final ISession session;
 

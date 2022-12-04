@@ -23,12 +23,12 @@ class KiteBulletinInit {
   KiteBulletinInit._();
 
   static late KiteBulletinServiceDao noticeService;
-  static late KiteSession kiteSession;
+  static late ISession kiteSession;
 
   static Future<void> init({
-    required KiteSession kiteSession,
+    required ISession session,
   }) async {
-    KiteBulletinInit.kiteSession = kiteSession;
-    noticeService = KiteBulletinService(kiteSession);
+    KiteBulletinInit.kiteSession = session;
+    noticeService = KiteBulletinService(session);
   }
 }
