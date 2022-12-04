@@ -1,3 +1,20 @@
+/*
+ *    上应小风筝(SIT-kite)  便利校园，一步到位
+ *    Copyright (C) 2022 上海应用技术大学 上应小风筝团队
+ *
+ *    This program is free software: you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation, either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 import 'package:auto_animated/auto_animated.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -87,7 +104,7 @@ class _ApplicationListState extends State<ApplicationList> {
   List<Widget> buildApplications(List<ApplicationMeta> all) {
     return all
         .where((element) => !enableFilter || _commonUse.contains(element.id))
-        .mapIndexed((i, e) => ApplicationTile(item: e, isHot: i < 3))
+        .mapIndexed((i, e) => ApplicationTile(meta: e, isHot: i < 3).hero(e.id))
         .toList();
   }
 

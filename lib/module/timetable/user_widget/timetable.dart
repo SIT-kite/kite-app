@@ -133,7 +133,6 @@ class _TimetableViewerState extends State<TimetableViewer> {
   late final dailyTimetableKey = GlobalKey(debugLabel: "Daily TimeTable Key of ${widget.initialTableMeta?.name}");
   late final weeklyTimetableKey = GlobalKey(debugLabel: "Weekly TimeTable Key of ${widget.initialTableMeta?.name}");
 
-
   @override
   void initState() {
     Log.info('TimetableViewer init');
@@ -174,14 +173,14 @@ class _TimetableViewerState extends State<TimetableViewer> {
               key: dailyTimetableKey,
               $currentPos: widget.$currentPos,
               allCourses: widget.initialTableCourses,
-              initialDate:  widget.initialTableMeta?.startDate ?? DateTime.now(),
+              initialDate: widget.initialTableMeta?.startDate ?? DateTime.now(),
               tableCache: widget.tableCache,
               viewChangingCallback: switchDisplayMode)
           : WeeklyTimetable(
               key: weeklyTimetableKey,
               $currentPos: widget.$currentPos,
               allCourses: widget.initialTableCourses,
-              initialDate:  widget.initialTableMeta?.startDate ?? DateTime.now(),
+              initialDate: widget.initialTableMeta?.startDate ?? DateTime.now(),
               tableCache: widget.tableCache),
     );
   }

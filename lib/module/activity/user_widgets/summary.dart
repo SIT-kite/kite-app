@@ -149,7 +149,11 @@ Widget buildSummeryCard(BuildContext ctx, ScScoreSummary? summery) {
   } else {
     return [
       i18n.activityMyScoreTitle.text(style: ctx.textTheme.headline1).padFromLTRB(8, 24, 8, 0),
-      _buildChart(ctx, summery, showTotal: true).padSymmetric(v: 12).inCard(elevation: 8).padSymmetric(v: 12.w, h: 8.h).expanded()
+      _buildChart(ctx, summery, showTotal: true)
+          .padSymmetric(v: 12)
+          .inCard(elevation: 8)
+          .padSymmetric(v: 12.w, h: 8.h)
+          .expanded()
     ].column(maa: MainAxisAlignment.spaceEvenly);
   }
 }

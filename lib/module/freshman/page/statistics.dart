@@ -117,10 +117,8 @@ class FreshmanStatisticsPage extends StatelessWidget {
           ],
         ),
         SizedBox(height: 15.h),
-        if (data.sameCity > 0)
-          _row(text: '还有 ', n: data.sameCity.toString(), text2: '人和你来自同一座城市'),
-        if (data.sameHighSchool > 0)
-          _row(text: '其他 ', n: data.sameHighSchool.toString(), text2: '人是你的高中校友'),
+        if (data.sameCity > 0) _row(text: '还有 ', n: data.sameCity.toString(), text2: '人和你来自同一座城市'),
+        if (data.sameHighSchool > 0) _row(text: '其他 ', n: data.sameHighSchool.toString(), text2: '人是你的高中校友'),
         if (data.sameHighSchool > 0 || data.sameCity > 0) _row(text: '有时间可以认识一下哦'),
         SizedBox(height: 15.h),
         if (data.sameName > 0) _row(text: '哦，还有', n: data.sameName.toString(), text2: '人和你同名'),

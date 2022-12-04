@@ -46,7 +46,7 @@ class _YellowPagesPageState extends State<YellowPagesPage> {
   @override
   void initState() {
     super.initState();
-      _contacts = YellowPagesInit.contactStorageDao.getAllContacts();
+    _contacts = YellowPagesInit.contactStorageDao.getAllContacts();
     _fetchContactList().then((value) {
       if (!mounted) return;
       setState(() {

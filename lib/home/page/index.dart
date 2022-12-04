@@ -333,7 +333,7 @@ class _HomePageState extends State<HomePage> {
 
     Future.delayed(Duration.zero, () async {
       // Remove auto launch timetable function permanently
-     /* if (Kv.home.autoLaunchTimetable ?? false) {
+      /* if (Kv.home.autoLaunchTimetable ?? false) {
         Navigator.of(context).pushNamed(RouteTable.timetable);
       }*/
       // 非新生才执行该网络检查逻辑

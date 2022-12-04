@@ -20,105 +20,132 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:kite/launcher.dart';
-import 'package:kite/user_widget/future_builder.dart';
 import 'package:kite/util/url_launcher.dart';
+import 'package:rettulf/rettulf.dart';
 import 'package:universal_platform/universal_platform.dart';
 import '../entity/function.dart';
 
 import '../init.dart';
+import '../using.dart';
 import '../page/browser.dart';
 
-class DetailPage extends StatelessWidget {
-  final ApplicationMeta function;
+class DetailPage extends StatefulWidget {
+  final ApplicationMeta meta;
 
-  const DetailPage(this.function, {Key? key}) : super(key: key);
+  const DetailPage({super.key, required this.meta});
 
-  Widget buildSection(BuildContext context, ApplicationDetailSection section) {
-    final titleStyle = Theme.of(context).textTheme.headline2;
-    final textStyle = Theme.of(context).textTheme.bodyText2;
+  @override
+  State<DetailPage> createState() => _DetailPageState();
+}
 
-    Widget buildHtmlSection(String content) {
-      final html = content.replaceAll('../app/files/', 'https://xgfy.sit.edu.cn/app/files/');
-      return HtmlWidget(html, textStyle: textStyle, onTapUrl: (url) {
-        launchUrlInBrowser(url);
-        return true;
+class _DetailPageState extends State<DetailPage> {
+  ApplicationMeta get meta => widget.meta;
+  ApplicationDetail? _detail;
+
+  @override
+  void initState() {
+    super.initState();
+    ApplicationInit.applicationService.getApplicationDetail(meta.id).then((value) {
+      if (!mounted) return;
+      setState(() {
+        _detail = value;
       });
-    }
-
-    Widget buildJsonSection(String content) {
-      final Map kvPairs = jsonDecode(content);
-      List<Widget> items = [];
-      kvPairs.forEach((key, value) => items.add(Text('$key: $value', style: textStyle)));
-
-      return Column(crossAxisAlignment: CrossAxisAlignment.start, children: items);
-    }
-
-    Widget buildOtherSection(String type, String _) {
-      return Text('未知类型: $type', style: textStyle);
-    }
-
-    late Widget bodyWidget;
-    switch (section.type) {
-      case 'html':
-        bodyWidget = buildHtmlSection(section.content);
-        break;
-      case 'json':
-        bodyWidget = buildJsonSection(section.content);
-        break;
-      default:
-        bodyWidget = buildOtherSection(section.type, section.content);
-        break;
-    }
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(section.section, style: titleStyle),
-          bodyWidget,
-        ],
-      ),
-    );
-  }
-
-  Widget buildBody(BuildContext context, List<ApplicationDetailSection> sections) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: sections.map((e) => buildSection(context, e)).toList(),
-      ),
-    );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(function.name)),
+      appBar: AppBar(title: Text(meta.name).hero(meta.id)),
       body: SafeArea(
-        child: MyFutureBuilder<ApplicationDetail>(
-          future: ApplicationInit.applicationService.getApplicationDetail(function.id),
-          builder: (context, data) {
-            return buildBody(context, data.sections);
-          },
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.east),
-        onPressed: () {
-          if (UniversalPlatform.isDesktopOrWeb) {
-            GlobalLauncher.launch("http://ywb.sit.edu.cn/v1/#/");
-          } else {
-            // 跳转到申请页面
-            final String applyUrl =
-                'https://xgfy.sit.edu.cn/unifri-flow/WF/MyFlow.htm?ismobile=1&out=1&FK_Flow=${function.id}';
-            Navigator.of(context)
-                .pushReplacement(MaterialPageRoute(builder: (_) => InAppViewPage(title: function.name, url: applyUrl)));
-          }
-        },
+        child: buildBody(context),
       ),
     );
   }
+
+  Widget buildOpenInAppFloatingButton() {
+    return FloatingActionButton(
+      child: const Icon(Icons.east),
+      onPressed: () => openInApp(context),
+    );
+  }
+
+  Widget buildBody(
+    BuildContext context,
+  ) {
+    final detail = _detail;
+    if (detail == null) {
+      return Placeholders.loading();
+    } else {
+      final sections = detail.sections;
+      return sections
+          .map((e) => _buildSection(context, e))
+          .toList()
+          .column(
+            caa: CrossAxisAlignment.start,
+            mas: MainAxisSize.min,
+          )
+          .padAll(10)
+          .scrolled();
+    }
+  }
+
+  void openInApp(BuildContext ctx) {
+    if (UniversalPlatform.isDesktopOrWeb) {
+      GlobalLauncher.launch("http://ywb.sit.edu.cn/v1/#/");
+    } else {
+      // 跳转到申请页面
+      final String applyUrl = 'https://xgfy.sit.edu.cn/unifri-flow/WF/MyFlow.htm?ismobile=1&out=1&FK_Flow=${meta.id}';
+      ctx.navigator.pushReplacement(MaterialPageRoute(builder: (_) => InAppViewPage(title: meta.name, url: applyUrl)));
+    }
+  }
+}
+
+Widget _buildSection(BuildContext context, ApplicationDetailSection section) {
+  final titleStyle = Theme.of(context).textTheme.headline2;
+  final textStyle = Theme.of(context).textTheme.bodyText2;
+
+  Widget buildHtmlSection(String content) {
+    final html = content.replaceAll('../app/files/', 'https://xgfy.sit.edu.cn/app/files/');
+    return HtmlWidget(html, textStyle: textStyle, onTapUrl: (url) {
+      launchUrlInBrowser(url);
+      return true;
+    });
+  }
+
+  Widget buildJsonSection(String content) {
+    final Map kvPairs = jsonDecode(content);
+    List<Widget> items = [];
+    kvPairs.forEach((key, value) => items.add(Text('$key: $value', style: textStyle)));
+
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: items);
+  }
+
+  Widget buildOtherSection(String type, String _) {
+    return Text('未知类型: $type', style: textStyle);
+  }
+
+  late Widget bodyWidget;
+  switch (section.type) {
+    case 'html':
+      bodyWidget = buildHtmlSection(section.content);
+      break;
+    case 'json':
+      bodyWidget = buildJsonSection(section.content);
+      break;
+    default:
+      bodyWidget = buildOtherSection(section.type, section.content);
+      break;
+  }
+
+  return Padding(
+    padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(section.section, style: titleStyle),
+        bodyWidget,
+      ],
+    ),
+  );
 }
