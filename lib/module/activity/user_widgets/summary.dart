@@ -18,6 +18,7 @@
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../entity/score.dart';
@@ -147,13 +148,8 @@ Widget buildSummeryCard(BuildContext ctx, ScScoreSummary? summery) {
     );
   } else {
     return [
-      i18n.activityMyScoreTitle.text(style: ctx.textTheme.titleLarge).padAll(10),
-      AspectRatio(
-        aspectRatio: 1.2,
-        child: Card(
-          child: _buildChart(ctx, summery, showTotal: true).padSymmetric(v: 12),
-        ),
-      )
-    ].column();
+      i18n.activityMyScoreTitle.text(style: ctx.textTheme.headline1).padFromLTRB(8, 24, 8, 0),
+      _buildChart(ctx, summery, showTotal: true).padSymmetric(v: 12).inCard(elevation: 8).padSymmetric(v: 12.w, h: 8.h).expanded()
+    ].column(maa: MainAxisAlignment.spaceEvenly);
   }
 }

@@ -33,7 +33,7 @@ import 'package:kite/override/entity.dart';
 import 'package:kite/route.dart';
 import 'package:rettulf/rettulf.dart';
 
-import 'global/desktop_initializer.dart';
+import 'global/desktop_init.dart';
 import 'global/global.dart';
 import 'navigation/route.dart';
 import 'storage/init.dart';

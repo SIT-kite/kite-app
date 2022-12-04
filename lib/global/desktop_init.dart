@@ -61,7 +61,6 @@ class DesktopInit {
     await windowManager.ensureInitialized();
     windowManager.waitUntilReadyToShow().then((_) async {
       // Hide window title bar
-      final lastWindowSize = Kv.theme.lastWindowSize;
       await windowManager.setSize(R.defaultWindowSize);
       // Center the window.
       await windowManager.center();

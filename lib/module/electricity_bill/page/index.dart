@@ -70,7 +70,11 @@ class _ElectricityBillPageState extends State<ElectricityBillPage> {
                 )),
           ],
         ),
-        body: selectedRoom == null ? const EmptySearchTip() : Dashboard(selectedRoom: selectedRoom));
+        body: selectedRoom == null
+            ? EmptySearchTip(
+                search: search,
+              )
+            : Dashboard(selectedRoom: selectedRoom));
   }
 
   Widget buildLandscape(BuildContext ctx) {

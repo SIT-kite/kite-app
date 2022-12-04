@@ -22,7 +22,7 @@ import 'package:catcher/catcher.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/global/cookie_initializer.dart';
+import 'package:kite/global/cookie_init.dart';
 import 'package:kite/global/dio_initializer.dart';
 import 'package:kite/module/activity/using.dart';
 import 'package:kite/module/user_event/dao/user_event.dart';

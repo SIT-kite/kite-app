@@ -90,27 +90,25 @@ class _MyActivityPageState extends State<MyActivityPage> {
     final trailingStyle = Theme.of(context).textTheme.headline6?.copyWith(color: color);
     final activity = ActivityParser.parse(rawActivity);
 
-    return Card(
-      child: ListTile(
-        title: Text(activity.realTitle, style: titleStyle, maxLines: 2, overflow: TextOverflow.ellipsis),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('${i18n.activityApplicationTime}: ${context.dateFullNum(rawActivity.time)}', style: subtitleStyle),
-            Text('${i18n.activityApplicationID}: ${rawActivity.applyId}', style: subtitleStyle),
-          ],
-        ),
-        trailing: Text(rawActivity.amount.abs() > 0.01 ? rawActivity.amount.toStringAsFixed(2) : rawActivity.status,
-            style: trailingStyle),
-        onTap: rawActivity.activityId != -1
-            ? () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => DetailPage(activity, hero: rawActivity.applyId, enableApply: false)),
-                );
-              }
-            : null,
+    return ListTile(
+      title: Text(activity.realTitle, style: titleStyle, maxLines: 2, overflow: TextOverflow.ellipsis),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('${i18n.activityApplicationTime}: ${context.dateFullNum(rawActivity.time)}', style: subtitleStyle),
+          Text('${i18n.activityApplicationID}: ${rawActivity.applyId}', style: subtitleStyle),
+        ],
       ),
-    ).hero(rawActivity.applyId).padSymmetric(h: 8);
+      trailing: Text(rawActivity.amount.abs() > 0.01 ? rawActivity.amount.toStringAsFixed(2) : rawActivity.status,
+          style: trailingStyle),
+      onTap: rawActivity.activityId != -1
+          ? () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => DetailPage(activity, hero: rawActivity.applyId, enableApply: false)),
+              );
+            }
+          : null,
+    ).inCard().hero(rawActivity.applyId).padSymmetric(h: 8);
   }
 
 // Animation
@@ -128,8 +126,7 @@ class _MyActivityPageState extends State<MyActivityPage> {
           itemCount: activities.length,
           physics: const BouncingScrollPhysics(),
           showItemInterval: const Duration(milliseconds: 40),
-          itemBuilder: (ctx, index, animation) =>
-              buildJoinedActivityCard(ctx, activities[index]).aliveWith(animation),
+          itemBuilder: (ctx, index, animation) => buildJoinedActivityCard(ctx, activities[index]).aliveWith(animation),
         ),
       );
     }
