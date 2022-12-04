@@ -95,7 +95,7 @@ class _DetailPageState extends State<DetailPage> {
         actions: [
           if (widget.enableApply)
             PlainExtendedButton(
-                label: i18n.open.text(),
+                label: i18n.activityApplyBtn.text(),
                 icon: const Icon(Icons.person_add),
                 tap: () async {
                   await showApplyRequest(ctx);

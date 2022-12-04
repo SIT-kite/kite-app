@@ -105,7 +105,7 @@ class _MinePageState extends State<MinePage> {
         onTap: rawActivity.activityId != -1
             ? () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => DetailPage(activity, hero: rawActivity.applyId, enableApply: true)),
+                  MaterialPageRoute(builder: (_) => DetailPage(activity, hero: rawActivity.applyId, enableApply: false)),
                 );
               }
             : null,
