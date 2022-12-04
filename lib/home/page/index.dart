@@ -45,9 +45,9 @@ import 'homepage_factory.dart';
 import 'item/index.dart';
 
 class HomeItemGroup extends StatelessWidget {
-  final List<Widget> _items;
+  final List<Widget> items;
 
-  const HomeItemGroup(this._items, {Key? key}) : super(key: key);
+  const HomeItemGroup(this.items, {super.key});
 
   Widget buildGlassmorphismBg() {
     return GlassmorphismBackground(sigmaX: 5, sigmaY: 12, colors: [
@@ -64,7 +64,7 @@ class HomeItemGroup extends StatelessWidget {
           children: [
             buildGlassmorphismBg(),
             Column(
-              children: _items,
+              children: items,
             ),
           ],
         ));
@@ -206,8 +206,8 @@ class _HomePageState extends State<HomePage> {
 
     for (final item in list) {
       if (item == FType.separator) {
-        result.addAll([HomeItemGroup(currentGroup), separator]);
-        currentGroup = [];
+        result.addAll([HomeItemGroup([...currentGroup]), separator]);
+        currentGroup.clear();
       } else {
         if (!filter.accept(item, userType)) {
           final brick = HomepageFactory.buildBrickWidget(context, item);
@@ -216,6 +216,10 @@ class _HomePageState extends State<HomePage> {
           }
         }
       }
+    }
+    if (currentGroup.isNotEmpty) {
+      result.add(HomeItemGroup([...currentGroup]));
+      currentGroup.clear();
     }
 
     if (extraItemList != null) {

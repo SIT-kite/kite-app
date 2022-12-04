@@ -20,7 +20,6 @@ import 'package:kite/design/colors.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
-import 'package:kite/util/dsl.dart';
 import 'package:rettulf/rettulf.dart';
 import 'package:universal_platform/universal_platform.dart';
 

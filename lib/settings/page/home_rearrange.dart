@@ -71,10 +71,7 @@ class _HomeRearrangePageState extends State<HomeRearrangePage> {
           appBar: AppBar(
             title: i18n.settingsHomepageRearrangeTitle.text(),
             actions: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6),
-                child: buildResetButton(),
-              )
+              buildResetButton()
             ],
           ),
           body: Padding(
@@ -91,6 +88,7 @@ class _HomeRearrangePageState extends State<HomeRearrangePage> {
             },
           )),
       onWillPop: () async {
+        Kv.home.homeItems = currentHomeItems;
         Global.eventBus.emit(EventNameConstants.onHomeItemReorder);
         return true;
       },
@@ -116,7 +114,6 @@ class _HomeRearrangePageState extends State<HomeRearrangePage> {
       final item = items.removeAt(oldIndex);
       items.insert(newIndex, item);
     });
-    _onSave();
   }
 
   void _onReorderStart(int index) async {
@@ -125,10 +122,6 @@ class _HomeRearrangePageState extends State<HomeRearrangePage> {
 
   void _onReorderEnd(int index) async {
     await const Vibration(milliseconds: 100).emit();
-  }
-
-  void _onSave() {
-    Kv.home.homeItems = currentHomeItems;
   }
 
   Widget buildResetButton() {
@@ -146,7 +139,6 @@ class _HomeRearrangePageState extends State<HomeRearrangePage> {
               isA = !isA;
               currentHomeItems = [...defaultOrder];
             });
-            _onSave();
           }
         }
       },
@@ -173,10 +165,23 @@ class _HomeRearrangePageState extends State<HomeRearrangePage> {
   List<Widget> buildWidgetItems(BuildContext ctx, List<FType> homeItems) {
     final List<Widget> listItems = [];
     for (int i = 0; i < homeItems.length; ++i) {
-      listItems.add(Card(
+      Widget card = Card(
         key: Key(i.toString()),
         child: _buildFType(homeItems[i]),
-      ));
+      );
+      final ftype = homeItems[i];
+      if (ftype == FType.separator) {
+        card = Dismissible(
+          key: ValueKey(i),
+          child: card,
+          onDismissed: (dir) {
+            setState(() {
+              homeItems.removeAt(i);
+            });
+          },
+        );
+      }
+      listItems.add(card);
     }
     return listItems;
   }

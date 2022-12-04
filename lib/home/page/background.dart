@@ -25,7 +25,6 @@ import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/module/shared/entity/weather.dart';
 import 'package:kite/storage/init.dart';
-import 'package:kite/util/dsl.dart';
 import 'package:kite/util/flash.dart';
 import 'package:rettulf/rettulf.dart';
 import 'package:universal_platform/universal_platform.dart';

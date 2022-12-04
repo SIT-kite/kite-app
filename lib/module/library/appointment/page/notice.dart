@@ -19,7 +19,6 @@
 import 'package:flutter/material.dart';
 import 'package:kite/user_widget/html_widget.dart';
 import 'package:kite/l10n/extension.dart';
-import 'package:kite/util/dsl.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../entity.dart';
