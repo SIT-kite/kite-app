@@ -23,6 +23,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'package:rettulf/rettulf.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import '../entity/picture_summary.dart';
@@ -188,7 +189,7 @@ class _BoardPageState extends State<BoardPage> {
         if (_atEnd)
           SizedBox(
             height: 40,
-            child: Center(child: i18n.kiteBoardReachEndLabel.txt),
+            child: Center(child: i18n.kiteBoardReachEndLabel.text()),
           )
       ],
     );
@@ -199,7 +200,7 @@ class _BoardPageState extends State<BoardPage> {
     final bool showUpload = AccountUtils.getAuthUserType() != UserType.freshman;
 
     return Scaffold(
-      appBar: AppBar(title: i18n.kiteBoardTitle.txt),
+      appBar: AppBar(title: i18n.kiteBoardTitle.text()),
       floatingActionButton: showUpload
           ? FloatingActionButton(
               onPressed: () => onUploadPicture(context),

@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:rettulf/rettulf.dart';
 import '../../user_widget/common.dart';
 import '../../using.dart';
 
@@ -72,7 +73,7 @@ class _FreshmanRelationshipPageState extends State<FreshmanRelationshipPage> wit
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: i18n.newFriendsTitle.txt,
+          title: i18n.newFriendsTitle.text(),
           bottom: _buildBarHeader(context),
           actions: buildAppBarMenuButton(context),
         ),

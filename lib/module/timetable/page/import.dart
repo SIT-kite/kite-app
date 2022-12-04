@@ -83,7 +83,7 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: i18n.timetableImportTitle.txt),
+      appBar: AppBar(title: i18n.timetableImportTitle.text()),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
         child: buildImportPage(context),

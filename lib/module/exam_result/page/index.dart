@@ -17,6 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:rettulf/rettulf.dart';
 
 import '../entity/score.dart';
 import '../init.dart';
@@ -119,7 +120,7 @@ class _ScorePageState extends State<ScorePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: i18n.ftype_examResult.txt,
+        title: i18n.ftype_examResult.text(),
       ),
       body: scoreList == null
           ? const Center(child: CircularProgressIndicator())

@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/design/user_widgets/dialog.dart';
+import 'package:rettulf/rettulf.dart';
 
 import '../init.dart';
 import '../service/network.dart';
@@ -132,10 +133,10 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
         children: [
           ElevatedButton(
             onPressed: AppSettings.openWIFISettings,
-            child: i18n.openWlanSettingsBtn.txt,
+            child: i18n.openWlanSettingsBtn.text(),
           ),
           ElevatedButton(
-              child: i18n.launchEasyConnectBtn.txt,
+              child: i18n.launchEasyConnectBtn.text(),
               onPressed: () async {
                 final launched = await GlobalLauncher.launch('sangfor://easyconnect');
                 if (!launched) {
@@ -181,7 +182,7 @@ class _ConnectivityPageState extends State<ConnectivityPage> {
   Widget build(BuildContext context) {
     final block = isConnected ? buildConnectedBlock() : buildDisconnectedBlock();
     return Scaffold(
-      appBar: AppBar(title: i18n.networkTool.txt),
+      appBar: AppBar(title: i18n.networkTool.text()),
       body: SizedBox.expand(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

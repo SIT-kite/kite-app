@@ -160,7 +160,7 @@ class _ApplicationListState extends State<ApplicationList> {
                 AbsorbPointer(
                   child: Checkbox(value: enableFilter, onChanged: (bool? value) {}),
                 ),
-                i18n.applicationFilerInfrequentlyUsed.txt,
+                i18n.applicationFilerInfrequentlyUsed.text(),
               ],
             ),
           ),

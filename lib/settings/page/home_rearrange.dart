@@ -23,6 +23,7 @@ import 'package:kite/home/entity/home.dart';
 import 'package:kite/module/activity/using.dart';
 import 'package:kite/util/user.dart';
 import 'package:kite/util/vibration.dart';
+import 'package:rettulf/rettulf.dart';
 
 class HomeRearrangePage extends StatefulWidget {
   const HomeRearrangePage({Key? key}) : super(key: key);
@@ -68,7 +69,7 @@ class _HomeRearrangePageState extends State<HomeRearrangePage> {
     return WillPopScope(
       child: Scaffold(
           appBar: AppBar(
-            title: i18n.settingsHomepageRearrangeTitle.txt,
+            title: i18n.settingsHomepageRearrangeTitle.text(),
             actions: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 6),

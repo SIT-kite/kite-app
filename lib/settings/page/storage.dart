@@ -47,7 +47,7 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
 
   Widget buildPortrait(BuildContext ctx) {
     return Scaffold(
-      appBar: AppBar(title: i18n.localStorageTitle.txt),
+      appBar: AppBar(title: i18n.localStorageTitle.text()),
       body: Scrollbar(
           //always show scrollbar
           thickness: 20,
@@ -61,7 +61,7 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
 
   Widget buildLandscape(BuildContext ctx) {
     return Scaffold(
-        //appBar: AppBar(title: i18n.localStorageTitle.txt),
+        //appBar: AppBar(title: i18n.localStorageTitle.text()),
         body: [
       Scaffold(
         appBar: AppBar(

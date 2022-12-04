@@ -18,6 +18,7 @@
 import 'package:enough_mail/enough_mail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rettulf/rettulf.dart';
 import '../using.dart';
 import '../init.dart';
 import '../service/email.dart';
@@ -108,7 +109,7 @@ class _MailPageState extends State<MailPage> {
                   EduEmailInit.mail.password = _controller.text;
                   setState(() => _index = indexEmailList);
                 },
-                child: i18n.continue_.txt)
+                child: i18n.continue_.text())
           ]),
         ],
       ),
@@ -142,7 +143,7 @@ class _MailPageState extends State<MailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: i18n.eduEmailTitle.txt,
+        title: i18n.eduEmailTitle.text(),
         actions: [_buildPopupMenu()],
       ),
       body: _buildBody(context),

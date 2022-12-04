@@ -47,7 +47,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: i18n.timetableMineTitle.txt,
+        title: i18n.timetableMineTitle.text(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: goImport,
@@ -96,7 +96,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
               setState(() {});
             }
           },
-          child: i18n.timetableEdit.txt,
+          child: i18n.timetableEdit.text(),
         ),
         if (timetableStorage.currentTableName != meta.name)
           CupertinoContextMenuAction(
@@ -106,7 +106,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
               timetableStorage.currentTableName = meta.name;
               setState(() {});
             },
-            child: i18n.timetableSetToDefault.txt,
+            child: i18n.timetableSetToDefault.text(),
           ),
         CupertinoContextMenuAction(
           trailingIcon: CupertinoIcons.time,
@@ -118,7 +118,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
               timetableStorage.addTableMeta(meta.name, meta);
             }
           },
-          child: i18n.timetableSetStartDate.txt,
+          child: i18n.timetableSetStartDate.text(),
         ),
         CupertinoContextMenuAction(
           trailingIcon: CupertinoIcons.eye,
@@ -128,7 +128,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
                 builder: (ctx) =>
                     TimetablePreviewPage(meta: meta, courses: timetableStorage.getTableCourseByName(meta.name) ?? [])));
           },
-          child: i18n.timetablePreviewBtn.txt,
+          child: i18n.timetablePreviewBtn.text(),
         ),
         CupertinoContextMenuAction(
           trailingIcon: CupertinoIcons.delete,
@@ -138,7 +138,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
             await showDeleteTimetableRequest(ctx, meta);
           },
           isDestructiveAction: true,
-          child: i18n.timetableDelete.txt,
+          child: i18n.timetableDelete.text(),
         ),
       ],
       child: [

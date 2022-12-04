@@ -24,8 +24,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/user_widget/future_builder.dart';
 import 'package:kite/user_widget/my_switcher.dart';
 import 'package:kite/l10n/extension.dart';
-import 'package:kite/util/dsl.dart';
 import 'package:kite/util/flash.dart';
+import 'package:rettulf/rettulf.dart';
 import '../dao/Freshman.dart';
 import '../entity/info.dart';
 import '../init.dart';
@@ -90,14 +90,14 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
     );
     // 销毁后当前组件的context将不存在
     // Catcher中存放了上一个父节点的context可以继续用
-    showBasicFlash(Catcher.navigatorKey!.currentContext!, i18n.userInfoUpdatedTip.txt);
+    showBasicFlash(Catcher.navigatorKey!.currentContext!, i18n.userInfoUpdatedTip.text());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: i18n.personalInfoTitle.txt,
+        title: i18n.personalInfoTitle.text(),
       ),
       body: MyFutureBuilder<FreshmanInfo>(
         future: freshmanDao.getInfo(),

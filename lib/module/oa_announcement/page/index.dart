@@ -51,7 +51,7 @@ class _OaAnnouncePageState extends State<OaAnnouncePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: i18n.ftype_oaAnnouncement.txt),
+      appBar: AppBar(title: i18n.ftype_oaAnnouncement.text()),
       body: _buildAnnounceList(),
     );
   }

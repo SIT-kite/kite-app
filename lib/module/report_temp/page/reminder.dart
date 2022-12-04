@@ -16,6 +16,7 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import 'package:flutter/material.dart';
+import 'package:rettulf/rettulf.dart';
 import '../using.dart';
 
 class ReminderDialog extends StatefulWidget {
@@ -39,11 +40,11 @@ class _ReminderDialogState extends State<ReminderDialog> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        i18n.reportTempReminderDesc.txt,
+        i18n.reportTempReminderDesc.text(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            i18n.reportTempReminderSwitch.txt,
+            i18n.reportTempReminderSwitch.text(),
             MySwitcher(
               Kv.report.enable ?? false,
               onChanged: (value) {
@@ -57,7 +58,7 @@ class _ReminderDialogState extends State<ReminderDialog> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              i18n.reportTempRemindTime.txt,
+              i18n.reportTempRemindTime.text(),
               TextButton(
                 onPressed: () async {
                   final selectTime = await showTimePicker(
@@ -72,9 +73,9 @@ class _ReminderDialogState extends State<ReminderDialog> {
                   valueListenable: _notifier,
                   builder: (context, data, widget) {
                     if (data == null) {
-                      return const TimeOfDay(hour: 0, minute: 0).format(context).txt;
+                      return const TimeOfDay(hour: 0, minute: 0).format(context).text();
                     }
-                    return data.format(context).txt;
+                    return data.format(context).text();
                   },
                 ),
               ),

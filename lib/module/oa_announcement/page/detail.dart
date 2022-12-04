@@ -65,7 +65,7 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: i18n.oaAnnouncementTextTitle.txt,
+        title: i18n.oaAnnouncementTextTitle.text(),
         actions: [
           IconButton(
             onPressed: () {
@@ -138,7 +138,7 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Future<void> _onDownloadFile(Attachment attachment) async {
-    showBasicFlash(context, i18n.downloading.txt, duration: const Duration(seconds: 1));
+    showBasicFlash(context, i18n.downloading.text(), duration: const Duration(seconds: 1));
     Log.info('下载文件: [${attachment.name}](${attachment.url})');
 
     String targetPath = '${(await getTemporaryDirectory()).path}/kite1/downloads/${attachment.name}';
@@ -164,14 +164,14 @@ class _DetailPageState extends State<DetailPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                i18n.downloadCompleted.txt,
+                i18n.downloadCompleted.text(),
                 Text(attachment.name),
               ],
             ),
           ),
           TextButton(
             onPressed: () => OpenFile.open(targetPath),
-            child: i18n.open.txt,
+            child: i18n.open.text(),
           ),
         ],
       ),

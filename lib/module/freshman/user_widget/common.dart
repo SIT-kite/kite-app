@@ -19,12 +19,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/l10n/extension.dart';
-import 'package:kite/launcher.dart';
 import 'package:kite/module/freshman/using.dart';
-import 'package:kite/route.dart';
-import 'package:kite/util/dsl.dart';
-import 'package:kite/util/flash.dart';
+import 'package:rettulf/rettulf.dart';
 
 import '../entity/info.dart';
 import 'profile.dart';
@@ -42,7 +38,7 @@ List<InfoItem> buildContactInfoItems(BuildContext ctx, Contact? contact, {String
         onTap: () async {
           if (!await GlobalLauncher.launchTel(counselorTel)) {
             Clipboard.setData(ClipboardData(text: counselorTel));
-            showBasicFlash(ctx, i18n.cantLaunchPhoneSoNumber2ClipboardTip.txt);
+            showBasicFlash(ctx, i18n.cantLaunchPhoneSoNumber2ClipboardTip.text());
           }
         },
         trailIconData: Icons.phone,
@@ -54,7 +50,7 @@ List<InfoItem> buildContactInfoItems(BuildContext ctx, Contact? contact, {String
         wechat,
         onTap: () {
           Clipboard.setData(ClipboardData(text: wechat));
-          showBasicFlash(ctx, i18n.cantLaunchWechatSoNumber2ClipboardTip.txt);
+          showBasicFlash(ctx, i18n.cantLaunchWechatSoNumber2ClipboardTip.text());
         },
         trailIconData: Icons.copy,
       ),
@@ -66,7 +62,7 @@ List<InfoItem> buildContactInfoItems(BuildContext ctx, Contact? contact, {String
         onTap: () async {
           if (!await GlobalLauncher.launchQqContact(qq)) {
             Clipboard.setData(ClipboardData(text: qq));
-            showBasicFlash(ctx, i18n.cantLaunchQqSoNumber2ClipboardTip.txt);
+            showBasicFlash(ctx, i18n.cantLaunchQqSoNumber2ClipboardTip.text());
           }
         },
         trailIconData: Icons.open_in_browser,
@@ -79,7 +75,7 @@ List<InfoItem> buildContactInfoItems(BuildContext ctx, Contact? contact, {String
         onTap: () async {
           if (!await GlobalLauncher.launchTel(tel)) {
             Clipboard.setData(ClipboardData(text: tel));
-            showBasicFlash(ctx, i18n.cantLaunchPhoneSoNumber2ClipboardTip.txt);
+            showBasicFlash(ctx, i18n.cantLaunchPhoneSoNumber2ClipboardTip.text());
           }
         },
         trailIconData: Icons.phone,

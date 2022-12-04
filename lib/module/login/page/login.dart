@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
     if (!isLicenseAccepted) {
-      showBasicFlash(context, i18n.readAndAcceptRequest(R.kiteUserAgreementName).txt);
+      showBasicFlash(context, i18n.readAndAcceptRequest(R.kiteUserAgreementName).text());
       return;
     }
 
@@ -188,7 +188,7 @@ class _LoginPageState extends State<LoginPage> {
       children: [
         ElevatedButton(
           onPressed: disableLoginButton ? null : onLogin,
-          child: i18n.kiteLoginBtn.txt,
+          child: i18n.kiteLoginBtn.text(),
         ).sized(height: 40.h),
         ElevatedButton(
           onPressed: () {

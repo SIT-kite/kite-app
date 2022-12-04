@@ -290,7 +290,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 final id = Kv.auth.currentUsername;
                 if (id != null) {
                   Clipboard.setData(ClipboardData(text: id));
-                  showBasicFlash(context, i18n.studentIdCopy2ClipboardTip.txt);
+                  showBasicFlash(context, i18n.studentIdCopy2ClipboardTip.text());
                 }
               },
             ),

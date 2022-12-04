@@ -19,6 +19,7 @@
 import 'package:enough_mail/enough_mail.dart';
 import 'package:enough_mail_html/enough_mail_html.dart';
 import 'package:flutter/material.dart';
+import 'package:rettulf/rettulf.dart';
 import '../using.dart';
 
 class DetailPage extends StatelessWidget {
@@ -68,7 +69,7 @@ class DetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: i18n.eduEmailText.txt),
+      appBar: AppBar(title: i18n.eduEmailText.text()),
       body: _buildBody(context),
     );
   }

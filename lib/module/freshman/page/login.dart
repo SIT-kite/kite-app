@@ -18,6 +18,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rettulf/rettulf.dart';
 
 import '../dao/Freshman.dart';
 import '../init.dart';
@@ -51,11 +52,11 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
     Log.info('新生登录');
     bool formValid = (_formKey.currentState as FormState).validate();
     if (!formValid) {
-      showBasicFlash(context, i18n.validateInputRequest.txt);
+      showBasicFlash(context, i18n.validateInputRequest.text());
       return;
     }
     if (!_isLicenseAccepted) {
-      showBasicFlash(context, i18n.readAndAcceptRequest(R.kiteUserAgreementName).txt);
+      showBasicFlash(context, i18n.readAndAcceptRequest(R.kiteUserAgreementName).text());
       return;
     }
 
@@ -201,7 +202,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
           height: 40.h,
           child: ElevatedButton(
             onPressed: _disableLoginButton ? null : onLogin,
-            child: i18n.freshmanLoginBtn.txt,
+            child: i18n.freshmanLoginBtn.text(),
           ),
         ),
       ],

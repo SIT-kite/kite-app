@@ -33,6 +33,7 @@ import 'package:kite/user_widget/color_saturation_widget.dart';
 import 'package:kite/util/scanner.dart';
 import 'package:kite/util/user.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:rettulf/rettulf.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import '../entity/home.dart';
@@ -113,9 +114,9 @@ class _HomePageState extends State<HomePage> {
       context,
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         const Icon(Icons.dangerous),
-        title ?? i18n.checkCampusNetworkConnection.txt,
+        title ?? i18n.checkCampusNetworkConnection.text(),
         TextButton(
-          child: i18n.openNetworkToolBtn.txt,
+          child: i18n.openNetworkToolBtn.text(),
           onPressed: () => Navigator.of(context).pushNamed('/connectivity'),
         )
       ]),
@@ -137,14 +138,14 @@ class _HomePageState extends State<HomePage> {
       try {
         await _doLogin(context);
         if (!mounted) return;
-        showBasicFlash(context, i18n.kiteLoggedInTip.txt);
+        showBasicFlash(context, i18n.kiteLoggedInTip.text());
       } on Exception catch (e) {
         // 如果是认证相关问题, 弹出相应的错误信息.
         if (e is UnknownAuthException || e is CredentialsInvalidException) {
           showBasicFlash(context, Text('${i18n.kiteLoginFailedTip}: $e'));
         } else {
           // 如果是网络问题, 提示检查网络.
-          _showCheckNetwork(context, title: i18n.networkXcpWarn.txt);
+          _showCheckNetwork(context, title: i18n.networkXcpWarn.text());
         }
       } catch (e, s) {
         Catcher.reportCheckedError(e, s);
@@ -340,7 +341,7 @@ class _HomePageState extends State<HomePage> {
       if (!isFreshman && await HomeInit.ssoSession.checkConnectivity()) {
         showBasicFlash(
           context,
-          i18n.homepageCampusNetworkConnected.txt,
+          i18n.homepageCampusNetworkConnected.text(),
           duration: const Duration(seconds: 3),
         );
       }

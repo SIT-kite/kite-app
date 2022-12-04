@@ -23,6 +23,7 @@ import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/design/page/common.dart';
 import 'package:nfc_manager/nfc_manager.dart';
+import 'package:rettulf/rettulf.dart';
 import '../using.dart';
 import '../init.dart';
 
@@ -96,7 +97,7 @@ class _CampusCardPageState extends State<CampusCardPage> {
       });
     }).catchError((_) {
       completer.complete();
-      showBasicFlash(context, i18n.networkError.txt);
+      showBasicFlash(context, i18n.networkError.text());
     });
   }
 
@@ -192,7 +193,7 @@ class _CampusCardPageState extends State<CampusCardPage> {
       content = buildFailedPrompt(context);
     }
     return Scaffold(
-      appBar: AppBar(title: i18n.campusCardTool.txt),
+      appBar: AppBar(title: i18n.campusCardTool.text()),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),

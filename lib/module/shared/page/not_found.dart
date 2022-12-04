@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
-import 'package:kite/util/dsl.dart';
+import 'package:rettulf/rettulf.dart';
 
 class NotFoundPage extends StatelessWidget {
   final String routeName;
@@ -30,14 +30,14 @@ class NotFoundPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: i18n.notFound404.txt,
+        title: i18n.notFound404.text(),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            i18n.notFound404.txt,
+            i18n.notFound404.text(),
             Text(routeName),
             SvgPicture.asset(
               'assets/common/not-found.svg',
@@ -46,7 +46,7 @@ class NotFoundPage extends StatelessWidget {
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pushNamed(RouteTable.feedback),
-              child: i18n.feedbackBtn.txt,
+              child: i18n.feedbackBtn.text(),
             ),
           ],
         ),

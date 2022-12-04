@@ -71,7 +71,7 @@ class ElectricityChartState extends State<ElectricityChart> {
   /// 天模式
   Widget buildDailyChart(BuildContext ctx) {
     return Column(children: [
-      i18n.elecBillDailyChart7.txt,
+      i18n.elecBillDailyChart7.text(),
       Padding(
           padding: const EdgeInsets.symmetric(vertical: 20),
           child: Container(
@@ -143,8 +143,8 @@ class ElectricityChartState extends State<ElectricityChart> {
               invertedSelection: true,
               foregroundColor: context.isDarkMode ? null : context.themeColor,
               children: [
-                ButtonBarEntry(onTap: () => onSetMode(ElectricityChartMode.hourly), child: i18n.elecBillLast24Hour.txt),
-                ButtonBarEntry(onTap: () => onSetMode(ElectricityChartMode.daily), child: i18n.elecBillLast7Day.txt),
+                ButtonBarEntry(onTap: () => onSetMode(ElectricityChartMode.hourly), child: i18n.elecBillLast24Hour.text()),
+                ButtonBarEntry(onTap: () => onSetMode(ElectricityChartMode.daily), child: i18n.elecBillLast7Day.text()),
               ],
             )),
         const SizedBox(height: 20),

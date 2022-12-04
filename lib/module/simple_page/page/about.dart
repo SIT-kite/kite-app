@@ -17,6 +17,7 @@
  */
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:rettulf/rettulf.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import '../using.dart';
@@ -37,7 +38,7 @@ class AboutPage extends StatelessWidget {
     final controller = MyFutureBuilderController();
     return Scaffold(
       appBar: AppBar(
-        title: i18n.about.txt,
+        title: i18n.about.text(),
         actions: [
           IconButton(
             onPressed: () => controller.refresh(),

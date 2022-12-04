@@ -21,6 +21,7 @@ import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/dsl.dart';
+import 'package:rettulf/rettulf.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 class KiteDrawer extends StatelessWidget {
@@ -49,7 +50,7 @@ class KiteDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            title: i18n.networkTool.txt,
+            title: i18n.networkTool.text(),
             leading: const Icon(Icons.lan),
             onTap: () {
               Navigator.pop(context);
@@ -58,7 +59,7 @@ class KiteDrawer extends StatelessWidget {
           ),
           if (UniversalPlatform.isAndroid)
             ListTile(
-              title: i18n.campusCardTool.txt,
+              title: i18n.campusCardTool.text(),
               leading: const Icon(Icons.credit_card),
               onTap: () {
                 Navigator.pop(context);
@@ -67,7 +68,7 @@ class KiteDrawer extends StatelessWidget {
             ),
           // Feedback
           ListTile(
-            title: i18n.feedback.txt,
+            title: i18n.feedback.text(),
             leading: const Icon(Icons.feedback_rounded),
             onTap: () {
               Navigator.pop(context);
@@ -76,7 +77,7 @@ class KiteDrawer extends StatelessWidget {
           ),
           // Service status
           ListTile(
-            title: i18n.serviceStatus.txt,
+            title: i18n.serviceStatus.text(),
             leading: const Icon(Icons.monitor_heart),
             onTap: () {
               Navigator.pop(context);
@@ -85,7 +86,7 @@ class KiteDrawer extends StatelessWidget {
           ),
           // About
           ListTile(
-            title: i18n.about.txt,
+            title: i18n.about.text(),
             leading: const Icon(Icons.info_rounded),
             onTap: () {
               Navigator.pop(context);

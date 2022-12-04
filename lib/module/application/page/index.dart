@@ -48,7 +48,7 @@ class _ApplicationPageState extends State<ApplicationPage> {
   Widget buildPortrait(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: i18n.ftype_application.txt,
+        title: i18n.ftype_application.text(),
         actions: [
           IconButton(
             icon: const Icon(CupertinoIcons.info_circle),
@@ -144,7 +144,7 @@ class _ApplicationPageState extends State<ApplicationPage> {
                 AbsorbPointer(
                   child: Checkbox(value: enableFilter, onChanged: (bool? value) {}),
                 ),
-                i18n.applicationFilerInfrequentlyUsed.txt,
+                i18n.applicationFilerInfrequentlyUsed.text(),
               ],
             ),
           ),

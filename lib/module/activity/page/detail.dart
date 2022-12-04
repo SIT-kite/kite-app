@@ -65,7 +65,7 @@ class _DetailPageState extends State<DetailPage> {
   Widget buildPortrait(BuildContext ctx) {
     return Scaffold(
       appBar: AppBar(
-        title: i18n.activityDetails.txt,
+        title: i18n.activityDetails.text(),
         actions: [
           IconButton(
             icon: const Icon(Icons.open_in_browser),
@@ -79,7 +79,7 @@ class _DetailPageState extends State<DetailPage> {
       floatingActionButton: widget.enableApply
           ? FloatingActionButton.extended(
               icon: const Icon(Icons.person_add),
-              label: i18n.activityApplyBtn.txt,
+              label: i18n.activityApplyBtn.text(),
               onPressed: () async {
                 await showApplyRequest(ctx);
               },
@@ -91,7 +91,7 @@ class _DetailPageState extends State<DetailPage> {
   Widget buildLandscape(BuildContext ctx) {
     return Scaffold(
       appBar: AppBar(
-        title: i18n.activityDetails.txt,
+        title: i18n.activityDetails.text(),
         actions: [
           if (widget.enableApply)
             PlainExtendedButton(

@@ -18,6 +18,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:rettulf/rettulf.dart';
 import 'appointment/init.dart';
 import 'using.dart';
 
@@ -87,7 +88,7 @@ class LibraryPage extends StatelessWidget {
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
-      title: i18n.ftype_library.txt,
+      title: i18n.ftype_library.text(),
       actions: [
         IconButton(
           onPressed: () {
@@ -99,7 +100,7 @@ class LibraryPage extends StatelessWidget {
         ),
         IconButton(
           onPressed: () async {
-            showBasicFlash(context, i18n.libraryAccountManagementBtnTip.txt);
+            showBasicFlash(context, i18n.libraryAccountManagementBtnTip.text());
           },
           icon: const Icon(
             Icons.person,

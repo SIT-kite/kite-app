@@ -31,7 +31,7 @@ class KiteBulletinPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: i18n.ftype_kiteBulletin.txt),
+      appBar: AppBar(title: i18n.ftype_kiteBulletin.text()),
       body: SafeArea(child: _buildBody()),
     );
   }

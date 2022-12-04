@@ -29,6 +29,7 @@ import 'package:kite/module/user_event/dao/user_event.dart';
 import 'package:kite/route.dart';
 import 'package:kite/util/event_bus.dart';
 import 'package:kite/util/page_logger.dart';
+import 'package:rettulf/rettulf.dart';
 
 import '../util/upgrade.dart';
 
@@ -128,15 +129,15 @@ class Global {
         return Center(
           child: Column(
             children: [
-              i18n.networkConnectionTimeoutError.txt,
+              i18n.networkConnectionTimeoutError.text(),
               ElevatedButton(
                 onPressed: () => Navigator.of(context).pushReplacementNamed(RouteTable.connectivity),
-                child: i18n.openNetworkToolBtn.txt,
+                child: i18n.openNetworkToolBtn.text(),
               ),
               if (futureBuilder.futureGetter != null)
                 TextButton(
                   onPressed: () => futureBuilder.controller?.refresh(),
-                  child: i18n.refresh.txt,
+                  child: i18n.refresh.text(),
                 ),
             ],
           ),

@@ -27,6 +27,7 @@ import 'package:kite/module/shared/entity/weather.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/dsl.dart';
 import 'package:kite/util/flash.dart';
+import 'package:rettulf/rettulf.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 class HomeBackground extends StatefulWidget {
@@ -82,7 +83,7 @@ class _HomeBackgroundState extends State<HomeBackground> {
 
   void _onBackgroundUpdate(_) {
     if (Kv.home.background == null) {
-      showBasicFlash(context, i18n.settingsWallpaperEmptyWarn.txt);
+      showBasicFlash(context, i18n.settingsWallpaperEmptyWarn.text());
       return;
     }
     setState(() {});
@@ -120,7 +121,7 @@ class _HomeBackgroundState extends State<HomeBackground> {
       } else {
         Future.delayed(
           Duration.zero,
-          () => showBasicFlash(context, i18n.settingsWallpaperEmptyWarn.txt),
+          () => showBasicFlash(context, i18n.settingsWallpaperEmptyWarn.text()),
         );
       }
     }
