@@ -172,6 +172,7 @@ flutter:
     - assets/game/step.mp3
     - assets/scanner/beep.mp3
     - assets/roomlist.json
+    - assets/webview/
 
 # See: https://pub.flutter-io.cn/packages/flutter_native_splash
 flutter_native_splash:

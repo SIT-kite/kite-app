@@ -19,10 +19,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:kite/design/utils.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/launcher.dart';
 import 'package:kite/user_widget/webview/view.dart';
 import 'package:kite/util/logger.dart';
+import 'package:kite/util/rule.dart';
 import 'package:kite/util/url_launcher.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -73,6 +76,9 @@ class SimpleWebViewPage extends StatefulWidget {
   /// 自定义Action按钮
   final List<Widget>? otherActions;
 
+  /// 夜间模式
+  final bool followDarkMode;
+
   const SimpleWebViewPage({
     Key? key,
     required this.initialUrl,
@@ -90,6 +96,7 @@ class SimpleWebViewPage extends StatefulWidget {
     this.javascriptChannels,
     this.showLaunchButtonIfUnsupported = true,
     this.otherActions,
+    this.followDarkMode = true,
   }) : super(key: key);
 
   @override
@@ -179,7 +186,18 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
               widget.onWebViewCreated!(controller);
             }
           },
-          injectJsRules: widget.injectJsRules,
+          injectJsRules: () {
+            if (!widget.followDarkMode) return null;
+            return [
+              if (Theme.of(context).isDark)
+                InjectJsRuleItem(
+                  rule: const ConstRule(true),
+                  asyncJavascript: rootBundle.loadString('assets/webview/dark.js'),
+                  injectTime: InjectJsTime.onPageStarted,
+                ),
+              if (widget.injectJsRules != null) ...widget.injectJsRules!,
+            ];
+          }(),
           onProgress: (value) {
             if (!mounted) return;
             setState(() => progress = value % 100);
@@ -188,10 +206,8 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
             if (widget.fixedTitle == null) {
               final controller = await _controllerCompleter.future;
               title = (await controller.getTitle()) ?? i18n.untitled;
-
-              if (mounted) {
-                setState(() {});
-              }
+              if (!mounted) return;
+              setState(() {});
             }
           },
           javascriptChannels: widget.javascriptChannels,
