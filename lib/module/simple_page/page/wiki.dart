@@ -20,6 +20,7 @@ import 'dart:async';
 import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kite/design/utils.dart';
 
 import '../using.dart';
 
@@ -40,6 +41,16 @@ class WikiPage extends StatelessWidget {
           asyncJavascript: rootBundle.loadString('assets/wiki/inject.js'),
           injectTime: InjectJsTime.onPageStarted,
         ),
+        if (Theme.of(context).isDark)
+          InjectJsRuleItem(
+            rule: FunctionalRule((url) => url.startsWith(R.kiteWikiUrl)),
+            javascript: '''
+              window.localStorage.clear();
+              dartButton = document.querySelector('.md-header__option > label:nth-child(2)');
+              if(dartButton !== null) dartButton.click();
+            ''',
+            injectTime: InjectJsTime.onPageFinished,
+          ),
       ],
       onWebViewCreated: (WebViewController webViewController) {
         _controller.complete(webViewController);
