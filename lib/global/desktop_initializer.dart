@@ -18,6 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:kite/common/annotation.dart';
+import 'package:kite/r.dart';
+import 'package:kite/storage/init.dart';
 import 'package:kite/util/event_bus.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:window_manager/window_manager.dart';
@@ -36,22 +38,19 @@ class MyWindowListener extends WindowListener {
   void onWindowResize() async {
     final size = await windowManager.getSize();
     eventBus.emit<Size>(WindowEvent.onWindowResize, size);
+    Kv.theme.lastWindowSize = size;
   }
 
   @override
-  void onWindowResized() {
+  void onWindowResized() async {
+    final size = await windowManager.getSize();
     eventBus.emit(WindowEvent.onWindowResized);
+    Kv.theme.lastWindowSize = size;
   }
 }
 
 class DesktopInit {
   static bool resizing = false;
-
-  /// The default window size is small enough for any modern desktop device.
-  static const Size defaultSize = Size(500, 800);
-
-  /// If the window was resized to too small accidentally, this will keep a minimum function area.
-  static const Size minSize = Size(300, 400);
   static EventBus<WindowEvent> eventBus = EventBus<WindowEvent>();
 
   static Future<void> init() async {
@@ -62,12 +61,20 @@ class DesktopInit {
     await windowManager.ensureInitialized();
     windowManager.waitUntilReadyToShow().then((_) async {
       // Hide window title bar
-      await windowManager.setSize(defaultSize);
+      final lastWindowSize = Kv.theme.lastWindowSize;
+      await windowManager.setSize(R.defaultWindowSize);
       // Center the window.
       await windowManager.center();
-      await windowManager.setMinimumSize(minSize);
+      await windowManager.setMinimumSize(R.minWindowSize);
       await windowManager.show();
     });
+  }
+
+  static Future<void> resizeTo(Size newSize, {bool center = false}) async {
+    await windowManager.setSize(newSize);
+    if (center) {
+      await windowManager.center();
+    }
   }
 
   @desktopSafe

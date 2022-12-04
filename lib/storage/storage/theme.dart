@@ -25,6 +25,7 @@ class ThemeKeys {
   static const namespace = '/theme';
   static const themeColor = '$namespace/color';
   static const isDarkMode = '$namespace/isDarkMode';
+  static const lastWindowSize = '$namespace/lastWindowSize';
 }
 
 class ThemeSettingStorage implements ThemeSettingDao {
@@ -34,6 +35,8 @@ class ThemeSettingStorage implements ThemeSettingDao {
 
   @override
   Color? get color {
+    // TODO: Use the Color Adapter next version
+    // NOTE: The settings
     final String? value = box.get(ThemeKeys.themeColor);
     if (value != null) {
       var hex = value.replaceFirst('#', '');
@@ -48,14 +51,19 @@ class ThemeSettingStorage implements ThemeSettingDao {
   @override
   set color(Color? v) {
     if (v != null) {
-      final String value = v.value.toRadixString(16).padLeft(6, '0');
-      box.put(ThemeKeys.themeColor, value);
+      box.put(ThemeKeys.themeColor, v);
     }
   }
 
   @override
-  bool? get isDarkMode => box.get(ThemeKeys.isDarkMode);
+  bool? get isDarkMode => box.get(ThemeKeys.isDarkMode, defaultValue: false);
 
   @override
   set isDarkMode(value) => box.put(ThemeKeys.isDarkMode, value ?? false);
+
+  @override
+  Size? get lastWindowSize => box.get(ThemeKeys.lastWindowSize, defaultValue: R.defaultWindowSize);
+
+  @override
+  set lastWindowSize(value) => box.put(ThemeKeys.lastWindowSize, value ?? R.defaultWindowSize);
 }

@@ -19,13 +19,13 @@
 import 'dart:collection';
 
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:kite/global/hive_type_id_pool.dart';
+import 'package:kite/hive/type_id.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/util/user.dart';
 
 part 'home.g.dart';
 
-@HiveType(typeId: HiveTypeId.ftypeItem)
+@HiveType(typeId: HiveTypeId.ftype)
 enum FType {
   /// 升级
   @HiveField(0)

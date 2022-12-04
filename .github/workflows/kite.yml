@@ -241,7 +241,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.BRANCH_NAME }}-${{ env.SHA }}-macos.zip
-          path: ./$MACOS_APP_RELEASE_PATH/上应小风筝.app
+          path: ./$MACOS_APP_RELEASE_PATH/上应小风筝.app/
   ######################
   # Linux
   #

@@ -20,7 +20,7 @@ import '../using.dart';
 part 'meta.g.dart';
 
 /// 存放课表元数据
-@HiveType(typeId: HiveTypeId.timetableMetaItem)
+@HiveType(typeId: HiveTypeId.timetableMeta)
 class TimetableMeta extends HiveObject {
   /// 课表名称
   @HiveField(0)

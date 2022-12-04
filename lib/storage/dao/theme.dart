@@ -25,4 +25,8 @@ abstract class ThemeSettingDao {
   bool? get isDarkMode;
 
   set isDarkMode(bool? value);
+
+  Size? get lastWindowSize;
+
+  set lastWindowSize(Size? value);
 }

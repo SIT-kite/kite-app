@@ -18,19 +18,21 @@
 /// 存放所有 hive 的自定义类型的typeId
 class HiveTypeId {
   HiveTypeId._();
-  static const librarySearchHistoryItem = 1;
-  static const authItem = 2; // 改为单用户后已不再使用该id
-  static const weatherItem = 3;
-  static const reportHistoryItem = 4;
-  static const balanceItem = 5;
-  static const courseItem = 6;
-  static const expenseItem = 7;
-  static const expenseTypeItem = 8;
-  static const contactItem = 9;
-  static const userEventTypeItem = 10;
-  static const userEventItem = 11;
-  static const gameTypeItem = 12;
-  static const gameRecordItem = 13;
-  static const ftypeItem = 14;
-  static const timetableMetaItem = 15;
+  static const librarySearchHistory = 1;
+  static const auth = 2; // 改为单用户后已不再使用该id
+  static const weather = 3;
+  static const reportHistory = 4;
+  static const balance = 5;
+  static const course = 6;
+  static const expense = 7;
+  static const expenseType = 8;
+  static const contact = 9;
+  static const userEventType = 10;
+  static const userEvent = 11;
+  static const gameType = 12;
+  static const gameRecord = 13;
+  static const ftype = 14;
+  static const timetableMeta = 15;
+  static const size = 16;
+  static const color = 17;
 }

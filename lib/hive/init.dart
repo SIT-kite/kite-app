@@ -17,11 +17,9 @@
  */
 
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:kite/global/hive/adapter.dart';
+import 'adapter.dart';
 import 'package:kite/module/library/search/entity/search_history.dart';
 import 'package:kite/module/yellow_pages/entity/contact.dart';
-
-import 'adapter.dart';
 
 class HiveBoxInit {
   HiveBoxInit._();

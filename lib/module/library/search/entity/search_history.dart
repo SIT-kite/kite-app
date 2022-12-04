@@ -19,7 +19,7 @@ import '../../using.dart';
 
 part 'search_history.g.dart';
 
-@HiveType(typeId: HiveTypeId.librarySearchHistoryItem)
+@HiveType(typeId: HiveTypeId.librarySearchHistory)
 class LibrarySearchHistoryItem extends HiveObject {
   @HiveField(0)
   String keyword = '';

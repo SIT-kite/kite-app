@@ -59,8 +59,4 @@ void main() async {
       ],
     ),
   );
-  if (UniversalPlatform.isDesktop) {
-    final size = windowManager.getSize();
-    //Kv
-  }
 }

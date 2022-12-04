@@ -22,7 +22,7 @@ import '../using.dart';
 part 'contact.g.dart';
 
 @JsonSerializable()
-@HiveType(typeId: HiveTypeId.contactItem)
+@HiveType(typeId: HiveTypeId.contact)
 class ContactData {
   ///部门
   @HiveField(0)

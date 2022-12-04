@@ -17,13 +17,13 @@
  */
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:kite/global/hive_type_id_pool.dart';
+import 'package:kite/hive/type_id.dart';
 import 'package:kite/l10n/extension.dart';
 
 part 'weather.g.dart';
 
 @JsonSerializable()
-@HiveType(typeId: HiveTypeId.weatherItem)
+@HiveType(typeId: HiveTypeId.weather)
 class Weather {
   @HiveField(0)
   String weather;

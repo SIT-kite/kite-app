@@ -41,6 +41,11 @@ class R {
   static const kiteFeedbackUrl = "https://support.qq.com/product/377648";
   static const kiteWikiUrl = "${Backend.kite}/wiki/";
   static const  defaultThemeColor = Color(0xff2196f3);
+  /// The default window size is small enough for any modern desktop device.
+  static const Size defaultWindowSize = Size(500, 800);
+
+  /// If the window was resized to too small accidentally, this will keep a minimum function area.
+  static const Size minWindowSize = Size(300, 400);
   static String getAppName({required Locale by}) {
     final locale = Lang.redirectLocale(by);
     return locale2AppName[locale] ?? appNameEn;
