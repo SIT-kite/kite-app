@@ -27,6 +27,7 @@ class ServiceStatusPage extends StatelessWidget {
     return SimpleWebViewPage(
       initialUrl: R.kiteStatusUrl,
       fixedTitle: i18n.serviceStatus,
+      followDarkMode: true,
     );
   }
 }

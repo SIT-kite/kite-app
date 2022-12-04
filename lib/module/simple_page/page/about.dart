@@ -18,6 +18,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:universal_platform/universal_platform.dart';
+
 import '../using.dart';
 
 class AboutPage extends StatelessWidget {
@@ -29,6 +30,7 @@ class AboutPage extends StatelessWidget {
       return SimpleWebViewPage(
         initialUrl: R.kiteAboutUrl,
         fixedTitle: i18n.about,
+        followDarkMode: true,
       );
     }
 
