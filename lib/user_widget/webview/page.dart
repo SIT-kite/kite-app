@@ -19,6 +19,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kite/design/utils.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/launcher.dart';
@@ -205,10 +206,8 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
             if (widget.fixedTitle == null) {
               final controller = await _controllerCompleter.future;
               title = (await controller.getTitle()) ?? i18n.untitled;
-
-              if (mounted) {
-                setState(() {});
-              }
+              if (!mounted) return;
+              setState(() {});
             }
           },
           javascriptChannels: widget.javascriptChannels,
