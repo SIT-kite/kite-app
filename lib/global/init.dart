@@ -35,6 +35,7 @@ import 'package:kite/util/logger.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import 'hive_initializer.dart';
+import 'package:path/path.dart' as path;
 
 class Initializer {
   static Future<void> init({bool? debugNetwork}) async {
@@ -57,7 +58,11 @@ class Initializer {
     }
 
     // 初始化Hive数据库
-    await HiveBoxInit.init('kite1/hive');
+    if (UniversalPlatform.isDesktop) {
+      await HiveBoxInit.init(path.join("cn.edu.sit.kite", "hive"));
+    } else {
+      await HiveBoxInit.init(path.join("kite1", "hive"));
+    }
     await UserEventInit.init(userEventBox: HiveBoxInit.userEvent);
     Kv.init(kvStorageBox: HiveBoxInit.kv);
     SettingsInit.init(kvStorageBox: HiveBoxInit.kv);

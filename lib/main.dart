@@ -19,8 +19,10 @@ import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:kite/global/init.dart';
+import 'package:kite/storage/init.dart';
 import 'package:kite/util/catcher_dialog_handler.dart';
 import 'package:universal_platform/universal_platform.dart';
+import 'package:window_manager/window_manager.dart';
 
 import 'app.dart';
 import 'backend.dart';
@@ -57,4 +59,8 @@ void main() async {
       ],
     ),
   );
+  if (UniversalPlatform.isDesktop) {
+    final size = windowManager.getSize();
+    //Kv
+  }
 }
