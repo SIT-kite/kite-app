@@ -15,16 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rettulf/rettulf.dart';
+import '../user_widget/application.dart';
 import '../using.dart';
 
 import '../entity/function.dart';
 import '../init.dart';
-import 'detail.dart';
 import 'message.dart';
 
 // 本科生常用功能列表
@@ -44,19 +41,6 @@ const Set<String> _commonUse = <String>{
   '059'
 };
 
-const List<Color> _iconColors = <Color>[
-  Colors.orangeAccent,
-  Colors.redAccent,
-  Colors.blueAccent,
-  Colors.grey,
-  Colors.black,
-  Colors.green,
-  Colors.yellowAccent,
-  Colors.cyan,
-  Colors.purple,
-  Colors.teal,
-];
-
 class ApplicationPage extends StatefulWidget {
   const ApplicationPage({Key? key}) : super(key: key);
 
@@ -65,6 +49,27 @@ class ApplicationPage extends StatefulWidget {
 }
 
 class _ApplicationPageState extends State<ApplicationPage> {
+  bool enableFilter = true;
+  List<ApplicationMeta> _allApplications = [];
+  String? _lastError;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchApplicationMetaList().then((value) {
+      if (!mounted) return;
+      setState(() {
+        _allApplications = value;
+        _lastError = null;
+      });
+    }).onError((error, stackTrace) {
+      if (!mounted) return;
+      setState(() {
+        _lastError = error.toString();
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return context.isPortrait ? buildPortrait(context) : buildLandscape(context);
@@ -78,13 +83,15 @@ class _ApplicationPageState extends State<ApplicationPage> {
       ),
       body: Column(
         children: [
-          _buildNotice(),
-          Expanded(child: _buildBody()),
+          i18n.applicationDesc.text(overflow: TextOverflow.visible).padAll(15).center(),
+          buildBodyPortrait().expanded(),
         ],
       ),
       floatingActionButton: ApplicationInit.session.isLogin
           ? FloatingActionButton(
-              onPressed: _navigateMessagePage,
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MessagePage()));
+              },
               tooltip: i18n.applicationMyMailBox,
               child: const Icon(Icons.mail_outline),
             )
@@ -93,116 +100,28 @@ class _ApplicationPageState extends State<ApplicationPage> {
   }
 
   Widget buildLandscape(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: i18n.ftype_application.txt,
-        actions: [_buildMenuButton(context)],
-      ),
-      body: Column(
-        children: [
-          _buildNotice(),
-          Expanded(child: _buildBody()),
-        ],
-      ),
-      floatingActionButton: ApplicationInit.session.isLogin
-          ? FloatingActionButton(
-              onPressed: _navigateMessagePage,
-              tooltip: i18n.applicationMyMailBox,
-              child: const Icon(Icons.mail_outline),
-            )
-          : null,
-    );
+    return buildPortrait(context);
   }
 
-  bool _enableFilter = true;
-  List<SimpleFunction> _allFunctions = [];
-  String? _lastError;
-
-  @override
-  void initState() {
-    Future.delayed(Duration.zero, () async {
-      try {
-        final functionList = await _fetchFuncList();
-        if (!mounted) return;
-        setState(() {
-          _allFunctions = functionList;
-          _lastError = null;
-        });
-      } on CredentialsInvalidException catch (e) {
-        if (!mounted) return;
-        setState(() {
-          _lastError = e.toString();
-        });
-      }
-    });
-    return super.initState();
-  }
-
-  Future<List<SimpleFunction>> _fetchFuncList() async {
-    if (!ApplicationInit.session.isLogin) {
-      final username = Kv.auth.currentUsername!;
-      final password = Kv.auth.ssoPassword!;
-      await ApplicationInit.session.login(
-        username: username,
-        password: password,
-      );
-    }
-    return await ApplicationInit.functionService.selectFunctionsByCountDesc();
-  }
-
-  Widget _buildFunctionList(List<SimpleFunction> functionList) {
+  Widget buildListPortrait(List<ApplicationMeta> applicationList) {
     int count = 0;
     return ListView(
-      children: functionList.where((element) => _commonUse.contains(element.id) || !_enableFilter).map((e) {
+      children: applicationList.where((element) => _commonUse.contains(element.id) || !enableFilter).map((e) {
         count++;
-        return buildFunctionItem(e, count <= 3);
+        return ApplicationTile(item: e, isHot: count <= 3);
       }).toList(),
     );
   }
 
-  Widget _buildBody() {
-    if (_lastError != null) {
-      return Center(child: Text(_lastError!));
-    } else if (_allFunctions.isNotEmpty) {
-      return _buildFunctionList(_allFunctions);
+  Widget buildBodyPortrait() {
+    final lastError = _lastError;
+    if (lastError != null) {
+      return lastError.text().center();
+    } else if (_allApplications.isNotEmpty) {
+      return buildListPortrait(_allApplications);
     } else {
-      return const Center(child: CircularProgressIndicator());
+      return Placeholders.loading();
     }
-  }
-
-  Widget _buildNotice() {
-    return Container(
-      alignment: Alignment.center,
-      padding: const EdgeInsets.all(15),
-      child: Text(
-        i18n.applicationDesc,
-        overflow: TextOverflow.visible,
-      ),
-    );
-  }
-
-  Widget buildFunctionItem(SimpleFunction function, bool hot) {
-    final colorIndex = Random().nextInt(_iconColors.length);
-    final color = _iconColors[colorIndex];
-    final trailing = hot
-        ? Row(mainAxisSize: MainAxisSize.min, children: [
-            Text(function.count.toString()),
-            SvgPicture.asset('assets/common/icon_flame.svg', width: 20, height: 20, color: Colors.orange),
-          ])
-        : Text(function.count.toString());
-
-    return ListTile(
-      leading: SizedBox(height: 40, width: 40, child: Center(child: Icon(function.icon, size: 35, color: color))),
-      title: Text(function.name),
-      subtitle: Text(function.summary),
-      trailing: trailing,
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => DetailPage(function)),
-        );
-      },
-    );
   }
 
   PopupMenuButton _buildMenuButton(BuildContext context) {
@@ -212,14 +131,14 @@ class _ApplicationPageState extends State<ApplicationPage> {
           PopupMenuItem(
             onTap: () {
               setState(() {
-                _enableFilter = !_enableFilter;
+                enableFilter = !enableFilter;
               });
             },
             child: Row(
               children: [
                 // 禁用checkbox自身的点击效果，点击由外部接管
                 AbsorbPointer(
-                  child: Checkbox(value: _enableFilter, onChanged: (bool? value) {}),
+                  child: Checkbox(value: enableFilter, onChanged: (bool? value) {}),
                 ),
                 i18n.applicationFilerInfrequentlyUsed.txt,
               ],
@@ -230,8 +149,16 @@ class _ApplicationPageState extends State<ApplicationPage> {
     );
     return menuButton;
   }
+}
 
-  void _navigateMessagePage() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MessagePage()));
+Future<List<ApplicationMeta>> _fetchApplicationMetaList() async {
+  if (!ApplicationInit.session.isLogin) {
+    final username = Kv.auth.currentUsername!;
+    final password = Kv.auth.ssoPassword!;
+    await ApplicationInit.session.login(
+      username: username,
+      password: password,
+    );
   }
+  return await ApplicationInit.applicationService.selectApplicationByCountDesc();
 }

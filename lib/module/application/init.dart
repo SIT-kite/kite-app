@@ -25,7 +25,7 @@ import 'using.dart';
 
 class ApplicationInit {
   static late CookieJar cookieJar;
-  static late OfficeFunctionService functionService;
+  static late OfficeFunctionService applicationService;
   static late OfficeMessageService messageService;
   static late OfficeSession session;
 
@@ -36,7 +36,7 @@ class ApplicationInit {
     ApplicationInit.cookieJar = cookieJar;
     session = OfficeSession(dio: dio);
 
-    ApplicationInit.functionService = OfficeFunctionService(session);
+    ApplicationInit.applicationService = OfficeFunctionService(session);
     ApplicationInit.messageService = OfficeMessageService(session);
   }
 }

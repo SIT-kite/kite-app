@@ -23,7 +23,7 @@ import '../using.dart';
 part 'function.g.dart';
 
 @JsonSerializable(createToJson: false)
-class SimpleFunction {
+class ApplicationMeta {
   @JsonKey(name: 'appID')
   final String id;
   @JsonKey(name: 'appName')
@@ -37,27 +37,27 @@ class SimpleFunction {
   @JsonKey(name: 'appIcon', fromJson: IconFont.query)
   final IconData icon;
 
-  const SimpleFunction(this.id, this.name, this.summary, this.status, this.count, this.icon);
+  const ApplicationMeta(this.id, this.name, this.summary, this.status, this.count, this.icon);
 
-  factory SimpleFunction.fromJson(Map<String, dynamic> json) => _$SimpleFunctionFromJson(json);
+  factory ApplicationMeta.fromJson(Map<String, dynamic> json) => _$ApplicationMetaFromJson(json);
 }
 
 @JsonSerializable()
-class FunctionDetailSection {
+class ApplicationDetailSection {
   @JsonKey(name: 'formName')
   final String section;
   final String type;
   final DateTime createTime;
   final String content;
 
-  const FunctionDetailSection(this.section, this.type, this.createTime, this.content);
+  const ApplicationDetailSection(this.section, this.type, this.createTime, this.content);
 
-  factory FunctionDetailSection.fromJson(Map<String, dynamic> json) => _$FunctionDetailSectionFromJson(json);
+  factory ApplicationDetailSection.fromJson(Map<String, dynamic> json) => _$ApplicationDetailSectionFromJson(json);
 }
 
-class FunctionDetail {
+class ApplicationDetail {
   final String id;
-  final List<FunctionDetailSection> sections;
+  final List<ApplicationDetailSection> sections;
 
-  const FunctionDetail(this.id, this.sections);
+  const ApplicationDetail(this.id, this.sections);
 }

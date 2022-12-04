@@ -29,11 +29,11 @@ import '../init.dart';
 import '../page/browser.dart';
 
 class DetailPage extends StatelessWidget {
-  final SimpleFunction function;
+  final ApplicationMeta function;
 
   const DetailPage(this.function, {Key? key}) : super(key: key);
 
-  Widget buildSection(BuildContext context, FunctionDetailSection section) {
+  Widget buildSection(BuildContext context, ApplicationDetailSection section) {
     final titleStyle = Theme.of(context).textTheme.headline2;
     final textStyle = Theme.of(context).textTheme.bodyText2;
 
@@ -82,7 +82,7 @@ class DetailPage extends StatelessWidget {
     );
   }
 
-  Widget buildBody(BuildContext context, List<FunctionDetailSection> sections) {
+  Widget buildBody(BuildContext context, List<ApplicationDetailSection> sections) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -98,8 +98,8 @@ class DetailPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(function.name)),
       body: SafeArea(
-        child: MyFutureBuilder<FunctionDetail>(
-          future: ApplicationInit.functionService.getFunctionDetail(function.id),
+        child: MyFutureBuilder<ApplicationDetail>(
+          future: ApplicationInit.applicationService.getApplicationDetail(function.id),
           builder: (context, data) {
             return buildBody(context, data.sections);
           },

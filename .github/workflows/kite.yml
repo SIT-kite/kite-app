@@ -234,14 +234,11 @@ jobs:
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k SIT_KITE_PWD build.keychain
           echo "Sign the app"
           /usr/bin/codesign --force --deep -s MJGX7ZZ3AG ./$MACOS_APP_RELEASE_PATH/上应小风筝.app
-          cd ./$MACOS_APP_RELEASE_PATH/
-          pwd
-          ls
       - name: Upload macOS File
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.BRANCH_NAME }}-${{ env.SHA }}-macos.zip
-          path: ./$MACOS_APP_RELEASE_PATH/上应小风筝.app/
+          path: ./build/macos/Build/Products/Release/上应小风筝.app/
   ######################
   # Linux
   #

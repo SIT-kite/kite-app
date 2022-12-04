@@ -343,6 +343,7 @@ class OfflineBricks implements IUserBricks {
     return <FType>[
       FType.upgrade,
       FType.kiteBulletin,
+      FType.timetable,
       FType.separator,
       FType.library,
       FType.separator,

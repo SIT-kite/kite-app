@@ -42,7 +42,6 @@ class MyHtmlWidget extends StatelessWidget {
     Widget widget = HtmlWidget(
       html,
       renderMode: renderMode,
-      customStylesBuilder: (e) => {"background-color": ""},
       textStyle: textStyle ?? Theme.of(context).textTheme.bodyText2,
       onTapUrl: (url) async {
         await GlobalLauncher.launch(url);

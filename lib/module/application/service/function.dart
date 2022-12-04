@@ -27,7 +27,7 @@ class OfficeFunctionService {
 
   const OfficeFunctionService(this.session);
 
-  Future<List<SimpleFunction>> selectFunctions() async {
+  Future<List<ApplicationMeta>> selectApplications() async {
     String payload = '{"appObject":"student","appName":null}';
 
     final response = await session.request(
@@ -38,21 +38,21 @@ class OfficeFunctionService {
     );
 
     final Map<String, dynamic> data = response.data;
-    final List<SimpleFunction> functionList = (data['value'] as List<dynamic>)
-        .map((e) => SimpleFunction.fromJson(e))
+    final List<ApplicationMeta> functionList = (data['value'] as List<dynamic>)
+        .map((e) => ApplicationMeta.fromJson(e))
         .where((element) => element.status == 1) // Filter functions unavailable.
         .toList();
 
     return functionList;
   }
 
-  Future<List<SimpleFunction>> selectFunctionsByCountDesc() async {
-    final functions = await selectFunctions();
+  Future<List<ApplicationMeta>> selectApplicationByCountDesc() async {
+    final functions = await selectApplications();
     functions.sort((a, b) => b.count.compareTo(a.count));
     return functions;
   }
 
-  Future<FunctionDetail> getFunctionDetail(String functionId) async {
+  Future<ApplicationDetail> getApplicationDetail(String functionId) async {
     final String payload = '{"appID":"$functionId"}';
 
     final response = await session.request(
@@ -62,9 +62,9 @@ class OfficeFunctionService {
       options: SessionOptions(responseType: SessionResType.json),
     );
     final Map<String, dynamic> data = response.data;
-    final List<FunctionDetailSection> sections =
-        (data['value'] as List<dynamic>).map((e) => FunctionDetailSection.fromJson(e)).toList();
+    final List<ApplicationDetailSection> sections =
+        (data['value'] as List<dynamic>).map((e) => ApplicationDetailSection.fromJson(e)).toList();
 
-    return FunctionDetail(functionId, sections);
+    return ApplicationDetail(functionId, sections);
   }
 }
