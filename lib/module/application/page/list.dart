@@ -104,7 +104,7 @@ class _ApplicationListState extends State<ApplicationList> {
   List<Widget> buildApplications(List<ApplicationMeta> all) {
     return all
         .where((element) => !enableFilter || _commonUse.contains(element.id))
-        .mapIndexed((i, e) => ApplicationTile(meta: e, isHot: i < 3).hero(e.id))
+        .mapIndexed((i, e) => ApplicationTile(meta: e, isHot: i < 3))
         .toList();
   }
 

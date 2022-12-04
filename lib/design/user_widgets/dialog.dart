@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kite/user_widget/darggable.dart';
 import 'package:rettulf/rettulf.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 typedef PickerActionWidgetBuilder = Widget Function(BuildContext context, int? curSelectedIndex);
 
@@ -13,19 +15,24 @@ extension DialogEx on BuildContext {
   Future<bool> showAnyTip({required String title, required WidgetBuilder make, required String ok}) async {
     final confirm = await showDialog(
       context: this,
-      builder: (ctx) => AlertDialog(
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        content: make(ctx),
-        actions: [
-          Align(
-              alignment: Alignment.bottomCenter,
-              child: CupertinoButton(
+      builder: (ctx) {
+        final dialog = AlertDialog(
+            title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+            content: make(ctx),
+            actions: [
+              CupertinoButton(
                   onPressed: () {
                     Navigator.of(ctx).pop(true);
                   },
-                  child: Text(ok))),
-        ],
-      ),
+                  child: Text(ok))
+            ],
+            actionsAlignment: MainAxisAlignment.spaceEvenly);
+        if (UniversalPlatform.isDesktop) {
+          return OmniDraggable(child: dialog);
+        } else {
+          return dialog;
+        }
+      },
     );
     return confirm == true;
   }
@@ -47,29 +54,30 @@ extension DialogEx on BuildContext {
       required String no,
       bool highlight = false}) async {
     final index = await showDialog(
-      context: this,
-      builder: (ctx) => AlertDialog(
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        content: make(ctx),
-        actions: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              CupertinoButton(
-                  onPressed: () {
-                    Navigator.of(ctx).pop(0);
-                  },
-                  child: yes.text(style: highlight ? const TextStyle(color: Colors.redAccent) : null)),
-              CupertinoButton(
-                  onPressed: () {
-                    Navigator.of(ctx).pop(1);
-                  },
-                  child: no.text())
-            ],
-          )
-        ],
-      ),
-    );
+        context: this,
+        builder: (ctx) {
+          final dialog = AlertDialog(
+              title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+              content: make(ctx),
+              actions: [
+                CupertinoButton(
+                    onPressed: () {
+                      Navigator.of(ctx).pop(0);
+                    },
+                    child: yes.text(style: highlight ? const TextStyle(color: Colors.redAccent) : null)),
+                CupertinoButton(
+                    onPressed: () {
+                      Navigator.of(ctx).pop(1);
+                    },
+                    child: no.text())
+              ],
+              actionsAlignment: MainAxisAlignment.spaceEvenly);
+          if (UniversalPlatform.isDesktop) {
+            return OmniDraggable(child: dialog);
+          } else {
+            return dialog;
+          }
+        });
     if (index == 0) {
       return true;
     } else if (index == 1) {

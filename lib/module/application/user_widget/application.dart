@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:rettulf/rettulf.dart';
 
-import '../design.dart';
+import '../using.dart';
 import '../entity/function.dart';
 import '../page/detail.dart';
 import 'dart:math';
@@ -32,8 +32,8 @@ class ApplicationTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorIndex = Random(meta.id.hashCode).nextInt(iconColors.length);
-    final color = iconColors[colorIndex];
+    final colorIndex = Random(meta.id.hashCode).nextInt(applicationColors.length);
+    final color = applicationColors[colorIndex];
     final Widget views;
     if (isHot) {
       views = [
@@ -46,8 +46,14 @@ class ApplicationTile extends StatelessWidget {
 
     return ListTile(
       leading: Icon(meta.icon, size: 35, color: color).center().sized(width: 40, height: 40),
-      title: Text(meta.name),
-      subtitle: Text(meta.summary),
+      title: Text(
+        meta.name,
+        overflow: TextOverflow.ellipsis,
+      ),
+      subtitle: Text(
+        meta.summary,
+        overflow: TextOverflow.ellipsis,
+      ),
       trailing: views,
       onTap: () {
         Navigator.push(

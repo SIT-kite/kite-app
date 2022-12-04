@@ -69,7 +69,7 @@ class DesktopInit {
     });
   }
 
-  static Future<void> resizeTo(Size newSize, {bool center = false}) async {
+  static Future<void> resizeTo(Size newSize, {bool center = true}) async {
     await windowManager.setSize(newSize);
     if (center) {
       await windowManager.center();

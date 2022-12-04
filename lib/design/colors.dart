@@ -128,3 +128,15 @@ class CourseColor {
 }
 
 const electricityColor = ColorPair(Color(0xFFffd200), Color(0xFFfffc00));
+
+const List<Color> applicationColors = <Color>[
+  Colors.orangeAccent,
+  Colors.redAccent,
+  Colors.blueAccent,
+  Colors.grey,
+  Colors.green,
+  Colors.yellowAccent,
+  Colors.cyan,
+  Colors.purple,
+  Colors.teal,
+];

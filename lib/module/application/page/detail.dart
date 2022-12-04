@@ -55,18 +55,45 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    return context.isPortrait ? buildPortrait(context) : buildLandscape(context);
+  }
+
+  Widget buildPortrait(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(meta.name).hero(meta.id)),
+      appBar: AppBar(title: Text(meta.name)),
+      body: SafeArea(
+        child: buildBody(context),
+      ),
+      // floatingActionButton: buildOpenInAppFAB(), TODO: fix this
+    );
+  }
+
+  Widget buildOpenInAppFAB() {
+    return FloatingActionButton(
+      child: const Icon(Icons.east),
+      onPressed: () => openInApp(context),
+    );
+  }
+
+  Widget buildLandscape(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(meta.name),
+       /* actions: [
+          buildOpenInApp(),
+        ],*/
+      ),
       body: SafeArea(
         child: buildBody(context),
       ),
     );
   }
 
-  Widget buildOpenInAppFloatingButton() {
-    return FloatingActionButton(
-      child: const Icon(Icons.east),
-      onPressed: () => openInApp(context),
+  Widget buildOpenInApp() {
+    return PlainExtendedButton(
+      label: i18n.open.text(),
+      icon: const Icon(Icons.open_in_browser),
+      tap: () => openInApp(context),
     );
   }
 
