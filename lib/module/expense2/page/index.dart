@@ -28,14 +28,14 @@ import '../using.dart';
 import 'bill.dart';
 import 'statistics.dart';
 
-class IndexPage extends StatefulWidget {
-  const IndexPage({Key? key}) : super(key: key);
+class ExpenseTrackerPage extends StatefulWidget {
+  const ExpenseTrackerPage({Key? key}) : super(key: key);
 
   @override
-  State<IndexPage> createState() => _IndexPageState();
+  State<ExpenseTrackerPage> createState() => _ExpenseTrackerPageState();
 }
 
-class _IndexPageState extends State<IndexPage> {
+class _ExpenseTrackerPageState extends State<ExpenseTrackerPage> {
   int currentIndex = 0;
 
   final cache = Expense2Init.cache;

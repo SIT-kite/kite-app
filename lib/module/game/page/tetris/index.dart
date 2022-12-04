@@ -31,8 +31,8 @@ import 'panel/page_portrait.dart';
 
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
 
-class TetrisPage extends StatelessWidget {
-  const TetrisPage({Key? key}) : super(key: key);
+class GameTetrisPage extends StatelessWidget {
+  const GameTetrisPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

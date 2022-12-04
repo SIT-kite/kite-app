@@ -187,7 +187,7 @@ class _TimetablePageState extends State<TimetablePage> {
     return IconButton(
         icon: const Icon(Icons.person_rounded),
         onPressed: () async {
-          await Navigator.of(ctx).pushNamed(RouteTable.myTimetables);
+          await Navigator.of(ctx).pushNamed(RouteTable.timetableMine);
         });
   }
 }

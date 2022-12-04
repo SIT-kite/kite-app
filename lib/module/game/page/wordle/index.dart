@@ -37,14 +37,14 @@ import '../common.dart';
 import 'models/board_model.dart';
 import 'widgets/board.dart';
 
-class WordlePage extends StatefulWidget {
-  const WordlePage({Key? key}) : super(key: key);
+class GameWordlePage extends StatefulWidget {
+  const GameWordlePage({Key? key}) : super(key: key);
 
   @override
-  State<WordlePage> createState() => _WordlePageState();
+  State<GameWordlePage> createState() => _GameWordlePageState();
 }
 
-class _WordlePageState extends State<WordlePage> {
+class _GameWordlePageState extends State<GameWordlePage> {
   Future<String> getRandomWord() async {
     final words = jsonDecode(
       await rootBundle.loadString('assets/game/words.json'),

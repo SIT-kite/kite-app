@@ -24,7 +24,6 @@ import 'package:kite/override/entity.dart';
 import 'package:kite/settings/page/index.dart';
 import 'package:kite/storage/init.dart';
 
-import 'module/expense2/page/index.dart';
 import 'module/simple_page/page/browser.dart';
 import 'module/symbol.dart';
 import 'navigation/route.dart';
@@ -35,16 +34,20 @@ class RouteTable {
 
   static const root = '/';
   static const home = '/home';
+  static const about = '/about';
+  static const activity = '/activity';
+  static const application = '/application';
+  static const campusCard = '/campus_card';
+  static const classroomBrowser = '/classroom_browser';
+  static const connectivity = '/connectivity';
+  static const easterEgg = '/easter_egg';
+  static const eduEmail = '/edu_email';
+  static const electricityBill = '/electricity_bill';
   static const reportTemp = '/report_temp';
   static const login = '/login';
   static const welcome = '/welcome';
-  static const about = '/about';
   static const expense = '/expense';
-  static const connectivity = '/connectivity';
-  static const campusCard = '/campusCard'; // TODO: A weird name
-  static const electricityBill = '/electricity_bill';
   static const examResult = '/exam_result';
-  static const application = '/application';
   static const game = '/game';
   static const game2048 = '$game/2048';
   static const gameWordle = '$game/wordle';
@@ -56,19 +59,15 @@ class RouteTable {
   static const market = '/market';
   static const timetable = '/timetable';
   static const timetableImport = '$timetable/import';
-  static const myTimetables = '$timetable/mine';
+  static const timetableMine = '$timetable/mine';
   static const settings = '/settings';
   static const feedback = '/feedback';
   static const kiteBulletin = '/kite_bulletin';
   static const yellowPages = '/yellow_pages';
   static const oaAnnouncement = '/oa_announcement';
-  static const eduEmail = '/eduEmail';
   static const goodNight = '/good_night';
-  static const activity = '/activity';
   static const lostFound = '/lost_found';
-  static const classroomBrowser = '/classroom_browser';
   static const examArrangement = '/exam_arrangement';
-  static const easterEgg = '/easter_egg';
   static const bbs = '/bbs';
   static const scanner = '/scanner';
   static const browser = '/browser';
@@ -90,25 +89,25 @@ final defaultRouteTable = StaticRouteTable(
     RouteTable.login: (context, args) => const LoginPage(),
     RouteTable.welcome: (context, args) => const WelcomePage(),
     RouteTable.about: (context, args) => const AboutPage(),
-    RouteTable.expense: (context, args) => const IndexPage(),
+    RouteTable.expense: (context, args) => const ExpenseTrackerPage(),
     RouteTable.connectivity: (context, args) => const ConnectivityPage(),
     RouteTable.campusCard: (context, args) => const CampusCardPage(),
     RouteTable.electricityBill: (context, args) => const ElectricityBillPage(),
     RouteTable.examResult: (context, args) => const ScorePage(),
-    RouteTable.application: (context, args) => const OfficePage(),
+    RouteTable.application: (context, args) => const ApplicationPage(),
     RouteTable.game: (context, args) => const GamePage(),
     RouteTable.game2048: (context, args) => const Game2048Page(),
-    RouteTable.gameWordle: (context, args) => const WordlePage(),
-    RouteTable.gameComposeSit: (context, args) => const ComposeSitPage(),
-    RouteTable.gameTetris: (context, args) => const TetrisPage(),
+    RouteTable.gameWordle: (context, args) => const GameWordlePage(),
+    RouteTable.gameComposeSit: (context, args) => const GameComposeSitPage(),
+    RouteTable.gameTetris: (context, args) => const GameTetrisPage(),
     RouteTable.wiki: (context, args) => WikiPage(),
     RouteTable.library: (context, args) => const LibraryPage(),
     RouteTable.libraryAppointment: (context, args) => const AppointmentPage(),
     RouteTable.market: (context, args) => const MarketPage(),
     RouteTable.timetable: (context, args) => const TimetablePage(),
     RouteTable.timetableImport: (context, args) => const ImportTimetablePage(),
-    RouteTable.myTimetables: (context, args) => const MyTimetablePage(),
-    RouteTable.settings: (context, args) => SettingsPage(),
+    RouteTable.timetableMine: (context, args) => const MyTimetablePage(),
+    RouteTable.settings: (context, args) => const SettingsPage(),
     RouteTable.feedback: (context, args) => const FeedbackPage(),
     RouteTable.kiteBulletin: (context, args) => const KiteBulletinPage(),
     RouteTable.yellowPages: (context, args) => const YellowPagesPage(),

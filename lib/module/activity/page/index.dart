@@ -50,7 +50,7 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
           onPressed: () => showSearch(context: context, delegate: SearchBar()),
         ),
       ]),
-      body: currentNavigation == 0 ? const ActivityListPage() : const MinePage(),
+      body: currentNavigation == 0 ? const ActivityListPage() : const MyActivityPage(),
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
@@ -104,7 +104,7 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
           ),
           const VerticalDivider(thickness: 1, width: 1),
           // This is the main content.
-          Expanded(child: currentNavigation == 0 ? const ActivityListPage() : const MinePage())
+          Expanded(child: currentNavigation == 0 ? const ActivityListPage() : const MyActivityPage())
         ],
       ),
     );

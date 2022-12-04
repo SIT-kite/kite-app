@@ -23,6 +23,7 @@ export 'connectivity/symbol.dart';
 export 'easter_egg/symbol.dart';
 export 'edu_email/symbol.dart';
 export 'electricity_bill/symbol.dart';
+export 'expense2/symbol.dart';
 export 'exam_arr/symbol.dart';
 export 'exam_result/symbol.dart';
 export 'flea_market/symbol.dart';

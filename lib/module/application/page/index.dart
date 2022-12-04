@@ -57,14 +57,14 @@ const List<Color> _iconColors = <Color>[
   Colors.teal,
 ];
 
-class OfficePage extends StatefulWidget {
-  const OfficePage({Key? key}) : super(key: key);
+class ApplicationPage extends StatefulWidget {
+  const ApplicationPage({Key? key}) : super(key: key);
 
   @override
-  State<OfficePage> createState() => _OfficePageState();
+  State<ApplicationPage> createState() => _ApplicationPageState();
 }
 
-class _OfficePageState extends State<OfficePage> {
+class _ApplicationPageState extends State<ApplicationPage> {
   @override
   Widget build(BuildContext context) {
     return context.isPortrait ? buildPortrait(context) : buildLandscape(context);

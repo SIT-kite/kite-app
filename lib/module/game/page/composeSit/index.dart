@@ -25,8 +25,8 @@ import '../../using.dart';
 import '../../entity/record.dart';
 import '../common.dart';
 
-class ComposeSitPage extends StatelessWidget {
-  const ComposeSitPage({Key? key}) : super(key: key);
+class GameComposeSitPage extends StatelessWidget {
+  const GameComposeSitPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

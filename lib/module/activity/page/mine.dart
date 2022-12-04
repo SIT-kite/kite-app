@@ -29,14 +29,14 @@ import '../using.dart';
 import '../utils.dart';
 import 'detail.dart';
 
-class MinePage extends StatefulWidget {
-  const MinePage({Key? key}) : super(key: key);
+class MyActivityPage extends StatefulWidget {
+  const MyActivityPage({Key? key}) : super(key: key);
 
   @override
-  State<MinePage> createState() => _MinePageState();
+  State<MyActivityPage> createState() => _MyActivityPageState();
 }
 
-class _MinePageState extends State<MinePage> {
+class _MyActivityPageState extends State<MyActivityPage> {
   List<ScJoinedActivity>? joined;
   ScScoreSummary? summary;
 
