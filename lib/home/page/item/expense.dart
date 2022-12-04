@@ -54,7 +54,7 @@ class _ExpenseItemState extends State<ExpenseItem> {
     }
     return Brick(
       route: RouteTable.expense,
-      icon: 'assets/home/icon_expense.svg',
+      icon: SvgAssetIcon('assets/home/icon_expense.svg'),
       title: i18n.ftype_expense,
       subtitle: content ?? i18n.ftype_expense_desc,
     );

@@ -29,11 +29,8 @@ Widget buildBrickWidgetByExtraHomeItem(BuildContext context, ExtraHomeItem item)
   return Brick(
     title: item.title,
     subtitle: item.description,
-    iconWidget: SvgPicture.network(
+    icon: SvgNetworkIcon(
       item.iconUrl,
-      height: 30.h,
-      width: 30.w,
-      color: context.fgColor,
     ),
     route: item.route,
   );

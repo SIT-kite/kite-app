@@ -48,7 +48,7 @@ class _EduEmailItemState extends State<EduEmailItem> {
   Widget build(BuildContext context) {
     return Brick(
       route: '/eduEmail',
-      icon: 'assets/home/icon_mail.svg',
+      icon: SvgAssetIcon('assets/home/icon_mail.svg'),
       title: i18n.ftype_eduEmail,
       subtitle: content ?? i18n.ftype_eduEmail_desc,
     );

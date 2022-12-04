@@ -42,7 +42,7 @@ class _ExamArrangementItemState extends State<ExamArrangementItem> {
   Widget build(BuildContext context) {
     return Brick(
       route: RouteTable.examArrangement,
-      icon: 'assets/home/icon_exam.svg',
+      icon: SvgAssetIcon('assets/home/icon_exam.svg'),
       title: i18n.ftype_examArr,
       subtitle: content ?? i18n.ftype_examArr_desc,
     );

@@ -96,7 +96,7 @@ class _ApplicationItemState extends State<ApplicationItem> {
     _tryUpdateContent(Kv.home.lastOfficeStatus);
     return Brick(
         route: RouteTable.application,
-        icon: 'assets/home/icon_office.svg',
+        icon: SvgAssetIcon('assets/home/icon_office.svg'),
         title: i18n.ftype_application,
         subtitle: content ?? i18n.ftype_application_desc);
   }

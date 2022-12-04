@@ -48,7 +48,7 @@ class _ElectricityBillItemState extends State<ElectricityBillItem> {
     }
     return Brick(
       route: '/electricity_bill',
-      icon: 'assets/home/icon_electricity.svg',
+      icon: SvgAssetIcon('assets/home/icon_electricity.svg'),
       title: i18n.ftype_elecBill,
       subtitle: content ?? i18n.ftype_elecBill_desc,
     );

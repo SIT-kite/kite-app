@@ -121,7 +121,7 @@ class _ReportTempItemState extends State<ReportTempItem> {
     }
     return Brick(
       route: RouteTable.reportTemp,
-      icon: 'assets/home/icon_report.svg',
+      icon: SvgAssetIcon('assets/home/icon_report.svg'),
       title: i18n.ftype_reportTemp,
       subtitle: content ?? i18n.ftype_reportTemp,
     );

@@ -51,7 +51,7 @@ class UpgradeItem extends StatelessWidget {
             title: FType.upgrade.localized(),
             onPressed: () => onTapUpdate(snapshot.data!),
             subtitle: FType.upgrade.localizedDesc(),
-            icon: 'assets/home/icon_upgrade.svg',
+            icon: SvgAssetIcon('assets/home/icon_upgrade.svg'),
           );
         }
         return const SizedBox(height: 0);

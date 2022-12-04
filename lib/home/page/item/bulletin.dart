@@ -68,7 +68,7 @@ class _KiteBulletinItemState extends State<KiteBulletinItem> {
   Widget build(BuildContext context) {
     return Brick(
       route: RouteTable.kiteBulletin,
-      icon: 'assets/home/icon_notice.svg',
+      icon: SvgAssetIcon('assets/home/icon_notice.svg'),
       title: i18n.ftype_kiteBulletin,
       subtitle: content ?? i18n.ftype_kiteBulletin_desc,
     );

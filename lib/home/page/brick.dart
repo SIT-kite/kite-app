@@ -23,25 +23,37 @@ import 'package:kite/design/utils.dart';
 import 'package:kite/module/application/using.dart';
 import 'package:rettulf/rettulf.dart';
 
+typedef IconBuilder = Widget Function(double size, Color color);
+// ignore: non_constant_identifier_names
+IconBuilder SysIcon(IconData icon) {
+  return (size, color) => Icon(icon, size: size, color: color);
+}
+
+// ignore: non_constant_identifier_names
+IconBuilder SvgAssetIcon(String path) {
+  return (size, color) => SvgPicture.asset(path, width: size, height: size, color: color);
+}
+
+// ignore: non_constant_identifier_names
+IconBuilder SvgNetworkIcon(String path) {
+  return (size, color) => SvgPicture.network(path, width: size, height: size, color: color);
+}
+
 class Brick extends StatelessWidget {
   final String? route;
-  final String? icon;
-  final Widget? iconWidget;
+  final IconBuilder icon;
   final String title;
   final String? subtitle;
   final VoidCallback? onPressed;
 
-  Brick({
+  const Brick({
     this.route,
     this.onPressed,
     required this.title,
     this.subtitle,
-    this.icon,
-    this.iconWidget,
-    Key? key,
-  }) : super(key: key) {
-    assert(icon != null || iconWidget != null);
-  }
+    required this.icon,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +77,7 @@ class Brick extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(color: bg),
       child: ListTile(
-        leading: iconWidget ?? SvgPicture.asset(icon!, height: 30.h, width: 30.w, color: iconColor),
+        leading: icon(30.w, iconColor),
         title: Text(title, style: titleStyle),
         subtitle: Text(subtitle ?? '', style: subtitleStyle, maxLines: 1, overflow: TextOverflow.ellipsis),
         // dense: true,

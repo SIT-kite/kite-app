@@ -17,8 +17,6 @@
 */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/design/colors.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import '../../launcher.dart';
@@ -44,7 +42,7 @@ class HomepageFactory {
     FType.kiteBulletin: (context) => const KiteBulletinItem(),
     FType.timetable: (context) => Brick(
           route: RouteTable.timetable,
-          icon: 'assets/home/icon_timetable.svg',
+          icon: SvgAssetIcon('assets/home/icon_timetable.svg'),
           title: FType.timetable.localized(),
           subtitle: FType.timetable.localizedDesc(),
         ),
@@ -52,20 +50,20 @@ class HomepageFactory {
     FType.examArr: (context) => const ExamArrangementItem(),
     FType.classroomBrowser: (context) => Brick(
           route: RouteTable.classroomBrowser,
-          icon: 'assets/home/icon_classroom.svg',
+          icon: SvgAssetIcon('assets/home/icon_classroom.svg'),
           title: FType.classroomBrowser.localized(),
           subtitle: FType.classroomBrowser.localizedDesc(),
         ),
     FType.activity: (context) => Brick(
           route: RouteTable.activity,
-          icon: 'assets/home/icon_event.svg',
+          icon:SvgAssetIcon( 'assets/home/icon_event.svg'),
           title: FType.activity.localized(),
           subtitle: FType.activity.localizedDesc(),
         ),
     FType.expense: (context) => const ExpenseItem(),
     FType.examResult: (context) => Brick(
           route: RouteTable.examResult,
-          icon: 'assets/home/icon_score.svg',
+          icon: SvgAssetIcon('assets/home/icon_score.svg'),
           title: FType.examResult.localized(),
           subtitle: FType.examResult.localizedDesc(),
         ),
@@ -74,25 +72,25 @@ class HomepageFactory {
     FType.eduEmail: (context) => const EduEmailItem(),
     FType.oaAnnouncement: (context) => Brick(
           route: RouteTable.oaAnnouncement,
-          icon: 'assets/home/icon_bulletin.svg',
+          icon:SvgAssetIcon( 'assets/home/icon_bulletin.svg'),
           title: FType.oaAnnouncement.localized(),
           subtitle: FType.oaAnnouncement.localizedDesc(),
         ),
     FType.yellowPages: (context) => Brick(
           route: RouteTable.yellowPages,
-          icon: 'assets/home/icon_contact.svg',
+          icon: SvgAssetIcon('assets/home/icon_contact.svg'),
           title: FType.yellowPages.localized(),
           subtitle: FType.yellowPages.localizedDesc(),
         ),
     FType.game: (context) => Brick(
           route: RouteTable.game,
-          icon: 'assets/home/icon_game.svg',
+          icon: SvgAssetIcon('assets/home/icon_game.svg'),
           title: FType.game.localized(),
           subtitle: FType.game.localizedDesc(),
         ),
     FType.wiki: (context) => Brick(
           route: RouteTable.wiki,
-          icon: 'assets/home/icon_wiki.svg',
+          icon: SvgAssetIcon('assets/home/icon_wiki.svg'),
           title: FType.wiki.localized(),
           subtitle: FType.wiki.localizedDesc(),
         ),
@@ -101,7 +99,7 @@ class HomepageFactory {
         ? null
         : (context) => Brick(
               route: RouteTable.bbs,
-              icon: 'assets/home/icon_bbs.svg',
+              icon: SvgAssetIcon('assets/home/icon_bbs.svg'),
               title: FType.bbs.localized(),
               subtitle: FType.bbs.localizedDesc(),
             ),
@@ -113,21 +111,21 @@ class HomepageFactory {
                 Log.info('扫码结果: $result');
                 if (result != null) GlobalLauncher.launch(result);
               },
-              iconWidget: Icon(Icons.qr_code_scanner, size: 30.h, color: context.fgColor),
+              icon: SysIcon(Icons.qr_code_scanner),
               title: FType.scanner.localized(),
               subtitle: FType.scanner.localizedDesc(),
             ),
     FType.freshman: (context) => const FreshmanItem(),
     FType.switchAccount: (context) => Brick(
           route: RouteTable.login,
-          iconWidget: Icon(Icons.switch_account, size: 30.h, color: context.fgColor),
+          icon: (size, color) => Icon(Icons.switch_account, size: size, color: color),
           title: FType.switchAccount.localized(),
           subtitle: FType.switchAccount.localizedDesc(),
         ),
     FType.electricityBill: (context) => const ElectricityBillItem(),
     FType.kiteBoard: (context) => Brick(
           route: RouteTable.kiteBoard,
-          icon: 'assets/home/icon_board.svg',
+          icon: SvgAssetIcon('assets/home/icon_board.svg'),
           title: FType.kiteBoard.localized(),
           subtitle: FType.kiteBoard.localizedDesc(),
         ),

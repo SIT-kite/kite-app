@@ -55,7 +55,7 @@ class FreshmanItem extends StatelessWidget {
           Navigator.of(context).pushNamed(RouteTable.freshman);
         }
       },
-      iconWidget: Icon(Icons.people, size: 30.h, color: context.fgColor),
+      icon: SysIcon(Icons.people),
       title: i18n.ftype_freshman,
       subtitle: i18n.ftype_freshman_desc,
     );
