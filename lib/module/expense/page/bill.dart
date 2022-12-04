@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:kite/l10n/extension.dart';
-import 'package:kite/module/expense2/using.dart';
+import '../using.dart';
 
 import '../entity/local.dart';
 

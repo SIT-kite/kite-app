@@ -19,7 +19,6 @@ import 'package:flash/flash.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/module/expense2/using.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../init.dart';

@@ -22,7 +22,7 @@ import 'dao/getter.dart';
 import 'service/getter.dart';
 import 'storage/local.dart';
 
-class Expense2Init {
+class ExpenseTrackerInit {
   static late ExpenseGetDao remote;
   static late ExpenseStorage local;
   static late CachedExpenseGetDao cache;

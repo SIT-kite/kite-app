@@ -20,3 +20,4 @@ export 'page/relationship/index.dart';
 export 'page/info.dart';
 export 'page/login.dart';
 export 'page/personal_info.dart';
+export 'init.dart';

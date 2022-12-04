@@ -19,7 +19,7 @@
 import 'package:catcher/core/catcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:kite/module/expense2/init.dart';
+import '../init.dart';
 import 'package:kite/storage/init.dart';
 import 'package:rettulf/rettulf.dart';
 
@@ -38,7 +38,7 @@ class ExpenseTrackerPage extends StatefulWidget {
 class _ExpenseTrackerPageState extends State<ExpenseTrackerPage> {
   int currentIndex = 0;
 
-  final cache = Expense2Init.cache;
+  final cache = ExpenseTrackerInit.cache;
 
   final ValueNotifier<double?> $balance = ValueNotifier(null);
 
@@ -135,7 +135,7 @@ class _ExpenseTrackerPageState extends State<ExpenseTrackerPage> {
               // 关闭用户交互
               EasyLoading.instance.userInteractions = false;
               EasyLoading.show(status: i18n.expenseFetchingRecordTip);
-              Expense2Init.local
+              ExpenseTrackerInit.local
                 ..clear()
                 ..cachedTsEnd = null
                 ..cachedTsStart = null;

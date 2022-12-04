@@ -20,10 +20,6 @@ import 'package:kite/global/desktop_initializer.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/home/init.dart';
 import 'package:kite/module/classroom_browser/init.dart';
-import 'package:kite/module/expense2/init.dart';
-import 'package:kite/module/freshman/init.dart';
-import 'package:kite/module/kite_board/init.dart';
-import 'package:kite/module/kite_bulletin/init.dart';
 import 'package:kite/module/symbol.dart';
 import 'package:kite/override/init.dart';
 import 'package:kite/session/edu_session.dart';
@@ -99,7 +95,7 @@ class Initializer {
     await ExamArrInit.init(sharedEduSession);
     await TimetableInit.init(eduSession: sharedEduSession, kiteSession: kiteSession, timetableBox: HiveBoxInit.course);
 
-    await Expense2Init.init(
+    await ExpenseTrackerInit.init(
       session: Global.ssoSession2,
       expenseBox: HiveBoxInit.expense2,
     );

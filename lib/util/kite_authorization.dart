@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:kite/module/expense2/using.dart';
+import 'package:kite/design/user_widgets/dialog.dart';
 import 'package:kite/module/shared/init.dart';
 import 'package:kite/storage/init.dart';
 

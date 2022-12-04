@@ -16,8 +16,8 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import 'package:kite/module/expense2/dao/getter.dart';
-import 'package:kite/module/expense2/entity/local.dart';
+import '../dao/getter.dart';
+import '../entity/local.dart';
 
 import '../storage/local.dart';
 

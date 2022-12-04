@@ -2,9 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../init.dart';
 
-import 'package:kite/module/expense2/cache/cache.dart';
-import 'package:kite/module/expense2/service/getter.dart';
-import 'package:kite/module/expense2/storage/local.dart';
+import 'package:kite/module/expense/cache/cache.dart';
+import 'package:kite/module/expense/service/getter.dart';
+import 'package:kite/module/expense/storage/local.dart';
 import 'package:kite/network/session.dart';
 import 'package:kite/session/dio_common.dart';
 

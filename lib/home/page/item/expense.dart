@@ -20,8 +20,8 @@ import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
 
-import '../../../module/expense2/entity/local.dart';
-import '../../../module/expense2/init.dart';
+import 'package:kite/module/expense/entity/local.dart';
+import 'package:kite/module/expense/init.dart';
 import '../brick.dart';
 
 class ExpenseItem extends StatefulWidget {
@@ -33,9 +33,9 @@ class ExpenseItem extends StatefulWidget {
 
 class _ExpenseItemState extends State<ExpenseItem> {
   final Transaction? lastExpense = () {
-    final tsl = Expense2Init.local.transactionTsList;
+    final tsl = ExpenseTrackerInit.local.transactionTsList;
     if (tsl.isEmpty) return null;
-    return Expense2Init.local.getTransactionByTs(tsl.last);
+    return ExpenseTrackerInit.local.getTransactionByTs(tsl.last);
   }();
   String? content;
 
