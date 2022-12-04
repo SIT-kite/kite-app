@@ -193,7 +193,7 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
                 InjectJsRuleItem(
                   rule: const ConstRule(true),
                   asyncJavascript: rootBundle.loadString('assets/webview/dark.js'),
-                  injectTime: InjectJsTime.onPageStarted,
+                  injectTime: InjectJsTime.onPageFinished,
                 ),
               if (widget.injectJsRules != null) ...widget.injectJsRules!,
             ];
