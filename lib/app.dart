@@ -109,7 +109,7 @@ class _KiteAppState extends State<KiteApp> {
   @override
   Widget build(BuildContext context) {
     final isDark = Kv.theme.isDarkMode ?? false;
-    final primaryColor = Kv.theme.color;
+    final primaryColor = Kv.theme.color ?? R.defaultThemeColor;
 
     // refresh override route
     Global.eventBus.on(EventNameConstants.onRouteRefresh, (arg) {

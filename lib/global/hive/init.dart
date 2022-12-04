@@ -17,12 +17,15 @@
  */
 
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:kite/module/init.dart';
+import 'package:kite/global/hive/adapter.dart';
 import 'package:kite/module/library/search/entity/search_history.dart';
 import 'package:kite/module/yellow_pages/entity/contact.dart';
 
+import 'adapter.dart';
+
 class HiveBoxInit {
   HiveBoxInit._();
+
   static late Box<dynamic> userEvent;
   static late Box<LibrarySearchHistoryItem> librarySearchHistory;
   static late Box<ContactData> contactSetting;
@@ -33,7 +36,7 @@ class HiveBoxInit {
 
   static Future<void> init(String root) async {
     await Hive.initFlutter(root);
-    registerAdapters();
+    HiveAdapter.registerAll();
     kv = await Hive.openBox('setting');
     userEvent = await Hive.openBox('userEvent');
     librarySearchHistory = await Hive.openBox('librarySearchHistory');

@@ -71,10 +71,10 @@ class HomeSettingStorage implements HomeSettingDao {
   set installTime(DateTime? dateTime) => box.put(HomeKeyKeys.installTime, dateTime);
 
   @override
-  Weather get lastWeather => box.get(HomeKeyKeys.lastWeather, defaultValue: Weather.defaultWeather());
+  Weather? get lastWeather => box.get(HomeKeyKeys.lastWeather, defaultValue: Weather.defaultWeather);
 
   @override
-  set lastWeather(Weather weather) => box.put(HomeKeyKeys.lastWeather, weather);
+  set lastWeather(Weather? weather) => box.put(HomeKeyKeys.lastWeather, weather);
 
   @override
   ReportHistory? get lastReport => box.get(HomeKeyKeys.lastReport);

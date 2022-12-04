@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kite/module/init.dart';
+import 'package:kite/global/hive/adapter.dart';
 import 'package:kite/module/library/search/init.dart';
 import 'package:kite/module/library/search/service/holding_preview.dart';
 import 'package:kite/util/logger.dart';

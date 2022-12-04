@@ -18,9 +18,9 @@
 import 'dart:ui';
 
 abstract class ThemeSettingDao {
-  Color get color;
+  Color? get color;
 
-  set color(Color value);
+  set color(Color? value);
 
   bool? get isDarkMode;
 

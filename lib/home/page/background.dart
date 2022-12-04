@@ -43,7 +43,8 @@ class _HomeBackgroundState extends State<HomeBackground> {
 
   @override
   void initState() {
-    _weatherCode = widget.initialWeatherCode ?? int.parse(Kv.home.lastWeather.icon);
+    final lastWeather = Kv.home.lastWeather ?? Weather.defaultWeather;
+    _weatherCode = widget.initialWeatherCode ?? int.tryParse(lastWeather.icon) ?? Weather.defaultWeatherCode;
     super.initState();
     Global.eventBus.on(EventNameConstants.onBackgroundChange, _onBackgroundUpdate);
     Global.eventBus.on(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);

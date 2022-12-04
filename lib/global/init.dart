@@ -34,7 +34,7 @@ import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-import 'hive_initializer.dart';
+import 'hive/init.dart';
 import 'package:path/path.dart' as path;
 
 class Initializer {

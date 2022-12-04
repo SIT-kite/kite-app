@@ -27,7 +27,7 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kite/design/user_widgets/dialog.dart';
 import 'package:kite/global/global.dart';
-import 'package:kite/global/hive_initializer.dart';
+import 'package:kite/global/hive/init.dart';
 import 'package:kite/global/init.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
@@ -196,7 +196,7 @@ class _SettingsPageState extends State<SettingsPage> {
               1: i18n.realtimeWeather,
               2: i18n.staticPicture,
             },
-            selected: Kv.home.backgroundMode,
+            selected: Kv.home.backgroundMode, // TODO: Kv may return a unavailable value
             onChange: (value) {
               Kv.home.backgroundMode = value;
               Global.eventBus.emit(EventNameConstants.onBackgroundChange);

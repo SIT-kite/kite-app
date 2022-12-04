@@ -40,7 +40,11 @@ class JsonStorage {
   T? getModel<T>(String key, T Function(Map<String, dynamic>) fromJson) {
     String? json = box.get(key);
     if (json == null) return null;
-    return fromJson(jsonDecode(json));
+    try {
+      return fromJson(jsonDecode(json));
+    } on Exception {
+      return null;
+    }
   }
 
   List<T>? getModelList<T>(
@@ -50,7 +54,11 @@ class JsonStorage {
     String? json = box.get(key);
     if (json == null) return null;
     List<dynamic> list = jsonDecode(json);
-    return list.map((e) => fromJson(e)).toList();
+    try {
+      return list.map((e) => fromJson(e)).toList();
+    } on Exception {
+      return null;
+    }
   }
 
   void setModelList<T>(

@@ -17,6 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:kite/r.dart';
 
 import '../dao/theme.dart';
 
@@ -32,16 +33,24 @@ class ThemeSettingStorage implements ThemeSettingDao {
   ThemeSettingStorage(this.box);
 
   @override
-  Color get color {
-    final String value = box.get(ThemeKeys.themeColor, defaultValue: 'ff2196f3');
-    final int color = int.parse(value.replaceFirst('#', ''), radix: 16);
-    return Color(color);
+  Color? get color {
+    final String? value = box.get(ThemeKeys.themeColor);
+    if (value != null) {
+      var hex = value.replaceFirst('#', '');
+      final colorValue = int.tryParse(hex, radix: 16);
+      if (colorValue != null) {
+        return Color(colorValue);
+      }
+    }
+    return R.defaultThemeColor;
   }
 
   @override
-  set color(Color v) {
-    final String value = v.value.toRadixString(16).padLeft(6, '0');
-    box.put(ThemeKeys.themeColor, value);
+  set color(Color? v) {
+    if (v != null) {
+      final String value = v.value.toRadixString(16).padLeft(6, '0');
+      box.put(ThemeKeys.themeColor, value);
+    }
   }
 
   @override

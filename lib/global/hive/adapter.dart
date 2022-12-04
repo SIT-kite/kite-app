@@ -16,23 +16,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:hive/hive.dart';
 import 'package:kite/home/entity/home.dart';
-import 'package:kite/util/hive_register_adapter.dart';
 
-import 'symbol.dart';
+import 'package:kite/module/symbol.dart';
 
-void registerAdapters() {
-  registerAdapter(ContactDataAdapter());
-  registerAdapter(CourseAdapter());
-  registerAdapter(GameTypeAdapter());
-  registerAdapter(GameRecordAdapter());
-  registerAdapter(FTypeAdapter());
-  registerAdapter(BalanceAdapter());
-  registerAdapter(WeatherAdapter());
-  registerAdapter(ReportHistoryAdapter());
-  registerAdapter(LibrarySearchHistoryItemAdapter());
-  registerAdapter(UserEventAdapter());
-  registerAdapter(UserEventTypeAdapter());
-  registerAdapter(TimetableMetaAdapter());
-  registerAdapter(ReportHistoryAdapter());
+class HiveAdapter {
+  HiveAdapter._();
+  static void registerAll() {
+    _register(ContactDataAdapter());
+    _register(CourseAdapter());
+    _register(GameTypeAdapter());
+    _register(GameRecordAdapter());
+    _register(FTypeAdapter());
+    _register(BalanceAdapter());
+    _register(WeatherAdapter());
+    _register(ReportHistoryAdapter());
+    _register(LibrarySearchHistoryItemAdapter());
+    _register(UserEventAdapter());
+    _register(UserEventTypeAdapter());
+    _register(TimetableMetaAdapter());
+    _register(ReportHistoryAdapter());
+  }
+
+  static void _register<T>(TypeAdapter<T> adapter) {
+    if (!Hive.isAdapterRegistered(adapter.typeId)) {
+      Hive.registerAdapter(adapter);
+    }
+  }
 }

@@ -35,9 +35,9 @@ class Weather {
   String icon;
 
   Weather(this.weather, this.temperature, this.ts, this.icon);
-
-  static Weather defaultWeather() {
-    return Weather(i18n.weather_sunny, 20, DateTime.now().toString(), '100');
+  static const defaultWeatherCode = 100;
+  static Weather get defaultWeather {
+    return Weather(i18n.weather_sunny, 20, DateTime.now().toString(), defaultWeatherCode.toString());
   }
 
   factory Weather.fromJson(Map<String, dynamic> json) => _$WeatherFromJson(json);

@@ -44,7 +44,7 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   // TODO: Update studyDays when current system date changed
   int? studyDays;
   int campus = Kv.home.campus;
-  Weather currentWeather = Kv.home.lastWeather;
+  Weather currentWeather = Kv.home.lastWeather ?? Weather.defaultWeather;
 
   @override
   void initState() {
