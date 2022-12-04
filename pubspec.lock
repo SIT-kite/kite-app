@@ -627,6 +627,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.3-null-safety+2"
+  flutter_shake_animated:
+    dependency: "direct main"
+    description:
+      name: flutter_shake_animated
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.5"
   flutter_spinkit:
     dependency: transitive
     description:
@@ -1339,6 +1346,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.7"
+  rnd:
+    dependency: "direct main"
+    description:
+      name: rnd
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   rxdart:
     dependency: transitive
     description:

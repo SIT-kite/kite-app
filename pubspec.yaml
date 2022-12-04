@@ -123,6 +123,8 @@ dependencies:
   markdown: ^6.0.1
   event_bus: ^2.0.0
   collection: ^1.16.0
+  flutter_shake_animated: ^0.0.5
+  rnd: ^0.2.0
 
 
 dev_dependencies:

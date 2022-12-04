@@ -20,6 +20,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/design/colors.dart';
 import 'package:kite/design/utils.dart';
+import 'package:kite/module/application/using.dart';
 import 'package:rettulf/rettulf.dart';
 
 class Brick extends StatelessWidget {
@@ -49,16 +50,17 @@ class Brick extends StatelessWidget {
     final TextStyle? subtitleStyle;
     final Color bg;
     final Color iconColor;
+    final titleStyleRaw = theme.textTheme.headline4;
     if (theme.isLight) {
-      titleStyle = theme.textTheme.headline4?.copyWith(color: theme.textTheme.headline2?.color);
+      iconColor = context.themeColor;
+      titleStyle = titleStyleRaw?.copyWith(color: Color.lerp(titleStyleRaw.color, iconColor, 0.6));
       subtitleStyle = theme.textTheme.bodyText2?.copyWith(color: Colors.black87);
       bg = Colors.white.withOpacity(0.6);
-      iconColor = context.themeColor;
     } else {
-      titleStyle = theme.textTheme.headline4?.copyWith(color: theme.textTheme.headline2?.color);
+      iconColor = Color.lerp(context.themeColor, Colors.white, 0.6)!;
+      titleStyle = titleStyleRaw?.copyWith(color: Color.lerp(titleStyleRaw.color, iconColor, 0.8));
       subtitleStyle = theme.textTheme.bodyText2?.copyWith(color: theme.textTheme.headline4?.color);
       bg = Colors.black87.withOpacity(0.2);
-      iconColor = Colors.white70;
     }
     return Container(
       decoration: BoxDecoration(color: bg),

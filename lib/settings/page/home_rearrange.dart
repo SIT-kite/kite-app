@@ -15,15 +15,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'dart:math';
+
 import 'package:animations/animations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_shake_animated/flutter_shake_animated.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/home/entity/home.dart';
 import 'package:kite/module/activity/using.dart';
 import 'package:kite/util/user.dart';
 import 'package:kite/util/vibration.dart';
 import 'package:rettulf/rettulf.dart';
+import 'package:rnd/rnd.dart';
 
 class HomeRearrangePage extends StatefulWidget {
   const HomeRearrangePage({Key? key}) : super(key: key);
@@ -70,9 +74,7 @@ class _HomeRearrangePageState extends State<HomeRearrangePage> {
       child: Scaffold(
           appBar: AppBar(
             title: i18n.settingsHomepageRearrangeTitle.text(),
-            actions: [
-              buildResetButton()
-            ],
+            actions: [buildResetButton()],
           ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18),
@@ -83,7 +85,6 @@ class _HomeRearrangePageState extends State<HomeRearrangePage> {
             onPressed: () {
               setState(() {
                 currentHomeItems.insert(0, FType.separator);
-                nextKey();
               });
             },
           )),
@@ -116,11 +117,19 @@ class _HomeRearrangePageState extends State<HomeRearrangePage> {
     });
   }
 
-  void _onReorderStart(int index) async {
+  int? reorderingIndex;
+
+  Future<void> _onReorderStart(int index) async {
+    setState(() {
+      reorderingIndex = index;
+    });
     await const Vibration(milliseconds: 100).emit();
   }
 
-  void _onReorderEnd(int index) async {
+  Future<void> _onReorderEnd(int index) async {
+    setState(() {
+      reorderingIndex = null;
+    });
     await const Vibration(milliseconds: 100).emit();
   }
 
@@ -152,9 +161,15 @@ class _HomeRearrangePageState extends State<HomeRearrangePage> {
       onReorderStart: _onReorderStart,
       onReorderEnd: _onReorderEnd,
       proxyDecorator: (child, index, animation) {
-        return Container(
-          decoration: BoxDecoration(
-              boxShadow: [BoxShadow(color: context.fgColor, blurRadius: 8)], borderRadius: BorderRadius.circular(12)),
+        return DecoratedBoxTransition(
+          decoration: DecorationTween(
+                  begin: BoxDecoration(
+                      boxShadow: const [BoxShadow(color: Colors.transparent, blurRadius: 8)],
+                      borderRadius: BorderRadius.circular(12)),
+                  end: BoxDecoration(
+                      boxShadow: [BoxShadow(color: context.fgColor, blurRadius: 8)],
+                      borderRadius: BorderRadius.circular(12)))
+              .animate(animation),
           child: child,
         );
       },
@@ -166,9 +181,16 @@ class _HomeRearrangePageState extends State<HomeRearrangePage> {
     final List<Widget> listItems = [];
     for (int i = 0; i < homeItems.length; ++i) {
       Widget card = Card(
-        key: Key(i.toString()),
-        child: _buildFType(homeItems[i]),
+        key: ValueKey(i),
+        child: _buildFType(i, homeItems[i]),
       );
+      if (reorderingIndex != null) {
+        card = card.shaking(
+          key: ValueKey(i),
+          i,
+        );
+      }
+      /* TODO: index will cause the same key issue, try to make another personalization system
       final ftype = homeItems[i];
       if (ftype == FType.separator) {
         card = Dismissible(
@@ -180,13 +202,14 @@ class _HomeRearrangePageState extends State<HomeRearrangePage> {
             });
           },
         );
-      }
+      }*/
+
       listItems.add(card);
     }
     return listItems;
   }
 
-  Widget _buildFType(FType type) {
+  Widget _buildFType(i, FType type) {
     if (type == FType.separator) {
       return const ListTile(
         title: ClipRRect(
@@ -202,5 +225,18 @@ class _HomeRearrangePageState extends State<HomeRearrangePage> {
         ),
       );
     }
+  }
+}
+
+extension _Shaking on Widget {
+  Widget shaking(int i, {Key? key}) {
+    return ShakeWidget(
+      key: key,
+      duration: Duration(seconds: rnd.getInt(5, 8)),
+      shakeConstant: allLittleShaking[Random(i).nextInt(allLittleShaking.length)],
+      autoPlay: true,
+      enableWebMouseHover: true,
+      child: this,
+    );
   }
 }
