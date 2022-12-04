@@ -16,10 +16,12 @@ class ElectricityBillPage extends StatefulWidget {
   State<StatefulWidget> createState() => _ElectricityBillPageState();
 }
 
-class _ElectricityBillPageState extends State<ElectricityBillPage> {
-  static const billPageIndex = 0;
-  static const searchPageIndex = 1;
+class _Page {
+  static const bill = 0;
+  static const search = 1;
+}
 
+class _ElectricityBillPageState extends State<ElectricityBillPage> {
   /// elevated the `room` to share the state
   /// Null means user should select a room number before all.
   String? _selectedRoom;
@@ -28,7 +30,7 @@ class _ElectricityBillPageState extends State<ElectricityBillPage> {
   List<String>? _allRoomNumbers;
 
   /// For landscape mode Full.
-  int currentNavigation = billPageIndex;
+  int curNavigation = _Page.bill;
 
   Future<List> getRoomNumberList() async {
     String jsonData = await rootBundle.loadString("assets/roomlist.json");
@@ -85,8 +87,8 @@ class _ElectricityBillPageState extends State<ElectricityBillPage> {
         search: search,
       );
     } else {
-      switch (currentNavigation) {
-        case billPageIndex:
+      switch (curNavigation) {
+        case _Page.bill:
           right = Dashboard(selectedRoom: selectedRoom);
           break;
         default:
@@ -108,14 +110,14 @@ class _ElectricityBillPageState extends State<ElectricityBillPage> {
                 ctx.navigator.pop();
               },
             ),
-            selectedIndex: currentNavigation,
+            selectedIndex: curNavigation,
             groupAlignment: 1.0,
             onDestinationSelected: (int index) {
-              if (selectedRoom == null && index == searchPageIndex) {
+              if (selectedRoom == null && index == _Page.search) {
                 search();
               } else {
                 setState(() {
-                  currentNavigation = index;
+                  curNavigation = index;
                 });
               }
             },
@@ -170,7 +172,7 @@ class _ElectricityBillPageState extends State<ElectricityBillPage> {
     if (!mounted) return;
     setState(() {
       _selectedRoom = roomNumber;
-      currentNavigation = billPageIndex;
+      curNavigation = _Page.bill;
     });
   }
 }

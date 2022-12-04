@@ -1,12 +1,13 @@
 from threading import Thread
 from typing import Iterable, Callable
 
-from build import select_one
+import fuzzy
+from build import select_one, await_input
 from cmd import CmdContext, CommandArgError, CommandEmptyArgsError, CommandLike
 from cmds.shared import print_stdout
 from filesystem import File
 from project import Proj
-from utils import useRef
+from utils import useRef, cast_bool
 
 
 class ServeTask:
@@ -37,8 +38,35 @@ def resort(ctx: CmdContext):
             fi.write(new)
             ctx.term << f"{fi.path} resorted."
 
-def rename(ctx: CmdContext):
-    import l10n.migration as res
+
+def rename(ctx: CmdContext) -> Iterable:
+    import l10n.rename as res
+    from l10n.arb import load_arb_from
+    template, others = template_and_others(ctx.proj)
+    template_arb = load_arb_from(path=str(template.path))
+    while True:
+        while True:
+            yield await_input(ctx, "old=", ref=(inputted := useRef()))
+            old = inputted.obj.strip()
+            if old in template_arb.pmap:
+                break
+            else:
+                matched, ratio = fuzzy.match(old, template_arb.pmap.items())
+                if ratio > fuzzy.at_least:
+                    ctx.term << f'"{old}" not found, do you mean "{matched}"?'
+                    yield await_input(ctx, "y/n=", ref=inputted)
+                    if cast_bool(inputted):
+                        old = matched
+                        break
+                    else:
+                        ctx.term << "alright, let's start all over again."
+
+        yield await_input(ctx, "new=", ref=inputted)
+        new = inputted.obj.strip()
+        res.rename_key_by(template=template_arb, others=[load_arb_from(path=str(f.path)) for f in others],
+                          old=old, new=new,
+                          terminal=ctx.term,
+                          auto_add=True)
 
 
 def serve(ctx: CmdContext):
@@ -97,8 +125,15 @@ class L10nCmd:
     def execute_interactive(ctx: CmdContext) -> Iterable:
         while True:
             selected = useRef()
-            yield select_one(ctx, name2function, prompt="func=", fuzzy_match=True, ref=selected)
-            selected(ctx)
+            funcs = dict(name2function)
+            funcs.update({
+                "rename": rename
+            })
+            yield select_one(ctx, funcs, prompt="func=", fuzzy_match=True, ref=selected)
+            if selected == rename:
+                yield rename(ctx)
+            else:
+                selected(ctx)
 
     @staticmethod
     def help(ctx: CmdContext):

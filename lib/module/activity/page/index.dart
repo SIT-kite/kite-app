@@ -32,9 +32,14 @@ class ActivityPage extends StatefulWidget {
   State<StatefulWidget> createState() => _ActivityPageState();
 }
 
+class _Page {
+  static const list = 0;
+  static const mine = 1;
+}
+
 class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderStateMixin {
   /// For landscape mode.
-  int currentNavigation = 0;
+  int curNavigation = _Page.list;
 
   @override
   Widget build(BuildContext context) {
@@ -50,11 +55,11 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
           onPressed: () => showSearch(context: context, delegate: SearchBar()),
         ),
       ]),
-      body: currentNavigation == 0 ? const ActivityListPage() : const MyActivityPage(),
+      body: curNavigation == 0 ? const ActivityListPage() : const MyActivityPage(),
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
-            label: i18n.activityListNavigation,
+            label: i18n.activityAllNavigation,
             icon: const Icon(Icons.list_alt_rounded),
           ),
           BottomNavigationBarItem(
@@ -62,9 +67,9 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
             icon: const Icon(Icons.person_rounded),
           )
         ],
-        currentIndex: currentNavigation,
+        currentIndex: curNavigation,
         onTap: (int index) {
-          setState(() => currentNavigation = index);
+          setState(() => curNavigation = index);
         },
       ),
     );
@@ -81,11 +86,11 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
                 context.navigator.pop();
               },
             ),
-            selectedIndex: currentNavigation,
+            selectedIndex: curNavigation,
             groupAlignment: 1.0,
             onDestinationSelected: (int index) {
               setState(() {
-                currentNavigation = index;
+                curNavigation = index;
               });
             },
             labelType: NavigationRailLabelType.all,
@@ -93,7 +98,7 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
               NavigationRailDestination(
                 icon: const Icon(Icons.check_box_outline_blank),
                 selectedIcon: const Icon(Icons.list_alt_rounded),
-                label: i18n.activityListNavigation.text(),
+                label: i18n.activityAllNavigation.text(),
               ),
               NavigationRailDestination(
                 icon: const Icon(Icons.person_outline_rounded),
@@ -104,7 +109,7 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
           ),
           const VerticalDivider(thickness: 1, width: 1),
           // This is the main content.
-          Expanded(child: currentNavigation == 0 ? const ActivityListPage() : const MyActivityPage())
+          Expanded(child: curNavigation == _Page.list ? const ActivityListPage() : const MyActivityPage())
         ],
       ),
     );

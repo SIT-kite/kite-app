@@ -15,7 +15,7 @@
   "activityDetails": "活動詳情",
   "activityDuration": "活動時長",
   "activityID": "活動ID",
-  "activityListNavigation": "列表",
+  "activityAllNavigation": "活動",
   "activityLocation": "活動地點",
   "activityMineNavigation": "我的",
   "activityMyScoreTitle": "第二課堂學分",
@@ -33,9 +33,9 @@
   "appName": "上應小風箏",
   "applicationDesc": "此功能基於 \"上应一网通办\"。\n就大多數業務而言，即使你已在平台上完成申請，依舊需要到現場辦理。",
   "applicationFilerInfrequentlyUsed": "篩選不常用的",
-  "applicationMyMailBox": "我的郵箱",
-  "applicationMyMailBoxEmptyTip": "一只空郵箱。",
-  "applicationMyMailBoxRecent": "最近",
+  "applicationMailbox": "我的郵箱",
+  "applicationMailboxEmptyTip": "一只空郵箱。",
+  "applicationMailboxRecent": "最近",
   "author": "作者",
   "bill": "賬單",
   "campus": "校區",
@@ -428,5 +428,7 @@
   "elecBillSearchNavigation": "搜尋",
   "warning": "警告",
   "localStorageEmptyValueDesc": "謹防失誤！你正在嘗試清空該值！確認嗎？",
-  "rmb": "¥{amount}"
+  "rmb": "¥{amount}",
+  "applicationAllNavigation": "申請",
+  "applicationMailboxNavigation": "站內信"
 }

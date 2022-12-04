@@ -17,9 +17,8 @@
  */
 
 import 'package:auto_animated/auto_animated.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/util/collection.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../entity/list.dart';
@@ -64,7 +63,7 @@ class _ActivityListPageState extends State<ActivityListPage> with SingleTickerPr
       isScrollable: true,
       controller: _tabController,
       tabs: categories
-          .mapIndexed((e, i) =>
+          .mapIndexed((i, e) =>
               $page <<
               (ctx, page, child) {
                 return Tab(
@@ -172,7 +171,7 @@ class _ActivityListState extends State<ActivityList> {
       return LiveGrid(
         controller: _scrollController,
         itemCount: activities.length,
-        gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: count,
         ),
         showItemInterval: const Duration(milliseconds: 40),

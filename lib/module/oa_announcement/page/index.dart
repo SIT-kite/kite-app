@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:auto_animated/auto_animated.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/util/collection.dart';
 import 'package:rettulf/rettulf.dart';
 import '../using.dart';
 
@@ -84,7 +84,7 @@ class _OaAnnouncePageState extends State<OaAnnouncePage> {
   }
 
   Widget _buildAnnounceLiveList(List<AnnounceRecord> records) {
-    final items = records.mapIndexed((e, i) => _buildAnnounceItem(context, e).inCard()).toList();
+    final items = records.mapIndexed((i, e) => _buildAnnounceItem(context, e).inCard()).toList();
 
     return LiveList(
         itemCount: items.length,
@@ -94,7 +94,7 @@ class _OaAnnouncePageState extends State<OaAnnouncePage> {
   }
 
   Widget _buildAnnounceLiveGrid(List<AnnounceRecord> records) {
-    final items = records.mapIndexed((e, i) => _buildAnnounceItem(context, e).inCard()).toList();
+    final items = records.mapIndexed((i, e) => _buildAnnounceItem(context, e).inCard()).toList();
     return LayoutBuilder(builder: (ctx, constraints) {
       final count = constraints.maxWidth ~/ 300;
       return LiveGrid(

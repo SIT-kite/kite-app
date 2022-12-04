@@ -17,14 +17,48 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/design/page/common.dart';
+import 'package:rettulf/rettulf.dart';
 import '../entity/message.dart';
 import '../using.dart';
 
 import '../init.dart';
 import 'browser.dart';
 
-class MessagePage extends StatelessWidget {
-  const MessagePage({Key? key}) : super(key: key);
+class Mailbox extends StatefulWidget {
+  const Mailbox({super.key});
+
+  @override
+  State<Mailbox> createState() => _MailboxState();
+}
+
+class _MailboxState extends State<Mailbox> {
+  OfficeMessagePage? _msgPage;
+
+  @override
+  void initState() {
+    super.initState();
+    ApplicationInit.messageService.getAllMessage().then((value) {
+      if (!mounted) return;
+      setState(() {
+        _msgPage = value;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final msg = _msgPage;
+
+    if (msg == null) {
+      return Placeholders.loading();
+    } else {
+      if (msg.msgList.isNotEmpty) {
+        return _buildMessageList(context, msg.msgList);
+      } else {
+        return LeavingBlank(icon: Icons.upcoming_outlined, desc: i18n.applicationMailboxEmptyTip);
+      }
+    }
+  }
 
   Widget _buildMessageList(BuildContext context, List<OfficeMessageSummary> messageList) {
     return ListView(
@@ -32,7 +66,7 @@ class MessagePage extends StatelessWidget {
           .map(
             (e) => ListTile(
               title: Text(e.functionName),
-              subtitle: Text('${i18n.applicationMyMailBoxRecent}: ${e.recentStep}'),
+              subtitle: Text('${i18n.applicationMailboxRecent}: ${e.recentStep}'),
               trailing: Text(e.status),
               onTap: () {
                 // 跳转到详情页面
@@ -45,23 +79,5 @@ class MessagePage extends StatelessWidget {
           )
           .toList(),
     );
-  }
-
-  Widget _buildBody() {
-    return MyFutureBuilder<OfficeMessagePage>(
-      future: ApplicationInit.messageService.getAllMessage(),
-      builder: (context, data) {
-        if (data.msgList.isNotEmpty) {
-          return _buildMessageList(context, data.msgList);
-        } else {
-          return LeavingBlank(icon: Icons.upcoming_outlined, desc: i18n.applicationMyMailBoxEmptyTip);
-        }
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: i18n.applicationMyMailBox.txt), body: _buildBody());
   }
 }

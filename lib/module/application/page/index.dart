@@ -15,31 +15,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rettulf/rettulf.dart';
-import '../user_widget/application.dart';
 import '../using.dart';
 
-import '../entity/function.dart';
 import '../init.dart';
-import 'message.dart';
-
-// 本科生常用功能列表
-const Set<String> _commonUse = <String>{
-  '121',
-  '011',
-  '047',
-  '123',
-  '124',
-  '024',
-  '125',
-  '165',
-  '075',
-  '202',
-  '023',
-  '067',
-  '059'
-};
+import 'list.dart';
+import 'mailbox.dart';
 
 class ApplicationPage extends StatefulWidget {
   const ApplicationPage({Key? key}) : super(key: key);
@@ -48,27 +32,13 @@ class ApplicationPage extends StatefulWidget {
   State<ApplicationPage> createState() => _ApplicationPageState();
 }
 
-class _ApplicationPageState extends State<ApplicationPage> {
-  bool enableFilter = true;
-  List<ApplicationMeta> _allApplications = [];
-  String? _lastError;
+class _Page {
+  static const list = 0;
+  static const mailbox = 1;
+}
 
-  @override
-  void initState() {
-    super.initState();
-    _fetchApplicationMetaList().then((value) {
-      if (!mounted) return;
-      setState(() {
-        _allApplications = value;
-        _lastError = null;
-      });
-    }).onError((error, stackTrace) {
-      if (!mounted) return;
-      setState(() {
-        _lastError = error.toString();
-      });
-    });
-  }
+class _ApplicationPageState extends State<ApplicationPage> {
+  int curNavigation = _Page.list;
 
   @override
   Widget build(BuildContext context) {
@@ -79,51 +49,85 @@ class _ApplicationPageState extends State<ApplicationPage> {
     return Scaffold(
       appBar: AppBar(
         title: i18n.ftype_application.txt,
-        actions: [_buildMenuButton(context)],
-      ),
-      body: Column(
-        children: [
-          i18n.applicationDesc.text(overflow: TextOverflow.visible).padAll(15).center(),
-          buildBodyPortrait().expanded(),
+        actions: [
+          IconButton(
+            icon: const Icon(CupertinoIcons.info_circle),
+            onPressed: () async => showInfo(context),
+          )
         ],
       ),
-      floatingActionButton: ApplicationInit.session.isLogin
-          ? FloatingActionButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MessagePage()));
-              },
-              tooltip: i18n.applicationMyMailBox,
-              child: const Icon(Icons.mail_outline),
-            )
-          : null,
+      body: curNavigation == 0 ? const ApplicationList() : const Mailbox(),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+            label: i18n.activityAllNavigation,
+            icon: const Icon(Icons.description_outlined),
+          ),
+          BottomNavigationBarItem(
+            label: i18n.applicationMailboxNavigation,
+            icon: const Icon(Icons.mail_outline_outlined),
+          )
+        ],
+        currentIndex: curNavigation,
+        onTap: (int index) {
+          setState(() => curNavigation = index);
+        },
+      ),
     );
   }
 
   Widget buildLandscape(BuildContext context) {
-    return buildPortrait(context);
-  }
-
-  Widget buildListPortrait(List<ApplicationMeta> applicationList) {
-    int count = 0;
-    return ListView(
-      children: applicationList.where((element) => _commonUse.contains(element.id) || !enableFilter).map((e) {
-        count++;
-        return ApplicationTile(item: e, isHot: count <= 3);
-      }).toList(),
+    return Scaffold(
+      body: Row(
+        children: <Widget>[
+          NavigationRail(
+            leading: [
+              IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    context.navigator.pop();
+                  }),
+              SizedBox(
+                height: 5.h,
+              ),
+              IconButton(
+                icon: const Icon(CupertinoIcons.info_circle),
+                onPressed: () async => showInfo(context),
+              )
+            ].column(),
+            selectedIndex: curNavigation,
+            groupAlignment: 1.0,
+            onDestinationSelected: (int index) {
+              setState(() {
+                curNavigation = index;
+              });
+            },
+            labelType: NavigationRailLabelType.all,
+            destinations: <NavigationRailDestination>[
+              NavigationRailDestination(
+                icon: const Icon(Icons.check_box_outline_blank),
+                selectedIcon: const Icon(Icons.list_alt_rounded),
+                label: i18n.applicationAllNavigation.text(),
+              ),
+              NavigationRailDestination(
+                icon: const Icon(Icons.mail_outline_outlined),
+                selectedIcon: const Icon(Icons.mail_rounded),
+                label: i18n.applicationMailboxNavigation.text(),
+              ),
+            ],
+          ),
+          const VerticalDivider(thickness: 1, width: 1),
+          // This is the main content.
+          Expanded(child: curNavigation == 0 ? const ApplicationList() : const Mailbox())
+        ],
+      ),
     );
   }
 
-  Widget buildBodyPortrait() {
-    final lastError = _lastError;
-    if (lastError != null) {
-      return lastError.text().center();
-    } else if (_allApplications.isNotEmpty) {
-      return buildListPortrait(_allApplications);
-    } else {
-      return Placeholders.loading();
-    }
+  Future<void> showInfo(BuildContext ctx) async {
+    await ctx.showTip(title: i18n.ftype_application, desc: i18n.applicationDesc, ok: i18n.close);
   }
-
+/*
   PopupMenuButton _buildMenuButton(BuildContext context) {
     final menuButton = PopupMenuButton(
       itemBuilder: (BuildContext context) {
@@ -148,17 +152,5 @@ class _ApplicationPageState extends State<ApplicationPage> {
       },
     );
     return menuButton;
-  }
-}
-
-Future<List<ApplicationMeta>> _fetchApplicationMetaList() async {
-  if (!ApplicationInit.session.isLogin) {
-    final username = Kv.auth.currentUsername!;
-    final password = Kv.auth.ssoPassword!;
-    await ApplicationInit.session.login(
-      username: username,
-      password: password,
-    );
-  }
-  return await ApplicationInit.applicationService.selectApplicationByCountDesc();
+  }*/
 }
