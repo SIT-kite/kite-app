@@ -40,6 +40,7 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
     "game": Future(() => Hive.openBox<dynamic>("game")),
     "userEvent": Future(() => Hive.openBox<dynamic>("userEvent")),
     "contactSetting": Future(() => Hive.openBox<ContactData>("contactSetting")),
+    "cookies": Future(() => Hive.openBox<dynamic>("cookies")),
   };
 
   @override

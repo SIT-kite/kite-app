@@ -88,10 +88,14 @@ class Global {
     }
   }
 
-  static Future<void> init(
-      {required UserEventStorageDao userEventStorage, required AuthSettingDao authSetting, bool? debugNetwork}) async {
+  static Future<void> init({
+    required UserEventStorageDao userEventStorage,
+    required AuthSettingDao authSetting,
+    bool? debugNetwork,
+    required Box cookieBox,
+  }) async {
     currentVersion = await getCurrentVersion();
-    cookieJar = await CookieInit.init();
+    cookieJar = await CookieInit.init(box: cookieBox);
     dio = await DioInit.init(
       config: DioConfig()
         ..cookieJar = cookieJar
