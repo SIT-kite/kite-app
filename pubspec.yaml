@@ -125,6 +125,7 @@ dependencies:
   collection: ^1.16.0
   flutter_shake_animated: ^0.0.5
   rnd: ^0.2.0
+  animated_size_and_fade: ^3.0.0
 
 
 dev_dependencies:

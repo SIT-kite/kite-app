@@ -15,183 +15,88 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:app_settings/app_settings.dart';
-import 'package:check_vpn_connection/check_vpn_connection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:kite/design/user_widgets/dialog.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../init.dart';
-import '../service/network.dart';
+import '../user_widget/connected.dart';
+import '../user_widget/disconnected.dart';
+import '../user_widget/quick_button.dart';
 import '../using.dart';
 
-class ConnectivityPage extends StatefulWidget {
-  const ConnectivityPage({Key? key}) : super(key: key);
+class NetworkToolPage extends StatefulWidget {
+  const NetworkToolPage({Key? key}) : super(key: key);
 
   @override
-  State<ConnectivityPage> createState() => _ConnectivityPageState();
+  State<NetworkToolPage> createState() => _NetworkToolPageState();
 }
 
-class _ConnectivityPageState extends State<ConnectivityPage> {
+const iconDir = "assets/connectivity";
+const unavailableIconPath = "$iconDir/unavailable.svg";
+const availableIconPath = "$iconDir/available.svg";
+
+class _NetworkToolPageState extends State<NetworkToolPage> {
   bool isConnected = false;
-  late Future checkConnectivityFuture;
 
   @override
   void initState() {
     super.initState();
 
-    checkConnectivityFuture = ConnectivityInit.ssoSession.checkConnectivity().then((value) {
+    ConnectivityInit.ssoSession.checkConnectivity().then((value) {
       Log.info('当前是否连接校园网：$value');
       if (!mounted) return;
       setState(() => isConnected = value);
     });
   }
 
-  Widget buildFigure(BuildContext context) {
-    final Color primaryColor = Theme.of(context).primaryColor;
-    final Color color = isConnected ? primaryColor : Colors.grey;
-    return SvgPicture.asset('assets/connectivity/not-available.svg', width: 180.h, height: 180.h, color: color);
-  }
-
-  List<Widget> buildConnectedBlock() {
-    final style = Theme.of(context).textTheme.bodyText1;
-
-    late Widget buildConnectedByProxy = Text(
-        '${i18n.connectivityConnectedByVpn}\n'
-        '${i18n.address}：${Kv.network.proxy}',
-        textAlign: TextAlign.center,
-        style: style);
-
-    Widget buildConnectedByVpnBlock() =>
-        Text(i18n.connectivityConnectedByVpn, textAlign: TextAlign.center, style: style);
-    Widget buildConnectedByWlanBlock() {
-      return FutureBuilder(
-        future: Network.checkStatus(),
-        builder: (context, snapshot) {
-          String ip = i18n.fetching;
-          String studentId = i18n.fetching;
-          if (snapshot.connectionState == ConnectionState.done) {
-            final data = snapshot.data;
-            if (data is CheckStatusResult) {
-              ip = data.ip;
-              studentId = data.uid ?? i18n.notLoggedIn;
-            } else {
-              ip = i18n.unknown;
-              studentId = i18n.unknown;
-            }
-          }
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(i18n.connectivityConnectedByWlan, style: style),
-              const SizedBox(height: 10),
-              Text('${i18n.studentID}: $studentId'),
-              Text('${i18n.address}: $ip'),
-            ],
-          );
-        },
-      );
-    }
-
-    if (Kv.network.useProxy) {
-      return [buildConnectedByProxy];
-    }
-    return [
-      FutureBuilder(
-        future: CheckVpnConnection.isVpnActive(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            final isVpnActive = snapshot.data!;
-            if (false == isVpnActive) {
-              return buildConnectedByWlanBlock();
-            }
-          }
-          return buildConnectedByVpnBlock();
-        },
-      )
-    ];
-  }
-
-  Widget buildErrorText() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Text(
-        i18n.connectivityConnectFailedError,
-        textAlign: TextAlign.start,
-        style: Theme.of(context).textTheme.bodyText1,
-      ),
-    );
-  }
-
-  List<Widget> buildDisconnectedBlock() {
-    return [
-      buildErrorText(),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          ElevatedButton(
-            onPressed: AppSettings.openWIFISettings,
-            child: i18n.openWlanSettingsBtn.text(),
-          ),
-          ElevatedButton(
-              child: i18n.launchEasyConnectBtn.text(),
-              onPressed: () async {
-                final launched = await GlobalLauncher.launch('sangfor://easyconnect');
-                if (!launched) {
-                  if (!mounted) return;
-                  final confirm = await context.showRequest(
-                      title: i18n.easyconnectLaunchFailed,
-                      desc: i18n.easyconnectLaunchFailedDesc,
-                      yes: i18n.download,
-                      no: i18n.notNow,
-                      highlight: true);
-                  if (confirm == true) {
-                    await GlobalLauncher.launch(R.easyConnectDownloadUrl);
-                  }
-                }
-              }),
-        ],
-      ),
-      /* TextButton(
-          onPressed: () async {
-            EasyLoading.show(status: '正在登录');
-            final username = Kv.auth.currentUsername;
-            final password = Kv.auth.ssoPassword;
-            try {
-              if (username != null && password != null) await Network.login(username, password);
-              if (!mounted) return;
-              setState(() {});
-            } on DioError catch (e) {
-              if (e.type == DioErrorType.connectTimeout) {
-                EasyLoading.showToast('登录请求发生异常: 连接超时');
-              } else {
-                EasyLoading.showToast('登录请求发生异常: ${e.message}');
-              }
-            } finally {
-              EasyLoading.dismiss();
-            }
-          },
-          child: const Text('一键登录i-SIT'),
-        ),*/
-    ];
-  }
+  final _connectedKey = const ValueKey("Connected");
+  final _disconnectedKey = const ValueKey("Disconnected");
 
   @override
   Widget build(BuildContext context) {
-    final block = isConnected ? buildConnectedBlock() : buildDisconnectedBlock();
     return Scaffold(
-      appBar: AppBar(title: i18n.networkTool.text()),
-      body: SizedBox.expand(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            buildFigure(context),
-            ...block,
-          ],
-        ),
-      ),
-    );
+        appBar: AppBar(title: i18n.networkTool.text()),
+        body: context.isPortrait ? buildPortraitBody(context) : buildLandscapeBody(context));
+  }
+
+  Widget buildPortraitBody(BuildContext context) {
+    return [
+      buildFigure(context).expanded(),
+      AnimatedSwitcher(
+              duration: const Duration(milliseconds: 500),
+              child: isConnected
+                  ? ConnectedBlock(
+                      key: _connectedKey,
+                    )
+                  : [const DisconnectedBlock(), const QuickButtons()]
+                      .column(key: _disconnectedKey, maa: MainAxisAlignment.spaceEvenly))
+          .expanded(),
+    ].column(caa: CrossAxisAlignment.center, maa: MainAxisAlignment.center).center();
+  }
+
+  Widget buildLandscapeBody(BuildContext context) {
+    final figure =
+        isConnected ? buildFigure(context).center() : [buildFigure(context), const QuickButtons().expanded()].column(caa: CrossAxisAlignment.center,maa: MainAxisAlignment.spaceEvenly);
+    return [
+      figure.expanded(),
+      AnimatedSwitcher(
+              duration: const Duration(milliseconds: 500),
+              child: isConnected
+                  ? ConnectedBlock(
+                      key: _connectedKey,
+                    )
+                  : DisconnectedBlock(
+                      key: _disconnectedKey,
+                    ))
+          .center()
+          .expanded(),
+    ].row(caa: CrossAxisAlignment.center, maa: MainAxisAlignment.center).center();
+  }
+
+  Widget buildFigure(BuildContext context) {
+    final iconPath = isConnected ? availableIconPath : unavailableIconPath;
+    return SvgPicture.asset(iconPath, width: 300, height: 300, color: context.darkSafeThemeColor)
+        .constrained(const BoxConstraints(minWidth: 120, minHeight: 120, maxWidth: 240, maxHeight: 240));
   }
 }

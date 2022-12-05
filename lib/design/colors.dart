@@ -21,7 +21,7 @@ import 'package:rettulf/rettulf.dart';
 import 'package:tuple/tuple.dart';
 
 Color getThemeColor(BuildContext ctx) {
-  var theme = Theme.of(ctx);
+  final theme = ctx.theme;
   if (theme.isLight) {
     return theme.primaryColor;
   } else {
@@ -29,8 +29,17 @@ Color getThemeColor(BuildContext ctx) {
   }
 }
 
+Color getDarkSafeThemeColor(BuildContext ctx) {
+  final theme = ctx.theme;
+  if (theme.isLight) {
+    return theme.primaryColor;
+  } else {
+    return Color.lerp(theme.colorScheme.onPrimary, Colors.white, 0.6)!;
+  }
+}
+
 Color getFgColor(BuildContext ctx) {
-  var theme = Theme.of(ctx);
+  final theme = ctx.theme;
   if (theme.isLight) {
     return theme.primaryColor;
   } else {
@@ -57,6 +66,8 @@ Color getChessBoardColor(BuildContext ctx, int index) {
 
 extension DesignExtension on BuildContext {
   Color get themeColor => getThemeColor(this);
+
+  Color get darkSafeThemeColor => getDarkSafeThemeColor(this);
 
   Color get fgColor => getFgColor(this);
 

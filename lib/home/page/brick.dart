@@ -61,15 +61,13 @@ class Brick extends StatelessWidget {
     final TextStyle? titleStyle;
     final TextStyle? subtitleStyle;
     final Color bg;
-    final Color iconColor;
+    final Color iconColor = context.darkSafeThemeColor;
     final titleStyleRaw = theme.textTheme.headline4;
     if (theme.isLight) {
-      iconColor = context.themeColor;
       titleStyle = titleStyleRaw?.copyWith(color: Color.lerp(titleStyleRaw.color, iconColor, 0.6));
       subtitleStyle = theme.textTheme.bodyText2?.copyWith(color: Colors.black87);
       bg = Colors.white.withOpacity(0.6);
     } else {
-      iconColor = Color.lerp(context.themeColor, Colors.white, 0.6)!;
       titleStyle = titleStyleRaw?.copyWith(color: Color.lerp(titleStyleRaw.color, iconColor, 0.8));
       subtitleStyle = theme.textTheme.bodyText2?.copyWith(color: theme.textTheme.headline4?.color);
       bg = Colors.black87.withOpacity(0.2);
