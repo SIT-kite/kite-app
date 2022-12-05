@@ -79,7 +79,7 @@ class _DetailPageState extends State<DetailPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(meta.name),
-       /* actions: [
+        /* actions: [
           buildOpenInApp(),
         ],*/
       ),

@@ -25,14 +25,45 @@ import '../entity/bulletin.dart';
 import '../init.dart';
 import '../using.dart';
 
-class KiteBulletinPage extends StatelessWidget {
+class KiteBulletinPage extends StatefulWidget {
   const KiteBulletinPage({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _KiteBulletinPageState();
+}
+
+class _KiteBulletinPageState extends State<KiteBulletinPage> {
+  List<KiteBulletin>? _bulletins;
+
+  @override
+  void initState() {
+    super.initState();
+    KiteBulletinInit.noticeService.getNoticeList().then((value) {
+      setState(() {
+        _bulletins = value;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: i18n.ftype_kiteBulletin.text()),
-      body: SafeArea(child: _buildBody()),
+      body: SafeArea(child: buildList(context)),
+    );
+  }
+
+  Widget buildLandscape(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: i18n.ftype_kiteBulletin.text()),
+      body: SafeArea(child: buildList(context)),
+    );
+  }
+
+  Widget buildPortrait(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: i18n.ftype_kiteBulletin.text()),
+      body: SafeArea(child: buildList(context)),
     );
   }
 
@@ -50,7 +81,25 @@ class KiteBulletinPage extends StatelessWidget {
     }
   }
 
-  Widget _buildBulletinItem(BuildContext context, KiteBulletin notice) {
+  Widget buildList(BuildContext context) {
+    final list = _bulletins;
+    if (list == null) {
+      return Placeholders.loading();
+    } else {
+      return _buildBulletinList(context, list);
+    }
+  }
+
+  Widget _buildBulletinList(BuildContext context, List<KiteBulletin> list) {
+    return SingleChildScrollView(
+      child: Column(
+        children:
+            list.map((e) => _buildBulletin(context, e).inCard(elevation: 5).padSymmetric(h: 10.h, v: 2.h)).toList(),
+      ),
+    );
+  }
+
+  Widget _buildBulletin(BuildContext context, KiteBulletin bulletin) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -62,36 +111,17 @@ class KiteBulletinPage extends StatelessWidget {
             children: [
               // 标题, 注意遇到长标题时要折断
               Expanded(
-                child: _buildBulletinTitle(context, notice),
+                child: _buildBulletinTitle(context, bulletin),
               ),
               // 日期
-              Text(context.dateNum(notice.publishTime), style: const TextStyle(color: Colors.grey)),
+              Text(context.dateNum(bulletin.publishTime), style: const TextStyle(color: Colors.grey)),
             ],
           ),
           const SizedBox(height: 10),
           // 正文
-          MyMarkdownWidget(notice.content ?? ''),
+          MyMarkdownWidget(bulletin.content ?? ''),
         ],
       ),
-    );
-  }
-
-  Widget _buildNoticeList(BuildContext context, List<KiteBulletin> noticeList) {
-    return SingleChildScrollView(
-      child: Column(
-        children: noticeList
-            .map((e) => _buildBulletinItem(context, e).inCard(elevation: 5).padSymmetric(h: 10.h, v: 2.h))
-            .toList(),
-      ),
-    );
-  }
-
-  Widget _buildBody() {
-    return MyFutureBuilder<List<KiteBulletin>>(
-      future: KiteBulletinInit.noticeService.getNoticeList(),
-      builder: (context, data) {
-        return _buildNoticeList(context, data);
-      },
     );
   }
 }

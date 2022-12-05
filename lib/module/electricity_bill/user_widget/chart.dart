@@ -143,7 +143,8 @@ class ElectricityChartState extends State<ElectricityChart> {
               invertedSelection: true,
               foregroundColor: context.isDarkMode ? null : context.themeColor,
               children: [
-                ButtonBarEntry(onTap: () => onSetMode(ElectricityChartMode.hourly), child: i18n.elecBillLast24Hour.text()),
+                ButtonBarEntry(
+                    onTap: () => onSetMode(ElectricityChartMode.hourly), child: i18n.elecBillLast24Hour.text()),
                 ButtonBarEntry(onTap: () => onSetMode(ElectricityChartMode.daily), child: i18n.elecBillLast7Day.text()),
               ],
             )),

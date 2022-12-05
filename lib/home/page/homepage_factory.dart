@@ -56,7 +56,7 @@ class HomepageFactory {
         ),
     FType.activity: (context) => Brick(
           route: RouteTable.activity,
-          icon:SvgAssetIcon( 'assets/home/icon_event.svg'),
+          icon: SvgAssetIcon('assets/home/icon_event.svg'),
           title: FType.activity.localized(),
           subtitle: FType.activity.localizedDesc(),
         ),
@@ -72,7 +72,7 @@ class HomepageFactory {
     FType.eduEmail: (context) => const EduEmailItem(),
     FType.oaAnnouncement: (context) => Brick(
           route: RouteTable.oaAnnouncement,
-          icon:SvgAssetIcon( 'assets/home/icon_bulletin.svg'),
+          icon: SvgAssetIcon('assets/home/icon_bulletin.svg'),
           title: FType.oaAnnouncement.localized(),
           subtitle: FType.oaAnnouncement.localizedDesc(),
         ),

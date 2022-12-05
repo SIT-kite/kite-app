@@ -76,8 +76,10 @@ class _NetworkToolPageState extends State<NetworkToolPage> {
   }
 
   Widget buildLandscapeBody(BuildContext context) {
-    final figure =
-        isConnected ? buildFigure(context).center() : [buildFigure(context), const QuickButtons().expanded()].column(caa: CrossAxisAlignment.center,maa: MainAxisAlignment.spaceEvenly);
+    final figure = isConnected
+        ? buildFigure(context).center()
+        : [buildFigure(context), const QuickButtons().expanded()]
+            .column(caa: CrossAxisAlignment.center, maa: MainAxisAlignment.spaceEvenly);
     return [
       figure.expanded(),
       AnimatedSwitcher(

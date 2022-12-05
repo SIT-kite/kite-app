@@ -17,6 +17,7 @@
  */
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:kite/module/activity/using.dart';
 import 'package:kite/module/library/search/entity/search_history.dart';
 import 'package:kite/module/yellow_pages/entity/contact.dart';
@@ -61,20 +62,17 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
 
   Widget buildLandscape(BuildContext ctx) {
     return Scaffold(
-        //appBar: AppBar(title: i18n.localStorageTitle.text()),
-        body: [
-      Scaffold(
         appBar: AppBar(
           title: i18n.localStorageTitle.text(),
           elevation: 0,
         ),
-        body: buildBoxIntroduction(ctx),
-      ).expanded(),
-      const VerticalDivider(
-        thickness: 5,
-      ),
-      buildBoxContentView(ctx).padAll(10).expanded()
-    ].row());
+        body: [
+          buildBoxIntroduction(ctx).expanded(),
+          const VerticalDivider(
+            thickness: 5,
+          ),
+          buildBoxContentView(ctx).padAll(10).flexible(flex: 2)
+        ].row());
   }
 
   Widget buildBoxIntroduction(BuildContext ctx) {
@@ -129,7 +127,7 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
                       .toList();
                 }
               }
-              return items.column().scrolled();
+              return items.listview();
             }).align(at: Alignment.topCenter);
       }
     }

@@ -19,7 +19,6 @@
 import 'package:auto_animated/auto_animated.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:kite/design/colors.dart';
 import 'package:rettulf/rettulf.dart';
@@ -35,9 +34,9 @@ class GroupedContactList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GroupedListView<ContactData, int>(
+    return GroupedListView<ContactData, String>(
       elements: contacts,
-      groupBy: (element) => element.department.hashCode,
+      groupBy: (element) => element.department,
       useStickyGroupSeparators: true,
       stickyHeaderBackgroundColor: context.bgColor,
       order: GroupedListOrder.DESC,
@@ -81,10 +80,10 @@ class _NavigationContactListState extends State<NavigationContactList> {
           .toList()
           .column()
           .scrolled()
-          .constrained(BoxConstraints(minWidth: 50.w, maxWidth: 50.w))
-          .align(at: Alignment.topCenter),
+          .align(at: Alignment.topCenter)
+          .flexible(flex: 1),
       const VerticalDivider(width: 0),
-      buildListView(context).expanded()
+      buildListView(context).flexible(flex: 5)
     ].row();
   }
 
@@ -101,16 +100,23 @@ class _NavigationContactListState extends State<NavigationContactList> {
     if (selected == null) {
       return Container();
     } else {
-      final list = group2List[selected];
-      if (list == null) {
+      final items = group2List[selected];
+      if (items == null) {
         return Container();
       }
-      return LiveList(
+      return LayoutBuilder(builder: (ctx, constraints) {
+        final count = constraints.maxWidth ~/ 300;
+        return LiveGrid(
           key: ValueKey(selected),
-          itemCount: list.length,
-          showItemInterval: const Duration(milliseconds: 100),
-          showItemDuration: const Duration(milliseconds: 300),
-          itemBuilder: (ctx, index, animation) => ContactTile(list[index]).aliveWith(animation));
+          itemCount: items.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: count,
+            childAspectRatio: 4,
+          ),
+          showItemInterval: const Duration(milliseconds: 40),
+          itemBuilder: (ctx, index, animation) => ContactTile(items[index]).aliveWith(animation),
+        );
+      });
     }
   }
 }

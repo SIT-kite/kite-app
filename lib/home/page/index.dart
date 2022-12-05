@@ -206,7 +206,10 @@ class _HomePageState extends State<HomePage> {
 
     for (final item in list) {
       if (item == FType.separator) {
-        result.addAll([HomeItemGroup([...currentGroup]), separator]);
+        result.addAll([
+          HomeItemGroup([...currentGroup]),
+          separator
+        ]);
         currentGroup.clear();
       } else {
         if (!filter.accept(item, userType)) {

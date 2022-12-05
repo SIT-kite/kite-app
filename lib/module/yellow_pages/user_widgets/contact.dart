@@ -38,10 +38,19 @@ class ContactTile extends StatelessWidget {
         child: Container(
             child: (contact.name ?? '').isEmpty
                 ? Center(child: Icon(Icons.account_circle, size: 40, color: Colors.grey[50]))
-                : Text(contact.name![0], style: avatarStyle)),
+                : Text(
+                    contact.name![0],
+                    style: avatarStyle,
+                    overflow: TextOverflow.ellipsis,
+                  )),
       ),
-      title: Text('${contact.description}'),
-      subtitle: Text(('${contact.name ?? ' '} ${contact.phone}').trim()),
+      title: contact.description.text(
+        overflow: TextOverflow.ellipsis,
+      ),
+      subtitle: Text(
+        ('${contact.name ?? ' '} ${contact.phone}').trim(),
+        overflow: TextOverflow.ellipsis,
+      ),
       tileColor: bgColor,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,

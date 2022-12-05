@@ -36,8 +36,8 @@ class FreshmanItem extends StatelessWidget {
     if (userType == null) {
       return const SizedBox();
     }
-    if (userType != UserType.freshman) {
-      // 正式学生，获取学号
+    if (userType == UserType.freshman || userType == UserType.undergraduate) {
+      /*// 正式学生，获取学号
       final username = Kv.auth.currentUsername!;
       // 取今年的后两位，若今年的后两位大于学号前两位
       // 说明已经不是新生了
@@ -45,19 +45,22 @@ class FreshmanItem extends StatelessWidget {
       // 到了 12 月，也把迎新入口隐藏掉
       if (now.year % 100 > (int.tryParse(username.substring(0, 2)) ?? 0) || now.month > 11) {
         return const SizedBox();
-      }
+      }*/
+      // No matter whether the user is a freshman, display this for them.
+      return Brick(
+        onPressed: () {
+          if (Kv.freshman.freshmanAccount == null || Kv.freshman.freshmanSecret == null) {
+            Navigator.of(context).pushNamed(RouteTable.freshmanLogin);
+          } else {
+            Navigator.of(context).pushNamed(RouteTable.freshman);
+          }
+        },
+        icon: SysIcon(Icons.people),
+        title: i18n.ftype_freshman,
+        subtitle: i18n.ftype_freshman_desc,
+      );
+    } else {
+      return const SizedBox();
     }
-    return Brick(
-      onPressed: () {
-        if (Kv.freshman.freshmanAccount == null || Kv.freshman.freshmanSecret == null) {
-          Navigator.of(context).pushNamed(RouteTable.freshmanLogin);
-        } else {
-          Navigator.of(context).pushNamed(RouteTable.freshman);
-        }
-      },
-      icon: SysIcon(Icons.people),
-      title: i18n.ftype_freshman,
-      subtitle: i18n.ftype_freshman_desc,
-    );
   }
 }

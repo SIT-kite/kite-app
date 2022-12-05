@@ -75,7 +75,7 @@ class Brick extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(color: bg),
       child: ListTile(
-        leading: icon(30.w, iconColor),
+        leading: icon(48, iconColor),
         title: Text(title, style: titleStyle),
         subtitle: Text(subtitle ?? '', style: subtitleStyle, maxLines: 1, overflow: TextOverflow.ellipsis),
         // dense: true,
