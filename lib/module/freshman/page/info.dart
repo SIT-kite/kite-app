@@ -26,8 +26,15 @@ import '../init.dart';
 import '../user_widget/common.dart';
 import '../user_widget/profile.dart';
 
-class FreshmanPage extends StatelessWidget {
-  FreshmanPage({Key? key}) : super(key: key);
+class FreshmanPage extends StatefulWidget {
+  const FreshmanPage({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _FreshmanPageState();
+
+}
+
+class _FreshmanPageState extends State<FreshmanPage> {
 
   final freshmanDao = FreshmanInit.freshmanDao;
   final freshmanCacheManager = FreshmanInit.freshmanCacheManager;
@@ -99,5 +106,10 @@ class FreshmanPage extends StatelessWidget {
       Clipboard.setData(ClipboardData(text: contact));
       showBasicFlash(context, Text(tips));
     }
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    refreshController.dispose();
   }
 }

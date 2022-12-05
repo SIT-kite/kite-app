@@ -114,6 +114,12 @@ class _MyActivityPageState extends State<MyActivityPage> {
 // Animation
   final _scrollController = ScrollController();
 
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+  }
+
   Widget buildLiveList(BuildContext ctx) {
     final activities = joined;
     if (activities == null) {

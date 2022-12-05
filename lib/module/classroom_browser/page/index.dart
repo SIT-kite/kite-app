@@ -45,6 +45,18 @@ class _ClassroomPageState extends State<ClassroomPage> {
   int _campusIndex = 0;
   int _buildingIndex = 0;
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('空教室')),
+      body: Column(children: [
+        _buildOptionSection(),
+        _buildHeaderLine(),
+        Expanded(child: _buildBody()),
+      ]),
+    );
+  }
+
   /// 查询缓存. 避免用户切换日期后重新请求
   /// 第一维为校区的 index, 第二维为日期的 index.
   final List<List<List<AvailableClassroom>>> _cachedQueryResult =
@@ -139,6 +151,8 @@ class _ClassroomPageState extends State<ClassroomPage> {
     );
   }
 
+  final ScrollController _controller = ScrollController();
+
   Widget _buildResult(List<AvailableClassroom> data) {
     Widget buildEmptyResult() {
       final textStyle = Theme.of(context).textTheme.headline3;
@@ -159,7 +173,7 @@ class _ClassroomPageState extends State<ClassroomPage> {
     Widget buildResult() {
       final items = data.map((room) => ClassroomItem(room)).toList();
       return ListView.separated(
-        controller: ScrollController(),
+        controller: _controller,
         itemCount: items.length,
         separatorBuilder: (context, index) =>
             Divider(height: 1.0, color: Theme.of(context).primaryColor.withOpacity(0.4)),
@@ -210,14 +224,8 @@ class _ClassroomPageState extends State<ClassroomPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('空教室')),
-      body: Column(children: [
-        _buildOptionSection(),
-        _buildHeaderLine(),
-        Expanded(child: _buildBody()),
-      ]),
-    );
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
   }
 }

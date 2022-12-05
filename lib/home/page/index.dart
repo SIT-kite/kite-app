@@ -369,6 +369,7 @@ class _HomePageState extends State<HomePage> {
     Global.eventBus.off(EventNameConstants.onCampusChange);
     Global.eventBus.off(EventNameConstants.onHomeItemReorder);
     super.dispose();
+    _refreshController.dispose();
   }
 
   Widget? buildFloatingActionButton() {

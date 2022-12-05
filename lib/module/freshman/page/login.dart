@@ -273,4 +273,10 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       ),
     );
   }
+  @override
+  void dispose() {
+    super.dispose();
+    _accountController.dispose();
+    _secretController.dispose();
+  }
 }

@@ -41,6 +41,16 @@ class _MailPageState extends State<MailPage> {
 
   final TextEditingController _controller = TextEditingController();
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: i18n.eduEmailTitle.text(),
+        actions: [_buildPopupMenu()],
+      ),
+      body: _buildBody(context),
+    );
+  }
   Future<void> _updateMailList() async {
     try {
       final messages = (await _loadMailList()).messages;
@@ -138,15 +148,9 @@ class _MailPageState extends State<MailPage> {
 
     return PopupMenuButton(itemBuilder: (_) => [PopupMenuItem(child: Text(email))]);
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: i18n.eduEmailTitle.text(),
-        actions: [_buildPopupMenu()],
-      ),
-      body: _buildBody(context),
-    );
+@override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
   }
 }

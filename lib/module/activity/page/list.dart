@@ -58,6 +58,12 @@ class _ActivityListPageState extends State<ActivityListPage> with SingleTickerPr
     super.initState();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _tabController.dispose();
+  }
+
   TabBar _buildBarHeader(BuildContext ctx) {
     return TabBar(
       isScrollable: true,

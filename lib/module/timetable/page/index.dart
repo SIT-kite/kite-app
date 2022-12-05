@@ -108,7 +108,7 @@ class _TimetablePageState extends State<TimetablePage> {
   Future<void> selectTimetablePageToJump(BuildContext ctx) async {
     final currentWeek = $currentPos.value.week;
     final initialIndex = currentWeek - 1;
-    final controller = FixedExtentScrollController(initialItem: initialIndex);
+    final controller = FixedExtentScrollController(initialItem: initialIndex); // TODO: Memory leaking?
     final startDate = meta?.startDate;
     final todayIndex = startDate != null ? TimetablePosition.locate(startDate, DateTime.now()).week - 1 : 0;
     final goto = await ctx.showPicker(
