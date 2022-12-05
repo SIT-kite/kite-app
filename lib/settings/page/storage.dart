@@ -33,6 +33,12 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
   late final name2Box = HiveBoxInit.name2Box.map((key, value) => MapEntry(key, Future(() => value)));
 
   @override
+  void initState() {
+    super.initState();
+    debugPaintSizeEnabled = false;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return context.isPortrait ? buildPortrait(context) : buildLandscape(context);
   }
@@ -57,7 +63,10 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
           const VerticalDivider(
             thickness: 5,
           ),
-          buildBoxContentView(ctx).padAll(10).flexible(flex: 2)
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 500),
+            child: buildBoxContentView(ctx),
+          ).padAll(10).flexible(flex: 2)
         ].row());
   }
 
@@ -80,26 +89,32 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
   Widget buildBoxContentView(BuildContext ctx) {
     final name = selectedBoxName;
     if (name == null) {
-      return _buildUnselectBoxTip(ctx);
+      return _buildUnselectBoxTip(ValueKey(name), ctx);
     } else {
       final boxGetter = name2Box[name];
+      final key = ValueKey(name);
       if (boxGetter == null) {
-        return _buildUnselectBoxTip(ctx);
+        return _buildUnselectBoxTip(key, ctx);
       } else {
         final routeStyle = context.textTheme.titleMedium;
         final typeStyle = context.textTheme.bodySmall;
         final contentStyle = context.textTheme.bodyText2;
         return PlaceholderFutureBuilder<Box<dynamic>>(
-            key: ValueKey(name),
+            key: key,
             future: boxGetter,
             builder: (ctx, box, _) {
+              final Widget res;
               if (box == null) {
-                return _buildEmptyBoxTip(ctx);
+                res = [
+                  BoxItem.skeleton(routeStyle, typeStyle, contentStyle),
+                  BoxItem.skeleton(routeStyle, typeStyle, contentStyle),
+                  BoxItem.skeleton(routeStyle, typeStyle, contentStyle),
+                ].column();
               } else {
                 if (box.isEmpty) {
-                  return _buildEmptyBoxTip(ctx);
+                  res = _buildEmptyBoxTip(key, ctx);
                 } else {
-                  return box.keys
+                  res = box.keys
                       .map((e) => BoxItem(
                             boxKey: e,
                             box: box,
@@ -111,17 +126,20 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
                       .scrolledWithBar();
                 }
               }
-            }).align(at: Alignment.topCenter);
+              return res.align(
+                at: Alignment.topCenter,
+              );
+            });
       }
     }
   }
 
-  Widget _buildUnselectBoxTip(BuildContext ctx) {
-    return LeavingBlank(key: const ValueKey(1), icon: Icons.unarchive_outlined, desc: i18n.settingsStorageSelectTip);
+  Widget _buildUnselectBoxTip(Key? key, BuildContext ctx) {
+    return LeavingBlank(key: key, icon: Icons.unarchive_outlined, desc: i18n.settingsStorageSelectTip);
   }
 
-  Widget _buildEmptyBoxTip(BuildContext ctx) {
-    return LeavingBlank(key: const ValueKey(2), icon: Icons.inbox_outlined, desc: i18n.emptyContent).sized(height: 300);
+  Widget _buildEmptyBoxTip(Key? key, BuildContext ctx) {
+    return LeavingBlank(key: key, icon: Icons.inbox_outlined, desc: i18n.emptyContent).sized(height: 300);
   }
 
   Widget buildPortraitBody(BuildContext context) {
@@ -208,6 +226,19 @@ class BoxItem extends StatefulWidget {
 
   @override
   State<BoxItem> createState() => _BoxItemState();
+
+  static Widget skeleton(TextStyle? routeStyle, TextStyle? typeStyle, TextStyle? contentStyle) => [
+        Text(
+          "...",
+          style: routeStyle,
+        ),
+        Text("...", style: typeStyle),
+        Text(
+          '.........',
+          maxLines: 3,
+          style: contentStyle,
+        ),
+      ].column(caa: CrossAxisAlignment.start).align(at: Alignment.topLeft).padAll(10).inCard(elevation: 5);
 }
 
 class _BoxItemState extends State<BoxItem> {

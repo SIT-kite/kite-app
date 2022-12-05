@@ -33,7 +33,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Initializer.init();
   if (kDebugMode) {
-    rendering.debugPaintSizeEnabled = true;
+    //rendering.debugPaintSizeEnabled = true;
   }
   Catcher(
     rootWidget: Phoenix(

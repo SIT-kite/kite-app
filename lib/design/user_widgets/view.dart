@@ -1,25 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:kite/design/colors.dart';
 import 'package:rettulf/rettulf.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 extension ScrollWidgetListEx on List<Widget> {
   Widget scrolledWithBar({Key? key, ScrollController? controller}) {
-    return _KiteScrolledWithBar(
-      key: key,
-      controller: controller,
-      children: this,
-    );
+    if (UniversalPlatform.isWindows || UniversalPlatform.isLinux) {
+      return listview();
+    } else {
+      return _KiteScrolledWithBar(
+        key: key,
+        controller: controller,
+        children: this,
+      );
+    }
   }
 }
 
 extension ScrollSingleWidgetEx on Widget {
   Widget scrolledWithBar({Key? key, ScrollController? controller}) {
-    return _KiteScrolledWithBar(
-      key: key,
-      controller: controller,
-      child: this,
-    );
+    if (UniversalPlatform.isWindows || UniversalPlatform.isLinux) {
+      return scrolled();
+    } else {
+      return _KiteScrolledWithBar(
+        key: key,
+        controller: controller,
+        child: this,
+      );
+    }
   }
 }
 
@@ -54,28 +61,19 @@ class _KiteScrolledWithBarState extends State<_KiteScrolledWithBar> {
         if (child != null) {
           // child mode
           if (child is! ScrollView) {
-            child = child.scrolled(
-                controller: controller,
-                physics: UniversalPlatform.isDesktop ? const NeverScrollableScrollPhysics() : null);
+            child = child.scrolled(controller: controller);
           } else {
             assert(child.controller == controller, "The ScrollView external provided should have no controller.");
-            if (UniversalPlatform.isDesktop) {
-              assert(child.physics is NeverScrollableScrollPhysics,
-                  "A ScrollView shouldn't have any scroll physics on desktop.");
-            }
           }
         } else if (children != null) {
           // list mode
-          child = children.listview(
-              controller: controller,
-              physics: UniversalPlatform.isDesktop ? const NeverScrollableScrollPhysics() : null);
+          child = children.listview(controller: controller);
         } else {
           throw Exception("Never reached.");
         }
-        return RawScrollbar(
-            thickness: UniversalPlatform.isDesktop ? width / 30 : width / 20,
+        return Scrollbar(
+            thickness: width / 25,
             radius: const Radius.circular(12),
-            thumbColor: context.themeColor.withOpacity(0.8),
             controller: controller,
             interactive: true,
             child: child);

@@ -33,18 +33,20 @@ class BulletinCard extends StatelessWidget {
 
 class BulletinPreview extends StatelessWidget {
   final KiteBulletin bulletin;
+  final bool isSelected;
 
-  const BulletinPreview(this.bulletin, {super.key});
+  const BulletinPreview(this.bulletin, {super.key, required this.isSelected});
 
   @override
   Widget build(BuildContext context) {
+    final color = isSelected ? context.theme.secondaryHeaderColor : null;
     return [
       _buildTitle(context, bulletin),
       context
           .dateNum(bulletin.publishTime)
           .text(style: const TextStyle(color: Colors.grey))
           .align(at: Alignment.bottomRight),
-    ].column().inCard(elevation: 8).padAll(10);
+    ].column().padAll(10).inCard(elevation: 8, color: color);
   }
 }
 

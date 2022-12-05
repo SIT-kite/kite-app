@@ -22,7 +22,7 @@ import 'package:rettulf/rettulf.dart';
 
 import '../entity/bulletin.dart';
 import '../init.dart';
-import '../user_widget/bulltin.dart';
+import '../user_widget/bulletin.dart';
 import '../using.dart';
 
 class KiteBulletinPage extends StatefulWidget {
@@ -43,6 +43,9 @@ class _KiteBulletinPageState extends State<KiteBulletinPage> {
       value.sort((a, b) => b.top ? 1 : -1);
       setState(() {
         _bulletins = value;
+        if (value.isNotEmpty) {
+          _selected ??= 0;
+        }
       });
     });
   }
@@ -62,7 +65,6 @@ class _KiteBulletinPageState extends State<KiteBulletinPage> {
   Widget buildBodyLandscape(BuildContext ctx) {
     return [
       buildPreviewList(ctx).flexible(flex: 2),
-      const VerticalDivider(thickness: 10, color: Colors.transparent),
       buildSelectedBulletinDetailArea(ctx).scrolled().align(at: Alignment.topCenter).flexible(flex: 4),
     ].row();
   }
@@ -85,10 +87,9 @@ class _KiteBulletinPageState extends State<KiteBulletinPage> {
         return LeavingBlank(icon: Icons.inbox_outlined, desc: i18n.emptyContent);
       }
     }
-    return BulletinCard(all[selected]);
+    var target = all[selected];
+    return BulletinCard(key: ValueKey(target.id), target);
   }
-
-  final _controller = ScrollController();
 
   Widget buildPreviewList(BuildContext ctx) {
     final all = _bulletins;
@@ -96,7 +97,10 @@ class _KiteBulletinPageState extends State<KiteBulletinPage> {
       return Placeholders.loading();
     } else {
       final list = all
-          .mapIndexed((i, e) => BulletinPreview(e).onTap(() {
+          .mapIndexed((i, e) => BulletinPreview(
+                e,
+                isSelected: _selected == i,
+              ).onTap(() {
                 if (_selected != i) {
                   setState(() => _selected = i);
                 }
