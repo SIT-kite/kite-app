@@ -30,7 +30,7 @@ class LocalStoragePage extends StatefulWidget {
 }
 
 class _LocalStoragePageState extends State<LocalStoragePage> {
-  static final name2Box = HiveBoxInit.name2Box.map((key, value) => MapEntry(key, Future(() => value)));
+  late final name2Box = HiveBoxInit.name2Box.map((key, value) => MapEntry(key, Future(() => value)));
 
   @override
   Widget build(BuildContext context) {
