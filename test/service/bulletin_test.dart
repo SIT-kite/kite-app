@@ -1,11 +1,11 @@
-import 'package:kite/module/oa_announcement/init.dart';
+import 'package:kite/module/oa_announce/init.dart';
 import '../init.dart';
 
 void main() async {
   await init();
   await login();
 
-  final dao = OaAnnouncementInit.bulletin;
+  final dao = OaAnnounceInit.service;
   test('test oa_announcement', () async {
     final list = dao.getAllCatalogues();
     Log.info(list);

@@ -77,7 +77,7 @@ class Initializer {
     // ??= 表示为空时候才赋值
     Kv.home.installTime ??= DateTime.now();
 
-    OaAnnouncementInit.init(ssoSession: Global.ssoSession);
+    OaAnnounceInit.init(ssoSession: Global.ssoSession);
     CampusCardInit.init(session: Global.ssoSession);
     ConnectivityInit.init(ssoSession: Global.ssoSession);
 

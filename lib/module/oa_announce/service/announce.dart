@@ -24,10 +24,10 @@ import '../entity/announcement.dart';
 import '../entity/attachment.dart';
 import '../entity/page.dart';
 
-class BulletinService implements AnnounceDao {
+class AnnounceService implements AnnounceDao {
   final ISession session;
 
-  const BulletinService(this.session);
+  const AnnounceService(this.session);
 
   List<Attachment> _parseAttachment(Bs4Element element) {
     return element.find('#containerFrame > table')!.findAll('a').map((e) {

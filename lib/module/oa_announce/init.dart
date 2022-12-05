@@ -19,14 +19,14 @@
 import 'using.dart';
 
 import 'dao/announcement.dart';
-import 'service/announcement.dart';
+import 'service/announce.dart';
 
-class OaAnnouncementInit {
-  static late AnnounceDao bulletin;
+class OaAnnounceInit {
+  static late AnnounceDao service;
   static late SsoSession session;
 
   static void init({required SsoSession ssoSession}) {
-    OaAnnouncementInit.session = ssoSession;
-    bulletin = BulletinService(session);
+    OaAnnounceInit.session = ssoSession;
+    service = AnnounceService(session);
   }
 }

@@ -60,9 +60,9 @@ class _OaAnnouncePageState extends State<OaAnnouncePage> {
 
   Future<List<AnnounceRecord>> _queryBulletinListInAllCategory(int page) async {
     // Make sure login.
-    await OaAnnouncementInit.session.request('https://myportal.sit.edu.cn/', ReqMethod.get);
+    await OaAnnounceInit.session.request('https://myportal.sit.edu.cn/', ReqMethod.get);
 
-    final service = OaAnnouncementInit.bulletin;
+    final service = OaAnnounceInit.service;
 
     // 获取所有分类
     final catalogues = await service.getAllCatalogues();

@@ -35,7 +35,7 @@ export 'kite_bulletin/symbol.dart';
 export 'library/symbol.dart';
 export 'login/symbol.dart';
 export 'lost_found/symbol.dart';
-export 'oa_announcement/symbol.dart';
+export 'oa_announce/symbol.dart';
 export 'report_temp/symbol.dart';
 export 'scanner/symbol.dart';
 export 'shared/symbol.dart';

@@ -48,7 +48,7 @@ class _DetailPageState extends State<DetailPage> {
       'https://myportal.sit.edu.cn/detach.portal?action=bulletinBrowser&.ia=false&.pmn=view&.pen=${summary.bulletinCatalogueId}&bulletinId=${summary.uuid}';
 
   Future<AnnounceDetail> fetchAnnounceDetail() async {
-    return await OaAnnouncementInit.bulletin.getAnnounceDetail(widget.summary.bulletinCatalogueId, widget.summary.uuid);
+    return await OaAnnounceInit.service.getAnnounceDetail(widget.summary.bulletinCatalogueId, widget.summary.uuid);
   }
 
   @override
@@ -145,7 +145,7 @@ class _DetailPageState extends State<DetailPage> {
     Log.info('下载到：$targetPath');
     // 如果文件不存在，那么下载文件
     if (!await File(targetPath).exists()) {
-      await OaAnnouncementInit.session.download(
+      await OaAnnounceInit.session.download(
         attachment.url,
         savePath: targetPath,
         onReceiveProgress: (int count, int total) {
