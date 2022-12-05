@@ -43,9 +43,9 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
   final TapGestureRecognizer _recognizer = TapGestureRecognizer()..onTap = onOpenUserLicense;
 
   // State
-  bool _isPasswordClear = false;
-  bool _isLicenseAccepted = false;
-  bool _disableLoginButton = false;
+  bool isPasswordClear = false;
+  bool isLicenseAccepted = false;
+  bool enableLoginButton = true;
 
   /// 用户点击登录按钮后
   Future<void> onLogin() async {
@@ -55,13 +55,13 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       showBasicFlash(context, i18n.validateInputRequest.text());
       return;
     }
-    if (!_isLicenseAccepted) {
+    if (!isLicenseAccepted) {
       showBasicFlash(context, i18n.readAndAcceptRequest(R.kiteUserAgreementName).text());
       return;
     }
 
     if (!mounted) return;
-    setState(() => _disableLoginButton = true);
+    setState(() => enableLoginButton = false);
 
     final account = _accountController.text;
     final secret = _secretController.text;
@@ -99,8 +99,8 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
         ..freshmanAccount = null;
       showBasicFlash(context, Text('${i18n.freshmanLoginFailedWarn}: $e'));
     } finally {
-      if (mounted) {
-        setState(() => _disableLoginButton = false);
+      if (!mounted) {
+        setState(() => enableLoginButton = true);
       }
     }
   }
@@ -145,16 +145,16 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
           TextFormField(
             controller: _secretController,
             autofocus: true,
-            obscureText: !_isPasswordClear,
+            obscureText: !isPasswordClear,
             decoration: InputDecoration(
               labelText: i18n.pwd,
               hintText: i18n.freshmanLoginPwdHint,
               icon: const Icon(Icons.lock),
               suffixIcon: IconButton(
                 // 切换密码明文显示状态的图标按钮
-                icon: Icon(_isPasswordClear ? Icons.visibility : Icons.visibility_off),
+                icon: Icon(isPasswordClear ? Icons.visibility : Icons.visibility_off),
                 onPressed: () {
-                  setState(() => _isPasswordClear = !_isPasswordClear);
+                  setState(() => isPasswordClear = !isPasswordClear);
                 },
               ),
             ),
@@ -170,9 +170,13 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Checkbox(
-          value: _isLicenseAccepted,
-          onChanged: (isLicenseAccepted) {
-            setState(() => _isLicenseAccepted = isLicenseAccepted!);
+          value: isLicenseAccepted,
+          onChanged: (newValue) {
+            if (newValue != null) {
+              setState(() {
+                isLicenseAccepted = newValue;
+              });
+            }
           },
         ),
         Flexible(
@@ -201,7 +205,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
         SizedBox(
           height: 40.h,
           child: ElevatedButton(
-            onPressed: _disableLoginButton ? null : onLogin,
+            onPressed: enableLoginButton && isLicenseAccepted ? onLogin : null,
             child: i18n.freshmanLoginBtn.text(),
           ),
         ),
@@ -245,8 +249,8 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
                       const SizedBox(width: 10),
                     ],
                   ),
-                ], //to avoid overflow when keyboard is up.
-              ).scrolled(physics: const NeverScrollableScrollPhysics()),
+                ]
+              ),
             ),
           ),
           Align(
@@ -270,7 +274,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
             ),
           ),
         ],
-      ),
+      ).safeArea(), //to avoid overflow when keyboard is up.
     );
   }
 

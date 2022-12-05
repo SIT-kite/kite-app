@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
   bool isPasswordClear = false;
   bool isLicenseAccepted = false;
   bool isProxySettingShown = false;
-  bool disableLoginButton = false;
+  bool enableLoginButton = true;
 
   /// 用户点击登录按钮后
   Future<void> onLogin() async {
@@ -60,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     if (!mounted) return;
-    setState(() => disableLoginButton = true);
+    setState(() => enableLoginButton = false);
     final username = _usernameController.text;
     final password = _passwordController.text;
     try {
@@ -88,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
       return;
     } finally {
       if (mounted) {
-        setState(() => disableLoginButton = false);
+        setState(() => enableLoginButton = true);
       }
     }
   }
@@ -159,8 +159,12 @@ class _LoginPageState extends State<LoginPage> {
       children: [
         Checkbox(
           value: isLicenseAccepted,
-          onChanged: (value) {
-            setState(() => isLicenseAccepted = value!);
+          onChanged: (newValue) {
+            if (newValue != null) {
+              setState(() {
+                isLicenseAccepted = newValue;
+              });
+            }
           },
         ),
         Flexible(
@@ -187,13 +191,15 @@ class _LoginPageState extends State<LoginPage> {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         ElevatedButton(
-          onPressed: disableLoginButton ? null : onLogin,
+          onPressed: enableLoginButton && isLicenseAccepted ? onLogin : null,
           child: i18n.kiteLoginBtn.text(),
         ).sized(height: 40.h),
         ElevatedButton(
-          onPressed: () {
-            Navigator.pushReplacementNamed(context, RouteTable.home);
-          },
+          onPressed: isLicenseAccepted
+              ? () {
+                  Navigator.pushReplacementNamed(context, RouteTable.home);
+                }
+              : null,
           child: i18n.kiteLoginOfflineModeBtn.text(),
         ).sized(height: 40.h),
       ],
@@ -293,8 +299,8 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(height: 25.h),
                   // Login button.
                   buildLoginButton(),
-                ], //to avoid overflow when keyboard is up.
-              ).scrolled(physics: const NeverScrollableScrollPhysics()),
+                ],
+              ),
             ),
           ),
           Align(
@@ -327,7 +333,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ],
-      ),
+      ).safeArea(), //to avoid overflow when keyboard is up.
     );
   }
 }
