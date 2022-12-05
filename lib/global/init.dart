@@ -62,9 +62,11 @@ class Initializer {
     }
     await UserEventInit.init(userEventBox: HiveBoxInit.userEvent);
     Kv.init(kvStorageBox: HiveBoxInit.kv);
-    final lastWindowSize = Kv.theme.lastWindowSize;
-    if (lastWindowSize != null) {
-      DesktopInit.resizeTo(lastWindowSize);
+    if (UniversalPlatform.isDesktop) {
+      final lastWindowSize = Kv.theme.lastWindowSize;
+      if (lastWindowSize != null) {
+        DesktopInit.resizeTo(lastWindowSize);
+      }
     }
     SettingsInit.init(kvStorageBox: HiveBoxInit.kv);
     await Global.init(

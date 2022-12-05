@@ -17,8 +17,7 @@
 */
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
-import 'package:intl/intl.dart';
-import 'package:kite/l10n/extension.dart';
+import 'package:rettulf/rettulf.dart';
 import '../using.dart';
 
 import '../entity/local.dart';
@@ -33,18 +32,19 @@ class BillPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final groupTitleStyle = Theme.of(context).textTheme.headline2;
-    final groupSubtitleStyle = Theme.of(context).textTheme.headline6;
+    final groupTitleStyle = Theme.of(context).textTheme.headline5;
+    final groupSubtitleStyle = Theme.of(context).textTheme.headline3;
 
     return GroupedListView<Transaction, int>(
       elements: records,
       groupBy: (element) => element.datetime.year * 12 + element.datetime.month,
       useStickyGroupSeparators: true,
+      stickyHeaderBackgroundColor: context.bgColor,
       order: GroupedListOrder.DESC,
       itemComparator: (item1, item2) => item1.datetime.compareTo(item2.datetime),
       // 生成每一组的头部
       groupHeaderBuilder: (Transaction firstGroupRecord) {
-        double totalOutcome = 0;
+        double totalSpent = 0;
         double totalIncome = 0;
         int month = firstGroupRecord.datetime.month;
         int year = firstGroupRecord.datetime.year;
@@ -52,33 +52,32 @@ class BillPage extends StatelessWidget {
         for (final element in records) {
           if (element.datetime.month == month && element.datetime.year == year) {
             if (element.isConsume) {
-              totalOutcome += element.deltaAmount;
+              totalSpent += element.deltaAmount;
             } else {
               totalIncome += element.deltaAmount;
             }
           }
         }
         return ListTile(
-          title: Text('$year 年$month 月 ', style: groupTitleStyle),
-          subtitle: Text(
-            '支出: ${totalOutcome.toStringAsFixed(2)} 元  收入: ${totalIncome.toStringAsFixed(2)} 元',
-            style: groupSubtitleStyle,
-          ),
+          title: context.dateYearMonth(firstGroupRecord.datetime).text(style: groupTitleStyle),
+          subtitle:
+              "${i18n.expenseSpentStatistics(totalSpent.toStringAsFixed(2))} ${i18n.expenseIncomeStatistics(totalIncome.toStringAsFixed(2))}"
+                  .text(style: groupSubtitleStyle),
         );
       },
       // 生成账单项
-      itemBuilder: (context, e) {
+      itemBuilder: (ctx, e) {
         return ListTile(
-          title: Text(e.bestTitle ?? i18n.unknown),
-          subtitle: Text(DateFormat('yyyy-MM-dd  HH:mm:ss').format(e.datetime)),
-          leading: Transform.scale(scale: 1.5, child: Icon(e.type.icon, color: context.themeColor)),
-          trailing: Transform.scale(
-            scale: 1.2,
-            child: Text(
-              e.toReadableString(),
-              style: TextStyle(color: e.billColor, fontWeight: FontWeight.bold),
-            ),
+          title: Text(e.bestTitle ?? i18n.unknown, style: ctx.textTheme.titleSmall),
+          subtitle: ctx.dateFullNum(e.datetime).text(),
+          leading: Icon(
+            e.type.icon,
+            color: ctx.themeColor,
+            size: 32,
           ),
+          trailing: e.toReadableString().text(
+                style: TextStyle(color: e.billColor, fontWeight: FontWeight.bold, fontSize: 18),
+              ),
         );
       },
     );

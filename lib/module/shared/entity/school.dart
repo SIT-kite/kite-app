@@ -335,7 +335,7 @@ extension DateTimeUtil on DateTime {
   }
 }
 
-/// Repalce the fullwidth brackets to ASCII one
+/// Replace the full-width brackets to ASCII ones
 String stylizeCourseName(String name) {
   return name.replaceAll("（", "(").replaceAll("）", ")");
 }

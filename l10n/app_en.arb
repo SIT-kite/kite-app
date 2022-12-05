@@ -4,6 +4,7 @@
   "academicYear": "Academic Year",
   "acceptedAgreementCheckbox": "I have known and accepted",
   "account": "Account",
+  "activityAllNavigation": "All",
   "activityApplicationID": "Application ID",
   "activityApplicationTime": "Application Time",
   "activityApplyBtn": "Apply",
@@ -15,7 +16,6 @@
   "activityDetails": "Activity Details",
   "activityDuration": "Duration",
   "activityID": "Activity ID",
-  "activityAllNavigation": "All",
   "activityLocation": "Location",
   "activityMineNavigation": "Mine",
   "activityMyScoreTitle": "Second Class Score",
@@ -31,10 +31,12 @@
   "address": "Address",
   "allowOthersFindMeCheckbox": "Allow others to find me",
   "appName": "SIT Kite",
+  "applicationAllNavigation": "All",
   "applicationDesc": "This function is based on \"上应一网通办\".\nFor most of types, you have to do the necessary procedure on the spot although you submitted an application online.",
   "applicationFilerInfrequentlyUsed": "Filter Infrequently-used",
   "applicationMailbox": "My Mailbox",
   "applicationMailboxEmptyTip": "Here is nothing.",
+  "applicationMailboxNavigation": "Mailbox",
   "applicationMailboxRecent": "Recent",
   "author": "Author",
   "bill": "Bill",
@@ -181,6 +183,7 @@
     }
   },
   "elecBillBalance": "Balance",
+  "elecBillBillNavigation": "Bill",
   "elecBillContent": "last: ¥{balance} Room {room}",
   "@elecBillContent": {
     "placeholders": {
@@ -209,6 +212,7 @@
   },
   "elecBillRemainingPower": "Remaining",
   "elecBillRoomNumber": "Room",
+  "elecBillSearchNavigation": "Search",
   "elecBillTitle": "Bill of #{room}",
   "@elecBillTitle": {
     "placeholders": {
@@ -409,6 +413,7 @@
   "libraryNoticeSendTime": "Send Time",
   "libraryNoticeTitle": "Library Notice",
   "loading": "Loading",
+  "localStorageEmptyValueDesc": "BEWARE! YOU ARE TRYING TO EMPTY THE VALUE! ARE YOU SURE?",
   "localStorageTitle": "Local Storage Editor",
   "loggingIn": "Logging in",
   "loginCredentialsValidatedTip": "Account and password is correct",
@@ -507,6 +512,14 @@
   },
   "restartRequest": "Restart?",
   "restartRequestDesc": "Would you like to restart Kite now?",
+  "rmb": "¥{amount}",
+  "@rmb": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "roommate": "Roommate",
   "save": "Save",
   "scannerBarcodeNotRecognized": "No Barcode",
@@ -654,6 +667,7 @@
   },
   "userInfoUpdatedTip": "Your info updated !",
   "validateInputRequest": "Please check your input.",
+  "warning": "Warning",
   "weather": "Weather",
   "weather_sunny": "Sunny",
   "wechat": "Wechat",
@@ -677,18 +691,20 @@
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
   "yes": "Yes",
-  "elecBillBillNavigation": "Bill",
-  "elecBillSearchNavigation": "Search",
-  "warning": "Warning",
-  "localStorageEmptyValueDesc": "BEWARE! YOU ARE TRYING TO EMPTY THE VALUE! ARE YOU SURE?",
-  "rmb": "¥{amount}",
-  "@rmb": {
+  "expenseSpentStatistics": "Outcome: ¥{amount}",
+  "@expenseSpentStatistics": {
     "placeholders": {
       "amount": {
         "type": "String"
       }
     }
   },
-  "applicationAllNavigation": "All",
-  "applicationMailboxNavigation": "Mailbox"
+  "expenseIncomeStatistics": "Income: ¥{amount}",
+  "@expenseIncomeStatistics": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  }
 }

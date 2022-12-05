@@ -34,19 +34,24 @@ extension I18nBuildContext on BuildContext {
   ///e.g.: Wednesday, September 21, 2022
   String dateText(DateTime date) {
     final curLocale = locale;
-    return Lang.textf(curLocale.languageCode, curLocale.countryCode).format(date);
+    return Lang.dateT(curLocale.languageCode, curLocale.countryCode).format(date);
   }
 
   ///e.g.: 9/21/2022
   String dateNum(DateTime date) {
     final curLocale = locale;
-    return Lang.numf(curLocale.languageCode, curLocale.countryCode).format(date);
+    return Lang.dateN(curLocale.languageCode, curLocale.countryCode).format(date);
   }
 
   ///e.g.: 9/21/2022 23:57:23
   String dateFullNum(DateTime date) {
     final curLocale = locale;
-    return Lang.fullNumf(curLocale.languageCode, curLocale.countryCode).format(date);
+    return Lang.fullN(curLocale.languageCode, curLocale.countryCode).format(date);
+  }
+
+  String dateYearMonth(DateTime date) {
+    final curLocale = locale;
+    return Lang.ymT(curLocale.languageCode, curLocale.countryCode).format(date);
   }
 
   /// e.g.: 8:32:59
@@ -74,19 +79,19 @@ bool yOrNo(String test, {bool defaultValue = false}) {
 /// [Global.buildContext] is used
 String dateText(DateTime date) {
   final curLocale = Global.buildContext!.locale;
-  return Lang.textf(curLocale.languageCode, curLocale.countryCode).format(date);
+  return Lang.dateT(curLocale.languageCode, curLocale.countryCode).format(date);
 }
 
 ///e.g.:9/21/2022
 /// [Global.buildContext] is used
 String dateNum(DateTime date) {
   final curLocale = Global.buildContext!.locale;
-  return Lang.numf(curLocale.languageCode, curLocale.countryCode).format(date);
+  return Lang.dateN(curLocale.languageCode, curLocale.countryCode).format(date);
 }
 
 ///e.g.: 9/21/2022 23:57:23
 /// [Global.buildContext] is used
 String dateFullNum(DateTime date) {
   final curLocale = Global.buildContext!.locale;
-  return Lang.fullNumf(curLocale.languageCode, curLocale.countryCode).format(date);
+  return Lang.fullN(curLocale.languageCode, curLocale.countryCode).format(date);
 }

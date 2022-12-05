@@ -38,6 +38,16 @@ extension LocaleToJson on Locale {
   }
 }
 
+abstract class _RegionalFormatter {
+  DateFormat get dateT;
+
+  DateFormat get ymT;
+
+  DateFormat get dateN;
+
+  DateFormat get fullN;
+}
+
 ///
 /// `Lang` provides a list of all languages Kite supports as well as a da
 class Lang {
@@ -51,22 +61,12 @@ class Lang {
   static const zhLocale = Locale.fromSubtags(languageCode: "zh");
   static const zhTwLocale = Locale.fromSubtags(languageCode: "zh", scriptCode: "Hant", countryCode: "TW");
   static const enLocale = Locale.fromSubtags(languageCode: "en");
-
+  static final zhFormatter = _ZhFormatter();
+  static final zhTwFormatter = _ZhTwFormatter();
+  static final enFormatter = _EnFormatter();
   static const zhCode = 1;
   static const zhTwCode = 2;
   static const enCode = 3;
-
-  static final zhTextf = DateFormat("yyyy年M月d日 EEEE", "zh_CN");
-  static final zhTwTextf = DateFormat("yyyy年M月d日 EEEE", "zh_TW");
-  static final enTextf = DateFormat("EEEE, MMMM d, yyyy", "en_US");
-
-  static final zhNumf = DateFormat("yyyy-M-d", "zh_CN");
-  static final zhTwNumf = DateFormat("yyyy-M-d", "zh_TW");
-  static final enNumf = DateFormat("M-d-yyyy", "en_US");
-
-  static final zhFullNumf = DateFormat("yy/MM/dd H:mm:ss", "zh_CN");
-  static final zhTwFullNumf = DateFormat("yy/MM/dd H:mm:ss", "zh_TW");
-  static final enFullNumf = DateFormat("MM/dd/yy H:mm:ss", "en_US");
 
   static final timef = DateFormat("H:mm:ss");
 
@@ -82,44 +82,26 @@ class Lang {
     return null;
   }
 
-  static DateFormat textf(String lang, String? country) {
+  static _RegionalFormatter _getFormatterFrom(String lang, String? country) {
     if (lang == zh) {
       if (country == null) {
-        return zhTextf;
+        return zhFormatter;
       } else if (country == tw) {
-        return zhTextf;
+        return zhTwFormatter;
       }
     } else if (lang == en) {
-      return enTextf;
+      return enFormatter;
     }
-    return zhTextf;
+    return zhFormatter;
   }
 
-  static DateFormat numf(String lang, String? country) {
-    if (lang == zh) {
-      if (country == null) {
-        return zhNumf;
-      } else if (country == tw) {
-        return zhNumf;
-      }
-    } else if (lang == en) {
-      return enNumf;
-    }
-    return zhNumf;
-  }
+  static DateFormat dateT(String lang, String? country) => _getFormatterFrom(lang, country).dateT;
 
-  static DateFormat fullNumf(String lang, String? country) {
-    if (lang == zh) {
-      if (country == null) {
-        return zhFullNumf;
-      } else if (country == tw) {
-        return zhTwFullNumf;
-      }
-    } else if (lang == en) {
-      return enFullNumf;
-    }
-    return zhFullNumf;
-  }
+  static DateFormat dateN(String lang, String? country) => _getFormatterFrom(lang, country).dateN;
+
+  static DateFormat ymT(String lang, String? country) => _getFormatterFrom(lang, country).ymT;
+
+  static DateFormat fullN(String lang, String? country) => _getFormatterFrom(lang, country).fullN;
 
   static const supports = [
     enLocale, // generic English 'en'
@@ -160,4 +142,37 @@ class Lang {
   static setCurrentLocaleIfAbsent(Locale cur) {
     Kv.pref.locale ??= redirectLocale(cur);
   }
+}
+
+class _ZhFormatter implements _RegionalFormatter {
+  @override
+  final dateT = DateFormat("yyyy年M月d日 EEEE", "zh_CN");
+  @override
+  final ymT = DateFormat("yyyy年M月", "zh_CN");
+  @override
+  final dateN = DateFormat("yyyy-M-d", "zh_CN");
+  @override
+  final fullN = DateFormat("yyyy-MM-dd H:mm:ss", "zh_CN");
+}
+
+class _ZhTwFormatter implements _RegionalFormatter {
+  @override
+  final dateT = DateFormat("yyyy年M月d日 EEEE", "zh_TW");
+  @override
+  final ymT = DateFormat("yyyy年M月", "zh_TW");
+  @override
+  final dateN = DateFormat("yyyy-M-d", "zh_TW");
+  @override
+  final fullN = DateFormat("yyyy-MM-dd H:mm:ss", "zh_TW");
+}
+
+class _EnFormatter implements _RegionalFormatter {
+  @override
+  final dateT = DateFormat("EEEE, MMMM d, yyyy", "en_US");
+  @override
+  final ymT = DateFormat("MMMM, yyyy", "en_US");
+  @override
+  final dateN = DateFormat("M-d-yyyy", "en_US");
+  @override
+  final fullN = DateFormat("MM-dd-yyyy H:mm:ss", "en_US");
 }

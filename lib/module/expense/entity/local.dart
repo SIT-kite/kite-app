@@ -57,10 +57,16 @@ extension TransactionEnchanced on Transaction {
 
   String? get bestTitle {
     if (deviceName.isNotEmpty) {
-      return deviceName;
+      return _stylizeTitle(deviceName);
+    } else if (note.isNotEmpty) {
+      return _stylizeTitle(note);
     } else {
-      return note;
+      return null;
     }
+  }
+
+  String _stylizeTitle(String title) {
+    return title.replaceAll("（", "(").replaceAll("）", ")");
   }
 
   Color get billColor => isConsume ? Colors.redAccent : Colors.green;

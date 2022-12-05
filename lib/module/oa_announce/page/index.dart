@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'dart:math';
 
 import 'package:auto_animated/auto_animated.dart';
 import 'package:collection/collection.dart';
@@ -42,6 +41,7 @@ class _OaAnnouncePageState extends State<OaAnnouncePage> {
   void initState() {
     super.initState();
     _queryBulletinListInAllCategory(1).then((value) {
+      if (!mounted) return;
       setState(() {
         // 公告项按时间排序
         value.sort((a, b) => b.dateTime.difference(a.dateTime).inSeconds);
@@ -84,7 +84,6 @@ class _OaAnnouncePageState extends State<OaAnnouncePage> {
 
     return _buildAnnounceLiveGrid(records);
   }
-
 
   Widget _buildAnnounceLiveGrid(List<AnnounceRecord> records) {
     final items = records.mapIndexed((i, e) => _buildAnnounceItem(context, e).inCard()).toList();

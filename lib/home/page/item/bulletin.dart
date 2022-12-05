@@ -57,7 +57,7 @@ class _KiteBulletinItemState extends State<KiteBulletinItem> {
   Future<String?> _buildContent() async {
     try {
       Log.info('获取公告');
-      final List<KiteBulletin> list = await HomeInit.noticeService.getNoticeList();
+      final List<KiteBulletin> list = await HomeInit.noticeService.getSortedBulletinList();
       return list.first.title;
     } catch (_) {
       return null;

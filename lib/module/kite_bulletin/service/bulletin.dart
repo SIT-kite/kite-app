@@ -35,7 +35,7 @@ class KiteBulletinService implements KiteBulletinServiceDao {
   }
 
   @override
-  Future<List<KiteBulletin>> getNoticeList() async {
+  Future<List<KiteBulletin>> getSortedBulletinList() async {
     final response = await session.request(_noticePath, ReqMethod.get);
     final List noticeList = response.data;
 
