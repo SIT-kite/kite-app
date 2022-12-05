@@ -16,12 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../entity/exam.dart';
 import '../init.dart';
+import '../user_widget/exam.dart';
 import '../using.dart';
 
 class ExamArrangementPage extends StatefulWidget {
@@ -37,99 +39,48 @@ class _ExamArrangementPageState extends State<ExamArrangementPage> {
 
   /// 要查询的学期
   late Semester selectedSemester;
+  List<ExamEntry>? _exams;
 
   @override
   void initState() {
+    super.initState();
     final DateTime now = DateTime.now();
     selectedYear = (now.month >= 9 ? now.year : now.year - 1);
     selectedSemester = (now.month >= 3 && now.month <= 7) ? Semester.secondTerm : Semester.firstTerm;
 
-    super.initState();
+    refresh();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: i18n.ftype_examArr.text()),
-      body: Column(
-        children: [
+        appBar: AppBar(title: i18n.ftype_examArr.text()),
+        body: [
           buildSemesterSelector(),
-          MyFutureBuilder<List<ExamRoom>>(
-            future: ExamArrInit.examService.getExamList(
-              SchoolYear(selectedYear),
-              selectedSemester,
-            ),
-            builder: (context, data) {
-              data.sort((a, b) {
-                if (a.time.isEmpty || b.time.isEmpty) {
-                  if (a.time.isEmpty != b.time.isEmpty) {
-                    return a.time.isEmpty ? 1 : -1;
-                  }
-                  return 0;
-                }
-                return a.time[0].isAfter(b.time[0]) ? 1 : -1;
-              });
-              return Expanded(child: buildExamItems(data));
-            },
-          ),
-        ],
-      ),
-    );
+          buildExamEntries(context).expanded(),
+        ].column());
   }
 
-  Widget _buildItem(String icon, String text) {
-    final itemStyle = Theme.of(context).textTheme.bodyText1;
-    final iconImage = AssetImage('assets/$icon');
-    return Row(
-      children: [
-        icon.isEmpty ? const SizedBox(height: 24, width: 24) : Image(image: iconImage, width: 24, height: 24),
-        const SizedBox(width: 8, height: 32),
-        Expanded(child: Text(text, softWrap: true, style: itemStyle))
-      ],
-    );
+  void refresh() {
+    ExamArrInit.examService
+        .getExamList(
+      SchoolYear(selectedYear),
+      selectedSemester,
+    )
+        .then((value) {
+      value.sort(ExamEntry.comparator);
+      setState(() {
+        _exams = value;
+      });
+    });
   }
 
-  Widget buildExamItem(ExamRoom examItem) {
-    final itemStyle = Theme.of(context).textTheme.bodyText2;
-    final name = stylizeCourseName(examItem.courseName);
-    final strStartTime = examItem.time.isNotEmpty ? dateFullNum(examItem.time[0]) : '/';
-    final strEndTime = examItem.time.isNotEmpty ? dateFullNum(examItem.time[1]) : '/';
-    final place = stylizeCourseName(examItem.place);
-    final seatNumber = examItem.seatNumber;
-    final isSecondExam = examItem.isSecondExam;
-
-    TableRow buildRow(String icon, String title, String content) {
-      return TableRow(children: [
-        _buildItem(icon, title),
-        Text(content, style: itemStyle),
-      ]);
+  Widget buildExamEntries(BuildContext ctx) {
+    final exams = _exams;
+    if (exams == null) {
+      return Placeholders.loading();
     }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
-          child: Text(name, style: Theme.of(context).textTheme.headline6),
-        ),
-        Table(
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          columnWidths: const {0: FlexColumnWidth(4), 1: FlexColumnWidth(5)},
-          children: [
-            buildRow('timetable/campus.png', i18n.examLocation, place),
-            buildRow('timetable/courseId.png', i18n.examSeatNumber, '$seatNumber'),
-            buildRow('timetable/day.png', i18n.examStartTime, strStartTime),
-            buildRow('timetable/day.png', i18n.examEndTime, strEndTime),
-            buildRow('', i18n.examIsRetake, isSecondExam),
-          ],
-        )
-      ],
-    );
-  }
-
-  Widget buildExamItems(List<ExamRoom> examItems) {
-    final widgets = examItems.map((e) => buildExamItem(e)).toList();
-    if (examItems.isEmpty) {
+    if (exams.isEmpty) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -137,27 +88,45 @@ class _ExamArrangementPageState extends State<ExamArrangementPage> {
             'assets/common/not-found.svg',
             width: 260,
             height: 260,
-          ),
-          Text(i18n.examNoExamThisSemester, style: const TextStyle(color: Colors.grey)),
+          ).flexible(flex: 3),
+          Text(i18n.examNoExamThisSemester, style: const TextStyle(color: Colors.grey)).flexible(flex: 1),
         ],
       );
+    } else {
+      return LayoutBuilder(builder: (ctx, constraints) {
+        final count = constraints.maxWidth ~/ 300;
+        return LiveGrid(
+          itemCount: exams.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: count,
+            childAspectRatio: 1.55,
+          ),
+          showItemInterval: const Duration(milliseconds: 40),
+          itemBuilder: (ctx, index, animation) => ExamCard(exam: exams[index])
+              .padSymmetric(v: 8, h: 16)
+              .inCard(elevation: 5)
+              .padAll(8)
+              .aliveWith(animation),
+        );
+      });
     }
-    return ListView.builder(
-      itemBuilder: (BuildContext context, int index) =>
-          widgets[index].padSymmetric(v: 8, h: 16).inCard(elevation: 5).padH(16),
-      itemCount: widgets.length,
-    );
   }
 
   Widget buildSemesterSelector() {
     return Container(
       margin: const EdgeInsets.only(left: 15),
       child: SemesterSelector(
-        yearSelectCallback: (year) {
-          setState(() => selectedYear = year);
+        onNewYearSelect: (year) {
+          setState(() {
+            selectedYear = year;
+            refresh();
+          });
         },
-        semesterSelectCallback: (semester) {
-          setState(() => selectedSemester = semester);
+        onNewSemesterSelect: (semester) {
+          setState(() {
+            selectedSemester = semester;
+            refresh();
+          });
         },
         initialYear: selectedYear,
         initialSemester: selectedSemester,

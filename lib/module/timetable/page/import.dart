@@ -131,10 +131,10 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
         Padding(
             padding: const EdgeInsets.symmetric(vertical: 30),
             child: SemesterSelector(
-              yearSelectCallback: (year) {
+              onNewYearSelect: (year) {
                 setState(() => selectedYear = year);
               },
-              semesterSelectCallback: (semester) {
+              onNewSemesterSelect: (semester) {
                 setState(() => selectedSemester = semester);
               },
               initialYear: selectedYear,

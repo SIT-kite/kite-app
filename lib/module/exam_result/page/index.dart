@@ -61,10 +61,10 @@ class _ScorePageState extends State<ScorePage> {
         Container(
           margin: const EdgeInsets.only(left: 15),
           child: SemesterSelector(
-            yearSelectCallback: (year) {
+            onNewYearSelect: (year) {
               setState(() => selectedYear = year);
             },
-            semesterSelectCallback: (semester) {
+            onNewSemesterSelect: (semester) {
               setState(() => selectedSemester = semester);
             },
             initialYear: selectedYear,

@@ -34,12 +34,12 @@ class SemesterSelector extends StatefulWidget {
   /// 是否显示整个学年
   final bool? showEntireYear;
   final bool? showNextYear;
-  final Function(int) yearSelectCallback;
-  final Function(Semester) semesterSelectCallback;
+  final Function(int) onNewYearSelect;
+  final Function(Semester) onNewSemesterSelect;
 
   const SemesterSelector({
-    required this.yearSelectCallback,
-    required this.semesterSelectCallback,
+    required this.onNewYearSelect,
+    required this.onNewSemesterSelect,
     this.initialYear,
     this.initialSemester,
     this.showEntireYear,
@@ -128,7 +128,7 @@ class _SemesterSelectorState extends State<SemesterSelector> {
     return buildSelector<int>(ctx, Map.fromEntries(mapping), selectedYear, (int? selected) {
       if (selected != null && selected != selectedYear) {
         setState(() => selectedYear = selected);
-        widget.yearSelectCallback(selectedYear);
+        widget.onNewYearSelect(selectedYear);
       }
     });
   }
@@ -147,7 +147,7 @@ class _SemesterSelectorState extends State<SemesterSelector> {
     return buildSelector<Semester>(ctx, semesterItems, selectedSemester, (Semester? selected) {
       if (selected != null && selected != selectedSemester) {
         setState(() => selectedSemester = selected);
-        widget.semesterSelectCallback(selectedSemester);
+        widget.onNewSemesterSelect(selectedSemester);
       }
     });
   }

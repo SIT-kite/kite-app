@@ -23,7 +23,7 @@ part 'exam.g.dart';
 /// REAL. THE PAYLOAD IS IN PINYIN. DONT BLAME ANYONE BUT THE SCHOOL.
 /// More reading: https://github.com/sunnysab/zf-tools/blob/master/TRANSLATION.md
 @JsonSerializable()
-class ExamRoom {
+class ExamEntry {
   /// 课程名称
   @JsonKey(name: 'kcmc')
   String courseName = '';
@@ -48,11 +48,11 @@ class ExamRoom {
   @JsonKey(name: 'cxbj', defaultValue: '未知')
   String isSecondExam = '';
 
-  ExamRoom();
+  ExamEntry();
 
-  factory ExamRoom.fromJson(Map<String, dynamic> json) => _$ExamRoomFromJson(json);
+  factory ExamEntry.fromJson(Map<String, dynamic> json) => _$ExamEntryFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ExamRoomToJson(this);
+  Map<String, dynamic> toJson() => _$ExamEntryToJson(this);
 
   @override
   String toString() {
@@ -79,5 +79,15 @@ class ExamRoom {
     } catch (_) {}
 
     return result;
+  }
+
+  static int comparator(ExamEntry a, ExamEntry b) {
+    if (a.time.isEmpty || b.time.isEmpty) {
+      if (a.time.isEmpty != b.time.isEmpty) {
+        return a.time.isEmpty ? 1 : -1;
+      }
+      return 0;
+    }
+    return a.time[0].isAfter(b.time[0]) ? 1 : -1;
   }
 }

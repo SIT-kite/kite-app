@@ -31,7 +31,7 @@ class ExamService implements ExamDao {
 
   /// 获取考场信息
   @override
-  Future<List<ExamRoom>> getExamList(SchoolYear schoolYear, Semester semester) async {
+  Future<List<ExamEntry>> getExamList(SchoolYear schoolYear, Semester semester) async {
     var response = await session.request(
       _examRoomUrl,
       ReqMethod.post,
@@ -48,6 +48,6 @@ class ExamService implements ExamDao {
     );
     final List<dynamic> itemsData = response.data['items'];
 
-    return itemsData.map((e) => ExamRoom.fromJson(e as Map<String, dynamic>)).toList();
+    return itemsData.map((e) => ExamEntry.fromJson(e as Map<String, dynamic>)).toList();
   }
 }

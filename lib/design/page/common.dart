@@ -16,7 +16,7 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../colors.dart';
 import 'package:rettulf/rettulf.dart';
 
 class LeavingBlank extends StatelessWidget {
@@ -28,7 +28,7 @@ class LeavingBlank extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget iconWidget = icon.make(size: 120).padAll(20);
+    Widget iconWidget = icon.make(size: 120, color: context.darkSafeThemeColor).padAll(20);
     if (onIconTap != null) {
       iconWidget = iconWidget.on(tap: onIconTap);
     }
