@@ -21,3 +21,4 @@ export 'package:kite/user_widget/html_widget.dart';
 export 'package:kite/user_widget/search.dart';
 export 'package:kite/user_widget/multibutton_switch.dart';
 export 'package:kite/user_widget/my_switcher.dart';
+export 'package:kite/user_widget/markdown_widget.dart';

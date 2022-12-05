@@ -85,15 +85,6 @@ class _OaAnnouncePageState extends State<OaAnnouncePage> {
     return _buildAnnounceLiveGrid(records);
   }
 
-  Widget _buildAnnounceLiveList(List<AnnounceRecord> records) {
-    final items = records.mapIndexed((i, e) => _buildAnnounceItem(context, e).inCard()).toList();
-
-    return LiveList(
-        itemCount: items.length,
-        showItemInterval: const Duration(milliseconds: 50),
-        showItemDuration: const Duration(milliseconds: 300),
-        itemBuilder: (ctx, index, animation) => items[index].aliveWith(animation));
-  }
 
   Widget _buildAnnounceLiveGrid(List<AnnounceRecord> records) {
     final items = records.mapIndexed((i, e) => _buildAnnounceItem(context, e).inCard()).toList();

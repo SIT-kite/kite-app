@@ -49,12 +49,7 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
   Widget buildPortrait(BuildContext ctx) {
     return Scaffold(
       appBar: AppBar(title: i18n.localStorageTitle.text()),
-      body: Scrollbar(
-          //always show scrollbar
-          thickness: 20,
-          radius: const Radius.circular(12),
-          interactive: true,
-          child: buildPortraitBody(ctx).scrolled()),
+      body: buildPortraitBody(ctx).scrolledWithBar(),
     );
   }
 

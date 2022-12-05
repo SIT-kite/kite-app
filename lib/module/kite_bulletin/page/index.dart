@@ -16,13 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/user_widget/markdown_widget.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../entity/bulletin.dart';
 import '../init.dart';
+import '../user_widget/bulltin.dart';
 import '../using.dart';
 
 class KiteBulletinPage extends StatefulWidget {
@@ -34,11 +34,13 @@ class KiteBulletinPage extends StatefulWidget {
 
 class _KiteBulletinPageState extends State<KiteBulletinPage> {
   List<KiteBulletin>? _bulletins;
+  int? _selected;
 
   @override
   void initState() {
     super.initState();
     KiteBulletinInit.noticeService.getNoticeList().then((value) {
+      value.sort((a, b) => b.top ? 1 : -1);
       setState(() {
         _bulletins = value;
       });
@@ -49,79 +51,67 @@ class _KiteBulletinPageState extends State<KiteBulletinPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: i18n.ftype_kiteBulletin.text()),
-      body: SafeArea(child: buildList(context)),
+      body: context.isPortrait ? buildBodyPortrait(context) : buildBodyLandscape(context),
     );
   }
 
-  Widget buildLandscape(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: i18n.ftype_kiteBulletin.text()),
-      body: SafeArea(child: buildList(context)),
-    );
+  Widget buildBodyPortrait(BuildContext context) {
+    return buildBulletinList(context);
   }
 
-  Widget buildPortrait(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: i18n.ftype_kiteBulletin.text()),
-      body: SafeArea(child: buildList(context)),
-    );
+  Widget buildBodyLandscape(BuildContext ctx) {
+    return [
+      buildPreviewList(ctx).flexible(flex: 2),
+      const VerticalDivider(thickness: 10, color: Colors.transparent),
+      buildSelectedBulletinDetailArea(ctx).scrolled().align(at: Alignment.topCenter).flexible(flex: 4),
+    ].row();
   }
 
-  _buildTitleText(BuildContext ctx, String title) {
-    return Text(title, overflow: TextOverflow.ellipsis, style: Theme.of(ctx).textTheme.headline3);
-  }
-
-  _buildBulletinTitle(BuildContext ctx, KiteBulletin notice) {
-    if (notice.top) {
-      return Row(
-        children: [const Icon(Icons.push_pin_rounded), _buildTitleText(ctx, notice.title)],
-      );
-    } else {
-      return _buildTitleText(ctx, notice.title);
-    }
-  }
-
-  Widget buildList(BuildContext context) {
-    final list = _bulletins;
-    if (list == null) {
+  Widget buildSelectedBulletinDetailArea(BuildContext ctx) {
+    final all = _bulletins;
+    if (all == null) {
       return Placeholders.loading();
     } else {
-      return _buildBulletinList(context, list);
+      return buildSelectedBulletinDetail(ctx, all);
     }
   }
 
-  Widget _buildBulletinList(BuildContext context, List<KiteBulletin> list) {
-    return SingleChildScrollView(
-      child: Column(
-        children:
-            list.map((e) => _buildBulletin(context, e).inCard(elevation: 5).padSymmetric(h: 10.h, v: 2.h)).toList(),
-      ),
-    );
+  Widget buildSelectedBulletinDetail(BuildContext ctx, List<KiteBulletin> all) {
+    var selected = _selected;
+    if (selected == null) {
+      if (all.isNotEmpty) {
+        selected = 0;
+      } else {
+        return LeavingBlank(icon: Icons.inbox_outlined, desc: i18n.emptyContent);
+      }
+    }
+    return BulletinCard(all[selected]);
   }
 
-  Widget _buildBulletin(BuildContext context, KiteBulletin bulletin) {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // 标题, 注意遇到长标题时要折断
-              Expanded(
-                child: _buildBulletinTitle(context, bulletin),
-              ),
-              // 日期
-              Text(context.dateNum(bulletin.publishTime), style: const TextStyle(color: Colors.grey)),
-            ],
-          ),
-          const SizedBox(height: 10),
-          // 正文
-          MyMarkdownWidget(bulletin.content ?? ''),
-        ],
-      ),
-    );
+  final _controller = ScrollController();
+
+  Widget buildPreviewList(BuildContext ctx) {
+    final all = _bulletins;
+    if (all == null) {
+      return Placeholders.loading();
+    } else {
+      final list = all
+          .mapIndexed((i, e) => BulletinPreview(e).onTap(() {
+                if (_selected != i) {
+                  setState(() => _selected = i);
+                }
+              }))
+          .toList();
+      return list.scrolledWithBar();
+    }
+  }
+
+  Widget buildBulletinList(BuildContext ctx) {
+    final all = _bulletins;
+    if (all == null) {
+      return Placeholders.loading();
+    } else {
+      return all.map((e) => BulletinCard(e)).toList().column().scrolled();
+    }
   }
 }
