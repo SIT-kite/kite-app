@@ -155,16 +155,13 @@ class WeeklyTimetableState extends State<WeeklyTimetable> implements ITimetableV
   Widget _buildPage(int week, List<String> dayHeaders) {
     return Column(
       children: [
-        Expanded(
-            flex: 1,
-            // Display the week name on top
-            child: TimetableHeader(
-              dayHeaders: dayHeaders,
-              leadingSpace: true,
-              currentWeek: week,
-              selectedDay: -1,
-              startDate: widget.initialDate,
-            )),
+        TimetableHeader(
+          dayHeaders: dayHeaders,
+          leadingSpace: true,
+          currentWeek: week,
+          selectedDay: -1,
+          startDate: widget.initialDate,
+        ),
         Expanded(
           flex: 10,
           child: widget.allCourses.isEmpty
