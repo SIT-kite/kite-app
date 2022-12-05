@@ -17,9 +17,10 @@
  */
 
 import 'package:hive_flutter/hive_flutter.dart';
-import 'adapter.dart';
 import 'package:kite/module/library/search/entity/search_history.dart';
 import 'package:kite/module/yellow_pages/entity/contact.dart';
+
+import 'adapter.dart';
 
 class HiveBoxInit {
   HiveBoxInit._();
@@ -31,6 +32,9 @@ class HiveBoxInit {
   static late Box<dynamic> expense2;
   static late Box<dynamic> game;
   static late Box<dynamic> kv;
+  static late Box<dynamic> cookiesBox;
+
+  static late Map<String, Box> name2Box;
 
   static Future<void> init(String root) async {
     await Hive.initFlutter(root);
@@ -42,6 +46,17 @@ class HiveBoxInit {
     course = await Hive.openBox<dynamic>('course');
     expense2 = await Hive.openBox('expense2');
     game = await Hive.openBox<dynamic>('game');
+    cookiesBox = await Hive.openBox<dynamic>('cookies');
+    name2Box = {
+      "setting": HiveBoxInit.kv,
+      "librarySearchHistory": HiveBoxInit.librarySearchHistory,
+      "expense2": HiveBoxInit.expense2,
+      "course": HiveBoxInit.course,
+      "game": HiveBoxInit.game,
+      "userEvent": HiveBoxInit.userEvent,
+      "contactSetting": HiveBoxInit.contactSetting,
+      "cookies": HiveBoxInit.cookiesBox,
+    };
   }
 
   static Future<void> clear() async {
@@ -54,6 +69,7 @@ class HiveBoxInit {
     await Hive.deleteBoxFromDisk('expense2');
     await Hive.deleteBoxFromDisk('game');
     await Hive.deleteBoxFromDisk('mail');
+    await Hive.deleteBoxFromDisk('cookies');
     await Hive.close();
   }
 }

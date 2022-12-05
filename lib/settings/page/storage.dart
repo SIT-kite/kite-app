@@ -15,13 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:kite/hive/init.dart';
 import 'package:kite/module/activity/using.dart';
-import 'package:kite/module/library/search/entity/search_history.dart';
-import 'package:kite/module/yellow_pages/entity/contact.dart';
 import 'package:rettulf/rettulf.dart';
 
 class LocalStoragePage extends StatefulWidget {
@@ -32,15 +30,7 @@ class LocalStoragePage extends StatefulWidget {
 }
 
 class _LocalStoragePageState extends State<LocalStoragePage> {
-  static final name2Box = {
-    "setting": Future(() => Hive.openBox<dynamic>("setting")),
-    "librarySearchHistory": Future(() => Hive.openBox<LibrarySearchHistoryItem>("librarySearchHistory")),
-    "expense2": Future(() => Hive.openBox<dynamic>("expense2")),
-    "course": Future(() => Hive.openBox<dynamic>("course")),
-    "game": Future(() => Hive.openBox<dynamic>("game")),
-    "userEvent": Future(() => Hive.openBox<dynamic>("userEvent")),
-    "contactSetting": Future(() => Hive.openBox<ContactData>("contactSetting")),
-  };
+  late final name2Box = HiveBoxInit.name2Box.map((key, value) => MapEntry(key, Future(() => value)));
 
   @override
   Widget build(BuildContext context) {

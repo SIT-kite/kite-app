@@ -68,9 +68,11 @@ class Initializer {
     }
     SettingsInit.init(kvStorageBox: HiveBoxInit.kv);
     await Global.init(
-        userEventStorage: UserEventInit.userEventStorage,
-        authSetting: Kv.auth,
-        debugNetwork: debugNetwork ?? Kv.network.isGlobalProxy);
+      userEventStorage: UserEventInit.userEventStorage,
+      authSetting: Kv.auth,
+      debugNetwork: debugNetwork ?? Kv.network.isGlobalProxy,
+      cookieBox: HiveBoxInit.cookiesBox,
+    );
     // 初始化用户首次打开时间（而不是应用安装时间）
     // ??= 表示为空时候才赋值
     Kv.home.installTime ??= DateTime.now();
