@@ -245,8 +245,8 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
                       const SizedBox(width: 10),
                     ],
                   ),
-                ],
-              ),
+                ], //to avoid overflow when keyboard is up.
+              ).scrolled(physics: const NeverScrollableScrollPhysics()),
             ),
           ),
           Align(
@@ -273,6 +273,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       ),
     );
   }
+
   @override
   void dispose() {
     super.dispose();

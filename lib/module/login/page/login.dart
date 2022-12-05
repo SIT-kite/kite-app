@@ -293,8 +293,8 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(height: 25.h),
                   // Login button.
                   buildLoginButton(),
-                ],
-              ),
+                ], //to avoid overflow when keyboard is up.
+              ).scrolled(physics: const NeverScrollableScrollPhysics()),
             ),
           ),
           Align(
