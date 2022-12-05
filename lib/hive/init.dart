@@ -34,6 +34,8 @@ class HiveBoxInit {
   static late Box<dynamic> kv;
   static late Box<dynamic> cookiesBox;
 
+  static late Map<String, Box> name2Box;
+
   static Future<void> init(String root) async {
     await Hive.initFlutter(root);
     HiveAdapter.registerAll();
@@ -45,6 +47,16 @@ class HiveBoxInit {
     expense2 = await Hive.openBox('expense2');
     game = await Hive.openBox<dynamic>('game');
     cookiesBox = await Hive.openBox<dynamic>('cookies');
+    name2Box = {
+      "setting": HiveBoxInit.kv,
+      "librarySearchHistory": HiveBoxInit.librarySearchHistory,
+      "expense2": HiveBoxInit.expense2,
+      "course": HiveBoxInit.course,
+      "game": HiveBoxInit.game,
+      "userEvent": HiveBoxInit.userEvent,
+      "contactSetting": HiveBoxInit.contactSetting,
+      "cookies": HiveBoxInit.cookiesBox,
+    };
   }
 
   static Future<void> clear() async {
