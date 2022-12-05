@@ -236,19 +236,15 @@ class SsoSession with DioDownloaderMixin implements ISession {
   }
 
   Future<Response> _login(String username, String password) async {
-    int count = 0;
-    while (count < _maxRetryCount) {
+    for (int i = 0; i < _maxRetryCount; i++) {
       try {
         return await loginWithoutRetry(username, password);
-      } catch (e) {
-        // 只要是异常，就再重试
-        count++;
-        if (count == _maxRetryCount) {
-          rethrow;
-        }
+      } on CredentialsInvalidException catch (e) {
+        if (e.msg.contains('验证码')) continue;
+        rethrow; // 已达到最大次数
       }
     }
-    throw const MaxRetryExceedException(msg: '登录超过最大重试次数 ($_maxRetryCount 次)');
+    throw const MaxRetryExceedException(msg: '验证码识别有误，请稍后重试');
   }
 
   /// 登录流程
@@ -314,10 +310,10 @@ class SsoSession with DioDownloaderMixin implements ISession {
     // 首先获取AuthServer首页
     final html = await getAuthServerHtml();
 
-    await cookieJar.saveFromResponse(
-      Uri.parse('https://authserver.sit.edu.cn'),
-      [Cookie('org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE', 'en')],
-    );
+    // await cookieJar.saveFromResponse(
+    //   Uri.parse('https://authserver.sit.edu.cn'),
+    //   [Cookie('org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE', 'zh')],
+    // );
 
     // 获取首页验证码
     var captcha = '';
