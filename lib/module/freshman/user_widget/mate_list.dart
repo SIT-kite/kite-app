@@ -127,20 +127,20 @@ class MateListWidget extends StatelessWidget {
   }
 
   Widget buildListView(BuildContext context, List<Mate> list) {
-    return ListView(
-      controller: ScrollController(),
-      children: list.map((e) {
-        return PersonItemWidget(
-          basicInfoWidget: buildBasicInfoWidget(context, e),
-          name: e.name,
-          isMale: e.gender == 'M',
-          lastSeenText: calcLastSeen(e.lastSeen),
-          locationText: e.province,
-          onLoadMore: () => loadMoreInfo(context, e),
-          height: 235,
-        );
-      }).toList(),
-    );
+    return list
+        .map((e) {
+          return PersonItemWidget(
+            basicInfoWidget: buildBasicInfoWidget(context, e),
+            name: e.name,
+            isMale: e.gender == 'M',
+            lastSeenText: calcLastSeen(e.lastSeen),
+            locationText: e.province,
+            onLoadMore: () => loadMoreInfo(context, e),
+            height: 235,
+          );
+        })
+        .toList()
+        .scrolledWithBar();
   }
 
   Widget buildBody(BuildContext context, List<Mate> mateList) {

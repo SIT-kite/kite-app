@@ -4,22 +4,32 @@ import 'package:rettulf/rettulf.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 extension ScrollWidgetListEx on List<Widget> {
-  Widget scrolledWithBar({Key? key}) {
-    return _KiteScrolledWithBar(key: key, children: this);
+  Widget scrolledWithBar({Key? key, ScrollController? controller}) {
+    return _KiteScrolledWithBar(
+      key: key,
+      controller: controller,
+      children: this,
+    );
   }
 }
 
 extension ScrollSingleWidgetEx on Widget {
-  Widget scrolledWithBar({Key? key}) {
-    return _KiteScrolledWithBar(key: key, child: this);
+  Widget scrolledWithBar({Key? key, ScrollController? controller}) {
+    return _KiteScrolledWithBar(
+      key: key,
+      controller: controller,
+      child: this,
+    );
   }
 }
 
 class _KiteScrolledWithBar extends StatefulWidget {
   final Widget? child;
   final List<Widget>? children;
+  final ScrollController? controller;
 
-  const _KiteScrolledWithBar({super.key, this.child, this.children}) : assert(child != null || children != null);
+  const _KiteScrolledWithBar({super.key, this.child, this.children, this.controller})
+      : assert(child != null || children != null);
 
   @override
   State<_KiteScrolledWithBar> createState() => _KiteScrolledWithBarState();
@@ -31,7 +41,7 @@ class _KiteScrolledWithBarState extends State<_KiteScrolledWithBar> {
   @override
   void initState() {
     super.initState();
-    controller = ScrollController();
+    controller = widget.controller ?? ScrollController();
   }
 
   @override

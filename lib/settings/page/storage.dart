@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -72,20 +73,18 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
 
   Widget buildBoxIntroduction(BuildContext ctx) {
     final boxNameStyle = context.textTheme.headline4;
-    final name2BoxList = name2Box.entries.toList();
-    return ListView.builder(
-        itemCount: name2Box.length,
-        itemBuilder: (ctx, i) {
-          final name2Box = name2BoxList[i];
-          final color = name2Box.key == selectedBoxName ? ctx.theme.secondaryHeaderColor : null;
-          return name2Box.key.text(style: boxNameStyle).padAll(10).inCard(elevation: 3, color: color).on(tap: () {
-            if (selectedBoxName != name2Box.key) {
-              setState(() {
-                selectedBoxName = name2Box.key;
-              });
-            }
+    final list = name2Box.entries.map((e) {
+      final name2Box = e;
+      final color = name2Box.key == selectedBoxName ? ctx.theme.secondaryHeaderColor : null;
+      return name2Box.key.text(style: boxNameStyle).padAll(10).inCard(elevation: 3, color: color).on(tap: () {
+        if (selectedBoxName != name2Box.key) {
+          setState(() {
+            selectedBoxName = name2Box.key;
           });
-        });
+        }
+      });
+    }).toList();
+    return list.scrolledWithBar();
   }
 
   Widget buildBoxContentView(BuildContext ctx) {
@@ -104,14 +103,13 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
             key: ValueKey(name),
             future: boxGetter,
             builder: (ctx, box, _) {
-              final List<Widget> items;
               if (box == null) {
-                items = [];
+                return _buildEmptyBoxTip(ctx);
               } else {
                 if (box.isEmpty) {
-                  items = [_buildEmptyBoxTip(ctx)];
+                  return _buildEmptyBoxTip(ctx);
                 } else {
-                  items = box.keys
+                  return box.keys
                       .map((e) => BoxItem(
                             boxKey: e,
                             box: box,
@@ -119,10 +117,10 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
                             typeStyle: typeStyle,
                             contentStyle: contentStyle,
                           ))
-                      .toList();
+                      .toList()
+                      .scrolledWithBar();
                 }
               }
-              return items.listview();
             }).align(at: Alignment.topCenter);
       }
     }
