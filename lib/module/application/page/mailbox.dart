@@ -15,14 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/design/page/common.dart';
 import 'package:rettulf/rettulf.dart';
 import '../entity/message.dart';
+import '../user_widget/mail.dart';
 import '../using.dart';
 
 import '../init.dart';
-import 'browser.dart';
 
 class Mailbox extends StatefulWidget {
   const Mailbox({super.key});
@@ -32,7 +32,7 @@ class Mailbox extends StatefulWidget {
 }
 
 class _MailboxState extends State<Mailbox> {
-  OfficeMessagePage? _msgPage;
+  ApplicationMsgPage? _msgPage;
 
   @override
   void initState() {
@@ -60,24 +60,17 @@ class _MailboxState extends State<Mailbox> {
     }
   }
 
-  Widget _buildMessageList(BuildContext context, List<OfficeMessageSummary> messageList) {
-    return ListView(
-      children: messageList
-          .map(
-            (e) => ListTile(
-              title: Text(e.functionName),
-              subtitle: Text('${i18n.applicationMailboxRecent}: ${e.recentStep}'),
-              trailing: Text(e.status),
-              onTap: () {
-                // 跳转到详情页面
-                final String resultUrl =
-                    'https://xgfy.sit.edu.cn/unifri-flow/WF/mobile/index.html?ismobile=1&FK_Flow=${e.functionId}&WorkID=${e.flowId}&IsReadonly=1&IsView=1';
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (_) => InAppViewPage(title: e.functionName, url: resultUrl)));
-              },
-            ),
-          )
-          .toList(),
-    );
+  Widget _buildMessageList(BuildContext context, List<ApplicationMsg> list) {
+    return LayoutBuilder(builder: (ctx, constraints) {
+      final count = constraints.maxWidth ~/ 300;
+      return LiveGrid.options(
+        itemCount: list.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: count,
+        ),
+        options: kiteLiveOptions,
+        itemBuilder: (ctx, index, animation) => Mail(msg: list[index]).aliveWith(animation),
+      );
+    });
   }
 }

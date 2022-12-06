@@ -28,7 +28,7 @@ class OfficeMessageService {
 
   const OfficeMessageService(this.session);
 
-  Future<OfficeMessageCount> queryMessageCount() async {
+  Future<ApplicationMsgCount> queryMessageCount() async {
     String payload = 'code=${Kv.auth.currentUsername}';
 
     final response = await session.request(
@@ -41,11 +41,11 @@ class OfficeMessageService {
       ),
     );
     final Map<String, dynamic> data = response.data;
-    final OfficeMessageCount result = OfficeMessageCount.fromJson(data['data']);
+    final ApplicationMsgCount result = ApplicationMsgCount.fromJson(data['data']);
     return result;
   }
 
-  Future<OfficeMessagePage> getMessage(MessageType type, int page) async {
+  Future<ApplicationMsgPage> getMessage(MessageType type, int page) async {
     final String url = _getMessageListUrl(type);
     final String payload = 'myFlow=1&pageIdx=$page&pageSize=999'; // TODO: 此处硬编码.
 
@@ -61,20 +61,20 @@ class OfficeMessageService {
     final List data = jsonDecode(response.data);
     final int totalNum = int.parse(data.last['totalNum']);
     final int totalPage = int.parse(data.last['totalPage']);
-    final List<OfficeMessageSummary> messages =
-        data.where((e) => (e['FlowName'] as String).isNotEmpty).map((e) => OfficeMessageSummary.fromJson(e)).toList();
+    final List<ApplicationMsg> messages =
+        data.where((e) => (e['FlowName'] as String).isNotEmpty).map((e) => ApplicationMsg.fromJson(e)).toList();
 
-    return OfficeMessagePage(totalNum, totalPage, page, messages);
+    return ApplicationMsgPage(totalNum, totalPage, page, messages);
   }
 
-  Future<OfficeMessagePage> getAllMessage() async {
-    List<OfficeMessageSummary> messageList = [];
+  Future<ApplicationMsgPage> getAllMessage() async {
+    List<ApplicationMsg> messageList = [];
 
     for (MessageType type in MessageType.values) {
       messageList.addAll((await getMessage(type, 1)).msgList);
     }
     // TODO: 此处硬编码.
-    return OfficeMessagePage(messageList.length, 1, 1, messageList);
+    return ApplicationMsgPage(messageList.length, 1, 1, messageList);
   }
 
   static String _getMessageListUrl(MessageType type) {

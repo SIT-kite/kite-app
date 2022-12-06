@@ -26,7 +26,7 @@ enum MessageType {
 }
 
 @JsonSerializable()
-class OfficeMessageCount {
+class ApplicationMsgCount {
   @JsonKey(name: 'myFlow_complete_count')
   final int completed;
   @JsonKey(name: 'myFlow_runing_count')
@@ -34,34 +34,34 @@ class OfficeMessageCount {
   @JsonKey(name: 'myFlow_todo_count')
   final int inDraft;
 
-  const OfficeMessageCount(this.completed, this.inProgress, this.inDraft);
+  const ApplicationMsgCount(this.completed, this.inProgress, this.inDraft);
 
-  factory OfficeMessageCount.fromJson(Map<String, dynamic> json) => _$OfficeMessageCountFromJson(json);
+  factory ApplicationMsgCount.fromJson(Map<String, dynamic> json) => _$ApplicationMsgCountFromJson(json);
 }
 
 @JsonSerializable()
-class OfficeMessageSummary {
+class ApplicationMsg {
   @JsonKey(name: 'WorkID')
   final int flowId;
   @JsonKey(name: 'FK_Flow')
   final String functionId;
   @JsonKey(name: 'FlowName')
-  final String functionName;
+  final String name;
   @JsonKey(name: 'NodeName')
   final String recentStep;
   @JsonKey(name: 'FlowNote')
   final String status;
 
-  const OfficeMessageSummary(this.flowId, this.functionId, this.functionName, this.recentStep, this.status);
+  const ApplicationMsg(this.flowId, this.functionId, this.name, this.recentStep, this.status);
 
-  factory OfficeMessageSummary.fromJson(Map<String, dynamic> json) => _$OfficeMessageSummaryFromJson(json);
+  factory ApplicationMsg.fromJson(Map<String, dynamic> json) => _$ApplicationMsgFromJson(json);
 }
 
-class OfficeMessagePage {
+class ApplicationMsgPage {
   final int totalNum;
   final int totalPage;
   final int currentPage;
-  final List<OfficeMessageSummary> msgList;
+  final List<ApplicationMsg> msgList;
 
-  const OfficeMessagePage(this.totalNum, this.totalPage, this.currentPage, this.msgList);
+  const ApplicationMsgPage(this.totalNum, this.totalPage, this.currentPage, this.msgList);
 }
