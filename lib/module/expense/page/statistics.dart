@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/module/activity/using.dart';
 import 'package:kite/user_widget/base_line_chart.dart';
+import 'package:rettulf/rettulf.dart';
 
 import '../entity/local.dart';
 import '../using.dart';
@@ -36,6 +37,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   late int selectedYear = now.year;
   late int selectedMonth = now.month;
+
   List<int> _getYear(List<Transaction> expenseBillDesc) {
     List<int> years = [];
 
@@ -119,10 +121,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
     _filterExpense().forEach(
         (e) => daysAmount[e.datetime.day - 1] += ((delta) => delta < 0 ? -delta : 0)(e.balanceAfter - e.balanceBefore));
 
-    if (daysAmount.every((double e) => e.abs() < 0.01)) {
-      return const SizedBox(height: 70, child: Center(child: Text('该月无消费数据')));
-    }
-
     final width = MediaQuery.of(context).size.width - 70;
     return Card(
       margin: const EdgeInsets.fromLTRB(10, 10, 10, 20),
@@ -134,7 +132,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 30),
-              child: Text('支出对比', style: Theme.of(context).textTheme.headline2),
+              child: i18n.expenseStatistics.text(style: Theme.of(context).textTheme.headline2),
             ),
             // const SizedBox(height: 5),
             Center(
@@ -154,33 +152,32 @@ class _StatisticsPageState extends State<StatisticsPage> {
     );
   }
 
-  List<Widget> _buildClassifiedStat() {
+  List<Widget> _buildClassifiedStat(BuildContext ctx) {
+    final theme = ctx.theme;
     // 各分类下消费的统计
     List<double> sumByClassification = List.filled(TransactionType.values.length, 0.0);
     for (final line in _filterExpense()) {
       sumByClassification[line.type.index] +=
           ((delta) => delta < 0 ? -delta : 0)(line.balanceAfter - line.balanceBefore);
     }
-    final backgroundColor = Theme.of(context).secondaryHeaderColor;
+    final backgroundColor = theme.secondaryHeaderColor;
 
     double sum = sumByClassification.fold(0.0, (previousValue, element) => previousValue += element);
 
-    return TransactionType.values
-        .where((e) => !{TransactionType.topUp, TransactionType.subsidy}.contains(e))
-        .map(
-      (expenseType) {
-        final double sumInType = sumByClassification[expenseType.index];
+    return TransactionType.values.where((e) => !{TransactionType.topUp, TransactionType.subsidy}.contains(e)).map(
+      (type) {
+        final double sumInType = sumByClassification[type.index];
         final double percentage = sum != 0 ? sumInType / sum : 0;
 
         return ListTile(
-          leading: Icon(expenseType.icon),
-          title: Text(expenseType.localized(), style: Theme.of(context).textTheme.subtitle1),
+          leading: type.icon.make(color: type.color, size: 32),
+          title: Text(type.localized(), style: theme.textTheme.subtitle1),
           subtitle: LinearProgressIndicator(value: percentage, backgroundColor: backgroundColor),
           // 下方 SizedBox 用于限制文字宽度, 使左侧进度条的右端对齐.
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('¥ ${sumInType.toStringAsFixed(2)}'),
+              i18n.rmb(sumInType.toStringAsFixed(2)).text(),
               SizedBox(
                 width: 60,
                 child: Text(
@@ -208,7 +205,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
             child: Text(i18n.expenseCats, style: Theme.of(context).textTheme.headline2),
           ),
           Column(
-            children: _buildClassifiedStat(),
+            children: _buildClassifiedStat(context),
           )
         ],
       ),

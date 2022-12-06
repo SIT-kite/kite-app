@@ -32,18 +32,18 @@ class ExpenseItem extends StatefulWidget {
 }
 
 class _ExpenseItemState extends State<ExpenseItem> {
-  final Transaction? lastExpense = () {
-    final tsl = ExpenseTrackerInit.local.transactionTsList;
-    if (tsl.isEmpty) return null;
-    return ExpenseTrackerInit.local.getTransactionByTs(tsl.last);
-  }();
+  Transaction? lastExpense;
   String? content;
 
   @override
   void initState() {
+    super.initState();
     Global.eventBus.on(EventNameConstants.onHomeRefresh, (arg) {});
 
-    return super.initState();
+    final tsl = ExpenseTrackerInit.local.transactionTsList;
+    if (tsl.isNotEmpty) {
+      lastExpense = ExpenseTrackerInit.local.getTransactionByTs(tsl.last);
+    }
   }
 
   @override

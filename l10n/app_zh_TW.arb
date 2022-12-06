@@ -431,6 +431,7 @@
   "xuhui": "徐匯",
   "xuhuiDistrict": "徐匯區",
   "yes": "好",
-  "expenseSpentStatistics": "消費",
-  "expenseIncomeStatistics": "收入"
+  "expenseSpentStatistics": "消費: ¥{amount}",
+  "expenseIncomeStatistics": "入賬: ¥{amount}",
+  "expenseStatistics": "消費統計"
 }

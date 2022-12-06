@@ -25,13 +25,13 @@ typedef SearchItemBuilder<T> = Widget Function(T itemData, String highlighted);
 
 /// 搜索对象文档化
 typedef SearchItemDocumented<T> = String Function(T itemData);
-typedef TextPreprocessing = String Function(String raw);
+typedef TextPreprocess = String Function(String raw);
 
 class SimpleTextSearchDelegate<T> extends SearchDelegate {
   final List<T> recentList, suggestionList;
   SearchItemBuilder<T>? searchItemBuilder;
   SearchItemDocumented<T>? searchItemDocumented;
-  TextPreprocessing? preprocessing;
+  TextPreprocess? preprocess;
   final bool onlyUseSuggestion;
   final double maxCrossAxisExtent;
   final double childAspectRatio;
@@ -41,7 +41,7 @@ class SimpleTextSearchDelegate<T> extends SearchDelegate {
     required this.suggestionList,
     this.searchItemBuilder,
     this.searchItemDocumented,
-    this.preprocessing,
+    this.preprocess,
     this.onlyUseSuggestion = true,
     this.maxCrossAxisExtent = 150.0,
     this.childAspectRatio = 2.0,
@@ -50,7 +50,7 @@ class SimpleTextSearchDelegate<T> extends SearchDelegate {
     searchItemBuilder ??= (item, highlight) => ListTile(title: HtmlWidget(highlight)).center().inCard(elevation: 4);
   }
 
-  String get realQuery => preprocessing?.call(query) ?? query;
+  String get realQuery => preprocess?.call(query) ?? query;
 
   @override
   List<Widget>? buildActions(BuildContext context) {

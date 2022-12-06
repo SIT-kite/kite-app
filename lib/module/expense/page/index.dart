@@ -48,9 +48,6 @@ class _ExpenseTrackerPageState extends State<ExpenseTrackerPage> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await fetch(DateTime(2010), DateTime.now());
-      if (allRecords.isNotEmpty) {
-        $balance.value = allRecords.last.balanceAfter;
-      }
     });
     super.initState();
   }
@@ -104,6 +101,9 @@ class _ExpenseTrackerPageState extends State<ExpenseTrackerPage> {
     records = records.where((e) => e.type != TransactionType.topUp).toList();
     setState(() {
       allRecords = records;
+      if (allRecords.isNotEmpty) {
+        $balance.value = allRecords.last.balanceAfter;
+      }
     });
   }
 

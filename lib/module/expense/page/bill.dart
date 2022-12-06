@@ -32,8 +32,9 @@ class BillPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final groupTitleStyle = Theme.of(context).textTheme.headline5;
-    final groupSubtitleStyle = Theme.of(context).textTheme.headline3;
+    final textTheme = context.textTheme;
+    final groupTitleStyle = textTheme.headline5;
+    final groupSubtitleStyle = textTheme.headline3;
 
     return GroupedListView<Transaction, int>(
       elements: records,
@@ -59,27 +60,35 @@ class BillPage extends StatelessWidget {
           }
         }
         return ListTile(
+          tileColor:  context.bgColor,
           title: context.dateYearMonth(firstGroupRecord.datetime).text(style: groupTitleStyle),
           subtitle:
-              "${i18n.expenseSpentStatistics(totalSpent.toStringAsFixed(2))} ${i18n.expenseIncomeStatistics(totalIncome.toStringAsFixed(2))}"
-                  .text(style: groupSubtitleStyle),
+          "${i18n.expenseSpentStatistics(totalSpent.toStringAsFixed(2))} ${i18n.expenseIncomeStatistics(totalIncome.toStringAsFixed(2))}"
+              .text(style: groupSubtitleStyle),
         );
       },
       // 生成账单项
       itemBuilder: (ctx, e) {
-        return ListTile(
-          title: Text(e.bestTitle ?? i18n.unknown, style: ctx.textTheme.titleSmall),
-          subtitle: ctx.dateFullNum(e.datetime).text(),
-          leading: Icon(
-            e.type.icon,
-            color: ctx.themeColor,
-            size: 32,
-          ),
-          trailing: e.toReadableString().text(
-                style: TextStyle(color: e.billColor, fontWeight: FontWeight.bold, fontSize: 18),
-              ),
-        );
+        return TransactionTile(trans: e);
       },
+    );
+  }
+}
+
+class TransactionTile extends StatelessWidget {
+  final Transaction trans;
+
+  const TransactionTile({super.key, required this.trans});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(trans.bestTitle ?? i18n.unknown, style: context.textTheme.titleSmall),
+      subtitle: context.dateFullNum(trans.datetime).text(),
+      leading: trans.type.icon.make(color: trans.type.color, size: 32),
+      trailing: trans.toReadableString().text(
+            style: TextStyle(color: trans.billColor, fontWeight: FontWeight.bold, fontSize: 18),
+          ),
     );
   }
 }

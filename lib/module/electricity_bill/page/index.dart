@@ -171,7 +171,7 @@ class _ElectricityBillPageState extends State<ElectricityBillPage> {
         suggestionList: _allRoomNumbers ?? [],
         // 只允许使用搜索建议里的
         onlyUseSuggestion: true,
-        preprocessing: _keepOnlyNumber,
+        preprocess: _keepOnlyNumber,
         childAspectRatio: 2.0,
         maxCrossAxisExtent: 150.0,
       ),

@@ -20,6 +20,8 @@ import 'package:kite/design/utils.dart';
 import 'package:rettulf/rettulf.dart';
 import 'package:tuple/tuple.dart';
 
+typedef _C = Color;
+
 Color getThemeColor(BuildContext ctx) {
   final theme = ctx.theme;
   if (theme.isLight) {
@@ -50,7 +52,7 @@ Color getFgColor(BuildContext ctx) {
 Color getBgColor(BuildContext ctx) {
   var theme = Theme.of(ctx);
   if (theme.isLight) {
-    return theme.colorScheme.onPrimary;
+    return Color.lerp(theme.primaryColor, Colors.white, 0.9)!;
   } else {
     return theme.colorScheme.onSecondary;
   }
@@ -117,22 +119,24 @@ extension ColorPairHelper on ColorPair {
   Color byTheme(ThemeData theme) => theme.isDark ? dark : light;
 }
 
+typedef _Cp = ColorPair;
+
 /// https://m3.material.io/theme-builder#/custom
 class CourseColor {
   /// Raw color is in HTC
   static const List<ColorPair> all = [
-    ColorPair(Color(0xFF85e779), Color(0xFF21520f)), // green #678a5c
-    ColorPair(Color(0xFFc3e8ff), Color(0xFF004c68)), // sky #5487a3
-    ColorPair(Color(0xFFffa6bb), Color(0xFF8e2f56)), // pink #ae6f83
-    ColorPair(Color(0xFFad9bd7), Color(0xFF50378a)), // violet #8879ab
-    ColorPair(Color(0xFFff9d6b), Color(0xFF7f2b00)), // orange #a23900
-    ColorPair(Color(0xFFffa2d2), Color(0xFF8e0032)), // rose #b50060
-    ColorPair(Color(0xFFffd200), Color(0xFF523900)), // lemon #b09e40
-    ColorPair(Color(0xFF75f8e2), Color(0xFF005047)), // cyan #008f7f
-    ColorPair(Color(0xFFb4ebff), Color(0xFF004e5f)), // ice #b3c7cf
-    ColorPair(Color(0xFFb4ebff), Color(0xFF004e5f)), // cyan #d4bdce
-    ColorPair(Color(0xFFffd7f5), Color(0xFF7c157a)), // mauve #ff8df3
-    ColorPair(Color(0xFFeaf141), Color(0xFF4b4c00)), // toxic #a2c300
+    _Cp(_C(0xFF85e779), _C(0xFF21520f)), // green #678a5c
+    _Cp(_C(0xFFc3e8ff), _C(0xFF004c68)), // sky #5487a3
+    _Cp(_C(0xFFffa6bb), _C(0xFF8e2f56)), // pink #ae6f83
+    _Cp(_C(0xFFad9bd7), _C(0xFF50378a)), // violet #8879ab
+    _Cp(_C(0xFFff9d6b), _C(0xFF7f2b00)), // orange #a23900
+    _Cp(_C(0xFFffa2d2), _C(0xFF8e0032)), // rose #b50060
+    _Cp(_C(0xFFffd200), _C(0xFF523900)), // lemon #b09e40
+    _Cp(_C(0xFF75f8e2), _C(0xFF005047)), // cyan #008f7f
+    _Cp(_C(0xFFb4ebff), _C(0xFF004e5f)), // ice #b3c7cf
+    _Cp(_C(0xFFb4ebff), _C(0xFF004e5f)), // cyan #d4bdce
+    _Cp(_C(0xFFffd7f5), _C(0xFF7c157a)), // mauve #ff8df3
+    _Cp(_C(0xFFeaf141), _C(0xFF4b4c00)), // toxic #a2c300
   ];
 
   static get({required ThemeData from, required int by}) => all[by.abs() % all.length].byTheme(from);
@@ -151,3 +155,10 @@ const List<Color> applicationColors = <Color>[
   Colors.purple,
   Colors.teal,
 ];
+
+class IconPair {
+  final IconData icon;
+  final Color color;
+
+  const IconPair(this.icon, this.color);
+}

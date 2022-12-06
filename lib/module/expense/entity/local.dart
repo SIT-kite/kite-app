@@ -81,20 +81,24 @@ extension TransactionEnchanced on Transaction {
   }
 }
 
+typedef _I = IconPair;
+
 enum TransactionType {
-  water(UniconsLine.water_glass),
-  shower(Icons.shower_outlined),
-  food(Icons.restaurant),
-  store(Icons.store_outlined),
-  topUp(Icons.savings),
-  subsidy(Icons.handshake_outlined),
-  coffee(Icons.coffee_rounded),
-  library(Icons.import_contacts_outlined),
-  other(Icons.menu_rounded);
+  water(_I(UniconsLine.water_glass, Color(0xff8acde1))),
+  shower(_I(Icons.shower_outlined, Color(0xFF2196F3))),
+  food(_I(Icons.restaurant, Color(0xffe78d32))),
+  store(_I(Icons.store_outlined,Color(0xFF0DAB30))),
+  topUp(_I(Icons.savings, Colors.blue)),
+  subsidy(_I(Icons.handshake_outlined, Color(0xffdd2e22))),
+  coffee(_I(Icons.coffee_rounded, Color(0xFF6F4E37))),
+  library(_I(Icons.import_contacts_outlined, Color(0xffa75f1d))),
+  other(_I(Icons.menu_rounded, Colors.grey));
 
-  final IconData icon;
+  final IconPair style;
+  IconData get icon => style.icon;
+  Color get color => style.color;
 
-  const TransactionType(this.icon);
+  const TransactionType(this.style);
 
   String localized() {
     switch (this) {
