@@ -22,24 +22,41 @@ import 'package:kite/route.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/scanner.dart';
 import 'package:quick_actions/quick_actions.dart';
+import 'package:rettulf/rettulf.dart';
+
+class _QuickAction {
+  _QuickAction._();
+
+  static const reportTemp = "reportTemp";
+  static const timetable = "timetable";
+  static const library = "library";
+  static const scanner = "scanner";
+}
 
 class QuickButton {
   static BuildContext? _context;
   static const QuickActions _quickActions = QuickActions();
 
   static void quickActionHandler(String type) {
-    if (type == 'reportTemp') {
-      Navigator.of(_context!).pushNamed(RouteTable.reportTemp);
-    } else if (type == 'timetable') {
-      Navigator.of(_context!).pushNamed(RouteTable.timetable);
-    } else if (type == 'library') {
-      Navigator.of(_context!).pushNamed(RouteTable.library);
-    } else if (type == 'scanner') {
-      () async {
-        final result = await scan(_context!);
-        Log.info('扫码结果: $result');
-        if (result != null) GlobalLauncher.launch(result);
-      }();
+    final ctx = _context;
+    if (ctx == null) return;
+    switch (type) {
+      case _QuickAction.reportTemp:
+        ctx.navigator.pushNamed(RouteTable.reportTemp);
+        break;
+      case _QuickAction.timetable:
+        ctx.navigator.pushNamed(RouteTable.timetable);
+        break;
+      case _QuickAction.library:
+        ctx.navigator.pushNamed(RouteTable.library);
+        break;
+      case _QuickAction.scanner:
+        scan(ctx).then((result) {
+          Log.info('扫码结果: $result');
+          if (result != null) GlobalLauncher.launch(result);
+        });
+        ctx.navigator.pushNamed(RouteTable.scanner);
+        break;
     }
   }
 
