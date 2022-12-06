@@ -44,7 +44,7 @@ import 'package:rettulf/rettulf.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import 'home_rearrange.dart';
-import 'storage.dart';
+import '../../storage/page/editor.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -126,7 +126,11 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void _onClearStorage(BuildContext context) async {
     final confirm = await context.showRequest(
-        title: i18n.settingsWipeKiteData, desc: i18n.settingsWipeKiteDataDesc, yes: i18n.confirm, no: i18n.notNow);
+        title: i18n.settingsWipeKiteData,
+        desc: i18n.settingsWipeKiteDataDesc,
+        yes: i18n.confirm,
+        no: i18n.notNow,
+        highlight: true);
     if (confirm == true) {
       await HiveBoxInit.clear(); // 清除存储
       await Initializer.init();
@@ -195,7 +199,8 @@ class _SettingsPageState extends State<SettingsPage> {
               1: i18n.realtimeWeather,
               2: i18n.staticPicture,
             },
-            selected: Kv.home.backgroundMode, // TODO: Kv may return a unavailable value
+            selected: Kv.home.backgroundMode,
+            // TODO: Kv may return a unavailable value
             onChange: (value) {
               Kv.home.backgroundMode = value;
               Global.eventBus.emit(EventNameConstants.onBackgroundChange);
