@@ -16,7 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/launcher.dart';
+import 'package:kite/route.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/scanner.dart';
 import 'package:quick_actions/quick_actions.dart';
@@ -27,11 +29,11 @@ class QuickButton {
 
   static void quickActionHandler(String type) {
     if (type == 'reportTemp') {
-      Navigator.of(_context!).pushNamed('/report_temp');
+      Navigator.of(_context!).pushNamed(RouteTable.reportTemp);
     } else if (type == 'timetable') {
-      Navigator.of(_context!).pushNamed('/timetable');
+      Navigator.of(_context!).pushNamed(RouteTable.timetable);
     } else if (type == 'library') {
-      Navigator.of(_context!).pushNamed('/library');
+      Navigator.of(_context!).pushNamed(RouteTable.library);
     } else if (type == 'scanner') {
       () async {
         final result = await scan(_context!);
@@ -46,10 +48,10 @@ class QuickButton {
     _quickActions.initialize(quickActionHandler);
     // TODO: Add Icons
     _quickActions.setShortcutItems(<ShortcutItem>[
-      const ShortcutItem(type: 'reportTemp', localizedTitle: '体温上报', icon: null),
-      const ShortcutItem(type: 'timetable', localizedTitle: '课表', icon: null),
-      const ShortcutItem(type: 'library', localizedTitle: '图书馆', icon: null),
-      const ShortcutItem(type: 'scanner', localizedTitle: '扫码', icon: null),
+      ShortcutItem(type: 'reportTemp', localizedTitle: i18n.ftype_reportTemp, icon: null),
+      ShortcutItem(type: 'timetable', localizedTitle: i18n.ftype_timetable, icon: null),
+      ShortcutItem(type: 'library', localizedTitle: i18n.ftype_library, icon: null),
+      ShortcutItem(type: 'scanner', localizedTitle: i18n.ftype_scanner, icon: null),
     ]);
   }
 }

@@ -17,8 +17,9 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:kite/route.dart';
 
 Future<String?> scan(BuildContext context) async {
-  final result = await Navigator.of(context).pushNamed('/scanner');
+  final result = await Navigator.of(context).pushNamed(RouteTable.scanner);
   return result as String?;
 }

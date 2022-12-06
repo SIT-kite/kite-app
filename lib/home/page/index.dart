@@ -117,7 +117,7 @@ class _HomePageState extends State<HomePage> {
         title ?? i18n.checkCampusNetworkConnection.text(),
         TextButton(
           child: i18n.openNetworkToolBtn.text(),
-          onPressed: () => Navigator.of(context).pushNamed('/connectivity'),
+          onPressed: () => Navigator.of(context).pushNamed(RouteTable.connectivity),
         )
       ]),
       duration: const Duration(seconds: 5),

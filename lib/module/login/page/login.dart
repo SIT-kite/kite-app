@@ -325,7 +325,7 @@ class _LoginPageState extends State<LoginPage> {
                       style: const TextStyle(color: Colors.grey),
                     ),
                     onPressed: () {
-                      Navigator.of(context).pushNamed('/feedback');
+                      Navigator.of(context).pushNamed(RouteTable.feedback);
                     },
                   ),
                 ],
