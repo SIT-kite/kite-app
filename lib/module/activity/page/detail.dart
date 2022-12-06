@@ -41,7 +41,7 @@ class DetailPage extends StatefulWidget {
   State<StatefulWidget> createState() => _DetailPageState();
 }
 
-class _DetailPageState extends State<DetailPage> {
+class _DetailPageState extends State<DetailPage>  with AutomaticKeepAliveClientMixin{
   int get activityId => widget.activity.id;
 
   Activity get activity => widget.activity;
@@ -59,6 +59,7 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return context.orientation == Orientation.portrait ? buildPortrait(context) : buildLandscape(context);
   }
 
@@ -163,7 +164,7 @@ class _DetailPageState extends State<DetailPage> {
   Widget buildDetailLandscape(BuildContext ctx, ActivityDetail? detail) {
     return [
       const CardCoverBackground().padAll(20),
-      buildGlassmorphismBg(ctx),
+      // buildGlassmorphismBg(ctx),
       Row(mainAxisSize: MainAxisSize.min, children: [
         buildInfoCardLandscape(context, detail).expanded(),
         if (detail != null)
@@ -241,4 +242,7 @@ class _DetailPageState extends State<DetailPage> {
       ],
     ).scrolled(physics: const NeverScrollableScrollPhysics()).padAll(10);
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

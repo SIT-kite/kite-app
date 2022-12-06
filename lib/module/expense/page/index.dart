@@ -44,6 +44,8 @@ class _ExpenseTrackerPageState extends State<ExpenseTrackerPage> {
 
   List<Transaction> allRecords = [];
 
+  List<Widget> pages = [];
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {

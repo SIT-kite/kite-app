@@ -21,14 +21,13 @@ import 'dart:ui';
 import 'package:animations/animations.dart';
 import 'package:catcher/core/catcher.dart';
 import 'package:dynamic_color_theme/dynamic_color_theme.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/l10n/extension.dart';
+import 'package:kite/module/activity/using.dart';
 import 'package:kite/override/entity.dart';
 import 'package:kite/route.dart';
 import 'package:rettulf/rettulf.dart';
@@ -36,7 +35,6 @@ import 'package:rettulf/rettulf.dart';
 import 'global/desktop_init.dart';
 import 'global/global.dart';
 import 'navigation/route.dart';
-import 'storage/init.dart';
 import 'util/logger.dart';
 
 class KiteApp extends StatefulWidget {
@@ -160,7 +158,10 @@ class _KiteAppState extends State<KiteApp> {
           return MediaQuery(
             // 设置文字大小不随系统设置改变
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-            child: widget!,
+            child: AdaptiveUI(
+              hasTransition: true,
+              child: widget!,
+            ),
           );
         }),
         scrollBehavior: const MaterialScrollBehavior().copyWith(

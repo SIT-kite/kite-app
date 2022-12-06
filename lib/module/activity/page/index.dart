@@ -17,7 +17,6 @@
  */
 
 import 'package:flutter/material.dart' hide ThemeData;
-import 'package:flutter/services.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../using.dart';
@@ -40,11 +39,24 @@ class _Page {
 class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderStateMixin {
   /// For landscape mode.
   int curNavigation = _Page.list;
+  final _pageListKey = GlobalKey();
+  final _pageMineKey = GlobalKey();
+  final pages = <Widget>[];
+
+  @override
+  void initState() {
+    super.initState();
+    pages.add(ActivityListPage(
+      key: _pageListKey,
+    ));
+    pages.add(MyActivityPage(
+      key: _pageMineKey,
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
-    return OrientationBuilder(
-        builder: (ctx, orient) => orient == Orientation.portrait ? buildPortrait(ctx) : buildLandscape(ctx));
+    return context.isPortrait ? buildPortrait(context) : buildLandscape(context);
   }
 
   Widget buildPortrait(BuildContext ctx) {
@@ -55,7 +67,10 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
           onPressed: () => showSearch(context: context, delegate: SearchBar()),
         ),
       ]),
-      body: curNavigation == 0 ? const ActivityListPage() : const MyActivityPage(),
+      body: IndexedStack(
+        index: curNavigation,
+        children: pages,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
@@ -108,10 +123,28 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
             ],
           ),
           const VerticalDivider(thickness: 1, width: 1),
+
+          AdaptiveUI(hasTransition: false, child: IndexedStack(index: curNavigation, children: pages)).expanded()
           // This is the main content.
-          Expanded(child: curNavigation == _Page.list ? const ActivityListPage() : const MyActivityPage())
         ],
       ),
     );
+  }
+
+/*
+Navigator(
+                key: curNavigation == _Page.list ? _pageListKey : _pageMineKey,
+                onGenerateRoute: (settings) {
+                  return NoTransitionPageRoute(builder: buildSubRoute);
+                },
+              )
+* */
+  Widget buildSubRoute(BuildContext ctx) {
+    switch (curNavigation) {
+      case _Page.list:
+        return const ActivityListPage();
+      default:
+        return const MyActivityPage();
+    }
   }
 }

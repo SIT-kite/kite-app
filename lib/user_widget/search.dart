@@ -21,7 +21,7 @@ import 'package:kite/module/exam_arr/using.dart';
 import 'package:rettulf/rettulf.dart';
 
 /// 搜索对象的WidgetBuilder
-typedef SearchItemBuilder<T> = Widget Function(BuildContext ctx, T itemData, String highlighted);
+typedef SearchItemBuilder<T> = Widget Function(BuildContext ctx, T itemData, String highlighted, VoidCallback onSelect);
 
 /// 搜索对象文档化
 typedef SearchItemDocumented<T> = String Function(T itemData);
@@ -85,10 +85,7 @@ class SimpleTextSearchDelegate<T> extends SearchDelegate {
   Widget buildRecentList(BuildContext context) {
     return ListView(
         children: recentList.map((e) {
-      return GestureDetector(
-        child: searchItemBuilder!(context, e, searchItemDocumented!(e)),
-        onTap: () => close(context, e),
-      );
+      return searchItemBuilder(context, e, searchItemDocumented!(e), () => close(context, e));
     }).toList());
   }
 
@@ -116,9 +113,7 @@ class SimpleTextSearchDelegate<T> extends SearchDelegate {
       final highlighted = highlight(context, documented);
 
       // 搜索结果Widget构建
-      final widget = searchItemBuilder!(context, item, highlighted).onTap(() {
-        close(context, item);
-      });
+      final widget = searchItemBuilder(context, item, highlighted, () => close(context, item));
 
       children.add(widget);
     }

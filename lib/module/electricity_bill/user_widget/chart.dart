@@ -43,6 +43,33 @@ class ElectricityChartState extends State<ElectricityChart> {
   ElectricityChartMode mode = ElectricityChartMode.hourly;
   List<HourlyBill>? hourlyBill;
   List<DailyBill>? dailyBill;
+  final service = ElectricityBillInit.electricityService;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        cardTitle(i18n.elecBillElecChart),
+        const SizedBox(height: 20),
+        SizedBox(
+            width: 300.w,
+            child: AnimatedButtonBar(
+              radius: 20,
+              invertedSelection: true,
+              foregroundColor: context.isDarkMode ? null : context.themeColor,
+              children: [
+                ButtonBarEntry(
+                    onTap: () => onSetMode(ElectricityChartMode.hourly), child: i18n.elecBillLast24Hour.text()),
+                ButtonBarEntry(onTap: () => onSetMode(ElectricityChartMode.daily), child: i18n.elecBillLast7Day.text()),
+              ],
+            )),
+        const SizedBox(height: 20),
+        _buildChartInCurrentMode(context),
+        const SizedBox(height: 5),
+      ],
+    );
+  }
 
   /// 小时模式
   Widget buildHourlyChart(BuildContext ctx) {
@@ -104,54 +131,25 @@ class ElectricityChartState extends State<ElectricityChart> {
   void onSetMode(ElectricityChartMode newMode) async {
     if (newMode == mode) return;
     var room = widget.room;
-    setState(() {
-      dailyBill = null;
-      hourlyBill = null;
-    });
     if (room != null) {
       if (newMode == ElectricityChartMode.daily) {
-        final newDailyBill = await ElectricityBillInit.electricityService.getDailyBill(room);
-        setState(() {
-          dailyBill = newDailyBill;
-          mode = newMode;
-        });
+        if (dailyBill == null) {
+          final newDailyBill = await ElectricityBillInit.electricityService.getDailyBill(room);
+          setState(() {
+            dailyBill = newDailyBill;
+          });
+        }
       } else {
-        final newHourlyBill = await ElectricityBillInit.electricityService.getHourlyBill(room);
-        setState(() {
-          hourlyBill = newHourlyBill;
-          mode = newMode;
-        });
+        if (hourlyBill != null) {
+          final newHourlyBill = await ElectricityBillInit.electricityService.getHourlyBill(room);
+          setState(() {
+            hourlyBill = newHourlyBill;
+          });
+        }
       }
-    } else {
-      setState(() {
-        mode = newMode;
-      });
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        cardTitle(i18n.elecBillElecChart),
-        const SizedBox(height: 20),
-        SizedBox(
-            width: 300.w,
-            child: AnimatedButtonBar(
-              radius: 20,
-              invertedSelection: true,
-              foregroundColor: context.isDarkMode ? null : context.themeColor,
-              children: [
-                ButtonBarEntry(
-                    onTap: () => onSetMode(ElectricityChartMode.hourly), child: i18n.elecBillLast24Hour.text()),
-                ButtonBarEntry(onTap: () => onSetMode(ElectricityChartMode.daily), child: i18n.elecBillLast7Day.text()),
-              ],
-            )),
-        const SizedBox(height: 20),
-        _buildChartInCurrentMode(context),
-        const SizedBox(height: 5),
-      ],
-    );
+    setState(() {
+      mode = newMode;
+    });
   }
 }

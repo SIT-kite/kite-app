@@ -21,6 +21,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:geopattern_flutter/geopattern_flutter.dart';
 import 'package:geopattern_flutter/patterns/overlapping_circles.dart';
+import 'package:kite/design/user_widgets/route.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../entity/list.dart';
@@ -93,7 +94,9 @@ class ActivityCard extends StatelessWidget {
       margin: const EdgeInsets.all(10),
       child: ClipRRect(borderRadius: BorderRadius.circular(16), child: _buildBasicInfo(context)),
     ).hero(activity.id).on(tap: () {
-      Navigator.of(context).push(MaterialPageRoute(builder: (_) => DetailPage(activity, hero: activity.id)));
+      final route = AdaptiveUI.of(context).makeRoute((_) => DetailPage(activity, hero: activity.id));
+      context.navigator.push(route);
+      //Navigator.of(context).push(MaterialPageRoute(builder: (_) => DetailPage(activity, hero: activity.id)));
     });
   }
 }

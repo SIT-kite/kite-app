@@ -33,7 +33,8 @@ class ActivityListPage extends StatefulWidget {
   State<StatefulWidget> createState() => _ActivityListPageState();
 }
 
-class _ActivityListPageState extends State<ActivityListPage> with SingleTickerProviderStateMixin {
+class _ActivityListPageState extends State<ActivityListPage>
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   static const categories = [
     ActivityType.lecture,
     ActivityType.creation,
@@ -84,6 +85,7 @@ class _ActivityListPageState extends State<ActivityListPage> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return DefaultTabController(
       length: categories.length,
       child: Scaffold(
@@ -102,6 +104,9 @@ class _ActivityListPageState extends State<ActivityListPage> with SingleTickerPr
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class ActivityList extends StatefulWidget {

@@ -46,6 +46,7 @@ class _ElectricityBillPageState extends State<ElectricityBillPage> {
   final storage = ElectricityBillInit.electricityStorage;
   List<String>? _searchHistory;
   List<String>? _allRoomNumbers;
+  var _dashboardKey = GlobalKey();
 
   /// For landscape mode Full.
   int curNavigation = _Page.bill;
@@ -94,7 +95,7 @@ class _ElectricityBillPageState extends State<ElectricityBillPage> {
             ? EmptySearchTip(
                 search: search,
               )
-            : Dashboard(selectedRoom: selectedRoom));
+            : Dashboard(key: _dashboardKey, selectedRoom: selectedRoom));
   }
 
   Widget buildLandscape(BuildContext ctx) {
@@ -107,7 +108,7 @@ class _ElectricityBillPageState extends State<ElectricityBillPage> {
     } else {
       switch (curNavigation) {
         case _Page.bill:
-          right = Dashboard(selectedRoom: selectedRoom);
+          right = Dashboard(key: _dashboardKey, selectedRoom: selectedRoom);
           break;
         default:
           right = Search(
@@ -168,10 +169,12 @@ class _ElectricityBillPageState extends State<ElectricityBillPage> {
       delegate: SimpleTextSearchDelegate(
         // 最近查询(需要从hive里获取)，也可留空
         recentList: recentList.reversed.toList(),
-        searchItemBuilder: (ctx, item, highlight) => HtmlWidget(
+        searchItemBuilder: (ctx, item, highlight, onSelect) => HtmlWidget(
           highlight,
           textStyle: ctx.textTheme.titleMedium,
-        ).padAll(2).elevatedButton(onPressed: () {}).padAll(5),
+        ).padAll(2).elevatedButton(onPressed: () {
+          onSelect();
+        }).padAll(5),
         // 待搜索提示的列表(需要从服务器获取，可以缓存至数据库)
         suggestionList: _allRoomNumbers ?? [],
         // 只允许使用搜索建议里的
@@ -194,6 +197,20 @@ class _ElectricityBillPageState extends State<ElectricityBillPage> {
     return String.fromCharCodes(raw.codeUnits.where((e) => e >= 48 && e < 58));
   }
 
+  void selectRoomNumber(String roomNumber) {
+    final recentList = _searchHistory ?? [];
+    recentList.remove(roomNumber);
+    recentList.add(roomNumber);
+    storage.searchHistory = recentList;
+    if (!mounted) return;
+    if (_selectedRoom != roomNumber) {
+      setState(() {
+        _selectedRoom = roomNumber;
+        curNavigation = _Page.bill;
+        _dashboardKey = GlobalKey();
+      });
+    }
+  }
 /*
   // benchmark: 100,000,000 times, result: 1:06.313091 minutes, AMD Ryzen 9 5900X 12-Core
   // created by Liplum
@@ -210,15 +227,4 @@ class _ElectricityBillPageState extends State<ElectricityBillPage> {
   }
 */
 
-  void selectRoomNumber(String roomNumber) {
-    final recentList = _searchHistory ?? [];
-    recentList.remove(roomNumber);
-    recentList.add(roomNumber);
-    storage.searchHistory = recentList;
-    if (!mounted) return;
-    setState(() {
-      _selectedRoom = roomNumber;
-      curNavigation = _Page.bill;
-    });
-  }
 }

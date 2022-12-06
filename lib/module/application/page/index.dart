@@ -39,6 +39,20 @@ class _Page {
 
 class _ApplicationPageState extends State<ApplicationPage> {
   int curNavigation = _Page.list;
+  final pages = <Widget>[];
+  final _pageListKey = GlobalKey();
+  final _pageMineKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    pages.add(ApplicationList(
+      key: _pageListKey,
+    ));
+    pages.add(Mailbox(
+      key: _pageMineKey,
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +61,7 @@ class _ApplicationPageState extends State<ApplicationPage> {
 
   Widget buildPortrait(BuildContext context) {
     return Scaffold(
+      key: const ValueKey("Portrait"),
       appBar: AppBar(
         title: i18n.ftype_application.text(),
         actions: [
@@ -56,7 +71,10 @@ class _ApplicationPageState extends State<ApplicationPage> {
           )
         ],
       ),
-      body: curNavigation == 0 ? const ApplicationList() : const Mailbox(),
+      body: IndexedStack(
+        index: curNavigation,
+        children: pages,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
@@ -78,6 +96,7 @@ class _ApplicationPageState extends State<ApplicationPage> {
 
   Widget buildLandscape(BuildContext context) {
     return Scaffold(
+      key: const ValueKey("Landscape"),
       body: Row(
         children: <Widget>[
           NavigationRail(
@@ -118,15 +137,15 @@ class _ApplicationPageState extends State<ApplicationPage> {
           ),
           const VerticalDivider(thickness: 1, width: 1),
           // This is the main content.
-          Expanded(child: curNavigation == 0 ? const ApplicationList() : const Mailbox())
+          IndexedStack(
+            index: curNavigation,
+            children: pages,
+          ).expanded()
         ],
       ),
     );
   }
 
-  Future<void> showInfo(BuildContext ctx) async {
-    await ctx.showTip(title: i18n.ftype_application, desc: i18n.applicationDesc, ok: i18n.close);
-  }
 /*
   PopupMenuButton _buildMenuButton(BuildContext context) {
     final menuButton = PopupMenuButton(
@@ -153,4 +172,8 @@ class _ApplicationPageState extends State<ApplicationPage> {
     );
     return menuButton;
   }*/
+}
+
+Future<void> showInfo(BuildContext ctx) async {
+  await ctx.showTip(title: i18n.ftype_application, desc: i18n.applicationDesc, ok: i18n.close);
 }

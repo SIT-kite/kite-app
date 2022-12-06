@@ -36,7 +36,7 @@ class MyActivityPage extends StatefulWidget {
   State<MyActivityPage> createState() => _MyActivityPageState();
 }
 
-class _MyActivityPageState extends State<MyActivityPage> {
+class _MyActivityPageState extends State<MyActivityPage> with AutomaticKeepAliveClientMixin {
   List<ScJoinedActivity>? joined;
   ScScoreSummary? summary;
 
@@ -48,10 +48,14 @@ class _MyActivityPageState extends State<MyActivityPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       body: context.orientation == Orientation.portrait ? buildPortrait(context) : buildLandscape(context),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   void onRefresh() {
     ScInit.scScoreService.getScScoreSummary().then((value) {
