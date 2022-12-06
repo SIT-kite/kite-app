@@ -21,17 +21,17 @@ import 'package:kite/module/exam_arr/using.dart';
 import 'package:rettulf/rettulf.dart';
 
 /// 搜索对象的WidgetBuilder
-typedef SearchItemBuilder<T> = Widget Function(T itemData, String highlighted);
+typedef SearchItemBuilder<T> = Widget Function(BuildContext ctx, T itemData, String highlighted);
 
 /// 搜索对象文档化
 typedef SearchItemDocumented<T> = String Function(T itemData);
-typedef TextPreprocess = String Function(String raw);
+typedef TextPreprocessing = String Function(String raw);
 
 class SimpleTextSearchDelegate<T> extends SearchDelegate {
   final List<T> recentList, suggestionList;
-  SearchItemBuilder<T>? searchItemBuilder;
+  SearchItemBuilder<T> searchItemBuilder;
   SearchItemDocumented<T>? searchItemDocumented;
-  TextPreprocess? preprocess;
+  TextPreprocessing? preprocess;
   final bool onlyUseSuggestion;
   final double maxCrossAxisExtent;
   final double childAspectRatio;
@@ -39,15 +39,15 @@ class SimpleTextSearchDelegate<T> extends SearchDelegate {
   SimpleTextSearchDelegate({
     required this.recentList,
     required this.suggestionList,
-    this.searchItemBuilder,
+    required this.searchItemBuilder,
     this.searchItemDocumented,
     this.preprocess,
     this.onlyUseSuggestion = true,
     this.maxCrossAxisExtent = 150.0,
     this.childAspectRatio = 2.0,
+    super.keyboardType,
   }) {
     searchItemDocumented ??= (item) => item.toString();
-    searchItemBuilder ??= (item, highlight) => ListTile(title: HtmlWidget(highlight)).center().inCard(elevation: 4);
   }
 
   String get realQuery => preprocess?.call(query) ?? query;
@@ -86,7 +86,7 @@ class SimpleTextSearchDelegate<T> extends SearchDelegate {
     return ListView(
         children: recentList.map((e) {
       return GestureDetector(
-        child: searchItemBuilder!(e, searchItemDocumented!(e)),
+        child: searchItemBuilder!(context, e, searchItemDocumented!(e)),
         onTap: () => close(context, e),
       );
     }).toList());
@@ -97,6 +97,8 @@ class SimpleTextSearchDelegate<T> extends SearchDelegate {
     final highlight = "<span style='color:${ctx.highlightColor};font-weight: bold'>$realQuery</span>";
     return splitTextList.join(highlight);
   }
+
+  final _scrollController = ScrollController();
 
   Widget buildSearchList(BuildContext context) {
     List<Widget> children = [];
@@ -114,7 +116,7 @@ class SimpleTextSearchDelegate<T> extends SearchDelegate {
       final highlighted = highlight(context, documented);
 
       // 搜索结果Widget构建
-      final widget = searchItemBuilder!(item, highlighted).onTap(() {
+      final widget = searchItemBuilder!(context, item, highlighted).onTap(() {
         close(context, item);
       });
 
@@ -122,10 +124,11 @@ class SimpleTextSearchDelegate<T> extends SearchDelegate {
     }
 
     return GridView(
+      controller: _scrollController,
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: maxCrossAxisExtent, childAspectRatio: childAspectRatio),
       children: children,
-    );
+    ).scrolledWithBar();
   }
 
   @override

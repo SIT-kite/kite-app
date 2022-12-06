@@ -19,6 +19,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:kite/module/electricity_bill/symbol.dart';
 import 'package:rettulf/rettulf.dart';
 
@@ -167,12 +168,17 @@ class _ElectricityBillPageState extends State<ElectricityBillPage> {
       delegate: SimpleTextSearchDelegate(
         // 最近查询(需要从hive里获取)，也可留空
         recentList: recentList.reversed.toList(),
+        searchItemBuilder: (ctx, item, highlight) => HtmlWidget(
+          highlight,
+          textStyle: ctx.textTheme.titleMedium,
+        ).padAll(2).elevatedButton(onPressed: () {}).padAll(5),
         // 待搜索提示的列表(需要从服务器获取，可以缓存至数据库)
         suggestionList: _allRoomNumbers ?? [],
         // 只允许使用搜索建议里的
         onlyUseSuggestion: true,
         preprocess: _keepOnlyNumber,
-        childAspectRatio: 2.0,
+        keyboardType: TextInputType.number,
+        childAspectRatio: 2,
         maxCrossAxisExtent: 150.0,
       ),
     ).then((value) async {

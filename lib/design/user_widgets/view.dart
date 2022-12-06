@@ -1,4 +1,3 @@
-
 /*
  *    上应小风筝(SIT-kite)  便利校园，一步到位
  *    Copyright (C) 2022 上海应用技术大学 上应小风筝团队
@@ -66,7 +65,14 @@ class _KiteScrolledWithBarState extends State<_KiteScrolledWithBar> {
   @override
   void initState() {
     super.initState();
-    controller = widget.controller ?? ScrollController();
+    final child = widget.child;
+    if (child is ScrollView) {
+      final childController = child.controller;
+      assert(childController != null, "The ScrollView external provided should have a ScrollController.");
+      controller = child.controller;
+    } else {
+      controller = widget.controller ?? ScrollController();
+    }
   }
 
   @override
@@ -80,8 +86,6 @@ class _KiteScrolledWithBarState extends State<_KiteScrolledWithBar> {
           // child mode
           if (child is! ScrollView) {
             child = child.scrolled(controller: controller);
-          } else {
-            assert(child.controller == controller, "The ScrollView external provided should have no controller.");
           }
         } else if (children != null) {
           // list mode
