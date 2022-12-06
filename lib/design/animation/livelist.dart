@@ -15,6 +15,7 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/widgets.dart';
 
 extension LiveListAnimationEx on Widget {
@@ -38,3 +39,8 @@ extension LiveListAnimationEx on Widget {
         ),
       );
 }
+
+const kiteLiveOptions = LiveOptions(
+  showItemInterval: Duration(milliseconds: 40), // the interval between two items
+  showItemDuration: Duration(milliseconds: 250), // How long it animated to appear
+);

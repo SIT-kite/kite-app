@@ -62,6 +62,10 @@ class _ExamArrangementPageState extends State<ExamArrangementPage> {
   }
 
   void refresh() {
+    setState(() {
+      // To display the loading placeholder.
+      _exams = null;
+    });
     ExamArrInit.examService
         .getExamList(
       SchoolYear(selectedYear),
@@ -81,27 +85,18 @@ class _ExamArrangementPageState extends State<ExamArrangementPage> {
       return Placeholders.loading();
     }
     if (exams.isEmpty) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SvgPicture.asset(
-            'assets/common/not-found.svg',
-            width: 260,
-            height: 260,
-          ).flexible(flex: 3),
-          Text(i18n.examNoExamThisSemester, style: const TextStyle(color: Colors.grey)).flexible(flex: 1),
-        ],
-      );
+      return LeavingBlank.svgAssets(
+          assetName: "assets/common/not-found.svg", desc: i18n.examNoExamThisSemester, width: 240, height: 240);
     } else {
       return LayoutBuilder(builder: (ctx, constraints) {
         final count = constraints.maxWidth ~/ 300;
-        return LiveGrid(
+        return LiveGrid.options(
           itemCount: exams.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: count,
             childAspectRatio: 1.55,
           ),
-          showItemInterval: const Duration(milliseconds: 40),
+          options: kiteLiveOptions,
           itemBuilder: (ctx, index, animation) => ExamCard(exam: exams[index])
               .padSymmetric(v: 8, h: 16)
               .inCard(elevation: 5)

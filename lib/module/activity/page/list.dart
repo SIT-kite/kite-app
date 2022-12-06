@@ -174,13 +174,13 @@ class _ActivityListState extends State<ActivityList> {
   Widget _buildActivityResult(List<Activity> activities) {
     return LayoutBuilder(builder: (ctx, constraints) {
       final count = constraints.maxWidth ~/ 180;
-      return LiveGrid(
+      return LiveGrid.options(
         controller: _scrollController,
         itemCount: activities.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: count,
         ),
-        showItemInterval: const Duration(milliseconds: 40),
+        options: kiteLiveOptions,
         itemBuilder: (ctx, index, animation) => buildAnimatedActivityCard(ctx, activities[index], animation),
       );
     });

@@ -18,6 +18,7 @@
 */
 import 'package:flutter/material.dart';
 import 'package:kite/module/exam_arr/entity/exam.dart';
+import 'package:rettulf/rettulf.dart';
 import '../using.dart';
 
 class ExamCard extends StatefulWidget {
@@ -52,10 +53,7 @@ class _ExamCardState extends State<ExamCard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
-          child: Text(name, style: Theme.of(context).textTheme.headline6),
-        ),
+        Text(name, style: Theme.of(context).textTheme.headline6).padAll(12),
         Table(
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           columnWidths: const {0: FlexColumnWidth(4), 1: FlexColumnWidth(5)},

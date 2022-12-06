@@ -16,24 +16,48 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import '../colors.dart';
 import 'package:rettulf/rettulf.dart';
 
 class LeavingBlank extends StatelessWidget {
-  final IconData icon;
+  final WidgetBuilder iconBuilder;
   final String desc;
   final VoidCallback? onIconTap;
 
-  const LeavingBlank({super.key, required this.icon, required this.desc, this.onIconTap});
+  const LeavingBlank.builder({super.key, required this.iconBuilder, required this.desc, this.onIconTap});
+
+  factory LeavingBlank(
+      {Key? key, required IconData icon, required String desc, VoidCallback? onIconTap, double size = 120}) {
+    return LeavingBlank.builder(
+      iconBuilder: (ctx) => icon.make(size: size, color: ctx.darkSafeThemeColor),
+      desc: desc,
+      onIconTap: onIconTap,
+    );
+  }
+
+  factory LeavingBlank.svgAssets(
+      {Key? key,
+      required String assetName,
+      required String desc,
+      VoidCallback? onIconTap,
+      double width = 120,
+      double height = 120}) {
+    return LeavingBlank.builder(
+      iconBuilder: (ctx) => SvgPicture.asset(assetName, width: width, height: height),
+      desc: desc,
+      onIconTap: onIconTap,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    Widget iconWidget = icon.make(size: 120, color: context.darkSafeThemeColor).padAll(20);
+    Widget icon = iconBuilder(context).padAll(20);
     if (onIconTap != null) {
-      iconWidget = iconWidget.on(tap: onIconTap);
+      icon = icon.on(tap: onIconTap);
     }
     return [
-      iconWidget.expanded(),
+      icon.expanded(),
       desc
           .text(
             style: context.textTheme.titleLarge,

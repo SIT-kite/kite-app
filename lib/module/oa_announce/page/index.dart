@@ -89,13 +89,13 @@ class _OaAnnouncePageState extends State<OaAnnouncePage> {
     final items = records.mapIndexed((i, e) => _buildAnnounceItem(context, e).inCard()).toList();
     return LayoutBuilder(builder: (ctx, constraints) {
       final count = constraints.maxWidth ~/ 300;
-      return LiveGrid(
+      return LiveGrid.options(
         itemCount: items.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: count,
           childAspectRatio: 4,
         ),
-        showItemInterval: const Duration(milliseconds: 40),
+        options: kiteLiveOptions,
         itemBuilder: (ctx, index, animation) => items[index].aliveWith(animation),
       );
     });

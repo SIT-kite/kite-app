@@ -228,7 +228,7 @@
   "examEndTime": "Ent Time",
   "examIsRetake": "Is Retake",
   "examLocation": "Location",
-  "examNoExamThisSemester": "No exams this semester",
+  "examNoExamThisSemester": "No exam in this semester.",
   "examResultBePatientLabel": "Please be patient :)",
   "examResultNoResult": "No result record",
   "examSeatNumber": "Seat No.",

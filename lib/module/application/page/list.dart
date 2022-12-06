@@ -132,13 +132,13 @@ class _ApplicationListState extends State<ApplicationList> {
     final items = buildApplications(list);
     return LayoutBuilder(builder: (ctx, constraints) {
       final count = constraints.maxWidth ~/ 300;
-      return LiveGrid(
+      return LiveGrid.options(
         itemCount: items.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: count,
           childAspectRatio: 5,
         ),
-        showItemInterval: const Duration(milliseconds: 40),
+        options: kiteLiveOptions,
         itemBuilder: (ctx, index, animation) => items[index].aliveWith(animation),
       );
     });

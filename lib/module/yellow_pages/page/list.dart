@@ -106,14 +106,14 @@ class _NavigationContactListState extends State<NavigationContactList> {
       }
       return LayoutBuilder(builder: (ctx, constraints) {
         final count = constraints.maxWidth ~/ 300;
-        return LiveGrid(
+        return LiveGrid.options(
           key: ValueKey(selected),
           itemCount: items.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: count,
             childAspectRatio: 4,
           ),
-          showItemInterval: const Duration(milliseconds: 40),
+          options: kiteLiveOptions,
           itemBuilder: (ctx, index, animation) => ContactTile(items[index]).aliveWith(animation),
         );
       });
