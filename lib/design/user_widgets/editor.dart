@@ -165,7 +165,7 @@ class _IntEditorState extends State<_IntEditor> {
               child: const Icon(Icons.add),
               onPressed: () {
                 setState(() {
-                  value ++;
+                  value++;
                   controller.text = value.toString();
                 });
               },

@@ -20,7 +20,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:rettulf/rettulf.dart';
 
-import '../entity/function.dart';
+import '../entity/application.dart';
 import '../init.dart';
 import '../user_widget/application.dart';
 import '../using.dart';

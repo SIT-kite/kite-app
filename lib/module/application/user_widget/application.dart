@@ -20,7 +20,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../using.dart';
-import '../entity/function.dart';
+import '../entity/application.dart';
 import '../page/detail.dart';
 import 'dart:math';
 

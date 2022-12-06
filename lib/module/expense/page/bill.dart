@@ -60,11 +60,11 @@ class BillPage extends StatelessWidget {
           }
         }
         return ListTile(
-          tileColor:  context.bgColor,
+          tileColor: context.bgColor,
           title: context.dateYearMonth(firstGroupRecord.datetime).text(style: groupTitleStyle),
           subtitle:
-          "${i18n.expenseSpentStatistics(totalSpent.toStringAsFixed(2))} ${i18n.expenseIncomeStatistics(totalIncome.toStringAsFixed(2))}"
-              .text(style: groupSubtitleStyle),
+              "${i18n.expenseSpentStatistics(totalSpent.toStringAsFixed(2))} ${i18n.expenseIncomeStatistics(totalIncome.toStringAsFixed(2))}"
+                  .text(style: groupSubtitleStyle),
         );
       },
       // 生成账单项

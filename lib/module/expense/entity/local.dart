@@ -87,7 +87,7 @@ enum TransactionType {
   water(_I(UniconsLine.water_glass, Color(0xff8acde1))),
   shower(_I(Icons.shower_outlined, Color(0xFF2196F3))),
   food(_I(Icons.restaurant, Color(0xffe78d32))),
-  store(_I(Icons.store_outlined,Color(0xFF0DAB30))),
+  store(_I(Icons.store_outlined, Color(0xFF0DAB30))),
   topUp(_I(Icons.savings, Colors.blue)),
   subsidy(_I(Icons.handshake_outlined, Color(0xffdd2e22))),
   coffee(_I(Icons.coffee_rounded, Color(0xFF6F4E37))),

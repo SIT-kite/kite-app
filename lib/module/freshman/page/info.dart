@@ -31,11 +31,9 @@ class FreshmanPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => _FreshmanPageState();
-
 }
 
 class _FreshmanPageState extends State<FreshmanPage> {
-
   final freshmanDao = FreshmanInit.freshmanDao;
   final freshmanCacheManager = FreshmanInit.freshmanCacheManager;
   final refreshController = RefreshController();
@@ -107,6 +105,7 @@ class _FreshmanPageState extends State<FreshmanPage> {
       showBasicFlash(context, Text(tips));
     }
   }
+
   @override
   void dispose() {
     super.dispose();

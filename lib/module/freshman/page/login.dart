@@ -230,27 +230,24 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
             child: Container(
               width: 1.sw,
               padding: EdgeInsets.fromLTRB(50.w, 0, 50.w, 0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Title field.
-                  buildTitleLine(),
-                  Padding(padding: EdgeInsets.only(top: 40.h)),
-                  // Form field: username and password.
-                  buildLoginForm(),
-                  SizedBox(height: 10.h),
-                  // User license check box.
-                  buildUserLicenseCheckbox(),
-                  SizedBox(height: 25.h),
-                  // Login button.
-                  Row(
-                    children: [
-                      buildLoginButton(),
-                      const SizedBox(width: 10),
-                    ],
-                  ),
-                ]
-              ).scrolled(physics: const NeverScrollableScrollPhysics()),
+              child: Column(mainAxisSize: MainAxisSize.min, children: [
+                // Title field.
+                buildTitleLine(),
+                Padding(padding: EdgeInsets.only(top: 40.h)),
+                // Form field: username and password.
+                buildLoginForm(),
+                SizedBox(height: 10.h),
+                // User license check box.
+                buildUserLicenseCheckbox(),
+                SizedBox(height: 25.h),
+                // Login button.
+                Row(
+                  children: [
+                    buildLoginButton(),
+                    const SizedBox(width: 10),
+                  ],
+                ),
+              ]).scrolled(physics: const NeverScrollableScrollPhysics()),
             ),
           ),
           Align(

@@ -41,7 +41,7 @@ class DetailPage extends StatefulWidget {
   State<StatefulWidget> createState() => _DetailPageState();
 }
 
-class _DetailPageState extends State<DetailPage>  with AutomaticKeepAliveClientMixin{
+class _DetailPageState extends State<DetailPage> with AutomaticKeepAliveClientMixin {
   int get activityId => widget.activity.id;
 
   Activity get activity => widget.activity;

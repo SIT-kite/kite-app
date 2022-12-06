@@ -52,7 +52,7 @@ class _ExpenseItemState extends State<ExpenseItem> {
   void refreshTracker() {
     final tsl = ExpenseTrackerInit.local.transactionTsList;
     if (tsl.isNotEmpty) {
-      if(!mounted) return;
+      if (!mounted) return;
       setState(() {
         lastExpense = ExpenseTrackerInit.local.getTransactionByTs(tsl.last);
       });

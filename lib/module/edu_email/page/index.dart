@@ -51,6 +51,7 @@ class _MailPageState extends State<MailPage> {
       body: _buildBody(context),
     );
   }
+
   Future<void> _updateMailList() async {
     try {
       final messages = (await _loadMailList()).messages;
@@ -148,7 +149,8 @@ class _MailPageState extends State<MailPage> {
 
     return PopupMenuButton(itemBuilder: (_) => [PopupMenuItem(child: Text(email))]);
   }
-@override
+
+  @override
   void dispose() {
     super.dispose();
     _controller.dispose();

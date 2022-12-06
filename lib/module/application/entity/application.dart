@@ -20,7 +20,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 import '../using.dart';
 
-part 'function.g.dart';
+part 'application.g.dart';
 
 @JsonSerializable(createToJson: false)
 class ApplicationMeta {
