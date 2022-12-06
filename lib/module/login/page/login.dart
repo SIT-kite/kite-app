@@ -300,7 +300,7 @@ class _LoginPageState extends State<LoginPage> {
                   // Login button.
                   buildLoginButton(),
                 ],
-              ),
+              ).scrolled(physics: const NeverScrollableScrollPhysics()),
             ),
           ),
           Align(

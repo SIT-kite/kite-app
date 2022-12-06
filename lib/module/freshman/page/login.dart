@@ -250,7 +250,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
                     ],
                   ),
                 ]
-              ),
+              ).scrolled(physics: const NeverScrollableScrollPhysics()),
             ),
           ),
           Align(

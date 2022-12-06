@@ -17,7 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/global/global.dart';
-import 'package:kite/l10n/extension.dart';
+import 'package:kite/module/freshman/using.dart';
 import '../brick.dart';
 
 class EduEmailItem extends StatefulWidget {
@@ -47,7 +47,7 @@ class _EduEmailItemState extends State<EduEmailItem> {
   @override
   Widget build(BuildContext context) {
     return Brick(
-      route: '/eduEmail',
+      route: RouteTable.eduEmail,
       icon: SvgAssetIcon('assets/home/icon_mail.svg'),
       title: i18n.ftype_eduEmail,
       subtitle: content ?? i18n.ftype_eduEmail_desc,

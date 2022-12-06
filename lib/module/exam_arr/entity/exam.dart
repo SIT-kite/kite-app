@@ -56,7 +56,7 @@ class ExamEntry {
 
   @override
   String toString() {
-    return 'ExamRoom{courseName: $courseName, time: $time, place: $place, campus: $campus, seatNumber: $seatNumber, isSecondExam: $isSecondExam}';
+    return 'ExamEntry{courseName: $courseName, time: $time, place: $place, campus: $campus, seatNumber: $seatNumber, isSecondExam: $isSecondExam}';
   }
 
   static int _stringToInt(String s) => int.tryParse(s) ?? 0;

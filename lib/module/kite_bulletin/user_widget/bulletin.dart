@@ -1,4 +1,3 @@
-
 /*
  *    上应小风筝(SIT-kite)  便利校园，一步到位
  *    Copyright (C) 2022 上海应用技术大学 上应小风筝团队
@@ -59,7 +58,7 @@ class BulletinPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = isSelected ? context.theme.secondaryHeaderColor : null;
     return [
-      _buildTitle(context, bulletin),
+      _buildTitle(context, bulletin, overflow: TextOverflow.ellipsis),
       context
           .dateNum(bulletin.publishTime)
           .text(style: const TextStyle(color: Colors.grey))
@@ -68,14 +67,11 @@ class BulletinPreview extends StatelessWidget {
   }
 }
 
-Widget _buildTitle(BuildContext ctx, KiteBulletin bulletin) {
+Widget _buildTitle(BuildContext ctx, KiteBulletin bulletin, {TextOverflow? overflow}) {
+  final title = bulletin.title.text(overflow: overflow, style: Theme.of(ctx).textTheme.headline3);
   if (bulletin.top) {
-    return [const Icon(Icons.push_pin_rounded), _buildTitleText(ctx, bulletin.title)].row();
+    return [const Icon(Icons.push_pin_rounded), title].row();
   } else {
-    return _buildTitleText(ctx, bulletin.title);
+    return title;
   }
-}
-
-Widget _buildTitleText(BuildContext ctx, String title) {
-  return title.text(overflow: TextOverflow.ellipsis, style: Theme.of(ctx).textTheme.headline3);
 }
