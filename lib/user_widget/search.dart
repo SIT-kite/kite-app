@@ -17,6 +17,7 @@
 */
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:kite/module/exam_arr/using.dart';
 import 'package:rettulf/rettulf.dart';
 
 /// 搜索对象的WidgetBuilder
@@ -24,11 +25,13 @@ typedef SearchItemBuilder<T> = Widget Function(T itemData, String highlighted);
 
 /// 搜索对象文档化
 typedef SearchItemDocumented<T> = String Function(T itemData);
+typedef TextPreprocessing = String Function(String raw);
 
 class SimpleTextSearchDelegate<T> extends SearchDelegate {
   final List<T> recentList, suggestionList;
   SearchItemBuilder<T>? searchItemBuilder;
   SearchItemDocumented<T>? searchItemDocumented;
+  TextPreprocessing? preprocessing;
   final bool onlyUseSuggestion;
   final double maxCrossAxisExtent;
   final double childAspectRatio;
@@ -38,13 +41,16 @@ class SimpleTextSearchDelegate<T> extends SearchDelegate {
     required this.suggestionList,
     this.searchItemBuilder,
     this.searchItemDocumented,
+    this.preprocessing,
     this.onlyUseSuggestion = true,
     this.maxCrossAxisExtent = 150.0,
     this.childAspectRatio = 2.0,
   }) {
     searchItemDocumented ??= (item) => item.toString();
-    searchItemBuilder ??= (item, highlight) => ListTile(title: HtmlWidget(highlight));
+    searchItemBuilder ??= (item, highlight) => ListTile(title: HtmlWidget(highlight)).center().inCard(elevation: 4);
   }
+
+  String get realQuery => preprocessing?.call(query) ?? query;
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -67,10 +73,13 @@ class SimpleTextSearchDelegate<T> extends SearchDelegate {
   @override
   Widget buildResults(BuildContext context) {
     // 是否允许用户不仅仅只使用建议里的搜索条目？
-    if (!onlyUseSuggestion) {
-      close(context, query);
+    final dest = realQuery;
+    if (!onlyUseSuggestion || suggestionList.contains(dest)) {
+      close(context, dest);
+      return Container();
+    } else {
+      return LeavingBlank(icon: Icons.search_off_rounded, desc: "Please select one.");
     }
-    return Container();
   }
 
   Widget buildRecentList(BuildContext context) {
@@ -84,8 +93,8 @@ class SimpleTextSearchDelegate<T> extends SearchDelegate {
   }
 
   String highlight(BuildContext ctx, String e) {
-    final splitTextList = e.split(query).map((e1) => "<span style='color:grey'>$e1</span>");
-    final highlight = "<span style='color:${ctx.highlightColor};font-weight: bold'>$query</span>";
+    final splitTextList = e.split(realQuery).map((e1) => "<span style='color:grey'>$e1</span>");
+    final highlight = "<span style='color:${ctx.highlightColor};font-weight: bold'>$realQuery</span>";
     return splitTextList.join(highlight);
   }
 
@@ -99,16 +108,15 @@ class SimpleTextSearchDelegate<T> extends SearchDelegate {
       final documented = searchItemDocumented!(item);
 
       // 过滤
-      if (!documented.contains(query)) continue;
+      if (!documented.contains(realQuery)) continue;
 
       // 高亮化
       final highlighted = highlight(context, documented);
 
       // 搜索结果Widget构建
-      final widget = GestureDetector(
-        child: searchItemBuilder!(item, highlighted),
-        onTap: () => close(context, item),
-      );
+      final widget = searchItemBuilder!(item, highlighted).onTap(() {
+        close(context, item);
+      });
 
       children.add(widget);
     }
@@ -123,7 +131,7 @@ class SimpleTextSearchDelegate<T> extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     // 用户未输入
-    if (query.isEmpty) {
+    if (realQuery.isEmpty) {
       return buildRecentList(context);
     } else {
       return buildSearchList(context);

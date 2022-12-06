@@ -17,6 +17,7 @@
 */
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:unicons/unicons.dart';
 
 import './remote.dart';
 import '../using.dart';
@@ -35,7 +36,7 @@ class Transaction {
 
   /// [TransactionRaw.custid]
   int consumerId = 0;
-  TransactionType type = TransactionType.consume;
+  TransactionType type = TransactionType.other;
   double balanceBefore = 0;
   double balanceAfter = 0;
   @abosute
@@ -81,8 +82,7 @@ extension TransactionEnchanced on Transaction {
 }
 
 enum TransactionType {
-  consume(Icons.shopping_bag_outlined),
-  water(Icons.water_damage_outlined),
+  water(UniconsLine.water_glass),
   shower(Icons.shower_outlined),
   food(Icons.restaurant),
   store(Icons.store_outlined),
@@ -104,17 +104,12 @@ enum TransactionType {
         return i18n.expenseCafe;
       case TransactionType.water:
         return i18n.expenseHotWater;
-
       case TransactionType.shower:
         return i18n.expenseShower;
-
       case TransactionType.store:
         return i18n.expenseGrocery;
-
       case TransactionType.other:
         return i18n.expenseStuff;
-      case TransactionType.consume:
-        return i18n.expenseConsume;
       case TransactionType.topUp:
         return i18n.expenseTopUp;
       case TransactionType.subsidy:

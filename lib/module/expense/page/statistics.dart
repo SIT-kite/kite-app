@@ -166,7 +166,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
     double sum = sumByClassification.fold(0.0, (previousValue, element) => previousValue += element);
 
     return TransactionType.values
-        .where((e) => !{TransactionType.consume, TransactionType.topUp, TransactionType.subsidy}.contains(e))
+        .where((e) => !{TransactionType.topUp, TransactionType.subsidy}.contains(e))
         .map(
       (expenseType) {
         final double sumInType = sumByClassification[expenseType.index];

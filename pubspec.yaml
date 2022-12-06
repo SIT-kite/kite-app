@@ -126,6 +126,7 @@ dependencies:
   flutter_shake_animated: ^0.0.5
   rnd: ^0.2.0
   animated_size_and_fade: ^3.0.0
+  unicons: ^2.1.0
 
 
 dev_dependencies:

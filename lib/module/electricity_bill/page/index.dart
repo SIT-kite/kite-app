@@ -171,6 +171,7 @@ class _ElectricityBillPageState extends State<ElectricityBillPage> {
         suggestionList: _allRoomNumbers ?? [],
         // 只允许使用搜索建议里的
         onlyUseSuggestion: true,
+        preprocessing: _keepOnlyNumber,
         childAspectRatio: 2.0,
         maxCrossAxisExtent: 150.0,
       ),
@@ -180,6 +181,28 @@ class _ElectricityBillPageState extends State<ElectricityBillPage> {
       }
     });
   }
+
+  // benchmark: 100,000,000 times, result: 1:40.946605 minutes, AMD Ryzen 9 5900X 12-Core
+  // created by zzq
+  String _keepOnlyNumber(String raw) {
+    return String.fromCharCodes(raw.codeUnits.where((e) => e >= 48 && e < 58));
+  }
+
+/*
+  // benchmark: 100,000,000 times, result: 1:06.313091 minutes, AMD Ryzen 9 5900X 12-Core
+  // created by Liplum
+  static const Set<String> _numbers = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+    String _keepOnlyNumber(String raw) {
+    final s = StringBuffer();
+    for (int i = 0; i < raw.length; i++) {
+      final char = raw[i];
+      if (_numbers.contains(char)) {
+        s.write(char);
+      }
+    }
+    return s.toString();
+  }
+*/
 
   void selectRoomNumber(String roomNumber) {
     final recentList = _searchHistory ?? [];
