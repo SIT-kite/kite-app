@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/module/symbol.dart';
+import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
 import '../brick.dart';
 
@@ -35,8 +36,6 @@ class _ElectricityBillItemState extends State<ElectricityBillItem> {
 
   @override
   void initState() {
-    Global.eventBus.on(EventNameConstants.onHomeRefresh, (arg) {});
-
     return super.initState();
   }
 
@@ -47,7 +46,7 @@ class _ElectricityBillItemState extends State<ElectricityBillItem> {
       content = i18n.elecBillContent(b.room, b.balance.toStringAsPrecision(2));
     }
     return Brick(
-      route: '/electricity_bill',
+      route: RouteTable.electricityBill,
       icon: SvgAssetIcon('assets/home/icon_electricity.svg'),
       title: i18n.ftype_elecBill,
       subtitle: content ?? i18n.ftype_elecBill_desc,

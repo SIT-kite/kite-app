@@ -17,7 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/design/user_widgets/dialog.dart';
-import 'package:kite/global/global.dart';
+import 'package:kite/events/bus.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/module/symbol.dart';
 import 'package:kite/route.dart';
@@ -39,18 +39,13 @@ class _ReportTempItemState extends State<ReportTempItem> {
 
   @override
   void initState() {
-    Global.eventBus.on(EventNameConstants.onHomeRefresh, _onHomeRefresh);
-
-    return super.initState();
+    super.initState();
+    On.home((event) {
+      updateReportStatus();
+    });
   }
 
-  @override
-  void dispose() {
-    Global.eventBus.off(EventNameConstants.onHomeRefresh, _onHomeRefresh);
-    super.dispose();
-  }
-
-  void _onHomeRefresh(_) async {
+  void updateReportStatus() async {
     final String result = await _buildContent();
     if (!mounted) return;
     setState(() => content = result);

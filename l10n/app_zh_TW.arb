@@ -134,9 +134,12 @@
   "expenseFirstTimeRefreshRequest": "\"查消費\" 獲取數據時，需要訪問校園網路。你可通過點擊右上角的 \"重新整理\"按鈕來更新數據。",
   "expenseGrocery": "超商",
   "expenseHotWater": "熱水",
+  "expenseIncomeStatistics": "入賬: ¥{amount}",
   "expenseLibrary": "圖書館",
   "expenseRefreshMenuButton": "重新整理",
   "expenseShower": "淋浴",
+  "expenseSpentStatistics": "消費: ¥{amount}",
+  "expenseStatistics": "消費統計",
   "expenseStuff": "雜項",
   "expenseSubsidy": "津貼",
   "expenseToastLoadFailed": "網絡異常，請稍後再試",
@@ -430,8 +433,5 @@
   "welcomeSlogan": "便捷校園, 即刻起航",
   "xuhui": "徐匯",
   "xuhuiDistrict": "徐匯區",
-  "yes": "好",
-  "expenseSpentStatistics": "消費: ¥{amount}",
-  "expenseIncomeStatistics": "入賬: ¥{amount}",
-  "expenseStatistics": "消費統計"
+  "yes": "好"
 }

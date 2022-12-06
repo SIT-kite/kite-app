@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/events/bus.dart';
+import 'package:kite/events/symbol.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
@@ -38,11 +40,22 @@ class _ExpenseItemState extends State<ExpenseItem> {
   @override
   void initState() {
     super.initState();
-    Global.eventBus.on(EventNameConstants.onHomeRefresh, (arg) {});
+    On.home<HomeRefreshEvent>((event) {
+      refreshTracker();
+    });
+    On.expenseTracker<ExpenseTackerRefreshEvent>((event) {
+      refreshTracker();
+    });
+    refreshTracker();
+  }
 
+  void refreshTracker() {
     final tsl = ExpenseTrackerInit.local.transactionTsList;
     if (tsl.isNotEmpty) {
-      lastExpense = ExpenseTrackerInit.local.getTransactionByTs(tsl.last);
+      if(!mounted) return;
+      setState(() {
+        lastExpense = ExpenseTrackerInit.local.getTransactionByTs(tsl.last);
+      });
     }
   }
 

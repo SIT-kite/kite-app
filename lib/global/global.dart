@@ -53,8 +53,8 @@ enum EventNameConstants {
 /// 应用程序全局数据对象
 class Global {
   static late AppVersion currentVersion;
-
   static final eventBus = EventBus<EventNameConstants>();
+
   static late PageLogger pageLogger;
 
   static late CookieJar cookieJar;

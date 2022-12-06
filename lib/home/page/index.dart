@@ -21,6 +21,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/design/utils.dart';
+import 'package:kite/events/bus.dart';
+import 'package:kite/events/events.dart';
 import 'package:kite/exception/session.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/module/login/init.dart';
@@ -150,7 +152,7 @@ class _HomePageState extends State<HomePage> {
       } catch (e, s) {
         Catcher.reportCheckedError(e, s);
       }
-
+      FireOn.homepage(HomeRefreshEvent(isOnline: HomeInit.ssoSession.isOnline));
       if (HomeInit.ssoSession.isOnline) {
         Global.eventBus.emit(EventNameConstants.onHomeRefresh);
       }

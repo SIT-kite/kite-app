@@ -263,9 +263,26 @@
   "expenseFirstTimeRefreshRequest": "Expense Tracker needs to access campus network to retrieve expense history. You can refresh the expense history manually next time by hitting the \"Refresh\" button at the top-right corner.",
   "expenseGrocery": "Grocery Shopping",
   "expenseHotWater": "Hot Water",
+  "expenseIncomeStatistics": "Income: ¥{amount}",
+  "@expenseIncomeStatistics": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "expenseLibrary": "Library",
   "expenseRefreshMenuButton": "Force Refresh",
   "expenseShower": "Shower",
+  "expenseSpentStatistics": "Outcome: ¥{amount}",
+  "@expenseSpentStatistics": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseStatistics": "Statistics",
   "expenseStuff": "Stuff",
   "expenseSubsidy": "Subsidy",
   "expenseToastLoadFailed": "Network error",
@@ -690,22 +707,5 @@
   "welcomeSlogan": "Excellent school life, from here.",
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
-  "yes": "Yes",
-  "expenseSpentStatistics": "Outcome: ¥{amount}",
-  "@expenseSpentStatistics": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-  "expenseIncomeStatistics": "Income: ¥{amount}",
-  "@expenseIncomeStatistics": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-  "expenseStatistics": "Statistics"
+  "yes": "Yes"
 }

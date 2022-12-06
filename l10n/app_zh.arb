@@ -134,9 +134,12 @@
   "expenseFirstTimeRefreshRequest": "\"查消费\" 需要访问校园网来获取数据。你可以下次点击右上角的 \"刷新\" 按钮，以此更新数据。",
   "expenseGrocery": "商店",
   "expenseHotWater": "热水",
+  "expenseIncomeStatistics": "收入: ¥{amount}",
   "expenseLibrary": "图书馆",
   "expenseRefreshMenuButton": "刷新",
   "expenseShower": "淋浴",
+  "expenseSpentStatistics": "支出: ¥{amount}",
+  "expenseStatistics": "消费统计",
   "expenseStuff": "杂项",
   "expenseSubsidy": "补贴",
   "expenseToastLoadFailed": "网络异常，请稍后重试",
@@ -430,8 +433,5 @@
   "welcomeSlogan": "便利校园，一步到位",
   "xuhui": "徐汇",
   "xuhuiDistrict": "徐汇区",
-  "yes": "好",
-  "expenseSpentStatistics": "支出: ¥{amount}",
-  "expenseIncomeStatistics": "收入: ¥{amount}",
-  "expenseStatistics": "消费统计"
+  "yes": "好"
 }

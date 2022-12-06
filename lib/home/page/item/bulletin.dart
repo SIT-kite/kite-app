@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/events/bus.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/module/symbol.dart';
@@ -37,18 +38,14 @@ class _KiteBulletinItemState extends State<KiteBulletinItem> {
 
   @override
   void initState() {
-    Global.eventBus.on(EventNameConstants.onHomeRefresh, _onHomeRefresh);
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => _onHomeRefresh(null));
     super.initState();
+    On.home((event) {
+      updateLatestBulletin();
+    });
+    updateLatestBulletin();
   }
 
-  @override
-  void dispose() {
-    Global.eventBus.off(EventNameConstants.onHomeRefresh, _onHomeRefresh);
-    super.dispose();
-  }
-
-  void _onHomeRefresh(_) async {
+  void updateLatestBulletin() async {
     final String? result = await _buildContent();
     if (!mounted) return;
     setState(() => content = result);

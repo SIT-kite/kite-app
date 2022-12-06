@@ -105,6 +105,7 @@ class _ExpenseTrackerPageState extends State<ExpenseTrackerPage> {
         $balance.value = allRecords.last.balanceAfter;
       }
     });
+    FireOn.expenseTracker(ExpenseTackerRefreshEvent());
   }
 
   Future<void> fetch(DateTime start, DateTime end) async {
