@@ -23,6 +23,5 @@ export '../shared/storage.dart';
 export '../shared/design.dart';
 export '../shared/cache.dart';
 export '../shared/networking.dart';
-export '../shared/hive.dart';
 export '../shared/design.dart';
 export '../shared/user_widget/common.dart';

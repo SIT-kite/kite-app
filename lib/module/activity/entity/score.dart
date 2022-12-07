@@ -21,8 +21,8 @@ import 'dart:core';
 import '../entity/list.dart';
 import '../using.dart';
 
-
 part 'score.g.dart';
+
 @HiveType(typeId: HiveTypeId.scScoreSummary)
 class ScScoreSummary {
   /// Subject report (主题报告)

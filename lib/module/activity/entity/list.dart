@@ -36,6 +36,7 @@ class ActivityName {
   static const voluntary = "志愿公益";
   static const blackList = ["补录"];
 }
+
 @HiveType(typeId: HiveTypeId.activityType)
 enum ActivityType {
   @HiveField(0)

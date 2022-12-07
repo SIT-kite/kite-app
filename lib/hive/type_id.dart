@@ -35,10 +35,13 @@ class HiveTypeId {
   static const timetableMeta = 15;
   static const size = 16;
   static const color = 17;
+  // Activity
   static const activityDetail = 18;
   static const activity = 19;
   static const scScoreSummary = 20;
   static const scActivityApplication = 21;
   static const scScoreItem = 22;
   static const activityType = 23;
+  // Exam Arrangement
+  static const examEntry = 24;
 }

@@ -35,7 +35,6 @@ class SearchBar extends SearchDelegate<String> {
     return null;
   }
 
-
   Widget buildEventResult(List<Activity> activities) {
     return ListView.builder(
         itemCount: activities.length,

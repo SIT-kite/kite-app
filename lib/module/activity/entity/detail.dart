@@ -19,6 +19,7 @@
 import '../using.dart';
 
 part 'detail.g.dart';
+
 @HiveType(typeId: HiveTypeId.activityDetail)
 class ActivityDetail {
   /// Activity id
@@ -73,20 +74,8 @@ class ActivityDetail {
   @HiveField(12)
   final String? description;
 
-  const ActivityDetail(
-       this.id,
-      this.category,
-      this.title,
-      this.startTime,
-      this.signStartTime,
-      this.signEndTime,
-      this.place,
-      this.duration,
-      this.principal,
-      this.contactInfo,
-      this.organizer,
-      this.undertaker,
-      this.description);
+  const ActivityDetail(this.id, this.category, this.title, this.startTime, this.signStartTime, this.signEndTime,
+      this.place, this.duration, this.principal, this.contactInfo, this.organizer, this.undertaker, this.description);
 
   const ActivityDetail.named(
       {required this.id,
