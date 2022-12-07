@@ -16,18 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/module/kite_bulletin/dao/remote.dart';
 import 'package:kite/session/sso/index.dart';
 
 class HomeInit {
   static late SsoSession ssoSession;
-  static late KiteBulletinServiceDao noticeService;
 
   static init({
     required SsoSession ssoSession,
-    required KiteBulletinServiceDao noticeService,
   }) {
     HomeInit.ssoSession = ssoSession;
-    HomeInit.noticeService = noticeService;
   }
 }

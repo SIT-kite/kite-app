@@ -20,7 +20,8 @@ import '../entity/bulletin.dart';
 import '../using.dart';
 
 class KiteBulletinService implements KiteBulletinServiceDao {
-  static const String _noticePath = '${Backend.kite}/bulletin.json';
+  static const String _bulletinPath = '${Backend.kite}/bulletin.json';
+  static const String _bulletinMetaPath = '${Backend.kite}/bulletin_meta.json';
 
   final ISession session;
 
@@ -36,11 +37,17 @@ class KiteBulletinService implements KiteBulletinServiceDao {
 
   @override
   Future<List<KiteBulletin>> getSortedBulletinList() async {
-    final response = await session.request(_noticePath, ReqMethod.get);
+    final response = await session.request(_bulletinPath, ReqMethod.get);
     final List noticeList = response.data;
 
     List<KiteBulletin> result = noticeList.map((e) => KiteBulletin.fromJson(e)).toList();
     _sort(result);
     return result;
+  }
+
+  @override
+  Future<KiteBulletinMeta> getBulletinMeta() async {
+    final response = await session.request(_bulletinMetaPath, ReqMethod.get);
+    return KiteBulletinMeta.fromJson(response.data);
   }
 }

@@ -15,15 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/events/bus.dart';
-import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/module/symbol.dart';
 import 'package:kite/route.dart';
 import 'package:kite/util/logger.dart';
 
-import '../../init.dart';
 import '../brick.dart';
 
 class KiteBulletinItem extends StatefulWidget {
@@ -54,9 +53,10 @@ class _KiteBulletinItemState extends State<KiteBulletinItem> {
   Future<String?> _buildContent() async {
     try {
       Log.info('获取公告');
-      final List<KiteBulletin> list = await HomeInit.noticeService.getSortedBulletinList();
-      return list.first.title;
-    } catch (_) {
+      final meta = await KiteBulletinInit.cache.getBulletinMeta();
+      return meta.headTitle;
+    } catch (e, s) {
+      Catcher.reportCheckedError(e, s);
       return null;
     }
   }

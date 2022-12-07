@@ -19,6 +19,9 @@ import '../entity/bulletin.dart';
 
 // 远程
 abstract class KiteBulletinServiceDao {
-  // 获取电费数据
+  // 获取公告数据
   Future<List<KiteBulletin>> getSortedBulletinList();
+
+  // 获取公告meta
+  Future<KiteBulletinMeta> getBulletinMeta();
 }
