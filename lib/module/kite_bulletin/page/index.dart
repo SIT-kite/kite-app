@@ -39,7 +39,7 @@ class _KiteBulletinPageState extends State<KiteBulletinPage> {
   @override
   void initState() {
     super.initState();
-    KiteBulletinInit.service.getSortedBulletinList().then((value) {
+    KiteBulletinInit.cache.getSortedBulletinList().then((value) {
       setState(() {
         _bulletins = value;
         if (value.isNotEmpty) {

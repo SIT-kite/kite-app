@@ -45,8 +45,8 @@ class KiteBulletin {
 @JsonSerializable()
 class KiteBulletinMeta {
   final String hash;
-  final String head;
-  const KiteBulletinMeta(this.hash, this.head);
+  final String headTitle;
+  const KiteBulletinMeta(this.hash, this.headTitle);
   factory KiteBulletinMeta.fromJson(Map<String, dynamic> json) => _$KiteBulletinMetaFromJson(json);
   Map<String, dynamic> toJson() => _$KiteBulletinMetaToJson(this);
 }

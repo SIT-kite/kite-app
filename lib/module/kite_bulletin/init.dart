@@ -18,6 +18,7 @@
 import 'package:kite/module/kite_bulletin/storage/storage.dart';
 import 'package:kite/storage/init.dart';
 
+import 'cache/cache.dart';
 import 'dao/local.dart';
 import 'dao/remote.dart';
 import 'service/bulletin.dart';
@@ -29,6 +30,7 @@ class KiteBulletinInit {
   static late KiteBulletinServiceDao service;
   static late ISession kiteSession;
   static late KiteBulletinStorageDao storage;
+  static late KiteBulletinServiceDao cache;
 
   static Future<void> init({
     required ISession session,
@@ -36,5 +38,9 @@ class KiteBulletinInit {
     KiteBulletinInit.kiteSession = session;
     service = KiteBulletinService(session);
     storage = KiteBulletinStorage(Kv.kvStorageBox);
+    cache = CachedKiteBulletinService(
+      storage: storage,
+      service: service,
+    );
   }
 }
