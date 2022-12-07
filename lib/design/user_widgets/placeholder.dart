@@ -19,5 +19,14 @@ import 'package:flutter/material.dart';
 
 class Placeholders {
   Placeholders._();
+
   static Widget loading() => const Center(child: CircularProgressIndicator());
+}
+
+extension LazyLoadingEffectEx<T> on Future<T> {
+  Future<T> withDelay(Duration duration) async {
+    final res = await this;
+    await Future.delayed(duration);
+    return res;
+  }
 }

@@ -15,12 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:flutter/foundation.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:kite/hive/init.dart';
 import 'package:kite/module/activity/using.dart';
-import 'package:kite/user_widget/layz_list.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../user_widget/box.dart';
@@ -68,8 +66,8 @@ class _StorageListState extends State<StorageList> {
 
   Widget buildPortraitBody(BuildContext context) {
     return widget.name2box.entries
-        .map((p) => PlaceholderFutureBuilder<Box<dynamic>>(
-            future: p.value,
+        .mapIndexed((i, p) => PlaceholderFutureBuilder<Box<dynamic>>(
+            future: p.value.withDelay(Duration(milliseconds: 200 * i)),
             builder: (ctx, box, _) {
               return BoxSection(box: box, boxName: p.key);
             }))

@@ -50,12 +50,14 @@ class HiveBoxInit {
     name2Box = {
       "setting": HiveBoxInit.kv,
       "librarySearchHistory": HiveBoxInit.librarySearchHistory,
-      "expense2": HiveBoxInit.expense2,
-      "course": HiveBoxInit.course,
-      "game": HiveBoxInit.game,
-      "userEvent": HiveBoxInit.userEvent,
-      "contactSetting": HiveBoxInit.contactSetting,
       "cookies": HiveBoxInit.cookiesBox,
+      "game": HiveBoxInit.game,
+      "course": HiveBoxInit.course,
+      "contactSetting": HiveBoxInit.contactSetting,
+      "userEvent": HiveBoxInit.userEvent,
+      "expense2": HiveBoxInit.expense2,
+      // almost time, this box is very very long which ends up low performance in building.
+      // So put this on the bottom
     };
   }
 

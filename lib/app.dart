@@ -159,7 +159,7 @@ class _KiteAppState extends State<KiteApp> {
             // 设置文字大小不随系统设置改变
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: AdaptiveUI(
-              hasTransition: true,
+              isSubpage: true,
               child: widget!,
             ),
           );

@@ -90,27 +90,51 @@ class _DetailPageState extends State<DetailPage> with AutomaticKeepAliveClientMi
   }
 
   Widget buildLandscape(BuildContext ctx) {
-    return Scaffold(
-      appBar: AppBar(
-        title: i18n.activityDetails.text(),
-        actions: [
-          if (widget.enableApply)
+    if (ctx.adaptive.isSubpage) {
+      return Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            toolbarHeight: 30,
+            actions: [
+              if (widget.enableApply)
+                PlainExtendedButton(
+                    label: i18n.activityApplyBtn.text(),
+                    icon: const Icon(Icons.person_add),
+                    tap: () async {
+                      await showApplyRequest(ctx);
+                    }).padOnly(t:10),
+              PlainExtendedButton(
+                  label: i18n.open.text(),
+                  icon: const Icon(Icons.open_in_browser),
+                  tap: () {
+                    launchUrlInBrowser(_getActivityUrl(activityId));
+                  }).padOnly(t:10),
+            ],
+          ),
+          body: buildDetailLandscape(ctx, detail));
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+          title: i18n.activityDetails.text(),
+          actions: [
+            if (widget.enableApply)
+              PlainExtendedButton(
+                  label: i18n.activityApplyBtn.text(),
+                  icon: const Icon(Icons.person_add),
+                  tap: () async {
+                    await showApplyRequest(ctx);
+                  }),
             PlainExtendedButton(
-                label: i18n.activityApplyBtn.text(),
-                icon: const Icon(Icons.person_add),
-                tap: () async {
-                  await showApplyRequest(ctx);
-                }),
-          PlainExtendedButton(
-              label: i18n.open.text(),
-              icon: const Icon(Icons.open_in_browser),
-              tap: () {
-                launchUrlInBrowser(_getActivityUrl(activityId));
-              })
-        ],
-      ),
-      body: buildDetailLandscape(ctx, detail),
-    );
+                label: i18n.open.text(),
+                icon: const Icon(Icons.open_in_browser),
+                tap: () {
+                  launchUrlInBrowser(_getActivityUrl(activityId));
+                })
+          ],
+        ),
+        body: buildDetailLandscape(ctx, detail),
+      );
+    }
   }
 
   Widget buildInfoCardPortrait(BuildContext ctx, ActivityDetail? detail) {

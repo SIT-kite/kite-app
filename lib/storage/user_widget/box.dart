@@ -15,11 +15,14 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 import 'package:kite/l10n/extension.dart';
+import 'package:kite/user_widget/paginated.dart';
 import 'package:rettulf/rettulf.dart';
 import '../using.dart';
 
@@ -35,7 +38,8 @@ class BoxSection extends StatelessWidget {
     final boxNameStyle = context.textTheme.headline1;
     return [
       Text(boxName, style: boxNameStyle).padOnly(b: 20),
-      if (curBox == null) Placeholders.loading() else BoxItemList(box: curBox),
+      if (curBox == null) Placeholders.loading() else
+        BoxItemList(box: curBox),
     ].column(mas: MainAxisSize.min).sized(width: double.infinity).padAll(20).inCard();
   }
 }
@@ -51,28 +55,68 @@ class BoxItemList extends StatefulWidget {
 
 class _BoxItemListState extends State<BoxItemList> {
   late final keys = widget.box.keys.toList();
+  int currentPage = 0;
+  final pageSize = 20;
 
   @override
   Widget build(BuildContext context) {
-    final routeStyle = context.textTheme.titleMedium;
-    final typeStyle = context.textTheme.bodySmall;
-    final contentStyle = context.textTheme.bodyText2;
     final box = widget.box;
     if (box.isEmpty) {
       return i18n.emptyContent.text(style: context.textTheme.displayMedium);
     } else {
-      return ListView.builder(
-          shrinkWrap: true,
-          itemCount: keys.length,
-          physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (ctx, index) => BoxItem(
-                boxKey: keys[index],
-                box: box,
-                routeStyle: routeStyle,
-                typeStyle: typeStyle,
-                contentStyle: contentStyle,
-              )).container().scrolled(physics: const NeverScrollableScrollPhysics());
+      return buildList(context);
     }
+  }
+
+  Widget buildList(BuildContext ctx) {
+    final length = keys.length;
+    if (length < pageSize) {
+      return buildBoxItems(ctx, keys);
+    } else {
+      final start = currentPage * pageSize;
+      final totalPages = length ~/ pageSize;
+      return [
+        buildPaginated(ctx, totalPages).padAll(10),
+        buildBoxItems(ctx, keys.sublist(start, min(start + pageSize, length)))
+      ]
+          .column();
+    }
+  }
+
+  Widget buildBoxItems(BuildContext ctx, List<dynamic> keys) {
+    final routeStyle = context.textTheme.titleMedium;
+    final typeStyle = context.textTheme.bodySmall;
+    final contentStyle = context.textTheme.bodyText2;
+    return keys
+        .map((e) =>
+        BoxItem(
+          boxKey: e,
+          box: widget.box,
+          routeStyle: routeStyle,
+          typeStyle: typeStyle,
+          contentStyle: contentStyle,
+        ))
+        .toList()
+        .column();
+  }
+
+  Widget buildPaginated(BuildContext ctx, int totalPage) {
+    return Paginated(
+      paginateButtonStyles: PaginateButtonStyles(),
+      prevButtonStyles: PaginateSkipButton(
+          borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), bottomLeft: Radius.circular(20))),
+      nextButtonStyles: PaginateSkipButton(
+          borderRadius: const BorderRadius.only(topRight: Radius.circular(20), bottomRight: Radius.circular(20))),
+      onPageChange: (number) {
+        setState(() {
+          currentPage = number;
+        });
+      },
+      useGroup: true,
+      totalPage: totalPage,
+      show: min(3, totalPage - 1),
+      currentPage: currentPage,
+    );
   }
 }
 
@@ -90,7 +134,8 @@ class BoxItem extends StatefulWidget {
   @override
   State<BoxItem> createState() => _BoxItemState();
 
-  static Widget skeleton(TextStyle? routeStyle, TextStyle? typeStyle, TextStyle? contentStyle) => [
+  static Widget skeleton(TextStyle? routeStyle, TextStyle? typeStyle, TextStyle? contentStyle) =>
+      [
         Text(
           "...",
           style: routeStyle,
@@ -143,21 +188,24 @@ class _BoxItemState extends State<BoxItem> {
         },
         child: res,
       );
+    } else {
+      res = res.on(tap: () async => showContentDialog(context, widget.box, key, value, readonly: true));
     }
     return res;
   }
 
-  Future<void> showContentDialog(BuildContext context, Box<dynamic> box, String key, dynamic value) async {
-    if (Editor.isSupport(value)) {
-      final newValue = await Editor.showAnyEditor(context, value, desc: key, readonlyIfNotSupport: false);
+  Future<void> showContentDialog(BuildContext context, Box<dynamic> box, String key, dynamic value,
+      {bool readonly = false}) async {
+    if (readonly || Editor.isSupport(value)) {
+      await Editor.showReadonlyEditor(context, key, value);
+    } else {
+      final newValue = await Editor.showAnyEditor(context, value, desc: key);
       bool isModified = value != newValue;
       if (isModified) {
         box.put(key, newValue);
         if (!mounted) return;
         setState(() {});
       }
-    } else {
-      await Editor.showAnyEditor(context, value, desc: key, readonlyIfNotSupport: true);
     }
   }
 }

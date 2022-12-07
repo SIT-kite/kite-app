@@ -20,13 +20,13 @@ import 'package:flutter/material.dart';
 import '../user_widgets/route.dart';
 
 class AdaptiveUI extends InheritedWidget {
-  final bool hasTransition;
+  final bool isSubpage;
 
-  const AdaptiveUI({super.key, required this.hasTransition, required super.child});
+  const AdaptiveUI({super.key, required this.isSubpage, required super.child});
 
   @override
   bool updateShouldNotify(covariant AdaptiveUI oldWidget) {
-    return hasTransition != oldWidget.hasTransition;
+    return isSubpage != oldWidget.isSubpage;
   }
 
   static AdaptiveUI of(BuildContext ctx) {
@@ -41,12 +41,20 @@ class AdaptiveUI extends InheritedWidget {
     bool maintainState = true,
     bool fullscreenDialog = false,
   }) {
-    if (hasTransition) {
-      return MaterialPageRoute<T>(
+    if (isSubpage) {
+      return SubpageRoute<T>(
           builder: builder, settings: settings, maintainState: maintainState, fullscreenDialog: fullscreenDialog);
     } else {
-      return NoTransitionPageRoute<T>(
+      return MaterialPageRoute<T>(
           builder: builder, settings: settings, maintainState: maintainState, fullscreenDialog: fullscreenDialog);
     }
   }
+}
+
+extension AdapativeEx on BuildContext {
+  AdaptiveUI get adaptive => AdaptiveUI.of(this);
+}
+
+abstract class Navigatable {
+  NavigatorState? get navigator;
 }

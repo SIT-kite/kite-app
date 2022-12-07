@@ -39,18 +39,17 @@ class _Page {
 class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderStateMixin {
   /// For landscape mode.
   int curNavigation = _Page.list;
-  final _pageListKey = GlobalKey();
-  final _pageMineKey = GlobalKey();
+  final _pageKeys = [GlobalKey(), GlobalKey()];
   final pages = <Widget>[];
 
   @override
   void initState() {
     super.initState();
     pages.add(ActivityListPage(
-      key: _pageListKey,
+      key: _pageKeys[_Page.list],
     ));
     pages.add(MyActivityPage(
-      key: _pageMineKey,
+      key: _pageKeys[_Page.mine],
     ));
   }
 
@@ -98,7 +97,15 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
-                context.navigator.pop();
+                final subpage = _pageKeys[curNavigation].currentState;
+                if (subpage is Navigatable) {
+                  final subNavi = (subpage as Navigatable).navigator;
+                  if (subNavi != null && subNavi.canPop()) {
+                    subNavi.pop();
+                    return;
+                  }
+                }
+                ctx.navigator.pop();
               },
             ),
             selectedIndex: curNavigation,
@@ -124,7 +131,12 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
           ),
           const VerticalDivider(thickness: 1, width: 1),
 
-          AdaptiveUI(hasTransition: false, child: IndexedStack(index: curNavigation, children: pages)).expanded()
+          AdaptiveUI(
+              isSubpage: true,
+              child: IndexedStack(
+                index: curNavigation,
+                children: pages,
+              )).expanded()
           // This is the main content.
         ],
       ),

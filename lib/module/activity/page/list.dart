@@ -34,7 +34,8 @@ class ActivityListPage extends StatefulWidget {
 }
 
 class _ActivityListPageState extends State<ActivityListPage>
-    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin
+    implements Navigatable {
   static const categories = [
     ActivityType.lecture,
     ActivityType.creation,
@@ -45,6 +46,8 @@ class _ActivityListPageState extends State<ActivityListPage>
   ];
 
   late TabController _tabController;
+
+  final _navigatorKey = GlobalKey();
 
   final $page = ValueNotifier(0);
   bool init = false;
@@ -87,26 +90,55 @@ class _ActivityListPageState extends State<ActivityListPage>
   Widget build(BuildContext context) {
     super.build(context);
     return DefaultTabController(
-      length: categories.length,
-      child: Scaffold(
-        appBar: _buildBarHeader(context),
-        body: TabBarView(
-          controller: _tabController,
-          children: categories.map((selectedActivityType) {
-            return ValueListenableBuilder(
-              valueListenable: $page,
-              builder: (context, index, child) {
-                return ActivityList(selectedActivityType);
-              },
-            );
-          }).toList(),
-        ),
+        length: categories.length, child: context.isPortrait ? buildPortrait(context) : buildLandscape(context));
+  }
+
+  Widget buildLandscape(BuildContext ctx) {
+    return Navigator(
+      key: _navigatorKey,
+      onGenerateRoute: (settings) {
+        return ctx.adaptive.makeRoute((ctx) {
+          return Scaffold(
+            appBar: _buildBarHeader(context),
+            body: TabBarView(
+              controller: _tabController,
+              children: categories.map((selectedActivityType) {
+                return ValueListenableBuilder(
+                  valueListenable: $page,
+                  builder: (context, index, child) {
+                    return ActivityList(selectedActivityType);
+                  },
+                );
+              }).toList(),
+            ),
+          );
+        });
+      },
+    );
+  }
+
+  Widget buildPortrait(BuildContext ctx) {
+    return Scaffold(
+      appBar: _buildBarHeader(context),
+      body: TabBarView(
+        controller: _tabController,
+        children: categories.map((selectedActivityType) {
+          return ValueListenableBuilder(
+            valueListenable: $page,
+            builder: (context, index, child) {
+              return ActivityList(selectedActivityType);
+            },
+          );
+        }).toList(),
       ),
     );
   }
 
   @override
   bool get wantKeepAlive => true;
+
+  @override
+  NavigatorState? get navigator => _navigatorKey.currentState as NavigatorState?;
 }
 
 class ActivityList extends StatefulWidget {
@@ -149,16 +181,20 @@ class _ActivityListState extends State<ActivityList> {
     if (loading) {
       return Placeholders.loading();
     }
-    return _buildActivityResult(_activityList);
+    return buildActivityResult(_activityList);
   }
 
   void loadInitialActivities() async {
-    _lastPage = 1;
-    _activityList = await ScInit.scActivityListService.getActivityList(widget.type, 1);
-    _lastPage++;
-    loading = false;
     if (!mounted) return;
-    setState(() {});
+    setState(() {
+      _lastPage = 1;
+    });
+    _activityList = await ScInit.scActivityListService.getActivityList(widget.type, 1);
+    if (!mounted) return;
+    setState(() {
+      _lastPage++;
+      loading = false;
+    });
   }
 
   void loadMoreActivities() async {
@@ -176,7 +212,7 @@ class _ActivityListState extends State<ActivityList> {
     setState(() => _activityList.addAll(lastActivities));
   }
 
-  Widget _buildActivityResult(List<Activity> activities) {
+  Widget buildActivityResult(List<Activity> activities) {
     return LayoutBuilder(builder: (ctx, constraints) {
       final count = constraints.maxWidth ~/ 180;
       return LiveGrid.options(
