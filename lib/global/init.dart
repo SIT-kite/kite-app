@@ -85,6 +85,7 @@ class Initializer {
 
     OaAnnounceInit.init(
       ssoSession: Global.ssoSession,
+      box: HiveBoxInit.oaAnnounceCache,
     );
     CampusCardInit.init(
       session: Global.ssoSession,

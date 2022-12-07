@@ -32,6 +32,7 @@ class HiveBoxInit {
   static late Box<dynamic> expense2;
   static late Box<dynamic> activityCache;
   static late Box<dynamic> examArrCache;
+  static late Box<dynamic> oaAnnounceCache;
   static late Box<dynamic> game;
   static late Box<dynamic> kv;
   static late Box<dynamic> cookiesBox;
@@ -49,6 +50,7 @@ class HiveBoxInit {
     expense2 = await Hive.openBox('expense2');
     activityCache = await Hive.openBox('activityCache');
     examArrCache = await Hive.openBox('examArrCache');
+    oaAnnounceCache = await Hive.openBox('oaAnnounceCache');
     game = await Hive.openBox<dynamic>('game');
     cookiesBox = await Hive.openBox<dynamic>('cookies');
     name2Box = {
@@ -59,6 +61,7 @@ class HiveBoxInit {
       "course": HiveBoxInit.course,
       "userEvent": HiveBoxInit.userEvent,
       "examArrCache": HiveBoxInit.examArrCache,
+      "oaAnnounceCache": HiveBoxInit.oaAnnounceCache,
       "activityCache": HiveBoxInit.activityCache,
       "contactSetting": HiveBoxInit.contactSetting,
       "expense2": HiveBoxInit.expense2,

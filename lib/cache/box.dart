@@ -25,11 +25,15 @@ abstract class HasBox<T> {
 const _lastUpdateKey = ".LAST_UPDATE";
 
 mixin CachedBox implements HasBox<dynamic> {
+  /// Create a named cache key.
+  /// As a best practice, it will be used as a single value or a list.
   // ignore: non_constant_identifier_names
   CacheKey<T> Named<T>(String name) {
     return NamedCacheKey(box, name);
   }
 
+  /// Create a cache namespace.
+  /// As a best practice, it will be used as a map with one or more string-keys.
   // ignore: non_constant_identifier_names
   CacheNamespace<T> Namespace<T>(String namespace) {
     return CacheNamespace(box, namespace);

@@ -15,9 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 /// 存放所有 hive 的自定义类型的typeId
 class HiveTypeId {
   HiveTypeId._();
+
   static const librarySearchHistory = 1;
   static const auth = 2; // 改为单用户后已不再使用该id
   static const weather = 3;
@@ -35,6 +37,7 @@ class HiveTypeId {
   static const timetableMeta = 15;
   static const size = 16;
   static const color = 17;
+
   // Activity
   static const activityDetail = 18;
   static const activity = 19;
@@ -42,6 +45,14 @@ class HiveTypeId {
   static const scActivityApplication = 21;
   static const scScoreItem = 22;
   static const activityType = 23;
+
   // Exam Arrangement
   static const examEntry = 24;
+
+  // OA Announcement
+  static const announceDetail = 25;
+  static const announceAttachment = 26;
+  static const announceCatalogue = 27;
+  static const announceListPage = 28;
+  static const announceRecord = 29;
 }

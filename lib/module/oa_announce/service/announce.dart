@@ -19,8 +19,8 @@ import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:intl/intl.dart';
 import '../using.dart';
 
-import '../dao/announcement.dart';
-import '../entity/announcement.dart';
+import '../dao/announce.dart';
+import '../entity/announce.dart';
 import '../entity/attachment.dart';
 import '../entity/page.dart';
 
@@ -29,9 +29,9 @@ class AnnounceService implements AnnounceDao {
 
   const AnnounceService(this.session);
 
-  List<Attachment> _parseAttachment(Bs4Element element) {
+  List<AnnounceAttachment> _parseAttachment(Bs4Element element) {
     return element.find('#containerFrame > table')!.findAll('a').map((e) {
-      return Attachment()
+      return AnnounceAttachment()
         ..name = e.text.trim()
         ..url = 'https://myportal.sit.edu.cn/${e.attributes['href']!}';
     }).toList();
@@ -85,7 +85,7 @@ class AnnounceService implements AnnounceDao {
     return 'https://myportal.sit.edu.cn/detach.portal?pageIndex=$pageIndex&groupid=&action=bulletinsMoreView&.ia=false&pageSize=&.pmn=view&.pen=$bulletinCatalogueId';
   }
 
-  static BulletinListPage _parseBulletinListPage(Bs4Element element) {
+  static AnnounceListPage _parseBulletinListPage(Bs4Element element) {
     final list = element.findAll('li').map((e) {
       final departmentAndDate = e.find('span', class_: 'rss-time')!.text.trim();
       final departmentAndDateLen = departmentAndDate.length;
@@ -107,14 +107,14 @@ class AnnounceService implements AnnounceDao {
     final lastElement = element.find('a', attrs: {'title': '点击跳转到最后页'})!;
     final lastElementHref = Uri.parse(lastElement.attributes['href']!);
     final lastPageIndex = lastElementHref.queryParameters['pageIndex']!;
-    return BulletinListPage()
+    return AnnounceListPage()
       ..bulletinItems = list
       ..currentPage = int.parse(currentElement.text)
       ..totalPage = int.parse(lastPageIndex);
   }
 
   @override
-  Future<BulletinListPage> queryAnnounceList(int pageIndex, String bulletinCatalogueId) async {
+  Future<AnnounceListPage> queryAnnounceList(int pageIndex, String bulletinCatalogueId) async {
     final response = await session.request(_buildBulletinListUrl(pageIndex, bulletinCatalogueId), ReqMethod.get);
     return _parseBulletinListPage(BeautifulSoup(response.data).html!);
   }

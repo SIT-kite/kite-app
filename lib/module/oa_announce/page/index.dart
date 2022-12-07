@@ -22,7 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:rettulf/rettulf.dart';
 import '../using.dart';
 
-import '../entity/announcement.dart';
+import '../entity/announce.dart';
 import '../entity/page.dart';
 import '../init.dart';
 import 'detail.dart';
@@ -69,11 +69,10 @@ class _OaAnnouncePageState extends State<OaAnnouncePage> {
 
     // 获取所有分类中的第一页
     final futureResult = await Future.wait(catalogues.map((e) => service.queryAnnounceList(page, e.id)));
-
     // 合并所有分类的第一页的公告项
-    final List<AnnounceRecord> records = futureResult.fold(
+    final List<AnnounceRecord> records = futureResult.whereNotNull().fold(
       <AnnounceRecord>[],
-      (List<AnnounceRecord> previousValue, BulletinListPage page) => previousValue + page.bulletinItems,
+      (List<AnnounceRecord> previousValue, AnnounceListPage page) => previousValue + page.bulletinItems,
     ).toList();
     return records;
   }

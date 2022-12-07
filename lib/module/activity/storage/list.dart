@@ -33,7 +33,7 @@ class ScActivityListStorageBox with CachedBox {
 class ScActivityListStorage extends ScActivityListDao {
   final ScActivityListStorageBox box;
 
-  static String composeActivityKey(ActivityType type, int page) {
+  static String makeActivityKey(ActivityType type, int page) {
     return "$type/$page";
   }
 
@@ -41,12 +41,12 @@ class ScActivityListStorage extends ScActivityListDao {
 
   @override
   Future<List<Activity>> getActivityList(ActivityType type, int page) async {
-    final key = box.activities.make(composeActivityKey(type, page));
+    final key = box.activities.make(makeActivityKey(type, page));
     return key.value ?? <Activity>[];
   }
 
   void setActivityList(ActivityType type, int page, List<Activity> activities) {
-    final key = box.activities.make(composeActivityKey(type, page));
+    final key = box.activities.make(makeActivityKey(type, page));
     key.value = activities;
   }
 
