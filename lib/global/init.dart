@@ -60,7 +60,9 @@ class Initializer {
     } else {
       await HiveBoxInit.init(path.join("kite1", "hive"));
     }
-    await UserEventInit.init(userEventBox: HiveBoxInit.userEvent);
+    await UserEventInit.init(
+      userEventBox: HiveBoxInit.userEvent,
+    );
     Kv.init(kvStorageBox: HiveBoxInit.kv);
     if (UniversalPlatform.isDesktop) {
       final lastWindowSize = Kv.theme.lastWindowSize;
@@ -68,7 +70,9 @@ class Initializer {
         DesktopInit.resizeTo(lastWindowSize);
       }
     }
-    SettingsInit.init(kvStorageBox: HiveBoxInit.kv);
+    SettingsInit.init(
+      kvStorageBox: HiveBoxInit.kv,
+    );
     await Global.init(
       userEventStorage: UserEventInit.userEventStorage,
       authSetting: Kv.auth,
@@ -79,9 +83,15 @@ class Initializer {
     // ??= 表示为空时候才赋值
     Kv.home.installTime ??= DateTime.now();
 
-    OaAnnounceInit.init(ssoSession: Global.ssoSession);
-    CampusCardInit.init(session: Global.ssoSession);
-    ConnectivityInit.init(ssoSession: Global.ssoSession);
+    OaAnnounceInit.init(
+      ssoSession: Global.ssoSession,
+    );
+    CampusCardInit.init(
+      session: Global.ssoSession,
+    );
+    ConnectivityInit.init(
+      ssoSession: Global.ssoSession,
+    );
 
     final kiteSession = KiteSession(
       Global.dio,
@@ -97,12 +107,26 @@ class Initializer {
       kiteSession: kiteSession,
       contactDataBox: HiveBoxInit.contactSetting,
     );
-    await ClassroomBrowserInit.init(kiteSession: kiteSession);
+    await ClassroomBrowserInit.init(
+      kiteSession: kiteSession,
+    );
 
-    final sharedEduSession = EduSession(Global.ssoSession);
-    await ExamResultInit.init(cookieJar: Global.cookieJar, eduSession: sharedEduSession);
-    await ExamArrInit.init(sharedEduSession);
-    await TimetableInit.init(eduSession: sharedEduSession, kiteSession: kiteSession, timetableBox: HiveBoxInit.course);
+    final sharedEduSession = EduSession(
+      Global.ssoSession,
+    );
+    await ExamResultInit.init(
+      cookieJar: Global.cookieJar,
+      eduSession: sharedEduSession,
+    );
+    await ExamArrInit.init(
+      eduSession: sharedEduSession,
+      box: HiveBoxInit.examArrCache,
+    );
+    await TimetableInit.init(
+      eduSession: sharedEduSession,
+      kiteSession: kiteSession,
+      timetableBox: HiveBoxInit.course,
+    );
 
     await ExpenseTrackerInit.init(
       session: Global.ssoSession2,
@@ -116,8 +140,12 @@ class Initializer {
       gameBox: HiveBoxInit.game,
       kiteSession: kiteSession,
     );
-    await KiteBulletinInit.init(session: DefaultDioSession(Global.dio));
-    await BoardInit.init(kiteSession: kiteSession);
+    await KiteBulletinInit.init(
+      session: DefaultDioSession(Global.dio),
+    );
+    await BoardInit.init(
+      kiteSession: kiteSession,
+    );
     await HomeInit.init(
       ssoSession: Global.ssoSession,
     );
@@ -136,9 +164,13 @@ class Initializer {
       ssoSession: Global.ssoSession,
       box: HiveBoxInit.activityCache,
     );
-    LoginInit.init(ssoSession: Global.ssoSession);
+    LoginInit.init(
+      ssoSession: Global.ssoSession,
+    );
 
-    await FreshmanInit.init(kiteSession: kiteSession);
+    await FreshmanInit.init(
+      kiteSession: kiteSession,
+    );
 
     await ElectricityBillInit.init(
       kiteSession: kiteSession,

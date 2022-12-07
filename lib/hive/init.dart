@@ -31,6 +31,7 @@ class HiveBoxInit {
   static late Box<dynamic> course;
   static late Box<dynamic> expense2;
   static late Box<dynamic> activityCache;
+  static late Box<dynamic> examArrCache;
   static late Box<dynamic> game;
   static late Box<dynamic> kv;
   static late Box<dynamic> cookiesBox;
@@ -47,6 +48,7 @@ class HiveBoxInit {
     course = await Hive.openBox<dynamic>('course');
     expense2 = await Hive.openBox('expense2');
     activityCache = await Hive.openBox('activityCache');
+    examArrCache = await Hive.openBox('examArrCache');
     game = await Hive.openBox<dynamic>('game');
     cookiesBox = await Hive.openBox<dynamic>('cookies');
     name2Box = {
@@ -55,9 +57,10 @@ class HiveBoxInit {
       "cookies": HiveBoxInit.cookiesBox,
       "game": HiveBoxInit.game,
       "course": HiveBoxInit.course,
-      "contactSetting": HiveBoxInit.contactSetting,
       "userEvent": HiveBoxInit.userEvent,
+      "examArrCache": HiveBoxInit.examArrCache,
       "activityCache": HiveBoxInit.activityCache,
+      "contactSetting": HiveBoxInit.contactSetting,
       "expense2": HiveBoxInit.expense2,
       // almost time, this box is very very long which ends up low performance in building.
       // So put this on the bottom

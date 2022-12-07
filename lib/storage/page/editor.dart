@@ -31,18 +31,43 @@ class LocalStoragePage extends StatefulWidget {
 }
 
 class _LocalStoragePageState extends State<LocalStoragePage> {
-  late final name2Box = HiveBoxInit.name2Box.map((key, value) => MapEntry(key, Future(() => value)));
+  final Map<String, Future<Box<dynamic>>> name2Box = {};
+
+  @override
+  void initState() {
+    super.initState();
+    refreshBoxes();
+  }
+
+  void refreshBoxes() {
+    name2Box.clear();
+    for (final entry in HiveBoxInit.name2Box.entries) {
+      final boxName = entry.key;
+      final box = entry.value;
+      if (box.isOpen) {
+        name2Box[boxName] = Future(() => box);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return context.isPortrait ? StorageList(name2Box) : StorageBox(name2Box);
+    return context.isPortrait
+        ? StorageList(
+            name2Box,
+            onHiveChange: () {
+              setState(() {});
+            },
+          )
+        : StorageBox(name2Box);
   }
 }
 
 class StorageList extends StatefulWidget {
   final Map<String, Future<Box<dynamic>>> name2box;
+  final VoidCallback? onHiveChange;
 
-  const StorageList(this.name2box, {super.key});
+  const StorageList(this.name2box, {super.key, this.onHiveChange});
 
   @override
   State<StorageList> createState() => _StorageListState();
@@ -69,118 +94,17 @@ class _StorageListState extends State<StorageList> {
         .mapIndexed((i, p) => PlaceholderFutureBuilder<Box<dynamic>>(
             future: p.value.withDelay(Duration(milliseconds: 200 * i)),
             builder: (ctx, box, _) {
-              return BoxSection(box: box, boxName: p.key);
+              return BoxSection(
+                box: box,
+                boxName: p.key,
+                onDelete: () {
+                  if (mounted) {
+                    widget.onHiveChange?.call();
+                  }
+                },
+              );
             }))
         .toList()
         .column();
-  }
-}
-
-class StorageBox extends StatefulWidget {
-  final Map<String, Future<Box<dynamic>>> name2box;
-
-  const StorageBox(this.name2box, {super.key});
-
-  @override
-  State<StorageBox> createState() => _StorageBoxState();
-}
-
-class _StorageBoxState extends State<StorageBox> {
-  String? selectedBoxName;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext ctx) {
-    return Scaffold(
-        appBar: AppBar(
-          title: i18n.localStorageTitle.text(),
-          elevation: 0,
-        ),
-        body: [
-          buildBoxIntroduction(ctx).expanded(),
-          const VerticalDivider(
-            thickness: 5,
-          ),
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 500),
-            child: buildBoxContentView(ctx),
-          ).padAll(10).flexible(flex: 2)
-        ].row());
-  }
-
-  Widget buildBoxIntroduction(BuildContext ctx) {
-    final boxNameStyle = context.textTheme.headline4;
-    final list = widget.name2box.entries.map((e) {
-      final name2Box = e;
-      final color = name2Box.key == selectedBoxName ? ctx.theme.secondaryHeaderColor : null;
-      return name2Box.key.text(style: boxNameStyle).padAll(10).inCard(elevation: 3, color: color).on(tap: () {
-        if (selectedBoxName != name2Box.key) {
-          setState(() {
-            selectedBoxName = name2Box.key;
-          });
-        }
-      });
-    }).toList();
-    return list.scrolledWithBar();
-  }
-
-  Widget buildBoxContentView(BuildContext ctx) {
-    final name = selectedBoxName;
-    if (name == null) {
-      return _buildUnselectBoxTip(ValueKey(name), ctx);
-    } else {
-      final boxGetter = widget.name2box[name];
-      final key = ValueKey(name);
-      if (boxGetter == null) {
-        return _buildUnselectBoxTip(key, ctx);
-      } else {
-        final routeStyle = context.textTheme.titleMedium;
-        final typeStyle = context.textTheme.bodySmall;
-        final contentStyle = context.textTheme.bodyText2;
-        return PlaceholderFutureBuilder<Box<dynamic>>(
-            key: key,
-            future: boxGetter,
-            builder: (ctx, box, _) {
-              final Widget res;
-              if (box == null) {
-                res = [
-                  BoxItem.skeleton(routeStyle, typeStyle, contentStyle),
-                  BoxItem.skeleton(routeStyle, typeStyle, contentStyle),
-                  BoxItem.skeleton(routeStyle, typeStyle, contentStyle),
-                ].column();
-              } else {
-                if (box.isEmpty) {
-                  res = _buildEmptyBoxTip(key, ctx);
-                } else {
-                  res = box.keys
-                      .map((e) => BoxItem(
-                            boxKey: e,
-                            box: box,
-                            routeStyle: routeStyle,
-                            typeStyle: typeStyle,
-                            contentStyle: contentStyle,
-                          ))
-                      .toList()
-                      .scrolledWithBar();
-                }
-              }
-              return res.align(
-                at: Alignment.topCenter,
-              );
-            });
-      }
-    }
-  }
-
-  Widget _buildUnselectBoxTip(Key? key, BuildContext ctx) {
-    return LeavingBlank(key: key, icon: Icons.unarchive_outlined, desc: i18n.settingsStorageSelectTip);
-  }
-
-  Widget _buildEmptyBoxTip(Key? key, BuildContext ctx) {
-    return LeavingBlank(key: key, icon: Icons.inbox_outlined, desc: i18n.emptyContent).sized(height: 300);
   }
 }

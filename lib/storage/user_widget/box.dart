@@ -17,27 +17,56 @@
 */
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:kite/design/page/common.dart';
+import 'package:kite/design/user_widgets/view.dart';
 
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/user_widget/paginated.dart';
+import 'package:kite/user_widget/placeholder_future_builder.dart';
 import 'package:rettulf/rettulf.dart';
 import '../using.dart';
 
 class BoxSection extends StatelessWidget {
   final String boxName;
   final Box<dynamic>? box;
+  final VoidCallback? onDelete;
 
-  const BoxSection({super.key, this.box, required this.boxName});
+  const BoxSection({super.key, this.box, required this.boxName, this.onDelete});
+
+  Widget buildTitle(BuildContext ctx) {
+    final b = box;
+    final boxNameStyle = ctx.textTheme.headline1;
+    final title = Text(boxName, style: boxNameStyle);
+    if (b != null && kDebugMode) {
+      return CupertinoContextMenu(
+        actions: [
+          CupertinoContextMenuAction(
+            trailingIcon: CupertinoIcons.delete,
+            onPressed: () async {
+              Navigator.of(ctx).pop();
+              _showDeleteBoxRequest(ctx, b, onDelete);
+            },
+            isDestructiveAction: true,
+            child: i18n.delete.text(),
+          )
+        ],
+        previewBuilder: (ctx, ani, child) => child.padSymmetric(h: 40, v: 20).inCard(),
+        child: title,
+      );
+    } else {
+      return title;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final curBox = box;
-    final boxNameStyle = context.textTheme.headline1;
     return [
-      Text(boxName, style: boxNameStyle).padOnly(b: 20),
+      buildTitle(context),
       if (curBox == null) Placeholders.loading() else BoxItemList(box: curBox),
     ].column(mas: MainAxisSize.min).sized(width: double.infinity).padAll(20).inCard();
   }
@@ -230,6 +259,133 @@ class _BoxItemState extends State<BoxItem> {
   }
 }
 
+class StorageBox extends StatefulWidget {
+  final Map<String, Future<Box<dynamic>>> name2box;
+
+  const StorageBox(this.name2box, {super.key});
+
+  @override
+  State<StorageBox> createState() => _StorageBoxState();
+}
+
+class _StorageBoxState extends State<StorageBox> {
+  String? selectedBoxName;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext ctx) {
+    return Scaffold(
+        appBar: AppBar(
+          title: i18n.localStorageTitle.text(),
+          elevation: 0,
+        ),
+        body: [
+          buildBoxIntroduction(ctx).expanded(),
+          const VerticalDivider(
+            thickness: 5,
+          ),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 500),
+            child: buildBoxContentView(ctx),
+          ).padAll(10).flexible(flex: 2)
+        ].row());
+  }
+
+  Widget buildBoxIntroduction(BuildContext ctx) {
+    final boxNameStyle = context.textTheme.headline4;
+    final list = widget.name2box.entries.map((e) {
+      final name2Box = e;
+      final color = name2Box.key == selectedBoxName ? ctx.theme.secondaryHeaderColor : null;
+      Widget preview = name2Box.key.text(style: boxNameStyle).padAll(10).inCard(elevation: 3, color: color).on(tap: () {
+        if (selectedBoxName != name2Box.key) {
+          setState(() {
+            selectedBoxName = name2Box.key;
+          });
+        }
+      });
+      if (kDebugMode) {
+        preview = Dismissible(
+          key: ValueKey(e.key),
+          direction: DismissDirection.startToEnd,
+          confirmDismiss: (dir) async {
+            final box = await name2Box.value;
+            if (!mounted) return true;
+            _showDeleteBoxRequest(ctx, box, () {
+              if (mounted) {
+                setState(() {});
+              }
+            });
+            return true;
+          },
+          child: preview,
+        );
+      }
+      return preview;
+    }).toList();
+    return list.scrolledWithBar();
+  }
+
+  Widget buildBoxContentView(BuildContext ctx) {
+    final name = selectedBoxName;
+    if (name == null) {
+      return _buildUnselectBoxTip(ValueKey(name), ctx);
+    } else {
+      final boxGetter = widget.name2box[name];
+      final key = ValueKey(name);
+      if (boxGetter == null) {
+        return _buildUnselectBoxTip(key, ctx);
+      } else {
+        final routeStyle = context.textTheme.titleMedium;
+        final typeStyle = context.textTheme.bodySmall;
+        final contentStyle = context.textTheme.bodyText2;
+        return PlaceholderFutureBuilder<Box<dynamic>>(
+            key: key,
+            future: boxGetter,
+            builder: (ctx, box, _) {
+              final Widget res;
+              if (box == null) {
+                res = [
+                  BoxItem.skeleton(routeStyle, typeStyle, contentStyle),
+                  BoxItem.skeleton(routeStyle, typeStyle, contentStyle),
+                  BoxItem.skeleton(routeStyle, typeStyle, contentStyle),
+                ].column();
+              } else {
+                if (box.isEmpty) {
+                  res = _buildEmptyBoxTip(key, ctx);
+                } else {
+                  res = box.keys
+                      .map((e) => BoxItem(
+                            boxKey: e,
+                            box: box,
+                            routeStyle: routeStyle,
+                            typeStyle: typeStyle,
+                            contentStyle: contentStyle,
+                          ))
+                      .toList()
+                      .scrolledWithBar();
+                }
+              }
+              return res.align(
+                at: Alignment.topCenter,
+              );
+            });
+      }
+    }
+  }
+
+  Widget _buildUnselectBoxTip(Key? key, BuildContext ctx) {
+    return LeavingBlank(key: key, icon: Icons.unarchive_outlined, desc: i18n.settingsStorageSelectTip);
+  }
+
+  Widget _buildEmptyBoxTip(Key? key, BuildContext ctx) {
+    return LeavingBlank(key: key, icon: Icons.inbox_outlined, desc: i18n.emptyContent).sized(height: 300);
+  }
+}
+
 /// THIS IS VERY DANGEROUS!!!
 dynamic _emptyValue(dynamic value) {
   if (value is String) {
@@ -262,4 +418,13 @@ dynamic _canEmptyValue(dynamic value) {
       value is List ||
       value is Set ||
       value is Map;
+}
+
+Future<void> _showDeleteBoxRequest(BuildContext ctx, Box<dynamic> box, VoidCallback? onDelete) async {
+  final confirm = await ctx.showRequest(
+      title: i18n.delete, desc: i18n.localStorageDeleteDesc, yes: i18n.delete, no: i18n.cancel, highlight: true);
+  if (confirm == true) {
+    box.deleteFromDisk();
+    onDelete?.call();
+  }
 }

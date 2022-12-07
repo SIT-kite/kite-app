@@ -34,6 +34,7 @@ class ExamArrangementPage extends StatefulWidget {
 }
 
 class _ExamArrangementPageState extends State<ExamArrangementPage> {
+  final service = ExamArrInit.examService;
   /// 四位年份
   late int selectedYear;
 
@@ -66,12 +67,7 @@ class _ExamArrangementPageState extends State<ExamArrangementPage> {
       // To display the loading placeholder.
       _exams = null;
     });
-    ExamArrInit.examService
-        .getExamList(
-      SchoolYear(selectedYear),
-      selectedSemester,
-    )
-        .then((value) {
+    service.getExamList(SchoolYear(selectedYear), selectedSemester,).then((value) {
       value.sort(ExamEntry.comparator);
       setState(() {
         _exams = value;

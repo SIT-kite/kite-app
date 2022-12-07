@@ -41,9 +41,9 @@ abstract class CacheKey<T> {
 
   CacheKey(this.box);
 
-  T get value;
+  T? get value;
 
-  set value(T newValue);
+  set value(T? newValue);
 
   DateTime? get lastUpdate;
 
@@ -58,10 +58,10 @@ class NamedCacheKey<T> extends CacheKey<T> {
   NamedCacheKey(super.box, this.name);
 
   @override
-  T get value => box.get(name);
+  T? get value => box.get(name);
 
   @override
-  set value(T newValue) {
+  set value(T? newValue) {
     box.put(name, newValue);
     box.put("$name/$_lastUpdateKey", DateTime.now());
   }
@@ -109,10 +109,10 @@ class _NamespaceSubCacheKey<T> extends CacheKey<T> {
   );
 
   @override
-  T get value => box.get("$namespace/$name");
+  T? get value => box.get("$namespace/$name");
 
   @override
-  set value(T newValue) {
+  set value(T? newValue) {
     box.put("$namespace/$name", newValue);
     lastUpdate = DateTime.now();
   }

@@ -48,6 +48,7 @@ class HiveAdapter {
     _register(ScActivityApplicationAdapter());
     _register(ScScoreItemAdapter());
     _register(ActivityTypeAdapter());
+    _register(ExamEntryAdapter());
   }
 
   static void _register<T>(TypeAdapter<T> adapter) {
