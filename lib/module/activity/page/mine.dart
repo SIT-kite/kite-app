@@ -62,14 +62,14 @@ class _MyActivityPageState extends State<MyActivityPage> with AutomaticKeepAlive
       if (!mounted) return;
       setState(() {
         summary = value;
-        //navigatorKey = GlobalKey();
+        navigatorKey = GlobalKey();
       });
     });
     getMyActivityListJoinScore(ScInit.scScoreService).then((value) {
       if (!mounted) return;
       setState(() {
         joined = value;
-        //navigatorKey = GlobalKey();
+        navigatorKey = GlobalKey();
       });
     });
   }

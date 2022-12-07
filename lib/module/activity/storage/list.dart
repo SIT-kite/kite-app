@@ -42,7 +42,7 @@ class ScActivityListStorage extends ScActivityListDao {
   @override
   Future<List<Activity>> getActivityList(ActivityType type, int page) async {
     final key = box.activities.make(composeActivityKey(type, page));
-    return key.value ?? [];
+    return key.value ?? <Activity>[];
   }
 
   void setActivityList(ActivityType type, int page, List<Activity> activities) {

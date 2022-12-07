@@ -50,12 +50,12 @@ class ScScoreStorage extends ScScoreDao {
 
   @override
   Future<List<ScScoreItem>> getMyScoreList() async {
-    return box.myScoreList.value ?? [];
+    return box.myScoreList.value ?? <ScScoreItem>[];
   }
 
   @override
   Future<List<ScActivityApplication>> getMyInvolved() async {
-    return box.myInvolved.value ?? [];
+    return box.myInvolved.value ?? <ScActivityApplication>[];
   }
 
   void setMeInvolved(List<ScActivityApplication> list) {

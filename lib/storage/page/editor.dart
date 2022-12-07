@@ -56,7 +56,10 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
         ? StorageList(
             name2Box,
             onHiveChange: () {
-              setState(() {});
+              setState(() {
+                if (!mounted) return;
+                refreshBoxes();
+              });
             },
           )
         : StorageBox(name2Box);
