@@ -120,7 +120,7 @@ class Initializer {
     await BoardInit.init(kiteSession: kiteSession);
     await HomeInit.init(
       ssoSession: Global.ssoSession,
-      noticeService: KiteBulletinInit.noticeService,
+      noticeService: KiteBulletinInit.service,
     );
     await LibraryInit.init(
       dio: Global.dio,
