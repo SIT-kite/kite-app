@@ -24,6 +24,11 @@ abstract class HasBox<T> {
 
 const _lastUpdateKey = ".LAST_UPDATE";
 
+/// Please specify the concrete type parameter of a list.
+/// Otherwise, the list will be dynamic and cause type issue when the Hive is read next time.
+/// ```dart
+/// return cacheKey.value ?? <FooItem>[];
+/// ```
 mixin CachedBox implements HasBox<dynamic> {
   /// Create a named cache key.
   /// As a best practice, it will be used as a single value or a list.

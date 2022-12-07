@@ -42,7 +42,7 @@ class ExamStorage extends ExamDao {
   @override
   Future<List<ExamEntry>> getExamList(SchoolYear schoolYear, Semester semester) async {
     final cacheKey = box.exams.make(makeExamsKey(schoolYear, semester));
-    return cacheKey.value ?? [];
+    return cacheKey.value ?? <ExamEntry>[];
   }
 
   void setExamList(SchoolYear schoolYear, Semester semester, List<ExamEntry> exams) {
