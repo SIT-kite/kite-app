@@ -17,11 +17,6 @@ mixin CachedBox implements HasBox<dynamic> {
   CacheNamespace<T> Namespace<T>(String namespace) {
     return CacheNamespace(box, namespace);
   }
-
-  // ignore: non_constant_identifier_names
-  CacheMap<T, K, V> AsMap<T extends Map<K, V>?, K, V>(String name) {
-    return CacheMap(box, name);
-  }
 }
 
 abstract class CacheKey<T> {
@@ -38,53 +33,6 @@ abstract class CacheKey<T> {
   set lastUpdate(DateTime? newValue);
 
   bool needRefresh({required Duration after});
-}
-
-class CacheMap<T extends Map<K, V>?, K, V> {
-  final Box<dynamic> box;
-  final String name;
-
-  CacheMap(this.box, this.name);
-
-  CacheKey<T?> make(K key) {
-    return _MapKeyCacheKey(box, key, name);
-  }
-}
-
-class _MapKeyCacheKey<T extends Map<K, V>?, K, V> extends CacheKey<T?> {
-  final String nameInBox;
-  final K keyInMap;
-
-  _MapKeyCacheKey(super.box, this.keyInMap, this.nameInBox);
-
-  @override
-  T? get value => box.get(keyInMap);
-
-  @override
-  set value(T? newValue) {
-    box.put(nameInBox, newValue);
-    box.put("$nameInBox/$_lastUpdateKey", DateTime.now());
-  }
-
-  @override
-  DateTime? get lastUpdate {
-    return box.get("$nameInBox/$_lastUpdateKey");
-  }
-
-  @override
-  set lastUpdate(DateTime? newValue) {
-    box.put("$nameInBox/$_lastUpdateKey", DateTime.now());
-  }
-
-  @override
-  bool needRefresh({required Duration after}) {
-    final map = value;
-    if (map == null) {
-      return true;
-    } else {
-      return !map.containsKey(keyInMap);
-    }
-  }
 }
 
 class NamedCacheKey<T> extends CacheKey<T> {
@@ -154,12 +102,12 @@ class _NamespaceSubCacheKey<T> extends CacheKey<T> {
 
   @override
   DateTime? get lastUpdate {
-    return box.get("$namespace/$_lastUpdateKey");
+    return box.get("$namespace/$name/$_lastUpdateKey");
   }
 
   @override
   set lastUpdate(DateTime? newValue) {
-    box.put("$namespace/$_lastUpdateKey", DateTime.now());
+    box.put("$namespace/$name/$_lastUpdateKey", DateTime.now());
   }
 
   @override

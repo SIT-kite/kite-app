@@ -24,7 +24,7 @@ class ScActivityDetailStorageBox with CachedBox {
   static const id2DetailKey = "/id2Detail";
   @override
   final Box<dynamic> box;
-  late final id2Detail = AsMap<Map<int, ActivityDetail>?, int, ActivityDetail>(id2DetailKey);
+  late final id2Detail = Namespace<ActivityDetail?>(id2DetailKey);
 
   ScActivityDetailStorageBox(this.box);
 }
@@ -36,23 +36,12 @@ class ScActivityDetailStorage extends ScActivityDetailDao {
 
   @override
   Future<ActivityDetail?> getActivityDetail(int activityId) async {
-    final id2Detail = box.id2Detail.make(activityId).value;
-    if (id2Detail == null) {
-      return null;
-    } else {
-      return id2Detail[activityId];
-    }
+    return box.id2Detail.make(activityId.toString()).value;
   }
 
   void setActivityDetail(int activityId, ActivityDetail? detail) {
     if (detail == null) return;
-    final cacheKey = box.id2Detail.make(activityId);
-    var id2Detail = cacheKey.value;
-    if (id2Detail == null) {
-      id2Detail = {activityId: detail};
-    } else {
-      id2Detail[activityId] = detail;
-    }
-    cacheKey.value = id2Detail;
+    final cacheKey = box.id2Detail.make(activityId.toString());
+    cacheKey.value = detail;
   }
 }
