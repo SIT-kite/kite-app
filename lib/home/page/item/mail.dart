@@ -32,8 +32,8 @@ class _EduEmailItemState extends State<EduEmailItem> {
 
   @override
   void initState() {
-    Global.eventBus.on(EventNameConstants.onHomeRefresh, _onHomeRefresh);
     super.initState();
+    Global.eventBus.on(EventNameConstants.onHomeRefresh, _onHomeRefresh);
   }
 
   @override

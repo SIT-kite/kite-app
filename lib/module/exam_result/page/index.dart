@@ -44,6 +44,7 @@ class _ScorePageState extends State<ScorePage> {
 
   @override
   void initState() {
+    super.initState();
     final now = DateTime.now();
     selectedYear = (now.month >= 9 ? now.year : now.year - 1);
     selectedSemester = Semester.all;
@@ -51,7 +52,6 @@ class _ScorePageState extends State<ScorePage> {
       scoreList = await ExamResultInit.scoreService.getScoreList(SchoolYear(selectedYear), selectedSemester);
       setState(() {});
     });
-    super.initState();
   }
 
   Widget _buildHeader() {

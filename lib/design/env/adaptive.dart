@@ -55,6 +55,19 @@ extension AdapativeEx on BuildContext {
   AdaptiveUI get adaptive => AdaptiveUI.of(this);
 }
 
-abstract class Navigatable {
-  NavigatorState? get navigator;
+mixin Navigatable {
+  var navigatorKey = GlobalKey();
+
+  NavigatorState? get navigator => navigatorKey.currentState as NavigatorState?;
+
+  // ignore: non_constant_identifier_names
+  Widget AdaptiveNavigation(BuildContext ctx, {required Widget child}) {
+    return Navigator(
+        key: navigatorKey,
+        onGenerateRoute: (settings) {
+          return ctx.adaptive.makeRoute((ctx) {
+            return child;
+          });
+        });
+  }
 }

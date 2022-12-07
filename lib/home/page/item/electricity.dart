@@ -36,7 +36,7 @@ class _ElectricityBillItemState extends State<ElectricityBillItem> {
 
   @override
   void initState() {
-    return super.initState();
+    super.initState();
   }
 
   @override

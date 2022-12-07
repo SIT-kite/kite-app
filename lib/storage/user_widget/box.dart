@@ -38,8 +38,7 @@ class BoxSection extends StatelessWidget {
     final boxNameStyle = context.textTheme.headline1;
     return [
       Text(boxName, style: boxNameStyle).padOnly(b: 20),
-      if (curBox == null) Placeholders.loading() else
-        BoxItemList(box: curBox),
+      if (curBox == null) Placeholders.loading() else BoxItemList(box: curBox),
     ].column(mas: MainAxisSize.min).sized(width: double.infinity).padAll(20).inCard();
   }
 }
@@ -78,8 +77,7 @@ class _BoxItemListState extends State<BoxItemList> {
       return [
         buildPaginated(ctx, totalPages).padAll(10),
         buildBoxItems(ctx, keys.sublist(start, min(start + pageSize, length)))
-      ]
-          .column();
+      ].column();
     }
   }
 
@@ -88,14 +86,13 @@ class _BoxItemListState extends State<BoxItemList> {
     final typeStyle = context.textTheme.bodySmall;
     final contentStyle = context.textTheme.bodyText2;
     return keys
-        .map((e) =>
-        BoxItem(
-          boxKey: e,
-          box: widget.box,
-          routeStyle: routeStyle,
-          typeStyle: typeStyle,
-          contentStyle: contentStyle,
-        ))
+        .map((e) => BoxItem(
+              boxKey: e,
+              box: widget.box,
+              routeStyle: routeStyle,
+              typeStyle: typeStyle,
+              contentStyle: contentStyle,
+            ))
         .toList()
         .column();
   }
@@ -134,8 +131,7 @@ class BoxItem extends StatefulWidget {
   @override
   State<BoxItem> createState() => _BoxItemState();
 
-  static Widget skeleton(TextStyle? routeStyle, TextStyle? typeStyle, TextStyle? contentStyle) =>
-      [
+  static Widget skeleton(TextStyle? routeStyle, TextStyle? typeStyle, TextStyle? contentStyle) => [
         Text(
           "...",
           style: routeStyle,

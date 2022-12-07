@@ -33,9 +33,8 @@ class _ExamArrangementItemState extends State<ExamArrangementItem> {
 
   @override
   void initState() {
+    super.initState();
     Global.eventBus.on(EventNameConstants.onHomeRefresh, (arg) {});
-
-    return super.initState();
   }
 
   @override

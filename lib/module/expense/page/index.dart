@@ -48,10 +48,10 @@ class _ExpenseTrackerPageState extends State<ExpenseTrackerPage> {
 
   @override
   void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await fetch(DateTime(2010), DateTime.now());
     });
-    super.initState();
   }
 
   @override

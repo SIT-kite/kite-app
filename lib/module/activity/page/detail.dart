@@ -102,13 +102,13 @@ class _DetailPageState extends State<DetailPage> with AutomaticKeepAliveClientMi
                     icon: const Icon(Icons.person_add),
                     tap: () async {
                       await showApplyRequest(ctx);
-                    }).padOnly(t:10),
+                    }).padOnly(t: 10),
               PlainExtendedButton(
                   label: i18n.open.text(),
                   icon: const Icon(Icons.open_in_browser),
                   tap: () {
                     launchUrlInBrowser(_getActivityUrl(activityId));
-                  }).padOnly(t:10),
+                  }).padOnly(t: 10),
             ],
           ),
           body: buildDetailLandscape(ctx, detail));
@@ -145,10 +145,7 @@ class _DetailPageState extends State<DetailPage> with AutomaticKeepAliveClientMi
           child: CardCoverBackground(),
         ),
         buildGlassmorphismBg(ctx),
-        Padding(
-          padding: const EdgeInsets.all(20),
-          child: buildActivityInfo(ctx, detail).padAll(8).inCard().hero(widget.hero),
-        )
+        buildActivityInfo(ctx, detail).padAll(8).inCard().hero(widget.hero).padAll(20),
       ],
     );
   }
@@ -188,7 +185,9 @@ class _DetailPageState extends State<DetailPage> with AutomaticKeepAliveClientMi
   Widget buildDetailLandscape(BuildContext ctx, ActivityDetail? detail) {
     return [
       const CardCoverBackground().padAll(20),
-      // buildGlassmorphismBg(ctx),
+      ClipRRect(
+        child: buildGlassmorphismBg(ctx),
+      ),
       Row(mainAxisSize: MainAxisSize.min, children: [
         buildInfoCardLandscape(context, detail).expanded(),
         if (detail != null)

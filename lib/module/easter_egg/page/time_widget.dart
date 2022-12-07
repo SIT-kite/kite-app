@@ -215,6 +215,7 @@ class _TimeWidgetState extends State<TimeWidget> {
 
   @override
   void initState() {
+    super.initState();
     world = widget.world;
     final firstTime = DateTime.now();
     Future.delayed(Duration.zero, () async {
@@ -240,7 +241,6 @@ class _TimeWidgetState extends State<TimeWidget> {
         await Future.delayed(const Duration(seconds: 1));
       }
     });
-    super.initState();
   }
 
   @override

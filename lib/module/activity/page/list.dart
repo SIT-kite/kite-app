@@ -34,8 +34,7 @@ class ActivityListPage extends StatefulWidget {
 }
 
 class _ActivityListPageState extends State<ActivityListPage>
-    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin
-    implements Navigatable {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin, Navigatable {
   static const categories = [
     ActivityType.lecture,
     ActivityType.creation,
@@ -47,19 +46,18 @@ class _ActivityListPageState extends State<ActivityListPage>
 
   late TabController _tabController;
 
-  final _navigatorKey = GlobalKey();
-
   final $page = ValueNotifier(0);
   bool init = false;
+  final _listKey = GlobalKey();
 
   @override
   void initState() {
+    super.initState();
     _tabController = TabController(
       length: categories.length,
       vsync: this,
     );
     _tabController.addListener(() => $page.value = _tabController.index);
-    super.initState();
   }
 
   @override
@@ -94,27 +92,21 @@ class _ActivityListPageState extends State<ActivityListPage>
   }
 
   Widget buildLandscape(BuildContext ctx) {
-    return Navigator(
-      key: _navigatorKey,
-      onGenerateRoute: (settings) {
-        return ctx.adaptive.makeRoute((ctx) {
-          return Scaffold(
-            appBar: _buildBarHeader(context),
-            body: TabBarView(
-              controller: _tabController,
-              children: categories.map((selectedActivityType) {
-                return ValueListenableBuilder(
-                  valueListenable: $page,
-                  builder: (context, index, child) {
-                    return ActivityList(selectedActivityType);
-                  },
-                );
-              }).toList(),
-            ),
-          );
-        });
-      },
-    );
+    return AdaptiveNavigation(ctx,
+        child: Scaffold(
+          appBar: _buildBarHeader(ctx),
+          body: TabBarView(
+            controller: _tabController,
+            children: categories.map((selectedActivityType) {
+              return ValueListenableBuilder(
+                valueListenable: $page,
+                builder: (context, index, child) {
+                  return ActivityList(key: _listKey, selectedActivityType);
+                },
+              );
+            }).toList(),
+          ),
+        ));
   }
 
   Widget buildPortrait(BuildContext ctx) {
@@ -126,7 +118,7 @@ class _ActivityListPageState extends State<ActivityListPage>
           return ValueListenableBuilder(
             valueListenable: $page,
             builder: (context, index, child) {
-              return ActivityList(selectedActivityType);
+              return ActivityList(key: _listKey, selectedActivityType);
             },
           );
         }).toList(),
@@ -136,9 +128,6 @@ class _ActivityListPageState extends State<ActivityListPage>
 
   @override
   bool get wantKeepAlive => true;
-
-  @override
-  NavigatorState? get navigator => _navigatorKey.currentState as NavigatorState?;
 }
 
 class ActivityList extends StatefulWidget {
@@ -161,6 +150,7 @@ class _ActivityListState extends State<ActivityList> {
 
   @override
   void initState() {
+    super.initState();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         if (!_atEnd) {
@@ -173,7 +163,6 @@ class _ActivityListState extends State<ActivityList> {
       }
     });
     loadInitialActivities();
-    super.initState();
   }
 
   @override

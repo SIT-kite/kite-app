@@ -336,6 +336,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    super.initState();
     var userType = AccountUtils.getUserType();
     isFreshman = userType == UserType.freshman;
     isOffline = userType == UserType.offline;
@@ -363,7 +364,6 @@ class _HomePageState extends State<HomePage> {
     }
     Global.eventBus.on(EventNameConstants.onCampusChange, (_) => _updateWeather());
     Global.eventBus.on(EventNameConstants.onHomeItemReorder, (_) => setState(() {}));
-    super.initState();
   }
 
   @override

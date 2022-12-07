@@ -37,9 +37,9 @@ class _GpaBannerState extends State<GpaBanner> {
 
   @override
   void initState() {
+    super.initState();
     Global.eventBus.on<Score>(EventNameConstants.onSelectCourse, _onSelectCourse);
     Global.eventBus.on<Score>(EventNameConstants.onRemoveCourse, _onRemoveCourse);
-    super.initState();
   }
 
   @override

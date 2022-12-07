@@ -62,6 +62,7 @@ class _SemesterSelectorState extends State<SemesterSelector> {
 
   @override
   void initState() {
+    super.initState();
     now = DateTime.now();
     selectedYear = widget.initialYear ?? (now.month >= 9 ? now.year : now.year - 1);
     if (widget.showEntireYear ?? true) {
@@ -70,7 +71,6 @@ class _SemesterSelectorState extends State<SemesterSelector> {
       selectedSemester =
           widget.initialSemester ?? ((now.month >= 3 && now.month <= 7) ? Semester.secondTerm : Semester.firstTerm);
     }
-    super.initState();
   }
 
   List<int> _generateYearList(int entranceYear) {

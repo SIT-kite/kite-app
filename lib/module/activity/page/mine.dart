@@ -36,7 +36,7 @@ class MyActivityPage extends StatefulWidget {
   State<MyActivityPage> createState() => _MyActivityPageState();
 }
 
-class _MyActivityPageState extends State<MyActivityPage> with AutomaticKeepAliveClientMixin {
+class _MyActivityPageState extends State<MyActivityPage> with AutomaticKeepAliveClientMixin, Navigatable {
   List<ScJoinedActivity>? joined;
   ScScoreSummary? summary;
 
@@ -62,12 +62,14 @@ class _MyActivityPageState extends State<MyActivityPage> with AutomaticKeepAlive
       if (!mounted) return;
       setState(() {
         summary = value;
+        navigatorKey = GlobalKey();
       });
     });
     getMyActivityListJoinScore(ScInit.scScoreService).then((value) {
       if (!mounted) return;
       setState(() {
         joined = value;
+        navigatorKey = GlobalKey();
       });
     });
   }
@@ -82,8 +84,10 @@ class _MyActivityPageState extends State<MyActivityPage> with AutomaticKeepAlive
     ].column();
   }
 
-  Widget buildLandscape(BuildContext context) {
-    return [buildSummeryCard(context, summary).expanded(), buildLiveList(context).expanded()].row();
+  Widget buildLandscape(BuildContext ctx) {
+    return AdaptiveNavigation(ctx,
+        child: [buildSummeryCard(ctx, summary).expanded(), buildLiveList(context).expanded()].row());
+    //return [buildSummeryCard(ctx, summary).expanded(), buildLiveList(context).expanded()].row();
   }
 
   Widget buildJoinedActivityCard(BuildContext context, ScJoinedActivity rawActivity) {

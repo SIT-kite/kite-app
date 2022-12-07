@@ -52,17 +52,14 @@ class ActivityCard extends StatelessWidget {
               opacity: 0.75,
             ),
             buildGlassmorphismBg(ctx),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Center(
-                child: Text(
-                  activity.realTitle,
-                  style: titleStyle,
-                  maxLines: 3,
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
+            Center(
+              child: Text(
+                activity.realTitle,
+                style: titleStyle,
+                maxLines: 3,
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+              ).padSymmetric(h: 12),
             ),
           ],
         ).expanded(),
@@ -96,7 +93,6 @@ class ActivityCard extends StatelessWidget {
     ).hero(activity.id).on(tap: () {
       final route = AdaptiveUI.of(context).makeRoute((_) => DetailPage(activity, hero: activity.id));
       context.navigator.push(route);
-      //Navigator.of(context).push(MaterialPageRoute(builder: (_) => DetailPage(activity, hero: activity.id)));
     });
   }
 }

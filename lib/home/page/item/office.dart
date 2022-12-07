@@ -36,8 +36,8 @@ class _ApplicationItemState extends State<ApplicationItem> {
 
   @override
   void initState() {
+    super.initState();
     Global.eventBus.on(EventNameConstants.onHomeRefresh, _onHomeRefresh);
-    return super.initState();
   }
 
   @override

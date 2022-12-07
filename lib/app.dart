@@ -129,9 +129,11 @@ class _KiteAppState extends State<KiteApp> {
         theme: theme.copyWith(
             pageTransitionsTheme: const PageTransitionsTheme(
               builders: {
-                TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-                TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-                TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
+                TargetPlatform.android:
+                    SharedAxisPageTransitionsBuilder(transitionType: SharedAxisTransitionType.horizontal),
+                TargetPlatform.iOS:
+                    SharedAxisPageTransitionsBuilder(transitionType: SharedAxisTransitionType.horizontal),
+                TargetPlatform.macOS: FadeThroughPageTransitionsBuilder(),
                 TargetPlatform.linux: FadeThroughPageTransitionsBuilder(),
                 TargetPlatform.windows: FadeThroughPageTransitionsBuilder(),
               },
