@@ -40,7 +40,7 @@ class Dashboard extends StatefulWidget {
   State<StatefulWidget> createState() => _DashboardState();
 }
 
-class _DashboardState extends State<Dashboard> {
+class _DashboardState extends State<Dashboard> with AutomaticKeepAliveClientMixin {
   final service = ElectricityBillInit.electricityService;
   final updateTimeFormatter = DateFormat('MM/dd HH:mm');
   Balance? _balance;
@@ -76,6 +76,7 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return context.isPortrait ? buildPortrait(context) : buildLandscape(context);
   }
 
@@ -254,6 +255,9 @@ class _DashboardState extends State<Dashboard> {
           ],
         )).center();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 extension BalanceEx on Balance? {

@@ -28,7 +28,7 @@ import 'dashboard.dart';
 import 'search.dart';
 
 class ElectricityBillPage extends StatefulWidget {
-  const ElectricityBillPage({Key? key}) : super(key: key);
+  const ElectricityBillPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _ElectricityBillPageState();
@@ -45,7 +45,7 @@ class _ElectricityBillPageState extends State<ElectricityBillPage> {
   String? _selectedRoom;
   final storage = ElectricityBillInit.electricityStorage;
   List<String>? _searchHistory;
-  List<String>? _allRoomNumbers;
+  static List<String>? _allRoomNumbers;
   var _dashboardKey = GlobalKey();
 
   /// For landscape mode Full.
@@ -67,9 +67,11 @@ class _ElectricityBillPageState extends State<ElectricityBillPage> {
         _selectedRoom = searchHistory.last;
       }
     }
-    getRoomNumberList().then((value) {
-      _allRoomNumbers = value.map((e) => e.toString()).toList();
-    });
+    if (_allRoomNumbers == null) {
+      getRoomNumberList().then((value) {
+        _allRoomNumbers = value.map((e) => e.toString()).toList();
+      });
+    }
   }
 
   @override
@@ -100,23 +102,21 @@ class _ElectricityBillPageState extends State<ElectricityBillPage> {
 
   Widget buildLandscape(BuildContext ctx) {
     final selectedRoom = _selectedRoom;
-    final Widget right;
+    final right = <Widget>[];
     if (selectedRoom == null) {
-      right = EmptySearchTip(
+      right.add(EmptySearchTip(
         search: search,
-      );
+      ));
+      right.add(EmptySearchTip(
+        search: search,
+      ));
     } else {
-      switch (curNavigation) {
-        case _Page.bill:
-          right = Dashboard(key: _dashboardKey, selectedRoom: selectedRoom);
-          break;
-        default:
-          right = Search(
-            searchHistory: _searchHistory ?? [selectedRoom],
-            search: search,
-            onSelected: selectRoomNumber,
-          );
-      }
+      right.add(Dashboard(key: _dashboardKey, selectedRoom: selectedRoom));
+      right.add(Search(
+        searchHistory: _searchHistory ?? [selectedRoom],
+        search: search,
+        onSelected: selectRoomNumber,
+      ));
     }
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -156,7 +156,10 @@ class _ElectricityBillPageState extends State<ElectricityBillPage> {
           ),
           const VerticalDivider(thickness: 1, width: 1),
           // This is the main content.
-          right.expanded()
+          IndexedStack(
+            index: curNavigation,
+            children: right,
+          ).expanded()
         ],
       ),
     );
