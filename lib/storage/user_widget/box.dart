@@ -164,10 +164,18 @@ class _BoxItemState extends State<BoxItem> {
       ),
     ].column(caa: CrossAxisAlignment.start).align(at: Alignment.topLeft).padAll(10).inCard(elevation: 5);
     if (kDebugMode) {
+      final DismissDirection dir;
+      if (value == null) {
+        dir = DismissDirection.none;
+      } else if (_canEmptyValue(value)) {
+        dir = DismissDirection.horizontal;
+      } else {
+        dir = DismissDirection.endToStart;
+      }
       res = res.on(tap: () async => showContentDialog(context, widget.box, key, value));
       res = Dismissible(
         key: ValueKey(key),
-        direction: _canEmptyValue(value) ? DismissDirection.horizontal : DismissDirection.endToStart,
+        direction: dir,
         confirmDismiss: (dir) async {
           if (dir == DismissDirection.startToEnd) {
             // Empty the value
@@ -182,7 +190,7 @@ class _BoxItemState extends State<BoxItem> {
               if (!mounted) return false;
               setState(() {});
             }
-          } else {
+          } else if (value != null) {
             // Set the value to null
             final confirm = await context.showRequest(
                 title: i18n.warning,

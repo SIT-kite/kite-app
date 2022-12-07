@@ -49,14 +49,17 @@ class ScInit {
     scActivityListService = ScActivityListCache(
       from: ScActivityListService(session),
       to: ScActivityListStorage(box),
+      expiration: const Duration(hours: 6),
     );
     scActivityDetailService = ScActivityDetailCache(
       from: ScActivityDetailService(session),
       to: ScActivityDetailStorage(box),
+      expiration: const Duration(days: 180),
     );
     scScoreService = ScScoreCache(
       from: ScScoreService(session),
       to: ScScoreStorage(box),
+      expiration: const Duration(days: 1),
     );
     scJoinActivityService = ScJoinActivityService(session);
   }
