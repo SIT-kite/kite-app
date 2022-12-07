@@ -16,32 +16,48 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:hive/hive.dart';
 import 'package:kite/network/session.dart';
 
 import '../../session/sc_session.dart';
+import 'cache/detail.dart';
+import 'cache/list.dart';
+import 'cache/score.dart';
 import 'dao/detail.dart';
-import 'dao/join.dart';
 import 'dao/list.dart';
 import 'dao/score.dart';
 import 'service/detail.dart';
 import 'service/join.dart';
 import 'service/list.dart';
 import 'service/score.dart';
+import 'storage/detail.dart';
+import 'storage/list.dart';
+import 'storage/score.dart';
 
 class ScInit {
   static late ScSession session;
   static late ScActivityListDao scActivityListService;
   static late ScActivityDetailDao scActivityDetailService;
-  static late ScJoinActivityDao scJoinActivityService;
   static late ScScoreDao scScoreService;
+  static late ScJoinActivityService scJoinActivityService;
 
   static void init({
     required ISession ssoSession,
+    required Box<dynamic> box,
   }) {
     session = ScSession(ssoSession);
-    scActivityListService = ScActivityListService(session);
-    scActivityDetailService = ScActivityDetailService(session);
+    scActivityListService = ScActivityListCache(
+      from: ScActivityListService(session),
+      to: ScActivityListStorage(box),
+    );
+    scActivityDetailService = ScActivityDetailCache(
+      from: ScActivityDetailService(session),
+      to: ScActivityDetailStorage(box),
+    );
+    scScoreService = ScScoreCache(
+      from: ScScoreService(session),
+      to: ScScoreStorage(box),
+    );
     scJoinActivityService = ScJoinActivityService(session);
-    scScoreService = ScScoreService(session);
   }
 }

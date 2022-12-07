@@ -167,18 +167,34 @@ class _BoxItemState extends State<BoxItem> {
       res = res.on(tap: () async => showContentDialog(context, widget.box, key, value));
       res = Dismissible(
         key: ValueKey(key),
-        direction: DismissDirection.startToEnd,
+        direction: _canEmptyValue(value) ? DismissDirection.horizontal : DismissDirection.endToStart,
         confirmDismiss: (dir) async {
-          final confirm = await context.showRequest(
-              title: i18n.warning,
-              desc: i18n.localStorageEmptyValueDesc,
-              yes: i18n.confirm,
-              no: i18n.cancel,
-              highlight: true);
-          if (confirm == true) {
-            widget.box.put(key, _emptyValue(value));
-            if (!mounted) return false;
-            setState(() {});
+          if (dir == DismissDirection.startToEnd) {
+            // Empty the value
+            final confirm = await context.showRequest(
+                title: i18n.warning,
+                desc: i18n.localStorageEmptyValueDesc,
+                yes: i18n.confirm,
+                no: i18n.cancel,
+                highlight: true);
+            if (confirm == true) {
+              widget.box.put(key, _emptyValue(value));
+              if (!mounted) return false;
+              setState(() {});
+            }
+          } else {
+            // Set the value to null
+            final confirm = await context.showRequest(
+                title: i18n.warning,
+                desc: i18n.localStorageSetValueNullDesc,
+                yes: i18n.confirm,
+                no: i18n.cancel,
+                highlight: true);
+            if (confirm == true) {
+              widget.box.put(key, null);
+              if (!mounted) return false;
+              setState(() {});
+            }
           }
           return false;
         },
@@ -192,7 +208,7 @@ class _BoxItemState extends State<BoxItem> {
 
   Future<void> showContentDialog(BuildContext context, Box<dynamic> box, String key, dynamic value,
       {bool readonly = false}) async {
-    if (readonly || Editor.isSupport(value)) {
+    if (readonly || !Editor.isSupport(value)) {
       await Editor.showReadonlyEditor(context, key, value);
     } else {
       final newValue = await Editor.showAnyEditor(context, value, desc: key);
@@ -226,6 +242,16 @@ dynamic _emptyValue(dynamic value) {
     value.clear();
     return value;
   } else {
-    return null;
+    return value;
   }
+}
+
+dynamic _canEmptyValue(dynamic value) {
+  return value is String ||
+      value is bool ||
+      value is int ||
+      value is double ||
+      value is List ||
+      value is Set ||
+      value is Map;
 }

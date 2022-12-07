@@ -133,7 +133,10 @@ class Initializer {
       cookieJar: Global.cookieJar,
     );
     ReportTempInit.init(dio: Global.dio);
-    ScInit.init(ssoSession: Global.ssoSession);
+    ScInit.init(
+      ssoSession: Global.ssoSession,
+      box: HiveBoxInit.activityCache,
+    );
     LoginInit.init(ssoSession: Global.ssoSession);
 
     await FreshmanInit.init(kiteSession: kiteSession);

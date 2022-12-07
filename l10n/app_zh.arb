@@ -251,6 +251,7 @@
   "libraryNoticeTitle": "图书馆通知",
   "loading": "加载中",
   "localStorageEmptyValueDesc": "当心！你正准备清空这个值，确定要这样做吗？",
+  "localStorageSetValueNullDesc": "当心！你正准备将这个值设为 null，确定要这样做吗？",
   "localStorageTitle": "本地存储",
   "loggingIn": "登录中",
   "loginCredentialsValidatedTip": "账号与密码正确",

@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:kite/module/activity/using.dart';
+import 'package:rettulf/rettulf.dart';
 
 import '../entity/list.dart';
 import '../init.dart';
@@ -33,24 +35,24 @@ class SearchBar extends SearchDelegate<String> {
     return null;
   }
 
-  Widget _buildEventResult(List<Activity> activities) {
-    return ListView(children: activities.map((e) => ActivityCard(e)).toList());
+
+  Widget buildEventResult(List<Activity> activities) {
+    return ListView.builder(
+        itemCount: activities.length,
+        itemBuilder: (ctx, i) {
+          return ActivityCard(activities[i]).sized(width: 400, height: 200);
+        });
   }
 
   Widget _buildSearch() {
-    final future = ScInit.scActivityListService.query(query);
-
-    return FutureBuilder<List<Activity>>(
-      future: future,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasData) {
-            return _buildEventResult(snapshot.data!);
-          } else if (snapshot.hasError) {
-            return Center(child: Text(snapshot.error.toString()));
-          }
+    return PlaceholderFutureBuilder<List<Activity>>(
+      future: ScInit.scActivityListService.query(query),
+      builder: (context, data, state) {
+        if (data == null) {
+          return Placeholders.loading();
+        } else {
+          return buildEventResult(data);
         }
-        return const Center(child: CircularProgressIndicator());
       },
     );
   }
@@ -62,6 +64,6 @@ class SearchBar extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return query.isNotEmpty ? _buildSearch() : Container();
+    return Container();
   }
 }

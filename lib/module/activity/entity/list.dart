@@ -18,6 +18,9 @@
 
 import '../page/util.dart';
 import 'score.dart';
+import '../using.dart';
+
+part 'list.g.dart';
 
 /// No I18n for unambiguity among all languages
 class ActivityName {
@@ -33,15 +36,23 @@ class ActivityName {
   static const voluntary = "志愿公益";
   static const blackList = ["补录"];
 }
-
+@HiveType(typeId: HiveTypeId.activityType)
 enum ActivityType {
+  @HiveField(0)
   lecture(ActivityName.lectureReport), // 讲座报告
+  @HiveField(1)
   thematicEdu(ActivityName.thematicEdu), // 主题教育
+  @HiveField(2)
   creation(ActivityName.creation), // 三创
+  @HiveField(3)
   schoolCulture(ActivityName.schoolCulture), // 校园文化
+  @HiveField(4)
   practice(ActivityName.practice), // 社会实践
+  @HiveField(5)
   voluntary(ActivityName.voluntary), // 志愿公益
+  @HiveField(6)
   cyberSafetyEdu(ActivityName.cyberSafetyEdu), // 安全教育网络教学
+  @HiveField(7)
   unknown(ActivityName.unknown); // 未知
 
   final String name;
@@ -86,23 +97,32 @@ const Map<String, ActivityType> stringToActivityType = {
   '校园文明': ActivityType.schoolCulture,
 };
 
+@HiveType(typeId: HiveTypeId.activity)
 class Activity {
   /// Activity id
+  @HiveField(0)
   final int id;
 
   /// Activity category
+  @HiveField(1)
   final ActivityType category;
 
   /// Title
+  @HiveField(2)
   final String title;
 
+  @HiveField(3)
   final String realTitle;
+  @HiveField(4)
   final List<String> tags;
 
   /// Date
+  @HiveField(5)
   final DateTime ts;
 
-  const Activity(
+  const Activity(this.id, this.category, this.title, this.ts, this.realTitle, this.tags);
+
+  const Activity.named(
       {required this.id,
       required this.category,
       required this.title,
@@ -119,7 +139,7 @@ class Activity {
 extension ActivityParser on Activity {
   static Activity parse(ScJoinedActivity activity) {
     final titleAndTags = splitTitleAndTags(activity.title);
-    return Activity(
+    return Activity.named(
         id: activity.activityId,
         category: ActivityType.unknown,
         title: activity.title,

@@ -39,7 +39,10 @@ class _Page {
 class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderStateMixin {
   /// For landscape mode.
   int curNavigation = _Page.list;
-  final _pageKeys = [GlobalKey(), GlobalKey()];
+  final _pageKeys = [
+    GlobalKey(debugLabel: "Activity Page List"),
+    GlobalKey(debugLabel: "Activity Page Mine"),
+  ];
   final pages = <Widget>[];
 
   @override

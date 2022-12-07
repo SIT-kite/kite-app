@@ -21,6 +21,7 @@ import 'package:kite/home/entity/home.dart';
 
 import 'package:kite/module/symbol.dart';
 
+import 'adapter/color.dart';
 import 'adapter/size.dart';
 
 class HiveAdapter {
@@ -40,6 +41,13 @@ class HiveAdapter {
     _register(ReportHistoryAdapter());
     _register(TimetableMetaAdapter());
     _register(SizeAdapter());
+    _register(ColorAdapter());
+    _register(ActivityDetailAdapter());
+    _register(ActivityAdapter());
+    _register(ScScoreSummaryAdapter());
+    _register(ScActivityApplicationAdapter());
+    _register(ScScoreItemAdapter());
+    _register(ActivityTypeAdapter());
   }
 
   static void _register<T>(TypeAdapter<T> adapter) {

@@ -431,6 +431,7 @@
   "libraryNoticeTitle": "Library Notice",
   "loading": "Loading",
   "localStorageEmptyValueDesc": "BEWARE! YOU ARE TRYING TO EMPTY THE VALUE! ARE YOU SURE?",
+  "localStorageSetValueNullDesc": "BEWARE! YOU ARE TRYING TO SET THE VALUE TO NULL! ARE YOU SURE?",
   "localStorageTitle": "Local Storage Editor",
   "loggingIn": "Logging in",
   "loginCredentialsValidatedTip": "Account and password is correct",
