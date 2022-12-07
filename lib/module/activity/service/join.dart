@@ -16,10 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import '../dao/join.dart';
 import '../using.dart';
 
-class ScJoinActivityService implements ScJoinActivityDao {
+class ScJoinActivityService {
   static const _applyCheck = 'http://sc.sit.edu.cn/public/pcenter/check.action?activityId=';
   static const _applyRequest = 'http://sc.sit.edu.cn/public/pcenter/applyActivity.action?activityId=';
 
@@ -53,7 +52,6 @@ class ScJoinActivityService implements ScJoinActivityDao {
   }
 
   /// 参加活动
-  @override
   Future<String> join(int activityId, [bool force = false]) async {
     if (!force) {
       final result = await _sendCheckRequest(activityId);

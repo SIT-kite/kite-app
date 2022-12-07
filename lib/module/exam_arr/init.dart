@@ -16,6 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:kite/module/exam_arr/storage/exam.dart';
+
+import 'cache/exam.dart';
 import 'using.dart';
 import 'dao/exam.dart';
 import 'service/exam.dart';
@@ -23,7 +26,14 @@ import 'service/exam.dart';
 class ExamArrInit {
   static late ExamDao examService;
 
-  static Future<void> init(ISession eduSession) async {
-    examService = ExamService(eduSession);
+  static Future<void> init({
+    required ISession eduSession,
+    required Box<dynamic> box,
+  }) async {
+    examService = ExamCache(
+      from: ExamService(eduSession),
+      to: ExamStorage(box),
+      expiration: const Duration(days: 30),
+    );
   }
 }

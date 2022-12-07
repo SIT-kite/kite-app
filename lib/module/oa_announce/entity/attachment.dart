@@ -15,11 +15,17 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-class Attachment {
+import '../using.dart';
+part 'attachment.g.dart';
+
+@HiveType(typeId: HiveTypeId.announceAttachment)
+class AnnounceAttachment {
   /// 附件标题
+  @HiveField(0)
   String name = '';
 
   /// 附件下载网址
+  @HiveField(1)
   String url = '';
 
   @override

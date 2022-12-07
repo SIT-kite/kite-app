@@ -48,7 +48,7 @@ class _ActivityListPageState extends State<ActivityListPage>
 
   final $page = ValueNotifier(0);
   bool init = false;
-  final _listKey = GlobalKey();
+  final _listKey = GlobalKey(debugLabel: "Activity List");
 
   @override
   void initState() {

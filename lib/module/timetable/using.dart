@@ -15,13 +15,12 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-export '../shared/hive.dart';
+export '../shared/storage.dart';
 export '../shared/logger.dart';
 export '../shared/dialog.dart';
 export '../shared/launcher.dart';
 export '../shared/file_system.dart';
 export '../shared/route.dart';
-export '../shared/storage.dart';
 export '../shared/networking.dart';
 export '../shared/design.dart';
 export '../shared/entity/school.dart';

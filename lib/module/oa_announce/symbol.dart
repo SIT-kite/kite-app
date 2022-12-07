@@ -17,3 +17,6 @@
 */
 export 'page/index.dart';
 export 'init.dart';
+export 'entity/announce.dart';
+export 'entity/attachment.dart';
+export 'entity/page.dart';

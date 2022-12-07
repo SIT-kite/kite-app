@@ -19,9 +19,9 @@
 import '../entity/score.dart';
 
 abstract class ScScoreDao {
-  Future<ScScoreSummary?> getScScoreSummary();
+  Future<ScScoreSummary?> getScoreSummary();
 
   Future<List<ScScoreItem>> getMyScoreList();
 
-  Future<List<ScActivityApplication>> getMyActivityList();
+  Future<List<ScActivityApplication>> getMyInvolved();
 }

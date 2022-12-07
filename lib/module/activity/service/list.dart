@@ -96,7 +96,7 @@ class ScActivityListService implements ScActivityListDao {
         final String? x = re.firstMatch(link)?.group(0).toString();
         final int id = int.parse(x!);
         final titleAndTags = splitTitleAndTags(title);
-        return Activity(
+        return Activity.named(
             id: id,
             category: ActivityType.unknown,
             title: title,

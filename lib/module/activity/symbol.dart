@@ -18,3 +18,6 @@
 export 'init.dart';
 export 'page/index.dart';
 export 'page/mine.dart';
+export 'entity/detail.dart';
+export 'entity/list.dart';
+export 'entity/score.dart';

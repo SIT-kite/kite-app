@@ -21,28 +21,47 @@ import 'package:kite/home/entity/home.dart';
 
 import 'package:kite/module/symbol.dart';
 
+import 'adapter/color.dart';
 import 'adapter/size.dart';
 
 class HiveAdapter {
   HiveAdapter._();
+
   static void registerAll() {
-    _register(ContactDataAdapter());
-    _register(CourseAdapter());
-    _register(GameTypeAdapter());
-    _register(GameRecordAdapter());
-    _register(FTypeAdapter());
-    _register(BalanceAdapter());
-    _register(WeatherAdapter());
-    _register(ReportHistoryAdapter());
-    _register(LibrarySearchHistoryItemAdapter());
-    _register(UserEventAdapter());
-    _register(UserEventTypeAdapter());
-    _register(ReportHistoryAdapter());
-    _register(TimetableMetaAdapter());
-    _register(SizeAdapter());
+    _r(ContactDataAdapter());
+    _r(CourseAdapter());
+    _r(GameTypeAdapter());
+    _r(GameRecordAdapter());
+    _r(FTypeAdapter());
+    _r(BalanceAdapter());
+    _r(WeatherAdapter());
+    _r(ReportHistoryAdapter());
+    _r(LibrarySearchHistoryItemAdapter());
+    _r(UserEventAdapter());
+    _r(UserEventTypeAdapter());
+    _r(ReportHistoryAdapter());
+    _r(TimetableMetaAdapter());
+    _r(SizeAdapter());
+    _r(ColorAdapter());
+
+    // Activity
+    _r(ActivityDetailAdapter());
+    _r(ActivityAdapter());
+    _r(ScScoreSummaryAdapter());
+    _r(ScActivityApplicationAdapter());
+    _r(ScScoreItemAdapter());
+    _r(ActivityTypeAdapter());
+    // Exam Arrangement
+    _r(ExamEntryAdapter());
+    // OA Announcement
+    _r(AnnounceDetailAdapter());
+    _r(AnnounceCatalogueAdapter());
+    _r(AnnounceRecordAdapter());
+    _r(AnnounceAttachmentAdapter());
+    _r(AnnounceListPageAdapter());
   }
 
-  static void _register<T>(TypeAdapter<T> adapter) {
+  static void _r<T>(TypeAdapter<T> adapter) {
     if (!Hive.isAdapterRegistered(adapter.typeId)) {
       Hive.registerAdapter(adapter);
     }

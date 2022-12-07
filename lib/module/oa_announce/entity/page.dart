@@ -15,12 +15,18 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import 'announcement.dart';
+import 'announce.dart';
+import '../using.dart';
+part 'page.g.dart';
 
 /// 获取到的通知页
-class BulletinListPage {
+@HiveType(typeId: HiveTypeId.announceListPage)
+class AnnounceListPage {
+  @HiveField(0)
   int currentPage = 1;
+  @HiveField(1)
   int totalPage = 10;
+  @HiveField(2)
   List<AnnounceRecord> bulletinItems = [];
 
   @override

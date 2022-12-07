@@ -19,7 +19,7 @@ import 'dao/score.dart';
 import 'entity/score.dart';
 
 Future<List<ScJoinedActivity>> getMyActivityListJoinScore(ScScoreDao scScoreDao) async {
-  final activities = await scScoreDao.getMyActivityList();
+  final activities = await scScoreDao.getMyInvolved();
   final scores = await scScoreDao.getMyScoreList();
 
   return activities.map((application) {

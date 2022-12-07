@@ -16,7 +16,6 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:kite/module/exam_arr/using.dart';
 import 'package:rettulf/rettulf.dart';
 
@@ -95,8 +94,6 @@ class SimpleTextSearchDelegate<T> extends SearchDelegate {
     return splitTextList.join(highlight);
   }
 
-  final _scrollController = ScrollController();
-
   Widget buildSearchList(BuildContext context) {
     List<Widget> children = [];
     for (int i = 0; i < suggestionList.length; i++) {
@@ -119,11 +116,10 @@ class SimpleTextSearchDelegate<T> extends SearchDelegate {
     }
 
     return GridView(
-      controller: _scrollController,
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: maxCrossAxisExtent, childAspectRatio: childAspectRatio),
       children: children,
-    ).scrolledWithBar();
+    );
   }
 
   @override

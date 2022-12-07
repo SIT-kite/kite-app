@@ -17,35 +17,43 @@
  */
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
+import '../using.dart';
 
 part 'exam.g.dart';
 
 /// REAL. THE PAYLOAD IS IN PINYIN. DONT BLAME ANYONE BUT THE SCHOOL.
 /// More reading: https://github.com/sunnysab/zf-tools/blob/master/TRANSLATION.md
 @JsonSerializable()
+@HiveType(typeId: HiveTypeId.examEntry)
 class ExamEntry {
   /// 课程名称
   @JsonKey(name: 'kcmc')
+  @HiveField(0)
   String courseName = '';
 
   /// 考试时间. 若无数据, 列表未空.
   @JsonKey(name: 'kssj', fromJson: _stringToList)
+  @HiveField(1)
   List<DateTime> time = [];
 
   /// 考试地点
   @JsonKey(name: 'cdmc')
+  @HiveField(2)
   String place = '';
 
   /// 考试校区
   @JsonKey(name: 'cdxqmc')
+  @HiveField(3)
   String campus = '';
 
   /// 考试座号
   @JsonKey(name: 'zwh', fromJson: _stringToInt)
+  @HiveField(4)
   int seatNumber = 0;
 
   /// 是否重修
   @JsonKey(name: 'cxbj', defaultValue: '未知')
+  @HiveField(5)
   String isSecondExam = '';
 
   ExamEntry();

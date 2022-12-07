@@ -431,6 +431,7 @@
   "libraryNoticeTitle": "Library Notice",
   "loading": "Loading",
   "localStorageEmptyValueDesc": "BEWARE! YOU ARE TRYING TO EMPTY THE VALUE! ARE YOU SURE?",
+  "localStorageSetValueNullDesc": "BEWARE! YOU ARE TRYING TO SET THE VALUE TO NULL! ARE YOU SURE?",
   "localStorageTitle": "Local Storage Editor",
   "loggingIn": "Logging in",
   "loginCredentialsValidatedTip": "Account and password is correct",
@@ -707,5 +708,6 @@
   "welcomeSlogan": "Excellent school life, from here.",
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
-  "yes": "Yes"
+  "yes": "Yes",
+  "localStorageDeleteDesc": "you will lose ALL DATA in this box. Are you sure?"
 }

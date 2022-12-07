@@ -24,7 +24,7 @@ import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:rettulf/rettulf.dart';
 
-import '../entity/announcement.dart';
+import '../entity/announce.dart';
 import '../entity/attachment.dart';
 import '../using.dart';
 import '../init.dart';
@@ -47,7 +47,7 @@ class _DetailPageState extends State<DetailPage> {
   late final url =
       'https://myportal.sit.edu.cn/detach.portal?action=bulletinBrowser&.ia=false&.pmn=view&.pen=${summary.bulletinCatalogueId}&bulletinId=${summary.uuid}';
 
-  Future<AnnounceDetail> fetchAnnounceDetail() async {
+  Future<AnnounceDetail?> fetchAnnounceDetail() async {
     return await OaAnnounceInit.service.getAnnounceDetail(widget.summary.bulletinCatalogueId, widget.summary.uuid);
   }
 
@@ -137,7 +137,7 @@ class _DetailPageState extends State<DetailPage> {
     return t;
   }
 
-  Future<void> _onDownloadFile(Attachment attachment) async {
+  Future<void> _onDownloadFile(AnnounceAttachment attachment) async {
     showBasicFlash(context, i18n.downloading.text(), duration: const Duration(seconds: 1));
     Log.info('下载文件: [${attachment.name}](${attachment.url})');
 

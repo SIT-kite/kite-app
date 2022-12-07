@@ -51,7 +51,7 @@ class ScScoreService implements ScScoreDao {
 
   /// 获取第二课堂分数
   @override
-  Future<ScScoreSummary?> getScScoreSummary() async {
+  Future<ScScoreSummary?> getScoreSummary() async {
     final response = await session.request(_scHomeUrl, ReqMethod.post);
     final data = response.data;
     if (data == null) return null;
@@ -130,7 +130,7 @@ class ScScoreService implements ScScoreDao {
 
   /// 获取我的活动列表
   @override
-  Future<List<ScActivityApplication>> getMyActivityList() async {
+  Future<List<ScActivityApplication>> getMyInvolved() async {
     final response = await session.request(_scMyEventUrl, ReqMethod.post);
     return _parseMyActivityList(response.data);
   }

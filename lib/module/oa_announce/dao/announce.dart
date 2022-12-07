@@ -15,11 +15,16 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-export "../shared/entity/school.dart";
-export "../shared/user_widget/school.dart";
-export '../shared/util.dart';
-export '../shared/i18n.dart';
-export '../shared/storage.dart';
-export '../shared/design.dart';
-export '../shared/networking.dart';
-export '../shared/user_widget/common.dart';
+import '../entity/announce.dart';
+import '../entity/page.dart';
+
+abstract class AnnounceDao {
+  /// 获取所有的分类信息
+  Future<List<AnnounceCatalogue>> getAllCatalogues();
+
+  /// 获取某篇文章内容
+  Future<AnnounceDetail?> getAnnounceDetail(String catalogueId, String uuid);
+
+  /// 检索文章列表
+  Future<AnnounceListPage?> queryAnnounceList(int pageIndex, String catalogueId);
+}

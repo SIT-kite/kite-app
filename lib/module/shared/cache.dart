@@ -15,16 +15,4 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import '../entity/announcement.dart';
-import '../entity/page.dart';
-
-abstract class AnnounceDao {
-  /// 获取所有的分类信息
-  Future<List<AnnounceCatalogue>> getAllCatalogues();
-
-  /// 获取某篇文章内容
-  Future<AnnounceDetail> getAnnounceDetail(String catalogueId, String uuid);
-
-  /// 检索文章列表
-  Future<BulletinListPage> queryAnnounceList(int pageIndex, String catalogueId);
-}
+export 'package:kite/cache/box.dart';

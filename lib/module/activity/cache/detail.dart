@@ -16,6 +16,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-abstract class ScJoinActivityDao {
-  Future<String> join(int activityId, [bool force = false]);
+import '../dao/detail.dart';
+import '../entity/detail.dart';
+import '../storage/detail.dart';
+
+class ScActivityDetailCache extends ScActivityDetailDao {
+  final ScActivityDetailDao from;
+  final ScActivityDetailStorage to;
+  Duration expiration;
+
+  ScActivityDetailCache({
+    required this.from,
+    required this.to,
+    this.expiration = const Duration(minutes: 10),
+  });
+
+  @override
+  Future<ActivityDetail?> getActivityDetail(int activityId) async {
+    final cacheKey = to.box.id2Detail.make(activityId.toString());
+    if (cacheKey.needRefresh(after: expiration)) {
+      final res = await from.getActivityDetail(activityId);
+      to.setActivityDetail(activityId, res);
+      return res;
+    } else {
+      return to.getActivityDetail(activityId);
+    }
+  }
 }

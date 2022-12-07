@@ -251,6 +251,7 @@
   "libraryNoticeTitle": "圖書館通知",
   "loading": "加載中",
   "localStorageEmptyValueDesc": "謹防失誤！你正在嘗試清空該值！確認嗎？",
+  "localStorageSetValueNullDesc": "謹防失誤！你正在嘗試設該值為 null！確認嗎？",
   "localStorageTitle": "本地儲存",
   "loggingIn": "登入中",
   "loginCredentialsValidatedTip": "賬號與密碼正確",
@@ -433,5 +434,6 @@
   "welcomeSlogan": "便捷校園, 即刻起航",
   "xuhui": "徐匯",
   "xuhuiDistrict": "徐匯區",
-  "yes": "好"
+  "yes": "好",
+  "localStorageDeleteDesc": "你會失去這個盒中的所有資訊，永遠！確認要刪除嗎？"
 }

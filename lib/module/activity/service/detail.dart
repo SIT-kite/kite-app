@@ -82,7 +82,7 @@ class ScActivityDetailService implements ScActivityDetailDao {
     final properties = _splitActivityProperties(banner);
     final signTime = _parseSignTime(properties['刷卡时间段']!);
 
-    return ActivityDetail(
+    return ActivityDetail.named(
         id: int.parse(properties['活动编号']!),
         category: 0,
         title: title,
