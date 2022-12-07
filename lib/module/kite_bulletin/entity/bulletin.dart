@@ -19,7 +19,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'bulletin.g.dart';
 
-@JsonSerializable(createToJson: false)
+@JsonSerializable()
 class KiteBulletin {
   /// 公告 ID
   final int id;
@@ -39,4 +39,14 @@ class KiteBulletin {
   const KiteBulletin(this.id, this.top, this.title, this.publishTime, this.content);
 
   factory KiteBulletin.fromJson(Map<String, dynamic> json) => _$KiteBulletinFromJson(json);
+  Map<String, dynamic> toJson() => _$KiteBulletinToJson(this);
+}
+
+@JsonSerializable()
+class KiteBulletinMeta {
+  final String hash;
+  final String head;
+  const KiteBulletinMeta(this.hash, this.head);
+  factory KiteBulletinMeta.fromJson(Map<String, dynamic> json) => _$KiteBulletinMetaFromJson(json);
+  Map<String, dynamic> toJson() => _$KiteBulletinMetaToJson(this);
 }

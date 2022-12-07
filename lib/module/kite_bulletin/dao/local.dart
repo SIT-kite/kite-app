@@ -18,6 +18,10 @@
 import '../entity/bulletin.dart';
 
 // 本地存储
-abstract class NoticeStorageDao {
-  List<KiteBulletin> getNoticeList();
+abstract class KiteBulletinStorageDao {
+  List<KiteBulletin> get data;
+  set data(List<KiteBulletin> v);
+
+  KiteBulletinMeta? get meta;
+  set meta(KiteBulletinMeta? v);
 }

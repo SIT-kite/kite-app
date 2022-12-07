@@ -43,4 +43,10 @@ class KiteBulletinService implements KiteBulletinServiceDao {
     _sort(result);
     return result;
   }
+
+  @override
+  Future<KiteBulletinMeta> getBulletinMeta() async {
+    final response = await session.request(_noticePath, ReqMethod.get);
+    return KiteBulletinMeta.fromJson(response.data);
+  }
 }

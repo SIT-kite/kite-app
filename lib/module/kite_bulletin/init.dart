@@ -15,6 +15,10 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+import 'package:kite/module/kite_bulletin/storage/storage.dart';
+import 'package:kite/storage/init.dart';
+
+import 'dao/local.dart';
 import 'dao/remote.dart';
 import 'service/bulletin.dart';
 import 'using.dart';
@@ -22,13 +26,15 @@ import 'using.dart';
 class KiteBulletinInit {
   KiteBulletinInit._();
 
-  static late KiteBulletinServiceDao noticeService;
+  static late KiteBulletinServiceDao service;
   static late ISession kiteSession;
+  static late KiteBulletinStorageDao storage;
 
   static Future<void> init({
     required ISession session,
   }) async {
     KiteBulletinInit.kiteSession = session;
-    noticeService = KiteBulletinService(session);
+    service = KiteBulletinService(session);
+    storage = KiteBulletinStorage(Kv.kvStorageBox);
   }
 }
