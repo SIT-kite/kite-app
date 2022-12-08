@@ -17,7 +17,9 @@
 */
 import 'package:hive/hive.dart';
 import 'package:kite/module/activity/using.dart';
+
 part 'cache_key.dart';
+
 part 'list_cache_key.dart';
 
 abstract class HasBox<T> {
@@ -39,8 +41,15 @@ mixin CachedBox implements HasBox<dynamic> {
   /// Create a cache namespace.
   /// As a best practice, it will be used as a map with multiple keys, such as Map<Foo,Map<Bar,T>>.
   // ignore: non_constant_identifier_names
-  CacheNamespace<T> Namespace<T>(String namespace) {
-    return CacheNamespace(box, namespace);
+  CacheNamespace1<T, Arg1> Namespace<T, Arg1>(String namespace, String Function(Arg1) maker) {
+    return CacheNamespace1(box, namespace, maker);
+  }
+
+  /// Create a cache namespace.
+  /// As a best practice, it will be used as a map with multiple keys, such as Map<Foo,Map<Bar,T>>.
+  // ignore: non_constant_identifier_names
+  CacheNamespace2<T, Arg1, Arg2> Namespace2<T, Arg1, Arg2>(String namespace, String Function(Arg1, Arg2) maker) {
+    return CacheNamespace2(box, namespace, maker);
   }
 
   /// Create a named cache key.
@@ -53,8 +62,16 @@ mixin CachedBox implements HasBox<dynamic> {
   /// Create a cache namespace.
   /// As a best practice, it will be used as a map with multiple keys but mapping to a list, such as Map<Foo,Map<Bar,List<T>>>.
   // ignore: non_constant_identifier_names
-  ListCacheNamespace<T> ListNamespace<T>(String namespace) {
-    return ListCacheNamespace(box, namespace);
+  ListCacheNamespace1<T, Arg1> ListNamespace<T, Arg1>(String namespace, String Function(Arg1) maker) {
+    return ListCacheNamespace1(box, namespace, maker);
+  }
+
+  /// Create a cache namespace.
+  /// As a best practice, it will be used as a map with multiple keys but mapping to a list, such as Map<Foo,Map<Bar,List<T>>>.
+  // ignore: non_constant_identifier_names
+  ListCacheNamespace2<T, Arg1, Arg2> ListNamespace2<T, Arg1, Arg2>(
+      String namespace, String Function(Arg1, Arg2) maker) {
+    return ListCacheNamespace2(box, namespace, maker);
   }
 }
 

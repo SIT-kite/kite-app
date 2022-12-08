@@ -75,6 +75,30 @@ class CacheNamespace<T> {
   }
 }
 
+class CacheNamespace1<T, Arg1> {
+  final Box<dynamic> box;
+  final String namespace;
+  final String Function(Arg1) maker;
+
+  CacheNamespace1(this.box, this.namespace, this.maker);
+
+  CacheKey<T> make(Arg1 arg1) {
+    return _NamespaceCacheKey(box, namespace, maker(arg1));
+  }
+}
+
+class CacheNamespace2<T, Arg1, Arg2> {
+  final Box<dynamic> box;
+  final String namespace;
+  final String Function(Arg1, Arg2) maker;
+
+  CacheNamespace2(this.box, this.namespace, this.maker);
+
+  CacheKey<T> make(Arg1 arg1, Arg2 arg2) {
+    return _NamespaceCacheKey(box, namespace, maker(arg1, arg2));
+  }
+}
+
 class _NamespaceCacheKey<T> extends CacheKey<T> {
   final String namespace;
   final String name;

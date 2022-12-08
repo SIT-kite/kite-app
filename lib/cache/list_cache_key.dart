@@ -75,15 +75,35 @@ class ListCacheNamespace<T> {
   }
 }
 
+class ListCacheNamespace1<T, Arg1> {
+  final Box<dynamic> box;
+  final String namespace;
+  final String Function(Arg1) maker;
+
+  ListCacheNamespace1(this.box, this.namespace, this.maker);
+
+  CacheKey<List<T>> make(Arg1 arg1) {
+    return _NamespaceListCacheKey(box, namespace, maker(arg1));
+  }
+}
+
+class ListCacheNamespace2<T, Arg1, Arg2> {
+  final Box<dynamic> box;
+  final String namespace;
+  final String Function(Arg1, Arg2) maker;
+
+  ListCacheNamespace2(this.box, this.namespace, this.maker);
+
+  CacheKey<List<T>> make(Arg1 arg1, Arg2 arg2) {
+    return _NamespaceListCacheKey(box, namespace, maker(arg1, arg2));
+  }
+}
+
 class _NamespaceListCacheKey<T> extends CacheKey<List<T>> {
   final String namespace;
   final String name;
 
-  _NamespaceListCacheKey(
-    super.box,
-    this.namespace,
-    this.name,
-  );
+  _NamespaceListCacheKey(super.box, this.namespace, this.name);
 
   @override
   List<T>? get value {

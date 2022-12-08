@@ -34,7 +34,7 @@ class ExamCache extends ExamDao {
 
   @override
   Future<List<ExamEntry>?> getExamList(SchoolYear schoolYear, Semester semester) async {
-    final cacheKey = to.box.exams.make(ExamStorage.makeExamsKey(schoolYear, semester));
+    final cacheKey = to.box.exams.make(schoolYear, semester);
     if (cacheKey.needRefresh(after: expiration)) {
       try {
         final res = await from.getExamList(schoolYear, semester);

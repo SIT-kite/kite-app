@@ -24,8 +24,10 @@ import '../using.dart';
 class ApplicationStorageBox with CachedBox {
   @override
   final Box<dynamic> box;
-  late final details = Namespace<ApplicationDetail>("/details");
+  late final details = Namespace<ApplicationDetail, String>("/details", makeDetailsKey);
   late final metas = NamedList<ApplicationMeta>("/metas");
+
+  String makeDetailsKey(String applicationId) => applicationId;
 
   ApplicationStorageBox(this.box);
 }

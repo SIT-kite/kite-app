@@ -30,7 +30,9 @@ class AnnounceStorageBox with CachedBox {
   @override
   final Box box;
   late final catalogues = NamedList<AnnounceCatalogue>(_Key.catalogues);
-  late final details = Namespace<AnnounceDetail>(_Key.detailsNs);
+  late final details = Namespace2<AnnounceDetail, String, String>(_Key.detailsNs, makeDetailKey);
+
+  static String makeDetailKey(String catalogueId, String uuid) => "$catalogueId/$uuid";
 
   AnnounceStorageBox(this.box);
 }
@@ -39,8 +41,6 @@ class AnnounceStorage extends AnnounceDao {
   final AnnounceStorageBox box;
 
   AnnounceStorage(Box<dynamic> hive) : box = AnnounceStorageBox(hive);
-
-  static String makeDetailKey(String catalogueId, String uuid) => "$catalogueId/$uuid";
 
   /// 获取所有的分类信息
   @override
@@ -51,12 +51,12 @@ class AnnounceStorage extends AnnounceDao {
   /// 获取某篇文章内容
   @override
   Future<AnnounceDetail?> getAnnounceDetail(String catalogueId, String uuid) async {
-    final details = box.details.make(makeDetailKey(catalogueId, uuid));
+    final details = box.details.make(catalogueId, uuid);
     return details.value;
   }
 
   void setAnnounceDetail(String catalogueId, String uuid, AnnounceDetail? detail) {
-    final details = box.details.make(makeDetailKey(catalogueId, uuid));
+    final details = box.details.make(catalogueId, uuid);
     details.value = detail;
   }
 

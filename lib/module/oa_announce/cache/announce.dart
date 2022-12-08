@@ -37,8 +37,6 @@ class AnnounceCache extends AnnounceDao {
 
   final Map<String, AnnounceListPage?> _queried = {};
 
-  String makeAnnounceListKey(int pageIndex, String catalogueId) => "$pageIndex/$catalogueId";
-
   @override
   Future<List<AnnounceCatalogue>?> getAllCatalogues() async {
     final cacheKey = to.box.catalogues;
@@ -57,7 +55,7 @@ class AnnounceCache extends AnnounceDao {
 
   @override
   Future<AnnounceDetail?> getAnnounceDetail(String catalogueId, String uuid) async {
-    final cacheKey = to.box.details.make(AnnounceStorage.makeDetailKey(catalogueId, uuid));
+    final cacheKey = to.box.details.make(catalogueId, uuid);
     if (cacheKey.needRefresh(after: detailExpire)) {
       try {
         final res = await from.getAnnounceDetail(catalogueId, uuid);
@@ -73,7 +71,7 @@ class AnnounceCache extends AnnounceDao {
 
   @override
   Future<AnnounceListPage?> queryAnnounceList(int pageIndex, String catalogueId) async {
-    final key = makeAnnounceListKey(pageIndex, catalogueId);
+    final key = "$pageIndex&$catalogueId";
     var res = _queried[key];
     res ??= await from.queryAnnounceList(pageIndex, catalogueId);
     _queried[key] = res;

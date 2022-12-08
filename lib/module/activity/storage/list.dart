@@ -27,26 +27,24 @@ class ScActivityListStorageBox with CachedBox {
 
   ScActivityListStorageBox(this.box);
 
-  late final activities = ListNamespace<Activity>(_activitiesNs);
+  late final activities = ListNamespace2<Activity, ActivityType, int>(_activitiesNs, makeActivityKey);
+
+  static String makeActivityKey(ActivityType type, int page) => "$type/$page";
 }
 
 class ScActivityListStorage extends ScActivityListDao {
   final ScActivityListStorageBox box;
 
-  static String makeActivityKey(ActivityType type, int page) {
-    return "$type/$page";
-  }
-
   ScActivityListStorage(Box<dynamic> hive) : box = ScActivityListStorageBox(hive);
 
   @override
   Future<List<Activity>?> getActivityList(ActivityType type, int page) async {
-    final key = box.activities.make(makeActivityKey(type, page));
+    final key = box.activities.make(type, page);
     return key.value;
   }
 
   void setActivityList(ActivityType type, int page, List<Activity>? activities) {
-    final key = box.activities.make(makeActivityKey(type, page));
+    final key = box.activities.make(type, page);
     key.value = activities;
   }
 

@@ -25,7 +25,9 @@ class ExamStorageBox with CachedBox {
   static const _examArrangementNs = "/exam_arr";
   @override
   final Box box;
-  late final exams = ListNamespace<ExamEntry>(_examArrangementNs);
+  late final exams = ListNamespace2<ExamEntry, SchoolYear, Semester>(_examArrangementNs, makeExamsKey);
+
+  static String makeExamsKey(SchoolYear schoolYear, Semester semester) => "$schoolYear/$semester";
 
   ExamStorageBox(this.box);
 }
@@ -35,18 +37,14 @@ class ExamStorage extends ExamDao {
 
   ExamStorage(Box<dynamic> hive) : box = ExamStorageBox(hive);
 
-  static String makeExamsKey(SchoolYear schoolYear, Semester semester) {
-    return "$schoolYear/$semester";
-  }
-
   @override
   Future<List<ExamEntry>?> getExamList(SchoolYear schoolYear, Semester semester) async {
-    final cacheKey = box.exams.make(makeExamsKey(schoolYear, semester));
+    final cacheKey = box.exams.make(schoolYear, semester);
     return cacheKey.value;
   }
 
   void setExamList(SchoolYear schoolYear, Semester semester, List<ExamEntry>? exams) {
-    final cacheKey = box.exams.make(makeExamsKey(schoolYear, semester));
+    final cacheKey = box.exams.make(schoolYear, semester);
     cacheKey.value = exams;
   }
 }
