@@ -30,7 +30,7 @@ class Placeholders extends StatelessWidget {
 
   factory Placeholders.loading({
     Key? key,
-    double size = 80,
+    double size = 40,
     PlaceholderDecorator? fix,
   }) {
     return Placeholders(

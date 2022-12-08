@@ -67,23 +67,32 @@ class HiveBoxInit {
       "activityCache": HiveBoxInit.activityCache,
       "applicationCache": HiveBoxInit.applicationCache,
       "contactSetting": HiveBoxInit.contactSetting,
-      "expense2": HiveBoxInit.expense2,
       // almost time, this box is very very long which ends up low performance in building.
       // So put this on the bottom
+      "expense2": HiveBoxInit.expense2,
     };
   }
 
   static Future<void> clear() async {
-    await Hive.deleteBoxFromDisk('contactSetting');
-    await Hive.deleteBoxFromDisk('setting');
-    await Hive.deleteBoxFromDisk('auth');
-    await Hive.deleteBoxFromDisk('librarySearchHistory');
-    await Hive.deleteBoxFromDisk('course');
-    await Hive.deleteBoxFromDisk('expenseSetting');
-    await Hive.deleteBoxFromDisk('expense2');
-    await Hive.deleteBoxFromDisk('game');
-    await Hive.deleteBoxFromDisk('mail');
-    await Hive.deleteBoxFromDisk('cookies');
+    await kv.deleteFromDisk();
+    await userEvent.deleteFromDisk();
+    await librarySearchHistory.deleteFromDisk();
+    await contactSetting.deleteFromDisk();
+    await course.deleteFromDisk();
+    await expense2.deleteFromDisk();
+    await activityCache.deleteFromDisk();
+    await examArrCache.deleteFromDisk();
+    await oaAnnounceCache.deleteFromDisk();
+    await applicationCache.deleteFromDisk();
+    await game.deleteFromDisk();
+    await cookiesBox.deleteFromDisk();
     await Hive.close();
+  }
+
+  static Future<void> clearCache() async {
+    activityCache.clear();
+    oaAnnounceCache.clear();
+    examArrCache.clear();
+    applicationCache.clear();
   }
 }

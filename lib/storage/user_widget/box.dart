@@ -424,7 +424,7 @@ Future<void> _showDeleteBoxRequest(BuildContext ctx, Box<dynamic> box, VoidCallb
   final confirm = await ctx.showRequest(
       title: i18n.delete, desc: i18n.localStorageDeleteDesc, yes: i18n.delete, no: i18n.cancel, highlight: true);
   if (confirm == true) {
-    box.deleteFromDisk();
+    box.clear();
     onDelete?.call();
   }
 }
