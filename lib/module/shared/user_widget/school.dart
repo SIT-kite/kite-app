@@ -27,6 +27,8 @@ Map<Semester, String> makeSemesterL10nName() => {
       Semester.secondTerm: i18n.semester2rd,
     };
 
+/// Precondition:
+/// [Kv.auth.currentUsername] is not null.
 class SemesterSelector extends StatefulWidget {
   final int? initialYear;
   final Semester? initialSemester;

@@ -424,6 +424,7 @@
   "uploadingCounter": "已上传 {done} / {all}",
   "userInfoUpdatedTip": "个人信息更新完毕",
   "validateInputRequest": "请检查你的输入",
+  "validateInputAccountPwdRequest": "请检查你输入的账号与密码的格式。",
   "warning": "警告",
   "weather": "天气",
   "weather_sunny": "晴",
@@ -447,5 +448,6 @@
   "welcomeSlogan": "便利校园，一步到位",
   "xuhui": "徐汇",
   "xuhuiDistrict": "徐汇区",
-  "yes": "好"
+  "yes": "好",
+  "formatError": "格式错误"
 }

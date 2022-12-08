@@ -21,6 +21,7 @@ export '../shared/dialog.dart';
 export '../shared/launcher.dart';
 export '../shared/file_system.dart';
 export '../shared/route.dart';
+export '../shared/auth.dart';
 export '../shared/networking.dart';
 export '../shared/design.dart';
 export '../shared/entity/school.dart';

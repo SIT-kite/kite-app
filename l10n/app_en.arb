@@ -698,6 +698,7 @@
   },
   "userInfoUpdatedTip": "Your info updated !",
   "validateInputRequest": "Please check your input.",
+  "validateInputAccountPwdRequest": "Please check the formats of account and password you entered.",
   "warning": "Warning",
   "weather": "Weather",
   "weather_sunny": "Sunny",
@@ -721,5 +722,6 @@
   "welcomeSlogan": "Excellent school life, from here.",
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
-  "yes": "Yes"
+  "yes": "Yes",
+  "formatError": "Format Error"
 }

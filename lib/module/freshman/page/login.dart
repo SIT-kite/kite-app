@@ -55,7 +55,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
     if (!formValid) {
       await ctx.showTip(
         title: i18n.error,
-        desc: i18n.validateInputRequest,
+        desc: i18n.validateInputAccountPwdRequest,
         ok: i18n.close,
       );
       return;

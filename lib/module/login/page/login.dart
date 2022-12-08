@@ -51,10 +51,12 @@ class _LoginPageState extends State<LoginPage> {
   /// 用户点击登录按钮后
   Future<void> onLogin(BuildContext ctx) async {
     bool formValid = (_formKey.currentState as FormState).validate();
-    if (!formValid) {
+    final username = _usernameController.text;
+    final password = _passwordController.text;
+    if (!formValid || username.isEmpty || password.isEmpty) {
       await ctx.showTip(
-        title: i18n.error,
-        desc: i18n.validateInputRequest,
+        title: i18n.formatError,
+        desc: i18n.validateInputAccountPwdRequest,
         ok: i18n.close,
       );
       return;
@@ -98,8 +100,7 @@ class _LoginPageState extends State<LoginPage> {
       }
       return;
     }
-    final username = _usernameController.text;
-    final password = _passwordController.text;
+
     try {
       await LoginInit.ssoSession.login(username, password);
       final personName = await LoginInit.authServerService.getPersonName();

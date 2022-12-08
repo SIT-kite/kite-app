@@ -18,10 +18,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/module/symbol.dart';
-import 'package:kite/module/timetable/events.dart';
 import 'package:rettulf/rettulf.dart';
 
-import '../../activity/using.dart';
+import '../using.dart';
 import '../user_widget/picker.dart';
 import '../user_widget/timetable_editor.dart';
 import 'import/index.dart';
@@ -46,17 +45,23 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
     }
   }
 
+  bool get canImport {
+    return Kv.auth.currentUsername != null && Kv.auth.ssoPassword != null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: i18n.timetableMineTitle.text(),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: goImport,
-        elevation: 10,
-        child: const Icon(Icons.add_outlined),
-      ),
+      floatingActionButton: canImport
+          ? FloatingActionButton(
+              onPressed: goImport,
+              elevation: 10,
+              child: const Icon(Icons.add_outlined),
+            )
+          : null,
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: buildTimetables(context),
