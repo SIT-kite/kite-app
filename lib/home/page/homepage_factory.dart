@@ -33,7 +33,7 @@ import 'item/freshman.dart';
 import 'item/library.dart';
 import 'item/mail.dart';
 import 'item/bulletin.dart';
-import 'item/office.dart';
+import 'item/application.dart';
 import 'item/report.dart';
 
 class HomepageFactory {

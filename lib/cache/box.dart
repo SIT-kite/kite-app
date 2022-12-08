@@ -19,6 +19,7 @@ import 'package:hive/hive.dart';
 import 'package:kite/module/activity/using.dart';
 part 'cache_key.dart';
 part 'list_cache_key.dart';
+
 abstract class HasBox<T> {
   Box<T> get box;
 }
@@ -41,6 +42,7 @@ mixin CachedBox implements HasBox<dynamic> {
   CacheNamespace<T> Namespace<T>(String namespace) {
     return CacheNamespace(box, namespace);
   }
+
   /// Create a named cache key.
   /// As a best practice, it will be used as a list, such as List<T>
   // ignore: non_constant_identifier_names

@@ -16,9 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/events/bus.dart';
+import 'package:kite/events/events.dart';
 import 'package:kite/exception/session.dart';
 import 'package:kite/module/application/init.dart';
-import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
@@ -37,13 +38,9 @@ class _ApplicationItemState extends State<ApplicationItem> {
   @override
   void initState() {
     super.initState();
-    Global.eventBus.on(EventNameConstants.onHomeRefresh, _onHomeRefresh);
-  }
-
-  @override
-  void dispose() {
-    Global.eventBus.off(EventNameConstants.onHomeRefresh, _onHomeRefresh);
-    super.dispose();
+    On.home<HomeRefreshEvent>((event) {
+      _onHomeRefresh();
+    });
   }
 
   void _tryUpdateContent(String? newContent) {
@@ -58,14 +55,16 @@ class _ApplicationItemState extends State<ApplicationItem> {
     }
   }
 
-  void _onHomeRefresh(_) async {
+  void _onHomeRefresh() async {
     if (!mounted) return;
-    final String result = await _buildContent();
-    Kv.home.lastOfficeStatus = result;
-    setState(() => _tryUpdateContent(result));
+    final result = await _buildContent();
+    if (result != null) {
+      Kv.home.lastOfficeStatus = result;
+      setState(() => _tryUpdateContent(result));
+    }
   }
 
-  Future<String> _buildContent() async {
+  Future<String?> _buildContent() async {
     final username = Kv.auth.currentUsername!;
     final password = Kv.auth.ssoPassword!;
 
@@ -82,7 +81,8 @@ class _ApplicationItemState extends State<ApplicationItem> {
       }
     }
     format(s, x) => x > 0 ? '$s ($x)' : '';
-    final totalMessage = await ApplicationInit.messageService.queryMessageCount();
+    final totalMessage = await ApplicationInit.messageService.getMessageCount();
+    if (totalMessage == null) return null;
     final draftBlock = format(i18n.draft, totalMessage.inDraft);
     final doingBlock = format(i18n.processing, totalMessage.inProgress);
     final completedBlock = format(i18n.done, totalMessage.completed);

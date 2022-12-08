@@ -60,4 +60,7 @@ class HiveTypeId {
   static const applicationDetail = 30;
   static const applicationDetailSection = 31;
   static const applicationMeta = 32;
+  static const applicationMsg = 33;
+  static const applicationMsgPage = 34;
+  static const applicationMsgCount = 35;
 }

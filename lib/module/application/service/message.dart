@@ -17,18 +17,20 @@
  */
 import 'dart:convert';
 
+import '../dao/message.dart';
 import '../using.dart';
 
 import '../entity/message.dart';
 
 const String serviceMessageCount = 'https://xgfy.sit.edu.cn/unifri-flow/user/queryFlowCount';
 
-class ApplicationMessageService {
+class ApplicationMessageService implements ApplicationMessageDao {
   final ISession session;
 
   const ApplicationMessageService(this.session);
 
-  Future<ApplicationMsgCount> queryMessageCount() async {
+  @override
+  Future<ApplicationMsgCount> getMessageCount() async {
     String payload = 'code=${Kv.auth.currentUsername}';
 
     final response = await session.request(
@@ -67,6 +69,7 @@ class ApplicationMessageService {
     return ApplicationMsgPage(totalNum, totalPage, page, messages);
   }
 
+  @override
   Future<ApplicationMsgPage> getAllMessage() async {
     List<ApplicationMsg> messageList = [];
 

@@ -18,5 +18,6 @@
 export 'package:hive/hive.dart';
 export 'package:kite/hive/type_id.dart';
 export 'package:kite/storage/init.dart';
+export 'package:kite/cache/box.dart';
 export 'package:kite/util/json_storage.dart';
 export 'package:kite/util/json.dart';

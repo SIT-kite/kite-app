@@ -15,7 +15,10 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-export 'page/index.dart';
-export 'init.dart';
-export 'entity/application.dart';
-export 'entity/message.dart';
+import '../entity/message.dart';
+
+abstract class ApplicationMessageDao {
+  Future<ApplicationMsgCount?> getMessageCount();
+
+  Future<ApplicationMsgPage?> getAllMessage();
+}
