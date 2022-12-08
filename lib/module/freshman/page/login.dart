@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -48,15 +49,23 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
   bool enableLoginButton = true;
 
   /// 用户点击登录按钮后
-  Future<void> onLogin() async {
+  Future<void> onLogin(BuildContext ctx) async {
     Log.info('新生登录');
     bool formValid = (_formKey.currentState as FormState).validate();
     if (!formValid) {
-      showBasicFlash(context, i18n.validateInputRequest.text());
+      await ctx.showTip(
+        title: i18n.error,
+        desc: i18n.validateInputRequest,
+        ok: i18n.close,
+      );
       return;
     }
     if (!isLicenseAccepted) {
-      showBasicFlash(context, i18n.readAndAcceptRequest(R.kiteUserAgreementName).text());
+      await ctx.showTip(
+        title: i18n.fromKite,
+        desc: i18n.readAndAcceptRequest(R.kiteUserAgreementName),
+        ok: i18n.close,
+      );
       return;
     }
 
@@ -65,7 +74,6 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
 
     final account = _accountController.text;
     final secret = _secretController.text;
-
     try {
       // 先保存登录信息
       Kv.freshman
@@ -79,27 +87,41 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       // 登录成功后赋值名字
       Kv.freshman.freshmanName = info.name;
 
-      // Flutter 官方推荐的在异步函数中使用context需要先检查是否mounted
+      // Reset the home
       Kv.home.homeItems = null;
+      // Flutter 官方推荐的在异步函数中使用context需要先检查是否mounted
       if (!mounted) return;
       // 后退到就剩一个栈内元素
-      while (Navigator.of(context).canPop()) {
-        Navigator.of(context).pop();
+      final navigator = context.navigator;
+      while (navigator.canPop()) {
+        navigator.pop();
       }
-      Navigator.pushReplacementNamed(context, "/home");
+      navigator.pushReplacementNamed(RouteTable.home);
 
       // 预计需要写一份新生的使用说明
       // GlobalLauncher.launch('${Backend.kite}/wiki/kite-app/features/');
-      return;
     } catch (e) {
-      // TODO: optimize UX
       // 登录失败
       Kv.freshman
         ..freshmanSecret = null
         ..freshmanAccount = null;
-      showBasicFlash(context, Text('${i18n.freshmanLoginFailedWarn}: $e'));
+      final connectionType = await Connectivity().checkConnectivity();
+      if (!mounted) return;
+      if (connectionType == ConnectivityResult.none) {
+        await ctx.showTip(
+          title: i18n.networkError,
+          desc: i18n.networkNoAccessTip,
+          ok: i18n.close,
+        );
+      } else {
+        await ctx.showTip(
+          title: i18n.loginFailedWarn,
+          desc: i18n.accountOrPwdIncorrectTip,
+          ok: i18n.close,
+        );
+      }
     } finally {
-      if (!mounted) {
+      if (mounted) {
         setState(() => enableLoginButton = true);
       }
     }
@@ -136,6 +158,9 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
           TextFormField(
             controller: _accountController,
             autofocus: true,
+            autocorrect: false,
+            enableSuggestions: false,
+            textInputAction: TextInputAction.next,
             decoration: InputDecoration(
               labelText: i18n.account,
               hintText: i18n.freshmanLoginAccountHint,
@@ -145,7 +170,21 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
           TextFormField(
             controller: _secretController,
             autofocus: true,
+            textInputAction: TextInputAction.go,
+            toolbarOptions: const ToolbarOptions(
+              copy: false,
+              cut: false,
+              paste: false,
+              selectAll: false,
+            ),
+            autocorrect: false,
+            enableSuggestions: false,
             obscureText: !isPasswordClear,
+            onFieldSubmitted: (inputted) {
+              if (enableLoginButton && isLicenseAccepted) {
+                onLogin(context);
+              }
+            },
             decoration: InputDecoration(
               labelText: i18n.pwd,
               hintText: i18n.freshmanLoginPwdHint,
@@ -197,7 +236,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
     );
   }
 
-  Widget buildLoginButton() {
+  Widget buildLoginButton(BuildContext ctx) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -205,7 +244,13 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
         SizedBox(
           height: 40.h,
           child: ElevatedButton(
-            onPressed: enableLoginButton && isLicenseAccepted ? onLogin : null,
+            onPressed: enableLoginButton && isLicenseAccepted
+                ? () {
+                    // un-focus the text field.
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    onLogin(ctx);
+                  }
+                : null,
             child: i18n.freshmanLoginBtn.text(),
           ),
         ),
@@ -243,7 +288,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
                 // Login button.
                 Row(
                   children: [
-                    buildLoginButton(),
+                    buildLoginButton(context),
                     const SizedBox(width: 10),
                   ],
                 ),

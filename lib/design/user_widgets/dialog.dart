@@ -8,11 +8,13 @@ typedef PickerActionWidgetBuilder = Widget Function(BuildContext context, int? c
 
 extension DialogEx on BuildContext {
   /// return: whether the button was hit
-  Future<bool> showTip({required String title, required String desc, required String ok}) async {
-    return showAnyTip(title: title, make: (_) => desc.text(style: const TextStyle()), ok: ok);
+  Future<bool> showTip(
+      {required String title, required String desc, required String ok, bool highlight = false}) async {
+    return showAnyTip(title: title, make: (_) => desc.text(style: const TextStyle()), ok: ok, highlight: false);
   }
 
-  Future<bool> showAnyTip({required String title, required WidgetBuilder make, required String ok}) async {
+  Future<bool> showAnyTip(
+      {required String title, required WidgetBuilder make, required String ok, bool highlight = false}) async {
     final confirm = await showDialog(
       context: this,
       builder: (ctx) {
@@ -24,7 +26,7 @@ extension DialogEx on BuildContext {
                   onPressed: () {
                     Navigator.of(ctx).pop(true);
                   },
-                  child: Text(ok))
+                  child: ok.text(style: highlight ? const TextStyle(color: Colors.redAccent) : null))
             ],
             actionsAlignment: MainAxisAlignment.spaceEvenly);
         if (UniversalPlatform.isDesktop) {

@@ -52,7 +52,7 @@ class ConnectivityChecker extends StatefulWidget {
 const _type2Icon = {
   ConnectivityResult.bluetooth: Icons.bluetooth,
   ConnectivityResult.wifi: Icons.wifi,
-  ConnectivityResult.ethernet: Icons.account_tree_outlined,
+  ConnectivityResult.ethernet: Icons.lan,
   ConnectivityResult.mobile: Icons.signal_cellular_alt,
   ConnectivityResult.none: Icons.signal_wifi_statusbar_null_outlined,
   ConnectivityResult.vpn: Icons.vpn_key,

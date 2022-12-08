@@ -19,6 +19,7 @@ export '../shared/i18n.dart';
 export '../shared/route.dart';
 export '../shared/storage.dart';
 export '../shared/util.dart';
+export '../shared/design.dart';
 export '../shared/dialog.dart';
 export '../shared/auth.dart';
 export '../shared/networking.dart';

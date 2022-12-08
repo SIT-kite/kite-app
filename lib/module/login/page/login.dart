@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -48,19 +49,55 @@ class _LoginPageState extends State<LoginPage> {
   bool enableLoginButton = true;
 
   /// 用户点击登录按钮后
-  Future<void> onLogin() async {
+  Future<void> onLogin(BuildContext ctx) async {
     bool formValid = (_formKey.currentState as FormState).validate();
     if (!formValid) {
-      // TODO: Where is the validation?
+      await ctx.showTip(
+        title: i18n.error,
+        desc: i18n.validateInputRequest,
+        ok: i18n.close,
+      );
       return;
     }
     if (!isLicenseAccepted) {
-      showBasicFlash(context, i18n.readAndAcceptRequest(R.kiteUserAgreementName).text());
+      await ctx.showTip(
+        title: i18n.fromKite,
+        desc: i18n.readAndAcceptRequest(R.kiteUserAgreementName),
+        ok: i18n.close,
+      );
       return;
     }
 
     if (!mounted) return;
     setState(() => enableLoginButton = false);
+    final connectionType = await Connectivity().checkConnectivity();
+    if (connectionType == ConnectivityResult.none) {
+      if (!mounted) return;
+      setState(() => enableLoginButton = true);
+      await ctx.showTip(
+        title: i18n.networkError,
+        desc: i18n.networkNoAccessTip,
+        ok: i18n.close,
+      );
+      return;
+    }
+    final connected = await LoginInit.ssoSession.checkConnectivity();
+    if (!connected) {
+      if (!mounted) return;
+      setState(() => enableLoginButton = true);
+      final confirm = await ctx.showRequest(
+          title: i18n.networkError,
+          desc: i18n.campusNetworkNoAccessTroubleshootingRequest,
+          yes: i18n.troubleshooting,
+          no: i18n.close,
+          highlight: true);
+      if (mounted) {
+        if (confirm == true) {
+          ctx.navigator.pushNamed(RouteTable.connectivity);
+        }
+      }
+      return;
+    }
     final username = _usernameController.text;
     final password = _passwordController.text;
     try {
@@ -74,18 +111,28 @@ class _LoginPageState extends State<LoginPage> {
       Kv.home.homeItems = null;
       if (!mounted) return;
       // 后退到就剩一个栈内元素
-      while (Navigator.of(context).canPop()) {
-        Navigator.of(context).pop();
+      final navigator = context.navigator;
+      while (navigator.canPop()) {
+        navigator.pop();
       }
-      Navigator.pushReplacementNamed(context, RouteTable.home);
+      navigator.pushReplacementNamed(RouteTable.home);
+
       GlobalLauncher.launch(R.kiteWikiUrlFeatures);
     } on CredentialsInvalidException catch (e) {
-      showBasicFlash(context, Text(e.msg));
+      if (!mounted) return;
+      await ctx.showTip(
+        title: i18n.loginFailedWarn,
+        desc: e.msg,
+        ok: i18n.close,
+      );
       return;
     } catch (e) {
-      // TODO: Optimize UX
-      showBasicFlash(context, Text('未知错误: $e'), duration: const Duration(seconds: 3));
-      return;
+      if (!mounted) return;
+      await ctx.showTip(
+        title: i18n.loginFailedWarn,
+        desc: i18n.accountOrPwdIncorrectTip,
+        ok: i18n.close,
+      );
     } finally {
       if (mounted) {
         setState(() => enableLoginButton = true);
@@ -115,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Text(i18n.kiteLoginTitle, style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold)));
   }
 
-  Widget buildLoginForm() {
+  Widget buildLoginForm(BuildContext ctx) {
     return Form(
       autovalidateMode: AutovalidateMode.always,
       key: _formKey,
@@ -123,7 +170,10 @@ class _LoginPageState extends State<LoginPage> {
         children: [
           TextFormField(
             controller: _usernameController,
+            textInputAction: TextInputAction.next,
             autofocus: true,
+            autocorrect: false,
+            enableSuggestions: false,
             validator: studentIdValidator,
             decoration: InputDecoration(
                 labelText: i18n.account, hintText: i18n.kiteLoginAccountHint, icon: const Icon(Icons.person)),
@@ -131,7 +181,21 @@ class _LoginPageState extends State<LoginPage> {
           TextFormField(
             controller: _passwordController,
             autofocus: true,
+            textInputAction: TextInputAction.go,
+            toolbarOptions: const ToolbarOptions(
+              copy: false,
+              cut: false,
+              paste: false,
+              selectAll: false,
+            ),
+            autocorrect: false,
+            enableSuggestions: false,
             obscureText: !isPasswordClear,
+            onFieldSubmitted: (inputted) {
+              if (enableLoginButton && isLicenseAccepted) {
+                onLogin(ctx);
+              }
+            },
             decoration: InputDecoration(
               labelText: i18n.oaPwd,
               hintText: i18n.kiteLoginPwdHint,
@@ -185,16 +249,24 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget buildLoginButton() {
+  Widget buildLoginButton(BuildContext ctx) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         ElevatedButton(
-          onPressed: enableLoginButton && isLicenseAccepted ? onLogin : null,
+          // Online
+          onPressed: enableLoginButton && isLicenseAccepted
+              ? () {
+                  // un-focus the text field.
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  onLogin(ctx);
+                }
+              : null,
           child: i18n.kiteLoginBtn.text(),
         ).sized(height: 40.h),
         ElevatedButton(
+          // Offline
           onPressed: isLicenseAccepted
               ? () {
                   Navigator.pushReplacementNamed(context, RouteTable.home);
@@ -292,13 +364,13 @@ class _LoginPageState extends State<LoginPage> {
                   buildTitleLine(),
                   Padding(padding: EdgeInsets.only(top: 40.h)),
                   // Form field: username and password.
-                  buildLoginForm(),
+                  buildLoginForm(context),
                   SizedBox(height: 10.h),
                   // User license check box.
                   buildUserLicenseCheckbox(),
                   SizedBox(height: 25.h),
                   // Login button.
-                  buildLoginButton(),
+                  buildLoginButton(context),
                 ],
               ).scrolled(physics: const NeverScrollableScrollPhysics()),
             ),

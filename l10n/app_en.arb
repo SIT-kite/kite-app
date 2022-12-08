@@ -4,6 +4,7 @@
   "academicYear": "Academic Year",
   "acceptedAgreementCheckbox": "I have known and accepted",
   "account": "Account",
+  "accountOrPwdIncorrectTip": "The account or password is incorrect. Please check them and try again.",
   "activityAllNavigation": "All",
   "activityApplicationID": "Application ID",
   "activityApplicationTime": "Application Time",
@@ -49,6 +50,7 @@
   "campusCardTool": "Campus Card Tool",
   "campusCardUnknownCard": "Unknown Card",
   "campusCardUnknownStudent": "Unknown Student",
+  "campusNetworkNoAccessTroubleshootingRequest": "You can't access the campus network. Do you want troubleshooting?",
   "campusWeatherTitle": "{campus} Weather",
   "@campusWeatherTitle": {
     "placeholders": {
@@ -70,11 +72,18 @@
   "@cantLaunchWechatSoNumber2ClipboardTip": {
     "description": "Used in Freshman vCard when Wechat.app can't be launched."
   },
-  "checkCampusNetworkConnection": "Please check whether to connect with campus network, or using EasyConnect.",
   "city": "City",
   "classmate": "Classmate",
   "close": "Close",
   "confirm": "Confirm",
+  "connectivityCheckerConnectedBtn": "Continue",
+  "connectivityCheckerConnectingBtn": "Check...",
+  "connectivityCheckerDisconnectedBtn": "Retry",
+  "connectivityCheckerNoneBtn": "Check My Connection",
+  "connectivityCheckerStatusConnected": "Right ! You have connected to campus network !",
+  "connectivityCheckerStatusConnecting": "It will take a few seconds, please ensure you have turned on the network on your device.",
+  "connectivityCheckerStatusDisconnected": "Oops ! You can't access the campus network. Please check your network settings or use Easy Connect, and try again.",
+  "connectivityCheckerStatusNone": "You need the access to campus network to continue. Let's check it now.",
   "connectivityConnectFailedError": "Unable to connect to campus network. Troubleshooting:\n1. Attempt to connect to the school's Wi-Fi, \"i-SIT\",\"i-SIT-1x\" or \"eduroam\".\n2. Attempt to launch \"EasyConnect\" VPN to connect to School.\n3. Attempt to use a self-built proxy server to connect to campus network via Http proxy\nIf they all didn't work, it's probably due to school server downtime for maintenance or even crash, please try again later.",
   "connectivityConnectedByProxy": "Connected to campus network by Http proxy.",
   "connectivityConnectedByVpn": "Connected to campus network by VPN.",
@@ -302,10 +311,10 @@
   "freshman": "Freshman",
   "freshmanLoginAccountHint": "Student ID/Full Name/Examinee Number",
   "freshmanLoginBtn": "Join Kite World",
-  "freshmanLoginFailedWarn": "Login failed",
   "freshmanLoginPwdHint": "The last six number of your ID card",
   "freshmanTitle": "Welcome !",
   "friendsRadder": "Friends Radder",
+  "fromKite": "From SIT Kite",
   "ftype_activity": "Activities",
   "ftype_activity_desc": "The latest Second Class activities",
   "ftype_application": "Application",
@@ -405,6 +414,7 @@
   },
   "homepage": "Homepage",
   "homepageCampusNetworkConnected": "Campus Network Available",
+  "homepageCampusNetworkDisconnected": "Campus Network Disconnected",
   "hotPost": "HOT",
   "htmlPageNoContent": "No Content",
   "kiteBoardReachEndLabel": "wow, you dug through the Earth !",
@@ -413,7 +423,6 @@
   "kiteLoggedInTip": "Logged in",
   "kiteLoginAccountHint": "Student ID/Work number",
   "kiteLoginBtn": "Join Kite World",
-  "kiteLoginFailedTip": "Failed to log in",
   "kiteLoginIncorrectIDFormat": "Incorrect ID format",
   "kiteLoginOfflineModeBtn": "Offline Mode",
   "kiteLoginPwdHint": "Enter your password",
@@ -430,6 +439,7 @@
   "libraryNoticeSendTime": "Send Time",
   "libraryNoticeTitle": "Library Notice",
   "loading": "Loading",
+  "localStorageDeleteDesc": "you will lose ALL DATA in this box. Are you sure?",
   "localStorageEmptyValueDesc": "BEWARE! YOU ARE TRYING TO EMPTY THE VALUE! ARE YOU SURE?",
   "localStorageSetValueNullDesc": "BEWARE! YOU ARE TRYING TO SET THE VALUE TO NULL! ARE YOU SURE?",
   "localStorageTitle": "Local Storage Editor",
@@ -445,6 +455,7 @@
   "networkConnectionTimeoutError": "Network Timeout",
   "networkConnectionTimeoutErrorDesc": "This function requires access to the campus network.\n\nNOTE: It can also occur when the school server crashes or is down for maintenance.",
   "networkError": "Network Error",
+  "networkNoAccessTip": "Unable to access network. Please check network settings on your device, and try again.",
   "networkTool": "Network Tool",
   "networkXcpWarn": "A network error occurred.",
   "networking": "Networking",
@@ -495,7 +506,7 @@
   "publishingDepartment": "Department",
   "pwd": "Password",
   "qq": "QQ",
-  "readAndAcceptRequest": "Please read and accept {agreement}.",
+  "readAndAcceptRequest": "Please read and accept {agreement} first.",
   "@readAndAcceptRequest": {
     "placeholders": {
       "agreement": {
@@ -528,6 +539,7 @@
   "@reportTempUnreportedToday": {
     "description": "For building string: Unreported Today Today Normal {place}"
   },
+  "request": "Request",
   "restartRequest": "Restart?",
   "restartRequestDesc": "Would you like to restart Kite now?",
   "rmb": "¥{amount}",
@@ -591,7 +603,6 @@
   "studentID": "Student ID",
   "studentIdCopy2ClipboardTip": "Your student ID is copied.",
   "studentInfoTitle": "Student Info",
-  "studentLoginFailedWarn": "Login failed",
   "submit": "Submit",
   "teacherEvalTitle": "Teacher Evaluation",
   "tel": "TEL.",
@@ -616,6 +627,7 @@
     }
   },
   "timetableEdit": "Edit",
+  "timetableImportConnectivityCheckerDesc": "You need access campus network before importing a new Timetable. Let's check it.",
   "timetableImportEndTip": "Please enter the info.",
   "timetableImportFailed": "Import Error",
   "timetableImportFailedDesc": "Can't import the timetable, please try again.",
@@ -667,6 +679,7 @@
       }
     }
   },
+  "troubleshooting": "Troubleshooting",
   "unfilled": "Unfilled",
   "unknown": "Unknown",
   "untitled": "Untitled",
@@ -708,15 +721,5 @@
   "welcomeSlogan": "Excellent school life, from here.",
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
-  "yes": "Yes",
-  "timetableImportConnectivityCheckerDesc": "You need the access to Campus Network before importing a new Timetable. Let's check it.",
-  "localStorageDeleteDesc": "you will lose ALL DATA in this box. Are you sure?",
-  "connectivityCheckerStatusNone": "You need the access to Campus Network to continue. Let's check it now.",
-  "connectivityCheckerStatusConnecting": "It will take a few seconds, please ensure you have turned on the network on your device.",
-  "connectivityCheckerStatusConnected": "Right ! You have connected to Campus Network !",
-  "connectivityCheckerStatusDisconnected": "Oops ! You don't have the access to Campus Network. Please check your network settings and try again.",
-  "connectivityCheckerNoneBtn": "Check My Connection",
-  "connectivityCheckerConnectingBtn": "Check...",
-  "connectivityCheckerConnectedBtn": "Continue",
-  "connectivityCheckerDisconnectedBtn": "Retry"
+  "yes": "Yes"
 }

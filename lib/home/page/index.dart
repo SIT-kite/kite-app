@@ -116,7 +116,7 @@ class _HomePageState extends State<HomePage> {
       context,
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         const Icon(Icons.dangerous),
-        title ?? i18n.checkCampusNetworkConnection.text(),
+        title ?? i18n.homepageCampusNetworkDisconnected.text(),
         TextButton(
           child: i18n.openNetworkToolBtn.text(),
           onPressed: () => Navigator.of(context).pushNamed(RouteTable.connectivity),
@@ -144,7 +144,7 @@ class _HomePageState extends State<HomePage> {
       } on Exception catch (e) {
         // 如果是认证相关问题, 弹出相应的错误信息.
         if (e is UnknownAuthException || e is CredentialsInvalidException) {
-          showBasicFlash(context, Text('${i18n.kiteLoginFailedTip}: $e'));
+          showBasicFlash(context, Text('${i18n.loginFailedWarn}: $e'));
         } else {
           // 如果是网络问题, 提示检查网络.
           _showCheckNetwork(context, title: i18n.networkXcpWarn.text());
