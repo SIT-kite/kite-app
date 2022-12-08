@@ -178,12 +178,15 @@ class _ActivityListState extends State<ActivityList> {
     setState(() {
       _lastPage = 1;
     });
-    _activityList = await ScInit.scActivityListService.getActivityList(widget.type, 1);
-    if (!mounted) return;
-    setState(() {
-      _lastPage++;
-      loading = false;
-    });
+    final activities = await ScInit.scActivityListService.getActivityList(widget.type, 1);
+    if (activities != null) {
+      _activityList = activities;
+      if (!mounted) return;
+      setState(() {
+        _lastPage++;
+        loading = false;
+      });
+    }
   }
 
   void loadMoreActivities() async {
@@ -192,13 +195,15 @@ class _ActivityListState extends State<ActivityList> {
     final lastActivities = await ScInit.scActivityListService.getActivityList(widget.type, _lastPage);
 
     if (!mounted) return;
-    if (lastActivities.isEmpty) {
-      setState(() => _atEnd = true);
-      return;
-    }
+    if (lastActivities != null) {
+      if (lastActivities.isEmpty) {
+        setState(() => _atEnd = true);
+        return;
+      }
 
-    _lastPage++;
-    setState(() => _activityList.addAll(lastActivities));
+      _lastPage++;
+      setState(() => _activityList.addAll(lastActivities));
+    }
   }
 
   Widget buildActivityResult(List<Activity> activities) {

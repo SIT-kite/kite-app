@@ -34,7 +34,7 @@ class ScActivityListCache extends ScActivityListDao {
   final Map<String, List<Activity>> _queried = {};
 
   @override
-  Future<List<Activity>> getActivityList(ActivityType type, int page) async {
+  Future<List<Activity>?> getActivityList(ActivityType type, int page) async {
     final cacheKey = to.box.activities.make(ScActivityListStorage.makeActivityKey(type, page));
     if (cacheKey.needRefresh(after: expiration)) {
       final res = await from.getActivityList(type, page);
@@ -46,10 +46,12 @@ class ScActivityListCache extends ScActivityListDao {
   }
 
   @override
-  Future<List<Activity>> query(String queryString) async {
+  Future<List<Activity>?> query(String queryString) async {
     var res = _queried[queryString];
     res ??= await from.query(queryString);
-    _queried[queryString] = res;
+    if (res != null) {
+      _queried[queryString] = res;
+    }
     return res;
   }
 }

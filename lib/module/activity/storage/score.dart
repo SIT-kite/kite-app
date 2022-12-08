@@ -33,7 +33,7 @@ class ScScoreStorageBox with CachedBox {
 
   ScScoreStorageBox(this.box);
 
-  late final myScoreSummary = Named<ScScoreSummary?>(_Key.scScoreSummary);
+  late final myScoreSummary = Named<ScScoreSummary>(_Key.scScoreSummary);
   late final myScoreList = Named<List<ScScoreItem>>(_Key.scoreList);
   late final myInvolved = Named<List<ScActivityApplication>>(_Key.meInvolved);
 }
@@ -49,16 +49,16 @@ class ScScoreStorage extends ScScoreDao {
   }
 
   @override
-  Future<List<ScScoreItem>> getMyScoreList() async {
-    return box.myScoreList.value ?? <ScScoreItem>[];
+  Future<List<ScScoreItem>?> getMyScoreList() async {
+    return box.myScoreList.value;
   }
 
   @override
-  Future<List<ScActivityApplication>> getMyInvolved() async {
-    return box.myInvolved.value ?? <ScActivityApplication>[];
+  Future<List<ScActivityApplication>?> getMyInvolved() async {
+    return box.myInvolved.value;
   }
 
-  void setMeInvolved(List<ScActivityApplication> list) {
+  void setMeInvolved(List<ScActivityApplication>? list) {
     box.myInvolved.value = list;
   }
 
@@ -66,7 +66,7 @@ class ScScoreStorage extends ScScoreDao {
     box.myScoreSummary.value = summery;
   }
 
-  void setMyScoreList(List<ScScoreItem> list) {
+  void setMyScoreList(List<ScScoreItem>? list) {
     box.myScoreList.value = list;
   }
 }

@@ -18,10 +18,11 @@
 import 'dao/score.dart';
 import 'entity/score.dart';
 
-Future<List<ScJoinedActivity>> getMyActivityListJoinScore(ScScoreDao scScoreDao) async {
+Future<List<ScJoinedActivity>?> getMyActivityListJoinScore(ScScoreDao scScoreDao) async {
   final activities = await scScoreDao.getMyInvolved();
+  if (activities == null) return null;
   final scores = await scScoreDao.getMyScoreList();
-
+  if (scores == null) return null;
   return activities.map((application) {
     // 对于每一次申请, 找到对应的加分信息
     final totalScore = scores

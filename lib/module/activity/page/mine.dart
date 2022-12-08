@@ -59,18 +59,22 @@ class _MyActivityPageState extends State<MyActivityPage> with AutomaticKeepAlive
 
   void onRefresh() {
     ScInit.scScoreService.getScoreSummary().then((value) {
-      summary = value;
-      if (!mounted) return;
-      setState(() {
-        navigatorKey = GlobalKey();
-      });
+      if (summary != value) {
+        summary = value;
+        if (!mounted) return;
+        setState(() {
+          navigatorKey = GlobalKey();
+        });
+      }
     });
     getMyActivityListJoinScore(ScInit.scScoreService).then((value) {
-      joined = value;
-      if (!mounted) return;
-      setState(() {
-        navigatorKey = GlobalKey();
-      });
+      if (joined != value) {
+        joined = value;
+        if (!mounted) return;
+        setState(() {
+          navigatorKey = GlobalKey();
+        });
+      }
     });
   }
 

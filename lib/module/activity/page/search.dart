@@ -44,7 +44,7 @@ class SearchBar extends SearchDelegate<String> {
   }
 
   Widget _buildSearch() {
-    return PlaceholderFutureBuilder<List<Activity>>(
+    return PlaceholderFutureBuilder<List<Activity>?>(
       future: ScInit.scActivityListService.query(query),
       builder: (context, data, state) {
         if (data == null) {

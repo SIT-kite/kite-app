@@ -44,7 +44,7 @@ class ScScoreCache extends ScScoreDao {
   }
 
   @override
-  Future<List<ScScoreItem>> getMyScoreList() async {
+  Future<List<ScScoreItem>?> getMyScoreList() async {
     if (to.box.myScoreList.needRefresh(after: expiration)) {
       final res = await from.getMyScoreList();
       to.setMyScoreList(res);
@@ -55,7 +55,7 @@ class ScScoreCache extends ScScoreDao {
   }
 
   @override
-  Future<List<ScActivityApplication>> getMyInvolved() async {
+  Future<List<ScActivityApplication>?> getMyInvolved() async {
     if (to.box.myInvolved.needRefresh(after: expiration)) {
       final res = await from.getMyInvolved();
       to.setMeInvolved(res);

@@ -27,7 +27,7 @@ class ScActivityListStorageBox with CachedBox {
 
   ScActivityListStorageBox(this.box);
 
-  late final activities = Namespace<List<Activity>?>(_activitiesNs);
+  late final activities = Namespace<List<Activity>>(_activitiesNs);
 }
 
 class ScActivityListStorage extends ScActivityListDao {
@@ -40,18 +40,18 @@ class ScActivityListStorage extends ScActivityListDao {
   ScActivityListStorage(Box<dynamic> hive) : box = ScActivityListStorageBox(hive);
 
   @override
-  Future<List<Activity>> getActivityList(ActivityType type, int page) async {
+  Future<List<Activity>?> getActivityList(ActivityType type, int page) async {
     final key = box.activities.make(makeActivityKey(type, page));
-    return key.value ?? <Activity>[];
+    return key.value;
   }
 
-  void setActivityList(ActivityType type, int page, List<Activity> activities) {
+  void setActivityList(ActivityType type, int page, List<Activity>? activities) {
     final key = box.activities.make(makeActivityKey(type, page));
     key.value = activities;
   }
 
   @override
-  Future<List<Activity>> query(String queryString) {
+  Future<List<Activity>?> query(String queryString) {
     throw UnimplementedError("Storage won't save query.");
   }
 }
