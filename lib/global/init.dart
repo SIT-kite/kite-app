@@ -159,6 +159,7 @@ class Initializer {
     await ApplicationInit.init(
       dio: Global.dio,
       cookieJar: Global.cookieJar,
+      box: HiveBoxInit.applicationCache,
     );
     ReportTempInit.init(dio: Global.dio);
     ScInit.init(

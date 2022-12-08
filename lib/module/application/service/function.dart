@@ -16,18 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import '../dao/application.dart';
 import '../entity/application.dart';
 import '../using.dart';
 
 const String serviceFunctionList = 'https://xgfy.sit.edu.cn/app/public/queryAppManageJson';
 const String serviceFunctionDetail = 'https://xgfy.sit.edu.cn/app/public/queryAppFormJson';
 
-class OfficeFunctionService {
+class ApplicationService implements ApplicationDao {
   final ISession session;
 
-  const OfficeFunctionService(this.session);
+  const ApplicationService(this.session);
 
-  Future<List<ApplicationMeta>> selectApplications() async {
+  @override
+  Future<List<ApplicationMeta>> getApplicationMetas() async {
     String payload = '{"appObject":"student","appName":null}';
 
     final response = await session.request(
@@ -46,12 +48,7 @@ class OfficeFunctionService {
     return functionList;
   }
 
-  Future<List<ApplicationMeta>> selectApplicationByCountDesc() async {
-    final functions = await selectApplications();
-    functions.sort((a, b) => b.count.compareTo(a.count));
-    return functions;
-  }
-
+  @override
   Future<ApplicationDetail> getApplicationDetail(String functionId) async {
     final String payload = '{"appID":"$functionId"}';
 

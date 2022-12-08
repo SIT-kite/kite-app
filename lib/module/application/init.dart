@@ -19,24 +19,32 @@
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 
+import 'cache/application.dart';
+import 'dao/application.dart';
 import 'service/function.dart';
 import 'service/message.dart';
+import 'storage/application.dart';
 import 'using.dart';
 
 class ApplicationInit {
   static late CookieJar cookieJar;
-  static late OfficeFunctionService applicationService;
-  static late OfficeMessageService messageService;
+  static late ApplicationDao applicationService;
+  static late ApplicationMessageService messageService;
   static late OfficeSession session;
 
   static Future<void> init({
     required Dio dio,
     required CookieJar cookieJar,
+    required Box<dynamic> box,
   }) async {
     ApplicationInit.cookieJar = cookieJar;
     session = OfficeSession(dio: dio);
 
-    ApplicationInit.applicationService = OfficeFunctionService(session);
-    ApplicationInit.messageService = OfficeMessageService(session);
+    ApplicationInit.applicationService = ApplicationCache(
+        from: ApplicationService(session),
+        to: ApplicationStorage(box),
+        detailExpire: const Duration(days: 180),
+        listExpire: const Duration(days: 10));
+    ApplicationInit.messageService = ApplicationMessageService(session);
   }
 }

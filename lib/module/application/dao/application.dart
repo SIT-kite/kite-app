@@ -15,6 +15,10 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-export 'page/index.dart';
-export 'init.dart';
-export 'entity/application.dart';
+import '../entity/application.dart';
+
+abstract class ApplicationDao {
+  Future<List<ApplicationMeta>?> getApplicationMetas();
+
+  Future<ApplicationDetail?> getApplicationDetail(String applicationId);
+}

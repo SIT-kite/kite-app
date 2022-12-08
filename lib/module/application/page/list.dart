@@ -26,7 +26,7 @@ import '../user_widget/application.dart';
 import '../using.dart';
 
 // 本科生常用功能列表
-const Set<String> _commonUse = <String>{
+const Set<String> _commonUsed = <String>{
   '121',
   '011',
   '047',
@@ -43,7 +43,7 @@ const Set<String> _commonUse = <String>{
 };
 
 class ApplicationList extends StatefulWidget {
-  const ApplicationList({Key? key}) : super(key: key);
+  const ApplicationList({super.key});
 
   @override
   State<ApplicationList> createState() => _ApplicationListState();
@@ -51,6 +51,7 @@ class ApplicationList extends StatefulWidget {
 
 class _ApplicationListState extends State<ApplicationList> {
   bool enableFilter = false;
+  final service = ApplicationInit.applicationService;
 
   // in descending order
   List<ApplicationMeta> _allDescending = [];
@@ -60,12 +61,14 @@ class _ApplicationListState extends State<ApplicationList> {
   void initState() {
     super.initState();
     _fetchMetaList().then((value) {
-      if (!mounted) return;
-      value.sortBy<num>((e) => -e.count); // descending
-      setState(() {
-        _allDescending = value;
-        _lastError = null;
-      });
+      if (value != null) {
+        if (!mounted) return;
+        value.sortBy<num>((e) => -e.count); // descending
+        setState(() {
+          _allDescending = value;
+          _lastError = null;
+        });
+      }
     }).onError((error, stackTrace) {
       if (!mounted) return;
       setState(() {
@@ -103,7 +106,7 @@ class _ApplicationListState extends State<ApplicationList> {
 
   List<Widget> buildApplications(List<ApplicationMeta> all) {
     return all
-        .where((element) => !enableFilter || _commonUse.contains(element.id))
+        .where((element) => !enableFilter || _commonUsed.contains(element.id))
         .mapIndexed((i, e) => ApplicationTile(meta: e, isHot: i < 3))
         .toList();
   }
@@ -169,16 +172,16 @@ class _ApplicationListState extends State<ApplicationList> {
     );
     return menuButton;
   }
-}
 
-Future<List<ApplicationMeta>> _fetchMetaList() async {
-  if (!ApplicationInit.session.isLogin) {
-    final username = Kv.auth.currentUsername!;
-    final password = Kv.auth.ssoPassword!;
-    await ApplicationInit.session.login(
-      username: username,
-      password: password,
-    );
+  Future<List<ApplicationMeta>?> _fetchMetaList() async {
+    if (!ApplicationInit.session.isLogin) {
+      final username = Kv.auth.currentUsername!;
+      final password = Kv.auth.ssoPassword!;
+      await ApplicationInit.session.login(
+        username: username,
+        password: password,
+      );
+    }
+    return await service.getApplicationMetas();
   }
-  return await ApplicationInit.applicationService.selectApplicationByCountDesc();
 }

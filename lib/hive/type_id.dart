@@ -55,4 +55,9 @@ class HiveTypeId {
   static const announceCatalogue = 27;
   static const announceListPage = 28;
   static const announceRecord = 29;
+
+  // Application
+  static const applicationDetail = 30;
+  static const applicationDetailSection = 31;
+  static const applicationMeta = 32;
 }

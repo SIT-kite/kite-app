@@ -23,10 +23,10 @@ import '../entity/message.dart';
 
 const String serviceMessageCount = 'https://xgfy.sit.edu.cn/unifri-flow/user/queryFlowCount';
 
-class OfficeMessageService {
+class ApplicationMessageService {
   final ISession session;
 
-  const OfficeMessageService(this.session);
+  const ApplicationMessageService(this.session);
 
   Future<ApplicationMsgCount> queryMessageCount() async {
     String payload = 'code=${Kv.auth.currentUsername}';

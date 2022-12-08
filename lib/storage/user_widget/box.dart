@@ -84,13 +84,13 @@ class BoxItemList extends StatefulWidget {
 class _BoxItemListState extends State<BoxItemList> {
   late final keys = widget.box.keys.toList();
   int currentPage = 0;
-  final pageSize = 20;
+  static const pageSize = 8;
 
   @override
   Widget build(BuildContext context) {
     final box = widget.box;
     if (box.isEmpty) {
-      return i18n.emptyContent.text(style: context.textTheme.displayMedium);
+      return i18n.emptyContent.text(style: context.textTheme.displayMedium).padAll(10);
     } else {
       return buildList(context);
     }

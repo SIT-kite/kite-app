@@ -50,12 +50,16 @@ abstract class CacheKey<T> {
 
   CacheKey(this.box);
 
+  /// Return null if there's no cache for this.
   T? get value;
 
+  /// If [newValue] is null, the cache will be delete.
   set value(T? newValue);
 
+  /// Return null if there's no cache for this.
   DateTime? get lastUpdate;
 
+  /// If [newValue] is null, the cache will be aborted.
   set lastUpdate(DateTime? newValue);
 
   bool needRefresh({required Duration after});
@@ -71,8 +75,12 @@ class NamedCacheKey<T> extends CacheKey<T> {
 
   @override
   set value(T? newValue) {
-    box.put(name, newValue);
-    box.put("$name/$_lastUpdateKey", DateTime.now());
+    if (newValue == null) {
+      lastUpdate = null;
+    } else {
+      box.put(name, newValue);
+      lastUpdate = DateTime.now();
+    }
   }
 
   @override
@@ -122,8 +130,12 @@ class _NamespaceSubCacheKey<T> extends CacheKey<T> {
 
   @override
   set value(T? newValue) {
-    box.put("$namespace/$name", newValue);
-    lastUpdate = DateTime.now();
+    if (newValue == null) {
+      lastUpdate = null;
+    } else {
+      box.put("$namespace/$name", newValue);
+      lastUpdate = DateTime.now();
+    }
   }
 
   @override
