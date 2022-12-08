@@ -15,27 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import 'package:flutter/material.dart';
-import 'package:rettulf/rettulf.dart';
+import 'package:flutter/widgets.dart';
 
-class Placeholders {
-  Placeholders._();
-
-  static Widget loading({Key? key, double? stroke, Widget Function(Widget)? fix}) {
-    Widget indicator = CircularProgressIndicator(
-      strokeWidth: stroke ?? 4.0,
-    );
-    if (fix != null) {
-      indicator = fix(indicator);
-    }
-    return Center(key: key, child: indicator);
-  }
-}
-
-extension LazyLoadingEffectEx<T> on Future<T> {
-  Future<T> withDelay(Duration duration) async {
-    final res = await this;
-    await Future.delayed(duration);
-    return res;
-  }
+extension AnimatedEx on Widget {
+  Widget animatedSwitched({Duration d = const Duration(milliseconds: 500)}) => AnimatedSwitcher(
+        duration: d,
+        child: this,
+      );
 }

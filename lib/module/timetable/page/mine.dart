@@ -24,6 +24,7 @@ import 'package:rettulf/rettulf.dart';
 import '../../activity/using.dart';
 import '../user_widget/picker.dart';
 import '../user_widget/timetable_editor.dart';
+import 'import/index.dart';
 import 'preview.dart';
 
 class MyTimetablePage extends StatefulWidget {
@@ -37,7 +38,9 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
   final storage = TimetableInit.timetableStorage;
 
   Future<void> goImport() async {
-    final changed = await Navigator.of(context).push((MaterialPageRoute(builder: (_) => const ImportTimetablePage())));
+    final changed = await Navigator.of(context).push(
+      (MaterialPageRoute(builder: (_) => const ImportTimetableIndex())),
+    );
     if (changed == true) {
       setState(() {});
     }

@@ -18,12 +18,12 @@
 import 'package:flutter/material.dart';
 import 'package:rettulf/rettulf.dart';
 
-import '../entity/course.dart';
-import '../entity/meta.dart';
-import '../init.dart';
-import '../using.dart';
-import '../mock/courses.dart';
-import '../user_widget/meta_editor.dart';
+import '../../entity/course.dart';
+import '../../entity/meta.dart';
+import '../../init.dart';
+import '../../using.dart';
+import '../../mock/courses.dart';
+import '../../user_widget/meta_editor.dart';
 
 enum ImportStatus {
   none,
@@ -42,8 +42,8 @@ class ImportTimetablePage extends StatefulWidget {
 }
 
 class _ImportTimetablePageState extends State<ImportTimetablePage> {
-  final timetableService = TimetableInit.timetableService;
-  final timetableStorage = TimetableInit.timetableStorage;
+  final service = TimetableInit.timetableService;
+  final storage = TimetableInit.timetableStorage;
   var _status = ImportStatus.none;
   late ValueNotifier<DateTime> selectedDate = ValueNotifier(
     widget.defaultStartDate != null
@@ -82,13 +82,7 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: i18n.timetableImportTitle.text()),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-        child: buildImportPage(context),
-      ),
-    );
+    return buildImportPage(context).padFromLTRB(12, 0, 12, 12);
   }
 
   Widget buildTip(BuildContext ctx) {
@@ -151,7 +145,7 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
   }
 
   Future<List<Course>> _fetchTimetable(SchoolYear year, Semester semester) async {
-    return await timetableService.getTimetable(year, semester);
+    return await service.getTimetable(year, semester);
   }
 
   Future<bool> handleTimetableData(BuildContext ctx, List<Course> courses, int year, Semester semester) async {
@@ -162,7 +156,7 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
       ..semester = semester.index;
     final saved = await ctx.showSheet((ctx) => MetaEditor(meta: meta).padOnly(b: MediaQuery.of(ctx).viewInsets.bottom));
     if (saved == true) {
-      timetableStorage.addTable(meta, courses);
+      storage.addTable(meta, courses);
       return true;
     }
     return false;

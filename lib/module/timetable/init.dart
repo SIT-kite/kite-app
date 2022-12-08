@@ -27,16 +27,16 @@ class TimetableInit {
   static late TimetableService timetableService;
   static late TimetableStorage timetableStorage;
   static late KiteTimetableService kiteTimetableService;
-  static late TableCache tableCache;
-
+  static late SsoSession network;
   static Future<void> init({
     required ISession eduSession,
     required ISession kiteSession,
     required Box<dynamic> timetableBox,
+    required SsoSession ssoSession,
   }) async {
     timetableService = TimetableService(eduSession);
     timetableStorage = TimetableStorage(timetableBox);
-    tableCache = TableCache();
     kiteTimetableService = KiteTimetableService(kiteSession);
+    network = ssoSession;
   }
 }

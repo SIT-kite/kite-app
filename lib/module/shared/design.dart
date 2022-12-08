@@ -25,5 +25,6 @@ export 'package:kite/design/user_widgets/button.dart';
 export 'package:kite/design/user_widgets/route.dart';
 export 'package:kite/design/page/common.dart';
 export 'package:kite/design/animation/livelist.dart';
+export 'package:kite/design/animation/animated.dart';
 export 'package:kite/design/animation/shake.dart';
 export 'package:kite/design/env/adaptive.dart';

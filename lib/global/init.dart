@@ -127,6 +127,7 @@ class Initializer {
       eduSession: sharedEduSession,
       kiteSession: kiteSession,
       timetableBox: HiveBoxInit.course,
+      ssoSession: Global.ssoSession,
     );
 
     await ExpenseTrackerInit.init(

@@ -435,5 +435,14 @@
   "xuhui": "徐汇",
   "xuhuiDistrict": "徐汇区",
   "yes": "好",
-  "localStorageDeleteDesc": "你会失去这个盒子中的所有数据！你确定吗？"
+  "timetableImportConnectivityCheckerDesc": "在导入课程表之前，需要先检查你是否能访问校园网。",
+  "localStorageDeleteDesc": "你会失去这个盒子中的所有数据！你确定吗？",
+  "connectivityCheckerStatusNone": "你需要访问校园网才能继续，现在就检查一下吧。",
+  "connectivityCheckerStatusConnecting": "这可能需要几秒钟，请确保你在设备上已经打开了网络连接。",
+  "connectivityCheckerStatusConnected": "好耶！你能够访问校园网！",
+  "connectivityCheckerStatusDisconnected": "糟糕！你无法访问校园网，请检查你的网络设置，然后再试一次。",
+  "connectivityCheckerNoneBtn": "检查我的网络连接",
+  "connectivityCheckerConnectingBtn": "正在检查中……",
+  "connectivityCheckerConnectedBtn": "继续",
+  "connectivityCheckerDisconnectedBtn": "重试"
 }

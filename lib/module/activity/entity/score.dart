@@ -114,7 +114,7 @@ class ScActivityApplication {
 
   @override
   String toString() {
-    return 'ScActivityItem{activityId: $activityId, time: $time, status: $status}';
+    return 'ScActivityApplication{activityId: $activityId, time: $time, status: $status}';
   }
 }
 

@@ -709,5 +709,14 @@
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
   "yes": "Yes",
-  "localStorageDeleteDesc": "you will lose ALL DATA in this box. Are you sure?"
+  "timetableImportConnectivityCheckerDesc": "You need the access to Campus Network before importing a new Timetable. Let's check it.",
+  "localStorageDeleteDesc": "you will lose ALL DATA in this box. Are you sure?",
+  "connectivityCheckerStatusNone": "You need the access to Campus Network to continue. Let's check it now.",
+  "connectivityCheckerStatusConnecting": "It will take a few seconds, please ensure you have turned on the network on your device.",
+  "connectivityCheckerStatusConnected": "Right ! You have connected to Campus Network !",
+  "connectivityCheckerStatusDisconnected": "Oops ! You don't have the access to Campus Network. Please check your network settings and try again.",
+  "connectivityCheckerNoneBtn": "Check My Connection",
+  "connectivityCheckerConnectingBtn": "Check...",
+  "connectivityCheckerConnectedBtn": "Continue",
+  "connectivityCheckerDisconnectedBtn": "Retry"
 }
