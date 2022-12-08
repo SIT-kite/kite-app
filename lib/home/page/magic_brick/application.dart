@@ -23,6 +23,7 @@ import 'package:kite/module/application/init.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
+import 'package:kite/util/logger.dart';
 import '../brick.dart';
 
 class ApplicationItem extends StatefulWidget {
@@ -74,10 +75,9 @@ class _ApplicationItemState extends State<ApplicationItem> {
           username: username,
           password: password,
         );
-      } on CredentialsInvalidException catch (e) {
-        return e.msg;
       } catch (e) {
-        return e.runtimeType.toString();
+        Log.error(e);
+        return null;
       }
     }
     format(s, x) => x > 0 ? '$s ($x)' : '';

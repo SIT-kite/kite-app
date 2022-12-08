@@ -44,7 +44,7 @@ import 'background.dart';
 import 'drawer.dart';
 import 'greeting.dart';
 import 'homepage_factory.dart';
-import 'item/index.dart';
+import 'magic_brick/index.dart';
 
 class HomeItemGroup extends StatelessWidget {
   final List<Widget> items;
