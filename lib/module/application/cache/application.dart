@@ -35,9 +35,13 @@ class ApplicationCache extends ApplicationDao {
   @override
   Future<List<ApplicationMeta>?> getApplicationMetas() async {
     if (to.box.metas.needRefresh(after: listExpire)) {
-      final res = await from.getApplicationMetas();
-      to.setApplicationMetas(res);
-      return res;
+      try {
+        final res = await from.getApplicationMetas();
+        to.setApplicationMetas(res);
+        return res;
+      } catch (e) {
+        return to.getApplicationMetas();
+      }
     } else {
       return to.getApplicationMetas();
     }
@@ -47,9 +51,13 @@ class ApplicationCache extends ApplicationDao {
   Future<ApplicationDetail?> getApplicationDetail(String applicationId) async {
     final cacheKey = to.box.details.make(applicationId);
     if (cacheKey.needRefresh(after: detailExpire)) {
-      final res = await from.getApplicationDetail(applicationId);
-      to.setApplicationDetail(applicationId, res);
-      return res;
+      try {
+        final res = await from.getApplicationDetail(applicationId);
+        to.setApplicationDetail(applicationId, res);
+        return res;
+      } catch (e) {
+        return to.getApplicationDetail(applicationId);
+      }
     } else {
       return to.getApplicationDetail(applicationId);
     }

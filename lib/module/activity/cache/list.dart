@@ -37,9 +37,13 @@ class ScActivityListCache extends ScActivityListDao {
   Future<List<Activity>?> getActivityList(ActivityType type, int page) async {
     final cacheKey = to.box.activities.make(ScActivityListStorage.makeActivityKey(type, page));
     if (cacheKey.needRefresh(after: expiration)) {
-      final res = await from.getActivityList(type, page);
-      to.setActivityList(type, page, res);
-      return res;
+      try {
+        final res = await from.getActivityList(type, page);
+        to.setActivityList(type, page, res);
+        return res;
+      } catch (e) {
+        return to.getActivityList(type, page);
+      }
     } else {
       return to.getActivityList(type, page);
     }

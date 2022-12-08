@@ -66,6 +66,7 @@ class HiveAdapter {
     _r(ApplicationMsgCountAdapter());
     _r(ApplicationMsgAdapter());
     _r(ApplicationMsgPageAdapter());
+    _r(ApplicationMessageTypeAdapter());
   }
 
   static void _r<T>(TypeAdapter<T> adapter) {

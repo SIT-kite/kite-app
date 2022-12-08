@@ -29,12 +29,17 @@ class ApplicationMessageCache implements ApplicationMessageDao {
     required this.to,
     this.expiration = const Duration(minutes: 10),
   });
+
   @override
   Future<ApplicationMsgCount?> getMessageCount() async {
     if (to.box.msgCount.needRefresh(after: expiration)) {
-      final res = await from.getMessageCount();
-      to.setMessageCount(res);
-      return res;
+      try {
+        final res = await from.getMessageCount();
+        to.setMessageCount(res);
+        return res;
+      } catch (e) {
+        return to.getMessageCount();
+      }
     } else {
       return to.getMessageCount();
     }
@@ -43,9 +48,13 @@ class ApplicationMessageCache implements ApplicationMessageDao {
   @override
   Future<ApplicationMsgPage?> getAllMessage() async {
     if (to.box.allMessages.needRefresh(after: expiration)) {
-      final res = await from.getAllMessage();
-      to.setAllMessage(res);
-      return res;
+      try {
+        final res = await from.getAllMessage();
+        to.setAllMessage(res);
+        return res;
+      } catch (e) {
+        return to.getAllMessage();
+      }
     } else {
       return to.getAllMessage();
     }

@@ -43,9 +43,13 @@ class AnnounceCache extends AnnounceDao {
   Future<List<AnnounceCatalogue>?> getAllCatalogues() async {
     final cacheKey = to.box.catalogues;
     if (cacheKey.needRefresh(after: detailExpire)) {
-      final res = await from.getAllCatalogues();
-      to.setAllCatalogues(res);
-      return res;
+      try {
+        final res = await from.getAllCatalogues();
+        to.setAllCatalogues(res);
+        return res;
+      } catch (e) {
+        return to.getAllCatalogues();
+      }
     } else {
       return to.getAllCatalogues();
     }
@@ -55,9 +59,13 @@ class AnnounceCache extends AnnounceDao {
   Future<AnnounceDetail?> getAnnounceDetail(String catalogueId, String uuid) async {
     final cacheKey = to.box.details.make(AnnounceStorage.makeDetailKey(catalogueId, uuid));
     if (cacheKey.needRefresh(after: detailExpire)) {
-      final res = await from.getAnnounceDetail(catalogueId, uuid);
-      to.setAnnounceDetail(catalogueId, uuid, res);
-      return res;
+      try {
+        final res = await from.getAnnounceDetail(catalogueId, uuid);
+        to.setAnnounceDetail(catalogueId, uuid, res);
+        return res;
+      } catch (e) {
+        return to.getAnnounceDetail(catalogueId, uuid);
+      }
     } else {
       return to.getAnnounceDetail(catalogueId, uuid);
     }

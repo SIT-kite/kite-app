@@ -27,7 +27,7 @@ import '../user_widgets/card.dart';
 import '../using.dart';
 
 class ActivityListPage extends StatefulWidget {
-  const ActivityListPage({Key? key}) : super(key: key);
+  const ActivityListPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _ActivityListPageState();
@@ -48,7 +48,6 @@ class _ActivityListPageState extends State<ActivityListPage>
 
   final $page = ValueNotifier(0);
   bool init = false;
-  final _listKey = GlobalKey(debugLabel: "Activity List");
 
   @override
   void initState() {
@@ -101,7 +100,7 @@ class _ActivityListPageState extends State<ActivityListPage>
               return ValueListenableBuilder(
                 valueListenable: $page,
                 builder: (context, index, child) {
-                  return ActivityList(key: _listKey, selectedActivityType);
+                  return ActivityList(selectedActivityType);
                 },
               );
             }).toList(),
@@ -118,7 +117,7 @@ class _ActivityListPageState extends State<ActivityListPage>
           return ValueListenableBuilder(
             valueListenable: $page,
             builder: (context, index, child) {
-              return ActivityList(key: _listKey, selectedActivityType);
+              return ActivityList(selectedActivityType);
             },
           );
         }).toList(),
@@ -130,6 +129,8 @@ class _ActivityListPageState extends State<ActivityListPage>
   bool get wantKeepAlive => true;
 }
 
+///
+/// Thanks to the cache, don't worry about that switching tab will re-fetch the activity list.
 class ActivityList extends StatefulWidget {
   final ActivityType type;
 

@@ -35,9 +35,13 @@ class ScActivityDetailCache extends ScActivityDetailDao {
   Future<ActivityDetail?> getActivityDetail(int activityId) async {
     final cacheKey = to.box.id2Detail.make(activityId.toString());
     if (cacheKey.needRefresh(after: expiration)) {
-      final res = await from.getActivityDetail(activityId);
-      to.setActivityDetail(activityId, res);
-      return res;
+      try {
+        final res = await from.getActivityDetail(activityId);
+        to.setActivityDetail(activityId, res);
+        return res;
+      } catch (e) {
+        return to.getActivityDetail(activityId);
+      }
     } else {
       return to.getActivityDetail(activityId);
     }

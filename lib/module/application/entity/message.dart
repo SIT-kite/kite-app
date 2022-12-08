@@ -20,9 +20,16 @@ import '../using.dart';
 
 part 'message.g.dart';
 
+@HiveType(
+  typeId: HiveTypeId.applicationMessageType,
+  adapterName: "ApplicationMessageTypeAdapter",
+)
 enum MessageType {
+  @HiveField(0)
   todo,
+  @HiveField(1)
   doing,
+  @HiveField(2)
   done,
 }
 
