@@ -42,11 +42,13 @@ class _OaAnnouncePageState extends State<OaAnnouncePage> {
     super.initState();
     _queryBulletinListInAllCategory(1).then((value) {
       if (!mounted) return;
-      setState(() {
-        // 公告项按时间排序
-        value.sort((a, b) => b.dateTime.difference(a.dateTime).inSeconds);
-        _records = value;
-      });
+      if (value != null) {
+        setState(() {
+          // 公告项按时间排序
+          value.sort((a, b) => b.dateTime.difference(a.dateTime).inSeconds);
+          _records = value;
+        });
+      }
     });
   }
 
@@ -58,7 +60,7 @@ class _OaAnnouncePageState extends State<OaAnnouncePage> {
     );
   }
 
-  Future<List<AnnounceRecord>> _queryBulletinListInAllCategory(int page) async {
+  Future<List<AnnounceRecord>?> _queryBulletinListInAllCategory(int page) async {
     // Make sure login.
     await OaAnnounceInit.session.request('https://myportal.sit.edu.cn/', ReqMethod.get);
 
@@ -66,6 +68,7 @@ class _OaAnnouncePageState extends State<OaAnnouncePage> {
 
     // 获取所有分类
     final catalogues = await service.getAllCatalogues();
+    if (catalogues == null) return null;
 
     // 获取所有分类中的第一页
     final futureResult = await Future.wait(catalogues.map((e) => service.queryAnnounceList(page, e.id)));

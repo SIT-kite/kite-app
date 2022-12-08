@@ -15,7 +15,7 @@ void main() async {
 
   test('test get list', () async {
     final list = await dao.getAllCatalogues();
-    final firstPage = await dao.queryAnnounceList(1, list[0].id);
+    final firstPage = await dao.queryAnnounceList(1, list![0].id);
     Log.info(firstPage);
   });
 }

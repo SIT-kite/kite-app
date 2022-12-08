@@ -40,7 +40,7 @@ class AnnounceCache extends AnnounceDao {
   String makeAnnounceListKey(int pageIndex, String catalogueId) => "$pageIndex/$catalogueId";
 
   @override
-  Future<List<AnnounceCatalogue>> getAllCatalogues() async {
+  Future<List<AnnounceCatalogue>?> getAllCatalogues() async {
     final cacheKey = to.box.catalogues;
     if (cacheKey.needRefresh(after: detailExpire)) {
       final res = await from.getAllCatalogues();

@@ -62,18 +62,32 @@ abstract class CacheKey<T> {
   bool needRefresh({required Duration after});
 }
 
+extension CacheKeyEx<T> on CacheKey<T> {
+  void clear() {
+    lastUpdate = null;
+  }
+}
+
 class NamedCacheKey<T> extends CacheKey<T> {
   final String name;
 
   NamedCacheKey(super.box, this.name);
 
   @override
-  T? get value => box.get(name);
+  T? get value {
+    final cache = box.get(name);
+    if (cache is T?) {
+      return cache;
+    } else {
+      clear();
+      return null;
+    }
+  }
 
   @override
   set value(T? newValue) {
     if (newValue == null) {
-      lastUpdate = null;
+      clear();
     } else {
       box.put(name, newValue);
       lastUpdate = DateTime.now();
@@ -108,27 +122,35 @@ class CacheNamespace<T> {
   CacheNamespace(this.box, this.namespace);
 
   CacheKey<T> make(String name) {
-    return _NamespaceSubCacheKey(box, namespace, name);
+    return _NamespaceCacheKey(box, namespace, name);
   }
 }
 
-class _NamespaceSubCacheKey<T> extends CacheKey<T> {
+class _NamespaceCacheKey<T> extends CacheKey<T> {
   final String namespace;
   final String name;
 
-  _NamespaceSubCacheKey(
+  _NamespaceCacheKey(
     super.box,
     this.namespace,
     this.name,
   );
 
   @override
-  T? get value => box.get("$namespace/$name");
+  T? get value {
+    final cache = box.get("$namespace/$name");
+    if (cache is T?) {
+      return cache;
+    } else {
+      clear();
+      return null;
+    }
+  }
 
   @override
   set value(T? newValue) {
     if (newValue == null) {
-      lastUpdate = null;
+      clear();
     } else {
       box.put("$namespace/$name", newValue);
       lastUpdate = DateTime.now();

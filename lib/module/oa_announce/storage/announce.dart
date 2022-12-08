@@ -44,8 +44,8 @@ class AnnounceStorage extends AnnounceDao {
 
   /// 获取所有的分类信息
   @override
-  Future<List<AnnounceCatalogue>> getAllCatalogues() async {
-    return box.catalogues.value ?? <AnnounceCatalogue>[];
+  Future<List<AnnounceCatalogue>?> getAllCatalogues() async {
+    return box.catalogues.value;
   }
 
   /// 获取某篇文章内容
@@ -66,7 +66,7 @@ class AnnounceStorage extends AnnounceDao {
     throw UnimplementedError("Storage won't query.");
   }
 
-  void setAllCatalogues(List<AnnounceCatalogue> catalogues) {
+  void setAllCatalogues(List<AnnounceCatalogue>? catalogues) {
     box.catalogues.value = catalogues;
   }
 }
