@@ -74,10 +74,12 @@ class _ExamArrangementPageState extends State<ExamArrangementPage> {
       selectedSemester,
     )
         .then((value) {
-      value.sort(ExamEntry.comparator);
-      setState(() {
-        _exams = value;
-      });
+      if (value != null) {
+        value.sort(ExamEntry.comparator);
+        setState(() {
+          _exams = value;
+        });
+      }
     });
   }
 
