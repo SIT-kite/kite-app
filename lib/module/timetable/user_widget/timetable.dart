@@ -91,7 +91,7 @@ class TimetableViewerController {
 
 class TimetableViewer extends StatefulWidget {
   /// 初始课表元数据
-  final TimetableMeta? initialTableMeta;
+  final TimetableMeta initialTableMeta;
 
   /// 初始课表课程
   final List<Course> initialTableCourses;
@@ -173,14 +173,14 @@ class _TimetableViewerState extends State<TimetableViewer> {
               key: dailyTimetableKey,
               $currentPos: widget.$currentPos,
               allCourses: widget.initialTableCourses,
-              initialDate: widget.initialTableMeta?.startDate ?? DateTime.now(),
+              initialDate: widget.initialTableMeta.startDate ?? DateTime.now(),
               tableCache: widget.tableCache,
               viewChangingCallback: switchDisplayMode)
           : WeeklyTimetable(
               key: weeklyTimetableKey,
               $currentPos: widget.$currentPos,
               allCourses: widget.initialTableCourses,
-              initialDate: widget.initialTableMeta?.startDate ?? DateTime.now(),
+              initialDate: widget.initialTableMeta.startDate ?? DateTime.now(),
               tableCache: widget.tableCache),
     );
   }

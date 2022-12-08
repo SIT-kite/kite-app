@@ -19,8 +19,8 @@ import 'package:event_bus/event_bus.dart';
 
 EventBus eventBus = EventBus();
 
-class DefaultTimetableChangeEvent {
+class CurrentTimetableChangeEvent {
   String? selected;
 
-  DefaultTimetableChangeEvent({this.selected});
+  CurrentTimetableChangeEvent({this.selected});
 }

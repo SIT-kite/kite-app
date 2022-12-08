@@ -34,7 +34,7 @@ class MyTimetablePage extends StatefulWidget {
 }
 
 class _MyTimetablePageState extends State<MyTimetablePage> {
-  final timetableStorage = TimetableInit.timetableStorage;
+  final storage = TimetableInit.timetableStorage;
 
   Future<void> goImport() async {
     final changed = await Navigator.of(context).push((MaterialPageRoute(builder: (_) => const ImportTimetablePage())));
@@ -66,14 +66,14 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
   }
 
   Widget buildTimetables(BuildContext ctx) {
-    final tableNames = timetableStorage.tableNames ?? [];
+    final tableNames = storage.tableNames ?? [];
     if (tableNames.isEmpty) {
       return _buildEmptyBody(ctx);
     }
-    final currentTableName = timetableStorage.currentTableName;
+    final currentTableName = storage.currentTableName;
     return ListView(
         children: tableNames.map((e) {
-      final meta = timetableStorage.getTableMetaByName(e);
+      final meta = storage.getTableMetaByName(e);
       if (meta == null) {
         return const SizedBox();
       } else {
@@ -98,12 +98,12 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
           },
           child: i18n.timetableEdit.text(),
         ),
-        if (timetableStorage.currentTableName != meta.name)
+        if (storage.currentTableName != meta.name)
           CupertinoContextMenuAction(
             trailingIcon: CupertinoIcons.checkmark,
             onPressed: () {
               Navigator.of(ctx).pop();
-              timetableStorage.currentTableName = meta.name;
+              storage.currentTableName = meta.name;
               setState(() {});
             },
             child: i18n.timetableSetToDefault.text(),
@@ -115,7 +115,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
             final date = await pickDate(context, initial: meta.startDate);
             if (date != null) {
               meta.startDate = DateTime(date.year, date.month, date.day, 8, 20);
-              timetableStorage.addTableMeta(meta.name, meta);
+              storage.addTableMeta(meta.name, meta);
             }
           },
           child: i18n.timetableSetStartDate.text(),
@@ -126,7 +126,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
             Navigator.of(ctx).pop();
             Navigator.of(ctx).push(MaterialPageRoute(
                 builder: (ctx) =>
-                    TimetablePreviewPage(meta: meta, courses: timetableStorage.getTableCourseByName(meta.name) ?? [])));
+                    TimetablePreviewPage(meta: meta, courses: storage.getTableCourseByName(meta.name) ?? [])));
           },
           child: i18n.timetablePreviewBtn.text(),
         ),
@@ -168,8 +168,14 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
         no: i18n.cancel,
         highlight: true);
     if (confirm == true) {
-      timetableStorage.removeTable(meta.name);
-      if (mounted) setState(() {});
+      storage.removeTable(meta.name);
+      if (storage.hasAnyTimetable) {
+        // Refresh Mine page and show other timetables
+        if (mounted) setState(() {});
+      } else {
+        // Otherwise, go out
+        ctx.navigator.pop();
+      }
     }
   }
 }

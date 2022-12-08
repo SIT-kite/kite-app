@@ -79,6 +79,8 @@ class TimetableStorage {
     currentTableName ??= meta.name;
   }
 
+  bool get hasAnyTimetable => tableNames?.isNotEmpty ?? false;
+
   /// 删除课表
   void removeTable(String name) {
     // 如果删除的是当前正在使用的课表
@@ -98,7 +100,7 @@ class TimetableStorage {
   String? get currentTableName => box.get(TimetableKeys.currentTableName);
 
   set currentTableName(String? name) {
-    eventBus.fire(DefaultTimetableChangeEvent(selected: name));
+    eventBus.fire(CurrentTimetableChangeEvent(selected: name));
     box.put(TimetableKeys.currentTableName, name);
   }
 
