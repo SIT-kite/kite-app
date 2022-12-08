@@ -17,7 +17,8 @@
 */
 import 'package:hive/hive.dart';
 import 'package:kite/module/activity/using.dart';
-
+part 'cache_key.dart';
+part 'list_cache_key.dart';
 abstract class HasBox<T> {
   Box<T> get box;
 }
@@ -28,17 +29,30 @@ const _lastUpdateKey = ".LAST_UPDATE";
 /// Otherwise, the list will be dynamic and cause type issue when the Hive is read next time.
 mixin CachedBox implements HasBox<dynamic> {
   /// Create a named cache key.
-  /// As a best practice, it will be used as a single value or a list.
+  /// As a best practice, it will be used as a name2value map, such as Map<String,T>.
   // ignore: non_constant_identifier_names
   CacheKey<T> Named<T>(String name) {
     return NamedCacheKey(box, name);
   }
 
   /// Create a cache namespace.
-  /// As a best practice, it will be used as a map with one or more string-keys.
+  /// As a best practice, it will be used as a map with multiple keys, such as Map<Foo,Map<Bar,T>>.
   // ignore: non_constant_identifier_names
   CacheNamespace<T> Namespace<T>(String namespace) {
     return CacheNamespace(box, namespace);
+  }
+  /// Create a named cache key.
+  /// As a best practice, it will be used as a list, such as List<T>
+  // ignore: non_constant_identifier_names
+  CacheKey<List<T>> NamedList<T>(String name) {
+    return NamedListCacheKey(box, name);
+  }
+
+  /// Create a cache namespace.
+  /// As a best practice, it will be used as a map with multiple keys but mapping to a list, such as Map<Foo,Map<Bar,List<T>>>.
+  // ignore: non_constant_identifier_names
+  ListCacheNamespace<T> ListNamespace<T>(String namespace) {
+    return ListCacheNamespace(box, namespace);
   }
 }
 
@@ -65,115 +79,5 @@ abstract class CacheKey<T> {
 extension CacheKeyEx<T> on CacheKey<T> {
   void clear() {
     lastUpdate = null;
-  }
-}
-
-class NamedCacheKey<T> extends CacheKey<T> {
-  final String name;
-
-  NamedCacheKey(super.box, this.name);
-
-  @override
-  T? get value {
-    final cache = box.get(name);
-    if (cache is T?) {
-      return cache;
-    } else {
-      clear();
-      return null;
-    }
-  }
-
-  @override
-  set value(T? newValue) {
-    if (newValue == null) {
-      clear();
-    } else {
-      box.put(name, newValue);
-      lastUpdate = DateTime.now();
-    }
-  }
-
-  @override
-  DateTime? get lastUpdate {
-    return box.get("$name/$_lastUpdateKey");
-  }
-
-  @override
-  set lastUpdate(DateTime? newValue) {
-    box.put("$name/$_lastUpdateKey", newValue);
-  }
-
-  @override
-  bool needRefresh({required Duration after}) {
-    final last = lastUpdate;
-    if (last == null) {
-      return true;
-    } else {
-      return DateTime.now().difference(last) > after;
-    }
-  }
-}
-
-class CacheNamespace<T> {
-  final Box<dynamic> box;
-  final String namespace;
-
-  CacheNamespace(this.box, this.namespace);
-
-  CacheKey<T> make(String name) {
-    return _NamespaceCacheKey(box, namespace, name);
-  }
-}
-
-class _NamespaceCacheKey<T> extends CacheKey<T> {
-  final String namespace;
-  final String name;
-
-  _NamespaceCacheKey(
-    super.box,
-    this.namespace,
-    this.name,
-  );
-
-  @override
-  T? get value {
-    final cache = box.get("$namespace/$name");
-    if (cache is T?) {
-      return cache;
-    } else {
-      clear();
-      return null;
-    }
-  }
-
-  @override
-  set value(T? newValue) {
-    if (newValue == null) {
-      clear();
-    } else {
-      box.put("$namespace/$name", newValue);
-      lastUpdate = DateTime.now();
-    }
-  }
-
-  @override
-  DateTime? get lastUpdate {
-    return box.get("$namespace/$name/$_lastUpdateKey");
-  }
-
-  @override
-  set lastUpdate(DateTime? newValue) {
-    box.put("$namespace/$name/$_lastUpdateKey", newValue);
-  }
-
-  @override
-  bool needRefresh({required Duration after}) {
-    final last = lastUpdate;
-    if (last == null) {
-      return true;
-    } else {
-      return DateTime.now().difference(last) > after;
-    }
   }
 }

@@ -27,7 +27,7 @@ class ScActivityListStorageBox with CachedBox {
 
   ScActivityListStorageBox(this.box);
 
-  late final activities = Namespace<List<Activity>>(_activitiesNs);
+  late final activities = ListNamespace<Activity>(_activitiesNs);
 }
 
 class ScActivityListStorage extends ScActivityListDao {

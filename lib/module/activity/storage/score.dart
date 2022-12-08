@@ -34,8 +34,8 @@ class ScScoreStorageBox with CachedBox {
   ScScoreStorageBox(this.box);
 
   late final myScoreSummary = Named<ScScoreSummary>(_Key.scScoreSummary);
-  late final myScoreList = Named<List<ScScoreItem>>(_Key.scoreList);
-  late final myInvolved = Named<List<ScActivityApplication>>(_Key.meInvolved);
+  late final myScoreList = NamedList<ScScoreItem>(_Key.scoreList);
+  late final myInvolved = NamedList<ScActivityApplication>(_Key.meInvolved);
 }
 
 class ScScoreStorage extends ScScoreDao {

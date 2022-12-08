@@ -25,7 +25,7 @@ class ExamStorageBox with CachedBox {
   static const _examArrangementNs = "/exam_arr";
   @override
   final Box box;
-  late final exams = Namespace<List<ExamEntry>>(_examArrangementNs);
+  late final exams = ListNamespace<ExamEntry>(_examArrangementNs);
 
   ExamStorageBox(this.box);
 }

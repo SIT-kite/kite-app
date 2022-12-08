@@ -29,7 +29,7 @@ class _Key {
 class AnnounceStorageBox with CachedBox {
   @override
   final Box box;
-  late final catalogues = Named<List<AnnounceCatalogue>>(_Key.catalogues);
+  late final catalogues = NamedList<AnnounceCatalogue>(_Key.catalogues);
   late final details = Namespace<AnnounceDetail>(_Key.detailsNs);
 
   AnnounceStorageBox(this.box);

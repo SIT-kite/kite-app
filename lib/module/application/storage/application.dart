@@ -25,7 +25,7 @@ class ApplicationStorageBox with CachedBox {
   @override
   final Box<dynamic> box;
   late final details = Namespace<ApplicationDetail>("/details");
-  late final metas = Named<List<ApplicationMeta>>("/metas");
+  late final metas = NamedList<ApplicationMeta>("/metas");
 
   ApplicationStorageBox(this.box);
 }
