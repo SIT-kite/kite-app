@@ -16,11 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/util/flash.dart';
-import 'package:kite/util/logger.dart';
 
 import '../entity/book_search.dart';
 import '../init.dart';
+import '../../using.dart';
 import '../page/book_info.dart';
 import '../util/search.dart';
 import 'search_result_item.dart';
@@ -124,12 +123,12 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
       showBasicFlash(
           context,
           Row(
-            children: const [
-              CircularProgressIndicator(),
-              SizedBox(
+            children: [
+              Placeholders.loading(),
+              const SizedBox(
                 width: 15,
               ),
-              Text('正在加载更多结果')
+              const Text('正在加载更多结果')
             ],
           ),
           duration: const Duration(seconds: 3));
@@ -250,9 +249,7 @@ class _BookSearchResultWidgetState extends State<BookSearchResultWidget> {
         buildSearchWaySelector(),
         Text('总结果数: $searchResultCount  用时: $useTime  已加载: $currentPage/$totalPage'),
         Expanded(
-          child: firstPageLoaded
-              ? (dataList.isEmpty ? buildNotFound() : buildListView())
-              : const Center(child: CircularProgressIndicator()),
+          child: firstPageLoaded ? (dataList.isEmpty ? buildNotFound() : buildListView()) : Placeholders.loading(),
         ),
       ],
     );

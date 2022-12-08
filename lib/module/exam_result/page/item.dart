@@ -62,7 +62,7 @@ class _ScoreItemState extends State<ScoreItem> {
         } else if (snapshot.hasError) {
           return Text('${i18n.failed}: ${snapshot.error.runtimeType}');
         }
-        return const Center(child: CircularProgressIndicator());
+        return Placeholders.loading();
       },
     );
   }

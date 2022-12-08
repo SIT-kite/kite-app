@@ -113,13 +113,12 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
           alignment: isImporting ? Alignment.center : AlignmentDirectional.topCenter,
           duration: const Duration(seconds: 2),
           curve: Curves.fastOutSlowIn,
-          child: const SizedBox(
-            width: 120,
-            height: 120,
-            child: CircularProgressIndicator(
-              strokeWidth: 12,
-            ),
-          ),
+          child: Placeholders.loading(
+              stroke: 12,
+              fix: (w) => w.sized(
+                    width: 120,
+                    height: 120,
+                  )),
         ),
         Padding(padding: const EdgeInsets.symmetric(vertical: 30), child: buildTip(ctx)),
         Padding(

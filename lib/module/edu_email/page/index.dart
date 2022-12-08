@@ -133,7 +133,7 @@ class _MailPageState extends State<MailPage> {
       // 如果是首次加载, 拉取数据并显示加载动画
       if (_messages == null) {
         _updateMailList();
-        return const Center(child: CircularProgressIndicator());
+        return Placeholders.loading();
       }
       // 非首次加载, 即已获取邮件列表, 直接渲染即可
       return _buildMailList();

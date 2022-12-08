@@ -21,6 +21,7 @@ import 'package:intl/intl.dart';
 
 import '../entity/classroom.dart';
 import '../init.dart';
+import '../using.dart';
 import 'item.dart';
 
 // TODO: i18n
@@ -216,9 +217,7 @@ class _ClassroomPageState extends State<ClassroomPage> {
             return Center(child: Text(snapshot.error.runtimeType.toString()));
           }
         }
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
+        return Placeholders.loading();
       },
     );
   }

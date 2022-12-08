@@ -88,9 +88,7 @@ class ElectricityChartState extends State<ElectricityChart> {
 
   Widget _buildHourlyChartContent(BuildContext ctx, List<HourlyBill>? bill) {
     if (bill == null) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return Placeholders.loading();
     }
     return HourlyElectricityChart(bill);
   }
@@ -111,9 +109,7 @@ class ElectricityChartState extends State<ElectricityChart> {
 
   Widget _buildDailyChartContent(BuildContext ctx, List<DailyBill>? bill) {
     if (bill == null) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return Placeholders.loading();
     }
     return DailyElectricityChart(bill);
   }

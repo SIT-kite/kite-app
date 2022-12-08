@@ -19,6 +19,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:kite/design/user_widgets/placeholder.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 typedef MyWidgetBuilder<T> = Widget Function(BuildContext context, T data);
@@ -120,7 +121,7 @@ class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
   }
 
   Widget buildWhenLoading() {
-    return const Center(child: CircularProgressIndicator());
+    return Placeholders.loading();
   }
 
   Future<T> fetchData() async {

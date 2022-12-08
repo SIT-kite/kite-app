@@ -124,7 +124,7 @@ class _QrcodePageState extends State<QrcodePage> {
     return ValueListenableBuilder<ApplicationRecord?>(
       valueListenable: codeNotifier,
       builder: (context, data, child) {
-        if (data == null) return const CircularProgressIndicator();
+        if (data == null) return Placeholders.loading();
         return Column(
           children: [
             buildQrcode(codeString),

@@ -123,7 +123,7 @@ class _ScorePageState extends State<ScorePage> {
         title: i18n.ftype_examResult.text(),
       ),
       body: scoreList == null
-          ? const Center(child: CircularProgressIndicator())
+          ? Placeholders.loading()
           : Column(
               children: [
                 _buildHeader(),

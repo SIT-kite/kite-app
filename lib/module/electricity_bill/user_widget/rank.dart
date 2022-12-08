@@ -39,9 +39,7 @@ class RankViewState extends State<RankView> {
   Widget _buildRank(BuildContext ctx) {
     final rank = curRank;
     if (rank == null) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return Placeholders.loading();
     } else {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,

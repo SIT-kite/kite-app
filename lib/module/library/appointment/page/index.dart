@@ -167,7 +167,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
           return ValueListenableBuilder<CurrentPeriodResponse?>(
             valueListenable: currentPeriod,
             builder: (context, data, child) {
-              if (data == null) return const CircularProgressIndicator();
+              if (data == null) return Placeholders.loading();
               if (e.appointed) {
                 if (e.period == data.period) {
                   return buildQrCode();
@@ -258,7 +258,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
         child: ValueListenableBuilder<CurrentPeriodResponse?>(
           valueListenable: currentPeriod,
           builder: (context, data, child) {
-            if (data == null) return const CircularProgressIndicator();
+            if (data == null) return Placeholders.loading();
             if (data.period == null) {
               return const Text(
                 '当前不在进馆时段',
