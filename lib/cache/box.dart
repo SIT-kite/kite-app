@@ -101,7 +101,7 @@ class NamedCacheKey<T> extends CacheKey<T> {
 
   @override
   set lastUpdate(DateTime? newValue) {
-    box.put("$name/$_lastUpdateKey", DateTime.now());
+    box.put("$name/$_lastUpdateKey", newValue);
   }
 
   @override
@@ -164,7 +164,7 @@ class _NamespaceCacheKey<T> extends CacheKey<T> {
 
   @override
   set lastUpdate(DateTime? newValue) {
-    box.put("$namespace/$name/$_lastUpdateKey", DateTime.now());
+    box.put("$namespace/$name/$_lastUpdateKey", newValue);
   }
 
   @override
