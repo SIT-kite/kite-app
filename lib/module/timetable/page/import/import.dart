@@ -114,7 +114,6 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
           duration: const Duration(seconds: 2),
           curve: Curves.fastOutSlowIn,
           child: Placeholders.loading(
-              stroke: 12,
               fix: (w) => w.sized(
                     width: 120,
                     height: 120,

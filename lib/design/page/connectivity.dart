@@ -106,7 +106,7 @@ class _ConnectivityCheckerState extends State<ConnectivityChecker> {
     });
     Future.wait([
       widget.check(),
-      Future.delayed(const Duration(milliseconds: 500)),
+      Future.delayed(const Duration(milliseconds: 800)),
     ]).then((value) {
       if (!mounted) return;
       final bool connected = value[0];
@@ -173,7 +173,6 @@ class _ConnectivityCheckerState extends State<ConnectivityChecker> {
         return buildCurrentConnectionType(ctx);
       case ConnectivityStatus.connecting:
         return Placeholders.loading(
-            stroke: 10,
             fix: (w) =>
                 w.padAll(30).sized(width: widget.iconSize, height: widget.iconSize, key: const ValueKey("Waiting")));
       case ConnectivityStatus.connected:
