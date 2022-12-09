@@ -34,7 +34,8 @@ const int maxCacheSize = 10;
 class PageLogger {
   var cachedCount = 0;
   final Dio dio;
-  static final String currentVersion = 'v${Global.currentVersion.version} on ${Global.currentVersion.platform}';
+  final String currentVersion = Global.currentVersion.version;
+  final String currentPlatform = Global.currentVersion.platform;
 
   PageLogger({required this.dio, required UserEventStorageDao userEventStorage}) {
     userEventStorage.getEventCount();
@@ -90,6 +91,7 @@ class PageLogger {
   void log(UserEventType type, [Map<String, String>? params]) {
     params ??= {};
     params["version"] = currentVersion;
+    params["platform"] = currentPlatform;
     final event = UserEvent(DateTime.now(), type, params);
     UserEventInit.userEventStorage.append(event);
 
