@@ -23,7 +23,6 @@ import 'package:rettulf/rettulf.dart';
 import '../using.dart';
 import '../user_widget/picker.dart';
 import '../user_widget/timetable_editor.dart';
-import 'import/index.dart';
 import 'preview.dart';
 
 class MyTimetablePage extends StatefulWidget {
@@ -149,23 +148,54 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
           child: i18n.timetableDelete.text(),
         ),
       ],
-      child: [
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Expanded(
-              child: Text(
-            meta.name,
-            style: ctx.textTheme.titleMedium,
-          )),
-          if (isSelected) const Icon(Icons.check, color: Colors.green)
-        ]),
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Expanded(
-              child: Text(
-            meta.description,
-          )),
-        ])
-      ].column().scrolled().padAll(20).inCard(elevation: 5),
+      child: buildTimetableItemCard(ctx, meta, isSelected: isSelected),
+      previewBuilder: (ctx, animation, child) => buildTimetableItemCardPreview(ctx, meta, isSelected: isSelected),
     );
+  }
+
+  Widget buildTimetableItemCard(BuildContext ctx, TimetableMeta meta, {required bool isSelected}) {
+    final bodyTextStyle = ctx.textTheme.titleSmall;
+    return [
+      [
+        meta.name.text(style: ctx.textTheme.titleMedium).expanded(),
+        if (isSelected) const Icon(Icons.check, color: Colors.green)
+      ].row(maa: MainAxisAlignment.spaceBetween),
+      if (meta.description.isNotEmpty)
+        [
+          const Icon(CupertinoIcons.doc_text),
+          meta.description.text(style: bodyTextStyle).padAll(10).expanded(),
+        ].row(maa: MainAxisAlignment.spaceBetween)
+    ].column().scrolled().padAll(20).inCard(elevation: 5);
+  }
+
+  Widget buildTimetableItemCardPreview(BuildContext ctx, TimetableMeta meta, {required bool isSelected}) {
+    final year = '${meta.schoolYear} - ${meta.schoolYear + 1}';
+    final semesterNames = makeSemesterL10nName();
+    final semester = semesterNames[Semester.values[meta.semester]] ?? "";
+    final bodyTextStyle = ctx.textTheme.titleSmall;
+    return [
+      [
+        [
+          meta.name.text(style: ctx.textTheme.titleMedium).expanded(),
+          if (isSelected) const Icon(Icons.check, color: Colors.green),
+        ].row(maa: MainAxisAlignment.spaceBetween),
+        [
+          year.text(style: bodyTextStyle),
+          semester.text(style: bodyTextStyle),
+        ].row(maa: MainAxisAlignment.spaceEvenly).padV(5),
+      ].column().padSymmetric(v: 10, h: 20).inCard(elevation: 8),
+      [
+        const Icon(CupertinoIcons.doc_text),
+        if (meta.description.isNotEmpty)
+          meta.description.text(style: bodyTextStyle).padAll(10).expanded()
+        else
+          i18n.timetableNoDescPlaceholder
+              .text(style: bodyTextStyle?.copyWith(fontStyle: FontStyle.italic))
+              .padAll(10)
+              .expanded(),
+      ].row(maa: MainAxisAlignment.spaceBetween).padAll(10),
+      i18n.timetableImportStartDate(ctx.dateNum(meta.startDate)).text(style: bodyTextStyle).padFromLTRB(20, 20, 20, 10),
+    ].column().scrolled().padAll(4).inCard(elevation: 5);
   }
 
   Future<void> showDeleteTimetableRequest(BuildContext ctx, TimetableMeta meta) async {

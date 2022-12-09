@@ -450,5 +450,6 @@
   "welcomeSlogan": "便利校园，一步到位",
   "xuhui": "徐汇",
   "xuhuiDistrict": "徐汇区",
-  "yes": "好"
+  "yes": "好",
+  "timetableNoDescPlaceholder": ""
 }

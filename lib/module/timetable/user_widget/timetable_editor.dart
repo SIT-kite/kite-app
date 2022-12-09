@@ -67,37 +67,22 @@ class _TimetableEditorState extends State<TimetableEditor> {
     final year = '${widget.meta.schoolYear} - ${widget.meta.schoolYear + 1}';
     final semesterNames = makeSemesterL10nName();
     final semester = semesterNames[Semester.values[widget.meta.semester]] ?? "";
-    return Center(
-      heightFactor: 1,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Column(
-            children: [
-              Text(widget.meta.name, style: ctx.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                  Text(year),
-                  Text(semester),
-                  Text(i18n.timetableImportStartDate(ctx.dateNum(widget.meta.startDate))),
-                ]),
-              ),
-              Padding(padding: const EdgeInsets.symmetric(vertical: 20), child: buildDescForm(ctx)),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              buildButton(ctx, i18n.timetableImportSaveBtn, onPressed: () {
-                widget.meta.description = _metaDescController.text;
-                Navigator.of(ctx).pop(true);
-              }),
-            ],
-          ).vwrap()
-        ],
-      ),
-    );
+    return [
+      [
+        widget.meta.name.text(style: ctx.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+        [
+          Text(year),
+          Text(semester),
+          Text(i18n.timetableImportStartDate(ctx.dateNum(widget.meta.startDate))),
+        ].row(maa: MainAxisAlignment.spaceEvenly).padV(5),
+        buildDescForm(ctx).padV(20),
+      ].column(),
+      [
+        buildButton(ctx, i18n.timetableImportSaveBtn, onPressed: () {
+          widget.meta.description = _metaDescController.text;
+          Navigator.of(ctx).pop(true);
+        }),
+      ].row(maa: MainAxisAlignment.spaceEvenly).vwrap()
+    ].column(maa: MainAxisAlignment.spaceBetween, mas: MainAxisSize.min,).center(heightFactor: 1);
   }
 }

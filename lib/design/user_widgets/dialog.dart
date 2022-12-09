@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/user_widget/draggable.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:rettulf/rettulf.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -169,6 +170,10 @@ extension DialogEx on BuildContext {
   }
 
   Future<dynamic> showSheet(WidgetBuilder builder) async {
+    return await showCupertinoModalBottomSheet(
+      context: this,
+      builder: builder,
+    );
     return await showModalBottomSheet(
         context: this,
         isScrollControlled: true,
