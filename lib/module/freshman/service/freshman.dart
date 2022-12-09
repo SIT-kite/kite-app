@@ -30,13 +30,13 @@ class FreshmanService implements FreshmanDao {
   const FreshmanService(this.session);
 
   @override
-  Future<FreshmanInfo> getInfo() async {
+  Future<FreshmanInfo> getMyInfo() async {
     final response = await session.request('', ReqMethod.get);
     return FreshmanInfo.fromJson(response.data);
   }
 
   @override
-  Future<void> update({Contact? contact, bool? visible}) async {
+  Future<void> updateMyContact({Contact? contact, bool? visible}) async {
     await session.request('/update', ReqMethod.put, data: {
       if (contact != null) 'yellow_pages': jsonEncode(contact.toJson()),
       if (visible != null) 'visible': visible,

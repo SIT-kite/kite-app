@@ -18,131 +18,139 @@
 
 import 'dart:core';
 
-import 'package:catcher/catcher.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/user_widget/future_builder.dart';
-import 'package:kite/user_widget/my_switcher.dart';
-import 'package:kite/l10n/extension.dart';
-import 'package:kite/util/flash.dart';
+import 'package:kite/module/activity/using.dart';
 import 'package:rettulf/rettulf.dart';
 import '../dao/Freshman.dart';
 import '../entity/info.dart';
+import '../using.dart';
 import '../init.dart';
 
 class PersonalInfoPage extends StatefulWidget {
-  const PersonalInfoPage({Key? key}) : super(key: key);
+  const PersonalInfoPage({super.key});
 
   @override
   State<PersonalInfoPage> createState() => _PersonalInfoPageState();
 }
 
 class _PersonalInfoPageState extends State<PersonalInfoPage> {
-  final FreshmanDao freshmanDao = FreshmanInit.freshmanDao;
+  final FreshmanDao service = FreshmanInit.freshmanDao;
 
   /// 初始状态
-  late String initialQq;
-  late String initialWechat;
-  late String initialTel;
-  late bool initialVisible;
+  String qqInit = "";
+  String wechatInit = "";
+  String telInit = "";
+  bool visibilityInit = false;
 
   /// 状态变量
-  late bool visibleState;
-  TextEditingController qqTextEditingController = TextEditingController();
-  TextEditingController wechatTextEditingController = TextEditingController();
-  TextEditingController telTextEditingController = TextEditingController();
+  bool visibility = false;
+  final $qq = TextEditingController();
+  final $wechat = TextEditingController();
+  final $tel = TextEditingController();
 
-  /// 初始化初始态变量
-  void makeInitialState(FreshmanInfo info) {
-    final contact = info.contact;
-    initialWechat = contact?.wechat ?? '';
-    initialQq = contact?.qq ?? '';
-    initialTel = contact?.tel ?? '';
-
-    initialVisible = info.visible;
-    visibleState = initialVisible;
-    qqTextEditingController.text = initialQq;
-    wechatTextEditingController.text = initialWechat;
-    telTextEditingController.text = initialTel;
+  @override
+  void initState() {
+    super.initState();
+    service.getMyInfo().then((info) {
+      setState(() {
+        final contact = info.contact;
+        if (contact != null) {
+          wechatInit = contact.wechat;
+          qqInit = contact.qq;
+          telInit = contact.tel;
+          visibilityInit = info.visible;
+        }
+        visibility = visibilityInit;
+        $qq.text = qqInit;
+        $wechat.text = wechatInit;
+        $tel.text = telInit;
+      });
+    });
   }
 
-  /// 判断信息是否发生变更
-  bool hasChanged() {
-    // 只要存在一种发生变更的情况就判定为被更改
-    return [
-      qqTextEditingController.text != initialQq,
-      wechatTextEditingController.text != initialWechat,
-      telTextEditingController.text != initialTel,
-      visibleState != initialVisible,
-    ].contains(true);
+  bool anyChanged() {
+    return qqInit != $qq.text || wechatInit != $wechat.text || telInit != $tel.text || visibilityInit != visibility;
   }
 
-  Future<void> update() async {
+  Future<void> tryUpdate() async {
     // 没更改信息直接不管
-    if (!hasChanged()) return;
-    // 更新信息
-    await freshmanDao.update(
-      contact: Contact()
-        ..qq = qqTextEditingController.text
-        ..wechat = wechatTextEditingController.text
-        ..tel = telTextEditingController.text,
-      visible: visibleState,
-    );
-    // 销毁后当前组件的context将不存在
-    // Catcher中存放了上一个父节点的context可以继续用
-    showBasicFlash(Catcher.navigatorKey!.currentContext!, i18n.userInfoUpdatedTip.text());
+    if (!anyChanged()) return;
+    try {
+      // 更新信息
+      await service.updateMyContact(
+        contact: Contact()
+          ..qq = $qq.text
+          ..wechat = $wechat.text
+          ..tel = $tel.text,
+        visible: visibility,
+      );
+    } catch (e) {
+      Log.info("Can't update freshman info. $e");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    return WillPopScope(
+        child: context.isPortrait ? buildPortrait(context) : buildLandscape(context),
+        onWillPop: () async {
+          tryUpdate();
+          return true;
+        });
+  }
+
+  Widget buildPortrait(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: i18n.personalInfoTitle.text(),
       ),
-      body: MyFutureBuilder<FreshmanInfo>(
-        future: freshmanDao.getInfo(),
-        builder: (context, data) {
-          makeInitialState(data);
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: _buildBody(data),
-          );
-        },
-      ),
+      body: [
+        Icon(
+          Icons.group_outlined,
+          size: 120,
+          color: context.darkSafeThemeColor,
+        ).flexible(flex: 1),
+        _buildBody().flexible(flex: 2),
+      ].column().padAll(8),
     );
   }
 
-  @override
-  void dispose() {
-    update();
-    super.dispose();
+  Widget buildLandscape(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: [
+          i18n.personalInfoTitle.text(),
+          Icon(Icons.group_outlined, color: context.darkSafeThemeColor),
+        ].row(),
+      ),
+      body: _buildBody().padAll(8),
+    );
   }
 
-  Widget _buildBody(FreshmanInfo info) {
+  Widget _buildBody() {
     return Form(
       child: SingleChildScrollView(
         child: Column(
           children: [
-            buildTextFormField(i18n.wechat, Icons.wechat, wechatTextEditingController),
-            buildTextFormField(i18n.qq, Icons.person, qqTextEditingController),
-            buildTextFormField(i18n.phoneNumber, Icons.phone, telTextEditingController),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    i18n.allowOthersFindMeCheckbox,
-                    style: Theme.of(context).textTheme.headline3,
-                  ),
-                  MySwitcher(
-                    visibleState,
-                    onChanged: (bool value) => visibleState = value,
-                  ),
-                ],
+            buildField(i18n.wechat, Icons.wechat, $wechat),
+            buildField(i18n.qq, Icons.person, $qq),
+            buildField(i18n.phoneNumber, Icons.phone, $tel),
+            [
+              Text(
+                i18n.allowOthersFindMeCheckbox,
+                style: Theme.of(context).textTheme.headline3,
               ),
-            ),
-            SizedBox(height: 20.h),
+              CupertinoSwitch(
+                value: visibility,
+                onChanged: (newVal) {
+                  setState(() {
+                    visibility = newVal;
+                  });
+                },
+              ),
+            ].row(maa: MainAxisAlignment.spaceBetween).padAll(8),
+            SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
@@ -156,7 +164,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
     );
   }
 
-  Widget buildTextFormField(
+  Widget buildField(
     String? fieldName,
     IconData iconData,
     TextEditingController textEditingController,
@@ -164,6 +172,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
     return TextFormField(
       autofocus: true,
       controller: textEditingController,
+      textInputAction: TextInputAction.next,
       decoration: InputDecoration(
         labelText: fieldName,
         hintText: i18n.unfilled,

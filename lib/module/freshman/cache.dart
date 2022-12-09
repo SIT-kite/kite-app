@@ -61,8 +61,8 @@ class CachedFreshmanService implements FreshmanDao {
         _freshmanCacheManager = freshmanCacheManager;
 
   @override
-  Future<void> update({Contact? contact, bool? visible}) async {
-    await _freshmanDao.update(
+  Future<void> updateMyContact({Contact? contact, bool? visible}) async {
+    await _freshmanDao.updateMyContact(
       contact: contact,
       visible: visible,
     );
@@ -83,11 +83,11 @@ class CachedFreshmanService implements FreshmanDao {
   }
 
   @override
-  Future<FreshmanInfo> getInfo() async {
+  Future<FreshmanInfo> getMyInfo() async {
     return _getWithCache(
       onReadCache: () => _freshmanCacheDao.basicInfo,
       onWriteCache: (e) => _freshmanCacheDao.basicInfo = e,
-      onLoadCache: _freshmanDao.getInfo,
+      onLoadCache: _freshmanDao.getMyInfo,
     );
   }
 

@@ -84,7 +84,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       // 清空本地缓存
       FreshmanInit.freshmanCacheManager.clearAll();
 
-      final info = await freshmanDao.getInfo();
+      final info = await freshmanDao.getMyInfo();
 
       // 登录成功后赋值名字
       Kv.freshman.freshmanName = info.name;

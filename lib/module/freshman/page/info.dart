@@ -65,7 +65,7 @@ class _FreshmanPageState extends State<FreshmanPage> {
     return MyFutureBuilder<FreshmanInfo>(
       controller: myFutureBuilderController,
       futureGetter: () async {
-        return await freshmanDao.getInfo();
+        return await freshmanDao.getMyInfo();
       },
       enablePullRefresh: true,
       onPreRefresh: () async {

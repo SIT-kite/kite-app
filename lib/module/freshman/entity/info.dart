@@ -49,9 +49,12 @@ class FreshmanInfo {
 
 @JsonSerializable()
 class Contact {
-  String? wechat;
-  String? qq;
-  String? tel;
+  @JsonKey(defaultValue: "")
+  String wechat = "";
+  @JsonKey(defaultValue: "")
+  String qq = "";
+  @JsonKey(defaultValue: "")
+  String tel = "";
 
   Contact();
 

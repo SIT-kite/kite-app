@@ -24,7 +24,7 @@ import '../entity/statistics.dart';
 
 class FreshmanMock implements FreshmanDao {
   @override
-  Future<FreshmanInfo> getInfo() async {
+  Future<FreshmanInfo> getMyInfo() async {
     String json = '''
   {
     "name": "姓名",
@@ -76,7 +76,7 @@ class FreshmanMock implements FreshmanDao {
   }
 
   @override
-  Future<void> update({Contact? contact, bool? visible}) {
+  Future<void> updateMyContact({Contact? contact, bool? visible}) {
     // TODO: implement update
     throw UnimplementedError();
   }

@@ -23,9 +23,9 @@ abstract class FreshmanDao {
   /// Precondition:
   /// - [Kv.freshman.freshmanAccount] is not null.
   /// - [Kv.freshman.freshmanSecret] is not null.
-  Future<FreshmanInfo> getInfo();
+  Future<FreshmanInfo> getMyInfo();
 
-  Future<void> update({Contact? contact, bool? visible});
+  Future<void> updateMyContact({Contact? contact, bool? visible});
 
   Future<List<Mate>> getRoommates();
 

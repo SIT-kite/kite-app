@@ -36,7 +36,7 @@ class FreshmanStatisticsPage extends StatelessWidget {
     final FreshmanCacheManager freshmanCacheManager = FreshmanInit.freshmanCacheManager;
     return Scaffold(
       body: MyFutureBuilder<List<dynamic>>(
-        futureGetter: () => Future.wait([freshmanDao.getAnalysis(), freshmanDao.getInfo()]),
+        futureGetter: () => Future.wait([freshmanDao.getAnalysis(), freshmanDao.getMyInfo()]),
         enablePullRefresh: true,
         onPreRefresh: () async {
           freshmanCacheManager.clearAnalysis();

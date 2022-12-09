@@ -14,18 +14,18 @@ void main() async {
   // ..freshmanAccount = '216072111'
   // ..freshmanSecret = '134629';
   test('test freshman getInfo', () async {
-    Log.info(await freshmanDao.getInfo());
+    Log.info(await freshmanDao.getMyInfo());
   });
   test('test freshman update', () async {
-    Log.info(await freshmanDao.getInfo());
-    await freshmanDao.update(
+    Log.info(await freshmanDao.getMyInfo());
+    await freshmanDao.updateMyContact(
       visible: false,
       contact: Contact()
         ..qq = 'qq123'
         ..wechat = 'wx123'
         ..tel = 'tel345',
     );
-    Log.info(await freshmanDao.getInfo());
+    Log.info(await freshmanDao.getMyInfo());
   });
   test('test freshman getRoommates', () async {
     final roommates = await freshmanDao.getRoommates();
