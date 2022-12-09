@@ -56,7 +56,7 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   final TextEditingController _passwordController = TextEditingController();
   final bool isFreshman = AccountUtils.getAuthUserType() == UserType.freshman;
-  final String currentVersion = 'v${Global.currentVersion.version} on ${Global.currentVersion.platform}';
+  static final String currentVersion = 'v${Global.currentVersion.version} on ${Global.currentVersion.platform}';
 
   Future<void> _onChangeBgImage() async {
     final saveToPath = '${(await getApplicationDocumentsDirectory()).path}/kite1/background';

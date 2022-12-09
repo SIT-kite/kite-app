@@ -15,42 +15,41 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:rettulf/rettulf.dart';
 
 // steal from "https://github.com/Akifcan/flutter_pagination"
-class Paginated extends StatefulWidget {
-  final PaginateSkipButton prevButtonStyles;
-  final PaginateSkipButton nextButtonStyles;
-  final PaginateButtonStyles paginateButtonStyles;
+class PageGrouper extends StatefulWidget {
+  final SkipBtnStyle preBtnStyles;
+  final PageBtnStyles paginateButtonStyles;
   final bool useSkipAndPrevButtons;
-  final bool useGroup;
-  final int currentPage;
+  final int currentPageIndex;
   final int totalPage;
-  final int show;
+  final int btnPerGroup;
   final double? width;
   final double? height;
   final Function(int number) onPageChange;
 
-  const Paginated(
+  const PageGrouper(
       {Key? key,
       this.width,
       this.height,
-      this.useGroup = false,
       this.useSkipAndPrevButtons = true,
-      required this.prevButtonStyles,
-      required this.nextButtonStyles,
+      required this.preBtnStyles,
       required this.paginateButtonStyles,
       required this.onPageChange,
       required this.totalPage,
-      required this.show,
-      required this.currentPage})
+      required this.btnPerGroup,
+      required this.currentPageIndex})
       : super(key: key);
 
   @override
-  State<Paginated> createState() => _PaginatedState();
+  State<PageGrouper> createState() => _PageGrouperState();
 }
 
-class _PaginatedState extends State<Paginated> {
+class _PageGrouperState extends State<PageGrouper> {
   late PageController pageController;
   List<int> pages = [];
   List<int> nextPages = [];
@@ -58,78 +57,48 @@ class _PaginatedState extends State<Paginated> {
   List<List<int>> groupedPages = [];
   double defaultHeight = 50;
 
-  void nonGroupPaginate() {
-    setState(() {
-      pages = [];
-      nextPages = [];
-      prevPages = [];
-      for (int i = 0; i < widget.totalPage; i++) {
-        pages.add(i);
-      }
-      for (int i = 0; i < widget.show; i++) {
-        if (pages.asMap().containsKey(widget.currentPage + i)) {
-          nextPages.add(pages[widget.currentPage + i]);
-        }
-      }
-      for (int i = widget.show; i > 0; i--) {
-        if (widget.currentPage - i - 1 > 0) {
-          prevPages.add(pages[widget.currentPage - i - 1]);
-        }
-      }
-    });
-  }
-
   void groupPaginate() {
-    int lastIndex = 0;
-    int counter = 0;
+    final btnPerGroup = min(widget.btnPerGroup, widget.totalPage);
+    List<int> curGroup = [];
     setState(() {
       groupedPages = [];
       pages = [];
       for (int i = 0; i < widget.totalPage; i++) {
         pages.add(i);
       }
-      for (int j = 0; j < pages.length; j++) {
-        counter++;
-        if (counter == widget.show) {
-          int next = lastIndex + widget.show;
-          groupedPages.add(pages.sublist(lastIndex, next < pages.length ? next : pages.length));
-          counter = 0;
-          lastIndex += widget.show;
+      for (int i = 0; i < pages.length; i++) {
+        curGroup.add(i);
+        if (curGroup.length >= btnPerGroup) {
+          groupedPages.add(curGroup);
+          curGroup = [];
         }
       }
-      groupedPages.add(pages.sublist(lastIndex));
+      if (curGroup.isNotEmpty) {
+        groupedPages.add(curGroup);
+      }
     });
-  }
-
-  void initialize() {
-    if (!widget.useGroup) {
-      nonGroupPaginate();
-    } else {
-      groupPaginate();
-      pageController = PageController();
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    assert(widget.show < widget.totalPage, "Show count should be smaller than total page");
-    initialize();
-    return !widget.useGroup ? nonGrouppedChild : grouppedChild;
+    groupPaginate();
+    pageController = PageController();
+    return groupedChild;
   }
 
-  Widget get grouppedChild => SizedBox(
+  Widget get groupedChild => SizedBox(
         width: widget.width ?? MediaQuery.of(context).size.width,
         height: 60,
         child: Row(
           children: [
             if (widget.useSkipAndPrevButtons)
-              SkipButton(
-                buttonStyles: widget.prevButtonStyles,
+              _SkipBtn(
+                buttonStyles: widget.preBtnStyles,
                 height: widget.height ?? defaultHeight,
                 onTap: () {
                   pageController.previousPage(duration: const Duration(milliseconds: 500), curve: Curves.decelerate);
                 },
-                skipButtonType: SkipButtonType.prev,
+                isPre: true,
               ),
             Expanded(
                 child: PageView.builder(
@@ -139,12 +108,12 @@ class _PaginatedState extends State<Paginated> {
                       return Row(
                         children: groupedPages[index].map((e) {
                           return Expanded(
-                              child: PaginateButton(
-                                  active: widget.currentPage == e + 1,
+                              child: _PageBtn(
+                                  active: widget.currentPageIndex == e + 1,
                                   buttonStyles: widget.paginateButtonStyles,
                                   height: widget.height ?? defaultHeight,
                                   page: e + 1,
-                                  color: e + 1 == widget.currentPage ? Colors.blueGrey : Colors.blue,
+                                  color: e + 1 == widget.currentPageIndex ? Colors.blueGrey : Colors.blue,
                                   onTap: (number) {
                                     widget.onPageChange(number);
                                   }));
@@ -152,90 +121,26 @@ class _PaginatedState extends State<Paginated> {
                       );
                     })),
             if (widget.useSkipAndPrevButtons)
-              SkipButton(
-                buttonStyles: widget.nextButtonStyles,
+              _SkipBtn(
+                buttonStyles: widget.preBtnStyles.symmetricL2R(),
                 height: widget.height ?? defaultHeight,
                 onTap: () {
                   pageController.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.decelerate);
                 },
-                skipButtonType: SkipButtonType.next,
+                isPre: false,
               ),
           ],
         ),
       );
-
-  Widget get nonGrouppedChild => Wrap(
-        children: [
-          if (widget.useSkipAndPrevButtons)
-            SkipButton(
-              buttonStyles: widget.prevButtonStyles,
-              height: widget.height ?? defaultHeight,
-              onTap: () {
-                if (widget.currentPage != 1) {
-                  int current = widget.currentPage;
-                  widget.onPageChange(current -= 1);
-                }
-              },
-              skipButtonType: SkipButtonType.prev,
-            ),
-          for (int i = 0; i < prevPages.length; i++)
-            PaginateButton(
-                active: false,
-                width: 50,
-                buttonStyles: widget.paginateButtonStyles,
-                height: widget.height ?? defaultHeight,
-                onTap: (number) {
-                  widget.onPageChange(number);
-                },
-                page: prevPages[i] + 1,
-                color: Colors.blue),
-          PaginateButton(
-              active: true,
-              width: 50,
-              buttonStyles: widget.paginateButtonStyles,
-              height: widget.height ?? defaultHeight,
-              onTap: (number) {
-                widget.onPageChange(widget.currentPage);
-              },
-              page: widget.currentPage,
-              color: Colors.blueGrey[800]!),
-          for (int i = 0; i < nextPages.length; i++)
-            PaginateButton(
-                active: false,
-                width: 50,
-                buttonStyles: widget.paginateButtonStyles,
-                height: widget.height ?? defaultHeight,
-                onTap: (number) {
-                  widget.onPageChange(number);
-                },
-                page: nextPages[i] + 1,
-                color: Colors.blue),
-          if (widget.useSkipAndPrevButtons)
-            SkipButton(
-              buttonStyles: widget.nextButtonStyles,
-              height: widget.height ?? defaultHeight,
-              onTap: () {
-                if (widget.currentPage + 1 <= widget.totalPage) {
-                  int current = widget.currentPage;
-                  widget.onPageChange(current += 1);
-                }
-              },
-              skipButtonType: SkipButtonType.next,
-            ),
-        ],
-      );
 }
 
-enum SkipButtonType { prev, next }
-
-class SkipButton extends StatelessWidget {
-  final PaginateSkipButton buttonStyles;
+class _SkipBtn extends StatelessWidget {
+  final SkipBtnStyle buttonStyles;
   final double height;
-  final SkipButtonType skipButtonType;
+  final bool isPre;
   final VoidCallback onTap;
 
-  const SkipButton(
-      {Key? key, required this.buttonStyles, required this.height, required this.skipButtonType, required this.onTap})
+  const _SkipBtn({Key? key, required this.buttonStyles, required this.height, required this.isPre, required this.onTap})
       : super(key: key);
 
   final double radius = 20;
@@ -245,14 +150,14 @@ class SkipButton extends StatelessWidget {
     return SizedBox(
       height: height,
       child: ClipRRect(
-        borderRadius: buttonStyles.getBorderRadius,
+        borderRadius: buttonStyles.borderRadius ?? BorderRadius.circular(0),
         child: Material(
-          color: buttonStyles.getButtonBackgroundColor,
+          color: context.theme.backgroundColor,
           child: InkWell(
             onTap: onTap,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: skipButtonType == SkipButtonType.prev
+              child: isPre
                   ? buttonStyles.icon ?? const Icon(Icons.chevron_left, color: Colors.white, size: 35)
                   : buttonStyles.icon ?? const Icon(Icons.chevron_right, color: Colors.white, size: 35),
             ),
@@ -263,16 +168,16 @@ class SkipButton extends StatelessWidget {
   }
 }
 
-class PaginateButton extends StatelessWidget {
+class _PageBtn extends StatelessWidget {
   final bool active;
   final double height;
   final double? width;
   final int page;
   final Color color;
   final Function(int number) onTap;
-  final PaginateButtonStyles buttonStyles;
+  final PageBtnStyles buttonStyles;
 
-  const PaginateButton(
+  const _PageBtn(
       {Key? key,
       required this.active,
       this.width,
@@ -286,54 +191,66 @@ class PaginateButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: buttonStyles.getPaginateButtonBorderRadius,
-      child: SizedBox(
+      borderRadius: buttonStyles.borderRadius ?? BorderRadius.circular(0),
+      child: Material(
+        color: active ? context.theme.secondaryHeaderColor : buttonStyles.bgColor ?? context.theme.backgroundColor,
+        child: InkWell(
+          onTap: () {
+            onTap(page);
+          },
+          child: Text("$page",
+                  style: active ? buttonStyles.getActiveTextStyle : buttonStyles.getTextStyle,
+                  textAlign: TextAlign.center)
+              .center(),
+        ),
+      ).sized(
         height: height,
         width: width ?? MediaQuery.of(context).size.width,
-        child: Material(
-          color: active ? buttonStyles.getActiveBackgroundColor : buttonStyles.getBackgroundColor,
-          child: InkWell(
-            onTap: () {
-              onTap(page);
-            },
-            child: Center(
-              child: Text("$page",
-                  style: active ? buttonStyles.getActiveTextStyle : buttonStyles.getTextStyle,
-                  textAlign: TextAlign.center),
-            ),
-          ),
-        ),
       ),
     );
   }
 }
 
-class PaginateButtonStyles {
+class PageBtnStyles {
   final double? fontSize;
-  final BorderRadius? paginateButtonBorderRadius;
-  final Color? backgroundColor;
-  final Color? activeBackgroundColor;
+  final BorderRadius? borderRadius;
+  final Color? bgColor;
+  final Color? activeBgColor;
   final TextStyle? textStyle;
   final TextStyle? activeTextStyle;
 
-  PaginateButtonStyles(
-      {this.fontSize,
-      this.backgroundColor,
-      this.activeBackgroundColor,
-      this.paginateButtonBorderRadius,
-      this.textStyle,
-      this.activeTextStyle});
+  PageBtnStyles({
+    this.fontSize,
+    this.bgColor,
+    this.activeBgColor,
+    this.borderRadius,
+    this.textStyle,
+    this.activeTextStyle,
+  });
+
+  PageBtnStyles copyWith({
+    double? fontSize,
+    BorderRadius? borderRadius,
+    Color? bgColor,
+    Color? activeBgColor,
+    TextStyle? textStyle,
+    TextStyle? activeTextStyle,
+  }) =>
+      PageBtnStyles(
+        fontSize: fontSize ?? this.fontSize,
+        bgColor: bgColor ?? this.bgColor,
+        activeBgColor: activeBgColor ?? this.activeBgColor,
+        borderRadius: borderRadius ?? this.borderRadius,
+        textStyle: textStyle ?? this.textStyle,
+        activeTextStyle: activeTextStyle ?? this.activeTextStyle,
+      );
 
   double get getFontSize {
     return fontSize ?? 14.0;
   }
 
-  Color get getBackgroundColor {
-    return backgroundColor ?? Colors.blue;
-  }
-
   Color get getActiveBackgroundColor {
-    return activeBackgroundColor ?? Colors.blueGrey;
+    return activeBgColor ?? Colors.blueGrey;
   }
 
   TextStyle get getTextStyle {
@@ -343,24 +260,31 @@ class PaginateButtonStyles {
   TextStyle get getActiveTextStyle {
     return activeTextStyle ?? const TextStyle(color: Colors.white, fontFamily: 'Roboto', fontSize: 14);
   }
-
-  BorderRadius get getPaginateButtonBorderRadius {
-    return paginateButtonBorderRadius ?? BorderRadius.circular(0);
-  }
 }
 
-class PaginateSkipButton extends PaginateButtonStyles {
+class SkipBtnStyle {
   final Icon? icon;
   final BorderRadius? borderRadius;
-  final Color? buttonBackgroundColor;
+  final Color? color;
 
-  PaginateSkipButton({this.icon, this.borderRadius, this.buttonBackgroundColor});
+  SkipBtnStyle({this.icon, this.borderRadius, this.color});
 
-  BorderRadius get getBorderRadius {
-    return borderRadius ?? BorderRadius.zero;
-  }
+  SkipBtnStyle copyWith({
+    Icon? icon,
+    BorderRadius? borderRadius,
+    Color? color,
+  }) =>
+      SkipBtnStyle(
+        icon: icon ?? this.icon,
+        borderRadius: borderRadius ?? this.borderRadius,
+        color: color ?? this.color,
+      );
 
-  Color get getButtonBackgroundColor {
-    return buttonBackgroundColor ?? Colors.blue;
+  SkipBtnStyle symmetricL2R() => copyWith(borderRadius: borderRadius?.symmetricL2R());
+}
+
+extension _BorderRadiusEx on BorderRadius {
+  BorderRadius symmetricL2R() {
+    return BorderRadius.only(topRight: topLeft, bottomRight: bottomLeft);
   }
 }

@@ -18,7 +18,9 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:kite/backend.dart';
+import 'package:kite/global/global.dart';
 import 'package:kite/module/user_event/dao/user_event.dart';
 import 'package:kite/module/user_event/entity/user_event.dart';
 import 'package:kite/module/user_event/init.dart';
@@ -32,6 +34,7 @@ const int maxCacheSize = 10;
 class PageLogger {
   var cachedCount = 0;
   final Dio dio;
+  static final String currentVersion = 'v${Global.currentVersion.version} on ${Global.currentVersion.platform}';
 
   PageLogger({required this.dio, required UserEventStorageDao userEventStorage}) {
     userEventStorage.getEventCount();
@@ -74,7 +77,8 @@ class PageLogger {
   }
 
   void _uploadReport() {
-    if (cachedCount <= maxCacheSize) {
+    // Why uploading developer's event?
+    if (cachedCount <= maxCacheSize || kDebugMode) {
       return;
     }
     final tmp = UserEventInit.userEventStorage.getEvents();
@@ -83,7 +87,9 @@ class PageLogger {
     _postReport(tmp);
   }
 
-  void log(UserEventType type, [Map<String, String> params = const {}]) {
+  void log(UserEventType type, [Map<String, String>? params]) {
+    params ??= {};
+    params["version"] = currentVersion;
     final event = UserEvent(DateTime.now(), type, params);
     UserEventInit.userEventStorage.append(event);
 

@@ -84,7 +84,7 @@ class BoxItemList extends StatefulWidget {
 class _BoxItemListState extends State<BoxItemList> {
   late final keys = widget.box.keys.toList();
   int currentPage = 0;
-  static const pageSize = 8;
+  static const pageSize = 6;
 
   @override
   Widget build(BuildContext context) {
@@ -102,10 +102,18 @@ class _BoxItemListState extends State<BoxItemList> {
       return buildBoxItems(ctx, keys);
     } else {
       final start = currentPage * pageSize;
-      final totalPages = length ~/ pageSize;
+      var totalPages = length ~/ pageSize;
+      if (length % pageSize != 0) {
+        totalPages++;
+      }
+      final end = min(start + pageSize, length);
       return [
         buildPaginated(ctx, totalPages).padAll(10),
-        buildBoxItems(ctx, keys.sublist(start, min(start + pageSize, length)))
+        AnimatedSize(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeIn,
+          child: buildBoxItems(ctx, keys.sublist(start, end)),
+        ),
       ].column();
     }
   }
@@ -127,21 +135,18 @@ class _BoxItemListState extends State<BoxItemList> {
   }
 
   Widget buildPaginated(BuildContext ctx, int totalPage) {
-    return Paginated(
-      paginateButtonStyles: PaginateButtonStyles(),
-      prevButtonStyles: PaginateSkipButton(
+    return PageGrouper(
+      paginateButtonStyles: PageBtnStyles(),
+      preBtnStyles: SkipBtnStyle(
           borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), bottomLeft: Radius.circular(20))),
-      nextButtonStyles: PaginateSkipButton(
-          borderRadius: const BorderRadius.only(topRight: Radius.circular(20), bottomRight: Radius.circular(20))),
       onPageChange: (number) {
         setState(() {
-          currentPage = number;
+          currentPage = number - 1;
         });
       },
-      useGroup: true,
       totalPage: totalPage,
-      show: min(3, totalPage - 1),
-      currentPage: currentPage,
+      btnPerGroup: min(5, totalPage),
+      currentPageIndex: currentPage + 1,
     );
   }
 }
