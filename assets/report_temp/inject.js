@@ -40,21 +40,21 @@ window.addEventListener('load', () => {
 
   // login
   if (route.is('guide') && userName !== '') {
-    localStorage.setItem('userInfo', JSON.stringify({ code: userName, ayz: 'MTg5MzQyNzIwMDAwMHVuaWZyaQ==' }));
-    localStorage.setItem('logcurrent', '1893427200000');
-    localStorage.setItem('version', '4.0');
-    localStorage.setItem('loginIn', '4');
-    // localStorage.setItem('isApp', '1');
+    new Map([
+      // ['isApp', '1'],
+      ['loginIn', '4'],
+      ['version', '4.0'],
+      ['logcurrent', '1893427200000'],
+      ['userInfo', JSON.stringify({ code: userName, ayz: 'MTg5MzQyNzIwMDAwMHVuaWZyaQ==' })]
+    ]).forEach(
+      (value, key) => localStorage.setItem(key, value)
+    );
     route.go('index');
   }
 
   // allowReport
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-  if ( // if userInfo matches { allowReport: 0 }
-    typeof userInfo === 'object' &&
-    userInfo !== null &&
-    userInfo.allowReport === 0
-  ) {
+  if (userInfo?.allowReport === 0) {
     userInfo.allowReport = 1;
     localStorage.setItem('userInfo', JSON.stringify(userInfo));
   }
@@ -78,7 +78,7 @@ window.addEventListener('load', () => {
 
   // redirect
   uni.redirectTo = new Proxy(
-    uni.navigateTo, {
+    uni.redirectTo, {
       apply: (target, _this, args) => (
         route.is('jksb') &&
         args[0]?.url === './index'

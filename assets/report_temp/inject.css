@@ -232,3 +232,6 @@ uni-radio .wx-radio-input,
 uni-radio .uni-radio-input { box-sizing: border-box; width: 14px; height: 14px; }
 uni-radio.radio .uni-radio-input-checked::after { width: 6px; height: 6px; border-width: 2px !important; }
 uni-radio.radio .uni-radio-input-checked { border: none; }
+
+/* fix for login (/pages/index/guide) */
+.cu-form-group .title { height: auto; line-height: normal; }
