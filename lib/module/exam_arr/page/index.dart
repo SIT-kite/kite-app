@@ -16,9 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:math';
+
 import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../entity/exam.dart';
@@ -97,7 +98,7 @@ class _ExamArrangementPageState extends State<ExamArrangementPage> {
         return LiveGrid.options(
           itemCount: exams.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: count,
+            crossAxisCount: max(count, 1),
             childAspectRatio: 1.55,
           ),
           options: kiteLiveOptions,

@@ -83,6 +83,11 @@ class _TimetableEditorState extends State<TimetableEditor> {
           Navigator.of(ctx).pop(true);
         }),
       ].row(maa: MainAxisAlignment.spaceEvenly).vwrap()
-    ].column(maa: MainAxisAlignment.spaceBetween, mas: MainAxisSize.min,).center(heightFactor: 1);
+    ]
+        .column(
+          maa: MainAxisAlignment.spaceBetween,
+          mas: MainAxisSize.min,
+        )
+        .center(heightFactor: 1);
   }
 }

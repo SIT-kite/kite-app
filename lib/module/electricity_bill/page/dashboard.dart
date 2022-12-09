@@ -232,7 +232,7 @@ class _DashboardState extends State<Dashboard> with AutomaticKeepAliveClientMixi
         if (content == null)
           LimitedBox(maxWidth: 10, maxHeight: 10, child: Placeholders.loading())
         else
-          Text(content, style: style),
+          content.text(style: style, overflow: TextOverflow.fade),
       ].column(caa: CrossAxisAlignment.end),
     ].row(maa: MainAxisAlignment.spaceBetween);
   }

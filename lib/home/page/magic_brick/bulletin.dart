@@ -18,6 +18,7 @@
 import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/events/bus.dart';
+import 'package:kite/events/events.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/module/symbol.dart';
 import 'package:kite/route.dart';
@@ -38,7 +39,7 @@ class _KiteBulletinItemState extends State<KiteBulletinItem> {
   @override
   void initState() {
     super.initState();
-    On.home((event) {
+    On.home<HomeRefreshEvent>((event) {
       updateLatestBulletin();
     });
     updateLatestBulletin();

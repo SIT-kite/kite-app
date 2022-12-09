@@ -21,7 +21,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:rettulf/rettulf.dart';
 import '../using.dart';
-
+import 'dart:math';
 import '../entity/announce.dart';
 import '../entity/page.dart';
 import '../init.dart';
@@ -94,7 +94,7 @@ class _OaAnnouncePageState extends State<OaAnnouncePage> {
       return LiveGrid.options(
         itemCount: items.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: count,
+          crossAxisCount: max(count, 1),
           childAspectRatio: 4,
         ),
         options: kiteLiveOptions,

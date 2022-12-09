@@ -25,6 +25,7 @@ Widget cardTitle(String title) {
       Text(
         title,
         style: const TextStyle(fontWeight: FontWeight.bold),
+        overflow: TextOverflow.fade,
       )
     ],
   );
