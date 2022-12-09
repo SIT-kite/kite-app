@@ -165,6 +165,7 @@
   "fengxianDistrict": "奉賢區",
   "fetching": "取回中",
   "filter": "篩選",
+  "formatError": "格式錯誤",
   "freshman": "新生",
   "freshmanLoginAccountHint": "學號/姓名/准考證號",
   "freshmanLoginBtn": "進入小風箏世界",
@@ -416,6 +417,7 @@
   "timetableSetToDefault": "設為預設",
   "timetableWeekOrderedName": "第 {week} 周",
   "troubleshooting": "疑難排解",
+  "unauthorizedUsernameTip": "請你先登入後，再進行這個操作。",
   "unfilled": "未輸入",
   "unknown": "未知",
   "untitled": "無標題",
@@ -423,8 +425,8 @@
   "uploadFailedTip": "上傳失敗",
   "uploadingCounter": "已經上傳 {done} / {all}",
   "userInfoUpdatedTip": "個人資訊更新完畢",
-  "validateInputRequest": "請檢查你的輸入",
   "validateInputAccountPwdRequest": "請檢查你輸入的賬戶和密碼的格式。",
+  "validateInputRequest": "請檢查你的輸入",
   "warning": "警告",
   "weather": "天氣",
   "weather_sunny": "晴",
@@ -448,6 +450,5 @@
   "welcomeSlogan": "便捷校園, 即刻起航",
   "xuhui": "徐匯",
   "xuhuiDistrict": "徐匯區",
-  "yes": "好",
-  "formatError": "格式錯誤"
+  "yes": "好"
 }

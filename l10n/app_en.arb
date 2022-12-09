@@ -308,6 +308,7 @@
   "fengxianDistrict": "Fengxian District",
   "fetching": "Fetching",
   "filter": "Filter",
+  "formatError": "Format Error",
   "freshman": "Freshman",
   "freshmanLoginAccountHint": "Student ID/Full Name/Examinee Number",
   "freshmanLoginBtn": "Join Kite World",
@@ -680,6 +681,7 @@
     }
   },
   "troubleshooting": "Troubleshooting",
+  "unauthorizedUsernameTip": "You have to login to perform this.",
   "unfilled": "Unfilled",
   "unknown": "Unknown",
   "untitled": "Untitled",
@@ -697,8 +699,8 @@
     }
   },
   "userInfoUpdatedTip": "Your info updated !",
-  "validateInputRequest": "Please check your input.",
   "validateInputAccountPwdRequest": "Please check the formats of account and password you entered.",
+  "validateInputRequest": "Please check your input.",
   "warning": "Warning",
   "weather": "Weather",
   "weather_sunny": "Sunny",
@@ -722,6 +724,5 @@
   "welcomeSlogan": "Excellent school life, from here.",
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
-  "yes": "Yes",
-  "formatError": "Format Error"
+  "yes": "Yes"
 }

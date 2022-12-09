@@ -100,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
       );
       if (mounted) {
         if (confirm == true) {
-          ctx.navigator.pushNamed(RouteTable.connectivity);
+          ctx.navigator.pushNamed(RouteTable.networkTool);
         }
       }
       return;

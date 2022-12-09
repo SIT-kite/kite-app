@@ -165,6 +165,7 @@
   "fengxianDistrict": "奉贤区",
   "fetching": "获取中",
   "filter": "筛选",
+  "formatError": "格式错误",
   "freshman": "新生",
   "freshmanLoginAccountHint": "学号/姓名/准考证号",
   "freshmanLoginBtn": "进入风筝元宇宙",
@@ -416,6 +417,7 @@
   "timetableSetToDefault": "设为默认",
   "timetableWeekOrderedName": "第 {week} 周",
   "troubleshooting": "疑难解答",
+  "unauthorizedUsernameTip": "你需要登录后才能进行此操作。",
   "unfilled": "未输入",
   "unknown": "未知",
   "untitled": "无标题",
@@ -423,8 +425,8 @@
   "uploadFailedTip": "上传失败",
   "uploadingCounter": "已上传 {done} / {all}",
   "userInfoUpdatedTip": "个人信息更新完毕",
-  "validateInputRequest": "请检查你的输入",
   "validateInputAccountPwdRequest": "请检查你输入的账号与密码的格式。",
+  "validateInputRequest": "请检查你的输入",
   "warning": "警告",
   "weather": "天气",
   "weather_sunny": "晴",
@@ -448,6 +450,5 @@
   "welcomeSlogan": "便利校园，一步到位",
   "xuhui": "徐汇",
   "xuhuiDistrict": "徐汇区",
-  "yes": "好",
-  "formatError": "格式错误"
+  "yes": "好"
 }

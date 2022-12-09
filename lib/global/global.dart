@@ -82,7 +82,7 @@ class Global {
               yes: i18n.openNetworkToolBtn,
               no: i18n.cancel)
           .then((confirm) {
-        if (confirm == true) Navigator.of(context).popAndPushNamed(RouteTable.connectivity);
+        if (confirm == true) Navigator.of(context).popAndPushNamed(RouteTable.networkTool);
         inSsoErrorDialog = false;
       });
     }
@@ -135,7 +135,7 @@ class Global {
             children: [
               i18n.networkConnectionTimeoutError.text(),
               ElevatedButton(
-                onPressed: () => Navigator.of(context).pushReplacementNamed(RouteTable.connectivity),
+                onPressed: () => Navigator.of(context).pushReplacementNamed(RouteTable.networkTool),
                 child: i18n.openNetworkToolBtn.text(),
               ),
               if (futureBuilder.futureGetter != null)

@@ -23,14 +23,14 @@ import '../../using.dart';
 import '../../../../design/page/connectivity.dart';
 import 'import.dart';
 
-class ImportTimetableIndex extends StatefulWidget {
-  const ImportTimetableIndex({super.key});
+class ImportTimetableIndexPage extends StatefulWidget {
+  const ImportTimetableIndexPage({super.key});
 
   @override
-  State<ImportTimetableIndex> createState() => _ImportTimetableIndexState();
+  State<ImportTimetableIndexPage> createState() => _ImportTimetableIndexPageState();
 }
 
-class _ImportTimetableIndexState extends State<ImportTimetableIndex> {
+class _ImportTimetableIndexPageState extends State<ImportTimetableIndexPage> {
   bool canImport = false;
 
   @override
@@ -49,11 +49,17 @@ class _ImportTimetableIndexState extends State<ImportTimetableIndex> {
   }
 
   Widget buildBody(BuildContext ctx) {
-    return canImport
-        ? const ImportTimetablePage(
-            key: ValueKey("Import Timetable"),
-          )
-        : buildConnectivityChecker(context, const ValueKey("Connectivity Checker"));
+    if (Kv.auth.currentUsername != null && Kv.auth.ssoPassword != null) {
+      if (canImport) {
+        return const ImportTimetablePage(
+          key: ValueKey("Import Timetable"),
+        );
+      } else {
+        return buildConnectivityChecker(context, const ValueKey("Connectivity Checker"));
+      }
+    } else {
+      return buildUnauthorized(ctx, const ValueKey("Unauthorized"));
+    }
   }
 
   Widget buildConnectivityChecker(BuildContext ctx, Key? key) {
@@ -71,5 +77,9 @@ class _ImportTimetableIndexState extends State<ImportTimetableIndex> {
       },
       iconSize: ctx.isPortrait ? 180 : 120,
     );
+  }
+
+  Widget buildUnauthorized(BuildContext ctx, Key? key) {
+    return LeavingBlank(icon: Icons.person_off_outlined, desc: i18n.unauthorizedUsernameTip);
   }
 }

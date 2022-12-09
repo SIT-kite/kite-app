@@ -15,12 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import 'package:kite/module/connectivity/using.dart';
-
 import 'cache/cache.dart';
 import 'dao/getter.dart';
 import 'service/getter.dart';
 import 'storage/local.dart';
+import 'using.dart';
 
 class ExpenseTrackerInit {
   static late ExpenseGetDao remote;

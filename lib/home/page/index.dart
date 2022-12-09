@@ -119,7 +119,7 @@ class _HomePageState extends State<HomePage> {
         title ?? i18n.homepageCampusNetworkDisconnected.text(),
         TextButton(
           child: i18n.openNetworkToolBtn.text(),
-          onPressed: () => Navigator.of(context).pushNamed(RouteTable.connectivity),
+          onPressed: () => Navigator.of(context).pushNamed(RouteTable.networkTool),
         )
       ]),
       duration: const Duration(seconds: 5),

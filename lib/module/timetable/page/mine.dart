@@ -38,7 +38,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
 
   Future<void> goImport() async {
     final changed = await Navigator.of(context).push(
-      (MaterialPageRoute(builder: (_) => const ImportTimetableIndex())),
+      (MaterialPageRoute(builder: (_) => const ImportTimetableIndexPage())),
     );
     if (changed == true) {
       setState(() {});

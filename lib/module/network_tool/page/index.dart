@@ -15,7 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:rettulf/rettulf.dart';
 
@@ -42,11 +46,19 @@ class _NetworkToolPageState extends State<NetworkToolPage> {
   @override
   void initState() {
     super.initState();
+    checkConnectivity();
+  }
 
-    ConnectivityInit.ssoSession.checkConnectivity().then((value) {
-      Log.info('当前是否连接校园网：$value');
+  /// Check the connectivity until succeed.
+  void checkConnectivity() {
+    ConnectivityInit.ssoSession.checkConnectivity().then((newStatus) {
       if (!mounted) return;
-      setState(() => isConnected = value);
+      if (isConnected != newStatus) {
+        setState(() => isConnected = newStatus);
+      }
+      if (!newStatus) {
+        checkConnectivity();
+      }
     });
   }
 
@@ -56,7 +68,15 @@ class _NetworkToolPageState extends State<NetworkToolPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: i18n.networkTool.text()),
+        appBar: AppBar(
+          title: [
+            i18n.networkTool.text(),
+            if (!isConnected)
+              Placeholders.loading(
+                size: 14,
+              ).padOnly(l: 40.w)
+          ].row(),
+        ),
         body: context.isPortrait ? buildPortraitBody(context) : buildLandscapeBody(context));
   }
 

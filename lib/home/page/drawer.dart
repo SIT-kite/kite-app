@@ -53,7 +53,7 @@ class KiteDrawer extends StatelessWidget {
             leading: const Icon(Icons.lan),
             onTap: () {
               Navigator.pop(context);
-              Navigator.of(context).pushNamed(RouteTable.connectivity);
+              Navigator.of(context).pushNamed(RouteTable.networkTool);
             },
           ),
           if (UniversalPlatform.isAndroid)
