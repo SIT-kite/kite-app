@@ -55,12 +55,6 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
     return context.isPortrait
         ? StorageList(
             name2Box,
-            onHiveChange: () {
-              setState(() {
-                if (!mounted) return;
-                refreshBoxes();
-              });
-            },
           )
         : StorageBox(name2Box);
   }
@@ -68,9 +62,8 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
 
 class StorageList extends StatefulWidget {
   final Map<String, Future<Box<dynamic>>> name2box;
-  final VoidCallback? onHiveChange;
 
-  const StorageList(this.name2box, {super.key, this.onHiveChange});
+  const StorageList(this.name2box, {super.key});
 
   @override
   State<StorageList> createState() => _StorageListState();
@@ -100,11 +93,6 @@ class _StorageListState extends State<StorageList> {
               return BoxSection(
                 box: box,
                 boxName: p.key,
-                onDelete: () {
-                  if (mounted) {
-                    widget.onHiveChange?.call();
-                  }
-                },
               );
             }))
         .toList()

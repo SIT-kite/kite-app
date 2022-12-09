@@ -31,7 +31,7 @@ class ExamService implements ExamDao {
 
   /// 获取考场信息
   @override
-  Future<List<ExamEntry>?> getExamList(SchoolYear schoolYear, Semester semester) async {
+  Future<List<ExamEntry>> getExamList(SchoolYear schoolYear, Semester semester) async {
     var response = await session.request(
       _examRoomUrl,
       ReqMethod.post,

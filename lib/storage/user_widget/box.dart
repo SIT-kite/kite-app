@@ -30,12 +30,20 @@ import 'package:kite/user_widget/placeholder_future_builder.dart';
 import 'package:rettulf/rettulf.dart';
 import '../using.dart';
 
-class BoxSection extends StatelessWidget {
+class BoxSection extends StatefulWidget {
   final String boxName;
   final Box<dynamic>? box;
-  final VoidCallback? onDelete;
 
-  const BoxSection({super.key, this.box, required this.boxName, this.onDelete});
+  const BoxSection({super.key, this.box, required this.boxName});
+
+  @override
+  State<StatefulWidget> createState() => _BoxSectionState();
+}
+
+class _BoxSectionState extends State<BoxSection> {
+  String get boxName => widget.boxName;
+
+  Box<dynamic>? get box => widget.box;
 
   Widget buildTitle(BuildContext ctx) {
     final b = box;
@@ -47,8 +55,13 @@ class BoxSection extends StatelessWidget {
           CupertinoContextMenuAction(
             trailingIcon: CupertinoIcons.delete,
             onPressed: () async {
-              Navigator.of(ctx).pop();
-              _showDeleteBoxRequest(ctx, b, onDelete);
+              ctx.navigator.pop();
+              final confirm = await _showDeleteBoxRequest(ctx);
+              if (confirm == true) {
+                setState(() {
+                  b.clear();
+                });
+              }
             },
             isDestructiveAction: true,
             child: i18n.delete.text(),
@@ -82,7 +95,6 @@ class BoxItemList extends StatefulWidget {
 }
 
 class _BoxItemListState extends State<BoxItemList> {
-  late final keys = widget.box.keys.toList();
   int currentPage = 0;
   static const pageSize = 6;
 
@@ -97,6 +109,7 @@ class _BoxItemListState extends State<BoxItemList> {
   }
 
   Widget buildList(BuildContext ctx) {
+    final keys = widget.box.keys.toList();
     final length = keys.length;
     if (length < pageSize) {
       return buildBoxItems(ctx, keys);
@@ -129,6 +142,10 @@ class _BoxItemListState extends State<BoxItemList> {
               routeStyle: routeStyle,
               typeStyle: typeStyle,
               contentStyle: contentStyle,
+              onBoxChanged: () {
+                if (!mounted) return;
+                setState(() {});
+              },
             ))
         .toList()
         .column();
@@ -138,7 +155,11 @@ class _BoxItemListState extends State<BoxItemList> {
     return PageGrouper(
       paginateButtonStyles: PageBtnStyles(),
       preBtnStyles: SkipBtnStyle(
-          borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), bottomLeft: Radius.circular(20))),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(20),
+          bottomLeft: Radius.circular(20),
+        ),
+      ),
       onPageChange: (number) {
         setState(() {
           currentPage = number - 1;
@@ -158,9 +179,17 @@ class BoxItem extends StatefulWidget {
   final TextStyle? contentStyle;
   final dynamic boxKey;
   final Box<dynamic> box;
+  final VoidCallback? onBoxChanged;
 
-  const BoxItem(
-      {super.key, this.routeStyle, this.typeStyle, this.contentStyle, required this.boxKey, required this.box});
+  const BoxItem({
+    super.key,
+    this.routeStyle,
+    this.typeStyle,
+    this.contentStyle,
+    required this.boxKey,
+    required this.box,
+    this.onBoxChanged,
+  });
 
   @override
   State<BoxItem> createState() => _BoxItemState();
@@ -197,55 +226,58 @@ class _BoxItemState extends State<BoxItem> {
         style: widget.contentStyle?.copyWith(overflow: TextOverflow.ellipsis),
       ),
     ].column(caa: CrossAxisAlignment.start).align(at: Alignment.topLeft).padAll(10).inCard(elevation: 5);
-    if (kDebugMode) {
-      final DismissDirection dir;
-      if (value == null) {
-        dir = DismissDirection.none;
-      } else if (_canEmptyValue(value)) {
-        dir = DismissDirection.horizontal;
+    if (value != null) {
+      if (kDebugMode) {
+        res = res.on(tap: () async => showContentDialog(context, widget.box, key, value));
+        //res = buildContextMenu(context, res, key, widget.box);
+        res = buildSwipe(context, res, key, value);
       } else {
-        dir = DismissDirection.endToStart;
+        res = res.on(tap: () async => showContentDialog(context, widget.box, key, value, readonly: true));
       }
-      res = res.on(tap: () async => showContentDialog(context, widget.box, key, value));
-      res = Dismissible(
-        key: ValueKey(key),
-        direction: dir,
-        confirmDismiss: (dir) async {
-          if (dir == DismissDirection.startToEnd) {
-            // Empty the value
-            final confirm = await context.showRequest(
-                title: i18n.warning,
-                desc: i18n.localStorageEmptyValueDesc,
-                yes: i18n.confirm,
-                no: i18n.cancel,
-                highlight: true);
-            if (confirm == true) {
-              widget.box.put(key, _emptyValue(value));
-              if (!mounted) return false;
-              setState(() {});
-            }
-          } else if (value != null) {
-            // Set the value to null
-            final confirm = await context.showRequest(
-                title: i18n.warning,
-                desc: i18n.localStorageSetValueNullDesc,
-                yes: i18n.confirm,
-                no: i18n.cancel,
-                highlight: true);
-            if (confirm == true) {
-              widget.box.put(key, null);
-              if (!mounted) return false;
-              setState(() {});
-            }
-          }
-          return false;
-        },
-        child: res,
-      );
-    } else {
-      res = res.on(tap: () async => showContentDialog(context, widget.box, key, value, readonly: true));
     }
     return res;
+  }
+
+  Widget buildSwipe(BuildContext ctx, Widget w, String key, dynamic value) {
+    final DismissDirection dir;
+    if (value == null) {
+      dir = DismissDirection.none;
+    } else if (_canEmptyValue(value)) {
+      dir = DismissDirection.horizontal;
+    } else {
+      dir = DismissDirection.endToStart;
+    }
+    return Dismissible(
+      key: ValueKey(key),
+      direction: dir,
+      confirmDismiss: (dir) async {
+        if (dir == DismissDirection.startToEnd) {
+          // Empty the value
+          final confirm = await context.showRequest(
+              title: i18n.warning,
+              desc: i18n.localStorageEmptyValueDesc,
+              yes: i18n.confirm,
+              no: i18n.cancel,
+              highlight: true);
+          if (confirm == true) {
+            widget.box.put(key, _emptyValue(value));
+            if (!mounted) return false;
+            setState(() {});
+          }
+          return false;
+        } else if (dir == DismissDirection.endToStart) {
+          // Delete the item.
+          final confirm = await _showDeleteItemRequest(ctx);
+          if (confirm == true) {
+            widget.box.delete(key);
+            widget.onBoxChanged?.call();
+            return true;
+          }
+        }
+        return false;
+      },
+      child: w,
+    );
   }
 
   Future<void> showContentDialog(BuildContext context, Box<dynamic> box, String key, dynamic value,
@@ -319,11 +351,13 @@ class _StorageBoxState extends State<StorageBox> {
           confirmDismiss: (dir) async {
             final box = await name2Box.value;
             if (!mounted) return true;
-            _showDeleteBoxRequest(ctx, box, () {
-              if (mounted) {
-                setState(() {});
-              }
-            });
+            final confirm = await _showDeleteBoxRequest(ctx);
+            if (confirm == true) {
+              if (!mounted) return true;
+              setState(() {
+                box.clear();
+              });
+            }
             return true;
           },
           child: preview,
@@ -369,6 +403,10 @@ class _StorageBoxState extends State<StorageBox> {
                             routeStyle: routeStyle,
                             typeStyle: typeStyle,
                             contentStyle: contentStyle,
+                            onBoxChanged: () {
+                              if (!mounted) return;
+                              setState(() {});
+                            },
                           ))
                       .toList()
                       .scrolledWithBar();
@@ -425,11 +463,12 @@ dynamic _canEmptyValue(dynamic value) {
       value is Map;
 }
 
-Future<void> _showDeleteBoxRequest(BuildContext ctx, Box<dynamic> box, VoidCallback? onDelete) async {
-  final confirm = await ctx.showRequest(
-      title: i18n.delete, desc: i18n.localStorageDeleteDesc, yes: i18n.delete, no: i18n.cancel, highlight: true);
-  if (confirm == true) {
-    box.clear();
-    onDelete?.call();
-  }
+Future<bool?> _showDeleteBoxRequest(BuildContext ctx) async {
+  return await ctx.showRequest(
+      title: i18n.delete, desc: i18n.localStorageClearBoxDesc, yes: i18n.confirm, no: i18n.cancel, highlight: true);
+}
+
+Future<bool?> _showDeleteItemRequest(BuildContext ctx) async {
+  return await ctx.showRequest(
+      title: i18n.delete, desc: i18n.localStorageDeleteItemDesc, yes: i18n.delete, no: i18n.cancel, highlight: true);
 }
