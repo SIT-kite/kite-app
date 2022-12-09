@@ -212,7 +212,12 @@ class _DetailPageState extends State<DetailPage> with AutomaticKeepAliveClientMi
         await ctx.showTip(title: i18n.activityApplyReplyTip, desc: response, ok: i18n.ok);
       } catch (e) {
         if (!mounted) return;
-        await ctx.showTip(title: i18n.error, desc: e.toString(), ok: i18n.ok);
+        await ctx.showTip(
+          title: i18n.error,
+          desc: e.toString(),
+          ok: i18n.ok,
+          error: true,
+        );
         rethrow;
       }
     }

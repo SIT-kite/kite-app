@@ -4,74 +4,69 @@ import 'package:kite/user_widget/draggable.dart';
 import 'package:rettulf/rettulf.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+import 'glassmorphic.dart';
+
 typedef PickerActionWidgetBuilder = Widget Function(BuildContext context, int? curSelectedIndex);
+
+const _kDialogAlpha = 0.89;
 
 extension DialogEx on BuildContext {
   /// return: whether the button was hit
-  Future<bool> showTip(
-      {required String title, required String desc, required String ok, bool highlight = false}) async {
-    return showAnyTip(title: title, make: (_) => desc.text(style: const TextStyle()), ok: ok, highlight: false);
-  }
-
-  Future<bool> showAnyTip(
-      {required String title, required WidgetBuilder make, required String ok, bool highlight = false}) async {
-    final confirm = await showDialog(
-      context: this,
-      builder: (ctx) {
-        final dialog = AlertDialog(
-            title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-            content: make(ctx),
-            actions: [
-              CupertinoButton(
-                  onPressed: () {
-                    Navigator.of(ctx).pop(true);
-                  },
-                  child: ok.text(style: highlight ? const TextStyle(color: Colors.redAccent) : null))
-            ],
-            actionsAlignment: MainAxisAlignment.spaceEvenly);
-        if (UniversalPlatform.isDesktop) {
-          return OmniDraggable(child: dialog);
-        } else {
-          return dialog;
-        }
-      },
+  Future<bool> showTip({
+    required String title,
+    required String desc,
+    required String ok,
+    bool highlight = false,
+    bool error = false,
+  }) async {
+    return showAnyTip(
+      title: title,
+      make: (_) => desc.text(style: const TextStyle()),
+      ok: ok,
+      highlight: false,
+      error: error,
     );
-    return confirm == true;
   }
 
-  Future<bool?> showRequest(
-      {required String title,
-      required String desc,
-      required String yes,
-      required String no,
-      bool highlight = false}) async {
-    return await showAnyRequest(
-        title: title, make: (_) => desc.text(style: const TextStyle()), yes: yes, no: no, highlight: highlight);
-  }
-
-  Future<bool?> showAnyRequest(
-      {required String title,
-      required WidgetBuilder make,
-      required String yes,
-      required String no,
-      bool highlight = false}) async {
-    final index = await showDialog(
+  Future<bool> showAnyTip({
+    required String title,
+    required WidgetBuilder make,
+    required String ok,
+    bool highlight = false,
+    bool error = false,
+  }) async {
+    final dynamic confirm;
+    if (UniversalPlatform.isIOS || UniversalPlatform.isMacOS) {
+      confirm = await showCupertinoModalPopup(
+        context: this,
+        builder: (BuildContext ctx) => CupertinoAlertDialog(
+          title: title.text(style: TextStyle(fontWeight: FontWeight.bold, color: error ? Colors.redAccent : null)),
+          content: make(ctx),
+          actions: <CupertinoDialogAction>[
+            CupertinoDialogAction(
+              isDefaultAction: highlight,
+              onPressed: () {
+                ctx.navigator.pop(true);
+              },
+              child: ok.text(),
+            )
+          ],
+        ),
+      );
+    } else {
+      confirm = await showDialog(
         context: this,
         builder: (ctx) {
           final dialog = AlertDialog(
-              title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+              backgroundColor: theme.dialogBackgroundColor.withOpacity(_kDialogAlpha),
+              title: title.text(style: TextStyle(fontWeight: FontWeight.bold, color: error ? Colors.redAccent : null)),
               content: make(ctx),
               actions: [
                 CupertinoButton(
                     onPressed: () {
-                      Navigator.of(ctx).pop(0);
+                      ctx.navigator.pop(true);
                     },
-                    child: yes.text(style: highlight ? const TextStyle(color: Colors.redAccent) : null)),
-                CupertinoButton(
-                    onPressed: () {
-                      Navigator.of(ctx).pop(1);
-                    },
-                    child: no.text())
+                    child: ok.text(style: highlight ? const TextStyle(color: Colors.redAccent) : null))
               ],
               actionsAlignment: MainAxisAlignment.spaceEvenly);
           if (UniversalPlatform.isDesktop) {
@@ -79,7 +74,91 @@ extension DialogEx on BuildContext {
           } else {
             return dialog;
           }
-        });
+        },
+      );
+    }
+    return confirm == true;
+  }
+
+  Future<bool?> showRequest({
+    required String title,
+    required String desc,
+    required String yes,
+    required String no,
+    bool highlight = false,
+    bool error = false,
+  }) async {
+    return await showAnyRequest(
+      title: title,
+      make: (_) => desc.text(style: const TextStyle()),
+      yes: yes,
+      no: no,
+      highlight: highlight,
+      error: error,
+    );
+  }
+
+  Future<bool?> showAnyRequest({
+    required String title,
+    required WidgetBuilder make,
+    required String yes,
+    required String no,
+    bool highlight = false,
+    bool error = false,
+  }) async {
+    final dynamic index;
+    if (UniversalPlatform.isIOS || UniversalPlatform.isMacOS) {
+      index = await showCupertinoModalPopup(
+        context: this,
+        builder: (BuildContext ctx) => CupertinoAlertDialog(
+          title: title.text(style: TextStyle(fontWeight: FontWeight.bold, color: error ? Colors.redAccent : null)),
+          content: make(ctx),
+          actions: <CupertinoDialogAction>[
+            CupertinoDialogAction(
+              onPressed: () {
+                Navigator.of(ctx).pop(1);
+              },
+              child: no.text(),
+            ),
+            CupertinoDialogAction(
+              isDestructiveAction: highlight,
+              onPressed: () {
+                Navigator.of(ctx).pop(0);
+              },
+              child: yes.text(),
+            )
+          ],
+        ),
+      );
+    } else {
+      index = await showDialog(
+          context: this,
+          builder: (ctx) {
+            final dialog = AlertDialog(
+                title:
+                    title.text(style: TextStyle(fontWeight: FontWeight.bold, color: error ? Colors.redAccent : null)),
+                backgroundColor: theme.dialogBackgroundColor.withOpacity(_kDialogAlpha),
+                content: make(ctx),
+                actions: [
+                  CupertinoButton(
+                      onPressed: () {
+                        Navigator.of(ctx).pop(0);
+                      },
+                      child: yes.text(style: highlight ? const TextStyle(color: Colors.redAccent) : null)),
+                  CupertinoButton(
+                      onPressed: () {
+                        Navigator.of(ctx).pop(1);
+                      },
+                      child: no.text())
+                ],
+                actionsAlignment: MainAxisAlignment.spaceEvenly);
+            if (UniversalPlatform.isDesktop) {
+              return OmniDraggable(child: dialog);
+            } else {
+              return dialog;
+            }
+          });
+    }
     if (index == 0) {
       return true;
     } else if (index == 1) {

@@ -74,7 +74,7 @@ class _TimetableHeaderState extends State<TimetableHeader> {
           child: Text(
             name,
             textAlign: TextAlign.center,
-            style: TextStyle(inherit: true, color: textColor),
+            style: TextStyle(color: textColor),
           )),
     );
   }

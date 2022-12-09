@@ -58,6 +58,7 @@ class _LoginPageState extends State<LoginPage> {
         title: i18n.formatError,
         desc: i18n.validateInputAccountPwdRequest,
         ok: i18n.close,
+        error: true,
       );
       return;
     }
@@ -66,6 +67,7 @@ class _LoginPageState extends State<LoginPage> {
         title: i18n.fromKite,
         desc: i18n.readAndAcceptRequest(R.kiteUserAgreementName),
         ok: i18n.close,
+        error: true,
       );
       return;
     }
@@ -80,6 +82,7 @@ class _LoginPageState extends State<LoginPage> {
         title: i18n.networkError,
         desc: i18n.networkNoAccessTip,
         ok: i18n.close,
+        error: true,
       );
       return;
     }
@@ -88,11 +91,13 @@ class _LoginPageState extends State<LoginPage> {
       if (!mounted) return;
       setState(() => enableLoginButton = true);
       final confirm = await ctx.showRequest(
-          title: i18n.networkError,
-          desc: i18n.campusNetworkNoAccessTroubleshootingRequest,
-          yes: i18n.troubleshooting,
-          no: i18n.close,
-          highlight: true);
+        title: i18n.networkError,
+        desc: i18n.campusNetworkNoAccessTroubleshootingRequest,
+        yes: i18n.troubleshooting,
+        no: i18n.close,
+        highlight: true,
+        error: true,
+      );
       if (mounted) {
         if (confirm == true) {
           ctx.navigator.pushNamed(RouteTable.connectivity);
@@ -133,6 +138,7 @@ class _LoginPageState extends State<LoginPage> {
         title: i18n.loginFailedWarn,
         desc: i18n.accountOrPwdIncorrectTip,
         ok: i18n.close,
+        error: true,
       );
     } finally {
       if (mounted) {
