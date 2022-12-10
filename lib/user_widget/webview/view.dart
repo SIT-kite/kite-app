@@ -125,7 +125,7 @@ class MyWebView extends StatefulWidget {
 }
 
 class _MyWebViewState extends State<MyWebView> {
-  final _controllerCompleter = Completer<WebViewController>();
+  WebViewController? _controller;
 
   /// 获取该url匹配的所有注入项
   Iterable<InjectJsRuleItem> getAllMatchJs(String url, InjectJsTime injectTime) {
@@ -136,17 +136,16 @@ class _MyWebViewState extends State<MyWebView> {
 
   /// 根据当前url筛选所有符合条件的js脚本，执行js注入
   Future<void> injectJs(InjectJsRuleItem injectJsRule) async {
-    final controller = await _controllerCompleter.future;
     // 同步获取js代码
     if (injectJsRule.javascript != null) {
       Log.info('执行了js注入');
-      await controller.runJavascript(injectJsRule.javascript!);
+      await _controller?.runJavascript(injectJsRule.javascript!);
     }
     // 异步获取js代码
     if (injectJsRule.asyncJavascript != null) {
       String? js = await injectJsRule.asyncJavascript;
       if (js != null) {
-        await controller.runJavascript(js);
+        await _controller?.runJavascript(js);
       }
     }
   }
@@ -169,7 +168,7 @@ class _MyWebViewState extends State<MyWebView> {
   void onResourceError(WebResourceError error) {
     if (!(error.failingUrl?.startsWith('http') ?? true)) {
       launchUrlInBrowser(error.failingUrl!);
-      _controllerCompleter.future.then((value) => value.goBack());
+      _controller?.goBack();
     }
   }
 
@@ -180,31 +179,25 @@ class _MyWebViewState extends State<MyWebView> {
       javascriptMode: widget.javascriptMode,
       onWebViewCreated: (WebViewController webViewController) async {
         Log.info('WebView已创建，已获取到controller');
+        _controller = webViewController;
         if (widget.postData != null) {
           Log.info('通过post请求打开页面: ${widget.initialUrl}');
           await webViewController.loadHtmlString(_buildFormHtml());
         }
-        _controllerCompleter.complete(webViewController);
-        if (widget.onWebViewCreated != null) {
-          widget.onWebViewCreated!(webViewController);
-        }
+        widget.onWebViewCreated?.call(webViewController);
       },
       onWebResourceError: onResourceError,
       userAgent: widget.userAgent,
       onPageStarted: (String url) async {
         Log.info('开始加载url: $url');
         await Future.wait(getAllMatchJs(url, InjectJsTime.onPageStarted).map(injectJs));
-        if (widget.onPageStarted != null) {
-          widget.onPageStarted!(url);
-        }
+        widget.onPageStarted?.call(url);
       },
       javascriptChannels: widget.javascriptChannels,
       onPageFinished: (String url) async {
         Log.info('url加载完毕: $url');
         await Future.wait(getAllMatchJs(url, InjectJsTime.onPageFinished).map(injectJs));
-        if (widget.onPageFinished != null) {
-          widget.onPageFinished!(url);
-        }
+        widget.onPageFinished?.call(url);
       },
       onProgress: widget.onProgress,
     );
