@@ -250,7 +250,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
                     onLogin(ctx);
                   }
                 : null,
-            child: i18n.freshmanLoginBtn.text(),
+            child: i18n.freshmanLoginBtn.text().padAll(5),
           ),
         ),
       ],

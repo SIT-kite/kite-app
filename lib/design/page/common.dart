@@ -17,7 +17,6 @@
 */
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:kite/l10n/extension.dart';
 import '../colors.dart';
 import 'package:rettulf/rettulf.dart';
 
@@ -62,43 +61,11 @@ class LeavingBlank extends StatelessWidget {
       desc
           .text(
             style: context.textTheme.titleLarge,
+            textAlign: TextAlign.center,
           )
           .center()
           .padAll(10)
           .expanded(),
     ].column(maa: MAAlign.spaceAround).center();
-  }
-}
-
-class UnauthorizedTip extends StatefulWidget {
-  const UnauthorizedTip({super.key});
-
-  @override
-  State<UnauthorizedTip> createState() => _UnauthorizedTipState();
-}
-
-class _UnauthorizedTipState extends State<UnauthorizedTip> {
-  @override
-  Widget build(BuildContext context) {
-    return LeavingBlank(icon: Icons.person_off_outlined, desc: i18n.unauthorizedUsernameTip);
-  }
-}
-
-class UnauthorizedTipPage extends StatefulWidget {
-  const UnauthorizedTipPage({Key? key}) : super(key: key);
-
-  @override
-  State<UnauthorizedTipPage> createState() => _UnauthorizedTipPageState();
-}
-
-class _UnauthorizedTipPageState extends State<UnauthorizedTipPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: i18n.unauthorizedTipTitle.text(),
-      ),
-      body: const UnauthorizedTip(),
-    );
   }
 }

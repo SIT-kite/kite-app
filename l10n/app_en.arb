@@ -514,6 +514,7 @@
   },
   "realtimeWeather": "Real-time Weather",
   "refresh": "Refresh",
+  "relogin": "Re-login",
   "reportTempAbnormal": "Abnormal",
   "@reportTempAbnormal": {
     "description": "For building string: Reported Today Abnormal {place}"
@@ -664,6 +665,7 @@
   "timetableMineEmptyTip": "Let's import a new timetable !",
   "timetableMineTitle": "My Timetables",
   "timetableNameFormTitle": "Name",
+  "timetableNoDescPlaceholder": "No description...",
   "timetablePreviewBtn": "Preview",
   "timetablePreviewTitle": "Preview",
   "timetableSelectSemesterTip": "Please select a semester first.",
@@ -678,7 +680,9 @@
     }
   },
   "troubleshooting": "Troubleshooting",
-  "unauthorizedUsernameTip": "You have to login to perform this.",
+  "unauthorizedTipEverLoggedInTip": "Your account or password is incorrect, please try to login again.",
+  "unauthorizedTipTitle": "Require Login",
+  "unauthorizedTipNeverLoggedInTip": "You have to login to perform this.",
   "unfilled": "Unfilled",
   "unknown": "Unknown",
   "untitled": "Untitled",
@@ -722,6 +726,7 @@
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
   "yes": "Yes",
-  "timetableNoDescPlaceholder": "No description...",
-  "unauthorizedTipTitle": "Require Login"
+  "clear": "Clear",
+  "success": "Success",
+  "loginSuccessfulTip": "Login successful !"
 }

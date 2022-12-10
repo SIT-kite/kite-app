@@ -76,16 +76,12 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void _testPassword(BuildContext context, OACredential oaCredential) async {
     try {
-      EasyLoading.instance.userInteractions = false;
-      EasyLoading.show(status: i18n.loggingIn);
       await Global.ssoSession.login(oaCredential.account, oaCredential.password);
-      EasyLoading.showSuccess(i18n.loginCredentialsValidatedTip);
+      if (!mounted) return;
+      await context.showTip(title: i18n.success, desc: i18n.loginSuccessfulTip, ok: i18n.close);
     } catch (e) {
-      showBasicFlash(context, Text('${i18n.loginFailedWarn}: ${e.toString().split('\n')[0]}'),
-          duration: const Duration(seconds: 3));
-    } finally {
-      EasyLoading.dismiss();
-      EasyLoading.instance.userInteractions = true;
+      if (!mounted) return;
+      await context.showTip(title: i18n.loginFailedWarn, desc: e.toString().split('\n')[0], ok: i18n.close);
     }
   }
 
@@ -294,20 +290,18 @@ class _SettingsPageState extends State<SettingsPage> {
                     }
                   : null,
             ),
-          if (!isFreshman)
+          if (oaCredential != null)
             ModalSettingsTile(
               title: i18n.settingsChangeOaPwd,
               subtitle: i18n.settingsChangeOaPwdSub,
               leading: const Icon(Icons.lock),
               showConfirmation: true,
-              onConfirm: oaCredential != null
-                  ? () {
-                      Auth.oaCredential = oaCredential.copyWith(
-                        password: _passwordController.text,
-                      );
-                      return true;
-                    }
-                  : null,
+              onConfirm: () {
+                Auth.oaCredential = oaCredential.copyWith(
+                  password: _passwordController.text,
+                );
+                return true;
+              },
               children: [
                 Padding(
                   padding: const EdgeInsets.all(10),
@@ -315,17 +309,18 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ],
             ),
-          if (!isFreshman)
+          if (oaCredential != null)
             SimpleSettingsTile(
                 title: i18n.settingsTestLoginKite,
                 subtitle: i18n.settingsTestLoginKiteSub,
                 leading: const Icon(Icons.login_rounded),
-                onTap: oaCredential != null ? () => _testPassword(context, oaCredential) : null),
-          SimpleSettingsTile(
-              title: i18n.settingsLogoutKite,
-              subtitle: i18n.settingsLogoutKiteSub,
-              leading: const Icon(Icons.logout_rounded),
-              onTap: () => _onLogout(context)),
+                onTap: () => _testPassword(context, oaCredential)),
+          if (oaCredential != null)
+            SimpleSettingsTile(
+                title: i18n.settingsLogoutKite,
+                subtitle: i18n.settingsLogoutKiteSub,
+                leading: const Icon(Icons.logout_rounded),
+                onTap: () => _onLogout(context)),
         ],
       ),
       // Data Management

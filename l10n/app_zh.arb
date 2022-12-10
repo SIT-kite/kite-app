@@ -310,6 +310,7 @@
   "readAndAcceptRequest": "请先阅读并同意 {agreement}",
   "realtimeWeather": "实时天气",
   "refresh": "刷新",
+  "relogin": "重新登录",
   "reportTempAbnormal": "体温异常",
   "reportTempHelper": "体温上报小助手",
   "reportTempNoReportRecords": "无上报记录",
@@ -407,6 +408,7 @@
   "timetableMineEmptyTip": "快去导入一个课程表吧!",
   "timetableMineTitle": "我的课程表",
   "timetableNameFormTitle": "名称",
+  "timetableNoDescPlaceholder": "暂无介绍……",
   "timetablePreviewBtn": "预览",
   "timetablePreviewTitle": "预览",
   "timetableSelectSemesterTip": "请先选择学年与学期。",
@@ -414,7 +416,9 @@
   "timetableSetToDefault": "设为默认",
   "timetableWeekOrderedName": "第 {week} 周",
   "troubleshooting": "疑难解答",
-  "unauthorizedUsernameTip": "你需要登录后才能进行此操作。",
+  "unauthorizedTipEverLoggedInTip": "你的账号或密码不正确，请重新登录。",
+  "unauthorizedTipTitle": "需要登录",
+  "unauthorizedTipNeverLoggedInTip": "你必须先登录才能继续。",
   "unfilled": "未输入",
   "unknown": "未知",
   "untitled": "无标题",
@@ -448,6 +452,7 @@
   "xuhui": "徐汇",
   "xuhuiDistrict": "徐汇区",
   "yes": "好",
-  "timetableNoDescPlaceholder": "暂无介绍……",
-  "unauthorizedTipTitle": "需要登录"
+  "clear": "清空",
+  "success": "成功",
+  "loginSuccessfulTip": "登录成功！"
 }

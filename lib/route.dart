@@ -17,6 +17,7 @@
  */
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kite/credential/symbol.dart';
 import 'package:kite/design/user_widgets/dialog.dart';
 import 'package:kite/home/page/index.dart';
 import 'package:kite/module/pure_function/launch_in_browser.dart';
@@ -88,7 +89,7 @@ class RouteTable {
 final defaultRouteTable = StaticRouteTable(
   table: {
     RouteTable.home: (context, args) => const HomePage(),
-    RouteTable.reportTemp: (context, args) => const DailyReportPage(),
+    RouteTable.reportTemp: (context, args) => const DailyReportIndexPage(),
     RouteTable.login: (context, args) => const LoginPage(),
     RouteTable.welcome: (context, args) => const WelcomePage(),
     RouteTable.about: (context, args) => const AboutPage(),
@@ -157,7 +158,7 @@ final defaultRouteTable = StaticRouteTable(
   },
   onNotFound: (context, routeName, args) => NotFoundPage(routeName),
   rootRoute: (context, table, args) {
-    final routeName = AccountUtils.getAuthUserType() != null ? RouteTable.home : RouteTable.welcome;
+    final routeName = Auth.hasLoggedIn ? RouteTable.home : RouteTable.welcome;
     return table.onGenerateRoute(routeName, args)(context);
   },
 );

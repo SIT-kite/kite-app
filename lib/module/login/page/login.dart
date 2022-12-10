@@ -179,12 +179,15 @@ class _LoginPageState extends State<LoginPage> {
             enableSuggestions: false,
             validator: studentIdValidator,
             decoration: InputDecoration(
-                labelText: i18n.account, hintText: i18n.kiteLoginAccountHint, icon: const Icon(Icons.person)),
+              labelText: i18n.account,
+              hintText: i18n.kiteLoginAccountHint,
+              icon: const Icon(Icons.person),
+            ),
           ),
           TextFormField(
             controller: _passwordController,
             autofocus: true,
-            textInputAction: TextInputAction.go,
+            textInputAction: TextInputAction.send,
             toolbarOptions: const ToolbarOptions(
               copy: false,
               cut: false,
@@ -266,8 +269,8 @@ class _LoginPageState extends State<LoginPage> {
                   onLogin(ctx);
                 }
               : null,
-          child: i18n.kiteLoginBtn.text(),
-        ).sized(height: 40.h),
+          child: i18n.kiteLoginBtn.text().padAll(5),
+        ),
         ElevatedButton(
           // Offline
           onPressed: isLicenseAccepted
@@ -275,8 +278,8 @@ class _LoginPageState extends State<LoginPage> {
                   Navigator.pushReplacementNamed(context, RouteTable.home);
                 }
               : null,
-          child: i18n.kiteLoginOfflineModeBtn.text(),
-        ).sized(height: 40.h),
+          child: i18n.kiteLoginOfflineModeBtn.text().padAll(5),
+        ),
       ],
     );
   }

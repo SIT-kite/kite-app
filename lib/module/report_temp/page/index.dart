@@ -16,50 +16,24 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../using.dart';
+import 'report.dart';
 
-import 'reminder.dart';
-
-const _reportUrlPrefix = 'http://xgfy.sit.edu.cn/h5/#/';
-const _reportUrlIndex = '${_reportUrlPrefix}pages/index/index';
-
-class DailyReportPage extends StatelessWidget {
-  const DailyReportPage({Key? key}) : super(key: key);
-
-  static Future<String> _getInjectJs() async {
-    // TODO: 把 replace 完的 JS 缓存了
-    final oaCredential = Auth.oaCredential;
-    final String username = oaCredential?.account ?? '';
-    final String css = await rootBundle.loadString('assets/report_temp/inject.css');
-    final String js = await rootBundle.loadString('assets/report_temp/inject.js');
-    return js.replaceFirst('{{username}}', username).replaceFirst('{{injectCSS}}', css);
-  }
+class DailyReportIndexPage extends StatefulWidget {
+  const DailyReportIndexPage({super.key});
 
   @override
+  State<DailyReportIndexPage> createState() => _DailyReportIndexPageState();
+}
+
+class _DailyReportIndexPageState extends State<DailyReportIndexPage> {
+  @override
   Widget build(BuildContext context) {
-    return SimpleWebViewPage(
-      initialUrl: _reportUrlIndex,
-      fixedTitle: i18n.ftype_reportTemp,
-      otherActions: [
-        IconButton(
-          onPressed: () async {
-            // TODO: use BuildContext.showTip dialog
-            showAlertDialog(context,
-                title: i18n.reportTempReminderTitle,
-                content: const SingleChildScrollView(
-                  child: ReminderDialog(),
-                ));
-          },
-          icon: const Icon(Icons.sms),
-        ),
-      ],
-      injectJsRules: [
-        InjectJsRuleItem(
-          rule: FunctionalRule((url) => url.startsWith(_reportUrlPrefix)),
-          asyncJavascript: _getInjectJs(),
-        ),
-      ],
-    );
+    final oaCredential = Auth.oaCredential;
+    if (oaCredential == null) {
+      return const UnauthorizedTipPage();
+    } else {
+      return DailyReportPage(oaCredential: oaCredential);
+    }
   }
 }

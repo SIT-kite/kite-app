@@ -58,7 +58,12 @@ class _ImportTimetableIndexPageState extends State<ImportTimetableIndexPage> {
         return buildConnectivityChecker(context, const ValueKey("Connectivity Checker"));
       }
     } else {
-      return const UnauthorizedTip(key: ValueKey("Unauthorized"));
+      return UnauthorizedTip(
+        key: const ValueKey("Unauthorized"),
+        onLogin: () {
+          setState(() {});
+        },
+      );
     }
   }
 

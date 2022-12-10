@@ -4,6 +4,8 @@ import 'dao/credential.dart';
 import 'init.dart';
 
 export 'entity/credential.dart';
+export 'page/unauth.dart';
+export 'utils.dart';
 
 // ignore: non_constant_identifier_names
 CredentialDao get Auth => CredentialDelegate(CredentialInit.credential);

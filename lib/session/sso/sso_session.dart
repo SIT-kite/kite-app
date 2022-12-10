@@ -22,11 +22,14 @@ import 'dart:typed_data';
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart' hide Lock;
+import 'package:flutter/material.dart';
 import 'package:kite/events/events.dart';
+import 'package:kite/global/global.dart';
 import 'package:kite/module/flea_market/service/ocr.dart';
 import 'package:kite/module/login/using.dart';
 import 'package:kite/session/dio_common.dart';
 import 'package:kite/util/logger.dart';
+import 'package:rettulf/rettulf.dart';
 import 'package:synchronized/synchronized.dart';
 
 import '../../events/bus.dart';
@@ -119,11 +122,11 @@ class SsoSession with DioDownloaderMixin implements ISession {
     });
   }
 
-  Future<Response> loginWith(OACredential oaCredential) async {
+  Future<Response?> loginWith(OACredential oaCredential) async {
     return await login(oaCredential.account, oaCredential.password);
   }
 
-  Future<Response> login(String username, String password) async {
+  Future<Response?> login(String username, String password) async {
     return await loginLock.synchronized(() async {
       return await _login(username, password);
     });
@@ -243,7 +246,7 @@ class SsoSession with DioDownloaderMixin implements ISession {
     return response;
   }
 
-  Future<Response> _login(String username, String password) async {
+  Future<Response?> _login(String username, String password) async {
     for (int i = 0; i < _maxRetryCount; i++) {
       try {
         return await loginWithoutRetry(username, password);
@@ -253,6 +256,16 @@ class SsoSession with DioDownloaderMixin implements ISession {
         } else {
           Auth.oaCredential = null;
           FireOn.global(CredentialChangeEvent());
+          final confirm = await Global.buildContext?.showRequest(
+              title: "Credential Error",
+              desc: "Your account or password is incorrect, do you want to log in again?",
+              yes: "Re-login",
+              no: "not now",
+              highlight: true);
+          if (confirm == true) {
+            Global.buildContext?.navigator.push(MaterialPageRoute(builder: (ctx) => const UnauthorizedTipPage()));
+          }
+          return null;
         }
       }
     }
