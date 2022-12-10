@@ -19,62 +19,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:rettulf/rettulf.dart';
-import 'appointment/init.dart';
 import 'using.dart';
 
-import 'appointment/entity.dart';
-import 'appointment/page/notice.dart';
 import 'search/page/constant.dart';
 import 'search/page/search_delegate.dart';
 
-class NoticeWidget extends StatelessWidget {
-  static const noticePreviewCharLimit = 25;
-  final ValueNotifier<Notice?> noticeNotifier = ValueNotifier(null);
-
-  NoticeWidget({Key? key}) : super(key: key);
-
-  Widget buildNone() => Container();
-
-  String genNoticePreview(Notice notice) => notice.html.substring(0, min(notice.html.length, noticePreviewCharLimit));
-
-  Widget buildSome(Notice notice) {
-    final isRealHtml = guessIsHtml(notice.html);
-    return Builder(builder: (context) {
-      return Card(
-          child: ListTile(
-        title: Text(isRealHtml ? i18n.libraryNoticeLabel : genNoticePreview(notice),
-            style: const TextStyle(color: Colors.blue, fontSize: 18)),
-        subtitle: Text(('${i18n.libraryNoticeSendTime}:  ${context.dateFullNum(notice.ts.toLocal())}')),
-        trailing: const Icon(
-          Icons.notification_important,
-          color: Colors.blueAccent,
-        ),
-        onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return LibraryNoticePage(notice, isHtml: isRealHtml);
-          }));
-        },
-      ));
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    LibraryAppointmentInit.appointmentService.getNotice().then((value) {
-      noticeNotifier.value = value;
-    });
-    return ValueListenableBuilder<Notice?>(
-      valueListenable: noticeNotifier,
-      builder: (context, value, child) {
-        if (value == null) {
-          return buildNone();
-        } else {
-          return buildSome(value);
-        }
-      },
-    );
-  }
-}
 
 class LibraryPage extends StatelessWidget {
   const LibraryPage({Key? key}) : super(key: key);
@@ -149,7 +98,6 @@ class LibraryPage extends StatelessWidget {
     var sayingWidth = screenWidth * 0.5;
     return Stack(
       children: [
-        Align(alignment: Alignment.topCenter, child: NoticeWidget()),
         Center(
           child: SizedBox(
             height: 400,
