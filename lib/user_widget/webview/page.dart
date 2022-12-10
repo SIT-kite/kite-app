@@ -16,8 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kite/design/utils.dart';
@@ -61,9 +59,6 @@ class SimpleWebViewPage extends StatefulWidget {
   /// WebView创建完毕时的回调
   final WebViewCreatedCallback? onWebViewCreated;
 
-  /// 异步注入cookie
-  final Future<List<WebViewCookie>>? initialAsyncCookies;
-
   /// 暴露dart回调到js接口
   final Set<JavascriptChannel>? javascriptChannels;
 
@@ -79,6 +74,9 @@ class SimpleWebViewPage extends StatefulWidget {
   /// 夜间模式
   final bool followDarkMode;
 
+  /// 注入cookies
+  final List<WebViewCookie> initialCookies;
+
   const SimpleWebViewPage({
     Key? key,
     required this.initialUrl,
@@ -92,11 +90,11 @@ class SimpleWebViewPage extends StatefulWidget {
     this.showTopProgressIndicator = true,
     this.userAgent,
     this.postData,
-    this.initialAsyncCookies,
     this.javascriptChannels,
     this.showLaunchButtonIfUnsupported = true,
     this.otherActions,
     this.followDarkMode = false,
+    this.initialCookies = const [],
   }) : super(key: key);
 
   @override
@@ -104,18 +102,17 @@ class SimpleWebViewPage extends StatefulWidget {
 }
 
 class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
-  final _controllerCompleter = Completer<WebViewController>();
+  WebViewController? _controller;
+
   String title = i18n.untitled;
   int progress = 0;
 
   void _onRefresh() async {
-    final controller = await _controllerCompleter.future;
-    await controller.reload();
+    await _controller?.reload();
   }
 
   void _onShared() async {
-    final controller = await _controllerCompleter.future;
-    Log.info('分享页面: ${await controller.currentUrl()}');
+    Log.info('分享页面: ${await _controller?.currentUrl()}');
   }
 
   /// 构造进度条
@@ -158,12 +155,10 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
     final curTitle = widget.fixedTitle ?? title;
     return WillPopScope(
       onWillPop: () async {
-        final controller = await _controllerCompleter.future;
-        if (await controller.canGoBack()) {
-          controller.goBack();
-          return false;
-        }
-        return true;
+        final canGoBack = await _controller?.canGoBack() ?? false;
+        if (canGoBack) _controller?.goBack();
+        // 如果wv能后退就不能退出路由
+        return !canGoBack;
       },
       child: Scaffold(
         appBar: AppBar(
@@ -181,10 +176,8 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
         body: MyWebView(
           initialUrl: widget.initialUrl,
           onWebViewCreated: (controller) async {
-            _controllerCompleter.complete(controller);
-            if (widget.onWebViewCreated != null) {
-              widget.onWebViewCreated!(controller);
-            }
+            _controller = controller;
+            widget.onWebViewCreated?.call(controller);
           },
           injectJsRules: () {
             return [
@@ -203,8 +196,7 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
           },
           onPageFinished: (url) async {
             if (widget.fixedTitle == null) {
-              final controller = await _controllerCompleter.future;
-              title = (await controller.getTitle()) ?? i18n.untitled;
+              title = (await _controller?.getTitle()) ?? i18n.untitled;
               if (!mounted) return;
               setState(() {});
             }
@@ -212,8 +204,8 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
           javascriptChannels: widget.javascriptChannels,
           userAgent: widget.userAgent,
           postData: widget.postData,
-          initialAsyncCookies: widget.initialAsyncCookies,
           showLaunchButtonIfUnsupported: widget.showLaunchButtonIfUnsupported,
+          initialCookies: widget.initialCookies,
         ),
       ),
     );

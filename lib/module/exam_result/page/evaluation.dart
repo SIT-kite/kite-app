@@ -16,9 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import '../using.dart';
+
 import '../entity/evaluation.dart';
 import '../init.dart';
+import '../using.dart';
 
 const _evaluationPageUrl = 'http://jwxt.sit.edu.cn/jwglxt/xspjgl/xspj_cxXspjDisplay.html?gnmkdm=N401605';
 
@@ -48,29 +49,38 @@ class _EvaluationPageState extends State<EvaluationPage> {
     };
   }
 
+  Future<List<WebViewCookie>> getCookies() async {
+    final result = await ExamResultInit.cookieJar.loadAsWebViewCookie(Uri.parse('http://jwxt.sit.edu.cn/jwglxt/'));
+    print('GetCookies: $result');
+    return result;
+  }
+
   @override
   Widget build(BuildContext context) {
     final coursesToEvaluate = widget.coursesToEvaluate;
-    return SimpleWebViewPage(
-      initialUrl: _evaluationPageUrl,
-      fixedTitle: i18n.teacherEvalTitle,
-      initialAsyncCookies: ExamResultInit.cookieJar.loadAsWebViewCookie(
-        Uri.parse('http://jwxt.sit.edu.cn/jwglxt/'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: index == coursesToEvaluate.length - 1 ? const Icon(Icons.check) : const Icon(Icons.east),
-        onPressed: () {
-          // 评教完成
-          if (index == coursesToEvaluate.length - 1) {
-            Navigator.of(context).pop();
-          } else {
-            setState(() {
-              index++;
-            });
-          }
-        },
-      ),
-      postData: _getForm(coursesToEvaluate[index]),
+    return MyFutureBuilder<List<WebViewCookie>>(
+      future: getCookies(),
+      builder: (context, data) {
+        return SimpleWebViewPage(
+          initialUrl: _evaluationPageUrl,
+          fixedTitle: i18n.teacherEvalTitle,
+          initialCookies: data,
+          floatingActionButton: FloatingActionButton(
+            child: index == coursesToEvaluate.length - 1 ? const Icon(Icons.check) : const Icon(Icons.east),
+            onPressed: () {
+              // 评教完成
+              if (index == coursesToEvaluate.length - 1) {
+                Navigator.of(context).pop();
+              } else {
+                setState(() {
+                  index++;
+                });
+              }
+            },
+          ),
+          postData: _getForm(coursesToEvaluate[index]),
+        );
+      },
     );
   }
 }

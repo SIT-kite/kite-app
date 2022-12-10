@@ -18,6 +18,7 @@
 import 'package:catcher/catcher.dart';
 import 'package:catcher/model/platform_type.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:kite/design/user_widgets/dialog.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/launcher.dart';
@@ -26,7 +27,7 @@ import 'package:stack_trace/stack_trace.dart';
 
 import 'logger.dart';
 
-class DialogHandler extends ReportHandler {
+class KiteDialogHandler extends ReportHandler {
   @override
   String toString() {
     return 'DialogHandler';
@@ -88,6 +89,33 @@ class DialogHandler extends ReportHandler {
           ),
         ),
       ),
+    );
+    return true;
+  }
+}
+
+class KiteToastHandler extends ReportHandler {
+  @override
+  String toString() {
+    return 'MyToastHandler';
+  }
+
+  @override
+  List<PlatformType> getSupportedPlatforms() => [
+        PlatformType.android,
+        PlatformType.iOS,
+        PlatformType.web,
+        PlatformType.linux,
+        PlatformType.macOS,
+        PlatformType.windows,
+      ];
+
+  @override
+  Future<bool> handle(Report error, BuildContext? context) async {
+    if (context == null) return true;
+    EasyLoading.showToast(
+      '程序好像有点小问题',
+      toastPosition: EasyLoadingToastPosition.bottom,
     );
     return true;
   }

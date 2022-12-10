@@ -48,9 +48,12 @@ class _ScorePageState extends State<ScorePage> {
     final now = DateTime.now();
     selectedYear = (now.month >= 9 ? now.year : now.year - 1);
     selectedSemester = Semester.all;
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      scoreList = await ExamResultInit.scoreService.getScoreList(SchoolYear(selectedYear), selectedSemester);
-      setState(() {});
+    Future.delayed(Duration.zero, () async {
+      ExamResultInit.scoreService.getScoreList(SchoolYear(selectedYear), selectedSemester).then((value) {
+        setState(() {
+          scoreList = value;
+        });
+      }).ignore();
     });
   }
 
