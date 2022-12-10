@@ -83,7 +83,7 @@ class Initializer {
       kvStorageBox: HiveBoxInit.kv,
     );
     CredentialInit.init(
-      box: HiveBoxInit.credential,
+      box: HiveBoxInit.credentials,
     );
     await Global.init(
       userEventStorage: UserEventInit.userEventStorage,

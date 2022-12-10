@@ -252,7 +252,7 @@ class SsoSession with DioDownloaderMixin implements ISession {
           continue;
         } else {
           Auth.oaCredential = null;
-          FireOn.global(LoginFailedEvent());
+          FireOn.global(CredentialChangeEvent());
         }
       }
     }

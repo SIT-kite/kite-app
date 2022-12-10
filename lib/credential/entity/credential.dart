@@ -12,7 +12,7 @@ class OACredential {
   OACredential(this.account, this.password);
 
   @override
-  String toString() => '{"account"="$account","password":"$password"}';
+  String toString() => 'account:"$account", password:"$password"';
 
   OACredential copyWith({
     String? account,
@@ -22,6 +22,17 @@ class OACredential {
         account ?? this.account,
         password ?? this.password,
       );
+
+  @override
+  bool operator ==(Object other) {
+    return other is OACredential &&
+        runtimeType == other.runtimeType &&
+        account == other.account &&
+        password == other.password;
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
 }
 
 @HiveType(typeId: HiveTypeId.freshmanCredential)
@@ -34,7 +45,7 @@ class FreshmanCredential {
   FreshmanCredential(this.account, this.password);
 
   @override
-  String toString() => '{"account"="$account","password":"$password"}';
+  String toString() => 'account:"$account", password:"$password"';
 
   FreshmanCredential copyWith({
     String? account,
@@ -44,4 +55,15 @@ class FreshmanCredential {
         account ?? this.account,
         password ?? this.password,
       );
+
+  @override
+  bool operator ==(Object other) {
+    return other is FreshmanCredential &&
+        runtimeType == other.runtimeType &&
+        account == other.account &&
+        password == other.password;
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
 }

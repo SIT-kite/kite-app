@@ -24,7 +24,7 @@ import 'adapter.dart';
 class HiveBoxInit {
   HiveBoxInit._();
 
-  static late Box<dynamic> credential;
+  static late Box<dynamic> credentials;
   static late Box<dynamic> userEvent;
   static late Box<LibrarySearchHistoryItem> librarySearchHistory;
   static late Box<ContactData> contactSetting;
@@ -43,7 +43,7 @@ class HiveBoxInit {
   static Future<void> init(String root) async {
     await Hive.initFlutter(root);
     HiveAdapter.registerAll();
-    credential = await Hive.openBox('credential');
+    credentials = await Hive.openBox('credentials');
     kv = await Hive.openBox('setting');
     userEvent = await Hive.openBox('userEvent');
     librarySearchHistory = await Hive.openBox('librarySearchHistory');
@@ -57,7 +57,7 @@ class HiveBoxInit {
     game = await Hive.openBox<dynamic>('game');
     cookiesBox = await Hive.openBox<dynamic>('cookies');
     name2Box = {
-      "credential": HiveBoxInit.credential,
+      "credentials": HiveBoxInit.credentials,
       "setting": HiveBoxInit.kv,
       "librarySearchHistory": HiveBoxInit.librarySearchHistory,
       "cookies": HiveBoxInit.cookiesBox,
@@ -76,7 +76,7 @@ class HiveBoxInit {
   }
 
   static Future<void> clear() async {
-    await credential.deleteFromDisk();
+    await credentials.deleteFromDisk();
     await kv.deleteFromDisk();
     await userEvent.deleteFromDisk();
     await librarySearchHistory.deleteFromDisk();

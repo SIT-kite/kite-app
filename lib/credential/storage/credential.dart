@@ -4,7 +4,7 @@ import '../entity/credential.dart';
 import '../dao/credential.dart';
 
 class _Key {
-  static const ns = "/credentials";
+  static const ns = "/credential";
   static const oa = "$ns/oa";
   static const freshman = "$ns/freshman";
   static const lastOaAuthTime = "$ns/lastOaAuthTime";

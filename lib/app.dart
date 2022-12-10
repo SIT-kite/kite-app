@@ -27,6 +27,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kite/credential/user_widget/scope.dart';
 import 'package:kite/module/activity/using.dart';
 import 'package:kite/override/entity.dart';
 import 'package:kite/route.dart';
@@ -161,8 +162,10 @@ class _KiteAppState extends State<KiteApp> {
             // 设置文字大小不随系统设置改变
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: AdaptiveUI(
-              isSubpage: true,
-              child: widget!,
+              isSubpage: false,
+              child: AuthScopeMaker(
+                child: widget!,
+              ),
             ),
           );
         }),
