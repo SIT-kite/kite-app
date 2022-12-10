@@ -16,8 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kite/design/utils.dart';
@@ -61,9 +59,6 @@ class SimpleWebViewPage extends StatefulWidget {
   /// WebView创建完毕时的回调
   final WebViewCreatedCallback? onWebViewCreated;
 
-  /// 异步注入cookie
-  final Future<List<WebViewCookie>>? initialAsyncCookies;
-
   /// 暴露dart回调到js接口
   final Set<JavascriptChannel>? javascriptChannels;
 
@@ -92,7 +87,6 @@ class SimpleWebViewPage extends StatefulWidget {
     this.showTopProgressIndicator = true,
     this.userAgent,
     this.postData,
-    this.initialAsyncCookies,
     this.javascriptChannels,
     this.showLaunchButtonIfUnsupported = true,
     this.otherActions,
@@ -206,7 +200,6 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
           javascriptChannels: widget.javascriptChannels,
           userAgent: widget.userAgent,
           postData: widget.postData,
-          initialAsyncCookies: widget.initialAsyncCookies,
           showLaunchButtonIfUnsupported: widget.showLaunchButtonIfUnsupported,
         ),
       ),

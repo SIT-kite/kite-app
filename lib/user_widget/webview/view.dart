@@ -19,7 +19,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:kite/user_widget/future_builder.dart';
 import 'package:kite/user_widget/platform_widget.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/rule.dart';
@@ -91,9 +90,6 @@ class MyWebView extends StatefulWidget {
   /// 注入cookies
   final List<WebViewCookie> initialCookies;
 
-  /// 异步注入cookie
-  final Future<List<WebViewCookie>>? initialAsyncCookies;
-
   /// 自定义 UA
   final String? userAgent;
 
@@ -115,7 +111,6 @@ class MyWebView extends StatefulWidget {
     this.userAgent,
     this.postData,
     this.initialCookies = const <WebViewCookie>[],
-    this.initialAsyncCookies,
     this.javascriptChannels,
     this.showLaunchButtonIfUnsupported = true,
   }) : super(key: key);
@@ -214,15 +209,7 @@ class _MyWebViewState extends State<MyWebView> {
         );
       },
       mobileBuilder: (context) {
-        if (widget.initialAsyncCookies == null) {
-          return buildWebView(widget.initialCookies);
-        }
-        return MyFutureBuilder<List<WebViewCookie>>(
-          future: widget.initialAsyncCookies,
-          builder: (context, data) {
-            return buildWebView([...widget.initialCookies, ...data]);
-          },
-        );
+        return buildWebView(widget.initialCookies);
       },
     );
   }
