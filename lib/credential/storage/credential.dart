@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 import '../entity/credential.dart';
 
 import '../dao/credential.dart';
+import '../entity/user_type.dart';
 
 class _Key {
   static const ns = "/credential";
@@ -9,6 +10,7 @@ class _Key {
   static const freshman = "$ns/freshman";
   static const lastOaAuthTime = "$ns/lastOaAuthTime";
   static const lastFreshmanAuthTime = "$ns/lastFreshmanAuthTime";
+  static const lastUserType = "$ns/lastUserType";
 }
 
 class CredentialStorage implements CredentialDao {
@@ -39,4 +41,10 @@ class CredentialStorage implements CredentialDao {
 
   @override
   set lastFreshmanAuthTime(DateTime? newV) => box.put(_Key.lastFreshmanAuthTime, newV);
+
+  @override
+  UserType2? get lastUserType => box.get(_Key.lastUserType);
+
+  @override
+  set lastUserType(UserType2? newV) => box.put(_Key.lastUserType, newV);
 }

@@ -3,6 +3,7 @@ import 'package:kite/credential/entity/credential.dart';
 import 'package:kite/events/bus.dart';
 import 'package:kite/events/events.dart';
 
+import '../entity/user_type.dart';
 import '../init.dart';
 
 class AuthScope extends InheritedWidget {
@@ -10,6 +11,7 @@ class AuthScope extends InheritedWidget {
   final DateTime? lastOaAuthTime;
   final FreshmanCredential? freshmanCredential;
   final DateTime? lastFreshmanAuthTime;
+  final UserType2? lastUserType;
 
   const AuthScope({
     super.key,
@@ -17,6 +19,7 @@ class AuthScope extends InheritedWidget {
     this.lastOaAuthTime,
     this.freshmanCredential,
     this.lastFreshmanAuthTime,
+    this.lastUserType,
     required super.child,
   });
 
@@ -31,7 +34,8 @@ class AuthScope extends InheritedWidget {
     return oaCredential == oldWidget.oaCredential &&
         lastOaAuthTime == oldWidget.lastOaAuthTime &&
         freshmanCredential == oldWidget.freshmanCredential &&
-        lastFreshmanAuthTime == oldWidget.lastFreshmanAuthTime;
+        lastFreshmanAuthTime == oldWidget.lastFreshmanAuthTime &&
+        lastUserType == oldWidget.lastUserType;
   }
 }
 
@@ -62,6 +66,7 @@ class _AuthScopeMakerState extends State<AuthScopeMaker> {
       lastOaAuthTime: storage.lastOaAuthTime,
       freshmanCredential: storage.freshmanCredential,
       lastFreshmanAuthTime: storage.lastFreshmanAuthTime,
+      lastUserType: storage.lastUserType,
       child: widget.child,
     );
   }

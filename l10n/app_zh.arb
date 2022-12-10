@@ -168,7 +168,6 @@
   "formatError": "格式错误",
   "freshman": "新生",
   "freshmanLoginAccountHint": "学号/姓名/准考证号",
-  "freshmanLoginBtn": "进入风筝元宇宙",
   "freshmanLoginPwdHint": "你的身份证倒数后六位",
   "freshmanTitle": "欢迎来到上应大！",
   "friendsRadder": "可能认识的人",
@@ -454,5 +453,7 @@
   "yes": "好",
   "clear": "清空",
   "success": "成功",
-  "loginSuccessfulTip": "登录成功！"
+  "loginSuccessfulTip": "登录成功！",
+  "credentialError": "登录凭据错误",
+  "reloginRequestDesc": "你的账号或密码不正确，是否想要重新登录？"
 }

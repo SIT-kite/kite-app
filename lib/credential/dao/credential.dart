@@ -6,7 +6,6 @@ abstract class CredentialDao {
   DateTime? lastOaAuthTime;
   FreshmanCredential? freshmanCredential;
   DateTime? lastFreshmanAuthTime;
-  /// TODO: User Type?
-  //UserType? lastUserType;
+  UserType2? lastUserType;
 }
 

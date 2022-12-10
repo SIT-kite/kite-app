@@ -311,7 +311,6 @@
   "formatError": "Format Error",
   "freshman": "Freshman",
   "freshmanLoginAccountHint": "Student ID/Full Name/Examinee Number",
-  "freshmanLoginBtn": "Join Kite World",
   "freshmanLoginPwdHint": "The last six number of your ID card",
   "freshmanTitle": "Welcome !",
   "friendsRadder": "Friends Radder",
@@ -728,5 +727,7 @@
   "yes": "Yes",
   "clear": "Clear",
   "success": "Success",
-  "loginSuccessfulTip": "Login successful !"
+  "loginSuccessfulTip": "Login successful !",
+  "credentialError": "Credential Error",
+  "reloginRequestDesc": "Your account or password is incorrect, do you want to log in again?"
 }

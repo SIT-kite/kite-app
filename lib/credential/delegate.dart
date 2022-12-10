@@ -3,6 +3,7 @@ import 'package:kite/events/bus.dart';
 import 'package:kite/events/events.dart';
 
 import 'entity/credential.dart';
+import 'entity/user_type.dart';
 
 class CredentialDelegate implements CredentialDao {
   final CredentialDao storage;
@@ -51,5 +52,13 @@ class CredentialDelegate implements CredentialDao {
   @override
   set lastFreshmanAuthTime(DateTime? newV) {
     storage.lastFreshmanAuthTime = newV;
+  }
+
+  @override
+  UserType2? get lastUserType => storage.lastUserType;
+
+  @override
+  set lastUserType(UserType2? newV) {
+    storage.lastUserType = newV;
   }
 }

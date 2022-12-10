@@ -168,7 +168,6 @@
   "formatError": "格式錯誤",
   "freshman": "新生",
   "freshmanLoginAccountHint": "學號/姓名/准考證號",
-  "freshmanLoginBtn": "進入小風箏世界",
   "freshmanLoginPwdHint": "你的身份證倒數後六位",
   "freshmanTitle": "歡迎來到上應大！",
   "friendsRadder": "交友雷達",
@@ -454,5 +453,7 @@
   "yes": "好",
   "clear": "清除",
   "success": "成功",
-  "loginSuccessfulTip": "登入成功！"
+  "loginSuccessfulTip": "登入成功！",
+  "credentialError": "登入憑證錯誤",
+  "reloginRequestDesc": "你的賬戶或密碼不正確，確認重新登入嗎？"
 }

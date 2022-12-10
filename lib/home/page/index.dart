@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _doLogin(BuildContext context, OACredential oaCredential) async {
-    await HomeInit.ssoSession.loginWith(oaCredential);
+    await HomeInit.ssoSession.loginPassive(oaCredential);
 
     if (Kv.auth.personName == null) {
       final personName = await LoginInit.authServerService.getPersonName();

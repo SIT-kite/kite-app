@@ -122,10 +122,10 @@ class Global {
     pageLogger.startup();
 
     // 若本地存放了用户名与密码，那就惰性登录
-    final oaUser = credentials.oaCredential;
-    if (oaUser != null) {
+    final oaCredential = credentials.oaCredential;
+    if (oaCredential != null) {
       // 惰性登录
-      ssoSession.lazyLoginWith(oa: oaUser);
+      ssoSession.lazyLogin(oaCredential);
     }
 
     // 全局FutureBuilder异常处理

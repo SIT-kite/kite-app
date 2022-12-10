@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
@@ -55,9 +54,8 @@ class SsoSession with DioDownloaderMixin implements ISession {
   /// 登录状态
   bool isOnline = false;
 
-  // 如果登录成功，那么 username 与 password 将不为 null
-  String? _username;
-  String? _password;
+  // If login successful, credential is non-null.
+  OACredential? _credential;
 
   /// Session错误拦截器
   SsoSessionErrorCallback? onError;
@@ -114,21 +112,24 @@ class SsoSession with DioDownloaderMixin implements ISession {
     await loginLock.synchronized(() async {
       if (isOnline) return;
       // 只有用户名与密码均不为空时，才尝试重新登录，否则就抛异常
-      if (username != null && password != null) {
-        await _login(_username!, _password!);
+      final credential = _credential;
+      if (credential != null) {
+        await _loginPassive(credential);
       } else {
         throw NeedLoginException(url: url);
       }
     });
   }
 
-  Future<Response?> loginWith(OACredential oaCredential) async {
-    return await login(oaCredential.account, oaCredential.password);
+  Future<Response?> loginPassive(OACredential credential) async {
+    return await loginLock.synchronized(() async {
+      return await _loginPassive(credential);
+    });
   }
 
-  Future<Response?> login(String username, String password) async {
+  Future<void> loginActive(OACredential credential) async {
     return await loginLock.synchronized(() async {
-      return await _login(username, password);
+      return await _loginActive(credential);
     });
   }
 
@@ -201,28 +202,19 @@ class SsoSession with DioDownloaderMixin implements ISession {
     }
   }
 
-  String? get username => _username;
-
-  String? get password => _password;
-
   /// 惰性登录，只有在第一次请求跳转到登录页时才开始尝试真正的登录
-  void lazyLoginWith({required OACredential oa}) {
-    lazyLogin(oa.account, oa.password);
-  }
-
-  void lazyLogin(String username, String password) {
-    _username = username;
-    _password = password;
+  void lazyLogin(OACredential credential) {
+    _credential = credential;
   }
 
   /// 带异常的登录, 但不处理验证码识别错误问题.
-  Future<Response> loginWithoutRetry(String username, String password) async {
-    Log.info('尝试登录：$username');
+  Future<Response> loginWithoutRetry(OACredential credential) async {
+    Log.info('尝试登录：${credential.account}');
     Log.debug('当前登录UA: ${dio.options.headers['User-Agent']}');
     // 在 OA 登录时, 服务端会记录同一 cookie 用户登录次数和输入错误次数,
     // 所以需要在登录前清除所有 cookie, 避免用户重试时出错.
     cookieJar.deleteAll();
-    final response = await _postLoginProcess(username, password);
+    final response = await _postLoginProcess(credential);
     final page = BeautifulSoup(response.data);
 
     final emptyPage = BeautifulSoup('');
@@ -238,32 +230,38 @@ class SsoSession with DioDownloaderMixin implements ISession {
       Log.error('未知验证错误,此时url为: ${response.realUri}');
       throw const UnknownAuthException();
     }
-    Log.info('登录成功：$username');
+    Log.info('登录成功：${credential.account}');
     isOnline = true;
-    _username = username;
-    _password = password;
+    _credential = credential;
     Kv.loginTime.sso = DateTime.now();
     return response;
   }
 
-  Future<Response?> _login(String username, String password) async {
+  /// Return null when failed to login but there is no exception raised.
+  Future<Response?> _loginPassive(OACredential credential) async {
     for (int i = 0; i < _maxRetryCount; i++) {
       try {
-        return await loginWithoutRetry(username, password);
+        return await loginWithoutRetry(credential);
       } on CredentialsInvalidException catch (e) {
         if (e.msg.contains('验证码')) {
+          Log.info("Credential is invalid because of a wrong captcha prompt.");
           continue;
         } else {
+          Log.info("Credential is invalid because of incorrect account or password.");
           Auth.oaCredential = null;
           FireOn.global(CredentialChangeEvent());
-          final confirm = await Global.buildContext?.showRequest(
-              title: "Credential Error",
-              desc: "Your account or password is incorrect, do you want to log in again?",
-              yes: "Re-login",
-              no: "not now",
-              highlight: true);
-          if (confirm == true) {
-            Global.buildContext?.navigator.push(MaterialPageRoute(builder: (ctx) => const UnauthorizedTipPage()));
+          final ctx = Global.buildContext;
+          if (ctx != null) {
+            final confirm = await ctx.showRequest(
+              title: i18n.credentialError,
+              desc: i18n.reloginRequestDesc,
+              yes: i18n.relogin,
+              no: i18n.notNow,
+              highlight: true,
+            );
+            if (confirm == true) {
+              ctx.navigator.push(MaterialPageRoute(builder: (ctx) => const UnauthorizedTipPage()));
+            }
           }
           return null;
         }
@@ -272,8 +270,28 @@ class SsoSession with DioDownloaderMixin implements ISession {
     throw const MaxRetryExceedException(msg: '验证码识别有误，请稍后重试');
   }
 
+  /// Use cases:
+  /// - User try to log in actively on a login page.
+  Future<void> _loginActive(OACredential credential) async {
+    for (int i = 0; i < _maxRetryCount; i++) {
+      try {
+        await loginWithoutRetry(credential);
+        return;
+      } on CredentialsInvalidException catch (e) {
+        if (e.msg.contains('验证码')) {
+          Log.info("Credential is invalid because of a wrong captcha prompt.");
+          continue;
+        } else {
+          Log.info("Credential is invalid because of incorrect account or password.");
+          rethrow;
+        }
+      }
+    }
+    throw const MaxRetryExceedException(msg: '验证码识别有误，请稍后重试');
+  }
+
   /// 登录流程
-  Future<Response> _postLoginProcess(String username, String password) async {
+  Future<Response> _postLoginProcess(OACredential credential) async {
     debug(m) => Log.debug(m);
 
     /// 提取认证页面中的加密盐
@@ -342,7 +360,7 @@ class SsoSession with DioDownloaderMixin implements ISession {
 
     // 获取首页验证码
     var captcha = '';
-    if (await needCaptcha(username)) {
+    if (await needCaptcha(credential.account)) {
       // 识别验证码
       // 一定要让识别到的字符串长度为4
       // 如果不是4，那就再试一次
@@ -357,9 +375,9 @@ class SsoSession with DioDownloaderMixin implements ISession {
     // 获取salt
     final salt = getSaltFromAuthHtml(html);
     // 加密密码
-    final hashedPwd = hashPassword(salt, password);
+    final hashedPwd = hashPassword(salt, credential.password);
     // 登录系统，获得cookie
-    return await _postLoginRequest(username, hashedPwd, captcha, casTicket);
+    return await _postLoginRequest(credential.account, hashedPwd, captcha, casTicket);
   }
 
   final neededHeaders = {

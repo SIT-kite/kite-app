@@ -160,6 +160,14 @@ class _UnauthorizedTipState extends State<UnauthorizedTip> {
         ].column());
   }
 
+  String get buttonText {
+    if (Auth.hasLoggedIn) {
+      return i18n.relogin;
+    } else {
+      return i18n.kiteLoginBtn;
+    }
+  }
+
   Widget buildLoginButton(BuildContext ctx) {
     const textStyle = TextStyle(fontSize: 18);
     return Row(
@@ -175,7 +183,7 @@ class _UnauthorizedTipState extends State<UnauthorizedTip> {
                   onLogin(ctx);
                 }
               : null,
-          child: i18n.relogin.text(style: textStyle).padAll(10),
+          child: buttonText.text(style: textStyle).padAll(10),
         ),
       ],
     );
@@ -213,9 +221,10 @@ class _UnauthorizedTipState extends State<UnauthorizedTip> {
     }
 
     try {
-      await LoginInit.ssoSession.login(account, password);
+      final credential = OACredential(account, password);
+      await LoginInit.ssoSession.loginActive(credential);
       final personName = await LoginInit.authServerService.getPersonName();
-      Auth.oaCredential = OACredential(account, password);
+      Auth.oaCredential = credential;
       Kv.auth.personName = personName;
       // Reset the home
       Kv.home.homeItems = null;

@@ -98,9 +98,10 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     try {
-      await LoginInit.ssoSession.login(account, password);
+      final credential = OACredential(account, password);
+      await LoginInit.ssoSession.loginActive(credential);
       final personName = await LoginInit.authServerService.getPersonName();
-      Auth.oaCredential = OACredential(account, password);
+      Auth.oaCredential = credential;
       Kv.auth.personName = personName;
       // Reset the home
       Kv.home.homeItems = null;

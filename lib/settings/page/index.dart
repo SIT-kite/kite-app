@@ -76,7 +76,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void _testPassword(BuildContext context, OACredential oaCredential) async {
     try {
-      await Global.ssoSession.login(oaCredential.account, oaCredential.password);
+      await Global.ssoSession.loginActive(oaCredential);
       if (!mounted) return;
       await context.showTip(title: i18n.success, desc: i18n.loginSuccessfulTip, ok: i18n.close);
     } catch (e) {
