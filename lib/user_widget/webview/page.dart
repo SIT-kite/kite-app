@@ -74,6 +74,9 @@ class SimpleWebViewPage extends StatefulWidget {
   /// 夜间模式
   final bool followDarkMode;
 
+  /// 注入cookies
+  final List<WebViewCookie> initialCookies;
+
   const SimpleWebViewPage({
     Key? key,
     required this.initialUrl,
@@ -91,6 +94,7 @@ class SimpleWebViewPage extends StatefulWidget {
     this.showLaunchButtonIfUnsupported = true,
     this.otherActions,
     this.followDarkMode = false,
+    this.initialCookies = const [],
   }) : super(key: key);
 
   @override
@@ -201,6 +205,7 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
           userAgent: widget.userAgent,
           postData: widget.postData,
           showLaunchButtonIfUnsupported: widget.showLaunchButtonIfUnsupported,
+          initialCookies: widget.initialCookies,
         ),
       ),
     );

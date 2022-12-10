@@ -17,7 +17,6 @@
  */
 import 'package:flutter/material.dart';
 
-import '../entity/evaluation.dart';
 import '../entity/score.dart';
 import '../init.dart';
 import '../using.dart';
@@ -93,21 +92,19 @@ class _ScoreItemState extends State<ScoreItem> {
 
     if (!_score.value.isNaN) return Text(_score.value.toString(), style: style);
 
-    // 获取评教列表. 然后找到与当前课程有关的, 将评教页面呈现给用户.
-    return MyFutureBuilder<List<CourseToEvaluate>>(
-      futureGetter: ExamResultInit.courseEvaluationService.getEvaluationList,
-      builder: (context, data) {
-        final coursesToEvaluate = data.where((element) => element.dynClassId.startsWith(_score.dynClassId)).toList();
-
-        if (coursesToEvaluate.isEmpty) return const Text('评教不可用');
-
-        return GestureDetector(
-          child: Text('去评教', style: style),
-          onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (_) => EvaluationPage(coursesToEvaluate)));
-          },
+    return InkWell(
+      onTap: () async {
+        final data = await ExamResultInit.courseEvaluationService.getEvaluationList();
+        if (!mounted) return;
+        await Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => EvaluationPage(
+              data.where((element) => element.dynClassId.startsWith(_score.dynClassId)).toList(),
+            ),
+          ),
         );
       },
+      child: Text('待评教', style: style),
     );
   }
 
