@@ -18,3 +18,4 @@
 export 'package:kite/util/kite_authorization.dart';
 export 'package:kite/util/user.dart';
 export 'package:kite/util/validation.dart';
+export 'package:kite/auth/symbol.dart';

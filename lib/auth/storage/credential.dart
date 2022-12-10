@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:kite/auth/credential.dart';
+import 'package:kite/auth/entity/credential.dart';
 
 import '../dao/credential.dart';
 

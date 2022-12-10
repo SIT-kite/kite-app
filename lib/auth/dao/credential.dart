@@ -1,4 +1,4 @@
-import 'package:kite/auth/credential.dart';
+import 'package:kite/auth/entity/credential.dart';
 
 abstract class CredentialDao {
   OaUserCredential? oaUser;
