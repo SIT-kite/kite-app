@@ -38,7 +38,7 @@ ScScoreSummary calcTargetScore(int admissionYear) {
   if (table.keys.contains(admissionYear)) {
     return table[admissionYear]!;
   } else {
-    return table[20]!;
+    return table[2020]!;
   }
 }
 

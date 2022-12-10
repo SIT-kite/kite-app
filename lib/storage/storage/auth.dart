@@ -33,18 +33,6 @@ class AuthSettingStorage implements AuthSettingDao {
   AuthSettingStorage(this.box);
 
   @override
-  String? get currentUsername => box.get(AuthKeys.currentUsername);
-
-  @override
-  set currentUsername(String? foo) => box.put(AuthKeys.currentUsername, foo);
-
-  @override
-  String? get ssoPassword => box.get(AuthKeys.ssoPassword);
-
-  @override
-  set ssoPassword(String? foo) => box.put(AuthKeys.ssoPassword, foo);
-
-  @override
   String? get personName => box.get(AuthKeys.personName);
 
   @override
