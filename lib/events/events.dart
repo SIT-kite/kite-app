@@ -22,3 +22,6 @@ class HomeRefreshEvent {
 }
 
 class ExpenseTackerRefreshEvent {}
+
+/// It will be raised when some functions require login SSO but faced failure.
+class LoginFailedEvent {}

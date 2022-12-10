@@ -22,6 +22,7 @@ import 'dart:typed_data';
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart' hide Lock;
+import 'package:kite/events/events.dart';
 import 'package:kite/exception/session.dart';
 import 'package:kite/module/flea_market/service/ocr.dart';
 import 'package:kite/network/session.dart';
@@ -30,6 +31,7 @@ import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
 import 'package:synchronized/synchronized.dart';
 
+import '../../events/bus.dart';
 import '../../util/dio_utils.dart';
 import 'encryption.dart';
 
@@ -240,8 +242,13 @@ class SsoSession with DioDownloaderMixin implements ISession {
       try {
         return await loginWithoutRetry(username, password);
       } on CredentialsInvalidException catch (e) {
-        if (e.msg.contains('验证码')) continue;
-        rethrow; // 已达到最大次数
+        if (e.msg.contains('验证码')) {
+          continue;
+        } else {
+          Kv.auth.currentUsername = null;
+          Kv.auth.ssoPassword = null;
+          FireOn.global(LoginFailedEvent());
+        }
       }
     }
     throw const MaxRetryExceedException(msg: '验证码识别有误，请稍后重试');

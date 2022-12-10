@@ -58,7 +58,7 @@ class _ImportTimetableIndexPageState extends State<ImportTimetableIndexPage> {
         return buildConnectivityChecker(context, const ValueKey("Connectivity Checker"));
       }
     } else {
-      return buildUnauthorized(ctx, const ValueKey("Unauthorized"));
+      return const UnauthorizedTip(key: ValueKey("Unauthorized"));
     }
   }
 
@@ -77,9 +77,5 @@ class _ImportTimetableIndexPageState extends State<ImportTimetableIndexPage> {
       },
       iconSize: ctx.isPortrait ? 180 : 120,
     );
-  }
-
-  Widget buildUnauthorized(BuildContext ctx, Key? key) {
-    return LeavingBlank(icon: Icons.person_off_outlined, desc: i18n.unauthorizedUsernameTip);
   }
 }

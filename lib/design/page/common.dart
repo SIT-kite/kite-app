@@ -17,6 +17,7 @@
 */
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kite/l10n/extension.dart';
 import '../colors.dart';
 import 'package:rettulf/rettulf.dart';
 
@@ -66,5 +67,19 @@ class LeavingBlank extends StatelessWidget {
           .padAll(10)
           .expanded(),
     ].column(maa: MAAlign.spaceAround).center();
+  }
+}
+
+class UnauthorizedTip extends StatefulWidget {
+  const UnauthorizedTip({super.key});
+
+  @override
+  State<UnauthorizedTip> createState() => _UnauthorizedTipState();
+}
+
+class _UnauthorizedTipState extends State<UnauthorizedTip> {
+  @override
+  Widget build(BuildContext context) {
+    return LeavingBlank(icon: Icons.person_off_outlined, desc: i18n.unauthorizedUsernameTip);
   }
 }
