@@ -86,25 +86,6 @@ class _LoginPageState extends State<LoginPage> {
       );
       return;
     }
-    final connected = await LoginInit.ssoSession.checkConnectivity();
-    if (!connected) {
-      if (!mounted) return;
-      setState(() => enableLoginButton = true);
-      final confirm = await ctx.showRequest(
-        title: i18n.networkError,
-        desc: i18n.campusNetworkNoAccessTroubleshootingRequest,
-        yes: i18n.troubleshooting,
-        no: i18n.close,
-        highlight: true,
-        error: true,
-      );
-      if (mounted) {
-        if (confirm == true) {
-          ctx.navigator.pushNamed(RouteTable.networkTool);
-        }
-      }
-      return;
-    }
 
     try {
       await LoginInit.ssoSession.login(username, password);
