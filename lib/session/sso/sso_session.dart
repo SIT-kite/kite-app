@@ -23,11 +23,9 @@ import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart' hide Lock;
 import 'package:kite/events/events.dart';
-import 'package:kite/exception/session.dart';
 import 'package:kite/module/flea_market/service/ocr.dart';
-import 'package:kite/network/session.dart';
+import 'package:kite/module/login/using.dart';
 import 'package:kite/session/dio_common.dart';
-import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
 import 'package:synchronized/synchronized.dart';
 
@@ -201,6 +199,9 @@ class SsoSession with DioDownloaderMixin implements ISession {
   String? get password => _password;
 
   /// 惰性登录，只有在第一次请求跳转到登录页时才开始尝试真正的登录
+  void lazyLoginWith({required OaUserCredential oa}) {
+    lazyLogin(oa.account, oa.password);
+  }
   void lazyLogin(String username, String password) {
     _username = username;
     _password = password;

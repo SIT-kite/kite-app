@@ -35,10 +35,14 @@ IconButton helpButton(BuildContext context) {
   );
 }
 
-Future<void> uploadGameRecord(BuildContext context, GameRecord record) async {
+Future<void> uploadGameRecord(
+  BuildContext context,
+  OaUserCredential oa,
+  GameRecord record,
+) async {
   try {
     // 如果用户未同意过, 请求用户确认
-    if (!await signUpIfNecessary(context, '使用学号或工号区分不同用户的游戏记录')) return;
+    if (!await signUpIfNecessary(context, oa, '使用学号或工号区分不同用户的游戏记录')) return;
     // 上传记录
     await GameInit.rankingService.postScore(record);
     EasyLoading.showInfo('正在上传');

@@ -180,8 +180,10 @@ class _GameWidgetState extends State<GameWidget> {
       final currentTime = DateTime.now();
       final record = GameRecord(GameType.game2048, _game.score, startTime, currentTime.difference(startTime).inSeconds);
       GameInit.gameRecord.append(record);
-
-      uploadGameRecord(context, record);
+      final oaUser = Auth.oaUser;
+      if (oaUser != null) {
+        uploadGameRecord(context, oaUser, record);
+      }
     }
   }
 

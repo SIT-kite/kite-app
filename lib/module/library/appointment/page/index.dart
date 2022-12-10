@@ -82,7 +82,9 @@ class TodayTomorrowSwitch extends StatelessWidget {
 }
 
 class AppointmentPage extends StatefulWidget {
-  const AppointmentPage({Key? key}) : super(key: key);
+  final OaUserCredential oaUser;
+
+  const AppointmentPage({super.key, required this.oaUser});
 
   @override
   State<AppointmentPage> createState() => _AppointmentPageState();
@@ -104,7 +106,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
     super.initState();
   }
 
-  Future<void> showAppointPeriodDialog(PeriodStatusRecord e) async {
+  Future<void> showAppointPeriodDialog(PeriodStatusRecord e, OaUserCredential oaUser) async {
     final applyDialogResult = await context.showRequest(
         title: '是否要预约本场',
         desc: '场次编号: ${e.period}\n'
@@ -118,7 +120,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
     // 确定预约
     if (applyDialogResult == true) {
       if (!mounted) return;
-      final signed = await signUpIfNecessary(context, '预约图书馆');
+      final signed = await signUpIfNecessary(context, oaUser, '预约图书馆');
       if (signed) return;
     }
     try {
@@ -233,7 +235,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                 showHasAppointed();
                 return;
               } else {
-                await showAppointPeriodDialog(e);
+                await showAppointPeriodDialog(e, widget.oaUser);
               }
             },
           ),
@@ -280,7 +282,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
           IconButton(
             icon: const Icon(Icons.history),
             onPressed: () async {
-              if (!await signUpIfNecessary(context, '查询预约记录')) return;
+              if (!await signUpIfNecessary(context, widget.oaUser, '查询预约记录')) return;
               await Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HistoryPage()));
               setState(() {});
             },

@@ -115,7 +115,12 @@ class _GameWordlePageState extends State<GameWordlePage> {
                             setState(board.reset);
                           }
 
-                          if (mounted) uploadGameRecord(context, record);
+                          if (mounted) {
+                            final oaUser = Auth.oaUser;
+                            if (oaUser != null) {
+                              uploadGameRecord(context, oaUser, record);
+                            }
+                          }
                         },
                         onLose: () async {
                           final result = await showAlertDialog(

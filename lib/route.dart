@@ -57,7 +57,6 @@ class RouteTable {
   static const gameTetris = '$game/tetris';
   static const wiki = '/wiki';
   static const library = '/library';
-  static const libraryAppointment = '$library/appointment';
   static const market = '/market';
   static const timetable = '/timetable';
   static const timetableImport = '$timetable/import';
@@ -106,7 +105,6 @@ final defaultRouteTable = StaticRouteTable(
     RouteTable.gameTetris: (context, args) => const GameTetrisPage(),
     RouteTable.wiki: (context, args) => WikiPage(),
     RouteTable.library: (context, args) => const LibraryPage(),
-    RouteTable.libraryAppointment: (context, args) => const AppointmentPage(),
     RouteTable.market: (context, args) => const MarketPage(),
     RouteTable.timetable: (context, args) => const TimetableIndexPage(),
     RouteTable.timetableImport: (context, args) => const ImportTimetableIndexPage(),

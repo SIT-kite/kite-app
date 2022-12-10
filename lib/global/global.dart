@@ -22,6 +22,7 @@ import 'package:catcher/catcher.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:kite/credential/dao/credential.dart';
 import 'package:kite/global/cookie_init.dart';
 import 'package:kite/global/dio_initializer.dart';
 import 'package:kite/global/init.dart';
@@ -92,6 +93,7 @@ class Global {
   static Future<void> init({
     required UserEventStorageDao userEventStorage,
     required AuthSettingDao authSetting,
+    required CredentialDao credentials,
     bool? debugNetwork,
     required Box cookieBox,
   }) async {
@@ -120,10 +122,10 @@ class Global {
     pageLogger.startup();
 
     // 若本地存放了用户名与密码，那就惰性登录
-    final auth = authSetting;
-    if (auth.currentUsername != null && auth.ssoPassword != null) {
+    final oaUser = credentials.oaUser;
+    if (oaUser != null) {
       // 惰性登录
-      ssoSession.lazyLogin(auth.currentUsername!, auth.ssoPassword!);
+      ssoSession.lazyLoginWith(oa: oaUser);
     }
 
     // 全局FutureBuilder异常处理

@@ -106,10 +106,10 @@ class _BoardPageState extends State<BoardPage> {
     );
   }
 
-  Future<void> onUploadPicture(BuildContext context) async {
+  Future<void> onUploadPicture(BuildContext context, OaUserCredential oaCredential) async {
     // 如果用户未同意过, 请求用户确认
     // TODO: I18n
-    if (!await signUpIfNecessary(context, '标识图片上传者')) return;
+    if (!await signUpIfNecessary(context, oaCredential, '标识图片上传者')) return;
     try {
       final List<String> imagePaths = UniversalPlatform.isDesktopOrWeb
           ? await FileUtils.pickImagesByFilePicker()
@@ -197,13 +197,13 @@ class _BoardPageState extends State<BoardPage> {
 
   @override
   Widget build(BuildContext context) {
-    final bool showUpload = AccountUtils.getAuthUserType() != UserType.freshman;
+    final oaCredential = Auth.oaUser;
 
     return Scaffold(
       appBar: AppBar(title: i18n.kiteBoardTitle.text()),
-      floatingActionButton: showUpload
+      floatingActionButton: oaCredential != null
           ? FloatingActionButton(
-              onPressed: () => onUploadPicture(context),
+              onPressed: () => onUploadPicture(context, oaCredential),
               child: const Icon(Icons.upload),
             )
           : null,
