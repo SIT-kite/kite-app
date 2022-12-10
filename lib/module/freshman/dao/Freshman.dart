@@ -24,7 +24,7 @@ abstract class FreshmanDao {
   /// Precondition:
   /// - [Auth.freshmanCredential.account] is not null.
   /// - [Auth.freshmanCredential.password] is not null.
-  Future<FreshmanInfo> getMyInfo();
+  Future<FreshmanInfo> getMyInfo({FreshmanCredential? credential});
 
   Future<void> updateMyContact({Contact? contact, bool? visible});
 

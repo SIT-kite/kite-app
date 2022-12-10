@@ -88,13 +88,12 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
     final account = _accountController.text;
     final secret = _secretController.text;
     try {
-      // 先保存登录信息
-      Auth.freshmanCredential = FreshmanCredential(account, secret);
+      final credential = FreshmanCredential(account, secret);
       // 清空本地缓存
       FreshmanInit.freshmanCacheManager.clearAll();
 
-      final info = await freshmanDao.getMyInfo();
-
+      final info = await freshmanDao.getMyInfo(credential: credential);
+      Auth.freshmanCredential = credential;
       // 登录成功后赋值名字
       Kv.freshman.freshmanName = info.name;
 
@@ -112,8 +111,6 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       // 预计需要写一份新生的使用说明
       // GlobalLauncher.launch('${Backend.kite}/wiki/kite-app/features/');
     } catch (e) {
-      // 登录失败
-      Auth.freshmanCredential = null;
       final connectionType = await Connectivity().checkConnectivity();
       if (!mounted) return;
       if (connectionType == ConnectivityResult.none) {

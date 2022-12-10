@@ -30,7 +30,6 @@ import 'module/pure_function/launcher.dart';
 import 'module/simple_page/page/browser.dart';
 import 'module/symbol.dart';
 import 'navigation/route.dart';
-import 'util/user.dart';
 
 class RouteTable {
   RouteTable._();

@@ -17,30 +17,31 @@
 */
 import 'dart:convert';
 
-import 'package:kite/network/session.dart';
-
 import '../dao/Freshman.dart';
 import '../entity/info.dart';
 import '../entity/relationship.dart';
 import '../entity/statistics.dart';
+import '../using.dart';
 
 class FreshmanService implements FreshmanDao {
-  final ISession session;
+  final FreshmanSession session;
 
   const FreshmanService(this.session);
 
   @override
-  Future<FreshmanInfo> getMyInfo() async {
-    final response = await session.request('', ReqMethod.get);
+  Future<FreshmanInfo> getMyInfo({FreshmanCredential? credential}) async {
+    final response = await session.request('', ReqMethod.get, credential: credential);
     return FreshmanInfo.fromJson(response.data);
   }
 
   @override
   Future<void> updateMyContact({Contact? contact, bool? visible}) async {
-    await session.request('/update', ReqMethod.put, data: {
-      if (contact != null) 'yellow_pages': jsonEncode(contact.toJson()),
-      if (visible != null) 'visible': visible,
-    });
+    await session.request('/update', ReqMethod.put,
+        data: {
+          if (contact != null) 'yellow_pages': jsonEncode(contact.toJson()),
+          if (visible != null) 'visible': visible,
+        },
+        credential: Auth.freshmanCredential!);
   }
 
   @override

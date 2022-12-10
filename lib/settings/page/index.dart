@@ -21,7 +21,6 @@ import 'dart:io';
 import 'package:dynamic_color_theme/dynamic_color_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:image_picker/image_picker.dart';
@@ -37,7 +36,6 @@ import 'package:kite/storage/storage/develop.dart';
 import 'package:kite/util/file.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
-import 'package:kite/util/user.dart';
 import 'package:kite/util/validation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:rettulf/rettulf.dart';
@@ -56,7 +54,6 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   final TextEditingController _passwordController = TextEditingController();
-  final bool isFreshman = AccountUtils.getAuthUserType() == UserType.freshman;
   static final String currentVersion = 'v${Global.currentVersion.version} on ${Global.currentVersion.platform}';
 
   Future<void> _onChangeBgImage() async {
@@ -93,26 +90,6 @@ class _SettingsPageState extends State<SettingsPage> {
     navigator.pushReplacementNamed(RouteTable.welcome);
 
     Log.info('重启成功');
-  }
-
-  Future<void> _onLogout(BuildContext context) async {
-    final confirm = await context.showRequest(
-        title: i18n.logout, desc: i18n.logoutKiteWarn, yes: i18n.confirm, no: i18n.notNow, highlight: true);
-    if (confirm == true) {
-      if (!mounted) return;
-      Log.info('退出登录');
-
-      if (isFreshman) {
-        Auth.freshmanCredential = null;
-        Kv.freshman.freshmanName = null;
-      } else {
-        Auth.oaCredential = null;
-      }
-      Kv.home.homeItems = null;
-      await Initializer.init();
-      if (!mounted) return;
-      _gotoWelcome(context);
-    }
   }
 
   void _onClearStorage(BuildContext context) async {
@@ -219,14 +196,12 @@ class _SettingsPageState extends State<SettingsPage> {
               subtitle: i18n.settingsWallpaperSub,
               leading: const Icon(Icons.photo_size_select_actual_outlined),
               onTap: _onChangeBgImage),
-          if (!isFreshman)
-            SimpleSettingsTile(
-              title: i18n.settingsHomepageRearrange,
-              subtitle: i18n.settingsHomepageRearrangeSub,
-              leading: const Icon(Icons.menu),
-              onTap: () =>
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeRearrangePage())),
-            ),
+          SimpleSettingsTile(
+            title: i18n.settingsHomepageRearrange,
+            subtitle: i18n.settingsHomepageRearrangeSub,
+            leading: const Icon(Icons.menu),
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeRearrangePage())),
+          ),
         ],
       ),
       SettingsGroup(title: i18n.networking, children: <Widget>[
@@ -277,18 +252,16 @@ class _SettingsPageState extends State<SettingsPage> {
       SettingsGroup(
         title: i18n.account,
         children: <Widget>[
-          if (!isFreshman)
+          if (oaCredential != null)
             SimpleSettingsTile(
               title: i18n.studentID,
-              subtitle: oaCredential?.account ?? i18n.offline,
+              subtitle: oaCredential.account,
               leading: const Icon(Icons.person_rounded),
-              onTap: oaCredential != null
-                  ? () {
-                      // Copy the student ID to clipboard
-                      Clipboard.setData(ClipboardData(text: oaCredential.account));
-                      showBasicFlash(context, i18n.studentIdCopy2ClipboardTip.text());
-                    }
-                  : null,
+              onTap: () {
+                // Copy the student ID to clipboard
+                Clipboard.setData(ClipboardData(text: oaCredential.account));
+                showBasicFlash(context, i18n.studentIdCopy2ClipboardTip.text());
+              },
             ),
           if (oaCredential != null)
             ModalSettingsTile(
@@ -315,12 +288,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 subtitle: i18n.settingsTestLoginKiteSub,
                 leading: const Icon(Icons.login_rounded),
                 onTap: () => _testPassword(context, oaCredential)),
-          if (oaCredential != null)
-            SimpleSettingsTile(
-                title: i18n.settingsLogoutKite,
-                subtitle: i18n.settingsLogoutKiteSub,
-                leading: const Icon(Icons.logout_rounded),
-                onTap: () => _onLogout(context)),
         ],
       ),
       // Data Management

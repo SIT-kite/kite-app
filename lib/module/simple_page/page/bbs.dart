@@ -24,7 +24,6 @@ class BbsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userType = AccountUtils.getUserType();
     String? openid;
     String? nickname;
     final oa = Auth.oaCredential;
@@ -44,7 +43,7 @@ class BbsPage extends StatelessWidget {
       );
     }
     if (nickname != null) {
-      if (userType == UserType.teacher) {
+      if (Auth.lastUserType == UserType.teacher) {
         /// No i18n, the name will be shown outside
         nickname = '${nickname[0]}老师';
       } else {

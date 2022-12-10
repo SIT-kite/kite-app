@@ -1,13 +1,12 @@
 import 'package:kite/credential/entity/credential.dart';
 import 'package:kite/design/user_widgets/editor.dart';
 
-import 'dao/credential.dart';
 import 'storage/credential.dart';
 import 'user_widget/editor.dart';
 import 'using.dart';
 
 class CredentialInit {
-  static late CredentialDao credential;
+  static late CredentialStorage credential;
 
   static void init({
     required Box<dynamic> box,

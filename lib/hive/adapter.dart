@@ -75,7 +75,7 @@ class HiveAdapter {
     // Credential
     ~OACredentialAdapter();
     ~FreshmanCredentialAdapter();
-    ~UserType2Adapter();
+    ~UserTypeAdapter();
   }
 }
 

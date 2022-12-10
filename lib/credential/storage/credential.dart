@@ -27,7 +27,6 @@ class CredentialStorage implements CredentialDao {
   @override
   DateTime? get lastOaAuthTime => box.get(_Key.lastOaAuthTime);
 
-  @override
   set lastOaAuthTime(DateTime? newV) => box.put(_Key.lastOaAuthTime, newV);
 
   @override
@@ -39,12 +38,10 @@ class CredentialStorage implements CredentialDao {
   @override
   DateTime? get lastFreshmanAuthTime => box.get(_Key.lastFreshmanAuthTime);
 
-  @override
   set lastFreshmanAuthTime(DateTime? newV) => box.put(_Key.lastFreshmanAuthTime, newV);
 
   @override
-  UserType2? get lastUserType => box.get(_Key.lastUserType);
+  UserType? get lastUserType => box.get(_Key.lastUserType);
 
-  @override
-  set lastUserType(UserType2? newV) => box.put(_Key.lastUserType, newV);
+  set lastUserType(UserType? newV) => box.put(_Key.lastUserType, newV);
 }

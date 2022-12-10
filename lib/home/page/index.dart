@@ -33,7 +33,6 @@ import 'package:kite/override/init.dart';
 import 'package:kite/quick_button/init.dart';
 import 'package:kite/user_widget/color_saturation_widget.dart';
 import 'package:kite/util/scanner.dart';
-import 'package:kite/util/user.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:rettulf/rettulf.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -41,6 +40,7 @@ import 'package:universal_platform/universal_platform.dart';
 import '../entity/home.dart';
 import '../init.dart';
 import 'background.dart';
+import 'brick_maker.dart';
 import 'drawer.dart';
 import 'greeting.dart';
 import 'homepage_factory.dart';
@@ -84,9 +84,58 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
   final overrideFunctionNotifier = ValueNotifier<FunctionOverrideInfo?>(null);
-  late bool isFreshman;
-  late bool isOffline;
   double saturation = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    Log.info('开始加载首页');
+
+    Future.delayed(Duration.zero, () async {
+      // Remove auto launch timetable function permanently
+      /* if (Kv.home.autoLaunchTimetable ?? false) {
+        Navigator.of(context).pushNamed(RouteTable.timetable);
+      }*/
+      // 非新生才执行该网络检查逻辑
+      if (Auth.hasLoggedIn && await HomeInit.ssoSession.checkConnectivity()) {
+        showBasicFlash(
+          context,
+          i18n.homepageCampusNetworkConnected.text(),
+          duration: const Duration(seconds: 3),
+        );
+      }
+    });
+
+    _onHomeRefresh(context);
+    // 非新生且使用手机
+    if (Auth.hasLoggedIn && (UniversalPlatform.isAndroid || UniversalPlatform.isIOS)) {
+      QuickButton.init(context);
+    }
+    Global.eventBus.on(EventNameConstants.onCampusChange, (_) => _updateWeather());
+    Global.eventBus.on(EventNameConstants.onHomeItemReorder, (_) => setState(() {}));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Log.info('Build Home');
+    return ColorSaturationFilteredWidget(
+      saturation: saturation,
+      child: Scaffold(
+        key: _scaffoldKey,
+        body: GestureDetector(
+          child: buildBody(context),
+          onHorizontalDragEnd: (d) {
+            // 速度达标，展示drawer
+            if (d.velocity.pixelsPerSecond.dx > 100) {
+              _scaffoldKey.currentState?.openDrawer();
+            }
+          },
+        ),
+        drawer: const KiteDrawer(),
+        floatingActionButton: buildFloatingActionButton(),
+      ),
+    );
+  }
 
   void _updateWeather() {
     Log.info('更新天气');
@@ -127,18 +176,11 @@ class _HomePageState extends State<HomePage> {
     BuildContext context, {
     bool loginSso = false, // 默认不登录oa，使用懒加载的方式登录
   }) async {
-    if (isFreshman || isOffline) {
-      _refreshController.refreshCompleted(resetFooterState: true);
-      _updateWeather();
-      return;
-    }
-    if (loginSso) {
+    final oaCredential = Auth.oaCredential;
+    if (loginSso && oaCredential != null) {
       // 如果未登录 (老用户直接进入 Home 页不会处于登录状态, 但新用户经过 login 页时已登录)
       try {
-        final oaCredential = Auth.oaCredential;
-        if (oaCredential != null) {
-          await _doLogin(context, oaCredential);
-        }
+        await _doLogin(context, oaCredential);
         if (!mounted) return;
         showBasicFlash(context, i18n.kiteLoggedInTip.text());
       } on Exception catch (e) {
@@ -152,11 +194,11 @@ class _HomePageState extends State<HomePage> {
       } catch (e, s) {
         Catcher.reportCheckedError(e, s);
       }
-      FireOn.homepage(HomeRefreshEvent(isOnline: HomeInit.ssoSession.isOnline));
-      if (HomeInit.ssoSession.isOnline) {
-        Global.eventBus.emit(EventNameConstants.onHomeRefresh);
-      }
     }
+    if (HomeInit.ssoSession.isOnline) {
+      Global.eventBus.emit(EventNameConstants.onHomeRefresh);
+    }
+    FireOn.homepage(HomeRefreshEvent(isOnline: HomeInit.ssoSession.isOnline));
     _refreshController.refreshCompleted(resetFooterState: true);
 
     // 下拉也要更新一下天气 :D
@@ -187,8 +229,8 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> buildBricksWidgets(List<ExtraHomeItem>? extraItemList, List<HomeItemHideInfo>? hideInfoList) {
     // print(extraItemList);
-    UserType userType = AccountUtils.getUserType();
-    List<FType> list = Kv.home.homeItems ?? makeDefaultBricks(userType);
+    final userType = Auth.lastUserType;
+    List<FType> list = Kv.home.homeItems ?? BrickMaker.makeDefaultBricks();
     final filter = HomeItemHideInfoFilter(hideInfoList ?? []);
 
     // 先遍历一遍，过滤相邻重复元素
@@ -214,7 +256,7 @@ class _HomePageState extends State<HomePage> {
         ]);
         currentGroup.clear();
       } else {
-        if (!filter.accept(item, userType)) {
+        if (userType == null || !filter.willHide(item, userType)) {
           final brick = HomepageFactory.buildBrickWidget(context, item);
           if (brick != null) {
             currentGroup.add(brick);
@@ -335,38 +377,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    var userType = AccountUtils.getUserType();
-    isFreshman = userType == UserType.freshman;
-    isOffline = userType == UserType.offline;
-    Log.info('开始加载首页');
-
-    Future.delayed(Duration.zero, () async {
-      // Remove auto launch timetable function permanently
-      /* if (Kv.home.autoLaunchTimetable ?? false) {
-        Navigator.of(context).pushNamed(RouteTable.timetable);
-      }*/
-      // 非新生才执行该网络检查逻辑
-      if (!isFreshman && await HomeInit.ssoSession.checkConnectivity()) {
-        showBasicFlash(
-          context,
-          i18n.homepageCampusNetworkConnected.text(),
-          duration: const Duration(seconds: 3),
-        );
-      }
-    });
-
-    _onHomeRefresh(context);
-    // 非新生且使用手机
-    if (!isFreshman && (UniversalPlatform.isAndroid || UniversalPlatform.isIOS)) {
-      QuickButton.init(context);
-    }
-    Global.eventBus.on(EventNameConstants.onCampusChange, (_) => _updateWeather());
-    Global.eventBus.on(EventNameConstants.onHomeItemReorder, (_) => setState(() {}));
-  }
-
-  @override
   void dispose() {
     Global.eventBus.off(EventNameConstants.onCampusChange);
     Global.eventBus.off(EventNameConstants.onHomeItemReorder);
@@ -387,27 +397,5 @@ class _HomePageState extends State<HomePage> {
             },
           )
         : null;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    Log.info('Build Home');
-    return ColorSaturationFilteredWidget(
-      saturation: saturation,
-      child: Scaffold(
-        key: _scaffoldKey,
-        body: GestureDetector(
-          child: buildBody(context),
-          onHorizontalDragEnd: (d) {
-            // 速度达标，展示drawer
-            if (d.velocity.pixelsPerSecond.dx > 100) {
-              _scaffoldKey.currentState?.openDrawer();
-            }
-          },
-        ),
-        drawer: const KiteDrawer(),
-        floatingActionButton: buildFloatingActionButton(),
-      ),
-    );
   }
 }

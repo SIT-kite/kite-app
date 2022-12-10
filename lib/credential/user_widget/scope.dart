@@ -11,7 +11,7 @@ class AuthScope extends InheritedWidget {
   final DateTime? lastOaAuthTime;
   final FreshmanCredential? freshmanCredential;
   final DateTime? lastFreshmanAuthTime;
-  final UserType2? lastUserType;
+  final UserType? lastUserType;
 
   const AuthScope({
     super.key,

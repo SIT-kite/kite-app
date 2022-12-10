@@ -83,7 +83,7 @@ class CachedFreshmanService implements FreshmanDao {
   }
 
   @override
-  Future<FreshmanInfo> getMyInfo() async {
+  Future<FreshmanInfo> getMyInfo({FreshmanCredential? credential}) async {
     return _getWithCache(
       onReadCache: () => _freshmanCacheDao.basicInfo,
       onWriteCache: (e) => _freshmanCacheDao.basicInfo = e,
