@@ -107,14 +107,10 @@ class _SettingsPageState extends State<SettingsPage> {
       Log.info('退出登录');
 
       if (isFreshman) {
-        Kv.freshman
-          ..freshmanAccount = null
-          ..freshmanName = null
-          ..freshmanSecret = null;
+        Auth.freshmanCredential = null;
+        Kv.freshman.freshmanName = null;
       } else {
-        Kv.auth
-          ..currentUsername = null
-          ..ssoPassword = null;
+        Auth.oaCredential = null;
       }
       Kv.home.homeItems = null;
       await Initializer.init();
@@ -161,8 +157,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    _passwordController.text = Kv.auth.ssoPassword ?? '';
     final oaCredential = Auth.oaCredential;
+    _passwordController.text = oaCredential?.password ?? '';
     return SettingsScreen(title: i18n.settingsTitle, children: [
       // Personalize
       SettingsGroup(
@@ -304,10 +300,14 @@ class _SettingsPageState extends State<SettingsPage> {
               subtitle: i18n.settingsChangeOaPwdSub,
               leading: const Icon(Icons.lock),
               showConfirmation: true,
-              onConfirm: () {
-                Kv.auth.ssoPassword = _passwordController.text;
-                return true;
-              },
+              onConfirm: oaCredential != null
+                  ? () {
+                      Auth.oaCredential = oaCredential.copyWith(
+                        password: _passwordController.text,
+                      );
+                      return true;
+                    }
+                  : null,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(10),

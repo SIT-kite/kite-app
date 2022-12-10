@@ -29,7 +29,7 @@ Map<Semester, String> makeSemesterL10nName() => {
     };
 
 /// Precondition:
-/// [Kv.auth.currentUsername] is not null.
+/// [Auth.oaCredential] is not null.
 class SemesterSelector extends StatefulWidget {
   final int? initialYear;
   final Semester? initialSemester;
@@ -41,14 +41,14 @@ class SemesterSelector extends StatefulWidget {
   final Function(Semester) onNewSemesterSelect;
 
   const SemesterSelector({
+    super.key,
     required this.onNewYearSelect,
     required this.onNewSemesterSelect,
     this.initialYear,
     this.initialSemester,
     this.showEntireYear,
     this.showNextYear,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() => _SemesterSelectorState();

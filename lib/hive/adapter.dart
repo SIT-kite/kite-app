@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:kite/credential/entity/credential.dart';
 import 'package:kite/home/entity/home.dart';
 
 import 'package:kite/module/symbol.dart';
@@ -38,10 +39,12 @@ class HiveAdapter {
     ~WeatherAdapter();
     ~ReportHistoryAdapter();
     ~LibrarySearchHistoryItemAdapter();
+    // User Type
     ~UserEventAdapter();
     ~UserEventTypeAdapter();
-    ~ReportHistoryAdapter();
     ~TimetableMetaAdapter();
+    // Common Type
+    ~VersionAdapter();
     ~SizeAdapter();
     ~ColorAdapter();
 
@@ -69,7 +72,9 @@ class HiveAdapter {
     ~ApplicationMsgPageAdapter();
     ~ApplicationMessageTypeAdapter();
 
-    ~VersionAdapter();
+    // Credential
+    ~OACredentialAdapter();
+    ~FreshmanCredentialAdapter();
   }
 }
 
