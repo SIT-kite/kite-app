@@ -29,8 +29,9 @@ const String appVersionUrl = '${Backend.kite}/version.txt';
 class AppVersion {
   String platform;
   String version;
+  Version? full;
 
-  AppVersion(this.platform, this.version);
+  AppVersion(this.platform, this.version, {this.full});
 }
 
 /// 获取当前 app 版本
@@ -52,7 +53,18 @@ Future<AppVersion> getCurrentVersion() async {
   } else {
     platform = "Unknown";
   }
-  return AppVersion(platform, packageInfo.version);
+  return AppVersion(platform, packageInfo.version,full: packageInfo.tryParseVersion());
+}
+
+extension PackageInfoEx on PackageInfo {
+  Version? tryParseVersion() {
+    try {
+      final res = Version.parse(version);
+      return Version(res.major, res.minor, res.patch, build: buildNumber);
+    } catch (_) {
+      return null;
+    }
+  }
 }
 
 /// Compare App version

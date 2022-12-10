@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' as rendering;
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:kite/global/init.dart';
+import 'package:kite/migration/migrations.dart';
 import 'package:kite/util/catcher_dialog_handler.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -31,6 +32,7 @@ const exceptionLogUrl = '${Backend.kite}/api/v2/report/exception';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Migrations.init();
   await Initializer.init();
   if (kDebugMode) {
     //rendering.debugPaintSizeEnabled = true;

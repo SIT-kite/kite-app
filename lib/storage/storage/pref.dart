@@ -24,6 +24,12 @@ import 'package:kite/storage/storage/common.dart';
 
 import '../dao/pref.dart';
 
+class PrefKey {
+  PrefKey._();
+
+  static const locale = "/locale";
+}
+
 class PrefStorage extends JsonStorage implements PrefDao {
   PrefStorage(Box<dynamic> box) : super(box);
 

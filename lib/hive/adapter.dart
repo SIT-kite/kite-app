@@ -23,6 +23,7 @@ import 'package:kite/module/symbol.dart';
 
 import 'adapter/color.dart';
 import 'adapter/size.dart';
+import 'adapter/version.dart';
 
 class HiveAdapter {
   HiveAdapter._();
@@ -67,6 +68,8 @@ class HiveAdapter {
     _r(ApplicationMsgAdapter());
     _r(ApplicationMsgPageAdapter());
     _r(ApplicationMessageTypeAdapter());
+
+    _r(VersionAdapter());
   }
 
   static void _r<T>(TypeAdapter<T> adapter) {

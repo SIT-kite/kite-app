@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kite/module/library/search/entity/search_history.dart';
 import 'package:kite/module/yellow_pages/entity/contact.dart';
@@ -61,7 +62,7 @@ class HiveBoxInit {
       "cookies": HiveBoxInit.cookiesBox,
       "game": HiveBoxInit.game,
       "course": HiveBoxInit.course,
-      "userEvent": HiveBoxInit.userEvent,
+      if (kDebugMode) "userEvent": HiveBoxInit.userEvent,
       "examArrCache": HiveBoxInit.examArrCache,
       "oaAnnounceCache": HiveBoxInit.oaAnnounceCache,
       "activityCache": HiveBoxInit.activityCache,

@@ -31,7 +31,6 @@ import 'package:kite/global/init.dart';
 import 'package:kite/hive/init.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
-import 'package:kite/storage/dao/pref.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/storage/storage/develop.dart';
 import 'package:kite/util/file.dart';
@@ -43,6 +42,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:rettulf/rettulf.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+import '../../storage/storage/pref.dart';
 import 'home_rearrange.dart';
 import '../../storage/page/editor.dart';
 

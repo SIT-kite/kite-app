@@ -20,6 +20,7 @@ import 'package:kite/global/desktop_init.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/hive/init.dart';
 import 'package:kite/home/init.dart';
+import 'package:kite/migration/migrations.dart';
 import 'package:kite/module/classroom_browser/init.dart';
 import 'package:kite/module/symbol.dart';
 import 'package:kite/override/init.dart';
@@ -33,8 +34,10 @@ import 'package:path/path.dart' as path;
 import 'package:universal_platform/universal_platform.dart';
 
 import '../session/dio_common.dart';
+import '../util/upgrade.dart';
 
 class Initializer {
+ static late AppVersion currentVersion;
   static Future<void> init({bool? debugNetwork}) async {
     // 运行前初始化
     try {
@@ -64,6 +67,10 @@ class Initializer {
       userEventBox: HiveBoxInit.userEvent,
     );
     Kv.init(kvStorageBox: HiveBoxInit.kv);
+    currentVersion = await getCurrentVersion();
+    await Migrations.perform(from: Kv.version.lastVersion, to: currentVersion.full);
+    Kv.version.lastVersion = currentVersion.full;
+    Kv.version.lastStartupTime = DateTime.now();
     if (UniversalPlatform.isDesktop) {
       final lastWindowSize = Kv.theme.lastWindowSize;
       if (lastWindowSize != null) {

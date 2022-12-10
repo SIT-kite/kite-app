@@ -18,6 +18,8 @@
 import 'dart:ui';
 
 import 'package:kite/l10n/lang.dart';
+import 'package:kite/util/upgrade.dart';
+import 'package:version/version.dart';
 
 import 'backend.dart';
 
@@ -47,10 +49,13 @@ class R {
 
   /// If the window was resized to too small accidentally, this will keep a minimum function area.
   static const Size minWindowSize = Size(300, 400);
+
   static String getAppName({required Locale by}) {
     final locale = Lang.redirectLocale(by);
     return locale2AppName[locale] ?? appNameEn;
   }
+
+  static final v1_5_3 = Version(1, 5, 3);
 }
 
 class CampusCode {

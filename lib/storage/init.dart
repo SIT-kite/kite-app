@@ -28,9 +28,11 @@ import 'package:kite/storage/storage/develop.dart';
 import 'package:kite/storage/storage/kite.dart';
 import 'package:kite/storage/storage/pref.dart';
 import 'package:kite/storage/storage/report.dart';
+import 'package:kite/storage/storage/version.dart';
 
 import 'dao/index.dart';
 import 'dao/report.dart';
+import 'dao/version.dart';
 import 'storage/index.dart';
 
 export 'dao/index.dart';
@@ -51,8 +53,10 @@ class Kv {
   static late FunctionOverrideStorageDao override;
   static late KiteStorageDao kite;
   static late PrefDao pref;
+  static late VersionDao version;
 
   static late Box<dynamic> kvStorageBox;
+
   static Future<void> init({
     required Box<dynamic> kvStorageBox,
   }) async {
@@ -71,5 +75,6 @@ class Kv {
     Kv.kite = KiteStorage(kvStorageBox);
     Kv.override = FunctionOverrideStorage(kvStorageBox);
     Kv.pref = PrefStorage(kvStorageBox);
+    Kv.version = VersionStorage(kvStorageBox);
   }
 }

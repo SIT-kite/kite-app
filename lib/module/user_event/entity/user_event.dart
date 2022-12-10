@@ -31,6 +31,8 @@ enum UserEventType {
   exit,
   @HiveField(3)
   button,
+  @HiveField(4)
+  upgrade,
 }
 
 /// 用户行为类

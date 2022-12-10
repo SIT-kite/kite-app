@@ -64,4 +64,6 @@ class HiveTypeId {
   static const applicationMsgPage = 34;
   static const applicationMsgCount = 35;
   static const applicationMessageType = 36;
+
+  static const version = 37;
 }
