@@ -16,6 +16,7 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import 'package:flutter/material.dart';
+import 'package:kite/credential/symbol.dart';
 import 'package:kite/module/activity/using.dart';
 import 'package:rettulf/rettulf.dart';
 
@@ -121,7 +122,9 @@ class _SemesterSelectorState extends State<SemesterSelector> {
 
   Widget buildYearSelector(BuildContext ctx) {
     // 得到入学年份
-    final grade = Kv.auth.currentUsername!.substring(0, 2);
+    final oaCredential = Auth.oaCredential;
+    // TODO: More checking
+    final grade = oaCredential!.account.substring(0, 2);
     // 生成经历过的学期并逆序（方便用户选择）
     final List<int> yearList = _generateYearList(int.parse(grade) + 2000).reversed.toList();
     final mapping = yearList.map((e) => MapEntry(e, buildYearString(e)));

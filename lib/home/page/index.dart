@@ -98,11 +98,8 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Future<void> _doLogin(BuildContext context) async {
-    final String username = Kv.auth.currentUsername!;
-    final String password = Kv.auth.ssoPassword!;
-
-    await HomeInit.ssoSession.login(username, password);
+  Future<void> _doLogin(BuildContext context, OACredential oaCredential) async {
+    await HomeInit.ssoSession.loginWith(oaCredential);
 
     if (Kv.auth.personName == null) {
       final personName = await LoginInit.authServerService.getPersonName();
@@ -138,7 +135,10 @@ class _HomePageState extends State<HomePage> {
     if (loginSso) {
       // 如果未登录 (老用户直接进入 Home 页不会处于登录状态, 但新用户经过 login 页时已登录)
       try {
-        await _doLogin(context);
+        final oaCredential = Auth.oaCredential;
+        if (oaCredential != null) {
+          await _doLogin(context, oaCredential);
+        }
         if (!mounted) return;
         showBasicFlash(context, i18n.kiteLoggedInTip.text());
       } on Exception catch (e) {

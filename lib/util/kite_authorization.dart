@@ -26,7 +26,7 @@ bool hasSignedKite() {
   return Kv.jwt.jwtToken != null;
 }
 
-Future<bool> signUpIfNecessary(BuildContext context, OaUserCredential oaCredential, String description) async {
+Future<bool> signUpIfNecessary(BuildContext context, OACredential oaCredential, String description) async {
   // 如果用户未同意过, 请求用户确认
   if (Kv.jwt.jwtToken == null) {
     final confirm = await context.showRequest(

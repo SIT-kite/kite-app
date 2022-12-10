@@ -19,6 +19,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:kite/credential/symbol.dart';
 import 'package:kite/network/session.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
@@ -56,9 +57,10 @@ class SitAppSession implements ISession {
       return await normallyRequest();
     } on SitAppApiError catch (e, _) {
       if (e.code == 500) {
+        final oaCredential = Auth.oaCredential!;
         await login(
-          Kv.auth.currentUsername!,
-          Kv.auth.ssoPassword!,
+          oaCredential.account,
+          oaCredential.password,
         );
       }
       return await normallyRequest();

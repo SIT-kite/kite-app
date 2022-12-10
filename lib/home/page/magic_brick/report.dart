@@ -45,7 +45,7 @@ class _ReportTempItemState extends State<ReportTempItem> {
     });
   }
 
-  void updateReportStatus(OaUserCredential oaCredential) async {
+  void updateReportStatus(OACredential oaCredential) async {
     final String result = await _buildContent(oaCredential);
     if (!mounted) return;
     setState(() => content = result);
@@ -88,7 +88,7 @@ class _ReportTempItemState extends State<ReportTempItem> {
     return '${i18n.reportTempReportedToday}, $tempState ${history.place}';
   }
 
-  Future<String> _buildContent(OaUserCredential oaCredential) async {
+  Future<String> _buildContent(OACredential oaCredential) async {
     late ReportHistory? history;
 
     try {

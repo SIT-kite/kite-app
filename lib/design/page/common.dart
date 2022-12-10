@@ -83,3 +83,22 @@ class _UnauthorizedTipState extends State<UnauthorizedTip> {
     return LeavingBlank(icon: Icons.person_off_outlined, desc: i18n.unauthorizedUsernameTip);
   }
 }
+
+class UnauthorizedTipPage extends StatefulWidget {
+  const UnauthorizedTipPage({Key? key}) : super(key: key);
+
+  @override
+  State<UnauthorizedTipPage> createState() => _UnauthorizedTipPageState();
+}
+
+class _UnauthorizedTipPageState extends State<UnauthorizedTipPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: i18n.unauthorizedTipTitle.text(),
+      ),
+      body: const UnauthorizedTip(),
+    );
+  }
+}

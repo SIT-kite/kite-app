@@ -25,6 +25,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kite/credential/symbol.dart';
 import 'package:kite/design/user_widgets/dialog.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/global/init.dart';
@@ -73,13 +74,11 @@ class _SettingsPageState extends State<SettingsPage> {
     Global.eventBus.emit(EventNameConstants.onBackgroundChange);
   }
 
-  void _testPassword(BuildContext context) async {
-    final user = Kv.auth.currentUsername;
-    final password = Kv.auth.ssoPassword;
+  void _testPassword(BuildContext context, OACredential oaCredential) async {
     try {
       EasyLoading.instance.userInteractions = false;
       EasyLoading.show(status: i18n.loggingIn);
-      await Global.ssoSession.login(user!, password!);
+      await Global.ssoSession.login(oaCredential.account, oaCredential.password);
       EasyLoading.showSuccess(i18n.loginCredentialsValidatedTip);
     } catch (e) {
       showBasicFlash(context, Text('${i18n.loginFailedWarn}: ${e.toString().split('\n')[0]}'),
@@ -163,6 +162,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     _passwordController.text = Kv.auth.ssoPassword ?? '';
+    final oaCredential = Auth.oaCredential;
     return SettingsScreen(title: i18n.settingsTitle, children: [
       // Personalize
       SettingsGroup(
@@ -288,16 +288,15 @@ class _SettingsPageState extends State<SettingsPage> {
           if (!isFreshman)
             SimpleSettingsTile(
               title: i18n.studentID,
-              subtitle: Kv.auth.currentUsername ?? i18n.offline,
+              subtitle: oaCredential?.account ?? i18n.offline,
               leading: const Icon(Icons.person_rounded),
-              onTap: () {
-                // Copy the student ID to clipboard
-                final id = Kv.auth.currentUsername;
-                if (id != null) {
-                  Clipboard.setData(ClipboardData(text: id));
-                  showBasicFlash(context, i18n.studentIdCopy2ClipboardTip.text());
-                }
-              },
+              onTap: oaCredential != null
+                  ? () {
+                      // Copy the student ID to clipboard
+                      Clipboard.setData(ClipboardData(text: oaCredential.account));
+                      showBasicFlash(context, i18n.studentIdCopy2ClipboardTip.text());
+                    }
+                  : null,
             ),
           if (!isFreshman)
             ModalSettingsTile(
@@ -321,7 +320,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: i18n.settingsTestLoginKite,
                 subtitle: i18n.settingsTestLoginKiteSub,
                 leading: const Icon(Icons.login_rounded),
-                onTap: () => _testPassword(context)),
+                onTap: oaCredential != null ? () => _testPassword(context, oaCredential) : null),
           SimpleSettingsTile(
               title: i18n.settingsLogoutKite,
               subtitle: i18n.settingsLogoutKiteSub,

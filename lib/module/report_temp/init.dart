@@ -32,7 +32,6 @@ class ReportTempInit {
   }) {
     session = ReportSession(
       dio: dio,
-      username: Kv.auth.currentUsername,
     );
     reportService = ReportService(session);
   }

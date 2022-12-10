@@ -119,6 +119,10 @@ class SsoSession with DioDownloaderMixin implements ISession {
     });
   }
 
+  Future<Response> loginWith(OACredential oaCredential) async {
+    return await login(oaCredential.account, oaCredential.password);
+  }
+
   Future<Response> login(String username, String password) async {
     return await loginLock.synchronized(() async {
       return await _login(username, password);
@@ -199,9 +203,10 @@ class SsoSession with DioDownloaderMixin implements ISession {
   String? get password => _password;
 
   /// 惰性登录，只有在第一次请求跳转到登录页时才开始尝试真正的登录
-  void lazyLoginWith({required OaUserCredential oa}) {
+  void lazyLoginWith({required OACredential oa}) {
     lazyLogin(oa.account, oa.password);
   }
+
   void lazyLogin(String username, String password) {
     _username = username;
     _password = password;
@@ -246,8 +251,7 @@ class SsoSession with DioDownloaderMixin implements ISession {
         if (e.msg.contains('验证码')) {
           continue;
         } else {
-          Kv.auth.currentUsername = null;
-          Kv.auth.ssoPassword = null;
+          Auth.oaCredential = null;
           FireOn.global(LoginFailedEvent());
         }
       }

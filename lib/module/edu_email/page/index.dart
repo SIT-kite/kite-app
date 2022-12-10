@@ -56,7 +56,7 @@ class _MailPageState extends State<MailPage> {
     );
   }
 
-  Future<void> _updateMailList(OaUserCredential oaCredential) async {
+  Future<void> _updateMailList(OACredential oaCredential) async {
     try {
       final String emailAddress = oaCredential.account.toEmailAddress();
       final String pwd = EduEmailInit.mail.password ?? oaCredential.password;
@@ -129,7 +129,7 @@ class _MailPageState extends State<MailPage> {
     );
   }
 
-  Widget _buildBody(BuildContext context, OaUserCredential oaCredential) {
+  Widget _buildBody(BuildContext context, OACredential oaCredential) {
     // 如果当前加载邮件列表
     if (_index == 0) {
       // 如果是首次加载, 拉取数据并显示加载动画

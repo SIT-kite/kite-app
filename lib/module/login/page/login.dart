@@ -48,12 +48,22 @@ class _LoginPageState extends State<LoginPage> {
   bool isProxySettingShown = false;
   bool enableLoginButton = true;
 
+  @override
+  void initState() {
+    super.initState();
+    final oaCredential = Auth.oaCredential;
+    if (oaCredential != null) {
+      _usernameController.text = oaCredential.account;
+      _passwordController.text = oaCredential.password;
+    }
+  }
+
   /// 用户点击登录按钮后
   Future<void> onLogin(BuildContext ctx) async {
     bool formValid = (_formKey.currentState as FormState).validate();
-    final username = _usernameController.text;
+    final account = _usernameController.text;
     final password = _passwordController.text;
-    if (!formValid || username.isEmpty || password.isEmpty) {
+    if (!formValid || account.isEmpty || password.isEmpty) {
       await ctx.showTip(
         title: i18n.formatError,
         desc: i18n.validateInputAccountPwdRequest,
@@ -107,12 +117,10 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     try {
-      await LoginInit.ssoSession.login(username, password);
+      await LoginInit.ssoSession.login(account, password);
       final personName = await LoginInit.authServerService.getPersonName();
-      Kv.auth
-        ..currentUsername = username
-        ..ssoPassword = password
-        ..personName = personName;
+      Auth.oaCredential = OACredential(account, password);
+      Kv.auth.personName = personName;
       // Reset the home
       Kv.home.homeItems = null;
       if (!mounted) return;
@@ -144,18 +152,6 @@ class _LoginPageState extends State<LoginPage> {
       if (mounted) {
         setState(() => enableLoginButton = true);
       }
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    String? username = Kv.auth.currentUsername;
-    String? password = Kv.auth.ssoPassword;
-    if (username != null) {
-      _usernameController.text = username;
-      _passwordController.text = password ?? '';
     }
   }
 

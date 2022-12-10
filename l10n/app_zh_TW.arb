@@ -448,5 +448,6 @@
   "xuhui": "徐匯",
   "xuhuiDistrict": "徐匯區",
   "yes": "好",
-  "timetableNoDescPlaceholder": "沒有說明……"
+  "timetableNoDescPlaceholder": "沒有說明……",
+  "unauthorizedTipTitle": "需要登入"
 }

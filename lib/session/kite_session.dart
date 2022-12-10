@@ -18,8 +18,8 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:kite/credential/entity/credential.dart';
 import 'package:kite/common/entity/kite_user.dart';
+import 'package:kite/credential/symbol.dart';
 import 'package:kite/storage/dao/kite.dart';
 import 'package:kite/util/logger.dart';
 
@@ -64,9 +64,10 @@ class KiteSession implements ISession {
       return await normallyRequest();
     } on KiteApiError catch (e) {
       if (e.code == 100) {
+        final oaCredential = Auth.oaCredential!;
         await login(
-          Kv.auth.currentUsername!,
-          Kv.auth.ssoPassword!,
+          oaCredential.account,
+          oaCredential.password,
         );
       }
       return await normallyRequest();
@@ -127,7 +128,7 @@ class KiteSession implements ISession {
 
   /// 用户登录
   /// 用户不存在时，将自动创建用户
-  Future<KiteUser> loginWith({required OaUserCredential oa}) async {
+  Future<KiteUser> loginWith({required OACredential oa}) async {
     return await login(oa.account, oa.password);
   }
 

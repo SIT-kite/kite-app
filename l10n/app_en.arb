@@ -722,5 +722,6 @@
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
   "yes": "Yes",
-  "timetableNoDescPlaceholder": "No description..."
+  "timetableNoDescPlaceholder": "No description...",
+  "unauthorizedTipTitle": "Require Login"
 }

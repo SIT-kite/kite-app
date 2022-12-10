@@ -106,7 +106,7 @@ class _BoardPageState extends State<BoardPage> {
     );
   }
 
-  Future<void> onUploadPicture(BuildContext context, OaUserCredential oaCredential) async {
+  Future<void> onUploadPicture(BuildContext context, OACredential oaCredential) async {
     // 如果用户未同意过, 请求用户确认
     // TODO: I18n
     if (!await signUpIfNecessary(context, oaCredential, '标识图片上传者')) return;

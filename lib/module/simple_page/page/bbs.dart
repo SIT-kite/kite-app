@@ -24,49 +24,53 @@ class BbsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var userType = AccountUtils.getUserType();
-    final isFreshman = userType == UserType.freshman;
-
+    final userType = AccountUtils.getUserType();
     String? openid;
     String? nickname;
-    if (isFreshman) {
-      openid = Kv.freshman.freshmanAccount;
+    final oa = Auth.oaCredential;
+    final freshman = Auth.freshmanCredential;
+    // TODO: Port the name.
+    if (oa != null) {
+      openid = oa.account;
+      nickname = Kv.auth.personName;
+    } else if (freshman != null) {
+      openid = freshman.account;
       nickname = Kv.freshman.freshmanName;
     } else {
-      openid = Kv.auth.currentUsername;
-      nickname = Kv.auth.personName;
+      return SimpleWebViewPage(
+        initialUrl: R.kiteBbsUrl,
+        fixedTitle: i18n.ftype_bbs,
+        showLaunchButtonIfUnsupported: false,
+      );
     }
     if (nickname != null) {
       if (userType == UserType.teacher) {
-        // TODO: Change this behavior?
         /// No i18n, the name will be shown outside
         nickname = '${nickname[0]}老师';
       } else {
         nickname = '${nickname[0]}同学';
       }
+    } else {
+      return SimpleWebViewPage(
+        initialUrl: R.kiteBbsUrl,
+        fixedTitle: i18n.ftype_bbs,
+        showLaunchButtonIfUnsupported: false,
+      );
     }
     var bbsSecret = Kv.admin.bbsSecret;
     if (bbsSecret != null && bbsSecret.isNotEmpty) {
       openid = bbsSecret;
     }
     Log.info('BBS身份：{openid: $openid, nickname: $nickname}');
-    if (openid != null && nickname != null) {
-      return SimpleWebViewPage(
-        initialUrl: R.kiteBbsUrl,
-        postData: {
-          'openid': openid,
-          'nickname': nickname,
-          'avatar': 'https://txc.qq.com/static/desktop/img/products/def-product-logo.png',
-        },
-        fixedTitle: i18n.ftype_bbs,
-        showLaunchButtonIfUnsupported: false,
-      );
-    } else {
-      return SimpleWebViewPage(
-        initialUrl: R.kiteBbsUrl,
-        fixedTitle: i18n.ftype_bbs,
-        showLaunchButtonIfUnsupported: false,
-      );
-    }
+    return SimpleWebViewPage(
+      initialUrl: R.kiteBbsUrl,
+      postData: {
+        'openid': openid,
+        'nickname': nickname,
+        'avatar': 'https://txc.qq.com/static/desktop/img/products/def-product-logo.png',
+      },
+      fixedTitle: i18n.ftype_bbs,
+      showLaunchButtonIfUnsupported: false,
+    );
   }
 }

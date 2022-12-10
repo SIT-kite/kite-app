@@ -17,10 +17,10 @@ class CredentialStorage implements CredentialDao {
   CredentialStorage(this.box);
 
   @override
-  OaUserCredential? get oaCredential => box.get(_Key.oa);
+  OACredential? get oaCredential => box.get(_Key.oa);
 
   @override
-  set oaCredential(OaUserCredential? newV) => box.put(_Key.oa, newV);
+  set oaCredential(OACredential? newV) => box.put(_Key.oa, newV);
 
   @override
   DateTime? get lastOaAuthTime => box.get(_Key.lastOaAuthTime);

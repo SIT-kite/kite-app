@@ -37,7 +37,7 @@ IconButton helpButton(BuildContext context) {
 
 Future<void> uploadGameRecord(
   BuildContext context,
-  OaUserCredential oa,
+  OACredential oa,
   GameRecord record,
 ) async {
   try {

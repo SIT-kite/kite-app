@@ -1,12 +1,12 @@
 import '../using.dart';
 @HiveType(typeId: HiveTypeId.oaUserCredential)
-class OaUserCredential {
+class OACredential {
   @HiveField(0)
   final String account;
   @HiveField(1)
   final String password;
 
-  OaUserCredential(this.account, this.password);
+  OACredential(this.account, this.password);
 }
 
 @HiveType(typeId: HiveTypeId.freshmanCredential)
