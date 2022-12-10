@@ -4,6 +4,7 @@ import 'dao/credential.dart';
 import 'init.dart';
 
 export 'entity/credential.dart';
+export 'entity/user_type.dart';
 export 'page/unauth.dart';
 export 'utils.dart';
 

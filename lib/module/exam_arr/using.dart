@@ -17,6 +17,7 @@
 */
 export "../shared/entity/school.dart";
 export "../shared/user_widget/school.dart";
+export '../shared/auth.dart';
 export '../shared/util.dart';
 export '../shared/i18n.dart';
 export '../shared/storage.dart';

@@ -16,7 +16,9 @@ class CredentialDelegate implements CredentialDao {
   set oaCredential(OACredential? newV) {
     if (storage.oaCredential != newV) {
       storage.oaCredential = newV;
-      storage.lastOaAuthTime = DateTime.now();
+      if (newV != null) {
+        storage.lastOaAuthTime = DateTime.now();
+      }
       FireOn.global(CredentialChangeEvent());
     }
   }
@@ -36,7 +38,9 @@ class CredentialDelegate implements CredentialDao {
   set freshmanCredential(FreshmanCredential? newV) {
     if (storage.freshmanCredential != newV) {
       storage.freshmanCredential = newV;
-      storage.lastFreshmanAuthTime = DateTime.now();
+      if (newV != null) {
+        storage.lastFreshmanAuthTime = DateTime.now();
+      }
       FireOn.global(CredentialChangeEvent());
     }
   }

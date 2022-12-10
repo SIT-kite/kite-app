@@ -54,7 +54,7 @@ class AccountUtils {
     final freshmanCredential = Auth.freshmanCredential;
     if (oaCredential != null) {
       // 已登录用户, 账号格式一定是合法的
-      return guessUserType(oaCredential.account) ?? UserType.offline;
+      return guessUserType(oaCredential.account) ?? UserType.undergraduate;
     } else if (freshmanCredential != null) {
       return UserType.freshman;
     }
@@ -62,6 +62,6 @@ class AccountUtils {
   }
 
   static UserType getUserType() {
-    return getAuthUserType() ?? UserType.offline;
+    return getAuthUserType() ?? UserType.undergraduate;
   }
 }
