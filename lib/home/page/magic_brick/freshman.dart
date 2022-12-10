@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kite/credential/symbol.dart';
 import 'package:kite/design/colors.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
@@ -49,7 +50,7 @@ class FreshmanItem extends StatelessWidget {
       // No matter whether the user is a freshman, display this for them.
       return Brick(
         onPressed: () {
-          if (Kv.freshman.freshmanAccount == null || Kv.freshman.freshmanSecret == null) {
+          if (Auth.freshmanCredential == null) {
             Navigator.of(context).pushNamed(RouteTable.freshmanLogin);
           } else {
             Navigator.of(context).pushNamed(RouteTable.freshman);

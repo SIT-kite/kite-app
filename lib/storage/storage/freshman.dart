@@ -32,8 +32,6 @@ class FreshmanCacheKeys {
   static const analysis = '$namespace/cache/analysis';
   static const familiars = '$namespace/cache/familiars';
 
-  static const authAccount = '$namespace/auth/account';
-  static const authSecret = '$namespace/auth/secret';
   static const authName = '$namespace/auth/name';
 
   static const disableFirstEnterDialogState = '$namespace/state/disableFirstEnterDialog';
@@ -77,18 +75,6 @@ class FreshmanCacheStorage implements FreshmanCacheDao {
 
   @override
   set roommates(List<Mate>? foo) => jsonStorage.setModelList<Mate>(FreshmanCacheKeys.roommates, foo, (e) => e.toJson());
-
-  @override
-  String? get freshmanAccount => box.get(FreshmanCacheKeys.authAccount);
-
-  @override
-  set freshmanAccount(String? foo) => box.put(FreshmanCacheKeys.authAccount, foo);
-
-  @override
-  String? get freshmanSecret => box.get(FreshmanCacheKeys.authSecret);
-
-  @override
-  set freshmanSecret(String? foo) => box.put(FreshmanCacheKeys.authSecret, foo);
 
   @override
   String? get freshmanName => box.get(FreshmanCacheKeys.authName);

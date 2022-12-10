@@ -21,10 +21,7 @@ import '../dao/auth.dart';
 
 class AuthKeys {
   static const namespace = '/auth';
-  static const currentUsername = '$namespace/currentUsername';
-  static const ssoPassword = '$namespace/ssoPassword';
   static const personName = '$namespace/personName';
-  static const userType = '$namespace/userType';
 }
 
 class AuthSettingStorage implements AuthSettingDao {

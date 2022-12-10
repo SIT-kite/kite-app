@@ -9,10 +9,11 @@ final NoVersionSpecifiedMigration = _NoVersionSpecifiedMigrationImpl();
 class _NoVersionSpecifiedMigrationImpl extends Migration {
   @override
   Future<void> perform() async {
-    await migrateAuth();
+    await migrateOAAuth();
+    await migrateFreshmanAuth();
   }
 
-  Future<void> migrateAuth() async {
+  Future<void> migrateOAAuth() async {
     final kvBox = HiveBoxInit.kv;
     final dynamic account = kvBox.get("/auth/currentUsername");
     final dynamic password = kvBox.get("/auth/ssoPassword");
@@ -21,6 +22,17 @@ class _NoVersionSpecifiedMigrationImpl extends Migration {
       kvBox.delete("/auth/currentUsername");
       kvBox.delete("/auth/ssoPassword");
     }
-    // TODO: Migrate freshman.
+  }
+
+  Future<void> migrateFreshmanAuth() async {
+    final kvBox = HiveBoxInit.kv;
+    final dynamic account = kvBox.get("/freshman/auth/account");
+    final dynamic password = kvBox.get("/freshman/auth/secret");
+
+    if (account is String && password is String) {
+      Auth.freshmanCredential ??= FreshmanCredential(account, password);
+      kvBox.delete("/freshman/auth/account");
+      kvBox.delete("/freshman/auth/secret");
+    }
   }
 }

@@ -36,8 +36,8 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
   FreshmanDao freshmanDao = FreshmanInit.freshmanDao;
 
   // Text field controllers.
-  final TextEditingController _accountController = TextEditingController();
-  final TextEditingController _secretController = TextEditingController();
+  final _accountController = TextEditingController();
+  final _secretController = TextEditingController();
 
   final GlobalKey _formKey = GlobalKey<FormState>();
 
@@ -47,6 +47,17 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
   bool isPasswordClear = false;
   bool isLicenseAccepted = false;
   bool enableLoginButton = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final freshmanCredential = Auth.freshmanCredential;
+    if (freshmanCredential != null) {
+      _accountController.text = freshmanCredential.account;
+      _secretController.text = freshmanCredential.password;
+    }
+  }
 
   /// 用户点击登录按钮后
   Future<void> onLogin(BuildContext ctx) async {
@@ -78,9 +89,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
     final secret = _secretController.text;
     try {
       // 先保存登录信息
-      Kv.freshman
-        ..freshmanAccount = account
-        ..freshmanSecret = secret;
+      Auth.freshmanCredential = FreshmanCredential(account, secret);
       // 清空本地缓存
       FreshmanInit.freshmanCacheManager.clearAll();
 
@@ -104,9 +113,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       // GlobalLauncher.launch('${Backend.kite}/wiki/kite-app/features/');
     } catch (e) {
       // 登录失败
-      Kv.freshman
-        ..freshmanSecret = null
-        ..freshmanAccount = null;
+      Auth.freshmanCredential = null;
       final connectionType = await Connectivity().checkConnectivity();
       if (!mounted) return;
       if (connectionType == ConnectivityResult.none) {
@@ -128,18 +135,6 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       if (mounted) {
         setState(() => enableLoginButton = true);
       }
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    String? account = Kv.freshman.freshmanAccount;
-    String? secret = Kv.freshman.freshmanSecret;
-    if (account != null) {
-      _accountController.text = account;
-      _secretController.text = secret ?? '';
     }
   }
 

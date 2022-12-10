@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:kite/credential/symbol.dart';
 import 'package:kite/network/session.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
@@ -53,15 +54,16 @@ class FreshmanSession extends ISession {
         onReceiveProgress: onReceiveProgress,
       );
     }
-
+    final freshmanCredential = Auth.freshmanCredential;
     // 如果不存在新生信息，那就不管了
-    if (_freshmanCacheDao.freshmanAccount == null || _freshmanCacheDao.freshmanSecret == null) {
+    // TODO: WHAT ???
+    if (freshmanCredential == null) {
       return await myRequest(data, url, para);
     }
 
     // 新生信息
-    String account = _freshmanCacheDao.freshmanAccount!;
-    String secret = _freshmanCacheDao.freshmanSecret!;
+    String account = freshmanCredential.account;
+    String secret = freshmanCredential.password;
 
     final String myUrl = '/freshman/$account$url';
 
