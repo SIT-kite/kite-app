@@ -2,6 +2,8 @@ import '../using.dart';
 
 part 'user_type.g.dart';
 
+/// Note: In the new UserType, freshman isn't a valid UserType.
+/// If you want to
 @HiveType(typeId: HiveTypeId.userType)
 enum UserType2 {
   /// 本、专科生（10位学号）

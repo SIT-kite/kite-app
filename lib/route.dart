@@ -76,7 +76,7 @@ class RouteTable {
   static const freshman = '/freshman';
   static const freshmanLogin = '$freshman/login';
   static const freshmanUpdate = '$freshman/update';
-  static const freshmanAnalysis = '$freshman/analysis';
+  static const freshmanStatistics = '$freshman/statistics';
   static const freshmanFriend = '$freshman/friend';
   static const kiteBoard = '/kite_board';
   static const notFound = '/not_found';
@@ -84,6 +84,7 @@ class RouteTable {
   static const serviceStatus = '/service_status';
   static const pureFunctionLauncher = '/pure_function/launch';
   static const pureFunctionLaunchInBrowser = '/pure_function/launchInBrowser';
+  static const relogin = '/relogin';
 }
 
 final defaultRouteTable = StaticRouteTable(
@@ -138,8 +139,8 @@ final defaultRouteTable = StaticRouteTable(
         javascriptUrl: args['javascriptUrl'],
       );
     },
-    RouteTable.freshman: (context, args) => FreshmanPage(),
-    RouteTable.freshmanAnalysis: (context, args) => const FreshmanStatisticsPage(),
+    RouteTable.freshman: (context, args) => const FreshmanPage(),
+    RouteTable.freshmanStatistics: (context, args) => const FreshmanStatisticsPage(),
     RouteTable.freshmanLogin: (context, args) => const FreshmanLoginPage(),
     RouteTable.freshmanUpdate: (context, args) => const PersonalInfoPage(),
     RouteTable.freshmanFriend: (context, args) => const FreshmanRelationshipPage(),
@@ -155,6 +156,7 @@ final defaultRouteTable = StaticRouteTable(
     RouteTable.serviceStatus: (context, args) => const ServiceStatusPage(),
     RouteTable.pureFunctionLauncher: (context, args) => LauncherFunction(args['schemeText']),
     RouteTable.pureFunctionLaunchInBrowser: (context, args) => LaunchInBrowserFunction(args['url']),
+    RouteTable.relogin: (context, args) => const UnauthorizedTipPage(),
   },
   onNotFound: (context, routeName, args) => NotFoundPage(routeName),
   rootRoute: (context, table, args) {

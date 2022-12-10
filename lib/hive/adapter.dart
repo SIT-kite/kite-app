@@ -16,10 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/credential/entity/credential.dart';
 import 'package:kite/home/entity/home.dart';
 
 import 'package:kite/module/symbol.dart';
+import 'package:kite/credential/symbol.dart';
 
 import 'using.dart';
 import 'adapter/color.dart';
@@ -75,6 +75,7 @@ class HiveAdapter {
     // Credential
     ~OACredentialAdapter();
     ~FreshmanCredentialAdapter();
+    ~UserType2Adapter();
   }
 }
 

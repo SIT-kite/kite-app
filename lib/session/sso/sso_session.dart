@@ -260,7 +260,7 @@ class SsoSession with DioDownloaderMixin implements ISession {
               highlight: true,
             );
             if (confirm == true) {
-              ctx.navigator.push(MaterialPageRoute(builder: (ctx) => const UnauthorizedTipPage()));
+              ctx.navigator.pushNamed(RouteTable.relogin);
             }
           }
           return null;

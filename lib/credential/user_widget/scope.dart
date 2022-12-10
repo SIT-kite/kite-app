@@ -39,6 +39,10 @@ class AuthScope extends InheritedWidget {
   }
 }
 
+extension AuthScopeEx on BuildContext {
+  AuthScope get auth => AuthScope.of(this);
+}
+
 class AuthScopeMaker extends StatefulWidget {
   final Widget child;
 
