@@ -197,7 +197,7 @@ class _BoardPageState extends State<BoardPage> {
 
   @override
   Widget build(BuildContext context) {
-    final oaCredential = Auth.oaUser;
+    final oaCredential = Auth.oaCredential;
 
     return Scaffold(
       appBar: AppBar(title: i18n.kiteBoardTitle.text()),

@@ -16,12 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:kite/design/user_widgets/dialog.dart';
 import 'package:kite/events/bus.dart';
-import 'package:kite/l10n/extension.dart';
+import 'package:kite/module/library/using.dart';
 import 'package:kite/module/symbol.dart';
-import 'package:kite/route.dart';
-import 'package:kite/storage/init.dart';
 import '../brick.dart';
 
 class ReportTempItem extends StatefulWidget {
@@ -41,12 +38,15 @@ class _ReportTempItemState extends State<ReportTempItem> {
   void initState() {
     super.initState();
     On.home((event) {
-      updateReportStatus();
+      final oaCredential = Auth.oaCredential;
+      if (oaCredential != null) {
+        updateReportStatus(oaCredential);
+      }
     });
   }
 
-  void updateReportStatus() async {
-    final String result = await _buildContent();
+  void updateReportStatus(OaUserCredential oaCredential) async {
+    final String result = await _buildContent(oaCredential);
     if (!mounted) return;
     setState(() => content = result);
   }
@@ -88,11 +88,11 @@ class _ReportTempItemState extends State<ReportTempItem> {
     return '${i18n.reportTempReportedToday}, $tempState ${history.place}';
   }
 
-  Future<String> _buildContent() async {
+  Future<String> _buildContent(OaUserCredential oaCredential) async {
     late ReportHistory? history;
 
     try {
-      history = await ReportTempInit.reportService.getRecentHistory(Kv.auth.currentUsername ?? '');
+      history = await ReportTempInit.reportService.getRecentHistory(oaCredential.account);
     } catch (e) {
       return '${i18n.failed}: ${e.runtimeType}';
     }

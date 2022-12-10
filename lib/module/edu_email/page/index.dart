@@ -24,8 +24,6 @@ import '../init.dart';
 import '../service/email.dart';
 import 'item.dart';
 
-String getEduEmail(String studentId) => "$studentId@mail.sit.edu.cn";
-
 class MailPage extends StatefulWidget {
   const MailPage({Key? key}) : super(key: key);
 
@@ -43,18 +41,26 @@ class _MailPageState extends State<MailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final oaCredential = Auth.oaCredential;
+    final String title;
+    if (oaCredential != null) {
+      title = oaCredential.account.toEmailAddress();
+    } else {
+      title = i18n.eduEmailTitle;
+    }
     return Scaffold(
       appBar: AppBar(
-        title: i18n.eduEmailTitle.text(),
-        actions: [_buildPopupMenu()],
+        title: title.text(),
       ),
-      body: _buildBody(context),
+      body: oaCredential != null ? _buildBody(context, oaCredential) : const UnauthorizedTip(),
     );
   }
 
-  Future<void> _updateMailList() async {
+  Future<void> _updateMailList(OaUserCredential oaCredential) async {
     try {
-      final messages = (await _loadMailList()).messages;
+      final String emailAddress = oaCredential.account.toEmailAddress();
+      final String pwd = EduEmailInit.mail.password ?? oaCredential.password;
+      final messages = (await _loadMailList(emailAddress, pwd)).messages;
       // 日期越大的越靠前
       messages.sort((a, b) {
         return a.decodeDate()!.isAfter(b.decodeDate()!) ? -1 : 1;
@@ -67,12 +73,8 @@ class _MailPageState extends State<MailPage> {
     }
   }
 
-  Future<FetchImapResult> _loadMailList() async {
-    final String studentId = Kv.auth.currentUsername ?? '';
-    final String password = EduEmailInit.mail.password ?? (Kv.auth.ssoPassword ?? '');
-
-    final email = getEduEmail(studentId);
-    final service = MailService(email, password);
+  Future<FetchImapResult> _loadMailList(String emailAddress, String pwd) async {
+    final service = MailService(emailAddress, pwd);
 
     return await service.getInboxMessage(30);
   }
@@ -127,12 +129,12 @@ class _MailPageState extends State<MailPage> {
     );
   }
 
-  Widget _buildBody(BuildContext context) {
+  Widget _buildBody(BuildContext context, OaUserCredential oaCredential) {
     // 如果当前加载邮件列表
     if (_index == 0) {
       // 如果是首次加载, 拉取数据并显示加载动画
       if (_messages == null) {
-        _updateMailList();
+        _updateMailList(oaCredential);
         return Placeholders.loading();
       }
       // 非首次加载, 即已获取邮件列表, 直接渲染即可
@@ -143,16 +145,13 @@ class _MailPageState extends State<MailPage> {
     }
   }
 
-  Widget _buildPopupMenu() {
-    final String studentId = Kv.auth.currentUsername ?? '';
-    final email = getEduEmail(studentId);
-
-    return PopupMenuButton(itemBuilder: (_) => [PopupMenuItem(child: Text(email))]);
-  }
-
   @override
   void dispose() {
     super.dispose();
     _controller.dispose();
   }
+}
+
+extension _EmailAddressEx on String {
+  String toEmailAddress() => "$this@mail.sit.edu.cn";
 }

@@ -279,7 +279,7 @@ class GameControl extends State<Game> with RouteAware {
         pause();
       }
       if (mounted) {
-        final oaUser = Auth.oaUser;
+        final oaUser = Auth.oaCredential;
         if (oaUser != null) {
           uploadGameRecord(context, oaUser, GameRecord(GameType.tetris, _points, DateTime.now(), 0));
         }

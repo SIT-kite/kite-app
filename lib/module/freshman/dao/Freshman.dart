@@ -21,8 +21,8 @@ import '../entity/statistics.dart';
 
 abstract class FreshmanDao {
   /// Precondition:
-  /// - [Kv.freshman.freshmanAccount] is not null.
-  /// - [Kv.freshman.freshmanSecret] is not null.
+  /// - [Kv.freshmanCredential.freshmanAccount] is not null.
+  /// - [Kv.freshmanCredential.freshmanSecret] is not null.
   Future<FreshmanInfo> getMyInfo();
 
   Future<void> updateMyContact({Contact? contact, bool? visible});

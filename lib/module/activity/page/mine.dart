@@ -20,6 +20,7 @@ import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/module/activity/entity/list.dart';
+import 'package:kite/module/library/using.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../entity/score.dart';
@@ -30,7 +31,7 @@ import '../utils.dart';
 import 'detail.dart';
 
 class MyActivityPage extends StatefulWidget {
-  const MyActivityPage({Key? key}) : super(key: key);
+  const MyActivityPage({super.key});
 
   @override
   State<MyActivityPage> createState() => _MyActivityPageState();
@@ -78,19 +79,27 @@ class _MyActivityPageState extends State<MyActivityPage> with AutomaticKeepAlive
     });
   }
 
+  ScScoreSummary getTargetScore() {
+    final admissionYear = int.tryParse(Auth.oaCredential?.account.substring(0, 2) ?? "") ?? 2000;
+    return calcTargetScore(admissionYear);
+  }
+
   Widget buildPortrait(BuildContext context) {
+    final targetScore = getTargetScore();
     return [
       Align(
         alignment: Alignment.topCenter,
-        child: buildSummeryCard(context, summary),
+        child: buildSummeryCard(context, targetScore, summary),
       ),
       buildLiveList(context).expanded()
     ].column();
   }
 
   Widget buildLandscape(BuildContext ctx) {
+    final targetScore = getTargetScore();
     return AdaptiveNavigation(ctx,
-        child: [buildSummeryCard(ctx, summary).expanded(), buildLiveList(context).expanded()].row());
+        child:
+            [buildSummeryCard(ctx, targetScore, summary).expanded(), buildLiveList(context).expanded()].row());
     //return [buildSummeryCard(ctx, summary).expanded(), buildLiveList(context).expanded()].row();
   }
 

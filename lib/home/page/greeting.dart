@@ -17,6 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kite/credential/symbol.dart';
 import 'package:kite/module/shared/entity/weather.dart';
 import 'package:kite/module/simple_page/page/weather.dart';
 import 'package:kite/global/global.dart';
@@ -63,11 +64,17 @@ class _GreetingWidgetState extends State<GreetingWidget> {
   }
 
   int _getStudyDays() {
-    final studentId = Kv.auth.currentUsername;
+    final oaCredential = Auth.oaCredential;
+    if (oaCredential != null) {
+      final id = oaCredential.account;
 
-    if (studentId != null && studentId.isNotEmpty) {
-      int entranceYear = 2000 + int.parse(studentId.substring(0, 2));
-      return _calcStudyDays(entranceYear);
+      if (id.isNotEmpty) {
+        final admissionYear = int.tryParse(id.substring(0, 2));
+        if (admissionYear != null) {
+          int entranceYear = 2000 + admissionYear;
+          return _calcStudyDays(entranceYear);
+        }
+      }
     }
     return 0;
   }

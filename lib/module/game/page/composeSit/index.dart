@@ -45,7 +45,7 @@ function uploadGameRecord(obj){
             JavascriptChannel(
               name: 'KiteGame',
               onMessageReceived: (JavascriptMessage message) async {
-                final oaUser = Auth.oaUser;
+                final oaUser = Auth.oaCredential;
                 if (oaUser != null) {
                   Log.info('收到上传游戏记录请求${message.message}');
                   final record = GameRecord.fromJson(jsonDecode(message.message));

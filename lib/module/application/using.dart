@@ -17,6 +17,7 @@
 */
 export '../shared/iconfont.dart';
 export '../shared/storage.dart';
+export '../shared/auth.dart';
 export '../shared/networking.dart';
 export '../shared/i18n.dart';
 export '../shared/design.dart';

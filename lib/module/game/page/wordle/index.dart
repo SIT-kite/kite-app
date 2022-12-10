@@ -116,7 +116,7 @@ class _GameWordlePageState extends State<GameWordlePage> {
                           }
 
                           if (mounted) {
-                            final oaUser = Auth.oaUser;
+                            final oaUser = Auth.oaCredential;
                             if (oaUser != null) {
                               uploadGameRecord(context, oaUser, record);
                             }

@@ -1,9 +1,9 @@
 import '../entity/credential.dart';
 
 abstract class CredentialDao {
-  OaUserCredential? oaUser;
+  OaUserCredential? oaCredential;
   DateTime? lastOaAuthTime;
-  FreshmanCredential? freshman;
+  FreshmanCredential? freshmanCredential;
   DateTime? lastFreshmanAuthTime;
 }
 
