@@ -455,5 +455,8 @@
   "welcomeSlogan": "便捷校園, 即刻起航",
   "xuhui": "徐匯",
   "xuhuiDistrict": "徐匯區",
-  "yes": "好"
+  "yes": "好",
+  "settingsClearCache": "",
+  "settingsClearCacheSub": "",
+  "settingsClearCacheDesc": ""
 }

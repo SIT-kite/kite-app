@@ -46,7 +46,7 @@ import 'home_rearrange.dart';
 import '../../storage/page/editor.dart';
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+  const SettingsPage({super.key});
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -171,9 +171,14 @@ class _SettingsPageState extends State<SettingsPage> {
             },
             selected: Kv.home.backgroundMode,
             // TODO: Kv may return a unavailable value
-            onChange: (value) {
-              Kv.home.backgroundMode = value;
-              Global.eventBus.emit(EventNameConstants.onBackgroundChange);
+            onChange: (value) async {
+              final backgroundPath = Kv.home.background;
+              if (backgroundPath != null) {
+                if (await File(backgroundPath).exists()) {
+                  Kv.home.backgroundMode = value;
+                  Global.eventBus.emit(EventNameConstants.onBackgroundChange);
+                }
+              }
             },
           ),
           DropDownSettingsTile<int>(

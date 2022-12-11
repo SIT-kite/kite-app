@@ -107,16 +107,16 @@ class _HomeBackgroundState extends State<HomeBackground> {
     );
   }
 
-  Widget _buildImageBg() {
-    final path = Kv.home.background!;
-    return Image.file(File(path), fit: BoxFit.fill);
+  Widget _buildImageBg(File file) {
+    return Image.file(file, fit: BoxFit.fill);
   }
 
   @override
   Widget build(BuildContext context) {
     if (Kv.home.backgroundMode == 2) {
-      if (Kv.home.background != null) {
-        return _buildImageBg();
+      final backgroundSelected = Kv.home.background;
+      if (backgroundSelected != null) {
+        return _buildImageBg(File(backgroundSelected));
       } else {
         Future.delayed(
           Duration.zero,
