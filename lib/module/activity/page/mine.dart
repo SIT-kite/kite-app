@@ -55,7 +55,6 @@ class _MyActivityPageState extends State<MyActivityPage> with AutomaticKeepAlive
       );
     } else {
       return AdaptiveNavigation(
-        context,
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           body: buildLandscape(context),

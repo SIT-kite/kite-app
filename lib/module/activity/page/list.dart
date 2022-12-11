@@ -89,24 +89,16 @@ class _ActivityListPageState extends State<ActivityListPage>
   }
 
   Widget buildLandscape(BuildContext ctx) {
-    return AdaptiveNavigation(ctx,
-        child: Scaffold(
-          appBar: _buildBarHeader(ctx),
-          body: TabBarView(
-            controller: _tabController,
-            children: categories.map((selectedActivityType) {
-              return ValueListenableBuilder(
-                valueListenable: $page,
-                builder: (context, index, child) {
-                  return ActivityList(selectedActivityType);
-                },
-              );
-            }).toList(),
-          ),
-        ));
+    return AdaptiveNavigation(
+      child: buildBody(ctx),
+    );
   }
 
   Widget buildPortrait(BuildContext ctx) {
+    return buildBody(ctx);
+  }
+
+  Widget buildBody(BuildContext ctx) {
     return Scaffold(
       appBar: _buildBarHeader(context),
       body: TabBarView(

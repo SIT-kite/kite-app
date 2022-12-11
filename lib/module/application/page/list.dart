@@ -133,7 +133,7 @@ class _ApplicationListState extends State<ApplicationList> with AdaptivePageProt
     if (lastError != null) {
       return lastError.text().center();
     } else if (_allDescending.isNotEmpty) {
-      return AdaptiveNavigation(context, child: buildListLandscape(_allDescending));
+      return AdaptiveNavigation( child: buildListLandscape(_allDescending));
     } else {
       return Placeholders.loading();
     }

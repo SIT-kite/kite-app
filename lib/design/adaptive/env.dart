@@ -53,17 +53,17 @@ extension AdapativeEx on BuildContext {
   AdaptiveUI get adaptive => AdaptiveUI.of(this);
 }
 
-mixin AdaptivePageProtocol {
+mixin AdaptivePageProtocol<T extends StatefulWidget> on State<T> {
   var navigatorKey = GlobalKey();
 
   NavigatorState? get navigator => navigatorKey.currentState as NavigatorState?;
 
   // ignore: non_constant_identifier_names
-  Widget AdaptiveNavigation(BuildContext ctx, {required Widget child}) {
+  Widget AdaptiveNavigation({required Widget child}) {
     return Navigator(
         key: navigatorKey,
         onGenerateRoute: (settings) {
-          return ctx.adaptive.makeRoute((ctx) {
+          return context.adaptive.makeRoute((ctx) {
             return child;
           });
         });
