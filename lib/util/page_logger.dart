@@ -24,6 +24,7 @@ import 'package:kite/global/global.dart';
 import 'package:kite/module/user_event/dao/user_event.dart';
 import 'package:kite/module/user_event/entity/user_event.dart';
 import 'package:kite/module/user_event/init.dart';
+import 'package:kite/storage/init.dart';
 import 'package:uuid/uuid.dart';
 
 import 'logger.dart';
@@ -92,6 +93,10 @@ class PageLogger {
     params ??= {};
     params["version"] = currentVersion;
     params["platform"] = currentPlatform;
+    final locale = Kv.pref.locale;
+    if (locale != null) {
+      params["locale"] = locale.toString();
+    }
     final event = UserEvent(DateTime.now(), type, params);
     UserEventInit.userEventStorage.append(event);
 

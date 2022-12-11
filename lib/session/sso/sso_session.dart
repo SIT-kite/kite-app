@@ -378,7 +378,7 @@ class SsoSession with DioDownloaderMixin implements ISession {
             captcha = c;
           } else {
             // 用户未输入验证码
-            throw const CredentialsInvalidException(msg: '登录失败');
+            throw CredentialsInvalidException(msg: i18n.notEnterCaptchaError);
           }
         } else {
           // 未实现手动验证码

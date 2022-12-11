@@ -25,6 +25,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/credential/dao/credential.dart';
+import 'package:kite/design/user_widgets/multiplatform.dart';
 import 'package:kite/global/cookie_init.dart';
 import 'package:kite/global/dio_initializer.dart';
 import 'package:kite/global/init.dart';
@@ -35,6 +36,7 @@ import 'package:kite/util/event_bus.dart';
 import 'package:kite/util/page_logger.dart';
 import 'package:rettulf/rettulf.dart';
 
+import '../user_widget/captcha_box.dart';
 import '../util/upgrade.dart';
 
 class GlobalConfig {
@@ -96,44 +98,7 @@ class Global {
     if (Catcher.navigatorKey == null) return null;
     if (Catcher.navigatorKey!.currentContext == null) return null;
     final context = Catcher.navigatorKey!.currentContext!;
-    TextEditingController controller = TextEditingController();
-    return await showDialog<String?>(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('请输入验证码', style: Theme.of(context).textTheme.headline2),
-                ),
-                Image.memory(
-                  imageBytes,
-                  scale: 0.5,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 100.0),
-                  child: TextFormField(
-                    controller: controller,
-                    decoration: const InputDecoration(
-                      hintText: '验证码',
-                      icon: Icon(Icons.input),
-                    ),
-                  ),
-                ),
-                CupertinoButton(
-                  child: const Text('确定'),
-                  onPressed: () => Navigator.of(context).pop(controller.text),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
+    return await show$Dialog$(context, (context) => CaptchaBox(captchaData: imageBytes));
   }
 
   static Future<void> init({

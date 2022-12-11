@@ -216,7 +216,7 @@ class _DetailPageState extends State<DetailPage> with AutomaticKeepAliveClientMi
           title: i18n.error,
           desc: e.toString(),
           ok: i18n.ok,
-          error: true,
+          serious: true,
         );
         rethrow;
       }

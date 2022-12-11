@@ -94,11 +94,12 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void _onClearStorage(BuildContext context) async {
     final confirm = await context.showRequest(
-      title: i18n.settingsWipeKiteData,
+      title: i18n.settingsWipeKiteDataRequest,
       desc: i18n.settingsWipeKiteDataDesc,
       yes: i18n.confirm,
       no: i18n.notNow,
       highlight: true,
+      serious:true,
     );
     if (confirm == true) {
       await HiveBoxInit.clear(); // 清除存储
@@ -115,6 +116,7 @@ class _SettingsPageState extends State<SettingsPage> {
       yes: i18n.confirm,
       no: i18n.notNow,
       highlight: true,
+      serious:true,
     );
     if (confirm == true) {
       await HiveBoxInit.clearCache(); // 清除存储

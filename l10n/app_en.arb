@@ -40,6 +40,7 @@
   "applicationMailboxNavigation": "Mailbox",
   "applicationMailboxRecent": "Recent",
   "author": "Author",
+  "back": "Back",
   "bill": "Bill",
   "campus": "Campus",
   "campusCardNfcDisabled": "Your device isn't NFC-enabled.",
@@ -72,6 +73,7 @@
   "@cantLaunchWechatSoNumber2ClipboardTip": {
     "description": "Used in Freshman vCard when Wechat.app can't be launched."
   },
+  "captcha": "Captcha",
   "city": "City",
   "classmate": "Classmate",
   "clear": "Clear",
@@ -235,6 +237,10 @@
   "elecBillUpdateTime": "Last Update",
   "emptyContent": "Empty",
   "enable": "Enable",
+  "enterCaptchaHint": "Plz enter captcha",
+  "@enterCaptchaHint": {
+    "description": "The hint text in the Text Field. It's narrow to show long sentence."
+  },
   "error": "Error",
   "examEndTime": "Ent Time",
   "examIsRetake": "Is Retake",
@@ -419,6 +425,7 @@
   "homepageCampusNetworkDisconnected": "Campus Network Disconnected",
   "hotPost": "HOT",
   "htmlPageNoContent": "No Content",
+  "iSee": "I see",
   "kiteBoardReachEndLabel": "wow, you dug through the Earth !",
   "kiteBoardTitle": "Kite Board",
   "kiteForgotPwdBtn": "Forgot password?",
@@ -464,6 +471,7 @@
   "no": "No",
   "noLocationLabel": "No location",
   "noOnlineRecords": "No online records",
+  "notEnterCaptchaError": "Captcha is empty.",
   "notFound404": "404 Not Found",
   "notLoggedIn": "Not Logged In",
   "notNow": "Not Now",
@@ -565,6 +573,9 @@
   "settingsCampusSub": "To display the weather",
   "settingsChangeOaPwd": "Change OA Password",
   "settingsChangeOaPwdSub": "Change the OA password used for logging in Kite",
+  "settingsClearCache": "Clear Cache",
+  "settingsClearCacheDesc": "Confirm to clear the cache? To reload them, you need connect to campus network again.",
+  "settingsClearCacheSub": "Clear the offline cache made by Kite during use.",
   "settingsDarkMode": "Dark Mode",
   "settingsDarkModeSub": "Kite will protect your eyes",
   "settingsDetailedXcpDialog": "Enable detailed exception dialog",
@@ -597,8 +608,9 @@
   "settingsWallpaperEmptyWarn": "You haven't set the wallpaper.",
   "settingsWallpaperSub": "Customize the homepage wallpaper",
   "settingsWipeKiteData": "Wipe Kite Data & Log out",
-  "settingsWipeKiteDataDesc": "Login credentials and other data, such as timetable imported, but besides webview cache, will be wiped.",
-  "settingsWipeKiteDataSub": "Wipe Kite saved accounts and settings.",
+  "settingsWipeKiteDataDesc": "ALL data, such as login credentials and timetable imported, except webview cache, will be wiped permanently.",
+  "settingsWipeKiteDataRequest": "Wipe ALL Data",
+  "settingsWipeKiteDataSub": "Wipe all data made by Kite and log out.",
   "staticPicture": "Static Picture",
   "stats": "Statistics",
   "status": "Status",
@@ -729,10 +741,5 @@
   "welcomeSlogan": "Excellent school life, from here.",
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
-  "yes": "Yes",
-  "settingsClearCache": "Clear Cache",
-  "settingsClearCacheSub": "Clear the offline cache made by Kite during use.",
-  "settingsClearCacheDesc": "Do you want to clear the cache? you will have to connect to campus network to reload those next time.",
-  "iSee": "I see",
-  "back": "Back"
+  "yes": "Yes"
 }

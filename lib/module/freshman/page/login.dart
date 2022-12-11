@@ -68,7 +68,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
         title: i18n.error,
         desc: i18n.validateInputAccountPwdRequest,
         ok: i18n.close,
-        error: true,
+        serious: true,
       );
       return;
     }
@@ -77,7 +77,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
         title: i18n.fromKite,
         desc: i18n.readAndAcceptRequest(R.kiteUserAgreementName),
         ok: i18n.close,
-        error: true,
+        serious: true,
       );
       return;
     }
@@ -118,14 +118,14 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
           title: i18n.networkError,
           desc: i18n.networkNoAccessTip,
           ok: i18n.close,
-          error: true,
+          serious: true,
         );
       } else {
         await ctx.showTip(
           title: i18n.loginFailedWarn,
           desc: i18n.accountOrPwdIncorrectTip,
           ok: i18n.close,
-          error: true,
+          serious: true,
         );
       }
     } finally {

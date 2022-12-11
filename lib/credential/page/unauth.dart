@@ -215,7 +215,7 @@ class _UnauthorizedTipState extends State<UnauthorizedTip> {
         title: i18n.formatError,
         desc: i18n.validateInputAccountPwdRequest,
         ok: i18n.close,
-        error: true,
+        serious: true,
       );
       return;
     }
@@ -231,7 +231,7 @@ class _UnauthorizedTipState extends State<UnauthorizedTip> {
           title: i18n.networkError,
           desc: i18n.networkNoAccessTip,
           ok: i18n.close,
-          error: true,
+          serious: true,
         );
       }
       return;
@@ -261,7 +261,7 @@ class _UnauthorizedTipState extends State<UnauthorizedTip> {
         title: i18n.loginFailedWarn,
         desc: i18n.accountOrPwdIncorrectTip,
         ok: i18n.close,
-        error: true,
+        serious: true,
       );
     } finally {
       if (mounted) {
