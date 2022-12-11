@@ -98,7 +98,7 @@ class _ScoreItemState extends State<ScoreItem> {
         await Navigator.of(context).pushNamed(RouteTable.examResultEvaluation);
         if (!mounted) return;
         Navigator.of(context).pop();
-        await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ScorePage()));
+        await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ExamResultPage()));
       },
       child: Text('待评教', style: style),
     );

@@ -26,6 +26,8 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kite/credential/symbol.dart';
 import 'package:kite/design/user_widgets/dialog.dart';
+import 'package:kite/events/bus.dart';
+import 'package:kite/events/events.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/global/init.dart';
 import 'package:kite/hive/init.dart';
@@ -103,6 +105,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
     if (confirm == true) {
       await HiveBoxInit.clear(); // 清除存储
+      FireOn.global(CredentialChangeEvent());
       await Initializer.init();
       if (!mounted) return;
       _gotoWelcome(context);

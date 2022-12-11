@@ -65,8 +65,7 @@ class _TimetableEditorState extends State<TimetableEditor> {
 
   Widget buildTimetableEditor(BuildContext ctx) {
     final year = '${widget.meta.schoolYear} - ${widget.meta.schoolYear + 1}';
-    final semesterNames = makeSemesterL10nName();
-    final semester = semesterNames[Semester.values[widget.meta.semester]] ?? "";
+    final semester = Semester.values[widget.meta.semester].localized();
     return [
       [
         widget.meta.name.text(style: ctx.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),

@@ -22,7 +22,6 @@ import '../../entity/course.dart';
 import '../../entity/meta.dart';
 import '../../init.dart';
 import '../../using.dart';
-import '../../mock/courses.dart';
 import '../../user_widget/meta_editor.dart';
 
 enum ImportStatus {
@@ -64,8 +63,6 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
     selectedYear = (now.month >= 9 ? now.year : now.year - 1);
     selectedSemester = (now.month >= 3 && now.month <= 7) ? Semester.secondTerm : Semester.firstTerm;
   }
-
-  late final semesterNames = makeSemesterL10nName();
 
   String getTip({required ImportStatus by}) {
     switch (by) {
@@ -146,7 +143,7 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
   }
 
   Future<bool> handleTimetableData(BuildContext ctx, List<Course> courses, int year, Semester semester) async {
-    final defaultName = i18n.timetableInfoDefaultName(semesterNames[semester] ?? "", year, year + 1);
+    final defaultName = i18n.timetableInfoDefaultName(semester.localized(), year, year + 1);
     final meta = TimetableMeta()
       ..name = defaultName
       ..schoolYear = year

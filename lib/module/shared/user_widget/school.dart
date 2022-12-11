@@ -22,12 +22,6 @@ import 'package:rettulf/rettulf.dart';
 
 import '../entity/school.dart';
 
-Map<Semester, String> makeSemesterL10nName() => {
-      Semester.all: i18n.fullAcademicYear,
-      Semester.firstTerm: i18n.semester1st,
-      Semester.secondTerm: i18n.semester2rd,
-    };
-
 class SemesterSelector extends StatefulWidget {
   final int? initialYear;
   final Semester? initialSemester;
@@ -148,7 +142,6 @@ class _SemesterSelectorState extends State<SemesterSelector> {
   }
 
   Widget buildSemesterSelector(BuildContext ctx) {
-    final semesterNames = makeSemesterL10nName();
     List<Semester> semesters;
     // 不显示学年
     if (!(widget.showEntireYear ?? true)) {
@@ -156,7 +149,7 @@ class _SemesterSelectorState extends State<SemesterSelector> {
     } else {
       semesters = [Semester.all, Semester.firstTerm, Semester.secondTerm];
     }
-    final semesterItems = Map.fromEntries(semesters.map((e) => MapEntry(e, semesterNames[e]!)));
+    final semesterItems = Map.fromEntries(semesters.map((e) => MapEntry(e, e.localized())));
     // 保证显示上初始选择学期、实际加载的学期、selectedSemester 变量一致.
     return buildSelector<Semester>(ctx, semesterItems, selectedSemester, (Semester? selected) {
       if (selected != null && selected != selectedSemester) {

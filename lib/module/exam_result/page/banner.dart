@@ -22,10 +22,10 @@ import '../using.dart';
 import '../util.dart';
 
 class GpaBanner extends StatefulWidget {
-  final Semester _semester; // 学期 or 学年
-  final List<Score> _scoreList;
+  final Semester semester; // 学期 or 学年
+  final List<Score> scoreList;
 
-  const GpaBanner(this._semester, this._scoreList, {Key? key}) : super(key: key);
+  const GpaBanner(this.semester, this.scoreList, {super.key});
 
   @override
   State<StatefulWidget> createState() => _GpaBannerState();
@@ -47,10 +47,6 @@ class _GpaBannerState extends State<GpaBanner> {
     Global.eventBus.off(EventNameConstants.onSelectCourse);
     Global.eventBus.off(EventNameConstants.onRemoveCourse);
     super.dispose();
-  }
-
-  String _getType() {
-    return (widget._semester == Semester.all) ? i18n.academicYear : i18n.academicYear;
   }
 
   void _onSelectCourse(Score? score) {
@@ -76,8 +72,8 @@ class _GpaBannerState extends State<GpaBanner> {
         child: Text(i18n.gpaSelectedAndTotalLabel(_selectedSet.length, gpa.toStringAsPrecision(2)), softWrap: true),
       );
     } else {
-      final type = _getType();
-      final gpa = calcGPA(widget._scoreList);
+      final type = widget.semester.localized();
+      final gpa = calcGPA(widget.scoreList);
 
       return Container(
         padding: const EdgeInsets.all(10),

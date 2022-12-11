@@ -26,14 +26,14 @@ import '../using.dart';
 import 'banner.dart';
 import 'item.dart';
 
-class ScorePage extends StatefulWidget {
-  const ScorePage({Key? key}) : super(key: key);
+class ExamResultPage extends StatefulWidget {
+  const ExamResultPage({super.key});
 
   @override
-  State<ScorePage> createState() => _ScorePageState();
+  State<ExamResultPage> createState() => _ExamResultPageState();
 }
 
-class _ScorePageState extends State<ScorePage> {
+class _ExamResultPageState extends State<ExamResultPage> {
   /// 四位年份
   late int selectedYear;
 
@@ -49,12 +49,14 @@ class _ScorePageState extends State<ScorePage> {
     final now = DateTime.now();
     selectedYear = (now.month >= 9 ? now.year : now.year - 1);
     selectedSemester = Semester.all;
-    Future.delayed(Duration.zero, () async {
-      ExamResultInit.scoreService.getScoreList(SchoolYear(selectedYear), selectedSemester).then((value) {
-        setState(() {
-          scoreList = value;
-        });
-      }).ignore();
+    onRefresh();
+  }
+
+  void onRefresh() {
+    ExamResultInit.scoreService.getScoreList(SchoolYear(selectedYear), selectedSemester).then((value) {
+      setState(() {
+        scoreList = value;
+      });
     });
   }
 
@@ -82,25 +84,24 @@ class _ScorePageState extends State<ScorePage> {
   }
 
   Widget _buildHeader() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Container(
-          margin: const EdgeInsets.only(left: 15),
-          child: SemesterSelector(
-            onNewYearSelect: (year) {
-              setState(() => selectedYear = year);
-            },
-            onNewSemesterSelect: (semester) {
-              setState(() => selectedSemester = semester);
-            },
-            initialYear: selectedYear,
-            initialSemester: selectedSemester,
-          ),
+    return [
+      GpaBanner(selectedSemester, scoreList!),
+      Container(
+        margin: const EdgeInsets.only(left: 15),
+        child: SemesterSelector(
+          onNewYearSelect: (year) {
+            setState(() => selectedYear = year);
+            onRefresh();
+          },
+          onNewSemesterSelect: (semester) {
+            setState(() => selectedSemester = semester);
+            onRefresh();
+          },
+          initialYear: selectedYear,
+          initialSemester: selectedSemester,
         ),
-        GpaBanner(selectedSemester, scoreList!),
-      ],
-    );
+      ),
+    ].column();
   }
 
   Widget _buildListView() {

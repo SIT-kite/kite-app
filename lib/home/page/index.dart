@@ -212,8 +212,9 @@ class _HomePageState extends State<HomePage> {
         EventNameConstants.onRouteRefresh,
         value,
       );
-      setState(() => saturation = value.homeColorSaturation);
       overrideFunctionNotifier.value = value;
+      if (!mounted) return;
+      setState(() => saturation = value.homeColorSaturation);
     });
   }
 

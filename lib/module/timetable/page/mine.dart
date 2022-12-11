@@ -164,8 +164,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
 
   Widget buildTimetableItemCardPreview(BuildContext ctx, TimetableMeta meta, {required bool isSelected}) {
     final year = '${meta.schoolYear} - ${meta.schoolYear + 1}';
-    final semesterNames = makeSemesterL10nName();
-    final semester = semesterNames[Semester.values[meta.semester]] ?? "";
+    final semester = Semester.values[meta.semester].localized();
     final bodyTextStyle = ctx.textTheme.titleSmall;
     return [
       [

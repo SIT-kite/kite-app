@@ -18,10 +18,23 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:kite/l10n/extension.dart';
+
 enum Semester {
   all,
   firstTerm,
-  secondTerm,
+  secondTerm;
+
+  String localized() {
+    switch (this) {
+      case Semester.all:
+        return i18n.fullAcademicYear;
+      case Semester.firstTerm:
+        return i18n.semester1st;
+      case Semester.secondTerm:
+        return i18n.semester2rd;
+    }
+  }
 }
 
 class SchoolYear {
