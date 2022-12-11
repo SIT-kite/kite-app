@@ -53,7 +53,7 @@ Future<AppVersion> getCurrentVersion() async {
   } else {
     platform = "Unknown";
   }
-  return AppVersion(platform, packageInfo.version,full: packageInfo.tryParseVersion());
+  return AppVersion(platform, packageInfo.version, full: packageInfo.tryParseVersion());
 }
 
 extension PackageInfoEx on PackageInfo {

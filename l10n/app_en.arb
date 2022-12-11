@@ -74,6 +74,7 @@
   },
   "city": "City",
   "classmate": "Classmate",
+  "clear": "Clear",
   "close": "Close",
   "confirm": "Confirm",
   "connectivityCheckerConnectedBtn": "Continue",
@@ -91,6 +92,7 @@
   "continue_": "Continue",
   "counselor": "Counselor",
   "counselorPhoneNumber": "Counselor Phone Number",
+  "credentialError": "Credential Error",
   "currentDormitoryLabel": "Current Dormitory",
   "currentVersion": "Current Version",
   "dataManagement": "Data Management",
@@ -443,6 +445,7 @@
   "loggingIn": "Logging in",
   "loginCredentialsValidatedTip": "Account and password is correct",
   "loginFailedWarn": "Login Failed",
+  "loginSuccessfulTip": "Login successful !",
   "logout": "Logout",
   "logoutKiteWarn": "Confirm to logout the Kite?",
   "major": "Major",
@@ -514,6 +517,7 @@
   "realtimeWeather": "Real-time Weather",
   "refresh": "Refresh",
   "relogin": "Re-login",
+  "reloginRequestDesc": "Your account or password is incorrect, do you want to log in again?",
   "reportTempAbnormal": "Abnormal",
   "@reportTempAbnormal": {
     "description": "For building string: Reported Today Abnormal {place}"
@@ -602,6 +606,7 @@
   "studentIdCopy2ClipboardTip": "Your student ID is copied.",
   "studentInfoTitle": "Student Info",
   "submit": "Submit",
+  "success": "Success",
   "teacherEvalTitle": "Teacher Evaluation",
   "tel": "TEL.",
   "timetableDelete": "Delete",
@@ -680,8 +685,8 @@
   },
   "troubleshooting": "Troubleshooting",
   "unauthorizedTipEverLoggedInTip": "Your account or password is incorrect, please try to login again.",
-  "unauthorizedTipTitle": "Require Login",
   "unauthorizedTipNeverLoggedInTip": "You have to login to perform this.",
+  "unauthorizedTipTitle": "Require Login",
   "unfilled": "Unfilled",
   "unknown": "Unknown",
   "untitled": "Untitled",
@@ -724,10 +729,5 @@
   "welcomeSlogan": "Excellent school life, from here.",
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
-  "yes": "Yes",
-  "clear": "Clear",
-  "success": "Success",
-  "loginSuccessfulTip": "Login successful !",
-  "credentialError": "Credential Error",
-  "reloginRequestDesc": "Your account or password is incorrect, do you want to log in again?"
+  "yes": "Yes"
 }

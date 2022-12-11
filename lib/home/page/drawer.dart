@@ -28,7 +28,7 @@ class KiteDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final installTime = Kv.home.installTime?? DateTime.now();
+    final installTime = Kv.home.installTime ?? DateTime.now();
     final inDays = DateTime.now().difference(installTime).inDays;
     return Drawer(
       child: ListView(

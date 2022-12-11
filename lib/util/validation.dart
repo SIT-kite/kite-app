@@ -18,6 +18,7 @@
 import 'package:kite/credential/utils.dart';
 
 import '../l10n/extension.dart';
+
 // Only allow student ID/ work number.
 String? studentIdValidator(String? account) {
   if (account != null && account.isNotEmpty) {

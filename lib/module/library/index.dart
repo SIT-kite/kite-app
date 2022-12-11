@@ -24,7 +24,6 @@ import 'using.dart';
 import 'search/page/constant.dart';
 import 'search/page/search_delegate.dart';
 
-
 class LibraryPage extends StatelessWidget {
   const LibraryPage({Key? key}) : super(key: key);
 

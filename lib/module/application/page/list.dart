@@ -175,7 +175,7 @@ class _ApplicationListState extends State<ApplicationList> {
 
   Future<List<ApplicationMeta>?> _fetchMetaList() async {
     final oaCredential = Auth.oaCredential;
-    if(oaCredential == null) return null;
+    if (oaCredential == null) return null;
     if (!ApplicationInit.session.isLogin) {
       await ApplicationInit.session.login(
         username: oaCredential.account,

@@ -137,7 +137,7 @@ Widget _buildChart(BuildContext ctx, ScScoreSummary targetScore, ScScoreSummary?
   );
 }
 
-Widget buildSummeryCard(BuildContext ctx,ScScoreSummary targetScore , ScScoreSummary? summery) {
+Widget buildSummeryCard(BuildContext ctx, ScScoreSummary targetScore, ScScoreSummary? summery) {
   if (ctx.isPortrait) {
     return AspectRatio(
       aspectRatio: 1.8,

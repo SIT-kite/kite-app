@@ -17,7 +17,6 @@
 */
 import 'dart:ui';
 
-
 abstract class PrefDao {
   Locale? get locale;
 

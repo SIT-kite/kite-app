@@ -98,8 +98,7 @@ class _MyActivityPageState extends State<MyActivityPage> with AutomaticKeepAlive
   Widget buildLandscape(BuildContext ctx) {
     final targetScore = getTargetScore();
     return AdaptiveNavigation(ctx,
-        child:
-            [buildSummeryCard(ctx, targetScore, summary).expanded(), buildLiveList(context).expanded()].row());
+        child: [buildSummeryCard(ctx, targetScore, summary).expanded(), buildLiveList(context).expanded()].row());
     //return [buildSummeryCard(ctx, summary).expanded(), buildLiveList(context).expanded()].row();
   }
 
