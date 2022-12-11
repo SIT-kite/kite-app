@@ -11,7 +11,7 @@ final RegExp _reUndergraduateId = RegExp(r'^(\d{6}[YGHE\d]\d{3})$');
 final RegExp _rePostgraduateId = RegExp(r'^(\d{2}6\d{6})$');
 final RegExp _reTeacherId = RegExp(r'^(\d{4})$');
 
-/// [oaAccount] can be a student ID or an examinee number.
+/// [oaAccount] can be a student ID or a work number.
 UserType? guessUserTypeByAccount(String oaAccount) {
   if (oaAccount.length == 10 && _reUndergraduateId.hasMatch(oaAccount.toUpperCase())) {
     return UserType.undergraduate;
