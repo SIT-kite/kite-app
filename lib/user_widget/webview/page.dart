@@ -59,6 +59,9 @@ class SimpleWebViewPage extends StatefulWidget {
   /// WebView创建完毕时的回调
   final WebViewCreatedCallback? onWebViewCreated;
 
+  /// 网页加载完毕
+  final PageFinishedCallback? onPageFinished;
+
   /// 暴露dart回调到js接口
   final Set<JavascriptChannel>? javascriptChannels;
 
@@ -84,6 +87,7 @@ class SimpleWebViewPage extends StatefulWidget {
     this.injectJsRules,
     this.floatingActionButton,
     this.onWebViewCreated,
+    this.onPageFinished,
     this.showSharedButton = false,
     this.showRefreshButton = true,
     this.showLoadInBrowser = false,
@@ -195,6 +199,7 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
             setState(() => progress = value % 100);
           },
           onPageFinished: (url) async {
+            widget.onPageFinished?.call(url);
             if (widget.fixedTitle == null) {
               title = (await _controller?.getTitle()) ?? i18n.untitled;
               if (!mounted) return;
