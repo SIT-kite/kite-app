@@ -16,11 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/route.dart';
 
 import '../entity/score.dart';
 import '../init.dart';
 import '../using.dart';
-import 'evaluation.dart';
 import 'index.dart';
 
 class ScoreItem extends StatefulWidget {
@@ -95,10 +95,10 @@ class _ScoreItemState extends State<ScoreItem> {
 
     return InkWell(
       onTap: () async {
-        await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const EvaluationPage()));
+        await Navigator.of(context).pushNamed(RouteTable.examResultEvaluation);
         if (!mounted) return;
         Navigator.of(context).pop();
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ScorePage()));
+        await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ScorePage()));
       },
       child: Text('待评教', style: style),
     );

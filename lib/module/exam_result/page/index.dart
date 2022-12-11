@@ -17,13 +17,13 @@
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kite/module/library/using.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../entity/score.dart';
 import '../init.dart';
 import '../using.dart';
 import 'banner.dart';
-import 'evaluation.dart';
 import 'item.dart';
 
 class ScorePage extends StatefulWidget {
@@ -75,7 +75,7 @@ class _ScorePageState extends State<ScorePage> {
             ),
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.assessment_outlined),
-        onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const EvaluationPage())),
+        onPressed: () => Navigator.of(context).pushNamed(RouteTable.examResultEvaluation),
         label: const Text('评教'),
       ),
     );

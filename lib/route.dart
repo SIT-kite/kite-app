@@ -27,6 +27,7 @@ import 'package:kite/override/entity.dart';
 import 'package:kite/settings/page/index.dart';
 import 'package:kite/storage/init.dart';
 
+import 'module/exam_result/page/evaluation.dart';
 import 'module/pure_function/launcher.dart';
 import 'module/simple_page/page/browser.dart';
 import 'module/symbol.dart';
@@ -51,6 +52,7 @@ class RouteTable {
   static const welcome = '/welcome';
   static const expense = '/expense';
   static const examResult = '/exam_result';
+  static const examResultEvaluation = '/exam_result/evaluation';
   static const game = '/game';
   static const game2048 = '$game/2048';
   static const gameWordle = '$game/wordle';
@@ -163,6 +165,7 @@ final defaultRouteTable = StaticRouteTable(
     RouteTable.pureFunctionLauncher: (context, args) => LauncherFunction(args['schemeText']),
     RouteTable.pureFunctionLaunchInBrowser: (context, args) => LaunchInBrowserFunction(args['url']),
     RouteTable.relogin: (context, args) => const UnauthorizedTipPage(),
+    RouteTable.examResultEvaluation: (context, args) => const EvaluationPage(),
   },
   onNotFound: (context, routeName, args) => NotFoundPage(routeName),
   rootRoute: (context, table, args) {
