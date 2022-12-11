@@ -30,6 +30,17 @@ class ActivityCard extends StatelessWidget {
 
   const ActivityCard(this.activity, {Key? key}) : super(key: key);
 
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.all(10),
+      child: ClipRRect(borderRadius: BorderRadius.circular(16), child: _buildBasicInfo(context)),
+    ).hero(activity.id).on(tap: () {
+      final route = context.adaptive.makeRoute((_) => DetailPage(activity, hero: activity.id));
+      context.navigator.push(route);
+    });
+  }
+
   Widget _buildBasicInfo(BuildContext ctx) {
     final titleStyle = ctx.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w500);
     final tagsStyle = ctx.textTheme.titleSmall;
@@ -78,16 +89,5 @@ class ActivityCard extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(10),
-      child: ClipRRect(borderRadius: BorderRadius.circular(16), child: _buildBasicInfo(context)),
-    ).hero(activity.id).on(tap: () {
-      final route = AdaptiveUI.of(context).makeRoute((_) => DetailPage(activity, hero: activity.id));
-      context.navigator.push(route);
-    });
   }
 }

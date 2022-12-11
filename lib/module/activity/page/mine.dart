@@ -54,9 +54,12 @@ class _MyActivityPageState extends State<MyActivityPage> with AutomaticKeepAlive
         body: buildPortrait(context),
       );
     } else {
-      return Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: buildLandscape(context),
+      return AdaptiveNavigation(
+        context,
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: buildLandscape(context),
+        ),
       );
     }
   }
@@ -103,8 +106,7 @@ class _MyActivityPageState extends State<MyActivityPage> with AutomaticKeepAlive
 
   Widget buildLandscape(BuildContext ctx) {
     final targetScore = getTargetScore();
-    return AdaptiveNavigation(ctx,
-        child: [buildSummeryCard(ctx, targetScore, summary).expanded(), buildLiveList(context).expanded()].row());
+    return [buildSummeryCard(ctx, targetScore, summary).expanded(), buildLiveList(context).expanded()].row();
     //return [buildSummeryCard(ctx, summary).expanded(), buildLiveList(context).expanded()].row();
   }
 

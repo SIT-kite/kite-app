@@ -38,7 +38,7 @@ class _Page {
   static const bill = 0;
   static const search = 1;
 }
-
+// TODO: For now, we can't use AdaptiveUI.
 class _ElectricityBillPageState extends State<ElectricityBillPage> {
   /// elevated the `room` to share the state
   /// Null means user should select a room number before all.
@@ -214,6 +214,8 @@ class _ElectricityBillPageState extends State<ElectricityBillPage> {
       });
     }
   }
+}
+
 /*
   // benchmark: 100,000,000 times, result: 1:06.313091 minutes, AMD Ryzen 9 5900X 12-Core
   // created by Liplum
@@ -229,5 +231,3 @@ class _ElectricityBillPageState extends State<ElectricityBillPage> {
     return s.toString();
   }
 */
-
-}

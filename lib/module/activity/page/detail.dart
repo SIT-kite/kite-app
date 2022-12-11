@@ -23,7 +23,6 @@ import 'package:rettulf/rettulf.dart';
 import '../entity/detail.dart';
 import '../init.dart';
 import '../user_widgets/background.dart';
-import '../user_widgets/card.dart';
 import '../using.dart';
 
 String _getActivityUrl(int activityId) {

@@ -76,17 +76,29 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Widget buildLandscape(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(meta.name),
-        /* actions: [
+    if (context.adaptive.isSubpage) {
+      return Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text(meta.name),
+        ),
+        body: SafeArea(
+          child: buildBody(context),
+        ),
+      );
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(meta.name),
+          /* actions: [
           buildOpenInApp(),
         ],*/
-      ),
-      body: SafeArea(
-        child: buildBody(context),
-      ),
-    );
+        ),
+        body: SafeArea(
+          child: buildBody(context),
+        ),
+      );
+    }
   }
 
   Widget buildOpenInApp() {

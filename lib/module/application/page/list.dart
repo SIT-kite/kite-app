@@ -43,14 +43,15 @@ const Set<String> _commonUsed = <String>{
 };
 
 class ApplicationList extends StatefulWidget {
-  const ApplicationList({super.key});
+  final ValueNotifier<bool> $enableFilter;
+
+  const ApplicationList({super.key, required this.$enableFilter});
 
   @override
   State<ApplicationList> createState() => _ApplicationListState();
 }
 
-class _ApplicationListState extends State<ApplicationList> {
-  bool enableFilter = false;
+class _ApplicationListState extends State<ApplicationList> with AdaptivePageProtocol {
   final service = ApplicationInit.applicationService;
 
   // in descending order
@@ -79,7 +80,11 @@ class _ApplicationListState extends State<ApplicationList> {
 
   @override
   Widget build(BuildContext context) {
-    return context.isPortrait ? buildPortrait(context) : buildLandscape(context);
+    if (context.isPortrait) {
+      return buildPortrait(context);
+    } else {
+      return buildLandscape(context);
+    }
   }
 
   Widget buildPortrait(BuildContext context) {
@@ -104,7 +109,7 @@ class _ApplicationListState extends State<ApplicationList> {
     }
   }
 
-  List<Widget> buildApplications(List<ApplicationMeta> all) {
+  List<Widget> buildApplications(List<ApplicationMeta> all, bool enableFilter) {
     return all
         .where((element) => !enableFilter || _commonUsed.contains(element.id))
         .mapIndexed((i, e) => ApplicationTile(meta: e, isHot: i < 3))
@@ -112,12 +117,15 @@ class _ApplicationListState extends State<ApplicationList> {
   }
 
   Widget buildListPortrait(List<ApplicationMeta> list) {
-    final items = buildApplications(list);
-    return LiveList(
-      showItemInterval: const Duration(milliseconds: 40),
-      itemCount: items.length,
-      itemBuilder: (ctx, index, animation) => items[index].aliveWith(animation),
-    );
+    return widget.$enableFilter <<
+        (ctx, v, _) {
+          final items = buildApplications(list, v);
+          return LiveList(
+            showItemInterval: const Duration(milliseconds: 40),
+            itemCount: items.length,
+            itemBuilder: (ctx, index, animation) => items[index].aliveWith(animation),
+          );
+        };
   }
 
   Widget buildLandscape(BuildContext context) {
@@ -125,52 +133,29 @@ class _ApplicationListState extends State<ApplicationList> {
     if (lastError != null) {
       return lastError.text().center();
     } else if (_allDescending.isNotEmpty) {
-      return buildListLandscape(_allDescending);
+      return AdaptiveNavigation(context, child: buildListLandscape(_allDescending));
     } else {
       return Placeholders.loading();
     }
   }
 
   Widget buildListLandscape(List<ApplicationMeta> list) {
-    final items = buildApplications(list);
-    return LayoutBuilder(builder: (ctx, constraints) {
-      final count = constraints.maxWidth ~/ 300;
-      return LiveGrid.options(
-        itemCount: items.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: count,
-          childAspectRatio: 5,
-        ),
-        options: kiteLiveOptions,
-        itemBuilder: (ctx, index, animation) => items[index].aliveWith(animation),
-      );
-    });
-  }
-
-  PopupMenuButton _buildMenuButton(BuildContext context) {
-    final menuButton = PopupMenuButton(
-      itemBuilder: (BuildContext context) {
-        return [
-          PopupMenuItem(
-            onTap: () {
-              setState(() {
-                enableFilter = !enableFilter;
-              });
-            },
-            child: Row(
-              children: [
-                // 禁用checkbox自身的点击效果，点击由外部接管
-                AbsorbPointer(
-                  child: Checkbox(value: enableFilter, onChanged: (bool? value) {}),
-                ),
-                i18n.applicationFilerInfrequentlyUsed.text(),
-              ],
-            ),
-          ),
-        ];
-      },
-    );
-    return menuButton;
+    return widget.$enableFilter <<
+        (ctx, v, _) {
+          return LayoutBuilder(builder: (ctx, constraints) {
+            final items = buildApplications(list, v);
+            final count = constraints.maxWidth ~/ 300;
+            return LiveGrid.options(
+              itemCount: items.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: count,
+                childAspectRatio: 5,
+              ),
+              options: kiteLiveOptions,
+              itemBuilder: (ctx, index, animation) => items[index].aliveWith(animation),
+            );
+          });
+        };
   }
 
   Future<List<ApplicationMeta>?> _fetchMetaList() async {

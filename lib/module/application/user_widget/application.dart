@@ -56,10 +56,8 @@ class ApplicationTile extends StatelessWidget {
       ),
       trailing: views,
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => DetailPage(meta: meta)),
-        );
+        final route = context.adaptive.makeRoute((_) => DetailPage(meta: meta));
+        context.navigator.push(route);
       },
     );
   }
