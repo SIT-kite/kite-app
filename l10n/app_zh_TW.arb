@@ -210,7 +210,7 @@
   "ftype_scanner_desc": "掃描行動條碼",
   "ftype_separator": "分隔號",
   "ftype_separator_desc": "看什麼看！我是個分隔號",
-  "ftype_switchAccount": "切換至正式用戶",
+  "ftype_switchAccount": "切換至 OA 用戶",
   "ftype_switchAccount_desc": "我準備好啦！",
   "ftype_timetable": "課程表",
   "ftype_timetable_desc": "查看你的每週課表",

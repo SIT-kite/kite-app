@@ -159,7 +159,10 @@ final defaultRouteTable = StaticRouteTable(
   },
   onNotFound: (context, routeName, args) => NotFoundPage(routeName),
   rootRoute: (context, table, args) {
-    final routeName = Auth.hasLoggedIn ? RouteTable.home : RouteTable.welcome;
+    // The freshmen and OA users who ever logged in can directly land on the homepage.
+    // While, the offline users have to click the `Offline Mode` button every time.
+    final routeName =
+        Auth.lastOaAuthTime != null || Auth.lastFreshmanAuthTime != null ? RouteTable.home : RouteTable.welcome;
     return table.onGenerateRoute(routeName, args)(context);
   },
 );

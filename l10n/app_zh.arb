@@ -210,7 +210,7 @@
   "ftype_scanner_desc": "扫描各种二维码",
   "ftype_separator": "分隔符",
   "ftype_separator_desc": "用于功能分组",
-  "ftype_switchAccount": "切换到正式用户",
+  "ftype_switchAccount": "切换到 OA 用户",
   "ftype_switchAccount_desc": "我准备好啦！",
   "ftype_timetable": "课程表",
   "ftype_timetable_desc": "查看近期课程",
