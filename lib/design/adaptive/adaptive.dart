@@ -101,7 +101,7 @@ class _AdaptiveNaviState extends State<AdaptiveNavi> {
   }
 
   Widget buildLandscape(BuildContext ctx) {
-    return Scaffold(
+    Widget main = Scaffold(
       resizeToAvoidBottomInset: false,
       body: Row(
         children: <Widget>[
@@ -154,5 +154,19 @@ class _AdaptiveNaviState extends State<AdaptiveNavi> {
         ],
       ),
     );
+    main = WillPopScope(
+        child: main,
+        onWillPop: () async {
+          final subpage = _pageKeys[_curIndex].currentState;
+          if (subpage is Adaptable) {
+            final subNavi = (subpage as Adaptable).navigator;
+            if (subNavi != null && subNavi.canPop()) {
+              subNavi.pop();
+              return false;
+            }
+          }
+          return true;
+        });
+    return main;
   }
 }

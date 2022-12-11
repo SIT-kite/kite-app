@@ -138,6 +138,8 @@ class ActivityList extends StatefulWidget {
   State<StatefulWidget> createState() => _ActivityListState();
 }
 
+/// Note: Changing orientation will cause a rebuild.
+/// The solution is to use any state manager framework, such as `provider`.
 class _ActivityListState extends State<ActivityList> {
   int _lastPage = 1;
   bool _atEnd = false;
@@ -168,8 +170,9 @@ class _ActivityListState extends State<ActivityList> {
   Widget build(BuildContext context) {
     if (loading) {
       return Placeholders.loading();
+    } else {
+      return buildActivityResult(_activityList);
     }
-    return buildActivityResult(_activityList);
   }
 
   void loadInitialActivities() async {
@@ -218,5 +221,11 @@ class _ActivityListState extends State<ActivityList> {
         itemBuilder: (ctx, index, animation) => ActivityCard(activities[index]).aliveWith(animation),
       );
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
   }
 }

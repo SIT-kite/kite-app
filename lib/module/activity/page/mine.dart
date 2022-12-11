@@ -50,9 +50,16 @@ class _MyActivityPageState extends State<MyActivityPage> with AutomaticKeepAlive
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Scaffold(
-      body: context.orientation == Orientation.portrait ? buildPortrait(context) : buildLandscape(context),
-    );
+    if (context.isPortrait) {
+      return Scaffold(
+        body: buildPortrait(context),
+      );
+    } else {
+      return Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: buildLandscape(context),
+      );
+    }
   }
 
   @override

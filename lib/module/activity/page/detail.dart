@@ -60,7 +60,7 @@ class _DetailPageState extends State<DetailPage> with AutomaticKeepAliveClientMi
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return context.orientation == Orientation.portrait ? buildPortrait(context) : buildLandscape(context);
+    return context.isPortrait ? buildPortrait(context) : buildLandscape(context);
   }
 
   Widget buildPortrait(BuildContext ctx) {
@@ -92,6 +92,7 @@ class _DetailPageState extends State<DetailPage> with AutomaticKeepAliveClientMi
   Widget buildLandscape(BuildContext ctx) {
     if (ctx.adaptive.isSubpage) {
       return Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             automaticallyImplyLeading: false,
             toolbarHeight: 30,
