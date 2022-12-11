@@ -24,6 +24,8 @@ import 'list.dart';
 import 'mine.dart';
 import 'search.dart';
 
+part 'new_index.dart';
+
 class ActivityPage extends StatefulWidget {
   const ActivityPage({Key? key}) : super(key: key);
 
@@ -36,7 +38,7 @@ class _Page {
   static const mine = 1;
 }
 
-class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderStateMixin {
+class _ActivityPageState extends State<ActivityPage> {
   /// For landscape mode.
   int curNavigation = _Page.list;
   final _pageKeys = [
@@ -63,12 +65,15 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
 
   Widget buildPortrait(BuildContext ctx) {
     return Scaffold(
-      appBar: AppBar(title: i18n.ftype_activity.text(), actions: [
-        IconButton(
-          icon: const Icon(Icons.search),
-          onPressed: () => showSearch(context: context, delegate: SearchBar()),
-        ),
-      ]),
+      appBar: AppBar(
+        title: i18n.ftype_activity.text(),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () => showSearch(context: context, delegate: SearchBar()),
+          ),
+        ],
+      ),
       body: IndexedStack(
         index: curNavigation,
         children: pages,
@@ -101,8 +106,8 @@ class _ActivityPageState extends State<ActivityPage> with SingleTickerProviderSt
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
                 final subpage = _pageKeys[curNavigation].currentState;
-                if (subpage is Navigatable) {
-                  final subNavi = (subpage as Navigatable).navigator;
+                if (subpage is Adaptable) {
+                  final subNavi = (subpage as Adaptable).navigator;
                   if (subNavi != null && subNavi.canPop()) {
                     subNavi.pop();
                     return;

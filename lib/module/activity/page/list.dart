@@ -34,7 +34,7 @@ class ActivityListPage extends StatefulWidget {
 }
 
 class _ActivityListPageState extends State<ActivityListPage>
-    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin, Navigatable {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin, Adaptable {
   static const categories = [
     ActivityType.lecture,
     ActivityType.creation,

@@ -37,7 +37,7 @@ class MyActivityPage extends StatefulWidget {
   State<MyActivityPage> createState() => _MyActivityPageState();
 }
 
-class _MyActivityPageState extends State<MyActivityPage> with AutomaticKeepAliveClientMixin, Navigatable {
+class _MyActivityPageState extends State<MyActivityPage> with AutomaticKeepAliveClientMixin, Adaptable {
   List<ScJoinedActivity>? joined;
   ScScoreSummary? summary;
 

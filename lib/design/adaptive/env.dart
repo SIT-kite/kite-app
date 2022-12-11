@@ -15,9 +15,7 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import 'package:flutter/material.dart';
-
-import '../user_widgets/route.dart';
+part of 'adaptive.dart';
 
 class AdaptiveUI extends InheritedWidget {
   final bool isSubpage;
@@ -55,7 +53,7 @@ extension AdapativeEx on BuildContext {
   AdaptiveUI get adaptive => AdaptiveUI.of(this);
 }
 
-mixin Navigatable {
+mixin Adaptable {
   var navigatorKey = GlobalKey();
 
   NavigatorState? get navigator => navigatorKey.currentState as NavigatorState?;
@@ -69,5 +67,20 @@ mixin Navigatable {
             return child;
           });
         });
+  }
+}
+
+class SubpageRoute<T> extends MaterialPageRoute<T> {
+  SubpageRoute({
+    required WidgetBuilder builder,
+    RouteSettings? settings,
+    bool maintainState = true,
+    bool fullscreenDialog = false,
+  }) : super(builder: builder, maintainState: maintainState, settings: settings, fullscreenDialog: fullscreenDialog);
+
+  @override
+  Widget buildTransitions(
+      BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+    return FadeTransition(opacity: animation, child: child);
   }
 }
