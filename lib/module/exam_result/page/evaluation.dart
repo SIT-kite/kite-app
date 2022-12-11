@@ -17,68 +17,34 @@
  */
 import 'package:flutter/material.dart';
 
-import '../entity/evaluation.dart';
 import '../init.dart';
 import '../using.dart';
 
-const _evaluationPageUrl = 'http://jwxt.sit.edu.cn/jwglxt/xspjgl/xspj_cxXspjDisplay.html?gnmkdm=N401605';
-
 /// REAL. THE PAYLOAD IS IN PINYIN. DONT BLAME ANYONE BUT THE SCHOOL.
 /// More reading: https://github.com/sunnysab/zf-tools/blob/master/TRANSLATION.md
-class EvaluationPage extends StatefulWidget {
-  final List<CourseToEvaluate> coursesToEvaluate;
-
-  const EvaluationPage(this.coursesToEvaluate, {Key? key}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() => _EvaluationPageState();
-}
-
-class _EvaluationPageState extends State<EvaluationPage> {
-  int index = 0;
-
-  Map<String, String> _getForm(CourseToEvaluate coursesToEvaluate) {
-    return {
-      'jxb_id': coursesToEvaluate.innerClassId,
-      'kch_id': coursesToEvaluate.courseId,
-      'xsdm': coursesToEvaluate.subTypeId,
-      'jgh_id': coursesToEvaluate.teacherId,
-      'tjzt': coursesToEvaluate.submittingStatus,
-      'pjmbmcb_id': coursesToEvaluate.evaluationId,
-      'sfcjlrjs': '1',
-    };
-  }
-
-  Future<List<WebViewCookie>> getCookies() async {
-    final result = await ExamResultInit.cookieJar.loadAsWebViewCookie(Uri.parse('http://jwxt.sit.edu.cn/jwglxt/'));
-    print('GetCookies: $result');
-    return result;
-  }
+class EvaluationPage extends StatelessWidget {
+  const EvaluationPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final coursesToEvaluate = widget.coursesToEvaluate;
+    final url = Uri(
+      scheme: 'http',
+      host: 'jwxt.sit.edu.cn',
+      path: '/jwglxt/xspjgl/xspj_cxXspjIndex.html',
+      queryParameters: {
+        'doType': 'details',
+        'gnmkdm': 'N401605',
+        'layout': 'default',
+        // 'su': studentId,
+      },
+    );
     return MyFutureBuilder<List<WebViewCookie>>(
-      future: getCookies(),
+      future: ExamResultInit.cookieJar.loadAsWebViewCookie(url),
       builder: (context, data) {
         return SimpleWebViewPage(
-          initialUrl: _evaluationPageUrl,
+          initialUrl: url.toString(),
           fixedTitle: i18n.teacherEvalTitle,
           initialCookies: data,
-          floatingActionButton: FloatingActionButton(
-            child: index == coursesToEvaluate.length - 1 ? const Icon(Icons.check) : const Icon(Icons.east),
-            onPressed: () {
-              // 评教完成
-              if (index == coursesToEvaluate.length - 1) {
-                Navigator.of(context).pop();
-              } else {
-                setState(() {
-                  index++;
-                });
-              }
-            },
-          ),
-          postData: _getForm(coursesToEvaluate[index]),
         );
       },
     );

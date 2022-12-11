@@ -21,6 +21,7 @@ import '../entity/score.dart';
 import '../init.dart';
 import '../using.dart';
 import 'evaluation.dart';
+import 'index.dart';
 
 class ScoreItem extends StatefulWidget {
   final Score _score;
@@ -94,15 +95,10 @@ class _ScoreItemState extends State<ScoreItem> {
 
     return InkWell(
       onTap: () async {
-        final data = await ExamResultInit.courseEvaluationService.getEvaluationList();
+        await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const EvaluationPage()));
         if (!mounted) return;
-        await Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => EvaluationPage(
-              data.where((element) => element.dynClassId.startsWith(_score.dynClassId)).toList(),
-            ),
-          ),
-        );
+        Navigator.of(context).pop();
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ScorePage()));
       },
       child: Text('待评教', style: style),
     );

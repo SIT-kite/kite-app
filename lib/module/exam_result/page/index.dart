@@ -23,6 +23,7 @@ import '../entity/score.dart';
 import '../init.dart';
 import '../using.dart';
 import 'banner.dart';
+import 'evaluation.dart';
 import 'item.dart';
 
 class ScorePage extends StatefulWidget {
@@ -59,23 +60,25 @@ class _ScorePageState extends State<ScorePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (!Auth.hasLoggedIn) {
-      return UnauthorizedTipPage(title: i18n.ftype_examArr.text());
-    } else {
-      return Scaffold(
-        appBar: AppBar(
-          title: i18n.ftype_examResult.text(),
-        ),
-        body: scoreList == null
-            ? Placeholders.loading()
-            : Column(
-                children: [
-                  _buildHeader(),
-                  Expanded(child: scoreList!.isNotEmpty ? _buildListView() : _buildNoResult()),
-                ],
-              ),
-      );
-    }
+    if (!Auth.hasLoggedIn) return UnauthorizedTipPage(title: i18n.ftype_examArr.text());
+    return Scaffold(
+      appBar: AppBar(
+        title: i18n.ftype_examResult.text(),
+      ),
+      body: scoreList == null
+          ? Placeholders.loading()
+          : Column(
+              children: [
+                _buildHeader(),
+                Expanded(child: scoreList!.isNotEmpty ? _buildListView() : _buildNoResult()),
+              ],
+            ),
+      floatingActionButton: FloatingActionButton.extended(
+        icon: const Icon(Icons.assessment),
+        onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const EvaluationPage())),
+        label: const Text('评教'),
+      ),
+    );
   }
 
   Widget _buildHeader() {
