@@ -18,6 +18,7 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:rettulf/rettulf.dart';
 
 class MyImageViewer extends StatelessWidget {
   final ImageProvider image;
@@ -59,7 +60,7 @@ class MyImageViewer extends StatelessWidget {
       return Scaffold(
         body: MyImageViewer(
           image: CachedNetworkImageProvider(url),
-        ),
+        ).hero(url),
       );
     }));
   }
