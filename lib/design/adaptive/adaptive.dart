@@ -112,8 +112,8 @@ class _AdaptiveNaviState extends State<AdaptiveNavi> {
                 tooltip: i18n.back,
                 onPressed: () {
                   final subpage = _pageKeys[_curIndex].currentState;
-                  if (subpage is Adaptable) {
-                    final subNavi = (subpage as Adaptable).navigator;
+                  if (subpage is AdaptivePageProtocol) {
+                    final subNavi = (subpage as AdaptivePageProtocol).navigator;
                     if (subNavi != null && subNavi.canPop()) {
                       subNavi.pop();
                       return;
@@ -158,8 +158,8 @@ class _AdaptiveNaviState extends State<AdaptiveNavi> {
         child: main,
         onWillPop: () async {
           final subpage = _pageKeys[_curIndex].currentState;
-          if (subpage is Adaptable) {
-            final subNavi = (subpage as Adaptable).navigator;
+          if (subpage is AdaptivePageProtocol) {
+            final subNavi = (subpage as AdaptivePageProtocol).navigator;
             if (subNavi != null && subNavi.canPop()) {
               subNavi.pop();
               return false;

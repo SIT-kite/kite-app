@@ -53,7 +53,7 @@ extension AdapativeEx on BuildContext {
   AdaptiveUI get adaptive => AdaptiveUI.of(this);
 }
 
-mixin Adaptable {
+mixin AdaptivePageProtocol {
   var navigatorKey = GlobalKey();
 
   NavigatorState? get navigator => navigatorKey.currentState as NavigatorState?;

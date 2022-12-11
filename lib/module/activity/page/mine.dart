@@ -19,8 +19,7 @@
 import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/module/activity/entity/list.dart';
-import 'package:kite/module/library/using.dart';
+import '../entity/list.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../entity/score.dart';
@@ -37,7 +36,7 @@ class MyActivityPage extends StatefulWidget {
   State<MyActivityPage> createState() => _MyActivityPageState();
 }
 
-class _MyActivityPageState extends State<MyActivityPage> with AutomaticKeepAliveClientMixin, Adaptable {
+class _MyActivityPageState extends State<MyActivityPage> with AutomaticKeepAliveClientMixin, AdaptivePageProtocol {
   List<ScJoinedActivity>? joined;
   ScScoreSummary? summary;
 

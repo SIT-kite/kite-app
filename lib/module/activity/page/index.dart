@@ -1,170 +1,50 @@
-/*
- * 上应小风筝  便利校园，一步到位
- * Copyright (C) 2022 上海应用技术大学 上应小风筝团队
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-import 'package:flutter/material.dart' hide ThemeData;
-import 'package:rettulf/rettulf.dart';
+import 'package:flutter/material.dart';
+import 'package:kite/module/library/using.dart';
 
 import '../using.dart';
 import 'list.dart';
 import 'mine.dart';
 import 'search.dart';
 
-part 'new_index.dart';
-
-class ActivityPage extends StatefulWidget {
-  const ActivityPage({Key? key}) : super(key: key);
+class ActivityIndexPage extends StatefulWidget {
+  const ActivityIndexPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _ActivityPageState();
+  State<StatefulWidget> createState() => _ActivityIndexPageState();
 }
 
-class _Page {
-  static const list = 0;
-  static const mine = 1;
-}
-
-class _ActivityPageState extends State<ActivityPage> {
-  /// For landscape mode.
-  int curNavigation = _Page.list;
-  final _pageKeys = [
-    GlobalKey(debugLabel: "Activity Page List"),
-    GlobalKey(debugLabel: "Activity Page Mine"),
-  ];
-  final pages = <Widget>[];
-
-  @override
-  void initState() {
-    super.initState();
-    pages.add(ActivityListPage(
-      key: _pageKeys[_Page.list],
-    ));
-    pages.add(MyActivityPage(
-      key: _pageKeys[_Page.mine],
-    ));
-  }
-
+class _ActivityIndexPageState extends State<ActivityIndexPage> {
   @override
   Widget build(BuildContext context) {
-    return context.isPortrait ? buildPortrait(context) : buildLandscape(context);
-  }
-
-  Widget buildPortrait(BuildContext ctx) {
-    return Scaffold(
-      appBar: AppBar(
-        title: i18n.ftype_activity.text(),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () => showSearch(context: context, delegate: SearchBar()),
-          ),
-        ],
-      ),
-      body: IndexedStack(
-        index: curNavigation,
-        children: pages,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(
-            label: i18n.activityAllNavigation,
-            icon: const Icon(Icons.list_alt_rounded),
-          ),
-          BottomNavigationBarItem(
-            label: i18n.activityMineNavigation,
-            icon: const Icon(Icons.person_rounded),
-          )
-        ],
-        currentIndex: curNavigation,
-        onTap: (int index) {
-          setState(() => curNavigation = index);
-        },
-      ),
+    return AdaptiveNavi(
+      title: i18n.ftype_activity,
+      defaultIndex: 0,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.search),
+          onPressed: () => showSearch(context: context, delegate: SearchBar()),
+        ),
+      ],
+      pages: [
+        // Activity List page
+        AdaptivePage(
+          label: i18n.activityAllNavigation,
+          unselectedIcon: const Icon(Icons.check_box_outline_blank),
+          selectedIcon: const Icon(Icons.list_alt_rounded),
+          builder: (ctx, key) {
+            return ActivityListPage(key: key);
+          },
+        ),
+        // Mine page
+        AdaptivePage(
+          label: i18n.activityMineNavigation,
+          unselectedIcon: const Icon(Icons.person_outline_rounded),
+          selectedIcon: const Icon(Icons.person_rounded),
+          builder: (ctx, key) {
+            return MyActivityPage(key: key);
+          },
+        ),
+      ],
     );
-  }
-
-  Widget buildLandscape(BuildContext ctx) {
-    return Scaffold(
-      body: Row(
-        children: <Widget>[
-          NavigationRail(
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                final subpage = _pageKeys[curNavigation].currentState;
-                if (subpage is Adaptable) {
-                  final subNavi = (subpage as Adaptable).navigator;
-                  if (subNavi != null && subNavi.canPop()) {
-                    subNavi.pop();
-                    return;
-                  }
-                }
-                ctx.navigator.pop();
-              },
-            ),
-            selectedIndex: curNavigation,
-            groupAlignment: 1.0,
-            onDestinationSelected: (int index) {
-              setState(() {
-                curNavigation = index;
-              });
-            },
-            labelType: NavigationRailLabelType.all,
-            destinations: <NavigationRailDestination>[
-              NavigationRailDestination(
-                icon: const Icon(Icons.check_box_outline_blank),
-                selectedIcon: const Icon(Icons.list_alt_rounded),
-                label: i18n.activityAllNavigation.text(),
-              ),
-              NavigationRailDestination(
-                icon: const Icon(Icons.person_outline_rounded),
-                selectedIcon: const Icon(Icons.person_rounded),
-                label: i18n.activityMineNavigation.text(),
-              ),
-            ],
-          ),
-          const VerticalDivider(thickness: 1, width: 1),
-
-          AdaptiveUI(
-              isSubpage: true,
-              child: IndexedStack(
-                index: curNavigation,
-                children: pages,
-              )).expanded()
-          // This is the main content.
-        ],
-      ),
-    );
-  }
-
-/*
-Navigator(
-                key: curNavigation == _Page.list ? _pageListKey : _pageMineKey,
-                onGenerateRoute: (settings) {
-                  return NoTransitionPageRoute(builder: buildSubRoute);
-                },
-              )
-* */
-  Widget buildSubRoute(BuildContext ctx) {
-    switch (curNavigation) {
-      case _Page.list:
-        return const ActivityListPage();
-      default:
-        return const MyActivityPage();
-    }
   }
 }
