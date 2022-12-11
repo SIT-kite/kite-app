@@ -22,9 +22,17 @@ import 'package:kite/l10n/extension.dart';
 import 'package:rettulf/buildcontext/show.dart';
 import 'package:rettulf/rettulf.dart';
 
+typedef EditorBuilder<T> = Widget Function(BuildContext ctx, String? desc, T initial);
+
 class Editor {
+  static final Map<Type, EditorBuilder> _customEditor = {};
+
+  static registerEditor<T>(EditorBuilder<T> builder) {
+    _customEditor[T] = (ctx, desc, initial) => builder(ctx, desc, initial);
+  }
+
   static bool isSupport(dynamic test) {
-    return test is int || test is String || test is bool;
+    return test is int || test is String || test is bool || _customEditor.containsKey(test.runtimeType);
   }
 
   static Future<dynamic> showAnyEditor(BuildContext ctx, dynamic initial,
@@ -35,10 +43,22 @@ class Editor {
       return await showStringEditor(ctx, desc, initial);
     } else if (initial is bool) {
       return await showBoolEditor(ctx, desc, initial);
-    } else if (readonlyIfNotSupport) {
-      return await showReadonlyEditor(ctx, desc, initial);
     } else {
-      throw UnsupportedError("Editing $initial is not supported.");
+      final customEditorBuilder = _customEditor[initial.runtimeType];
+      if (customEditorBuilder != null) {
+        final newValue = await ctx.showDialog(builder: (ctx) => customEditorBuilder(ctx, desc, initial));
+        if (newValue != null) {
+          return newValue;
+        } else {
+          return initial;
+        }
+      } else {
+        if (readonlyIfNotSupport) {
+          return await showReadonlyEditor(ctx, desc, initial);
+        } else {
+          throw UnsupportedError("Editing $initial is not supported.");
+        }
+      }
     }
   }
 

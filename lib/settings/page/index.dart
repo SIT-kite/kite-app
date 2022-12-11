@@ -21,10 +21,10 @@ import 'dart:io';
 import 'package:dynamic_color_theme/dynamic_color_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kite/credential/symbol.dart';
 import 'package:kite/design/user_widgets/dialog.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/global/init.dart';
@@ -36,7 +36,6 @@ import 'package:kite/storage/storage/develop.dart';
 import 'package:kite/util/file.dart';
 import 'package:kite/util/flash.dart';
 import 'package:kite/util/logger.dart';
-import 'package:kite/util/user.dart';
 import 'package:kite/util/validation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:rettulf/rettulf.dart';
@@ -55,7 +54,6 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   final TextEditingController _passwordController = TextEditingController();
-  final bool isFreshman = AccountUtils.getAuthUserType() == UserType.freshman;
   static final String currentVersion = 'v${Global.currentVersion.version} on ${Global.currentVersion.platform}';
 
   Future<void> _onChangeBgImage() async {
@@ -73,20 +71,14 @@ class _SettingsPageState extends State<SettingsPage> {
     Global.eventBus.emit(EventNameConstants.onBackgroundChange);
   }
 
-  void _testPassword(BuildContext context) async {
-    final user = Kv.auth.currentUsername;
-    final password = Kv.auth.ssoPassword;
+  void _testPassword(BuildContext context, OACredential oaCredential) async {
     try {
-      EasyLoading.instance.userInteractions = false;
-      EasyLoading.show(status: i18n.loggingIn);
-      await Global.ssoSession.login(user!, password!);
-      EasyLoading.showSuccess(i18n.loginCredentialsValidatedTip);
+      await Global.ssoSession.loginActive(oaCredential);
+      if (!mounted) return;
+      await context.showTip(title: i18n.success, desc: i18n.loginSuccessfulTip, ok: i18n.close);
     } catch (e) {
-      showBasicFlash(context, Text('${i18n.loginFailedWarn}: ${e.toString().split('\n')[0]}'),
-          duration: const Duration(seconds: 3));
-    } finally {
-      EasyLoading.dismiss();
-      EasyLoading.instance.userInteractions = true;
+      if (!mounted) return;
+      await context.showTip(title: i18n.loginFailedWarn, desc: e.toString().split('\n')[0], ok: i18n.close);
     }
   }
 
@@ -98,30 +90,6 @@ class _SettingsPageState extends State<SettingsPage> {
     navigator.pushReplacementNamed(RouteTable.welcome);
 
     Log.info('重启成功');
-  }
-
-  Future<void> _onLogout(BuildContext context) async {
-    final confirm = await context.showRequest(
-        title: i18n.logout, desc: i18n.logoutKiteWarn, yes: i18n.confirm, no: i18n.notNow, highlight: true);
-    if (confirm == true) {
-      if (!mounted) return;
-      Log.info('退出登录');
-
-      if (isFreshman) {
-        Kv.freshman
-          ..freshmanAccount = null
-          ..freshmanName = null
-          ..freshmanSecret = null;
-      } else {
-        Kv.auth
-          ..currentUsername = null
-          ..ssoPassword = null;
-      }
-      Kv.home.homeItems = null;
-      await Initializer.init();
-      if (!mounted) return;
-      _gotoWelcome(context);
-    }
   }
 
   void _onClearStorage(BuildContext context) async {
@@ -162,7 +130,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    _passwordController.text = Kv.auth.ssoPassword ?? '';
+    final oaCredential = Auth.oaCredential;
+    _passwordController.text = oaCredential?.password ?? '';
     return SettingsScreen(title: i18n.settingsTitle, children: [
       // Personalize
       SettingsGroup(
@@ -227,14 +196,12 @@ class _SettingsPageState extends State<SettingsPage> {
               subtitle: i18n.settingsWallpaperSub,
               leading: const Icon(Icons.photo_size_select_actual_outlined),
               onTap: _onChangeBgImage),
-          if (!isFreshman)
-            SimpleSettingsTile(
-              title: i18n.settingsHomepageRearrange,
-              subtitle: i18n.settingsHomepageRearrangeSub,
-              leading: const Icon(Icons.menu),
-              onTap: () =>
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeRearrangePage())),
-            ),
+          SimpleSettingsTile(
+            title: i18n.settingsHomepageRearrange,
+            subtitle: i18n.settingsHomepageRearrangeSub,
+            leading: const Icon(Icons.menu),
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeRearrangePage())),
+          ),
         ],
       ),
       SettingsGroup(title: i18n.networking, children: <Widget>[
@@ -285,28 +252,27 @@ class _SettingsPageState extends State<SettingsPage> {
       SettingsGroup(
         title: i18n.account,
         children: <Widget>[
-          if (!isFreshman)
+          if (oaCredential != null)
             SimpleSettingsTile(
               title: i18n.studentID,
-              subtitle: Kv.auth.currentUsername ?? i18n.offline,
+              subtitle: oaCredential.account,
               leading: const Icon(Icons.person_rounded),
               onTap: () {
                 // Copy the student ID to clipboard
-                final id = Kv.auth.currentUsername;
-                if (id != null) {
-                  Clipboard.setData(ClipboardData(text: id));
-                  showBasicFlash(context, i18n.studentIdCopy2ClipboardTip.text());
-                }
+                Clipboard.setData(ClipboardData(text: oaCredential.account));
+                showBasicFlash(context, i18n.studentIdCopy2ClipboardTip.text());
               },
             ),
-          if (!isFreshman)
+          if (oaCredential != null)
             ModalSettingsTile(
               title: i18n.settingsChangeOaPwd,
               subtitle: i18n.settingsChangeOaPwdSub,
               leading: const Icon(Icons.lock),
               showConfirmation: true,
               onConfirm: () {
-                Kv.auth.ssoPassword = _passwordController.text;
+                Auth.oaCredential = oaCredential.copyWith(
+                  password: _passwordController.text,
+                );
                 return true;
               },
               children: [
@@ -316,17 +282,12 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ],
             ),
-          if (!isFreshman)
+          if (oaCredential != null)
             SimpleSettingsTile(
                 title: i18n.settingsTestLoginKite,
                 subtitle: i18n.settingsTestLoginKiteSub,
                 leading: const Icon(Icons.login_rounded),
-                onTap: () => _testPassword(context)),
-          SimpleSettingsTile(
-              title: i18n.settingsLogoutKite,
-              subtitle: i18n.settingsLogoutKiteSub,
-              leading: const Icon(Icons.logout_rounded),
-              onTap: () => _onLogout(context)),
+                onTap: () => _testPassword(context, oaCredential)),
         ],
       ),
       // Data Management

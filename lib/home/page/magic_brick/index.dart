@@ -16,11 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kite/module/timetable/using.dart';
 import 'package:kite/override/entity.dart';
-import 'package:kite/util/user.dart';
 
 import '../../entity/home.dart';
 import '../brick.dart';
@@ -52,7 +49,7 @@ class HomeItemHideInfoFilter {
   }
 
   // if true then should be hide
-  bool accept(FType ftype, UserType userType) {
+  bool willHide(FType ftype, UserType userType) {
     if (!map.containsKey(ftype.name)) return false;
     return map[ftype.name]!.contains(userType.name);
   }

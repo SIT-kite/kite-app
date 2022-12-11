@@ -17,7 +17,6 @@
  */
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:kite/hive/init.dart';
 import 'package:kite/module/activity/using.dart';
 import 'package:rettulf/rettulf.dart';
 
@@ -81,11 +80,11 @@ class _StorageListState extends State<StorageList> {
   Widget build(BuildContext ctx) {
     return Scaffold(
       appBar: AppBar(title: i18n.localStorageTitle.text()),
-      body: buildPortraitBody(ctx).scrolledWithBar(),
+      body: buildBody(ctx).scrolledWithBar(),
     );
   }
 
-  Widget buildPortraitBody(BuildContext context) {
+  Widget buildBody(BuildContext context) {
     return widget.name2box.entries
         .mapIndexed((i, p) => PlaceholderFutureBuilder<Box<dynamic>>(
             future: p.value.withDelay(Duration(milliseconds: 200 * i)),

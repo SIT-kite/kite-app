@@ -17,12 +17,9 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/design/colors.dart';
+import 'package:kite/credential/symbol.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
-import 'package:kite/storage/init.dart';
-import 'package:kite/util/user.dart';
 import '../brick.dart';
 
 class FreshmanItem extends StatelessWidget {
@@ -30,14 +27,11 @@ class FreshmanItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userType = AccountUtils.getAuthUserType();
+    // TODO: Hide this in personalization system.
     // 老师根本不会显示这个列表项
     // 所以只考虑正式学生的情况
-    if (userType == null) {
-      return const SizedBox();
-    }
-    if (userType == UserType.freshman || userType == UserType.undergraduate) {
-      /*// 正式学生，获取学号
+
+    /*// 正式学生，获取学号
       final username = Kv.auth.currentUsername!;
       // 取今年的后两位，若今年的后两位大于学号前两位
       // 说明已经不是新生了
@@ -46,21 +40,18 @@ class FreshmanItem extends StatelessWidget {
       if (now.year % 100 > (int.tryParse(username.substring(0, 2)) ?? 0) || now.month > 11) {
         return const SizedBox();
       }*/
-      // No matter whether the user is a freshman, display this for them.
-      return Brick(
-        onPressed: () {
-          if (Kv.freshman.freshmanAccount == null || Kv.freshman.freshmanSecret == null) {
-            Navigator.of(context).pushNamed(RouteTable.freshmanLogin);
-          } else {
-            Navigator.of(context).pushNamed(RouteTable.freshman);
-          }
-        },
-        icon: SysIcon(Icons.people),
-        title: i18n.ftype_freshman,
-        subtitle: i18n.ftype_freshman_desc,
-      );
-    } else {
-      return const SizedBox();
-    }
+    // No matter whether the user is a freshman, display this for them.
+    return Brick(
+      onPressed: () {
+        if (Auth.freshmanCredential == null) {
+          Navigator.of(context).pushNamed(RouteTable.freshmanLogin);
+        } else {
+          Navigator.of(context).pushNamed(RouteTable.freshman);
+        }
+      },
+      icon: SysIcon(Icons.people),
+      title: i18n.ftype_freshman,
+      subtitle: i18n.ftype_freshman_desc,
+    );
   }
 }

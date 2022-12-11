@@ -16,11 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:hive/hive.dart';
 import 'package:kite/home/entity/home.dart';
 
 import 'package:kite/module/symbol.dart';
+import 'package:kite/credential/symbol.dart';
 
+import 'using.dart';
 import 'adapter/color.dart';
 import 'adapter/size.dart';
 import 'adapter/version.dart';
@@ -29,52 +30,59 @@ class HiveAdapter {
   HiveAdapter._();
 
   static void registerAll() {
-    _r(ContactDataAdapter());
-    _r(CourseAdapter());
-    _r(GameTypeAdapter());
-    _r(GameRecordAdapter());
-    _r(FTypeAdapter());
-    _r(BalanceAdapter());
-    _r(WeatherAdapter());
-    _r(ReportHistoryAdapter());
-    _r(LibrarySearchHistoryItemAdapter());
-    _r(UserEventAdapter());
-    _r(UserEventTypeAdapter());
-    _r(ReportHistoryAdapter());
-    _r(TimetableMetaAdapter());
-    _r(SizeAdapter());
-    _r(ColorAdapter());
+    ~ContactDataAdapter();
+    ~CourseAdapter();
+    ~GameTypeAdapter();
+    ~GameRecordAdapter();
+    ~FTypeAdapter();
+    ~BalanceAdapter();
+    ~WeatherAdapter();
+    ~ReportHistoryAdapter();
+    ~LibrarySearchHistoryItemAdapter();
+    // User Type
+    ~UserEventAdapter();
+    ~UserEventTypeAdapter();
+    ~TimetableMetaAdapter();
+    // Common Type
+    ~VersionAdapter();
+    ~SizeAdapter();
+    ~ColorAdapter();
 
     // Activity
-    _r(ActivityDetailAdapter());
-    _r(ActivityAdapter());
-    _r(ScScoreSummaryAdapter());
-    _r(ScActivityApplicationAdapter());
-    _r(ScScoreItemAdapter());
-    _r(ActivityTypeAdapter());
+    ~ActivityDetailAdapter();
+    ~ActivityAdapter();
+    ~ScScoreSummaryAdapter();
+    ~ScActivityApplicationAdapter();
+    ~ScScoreItemAdapter();
+    ~ActivityTypeAdapter();
     // Exam Arrangement
-    _r(ExamEntryAdapter());
+    ~ExamEntryAdapter();
     // OA Announcement
-    _r(AnnounceDetailAdapter());
-    _r(AnnounceCatalogueAdapter());
-    _r(AnnounceRecordAdapter());
-    _r(AnnounceAttachmentAdapter());
-    _r(AnnounceListPageAdapter());
+    ~AnnounceDetailAdapter();
+    ~AnnounceCatalogueAdapter();
+    ~AnnounceRecordAdapter();
+    ~AnnounceAttachmentAdapter();
+    ~AnnounceListPageAdapter();
     // Application
-    _r(ApplicationDetailSectionAdapter());
-    _r(ApplicationDetailAdapter());
-    _r(ApplicationMetaAdapter());
-    _r(ApplicationMsgCountAdapter());
-    _r(ApplicationMsgAdapter());
-    _r(ApplicationMsgPageAdapter());
-    _r(ApplicationMessageTypeAdapter());
+    ~ApplicationDetailSectionAdapter();
+    ~ApplicationDetailAdapter();
+    ~ApplicationMetaAdapter();
+    ~ApplicationMsgCountAdapter();
+    ~ApplicationMsgAdapter();
+    ~ApplicationMsgPageAdapter();
+    ~ApplicationMessageTypeAdapter();
 
-    _r(VersionAdapter());
+    // Credential
+    ~OACredentialAdapter();
+    ~FreshmanCredentialAdapter();
+    ~UserTypeAdapter();
   }
+}
 
-  static void _r<T>(TypeAdapter<T> adapter) {
-    if (!Hive.isAdapterRegistered(adapter.typeId)) {
-      Hive.registerAdapter(adapter);
+extension _TypeAdapterEx<T> on TypeAdapter<T> {
+  void operator ~() {
+    if (!Hive.isAdapterRegistered(typeId)) {
+      Hive.registerAdapter(this);
     }
   }
 }

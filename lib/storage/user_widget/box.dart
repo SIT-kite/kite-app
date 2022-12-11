@@ -53,18 +53,19 @@ class _BoxSectionState extends State<BoxSection> {
       return CupertinoContextMenu(
         actions: [
           CupertinoContextMenuAction(
-            trailingIcon: CupertinoIcons.delete,
+            trailingIcon: CupertinoIcons.clear,
             onPressed: () async {
               ctx.navigator.pop();
               final confirm = await _showDeleteBoxRequest(ctx);
               if (confirm == true) {
+                if (!mounted) return;
                 setState(() {
                   b.clear();
                 });
               }
             },
             isDestructiveAction: true,
-            child: i18n.delete.text(),
+            child: i18n.clear.text(),
           )
         ],
         previewBuilder: (ctx, ani, child) => child.padSymmetric(h: 40, v: 20).inCard(),

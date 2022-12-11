@@ -20,7 +20,6 @@ import 'package:catcher/core/catcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../init.dart';
-import 'package:kite/storage/init.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../entity/local.dart';
@@ -111,11 +110,14 @@ class _ExpenseTrackerPageState extends State<ExpenseTrackerPage> {
   }
 
   Future<void> fetch(DateTime start, DateTime end) async {
+    final oaCredential = Auth.oaCredential;
+    if(oaCredential == null) return;
+    final account = oaCredential.account;
     for (int i = 0; i < 3; i++) {
       try {
         EasyLoading.showToast(i18n.expenseToastLoading);
         allRecords = await cache.fetch(
-          studentID: Kv.auth.currentUsername!,
+          studentID: account,
           from: start,
           to: end,
           onLocalQuery: refreshRecords,

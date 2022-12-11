@@ -16,19 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:kite/credential/symbol.dart';
 import 'package:kite/network/session.dart';
-import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
 
-class FreshmanSession extends ISession {
+class FreshmanSession {
   final ISession _session;
-  final FreshmanCacheDao _freshmanCacheDao;
 
-  FreshmanSession(this._session, this._freshmanCacheDao) {
+  FreshmanSession(this._session) {
     Log.info('初始化 FreshmanSession');
   }
 
-  @override
   Future<SessionRes> request(
     String url,
     ReqMethod method, {
@@ -37,6 +35,7 @@ class FreshmanSession extends ISession {
     SessionOptions? options,
     SessionProgressCallback? onSendProgress,
     SessionProgressCallback? onReceiveProgress,
+    FreshmanCredential? credential,
   }) async {
     Future<SessionRes> myRequest(
       dynamic data1,
@@ -54,29 +53,26 @@ class FreshmanSession extends ISession {
       );
     }
 
+    credential ??= Auth.freshmanCredential;
     // 如果不存在新生信息，那就不管了
-    if (_freshmanCacheDao.freshmanAccount == null || _freshmanCacheDao.freshmanSecret == null) {
+    // TODO: WHAT ???
+    if (credential == null) {
       return await myRequest(data, url, para);
     }
-
-    // 新生信息
-    String account = _freshmanCacheDao.freshmanAccount!;
-    String secret = _freshmanCacheDao.freshmanSecret!;
-
-    final String myUrl = '/freshman/$account$url';
+    final String myUrl = '/freshman/${credential.account}$url';
 
     // 如果是GET请求，登录态直接注入到 queryParameters 中
     if (method == ReqMethod.get) {
       final myQuery = para ?? {};
-      myQuery['secret'] = secret;
+      myQuery['secret'] = credential.account;
       return await myRequest(data, myUrl, myQuery);
     }
 
     // 其他请求的话，如果data是Map那么注入登录态
     if (data == null || data is Map<String, dynamic>) {
       final Map<String, dynamic> myData = data ?? {};
-      myData['account'] = account;
-      myData['secret'] = secret;
+      myData['account'] = credential.account;
+      myData['secret'] = credential.password;
 
       // 修改url
       return await myRequest(myData, myUrl, para);

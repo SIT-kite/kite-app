@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/credential/symbol.dart';
 import 'package:kite/events/bus.dart';
 import 'package:kite/events/events.dart';
-import 'package:kite/exception/session.dart';
 import 'package:kite/module/application/init.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
@@ -40,7 +40,10 @@ class _ApplicationItemState extends State<ApplicationItem> {
   void initState() {
     super.initState();
     On.home<HomeRefreshEvent>((event) {
-      _onHomeRefresh();
+      final oaCredential = Auth.oaCredential;
+      if (oaCredential != null) {
+        onHomeRefresh(oaCredential);
+      }
     });
   }
 
@@ -56,24 +59,21 @@ class _ApplicationItemState extends State<ApplicationItem> {
     }
   }
 
-  void _onHomeRefresh() async {
+  void onHomeRefresh(OACredential oaCredential) async {
     if (!mounted) return;
-    final result = await _buildContent();
+    final result = await buildContent(oaCredential);
     if (result != null) {
       Kv.home.lastOfficeStatus = result;
       setState(() => _tryUpdateContent(result));
     }
   }
 
-  Future<String?> _buildContent() async {
-    final username = Kv.auth.currentUsername!;
-    final password = Kv.auth.ssoPassword!;
-
+  Future<String?> buildContent(OACredential oaCredential) async {
     if (!ApplicationInit.session.isLogin) {
       try {
         await ApplicationInit.session.login(
-          username: username,
-          password: password,
+          username: oaCredential.account,
+          password: oaCredential.password,
         );
       } catch (e) {
         Log.error(e);

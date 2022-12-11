@@ -1,3 +1,4 @@
+import 'package:kite/migration/all/initial.dart';
 import 'package:kite/r.dart';
 import 'package:version/version.dart';
 
@@ -6,14 +7,21 @@ import 'foundation.dart';
 
 class Migrations {
   static final _manager = MigrationManager();
+  static Migration? _onNullVersion;
 
   static void init() {
+    _onNullVersion = NoVersionSpecifiedMigration;
     R.v1_5_3 << ClearCacheMigration;
   }
 
   static Future<void> perform({required Version? from, required Version? to}) async {
-    if (from == null || to == null) return;
-    _manager.upgrade(from, to);
+    if (from == null) {
+      await _onNullVersion?.perform();
+    } else {
+      if (to != null) {
+        await _manager.upgrade(from, to);
+      }
+    }
   }
 }
 

@@ -15,23 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kite/credential/symbol.dart';
 import 'package:kite/module/shared/entity/weather.dart';
 import 'package:kite/module/simple_page/page/weather.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
-import 'package:kite/util/user.dart';
-
-/// 计算入学时间, 默认按 9 月 1 日开学来算. 年份 entranceYear 是完整的年份, 如 2018.
-int _calcStudyDays(int entranceYear) {
-  // if now is 2022/9/1, the difference is 0 day
-  final admissionTime = DateTime(entranceYear, 9, 1);
-  final now = DateTime.now();
-  final diff = now.difference(admissionTime);
-  return diff.inDays;
-}
 
 class GreetingWidget extends StatefulWidget {
   const GreetingWidget({Key? key}) : super(key: key);
@@ -41,33 +34,59 @@ class GreetingWidget extends StatefulWidget {
 }
 
 class _GreetingWidgetState extends State<GreetingWidget> {
-  // TODO: Update studyDays when current system date changed
   int? studyDays;
   int campus = Kv.home.campus;
   Weather currentWeather = Kv.home.lastWeather ?? Weather.defaultWeather;
+
+  Timer? dayWatcher;
+  DateTime? _admissionDate;
 
   @override
   void initState() {
     super.initState();
     Global.eventBus.on(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
     // 如果用户不是新生或老师，那么就显示学习天数
-    if (![UserType.freshman, UserType.teacher].contains(AccountUtils.getAuthUserType())) {
-      studyDays = _getStudyDays();
+    if (Auth.oaCredential != null && Auth.lastUserType != UserType.teacher) {
+      setState(() {
+        studyDays = _getStudyDaysAndInitState();
+      });
     }
+
+    /// Rebuild the study days when date is changed.
+    dayWatcher = Timer.periodic(const Duration(minutes: 1), (timer) {
+      final admissionDate = _admissionDate;
+      if (admissionDate != null) {
+        final now = DateTime.now();
+        setState(() {
+          studyDays = now.difference(admissionDate).inDays;
+        });
+      }
+    });
   }
 
   @override
-  void deactivate() {
-    super.deactivate();
+  void dispose() {
+    super.dispose();
+    dayWatcher?.cancel();
     Global.eventBus.off(EventNameConstants.onWeatherUpdate, _onWeatherUpdate);
   }
 
-  int _getStudyDays() {
-    final studentId = Kv.auth.currentUsername;
+  int _getStudyDaysAndInitState() {
+    final oaCredential = Auth.oaCredential;
+    if (oaCredential != null) {
+      final id = oaCredential.account;
 
-    if (studentId != null && studentId.isNotEmpty) {
-      int entranceYear = 2000 + int.parse(studentId.substring(0, 2));
-      return _calcStudyDays(entranceYear);
+      if (id.isNotEmpty) {
+        final admissionYearTrailing = int.tryParse(id.substring(0, 2));
+        if (admissionYearTrailing != null) {
+          int admissionYear = 2000 + admissionYearTrailing;
+          final admissionDate = DateTime(admissionYear, 9, 1);
+          _admissionDate = admissionDate;
+
+          /// 计算入学时间, 默认按 9 月 1 日开学来算. 年份 admissionYear 是完整的年份, 如 2018.
+          return DateTime.now().difference(admissionDate).inDays;
+        }
+      }
     }
     return 0;
   }

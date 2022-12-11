@@ -18,7 +18,6 @@
 
 import 'package:dio/dio.dart';
 import 'package:hive/hive.dart';
-import 'package:kite/module/library/appointment/init.dart';
 import 'package:kite/session/kite_session.dart';
 
 import 'search/entity/search_history.dart';
@@ -31,6 +30,5 @@ class LibraryInit {
     required KiteSession kiteSession,
   }) async {
     await LibrarySearchInit.init(dio: dio, searchHistoryBox: searchHistoryBox);
-    LibraryAppointmentInit.init(kiteSession: kiteSession);
   }
 }

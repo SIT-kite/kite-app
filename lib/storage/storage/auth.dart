@@ -21,28 +21,13 @@ import '../dao/auth.dart';
 
 class AuthKeys {
   static const namespace = '/auth';
-  static const currentUsername = '$namespace/currentUsername';
-  static const ssoPassword = '$namespace/ssoPassword';
   static const personName = '$namespace/personName';
-  static const userType = '$namespace/userType';
 }
 
 class AuthSettingStorage implements AuthSettingDao {
   final Box<dynamic> box;
 
   AuthSettingStorage(this.box);
-
-  @override
-  String? get currentUsername => box.get(AuthKeys.currentUsername);
-
-  @override
-  set currentUsername(String? foo) => box.put(AuthKeys.currentUsername, foo);
-
-  @override
-  String? get ssoPassword => box.get(AuthKeys.ssoPassword);
-
-  @override
-  set ssoPassword(String? foo) => box.put(AuthKeys.ssoPassword, foo);
 
   @override
   String? get personName => box.get(AuthKeys.personName);

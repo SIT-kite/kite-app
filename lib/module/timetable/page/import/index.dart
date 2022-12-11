@@ -49,7 +49,7 @@ class _ImportTimetableIndexPageState extends State<ImportTimetableIndexPage> {
   }
 
   Widget buildBody(BuildContext ctx) {
-    if (Kv.auth.currentUsername != null && Kv.auth.ssoPassword != null) {
+    if (Auth.oaCredential != null) {
       if (canImport) {
         return const ImportTimetablePage(
           key: ValueKey("Import Timetable"),
@@ -58,7 +58,12 @@ class _ImportTimetableIndexPageState extends State<ImportTimetableIndexPage> {
         return buildConnectivityChecker(context, const ValueKey("Connectivity Checker"));
       }
     } else {
-      return buildUnauthorized(ctx, const ValueKey("Unauthorized"));
+      return UnauthorizedTip(
+        key: const ValueKey("Unauthorized"),
+        onLogin: () {
+          setState(() {});
+        },
+      );
     }
   }
 
@@ -77,9 +82,5 @@ class _ImportTimetableIndexPageState extends State<ImportTimetableIndexPage> {
       },
       iconSize: ctx.isPortrait ? 180 : 120,
     );
-  }
-
-  Widget buildUnauthorized(BuildContext ctx, Key? key) {
-    return LeavingBlank(icon: Icons.person_off_outlined, desc: i18n.unauthorizedUsernameTip);
   }
 }

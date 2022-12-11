@@ -24,22 +24,21 @@ import 'package:rettulf/rettulf.dart';
 import '../entity/score.dart';
 import '../using.dart';
 
-ScScoreSummary _calcTargetScore(String username) {
-  int year = int.parse(username.substring(0, 2));
+ScScoreSummary calcTargetScore(int admissionYear) {
   const table = {
-    13: ScScoreSummary(lecture: 1, campus: 1),
-    14: ScScoreSummary(lecture: 1, practice: 1, campus: 1),
-    15: ScScoreSummary(lecture: 1, practice: 1, creation: 1, campus: 1),
-    16: ScScoreSummary(lecture: 1, practice: 1, creation: 1, campus: 1),
-    17: ScScoreSummary(lecture: 1.5, practice: 2, creation: 1.5, safetyEdu: 1, campus: 2),
-    18: ScScoreSummary(lecture: 1.5, practice: 2, creation: 1.5, safetyEdu: 1, campus: 2),
-    19: ScScoreSummary(lecture: 1.5, practice: 2, creation: 1.5, safetyEdu: 1, voluntary: 1, campus: 1),
-    20: ScScoreSummary(lecture: 1.5, practice: 2, creation: 1.5, safetyEdu: 1, voluntary: 1, campus: 1),
+    2013: ScScoreSummary(lecture: 1, campus: 1),
+    2014: ScScoreSummary(lecture: 1, practice: 1, campus: 1),
+    2015: ScScoreSummary(lecture: 1, practice: 1, creation: 1, campus: 1),
+    2016: ScScoreSummary(lecture: 1, practice: 1, creation: 1, campus: 1),
+    2017: ScScoreSummary(lecture: 1.5, practice: 2, creation: 1.5, safetyEdu: 1, campus: 2),
+    2018: ScScoreSummary(lecture: 1.5, practice: 2, creation: 1.5, safetyEdu: 1, campus: 2),
+    2019: ScScoreSummary(lecture: 1.5, practice: 2, creation: 1.5, safetyEdu: 1, voluntary: 1, campus: 1),
+    2020: ScScoreSummary(lecture: 1.5, practice: 2, creation: 1.5, safetyEdu: 1, voluntary: 1, campus: 1),
   };
-  if (table.keys.contains(year)) {
-    return table[year]!;
+  if (table.keys.contains(admissionYear)) {
+    return table[admissionYear]!;
   } else {
-    return table[20]!;
+    return table[2020]!;
   }
 }
 
@@ -70,7 +69,7 @@ BarTouchData _barTouchData() => BarTouchData(
       ),*/
     );
 
-Widget _buildChart(BuildContext ctx, ScScoreSummary? summary, {bool showTotal = false}) {
+Widget _buildChart(BuildContext ctx, ScScoreSummary targetScore, ScScoreSummary? summary, {bool showTotal = false}) {
   if (summary == null) {
     return Placeholders.loading();
   }
@@ -79,7 +78,7 @@ Widget _buildChart(BuildContext ctx, ScScoreSummary? summary, {bool showTotal = 
   }
 
   final scoreValues = buildScoreList(summary);
-  final totals = buildScoreList(_calcTargetScore(Kv.auth.currentUsername!));
+  final totals = buildScoreList(targetScore);
   final scoreTitles = (const ['志愿', '校园文化', '三创', '安全文明', '讲座', '社会实践']).asMap().entries.map((e) {
     int index = e.key;
     String text = e.value;
@@ -138,18 +137,18 @@ Widget _buildChart(BuildContext ctx, ScScoreSummary? summary, {bool showTotal = 
   );
 }
 
-Widget buildSummeryCard(BuildContext ctx, ScScoreSummary? summery) {
+Widget buildSummeryCard(BuildContext ctx,ScScoreSummary targetScore , ScScoreSummary? summery) {
   if (ctx.isPortrait) {
     return AspectRatio(
       aspectRatio: 1.8,
       child: Card(
-        child: _buildChart(ctx, summery).padSymmetric(v: 12),
+        child: _buildChart(ctx, targetScore, summery).padSymmetric(v: 12),
       ),
     );
   } else {
     return [
       i18n.activityMyScoreTitle.text(style: ctx.textTheme.headline1).padFromLTRB(8, 24, 8, 0),
-      _buildChart(ctx, summery, showTotal: true)
+      _buildChart(ctx, targetScore, summery, showTotal: true)
           .padSymmetric(v: 12)
           .inCard(elevation: 8)
           .padSymmetric(v: 12.w, h: 8.h)

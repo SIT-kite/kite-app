@@ -18,6 +18,7 @@
 export '../shared/i18n.dart';
 export '../shared/dialog.dart';
 export '../shared/math.dart';
+export '../shared/auth.dart';
 export '../shared/networking.dart';
 export '../shared/util.dart';
 export '../shared/storage.dart';

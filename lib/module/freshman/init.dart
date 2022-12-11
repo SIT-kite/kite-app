@@ -31,7 +31,7 @@ class FreshmanInit {
     required ISession kiteSession,
   }) async {
     freshmanCacheDao = Kv.freshman;
-    freshmanSession = FreshmanSession(kiteSession, freshmanCacheDao);
+    freshmanSession = FreshmanSession(kiteSession);
     freshmanCacheManager = FreshmanCacheManager(freshmanCacheDao);
     freshmanDao = CachedFreshmanService(
       freshmanDao: FreshmanService(freshmanSession),

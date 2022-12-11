@@ -17,6 +17,7 @@
  */
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kite/credential/symbol.dart';
 import 'package:kite/design/user_widgets/dialog.dart';
 import 'package:kite/home/page/index.dart';
 import 'package:kite/module/pure_function/launch_in_browser.dart';
@@ -29,7 +30,6 @@ import 'module/pure_function/launcher.dart';
 import 'module/simple_page/page/browser.dart';
 import 'module/symbol.dart';
 import 'navigation/route.dart';
-import 'util/user.dart';
 
 class RouteTable {
   RouteTable._();
@@ -57,7 +57,6 @@ class RouteTable {
   static const gameTetris = '$game/tetris';
   static const wiki = '/wiki';
   static const library = '/library';
-  static const libraryAppointment = '$library/appointment';
   static const market = '/market';
   static const timetable = '/timetable';
   static const timetableImport = '$timetable/import';
@@ -76,7 +75,7 @@ class RouteTable {
   static const freshman = '/freshman';
   static const freshmanLogin = '$freshman/login';
   static const freshmanUpdate = '$freshman/update';
-  static const freshmanAnalysis = '$freshman/analysis';
+  static const freshmanStatistics = '$freshman/statistics';
   static const freshmanFriend = '$freshman/friend';
   static const kiteBoard = '/kite_board';
   static const notFound = '/not_found';
@@ -84,12 +83,13 @@ class RouteTable {
   static const serviceStatus = '/service_status';
   static const pureFunctionLauncher = '/pure_function/launch';
   static const pureFunctionLaunchInBrowser = '/pure_function/launchInBrowser';
+  static const relogin = '/relogin';
 }
 
 final defaultRouteTable = StaticRouteTable(
   table: {
     RouteTable.home: (context, args) => const HomePage(),
-    RouteTable.reportTemp: (context, args) => const DailyReportPage(),
+    RouteTable.reportTemp: (context, args) => const DailyReportIndexPage(),
     RouteTable.login: (context, args) => const LoginPage(),
     RouteTable.welcome: (context, args) => const WelcomePage(),
     RouteTable.about: (context, args) => const AboutPage(),
@@ -106,7 +106,6 @@ final defaultRouteTable = StaticRouteTable(
     RouteTable.gameTetris: (context, args) => const GameTetrisPage(),
     RouteTable.wiki: (context, args) => WikiPage(),
     RouteTable.library: (context, args) => const LibraryPage(),
-    RouteTable.libraryAppointment: (context, args) => const AppointmentPage(),
     RouteTable.market: (context, args) => const MarketPage(),
     RouteTable.timetable: (context, args) => const TimetableIndexPage(),
     RouteTable.timetableImport: (context, args) => const ImportTimetableIndexPage(),
@@ -139,8 +138,8 @@ final defaultRouteTable = StaticRouteTable(
         javascriptUrl: args['javascriptUrl'],
       );
     },
-    RouteTable.freshman: (context, args) => FreshmanPage(),
-    RouteTable.freshmanAnalysis: (context, args) => const FreshmanStatisticsPage(),
+    RouteTable.freshman: (context, args) => const FreshmanPage(),
+    RouteTable.freshmanStatistics: (context, args) => const FreshmanStatisticsPage(),
     RouteTable.freshmanLogin: (context, args) => const FreshmanLoginPage(),
     RouteTable.freshmanUpdate: (context, args) => const PersonalInfoPage(),
     RouteTable.freshmanFriend: (context, args) => const FreshmanRelationshipPage(),
@@ -156,10 +155,11 @@ final defaultRouteTable = StaticRouteTable(
     RouteTable.serviceStatus: (context, args) => const ServiceStatusPage(),
     RouteTable.pureFunctionLauncher: (context, args) => LauncherFunction(args['schemeText']),
     RouteTable.pureFunctionLaunchInBrowser: (context, args) => LaunchInBrowserFunction(args['url']),
+    RouteTable.relogin: (context, args) => const UnauthorizedTipPage(),
   },
   onNotFound: (context, routeName, args) => NotFoundPage(routeName),
   rootRoute: (context, table, args) {
-    final routeName = AccountUtils.getAuthUserType() != null ? RouteTable.home : RouteTable.welcome;
+    final routeName = Auth.hasLoggedIn ? RouteTable.home : RouteTable.welcome;
     return table.onGenerateRoute(routeName, args)(context);
   },
 );

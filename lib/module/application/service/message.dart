@@ -31,7 +31,8 @@ class ApplicationMessageService implements ApplicationMessageDao {
 
   @override
   Future<ApplicationMsgCount> getMessageCount() async {
-    String payload = 'code=${Kv.auth.currentUsername}';
+    final account = Auth.oaCredential!.account;
+    String payload = 'code=$account';
 
     final response = await session.request(
       serviceMessageCount,

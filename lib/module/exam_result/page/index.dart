@@ -57,6 +57,27 @@ class _ScorePageState extends State<ScorePage> {
     });
   }
 
+  @override
+  Widget build(BuildContext context) {
+    if (!Auth.hasLoggedIn) {
+      return UnauthorizedTipPage(title: i18n.ftype_examArr.text());
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+          title: i18n.ftype_examResult.text(),
+        ),
+        body: scoreList == null
+            ? Placeholders.loading()
+            : Column(
+                children: [
+                  _buildHeader(),
+                  Expanded(child: scoreList!.isNotEmpty ? _buildListView() : _buildNoResult()),
+                ],
+              ),
+      );
+    }
+  }
+
   Widget _buildHeader() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -116,23 +137,6 @@ class _ScorePageState extends State<ScorePage> {
           ),
         ),
       ],
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: i18n.ftype_examResult.text(),
-      ),
-      body: scoreList == null
-          ? Placeholders.loading()
-          : Column(
-              children: [
-                _buildHeader(),
-                Expanded(child: scoreList!.isNotEmpty ? _buildListView() : _buildNoResult()),
-              ],
-            ),
     );
   }
 }

@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:catcher/catcher.dart';
+import 'package:kite/credential/init.dart';
 import 'package:kite/global/desktop_init.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/hive/init.dart';
@@ -37,7 +38,8 @@ import '../session/dio_common.dart';
 import '../util/upgrade.dart';
 
 class Initializer {
- static late AppVersion currentVersion;
+  static late AppVersion currentVersion;
+
   static Future<void> init({bool? debugNetwork}) async {
     // 运行前初始化
     try {
@@ -80,11 +82,15 @@ class Initializer {
     SettingsInit.init(
       kvStorageBox: HiveBoxInit.kv,
     );
+    CredentialInit.init(
+      box: HiveBoxInit.credentials,
+    );
     await Global.init(
       userEventStorage: UserEventInit.userEventStorage,
       authSetting: Kv.auth,
       debugNetwork: debugNetwork ?? Kv.network.isGlobalProxy,
       cookieBox: HiveBoxInit.cookiesBox,
+      credentials: CredentialInit.credential,
     );
     // 初始化用户首次打开时间（而不是应用安装时间）
     // ??= 表示为空时候才赋值

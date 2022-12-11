@@ -23,8 +23,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_shake_animated/flutter_shake_animated.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/home/entity/home.dart';
+import 'package:kite/home/page/brick_maker.dart';
 import 'package:kite/module/activity/using.dart';
-import 'package:kite/util/user.dart';
 import 'package:kite/util/vibration.dart';
 import 'package:rettulf/rettulf.dart';
 import 'package:rnd/rnd.dart';
@@ -63,7 +63,7 @@ class _HomeRearrangePageState extends State<HomeRearrangePage> {
   @override
   void initState() {
     super.initState();
-    defaultOrder = makeDefaultBricks(AccountUtils.getUserType());
+    defaultOrder = BrickMaker.makeDefaultBricks();
     homeItemsA = Kv.home.homeItems ?? [...defaultOrder];
     homeItemsB = [...homeItemsA];
   }

@@ -1,3 +1,4 @@
+import 'package:kite/credential/entity/credential.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/global/init.dart';
 import 'config.dart';
@@ -22,7 +23,7 @@ Future<void> init({bool? debugNetwork}) async {
 
 /// 如果需要登录，调用该函数
 Future<void> login() async {
-  await Global.ssoSession.login(username, ssoPassword);
+  await Global.ssoSession.loginPassive(OACredential(username, ssoPassword));
 }
 
 /// 图书馆登录

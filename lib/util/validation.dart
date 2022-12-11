@@ -15,14 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:kite/util/user.dart';
+import 'package:kite/credential/utils.dart';
 
 import '../l10n/extension.dart';
-
-String? studentIdValidator(String? username) {
-  if (username != null && username.isNotEmpty) {
+// Only allow student ID/ work number.
+String? studentIdValidator(String? account) {
+  if (account != null && account.isNotEmpty) {
     // 仅允许学生学号登录, 并且屏蔽
-    if (AccountUtils.guessUserType(username) == null) {
+    if (guessUserTypeByAccount(account) == null) {
       return i18n.kiteLoginIncorrectIDFormat;
     }
   }

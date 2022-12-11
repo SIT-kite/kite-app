@@ -44,23 +44,17 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
     }
   }
 
-  bool get canImport {
-    return Kv.auth.currentUsername != null && Kv.auth.ssoPassword != null;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: i18n.timetableMineTitle.text(),
       ),
-      floatingActionButton: canImport
-          ? FloatingActionButton(
-              onPressed: goImport,
-              elevation: 10,
-              child: const Icon(Icons.add_outlined),
-            )
-          : null,
+      floatingActionButton: FloatingActionButton(
+        onPressed: goImport,
+        elevation: 10,
+        child: const Icon(Icons.add_outlined),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: buildTimetables(context),

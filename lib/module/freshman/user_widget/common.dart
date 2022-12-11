@@ -201,7 +201,7 @@ extension Styles on Widget {
 List<Widget> buildAppBarMenuButton(BuildContext context) {
   return <Widget>[
     IconButton(
-      onPressed: () => Navigator.of(context).pushNamed(RouteTable.freshmanAnalysis),
+      onPressed: () => Navigator.of(context).pushNamed(RouteTable.freshmanStatistics),
       icon: const Icon(Icons.analytics),
       tooltip: i18n.kiteStatsBtnTooltip,
     ),

@@ -174,12 +174,12 @@ class _ApplicationListState extends State<ApplicationList> {
   }
 
   Future<List<ApplicationMeta>?> _fetchMetaList() async {
+    final oaCredential = Auth.oaCredential;
+    if(oaCredential == null) return null;
     if (!ApplicationInit.session.isLogin) {
-      final username = Kv.auth.currentUsername!;
-      final password = Kv.auth.ssoPassword!;
       await ApplicationInit.session.login(
-        username: username,
-        password: password,
+        username: oaCredential.account,
+        password: oaCredential.password,
       );
     }
     return await service.getApplicationMetas();

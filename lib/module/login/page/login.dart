@@ -34,9 +34,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   // Text field controllers.
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _proxyInputController = TextEditingController();
+  final TextEditingController $account = TextEditingController();
+  final TextEditingController $password = TextEditingController();
+  final TextEditingController $proxy = TextEditingController();
 
   final GlobalKey _formKey = GlobalKey<FormState>();
 
@@ -48,12 +48,22 @@ class _LoginPageState extends State<LoginPage> {
   bool isProxySettingShown = false;
   bool enableLoginButton = true;
 
+  @override
+  void initState() {
+    super.initState();
+    final oaCredential = Auth.oaCredential;
+    if (oaCredential != null) {
+      $account.text = oaCredential.account;
+      $password.text = oaCredential.password;
+    }
+  }
+
   /// 用户点击登录按钮后
   Future<void> onLogin(BuildContext ctx) async {
     bool formValid = (_formKey.currentState as FormState).validate();
-    final username = _usernameController.text;
-    final password = _passwordController.text;
-    if (!formValid || username.isEmpty || password.isEmpty) {
+    final account = $account.text;
+    final password = $password.text;
+    if (!formValid || account.isEmpty || password.isEmpty) {
       await ctx.showTip(
         title: i18n.formatError,
         desc: i18n.validateInputAccountPwdRequest,
@@ -88,12 +98,11 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     try {
-      await LoginInit.ssoSession.login(username, password);
+      final credential = OACredential(account, password);
+      await LoginInit.ssoSession.loginActive(credential);
       final personName = await LoginInit.authServerService.getPersonName();
-      Kv.auth
-        ..currentUsername = username
-        ..ssoPassword = password
-        ..personName = personName;
+      Auth.oaCredential = credential;
+      Kv.auth.personName = personName;
       // Reset the home
       Kv.home.homeItems = null;
       if (!mounted) return;
@@ -128,18 +137,6 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-
-    String? username = Kv.auth.currentUsername;
-    String? password = Kv.auth.ssoPassword;
-    if (username != null) {
-      _usernameController.text = username;
-      _passwordController.text = password ?? '';
-    }
-  }
-
   static void onOpenUserLicense() {
     GlobalLauncher.launch(R.kiteUserAgreementUrl);
   }
@@ -157,19 +154,22 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(
         children: [
           TextFormField(
-            controller: _usernameController,
+            controller: $account,
             textInputAction: TextInputAction.next,
             autofocus: true,
             autocorrect: false,
             enableSuggestions: false,
             validator: studentIdValidator,
             decoration: InputDecoration(
-                labelText: i18n.account, hintText: i18n.kiteLoginAccountHint, icon: const Icon(Icons.person)),
+              labelText: i18n.account,
+              hintText: i18n.kiteLoginAccountHint,
+              icon: const Icon(Icons.person),
+            ),
           ),
           TextFormField(
-            controller: _passwordController,
+            controller: $password,
             autofocus: true,
-            textInputAction: TextInputAction.go,
+            textInputAction: TextInputAction.send,
             toolbarOptions: const ToolbarOptions(
               copy: false,
               cut: false,
@@ -251,8 +251,8 @@ class _LoginPageState extends State<LoginPage> {
                   onLogin(ctx);
                 }
               : null,
-          child: i18n.kiteLoginBtn.text(),
-        ).sized(height: 40.h),
+          child: i18n.kiteLoginBtn.text().padAll(5),
+        ),
         ElevatedButton(
           // Offline
           onPressed: isLicenseAccepted
@@ -260,8 +260,8 @@ class _LoginPageState extends State<LoginPage> {
                   Navigator.pushReplacementNamed(context, RouteTable.home);
                 }
               : null,
-          child: i18n.kiteLoginOfflineModeBtn.text(),
-        ).sized(height: 40.h),
+          child: i18n.kiteLoginOfflineModeBtn.text().padAll(5),
+        ),
       ],
     );
   }
@@ -269,7 +269,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildProxySetButton(BuildContext context, FlashController<dynamic> controller, _) {
     return IconButton(
       onPressed: () {
-        final String inputText = _proxyInputController.text;
+        final String inputText = $proxy.text;
 
         if (proxyValidator(inputText) != null) {
           return;
@@ -292,7 +292,7 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
     isProxySettingShown = true;
-    _proxyInputController.text = Kv.network.proxy;
+    $proxy.text = Kv.network.proxy;
     context.showFlashBar(
       persistent: true,
       borderWidth: 3.sm,
@@ -306,7 +306,7 @@ class _LoginPageState extends State<LoginPage> {
           const Text('格式如 192.168.1.1:8000'),
           Form(
             child: TextFormField(
-              controller: _proxyInputController,
+              controller: $proxy,
               validator: proxyValidator,
               autofocus: true,
             ),
@@ -395,5 +395,12 @@ class _LoginPageState extends State<LoginPage> {
         ],
       ).safeArea(), //to avoid overflow when keyboard is up.
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    $account.dispose();
+    $password.dispose();
   }
 }

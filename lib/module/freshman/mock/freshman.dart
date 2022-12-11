@@ -18,13 +18,14 @@
 import 'dart:convert';
 
 import '../dao/Freshman.dart';
+import '../using.dart';
 import '../entity/info.dart';
 import '../entity/relationship.dart';
 import '../entity/statistics.dart';
 
 class FreshmanMock implements FreshmanDao {
   @override
-  Future<FreshmanInfo> getMyInfo() async {
+  Future<FreshmanInfo> getMyInfo({FreshmanCredential? credential}) async {
     String json = '''
   {
     "name": "姓名",

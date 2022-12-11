@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:kite/credential/symbol.dart';
 import 'package:kite/design/user_widgets/dialog.dart';
 import 'package:kite/module/shared/init.dart';
 import 'package:kite/storage/init.dart';
@@ -25,7 +26,7 @@ bool hasSignedKite() {
   return Kv.jwt.jwtToken != null;
 }
 
-Future<bool> signUpIfNecessary(BuildContext context, String description) async {
+Future<bool> signUpIfNecessary(BuildContext context, OACredential oaCredential, String description) async {
   // 如果用户未同意过, 请求用户确认
   if (Kv.jwt.jwtToken == null) {
     final confirm = await context.showRequest(
@@ -40,9 +41,7 @@ Future<bool> signUpIfNecessary(BuildContext context, String description) async {
         highlight: true);
     if (confirm == true) {
       // 注册用户
-      final username = Kv.auth.currentUsername!;
-      final password = Kv.auth.ssoPassword!;
-      await SharedInit.kiteSession.login(username, password);
+      await SharedInit.kiteSession.loginWith(oa: oaCredential);
     }
   }
   return true;

@@ -56,12 +56,16 @@ class _ExamArrangementPageState extends State<ExamArrangementPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(title: i18n.ftype_examArr.text()),
-        body: [
-          buildSemesterSelector(),
-          buildExamEntries(context).expanded(),
-        ].column());
+    if (!Auth.hasLoggedIn) {
+      return UnauthorizedTipPage(title: i18n.ftype_examArr.text());
+    } else {
+      return Scaffold(
+          appBar: AppBar(title: i18n.ftype_examArr.text()),
+          body: [
+            buildSemesterSelector(),
+            buildExamEntries(context).expanded(),
+          ].column());
+    }
   }
 
   void refresh() {

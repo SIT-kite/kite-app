@@ -66,4 +66,9 @@ class HiveTypeId {
   static const applicationMessageType = 36;
 
   static const version = 37;
+
+  // Credential
+  static const oaUserCredential = 38;
+  static const freshmanCredential = 39;
+  static const userType = 40;
 }

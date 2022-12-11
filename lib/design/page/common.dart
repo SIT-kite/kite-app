@@ -61,6 +61,7 @@ class LeavingBlank extends StatelessWidget {
       desc
           .text(
             style: context.textTheme.titleLarge,
+            textAlign: TextAlign.center,
           )
           .center()
           .padAll(10)

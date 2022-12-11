@@ -36,8 +36,8 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
   FreshmanDao freshmanDao = FreshmanInit.freshmanDao;
 
   // Text field controllers.
-  final TextEditingController _accountController = TextEditingController();
-  final TextEditingController _secretController = TextEditingController();
+  final _accountController = TextEditingController();
+  final _secretController = TextEditingController();
 
   final GlobalKey _formKey = GlobalKey<FormState>();
 
@@ -47,6 +47,17 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
   bool isPasswordClear = false;
   bool isLicenseAccepted = false;
   bool enableLoginButton = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final freshmanCredential = Auth.freshmanCredential;
+    if (freshmanCredential != null) {
+      _accountController.text = freshmanCredential.account;
+      _secretController.text = freshmanCredential.password;
+    }
+  }
 
   /// 用户点击登录按钮后
   Future<void> onLogin(BuildContext ctx) async {
@@ -77,15 +88,12 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
     final account = _accountController.text;
     final secret = _secretController.text;
     try {
-      // 先保存登录信息
-      Kv.freshman
-        ..freshmanAccount = account
-        ..freshmanSecret = secret;
+      final credential = FreshmanCredential(account, secret);
       // 清空本地缓存
       FreshmanInit.freshmanCacheManager.clearAll();
 
-      final info = await freshmanDao.getMyInfo();
-
+      final info = await freshmanDao.getMyInfo(credential: credential);
+      Auth.freshmanCredential = credential;
       // 登录成功后赋值名字
       Kv.freshman.freshmanName = info.name;
 
@@ -103,10 +111,6 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       // 预计需要写一份新生的使用说明
       // GlobalLauncher.launch('${Backend.kite}/wiki/kite-app/features/');
     } catch (e) {
-      // 登录失败
-      Kv.freshman
-        ..freshmanSecret = null
-        ..freshmanAccount = null;
       final connectionType = await Connectivity().checkConnectivity();
       if (!mounted) return;
       if (connectionType == ConnectivityResult.none) {
@@ -128,18 +132,6 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       if (mounted) {
         setState(() => enableLoginButton = true);
       }
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    String? account = Kv.freshman.freshmanAccount;
-    String? secret = Kv.freshman.freshmanSecret;
-    if (account != null) {
-      _accountController.text = account;
-      _secretController.text = secret ?? '';
     }
   }
 
@@ -255,7 +247,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
                     onLogin(ctx);
                   }
                 : null,
-            child: i18n.freshmanLoginBtn.text(),
+            child: i18n.kiteLoginBtn.text().padAll(5),
           ),
         ),
       ],

@@ -22,3 +22,5 @@ class HomeRefreshEvent {
 }
 
 class ExpenseTackerRefreshEvent {}
+
+class CredentialChangeEvent {}

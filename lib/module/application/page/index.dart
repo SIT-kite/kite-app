@@ -21,7 +21,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rettulf/rettulf.dart';
 import '../using.dart';
 
-import '../init.dart';
 import 'list.dart';
 import 'mailbox.dart';
 
@@ -56,7 +55,11 @@ class _ApplicationPageState extends State<ApplicationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return context.isPortrait ? buildPortrait(context) : buildLandscape(context);
+    if (!Auth.hasLoggedIn) {
+      return UnauthorizedTipPage(title: i18n.ftype_examArr.text());
+    } else {
+      return context.isPortrait ? buildPortrait(context) : buildLandscape(context);
+    }
   }
 
   Widget buildPortrait(BuildContext context) {

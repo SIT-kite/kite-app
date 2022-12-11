@@ -18,12 +18,13 @@
 import '../entity/info.dart';
 import '../entity/relationship.dart';
 import '../entity/statistics.dart';
+import '../using.dart';
 
 abstract class FreshmanDao {
   /// Precondition:
-  /// - [Kv.freshman.freshmanAccount] is not null.
-  /// - [Kv.freshman.freshmanSecret] is not null.
-  Future<FreshmanInfo> getMyInfo();
+  /// - [Auth.freshmanCredential.account] is not null.
+  /// - [Auth.freshmanCredential.password] is not null.
+  Future<FreshmanInfo> getMyInfo({FreshmanCredential? credential});
 
   Future<void> updateMyContact({Contact? contact, bool? visible});
 

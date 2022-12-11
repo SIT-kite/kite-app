@@ -16,6 +16,7 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import 'package:flutter/material.dart';
+import 'package:kite/credential/symbol.dart';
 import 'package:kite/module/activity/using.dart';
 import 'package:rettulf/rettulf.dart';
 
@@ -27,8 +28,6 @@ Map<Semester, String> makeSemesterL10nName() => {
       Semester.secondTerm: i18n.semester2rd,
     };
 
-/// Precondition:
-/// [Kv.auth.currentUsername] is not null.
 class SemesterSelector extends StatefulWidget {
   final int? initialYear;
   final Semester? initialSemester;
@@ -39,15 +38,17 @@ class SemesterSelector extends StatefulWidget {
   final Function(int) onNewYearSelect;
   final Function(Semester) onNewSemesterSelect;
 
+  /// Precondition:
+  /// [Auth.oaCredential] is not null.
   const SemesterSelector({
+    super.key,
     required this.onNewYearSelect,
     required this.onNewSemesterSelect,
     this.initialYear,
     this.initialSemester,
     this.showEntireYear,
     this.showNextYear,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() => _SemesterSelectorState();
@@ -121,9 +122,20 @@ class _SemesterSelectorState extends State<SemesterSelector> {
 
   Widget buildYearSelector(BuildContext ctx) {
     // 得到入学年份
-    final grade = Kv.auth.currentUsername!.substring(0, 2);
+    final oaCredential = Auth.oaCredential;
+    final int grade;
+    if (oaCredential != null) {
+      final fromID = int.tryParse(oaCredential.account.substring(0, 2));
+      if (fromID != null) {
+        grade = 2000 + fromID;
+      } else {
+        grade = DateTime.now().year;
+      }
+    } else {
+      grade = DateTime.now().year;
+    }
     // 生成经历过的学期并逆序（方便用户选择）
-    final List<int> yearList = _generateYearList(int.parse(grade) + 2000).reversed.toList();
+    final List<int> yearList = _generateYearList(grade).reversed.toList();
     final mapping = yearList.map((e) => MapEntry(e, buildYearString(e)));
 
     // 保证显示上初始选择年份、实际加载的年份、selectedYear 变量一致.
