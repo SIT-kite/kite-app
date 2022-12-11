@@ -732,5 +732,6 @@
   "yes": "Yes",
   "settingsClearCache": "Clear Cache",
   "settingsClearCacheSub": "Clear the offline cache made by Kite during use.",
-  "settingsClearCacheDesc": "Do you want to clear the cache? you will have to connect to campus network to reload those next time."
+  "settingsClearCacheDesc": "Do you want to clear the cache? you will have to connect to campus network to reload those next time.",
+  "iSee": "I see"
 }

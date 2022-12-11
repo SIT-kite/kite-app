@@ -235,21 +235,18 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
   Widget buildLoginButton(BuildContext ctx) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        SizedBox(
-          height: 40.h,
-          child: ElevatedButton(
-            onPressed: enableLoginButton && isLicenseAccepted
-                ? () {
-                    // un-focus the text field.
-                    FocusScope.of(context).requestFocus(FocusNode());
-                    onLogin(ctx);
-                  }
-                : null,
-            child: i18n.kiteLoginBtn.text().padAll(5),
-          ),
-        ),
+        ElevatedButton(
+          onPressed: enableLoginButton && isLicenseAccepted
+              ? () {
+                  // un-focus the text field.
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  onLogin(ctx);
+                }
+              : null,
+          child: i18n.kiteLoginBtn.text().padAll(5),
+        )
       ],
     );
   }
@@ -282,35 +279,24 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
                 buildUserLicenseCheckbox(),
                 SizedBox(height: 25.h),
                 // Login button.
-                Row(
-                  children: [
-                    buildLoginButton(context),
-                    const SizedBox(width: 10),
-                  ],
-                ),
+                buildLoginButton(context),
               ]).scrolled(physics: const NeverScrollableScrollPhysics()),
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextButton(
-                    child: Text(
-                      i18n.feedbackBtn,
-                      style: const TextStyle(color: Colors.grey),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(RouteTable.feedback);
-                    },
-                  ),
-                ],
+          [
+            TextButton(
+              child: Text(
+                i18n.feedbackBtn,
+                style: const TextStyle(color: Colors.grey),
               ),
+              onPressed: () {
+                Navigator.of(context).pushNamed(RouteTable.feedback);
+              },
             ),
-          ),
+          ]
+              .row(mas: MainAxisSize.min)
+              .padAll(20)
+              .align(at: context.isPortrait ? Alignment.bottomCenter : Alignment.bottomRight),
         ],
       ).safeArea(), //to avoid overflow when keyboard is up.
     );

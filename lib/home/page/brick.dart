@@ -39,8 +39,9 @@ IconBuilder SvgNetworkIcon(String path) {
   return (size, color) => SvgPicture.network(path, width: size, height: size, color: color);
 }
 
-class Brick extends StatelessWidget {
+class Brick extends StatefulWidget {
   final String? route;
+  final Map<String, dynamic>? routeArgs;
   final IconBuilder icon;
   final String title;
   final String? subtitle;
@@ -48,6 +49,7 @@ class Brick extends StatelessWidget {
 
   const Brick({
     this.route,
+    this.routeArgs,
     this.onPressed,
     required this.title,
     this.subtitle,
@@ -55,6 +57,11 @@ class Brick extends StatelessWidget {
     super.key,
   });
 
+  @override
+  State<StatefulWidget> createState() => _BrickState();
+}
+
+class _BrickState extends State<Brick> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -75,17 +82,15 @@ class Brick extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(color: bg),
       child: ListTile(
-        leading: icon(48, iconColor),
-        title: Text(title, style: titleStyle),
-        subtitle: Text(subtitle ?? '', style: subtitleStyle, maxLines: 1, overflow: TextOverflow.ellipsis),
+        leading: widget.icon(48, iconColor),
+        title: Text(widget.title, style: titleStyle),
+        subtitle: Text(widget.subtitle ?? '', style: subtitleStyle, maxLines: 1, overflow: TextOverflow.ellipsis),
         // dense: true,
         onTap: () {
-          if (onPressed != null) {
-            onPressed!();
-            return;
-          }
-          if (route != null) {
-            Navigator.of(context).pushNamed(route!);
+          widget.onPressed?.call();
+          final dest = widget.route;
+          if (dest != null) {
+            Navigator.of(context).pushNamed(dest, arguments: widget.routeArgs);
           }
         },
         style: ListTileStyle.list,

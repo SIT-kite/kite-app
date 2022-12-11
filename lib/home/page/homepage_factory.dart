@@ -119,6 +119,7 @@ class HomepageFactory {
     FType.freshman: (context) => const FreshmanItem(),
     FType.switchAccount: (context) => Brick(
           route: RouteTable.login,
+          routeArgs: const {"disableOffline": true},
           icon: (size, color) => Icon(Icons.switch_account, size: size, color: color),
           title: FType.switchAccount.localized(),
           subtitle: FType.switchAccount.localizedDesc(),

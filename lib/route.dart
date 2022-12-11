@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/credential/symbol.dart';
 import 'package:kite/design/user_widgets/dialog.dart';
 import 'package:kite/home/page/index.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:kite/module/pure_function/launch_in_browser.dart';
 import 'package:kite/navigation/static_route.dart';
 import 'package:kite/override/entity.dart';
@@ -90,7 +91,13 @@ final defaultRouteTable = StaticRouteTable(
   table: {
     RouteTable.home: (context, args) => const HomePage(),
     RouteTable.reportTemp: (context, args) => const DailyReportIndexPage(),
-    RouteTable.login: (context, args) => const LoginPage(),
+    RouteTable.login: (context, args) => args["disableOffline"] == true
+        ? const LoginPage(
+            disableOffline: true,
+          )
+        : const LoginPage(
+            disableOffline: false,
+          ),
     RouteTable.welcome: (context, args) => const WelcomePage(),
     RouteTable.about: (context, args) => const AboutPage(),
     RouteTable.expense: (context, args) => const ExpenseTrackerPage(),
@@ -220,7 +227,7 @@ class RouteWithNoticeDialog implements IRouteGenerator {
         final overrideDb = Kv.override;
         final confirmedRouteNotice = overrideDb.confirmedRouteNotice ?? [];
         if (confirmedRouteNotice.contains(notice.id)) return;
-        final confirm = await context.showTip(title: notice.title, desc: notice.msg, ok: '我已收到');
+        final confirm = await context.showTip(title: notice.title, desc: notice.msg, ok: i18n.iSee);
         if (confirm) {
           confirmedRouteNotice.add(notice.id);
           overrideDb.confirmedRouteNotice = confirmedRouteNotice;

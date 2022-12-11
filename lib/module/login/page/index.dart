@@ -26,7 +26,9 @@ import '../init.dart';
 import '../using.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  final bool disableOffline;
+
+  const LoginPage({super.key, required this.disableOffline});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -253,15 +255,16 @@ class _LoginPageState extends State<LoginPage> {
               : null,
           child: i18n.kiteLoginBtn.text().padAll(5),
         ),
-        ElevatedButton(
-          // Offline
-          onPressed: isLicenseAccepted
-              ? () {
-                  Navigator.pushReplacementNamed(context, RouteTable.home);
-                }
-              : null,
-          child: i18n.kiteLoginOfflineModeBtn.text().padAll(5),
-        ),
+        if (!widget.disableOffline)
+          ElevatedButton(
+            // Offline
+            onPressed: isLicenseAccepted
+                ? () {
+                    Navigator.pushReplacementNamed(context, RouteTable.home);
+                  }
+                : null,
+            child: i18n.kiteLoginOfflineModeBtn.text().padAll(5),
+          ),
       ],
     );
   }
@@ -363,35 +366,29 @@ class _LoginPageState extends State<LoginPage> {
               ).scrolled(physics: const NeverScrollableScrollPhysics()),
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextButton(
-                    child: Text(
-                      i18n.kiteForgotPwdBtn,
-                      style: const TextStyle(color: Colors.grey),
-                    ),
-                    onPressed: () {
-                      GlobalLauncher.launch(R.forgotLoginPwdUrl);
-                    },
-                  ),
-                  TextButton(
-                    child: Text(
-                      i18n.feedbackBtn,
-                      style: const TextStyle(color: Colors.grey),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(RouteTable.feedback);
-                    },
-                  ),
-                ],
+          [
+            TextButton(
+              child: Text(
+                i18n.kiteForgotPwdBtn,
+                style: const TextStyle(color: Colors.grey),
               ),
+              onPressed: () {
+                GlobalLauncher.launch(R.forgotLoginPwdUrl);
+              },
             ),
-          ),
+            TextButton(
+              child: Text(
+                i18n.feedbackBtn,
+                style: const TextStyle(color: Colors.grey),
+              ),
+              onPressed: () {
+                Navigator.of(context).pushNamed(RouteTable.feedback);
+              },
+            ),
+          ]
+              .row(mas: MainAxisSize.min)
+              .padAll(20)
+              .align(at: context.isPortrait ? Alignment.bottomCenter : Alignment.bottomRight),
         ],
       ).safeArea(), //to avoid overflow when keyboard is up.
     );
