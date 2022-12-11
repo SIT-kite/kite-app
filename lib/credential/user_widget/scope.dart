@@ -31,11 +31,11 @@ class AuthScope extends InheritedWidget {
 
   @override
   bool updateShouldNotify(AuthScope oldWidget) {
-    return oaCredential == oldWidget.oaCredential &&
-        lastOaAuthTime == oldWidget.lastOaAuthTime &&
-        freshmanCredential == oldWidget.freshmanCredential &&
-        lastFreshmanAuthTime == oldWidget.lastFreshmanAuthTime &&
-        lastUserType == oldWidget.lastUserType;
+    return oaCredential != oldWidget.oaCredential ||
+        lastOaAuthTime != oldWidget.lastOaAuthTime ||
+        freshmanCredential != oldWidget.freshmanCredential ||
+        lastFreshmanAuthTime != oldWidget.lastFreshmanAuthTime ||
+        lastUserType != oldWidget.lastUserType;
   }
 }
 
