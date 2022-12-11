@@ -38,6 +38,15 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
     refreshBoxes();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return context.isPortrait
+        ? StorageList(
+            name2Box,
+          )
+        : StorageBox(name2Box);
+  }
+
   void refreshBoxes() {
     name2Box.clear();
     for (final entry in HiveBoxInit.name2Box.entries) {
@@ -47,15 +56,6 @@ class _LocalStoragePageState extends State<LocalStoragePage> {
         name2Box[boxName] = Future(() => box);
       }
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return context.isPortrait
-        ? StorageList(
-            name2Box,
-          )
-        : StorageBox(name2Box);
   }
 }
 
@@ -79,6 +79,7 @@ class _StorageListState extends State<StorageList> {
   @override
   Widget build(BuildContext ctx) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(title: i18n.localStorageTitle.text()),
       body: buildBody(ctx).scrolledWithBar(),
     );

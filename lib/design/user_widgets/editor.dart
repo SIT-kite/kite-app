@@ -18,6 +18,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kite/design/user_widgets/multiplatform.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:rettulf/buildcontext/show.dart';
 import 'package:rettulf/rettulf.dart';
@@ -46,7 +47,7 @@ class Editor {
     } else {
       final customEditorBuilder = _customEditor[initial.runtimeType];
       if (customEditorBuilder != null) {
-        final newValue = await ctx.showDialog(builder: (ctx) => customEditorBuilder(ctx, desc, initial));
+        final newValue = await show$Dialog$(ctx, make: (ctx) => customEditorBuilder(ctx, desc, initial));
         if (newValue != null) {
           return newValue;
         } else {
@@ -108,19 +109,14 @@ class Editor {
 }
 
 Widget _readonlyEditor(BuildContext ctx, WidgetBuilder make, {String? title}) {
-  return AlertDialog(
-      scrollable: true,
-      title: title?.text(style: const TextStyle(fontWeight: FontWeight.bold)),
-      content: make(ctx),
-      actions: [
-        Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-          CupertinoButton(
-              onPressed: () {
-                ctx.navigator.pop(false);
-              },
-              child: i18n.close.text(style: const TextStyle(color: Colors.redAccent))),
-        ])
-      ]);
+  return $Dialog$(
+      title: title,
+      primary: $Action$(
+          text: i18n.close,
+          onPressed: () {
+            ctx.navigator.pop(false);
+          }),
+      make: (ctx) => make(ctx));
 }
 
 class _IntEditor extends StatefulWidget {
@@ -151,62 +147,60 @@ class _IntEditorState extends State<_IntEditor> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-        scrollable: true,
-        title: widget.title?.text(style: const TextStyle(fontWeight: FontWeight.bold)),
-        content: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            CupertinoButton(
-              child: const Icon(Icons.remove),
-              onPressed: () {
-                setState(() {
-                  value -= 1;
-                  controller.text = value.toString();
-                });
-              },
-            ),
-            TextFormField(
-              controller: controller,
-              onChanged: (v) {
-                final newV = int.tryParse(v);
-                if (newV != null) {
-                  setState(() {
-                    value = newV;
-                  });
-                }
-              },
-              keyboardType: TextInputType.number,
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-              ],
-            ).sized(width: 100, height: 50),
-            CupertinoButton(
-              child: const Icon(Icons.add),
-              onPressed: () {
-                setState(() {
-                  value++;
-                  controller.text = value.toString();
-                });
-              },
-            ),
-          ],
+    return $Dialog$(
+        title: widget.title,
+        primary: $Action$(
+            text: i18n.submit,
+            onPressed: () {
+              context.navigator.pop(value);
+            }),
+        secondary: $Action$(
+            text: i18n.cancel,
+            onPressed: () {
+              context.navigator.pop(widget.initial);
+            }),
+        make: (ctx) => buildBody(ctx));
+  }
+
+  Widget buildBody(BuildContext ctx) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        CupertinoButton(
+          child: const Icon(Icons.remove),
+          onPressed: () {
+            setState(() {
+              value--;
+              controller.text = value.toString();
+            });
+          },
         ),
-        actions: [
-          Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-            CupertinoButton(
-                onPressed: () {
-                  context.navigator.pop(value);
-                },
-                child: i18n.submit.text(style: const TextStyle(color: Colors.redAccent))),
-            CupertinoButton(
-              onPressed: () {
-                context.navigator.pop(widget.initial);
-              },
-              child: i18n.cancel.text(),
-            )
-          ])
-        ]);
+        TextFormField(
+          controller: controller,
+          onChanged: (v) {
+            final newV = int.tryParse(v);
+            if (newV != null) {
+              setState(() {
+                value = newV;
+              });
+            }
+          },
+          keyboardType: TextInputType.number,
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+          ],
+        ).sized(width: 100, height: 50),
+        CupertinoButton(
+          child: const Icon(Icons.add),
+          onPressed: () {
+            setState(() {
+              value++;
+              controller.text = value.toString();
+            });
+          },
+        ),
+      ],
+    );
   }
 }
 
@@ -225,9 +219,18 @@ class _BoolEditorState extends State<_BoolEditor> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-        scrollable: true,
-        content: ListTile(
+    return $Dialog$(
+        primary: $Action$(
+            text: i18n.submit,
+            onPressed: () {
+              context.navigator.pop(value);
+            }),
+        secondary: $Action$(
+            text: i18n.cancel,
+            onPressed: () {
+              context.navigator.pop(widget.initial);
+            }),
+        make: (ctx) => ListTile(
             title: widget.desc.text(style: context.textTheme.bodyText2),
             trailing: CupertinoSwitch(
               value: value,
@@ -236,22 +239,7 @@ class _BoolEditorState extends State<_BoolEditor> {
                   value = newValue;
                 });
               },
-            )),
-        actions: [
-          Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-            CupertinoButton(
-                onPressed: () {
-                  context.navigator.pop(value);
-                },
-                child: i18n.submit.text(style: const TextStyle(color: Colors.redAccent))),
-            CupertinoButton(
-              onPressed: () {
-                context.navigator.pop(widget.initial);
-              },
-              child: i18n.cancel.text(),
-            )
-          ])
-        ]);
+            )));
   }
 }
 
@@ -283,28 +271,22 @@ class _StringEditorState extends State<_StringEditor> {
   @override
   Widget build(BuildContext context) {
     final lines = context.isPortrait ? widget.initial.length ~/ 40 + 1 : widget.initial.length ~/ 120 + 1;
-    return AlertDialog(
-        scrollable: true,
-        title: widget.title?.text(style: const TextStyle(fontWeight: FontWeight.bold)),
-        content: TextFormField(
-          maxLines: lines,
-          controller: controller,
-          style: context.textTheme.bodyMedium,
-        ),
-        actions: [
-          Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-            CupertinoButton(
-                onPressed: () {
-                  context.navigator.pop(controller.text);
-                },
-                child: i18n.submit.text(style: const TextStyle(color: Colors.redAccent))),
-            CupertinoButton(
-              onPressed: () {
-                context.navigator.pop(widget.initial);
-              },
-              child: i18n.cancel.text(),
-            )
-          ])
-        ]);
+    return $Dialog$(
+        title: widget.title,
+        primary: $Action$(
+            text: i18n.submit,
+            onPressed: () {
+              context.navigator.pop(controller.text);
+            }),
+        secondary: $Action$(
+            text: i18n.cancel,
+            onPressed: () {
+              context.navigator.pop(widget.initial);
+            }),
+        make: (ctx) => TextFormField(
+              maxLines: lines,
+              controller: controller,
+              style: context.textTheme.bodyMedium,
+            ));
   }
 }

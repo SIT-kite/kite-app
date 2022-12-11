@@ -318,6 +318,7 @@ class _StorageBoxState extends State<StorageBox> {
   @override
   Widget build(BuildContext ctx) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: i18n.localStorageTitle.text(),
           elevation: 0,

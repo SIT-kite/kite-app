@@ -19,6 +19,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:rettulf/rettulf.dart';
+import '../using.dart';
 
 typedef CredentialCtor<T> = T Function(String account, String password);
 
@@ -60,41 +61,33 @@ class _CredentialEditorState extends State<CredentialEditor> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-        scrollable: true,
-        title: widget.title?.text(style: const TextStyle(fontWeight: FontWeight.bold)),
-        content: [
-          buildField("account", $account),
-          buildField("password", $password),
-        ].column(),
-        actions: [
-          Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-            CupertinoButton(
-                onPressed: () {
-                  context.navigator.pop(widget.ctor($account.text, $password.text));
-                },
-                child: i18n.submit.text(style: const TextStyle(color: Colors.redAccent))),
-            CupertinoButton(
-              onPressed: () {
-                context.navigator.pop(widget.ctor(widget.account, widget.password));
-              },
-              child: i18n.cancel.text(),
-            )
-          ])
-        ]);
+    return $Dialog$(
+      title: widget.title,
+      make: (ctx) => [
+        buildField("account", $account),
+        buildField("password", $password),
+      ].column(),
+      primary: $Action$(
+          text: i18n.submit,
+          onPressed: () {
+            context.navigator.pop(widget.ctor($account.text, $password.text));
+          }),
+      secondary: $Action$(
+          text: i18n.cancel,
+          onPressed: () {
+            context.navigator.pop(widget.ctor(widget.account, widget.password));
+          }),
+    );
   }
 
   Widget buildField(
     String fieldName,
     TextEditingController textEditingController,
   ) {
-    return TextFormField(
-      autofocus: true,
+    return $TextField$(
       controller: textEditingController,
       textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-        labelText: fieldName,
-      ),
-    );
+      labelText: fieldName,
+    ).padV(1);
   }
 }

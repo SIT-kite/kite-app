@@ -98,7 +98,11 @@ class Global {
     if (Catcher.navigatorKey == null) return null;
     if (Catcher.navigatorKey!.currentContext == null) return null;
     final context = Catcher.navigatorKey!.currentContext!;
-    return await show$Dialog$(context, (context) => CaptchaBox(captchaData: imageBytes));
+    return await show$Dialog$(
+      context,
+      dismissible: false,
+      make: (context) => CaptchaBox(captchaData: imageBytes),
+    );
   }
 
   static Future<void> init({

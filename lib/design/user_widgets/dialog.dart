@@ -7,7 +7,6 @@ import 'multiplatform.dart';
 
 typedef PickerActionWidgetBuilder = Widget Function(BuildContext context, int? curSelectedIndex);
 
-
 extension DialogEx on BuildContext {
   /// return: whether the button was hit
   Future<bool> showTip({
@@ -35,7 +34,7 @@ extension DialogEx on BuildContext {
   }) async {
     final dynamic confirm = await show$Dialog$(
       this,
-      (ctx) => $Dialog$(
+      make: (ctx) => $Dialog$(
           title: title,
           highlight: highlight,
           serious: serious,
@@ -78,7 +77,7 @@ extension DialogEx on BuildContext {
   }) async {
     return await show$Dialog$(
       this,
-      (ctx) => $Dialog$(
+      make: (ctx) => $Dialog$(
         title: title,
         highlight: highlight,
         serious: serious,
