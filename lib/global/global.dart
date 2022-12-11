@@ -17,10 +17,12 @@
  */
 
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:catcher/catcher.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/credential/dao/credential.dart';
 import 'package:kite/global/cookie_init.dart';
@@ -90,6 +92,50 @@ class Global {
     }
   }
 
+  static Future<String?> onNeedInputCaptcha(Uint8List imageBytes) async {
+    if (Catcher.navigatorKey == null) return null;
+    if (Catcher.navigatorKey!.currentContext == null) return null;
+    final context = Catcher.navigatorKey!.currentContext!;
+    TextEditingController controller = TextEditingController();
+    return await showDialog<String?>(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('请输入验证码', style: Theme.of(context).textTheme.headline2),
+                ),
+                Image.memory(
+                  imageBytes,
+                  scale: 0.5,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 100.0),
+                  child: TextFormField(
+                    controller: controller,
+                    decoration: const InputDecoration(
+                      hintText: '验证码',
+                      icon: Icon(Icons.input),
+                    ),
+                  ),
+                ),
+                CupertinoButton(
+                  child: const Text('确定'),
+                  onPressed: () => Navigator.of(context).pop(controller.text),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   static Future<void> init({
     required UserEventStorageDao userEventStorage,
     required AuthSettingDao authSetting,
@@ -116,8 +162,10 @@ class Global {
         ..receiveTimeout = 30 * 1000,
       debug: debugNetwork,
     );
-    ssoSession = SsoSession(dio: dio, cookieJar: cookieJar, onError: onSsoError);
-    ssoSession2 = SsoSession(dio: dio2, cookieJar: cookieJar, onError: onSsoError);
+    ssoSession =
+        SsoSession(dio: dio, cookieJar: cookieJar, onError: onSsoError, onNeedInputCaptcha: onNeedInputCaptcha);
+    ssoSession2 =
+        SsoSession(dio: dio2, cookieJar: cookieJar, onError: onSsoError, onNeedInputCaptcha: onNeedInputCaptcha);
     pageLogger = PageLogger(dio: dio, userEventStorage: userEventStorage);
     pageLogger.startup();
 

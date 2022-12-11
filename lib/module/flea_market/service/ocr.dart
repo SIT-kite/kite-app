@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:dio/dio.dart';
+import 'package:kite/module/activity/using.dart';
 
 import '../../../backend.dart';
 
@@ -30,7 +31,11 @@ class OcrServer {
   static const _ocrServerUrl = '${Backend.kite}/api/ocr/captcha';
 
   static Future<String> recognize(String imageBase64) async {
-    final response = await Dio().post(_ocrServerUrl, data: imageBase64);
+    final response = await Dio(BaseOptions(
+      connectTimeout: 5,
+      receiveTimeout: 5,
+      sendTimeout: 5,
+    )).post(_ocrServerUrl, data: imageBase64);
     final result = response.data;
     final code = result['code'];
     if (code == 0) {

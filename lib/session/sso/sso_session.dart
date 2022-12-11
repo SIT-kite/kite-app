@@ -21,7 +21,6 @@ import 'dart:typed_data';
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart' hide Lock;
-import 'package:flutter/material.dart';
 import 'package:kite/events/events.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/module/flea_market/service/ocr.dart';
@@ -36,6 +35,7 @@ import '../../util/dio_utils.dart';
 import 'encryption.dart';
 
 typedef SsoSessionErrorCallback = void Function(Object e, StackTrace t);
+typedef SsoSessionCaptchaCallback = Future<String?> Function(Uint8List imageBytes);
 
 class SsoSession with DioDownloaderMixin implements ISession {
   static const int _maxRetryCount = 5;
@@ -60,6 +60,9 @@ class SsoSession with DioDownloaderMixin implements ISession {
   /// Session错误拦截器
   SsoSessionErrorCallback? onError;
 
+  /// 手动验证码
+  SsoSessionCaptchaCallback? onNeedInputCaptcha;
+
   bool enableSsoErrorCallback = true;
 
   /// 惰性登录锁
@@ -69,6 +72,7 @@ class SsoSession with DioDownloaderMixin implements ISession {
     required this.dio,
     required this.cookieJar,
     this.onError,
+    this.onNeedInputCaptcha,
   });
 
   Future<void> runWithNoErrorCallback(Future<void> Function() callback) async {
@@ -239,35 +243,32 @@ class SsoSession with DioDownloaderMixin implements ISession {
 
   /// Return null when failed to login but there is no exception raised.
   Future<Response?> _loginPassive(OACredential credential) async {
-    for (int i = 0; i < _maxRetryCount; i++) {
-      try {
-        return await loginWithoutRetry(credential);
-      } on CredentialsInvalidException catch (e) {
-        if (e.msg.contains('验证码')) {
-          Log.info("Credential is invalid because of a wrong captcha prompt.");
-          continue;
-        } else {
-          Log.info("Credential is invalid because of incorrect account or password.");
-          Auth.oaCredential = null;
-          FireOn.global(CredentialChangeEvent());
-          final ctx = Global.buildContext;
-          if (ctx != null) {
-            final confirm = await ctx.showRequest(
-              title: i18n.credentialError,
-              desc: i18n.reloginRequestDesc,
-              yes: i18n.relogin,
-              no: i18n.notNow,
-              highlight: true,
-            );
-            if (confirm == true) {
-              ctx.navigator.pushNamed(RouteTable.relogin);
-            }
+    try {
+      return await loginWithoutRetry(credential);
+    } on CredentialsInvalidException catch (e) {
+      if (e.msg.contains('验证码')) {
+        Log.info("Credential is invalid because of a wrong captcha prompt.");
+        throw const MaxRetryExceedException(msg: '验证码识别有误，请稍后重试');
+      } else {
+        Log.info("Credential is invalid because of incorrect account or password.");
+        Auth.oaCredential = null;
+        FireOn.global(CredentialChangeEvent());
+        final ctx = Global.buildContext;
+        if (ctx != null) {
+          final confirm = await ctx.showRequest(
+            title: i18n.credentialError,
+            desc: i18n.reloginRequestDesc,
+            yes: i18n.relogin,
+            no: i18n.notNow,
+            highlight: true,
+          );
+          if (confirm == true) {
+            ctx.navigator.pushNamed(RouteTable.relogin);
           }
-          return null;
         }
+        return null;
       }
     }
-    throw const MaxRetryExceedException(msg: '验证码识别有误，请稍后重试');
   }
 
   /// Use cases:
@@ -337,7 +338,7 @@ class SsoSession with DioDownloaderMixin implements ISession {
     }
 
     /// 获取验证码
-    Future<String> getCaptcha() async {
+    Future<Uint8List> getCaptcha() async {
       final response = await dio.get(
         _captchaUrl,
         options: Options(
@@ -346,8 +347,7 @@ class SsoSession with DioDownloaderMixin implements ISession {
         ),
       );
       Uint8List captchaData = response.data;
-      final b64 = base64Encode(captchaData);
-      return b64;
+      return captchaData;
     }
 
     // 首先获取AuthServer首页
@@ -362,13 +362,29 @@ class SsoSession with DioDownloaderMixin implements ISession {
     var captcha = '';
     if (await needCaptcha(credential.account)) {
       // 识别验证码
+      final captchaImage = await getCaptcha();
       // 一定要让识别到的字符串长度为4
       // 如果不是4，那就再试一次
-      do {
-        final captchaImage = await getCaptcha();
-        captcha = await OcrServer.recognize(captchaImage);
-        debug('识别验证码结果: $captcha');
-      } while (captcha.length != 4);
+      try {
+        do {
+          captcha = await OcrServer.recognize(base64Encode(captchaImage));
+          debug('识别验证码结果: $captcha');
+        } while (captcha.length != 4);
+      } catch (e) {
+        if (onNeedInputCaptcha != null) {
+          // 验证码识别有误，进入手动验证码流程
+          final c = await onNeedInputCaptcha!(captchaImage);
+          if (c != null) {
+            captcha = c;
+          } else {
+            // 用户未输入验证码
+            throw const CredentialsInvalidException(msg: '登录失败');
+          }
+        } else {
+          // 未实现手动验证码
+          rethrow;
+        }
+      }
     }
     // 获取casTicket
     final casTicket = getCasTicketFromAuthHtml(html);
