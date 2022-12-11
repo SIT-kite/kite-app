@@ -71,4 +71,10 @@ class HiveTypeId {
   static const oaUserCredential = 38;
   static const freshmanCredential = 39;
   static const userType = 40;
+
+  // Exam Result
+  static const examResult = 41;
+  static const examResultDetail = 42;
+  static const semester = 43;
+  static const schoolYear = 44;
 }

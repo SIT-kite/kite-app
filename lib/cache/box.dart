@@ -73,6 +73,14 @@ mixin CachedBox implements HasBox<dynamic> {
       String namespace, String Function(Arg1, Arg2) maker) {
     return ListCacheNamespace2(box, namespace, maker);
   }
+
+  /// Create a cache namespace.
+  /// As a best practice, it will be used as a map with multiple keys but mapping to a list, such as Map<Foo,Map<Bar,List<T>>>.
+  // ignore: non_constant_identifier_names
+  ListCacheNamespace3<T, Arg1, Arg2, Arg3> ListNamespace3<T, Arg1, Arg2, Arg3>(
+      String namespace, String Function(Arg1, Arg2, Arg3) maker) {
+    return ListCacheNamespace3(box, namespace, maker);
+  }
 }
 
 abstract class CacheKey<T> {

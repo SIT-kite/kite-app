@@ -16,10 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'entity/score.dart';
+import 'entity/result.dart';
 
 /// 计算GPA
-double calcGPA(List<Score> scoreList) {
+double calcGPA(List<ExamResult> scoreList) {
   double totalCredits = 0.0;
   double sum = 0.0;
 

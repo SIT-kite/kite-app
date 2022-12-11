@@ -18,13 +18,13 @@
 import 'package:flutter/material.dart';
 import 'package:kite/route.dart';
 
-import '../entity/score.dart';
+import '../entity/result.dart';
 import '../init.dart';
 import '../using.dart';
 import 'index.dart';
 
 class ScoreItem extends StatefulWidget {
-  final Score _score;
+  final ExamResult _score;
 
   const ScoreItem(this._score, {Key? key}) : super(key: key);
 
@@ -33,11 +33,11 @@ class ScoreItem extends StatefulWidget {
 }
 
 class _ScoreItemState extends State<ScoreItem> {
-  late Score _score;
+  late ExamResult _score;
   bool _isExpanded = false;
   bool _isSelected = false;
 
-  Widget _buildScoreDetailView(List<ScoreDetail> scoreDetails) {
+  Widget _buildScoreDetailView(List<ExamResultDetail> scoreDetails) {
     return Container(
       alignment: Alignment.centerLeft,
       decoration: const BoxDecoration(
@@ -52,7 +52,7 @@ class _ScoreItemState extends State<ScoreItem> {
   }
 
   Widget _buildScoreDetail() {
-    final future = ExamResultInit.scoreService.getScoreDetail(_score.innerClassId, _score.schoolYear, _score.semester);
+    final future = ExamResultInit.resultService.getResultDetail(_score.innerClassId, _score.schoolYear, _score.semester);
 
     return FutureBuilder(
       future: future,

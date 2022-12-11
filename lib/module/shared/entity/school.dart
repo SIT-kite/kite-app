@@ -18,11 +18,19 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:hive/hive.dart';
+import 'package:kite/hive/type_id.dart';
 import 'package:kite/l10n/extension.dart';
 
+part 'school.g.dart';
+
+@HiveType(typeId: HiveTypeId.semester)
 enum Semester {
+  @HiveField(0)
   all,
+  @HiveField(1)
   firstTerm,
+  @HiveField(2)
   secondTerm;
 
   String localized() {
@@ -37,8 +45,10 @@ enum Semester {
   }
 }
 
+@HiveType(typeId: HiveTypeId.schoolYear)
 class SchoolYear {
   static const all = SchoolYear(null);
+  @HiveField(0)
   final int? year;
 
   const SchoolYear(this.year);

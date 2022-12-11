@@ -17,20 +17,31 @@
  */
 
 import 'package:cookie_jar/cookie_jar.dart';
+import 'cache/result.dart';
+import 'storage/result.dart';
 import 'using.dart';
 import 'dao/evaluation.dart';
-import 'dao/score.dart';
+import 'dao/result.dart';
 import 'service/evaluation.dart';
-import 'service/score.dart';
+import 'service/result.dart';
 
 class ExamResultInit {
   static late CookieJar cookieJar;
-  static late ScoreDao scoreService;
+  static late ExamResultDao resultService;
   static late CourseEvaluationDao courseEvaluationService;
 
-  static Future<void> init({required CookieJar cookieJar, required ISession eduSession}) async {
+  static Future<void> init({
+    required CookieJar cookieJar,
+    required ISession eduSession,
+    required Box<dynamic> box,
+  }) async {
     ExamResultInit.cookieJar = cookieJar;
-    scoreService = ScoreService(eduSession);
+    resultService = ExamResultCache(
+      from: ScoreService(eduSession),
+      to: ExamResultStorage(box),
+      detailExpire: const Duration(days: 180),
+      listExpire: const Duration(days: 1),
+    );
     courseEvaluationService = CourseEvaluationService(eduSession);
   }
 }

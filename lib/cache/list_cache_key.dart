@@ -99,6 +99,18 @@ class ListCacheNamespace2<T, Arg1, Arg2> {
   }
 }
 
+class ListCacheNamespace3<T, Arg1, Arg2, Arg3> {
+  final Box<dynamic> box;
+  final String namespace;
+  final String Function(Arg1, Arg2, Arg3) maker;
+
+  ListCacheNamespace3(this.box, this.namespace, this.maker);
+
+  CacheKey<List<T>> make(Arg1 arg1, Arg2 arg2, Arg3 arg3) {
+    return _NamespaceListCacheKey(box, namespace, maker(arg1, arg2, arg3));
+  }
+}
+
 class _NamespaceListCacheKey<T> extends CacheKey<List<T>> {
   final String namespace;
   final String name;

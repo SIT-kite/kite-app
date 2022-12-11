@@ -32,6 +32,7 @@ class HiveBoxInit {
   static late Box<dynamic> expense2;
   static late Box<dynamic> activityCache;
   static late Box<dynamic> examArrCache;
+  static late Box<dynamic> examResultCache;
   static late Box<dynamic> oaAnnounceCache;
   static late Box<dynamic> applicationCache;
   static late Box<dynamic> game;
@@ -52,6 +53,7 @@ class HiveBoxInit {
     expense2 = await Hive.openBox('expense2');
     activityCache = await Hive.openBox('activityCache');
     examArrCache = await Hive.openBox('examArrCache');
+    examResultCache = await Hive.openBox('examResultCache');
     oaAnnounceCache = await Hive.openBox('oaAnnounceCache');
     applicationCache = await Hive.openBox('applicationCache');
     game = await Hive.openBox<dynamic>('game');
@@ -65,6 +67,7 @@ class HiveBoxInit {
       "course": HiveBoxInit.course,
       if (kDebugMode) "userEvent": HiveBoxInit.userEvent,
       "examArrCache": HiveBoxInit.examArrCache,
+      "examResultCache": HiveBoxInit.examResultCache,
       "oaAnnounceCache": HiveBoxInit.oaAnnounceCache,
       "activityCache": HiveBoxInit.activityCache,
       "applicationCache": HiveBoxInit.applicationCache,
@@ -85,6 +88,7 @@ class HiveBoxInit {
     await expense2.deleteFromDisk();
     await activityCache.deleteFromDisk();
     await examArrCache.deleteFromDisk();
+    await examResultCache.deleteFromDisk();
     await oaAnnounceCache.deleteFromDisk();
     await applicationCache.deleteFromDisk();
     await game.deleteFromDisk();
@@ -96,6 +100,7 @@ class HiveBoxInit {
     activityCache.clear();
     oaAnnounceCache.clear();
     examArrCache.clear();
+    examResultCache.clear();
     applicationCache.clear();
   }
 }

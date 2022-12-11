@@ -76,6 +76,13 @@ class HiveAdapter {
     ~OACredentialAdapter();
     ~FreshmanCredentialAdapter();
     ~UserTypeAdapter();
+
+    // Exam Result
+    ~ExamResultAdapter();
+    ~ExamResultDetailAdapter();
+
+    ~SchoolYearAdapter();
+    ~SemesterAdapter();
   }
 }
 

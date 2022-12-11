@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import '../entity/score.dart';
+import '../entity/result.dart';
 import '../using.dart';
 
-abstract class ScoreDao {
-  Future<List<Score>> getScoreList(SchoolYear year, Semester semester);
+abstract class ExamResultDao {
+  Future<List<ExamResult>?> getResultList(SchoolYear schoolYear, Semester semester);
 
-  Future<List<ScoreDetail>> getScoreDetail(String classId, SchoolYear schoolYear, Semester semester);
+  Future<List<ExamResultDetail>?> getResultDetail(String classId, SchoolYear schoolYear, Semester semester);
 }

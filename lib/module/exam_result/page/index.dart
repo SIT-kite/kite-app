@@ -20,7 +20,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:kite/module/library/using.dart';
 import 'package:rettulf/rettulf.dart';
 
-import '../entity/score.dart';
+import '../entity/result.dart';
 import '../init.dart';
 import '../using.dart';
 import '../util.dart';
@@ -41,8 +41,8 @@ class _ExamResultPageState extends State<ExamResultPage> {
   late Semester selectedSemester;
 
   /// 成绩列表
-  List<Score>? scoreList;
-  List<Score>? _selectedExams;
+  List<ExamResult>? _allResults;
+  List<ExamResult>? _selectedExams;
 
   @override
   void initState() {
@@ -54,9 +54,14 @@ class _ExamResultPageState extends State<ExamResultPage> {
   }
 
   void onRefresh() {
-    ExamResultInit.scoreService.getScoreList(SchoolYear(selectedYear), selectedSemester).then((value) {
+    if (!mounted) return;
+    setState(() {
+      _allResults = null;
+    });
+    ExamResultInit.resultService.getResultList(SchoolYear(selectedYear), selectedSemester).then((value) {
+      if (!mounted) return;
       setState(() {
-        scoreList = value;
+        _allResults = value;
         _selectedExams = value;
       });
     });
@@ -82,12 +87,12 @@ class _ExamResultPageState extends State<ExamResultPage> {
         title: title.text(),
         centerTitle: true,
       ),
-      body: scoreList == null
+      body: _allResults == null
           ? Placeholders.loading()
           : Column(
               children: [
                 _buildHeader(),
-                Expanded(child: scoreList!.isNotEmpty ? _buildListView() : _buildNoResult()),
+                Expanded(child: _allResults!.isNotEmpty ? _buildListView() : _buildNoResult()),
               ],
             ),
       floatingActionButton: FloatingActionButton.extended(
@@ -120,7 +125,7 @@ class _ExamResultPageState extends State<ExamResultPage> {
 
   Widget _buildListView() {
     return ListView(
-      children: scoreList!
+      children: _allResults!
           .map(
             (e) => Column(
               children: [

@@ -17,13 +17,13 @@
  */
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 
-import '../dao/score.dart';
-import '../entity/score.dart';
+import '../dao/result.dart';
+import '../entity/result.dart';
 import '../using.dart';
 
 /// REAL. THE PAYLOAD IS IN PINYIN. DONT BLAME ANYONE BUT THE SCHOOL.
 /// More reading: https://github.com/sunnysab/zf-tools/blob/master/TRANSLATION.md
-class ScoreService implements ScoreDao {
+class ScoreService implements ExamResultDao {
   static const _scoreUrl = 'http://jwxt.sit.edu.cn/jwglxt/cjcx/cjcx_cxDgXscj.html';
   static const _scoreDetailUrl = 'http://jwxt.sit.edu.cn/jwglxt/cjcx/cjcx_cxCjxqGjh.html';
 
@@ -47,7 +47,7 @@ class ScoreService implements ScoreDao {
 
   /// 获取成绩
   @override
-  Future<List<Score>> getScoreList(SchoolYear schoolYear, Semester semester) async {
+  Future<List<ExamResult>> getResultList(SchoolYear schoolYear, Semester semester) async {
     final response = await session.request(_scoreUrl, ReqMethod.post, para: {
       'gnmkdm': 'N305005',
       'doType': 'query',
@@ -64,7 +64,7 @@ class ScoreService implements ScoreDao {
 
   /// 获取成绩详情
   @override
-  Future<List<ScoreDetail>> getScoreDetail(String classId, SchoolYear schoolYear, Semester semester) async {
+  Future<List<ExamResultDetail>> getResultDetail(String classId, SchoolYear schoolYear, Semester semester) async {
     var response = await session.request(
       _scoreDetailUrl,
       ReqMethod.post,
@@ -81,16 +81,16 @@ class ScoreService implements ScoreDao {
     return _parseDetailPage(response.data);
   }
 
-  static List<Score> _parseScoreListPage(Map<String, dynamic> jsonPage) {
+  static List<ExamResult> _parseScoreListPage(Map<String, dynamic> jsonPage) {
     final List? scoreList = jsonPage['items'];
     if (scoreList == null) {
       return const [];
     } else {
-      return scoreList.map((e) => Score.fromJson(e as Map<String, dynamic>)).toList();
+      return scoreList.map((e) => ExamResult.fromJson(e as Map<String, dynamic>)).toList();
     }
   }
 
-  static ScoreDetail _mapToDetailItem(Bs4Element item) {
+  static ExamResultDetail _mapToDetailItem(Bs4Element item) {
     f1(s) => s.replaceAll('&nbsp;', '').replaceAll(' ', '');
     f2(s) => s.replaceAll('【', '').replaceAll('】', '');
     f(s) => f1(f2(s));
@@ -99,10 +99,10 @@ class ScoreService implements ScoreDao {
     String percentage = item.find(_scorePercentageSelector)!.innerHtml.trim();
     String value = item.find(_scoreValueSelector)!.innerHtml;
 
-    return ScoreDetail(f(type), f(percentage), double.tryParse(f(value)) ?? double.nan);
+    return ExamResultDetail(f(type), f(percentage), double.tryParse(f(value)) ?? double.nan);
   }
 
-  static List<ScoreDetail> _parseDetailPage(String htmlPage) {
+  static List<ExamResultDetail> _parseDetailPage(String htmlPage) {
     final BeautifulSoup soup = BeautifulSoup(htmlPage);
     final elements = soup.findAll(_scoreDetailPageSelector);
 

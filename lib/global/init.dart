@@ -131,6 +131,7 @@ class Initializer {
     await ExamResultInit.init(
       cookieJar: Global.cookieJar,
       eduSession: sharedEduSession,
+      box: HiveBoxInit.examResultCache,
     );
     await ExamArrInit.init(
       eduSession: sharedEduSession,
