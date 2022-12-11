@@ -74,7 +74,7 @@ class _ScorePageState extends State<ScorePage> {
               ],
             ),
       floatingActionButton: FloatingActionButton.extended(
-        icon: const Icon(Icons.assessment),
+        icon: const Icon(Icons.assessment_outlined),
         onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const EvaluationPage())),
         label: const Text('评教'),
       ),
