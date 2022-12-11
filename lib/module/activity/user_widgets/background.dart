@@ -16,14 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:geopattern_flutter/geopattern_flutter.dart';
+import 'package:geopattern_flutter/patterns/overlapping_circles.dart';
 import 'package:rettulf/buildcontext/theme.dart';
 import '../using.dart';
 
 /// 矩形高斯模糊效果
-class BlurRectWidget extends StatefulWidget {
+class Blur extends StatelessWidget {
   final Widget? child;
 
   // 模糊值
@@ -33,7 +36,7 @@ class BlurRectWidget extends StatefulWidget {
   /// 透明度
   final double? opacity;
 
-  const BlurRectWidget(
+  const Blur(
     this.child, {
     Key? key,
     this.sigmaX,
@@ -42,28 +45,58 @@ class BlurRectWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<BlurRectWidget> createState() => _BlurRectWidgetState();
-}
-
-class _BlurRectWidgetState extends State<BlurRectWidget> {
-  @override
   Widget build(BuildContext context) {
     return ClipRRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(
-          sigmaX: widget.sigmaX ?? 10,
-          sigmaY: widget.sigmaY ?? 10,
+          sigmaX: sigmaX ?? 10,
+          sigmaY: sigmaY ?? 10,
         ),
         child: Container(
-          color: Colors.white10,
-          child: widget.opacity != null
-              ? Opacity(
-                  opacity: widget.opacity!,
-                  child: widget.child,
-                )
-              : widget.child,
-        ),
+            color: Colors.white10,
+            child: Opacity(
+              opacity: opacity ?? 1.0,
+              child: child,
+            )),
       ),
+    );
+  }
+}
+
+class ColorfulCircleBackground extends StatefulWidget {
+  final int? seed;
+
+  const ColorfulCircleBackground({super.key, this.seed});
+
+  @override
+  State<StatefulWidget> createState() => _ColorfulCircleBackgroundState();
+}
+
+class _ColorfulCircleBackgroundState extends State<ColorfulCircleBackground> {
+  late int? seed = widget.seed ?? hashCode;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final gen = Random(seed);
+        final pattern = OverlappingCircles(
+          radius: 60,
+          nx: 6,
+          ny: 6,
+          fillColors: List.generate(
+              36,
+              (_) => Color.fromARGB(10 + (gen.nextDouble() * 100).round(), 50 + gen.nextInt(2) * 150,
+                  50 + gen.nextInt(2) * 150, 50 + gen.nextInt(2) * 150)),
+        );
+        return ClipRect(
+          child: CustomPaint(
+            willChange: true,
+            painter: FullPainter(pattern: pattern, background: Colors.yellow),
+            child: SizedBox(width: constraints.maxWidth, height: constraints.maxHeight),
+          ),
+        );
+      },
     );
   }
 }

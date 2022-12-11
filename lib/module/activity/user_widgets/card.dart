@@ -16,17 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:geopattern_flutter/geopattern_flutter.dart';
-import 'package:geopattern_flutter/patterns/overlapping_circles.dart';
-import 'package:kite/design/user_widgets/route.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../entity/list.dart';
 import '../page/detail.dart';
-import 'blur.dart';
+import 'background.dart';
 
 import '../using.dart';
 
@@ -45,8 +40,8 @@ class ActivityCard extends StatelessWidget {
       children: [
         Stack(
           children: [
-            const BlurRectWidget(
-              CardCoverBackground(),
+            Blur(
+              ColorfulCircleBackground(seed: activity.id),
               sigmaX: 10,
               sigmaY: 10,
               opacity: 0.75,
@@ -94,34 +89,5 @@ class ActivityCard extends StatelessWidget {
       final route = AdaptiveUI.of(context).makeRoute((_) => DetailPage(activity, hero: activity.id));
       context.navigator.push(route);
     });
-  }
-}
-
-class CardCoverBackground extends StatelessWidget {
-  const CardCoverBackground({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final gen = Random();
-        final pattern = OverlappingCircles(
-          radius: 60,
-          nx: 6,
-          ny: 6,
-          fillColors: List.generate(
-              36,
-              (_) => Color.fromARGB(10 + (gen.nextDouble() * 100).round(), 50 + gen.nextInt(2) * 150,
-                  50 + gen.nextInt(2) * 150, 50 + gen.nextInt(2) * 150)),
-        );
-        return ClipRect(
-          child: CustomPaint(
-            willChange: true,
-            painter: FullPainter(pattern: pattern, background: Colors.yellow),
-            child: SizedBox(width: constraints.maxWidth, height: constraints.maxHeight),
-          ),
-        );
-      },
-    );
   }
 }

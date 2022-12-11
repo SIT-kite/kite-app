@@ -111,7 +111,7 @@ class ScScoreService implements ScScoreDao {
   }
 
   static List<ScScoreItem> _parseMyScoreList(String htmlPage) {
-    if(htmlPage.contains("<meta http-equiv=\"refresh\" content=\"0;URL=http://my.sit.edu.cn\"/>")){
+    if (htmlPage.contains('<meta http-equiv="refresh" content="0;URL=http://my.sit.edu.cn"/>')) {
       Log.info("My score list needs refresh.");
       throw Exception("My score list needs refresh.");
     }
@@ -138,7 +138,7 @@ class ScScoreService implements ScScoreDao {
   }
 
   static List<ScActivityApplication> _parseMyActivityList(String htmlPage) {
-    if(htmlPage.contains("<meta http-equiv=\"refresh\" content=\"0;URL=http://my.sit.edu.cn\"/>")){
+    if (htmlPage.contains('<meta http-equiv="refresh" content="0;URL=http://my.sit.edu.cn"/>')) {
       Log.info("My involved list needs refresh.");
       throw Exception("My involved list needs refresh.");
     }

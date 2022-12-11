@@ -33,7 +33,7 @@ class ExamArrInit {
     examService = ExamCache(
       from: ExamService(eduSession),
       to: ExamStorage(box),
-      expiration: const Duration(days: 30),
+      expiration: const Duration(days: 1),
     );
   }
 }

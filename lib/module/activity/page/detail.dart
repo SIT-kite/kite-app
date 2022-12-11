@@ -22,7 +22,7 @@ import 'package:rettulf/rettulf.dart';
 
 import '../entity/detail.dart';
 import '../init.dart';
-import '../user_widgets/blur.dart';
+import '../user_widgets/background.dart';
 import '../user_widgets/card.dart';
 import '../using.dart';
 
@@ -140,9 +140,9 @@ class _DetailPageState extends State<DetailPage> with AutomaticKeepAliveClientMi
   Widget buildInfoCardPortrait(BuildContext ctx, ActivityDetail? detail) {
     return Stack(
       children: [
-        const AspectRatio(
+        AspectRatio(
           aspectRatio: 1.8,
-          child: CardCoverBackground(),
+          child: ColorfulCircleBackground(seed: detail?.id),
         ),
         buildGlassmorphismBg(ctx),
         buildActivityInfo(ctx, detail).padAll(8).inCard().hero(widget.hero).padAll(20),
@@ -184,7 +184,7 @@ class _DetailPageState extends State<DetailPage> with AutomaticKeepAliveClientMi
 
   Widget buildDetailLandscape(BuildContext ctx, ActivityDetail? detail) {
     return [
-      const CardCoverBackground().padAll(20),
+      ColorfulCircleBackground(seed: detail?.id).padAll(20),
       ClipRRect(
         child: buildGlassmorphismBg(ctx),
       ),
