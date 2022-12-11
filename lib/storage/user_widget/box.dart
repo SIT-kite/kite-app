@@ -58,10 +58,11 @@ class _BoxSectionState extends State<BoxSection> {
               ctx.navigator.pop();
               final confirm = await _showDeleteBoxRequest(ctx);
               if (confirm == true) {
+                b.clear();
+                // Add a delay to ensure the box is really empty.
+                await Future.delayed(const Duration(milliseconds: 500));
                 if (!mounted) return;
-                setState(() {
-                  b.clear();
-                });
+                setState(() {});
               }
             },
             isDestructiveAction: true,

@@ -18,24 +18,37 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:kite/module/freshman/using.dart';
 import 'package:rettulf/rettulf.dart';
 
 class MyImageViewer extends StatelessWidget {
   final ImageProvider image;
 
-  const MyImageViewer({required this.image, Key? key}) : super(key: key);
+  const MyImageViewer({super.key, required this.image});
 
   Widget buildImageWidget() {
     return Image(
       image: image,
       loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-        if (loadingProgress == null) return child;
+        if (loadingProgress == null) {
+          return child;
+        } else {
+          return Placeholders.loading();
+        }
+      },
+      errorBuilder: (ctx, error, stacktrace) {
+        return Icon(
+          Icons.broken_image_rounded,
+          size: 180,
+          color: ctx.darkSafeThemeColor,
+        );
+      },
+/*
         int currentLength = loadingProgress.cumulativeBytesLoaded;
         int? totalLength = loadingProgress.expectedTotalBytes;
         return Center(
           child: CircularProgressIndicator(value: totalLength != null ? currentLength / totalLength : null),
-        );
-      },
+        );*/
     );
   }
 

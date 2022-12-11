@@ -86,6 +86,10 @@ class ScActivityListService implements ScActivityListDao {
   }
 
   static List<Activity> _parseActivityList(String htmlPage) {
+    if(htmlPage.contains("<meta http-equiv=\"refresh\" content=\"0;URL=http://my.sit.edu.cn\"/>")){
+      Log.info("Activity list needs refresh.");
+      throw Exception("Activity list needs refresh.");
+    }
     final BeautifulSoup soup = BeautifulSoup(htmlPage);
     List<Activity> result = soup.findAll(selector).map(
       (element) {

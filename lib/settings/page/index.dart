@@ -108,6 +108,19 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
+  void _onClearCache(BuildContext context) async {
+    final confirm = await context.showRequest(
+      title: i18n.settingsClearCache,
+      desc: i18n.settingsClearCacheDesc,
+      yes: i18n.confirm,
+      no: i18n.notNow,
+      highlight: true,
+    );
+    if (confirm == true) {
+      await HiveBoxInit.clearCache(); // 清除存储
+    }
+  }
+
   _buildLanguagePrefSelector(BuildContext ctx) {
     final Locale curLocale = Lang.getOrSetCurrentLocale(Localizations.localeOf(ctx));
 
@@ -299,9 +312,14 @@ class _SettingsPageState extends State<SettingsPage> {
       SettingsGroup(title: i18n.dataManagement, children: <Widget>[
         SimpleSettingsTile(
             title: i18n.settingsWipeKiteData,
-            leading: const Icon(Icons.remove_circle),
+            leading: const Icon(Icons.delete_forever_rounded),
             subtitle: i18n.settingsWipeKiteDataSub,
             onTap: () => _onClearStorage(context)),
+        SimpleSettingsTile(
+            title: i18n.settingsClearCache,
+            leading: const Icon(Icons.folder_delete_outlined),
+            subtitle: i18n.settingsClearCacheSub,
+            onTap: () => _onClearCache(context)),
       ]),
       SettingsGroup(
         title: i18n.devOptions,

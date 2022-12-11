@@ -111,6 +111,10 @@ class ScScoreService implements ScScoreDao {
   }
 
   static List<ScScoreItem> _parseMyScoreList(String htmlPage) {
+    if(htmlPage.contains("<meta http-equiv=\"refresh\" content=\"0;URL=http://my.sit.edu.cn\"/>")){
+      Log.info("My score list needs refresh.");
+      throw Exception("My score list needs refresh.");
+    }
     ScScoreItem nodeToScoreItem(Bs4Element item) {
       final int id = int.parse(item.find(idDetail)!.innerHtml.trim());
       // 注意：“我的成绩” 页面中，成绩条目显示的是活动类型，而非加分类型, 因此使用 ActivityType.
@@ -134,6 +138,10 @@ class ScScoreService implements ScScoreDao {
   }
 
   static List<ScActivityApplication> _parseMyActivityList(String htmlPage) {
+    if(htmlPage.contains("<meta http-equiv=\"refresh\" content=\"0;URL=http://my.sit.edu.cn\"/>")){
+      Log.info("My involved list needs refresh.");
+      throw Exception("My involved list needs refresh.");
+    }
     ScActivityApplication _activityMapDetail(Bs4Element item) {
       final applyIdText = item.find(applyIdDetail)!.text.trim();
       final applyId = int.parse(applyIdText);
