@@ -99,7 +99,7 @@ class _SettingsPageState extends State<SettingsPage> {
       yes: i18n.confirm,
       no: i18n.notNow,
       highlight: true,
-      serious:true,
+      serious: true,
     );
     if (confirm == true) {
       await HiveBoxInit.clear(); // 清除存储
@@ -116,7 +116,7 @@ class _SettingsPageState extends State<SettingsPage> {
       yes: i18n.confirm,
       no: i18n.notNow,
       highlight: true,
-      serious:true,
+      serious: true,
     );
     if (confirm == true) {
       await HiveBoxInit.clearCache(); // 清除存储

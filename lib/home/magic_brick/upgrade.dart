@@ -24,7 +24,7 @@ import 'package:kite/util/url_launcher.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import '../../../backend.dart';
-import '../brick.dart';
+import '../user_widget/brick.dart';
 
 const String appUpgradeUrl = '${Backend.kite}/upgrade/';
 

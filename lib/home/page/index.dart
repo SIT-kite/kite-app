@@ -40,11 +40,11 @@ import 'package:universal_platform/universal_platform.dart';
 import '../entity/home.dart';
 import '../init.dart';
 import 'background.dart';
-import 'brick_maker.dart';
-import 'drawer.dart';
-import 'greeting.dart';
-import 'homepage_factory.dart';
-import 'magic_brick/index.dart';
+import '../brick_maker.dart';
+import '../user_widget/drawer.dart';
+import '../user_widget/greeting.dart';
+import '../homepage_factory.dart';
+import '../magic_brick/index.dart';
 
 class HomeItemGroup extends StatelessWidget {
   final List<Widget> items;
@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
       }*/
       // 非新生才执行该网络检查逻辑
       if (Auth.hasLoggedIn && await HomeInit.ssoSession.checkConnectivity()) {
-        if(!mounted) return;
+        if (!mounted) return;
         showBasicFlash(
           context,
           i18n.homepageCampusNetworkConnected.text(),
@@ -394,7 +394,8 @@ class _HomePageState extends State<HomePage> {
               Log.info('浮动按钮被点击');
               // 触发下拉刷新
               final pos = _refreshController.position!;
-              await pos.animateTo(-100, duration: const Duration(milliseconds: 800), curve: Curves.fastLinearToSlowEaseIn);
+              await pos.animateTo(-100,
+                  duration: const Duration(milliseconds: 800), curve: Curves.fastLinearToSlowEaseIn);
             },
           )
         : null;

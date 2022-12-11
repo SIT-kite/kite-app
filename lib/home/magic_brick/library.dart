@@ -23,7 +23,7 @@ import 'package:kite/module/library/search/init.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/storage/init.dart';
-import '../brick.dart';
+import '../user_widget/brick.dart';
 
 class LibraryItem extends StatefulWidget {
   const LibraryItem({Key? key}) : super(key: key);

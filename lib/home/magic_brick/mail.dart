@@ -18,7 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/module/freshman/using.dart';
-import '../brick.dart';
+import '../user_widget/brick.dart';
 
 class EduEmailItem extends StatefulWidget {
   const EduEmailItem({Key? key}) : super(key: key);

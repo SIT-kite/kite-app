@@ -24,7 +24,7 @@ import 'package:kite/module/symbol.dart';
 import 'package:kite/route.dart';
 import 'package:kite/util/logger.dart';
 
-import '../brick.dart';
+import '../user_widget/brick.dart';
 
 class KiteBulletinItem extends StatefulWidget {
   const KiteBulletinItem({Key? key}) : super(key: key);

@@ -230,10 +230,6 @@ class PageBtnStyles {
         textStyle: textStyle ?? this.textStyle,
         activeTextStyle: activeTextStyle ?? this.activeTextStyle,
       );
-
-  double get getFontSize {
-    return fontSize ?? 14.0;
-  }
 }
 
 class SkipBtnStyle {

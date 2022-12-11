@@ -19,8 +19,8 @@ import 'package:flutter/material.dart';
 import 'package:kite/module/timetable/using.dart';
 import 'package:kite/override/entity.dart';
 
-import '../../entity/home.dart';
-import '../brick.dart';
+import '../entity/home.dart';
+import '../user_widget/brick.dart';
 
 Widget buildBrickWidgetByExtraHomeItem(BuildContext context, ExtraHomeItem item) {
   return Brick(

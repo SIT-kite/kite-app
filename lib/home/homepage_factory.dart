@@ -19,13 +19,13 @@
 import 'package:flutter/material.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-import '../../launcher.dart';
-import '../../route.dart';
-import '../../util/logger.dart';
-import '../../util/scanner.dart';
-import '../entity/home.dart';
+import '../launcher.dart';
+import '../route.dart';
+import '../util/logger.dart';
+import '../util/scanner.dart';
+import 'entity/home.dart';
 
-import 'brick.dart';
+import 'user_widget/brick.dart';
 import 'magic_brick/electricity.dart';
 import 'magic_brick/upgrade.dart';
 import 'magic_brick/exam.dart';

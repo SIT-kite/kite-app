@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/credential/symbol.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
-import '../brick.dart';
+import '../user_widget/brick.dart';
 
 class FreshmanItem extends StatelessWidget {
   const FreshmanItem({Key? key}) : super(key: key);

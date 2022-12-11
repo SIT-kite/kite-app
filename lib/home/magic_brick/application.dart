@@ -24,7 +24,7 @@ import 'package:kite/l10n/extension.dart';
 import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
-import '../brick.dart';
+import '../user_widget/brick.dart';
 
 class ApplicationItem extends StatefulWidget {
   const ApplicationItem({Key? key}) : super(key: key);

@@ -86,7 +86,7 @@ class ScActivityListService implements ScActivityListDao {
   }
 
   static List<Activity> _parseActivityList(String htmlPage) {
-    if(htmlPage.contains('<meta http-equiv="refresh" content="0;URL=http://my.sit.edu.cn"/>')){
+    if (htmlPage.contains('<meta http-equiv="refresh" content="0;URL=http://my.sit.edu.cn"/>')) {
       Log.info("Activity list needs refresh.");
       throw Exception("Activity list needs refresh.");
     }

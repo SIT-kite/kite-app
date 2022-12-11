@@ -24,7 +24,7 @@ import 'package:kite/route.dart';
 
 import 'package:kite/module/expense/entity/local.dart';
 import 'package:kite/module/expense/init.dart';
-import '../brick.dart';
+import '../user_widget/brick.dart';
 
 class ExpenseItem extends StatefulWidget {
   const ExpenseItem({Key? key}) : super(key: key);

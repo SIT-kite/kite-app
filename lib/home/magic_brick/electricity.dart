@@ -21,7 +21,7 @@ import 'package:kite/l10n/extension.dart';
 import 'package:kite/module/symbol.dart';
 import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
-import '../brick.dart';
+import '../user_widget/brick.dart';
 
 class ElectricityBillItem extends StatefulWidget {
   const ElectricityBillItem({Key? key}) : super(key: key);

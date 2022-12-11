@@ -122,6 +122,21 @@ class MyWebView extends StatefulWidget {
 class _MyWebViewState extends State<MyWebView> {
   WebViewController? _controller;
 
+  @override
+  Widget build(BuildContext context) {
+    return MyPlatformWidget(
+      desktopOrWebBuilder: (context) {
+        return UnsupportedPlatformUrlLauncher(
+          widget.initialUrl ?? '',
+          showLaunchButton: widget.showLaunchButtonIfUnsupported,
+        );
+      },
+      mobileBuilder: (context) {
+        return buildWebView(widget.initialCookies);
+      },
+    );
+  }
+
   /// 获取该url匹配的所有注入项
   Iterable<InjectJsRuleItem> getAllMatchJs(String url, InjectJsTime injectTime) {
     final rules = widget.injectJsRules
@@ -195,22 +210,6 @@ class _MyWebViewState extends State<MyWebView> {
         widget.onPageFinished?.call(url);
       },
       onProgress: widget.onProgress,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: Are you sure this wouldn't cause object lifecycle issue?
-    return MyPlatformWidget(
-      desktopOrWebBuilder: (context) {
-        return UnsupportedPlatformUrlLauncher(
-          widget.initialUrl ?? '',
-          showLaunchButton: widget.showLaunchButtonIfUnsupported,
-        );
-      },
-      mobileBuilder: (context) {
-        return buildWebView(widget.initialCookies);
-      },
     );
   }
 }

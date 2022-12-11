@@ -17,7 +17,7 @@
 */
 import 'package:kite/credential/symbol.dart';
 
-import '../entity/home.dart';
+import 'entity/home.dart';
 
 class BrickMaker {
   BrickMaker._();

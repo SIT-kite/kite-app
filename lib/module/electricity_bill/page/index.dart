@@ -38,6 +38,7 @@ class _Page {
   static const bill = 0;
   static const search = 1;
 }
+
 // TODO: For now, we can't use AdaptiveUI.
 class _ElectricityBillPageState extends State<ElectricityBillPage> {
   /// elevated the `room` to share the state

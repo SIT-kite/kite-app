@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/events/bus.dart';
 import 'package:kite/module/library/using.dart';
 import 'package:kite/module/symbol.dart';
-import '../brick.dart';
+import '../user_widget/brick.dart';
 
 class ReportTempItem extends StatefulWidget {
   const ReportTempItem({Key? key}) : super(key: key);
