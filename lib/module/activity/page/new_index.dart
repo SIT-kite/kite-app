@@ -13,6 +13,12 @@ class _ActivityIndexPageState extends State<ActivityIndexPage> {
     return AdaptiveNavi(
       title: i18n.ftype_activity,
       defaultIndex: 0,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.search),
+          onPressed: () => showSearch(context: context, delegate: SearchBar()),
+        ),
+      ],
       pages: [
         // Activity List page
         AdaptivePage(

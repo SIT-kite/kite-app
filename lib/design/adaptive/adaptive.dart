@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:kite/l10n/extension.dart';
 import 'package:rettulf/rettulf.dart';
 
 part 'env.dart';
@@ -11,10 +12,12 @@ class AdaptivePage {
   final String label;
   final Widget unselectedIcon;
   final Widget selectedIcon;
+  final String? tooltip;
   final PageBuilder builder;
 
   AdaptivePage({
     required this.label,
+    this.tooltip,
     required this.unselectedIcon,
     required this.selectedIcon,
     required this.builder,
@@ -86,6 +89,7 @@ class _AdaptiveNaviState extends State<AdaptiveNavi> {
                   label: p.label,
                   icon: p.unselectedIcon,
                   activeIcon: p.selectedIcon,
+                  tooltip: p.tooltip,
                 ))
             .toList(),
         currentIndex: _curIndex,
@@ -98,23 +102,28 @@ class _AdaptiveNaviState extends State<AdaptiveNavi> {
 
   Widget buildLandscape(BuildContext ctx) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Row(
         children: <Widget>[
           NavigationRail(
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                final subpage = _pageKeys[_curIndex].currentState;
-                if (subpage is Adaptable) {
-                  final subNavi = (subpage as Adaptable).navigator;
-                  if (subNavi != null && subNavi.canPop()) {
-                    subNavi.pop();
-                    return;
+            leading: [
+              IconButton(
+                icon: const Icon(Icons.arrow_back),
+                tooltip: i18n.back,
+                onPressed: () {
+                  final subpage = _pageKeys[_curIndex].currentState;
+                  if (subpage is Adaptable) {
+                    final subNavi = (subpage as Adaptable).navigator;
+                    if (subNavi != null && subNavi.canPop()) {
+                      subNavi.pop();
+                      return;
+                    }
                   }
-                }
-                ctx.navigator.pop();
-              },
-            ),
+                  ctx.navigator.pop();
+                },
+              ),
+              ...?widget.actions
+            ].column(),
             selectedIndex: _curIndex,
             groupAlignment: 1.0,
             onDestinationSelected: (newIndex) {
