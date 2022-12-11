@@ -23,7 +23,7 @@ import 'package:rettulf/rettulf.dart';
 import '../entity/score.dart';
 import '../init.dart';
 import '../using.dart';
-import 'banner.dart';
+import '../util.dart';
 import 'item.dart';
 
 class ExamResultPage extends StatefulWidget {
@@ -42,6 +42,7 @@ class _ExamResultPageState extends State<ExamResultPage> {
 
   /// 成绩列表
   List<Score>? scoreList;
+  List<Score>? _selectedExams;
 
   @override
   void initState() {
@@ -56,6 +57,7 @@ class _ExamResultPageState extends State<ExamResultPage> {
     ExamResultInit.scoreService.getScoreList(SchoolYear(selectedYear), selectedSemester).then((value) {
       setState(() {
         scoreList = value;
+        _selectedExams = value;
       });
     });
   }
@@ -63,9 +65,22 @@ class _ExamResultPageState extends State<ExamResultPage> {
   @override
   Widget build(BuildContext context) {
     if (!Auth.hasLoggedIn) return UnauthorizedTipPage(title: i18n.ftype_examArr.text());
+    final selectedExams = _selectedExams;
+    final String title;
+    if (selectedExams != null) {
+      var gpa = calcGPA(selectedExams);
+      if (gpa.isNaN) {
+        gpa = 0;
+      }
+      title = i18n.gpaPointLabel(selectedSemester.localized(), gpa.toStringAsPrecision(2));
+    } else {
+      title = i18n.ftype_examResult;
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: i18n.ftype_examResult.text(),
+        title: title.text(),
+        centerTitle: true,
       ),
       body: scoreList == null
           ? Placeholders.loading()
@@ -85,7 +100,6 @@ class _ExamResultPageState extends State<ExamResultPage> {
 
   Widget _buildHeader() {
     return [
-      GpaBanner(selectedSemester, scoreList!),
       Container(
         margin: const EdgeInsets.only(left: 15),
         child: SemesterSelector(

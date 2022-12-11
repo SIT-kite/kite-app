@@ -41,10 +41,11 @@ class AdaptivePage {
   });
 }
 
-/// Option A:
-/// Use WidgetBuilder: Build the page inside of AdaptiveNavi, the GlobalKey is passthrough.
-/// Option B:
-/// Pass through the widget itself
+/// Build the page inside of AdaptiveNavi, the GlobalKey is inside.
+/// The navigation state will be remembered.
+///
+/// Side effect: All pages will be built at the same time.
+/// So don't put something that will do heavy jobs in its [State.initState].
 class AdaptiveNavi extends StatefulWidget {
   final List<AdaptivePage> pages;
   final int defaultIndex;
@@ -130,7 +131,7 @@ class _AdaptiveNaviState extends State<AdaptiveNavi> {
                 onPressed: () {
                   final subpage = _pageKeys[_curIndex].currentState;
                   if (subpage is AdaptivePageProtocol) {
-                    final subNavi = (subpage as AdaptivePageProtocol).navigator;
+                    final subNavi = subpage.navigator;
                     if (subNavi != null && subNavi.canPop()) {
                       subNavi.pop();
                       return;
@@ -176,7 +177,7 @@ class _AdaptiveNaviState extends State<AdaptiveNavi> {
         onWillPop: () async {
           final subpage = _pageKeys[_curIndex].currentState;
           if (subpage is AdaptivePageProtocol) {
-            final subNavi = (subpage as AdaptivePageProtocol).navigator;
+            final subNavi = subpage.navigator;
             if (subNavi != null && subNavi.canPop()) {
               subNavi.pop();
               return false;

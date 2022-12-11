@@ -45,6 +45,7 @@ class _DetailPageState extends State<DetailPage> with AutomaticKeepAliveClientMi
 
   Activity get activity => widget.activity;
   ActivityDetail? detail;
+  Size? titleBarSize;
 
   @override
   void initState() {
@@ -53,6 +54,9 @@ class _DetailPageState extends State<DetailPage> with AutomaticKeepAliveClientMi
       setState(() {
         detail = value;
       });
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      titleBarSize = _fabKey.currentContext?.size;
     });
   }
 
@@ -88,13 +92,15 @@ class _DetailPageState extends State<DetailPage> with AutomaticKeepAliveClientMi
     );
   }
 
+  final _fabKey = GlobalKey(debugLabel: "To get size of FAB in Landscape Mode.");
+
   Widget buildLandscape(BuildContext ctx) {
     if (ctx.adaptive.isSubpage) {
       return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            toolbarHeight: 30,
+            toolbarHeight: titleBarSize?.height,
             actions: [
               if (widget.enableApply)
                 PlainExtendedButton(
@@ -102,13 +108,14 @@ class _DetailPageState extends State<DetailPage> with AutomaticKeepAliveClientMi
                     icon: const Icon(Icons.person_add),
                     tap: () async {
                       await showApplyRequest(ctx);
-                    }).padOnly(t: 10),
+                    }),
               PlainExtendedButton(
+                  key: _fabKey,
                   label: i18n.open.text(),
                   icon: const Icon(Icons.open_in_browser),
                   tap: () {
                     launchUrlInBrowser(_getActivityUrl(activityId));
-                  }).padOnly(t: 10),
+                  }),
             ],
           ),
           body: buildDetailLandscape(ctx, detail));
