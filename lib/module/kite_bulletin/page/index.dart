@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:auto_animated/auto_animated.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:rettulf/rettulf.dart';
@@ -95,6 +96,20 @@ class _KiteBulletinPageState extends State<KiteBulletinPage> {
     if (all == null) {
       return Placeholders.loading();
     } else {
+      // Don't use live list because the right, content view, doesn't follow the animation.
+      // Also, live list doesn't work well with Scroll Bar.
+/*      return LiveList.options(
+        options: kiteLiveOptions,
+        itemCount: all.length,
+        itemBuilder: (ctx, index, animation) => BulletinPreview(
+          all[index],
+          isSelected: _selected == index,
+        ).onTap(() {
+          if (_selected != index) {
+            setState(() => _selected = index);
+          }
+        }).aliveWith(animation),
+      );*/
       final list = all
           .mapIndexed((i, e) => BulletinPreview(
                 e,
@@ -114,7 +129,11 @@ class _KiteBulletinPageState extends State<KiteBulletinPage> {
     if (all == null) {
       return Placeholders.loading();
     } else {
-      return all.map((e) => BulletinCard(e)).toList().column().scrolled();
+      return LiveList.options(
+        options: kiteLiveOptions,
+        itemCount: all.length,
+        itemBuilder: (ctx, index, animation) => BulletinCard(all[index]).aliveWith(animation),
+      );
     }
   }
 }

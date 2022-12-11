@@ -215,30 +215,8 @@ class _ActivityListState extends State<ActivityList> {
           crossAxisCount: count,
         ),
         options: kiteLiveOptions,
-        itemBuilder: (ctx, index, animation) => buildAnimatedActivityCard(ctx, activities[index], animation),
+        itemBuilder: (ctx, index, animation) => ActivityCard(activities[index]).aliveWith(animation),
       );
     });
   }
-
-  Widget buildAnimatedActivityCard(
-    BuildContext ctx,
-    Activity activity,
-    Animation<double> animation,
-  ) =>
-      // For example wrap with fade transition
-      FadeTransition(
-        opacity: Tween<double>(
-          begin: 0,
-          end: 1,
-        ).animate(animation),
-        // And slide transition
-        child: SlideTransition(
-          position: Tween<Offset>(
-            begin: const Offset(0, -0.3),
-            end: Offset.zero,
-          ).animate(animation),
-          // Paste you Widget
-          child: ActivityCard(activity),
-        ),
-      );
 }
