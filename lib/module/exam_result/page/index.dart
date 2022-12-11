@@ -17,6 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kite/module/library/using.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../entity/score.dart';
@@ -59,23 +60,25 @@ class _ScorePageState extends State<ScorePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (!Auth.hasLoggedIn) {
-      return UnauthorizedTipPage(title: i18n.ftype_examArr.text());
-    } else {
-      return Scaffold(
-        appBar: AppBar(
-          title: i18n.ftype_examResult.text(),
-        ),
-        body: scoreList == null
-            ? Placeholders.loading()
-            : Column(
-                children: [
-                  _buildHeader(),
-                  Expanded(child: scoreList!.isNotEmpty ? _buildListView() : _buildNoResult()),
-                ],
-              ),
-      );
-    }
+    if (!Auth.hasLoggedIn) return UnauthorizedTipPage(title: i18n.ftype_examArr.text());
+    return Scaffold(
+      appBar: AppBar(
+        title: i18n.ftype_examResult.text(),
+      ),
+      body: scoreList == null
+          ? Placeholders.loading()
+          : Column(
+              children: [
+                _buildHeader(),
+                Expanded(child: scoreList!.isNotEmpty ? _buildListView() : _buildNoResult()),
+              ],
+            ),
+      floatingActionButton: FloatingActionButton.extended(
+        icon: const Icon(Icons.assessment_outlined),
+        onPressed: () => Navigator.of(context).pushNamed(RouteTable.examResultEvaluation),
+        label: const Text('评教'),
+      ),
+    );
   }
 
   Widget _buildHeader() {
