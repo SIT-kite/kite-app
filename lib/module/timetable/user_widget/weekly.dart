@@ -118,7 +118,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> implements ITimetableV
       _pageController.animateToPage(
         targetPos,
         duration: calcuSwitchAnimationDuration(distance),
-        curve: Curves.easeOut,
+        curve: Curves.fastLinearToSlowEaseIn,
       );
     }
     setState(() {

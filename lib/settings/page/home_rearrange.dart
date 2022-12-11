@@ -99,7 +99,8 @@ class _HomeRearrangePageState extends State<HomeRearrangePage> {
   Widget buildBody(BuildContext ctx) {
     return AnimatedSwitcher(
         duration: const Duration(milliseconds: 600),
-        switchInCurve: Curves.easeOut,
+        switchInCurve: Curves.fastLinearToSlowEaseIn,
+        switchOutCurve: Curves.fastLinearToSlowEaseIn,
         transitionBuilder: (Widget child, Animation<double> animation) {
           return FadeScaleTransition(animation: animation, child: child);
         },

@@ -301,6 +301,7 @@ class _LoginPageState extends State<LoginPage> {
       borderWidth: 3.sm,
       behavior: FlashBehavior.fixed,
       forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+      reverseAnimationCurve: Curves.fastLinearToSlowEaseIn,
       // TODO: I18n
       title: const Text('设置代理服务'),
       content: Column(

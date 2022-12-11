@@ -118,7 +118,7 @@ class DailyTimetableState extends State<DailyTimetable> implements ITimetableVie
       _pageController.animateToPage(
         targetPos,
         duration: calcuSwitchAnimationDuration(distance),
-        curve: Curves.easeOut,
+        curve: Curves.fastLinearToSlowEaseIn,
       );*/
       // Jumping brings a terrible UX
       _pageController.jumpToPage(

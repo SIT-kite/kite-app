@@ -89,7 +89,8 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
     final tip = getTip(by: _status);
     return AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
-        switchInCurve: Curves.easeIn,
+        switchInCurve: Curves.fastLinearToSlowEaseIn,
+        switchOutCurve: Curves.fastLinearToSlowEaseIn,
         transitionBuilder: (Widget child, Animation<double> animation) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -112,7 +113,7 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
           height: isImporting ? 120.0 : 0.0,
           alignment: isImporting ? Alignment.center : AlignmentDirectional.topCenter,
           duration: const Duration(seconds: 2),
-          curve: Curves.fastOutSlowIn,
+          curve: Curves.fastLinearToSlowEaseIn,
           child: Placeholders.loading(
             size: 120,
           ),

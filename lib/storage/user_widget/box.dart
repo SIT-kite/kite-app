@@ -25,7 +25,7 @@ import 'package:kite/design/page/common.dart';
 import 'package:kite/design/user_widgets/view.dart';
 
 import 'package:kite/l10n/extension.dart';
-import 'package:kite/user_widget/paginated.dart';
+import 'package:kite/user_widget/page_grouper.dart';
 import 'package:kite/user_widget/placeholder_future_builder.dart';
 import 'package:rettulf/rettulf.dart';
 import '../using.dart';
@@ -125,7 +125,7 @@ class _BoxItemListState extends State<BoxItemList> {
         buildPaginated(ctx, totalPages).padAll(10),
         AnimatedSize(
           duration: const Duration(milliseconds: 300),
-          curve: Curves.easeIn,
+          curve: Curves.fastLinearToSlowEaseIn,
           child: buildBoxItems(ctx, keys.sublist(start, end)),
         ),
       ].column();

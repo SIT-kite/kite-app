@@ -97,7 +97,7 @@ class _TimetablePageState extends State<TimetablePage> {
                   ? null
                   : () {
                       controller.animateToItem(todayIndex,
-                          duration: const Duration(milliseconds: 500), curve: Curves.fastOutSlowIn);
+                          duration: const Duration(milliseconds: 500), curve: Curves.fastLinearToSlowEaseIn);
                     })
         ],
         make: (ctx, i) {

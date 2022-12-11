@@ -165,23 +165,22 @@ class _TimetableViewerState extends State<TimetableViewer> {
     // Duplicate GlobalKey detected in widget tree.
     // I/flutter (16538): The following GlobalKey was specified multiple times in the widget tree. This will lead to parts of the widget tree being truncated unexpectedly, because the second time a key is seen, the previous instance is moved to the new location. The key was:
     // I/flutter (16538): - [GlobalKey#2ed39 Weekly TimeTable Key of Fall Semester, 2022-2023 Timetable]
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 300),
-      switchInCurve: Curves.ease,
-      child: (widget.$displayMode.value == DisplayMode.daily)
-          ? DailyTimetable(
-              key: dailyTimetableKey,
-              $currentPos: widget.$currentPos,
-              allCourses: widget.initialTableCourses,
-              initialDate: widget.initialTableMeta.startDate ?? DateTime.now(),
-              tableCache: widget.tableCache,
-              viewChangingCallback: switchDisplayMode)
-          : WeeklyTimetable(
-              key: weeklyTimetableKey,
-              $currentPos: widget.$currentPos,
-              allCourses: widget.initialTableCourses,
-              initialDate: widget.initialTableMeta.startDate ?? DateTime.now(),
-              tableCache: widget.tableCache),
+    return (widget.$displayMode.value == DisplayMode.daily
+            ? DailyTimetable(
+                key: dailyTimetableKey,
+                $currentPos: widget.$currentPos,
+                allCourses: widget.initialTableCourses,
+                initialDate: widget.initialTableMeta.startDate ?? DateTime.now(),
+                tableCache: widget.tableCache,
+                viewChangingCallback: switchDisplayMode)
+            : WeeklyTimetable(
+                key: weeklyTimetableKey,
+                $currentPos: widget.$currentPos,
+                allCourses: widget.initialTableCourses,
+                initialDate: widget.initialTableMeta.startDate ?? DateTime.now(),
+                tableCache: widget.tableCache))
+        .animatedSwitched(
+      d: const Duration(milliseconds: 300),
     );
   }
 }

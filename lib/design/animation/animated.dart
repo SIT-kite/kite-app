@@ -18,7 +18,14 @@
 import 'package:flutter/widgets.dart';
 
 extension AnimatedEx on Widget {
-  Widget animatedSwitched({Duration d = const Duration(milliseconds: 500)}) => AnimatedSwitcher(
+  Widget animatedSwitched({
+    Duration d = const Duration(milliseconds: 500),
+    Curve? switchInCurve,
+    Curve? switchOutCurve,
+  }) =>
+      AnimatedSwitcher(
+        switchInCurve: switchInCurve ?? Curves.linear,
+        switchOutCurve: switchOutCurve ?? Curves.linear,
         duration: d,
         child: this,
       );

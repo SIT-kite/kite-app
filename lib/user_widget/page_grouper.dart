@@ -24,7 +24,7 @@ import 'package:rettulf/rettulf.dart';
 class PageGrouper extends StatefulWidget {
   final SkipBtnStyle preBtnStyles;
   final PageBtnStyles paginateButtonStyles;
-  final bool useSkipAndPrevButtons;
+  final bool useSkipButton;
   final int currentPageIndex;
   final int totalPage;
   final int btnPerGroup;
@@ -36,7 +36,7 @@ class PageGrouper extends StatefulWidget {
       {Key? key,
       this.width,
       this.height,
-      this.useSkipAndPrevButtons = true,
+      this.useSkipButton = true,
       required this.preBtnStyles,
       required this.paginateButtonStyles,
       required this.onPageChange,
@@ -51,22 +51,16 @@ class PageGrouper extends StatefulWidget {
 
 class _PageGrouperState extends State<PageGrouper> {
   late PageController pageController;
-  List<int> pages = [];
-  List<int> nextPages = [];
-  List<int> prevPages = [];
   List<List<int>> groupedPages = [];
   double defaultHeight = 50;
 
-  void groupPaginate() {
+  void groupPageBtn() {
     final btnPerGroup = min(widget.btnPerGroup, widget.totalPage);
     List<int> curGroup = [];
     setState(() {
       groupedPages = [];
-      pages = [];
+
       for (int i = 0; i < widget.totalPage; i++) {
-        pages.add(i);
-      }
-      for (int i = 0; i < pages.length; i++) {
         curGroup.add(i);
         if (curGroup.length >= btnPerGroup) {
           groupedPages.add(curGroup);
@@ -81,57 +75,55 @@ class _PageGrouperState extends State<PageGrouper> {
 
   @override
   Widget build(BuildContext context) {
-    groupPaginate();
+    groupPageBtn();
     pageController = PageController();
-    return groupedChild;
+    return buildGroupedChild(context);
   }
 
-  Widget get groupedChild => SizedBox(
-        width: widget.width ?? MediaQuery.of(context).size.width,
-        height: 60,
-        child: Row(
-          children: [
-            if (widget.useSkipAndPrevButtons)
-              _SkipBtn(
-                buttonStyles: widget.preBtnStyles,
-                height: widget.height ?? defaultHeight,
-                onTap: () {
-                  pageController.previousPage(duration: const Duration(milliseconds: 500), curve: Curves.decelerate);
-                },
-                isPre: true,
-              ),
-            Expanded(
-                child: PageView.builder(
-                    controller: pageController,
-                    itemCount: groupedPages.where((element) => element.isNotEmpty).length,
-                    itemBuilder: (_, index) {
-                      return Row(
-                        children: groupedPages[index].map((e) {
-                          return Expanded(
-                              child: _PageBtn(
-                                  active: widget.currentPageIndex == e + 1,
-                                  buttonStyles: widget.paginateButtonStyles,
-                                  height: widget.height ?? defaultHeight,
-                                  page: e + 1,
-                                  color: e + 1 == widget.currentPageIndex ? Colors.blueGrey : Colors.blue,
-                                  onTap: (number) {
-                                    widget.onPageChange(number);
-                                  }));
-                        }).toList(),
-                      );
-                    })),
-            if (widget.useSkipAndPrevButtons)
-              _SkipBtn(
-                buttonStyles: widget.preBtnStyles.symmetricL2R(),
-                height: widget.height ?? defaultHeight,
-                onTap: () {
-                  pageController.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.decelerate);
-                },
-                isPre: false,
-              ),
-          ],
+  Widget buildGroupedChild(BuildContext ctx) {
+    return [
+      if (widget.useSkipButton)
+        _SkipBtn(
+          buttonStyles: widget.preBtnStyles,
+          height: widget.height ?? defaultHeight,
+          onTap: () {
+            pageController.previousPage(
+                duration: const Duration(milliseconds: 500), curve: Curves.fastLinearToSlowEaseIn);
+          },
+          isPre: true,
         ),
-      );
+      PageView.builder(
+          controller: pageController,
+          itemCount: groupedPages.where((element) => element.isNotEmpty).length,
+          itemBuilder: (_, index) {
+            return Row(
+              children: groupedPages[index].map((e) {
+                return _PageBtn(
+                    active: widget.currentPageIndex == e + 1,
+                    buttonStyles: widget.paginateButtonStyles,
+                    height: widget.height ?? defaultHeight,
+                    page: e + 1,
+                    color: e + 1 == widget.currentPageIndex ? Colors.blueGrey : Colors.blue,
+                    onTap: (number) {
+                      widget.onPageChange(number);
+                    }).expanded();
+              }).toList(),
+            );
+          }).expanded(),
+      if (widget.useSkipButton)
+        _SkipBtn(
+          buttonStyles: widget.preBtnStyles.symmetricL2R(),
+          height: widget.height ?? defaultHeight,
+          onTap: () {
+            pageController.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.fastLinearToSlowEaseIn);
+          },
+          isPre: false,
+        ),
+    ].row().sized(
+          width: widget.width ?? ctx.mediaQuery.size.width,
+          height: 60,
+        );
+  }
 }
 
 class _SkipBtn extends StatelessWidget {
@@ -147,31 +139,27 @@ class _SkipBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: height,
-      child: ClipRRect(
-        borderRadius: buttonStyles.borderRadius ?? BorderRadius.circular(0),
-        child: Material(
-          color: context.theme.backgroundColor,
-          child: InkWell(
-            onTap: onTap,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: isPre
-                  ? buttonStyles.icon ?? const Icon(Icons.chevron_left, color: Colors.white, size: 35)
-                  : buttonStyles.icon ?? const Icon(Icons.chevron_right, color: Colors.white, size: 35),
-            ),
+    return ClipRRect(
+      borderRadius: buttonStyles.borderRadius ?? BorderRadius.circular(0),
+      child: Material(
+        color: context.theme.backgroundColor,
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: isPre
+                ? buttonStyles.icon ?? const Icon(Icons.chevron_left, size: 35)
+                : buttonStyles.icon ?? const Icon(Icons.chevron_right, size: 35),
           ),
         ),
       ),
-    );
+    ).sized(height: height);
   }
 }
 
 class _PageBtn extends StatelessWidget {
   final bool active;
   final double height;
-  final double? width;
   final int page;
   final Color color;
   final Function(int number) onTap;
@@ -180,7 +168,6 @@ class _PageBtn extends StatelessWidget {
   const _PageBtn(
       {Key? key,
       required this.active,
-      this.width,
       required this.buttonStyles,
       required this.page,
       required this.height,
@@ -199,13 +186,12 @@ class _PageBtn extends StatelessWidget {
             onTap(page);
           },
           child: Text("$page",
-                  style: active ? buttonStyles.getActiveTextStyle : buttonStyles.getTextStyle,
-                  textAlign: TextAlign.center)
+                  style: active ? buttonStyles.activeTextStyle : buttonStyles.textStyle, textAlign: TextAlign.center)
               .center(),
         ),
       ).sized(
         height: height,
-        width: width ?? MediaQuery.of(context).size.width,
+        width: MediaQuery.of(context).size.width,
       ),
     );
   }
@@ -247,18 +233,6 @@ class PageBtnStyles {
 
   double get getFontSize {
     return fontSize ?? 14.0;
-  }
-
-  Color get getActiveBackgroundColor {
-    return activeBgColor ?? Colors.blueGrey;
-  }
-
-  TextStyle get getTextStyle {
-    return textStyle ?? const TextStyle(color: Colors.white, fontFamily: 'Roboto', fontSize: 14);
-  }
-
-  TextStyle get getActiveTextStyle {
-    return activeTextStyle ?? const TextStyle(color: Colors.white, fontFamily: 'Roboto', fontSize: 14);
   }
 }
 

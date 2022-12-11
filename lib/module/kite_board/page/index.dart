@@ -144,7 +144,7 @@ class _BoardPageState extends State<BoardPage> {
 
   void refresh() {
     loadInitialPicture();
-    _scrollController.animateTo(0, duration: const Duration(milliseconds: 500), curve: Curves.linear);
+    _scrollController.animateTo(0, duration: const Duration(milliseconds: 500), curve: Curves.fastLinearToSlowEaseIn);
   }
 
   void loadInitialPicture() async {
