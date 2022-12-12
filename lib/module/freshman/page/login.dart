@@ -36,10 +36,10 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
   FreshmanDao freshmanDao = FreshmanInit.freshmanDao;
 
   // Text field controllers.
-  final _accountController = TextEditingController();
-  final _secretController = TextEditingController();
+  final $account = TextEditingController();
+  final $password = TextEditingController();
 
-  final GlobalKey _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   final TapGestureRecognizer _recognizer = TapGestureRecognizer()..onTap = onOpenUserLicense;
 
@@ -54,8 +54,8 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
 
     final freshmanCredential = Auth.freshmanCredential;
     if (freshmanCredential != null) {
-      _accountController.text = freshmanCredential.account;
-      _secretController.text = freshmanCredential.password;
+      $account.text = freshmanCredential.account;
+      $password.text = freshmanCredential.password;
     }
   }
 
@@ -85,8 +85,8 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
     if (!mounted) return;
     setState(() => enableLoginButton = false);
 
-    final account = _accountController.text;
-    final secret = _secretController.text;
+    final account = $account.text;
+    final secret = $password.text;
     try {
       final credential = FreshmanCredential(account, secret);
       // 清空本地缓存
@@ -152,7 +152,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
       child: Column(
         children: [
           TextFormField(
-            controller: _accountController,
+            controller: $account,
             autofocus: true,
             autocorrect: false,
             enableSuggestions: false,
@@ -164,7 +164,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
             ),
           ),
           TextFormField(
-            controller: _secretController,
+            controller: $password,
             autofocus: true,
             textInputAction: TextInputAction.go,
             toolbarOptions: const ToolbarOptions(
@@ -305,7 +305,7 @@ class _FreshmanLoginPageState extends State<FreshmanLoginPage> {
   @override
   void dispose() {
     super.dispose();
-    _accountController.dispose();
-    _secretController.dispose();
+    $account.dispose();
+    $password.dispose();
   }
 }

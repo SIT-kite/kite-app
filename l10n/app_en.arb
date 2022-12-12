@@ -110,7 +110,7 @@
   "delete": "Delete",
   "devOptions": "Development Options",
   "done": "Done",
-  "dontShowThisAgainBtn": "Don't show this again",
+  "dontShowThisAgainBtn": "Don't show again",
   "dormitory": "Dormitory",
   "dormitoryDetailed_bbcr": "Room {room} Bed {bed} {building} {campus}",
   "@dormitoryDetailed_bbcr": {

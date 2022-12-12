@@ -64,7 +64,7 @@ class FreshmanSession {
     // 如果是GET请求，登录态直接注入到 queryParameters 中
     if (method == ReqMethod.get) {
       final myQuery = para ?? {};
-      myQuery['secret'] = credential.account;
+      myQuery['secret'] = credential.password;
       return await myRequest(data, myUrl, myQuery);
     }
 
