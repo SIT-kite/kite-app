@@ -196,7 +196,6 @@ class _MultiselectScopeState<T> extends State<MultiselectScope<T>> {
     super.dispose();
 
     _multiselectController.removeListener(_onSelectionChangedFunc);
-    _multiselectController.dispose();
   }
 
   @override

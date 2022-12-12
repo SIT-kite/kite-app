@@ -17,7 +17,6 @@
  */
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../entity/result.dart';
@@ -25,6 +24,7 @@ import '../init.dart';
 import '../using.dart';
 import '../util.dart';
 import 'item.dart';
+import '../events.dart';
 
 class ExamResultPage extends StatefulWidget {
   const ExamResultPage({super.key});
@@ -71,6 +71,7 @@ class _ExamResultPageState extends State<ExamResultPage> {
 
   @override
   Widget build(BuildContext context) {
+    // If the user has logged in, they can only check the cache.
     if (!Auth.hasLoggedIn) return UnauthorizedTipPage(title: i18n.ftype_examArr.text());
     final allResults = _allResults;
     final selectedExams = isSelecting ? multiselect.getSelectedItems().cast<ExamResult>() : allResults;
@@ -94,7 +95,7 @@ class _ExamResultPageState extends State<ExamResultPage> {
               onPressed: () {
                 setState(() {
                   isSelecting = !isSelecting;
-                  if(isSelecting == false){
+                  if (isSelecting == false) {
                     multiselect.clearSelection();
                   }
                 });
@@ -102,39 +103,42 @@ class _ExamResultPageState extends State<ExamResultPage> {
               icon: Icon(isSelecting ? Icons.check_box_outlined : Icons.check_box_outline_blank)),
         ],
       ),
-      body: allResults == null
-          ? Placeholders.loading()
-          : NotificationListener<UserScrollNotification>(
-              // TODO: How can I extract this to a more general component?
-              onNotification: (notification) {
-                final ScrollDirection direction = notification.direction;
-                setState(() {
-                  if (direction == ScrollDirection.reverse) {
-                    _showEvaluationBtn = false;
-                  } else if (direction == ScrollDirection.forward) {
-                    _showEvaluationBtn = true;
-                  }
-                });
-                return true;
-              },
-              child: Column(
-                children: [
-                  _buildHeader(),
-                  Expanded(child: allResults.isNotEmpty ? _buildExamResultList(allResults) : _buildNoResult()),
-                ],
-              ),
-            ),
+      body: [
+        _buildHeader(),
+        allResults == null
+            ? Placeholders.loading()
+            : NotificationListener<UserScrollNotification>(
+                // TODO: How can I extract this to a more general component?
+                onNotification: (notification) {
+                  final ScrollDirection direction = notification.direction;
+                  setState(() {
+                    if (direction == ScrollDirection.reverse) {
+                      _showEvaluationBtn = false;
+                    } else if (direction == ScrollDirection.forward) {
+                      _showEvaluationBtn = true;
+                    }
+                  });
+                  return true;
+                },
+                child: Expanded(child: allResults.isNotEmpty ? _buildExamResultList(allResults) : _buildNoResult())),
+      ].column(),
       floatingActionButton: buildEvaluationBtn(context),
     );
   }
 
-  Widget buildEvaluationBtn(BuildContext ctx) {
+  Widget? buildEvaluationBtn(BuildContext ctx) {
+    // If the user is currently offline, don't let them see the evaluation button.
+    if (Auth.oaCredential == null) return null;
     return AnimatedSlideDown(
         upWhen: _showEvaluationBtn,
         child: FloatingActionButton.extended(
           icon: const Icon(Icons.assessment_outlined),
-          onPressed: () {
-            Navigator.of(context).pushNamed(RouteTable.examResultEvaluation);
+          onPressed: () async {
+            await Navigator.of(context).pushNamed(RouteTable.examResultEvaluation);
+            if (!mounted) return;
+            eventBus.fire(LessonEvaluatedEvent());
+            await Future.delayed(const Duration(milliseconds: 1000));
+            onRefresh();
           },
           label: i18n.lessonEvaluationBtn.text(),
         ));
@@ -184,29 +188,17 @@ class _ExamResultPageState extends State<ExamResultPage> {
   }
 
   Widget _buildNoResult() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SvgPicture.asset(
-          'assets/common/not-found.svg',
-          width: 260,
-          height: 260,
-        ),
-        Text(i18n.examResultNoResult, style: const TextStyle(color: Colors.grey)),
-        Container(
-          margin: const EdgeInsets.only(left: 40, right: 40),
-          child: Text(
-            i18n.examResultBePatientLabel,
-            textAlign: TextAlign.center,
-            style: const TextStyle(color: Colors.grey),
-          ),
-        ),
-      ],
+    return LeavingBlank.svgAssets(
+      assetName: "assets/common/not-found.svg",
+      desc: i18n.examResultNoResult,
+      width: 240,
+      height: 240,
     );
   }
 
   @override
   void dispose() {
     super.dispose();
+    multiselect.dispose();
   }
 }

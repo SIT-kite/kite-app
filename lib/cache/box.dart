@@ -101,6 +101,10 @@ abstract class CacheKey<T> {
   set lastUpdate(DateTime? newValue);
 
   bool needRefresh({required Duration after});
+
+  void clear() {
+    lastUpdate = null;
+  }
 }
 
 extension CacheKeyEx<T> on CacheKey<T> {

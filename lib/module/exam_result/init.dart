@@ -18,6 +18,7 @@
 
 import 'package:cookie_jar/cookie_jar.dart';
 import 'cache/result.dart';
+import 'events.dart';
 import 'storage/result.dart';
 import 'using.dart';
 import 'dao/evaluation.dart';
@@ -36,12 +37,17 @@ class ExamResultInit {
     required Box<dynamic> box,
   }) async {
     ExamResultInit.cookieJar = cookieJar;
-    resultService = ExamResultCache(
+    final examResultCache = ExamResultCache(
       from: ScoreService(eduSession),
       to: ExamResultStorage(box),
       detailExpire: const Duration(days: 180),
-      listExpire: const Duration(hours: 1),
+      listExpire: const Duration(seconds: 1),
     );
+    resultService = examResultCache;
     courseEvaluationService = CourseEvaluationService(eduSession);
+    eventBus.on<LessonEvaluatedEvent>().listen((event) {
+      examResultCache.clearResultListCache();
+    });
   }
 }
+

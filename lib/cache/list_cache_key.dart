@@ -64,6 +64,14 @@ class NamedListCacheKey<T> extends CacheKey<List<T>> {
   }
 }
 
+void _clearNamespace(Box<dynamic> box, String namespace) {
+  for (final key in box.keys) {
+    if (key is String && key.startsWith(namespace)) {
+      box.delete(key);
+    }
+  }
+}
+
 class ListCacheNamespace<T> {
   final Box<dynamic> box;
   final String namespace;
@@ -73,6 +81,8 @@ class ListCacheNamespace<T> {
   CacheKey<List<T>> make(String name) {
     return _NamespaceListCacheKey(box, namespace, name);
   }
+
+  void clear() => _clearNamespace(box, namespace);
 }
 
 class ListCacheNamespace1<T, Arg1> {
@@ -85,6 +95,8 @@ class ListCacheNamespace1<T, Arg1> {
   CacheKey<List<T>> make(Arg1 arg1) {
     return _NamespaceListCacheKey(box, namespace, maker(arg1));
   }
+
+  void clear() => _clearNamespace(box, namespace);
 }
 
 class ListCacheNamespace2<T, Arg1, Arg2> {
@@ -97,6 +109,8 @@ class ListCacheNamespace2<T, Arg1, Arg2> {
   CacheKey<List<T>> make(Arg1 arg1, Arg2 arg2) {
     return _NamespaceListCacheKey(box, namespace, maker(arg1, arg2));
   }
+
+  void clear() => _clearNamespace(box, namespace);
 }
 
 class ListCacheNamespace3<T, Arg1, Arg2, Arg3> {
@@ -109,6 +123,8 @@ class ListCacheNamespace3<T, Arg1, Arg2, Arg3> {
   CacheKey<List<T>> make(Arg1 arg1, Arg2 arg2, Arg3 arg3) {
     return _NamespaceListCacheKey(box, namespace, maker(arg1, arg2, arg3));
   }
+
+  void clear() => _clearNamespace(box, namespace);
 }
 
 class _NamespaceListCacheKey<T> extends CacheKey<List<T>> {

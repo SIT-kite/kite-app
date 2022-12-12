@@ -95,7 +95,11 @@ class _ExamArrangementPageState extends State<ExamArrangementPage> {
     }
     if (exams.isEmpty) {
       return LeavingBlank.svgAssets(
-          assetName: "assets/common/not-found.svg", desc: i18n.examNoExamThisSemester, width: 240, height: 240);
+        assetName: "assets/common/not-found.svg",
+        desc: i18n.examNoExamThisSemester,
+        width: 240,
+        height: 240,
+      );
     } else {
       return LayoutBuilder(builder: (ctx, constraints) {
         final count = constraints.maxWidth ~/ 300;

@@ -49,6 +49,10 @@ class ExamResultCache implements ExamResultDao {
     }
   }
 
+  clearResultListCache() {
+    to.box.results.clear();
+  }
+
   @override
   Future<List<ExamResultDetail>?> getResultDetail(String classId, SchoolYear schoolYear, Semester semester) async {
     final cacheKey = to.box.resultDetails.make(classId, schoolYear, semester);

@@ -76,15 +76,7 @@ class _ScoreItemState extends State<ScoreItem> {
       if (!_score.value.isNaN) {
         return Text(_score.value.toString(), style: scoreStyle);
       }
-      return InkWell(
-        onTap: () async {
-          await Navigator.of(context).pushNamed(RouteTable.examResultEvaluation);
-          if (!mounted) return;
-          Navigator.of(context).pop();
-          await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ExamResultPage()));
-        },
-        child: Text('待评教', style: scoreStyle),
-      );
+      return Text('待评教', style: scoreStyle);
     }
 
     return ListTile(
@@ -127,4 +119,3 @@ class _ScoreItemState extends State<ScoreItem> {
     );
   }
 }
-
