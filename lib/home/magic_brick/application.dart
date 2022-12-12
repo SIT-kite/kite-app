@@ -64,6 +64,7 @@ class _ApplicationItemState extends State<ApplicationItem> {
     final result = await buildContent(oaCredential);
     if (result != null) {
       Kv.home.lastOfficeStatus = result;
+      if(!mounted) return;
       setState(() => _tryUpdateContent(result));
     }
   }

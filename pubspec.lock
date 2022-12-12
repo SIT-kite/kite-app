@@ -36,6 +36,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.0"
+  animated_toggle_switch:
+    dependency: "direct main"
+    description:
+      name: animated_toggle_switch
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.2"
   animations:
     dependency: "direct main"
     description:
@@ -1052,6 +1059,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.2"
+  msh_checkbox:
+    dependency: "direct main"
+    description:
+      name: msh_checkbox
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.1"
   nanoid:
     dependency: transitive
     description:

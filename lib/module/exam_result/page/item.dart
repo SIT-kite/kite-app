@@ -17,6 +17,8 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/route.dart';
+import 'package:msh_checkbox/msh_checkbox.dart';
+import 'package:rettulf/rettulf.dart';
 
 import '../entity/result.dart';
 import '../init.dart';
@@ -24,9 +26,11 @@ import '../using.dart';
 import 'index.dart';
 
 class ScoreItem extends StatefulWidget {
-  final ExamResult _score;
+  final ExamResult result;
+  final int index;
+  final bool isSelectingMode;
 
-  const ScoreItem(this._score, {Key? key}) : super(key: key);
+  const ScoreItem(this.result, {super.key, required this.index, required this.isSelectingMode});
 
   @override
   State<ScoreItem> createState() => _ScoreItemState();
@@ -34,8 +38,63 @@ class ScoreItem extends StatefulWidget {
 
 class _ScoreItemState extends State<ScoreItem> {
   late ExamResult _score;
-  bool _isExpanded = false;
-  bool _isSelected = false;
+  final size = 45.0;
+
+  @override
+  Widget build(BuildContext context) {
+    _score = widget.result;
+    final titleStyle = Theme.of(context).textTheme.titleMedium;
+    final subtitleStyle = Theme.of(context).textTheme.bodyMedium;
+    final scoreStyle = titleStyle?.copyWith(color: context.darkSafeThemeColor);
+    final controller = MultiselectScope.controllerOf(context);
+    final itemIsSelected = controller.isSelected(widget.index);
+    final selecting = widget.isSelectingMode;
+    Widget buildLeading() {
+      if (selecting) {
+        return MSHCheckbox(
+          size: 30,
+          duration: const Duration(milliseconds: 300),
+          value: itemIsSelected,
+          colorConfig: MSHColorConfig.fromCheckedUncheckedDisabled(
+            checkedColor: Colors.blue,
+          ),
+          style: MSHCheckboxStyle.stroke,
+          onChanged: (selected) {
+            setState(() {
+              controller.select(widget.index);
+            });
+          },
+        ).sized(key: const ValueKey("Checkbox"), width: size, height: size);
+      } else {
+        return Image.asset(
+          'assets/course/${CourseCategory.query(_score.course)}.png',
+        ).sized(key: const ValueKey("Icon"), width: size, height: size);
+      }
+    }
+
+    Widget buildTrailing() {
+      if (!_score.value.isNaN) {
+        return Text(_score.value.toString(), style: scoreStyle);
+      }
+      return InkWell(
+        onTap: () async {
+          await Navigator.of(context).pushNamed(RouteTable.examResultEvaluation);
+          if (!mounted) return;
+          Navigator.of(context).pop();
+          await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ExamResultPage()));
+        },
+        child: Text('待评教', style: scoreStyle),
+      );
+    }
+
+    return ListTile(
+        leading: buildLeading().animatedSwitched(
+          d: const Duration(milliseconds: 300),
+        ),
+        title: Text(_score.course, style: titleStyle),
+        subtitle: Text('${_score.courseId[0] != 'G' ? '必修' : '选修'} | 学分: ${_score.credit}', style: subtitleStyle),
+        trailing: buildTrailing());
+  }
 
   Widget _buildScoreDetailView(List<ExamResultDetail> scoreDetails) {
     return Container(
@@ -52,7 +111,8 @@ class _ScoreItemState extends State<ScoreItem> {
   }
 
   Widget _buildScoreDetail() {
-    final future = ExamResultInit.resultService.getResultDetail(_score.innerClassId, _score.schoolYear, _score.semester);
+    final future =
+        ExamResultInit.resultService.getResultDetail(_score.innerClassId, _score.schoolYear, _score.semester);
 
     return FutureBuilder(
       future: future,
@@ -66,70 +126,5 @@ class _ScoreItemState extends State<ScoreItem> {
       },
     );
   }
-
-  Widget _buildLeading() {
-    if (_isSelected) {
-      return SizedBox(
-        width: 30,
-        height: 30,
-        child: Center(
-          child: IconButton(
-            icon: const Icon(Icons.check),
-            onPressed: () {
-              Global.eventBus.emit(EventNameConstants.onRemoveCourse, _score);
-              setState(() => _isSelected = false);
-            },
-          ),
-        ),
-      );
-    } else {
-      return Image.asset('assets/course/${CourseCategory.query(_score.course)}.png');
-    }
-  }
-
-  // TODO: I18n
-  Widget _buildTrailing() {
-    final style = Theme.of(context).textTheme.headline4?.copyWith(color: Colors.blue);
-
-    if (!_score.value.isNaN) return Text(_score.value.toString(), style: style);
-
-    return InkWell(
-      onTap: () async {
-        await Navigator.of(context).pushNamed(RouteTable.examResultEvaluation);
-        if (!mounted) return;
-        Navigator.of(context).pop();
-        await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ExamResultPage()));
-      },
-      child: Text('待评教', style: style),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    _score = widget._score;
-    final titleStyle = Theme.of(context).textTheme.headline4;
-    final subtitleStyle = Theme.of(context).textTheme.bodyText1;
-
-    return Column(children: [
-      ListTile(
-        minLeadingWidth: 60,
-        leading: _buildLeading(),
-        title: Text(_score.course, style: titleStyle),
-        subtitle: Text('${_score.courseId[0] != 'G' ? '必修' : '选修'} | 学分: ${_score.credit}', style: subtitleStyle),
-        trailing: _buildTrailing(),
-        onTap: () => setState(() {
-          _isExpanded = !_isExpanded;
-        }),
-        onLongPress: () {
-          if (_isSelected) {
-            Global.eventBus.emit(EventNameConstants.onRemoveCourse, _score);
-          } else {
-            Global.eventBus.emit(EventNameConstants.onSelectCourse, _score);
-          }
-          setState(() => _isSelected = !_isSelected);
-        },
-      ),
-      _isExpanded ? _buildScoreDetail() : Container()
-    ]);
-  }
 }
+

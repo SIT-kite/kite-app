@@ -105,8 +105,8 @@ class _SettingsPageState extends State<SettingsPage> {
     );
     if (confirm == true) {
       await HiveBoxInit.clear(); // 清除存储
-      FireOn.global(CredentialChangeEvent());
       await Initializer.init();
+      FireOn.global(CredentialChangeEvent());
       if (!mounted) return;
       _gotoWelcome(context);
     }

@@ -29,4 +29,16 @@ extension AnimatedEx on Widget {
         duration: d,
         child: this,
       );
+
+  Widget animatedSized({
+    Duration d = const Duration(milliseconds: 500),
+    Alignment align = Alignment.center,
+    Curve? curve,
+  }) =>
+      AnimatedSize(
+        curve: curve ?? Curves.linear,
+        duration: d,
+        alignment: align,
+        child: this,
+      );
 }

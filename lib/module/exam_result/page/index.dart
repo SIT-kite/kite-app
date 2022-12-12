@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:kite/module/library/using.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../entity/result.dart';
@@ -42,7 +42,10 @@ class _ExamResultPageState extends State<ExamResultPage> {
 
   /// 成绩列表
   List<ExamResult>? _allResults;
-  List<ExamResult>? _selectedExams;
+  bool _showEvaluationBtn = true;
+  bool isSelecting = false;
+  var multiselect = MultiselectController();
+  final _multiselectKey = GlobalKey(debugLabel: "Multiselect");
 
   @override
   void initState() {
@@ -62,7 +65,6 @@ class _ExamResultPageState extends State<ExamResultPage> {
       if (!mounted) return;
       setState(() {
         _allResults = value;
-        _selectedExams = value;
       });
     });
   }
@@ -70,7 +72,8 @@ class _ExamResultPageState extends State<ExamResultPage> {
   @override
   Widget build(BuildContext context) {
     if (!Auth.hasLoggedIn) return UnauthorizedTipPage(title: i18n.ftype_examArr.text());
-    final selectedExams = _selectedExams;
+    final allResults = _allResults;
+    final selectedExams = isSelecting ? multiselect.getSelectedItems().cast<ExamResult>() : allResults;
     final String title;
     if (selectedExams != null) {
       var gpa = calcGPA(selectedExams);
@@ -86,21 +89,55 @@ class _ExamResultPageState extends State<ExamResultPage> {
       appBar: AppBar(
         title: title.text(),
         centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  isSelecting = !isSelecting;
+                  if(isSelecting == false){
+                    multiselect.clearSelection();
+                  }
+                });
+              },
+              icon: Icon(isSelecting ? Icons.check_box_outlined : Icons.check_box_outline_blank)),
+        ],
       ),
-      body: _allResults == null
+      body: allResults == null
           ? Placeholders.loading()
-          : Column(
-              children: [
-                _buildHeader(),
-                Expanded(child: _allResults!.isNotEmpty ? _buildListView() : _buildNoResult()),
-              ],
+          : NotificationListener<UserScrollNotification>(
+              // TODO: How can I extract this to a more general component?
+              onNotification: (notification) {
+                final ScrollDirection direction = notification.direction;
+                setState(() {
+                  if (direction == ScrollDirection.reverse) {
+                    _showEvaluationBtn = false;
+                  } else if (direction == ScrollDirection.forward) {
+                    _showEvaluationBtn = true;
+                  }
+                });
+                return true;
+              },
+              child: Column(
+                children: [
+                  _buildHeader(),
+                  Expanded(child: allResults.isNotEmpty ? _buildExamResultList(allResults) : _buildNoResult()),
+                ],
+              ),
             ),
-      floatingActionButton: FloatingActionButton.extended(
-        icon: const Icon(Icons.assessment_outlined),
-        onPressed: () => Navigator.of(context).pushNamed(RouteTable.examResultEvaluation),
-        label: const Text('评教'),
-      ),
+      floatingActionButton: buildEvaluationBtn(context),
     );
+  }
+
+  Widget buildEvaluationBtn(BuildContext ctx) {
+    return AnimatedSlideDown(
+        upWhen: _showEvaluationBtn,
+        child: FloatingActionButton.extended(
+          icon: const Icon(Icons.assessment_outlined),
+          onPressed: () {
+            Navigator.of(context).pushNamed(RouteTable.examResultEvaluation);
+          },
+          label: i18n.lessonEvaluationBtn.text(),
+        ));
   }
 
   Widget _buildHeader() {
@@ -123,21 +160,26 @@ class _ExamResultPageState extends State<ExamResultPage> {
     ].column();
   }
 
-  Widget _buildListView() {
-    return ListView(
-      children: _allResults!
-          .map(
-            (e) => Column(
-              children: [
-                ScoreItem(e),
-                Divider(
-                  height: 2.0,
-                  color: Theme.of(context).primaryColor.withOpacity(0.4),
-                ),
-              ],
-            ),
-          )
-          .toList(),
+  Widget _buildExamResultList(List<ExamResult> all) {
+    return MultiselectScope<ExamResult>(
+      key: _multiselectKey,
+      controller: multiselect,
+      dataSource: all,
+      // Set this to true if you want automatically
+      // clear selection when user tap back button
+      clearSelectionOnPop: true,
+      // When you update [dataSource] then selected indexes will update
+      // so that the same elements in new [dataSource] are selected
+      keepSelectedItemsBetweenUpdates: true,
+      initialSelectedIndexes: null,
+      // Callback that call on selection changing
+      onSelectionChanged: (indexes, items) {
+        setState(() {});
+      },
+      child: ListView.builder(
+        itemCount: all.length,
+        itemBuilder: (ctx, index) => ScoreItem(all[index], index: index, isSelectingMode: isSelecting),
+      ),
     );
   }
 
@@ -161,5 +203,10 @@ class _ExamResultPageState extends State<ExamResultPage> {
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

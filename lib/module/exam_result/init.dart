@@ -40,7 +40,7 @@ class ExamResultInit {
       from: ScoreService(eduSession),
       to: ExamResultStorage(box),
       detailExpire: const Duration(days: 180),
-      listExpire: const Duration(days: 1),
+      listExpire: const Duration(hours: 1),
     );
     courseEvaluationService = CourseEvaluationService(eduSession);
   }
