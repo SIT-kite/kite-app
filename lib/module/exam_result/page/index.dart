@@ -23,7 +23,7 @@ import '../entity/result.dart';
 import '../init.dart';
 import '../using.dart';
 import '../util.dart';
-import 'item.dart';
+import '../user_widget/item.dart';
 import '../events.dart';
 
 class ExamResultPage extends StatefulWidget {
@@ -42,7 +42,9 @@ class _ExamResultPageState extends State<ExamResultPage> {
 
   /// 成绩列表
   List<ExamResult>? _allResults;
-  bool _showEvaluationBtn = true;
+
+  // ValueNotifier is used to limit rebuilding when `Lesson Eval` is going up or going down.
+  final $showEvaluationBtn = ValueNotifier(true);
   bool isSelecting = false;
   var multiselect = MultiselectController();
   final _multiselectKey = GlobalKey(debugLabel: "Multiselect");
@@ -111,13 +113,11 @@ class _ExamResultPageState extends State<ExamResultPage> {
                 // TODO: How can I extract this to a more general component?
                 onNotification: (notification) {
                   final ScrollDirection direction = notification.direction;
-                  setState(() {
-                    if (direction == ScrollDirection.reverse) {
-                      _showEvaluationBtn = false;
-                    } else if (direction == ScrollDirection.forward) {
-                      _showEvaluationBtn = true;
-                    }
-                  });
+                  if (direction == ScrollDirection.reverse) {
+                    $showEvaluationBtn.value = false;
+                  } else if (direction == ScrollDirection.forward) {
+                    $showEvaluationBtn.value = true;
+                  }
                   return true;
                 },
                 child: Expanded(child: allResults.isNotEmpty ? _buildExamResultList(allResults) : _buildNoResult())),
@@ -129,19 +129,22 @@ class _ExamResultPageState extends State<ExamResultPage> {
   Widget? buildEvaluationBtn(BuildContext ctx) {
     // If the user is currently offline, don't let them see the evaluation button.
     if (Auth.oaCredential == null) return null;
-    return AnimatedSlideDown(
-        upWhen: _showEvaluationBtn,
-        child: FloatingActionButton.extended(
-          icon: const Icon(Icons.assessment_outlined),
-          onPressed: () async {
-            await Navigator.of(context).pushNamed(RouteTable.examResultEvaluation);
-            if (!mounted) return;
-            eventBus.fire(LessonEvaluatedEvent());
-            await Future.delayed(const Duration(milliseconds: 1000));
-            onRefresh();
-          },
-          label: i18n.lessonEvaluationBtn.text(),
-        ));
+    return $showEvaluationBtn <<
+        (ctx, showBtn, _) {
+          return AnimatedSlideDown(
+              upWhen: showBtn,
+              child: FloatingActionButton.extended(
+                icon: const Icon(Icons.assessment_outlined),
+                onPressed: () async {
+                  await Navigator.of(context).pushNamed(RouteTable.examResultEvaluation);
+                  if (!mounted) return;
+                  eventBus.fire(LessonEvaluatedEvent());
+                  await Future.delayed(const Duration(milliseconds: 1000));
+                  onRefresh();
+                },
+                label: i18n.lessonEvaluationBtn.text(),
+              ));
+        };
   }
 
   Widget _buildHeader() {
@@ -180,8 +183,12 @@ class _ExamResultPageState extends State<ExamResultPage> {
       onSelectionChanged: (indexes, items) {
         setState(() {});
       },
-      child: ListView.builder(
+      child: GridView.builder(
         itemCount: all.length,
+        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 750,
+          mainAxisExtent: 60,
+        ),
         itemBuilder: (ctx, index) => ScoreItem(all[index], index: index, isSelectingMode: isSelecting),
       ),
     );

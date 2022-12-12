@@ -465,5 +465,9 @@
   "xuhui": "徐匯",
   "xuhuiDistrict": "徐匯區",
   "yes": "好",
-  "lessonEvaluationBtn": "評教"
+  "lessonEvaluationBtn": "評教",
+  "courseCompulsory": "必修",
+  "courseElective": "選修",
+  "courseCredit": "學分",
+  "lessonNotEvaluated": "需評教"
 }

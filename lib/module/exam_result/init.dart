@@ -41,7 +41,7 @@ class ExamResultInit {
       from: ScoreService(eduSession),
       to: ExamResultStorage(box),
       detailExpire: const Duration(days: 180),
-      listExpire: const Duration(seconds: 1),
+      listExpire: const Duration(hours: 6),
     );
     resultService = examResultCache;
     courseEvaluationService = CourseEvaluationService(eduSession);
@@ -50,4 +50,3 @@ class ExamResultInit {
     });
   }
 }
-

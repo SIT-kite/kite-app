@@ -565,8 +565,8 @@
   "scannerBarcodeNotRecognized": "No Barcode",
   "scannerBarcodeRecognized": "Barcode Recognized",
   "semester": "Semester",
-  "semester1st": "Fall Semester",
-  "semester2rd": "Spring Semester",
+  "semester1st": "Fall",
+  "semester2rd": "Spring",
   "serviceStatus": "Service Status",
   "settings": "Settings",
   "settingsCampus": "Your Campus",
@@ -742,5 +742,9 @@
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
   "yes": "Yes",
-  "lessonEvaluationBtn": "Lesson Eval"
+  "lessonEvaluationBtn": "Lesson Eval",
+  "courseCompulsory": "Compulsory",
+  "courseElective": "Elective",
+  "courseCredit": "Credit",
+  "lessonNotEvaluated": "Not Eval"
 }
