@@ -66,7 +66,7 @@ class _CredentialEditorState extends State<CredentialEditor> {
       make: (ctx) => [
         buildField("account", $account),
         buildField("password", $password),
-      ].column(),
+      ].column(mas: MainAxisSize.min),
       primary: $Action$(
           text: i18n.submit,
           onPressed: () {

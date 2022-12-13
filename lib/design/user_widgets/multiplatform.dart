@@ -68,18 +68,21 @@ class $Button$ extends StatelessWidget {
 class $Action$ {
   final String text;
   final bool isDefault;
+  final bool warning;
   final VoidCallback? onPressed;
 
-  const $Action$({required this.text, this.onPressed, this.isDefault = false});
+  const $Action$({
+    required this.text,
+    this.onPressed,
+    this.isDefault = false,
+    this.warning = false,
+  });
 }
 
 class $Dialog$ extends StatelessWidget {
   final String? title;
   final $Action$ primary;
   final $Action$? secondary;
-
-  /// Highlight the primary button
-  final bool highlight;
 
   /// Highlight the title
   final bool serious;
@@ -91,7 +94,6 @@ class $Dialog$ extends StatelessWidget {
     required this.primary,
     required this.make,
     this.secondary,
-    this.highlight = false,
     this.serious = false,
   });
 
@@ -106,6 +108,7 @@ class $Dialog$ extends StatelessWidget {
         actions: [
           if (second != null)
             CupertinoDialogAction(
+              isDestructiveAction: second.warning,
               isDefaultAction: second.isDefault,
               onPressed: () {
                 second.onPressed?.call();
@@ -113,7 +116,7 @@ class $Dialog$ extends StatelessWidget {
               child: second.text.text(),
             ),
           CupertinoDialogAction(
-            isDestructiveAction: highlight,
+            isDestructiveAction: primary.warning,
             isDefaultAction: primary.isDefault,
             onPressed: () {
               primary.onPressed?.call();
@@ -135,7 +138,7 @@ class $Dialog$ extends StatelessWidget {
               },
               child: primary.text.text(
                 style: TextStyle(
-                  color: highlight ? Colors.redAccent : null,
+                  color: primary.warning ? Colors.redAccent : null,
                   fontWeight: primary.isDefault ? FontWeight.bold : null,
                 ),
               )),
@@ -146,7 +149,8 @@ class $Dialog$ extends StatelessWidget {
               },
               child: second.text.text(
                 style: TextStyle(
-                  fontWeight: primary.isDefault ? FontWeight.bold : null,
+                  color: second.warning ? Colors.redAccent : null,
+                  fontWeight: second.isDefault ? FontWeight.bold : null,
                 ),
               ),
             )

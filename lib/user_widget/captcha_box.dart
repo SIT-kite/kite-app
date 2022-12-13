@@ -41,9 +41,10 @@ class _CaptchaBoxState extends State<CaptchaBox> {
   Widget build(BuildContext context) {
     return $Dialog$(
       title: i18n.captcha,
-      highlight: true,
       primary: $Action$(
         text: i18n.submit,
+        warning: true,
+        isDefault: true,
         onPressed: () {
           context.navigator.pop($captcha.text);
         },

@@ -19,6 +19,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dynamic_color_theme/dynamic_color_theme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -342,8 +343,18 @@ class _SettingsPageState extends State<SettingsPage> {
             title: i18n.settingsLocalStorage,
             subtitle: i18n.settingsLocalStorageSub,
             leading: const Icon(Icons.storage),
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LocalStoragePage())),
-          )
+            onTap: () => context.navigator.push(MaterialPageRoute(builder: (context) => const LocalStoragePage())),
+          ),
+          if (kDebugMode)
+            SimpleSettingsTile(
+              title: "Reload",
+              subtitle: "Re-initialize all modules",
+              leading: const Icon(Icons.refresh_rounded),
+              onTap: () async {
+                await Initializer.init();
+                context.navigator.pop();
+              },
+            )
         ],
       ),
       SettingsGroup(title: i18n.status, children: <Widget>[

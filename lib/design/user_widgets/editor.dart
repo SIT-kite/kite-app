@@ -15,10 +15,12 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kite/design/user_widgets/multiplatform.dart';
+import 'package:kite/credential/using.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:rettulf/buildcontext/show.dart';
 import 'package:rettulf/rettulf.dart';
@@ -28,7 +30,7 @@ typedef EditorBuilder<T> = Widget Function(BuildContext ctx, String? desc, T ini
 class Editor {
   static final Map<Type, EditorBuilder> _customEditor = {};
 
-  static registerEditor<T>(EditorBuilder<T> builder) {
+  static void registerEditor<T>(EditorBuilder<T> builder) {
     _customEditor[T] = (ctx, desc, initial) => builder(ctx, desc, initial);
   }
 
@@ -108,6 +110,16 @@ class Editor {
   }
 }
 
+extension EditorEx on Editor {
+  static void registerEnumEditor<T>(List<T> values) {
+    Editor.registerEditor<T>((ctx, desc, initial) => EnumEditor<T>(
+          initial: initial,
+          title: desc,
+          values: values,
+        ));
+  }
+}
+
 Widget _readonlyEditor(BuildContext ctx, WidgetBuilder make, {String? title}) {
   return $Dialog$(
       title: title,
@@ -117,6 +129,62 @@ Widget _readonlyEditor(BuildContext ctx, WidgetBuilder make, {String? title}) {
             ctx.navigator.pop(false);
           }),
       make: (ctx) => make(ctx));
+}
+
+class EnumEditor<T> extends StatefulWidget {
+  final dynamic initial;
+  final List<T> values;
+  final String? title;
+
+  const EnumEditor({super.key, required this.initial, this.title, required this.values});
+
+  @override
+  State<EnumEditor> createState() => _EnumEditorState();
+}
+
+class _EnumEditorState extends State<EnumEditor> {
+  late dynamic current = widget.initial;
+  late final int initialIndex = max(widget.values.indexOf(widget.initial), 0);
+
+  @override
+  Widget build(BuildContext context) {
+    return $Dialog$(
+        title: widget.title,
+        primary: $Action$(
+            text: i18n.submit,
+            isDefault: true,
+            onPressed: () {
+              context.navigator.pop(current);
+            }),
+        secondary: $Action$(
+            text: i18n.cancel,
+            onPressed: () {
+              context.navigator.pop(widget.initial);
+            }),
+        make: (ctx) => buildBody(ctx));
+  }
+
+  Widget buildBody(BuildContext ctx) {
+    return ListTile(
+      title: current.toString().text(style: const TextStyle(fontSize: 15)),
+      trailing: const Icon(Icons.edit).onTap(() async {
+        FixedExtentScrollController controller = FixedExtentScrollController(initialItem: initialIndex);
+        controller.addListener(() {
+          final selected = widget.values[controller.selectedItem];
+          if (selected != current) {
+            setState(() {
+              current = selected;
+            });
+          }
+        });
+        await ctx.showPicker(
+            count: widget.values.length,
+            controller: controller,
+            make: (ctx, index) => widget.values[index].toString().text());
+        controller.dispose();
+      }),
+    );
+  }
 }
 
 class _IntEditor extends StatefulWidget {
@@ -151,6 +219,7 @@ class _IntEditorState extends State<_IntEditor> {
         title: widget.title,
         primary: $Action$(
             text: i18n.submit,
+            isDefault: true,
             onPressed: () {
               context.navigator.pop(value);
             }),
@@ -222,6 +291,7 @@ class _BoolEditorState extends State<_BoolEditor> {
     return $Dialog$(
         primary: $Action$(
             text: i18n.submit,
+            isDefault: true,
             onPressed: () {
               context.navigator.pop(value);
             }),
@@ -275,6 +345,7 @@ class _StringEditorState extends State<_StringEditor> {
         title: widget.title,
         primary: $Action$(
             text: i18n.submit,
+            isDefault: true,
             onPressed: () {
               context.navigator.pop(controller.text);
             }),

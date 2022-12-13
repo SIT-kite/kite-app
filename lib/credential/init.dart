@@ -18,6 +18,7 @@
 import 'package:kite/credential/entity/credential.dart';
 import 'package:kite/design/user_widgets/editor.dart';
 
+import 'entity/user_type.dart';
 import 'storage/credential.dart';
 import 'user_widget/editor.dart';
 import 'using.dart';
@@ -41,5 +42,6 @@ class CredentialInit {
           title: desc,
           ctor: (account, password) => FreshmanCredential(account, password),
         ));
+    EditorEx.registerEnumEditor(UserType.values);
   }
 }

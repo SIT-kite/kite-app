@@ -83,7 +83,7 @@ class _TimetablePageState extends State<TimetablePage> {
   Future<void> selectTimetablePageToJump(BuildContext ctx) async {
     final currentWeek = $currentPos.value.week;
     final initialIndex = currentWeek - 1;
-    final controller = FixedExtentScrollController(initialItem: initialIndex); // TODO: Memory leaking?
+    final controller = FixedExtentScrollController(initialItem: initialIndex);
     final startDate = meta.startDate;
     final todayIndex = TimetablePosition.locate(startDate, DateTime.now()).week - 1;
     final goto = await ctx.showPicker(
@@ -103,6 +103,7 @@ class _TimetablePageState extends State<TimetablePage> {
         make: (ctx, i) {
           return Text(i18n.timetableWeekOrderedName(i + 1));
         });
+    controller.dispose();
     if (goto != null && goto != (initialIndex)) {
       tableViewerController.jumpToWeek(goto + 1);
     }

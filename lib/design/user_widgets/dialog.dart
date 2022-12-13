@@ -36,10 +36,10 @@ extension DialogEx on BuildContext {
       this,
       make: (ctx) => $Dialog$(
           title: title,
-          highlight: highlight,
           serious: serious,
           make: make,
           primary: $Action$(
+            warning:highlight ,
             text: ok,
             onPressed: () {
               ctx.navigator.pop(true);
@@ -79,10 +79,10 @@ extension DialogEx on BuildContext {
       this,
       make: (ctx) => $Dialog$(
         title: title,
-        highlight: highlight,
         serious: serious,
         make: make,
         primary: $Action$(
+          warning:highlight ,
           text: yes,
           onPressed: () {
             ctx.navigator.pop(true);
@@ -112,7 +112,7 @@ extension DialogEx on BuildContext {
 
   Future<int?> showPicker(
       {required int count,
-      required String ok,
+      String? ok,
       bool Function(int? selected)? okEnabled,
       double targetHeight = 240,
       bool highlight = false,
@@ -143,15 +143,17 @@ extension DialogEx on BuildContext {
                 ?.map((e) =>
                     ValueListenableBuilder(valueListenable: $selected, builder: (ctx, value, child) => e(ctx, value)))
                 .toList(),
-            cancelButton: ValueListenableBuilder(
-                valueListenable: $selected,
-                builder: (ctx, value, child) => CupertinoButton(
-                    onPressed: okEnabled?.call(value) ?? true
-                        ? () {
-                            Navigator.of(ctx).pop($selected.value);
-                          }
-                        : null,
-                    child: ok.text(style: highlight ? const TextStyle(color: Colors.redAccent) : null)))),
+            cancelButton: ok == null
+                ? null
+                : ValueListenableBuilder(
+                    valueListenable: $selected,
+                    builder: (ctx, value, child) => CupertinoButton(
+                        onPressed: okEnabled?.call(value) ?? true
+                            ? () {
+                                Navigator.of(ctx).pop($selected.value);
+                              }
+                            : null,
+                        child: ok.text(style: highlight ? const TextStyle(color: Colors.redAccent) : null)))),
       ),
     );
   }

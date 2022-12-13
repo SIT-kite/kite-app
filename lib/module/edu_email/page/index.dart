@@ -40,6 +40,15 @@ class _MailPageState extends State<MailPage> {
   final TextEditingController _controller = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    final oaCredential = Auth.oaCredential;
+    if (oaCredential != null) {
+      _updateMailList(oaCredential);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final oaCredential = Auth.oaCredential;
     final String title;
@@ -52,7 +61,7 @@ class _MailPageState extends State<MailPage> {
       appBar: AppBar(
         title: title.text(),
       ),
-      body: oaCredential != null ? _buildBody(context, oaCredential) : const UnauthorizedTip(),
+      body: oaCredential != null ? _buildBody(context) : const UnauthorizedTip(),
     );
   }
 
@@ -129,12 +138,11 @@ class _MailPageState extends State<MailPage> {
     );
   }
 
-  Widget _buildBody(BuildContext context, OACredential oaCredential) {
+  Widget _buildBody(BuildContext context) {
     // 如果当前加载邮件列表
     if (_index == 0) {
       // 如果是首次加载, 拉取数据并显示加载动画
       if (_messages == null) {
-        _updateMailList(oaCredential);
         return Placeholders.loading();
       }
       // 非首次加载, 即已获取邮件列表, 直接渲染即可
