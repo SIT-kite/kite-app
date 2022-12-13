@@ -33,7 +33,6 @@ class TimetableHeader extends StatefulWidget {
   final Function(int)? onDayTap;
 
   final DateTime startDate;
-  final bool leadingSpace;
 
   const TimetableHeader({
     super.key,
@@ -41,7 +40,6 @@ class TimetableHeader extends StatefulWidget {
     required this.currentWeek,
     required this.selectedDay,
     required this.startDate,
-    this.leadingSpace = false,
     this.onDayTap,
   });
 
@@ -57,16 +55,28 @@ class _TimetableHeaderState extends State<TimetableHeader> {
     super.initState();
   }
 
+  /// 布局标题栏下方的时间选择行
+  ///
+  /// 将该行分为 2 + 7 * 3 一共 23 个小份, 左侧的周数占 2 份, 每天的日期占 3 份.
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        for (int i = 1; i <= 7; ++i) buildDayNameHeader(i),
+      ],
+    );
+  }
+
   Widget buildDayHeader(BuildContext ctx, int day, String name) {
     final isSelected = day == selectedDay;
     final textNBgColors = ctx.makeTabHeaderTextBgColors(isSelected);
     final textColor = textNBgColors.item1;
     final bgColor = textNBgColors.item2;
-
+    final side = BorderSide(color: ctx.darkSafeThemeColor, width: 0.8);
     return AnimatedContainer(
       decoration: BoxDecoration(
         color: bgColor,
-        border: Border.all(color: Colors.black12, width: 0.8),
+        border: Border(top: side, bottom: side, left: day == 1 ? side : BorderSide.none, right: side),
       ),
       duration: const Duration(milliseconds: 1000),
       curve: Curves.fastLinearToSlowEaseIn,
@@ -74,12 +84,8 @@ class _TimetableHeaderState extends State<TimetableHeader> {
         name,
         textAlign: TextAlign.center,
         style: TextStyle(color: textColor),
-      ).padOnly(t: 5,b: 5),
+      ).padOnly(t: 5, b: 5),
     );
-  }
-
-  Widget buildLeadingSpace() {
-    return Expanded(flex: 2, child: Container());
   }
 
   ///每天的列
@@ -97,17 +103,5 @@ class _TimetableHeaderState extends State<TimetableHeader> {
               : null,
           child: buildDayHeader(context, day, '${widget.dayHeaders[day - 1]}\n$dateString')),
     );
-  }
-
-  /// 布局标题栏下方的时间选择行
-  ///
-  /// 将该行分为 2 + 7 * 3 一共 23 个小份, 左侧的周数占 2 份, 每天的日期占 3 份.
-  @override
-  Widget build(BuildContext context) {
-    final columns = <Widget>[if (widget.leadingSpace) buildLeadingSpace()];
-    for (int i = 1; i <= 7; ++i) {
-      columns.add(buildDayNameHeader(i));
-    }
-    return Row(children: columns);
   }
 }

@@ -57,6 +57,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
   late PageController _pageController;
   late DateTime dateSemesterStart;
   final $cellSize = ValueNotifier(Size.zero);
+  final faceIndex = 0;
 
   TimetablePosition get currentPos => widget.$currentPos.value;
 
@@ -67,6 +68,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
   int week2PageOffset(int week) => week - 1;
   TimetablePosition? _lastPos;
   bool isJumping = false;
+  int mood = 0;
 
   @override
   void initState() {
@@ -92,10 +94,20 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
       }
     });
     final dayHeaders = makeWeekdaysShortText();
-
     return [
       [
-        const SizedBox.shrink().align(at: Alignment.centerLeft).flexible(flex: 2),
+        Icon(
+          Mood.get(mood),
+          color: context.darkSafeThemeColor,
+        )
+            .onTap(key: ValueKey(mood), () {
+              setState(() {
+                mood = Mood.next(mood);
+              });
+            })
+            .animatedSwitched(d: const Duration(milliseconds: 400))
+            .align(at: Alignment.center)
+            .flexible(flex: 2),
         widget.$currentPos <<
             (ctx, cur, _) => TimetableHeader(
                   dayHeaders: dayHeaders,
@@ -151,9 +163,9 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
   /// 布局左侧边栏, 显示节次
   Widget buildLeftColumn() {
     /// 构建每一个格子
-    Widget buildCell(BuildContext context, int index) {
-      final textStyle = context.textTheme.bodyText2;
-      const border = BorderSide(color: Colors.black12, width: 0.8);
+    Widget buildCell(BuildContext ctx, int index) {
+      final textStyle = ctx.textTheme.bodyText2;
+      final border = BorderSide(color: ctx.darkSafeThemeColor, width: 0.8);
 
       return Container(
         decoration: BoxDecoration(

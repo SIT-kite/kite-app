@@ -71,7 +71,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
 
   Future<void> showColorPaletteToggle() async {
     final initial = storage.useOldSchoolColors ?? false;
-    final changed = await context.show$Dialog$(
+    await context.show$Dialog$(
         make: (ctx) => $Dialog$(
               primary: $Action$(
                   text: i18n.close,
@@ -97,7 +97,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
                 ].column(mas: MainAxisSize.min);
               },
             ));
-    if (changed && storage.useOldSchoolColors != initial) {
+    if (storage.useOldSchoolColors != initial) {
       if (!mounted) return;
       eventBus.fire(TimetablePaletteChangeEvent());
     }
