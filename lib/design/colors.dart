@@ -79,7 +79,7 @@ extension DesignExtension on BuildContext {
 
   Color get textColor => isDarkMode ? Colors.white70 : theme.primaryColor;
 
-  Tuple2<Color, Color> makeTabHeaderTextNBgColors(bool isSelected) {
+  Tuple2<Color, Color> makeTabHeaderTextBgColors(bool isSelected) {
     final Color textColor;
     final Color bgColor;
     if (isDarkMode) {

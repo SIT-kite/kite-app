@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rettulf/rettulf.dart';
 import '../utils.dart';
 import 'sheet.dart';
 import 'timetable.dart';
@@ -53,12 +54,50 @@ class WeeklyTimetable extends StatefulWidget implements InitialTimeProtocol {
 class WeeklyTimetableState extends State<WeeklyTimetable> implements ITimetableView {
   late PageController _pageController;
   late DateTime dateSemesterStart;
+  final $cellSize = ValueNotifier(Size.zero);
 
   int _currentWeek = 1;
 
   int page2Week(int page) => page + 1;
 
   int week2Page(int week) => week - 1;
+
+  @override
+  void initState() {
+    super.initState();
+    dateSemesterStart = widget.initialDate;
+    final pos = widget.locateInTimetable(DateTime.now());
+    _currentWeek = pos.week;
+    _pageController = PageController(initialPage: _currentWeek - 1)..addListener(onPageChange);
+    widget.$currentPos.value = TimetablePosition(week: _currentWeek);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final dayHeaders = makeWeekdaysShortText();
+
+    return [
+      [
+        SizedBox(
+          width: 1,
+          height: 22 / 23 * (1.sw) / (1.sh),
+        ).align(at: Alignment.centerLeft).flexible(flex: 1),
+        widget.$currentPos <<
+            (ctx, cur, _) => TimetableHeader(
+                  dayHeaders: dayHeaders,
+                  selectedDay: 0,
+                  currentWeek: cur.week,
+                  startDate: widget.initialDate,
+                ).flexible(flex: 10)
+      ].row(mas: MainAxisSize.min,maa: MainAxisAlignment.start,caa: CrossAxisAlignment.start).flexible(flex: 1),
+      PageView.builder(
+        controller: _pageController,
+        scrollDirection: Axis.horizontal,
+        itemCount: 20,
+        itemBuilder: (BuildContext context, int index) => _buildPage(index + 1),
+      ).flexible(flex: 15)
+    ].column(mas: MainAxisSize.min,maa: MainAxisAlignment.start,caa: CrossAxisAlignment.start);
+  }
 
   void onPageChange() {
     setState(() {
@@ -69,26 +108,6 @@ class WeeklyTimetableState extends State<WeeklyTimetable> implements ITimetableV
         widget.$currentPos.value = TimetablePosition(week: newWeek);
       }
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    dateSemesterStart = widget.initialDate;
-    final pos = widget.locateInTimetable(DateTime.now());
-    _currentWeek = pos.week;
-    _pageController = PageController(initialPage: _currentWeek - 1)..addListener(onPageChange);
-    Future.delayed(Duration.zero, () {
-      setState(() {
-        widget.$currentPos.value = TimetablePosition(week: _currentWeek);
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _pageController.dispose();
   }
 
   @override
@@ -143,59 +162,39 @@ class WeeklyTimetableState extends State<WeeklyTimetable> implements ITimetableV
 
     // 用 [GridView] 构造整个左侧边栏
     return GridView.builder(
-        shrinkWrap: true,
-        itemCount: 11,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 1,
-          childAspectRatio: 22 / 23 * (1.sw) / (1.sh),
-        ),
-        itemBuilder: buildCell);
+      shrinkWrap: true,
+      itemCount: 11,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 1,
+        childAspectRatio: 22 / 23 * (1.sw) / (1.sh),
+      ),
+      itemBuilder: buildCell,
+    );
   }
 
-  Widget _buildPage(int week, List<String> dayHeaders) {
-    return Column(
-      children: [
-        TimetableHeader(
-          dayHeaders: dayHeaders,
-          leadingSpace: true,
-          currentWeek: week,
-          selectedDay: -1,
-          startDate: widget.initialDate,
-        ),
-        Expanded(
-          flex: 10,
-          child: widget.allCourses.isEmpty
-              ? const Center(child: Text('这周没有课哦'))
-              : SingleChildScrollView(
-                  controller: ScrollController(),
-                  child: Row(
-                    textDirection: TextDirection.ltr,
-                    children: [
-                      Expanded(flex: 2, child: buildLeftColumn()),
-                      Expanded(
-                          flex: 21,
-                          child: TimetableColumn(
-                            allCourses: widget.allCourses,
-                            currentWeek: week,
-                            cache: widget.tableCache,
-                          ))
-                    ],
-                  ),
-                ),
-        ),
-      ],
+  Widget _buildPage(int week) {
+    return SingleChildScrollView(
+      controller: ScrollController(),
+      child: Row(
+        textDirection: TextDirection.ltr,
+        children: [
+          Expanded(flex: 2, child: buildLeftColumn()),
+          Expanded(
+              flex: 21,
+              child: TimetableColumn(
+                allCourses: widget.allCourses,
+                currentWeek: week,
+                cache: widget.tableCache,
+              ))
+        ],
+      ),
     );
   }
 
   @override
-  Widget build(BuildContext context) {
-    final dayHeaders = makeWeekdaysShortText();
-    return PageView.builder(
-      controller: _pageController,
-      scrollDirection: Axis.horizontal,
-      itemCount: 20,
-      itemBuilder: (BuildContext context, int index) => _buildPage(index + 1, dayHeaders),
-    );
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
   }
 }
 
@@ -221,6 +220,28 @@ class _TimetableColumnState extends State<TimetableColumn> {
   double get cellWidth => calcuCellWidth(by: rawCellSize);
 
   double get cellHeight => calcuCellHeight(by: rawCellSize);
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    rawCellSize = MediaQuery.of(context).size;
+    return SizedBox(
+      width: cellWidth * 7,
+      height: rawCellSize.height,
+      child: ListView.builder(
+        itemCount: 7,
+        padding: const EdgeInsets.only(left: 1.0),
+        scrollDirection: Axis.horizontal,
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemBuilder: (BuildContext context, int index) => _buildColumnByDay(context, index + 1),
+      ),
+    );
+  }
 
   Widget _buildCourseCell(BuildContext context, Course? grid) {
     final textStyle = Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold);
@@ -316,26 +337,6 @@ class _TimetableColumnState extends State<TimetableColumn> {
       height: cellHeight * 11,
       child: Column(
         children: [for (int index = 0; index < grids.length; index++) _buildCourseCell(context, grids[index])],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    setState(() {
-      rawCellSize = MediaQuery.of(context).size;
-    });
-
-    return SizedBox(
-      width: cellWidth * 7,
-      height: rawCellSize.height,
-      child: ListView.builder(
-        itemCount: 7,
-        padding: const EdgeInsets.only(left: 1.0),
-        scrollDirection: Axis.horizontal,
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemBuilder: (BuildContext context, int index) => _buildColumnByDay(context, index + 1),
       ),
     );
   }

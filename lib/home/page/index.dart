@@ -74,7 +74,7 @@ class HomeItemGroup extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -212,9 +212,12 @@ class _HomePageState extends State<HomePage> {
         EventNameConstants.onRouteRefresh,
         value,
       );
-      overrideFunctionNotifier.value = value;
-      if (!mounted) return;
-      setState(() => saturation = value.homeColorSaturation);
+      final locale = Kv.pref.locale;
+      if (locale != null && locale.languageCode == "zh") {
+        overrideFunctionNotifier.value = value;
+        if (!mounted) return;
+        setState(() => saturation = value.homeColorSaturation);
+      }
     });
   }
 

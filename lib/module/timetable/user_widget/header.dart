@@ -59,7 +59,7 @@ class _TimetableHeaderState extends State<TimetableHeader> {
 
   Widget buildDayHeader(BuildContext ctx, int day, String name) {
     final isSelected = day == selectedDay;
-    final textNBgColors = ctx.makeTabHeaderTextNBgColors(isSelected);
+    final textNBgColors = ctx.makeTabHeaderTextBgColors(isSelected);
     final textColor = textNBgColors.item1;
     final bgColor = textNBgColors.item2;
 
@@ -70,13 +70,11 @@ class _TimetableHeaderState extends State<TimetableHeader> {
       ),
       duration: const Duration(milliseconds: 1000),
       curve: Curves.fastLinearToSlowEaseIn,
-      child: Padding(
-          padding: const EdgeInsets.only(top: 5, bottom: 5),
-          child: Text(
-            name,
-            textAlign: TextAlign.center,
-            style: TextStyle(color: textColor),
-          )),
+      child: Text(
+        name,
+        textAlign: TextAlign.center,
+        style: TextStyle(color: textColor),
+      ).padOnly(t: 5,b: 5),
     );
   }
 
