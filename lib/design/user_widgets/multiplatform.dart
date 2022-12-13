@@ -103,7 +103,7 @@ class $Dialog$ extends StatelessWidget {
     final second = secondary;
     if (_isCupertino) {
       dialog = CupertinoAlertDialog(
-        title: title?.text(style: TextStyle(fontWeight: FontWeight.bold, color: serious ? Colors.redAccent : null)),
+        title: title?.text(style: TextStyle(fontWeight: FontWeight.w600, color: serious ? context.$red$ : null)),
         content: make(context),
         actions: [
           if (second != null)
@@ -129,7 +129,7 @@ class $Dialog$ extends StatelessWidget {
       // For other platform
       dialog = AlertDialog(
         backgroundColor: context.theme.dialogBackgroundColor.withOpacity(_kDialogAlpha),
-        title: title?.text(style: TextStyle(fontWeight: FontWeight.bold, color: serious ? Colors.redAccent : null)),
+        title: title?.text(style: TextStyle(fontWeight: FontWeight.w600, color: serious ? context.$red$ : null)),
         content: make(context),
         actions: [
           CupertinoButton(
@@ -138,8 +138,8 @@ class $Dialog$ extends StatelessWidget {
               },
               child: primary.text.text(
                 style: TextStyle(
-                  color: primary.warning ? Colors.redAccent : null,
-                  fontWeight: primary.isDefault ? FontWeight.bold : null,
+                  color: primary.warning ? context.$red$ : null,
+                  fontWeight: primary.isDefault ? FontWeight.w600 : null,
                 ),
               )),
           if (second != null)
@@ -149,8 +149,8 @@ class $Dialog$ extends StatelessWidget {
               },
               child: second.text.text(
                 style: TextStyle(
-                  color: second.warning ? Colors.redAccent : null,
-                  fontWeight: second.isDefault ? FontWeight.bold : null,
+                  color: second.warning ? context.$red$ : null,
+                  fontWeight: second.isDefault ? FontWeight.w600 : null,
                 ),
               ),
             )
@@ -236,3 +236,7 @@ const Border _kDefaultRoundedBorder = Border(
   left: _kDefaultRoundedBorderSide,
   right: _kDefaultRoundedBorderSide,
 );
+
+extension ColorEx on BuildContext {
+  Color get $red$ => _isCupertino ? CupertinoDynamicColor.resolve(CupertinoColors.systemRed, this) : Colors.redAccent;
+}

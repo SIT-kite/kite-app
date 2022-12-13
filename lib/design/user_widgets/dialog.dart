@@ -146,15 +146,14 @@ extension DialogEx on BuildContext {
                 .toList(),
             cancelButton: ok == null
                 ? null
-                : ValueListenableBuilder(
-                    valueListenable: $selected,
-                    builder: (ctx, value, child) => CupertinoButton(
-                        onPressed: okEnabled?.call(value) ?? true
+                : $selected <<
+                    (ctx, selected, _) => CupertinoButton(
+                        onPressed: okEnabled?.call(selected) ?? true
                             ? () {
                                 Navigator.of(ctx).pop($selected.value);
                               }
                             : null,
-                        child: ok.text(style: highlight ? const TextStyle(color: Colors.redAccent) : null)))),
+                        child: ok.text(style: TextStyle(color: highlight ? $red$ : null)))),
       ),
     );
 
@@ -214,15 +213,19 @@ extension DialogEx on BuildContext {
                 actions?.map((e) => $selectedA << (ctx, a, _) => $selectedB << (ctx, b, _) => e(ctx, a, b)).toList(),
             cancelButton: ok == null
                 ? null
-                : ValueListenableBuilder(
-                    valueListenable: $selectedB,
-                    builder: (ctx, value, child) => CupertinoButton(
-                        onPressed: okEnabled?.call($selectedA.value, $selectedB.value) ?? true
-                            ? () {
-                                Navigator.of(ctx).pop(Tuple2($selectedA.value, $selectedB.value));
-                              }
-                            : null,
-                        child: ok.text(style: highlight ? const TextStyle(color: Colors.redAccent) : null)))),
+                : $selectedA <<
+                    (ctx, a, _) =>
+                        $selectedB <<
+                        (ctx, b, _) => CupertinoButton(
+                            onPressed: okEnabled?.call(a, b) ?? true
+                                ? () {
+                                    Navigator.of(ctx).pop(Tuple2($selectedA.value, $selectedB.value));
+                                  }
+                                : null,
+                            child: ok.text(
+                                style: TextStyle(
+                              color: highlight ? ctx.$red$ : null,
+                            )))),
       ),
     );
     $selectedA.dispose();
