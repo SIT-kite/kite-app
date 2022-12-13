@@ -94,6 +94,9 @@
   "continue_": "Continue",
   "counselor": "Counselor",
   "counselorPhoneNumber": "Counselor Phone Number",
+  "courseCompulsory": "Compulsory",
+  "courseCredit": "Credit",
+  "courseElective": "Elective",
   "credentialError": "Credential Error",
   "currentDormitoryLabel": "Current Dormitory",
   "currentVersion": "Current Version",
@@ -394,7 +397,7 @@
       }
     }
   },
-  "gpaSelectedAndTotalLabel": "Selected: {count}, point: {point}",
+  "gpaSelectedAndTotalLabel": "Point: {point} of {count} selected",
   "@gpaSelectedAndTotalLabel": {
     "placeholders": {
       "count": {
@@ -443,6 +446,8 @@
   "language_zh_TW": "中文(繁體)",
   "lastOnlineTime": "Last Online",
   "launchEasyConnectBtn": "Launch EasyConnect",
+  "lessonEvaluationBtn": "Lesson Eval",
+  "lessonNotEvaluated": "Not Eval",
   "libraryAccountManagementBtnTip": "Library account management is coming soon...",
   "loading": "Loading",
   "localStorageClearBoxDesc": "Confirm to clear this box pair?",
@@ -597,6 +602,8 @@
   "settingsLogoutKite": "Logout Kite",
   "settingsLogoutKiteSub": "Logout current Kite account",
   "settingsProxyAddress": "Proxy Address",
+  "settingsReload": "reload",
+  "settingsReloadSub": "Re-initialize all modules",
   "settingsStorageSelectTip": "Please select a box first.",
   "settingsTestConnect2School": "Test Connectivity",
   "settingsTestConnect2SchoolSub": "Test connectivity to school",
@@ -741,10 +748,5 @@
   "welcomeSlogan": "Excellent school life, from here.",
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
-  "yes": "Yes",
-  "lessonEvaluationBtn": "Lesson Eval",
-  "courseCompulsory": "Compulsory",
-  "courseElective": "Elective",
-  "courseCredit": "Credit",
-  "lessonNotEvaluated": "Not Eval"
+  "yes": "Yes"
 }

@@ -121,6 +121,7 @@ class _DetailPageState extends State<DetailPage> with AutomaticKeepAliveClientMi
           body: buildDetailLandscape(ctx, detail));
     } else {
       return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: i18n.activityDetails.text(),
           actions: [
@@ -196,9 +197,9 @@ class _DetailPageState extends State<DetailPage> with AutomaticKeepAliveClientMi
         child: buildGlassmorphismBg(ctx),
       ),
       Row(mainAxisSize: MainAxisSize.min, children: [
-        buildInfoCardLandscape(context, detail).expanded(),
+        buildInfoCardLandscape(context, detail).align(at:Alignment.topCenter).expanded(),
         if (detail != null)
-          _buildArticle(context, detail.description).expanded()
+          _buildArticle(context, detail.description).align(at:Alignment.topCenter).expanded()
         else
           Placeholders.loading().expanded(),
       ])

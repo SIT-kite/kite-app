@@ -174,9 +174,11 @@ class _ActivityListState extends State<ActivityList> {
     });
     final activities = await ScInit.scActivityListService.getActivityList(widget.type, 1);
     if (activities != null) {
-      _activityList = activities;
       if (!mounted) return;
       setState(() {
+        // The incoming activities may be the same as before, so distinct is necessary.
+        activities.distinctBy((a) => a.id);
+        _activityList = activities;
         _lastPage++;
         loading = false;
       });
@@ -192,32 +194,49 @@ class _ActivityListState extends State<ActivityList> {
     if (lastActivities != null) {
       if (lastActivities.isEmpty) {
         setState(() => _atEnd = true);
-        return;
+      } else {
+        setState(() {
+          _lastPage++;
+          _activityList.addAll(lastActivities);
+          // The incoming activities may be the same as before, so distinct is necessary.
+          _activityList.distinctBy((a) => a.id);
+        });
       }
-
-      _lastPage++;
-      setState(() => _activityList.addAll(lastActivities));
     }
   }
 
   Widget buildActivityResult(List<Activity> activities) {
-    return LayoutBuilder(builder: (ctx, constraints) {
-      final count = constraints.maxWidth ~/ 180;
-      return LiveGrid.options(
-        controller: _scrollController,
-        itemCount: activities.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: count,
-        ),
-        options: kiteLiveOptions,
-        itemBuilder: (ctx, index, animation) => ActivityCard(activities[index]).aliveWith(animation),
-      );
-    });
+    return LiveGrid.options(
+      controller: _scrollController,
+      itemCount: activities.length,
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 280,
+        mainAxisExtent: 200,
+      ),
+      options: kiteLiveOptions,
+      itemBuilder: (ctx, index, animation) => ActivityCard(activities[index]).aliveWith(animation),
+    );
   }
 
   @override
   void dispose() {
     super.dispose();
     _scrollController.dispose();
+  }
+}
+
+extension DistinctEx<E> on List<E> {
+  List<E> distinct({bool inplace = true}) {
+    final ids = <E>{};
+    var list = inplace ? this : List<E>.from(this);
+    list.retainWhere((x) => ids.add(x));
+    return list;
+  }
+
+  List<E> distinctBy<Id>(Id Function(E element) id, {bool inplace = true}) {
+    final ids = <Id>{};
+    var list = inplace ? this : List<E>.from(this);
+    list.retainWhere((x) => ids.add(id(x)));
+    return list;
   }
 }

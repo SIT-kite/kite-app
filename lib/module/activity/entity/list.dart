@@ -133,7 +133,7 @@ class Activity {
 
   @override
   String toString() {
-    return 'Activity{id: $id, category: $category}';
+    return 'Activity{id: $id, category: $category, title: $title, ts: $ts}';
   }
 }
 

@@ -101,22 +101,16 @@ class _ExamArrangementPageState extends State<ExamArrangementPage> {
         height: 240,
       );
     } else {
-      return LayoutBuilder(builder: (ctx, constraints) {
-        final count = constraints.maxWidth ~/ 300;
-        return LiveGrid.options(
-          itemCount: exams.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: max(count, 1),
-            childAspectRatio: 1.55,
-          ),
-          options: kiteLiveOptions,
-          itemBuilder: (ctx, index, animation) => ExamCard(exam: exams[index])
-              .padSymmetric(v: 8, h: 16)
-              .inCard(elevation: 5)
-              .padAll(8)
-              .aliveWith(animation),
-        );
-      });
+      return LiveGrid.options(
+        itemCount: exams.length,
+        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 750,
+          mainAxisExtent: 260,
+        ),
+        options: kiteLiveOptions,
+        itemBuilder: (ctx, index, animation) =>
+            ExamCard(exam: exams[index]).padSymmetric(v: 8, h: 16).inCard(elevation: 5).padAll(8).aliveWith(animation),
+      );
     }
   }
 

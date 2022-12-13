@@ -226,7 +226,7 @@ class _DashboardState extends State<Dashboard> with AutomaticKeepAliveClientMixi
           color: context.fgColor,
         ),
         const SizedBox(width: 10),
-        Text(title, style: style),
+        Text(title, style: style, overflow: TextOverflow.fade),
       ].row(),
       [
         if (content == null)
@@ -247,10 +247,10 @@ class _DashboardState extends State<Dashboard> with AutomaticKeepAliveClientMixi
             Row(children: [
               const Icon(Icons.update),
               const SizedBox(width: 10),
-              Text(i18n.elecBillUpdateTime, style: TextStyle(color: outOfDateColor)),
+              Text(i18n.elecBillUpdateTime, style: TextStyle(color: outOfDateColor), overflow: TextOverflow.ellipsis),
             ]),
             Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-              Text(time != null ? updateTimeFormatter.format(time.toLocal()) : "..."),
+              Text(time != null ? updateTimeFormatter.format(time.toLocal()) : "...", overflow: TextOverflow.ellipsis),
             ]),
           ],
         )).center();

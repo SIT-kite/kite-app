@@ -142,19 +142,16 @@ class _ApplicationListState extends State<ApplicationList> with AdaptivePageProt
   Widget buildListLandscape(List<ApplicationMeta> list) {
     return widget.$enableFilter <<
         (ctx, v, _) {
-          return LayoutBuilder(builder: (ctx, constraints) {
-            final items = buildApplications(list, v);
-            final count = constraints.maxWidth ~/ 300;
-            return LiveGrid.options(
-              itemCount: items.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: count,
-                childAspectRatio: 5,
-              ),
-              options: kiteLiveOptions,
-              itemBuilder: (ctx, index, animation) => items[index].aliveWith(animation),
-            );
-          });
+          final items = buildApplications(list, v);
+          return LiveGrid.options(
+            itemCount: items.length,
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 500,
+              mainAxisExtent: 70,
+            ),
+            options: kiteLiveOptions,
+            itemBuilder: (ctx, index, animation) => items[index].aliveWith(animation),
+          );
         };
   }
 

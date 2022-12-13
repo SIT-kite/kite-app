@@ -49,7 +49,7 @@ class ScInit {
     scActivityListService = ScActivityListCache(
       from: ScActivityListService(session),
       to: ScActivityListStorage(box),
-      expiration: const Duration(hours: 1),
+      expiration: const Duration(minutes: 30),
     );
     scActivityDetailService = ScActivityDetailCache(
       from: ScActivityDetailService(session),

@@ -28,14 +28,14 @@ import '../using.dart';
 class ActivityCard extends StatelessWidget {
   final Activity activity;
 
-  const ActivityCard(this.activity, {Key? key}) : super(key: key);
+  const ActivityCard(this.activity, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(10),
-      child: ClipRRect(borderRadius: BorderRadius.circular(16), child: _buildBasicInfo(context)),
-    ).hero(activity.id).on(tap: () {
+    return ClipRRect(borderRadius: BorderRadius.circular(16), child: _buildBasicInfo(context))
+        .inCard(margin: const EdgeInsets.all(10))
+        .hero(activity.id)
+        .on(tap: () {
       final route = context.adaptive.makeRoute((_) => DetailPage(activity, hero: activity.id));
       context.navigator.push(route);
     });
@@ -59,13 +59,14 @@ class ActivityCard extends StatelessWidget {
             ),
             buildGlassmorphismBg(ctx),
             Center(
-              child: Text(
-                activity.realTitle,
-                style: titleStyle,
-                maxLines: 3,
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-              ).padSymmetric(h: 12),
+              child: activity.realTitle
+                  .text(
+                    style: titleStyle,
+                    maxLines: 3,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                  )
+                  .padSymmetric(h: 12),
             ),
           ],
         ).expanded(),

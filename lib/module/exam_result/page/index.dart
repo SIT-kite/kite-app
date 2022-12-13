@@ -83,7 +83,11 @@ class _ExamResultPageState extends State<ExamResultPage> {
       if (gpa.isNaN) {
         gpa = 0;
       }
-      title = i18n.gpaPointLabel(selectedSemester.localized(), gpa.toStringAsPrecision(2));
+      if (isSelecting) {
+        title = i18n.gpaSelectedAndTotalLabel(selectedExams.length, gpa.toStringAsPrecision(2));
+      } else {
+        title = i18n.gpaPointLabel(selectedSemester.localized(), gpa.toStringAsPrecision(2));
+      }
     } else {
       title = i18n.ftype_examResult;
     }

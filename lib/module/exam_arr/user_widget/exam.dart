@@ -45,7 +45,7 @@ class _ExamCardState extends State<ExamCard> {
     TableRow buildRow(String icon, String title, String content) {
       return TableRow(children: [
         _buildItem(icon, title),
-        Text(content, style: itemStyle),
+        Text(content, style: itemStyle, overflow: TextOverflow.ellipsis),
       ]);
     }
 
@@ -69,13 +69,13 @@ class _ExamCardState extends State<ExamCard> {
   }
 
   Widget _buildItem(String icon, String text) {
-    final itemStyle = Theme.of(context).textTheme.bodyText1;
+    final itemStyle = context.textTheme.bodyText1;
     final iconImage = AssetImage('assets/$icon');
     return Row(
       children: [
         icon.isEmpty ? const SizedBox(height: 24, width: 24) : Image(image: iconImage, width: 24, height: 24),
         const SizedBox(width: 8, height: 32),
-        Expanded(child: Text(text, softWrap: true, style: itemStyle))
+        Expanded(child: Text(text, overflow: TextOverflow.ellipsis, style: itemStyle))
       ],
     );
   }

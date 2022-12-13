@@ -267,7 +267,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: i18n.settingsTestConnect2School,
                 subtitle: i18n.settingsTestConnect2SchoolSub,
                 onTap: () {
-                  Navigator.pushNamed(context, '/connectivity');
+                  Navigator.pushNamed(context, RouteTable.networkTool);
                 }),
           ],
         ),
@@ -347,8 +347,8 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           if (kDebugMode)
             SimpleSettingsTile(
-              title: "Reload",
-              subtitle: "Re-initialize all modules",
+              title: i18n.settingsReload,
+              subtitle: i18n.settingsReloadSub,
               leading: const Icon(Icons.refresh_rounded),
               onTap: () async {
                 await Initializer.init();

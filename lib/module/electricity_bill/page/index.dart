@@ -39,7 +39,7 @@ class _Page {
   static const search = 1;
 }
 
-// TODO: For now, we can't use AdaptiveUI.
+// For now, we can't use AdaptiveUI.
 class _ElectricityBillPageState extends State<ElectricityBillPage> {
   /// elevated the `room` to share the state
   /// Null means user should select a room number before all.
