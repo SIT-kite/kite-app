@@ -20,8 +20,6 @@ import 'package:kite/design/utils.dart';
 import 'package:rettulf/rettulf.dart';
 import 'package:tuple/tuple.dart';
 
-typedef _C = Color;
-
 Color getThemeColor(BuildContext ctx) {
   final theme = ctx.theme;
   if (theme.isLight) {
@@ -123,23 +121,33 @@ typedef _Cp = ColorPair;
 
 /// https://m3.material.io/theme-builder#/custom
 class CourseColor {
-  /// Raw color is in HTC
-  static const List<ColorPair> all = [
-    _Cp(_C(0xFF85e779), _C(0xFF21520f)), // green #678a5c
-    _Cp(_C(0xFFc3e8ff), _C(0xFF004c68)), // sky #5487a3
-    _Cp(_C(0xFFffa6bb), _C(0xFF8e2f56)), // pink #ae6f83
-    _Cp(_C(0xFFad9bd7), _C(0xFF50378a)), // violet #8879ab
-    _Cp(_C(0xFFff9d6b), _C(0xFF7f2b00)), // orange #a23900
-    _Cp(_C(0xFFffa2d2), _C(0xFF8e0032)), // rose #b50060
-    _Cp(_C(0xFFffd200), _C(0xFF523900)), // lemon #b09e40
-    _Cp(_C(0xFF75f8e2), _C(0xFF005047)), // cyan #008f7f
-    _Cp(_C(0xFFb4ebff), _C(0xFF004e5f)), // ice #b3c7cf
-    _Cp(_C(0xFFb4ebff), _C(0xFF004e5f)), // cyan #d4bdce
-    _Cp(_C(0xFFffd7f5), _C(0xFF7c157a)), // mauve #ff8df3
-    _Cp(_C(0xFFeaf141), _C(0xFF4b4c00)), // toxic #a2c300
+  static const List<ColorPair> oldSchool = [
+    _Cp(Color.fromARGB(178, 251, 83, 82), Color.fromARGB(178, 244, 83, 75)),
+    _Cp(Color.fromARGB(153, 115, 123, 250), Color.fromARGB(178, 100, 110, 220)),
+    _Cp(Color.fromARGB(178, 116, 185, 255), Color.fromARGB(178, 90, 135, 200)),
+    _Cp(Color.fromARGB(178, 118, 126, 253), Color.fromARGB(178, 88, 106, 213)),
+    _Cp(Color.fromARGB(178, 245, 175, 77), Color.fromARGB(178, 200, 125, 107)),
+    _Cp(Color.fromARGB(178, 187, 137, 106), Color.fromARGB(178, 120, 92, 66)),
+    _Cp(Color.fromARGB(178, 232, 67, 147), Color.fromARGB(178, 180, 35, 117)),
+    _Cp(Color.fromARGB(178, 188, 140, 240), Color.fromARGB(178, 148, 100, 180)),
+    _Cp(Color.fromARGB(178, 116, 185, 255), Color.fromARGB(178, 56, 85, 200)),
+  ];
+  static const List<ColorPair> v1_5 = [
+    _Cp(Color(0xF085e779), Color(0xF021520f)), // green #678a5c
+    _Cp(Color(0xF0c3e8ff), Color(0xF0004c68)), // sky #5487a3
+    _Cp(Color(0xF0ffa6bb), Color(0xF08e2f56)), // pink #ae6f83
+    _Cp(Color(0xF0ad9bd7), Color(0xF050378a)), // violet #8879ab
+    _Cp(Color(0xF0ff9d6b), Color(0xF07f2b00)), // orange #a23900
+    _Cp(Color(0xF0ffa2d2), Color(0xF08e0032)), // rose #b50060
+    _Cp(Color(0xF0ffd200), Color(0xF0523900)), // lemon #b09e40
+    _Cp(Color(0xF075f8e2), Color(0xF0005047)), // cyan #008f7f
+    _Cp(Color(0xF0b4ebff), Color(0xF0004e5f)), // ice #b3c7cf
+    _Cp(Color(0xF0b4ebff), Color(0xF0004e5f)), // cyan #d4bdce
+    _Cp(Color(0xF0ffd7f5), Color(0xF07c157a)), // mauve #ff8df3
+    _Cp(Color(0xF0eaf141), Color(0xF04b4c00)), // toxic #a2c300
   ];
 
-  static get({required ThemeData from, required int by}) => all[by.abs() % all.length].byTheme(from);
+  static get({required ThemeData from, required int by}) => oldSchool[by.abs() % oldSchool.length].byTheme(from);
 }
 
 const electricityColor = ColorPair(Color(0xFFffd200), Color(0xFFfffc00));

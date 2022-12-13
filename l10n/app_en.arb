@@ -750,6 +750,7 @@
   "xuhuiDistrict": "Xuhui District",
   "yes": "Yes",
   "timetableFreeDayIsTodayTip": "Have a nice day!",
-  "timetableFreeDayTip": "It's a free day!"
-
+  "timetableFreeDayTip": "It's a free day!",
+  "newsNewPersonalizationSystemIsComingSoon":"Excuse me, a new personalization system is coming soon!",
+  "timetableUseOldSchoolPalette": "Use Old School Palette"
 }

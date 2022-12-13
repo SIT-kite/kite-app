@@ -24,25 +24,27 @@ import '../../user_widget/draggable.dart';
 
 bool get _isCupertino => UniversalPlatform.isIOS || UniversalPlatform.isMacOS;
 const _kDialogAlpha = 0.89;
-
-Future<T?> show$Dialog$<T>(
-  BuildContext context, {
-  required WidgetBuilder make,
-  bool dismissible = true,
-}) async {
-  if (_isCupertino) {
-    return await showCupertinoDialog<T>(
-      context: context,
-      builder: make,
-      barrierDismissible: dismissible,
-    );
-  } else {
-    return await showDialog<T>(
-      context: context,
-      builder: make,
-      barrierDismissible: dismissible,
-    );
+extension $BuildContextEx$ on BuildContext{
+  Future<T?> show$Dialog$<T>(
+      {
+        required WidgetBuilder make,
+        bool dismissible = true,
+      }) async {
+    if (_isCupertino) {
+      return await showCupertinoDialog<T>(
+        context: this,
+        builder: make,
+        barrierDismissible: dismissible,
+      );
+    } else {
+      return await showDialog<T>(
+        context: this,
+        builder: make,
+        barrierDismissible: dismissible,
+      );
+    }
   }
+
 }
 
 class $Button$ extends StatelessWidget {

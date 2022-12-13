@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:kite/module/symbol.dart';
 import 'package:rettulf/rettulf.dart';
 
+import '../events.dart';
 import '../using.dart';
 import '../user_widget/picker.dart';
 import '../user_widget/timetable_editor.dart';
@@ -49,6 +50,12 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
     return Scaffold(
       appBar: AppBar(
         title: i18n.timetableMineTitle.text(),
+        actions: [
+          IconButton(
+            onPressed: showColorPaletteToggle,
+            icon: const Icon(Icons.color_lens_outlined),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: goImport,
@@ -60,6 +67,40 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
         child: buildTimetables(context),
       ),
     );
+  }
+
+  Future<void> showColorPaletteToggle() async {
+    final initial = storage.useOldSchoolColors ?? false;
+    final changed = await context.show$Dialog$(
+        make: (ctx) => $Dialog$(
+              primary: $Action$(
+                  text: i18n.close,
+                  isDefault: true,
+                  onPressed: () {
+                    ctx.navigator.pop(true);
+                  }),
+              make: (ctx) {
+                final $useOldSchool = ValueNotifier(initial);
+                return [
+                  [
+                    i18n.timetableUseOldSchoolPalette.text(style: ctx.textTheme.titleMedium),
+                    $useOldSchool <<
+                        (ctx, use, _) => CupertinoSwitch(
+                            value: use,
+                            onChanged: (newV) {
+                              storage.useOldSchoolColors = newV;
+                              $useOldSchool.value = newV;
+                            }),
+                  ].row(maa: MainAxisAlignment.spaceBetween),
+                  i18n.newsNewPersonalizationSystemIsComingSoon
+                      .text(style: const TextStyle(fontStyle: FontStyle.italic))
+                ].column(mas: MainAxisSize.min);
+              },
+            ));
+    if (changed && storage.useOldSchoolColors != initial) {
+      if (!mounted) return;
+      eventBus.fire(TimetablePaletteChangeEvent());
+    }
   }
 
   Widget _buildEmptyBody(BuildContext ctx) {

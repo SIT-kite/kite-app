@@ -35,7 +35,6 @@ extension DialogEx on BuildContext {
     bool serious = false,
   }) async {
     final dynamic confirm = await show$Dialog$(
-      this,
       make: (ctx) => $Dialog$(
           title: title,
           serious: serious,
@@ -78,7 +77,6 @@ extension DialogEx on BuildContext {
     bool serious = false,
   }) async {
     return await show$Dialog$(
-      this,
       make: (ctx) => $Dialog$(
         title: title,
         serious: serious,

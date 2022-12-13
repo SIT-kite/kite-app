@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rettulf/rettulf.dart';
 import '../utils.dart';
+import 'palette.dart';
 import 'sheet.dart';
 import 'timetable.dart';
 import '../using.dart';
@@ -108,7 +109,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
           if (e is ScrollEndNotification) {
             isJumping = false;
           }
-          return true;
+          return false;
         },
         child: PageView.builder(
           controller: _pageController,
@@ -284,40 +285,38 @@ class _CourseCellState extends State<_CourseCell> {
   Widget build(BuildContext context) {
     final size = context.mediaQuery.size;
 
+    final colors = TimetablePalette.of(context).colors;
     final decoration = BoxDecoration(
-      color: CourseColor.get(from: context.theme, by: course.courseId.hashCode),
+      color: colors[course.courseId.hashCode.abs() % colors.length].byTheme(context.theme),
       borderRadius: const BorderRadius.all(Radius.circular(3.0)),
       border: const Border(),
     );
 
-    return InkWell(
-      onTap: () {
-        showModalBottomSheet(
-            isScrollControlled: true,
-            backgroundColor: Colors.transparent,
-            builder: (BuildContext context) => Sheet(course.courseId, widget.allCourse),
-            context: context);
-      },
-      child: Container(
-        width: size.width - 3,
-        height: size.height * course.duration - 4,
-        decoration: decoration,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              buildText(stylizeCourseName(course.courseName), 3),
-              const SizedBox(height: 3),
-              buildText(formatPlace(course.place), 2),
-              const SizedBox(height: 3),
-              buildText(course.teacher.join(','), 2),
-            ],
-          ),
+    return Container(
+      width: size.width - 3,
+      height: size.height * course.duration - 4,
+      decoration: decoration,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            buildText(stylizeCourseName(course.courseName), 3),
+            const SizedBox(height: 3),
+            buildText(formatPlace(course.place), 2),
+            const SizedBox(height: 3),
+            buildText(course.teacher.join(','), 2),
+          ],
         ),
       ),
-    );
+    ).onTap(() async {
+      await showModalBottomSheet(
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (BuildContext context) => Sheet(course.courseId, widget.allCourse),
+          context: context);
+    });
   }
 
   Text buildText(String text, int maxLines) {

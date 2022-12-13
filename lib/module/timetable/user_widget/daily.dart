@@ -23,6 +23,7 @@ import '../entity/course.dart';
 import '../using.dart';
 import '../utils.dart';
 import 'header.dart';
+import 'palette.dart';
 import 'sheet.dart';
 import 'timetable.dart';
 
@@ -112,7 +113,7 @@ class DailyTimetableState extends State<DailyTimetable> {
             if (e is ScrollEndNotification) {
               isJumping = false;
             }
-            return true;
+            return false;
           },
           child: PageView.builder(
             controller: _pageController,
@@ -171,13 +172,14 @@ class DailyTimetableState extends State<DailyTimetable> {
     final timetable = getBuildingTimetable(course.campus, course.place);
     final description =
         formatTimeIndex(timetable, course.timeIndex, '${course.weekText} 周${weekWord[course.dayIndex - 1]}\nss-ee');
+    final colors = TimetablePalette.of(context).colors;
     return Card(
         margin: const EdgeInsets.all(8),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
         clipBehavior: Clip.antiAlias,
-        color: CourseColor.get(from: Theme.of(context), by: course.courseId.hashCode),
+        color: colors[course.courseId.hashCode.abs() % colors.length].byTheme(context.theme),
         child: ListTile(
           // 点击卡片打开课程详情.
           onTap: () => showModalBottomSheet(

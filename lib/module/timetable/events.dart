@@ -24,3 +24,6 @@ class CurrentTimetableChangeEvent {
 
   CurrentTimetableChangeEvent({this.selected});
 }
+class TimetablePaletteChangeEvent{
+
+}

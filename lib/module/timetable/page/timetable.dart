@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import '../user_widget/palette.dart';
 import '../utils.dart';
 import 'package:rettulf/rettulf.dart';
 
@@ -85,8 +86,7 @@ class _TimetablePageState extends State<TimetablePage> {
     final currentWeek = $currentPos.value.week;
     final initialIndex = currentWeek - 1;
     final controller = FixedExtentScrollController(initialItem: initialIndex);
-    final startDate = meta.startDate;
-    final todayPos = TimetablePosition.locate(startDate, DateTime.now());
+    final todayPos = TimetablePosition.locate(meta.startDate, DateTime.now());
     final todayIndex = todayPos.week - 1;
     final index2Go = await ctx.showPicker(
         count: 20,
@@ -119,8 +119,7 @@ class _TimetablePageState extends State<TimetablePage> {
     final initialDayIndex = currentPos.day - 1;
     final $week = FixedExtentScrollController(initialItem: initialWeekIndex);
     final $day = FixedExtentScrollController(initialItem: initialDayIndex);
-    final startDate = meta.startDate;
-    final todayPos = TimetablePosition.locate(startDate, DateTime.now());
+    final todayPos = TimetablePosition.locate(meta.startDate, DateTime.now());
     final todayWeekIndex = todayPos.week - 1;
     final todayDayIndex = todayPos.day - 1;
     final weekdayNames = makeWeekdaysText();
@@ -170,17 +169,30 @@ class _TimetablePageState extends State<TimetablePage> {
           buildMyTimetablesButton(context),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.undo_rounded),
-        onPressed: () async {
-          if ($displayMode.value == DisplayMode.weekly) {
-            await selectWeeklyTimetablePageToJump(context);
-          } else {
-            await selectDailyTimetablePageToJump(context);
-          }
-        },
-      ),
-      body: TimetableViewer(
+      floatingActionButton: InkWell(
+          onLongPress: () {
+            final today = TimetablePosition.locate(meta.startDate, DateTime.now());
+            if ($currentPos.value != today) {
+              $currentPos.value = today;
+            }
+          },
+          child: FloatingActionButton(
+            child: const Icon(Icons.undo_rounded),
+            onPressed: () async {
+              if ($displayMode.value == DisplayMode.weekly) {
+                await selectWeeklyTimetablePageToJump(context);
+              } else {
+                await selectDailyTimetablePageToJump(context);
+              }
+            },
+          )),
+      body: buildBody(context),
+    );
+  }
+
+  Widget buildBody(BuildContext ctx) {
+    return TimetablePaletteProv(
+      child: TimetableViewer(
         initialTableMeta: meta,
         $currentPos: $currentPos,
         initialTableCourses: courses,

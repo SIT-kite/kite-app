@@ -46,6 +46,9 @@ class TimetableKeys {
 
   /// 当前课表显示的起始日期
   static const startDate = '$_namespace/startDate';
+
+  // TODO: Remove this and add a new personalization system.
+  static const useOldSchoolColors = "$_namespace/useOldSchoolColors";
 }
 
 class TimetableStorage {
@@ -121,4 +124,8 @@ class TimetableStorage {
   }
 
   set lastMode(DisplayMode? foo) => box.put(TimetableKeys.lastMode, foo?.index);
+
+  set useOldSchoolColors(bool? newV) => box.put(TimetableKeys.useOldSchoolColors, newV);
+
+  bool? get useOldSchoolColors => box.get(TimetableKeys.useOldSchoolColors);
 }
