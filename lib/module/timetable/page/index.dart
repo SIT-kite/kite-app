@@ -61,7 +61,7 @@ class _TimetableIndexPageState extends State<TimetableIndexPage> {
       return const MyTimetablePage();
     } else {
       return TimetablePage(
-        selected: selected,
+        meta: selected,
       );
     }
   }

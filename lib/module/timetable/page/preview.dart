@@ -37,8 +37,9 @@ class TimetablePreviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tableViewerController = TimetableViewerController();
-    final ValueNotifier<TimetablePosition> $currentPos = ValueNotifier(TimetablePosition.initial);
+    final ValueNotifier<TimetablePosition> $currentPos = ValueNotifier(
+      TimetablePosition.locate(meta.startDate, DateTime.now()),
+    );
     final ValueNotifier<DisplayMode> $displayMode = ValueNotifier(DisplayMode.weekly);
 
     return Scaffold(
@@ -49,7 +50,6 @@ class TimetablePreviewPage extends StatelessWidget {
         ),
       ),
       body: TimetableViewer(
-        controller: tableViewerController,
         $currentPos: $currentPos,
         initialTableMeta: meta,
         initialTableCourses: courses,

@@ -38,9 +38,10 @@ class WeeklyTimetable extends StatefulWidget implements InitialTimeProtocol {
   /// 课表缓存
   final TableCache tableCache;
 
+  final ValueNotifier<TimetablePosition> $currentPos;
+
   @override
   State<StatefulWidget> createState() => WeeklyTimetableState();
-  final ValueNotifier<TimetablePosition> $currentPos;
 
   const WeeklyTimetable({
     Key? key,
@@ -51,110 +52,111 @@ class WeeklyTimetable extends StatefulWidget implements InitialTimeProtocol {
   }) : super(key: key);
 }
 
-class WeeklyTimetableState extends State<WeeklyTimetable> implements ITimetableView {
+class WeeklyTimetableState extends State<WeeklyTimetable> {
   late PageController _pageController;
   late DateTime dateSemesterStart;
   final $cellSize = ValueNotifier(Size.zero);
 
-  int _currentWeek = 1;
+  TimetablePosition get currentPos => widget.$currentPos.value;
+
+  set currentPos(TimetablePosition newValue) => widget.$currentPos.value = newValue;
 
   int page2Week(int page) => page + 1;
 
-  int week2Page(int week) => week - 1;
+  int week2PageOffset(int week) => week - 1;
+  TimetablePosition? _lastPos;
+  bool isJumping = false;
 
   @override
   void initState() {
     super.initState();
     dateSemesterStart = widget.initialDate;
-    final pos = widget.locateInTimetable(DateTime.now());
-    _currentWeek = pos.week;
-    _pageController = PageController(initialPage: _currentWeek - 1)..addListener(onPageChange);
-    widget.$currentPos.value = TimetablePosition(week: _currentWeek);
+    _pageController = PageController(initialPage: currentPos.week - 1)..addListener(onPageChange);
+    widget.$currentPos.addListener(() {
+      final curPos = widget.$currentPos.value;
+      if (_lastPos != curPos) {
+        jumpTo(curPos);
+        _lastPos = curPos;
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final targetOffset = week2PageOffset(currentPos.week);
+      final currentOffset = _pageController.page?.round() ?? targetOffset;
+      if (currentOffset != targetOffset) {
+        _pageController.jumpToPage(targetOffset);
+      }
+    });
     final dayHeaders = makeWeekdaysShortText();
 
     return [
       [
-        SizedBox(
-          width: 1,
-          height: 22 / 23 * (1.sw) / (1.sh),
-        ).align(at: Alignment.centerLeft).flexible(flex: 1),
+        const SizedBox.shrink().align(at: Alignment.centerLeft).flexible(flex: 2),
         widget.$currentPos <<
             (ctx, cur, _) => TimetableHeader(
                   dayHeaders: dayHeaders,
                   selectedDay: 0,
                   currentWeek: cur.week,
                   startDate: widget.initialDate,
-                ).flexible(flex: 10)
-      ].row(mas: MainAxisSize.min,maa: MainAxisAlignment.start,caa: CrossAxisAlignment.start).flexible(flex: 1),
-      PageView.builder(
-        controller: _pageController,
-        scrollDirection: Axis.horizontal,
-        itemCount: 20,
-        itemBuilder: (BuildContext context, int index) => _buildPage(index + 1),
-      ).flexible(flex: 15)
-    ].column(mas: MainAxisSize.min,maa: MainAxisAlignment.start,caa: CrossAxisAlignment.start);
+                ).flexible(flex: 21)
+      ].row(),
+      NotificationListener<ScrollNotification>(
+        onNotification: (e) {
+          if (e is ScrollEndNotification) {
+            isJumping = false;
+          }
+          return true;
+        },
+        child: PageView.builder(
+          controller: _pageController,
+          scrollDirection: Axis.horizontal,
+          itemCount: 20,
+          itemBuilder: (BuildContext context, int index) => _buildPage(index + 1),
+        ),
+      ).expanded()
+    ].column(mas: MainAxisSize.min, maa: MainAxisAlignment.start, caa: CrossAxisAlignment.start);
   }
 
   void onPageChange() {
-    setState(() {
-      final page = (_pageController.page ?? 0).round();
-      final newWeek = page2Week(page);
-      if (newWeek != _currentWeek) {
-        _currentWeek = newWeek;
-        widget.$currentPos.value = TimetablePosition(week: newWeek);
-      }
-    });
-  }
-
-  @override
-  bool get isTodayView {
-    var pos = widget.locateInTimetable(DateTime.now());
-    return _currentWeek == pos.week;
-  }
-
-  @override
-  void jumpToDay(int targetWeek, int targetDay) {
-    jumpToWeek(targetWeek);
-  }
-
-  @override
-  void jumpToToday() {
-    var pos = widget.locateInTimetable(DateTime.now());
-    jumpToWeek(pos.week);
+    if (!isJumping) {
+      setState(() {
+        final page = (_pageController.page ?? 0).round();
+        final newWeek = page2Week(page);
+        if (newWeek != currentPos.week) {
+          currentPos = currentPos.copyWith(week: newWeek);
+        }
+      });
+    }
   }
 
   /// 跳到某一周
-  @override
-  void jumpToWeek(int targetWeek) {
+  void jumpTo(TimetablePosition pos) {
     if (_pageController.hasClients) {
-      final targetPos = week2Page(targetWeek);
-      final currentPos = _pageController.page ?? targetPos;
-      final distance = (targetPos - currentPos).abs();
+      final targetOffset = week2PageOffset(pos.week);
+      final currentPos = _pageController.page ?? targetOffset;
+      final distance = (targetOffset - currentPos).abs();
       _pageController.animateToPage(
-        targetPos,
+        targetOffset,
         duration: calcuSwitchAnimationDuration(distance),
         curve: Curves.fastLinearToSlowEaseIn,
       );
+      isJumping = true;
     }
-    setState(() {
-      _currentWeek = targetWeek;
-    });
   }
 
   /// 布局左侧边栏, 显示节次
   Widget buildLeftColumn() {
     /// 构建每一个格子
     Widget buildCell(BuildContext context, int index) {
-      final textStyle = Theme.of(context).textTheme.bodyText2;
+      final textStyle = context.textTheme.bodyText2;
       const border = BorderSide(color: Colors.black12, width: 0.8);
 
       return Container(
-        decoration: const BoxDecoration(
-          border: Border(top: border, right: border),
+        decoration: BoxDecoration(
+          border: Border(top: border, right: border, left: border, bottom: index == 10 ? border : BorderSide.none),
         ),
         child: Center(child: Text((index + 1).toString(), style: textStyle)),
       );
@@ -181,7 +183,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> implements ITimetableV
           Expanded(flex: 2, child: buildLeftColumn()),
           Expanded(
               flex: 21,
-              child: TimetableColumn(
+              child: TimetableColumns(
                 allCourses: widget.allCourses,
                 currentWeek: week,
                 cache: widget.tableCache,
@@ -198,29 +200,19 @@ class WeeklyTimetableState extends State<WeeklyTimetable> implements ITimetableV
   }
 }
 
-class TimetableColumn extends StatefulWidget {
+class TimetableColumns extends StatefulWidget {
   final List<Course> allCourses;
   final TableCache cache;
 
   final int currentWeek;
 
-  const TimetableColumn({super.key, required this.allCourses, required this.currentWeek, required this.cache});
+  const TimetableColumns({super.key, required this.allCourses, required this.currentWeek, required this.cache});
 
   @override
-  State<StatefulWidget> createState() => _TimetableColumnState();
+  State<StatefulWidget> createState() => _TimetableColumnsState();
 }
 
-class _TimetableColumnState extends State<TimetableColumn> {
-  Size rawCellSize = Size.zero;
-
-  double calcuCellWidth({required Size by}) => rawCellSize.width * 3 / 23;
-
-  double calcuCellHeight({required Size by}) => rawCellSize.height / 11;
-
-  double get cellWidth => calcuCellWidth(by: rawCellSize);
-
-  double get cellHeight => calcuCellHeight(by: rawCellSize);
-
+class _TimetableColumnsState extends State<TimetableColumns> {
   @override
   void initState() {
     super.initState();
@@ -228,116 +220,132 @@ class _TimetableColumnState extends State<TimetableColumn> {
 
   @override
   Widget build(BuildContext context) {
-    rawCellSize = MediaQuery.of(context).size;
+    final rawColumnSize = MediaQuery.of(context).size;
+    final cellSize = Size(rawColumnSize.width * 3 / 23, rawColumnSize.height / 11);
     return SizedBox(
-      width: cellWidth * 7,
-      height: rawCellSize.height,
+      width: rawColumnSize.width * 7,
+      height: rawColumnSize.height,
       child: ListView.builder(
         itemCount: 7,
-        padding: const EdgeInsets.only(left: 1.0),
         scrollDirection: Axis.horizontal,
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemBuilder: (BuildContext context, int index) => _buildColumnByDay(context, index + 1),
+        physics: const NeverScrollableScrollPhysics(), // The scrolling has been handled outside
+        itemBuilder: (BuildContext context, int index) => _buildCellsByDay(context, index + 1, cellSize).center(),
       ),
     );
-  }
-
-  Widget _buildCourseCell(BuildContext context, Course? grid) {
-    final textStyle = Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold);
-    final textStyle2 = Theme.of(context).textTheme.bodyText2;
-    Widget buildCourseGrid(Course course) {
-      Text buildText(text, maxLines, {TextStyle? myTextStyle}) => Text(
-            text,
-            softWrap: true,
-            overflow: TextOverflow.ellipsis,
-            maxLines: maxLines,
-            style: myTextStyle ?? textStyle,
-          );
-      final decoration = BoxDecoration(
-        color: CourseColor.get(from: Theme.of(context), by: course.courseId.hashCode),
-        borderRadius: const BorderRadius.all(Radius.circular(3.0)),
-        border: const Border(),
-      );
-
-      return InkWell(
-        onTap: () {
-          showModalBottomSheet(
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              builder: (BuildContext context) => Sheet(course.courseId, widget.allCourses),
-              context: context);
-        },
-        child: Container(
-          width: cellWidth - 3,
-          height: cellHeight * course.duration - 4,
-          decoration: decoration,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                buildText(stylizeCourseName(course.courseName), 3),
-                const SizedBox(height: 3),
-                buildText(formatPlace(course.place), 2, myTextStyle: textStyle2),
-                const SizedBox(height: 3),
-                buildText(course.teacher.join(','), 2, myTextStyle: textStyle2),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-
-    Widget buildEmptyGrid() {
-      return SizedBox(
-        width: cellWidth - 3,
-        height: cellHeight - 4,
-      );
-    }
-
-    return Container(
-      width: cellWidth,
-      height: (grid?.duration ?? 1) * cellHeight,
-      alignment: const Alignment(0, 0),
-      child: grid != null ? buildCourseGrid(grid) : buildEmptyGrid(),
-    );
-  }
-
-  /// 该函数就是用来计算有课程和无课程格子数量, 供 ListView 使用
-  ///
-  /// 如：1-2, 5-6, 7-8
-  /// 合并得：[duration = 2, null, null, duration = 2, duration = 2]
-  List<Course?> _buildGrids(List<Course> dayCourseList) {
-    // 使用列表, 将每一门课放到其开始的节次上.
-    final List<Course?> l = List.filled(11, null, growable: true);
-    for (final course in dayCourseList) {
-      l[getIndexStart(course.timeIndex) - 1] = course;
-    }
-
-    // 此时 l 为 [duration = 2, null, null, null, duration = 2, null, duration = 2, null]
-    for (int i = 0; i < l.length; ++i) {
-      if (l[i] != null) {
-        l.removeRange(i + 1, i + l[i]!.duration);
-      }
-    }
-    return l;
   }
 
   /// 构建某一天的那一列格子.
-  Widget _buildColumnByDay(BuildContext context, int day) {
+  Widget _buildCellsByDay(BuildContext context, int day, Size cellSize) {
     // 该日的课程列表
-    final List<Course> dayCourseList = widget.cache.filterCourseOnDay(widget.allCourses, widget.currentWeek, day);
+    final List<Course> dayCourseList = widget.cache.getCoursesWhen(
+      widget.allCourses,
+      week: widget.currentWeek,
+      day: day,
+    );
     // 该日的格子列表
-    final List<Course?> grids = _buildGrids(dayCourseList);
+    final List<Course?> grids = _reduceCourseCells(dayCourseList);
 
     return SizedBox(
-      width: cellWidth,
-      height: cellHeight * 11,
+      width: cellSize.width,
+      height: cellSize.height * 11,
       child: Column(
-        children: [for (int index = 0; index < grids.length; index++) _buildCourseCell(context, grids[index])],
+        children: [
+          for (final course in grids)
+            SizedBox(
+              width: cellSize.width,
+              height: (course?.duration ?? 1) * cellSize.height,
+              child: course != null
+                  ? _CourseCell(
+                      course: course,
+                      allCourse: widget.allCourses,
+                    )
+                  : const SizedBox(),
+            )
+        ],
       ),
     );
   }
+}
+
+class _CourseCell extends StatefulWidget {
+  final Course course;
+  final List<Course> allCourse;
+
+  const _CourseCell({super.key, required this.course, required this.allCourse});
+
+  @override
+  State<_CourseCell> createState() => _CourseCellState();
+}
+
+class _CourseCellState extends State<_CourseCell> {
+  Course get course => widget.course;
+
+  @override
+  Widget build(BuildContext context) {
+    final size = context.mediaQuery.size;
+
+    final decoration = BoxDecoration(
+      color: CourseColor.get(from: context.theme, by: course.courseId.hashCode),
+      borderRadius: const BorderRadius.all(Radius.circular(3.0)),
+      border: const Border(),
+    );
+
+    return InkWell(
+      onTap: () {
+        showModalBottomSheet(
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            builder: (BuildContext context) => Sheet(course.courseId, widget.allCourse),
+            context: context);
+      },
+      child: Container(
+        width: size.width - 3,
+        height: size.height * course.duration - 4,
+        decoration: decoration,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              buildText(stylizeCourseName(course.courseName), 3),
+              const SizedBox(height: 3),
+              buildText(formatPlace(course.place), 2),
+              const SizedBox(height: 3),
+              buildText(course.teacher.join(','), 2),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Text buildText(String text, int maxLines) {
+    return Text(
+      text,
+      softWrap: true,
+      overflow: TextOverflow.ellipsis,
+      maxLines: maxLines,
+    );
+  }
+}
+
+/// 该函数就是用来计算有课程和无课程格子数量, 供 ListView 使用
+///
+/// 如：1-2, 5-6, 7-8
+/// 合并得：[duration = 2, null, null, duration = 2, duration = 2]
+List<Course?> _reduceCourseCells(List<Course> all) {
+  // 使用列表, 将每一门课放到其开始的节次上.
+  final List<Course?> l = List.filled(11, null, growable: true);
+  for (final course in all) {
+    l[getIndexStart(course.timeIndex) - 1] = course;
+  }
+
+  // 此时 l 为 [duration = 2, null, null, null, duration = 2, null, duration = 2, null]
+  for (int i = 0; i < l.length; ++i) {
+    if (l[i] != null) {
+      l.removeRange(i + 1, i + l[i]!.duration);
+    }
+  }
+  return l;
 }

@@ -36,7 +36,11 @@ class TableCache {
     _cache.clear();
   }
 
-  List<Course> filterCourseOnDay(List<Course> allCourses, int week, int day) {
+  List<Course> getCoursesWhen(
+    List<Course> allCourses, {
+    required int week,
+    required int day,
+  }) {
     List<Course> filtered = get(week, day);
     if (filtered.isNotEmpty) {
       return filtered;

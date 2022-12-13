@@ -30,9 +30,9 @@ import 'export.dart';
 const DisplayMode defaultMode = DisplayMode.weekly;
 
 class TimetablePage extends StatefulWidget {
-  final TimetableMeta selected;
+  final TimetableMeta meta;
 
-  const TimetablePage({super.key, required this.selected});
+  const TimetablePage({super.key, required this.meta});
 
   @override
   State<TimetablePage> createState() => _TimetablePageState();
@@ -42,8 +42,6 @@ class _TimetablePageState extends State<TimetablePage> {
   /// 最大周数
   /// TODO 还没用上
   // static const int maxWeekCount = 20;
-  final tableViewerController = TimetableViewerController();
-
   final storage = TimetableInit.timetableStorage;
 
   // 模式：周课表 日课表
@@ -53,7 +51,9 @@ class _TimetablePageState extends State<TimetablePage> {
   late List<Course> courses;
 
   // 课表元数据
-  TimetableMeta get meta => widget.selected;
+  TimetableMeta get meta => widget.meta;
+
+  late final ValueNotifier<TimetablePosition> $currentPos;
 
   /// 懒加载变量，只有用到的时候才会初始化
   late ExportDialog exportDialog = ExportDialog(context, meta, courses);
@@ -69,6 +69,7 @@ class _TimetablePageState extends State<TimetablePage> {
     });
     storage.lastMode = initialMode;
     courses = storage.getTableCourseByName(meta.name) ?? [];
+    $currentPos = ValueNotifier(TimetablePosition.locate(widget.meta.startDate, DateTime.now()));
   }
 
   // TODO: Finish this
@@ -80,20 +81,21 @@ class _TimetablePageState extends State<TimetablePage> {
     exportDialog.export();
   }
 
-  Future<void> selectTimetablePageToJump(BuildContext ctx) async {
+  Future<void> selectWeeklyTimetablePageToJump(BuildContext ctx) async {
     final currentWeek = $currentPos.value.week;
     final initialIndex = currentWeek - 1;
     final controller = FixedExtentScrollController(initialItem: initialIndex);
     final startDate = meta.startDate;
-    final todayIndex = TimetablePosition.locate(startDate, DateTime.now()).week - 1;
-    final goto = await ctx.showPicker(
+    final todayPos = TimetablePosition.locate(startDate, DateTime.now());
+    final todayIndex = todayPos.week - 1;
+    final index2Go = await ctx.showPicker(
         count: 20,
         controller: controller,
         ok: i18n.timetableJumpBtn,
         okEnabled: (curSelected) => curSelected != initialIndex,
         actions: [
           (ctx, curSelected) => i18n.timetableJumpFindTodayBtn.text().cupertinoButton(
-              onPressed: curSelected == todayIndex
+              onPressed: (curSelected == todayIndex)
                   ? null
                   : () {
                       controller.animateToItem(todayIndex,
@@ -104,32 +106,66 @@ class _TimetablePageState extends State<TimetablePage> {
           return Text(i18n.timetableWeekOrderedName(i + 1));
         });
     controller.dispose();
-    if (goto != null && goto != (initialIndex)) {
-      tableViewerController.jumpToWeek(goto + 1);
+    if (index2Go != null && index2Go != initialIndex) {
+      $currentPos.value = $currentPos.value.copyWith(
+        week: index2Go + 1,
+      );
     }
   }
 
-  final ValueNotifier<TimetablePosition> $currentPos = ValueNotifier(TimetablePosition.initial);
+  Future<void> selectDailyTimetablePageToJump(BuildContext ctx) async {
+    final currentPos = $currentPos.value;
+    final initialWeekIndex = currentPos.week - 1;
+    final initialDayIndex = currentPos.day - 1;
+    final $week = FixedExtentScrollController(initialItem: initialWeekIndex);
+    final $day = FixedExtentScrollController(initialItem: initialDayIndex);
+    final startDate = meta.startDate;
+    final todayPos = TimetablePosition.locate(startDate, DateTime.now());
+    final todayWeekIndex = todayPos.week - 1;
+    final todayDayIndex = todayPos.day - 1;
+    final weekdayNames = makeWeekdaysText();
+    final indices2Go = await ctx.showDualPicker(
+        countA: 20,
+        countB: 7,
+        controllerA: $week,
+        controllerB: $day,
+        ok: i18n.timetableJumpBtn,
+        okEnabled: (weekSelected, daySelected) => weekSelected != initialWeekIndex || daySelected != initialDayIndex,
+        actions: [
+          (ctx, week, day) => i18n.timetableJumpFindTodayBtn.text().cupertinoButton(
+              onPressed: (week == todayWeekIndex && day == todayDayIndex)
+                  ? null
+                  : () {
+                      $week.animateToItem(todayWeekIndex,
+                          duration: const Duration(milliseconds: 500), curve: Curves.fastLinearToSlowEaseIn);
+
+                      $day.animateToItem(todayDayIndex,
+                          duration: const Duration(milliseconds: 500), curve: Curves.fastLinearToSlowEaseIn);
+                    })
+        ],
+        makeA: (ctx, i) => i18n.timetableWeekOrderedName(i + 1).text(),
+        makeB: (ctx, i) => weekdayNames[i].text());
+    $week.dispose();
+    $day.dispose();
+    final week2Go = indices2Go?.item1;
+    final day2Go = indices2Go?.item2;
+    if (week2Go != null && day2Go != null && (week2Go != initialWeekIndex || day2Go != initialDayIndex)) {
+      $currentPos.value = TimetablePosition(week: week2Go + 1, day: day2Go + 1);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     Log.info('Timetable build');
     return Scaffold(
       appBar: AppBar(
-        title: ValueListenableBuilder(
-          valueListenable: $currentPos,
-          builder: (ctx, value, child) {
-            var weekdayText = makeWeekdaysText();
-            final mode = $displayMode.value;
-            if (mode == DisplayMode.weekly) {
-              return i18n.timetableWeekOrderedName(value.week).text();
-            } else {
-              return "${i18n.timetableWeekOrderedName(value.week)} ${weekdayText[(value.day - 1) % 7]}".text();
-            }
-          },
-        ),
-        actions: <Widget>[
-          //_buildSwitchWeekButton(),
+        title: $currentPos <<
+            (ctx, pos, _) =>
+                $displayMode <<
+                (ctx, mode, _) => mode == DisplayMode.weekly
+                    ? i18n.timetableWeekOrderedName(pos.week).text()
+                    : "${i18n.timetableWeekOrderedName(pos.week)} ${makeWeekdaysText()[(pos.day - 1) % 7]}".text(),
+        actions: [
           buildSwitchViewButton(context),
           buildMyTimetablesButton(context),
         ],
@@ -137,11 +173,14 @@ class _TimetablePageState extends State<TimetablePage> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.undo_rounded),
         onPressed: () async {
-          await selectTimetablePageToJump(context);
+          if ($displayMode.value == DisplayMode.weekly) {
+            await selectWeeklyTimetablePageToJump(context);
+          } else {
+            await selectDailyTimetablePageToJump(context);
+          }
         },
       ),
       body: TimetableViewer(
-        controller: tableViewerController,
         initialTableMeta: meta,
         $currentPos: $currentPos,
         initialTableCourses: courses,
@@ -154,7 +193,9 @@ class _TimetablePageState extends State<TimetablePage> {
   Widget buildSwitchViewButton(BuildContext ctx) {
     return IconButton(
       icon: const Icon(Icons.swap_horiz_rounded),
-      onPressed: tableViewerController.toggleDisplayMode,
+      onPressed: () {
+        $displayMode.value = DisplayMode.values[($displayMode.value.index + 1) & 1];
+      },
     );
   }
 

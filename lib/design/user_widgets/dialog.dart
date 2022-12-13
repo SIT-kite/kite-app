@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:rettulf/rettulf.dart';
+import 'package:tuple/tuple.dart';
 
 import 'multiplatform.dart';
 
-typedef PickerActionWidgetBuilder = Widget Function(BuildContext context, int? curSelectedIndex);
+typedef PickerActionWidgetBuilder = Widget Function(BuildContext context, int? selectedIndex);
+typedef DualPickerActionWidgetBuilder = Widget Function(BuildContext context, int? selectedIndexA, int? selectedIndexB);
 
 extension DialogEx on BuildContext {
   /// return: whether the button was hit
@@ -39,7 +41,7 @@ extension DialogEx on BuildContext {
           serious: serious,
           make: make,
           primary: $Action$(
-            warning:highlight ,
+            warning: highlight,
             text: ok,
             onPressed: () {
               ctx.navigator.pop(true);
@@ -82,7 +84,7 @@ extension DialogEx on BuildContext {
         serious: serious,
         make: make,
         primary: $Action$(
-          warning:highlight ,
+          warning: highlight,
           text: yes,
           onPressed: () {
             ctx.navigator.pop(true);
@@ -110,35 +112,34 @@ extension DialogEx on BuildContext {
         builder: builder);
   }
 
-  Future<int?> showPicker(
-      {required int count,
-      String? ok,
-      bool Function(int? selected)? okEnabled,
-      double targetHeight = 240,
-      bool highlight = false,
-      FixedExtentScrollController? controller,
-      List<PickerActionWidgetBuilder>? actions,
-      required IndexedWidgetBuilder make}) async {
+  Future<int?> showPicker({
+    required int count,
+    String? ok,
+    bool Function(int? selected)? okEnabled,
+    double targetHeight = 240,
+    bool highlight = false,
+    FixedExtentScrollController? controller,
+    List<PickerActionWidgetBuilder>? actions,
+    required IndexedWidgetBuilder make,
+  }) async {
     final $selected = ValueNotifier<int?>(controller?.initialItem);
-    return await navigator.push(
+    final res = await navigator.push(
       CupertinoModalPopupRoute(
         builder: (ctx) => CupertinoActionSheet(
-            message: SizedBox(
-                height: targetHeight,
-                child: CupertinoPicker(
-                  scrollController: controller,
-                  magnification: 1.22,
-                  useMagnifier: true,
-                  // This is called when selected item is changed.
-                  onSelectedItemChanged: (int selectedItem) {
-                    $selected.value = selectedItem;
-                  },
-                  squeeze: 1.5,
-                  itemExtent: 32.0,
-                  children: List<Widget>.generate(count, (int index) {
-                    return make(ctx, index);
-                  }),
-                )),
+            message: CupertinoPicker(
+              scrollController: controller,
+              magnification: 1.22,
+              useMagnifier: true,
+              // This is called when selected item is changed.
+              onSelectedItemChanged: (int selectedItem) {
+                $selected.value = selectedItem;
+              },
+              squeeze: 1.5,
+              itemExtent: 32.0,
+              children: List<Widget>.generate(count, (int index) {
+                return make(ctx, index);
+              }),
+            ).sized(height: targetHeight),
             actions: actions
                 ?.map((e) =>
                     ValueListenableBuilder(valueListenable: $selected, builder: (ctx, value, child) => e(ctx, value)))
@@ -156,5 +157,76 @@ extension DialogEx on BuildContext {
                         child: ok.text(style: highlight ? const TextStyle(color: Colors.redAccent) : null)))),
       ),
     );
+
+    $selected.dispose();
+    return res;
+  }
+
+  Future<Tuple2<int?, int?>?> showDualPicker({
+    required int countA,
+    required int countB,
+    String? ok,
+    bool Function(int? selectedA, int? selectedB)? okEnabled,
+    double targetHeight = 240,
+    bool highlight = false,
+    FixedExtentScrollController? controllerA,
+    FixedExtentScrollController? controllerB,
+    List<DualPickerActionWidgetBuilder>? actions,
+    required IndexedWidgetBuilder makeA,
+    required IndexedWidgetBuilder makeB,
+  }) async {
+    final $selectedA = ValueNotifier<int?>(controllerA?.initialItem);
+    final $selectedB = ValueNotifier<int?>(controllerB?.initialItem);
+    final res = await navigator.push(
+      CupertinoModalPopupRoute(
+        builder: (ctx) => CupertinoActionSheet(
+            message: [
+              CupertinoPicker(
+                scrollController: controllerA,
+                magnification: 1.22,
+                useMagnifier: true,
+                // This is called when selected item is changed.
+                onSelectedItemChanged: (int selectedItem) {
+                  $selectedA.value = selectedItem;
+                },
+                squeeze: 1.5,
+                itemExtent: 32.0,
+                children: List<Widget>.generate(countA, (int index) {
+                  return makeA(ctx, index);
+                }),
+              ).expanded(),
+              CupertinoPicker(
+                scrollController: controllerB,
+                magnification: 1.22,
+                useMagnifier: true,
+                // This is called when selected item is changed.
+                onSelectedItemChanged: (int selectedItem) {
+                  $selectedB.value = selectedItem;
+                },
+                squeeze: 1.5,
+                itemExtent: 32.0,
+                children: List<Widget>.generate(countB, (int index) {
+                  return makeB(ctx, index);
+                }),
+              ).expanded(),
+            ].row().sized(height: targetHeight),
+            actions:
+                actions?.map((e) => $selectedA << (ctx, a, _) => $selectedB << (ctx, b, _) => e(ctx, a, b)).toList(),
+            cancelButton: ok == null
+                ? null
+                : ValueListenableBuilder(
+                    valueListenable: $selectedB,
+                    builder: (ctx, value, child) => CupertinoButton(
+                        onPressed: okEnabled?.call($selectedA.value, $selectedB.value) ?? true
+                            ? () {
+                                Navigator.of(ctx).pop(Tuple2($selectedA.value, $selectedB.value));
+                              }
+                            : null,
+                        child: ok.text(style: highlight ? const TextStyle(color: Colors.redAccent) : null)))),
+      ),
+    );
+    $selectedA.dispose();
+    $selectedB.dispose();
+    return res;
   }
 }

@@ -132,6 +132,7 @@ dependencies:
   modal_bottom_sheet: ^2.1.2
   msh_checkbox: ^1.2.1
   animated_toggle_switch: ^0.5.2
+  quiver: ^3.1.0
 
 
 dev_dependencies:

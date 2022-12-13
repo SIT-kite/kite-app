@@ -15,8 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+import 'package:quiver/core.dart';
 import 'package:flutter/material.dart';
+import 'package:rettulf/rettulf.dart';
 
 import '../cache.dart';
 import '../entity/course.dart';
@@ -53,40 +54,19 @@ class TimetablePosition {
       return const TimetablePosition(week: 1, day: 1);
     }
   }
-}
 
-abstract class ITimetableView {
-  void jumpToToday();
+  TimetablePosition copyWith({int? week, int? day}) => TimetablePosition(
+        week: week ?? this.week,
+        day: day ?? this.day,
+      );
 
-  void jumpToWeek(int targetWeek);
-
-  void jumpToDay(int targetWeek, int targetDay);
-
-  bool get isTodayView;
-}
-
-class TimetableViewerController {
-  _TimetableViewerState? _state;
-
-  TimetableViewerController();
-
-  void toggleDisplayMode() {
-    _state?.switchDisplayMode();
+  @override
+  bool operator ==(Object other) {
+    return other is TimetablePosition && runtimeType == other.runtimeType && week == other.week && day == other.day;
   }
 
-  void jumpToToday() {
-    _state?.jumpToday();
-  }
-
-  void jumpToWeek(int week) {
-    _state?.jumpWeek(week);
-  }
-
-  bool get isTodayView => _state?.isTodayView ?? true;
-
-  void _bindState(State<TimetableViewer> state) {
-    _state = state as _TimetableViewerState;
-  }
+  @override
+  int get hashCode => hash2(week, day);
 }
 
 class TimetableViewer extends StatefulWidget {
@@ -104,9 +84,6 @@ class TimetableViewer extends StatefulWidget {
   /// 课表视图使用的缓存
   final TableCache tableCache;
 
-  /// 课表控制器
-  final TimetableViewerController? controller;
-
   final ValueNotifier<TimetablePosition> $currentPos;
 
   const TimetableViewer({
@@ -116,7 +93,6 @@ class TimetableViewer extends StatefulWidget {
     required this.tableCache,
     required this.$currentPos,
     this.onJumpedToday,
-    this.controller,
     Key? key,
   }) : super(key: key);
 
@@ -129,58 +105,30 @@ class _TimetableViewerState extends State<TimetableViewer> {
   /// TODO 还没用上
   // static const int maxWeekCount = 20;
 
-  GlobalKey get currentKey => widget.$displayMode.value == DisplayMode.daily ? dailyTimetableKey : weeklyTimetableKey;
-  late final dailyTimetableKey = GlobalKey(debugLabel: "Daily TimeTable Key of ${widget.initialTableMeta?.name}");
-  late final weeklyTimetableKey = GlobalKey(debugLabel: "Weekly TimeTable Key of ${widget.initialTableMeta?.name}");
-
   @override
   void initState() {
     Log.info('TimetableViewer init');
     super.initState();
-    widget.controller?._bindState(this);
   }
-
-  void switchDisplayMode() {
-    // 显示有0和1两种模式，可通过(x+1) & 2进行来会切换
-    setState(() {
-      widget.$displayMode.value = DisplayMode.values[(widget.$displayMode.value.index + 1) & 1];
-    });
-  }
-
-  ///跳到今天的方法
-  void jumpToday() {
-    (currentKey.currentState as ITimetableView?)?.jumpToToday();
-  }
-
-  /// 跳到某一周
-  void jumpWeek(int week) {
-    (currentKey.currentState as ITimetableView?)?.jumpToWeek(week);
-  }
-
-  bool get isTodayView => (currentKey.currentState as ITimetableView?)?.isTodayView ?? true;
 
   @override
   Widget build(BuildContext context) {
-    // TODO: memory leak in widget tree.
-    // Duplicate GlobalKey detected in widget tree.
-    // I/flutter (16538): The following GlobalKey was specified multiple times in the widget tree. This will lead to parts of the widget tree being truncated unexpectedly, because the second time a key is seen, the previous instance is moved to the new location. The key was:
-    // I/flutter (16538): - [GlobalKey#2ed39 Weekly TimeTable Key of Fall Semester, 2022-2023 Timetable]
-    return (widget.$displayMode.value == DisplayMode.daily
-            ? DailyTimetable(
-                key: dailyTimetableKey,
-                $currentPos: widget.$currentPos,
-                allCourses: widget.initialTableCourses,
-                initialDate: widget.initialTableMeta.startDate ?? DateTime.now(),
-                tableCache: widget.tableCache,
-                viewChangingCallback: switchDisplayMode)
-            : WeeklyTimetable(
-                key: weeklyTimetableKey,
-                $currentPos: widget.$currentPos,
-                allCourses: widget.initialTableCourses,
-                initialDate: widget.initialTableMeta.startDate ?? DateTime.now(),
-                tableCache: widget.tableCache))
-        .animatedSwitched(
-      d: const Duration(milliseconds: 300),
-    );
+    return widget.$displayMode <<
+        (ctx, mode, _) => (mode == DisplayMode.daily
+                    ? DailyTimetable(
+                        $currentPos: widget.$currentPos,
+                        allCourses: widget.initialTableCourses,
+                        initialDate: widget.initialTableMeta.startDate,
+                        tableCache: widget.tableCache,
+                      )
+                    : WeeklyTimetable(
+                        $currentPos: widget.$currentPos,
+                        allCourses: widget.initialTableCourses,
+                        initialDate: widget.initialTableMeta.startDate,
+                        tableCache: widget.tableCache,
+                      ))
+                .animatedSwitched(
+              d: const Duration(milliseconds: 300),
+            );
   }
 }
