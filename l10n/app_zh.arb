@@ -471,5 +471,7 @@
   "welcomeSlogan": "便利校园，一步到位",
   "xuhui": "徐汇",
   "xuhuiDistrict": "徐汇区",
-  "yes": "好"
+  "yes": "好",
+  "timetableFreeDayIsTodayTip": "尽情享受今天吧！",
+  "timetableFreeDayTip": "好耶，没课的一天！"
 }

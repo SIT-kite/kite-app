@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:rettulf/rettulf.dart';
 
 import '../cache.dart';
 import '../entity/course.dart';
@@ -74,20 +75,6 @@ class DailyTimetableState extends State<DailyTimetable> implements ITimetableVie
     return Tuple2(week, day);
   }
 
-  void onPageChange() {
-    setState(() {
-      final page = (_pageController.page ?? 0).round();
-      final weekNDay = page2WeekNDay(page);
-      final newWeek = weekNDay.item1;
-      final newDay = weekNDay.item2;
-      if (newWeek != _currentWeek || newDay != _currentDay) {
-        _currentWeek = newWeek;
-        _currentDay = newDay;
-        widget.$currentPos.value = TimetablePosition(week: newWeek, day: newDay);
-      }
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -103,6 +90,45 @@ class DailyTimetableState extends State<DailyTimetable> implements ITimetableVie
   }
 
   @override
+  Widget build(BuildContext context) {
+    final dayHeaders = makeWeekdaysShortText();
+    return [
+      widget.$currentPos <<
+          (ctx, cur, _) => TimetableHeader(
+                dayHeaders: dayHeaders,
+                selectedDay: cur.day,
+                currentWeek: cur.week,
+                startDate: widget.initialDate,
+                onDayTap: (selectedDay) {
+                  widget.$currentPos.value = TimetablePosition(week: cur.week, day: selectedDay);
+                  jumpToDay(cur.week, selectedDay);
+                },
+              ).flexible(flex: 1),
+      PageView.builder(
+        controller: _pageController,
+        scrollDirection: Axis.horizontal,
+        // TODO: 存储
+        itemCount: 20 * 7,
+        itemBuilder: (_, int index) => _pageBuilder(context, index, widget.allCourses),
+      ).flexible(flex: 10)
+    ].column();
+  }
+
+  void onPageChange() {
+    setState(() {
+      final page = (_pageController.page ?? 0).round();
+      final weekNDay = page2WeekNDay(page);
+      final newWeek = weekNDay.item1;
+      final newDay = weekNDay.item2;
+      if (newWeek != _currentWeek || newDay != _currentDay) {
+        _currentWeek = newWeek;
+        _currentDay = newDay;
+        widget.$currentPos.value = TimetablePosition(week: newWeek, day: newDay);
+      }
+    });
+  }
+
+  @override
   void dispose() {
     super.dispose();
     _pageController.dispose();
@@ -113,16 +139,12 @@ class DailyTimetableState extends State<DailyTimetable> implements ITimetableVie
   void jumpToDay(int targetWeek, int targetDay) {
     if (_pageController.hasClients) {
       final targetPos = weekNDay2Page(targetWeek, targetDay);
-      /*final currentPos = _pageController.page ?? targetPos;
+      final currentPos = _pageController.page ?? targetPos;
       final distance = (targetPos - currentPos).abs();
       _pageController.animateToPage(
         targetPos,
         duration: calcuSwitchAnimationDuration(distance),
         curve: Curves.fastLinearToSlowEaseIn,
-      );*/
-      // Jumping brings a terrible UX
-      _pageController.jumpToPage(
-        targetPos,
       );
     }
     setState(() {
@@ -134,7 +156,7 @@ class DailyTimetableState extends State<DailyTimetable> implements ITimetableVie
   /// 跳转到今天
   @override
   void jumpToToday() {
-    var pos = widget.locateInTimetable(DateTime.now());
+    final pos = widget.locateInTimetable(DateTime.now());
     jumpToDay(pos.week, pos.day);
   }
 
@@ -190,67 +212,30 @@ class DailyTimetableState extends State<DailyTimetable> implements ITimetableVie
   }
 
   Widget _buildEmptyPage() {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Text('太棒啦，今天没有课'),
-          if (widget.viewChangingCallback != null)
-            TextButton(
-              child: const Text('转到到周课表'),
-              onPressed: () {
-                (widget.viewChangingCallback)!();
-              },
-            )
-        ],
-      ),
+    final pos = widget.locateInTimetable(DateTime.now());
+    final String desc;
+    if (pos.week == _currentWeek && pos.day == _currentDay) {
+      desc = i18n.timetableFreeDayIsTodayTip;
+    } else {
+      desc = i18n.timetableFreeDayTip;
+    }
+    return LeavingBlank(
+      icon: Icons.free_cancellation_rounded,
+      desc: desc,
     );
   }
 
   /// 构建第 index 页视图
-  Widget _pageBuilder(BuildContext context, int index, List<Course> allCourses, List<String> dayHeaders) {
+  Widget _pageBuilder(BuildContext context, int index, List<Course> allCourses) {
     int week = index ~/ 7 + 1;
     int day = index % 7 + 1;
     final List<Course> todayCourse = widget.tableCache.filterCourseOnDay(allCourses, week, day);
 
-    return Column(
-      children: [
-        // 翻页不影响选择的星期, 因此沿用 _currentDay.
-        Expanded(
-          child: TimetableHeader(
-            dayHeaders: dayHeaders,
-            selectedDay: day,
-            currentWeek: week,
-            startDate: widget.initialDate,
-            onTap: (selectedDay) {
-              day = selectedDay;
-              jumpToDay(week, day);
-            },
-          ),
-        ),
-        Expanded(
-          flex: 10,
-          child: todayCourse.isNotEmpty
-              ? ListView(
-                  controller: ScrollController(),
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  children: todayCourse.map((e) => _buildCourseCard(context, e, widget.allCourses)).toList())
-              : _buildEmptyPage(),
-        )
-      ],
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final dayHeaders = makeWeekdaysShortText();
-    return PageView.builder(
-      controller: _pageController,
-      scrollDirection: Axis.horizontal,
-      // TODO: 存储
-      itemCount: 20 * 7,
-      itemBuilder: (_, int index) => _pageBuilder(context, index, widget.allCourses, dayHeaders),
-    );
+    return todayCourse.isNotEmpty
+        ? ListView(
+            controller: ScrollController(),
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+            children: todayCourse.map((e) => _buildCourseCard(context, e, widget.allCourses)).toList())
+        : _buildEmptyPage();
   }
 }

@@ -748,5 +748,8 @@
   "welcomeSlogan": "Excellent school life, from here.",
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
-  "yes": "Yes"
+  "yes": "Yes",
+  "timetableFreeDayIsTodayTip": "Have a nice day!",
+  "timetableFreeDayTip": "It's a free day!"
+
 }

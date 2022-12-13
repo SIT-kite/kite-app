@@ -30,7 +30,7 @@ class TimetableHeader extends StatefulWidget {
   final int selectedDay;
 
   /// 点击的回调
-  final Function(int)? onTap;
+  final Function(int)? onDayTap;
 
   final DateTime startDate;
   final bool leadingSpace;
@@ -42,7 +42,7 @@ class TimetableHeader extends StatefulWidget {
     required this.selectedDay,
     required this.startDate,
     this.leadingSpace = false,
-    this.onTap,
+    this.onDayTap,
   });
 
   @override
@@ -50,11 +50,10 @@ class TimetableHeader extends StatefulWidget {
 }
 
 class _TimetableHeaderState extends State<TimetableHeader> {
-  late int selectedDay;
+  int get selectedDay => widget.selectedDay;
 
   @override
   void initState() {
-    selectedDay = widget.selectedDay;
     super.initState();
   }
 
@@ -64,11 +63,13 @@ class _TimetableHeaderState extends State<TimetableHeader> {
     final textColor = textNBgColors.item1;
     final bgColor = textNBgColors.item2;
 
-    return Container(
+    return AnimatedContainer(
       decoration: BoxDecoration(
         color: bgColor,
         border: Border.all(color: Colors.black12, width: 0.8),
       ),
+      duration: const Duration(milliseconds: 1000),
+      curve: Curves.fastLinearToSlowEaseIn,
       child: Padding(
           padding: const EdgeInsets.only(top: 5, bottom: 5),
           child: Text(
@@ -87,22 +88,16 @@ class _TimetableHeaderState extends State<TimetableHeader> {
   Widget buildDayNameHeader(int day) {
     final date = getDateFromWeekDay(widget.startDate, widget.currentWeek, day);
     final dateString = '${date.month}/${date.day}';
-/*    TextStyle? style = Theme.of(context).textTheme.bodyText2;
-    if (day == selectedDay) {
-      style = style?.copyWith(color: Colors.white);
-    }*/
-    final onTapCallback = widget.onTap != null
-        ? () {
-            setState(() {
-              selectedDay = day;
-            });
-            widget.onTap!(selectedDay);
-          }
-        : null;
+    final onDayTap = widget.onDayTap;
     return Expanded(
       flex: 3,
       child: InkWell(
-          onTap: onTapCallback, child: buildDayHeader(context, day, '${widget.dayHeaders[day - 1]}\n$dateString')),
+          onTap: onDayTap != null
+              ? () {
+                  widget.onDayTap?.call(day);
+                }
+              : null,
+          child: buildDayHeader(context, day, '${widget.dayHeaders[day - 1]}\n$dateString')),
     );
   }
 

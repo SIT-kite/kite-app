@@ -471,5 +471,7 @@
   "welcomeSlogan": "便捷校園, 即刻起航",
   "xuhui": "徐匯",
   "xuhuiDistrict": "徐匯區",
-  "yes": "好"
+  "yes": "好",
+  "timetableFreeDayIsTodayTip": "祝你今日過得愉快！",
+  "timetableFreeDayTip": "好喔，這天沒課！"
 }

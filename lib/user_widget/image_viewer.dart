@@ -33,7 +33,7 @@ class MyImageViewer extends StatelessWidget {
         if (loadingProgress == null) {
           return child;
         } else {
-          return Placeholders.loading();
+          return Placeholders.progress();
         }
       },
       errorBuilder: (ctx, error, stacktrace) {
