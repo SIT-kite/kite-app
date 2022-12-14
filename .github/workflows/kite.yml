@@ -1,4 +1,4 @@
- name: KiteApp
+name: KiteApp
 
 on:
   push:
