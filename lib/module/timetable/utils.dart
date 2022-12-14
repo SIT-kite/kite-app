@@ -18,6 +18,7 @@
 
 import 'package:ical/serializer.dart';
 import 'package:intl/intl.dart';
+import 'entity/entity.dart';
 import 'using.dart';
 
 import 'entity/course.dart';
@@ -101,4 +102,8 @@ Future<void> exportTimetableToCalendar(TimetableMeta meta, List<Course> courses,
     filename: getExportTimetableFilename(),
     type: 'text/calendar',
   );
+}
+
+TimetableEntity parseTimetableEntity(List<Course> all) {
+  return TimetableEntity([],{});
 }

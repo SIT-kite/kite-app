@@ -93,7 +93,7 @@ class Editor {
 
   static Future<void> showReadonlyEditor(BuildContext ctx, String? desc, dynamic value) async {
     await ctx.showDialog(
-        builder: (ctx) => _readonlyEditor(ctx, (ctx) => value.toString().text().scrolled(), title: desc));
+        builder: (ctx) => _readonlyEditor(ctx, (ctx) => SelectableText(value.toString()), title: desc));
   }
 
   static Future<int> showIntEditor(BuildContext ctx, String? desc, int initial) async {

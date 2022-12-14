@@ -20,6 +20,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:kite/design/page/common.dart';
 import 'package:kite/design/user_widgets/view.dart';
@@ -168,7 +169,7 @@ class _BoxItemListState extends State<BoxItemList> {
         });
       },
       totalPage: totalPage,
-      btnPerGroup: min(5, totalPage),
+      btnPerGroup: (ctx.mediaQuery.size.width / 20.w).round().clamp(1, totalPage),
       currentPageIndex: currentPage + 1,
     );
   }
@@ -224,7 +225,7 @@ class _BoxItemState extends State<BoxItem> {
       Text(type, style: widget.typeStyle?.copyWith(color: Editor.isSupport(value) ? Colors.green : null)),
       Text(
         '$value',
-        maxLines: 3,
+        maxLines: 5,
         style: widget.contentStyle?.copyWith(overflow: TextOverflow.ellipsis),
       ),
     ].column(caa: CrossAxisAlignment.start).align(at: Alignment.topLeft).padAll(10).inCard(elevation: 5);

@@ -133,18 +133,18 @@ class CourseColor {
     _Cp(Color.fromARGB(178, 116, 185, 255), Color.fromARGB(178, 56, 85, 200)),
   ];
   static const List<ColorPair> v1_5 = [
-    _Cp(Color(0xF085e779), Color(0xF021520f)), // green #678a5c
-    _Cp(Color(0xF0c3e8ff), Color(0xF0004c68)), // sky #5487a3
-    _Cp(Color(0xF0ffa6bb), Color(0xF08e2f56)), // pink #ae6f83
-    _Cp(Color(0xF0ad9bd7), Color(0xF050378a)), // violet #8879ab
-    _Cp(Color(0xF0ff9d6b), Color(0xF07f2b00)), // orange #a23900
-    _Cp(Color(0xF0ffa2d2), Color(0xF08e0032)), // rose #b50060
-    _Cp(Color(0xF0ffd200), Color(0xF0523900)), // lemon #b09e40
-    _Cp(Color(0xF075f8e2), Color(0xF0005047)), // cyan #008f7f
-    _Cp(Color(0xF0b4ebff), Color(0xF0004e5f)), // ice #b3c7cf
-    _Cp(Color(0xF0b4ebff), Color(0xF0004e5f)), // cyan #d4bdce
-    _Cp(Color(0xF0ffd7f5), Color(0xF07c157a)), // mauve #ff8df3
-    _Cp(Color(0xF0eaf141), Color(0xF04b4c00)), // toxic #a2c300
+    _Cp(Color(0xF085e779), Color(0xFF21520f)), // green #678a5c
+    _Cp(Color(0xF0c3e8ff), Color(0xFF004c68)), // sky #5487a3
+    _Cp(Color(0xF0ffa6bb), Color(0xFF8e2f56)), // pink #ae6f83
+    _Cp(Color(0xF0ad9bd7), Color(0xFF50378a)), // violet #8879ab
+    _Cp(Color(0xF0ff9d6b), Color(0xFF7f2b00)), // orange #a23900
+    _Cp(Color(0xF0ffa2d2), Color(0xFF8e0032)), // rose #b50060
+    _Cp(Color(0xF0ffd200), Color(0xFF523900)), // lemon #b09e40
+    _Cp(Color(0xF075f8e2), Color(0xFF005047)), // cyan #008f7f
+    _Cp(Color(0xF0b4ebff), Color(0xFF004e5f)), // ice #b3c7cf
+    _Cp(Color(0xF0b4ebff), Color(0xFF004e5f)), // cyan #d4bdce
+    _Cp(Color(0xF0ffd7f5), Color(0xFF7c157a)), // mauve #ff8df3
+    _Cp(Color(0xF0eaf141), Color(0xFF4b4c00)), // toxic #a2c300
   ];
 
   static get({required ThemeData from, required int by}) => oldSchool[by.abs() % oldSchool.length].byTheme(from);

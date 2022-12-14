@@ -72,11 +72,11 @@ class _TimetableHeaderState extends State<TimetableHeader> {
     final textNBgColors = ctx.makeTabHeaderTextBgColors(isSelected);
     final textColor = textNBgColors.item1;
     final bgColor = textNBgColors.item2;
-    final side = BorderSide(color: ctx.darkSafeThemeColor, width: 0.8);
+    final side = getBorderSide(ctx);
     return AnimatedContainer(
       decoration: BoxDecoration(
         color: bgColor,
-        border: Border(top: side, bottom: side, left: day == 1 ? side : BorderSide.none, right: side),
+        border: Border(left: day == 1 ? side : BorderSide.none, right: day != 7 ? side : BorderSide.none),
       ),
       duration: const Duration(milliseconds: 1000),
       curve: Curves.fastLinearToSlowEaseIn,
@@ -105,3 +105,5 @@ class _TimetableHeaderState extends State<TimetableHeader> {
     );
   }
 }
+
+BorderSide getBorderSide(BuildContext ctx) => BorderSide(color: ctx.darkSafeThemeColor.withOpacity(0.4), width: 0.8);

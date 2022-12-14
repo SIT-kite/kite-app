@@ -94,28 +94,23 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
       }
     });
     final dayHeaders = makeWeekdaysShortText();
+    final side = getBorderSide(context);
+
     return [
       [
-        Icon(
-          Mood.get(mood),
-          color: context.darkSafeThemeColor,
-        )
-            .onTap(key: ValueKey(mood), () {
-              setState(() {
-                mood = Mood.next(mood);
-              });
-            })
-            .animatedSwitched(d: const Duration(milliseconds: 400))
-            .align(at: Alignment.center)
-            .flexible(flex: 2),
+        buildMood(context).align(at: Alignment.center).flexible(flex: 2),
         widget.$currentPos <<
             (ctx, cur, _) => TimetableHeader(
                   dayHeaders: dayHeaders,
                   selectedDay: 0,
                   currentWeek: cur.week,
                   startDate: widget.initialDate,
-                ).flexible(flex: 21)
-      ].row(),
+                ).flexible(flex: 22)
+      ].row().container(
+            decoration: BoxDecoration(
+              border: Border(left: side, top: side, right: side, bottom: side),
+            ),
+          ),
       NotificationListener<ScrollNotification>(
         onNotification: (e) {
           if (e is ScrollEndNotification) {
@@ -131,6 +126,17 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
         ),
       ).expanded()
     ].column(mas: MainAxisSize.min, maa: MainAxisAlignment.start, caa: CrossAxisAlignment.start);
+  }
+
+  Widget buildMood(BuildContext ctx) {
+    return Icon(
+      Mood.get(mood),
+      color: context.darkSafeThemeColor,
+    ).onTap(key: ValueKey(mood), () {
+      setState(() {
+        mood = Mood.next(mood);
+      });
+    }).animatedSwitched(d: const Duration(milliseconds: 400));
   }
 
   void onPageChange() {
@@ -165,11 +171,15 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
     /// 构建每一个格子
     Widget buildCell(BuildContext ctx, int index) {
       final textStyle = ctx.textTheme.bodyText2;
-      final border = BorderSide(color: ctx.darkSafeThemeColor, width: 0.8);
+      final side = getBorderSide(ctx);
 
       return Container(
         decoration: BoxDecoration(
-          border: Border(top: border, right: border, left: border, bottom: index == 10 ? border : BorderSide.none),
+          border: Border(
+              top: index != 0 ? side : BorderSide.none,
+              right: side,
+              left: side,
+              bottom: index == 10 ? side : BorderSide.none),
         ),
         child: Center(child: Text((index + 1).toString(), style: textStyle)),
       );
@@ -193,14 +203,12 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
       child: Row(
         textDirection: TextDirection.ltr,
         children: [
-          Expanded(flex: 2, child: buildLeftColumn()),
-          Expanded(
-              flex: 21,
-              child: TimetableColumns(
-                allCourses: widget.allCourses,
-                currentWeek: week,
-                cache: widget.tableCache,
-              ))
+          buildLeftColumn().flexible(flex: 2),
+          TimetableColumns(
+            allCourses: widget.allCourses,
+            currentWeek: week,
+            cache: widget.tableCache,
+          ).flexible(flex: 21)
         ],
       ),
     );

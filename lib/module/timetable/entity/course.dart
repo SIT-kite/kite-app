@@ -106,7 +106,7 @@ class Course {
 
   @override
   String toString() {
-    return 'Course{courseName: $courseName, day: $dayIndex, timeIndex: $timeIndex, week: $weekIndex, place: $place, teacher: $teacher, campus: $campus, credit: $credit, hour: $hour, dynClassId: $dynClassId, courseId: $courseId, weekText: $weekText, duration: $duration}';
+    return '{"courseName":"$courseName","day":"$dayIndex","timeIndex":"$timeIndex","week":"$weekIndex","place":"$place","teacher":"$teacher","campus":"$campus","credit":"$credit","hour":"$hour","dynClassId":"$dynClassId","courseId":"$courseId","weekText":"$weekText","duration":"$duration"}';
   }
 
   /// 将中文的星期转换为数字, 如 "星期四" -> 4. 如果出错, 返回 0

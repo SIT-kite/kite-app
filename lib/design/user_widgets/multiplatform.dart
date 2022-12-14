@@ -160,9 +160,6 @@ class $Dialog$ extends StatelessWidget {
         actionsAlignment: MainAxisAlignment.spaceEvenly,
       );
     }
-    if (UniversalPlatform.isDesktop) {
-      dialog = OmniDraggable(child: dialog);
-    }
     return dialog;
   }
 }

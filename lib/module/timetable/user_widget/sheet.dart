@@ -28,7 +28,7 @@ class Sheet extends StatelessWidget {
   /// classes 中存放的就是对应的所有课程, 我们在这把它称为班级.
   late final List<Course> classes;
 
-  Sheet(this.courseId, this.allCourses, {Key? key}) : super(key: key) {
+  Sheet(this.courseId, this.allCourses, {super.key}) {
     // 初始化 classes
     classes = allCourses.where((e) => e.courseId == courseId).toList();
   }
@@ -53,7 +53,7 @@ class Sheet extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(0, 25, 0, 5),
       child: Container(
         decoration: const BoxDecoration(),
-        child: Text(classes[0].courseName, style: titleStyle),
+        child: Text(stylizeCourseName(classes[0].courseName), style: titleStyle),
       ),
     );
   }
