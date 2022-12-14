@@ -19,7 +19,7 @@ jobs:
       - name: 🤖 Telegram Notification
         uses: appleboy/telegram-action@v0.1.1
         with:
-          to: ${{ secrets.CHAT_ID }}
+          to: ${{ secrets.CHANNEL_CHAT_ID }}
           token: ${{ secrets.BOT_TOKEN }}
           format: markdown
           message: |
@@ -94,7 +94,7 @@ jobs:
       - name: 🤖 Telegram Notification
         uses: appleboy/telegram-action@v0.1.1
         with:
-          to: ${{ secrets.CHAT_ID }}
+          to: ${{ secrets.CHANNEL_CHAT_ID }}
           token: ${{ secrets.BOT_TOKEN }}
           format: markdown
           message: |
