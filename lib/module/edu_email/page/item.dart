@@ -18,8 +18,8 @@
 
 import 'package:enough_mail/enough_mail.dart';
 import 'package:flutter/material.dart';
-import '../using.dart';
 
+import '../using.dart';
 import 'detail.dart';
 
 class MailItem extends StatelessWidget {

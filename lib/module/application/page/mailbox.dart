@@ -17,12 +17,11 @@
  */
 import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
-import 'package:rettulf/rettulf.dart';
+
 import '../entity/message.dart';
+import '../init.dart';
 import '../user_widget/mail.dart';
 import '../using.dart';
-
-import '../init.dart';
 
 class Mailbox extends StatefulWidget {
   const Mailbox({super.key});

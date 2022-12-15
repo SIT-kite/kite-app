@@ -15,14 +15,15 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:rettulf/rettulf.dart';
 
-import '../using.dart';
 import '../entity/application.dart';
 import '../page/detail.dart';
-import 'dart:math';
+import '../using.dart';
 
 class ApplicationTile extends StatelessWidget {
   final ApplicationMeta meta;

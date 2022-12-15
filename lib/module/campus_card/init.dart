@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'using.dart';
 import 'dao/campus_card.dart';
 import 'service/campus_card.dart';
+import 'using.dart';
 
 class CampusCardInit {
   static late CampusCardDao campusCardService;

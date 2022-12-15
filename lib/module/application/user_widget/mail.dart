@@ -16,6 +16,7 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import 'package:flutter/material.dart';
+
 import '../entity/message.dart';
 import '../page/browser.dart';
 import '../using.dart';

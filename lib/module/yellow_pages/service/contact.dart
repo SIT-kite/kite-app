@@ -15,10 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import '../using.dart';
-
 import '../dao/contact.dart';
 import '../entity/contact.dart';
+import '../using.dart';
 
 class ContactRemoteService implements ContactRemoteDao {
   static const _contactUrl = '/contact';

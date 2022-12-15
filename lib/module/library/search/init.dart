@@ -17,8 +17,8 @@
  */
 
 import 'package:dio/dio.dart';
-import '../using.dart';
 
+import '../using.dart';
 import 'dao/book_info.dart';
 import 'dao/book_search.dart';
 import 'dao/holding.dart';

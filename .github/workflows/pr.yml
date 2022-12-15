@@ -24,7 +24,7 @@ jobs:
         if: github.event.pull_request.merged == true
         uses: appleboy/telegram-action@v0.1.1
         with:
-          to: ${{ secrets.CHAT_ID }}
+          to: ${{ secrets.CHANNEL_CHAT_ID }}
           token: ${{ secrets.BOT_TOKEN }}
           format: markdown
           message: |

@@ -27,12 +27,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../user_widgets/dialog.dart';
-import '../../using.dart';
 
 import '../../entity/record.dart';
 import '../../entity/type.dart';
 import '../../init.dart';
+import '../../user_widgets/dialog.dart';
+import '../../using.dart';
 import '../common.dart';
 import 'models/board_model.dart';
 import 'widgets/board.dart';

@@ -19,9 +19,9 @@ import 'package:flutter/material.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../entity/meta.dart';
+import '../using.dart';
 import 'button.dart';
 import 'picker.dart';
-import '../using.dart';
 
 class MetaEditor extends StatefulWidget {
   final TimetableMeta meta;

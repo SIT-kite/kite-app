@@ -16,12 +16,10 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:kite/design/colors.dart';
 import 'package:kite/design/utils.dart';
 import 'package:kite/module/application/using.dart';
-import 'package:rettulf/rettulf.dart';
 
 typedef IconBuilder = Widget Function(double size, Color color);
 // ignore: non_constant_identifier_names

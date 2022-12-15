@@ -23,11 +23,11 @@ import 'package:kite/launcher.dart';
 import 'package:kite/util/url_launcher.dart';
 import 'package:rettulf/rettulf.dart';
 import 'package:universal_platform/universal_platform.dart';
-import '../entity/application.dart';
 
+import '../entity/application.dart';
 import '../init.dart';
-import '../using.dart';
 import '../page/browser.dart';
+import '../using.dart';
 
 class DetailPage extends StatefulWidget {
   final ApplicationMeta meta;

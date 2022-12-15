@@ -18,10 +18,10 @@
 import 'dart:convert';
 
 import '../dao/Freshman.dart';
-import '../using.dart';
 import '../entity/info.dart';
 import '../entity/relationship.dart';
 import '../entity/statistics.dart';
+import '../using.dart';
 
 class FreshmanMock implements FreshmanDao {
   @override

@@ -37,14 +37,14 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:rettulf/rettulf.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-import '../entity/home.dart';
-import '../init.dart';
-import 'background.dart';
 import '../brick_maker.dart';
+import '../entity/home.dart';
+import '../homepage_factory.dart';
+import '../init.dart';
+import '../magic_brick/index.dart';
 import '../user_widget/drawer.dart';
 import '../user_widget/greeting.dart';
-import '../homepage_factory.dart';
-import '../magic_brick/index.dart';
+import 'background.dart';
 
 class HomeItemGroup extends StatelessWidget {
   final List<Widget> items;

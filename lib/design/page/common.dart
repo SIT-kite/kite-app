@@ -17,8 +17,9 @@
 */
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import '../colors.dart';
 import 'package:rettulf/rettulf.dart';
+
+import '../colors.dart';
 
 class LeavingBlank extends StatelessWidget {
   final WidgetBuilder iconBuilder;

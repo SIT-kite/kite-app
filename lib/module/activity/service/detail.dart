@@ -22,8 +22,8 @@ import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:intl/intl.dart';
 
 import '../dao/detail.dart';
-import '../using.dart';
 import '../entity/detail.dart';
+import '../using.dart';
 
 class ScActivityDetailService implements ScActivityDetailDao {
   static const _scDetailUrlBase = 'http://sc.sit.edu.cn/public/activity/activityDetail.action?activityId=';

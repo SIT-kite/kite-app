@@ -19,13 +19,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../cache.dart';
-import '../using.dart';
 
+import '../cache.dart';
 import '../dao/Freshman.dart';
 import '../entity/info.dart';
 import '../entity/statistics.dart';
 import '../init.dart';
+import '../using.dart';
 
 class FreshmanStatisticsPage extends StatelessWidget {
   const FreshmanStatisticsPage({Key? key}) : super(key: key);

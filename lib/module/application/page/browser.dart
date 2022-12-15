@@ -17,9 +17,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:kite/user_widget/future_builder.dart';
-import 'package:kite/user_widget/unsupported_platform_launch.dart';
 import 'package:kite/util/cookie_util.dart';
-import 'package:universal_platform/universal_platform.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../init.dart';

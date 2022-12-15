@@ -17,14 +17,15 @@
  */
 
 import 'package:cookie_jar/cookie_jar.dart';
+
 import 'cache/result.dart';
-import 'events.dart';
-import 'storage/result.dart';
-import 'using.dart';
 import 'dao/evaluation.dart';
 import 'dao/result.dart';
+import 'events.dart';
 import 'service/evaluation.dart';
 import 'service/result.dart';
+import 'storage/result.dart';
+import 'using.dart';
 
 class ExamResultInit {
   static late CookieJar cookieJar;

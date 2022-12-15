@@ -17,8 +17,8 @@
  */
 import 'package:beautiful_soup_dart/beautiful_soup.dart';
 import 'package:json_annotation/json_annotation.dart';
-import '../../using.dart';
 
+import '../../using.dart';
 import '../dao/holding.dart';
 import '../entity/holding.dart';
 import 'constant.dart';

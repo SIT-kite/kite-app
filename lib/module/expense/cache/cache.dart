@@ -18,7 +18,6 @@
 
 import '../dao/getter.dart';
 import '../entity/local.dart';
-
 import '../storage/local.dart';
 
 class CachedExpenseGetDao implements ExpenseGetDao {

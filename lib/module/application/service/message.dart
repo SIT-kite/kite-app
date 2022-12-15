@@ -18,9 +18,8 @@
 import 'dart:convert';
 
 import '../dao/message.dart';
-import '../using.dart';
-
 import '../entity/message.dart';
+import '../using.dart';
 
 const String serviceMessageCount = 'https://xgfy.sit.edu.cn/unifri-flow/user/queryFlowCount';
 

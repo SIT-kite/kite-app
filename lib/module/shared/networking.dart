@@ -15,8 +15,8 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+export 'package:kite/backend.dart';
 export 'package:kite/network/session.dart';
 export 'package:kite/session/kite_session.dart';
 export 'package:kite/session/sso/sso_session.dart';
 export 'package:kite/util/cookie_util.dart';
-export 'package:kite/backend.dart';

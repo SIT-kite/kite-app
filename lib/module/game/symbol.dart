@@ -15,11 +15,11 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-export 'page/composeSit/index.dart';
-export 'page/index.dart';
-export 'page/2048/index.dart';
-export 'init.dart';
-export 'page/tetris/index.dart';
-export 'page/wordle/index.dart';
 export 'entity/record.dart';
 export 'entity/type.dart';
+export 'init.dart';
+export 'page/2048/index.dart';
+export 'page/composeSit/index.dart';
+export 'page/index.dart';
+export 'page/tetris/index.dart';
+export 'page/wordle/index.dart';

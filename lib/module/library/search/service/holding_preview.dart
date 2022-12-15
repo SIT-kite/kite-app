@@ -17,7 +17,6 @@
  */
 
 import '../../using.dart';
-
 import '../dao/holding_preview.dart';
 import '../entity/holding_preview.dart';
 import 'constant.dart';

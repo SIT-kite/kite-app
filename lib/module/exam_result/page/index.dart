@@ -20,11 +20,11 @@ import 'package:flutter/rendering.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../entity/result.dart';
+import '../events.dart';
 import '../init.dart';
+import '../user_widget/item.dart';
 import '../using.dart';
 import '../util.dart';
-import '../user_widget/item.dart';
-import '../events.dart';
 
 class ExamResultPage extends StatefulWidget {
   const ExamResultPage({super.key});

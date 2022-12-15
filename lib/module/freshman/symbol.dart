@@ -15,9 +15,9 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-export 'page/statistics.dart';
-export 'page/relationship/index.dart';
+export 'init.dart';
 export 'page/info.dart';
 export 'page/login.dart';
 export 'page/personal_info.dart';
-export 'init.dart';
+export 'page/relationship/index.dart';
+export 'page/statistics.dart';

@@ -18,10 +18,10 @@
 import 'package:flutter/material.dart';
 
 import '../cache.dart';
-import '../using.dart';
 import '../entity/course.dart';
 import '../entity/meta.dart';
 import '../user_widget/timetable.dart';
+import '../using.dart';
 
 ///
 /// There is no need to persist a preview after activity destroyed.

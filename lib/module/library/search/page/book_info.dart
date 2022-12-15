@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+
+import '../../using.dart';
 import '../entity/book_info.dart';
 import '../entity/book_search.dart';
 import '../entity/holding_preview.dart';
@@ -23,7 +25,6 @@ import '../init.dart';
 import '../user_widget/search_result_item.dart';
 import '../util/search.dart';
 import 'search_delegate.dart';
-import '../../using.dart';
 
 class BookInfoPage extends StatefulWidget {
   /// 上一层传递进来的数据

@@ -24,9 +24,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import '../../../using.dart';
+
 import '../../../entity/record.dart';
 import '../../../entity/type.dart';
+import '../../../using.dart';
 import '../../common.dart';
 import '../gamer/block.dart';
 import '../index.dart';

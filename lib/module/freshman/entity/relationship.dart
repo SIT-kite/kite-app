@@ -18,6 +18,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import 'info.dart';
+
 part 'relationship.g.dart';
 
 @JsonSerializable()

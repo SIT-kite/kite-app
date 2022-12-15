@@ -16,12 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'using.dart';
-
 import 'dao/contact.dart';
 import 'entity/contact.dart';
 import 'service/contact.dart';
 import 'storage/contact.dart';
+import 'using.dart';
 
 class YellowPagesInit {
   static late ContactStorageDao contactStorageDao;

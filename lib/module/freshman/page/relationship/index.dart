@@ -18,12 +18,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:rettulf/rettulf.dart';
+
 import '../../user_widget/common.dart';
 import '../../using.dart';
-
 import 'classmate.dart';
 import 'familiar.dart';
-
 import 'roommate.dart';
 
 class FreshmanRelationshipPage extends StatefulWidget {

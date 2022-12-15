@@ -17,8 +17,8 @@
 */
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../using.dart';
 
+import '../using.dart';
 import 'reminder.dart';
 
 const _reportUrlPrefix = 'http://xgfy.sit.edu.cn/h5/#/';

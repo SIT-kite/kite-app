@@ -24,11 +24,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:kite/design/page/common.dart';
 import 'package:kite/design/user_widgets/view.dart';
-
 import 'package:kite/l10n/extension.dart';
 import 'package:kite/user_widget/page_grouper.dart';
 import 'package:kite/user_widget/placeholder_future_builder.dart';
 import 'package:rettulf/rettulf.dart';
+
 import '../using.dart';
 
 class BoxSection extends StatefulWidget {

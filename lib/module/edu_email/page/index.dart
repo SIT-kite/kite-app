@@ -19,9 +19,10 @@ import 'package:enough_mail/enough_mail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rettulf/rettulf.dart';
-import '../using.dart';
+
 import '../init.dart';
 import '../service/email.dart';
+import '../using.dart';
 import 'item.dart';
 
 class MailPage extends StatefulWidget {

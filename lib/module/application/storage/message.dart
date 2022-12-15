@@ -16,9 +16,8 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import '../dao/message.dart';
-import '../using.dart';
-
 import '../entity/message.dart';
+import '../using.dart';
 
 class ApplicationMessageStorageBox with CachedBox {
   @override

@@ -22,9 +22,9 @@ import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:kite/design/colors.dart';
 import 'package:rettulf/rettulf.dart';
-import '../user_widgets/contact.dart';
 
 import '../entity/contact.dart';
+import '../user_widgets/contact.dart';
 import '../using.dart';
 
 class GroupedContactList extends StatelessWidget {

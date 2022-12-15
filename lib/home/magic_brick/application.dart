@@ -19,11 +19,12 @@ import 'package:flutter/material.dart';
 import 'package:kite/credential/symbol.dart';
 import 'package:kite/events/bus.dart';
 import 'package:kite/events/events.dart';
-import 'package:kite/module/application/init.dart';
 import 'package:kite/l10n/extension.dart';
+import 'package:kite/module/application/init.dart';
 import 'package:kite/route.dart';
 import 'package:kite/storage/init.dart';
 import 'package:kite/util/logger.dart';
+
 import '../user_widget/brick.dart';
 
 class ApplicationItem extends StatefulWidget {

@@ -17,9 +17,9 @@
  */
 import 'package:flutter/material.dart';
 
+import '../../using.dart';
 import '../entity/book_search.dart';
 import '../init.dart';
-import '../../using.dart';
 import '../page/book_info.dart';
 import '../util/search.dart';
 import 'search_result_item.dart';

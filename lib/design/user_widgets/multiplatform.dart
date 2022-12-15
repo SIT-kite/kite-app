@@ -20,16 +20,14 @@ import 'package:flutter/material.dart';
 import 'package:rettulf/rettulf.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-import '../../user_widget/draggable.dart';
-
 bool get _isCupertino => UniversalPlatform.isIOS || UniversalPlatform.isMacOS;
 const _kDialogAlpha = 0.89;
-extension $BuildContextEx$ on BuildContext{
-  Future<T?> show$Dialog$<T>(
-      {
-        required WidgetBuilder make,
-        bool dismissible = true,
-      }) async {
+
+extension $BuildContextEx$ on BuildContext {
+  Future<T?> show$Dialog$<T>({
+    required WidgetBuilder make,
+    bool dismissible = true,
+  }) async {
     if (_isCupertino) {
       return await showCupertinoDialog<T>(
         context: this,
@@ -44,7 +42,6 @@ extension $BuildContextEx$ on BuildContext{
       );
     }
   }
-
 }
 
 class $Button$ extends StatelessWidget {

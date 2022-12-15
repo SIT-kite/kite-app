@@ -16,15 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:kite/home/entity/home.dart';
-
-import 'package:kite/module/symbol.dart';
 import 'package:kite/credential/symbol.dart';
+import 'package:kite/home/entity/home.dart';
+import 'package:kite/module/symbol.dart';
 
-import 'using.dart';
 import 'adapter/color.dart';
 import 'adapter/size.dart';
 import 'adapter/version.dart';
+import 'using.dart';
 
 class HiveAdapter {
   HiveAdapter._();

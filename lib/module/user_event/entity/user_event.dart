@@ -18,7 +18,9 @@
 import 'dart:convert';
 
 import 'package:json_annotation/json_annotation.dart';
+
 import '../using.dart';
+
 part 'user_event.g.dart';
 
 @HiveType(typeId: 10)

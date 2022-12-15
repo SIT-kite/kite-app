@@ -18,10 +18,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../using.dart';
 
 import '../entity/rank.dart';
 import '../init.dart';
+import '../using.dart';
 
 class GameRanking extends StatelessWidget {
   static const _colorMapping = [Colors.redAccent, Colors.deepOrange, Colors.orange];

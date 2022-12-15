@@ -19,12 +19,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import '../using.dart';
 
 import '../entity/info.dart';
 import '../init.dart';
 import '../user_widget/common.dart';
 import '../user_widget/profile.dart';
+import '../using.dart';
 
 class FreshmanPage extends StatefulWidget {
   const FreshmanPage({super.key});

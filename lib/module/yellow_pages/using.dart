@@ -15,9 +15,9 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-export '../shared/storage.dart';
-export '../shared/i18n.dart';
 export '../shared/design.dart';
-export '../shared/util.dart';
+export '../shared/i18n.dart';
 export '../shared/launcher.dart';
 export '../shared/networking.dart';
+export '../shared/storage.dart';
+export '../shared/util.dart';

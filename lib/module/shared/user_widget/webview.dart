@@ -15,6 +15,6 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-export 'package:webview_flutter/webview_flutter.dart';
 export 'package:kite/user_widget/webview/page.dart';
 export 'package:kite/user_widget/webview/view.dart';
+export 'package:webview_flutter/webview_flutter.dart';
