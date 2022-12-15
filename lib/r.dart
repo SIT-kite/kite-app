@@ -50,8 +50,8 @@ class R {
   /// If the window was resized to too small accidentally, this will keep a minimum function area.
   static const Size minWindowSize = Size(300, 400);
 
-  static String getAppName({required Locale by}) {
-    final locale = Lang.redirectLocale(by);
+  static String getAppName({required Locale basedOn}) {
+    final locale = Lang.redirectLocale(basedOn);
     return locale2AppName[locale] ?? appNameEn;
   }
 

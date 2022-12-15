@@ -126,7 +126,7 @@ class _KiteAppState extends State<KiteApp> {
     });
     buildMaterialWithTheme(ThemeData theme) {
       return MaterialApp(
-        title: R.getAppName(by: window.locale),
+        title: R.getAppName(basedOn: window.locale),
         theme: theme.copyWith(
             pageTransitionsTheme: const PageTransitionsTheme(
               builders: {

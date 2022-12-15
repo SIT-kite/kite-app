@@ -1,29 +1,46 @@
 import '../utils.dart';
 import 'course.dart';
+///
+/// type: cn.edu.sit.Timetable
+class SitTimetableEntity {
 
-class TimetableEntity {
-  final List<TimetableWeek?> weeks;
-  final Map<String, CourseEntity> courseCode2Entity;
+  /// The Default number of weeks is 20.
+  final List<SitTimetableWeek?> weeks;
+  /// The index is the CourseKey.
+  final List<SitCourseEntity> courseKey2Entity;
+  int courseKeyCounter = 0;
 
-  TimetableEntity(this.weeks, this.courseCode2Entity);
+  SitTimetableEntity(this.weeks, this.courseKey2Entity);
 
-  static TimetableEntity parse(List<Course> all) => parseTimetableEntity(all);
+  static SitTimetableEntity parse(List<Course> all) => parseTimetableEntity(all);
+}
+/// Lessons in the same Timeslot.
+typedef LessonsInSlot = List<SitTimetableLesson>;
+/// A Timeslot contain one or more lesson.
+typedef SitTimeslots = List<LessonsInSlot>;
+class SitTimetableWeek {
+  /// The Default number of lesson in one day is 11. But the length of [lessons] can be more.
+  /// When two lessons are overlapped, it can be 12+.
+  final SitTimeslots timeslots2Lessons;
+
+  SitTimetableWeek(this.timeslots2Lessons);
 }
 
-class TimetableWeek {
-  final List<TimetableCourse?> courses;
+class SitTimetableLesson {
+  /// The start index of this lesson in a [SitTimetableWeek]
+  final int startIndex;
+  /// The end index of this lesson in a [SitTimetableWeek]
+  final int endIndex;
+  /// A lesson may last two or more time slots.
+  /// If current [SitTimetableLesson] is a part of the whole lesson, they all have the same [courseKey].
+  /// If there's no lesson, the [courseKey] is null.
+  final int courseKey;
 
-  TimetableWeek(this.courses);
+  SitTimetableLesson(this.startIndex, this.endIndex, this.courseKey);
 }
 
-class TimetableCourse {
-  final int duration;
-  final String courseCode;
-
-  TimetableCourse(this.duration, this.courseCode);
-}
-
-class CourseEntity {
+class SitCourseEntity {
+  final int courseKey;
   final String courseCode;
   final String classCode;
   final String campus;
@@ -32,13 +49,5 @@ class CourseEntity {
   final int creditHour;
   final List<String> teachers;
 
-  CourseEntity(
-    this.courseCode,
-    this.classCode,
-    this.campus,
-    this.place,
-    this.courseCredit,
-    this.creditHour,
-    this.teachers,
-  );
+  SitCourseEntity(this.courseKey, this.courseCode, this.classCode, this.campus, this.place, this.courseCredit, this.creditHour, this.teachers);
 }
