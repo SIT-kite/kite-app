@@ -12,5 +12,7 @@ export 'package:kite/module/exam_result/entity/result.dart';
 // oa_announce
 export 'package:kite/module/oa_announce/entity/announce.dart';
 export 'package:kite/module/oa_announce/entity/attachment.dart';
+// timetable
+export 'package:kite/module/timetable/entity/entity.dart';
 // yellow_pages
 export 'package:kite/module/yellow_pages/entity/contact.dart';

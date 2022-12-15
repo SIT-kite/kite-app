@@ -1,3 +1,5 @@
+import 'package:ikite/ikite.dart';
+
 import '../utils.dart';
 import 'course.dart';
 
@@ -14,6 +16,7 @@ class SitTimetableEntity {
   SitTimetableEntity(this.weeks, this.courseKey2Entity, this.courseKeyCounter);
 
   static SitTimetableEntity parse(List<CourseRaw> all) => parseTimetableEntity(all);
+
   @override
   String toString() => "[$courseKeyCounter]";
 }
@@ -91,9 +94,131 @@ class SitCourseEntity {
   final int creditHour;
   final List<String> teachers;
 
-  SitCourseEntity(this.courseKey, this.courseName, this.courseCode, this.classCode, this.campus, this.place,
-      this.courseCredit, this.creditHour, this.teachers);
+  SitCourseEntity(
+    this.courseKey,
+    this.courseName,
+    this.courseCode,
+    this.classCode,
+    this.campus,
+    this.place,
+    this.courseCredit,
+    this.creditHour,
+    this.teachers,
+  );
 
   @override
   String toString() => "[$courseKey] $courseName";
+}
+
+class SitTimetableEntityDataAdapter extends DataAdapter<SitTimetableEntity> {
+  @override
+  String get typeName => "kite.SitTimetableEntity";
+
+  @override
+  SitTimetableEntity fromJson(RestoreContext ctx, Map<String, dynamic> json) {
+    return SitTimetableEntity(
+      ctx.restoreNullableListByExactType<SitTimetableWeek>(json["weeks"]),
+      ctx.restoreListByExactType<SitCourseEntity>(json["courseKey2Entity"]),
+      json["courseKeyCounter"] as int,
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson(ParseContext ctx, SitTimetableEntity obj) {
+    return {
+      "weeks": ctx.parseToNullableList(obj.weeks),
+      "courseKey2Entity": ctx.parseToList(obj.courseKey2Entity),
+      "courseKeyCounter": obj.courseKeyCounter,
+    };
+  }
+}
+
+class SitTimetableWeekDataAdapter extends DataAdapter<SitTimetableWeek> {
+  @override
+  String get typeName => "kite.SitTimetableWeek";
+
+  @override
+  SitTimetableWeek fromJson(RestoreContext ctx, Map<String, dynamic> json) {
+    return SitTimetableWeek(
+      ctx.restoreListByExactType(json["days"]),
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson(ParseContext ctx, SitTimetableWeek obj) {
+    return {"days": ctx.parseToList(obj.days)};
+  }
+}
+
+class SitTimetableDayDataAdapter extends DataAdapter<SitTimetableDay> {
+  @override
+  String get typeName => "kite.SitTimetableDay";
+
+  @override
+  SitTimetableDay fromJson(RestoreContext ctx, Map<String, dynamic> json) {
+    return SitTimetableDay(ctx.restore2DListByExactType<SitTimetableLesson>(json["timeslots2Lessons"]));
+  }
+
+  @override
+  Map<String, dynamic> toJson(ParseContext ctx, SitTimetableDay obj) {
+    return {"timeslots2Lessons": ctx.parseTo2DList(obj.timeslots2Lessons)};
+  }
+}
+
+class SitTimetableLessonDataAdapter extends DataAdapter<SitTimetableLesson> {
+  @override
+  String get typeName => "kite.SitTimetableLesson";
+
+  @override
+  SitTimetableLesson fromJson(RestoreContext ctx, Map<String, dynamic> json) {
+    return SitTimetableLesson(
+      json["startIndex"] as int,
+      json["endIndex"] as int,
+      json["courseKey"] as int,
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson(ParseContext ctx, SitTimetableLesson obj) {
+    return {
+      "startIndex": obj.startIndex,
+      "endIndex": obj.endIndex,
+      "courseKey": obj.courseKey,
+    };
+  }
+}
+
+class SitCourseEntityDataAdapter extends DataAdapter<SitCourseEntity> {
+  @override
+  String get typeName => "kite.SitCourseEntity";
+
+  @override
+  SitCourseEntity fromJson(RestoreContext ctx, Map<String, dynamic> json) {
+    return SitCourseEntity(
+      json["courseKey"] as int,
+      json["courseName"] as String,
+      json["courseCode"] as String,
+      json["classCode"] as String,
+      json["campus"] as String,
+      json["place"] as String,
+      json["courseCredit"] as double,
+      json["creditHour"] as int,
+      json["teachers"] as List<String>,
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson(ParseContext ctx, SitCourseEntity obj) {
+    return {
+      "courseKey": obj.courseKey,
+      "courseName": obj.courseName,
+      "courseCode": obj.courseCode,
+      "classCode": obj.classCode,
+      "campus": obj.campus,
+      "place": obj.place,
+      "courseCredit": obj.courseCredit,
+      "creditHour": obj.creditHour,
+      "teachers": obj.teachers,
+    };
+  }
 }

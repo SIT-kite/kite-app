@@ -28,12 +28,15 @@ import 'backend.dart';
 import 'package:ikite/ikite.dart';
 import 'package:ikite_flutter/ikite_flutter.dart';
 
+import 'ikite.dart';
+
 const exceptionLogUrl = '${Backend.kite}/api/v2/report/exception';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Migrations.init();
   iKite.install(DefaultFlutterDataAdapterPlugin);
+  iKite.install(KiteAppDataAdapterPlugin);
   await Initializer.init();
   if (kDebugMode) {
     //rendering.debugPaintSizeEnabled = true;
