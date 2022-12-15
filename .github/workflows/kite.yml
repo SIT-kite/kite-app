@@ -345,29 +345,6 @@ jobs:
           document: build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk
           message: "🚀 Android arm64-v8a Apk Build by Github Actions"
 
-      - name: Copy file via SSH
-        uses: appleboy/scp-action@v0.1.2
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          port: ${{ secrets.SERVER_PORT }}
-          username: ${{ secrets.SERVER_USER }}
-          password: ${{ secrets.SERVER_SECRET }}
-          source: ./build/app/outputs/flutter-apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk
-          target: /var/kite/web/apk/
-          strip_components: 5
-
-      - name: SSH Remote Rename apk
-        uses: appleboy/ssh-action@v0.1.2
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          port: ${{ secrets.SERVER_PORT }}
-          username: ${{ secrets.SERVER_USER }}
-          password: ${{ secrets.SERVER_SECRET }}
-          script: |
-            rm /var/kite/web/apk/sit-kite-arm64-v8a-release-latest.apk
-            mv /var/kite/web/apk/${{ env.BRANCH_NAME }}-${{ env.SHA }}-arm64-v8a-release-signed.apk /var/kite/web/apk/sit-kite-arm64-v8a-release-latest.apk
-
-
   # Send notification
   notification:
     runs-on: ubuntu-latest
