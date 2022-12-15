@@ -15,10 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import '../using.dart';
-
 import '../dao/user_event.dart';
 import '../entity/user_event.dart';
+import '../using.dart';
 
 class UserEventStorage implements UserEventStorageDao {
   final Box<dynamic> box;

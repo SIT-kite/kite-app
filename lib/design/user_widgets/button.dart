@@ -16,7 +16,6 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import 'package:flutter/material.dart';
-import 'package:rettulf/rettulf.dart';
 
 class PlainExtendedButton extends StatelessWidget {
   final Widget label;

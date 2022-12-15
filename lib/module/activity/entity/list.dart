@@ -17,8 +17,8 @@
  */
 
 import '../page/util.dart';
-import 'score.dart';
 import '../using.dart';
+import 'score.dart';
 
 part 'list.g.dart';
 

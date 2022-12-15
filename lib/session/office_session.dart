@@ -19,8 +19,8 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
-import 'package:kite/network/session.dart';
 import 'package:kite/exception/session.dart';
+import 'package:kite/network/session.dart';
 
 import 'dio_common.dart';
 

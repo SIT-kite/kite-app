@@ -17,13 +17,13 @@
  */
 
 import 'package:flutter/material.dart';
-import '../../cache.dart';
-import '../../init.dart';
-import '../../using.dart';
 
+import '../../cache.dart';
 import '../../dao/Freshman.dart';
 import '../../entity/relationship.dart';
+import '../../init.dart';
 import '../../user_widget/familiar_list.dart';
+import '../../using.dart';
 
 class FamiliarPeoplePage extends StatefulWidget {
   const FamiliarPeoplePage({Key? key}) : super(key: key);

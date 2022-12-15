@@ -19,10 +19,10 @@
 import 'package:catcher/core/catcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import '../init.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../entity/local.dart';
+import '../init.dart';
 import '../using.dart';
 import 'bill.dart';
 import 'statistics.dart';

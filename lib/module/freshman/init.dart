@@ -16,10 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'using.dart';
 import 'cache.dart';
 import 'dao/Freshman.dart';
 import 'service/freshman.dart';
+import 'using.dart';
 
 class FreshmanInit {
   static late FreshmanSession freshmanSession;

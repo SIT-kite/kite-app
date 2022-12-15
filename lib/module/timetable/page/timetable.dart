@@ -16,16 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
-import '../user_widget/palette.dart';
-import '../utils.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../cache.dart';
 import '../entity/course.dart';
 import '../entity/meta.dart';
 import '../init.dart';
+import '../user_widget/palette.dart';
 import '../user_widget/timetable.dart';
 import '../using.dart';
+import '../utils.dart';
 import 'export.dart';
 
 const DisplayMode defaultMode = DisplayMode.weekly;

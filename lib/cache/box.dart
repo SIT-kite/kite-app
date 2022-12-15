@@ -19,7 +19,6 @@ import 'package:hive/hive.dart';
 import 'package:kite/module/activity/using.dart';
 
 part 'cache_key.dart';
-
 part 'list_cache_key.dart';
 
 abstract class HasBox<T> {

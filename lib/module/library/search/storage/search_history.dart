@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import '../../using.dart';
-
 import '../dao/search_history.dart';
 import '../entity/search_history.dart';
 

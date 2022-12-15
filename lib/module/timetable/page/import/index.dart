@@ -18,9 +18,9 @@
 import 'package:flutter/material.dart';
 import 'package:rettulf/rettulf.dart';
 
+import '../../../../design/page/connectivity.dart';
 import '../../init.dart';
 import '../../using.dart';
-import '../../../../design/page/connectivity.dart';
 import 'import.dart';
 
 class ImportTimetableIndexPage extends StatefulWidget {

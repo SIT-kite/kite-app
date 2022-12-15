@@ -19,9 +19,9 @@
 import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../entity/list.dart';
 import 'package:rettulf/rettulf.dart';
 
+import '../entity/list.dart';
 import '../entity/score.dart';
 import '../init.dart';
 import '../user_widgets/summary.dart';

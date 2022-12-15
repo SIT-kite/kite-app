@@ -17,13 +17,13 @@
  */
 
 import 'package:flutter/material.dart';
-import '../../using.dart';
 
 import '../../cache.dart';
 import '../../dao/Freshman.dart';
 import '../../entity/relationship.dart';
 import '../../init.dart';
 import '../../user_widget/mate_list.dart';
+import '../../using.dart';
 
 class ClassmatePage extends StatefulWidget {
   const ClassmatePage({Key? key}) : super(key: key);

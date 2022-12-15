@@ -18,10 +18,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
-import 'lang.dart';
 
 import '../global/global.dart';
+import 'lang.dart';
+
 export 'package:kite/r.dart';
+
 export 'lang.dart';
 
 extension I18nBuildContext on BuildContext {

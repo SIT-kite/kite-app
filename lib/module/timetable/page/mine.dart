@@ -21,9 +21,9 @@ import 'package:kite/module/symbol.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../events.dart';
-import '../using.dart';
 import '../user_widget/picker.dart';
 import '../user_widget/timetable_editor.dart';
+import '../using.dart';
 import 'preview.dart';
 
 class MyTimetablePage extends StatefulWidget {

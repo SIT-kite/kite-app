@@ -16,12 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kite/module/game/using.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:rettulf/rettulf.dart';
+
 import '../using.dart';
 
 class ScannerPage extends StatefulWidget {

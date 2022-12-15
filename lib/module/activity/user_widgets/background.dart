@@ -23,6 +23,7 @@ import 'package:flutter/material.dart';
 import 'package:geopattern_flutter/geopattern_flutter.dart';
 import 'package:geopattern_flutter/patterns/overlapping_circles.dart';
 import 'package:rettulf/buildcontext/theme.dart';
+
 import '../using.dart';
 
 /// 矩形高斯模糊效果

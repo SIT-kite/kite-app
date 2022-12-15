@@ -17,8 +17,8 @@
 */
 import 'package:flutter/material.dart';
 import 'package:kite/module/timetable/using.dart';
-import 'package:rettulf/rettulf.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:rettulf/rettulf.dart';
 
 typedef PlaceholderDecorator = Widget Function(Widget);
 
@@ -33,6 +33,7 @@ class Placeholders {
       fix: fix,
     );
   }
+
   static Widget progress({
     Key? key,
     double size = 40,

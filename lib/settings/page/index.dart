@@ -44,9 +44,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:rettulf/rettulf.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+import '../../storage/page/editor.dart';
 import '../../storage/storage/pref.dart';
 import 'home_rearrange.dart';
-import '../../storage/page/editor.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});

@@ -18,9 +18,9 @@
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:rettulf/rettulf.dart';
-import '../using.dart';
 
 import '../entity/local.dart';
+import '../using.dart';
 
 class BillPage extends StatelessWidget {
   final List<Transaction> records;

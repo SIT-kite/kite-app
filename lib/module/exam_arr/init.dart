@@ -19,9 +19,9 @@
 import 'package:kite/module/exam_arr/storage/exam.dart';
 
 import 'cache/exam.dart';
-import 'using.dart';
 import 'dao/exam.dart';
 import 'service/exam.dart';
+import 'using.dart';
 
 class ExamArrInit {
   static late ExamDao examService;

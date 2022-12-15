@@ -19,8 +19,6 @@
 import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/route.dart';
-import 'package:kite/session/sit_app_session.dart';
-import 'package:kite/util/alert_dialog.dart';
 import 'package:kite/util/launcher.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/rule.dart';

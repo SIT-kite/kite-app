@@ -16,12 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'using.dart';
-
-import 'cache.dart';
 import 'service/kite.dart';
 import 'service/school.dart';
 import 'storage/timetable.dart';
+import 'using.dart';
 
 class TimetableInit {
   static late TimetableService timetableService;

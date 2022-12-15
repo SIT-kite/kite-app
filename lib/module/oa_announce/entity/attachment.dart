@@ -16,6 +16,7 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import '../using.dart';
+
 part 'attachment.g.dart';
 
 @HiveType(typeId: HiveTypeId.announceAttachment)

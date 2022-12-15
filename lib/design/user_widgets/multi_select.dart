@@ -20,6 +20,7 @@ library multiselect_scope;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rettulf/rettulf.dart';
+
 export 'overlay.dart';
 
 // Steal from: "https://github.com/flankb/multiselect_scope/blob/master/lib/multiselect_scope.dart"

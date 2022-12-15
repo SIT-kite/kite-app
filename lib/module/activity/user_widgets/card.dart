@@ -21,9 +21,8 @@ import 'package:rettulf/rettulf.dart';
 
 import '../entity/list.dart';
 import '../page/detail.dart';
-import 'background.dart';
-
 import '../using.dart';
+import 'background.dart';
 
 class ActivityCard extends StatelessWidget {
   final Activity activity;

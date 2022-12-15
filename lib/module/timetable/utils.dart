@@ -18,11 +18,11 @@
 
 import 'package:ical/serializer.dart';
 import 'package:intl/intl.dart';
-import 'entity/entity.dart';
-import 'using.dart';
 
 import 'entity/course.dart';
+import 'entity/entity.dart';
 import 'entity/meta.dart';
+import 'using.dart';
 
 List<String> makeWeekdaysShortText() => [
       i18n.weekdayShort1,
@@ -105,5 +105,5 @@ Future<void> exportTimetableToCalendar(TimetableMeta meta, List<Course> courses,
 }
 
 TimetableEntity parseTimetableEntity(List<Course> all) {
-  return TimetableEntity([],{});
+  return TimetableEntity([], {});
 }

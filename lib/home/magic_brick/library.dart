@@ -18,11 +18,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:kite/module/library/search/entity/hot_search.dart';
-import 'package:kite/module/library/search/init.dart';
 import 'package:kite/global/global.dart';
 import 'package:kite/l10n/extension.dart';
+import 'package:kite/module/library/search/entity/hot_search.dart';
+import 'package:kite/module/library/search/init.dart';
 import 'package:kite/storage/init.dart';
+
 import '../user_widget/brick.dart';
 
 class LibraryItem extends StatefulWidget {

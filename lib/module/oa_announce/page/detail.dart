@@ -26,8 +26,8 @@ import 'package:rettulf/rettulf.dart';
 
 import '../entity/announce.dart';
 import '../entity/attachment.dart';
-import '../using.dart';
 import '../init.dart';
+import '../using.dart';
 
 class DetailPage extends StatefulWidget {
   final AnnounceRecord summary;

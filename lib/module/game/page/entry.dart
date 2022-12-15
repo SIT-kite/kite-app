@@ -17,9 +17,9 @@
  */
 
 import 'package:flutter/material.dart';
-import '../using.dart';
 
 import '../entity/type.dart';
+import '../using.dart';
 
 abstract class AGame {
   /// 获取游戏标题

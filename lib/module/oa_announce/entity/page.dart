@@ -15,8 +15,9 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import 'announce.dart';
 import '../using.dart';
+import 'announce.dart';
+
 part 'page.g.dart';
 
 /// 获取到的通知页

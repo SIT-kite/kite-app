@@ -16,8 +16,10 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import 'dart:ui';
-import '../type_id.dart';
+
 import 'package:hive/hive.dart';
+
+import '../type_id.dart';
 
 /// There is no need to consider revision
 class SizeAdapter extends TypeAdapter<Size> {

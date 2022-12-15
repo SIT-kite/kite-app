@@ -18,7 +18,6 @@
 import 'dart:convert';
 
 import '../../using.dart';
-
 import '../dao/image_search.dart';
 import '../entity/book_image.dart';
 import 'constant.dart';

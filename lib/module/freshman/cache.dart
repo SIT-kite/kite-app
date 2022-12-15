@@ -16,12 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'using.dart';
-
 import 'dao/Freshman.dart';
 import 'entity/info.dart';
 import 'entity/relationship.dart';
 import 'entity/statistics.dart';
+import 'using.dart';
 
 class FreshmanCacheManager {
   final FreshmanCacheDao freshmanCacheDao;

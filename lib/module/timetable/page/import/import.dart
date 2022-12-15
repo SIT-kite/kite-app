@@ -21,8 +21,8 @@ import 'package:rettulf/rettulf.dart';
 import '../../entity/course.dart';
 import '../../entity/meta.dart';
 import '../../init.dart';
-import '../../using.dart';
 import '../../user_widget/meta_editor.dart';
+import '../../using.dart';
 
 enum ImportStatus {
   none,

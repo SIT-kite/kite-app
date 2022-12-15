@@ -15,10 +15,9 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import '../using.dart';
-
 import '../dao/report.dart';
 import '../entity/record.dart';
+import '../using.dart';
 
 class ReportService implements ReportDao {
   final ISession session;

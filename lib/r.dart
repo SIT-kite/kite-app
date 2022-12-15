@@ -18,7 +18,6 @@
 import 'dart:ui';
 
 import 'package:kite/l10n/lang.dart';
-import 'package:kite/util/upgrade.dart';
 import 'package:version/version.dart';
 
 import 'backend.dart';

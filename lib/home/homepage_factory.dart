@@ -24,18 +24,17 @@ import '../route.dart';
 import '../util/logger.dart';
 import '../util/scanner.dart';
 import 'entity/home.dart';
-
-import 'user_widget/brick.dart';
+import 'magic_brick/application.dart';
+import 'magic_brick/bulletin.dart';
 import 'magic_brick/electricity.dart';
-import 'magic_brick/upgrade.dart';
 import 'magic_brick/exam.dart';
 import 'magic_brick/expense.dart';
 import 'magic_brick/freshman.dart';
 import 'magic_brick/library.dart';
 import 'magic_brick/mail.dart';
-import 'magic_brick/bulletin.dart';
-import 'magic_brick/application.dart';
 import 'magic_brick/report.dart';
+import 'magic_brick/upgrade.dart';
+import 'user_widget/brick.dart';
 
 class HomepageFactory {
   static final Map<FType, WidgetBuilder?> builders = {

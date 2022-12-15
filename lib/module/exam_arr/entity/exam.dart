@@ -17,6 +17,7 @@
  */
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
+
 import '../using.dart';
 
 part 'exam.g.dart';

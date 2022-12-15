@@ -15,9 +15,9 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+export 'entity/course.dart';
+export 'entity/meta.dart';
+export 'init.dart';
 export 'page/import/index.dart';
 export 'page/index.dart';
 export 'page/mine.dart';
-export 'init.dart';
-export 'entity/course.dart';
-export 'entity/meta.dart';

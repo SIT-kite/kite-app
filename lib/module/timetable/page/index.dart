@@ -16,8 +16,6 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import 'package:flutter/material.dart';
-import 'package:kite/design/page/common.dart';
-import 'package:rettulf/rettulf.dart';
 
 import '../entity/meta.dart';
 import '../events.dart';

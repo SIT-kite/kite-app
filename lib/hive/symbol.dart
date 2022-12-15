@@ -15,7 +15,8 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-export 'type_id.dart';
+export 'package:hive/hive.dart';
+
 export 'adapter.dart';
 export 'init.dart';
-export 'package:hive/hive.dart';
+export 'type_id.dart';

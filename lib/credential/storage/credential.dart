@@ -16,9 +16,9 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import 'package:hive/hive.dart';
-import '../entity/credential.dart';
 
 import '../dao/credential.dart';
+import '../entity/credential.dart';
 import '../entity/user_type.dart';
 
 class _Key {

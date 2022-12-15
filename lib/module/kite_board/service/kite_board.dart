@@ -17,9 +17,10 @@
  */
 
 import 'package:dio/dio.dart';
-import '../using.dart';
+
 import '../dao/kite_board.dart';
 import '../entity/picture_summary.dart';
+import '../using.dart';
 
 class BoardService implements BoardDao {
   static const _boardUrl = '/board';

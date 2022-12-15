@@ -19,6 +19,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/l10n/extension.dart';
 import 'package:rettulf/rettulf.dart';
+
 import '../using.dart';
 
 typedef CredentialCtor<T> = T Function(String account, String password);

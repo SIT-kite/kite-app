@@ -16,7 +16,6 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import 'package:kite/module/oa_announce/entity/announce.dart';
-
 import 'package:kite/module/oa_announce/entity/page.dart';
 
 import '../dao/announce.dart';

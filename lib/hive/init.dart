@@ -18,8 +18,8 @@
 
 import 'package:flutter/foundation.dart';
 
-import 'using.dart';
 import 'adapter.dart';
+import 'using.dart';
 
 class HiveBoxInit {
   HiveBoxInit._();

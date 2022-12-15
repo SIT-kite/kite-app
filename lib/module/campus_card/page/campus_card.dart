@@ -24,8 +24,9 @@ import 'package:flutter/material.dart';
 import 'package:kite/design/page/common.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:rettulf/rettulf.dart';
-import '../using.dart';
+
 import '../init.dart';
+import '../using.dart';
 
 class CampusCardRecord {
   final int cardId;

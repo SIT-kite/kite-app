@@ -19,8 +19,8 @@ import 'package:flutter/material.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../entity/contact.dart';
-import '../using.dart';
 import '../init.dart';
+import '../using.dart';
 import 'list.dart';
 import 'search.dart';
 

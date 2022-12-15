@@ -16,10 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'using.dart';
-
 import 'dao/user_event.dart';
 import 'storage/user_event.dart';
+import 'using.dart';
 
 class UserEventInit {
   static late UserEventStorageDao userEventStorage;

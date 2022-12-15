@@ -19,10 +19,9 @@
 import 'package:kite/module/oa_announce/storage/announce.dart';
 
 import 'cache/announce.dart';
-import 'using.dart';
-
 import 'dao/announce.dart';
 import 'service/announce.dart';
+import 'using.dart';
 
 class OaAnnounceInit {
   static late AnnounceDao service;

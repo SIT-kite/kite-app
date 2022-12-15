@@ -19,10 +19,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import '../../user_widgets/dialog.dart';
-import '../../using.dart';
 
 import '../../entity/record.dart';
+import '../../user_widgets/dialog.dart';
+import '../../using.dart';
 import '../common.dart';
 
 class GameComposeSitPage extends StatelessWidget {

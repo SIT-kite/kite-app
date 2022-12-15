@@ -22,10 +22,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/module/activity/using.dart';
 import 'package:rettulf/rettulf.dart';
+
 import '../dao/Freshman.dart';
 import '../entity/info.dart';
-import '../using.dart';
 import '../init.dart';
+import '../using.dart';
 
 class PersonalInfoPage extends StatefulWidget {
   const PersonalInfoPage({super.key});
