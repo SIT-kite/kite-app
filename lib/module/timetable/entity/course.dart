@@ -165,3 +165,55 @@ class Course {
     return result;
   }
 }
+
+@JsonSerializable()
+class CourseRaw {
+  /// 课程名称
+  @JsonKey(name: 'kcmc')
+  final String courseName;
+
+  /// 星期
+  @JsonKey(name: 'xqjmc')
+  final String weekDayText;
+
+  /// 节次
+  @JsonKey(name: 'jcs')
+  final String timeslotsText;
+
+  /// 周次
+  @JsonKey(name: 'zcd')
+  final String weekText;
+
+  /// 教室
+  @JsonKey(name: 'cdmc')
+  final String place;
+
+  /// 教师
+  @JsonKey(name: 'xm', defaultValue: "")
+  final String teachers;
+
+  /// 校区
+  @JsonKey(name: 'xqmc')
+  final String campus;
+
+  /// 学分
+  @JsonKey(name: 'xf')
+  final String courseCredit;
+
+  /// 学时
+  @JsonKey(name: 'zxs')
+  final String creditHour;
+
+  /// 教学班
+  @JsonKey(name: 'jxbmc')
+  final String classCode;
+
+  /// 课程代码
+  @JsonKey(name: 'kch')
+  final String courseCode;
+
+  factory CourseRaw.fromJson(Map<String, dynamic> json) => _$CourseRawFromJson(json);
+
+  CourseRaw(this.courseName, this.weekDayText, this.timeslotsText, this.weekText, this.place, this.teachers, this.campus,
+      this.courseCredit, this.creditHour, this.classCode, this.courseCode);
+}

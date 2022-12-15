@@ -16,13 +16,17 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import 'dart:convert';
+
 import '../entity/course.dart';
+import '../entity/entity.dart';
 import '../using.dart';
 
 class TimetableService {
   static const _timetableUrl = 'http://jwxt.sit.edu.cn/jwglxt/kbcx/xskbcx_cxXsgrkb.html';
 
   final ISession session;
+
   TimetableService(this.session);
 
   static List<Course> _parseTimetable(Map<String, dynamic> json) {
@@ -44,6 +48,10 @@ class TimetableService {
         'xqm': semesterToFormField(semester)
       },
     );
+    final json = response.data;
+    final List<dynamic> courseList = json['kbList'];
+    final rawCourses = courseList.map((e) => CourseRaw.fromJson(e)).toList();
+    final timetableEntity = SitTimetableEntity.parse(rawCourses);
     return _parseTimetable(response.data);
   }
 }

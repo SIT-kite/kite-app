@@ -130,6 +130,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
   }
 
   Widget buildMood(BuildContext ctx) {
+    return Text("😁",style: TextStyle(fontSize: 25),);
     return Icon(
       Mood.get(mood),
       color: context.darkSafeThemeColor,

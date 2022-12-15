@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'service/kite.dart';
 import 'service/school.dart';
 import 'storage/timetable.dart';
 import 'using.dart';
@@ -24,7 +23,6 @@ import 'using.dart';
 class TimetableInit {
   static late TimetableService timetableService;
   static late TimetableStorage timetableStorage;
-  static late KiteTimetableService kiteTimetableService;
   static late SsoSession network;
   static Future<void> init({
     required ISession eduSession,
@@ -34,7 +32,6 @@ class TimetableInit {
   }) async {
     timetableService = TimetableService(eduSession);
     timetableStorage = TimetableStorage(timetableBox);
-    kiteTimetableService = KiteTimetableService(kiteSession);
     network = ssoSession;
   }
 }
