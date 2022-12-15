@@ -20,6 +20,7 @@ import 'package:rettulf/rettulf.dart';
 
 import '../cache.dart';
 import '../entity/course.dart';
+import '../entity/entity.dart';
 import '../entity/meta.dart';
 import '../init.dart';
 import '../user_widget/palette.dart';
@@ -31,9 +32,9 @@ import 'export.dart';
 const DisplayMode defaultMode = DisplayMode.weekly;
 
 class TimetablePage extends StatefulWidget {
-  final TimetableMeta meta;
+  final SitTimetable timetable;
 
-  const TimetablePage({super.key, required this.meta});
+  const TimetablePage({super.key, required this.timetable});
 
   @override
   State<TimetablePage> createState() => _TimetablePageState();
@@ -48,45 +49,27 @@ class _TimetablePageState extends State<TimetablePage> {
   // 模式：周课表 日课表
   late ValueNotifier<DisplayMode> $displayMode;
 
-  // 课程表
-  late List<Course> courses;
-
   // 课表元数据
-  TimetableMeta get meta => widget.meta;
-
   late final ValueNotifier<TimetablePosition> $currentPos;
-
-  /// 懒加载变量，只有用到的时候才会初始化
-  late ExportDialog exportDialog = ExportDialog(context, meta, courses);
-
+  SitTimetable get timetable => widget.timetable;
   @override
   void initState() {
     super.initState();
     Log.info('Timetable init');
-    final initialMode = storage.lastMode ?? DisplayMode.weekly;
+    final initialMode = storage.lastDisplayMode ?? DisplayMode.weekly;
     $displayMode = ValueNotifier(initialMode);
     $displayMode.addListener(() {
-      storage.lastMode = $displayMode.value;
+      storage.lastDisplayMode = $displayMode.value;
     });
-    storage.lastMode = initialMode;
-    courses = storage.getTableCourseByName(meta.name) ?? [];
-    $currentPos = ValueNotifier(TimetablePosition.locate(widget.meta.startDate, DateTime.now()));
-  }
-
-  // TODO: Finish this
-  void _onExport() {
-    if (courses.isEmpty) {
-      showBasicFlash(context, const Text('你咋没课呢？？'));
-      return;
-    }
-    exportDialog.export();
+    storage.lastDisplayMode = initialMode;
+    $currentPos = ValueNotifier(TimetablePosition.locate(timetable.startDate, DateTime.now()));
   }
 
   Future<void> selectWeeklyTimetablePageToJump(BuildContext ctx) async {
     final currentWeek = $currentPos.value.week;
     final initialIndex = currentWeek - 1;
     final controller = FixedExtentScrollController(initialItem: initialIndex);
-    final todayPos = TimetablePosition.locate(meta.startDate, DateTime.now());
+    final todayPos = TimetablePosition.locate(timetable.startDate, DateTime.now());
     final todayIndex = todayPos.week - 1;
     final index2Go = await ctx.showPicker(
         count: 20,
@@ -119,7 +102,7 @@ class _TimetablePageState extends State<TimetablePage> {
     final initialDayIndex = currentPos.day - 1;
     final $week = FixedExtentScrollController(initialItem: initialWeekIndex);
     final $day = FixedExtentScrollController(initialItem: initialDayIndex);
-    final todayPos = TimetablePosition.locate(meta.startDate, DateTime.now());
+    final todayPos = TimetablePosition.locate(timetable.startDate, DateTime.now());
     final todayWeekIndex = todayPos.week - 1;
     final todayDayIndex = todayPos.day - 1;
     final weekdayNames = makeWeekdaysText();
@@ -171,7 +154,7 @@ class _TimetablePageState extends State<TimetablePage> {
       ),
       floatingActionButton: InkWell(
           onLongPress: () {
-            final today = TimetablePosition.locate(meta.startDate, DateTime.now());
+            final today = TimetablePosition.locate(timetable.startDate, DateTime.now());
             if ($currentPos.value != today) {
               $currentPos.value = today;
             }
@@ -217,5 +200,10 @@ class _TimetablePageState extends State<TimetablePage> {
         onPressed: () async {
           await Navigator.of(ctx).pushNamed(RouteTable.timetableMine);
         });
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    $displayMode.dispose();
   }
 }

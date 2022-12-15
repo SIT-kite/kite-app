@@ -81,7 +81,7 @@ void _addEventForCourse(ICalendar cal, Course course, DateTime startDate, Durati
 }
 
 ///导出的方法
-String convertTableToIcs(TimetableMeta meta, List<Course> courses, Duration? alarmBefore) {
+String convertTableToIcs(TimetableMetaLegacy meta, List<Course> courses, Duration? alarmBefore) {
   final ICalendar iCal = ICalendar(
     company: 'Kite Team, Yiban WorkStation of Shanghai Institute of Technology',
     product: 'kite',
@@ -100,7 +100,7 @@ String getExportTimetableFilename() {
   return 'kite_table_${DateFormat('yyyyMMdd_hhmmss').format(DateTime.now())}.ics';
 }
 
-Future<void> exportTimetableToCalendar(TimetableMeta meta, List<Course> courses, Duration? alarmBefore) async {
+Future<void> exportTimetableToCalendar(TimetableMetaLegacy meta, List<Course> courses, Duration? alarmBefore) async {
   await FileUtils.writeToTempFileAndOpen(
     content: convertTableToIcs(meta, courses, alarmBefore),
     filename: getExportTimetableFilename(),
@@ -162,19 +162,19 @@ extension _StringEx on String {
   String removePrefix(String prefix) => startsWith(prefix) ? substring(prefix.length) : this;
 }
 
-SitTimetableEntity parseTimetableEntity(List<CourseRaw> all) {
+SitTimetable parseTimetableEntity(List<CourseRaw> all) {
   final List<SitTimetableWeek?> weeks = List.generate(20, (index) => null);
   SitTimetableWeek getWeekAt(int index) {
-    var week = weeks[index] ??= SitTimetableWeek.$7();
+    var week = weeks[index] ??= SitTimetableWeek.$7days();
     weeks[index] = week;
     return week;
   }
 
-  final List<SitCourseEntity> courseKey2Entity = [];
+  final List<SitCourse> courseKey2Entity = [];
   var counter = 0;
   for (final raw in all) {
     final courseKey = counter++;
-    final course = SitCourseEntity(
+    final course = SitCourse(
       courseKey,
       raw.courseName.trim(),
       raw.courseCode.trim(),
@@ -212,6 +212,6 @@ SitTimetableEntity parseTimetableEntity(List<CourseRaw> all) {
       }
     }
   }
-  final res = SitTimetableEntity(weeks, courseKey2Entity, counter);
+  final res = SitTimetable(weeks, courseKey2Entity, counter);
   return res;
 }

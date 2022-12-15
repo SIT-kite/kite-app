@@ -20,13 +20,14 @@ import 'package:flutter/material.dart';
 import '../cache.dart';
 import '../entity/course.dart';
 import '../entity/meta.dart';
+import '../user_widget/palette.dart';
 import '../user_widget/timetable.dart';
 import '../using.dart';
 
 ///
 /// There is no need to persist a preview after activity destroyed.
 class TimetablePreviewPage extends StatelessWidget {
-  final TimetableMeta meta;
+  final TimetableMetaLegacy meta;
   final List<Course> courses;
 
   const TimetablePreviewPage({
@@ -43,19 +44,20 @@ class TimetablePreviewPage extends StatelessWidget {
     final ValueNotifier<DisplayMode> $displayMode = ValueNotifier(DisplayMode.weekly);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          '${i18n.timetablePreviewTitle} ${meta.name}',
-          overflow: TextOverflow.ellipsis,
+        appBar: AppBar(
+          title: Text(
+            '${i18n.timetablePreviewTitle} ${meta.name}',
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
-      ),
-      body: TimetableViewer(
-        $currentPos: $currentPos,
-        initialTableMeta: meta,
-        initialTableCourses: courses,
-        tableCache: TableCache(),
-        $displayMode: $displayMode,
-      ),
-    );
+        body: TimetablePaletteProv(
+          child: TimetableViewer(
+            $currentPos: $currentPos,
+            initialTableMeta: meta,
+            initialTableCourses: courses,
+            tableCache: TableCache(),
+            $displayMode: $displayMode,
+          ),
+        ));
   }
 }

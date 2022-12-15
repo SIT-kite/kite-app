@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../../entity/course.dart';
+import '../../entity/entity.dart';
 import '../../entity/meta.dart';
 import '../../init.dart';
 import '../../user_widget/meta_editor.dart';
@@ -138,13 +139,13 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
     );
   }
 
-  Future<List<Course>> _fetchTimetable(SchoolYear year, Semester semester) async {
+  Future<SitTimetable> _fetchTimetable(SchoolYear year, Semester semester) async {
     return await service.getTimetable(year, semester);
   }
 
-  Future<bool> handleTimetableData(BuildContext ctx, List<Course> courses, int year, Semester semester) async {
+  Future<bool> handleTimetableData(BuildContext ctx, SitTimetable timetable, int year, Semester semester) async {
     final defaultName = i18n.timetableInfoDefaultName(semester.localized(), year, year + 1);
-    final meta = TimetableMeta()
+    final meta = TimetableMetaLegacy()
       ..name = defaultName
       ..schoolYear = year
       ..semester = semester.index;
@@ -175,7 +176,7 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
                   setState(() {
                     _status = ImportStatus.end;
                   });
-                  final saved = await handleTimetableData(ctx, value[0], selectedYear, semester);
+                  final saved = await handleTimetableData(ctx, value[0] as SitTimetable, selectedYear, semester);
                   if (mounted) Navigator.of(ctx).pop(saved);
                   setState(() {
                     _status = ImportStatus.none;

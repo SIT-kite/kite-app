@@ -22,6 +22,7 @@ import 'package:rettulf/rettulf.dart';
 
 import '../cache.dart';
 import '../entity/course.dart';
+import '../entity/entity.dart';
 import '../using.dart';
 import '../utils.dart';
 import 'header.dart';
@@ -30,12 +31,10 @@ import 'sheet.dart';
 import 'timetable.dart';
 
 class WeeklyTimetable extends StatefulWidget implements InitialTimeProtocol {
-  /// 教务系统课程列表
-  final List<Course> allCourses;
+  final SitTimetable timetable;
 
-  /// 初始日期
   @override
-  final DateTime initialDate;
+  DateTime get initialDate => timetable.startDate;
 
   /// 课表缓存
   final TableCache tableCache;
@@ -46,12 +45,11 @@ class WeeklyTimetable extends StatefulWidget implements InitialTimeProtocol {
   State<StatefulWidget> createState() => WeeklyTimetableState();
 
   const WeeklyTimetable({
-    Key? key,
-    required this.allCourses,
-    required this.initialDate,
+    super.key,
+    required this.timetable,
     required this.tableCache,
     required this.$currentPos,
-  }) : super(key: key);
+  });
 }
 
 class WeeklyTimetableState extends State<WeeklyTimetable> {

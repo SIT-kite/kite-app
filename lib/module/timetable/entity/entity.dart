@@ -3,19 +3,28 @@ import 'package:ikite/ikite.dart';
 import '../utils.dart';
 import 'course.dart';
 
+final _defaultStartDate = DateTime.utc(0);
+
 ///
 /// type: cn.edu.sit.Timetable
-class SitTimetableEntity {
+class SitTimetable {
+  String id = "";
+  String name = "";
+  String description = "";
+  DateTime startDate = _defaultStartDate;
+  int schoolYear = 0;
+  int semester = 0;
+
   /// The Default number of weeks is 20.
   final List<SitTimetableWeek?> weeks;
 
   /// The index is the CourseKey.
-  final List<SitCourseEntity> courseKey2Entity;
+  final List<SitCourse> courseKey2Entity;
   final int courseKeyCounter;
 
-  SitTimetableEntity(this.weeks, this.courseKey2Entity, this.courseKeyCounter);
+  SitTimetable(this.weeks, this.courseKey2Entity, this.courseKeyCounter);
 
-  static SitTimetableEntity parse(List<CourseRaw> all) => parseTimetableEntity(all);
+  static SitTimetable parse(List<CourseRaw> all) => parseTimetableEntity(all);
 
   @override
   String toString() => "[$courseKeyCounter]";
@@ -27,8 +36,8 @@ class SitTimetableWeek {
 
   SitTimetableWeek(this.days);
 
-  factory SitTimetableWeek.$7() {
-    return SitTimetableWeek(List.generate(7, (index) => SitTimetableDay.$11()));
+  factory SitTimetableWeek.$7days() {
+    return SitTimetableWeek(List.generate(7, (index) => SitTimetableDay.$11slots()));
   }
 
   @override
@@ -48,7 +57,7 @@ class SitTimetableDay {
 
   SitTimetableDay(this.timeslots2Lessons);
 
-  factory SitTimetableDay.$11() {
+  factory SitTimetableDay.$11slots() {
     return SitTimetableDay(List.generate(11, (index) => <SitTimetableLesson>[]));
   }
 
@@ -83,7 +92,7 @@ class SitTimetableLesson {
   String toString() => "[$courseKey] $startIndex-$endIndex";
 }
 
-class SitCourseEntity {
+class SitCourse {
   final int courseKey;
   final String courseName;
   final String courseCode;
@@ -94,7 +103,7 @@ class SitCourseEntity {
   final int creditHour;
   final List<String> teachers;
 
-  SitCourseEntity(
+  SitCourse(
     this.courseKey,
     this.courseName,
     this.courseCode,
@@ -110,22 +119,34 @@ class SitCourseEntity {
   String toString() => "[$courseKey] $courseName";
 }
 
-class SitTimetableEntityDataAdapter extends DataAdapter<SitTimetableEntity> {
+class SitTimetableDataAdapter extends DataAdapter<SitTimetable> {
   @override
-  String get typeName => "kite.SitTimetableEntity";
+  String get typeName => "kite.SitTimetable";
 
   @override
-  SitTimetableEntity fromJson(RestoreContext ctx, Map<String, dynamic> json) {
-    return SitTimetableEntity(
+  SitTimetable fromJson(RestoreContext ctx, Map<String, dynamic> json) {
+    return SitTimetable(
       ctx.restoreNullableListByExactType<SitTimetableWeek>(json["weeks"]),
-      ctx.restoreListByExactType<SitCourseEntity>(json["courseKey2Entity"]),
+      ctx.restoreListByExactType<SitCourse>(json["courseKey2Entity"]),
       json["courseKeyCounter"] as int,
-    );
+    )
+      ..id = json["id"] as String
+      ..name = json["name"] as String
+      ..description = json["description"] as String
+      ..startDate = ctx.restoreByExactType<DateTime>(json["startDate"]) as DateTime
+      ..schoolYear = json["schoolYear"] as int
+      ..semester = json["semester"] as int;
   }
 
   @override
-  Map<String, dynamic> toJson(ParseContext ctx, SitTimetableEntity obj) {
+  Map<String, dynamic> toJson(ParseContext ctx, SitTimetable obj) {
     return {
+      "id": obj.id,
+      "name": obj.name,
+      "description": obj.description,
+      "startDate": ctx.parseToJson(obj.startDate),
+      "schoolYear": obj.schoolYear,
+      "semester": obj.semester,
       "weeks": ctx.parseToNullableList(obj.weeks),
       "courseKey2Entity": ctx.parseToList(obj.courseKey2Entity),
       "courseKeyCounter": obj.courseKeyCounter,
@@ -188,13 +209,13 @@ class SitTimetableLessonDataAdapter extends DataAdapter<SitTimetableLesson> {
   }
 }
 
-class SitCourseEntityDataAdapter extends DataAdapter<SitCourseEntity> {
+class SitCourseDataAdapter extends DataAdapter<SitCourse> {
   @override
-  String get typeName => "kite.SitCourseEntity";
+  String get typeName => "kite.SitCourse";
 
   @override
-  SitCourseEntity fromJson(RestoreContext ctx, Map<String, dynamic> json) {
-    return SitCourseEntity(
+  SitCourse fromJson(RestoreContext ctx, Map<String, dynamic> json) {
+    return SitCourse(
       json["courseKey"] as int,
       json["courseName"] as String,
       json["courseCode"] as String,
@@ -208,7 +229,7 @@ class SitCourseEntityDataAdapter extends DataAdapter<SitCourseEntity> {
   }
 
   @override
-  Map<String, dynamic> toJson(ParseContext ctx, SitCourseEntity obj) {
+  Map<String, dynamic> toJson(ParseContext ctx, SitCourse obj) {
     return {
       "courseKey": obj.courseKey,
       "courseName": obj.courseName,

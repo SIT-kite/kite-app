@@ -185,8 +185,8 @@ class _PageBtn extends StatelessWidget {
           onTap: () {
             onTap(page);
           },
-          child: Text("$page",
-                  style: active ? buttonStyles.activeTextStyle : buttonStyles.textStyle, textAlign: TextAlign.center)
+          child: page
+              .text(style: active ? buttonStyles.activeTextStyle : buttonStyles.textStyle, textAlign: TextAlign.center)
               .center(),
         ),
       ).sized(

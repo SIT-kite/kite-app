@@ -23,7 +23,7 @@ import '../using.dart';
 import 'button.dart';
 
 class TimetableEditor extends StatefulWidget {
-  final TimetableMeta meta;
+  final TimetableMetaLegacy meta;
   final DateTime? defaultStartDate;
 
   const TimetableEditor({super.key, required this.meta, this.defaultStartDate});

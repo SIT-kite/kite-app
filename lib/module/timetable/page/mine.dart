@@ -124,7 +124,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
     }).toList());
   }
 
-  Widget buildTimetableEntry(BuildContext ctx, TimetableMeta meta, {required bool isSelected}) {
+  Widget buildTimetableEntry(BuildContext ctx, TimetableMetaLegacy meta, {required bool isSelected}) {
     return CupertinoContextMenu(
       actions: [
         CupertinoContextMenuAction(
@@ -188,7 +188,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
     );
   }
 
-  Widget buildTimetableItemCard(BuildContext ctx, TimetableMeta meta, {required bool isSelected}) {
+  Widget buildTimetableItemCard(BuildContext ctx, TimetableMetaLegacy meta, {required bool isSelected}) {
     final bodyTextStyle = ctx.textTheme.titleSmall;
     return [
       [
@@ -203,7 +203,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
     ].column().scrolled().padAll(20).inCard(elevation: 5);
   }
 
-  Widget buildTimetableItemCardPreview(BuildContext ctx, TimetableMeta meta, {required bool isSelected}) {
+  Widget buildTimetableItemCardPreview(BuildContext ctx, TimetableMetaLegacy meta, {required bool isSelected}) {
     final year = '${meta.schoolYear} - ${meta.schoolYear + 1}';
     final semester = Semester.values[meta.semester].localized();
     final bodyTextStyle = ctx.textTheme.titleSmall;
@@ -232,7 +232,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
     ].column().scrolled().padAll(4).inCard(elevation: 5);
   }
 
-  Future<void> showDeleteTimetableRequest(BuildContext ctx, TimetableMeta meta) async {
+  Future<void> showDeleteTimetableRequest(BuildContext ctx, TimetableMetaLegacy meta) async {
     final confirm = await ctx.showRequest(
         title: i18n.timetableDeleteRequest,
         desc: i18n.timetableDeleteRequestDesc,

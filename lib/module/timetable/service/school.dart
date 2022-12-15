@@ -36,7 +36,7 @@ class TimetableService {
   }
 
   /// 获取课表
-  Future<List<Course>> getTimetable(SchoolYear schoolYear, Semester semester) async {
+  Future<SitTimetable> getTimetable(SchoolYear schoolYear, Semester semester) async {
     final response = await session.request(
       _timetableUrl,
       ReqMethod.post,
@@ -51,7 +51,7 @@ class TimetableService {
     final json = response.data;
     final List<dynamic> courseList = json['kbList'];
     final rawCourses = courseList.map((e) => CourseRaw.fromJson(e)).toList();
-    final timetableEntity = SitTimetableEntity.parse(rawCourses);
-    return _parseTimetable(response.data);
+    final timetableEntity = SitTimetable.parse(rawCourses);
+    return timetableEntity;
   }
 }

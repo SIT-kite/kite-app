@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/entities.dart';
 import 'package:quiver/core.dart';
 import 'package:rettulf/rettulf.dart';
 
@@ -70,16 +71,9 @@ class TimetablePosition {
 }
 
 class TimetableViewer extends StatefulWidget {
-  /// 初始课表元数据
-  final TimetableMeta initialTableMeta;
+  final SitTimetable timetable;
 
-  /// 初始课表课程
-  final List<Course> initialTableCourses;
-
-  /// 初始显示模式
   final ValueNotifier<DisplayMode> $displayMode;
-
-  final VoidCallback? onJumpedToday;
 
   /// 课表视图使用的缓存
   final TableCache tableCache;
@@ -87,14 +81,12 @@ class TimetableViewer extends StatefulWidget {
   final ValueNotifier<TimetablePosition> $currentPos;
 
   const TimetableViewer({
-    required this.initialTableMeta,
-    required this.initialTableCourses,
+    required this.timetable,
     required this.$displayMode,
     required this.tableCache,
     required this.$currentPos,
-    this.onJumpedToday,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<TimetableViewer> createState() => _TimetableViewerState();
@@ -104,6 +96,7 @@ class _TimetableViewerState extends State<TimetableViewer> {
   /// 最大周数
   /// TODO 还没用上
   // static const int maxWeekCount = 20;
+  SitTimetable get timetable => widget.timetable;
 
   @override
   void initState() {
@@ -117,14 +110,12 @@ class _TimetableViewerState extends State<TimetableViewer> {
         (ctx, mode, _) => (mode == DisplayMode.daily
                     ? DailyTimetable(
                         $currentPos: widget.$currentPos,
-                        allCourses: widget.initialTableCourses,
-                        initialDate: widget.initialTableMeta.startDate,
+                        timetable: timetable,
                         tableCache: widget.tableCache,
                       )
                     : WeeklyTimetable(
                         $currentPos: widget.$currentPos,
-                        allCourses: widget.initialTableCourses,
-                        initialDate: widget.initialTableMeta.startDate,
+                        timetable: timetable,
                         tableCache: widget.tableCache,
                       ))
                 .animatedSwitched(

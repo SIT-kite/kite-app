@@ -169,7 +169,7 @@ class _BoxItemListState extends State<BoxItemList> {
         });
       },
       totalPage: totalPage,
-      btnPerGroup: (ctx.mediaQuery.size.width / 20.w).round().clamp(1, totalPage),
+      btnPerGroup: (ctx.mediaQuery.size.width / 50.w).round().clamp(1, totalPage),
       currentPageIndex: currentPage + 1,
     );
   }

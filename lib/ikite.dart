@@ -3,9 +3,9 @@
 import 'package:ikite/ikite.dart';
 import 'entities.dart';
 void KiteAppDataAdapterPlugin(IKite ikite){
-  ikite.registerAdapter(SitTimetableEntityDataAdapter());
+  ikite.registerAdapter(SitTimetableDataAdapter());
   ikite.registerAdapter(SitTimetableWeekDataAdapter());
   ikite.registerAdapter(SitTimetableDayDataAdapter());
   ikite.registerAdapter(SitTimetableLessonDataAdapter());
-  ikite.registerAdapter(SitCourseEntityDataAdapter());
+  ikite.registerAdapter(SitCourseDataAdapter());
 }

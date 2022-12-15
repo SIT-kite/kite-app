@@ -140,7 +140,7 @@ class Initializer {
     await TimetableInit.init(
       eduSession: sharedEduSession,
       kiteSession: kiteSession,
-      timetableBox: HiveBoxInit.course,
+      box: HiveBoxInit.timetable,
       ssoSession: Global.ssoSession,
     );
 

@@ -27,11 +27,11 @@ class TimetableInit {
   static Future<void> init({
     required ISession eduSession,
     required ISession kiteSession,
-    required Box<dynamic> timetableBox,
+    required Box<dynamic> box,
     required SsoSession ssoSession,
   }) async {
     timetableService = TimetableService(eduSession);
-    timetableStorage = TimetableStorage(timetableBox);
+    timetableStorage = TimetableStorage(box);
     network = ssoSession;
   }
 }

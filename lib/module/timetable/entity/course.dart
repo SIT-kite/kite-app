@@ -24,7 +24,16 @@ part 'course.g.dart';
 /// 课表显示模式
 enum DisplayMode {
   daily,
-  weekly,
+  weekly;
+
+  static DisplayMode? at(int? index) {
+    if (index == null) {
+      return null;
+    } else if (0 <= index && index < DisplayMode.values.length) {
+      return DisplayMode.values[index];
+    }
+    return null;
+  }
 }
 
 @HiveType(typeId: HiveTypeId.course)
@@ -214,6 +223,6 @@ class CourseRaw {
 
   factory CourseRaw.fromJson(Map<String, dynamic> json) => _$CourseRawFromJson(json);
 
-  CourseRaw(this.courseName, this.weekDayText, this.timeslotsText, this.weekText, this.place, this.teachers, this.campus,
-      this.courseCredit, this.creditHour, this.classCode, this.courseCode);
+  CourseRaw(this.courseName, this.weekDayText, this.timeslotsText, this.weekText, this.place, this.teachers,
+      this.campus, this.courseCredit, this.creditHour, this.classCode, this.courseCode);
 }

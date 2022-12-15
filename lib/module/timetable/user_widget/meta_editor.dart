@@ -24,7 +24,7 @@ import 'button.dart';
 import 'picker.dart';
 
 class MetaEditor extends StatefulWidget {
-  final TimetableMeta meta;
+  final TimetableMetaLegacy meta;
   final DateTime? defaultStartDate;
 
   const MetaEditor({super.key, required this.meta, this.defaultStartDate});

@@ -30,7 +30,7 @@ import '../utils.dart';
 
 class ExportDialog {
   final BuildContext context;
-  final TimetableMeta meta;
+  final TimetableMetaLegacy meta;
   final List<Course> courses;
   ExportDialog(this.context, this.meta, this.courses);
 

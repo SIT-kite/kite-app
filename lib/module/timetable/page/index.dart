@@ -17,6 +17,7 @@
 */
 import 'package:flutter/material.dart';
 
+import '../entity/entity.dart';
 import '../entity/meta.dart';
 import '../events.dart';
 import '../init.dart';
@@ -33,8 +34,7 @@ class TimetableIndexPage extends StatefulWidget {
 class _TimetableIndexPageState extends State<TimetableIndexPage> {
   final storage = TimetableInit.timetableStorage;
 
-// 课表元数据
-  TimetableMeta? _selected;
+  SitTimetable? _selected;
 
   @override
   void initState() {
@@ -47,19 +47,23 @@ class _TimetableIndexPageState extends State<TimetableIndexPage> {
 
   void refresh() {
     if (!mounted) return;
-    setState(() {
-      _selected = storage.currentTableMeta;
-    });
+    final currentId = storage.currentTimetableId;
+    if (currentId != null) {
+      setState(() {
+        _selected = storage.getSitTimetableBy(id: currentId);
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final selected = _selected;
     if (selected == null) {
+      // If no timetable selected, navigate to Mine page to select/import one.
       return const MyTimetablePage();
     } else {
       return TimetablePage(
-        meta: selected,
+        timetable: selected,
       );
     }
   }

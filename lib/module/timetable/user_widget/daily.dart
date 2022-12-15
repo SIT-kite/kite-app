@@ -20,6 +20,7 @@ import 'package:rettulf/rettulf.dart';
 
 import '../cache.dart';
 import '../entity/course.dart';
+import '../entity/entity.dart';
 import '../using.dart';
 import '../utils.dart';
 import 'header.dart';
@@ -28,12 +29,9 @@ import 'sheet.dart';
 import 'timetable.dart';
 
 class DailyTimetable extends StatefulWidget implements InitialTimeProtocol {
-  /// 教务系统课程列表
-  final List<Course> allCourses;
-
-  /// 初始日期
+  final SitTimetable timetable;
   @override
-  final DateTime initialDate;
+  DateTime get initialDate => timetable.startDate;
 
   /// 课表缓存
   final TableCache tableCache;
@@ -45,8 +43,7 @@ class DailyTimetable extends StatefulWidget implements InitialTimeProtocol {
 
   const DailyTimetable({
     super.key,
-    required this.allCourses,
-    required this.initialDate,
+    required this.timetable,
     required this.tableCache,
     required this.$currentPos,
   });
