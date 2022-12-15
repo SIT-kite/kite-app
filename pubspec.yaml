@@ -133,7 +133,16 @@ dependencies:
   msh_checkbox: ^1.2.1
   animated_toggle_switch: ^0.5.2
   quiver: ^3.1.0
-
+  ikite:
+    git:
+      url: https://github.com/SIT-kite/iKite.git
+      ref: master
+      path: ikite-dart/
+  ikite_flutter:
+    git:
+      url: https://github.com/SIT-kite/iKite.git
+      ref: master
+      path: ikite-flutter/
 
 dev_dependencies:
   flutter_test: { sdk: flutter }

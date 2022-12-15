@@ -24,6 +24,7 @@ import 'adapter/color.dart';
 import 'adapter/size.dart';
 import 'adapter/version.dart';
 import 'using.dart';
+import 'package:kite/entities.dart';
 
 class HiveAdapter {
   HiveAdapter._();

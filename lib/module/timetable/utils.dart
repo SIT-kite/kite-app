@@ -105,5 +105,5 @@ Future<void> exportTimetableToCalendar(TimetableMeta meta, List<Course> courses,
 }
 
 SitTimetableEntity parseTimetableEntity(List<Course> all) {
-  return SitTimetableEntity([],[]);
+  return SitTimetableEntity([], []);
 }

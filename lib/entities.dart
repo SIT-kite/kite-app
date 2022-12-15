@@ -1,0 +1,16 @@
+// activities
+export 'package:kite/module/activity/entity/detail.dart';
+export 'package:kite/module/activity/entity/list.dart';
+export 'package:kite/module/activity/entity/score.dart';
+// application
+export 'package:kite/module/application/entity/application.dart';
+export 'package:kite/module/application/entity/message.dart';
+// exam_arr
+export 'package:kite/module/exam_arr/entity/exam.dart';
+// exam_result
+export 'package:kite/module/exam_result/entity/result.dart';
+// oa_announce
+export 'package:kite/module/oa_announce/entity/announce.dart';
+export 'package:kite/module/oa_announce/entity/attachment.dart';
+// yellow_pages
+export 'package:kite/module/yellow_pages/entity/contact.dart';

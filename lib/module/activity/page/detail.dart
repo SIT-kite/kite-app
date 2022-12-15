@@ -197,9 +197,9 @@ class _DetailPageState extends State<DetailPage> with AutomaticKeepAliveClientMi
         child: buildGlassmorphismBg(ctx),
       ),
       Row(mainAxisSize: MainAxisSize.min, children: [
-        buildInfoCardLandscape(context, detail).align(at:Alignment.topCenter).expanded(),
+        buildInfoCardLandscape(context, detail).align(at: Alignment.topCenter).expanded(),
         if (detail != null)
-          _buildArticle(context, detail.description).align(at:Alignment.topCenter).expanded()
+          _buildArticle(context, detail.description).align(at: Alignment.topCenter).expanded()
         else
           Placeholders.loading().expanded(),
       ])
