@@ -324,12 +324,18 @@ class _CourseCellState extends State<_CourseCell> {
     final colors = TimetablePalette.of(context).colors;
     final color = colors[course.courseCode.hashCode.abs() % colors.length].byTheme(context.theme);
     final info = <Widget>[];
-    info.add("${widget.timeslot + 1}".text());
-    info.add(stylizeCourseName(course.courseName).text());
-
-    return info
-        .column(maa: MainAxisAlignment.start, caa: CrossAxisAlignment.center)
-        .inCard(color: color, elevation: 8, margin: const EdgeInsets.all(1.5));
+    final Widget res;
+    info.add(stylizeCourseName(course.courseName).text(textAlign: TextAlign.center));
+    if (context.isPortrait) {
+      info.insert(0, TimeslotNumber(widget.timeslot));
+      res = info.column(maa: MainAxisAlignment.start, caa: CrossAxisAlignment.center);
+    } else {
+      res = [
+        TimeslotNumber(widget.timeslot + lesson.duration - 1).padAll(5).align(at: Alignment.bottomRight),
+        info.column(maa: MainAxisAlignment.start, caa: CrossAxisAlignment.center).center(),
+      ].stack();
+    }
+    return res.inCard(color: color, elevation: 8, margin: const EdgeInsets.all(1.5));
     return [
       buildText(formatPlace(course.place), 2),
       buildText(course.teachers.join(','), 2),
@@ -355,13 +361,22 @@ class _CourseCellState extends State<_CourseCell> {
 class TimeslotNumber extends StatelessWidget {
   final int timeslot;
 
-  const TimeslotNumber({
+  const TimeslotNumber(
+    this.timeslot, {
     super.key,
-    required this.timeslot,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    final number = (timeslot + 1).toString();
+    final double padding = number.length > 1 ? 1.8 : 2.8;
+    return Container(
+      decoration: ShapeDecoration(
+          shape: CircleBorder(
+        side: BorderSide(color: context.theme.colorScheme.onSurface),
+      )),
+      padding: EdgeInsets.all(padding),
+      child: number.text(textAlign: TextAlign.center),
+    );
   }
 }
