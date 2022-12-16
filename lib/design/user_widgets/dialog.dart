@@ -225,8 +225,6 @@ extension DialogEx on BuildContext {
                             )))),
       ),
     );
-    $selectedA.dispose();
-    $selectedB.dispose();
     return res;
   }
 }

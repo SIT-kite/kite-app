@@ -4,43 +4,45 @@ import '../events.dart';
 import '../init.dart';
 import '../using.dart';
 
-class TimetablePalette extends InheritedWidget {
+class TimetableStyle extends InheritedWidget {
   final List<ColorPair> colors;
+  final bool useNewUI;
 
-  const TimetablePalette({
+  const TimetableStyle({
     super.key,
     required this.colors,
+    required this.useNewUI,
     required super.child,
   });
 
-  static TimetablePalette of(BuildContext context) {
-    final TimetablePalette? result = context.dependOnInheritedWidgetOfExactType<TimetablePalette>();
+  static TimetableStyle of(BuildContext context) {
+    final TimetableStyle? result = context.dependOnInheritedWidgetOfExactType<TimetableStyle>();
     assert(result != null, 'No TimetablePalette found in context');
     return result!;
   }
 
   @override
-  bool updateShouldNotify(TimetablePalette oldWidget) {
-    return colors != oldWidget.colors;
+  bool updateShouldNotify(TimetableStyle oldWidget) {
+    return colors != oldWidget.colors || useNewUI != oldWidget.useNewUI;
   }
 }
 
-class TimetablePaletteProv extends StatefulWidget {
+class TimetableStyleProv extends StatefulWidget {
   final Widget child;
 
-  const TimetablePaletteProv({super.key, required this.child});
+  const TimetableStyleProv({super.key, required this.child});
 
   @override
-  TimetablePaletteProvState createState() => TimetablePaletteProvState();
+  TimetableStyleProvState createState() => TimetableStyleProvState();
 }
 
-class TimetablePaletteProvState extends State<TimetablePaletteProv> {
+class TimetableStyleProvState extends State<TimetableStyleProv> {
   final storage = TimetableInit.timetableStorage;
 
   @override
   void initState() {
     super.initState();
-    eventBus.on<TimetablePaletteChangeEvent>().listen((event) {
+    eventBus.on<TimetableStyleChangeEvent>().listen((event) {
       if (!mounted) return;
       setState(() {});
     });
@@ -48,8 +50,9 @@ class TimetablePaletteProvState extends State<TimetablePaletteProv> {
 
   @override
   Widget build(BuildContext context) {
-    return TimetablePalette(
+    return TimetableStyle(
       colors: storage.useOldSchoolColors == true ? CourseColor.oldSchool : CourseColor.v1_5,
+      useNewUI: storage.useNewUI ?? false,
       child: widget.child,
     );
   }

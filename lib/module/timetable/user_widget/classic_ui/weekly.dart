@@ -367,7 +367,7 @@ class _CourseCellState extends State<_CourseCell> {
   Widget build(BuildContext context) {
     final size = context.mediaQuery.size;
 
-    final colors = TimetablePalette.of(context).colors;
+    final colors = TimetableStyle.of(context).colors;
     final color = colors[course.courseCode.hashCode.abs() % colors.length].byTheme(context.theme);
     final decoration = BoxDecoration(
       color: color,

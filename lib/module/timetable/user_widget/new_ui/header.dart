@@ -68,53 +68,64 @@ class _TimetableHeaderState extends State<TimetableHeader> {
 
   ///每天的列
   Widget buildDayNameHeader(int day) {
-    final isSelected = day == selectedDay;
     final onDayTap = widget.onDayTap;
-    return InkWell(
-      onTap: onDayTap != null
-          ? () {
-              widget.onDayTap?.call(day);
-            }
-          : null,
-      child: buildDayHeader(context, day),
-    ).inCard(elevation: isSelected ? 20 : 5).expanded();
+    return buildDayHeader(context, day)
+        .on(
+            tap: onDayTap == null
+                ? null
+                : () {
+                    widget.onDayTap?.call(day);
+                  })
+        .expanded();
   }
 
   Widget buildDayHeader(BuildContext ctx, int day) {
-    final date = getDateFromWeekDay(widget.startDate, widget.currentWeek, day);
-    final name = '${widget.weekdayAbbr[day - 1]}\n${date.month}/${date.day}';
     final isSelected = day == selectedDay;
     final textNBgColors = ctx.makeTabHeaderTextBgColors(isSelected);
     final textColor = textNBgColors.item1;
     final bgColor = textNBgColors.item2;
-    return AnimatedContainer(
-      decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(10)),
-      duration: const Duration(milliseconds: 1000),
-      curve: Curves.fastLinearToSlowEaseIn,
-      child: LayoutBuilder(builder: (ctx, box) {
-        final span = TextSpan(
-          text: name,
-        );
-        final painter = TextPainter(
-          text: span,
-          maxLines: 2,
-          textDirection: TextDirection.ltr,
-        );
-        painter.layout();
-        final overflow = painter.size.width > box.maxWidth || painter.size.height > box.maxHeight;
-        final String realText;
-        if (overflow) {
-          realText = widget.weekdayAbbr[day - 1][0];
-        } else {
-          realText = name;
-        }
-        return realText
-            .text(
-              textAlign: TextAlign.center,
-              style: TextStyle(color: textColor),
-            )
-            .padOnly(t: 5, b: 5);
-      }),
+
+    return AnimatedSlide(
+      offset: isSelected ? const Offset(0.00, -0.04) : Offset.zero,
+      duration: const Duration(milliseconds: 100),
+      child: AnimatedContainer(
+        decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(10)),
+        duration: const Duration(milliseconds: 1000),
+        curve: Curves.fastLinearToSlowEaseIn,
+        child: buildHeaderText(ctx, day, textColor),
+      ).inCard(
+        elevation: isSelected ? 20 : 5,
+      ),
     );
+  }
+
+  Widget buildHeaderText(BuildContext ctx, int day, Color textColor) {
+    final date = getDateFromWeekDay(widget.startDate, widget.currentWeek, day);
+    final name = '${widget.weekdayAbbr[day - 1]}\n${date.month}/${date.day}';
+
+    return LayoutBuilder(builder: (ctx, box) {
+      final span = TextSpan(
+        text: name,
+      );
+      final painter = TextPainter(
+        text: span,
+        maxLines: 2,
+        textDirection: TextDirection.ltr,
+      );
+      painter.layout();
+      final overflow = painter.size.width > box.maxWidth || painter.size.height > box.maxHeight;
+      final String realText;
+      if (overflow) {
+        realText = widget.weekdayAbbr[day - 1][0];
+      } else {
+        realText = name;
+      }
+      return realText
+          .text(
+            textAlign: TextAlign.center,
+            style: TextStyle(color: textColor),
+          )
+          .padOnly(t: 5, b: 5);
+    });
   }
 }

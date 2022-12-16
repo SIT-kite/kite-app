@@ -25,6 +25,7 @@ import 'package:rettulf/rettulf.dart';
 import '../../cache.dart';
 import '../../entity/course.dart';
 import '../../entity/entity.dart';
+import '../../events.dart';
 import '../../using.dart';
 import '../../utils.dart';
 import '../shared.dart';
@@ -66,21 +67,14 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
   int page2Week(int page) => page + 1;
 
   int week2PageOffset(int week) => week - 1;
-  TimetablePosition? _lastPos;
-  bool isJumping = false;
-  int mood = 0;
 
   @override
   void initState() {
     super.initState();
     dateSemesterStart = widget.initialDate;
     _pageController = PageController(initialPage: currentPos.week - 1)..addListener(onPageChange);
-    widget.$currentPos.addListener(() {
-      final curPos = widget.$currentPos.value;
-      if (_lastPos != curPos) {
-        jumpTo(curPos);
-        _lastPos = curPos;
-      }
+    eventBus.on<JumpToPosEvent>().listen((event) {
+      jumpTo(event.where);
     });
   }
 
@@ -94,50 +88,22 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
       }
     });
 
-    return [
-      buildTimetableArea(context),
-      buildTableHeader(context),
-    ].stack();
-  }
-
-  Widget buildTimetableArea(BuildContext ctx) {
-    return NotificationListener<ScrollNotification>(
-      onNotification: (e) {
-        if (e is ScrollEndNotification) {
-          isJumping = false;
-        }
-        return false;
-      },
-      child: PageView.builder(
-        controller: _pageController,
-        scrollDirection: Axis.horizontal,
-        itemCount: 20,
-        itemBuilder: (BuildContext ctx, int index) => buildPageBody(ctx, index),
-      ),
+    return PageView.builder(
+      controller: _pageController,
+      scrollDirection: Axis.horizontal,
+      itemCount: 20,
+      itemBuilder: (BuildContext ctx, int index) => buildPageBody(ctx, index),
     );
   }
 
-  Widget buildTableHeader(BuildContext ctx) {
-    final weekdayAbbr = makeWeekdaysShortText();
-    return widget.$currentPos <<
-        (ctx, cur, _) => TimetableHeader(
-              weekdayAbbr: weekdayAbbr,
-              selectedDay: 0,
-              currentWeek: cur.week,
-              startDate: widget.initialDate,
-            );
-  }
-
   void onPageChange() {
-    if (!isJumping) {
-      setState(() {
-        final page = (_pageController.page ?? 0).round();
-        final newWeek = page2Week(page);
-        if (newWeek != currentPos.week) {
-          currentPos = currentPos.copyWith(week: newWeek);
-        }
-      });
-    }
+    setState(() {
+      final page = (_pageController.page ?? 0).round();
+      final newWeek = page2Week(page);
+      if (newWeek != currentPos.week) {
+        currentPos = currentPos.copyWith(week: newWeek);
+      }
+    });
   }
 
   /// 跳到某一周
@@ -151,7 +117,6 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
         duration: calcuSwitchAnimationDuration(distance),
         curve: Curves.fastLinearToSlowEaseIn,
       );
-      isJumping = true;
     }
   }
 
@@ -318,17 +283,17 @@ class _CourseCellState extends State<_CourseCell> {
   @override
   Widget build(BuildContext context) {
     final Widget res;
-    final colors = TimetablePalette.of(context).colors;
+    final colors = TimetableStyle.of(context).colors;
     final color = colors[course.courseCode.hashCode.abs() % colors.length].byTheme(context.theme);
     if (context.isPortrait) {
       res = [
         TimeslotNumber(widget.timeslot).flexible(flex: 1),
-        buildInfo(context,course).flexible(flex: 3),
+        buildInfo(context, course).flexible(flex: 3),
       ].column();
     } else {
       res = [
         TimeslotNumber(widget.timeslot + lesson.duration - 1).padAll(3).align(at: Alignment.bottomRight),
-        buildInfo(context,course).center().padOnly(b: 15.h),
+        buildInfo(context, course).center().padOnly(b: 15.h),
       ].stack();
     }
 
@@ -344,8 +309,6 @@ class _CourseCellState extends State<_CourseCell> {
           context: context);*/
     });
   }
-
-
 
   Text buildText(String text, int maxLines) {
     return Text(
@@ -369,7 +332,7 @@ class TimeslotNumber extends StatelessWidget {
   Widget build(BuildContext context) {
     final number = (timeslot + 1).toString();
     final double padding = number.length > 1 ? 1.0.w : 1.8.w;
-    final double fontSize = context.isPortrait? 12.sp : 6.sp;
+    final double fontSize = context.isPortrait ? 12.sp : 6.sp;
     return Container(
       decoration: ShapeDecoration(
           shape: CircleBorder(

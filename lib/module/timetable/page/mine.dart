@@ -54,7 +54,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
         title: i18n.timetableMineTitle.text(),
         actions: [
           IconButton(
-            onPressed: showColorPaletteToggle,
+            onPressed: showStyleToggle,
             icon: const Icon(Icons.color_lens_outlined),
           ),
         ],
@@ -71,8 +71,11 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
     );
   }
 
-  Future<void> showColorPaletteToggle() async {
-    final initial = storage.useOldSchoolColors ?? false;
+  Future<void> showStyleToggle() async {
+    final useOldSchoolInit = storage.useOldSchoolColors ?? false;
+    final useNewUIInit = storage.useNewUI ?? false;
+    final $useOldSchool = ValueNotifier(useOldSchoolInit);
+    final $useNewUI = ValueNotifier(useNewUIInit);
     await context.show$Dialog$(
         make: (ctx) => $Dialog$(
               primary: $Action$(
@@ -82,26 +85,37 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
                     ctx.navigator.pop(true);
                   }),
               make: (ctx) {
-                final $useOldSchool = ValueNotifier(initial);
                 return [
                   [
-                    i18n.timetableUseOldSchoolPalette.text(style: ctx.textTheme.titleMedium),
-                    $useOldSchool <<
-                        (ctx, use, _) => CupertinoSwitch(
-                            value: use,
-                            onChanged: (newV) {
-                              storage.useOldSchoolColors = newV;
-                              $useOldSchool.value = newV;
-                            }),
-                  ].row(maa: MainAxisAlignment.spaceBetween),
+                    ListTile(
+                      title: i18n.timetableUseOldSchoolPalette.text(style: const TextStyle(fontSize: 15)),
+                      trailing: $useOldSchool <<
+                          (ctx, use, _) => CupertinoSwitch(
+                              value: use,
+                              onChanged: (newV) {
+                                $useOldSchool.value = newV;
+                              }),
+                    ),
+                    ListTile(
+                      title: i18n.timetableUseOldNewUI.text(style: const TextStyle(fontSize: 15)),
+                      trailing: $useNewUI <<
+                          (ctx, use, _) => CupertinoSwitch(
+                              value: use,
+                              onChanged: (newV) {
+                                $useNewUI.value = newV;
+                              }),
+                    ),
+                  ].column(),
                   i18n.newsNewPersonalizationSystemIsComingSoon
                       .text(style: const TextStyle(fontStyle: FontStyle.italic))
                 ].column(mas: MainAxisSize.min);
               },
             ));
-    if (storage.useOldSchoolColors != initial) {
+    if ($useOldSchool.value != useOldSchoolInit || $useNewUI.value != useNewUIInit) {
+      storage.useOldSchoolColors = $useOldSchool.value;
+      storage.useNewUI = $useNewUI.value;
       if (!mounted) return;
-      eventBus.fire(TimetablePaletteChangeEvent());
+      eventBus.fire(TimetableStyleChangeEvent());
     }
   }
 
@@ -237,7 +251,10 @@ class _TimetableEntryState extends State<TimetableEntry> {
               .padAll(10)
               .expanded(),
       ].row(maa: MainAxisAlignment.spaceBetween).padAll(10),
-      i18n.timetableImportStartDate(ctx.dateNum(timetable.startDate)).text(style: bodyTextStyle).padFromLTRB(20, 20, 20, 10),
+      i18n
+          .timetableImportStartDate(ctx.dateNum(timetable.startDate))
+          .text(style: bodyTextStyle)
+          .padFromLTRB(20, 20, 20, 10),
     ].column().scrolled().padAll(4).inCard(elevation: 5);
   }
 

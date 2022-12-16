@@ -17,6 +17,8 @@
 */
 import 'package:event_bus/event_bus.dart';
 
+import 'user_widget/interface.dart';
+
 EventBus eventBus = EventBus();
 
 class CurrentTimetableChangeEvent {
@@ -25,4 +27,10 @@ class CurrentTimetableChangeEvent {
   CurrentTimetableChangeEvent({this.selected});
 }
 
-class TimetablePaletteChangeEvent {}
+class TimetableStyleChangeEvent {}
+
+class JumpToPosEvent{
+  final TimetablePosition where;
+
+  JumpToPosEvent(this.where);
+}

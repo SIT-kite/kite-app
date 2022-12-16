@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/module/timetable/events.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../cache.dart';
@@ -51,7 +52,9 @@ class _TimetablePageState extends State<TimetablePage> {
 
   // 课表元数据
   late final ValueNotifier<TimetablePosition> $currentPos;
+
   SitTimetable get timetable => widget.timetable;
+
   @override
   void initState() {
     super.initState();
@@ -63,77 +66,6 @@ class _TimetablePageState extends State<TimetablePage> {
     });
     storage.lastDisplayMode = initialMode;
     $currentPos = ValueNotifier(TimetablePosition.locate(timetable.startDate, DateTime.now()));
-  }
-
-  Future<void> selectWeeklyTimetablePageToJump(BuildContext ctx) async {
-    final currentWeek = $currentPos.value.week;
-    final initialIndex = currentWeek - 1;
-    final controller = FixedExtentScrollController(initialItem: initialIndex);
-    final todayPos = TimetablePosition.locate(timetable.startDate, DateTime.now());
-    final todayIndex = todayPos.week - 1;
-    final index2Go = await ctx.showPicker(
-        count: 20,
-        controller: controller,
-        ok: i18n.timetableJumpBtn,
-        okEnabled: (curSelected) => curSelected != initialIndex,
-        actions: [
-          (ctx, curSelected) => i18n.timetableJumpFindTodayBtn.text().cupertinoButton(
-              onPressed: (curSelected == todayIndex)
-                  ? null
-                  : () {
-                      controller.animateToItem(todayIndex,
-                          duration: const Duration(milliseconds: 500), curve: Curves.fastLinearToSlowEaseIn);
-                    })
-        ],
-        make: (ctx, i) {
-          return Text(i18n.timetableWeekOrderedName(i + 1));
-        });
-    controller.dispose();
-    if (index2Go != null && index2Go != initialIndex) {
-      $currentPos.value = $currentPos.value.copyWith(
-        week: index2Go + 1,
-      );
-    }
-  }
-
-  Future<void> selectDailyTimetablePageToJump(BuildContext ctx) async {
-    final currentPos = $currentPos.value;
-    final initialWeekIndex = currentPos.week - 1;
-    final initialDayIndex = currentPos.day - 1;
-    final $week = FixedExtentScrollController(initialItem: initialWeekIndex);
-    final $day = FixedExtentScrollController(initialItem: initialDayIndex);
-    final todayPos = TimetablePosition.locate(timetable.startDate, DateTime.now());
-    final todayWeekIndex = todayPos.week - 1;
-    final todayDayIndex = todayPos.day - 1;
-    final weekdayNames = makeWeekdaysText();
-    final indices2Go = await ctx.showDualPicker(
-        countA: 20,
-        countB: 7,
-        controllerA: $week,
-        controllerB: $day,
-        ok: i18n.timetableJumpBtn,
-        okEnabled: (weekSelected, daySelected) => weekSelected != initialWeekIndex || daySelected != initialDayIndex,
-        actions: [
-          (ctx, week, day) => i18n.timetableJumpFindTodayBtn.text().cupertinoButton(
-              onPressed: (week == todayWeekIndex && day == todayDayIndex)
-                  ? null
-                  : () {
-                      $week.animateToItem(todayWeekIndex,
-                          duration: const Duration(milliseconds: 500), curve: Curves.fastLinearToSlowEaseIn);
-
-                      $day.animateToItem(todayDayIndex,
-                          duration: const Duration(milliseconds: 500), curve: Curves.fastLinearToSlowEaseIn);
-                    })
-        ],
-        makeA: (ctx, i) => i18n.timetableWeekOrderedName(i + 1).text(),
-        makeB: (ctx, i) => weekdayNames[i].text());
-    $week.dispose();
-    $day.dispose();
-    final week2Go = indices2Go?.item1;
-    final day2Go = indices2Go?.item2;
-    if (week2Go != null && day2Go != null && (week2Go != initialWeekIndex || day2Go != initialDayIndex)) {
-      $currentPos.value = TimetablePosition(week: week2Go + 1, day: day2Go + 1);
-    }
   }
 
   @override
@@ -174,13 +106,19 @@ class _TimetablePageState extends State<TimetablePage> {
   }
 
   Widget buildBody(BuildContext ctx) {
-    return TimetablePaletteProv(
-      child: new_ui.TimetableViewer(
+    if (TimetableStyle.of(ctx).useNewUI) {
+      return new_ui.TimetableViewer(
         timetable: timetable,
         $currentPos: $currentPos,
         $displayMode: $displayMode,
-      ),
-    );
+      );
+    } else {
+      return classic_ui.TimetableViewer(
+        timetable: timetable,
+        $currentPos: $currentPos,
+        $displayMode: $displayMode,
+      );
+    }
   }
 
   Widget buildSwitchViewButton(BuildContext ctx) {
@@ -199,6 +137,84 @@ class _TimetablePageState extends State<TimetablePage> {
           await Navigator.of(ctx).pushNamed(RouteTable.timetableMine);
         });
   }
+
+  Future<void> selectWeeklyTimetablePageToJump(BuildContext ctx) async {
+    final currentWeek = $currentPos.value.week;
+    final initialIndex = currentWeek - 1;
+    final controller = FixedExtentScrollController(initialItem: initialIndex);
+    final todayPos = TimetablePosition.locate(timetable.startDate, DateTime.now());
+    final todayIndex = todayPos.week - 1;
+    final index2Go = await ctx.showPicker(
+        count: 20,
+        controller: controller,
+        ok: i18n.timetableJumpBtn,
+        okEnabled: (curSelected) => curSelected != initialIndex,
+        actions: [
+          (ctx, curSelected) => i18n.timetableJumpFindTodayBtn.text().cupertinoButton(
+              onPressed: (curSelected == todayIndex)
+                  ? null
+                  : () {
+                      controller.animateToItem(todayIndex,
+                          duration: const Duration(milliseconds: 500), curve: Curves.fastLinearToSlowEaseIn);
+                    })
+        ],
+        make: (ctx, i) {
+          return Text(i18n.timetableWeekOrderedName(i + 1));
+        });
+    controller.dispose();
+    if (index2Go != null && index2Go != initialIndex) {
+      if (storage.useNewUI ?? false) {
+        eventBus.fire(JumpToPosEvent($currentPos.value.copyWith(week: index2Go + 1)));
+      } else {
+        $currentPos.value = $currentPos.value.copyWith(week: index2Go + 1);
+      }
+    }
+  }
+
+  Future<void> selectDailyTimetablePageToJump(BuildContext ctx) async {
+    final currentPos = $currentPos.value;
+    final initialWeekIndex = currentPos.week - 1;
+    final initialDayIndex = currentPos.day - 1;
+    final $week = FixedExtentScrollController(initialItem: initialWeekIndex);
+    final $day = FixedExtentScrollController(initialItem: initialDayIndex);
+    final todayPos = TimetablePosition.locate(timetable.startDate, DateTime.now());
+    final todayWeekIndex = todayPos.week - 1;
+    final todayDayIndex = todayPos.day - 1;
+    final weekdayNames = makeWeekdaysText();
+    final indices2Go = await ctx.showDualPicker(
+        countA: 20,
+        countB: 7,
+        controllerA: $week,
+        controllerB: $day,
+        ok: i18n.timetableJumpBtn,
+        okEnabled: (weekSelected, daySelected) => weekSelected != initialWeekIndex || daySelected != initialDayIndex,
+        actions: [
+          (ctx, week, day) => i18n.timetableJumpFindTodayBtn.text().cupertinoButton(
+              onPressed: (week == todayWeekIndex && day == todayDayIndex)
+                  ? null
+                  : () {
+                      $week.animateToItem(todayWeekIndex,
+                          duration: const Duration(milliseconds: 500), curve: Curves.fastLinearToSlowEaseIn);
+
+                      $day.animateToItem(todayDayIndex,
+                          duration: const Duration(milliseconds: 500), curve: Curves.fastLinearToSlowEaseIn);
+                    })
+        ],
+        makeA: (ctx, i) => i18n.timetableWeekOrderedName(i + 1).text(),
+        makeB: (ctx, i) => weekdayNames[i].text());
+    $week.dispose();
+    $day.dispose();
+    final week2Go = indices2Go?.item1;
+    final day2Go = indices2Go?.item2;
+    if (week2Go != null && day2Go != null && (week2Go != initialWeekIndex || day2Go != initialDayIndex)) {
+      if (storage.useNewUI ?? false) {
+        eventBus.fire(JumpToPosEvent(TimetablePosition(week: week2Go + 1, day: day2Go + 1)));
+      } else {
+        $currentPos.value = TimetablePosition(week: week2Go + 1, day: day2Go + 1);
+      }
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();

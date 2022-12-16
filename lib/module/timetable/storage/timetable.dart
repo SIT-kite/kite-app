@@ -12,6 +12,7 @@ class _K {
 
   // TODO: Remove this and add a new personalization system.
   static const useOldSchoolPalette = "/useOldSchoolPalette";
+  static const useNewUI = "/useNewUI";
 
   static String makeTimetableKey(String id) => "$timetablesNs/$id";
 }
@@ -33,7 +34,7 @@ class TimetableStorage {
       iKite.restoreByExactType<SitTimetable>(box.get(_K.makeTimetableKey(id)));
 
   void setSitTimetable(SitTimetable? timetable, {required String byId}) =>
-      box.put(_K.makeTimetableKey(byId), timetable == null ? null : iKite.parseToJson<SitTimetable>(timetable));
+      box.put(_K.makeTimetableKey(byId), timetable == null ? null : iKite.parseToJson<SitTimetable>(timetable,enableTypeAnnotation: false));
 
   String? get currentTimetableId => box.get(_K.currentTimetableId);
 
@@ -42,6 +43,10 @@ class TimetableStorage {
   set useOldSchoolColors(bool? newV) => box.put(_K.useOldSchoolPalette, newV);
 
   bool? get useOldSchoolColors => box.get(_K.useOldSchoolPalette);
+
+  set useNewUI(bool? newV) => box.put(_K.useNewUI, newV);
+
+  bool? get useNewUI => box.get(_K.useNewUI);
 }
 
 extension TimetableStorageEx on TimetableStorage {

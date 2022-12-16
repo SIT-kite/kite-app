@@ -21,6 +21,7 @@ import '../entity/entity.dart';
 import '../entity/meta.dart';
 import '../events.dart';
 import '../init.dart';
+import '../user_widget/palette.dart';
 import 'mine.dart';
 import 'timetable.dart';
 
@@ -62,8 +63,10 @@ class _TimetableIndexPageState extends State<TimetableIndexPage> {
       // If no timetable selected, navigate to Mine page to select/import one.
       return const MyTimetablePage();
     } else {
-      return TimetablePage(
-        timetable: selected,
+      return TimetableStyleProv(
+        child: TimetablePage(
+          timetable: selected,
+        ),
       );
     }
   }

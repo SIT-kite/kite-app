@@ -144,6 +144,7 @@ dependencies:
       ref: master
       path: ikite-flutter/
   auto_size_text: ^3.0.0
+  badges: ^2.0.3
 
 dev_dependencies:
   flutter_test: { sdk: flutter }

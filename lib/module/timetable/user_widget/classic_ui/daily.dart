@@ -271,7 +271,7 @@ class _LessonCardState extends State<LessonCard> {
     final timetable = getBuildingTimetable(course.campus, course.place);
 /*    final description =
         formatTimeIndex(timetable, course.timeIndex, '${course.weekText} 周${weekWord[course.dayIndex - 1]}\nss-ee');*/
-    final colors = TimetablePalette.of(context).colors;
+    final colors = TimetableStyle.of(context).colors;
     return Card(
         margin: const EdgeInsets.all(8),
         shape: const RoundedRectangleBorder(

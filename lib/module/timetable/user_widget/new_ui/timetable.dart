@@ -5,8 +5,10 @@ import 'package:rettulf/rettulf.dart';
 import '../../entity/course.dart';
 import '../../entity/entity.dart';
 import '../../using.dart';
+import '../../utils.dart';
 import '../interface.dart';
 import 'daily.dart';
+import 'header.dart';
 import 'weekly.dart';
 
 export 'daily.dart';
@@ -44,7 +46,10 @@ class _TimetableViewerState extends State<TimetableViewer> {
 
   @override
   Widget build(BuildContext context) {
-    return buildTimetableBody(context).padH(5.w);
+    return [
+      buildTimetableBody(context).padH(5.w),
+      buildTableHeader(context),
+    ].stack();
   }
 
   Widget buildTimetableBody(BuildContext ctx) {
@@ -61,5 +66,18 @@ class _TimetableViewerState extends State<TimetableViewer> {
                 .animatedSwitched(
               d: const Duration(milliseconds: 300),
             );
+  }
+
+  Widget buildTableHeader(BuildContext ctx) {
+    final weekdayAbbr = makeWeekdaysShortText();
+    return widget.$currentPos <<
+        (ctx, cur, _) => TimetableHeader(
+            weekdayAbbr: weekdayAbbr,
+            currentWeek: cur.week,
+            selectedDay: cur.day,
+            startDate: timetable.startDate,
+            onDayTap: (selectedDay) {
+              widget.$currentPos.value = TimetablePosition(week: cur.week, day: selectedDay);
+            });
   }
 }

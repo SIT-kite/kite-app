@@ -53,7 +53,7 @@ class _TimetablePreviewPageState extends State<TimetablePreviewPage> {
             overflow: TextOverflow.ellipsis,
           ),
         ),
-        body: TimetablePaletteProv(
+        body: TimetableStyleProv(
           child: new_ui.TimetableViewer(
             timetable: widget.timetable,
             $currentPos: $currentPos,

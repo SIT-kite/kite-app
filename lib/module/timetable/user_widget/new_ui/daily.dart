@@ -17,6 +17,7 @@
  */
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kite/module/timetable/events.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../../cache.dart';
@@ -67,20 +68,13 @@ class DailyTimetableState extends State<DailyTimetable> {
     return TimetablePosition(week: week, day: day);
   }
 
-  TimetablePosition? _lastPos;
-  bool isJumping = false;
-
   @override
   void initState() {
     super.initState();
     final pos = widget.locateInTimetable(DateTime.now());
     _pageController = PageController(initialPage: pos2PageOffset(pos))..addListener(onPageChange);
-    widget.$currentPos.addListener(() {
-      final curPos = widget.$currentPos.value;
-      if (_lastPos != curPos) {
-        jumpTo(curPos);
-        _lastPos = curPos;
-      }
+    eventBus.on<JumpToPosEvent>().listen((event) {
+      jumpTo(event.where);
     });
   }
 
@@ -93,46 +87,25 @@ class DailyTimetableState extends State<DailyTimetable> {
         _pageController.jumpToPage(targetOffset);
       }
     });
-    final weekdayAbbr = makeWeekdaysShortText();
-    return [
-      widget.$currentPos <<
-          (ctx, cur, _) => TimetableHeader(
-                weekdayAbbr: weekdayAbbr,
-                selectedDay: cur.day,
-                currentWeek: cur.week,
-                startDate: widget.initialDate,
-                onDayTap: (selectedDay) {
-                  currentPos = TimetablePosition(week: cur.week, day: selectedDay);
-                },
-              )
-                  .flexible(flex: 2),
-      NotificationListener<ScrollNotification>(
-          onNotification: (e) {
-            if (e is ScrollEndNotification) {
-              isJumping = false;
-            }
-            return false;
-          },
-          child: PageView.builder(
-            controller: _pageController,
-            scrollDirection: Axis.horizontal,
-            // TODO: 存储
-            itemCount: 20 * 7,
-            itemBuilder: (_, int index) => _buildPage(context, index),
-          )).flexible(flex: 10)
-    ].column();
+    return PageView.builder(
+      controller: _pageController,
+      scrollDirection: Axis.horizontal,
+      itemCount: 20 * 7,
+      itemBuilder: (_, int index) => [
+        const SizedBox(height: 60),
+        _buildPage(context, index).expanded(),
+      ].column(),
+    );
   }
 
   void onPageChange() {
-    if (!isJumping) {
-      setState(() {
-        final page = (_pageController.page ?? 0).round();
-        final newPos = page2Pos(page);
-        if (currentPos != newPos) {
-          currentPos = newPos;
-        }
-      });
-    }
+    setState(() {
+      final page = (_pageController.page ?? 0).round();
+      final newPos = page2Pos(page);
+      if (currentPos != newPos) {
+        currentPos = newPos;
+      }
+    });
   }
 
   /// 跳转到指定星期与天
@@ -146,7 +119,6 @@ class DailyTimetableState extends State<DailyTimetable> {
         duration: calcuSwitchAnimationDuration(distance),
         curve: Curves.fastLinearToSlowEaseIn,
       );
-      isJumping = true;
     }
   }
 
@@ -238,7 +210,7 @@ class DailyTimetableState extends State<DailyTimetable> {
     }
     // WHAT? NO CLASS IN THE WHOLE TERM?
     // Alright, let's congratulate them!
-    if(!mounted) return;
+    if (!mounted) return;
     await ctx.showTip(title: i18n.congratulations, desc: i18n.timetableFreeTermTip, ok: i18n.thanks);
   }
 
@@ -269,7 +241,7 @@ class _LessonCardState extends State<LessonCard> {
     final timetable = getBuildingTimetable(course.campus, course.place);
 /*    final description =
         formatTimeIndex(timetable, course.timeIndex, '${course.weekText} 周${weekWord[course.dayIndex - 1]}\nss-ee');*/
-    final colors = TimetablePalette.of(context).colors;
+    final colors = TimetableStyle.of(context).colors;
     return Card(
         margin: const EdgeInsets.all(8),
         shape: const RoundedRectangleBorder(
