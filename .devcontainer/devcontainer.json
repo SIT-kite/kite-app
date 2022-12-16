@@ -1,5 +1,7 @@
 {
   "name": "Flutter",
-  "image": "cirrusci/flutter",
+  "service": "dev",
+  "dockerComposeFile": "docker-compose.yml",
+  "forwardPorts": [8080],
   "extensions": ["dart-code.dart-code", "dart-code.flutter"]
 }
