@@ -155,7 +155,6 @@ extension DialogEx on BuildContext {
       ),
     );
 
-    $selected.dispose();
     return res;
   }
 

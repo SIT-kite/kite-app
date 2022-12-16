@@ -749,8 +749,13 @@
   "xuhui": "Xuhui",
   "xuhuiDistrict": "Xuhui District",
   "yes": "Yes",
-  "timetableFreeDayIsTodayTip": "Have a nice day!",
+  "timetableFreeDayIsTodayTip": "Have a nice day! 🎉",
   "timetableFreeDayTip": "It's a free day!",
+  "timetableFreeWeekIsThisWeekTip": "Enjoy this week! 🎉",
+  "timetableFreeWeekTip": "Wow, no class this week!",
+  "timetableFreeTermTip": "Cool! You even have a free term! 🎉🎉🎉",
+  "congratulations": "Congratulations",
   "newsNewPersonalizationSystemIsComingSoon":"Excuse me, a new personalization system is coming soon!",
-  "timetableUseOldSchoolPalette": "Use Old School Palette"
+  "timetableUseOldSchoolPalette": "Use Old School Palette",
+  "thanks": "Thanks"
 }

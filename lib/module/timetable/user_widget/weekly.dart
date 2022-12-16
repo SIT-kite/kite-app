@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rettulf/rettulf.dart';
@@ -123,7 +124,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
           controller: _pageController,
           scrollDirection: Axis.horizontal,
           itemCount: 20,
-          itemBuilder: (BuildContext context, int index) => _buildPageBody(index),
+          itemBuilder: (BuildContext ctx, int index) => buildPageBody(ctx, index),
         ),
       ).expanded()
     ].column(mas: MainAxisSize.min, maa: MainAxisAlignment.start, caa: CrossAxisAlignment.start);
@@ -172,7 +173,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
   }
 
   /// 布局左侧边栏, 显示节次
-  Widget buildLeftColumn() {
+  Widget buildLeftColumn(BuildContext ctx) {
     /// 构建每一个格子
     Widget buildCell(BuildContext ctx, int index) {
       final textStyle = ctx.textTheme.bodyText2;
@@ -202,11 +203,11 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
     );
   }
 
-  Widget _buildPageBody(int weekIndex) {
+  Widget buildPageBody(BuildContext ctx, int weekIndex) {
     final timetableWeek = timetable.weeks[weekIndex];
     if (timetableWeek != null) {
       return [
-        buildLeftColumn().flexible(flex: 2),
+        buildLeftColumn(ctx).flexible(flex: 2),
         TimetableSingleWeekView(
           timetableWeek: timetableWeek,
           courseKey2Entity: timetable.courseKey2Entity,
@@ -216,10 +217,57 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
       ].row(textDirection: TextDirection.ltr).scrolled();
     } else {
       return [
-        buildLeftColumn().flexible(flex: 2),
-        "???".text().flexible(flex: 21),
-      ].row(textDirection: TextDirection.ltr).scrolled();
+        buildLeftColumn(ctx).flexible(flex: 2),
+        buildFreeWeekTip(ctx, weekIndex).flexible(flex: 21),
+      ].row(textDirection: TextDirection.ltr);
     }
+  }
+
+  Widget buildFreeWeekTip(BuildContext ctx, int weekIndex) {
+    final isThisWeek = widget.locateInTimetable(DateTime.now()).week == (weekIndex + 1);
+    final String desc;
+    if (isThisWeek) {
+      desc = i18n.timetableFreeWeekIsThisWeekTip;
+    } else {
+      desc = i18n.timetableFreeWeekTip;
+    }
+    return LeavingBlank(
+      icon: Icons.free_cancellation_rounded,
+      desc: desc,
+      subtitle: buildJumpToNearestWeekWithClassBtn(ctx, weekIndex),
+    );
+  }
+
+  Widget buildJumpToNearestWeekWithClassBtn(BuildContext ctx, int weekIndex) {
+    return CupertinoButton(
+      onPressed: () async {
+        await jumpToNearestWeekWithClass(ctx, weekIndex);
+      },
+      child: "Find a week with class".text(),
+    );
+  }
+
+  /// Find the nearest week with class forward.
+  /// No need to look back to passed weeks, unless there's no week after [weekIndex] that has any class.
+  Future<void> jumpToNearestWeekWithClass(BuildContext ctx, int weekIndex) async {
+    for (int i = weekIndex; i < timetable.weeks.length; i++) {
+      final week = timetable.weeks[i];
+      if (week != null) {
+        currentPos = currentPos.copyWith(week: i + 1);
+        return;
+      }
+    }
+    // Now there's no class forward, so let's search backward.
+    for (int i = weekIndex; 0 <= i; i--) {
+      final week = timetable.weeks[i];
+      if (week != null) {
+        currentPos = currentPos.copyWith(week: i + 1);
+        return;
+      }
+    }
+    // WHAT? NO CLASS IN THE WHOLE TERM?
+    // Alright, let's congratulate them!
+    await ctx.showTip(title: i18n.congratulations, desc: i18n.timetableFreeTermTip, ok: i18n.thanks);
   }
 
   @override

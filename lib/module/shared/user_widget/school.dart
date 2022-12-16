@@ -107,7 +107,7 @@ class _SemesterSelectorState extends State<SemesterSelector> {
       icon: const Icon(Icons.keyboard_arrow_down_outlined),
       underline: Container(
         height: 2,
-        color: Theme.of(ctx).primaryColor,
+        color: ctx.darkSafeThemeColor,
       ),
       onChanged: callback,
       items: items,

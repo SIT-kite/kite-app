@@ -474,6 +474,11 @@
   "yes": "好",
   "timetableFreeDayIsTodayTip": "尽情享受今天吧！",
   "timetableFreeDayTip": "好耶，没课的一天！",
+  "timetableFreeWeekIsThisWeekTip": "",
+  "timetableFreeWeekTip": "",
+  "timetableFreeTermTip": "",
+  "congratulations": "",
   "newsNewPersonalizationSystemIsComingSoon": "请等等，新的个性化系统还在路上！",
-  "timetableUseOldSchoolPalette": "使用旧版课程表配色"
+  "timetableUseOldSchoolPalette": "使用旧版课程表配色",
+  "thanks": ""
 }

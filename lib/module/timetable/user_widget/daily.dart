@@ -158,12 +158,12 @@ class DailyTimetableState extends State<DailyTimetable> {
     int dayIndex = index % 7 + 1;
     final week = timetable.weeks[weekIndex];
     if (week == null) {
-      return _buildEmptyPage();
+      return _buildFreeDayTip();
     } else {
       final day = week.days[dayIndex];
       final lessonsInDay = day.getLessons(atLayer: 0).toList();
       if (lessonsInDay.isEmpty) {
-        return _buildEmptyPage();
+        return _buildFreeDayTip();
       } else {
         return ListView.builder(
           controller: ScrollController(),
@@ -183,7 +183,7 @@ class DailyTimetableState extends State<DailyTimetable> {
     }
   }
 
-  Widget _buildEmptyPage() {
+  Widget _buildFreeDayTip() {
     final isToday = widget.locateInTimetable(DateTime.now()) == currentPos;
     final String desc;
     if (isToday) {

@@ -36,7 +36,17 @@ extension InitialTimeUtils on InitialTimeProtocol {
 }
 
 class TimetablePosition {
+  /// starts with 1
+  /// If you want week index, please do
+  /// ```dart
+  /// final weekIndex = position.week - 1;
+  /// ```
   final int week;
+  /// starts with 1
+  /// If you want day index, please do
+  /// ```dart
+  /// final dayIndex = position.day - 1;
+  /// ```
   final int day;
 
   const TimetablePosition({this.week = 1, this.day = 1});
