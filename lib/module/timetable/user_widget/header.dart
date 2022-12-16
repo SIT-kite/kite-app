@@ -22,7 +22,7 @@ import 'package:rettulf/rettulf.dart';
 import '../using.dart';
 
 class TimetableHeader extends StatefulWidget {
-  final List<String> dayHeaders;
+  final List<String> weekdayAbbr;
 
   /// 当前显示的周次
   final int currentWeek;
@@ -37,7 +37,7 @@ class TimetableHeader extends StatefulWidget {
 
   const TimetableHeader({
     super.key,
-    required this.dayHeaders,
+    required this.weekdayAbbr,
     required this.currentWeek,
     required this.selectedDay,
     required this.startDate,
@@ -61,50 +61,60 @@ class _TimetableHeaderState extends State<TimetableHeader> {
   /// 将该行分为 2 + 7 * 3 一共 23 个小份, 左侧的周数占 2 份, 每天的日期占 3 份.
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        for (int i = 1; i <= 7; ++i) buildDayNameHeader(i),
-      ],
-    );
-  }
-
-  Widget buildDayHeader(BuildContext ctx, int day, String name) {
-    final isSelected = day == selectedDay;
-    final textNBgColors = ctx.makeTabHeaderTextBgColors(isSelected);
-    final textColor = textNBgColors.item1;
-    final bgColor = textNBgColors.item2;
-    final side = getBorderSide(ctx);
-    return AnimatedContainer(
-      decoration: BoxDecoration(
-        color: bgColor,
-        border: Border(left: day == 1 ? side : BorderSide.none, right: day != 7 ? side : BorderSide.none),
-      ),
-      duration: const Duration(milliseconds: 1000),
-      curve: Curves.fastLinearToSlowEaseIn,
-      child: Text(
-        name,
-        textAlign: TextAlign.center,
-        style: TextStyle(color: textColor),
-      ).padOnly(t: 5, b: 5),
-    );
+    return [
+      for (int i = 1; i <= 7; ++i) buildDayNameHeader(i),
+    ].row();
   }
 
   ///每天的列
   Widget buildDayNameHeader(int day) {
-    final date = getDateFromWeekDay(widget.startDate, widget.currentWeek, day);
-    final dateString = '${date.month}/${date.day}';
+    final isSelected = day == selectedDay;
     final onDayTap = widget.onDayTap;
-    return Expanded(
-      flex: 3,
-      child: InkWell(
-          onTap: onDayTap != null
-              ? () {
-                  widget.onDayTap?.call(day);
-                }
-              : null,
-          child: buildDayHeader(context, day, '${widget.dayHeaders[day - 1]}\n$dateString')),
+    return InkWell(
+      onTap: onDayTap != null
+          ? () {
+              widget.onDayTap?.call(day);
+            }
+          : null,
+      child: buildDayHeader(context, day),
+    ).inCard(elevation:isSelected?20: 5).expanded();
+  }
+
+  Widget buildDayHeader(BuildContext ctx, int day) {
+    final date = getDateFromWeekDay(widget.startDate, widget.currentWeek, day);
+    final name = '${widget.weekdayAbbr[day - 1]}\n${date.month}/${date.day}';
+    final isSelected = day == selectedDay;
+    final textNBgColors = ctx.makeTabHeaderTextBgColors(isSelected);
+    final textColor = textNBgColors.item1;
+    final bgColor = textNBgColors.item2;
+    return AnimatedContainer(
+      decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(10)),
+      duration: const Duration(milliseconds: 1000),
+      curve: Curves.fastLinearToSlowEaseIn,
+      child: LayoutBuilder(builder: (ctx, box) {
+        final span = TextSpan(
+          text: name,
+        );
+        final painter = TextPainter(
+          text: span,
+          maxLines: 2,
+          textDirection: TextDirection.ltr,
+        );
+        painter.layout();
+        final overflow = painter.size.width > box.maxWidth || painter.size.height > box.maxHeight;
+        final String realText;
+        if (overflow) {
+          realText = widget.weekdayAbbr[day - 1][0];
+        } else {
+          realText = name;
+        }
+        return realText
+            .text(
+              textAlign: TextAlign.center,
+              style: TextStyle(color: textColor),
+            )
+            .padOnly(t: 5, b: 5);
+      }),
     );
   }
 }
-
-BorderSide getBorderSide(BuildContext ctx) => BorderSide(color: ctx.darkSafeThemeColor.withOpacity(0.4), width: 0.8);

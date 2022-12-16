@@ -97,12 +97,11 @@ class DailyTimetableState extends State<DailyTimetable> {
         _pageController.jumpToPage(targetOffset);
       }
     });
-    final dayHeaders = makeWeekdaysShortText();
-    final side = getBorderSide(context);
+    final weekdayAbbr = makeWeekdaysShortText();
     return [
       widget.$currentPos <<
           (ctx, cur, _) => TimetableHeader(
-                dayHeaders: dayHeaders,
+                weekdayAbbr: weekdayAbbr,
                 selectedDay: cur.day,
                 currentWeek: cur.week,
                 startDate: widget.initialDate,
@@ -110,7 +109,6 @@ class DailyTimetableState extends State<DailyTimetable> {
                   currentPos = TimetablePosition(week: cur.week, day: selectedDay);
                 },
               )
-                  .container(decoration: BoxDecoration(border: Border(top: side, bottom: side, right: side)))
                   .flexible(flex: 2),
       NotificationListener<ScrollNotification>(
           onNotification: (e) {

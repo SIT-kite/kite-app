@@ -95,54 +95,39 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
         _pageController.jumpToPage(targetOffset);
       }
     });
-    final dayHeaders = makeWeekdaysShortText();
-    final side = getBorderSide(context);
 
     return [
-      [
-        buildMood(context).align(at: Alignment.center).flexible(flex: 2),
-        widget.$currentPos <<
-            (ctx, cur, _) => TimetableHeader(
-                  dayHeaders: dayHeaders,
-                  selectedDay: 0,
-                  currentWeek: cur.week,
-                  startDate: widget.initialDate,
-                ).flexible(flex: 22)
-      ].row().container(
-            decoration: BoxDecoration(
-              border: Border(left: side, top: side, right: side, bottom: side),
-            ),
-          ),
-      NotificationListener<ScrollNotification>(
-        onNotification: (e) {
-          if (e is ScrollEndNotification) {
-            isJumping = false;
-          }
-          return false;
-        },
-        child: PageView.builder(
-          controller: _pageController,
-          scrollDirection: Axis.horizontal,
-          itemCount: 20,
-          itemBuilder: (BuildContext ctx, int index) => buildPageBody(ctx, index),
-        ),
-      ).expanded()
-    ].column(mas: MainAxisSize.min, maa: MainAxisAlignment.start, caa: CrossAxisAlignment.start);
+      buildTimetableArea(context),
+      buildTableHeader(context),
+    ].stack();
   }
 
-  Widget buildMood(BuildContext ctx) {
-    return Text(
-      "😁",
-      style: TextStyle(fontSize: 25),
+  Widget buildTimetableArea(BuildContext ctx) {
+    return NotificationListener<ScrollNotification>(
+      onNotification: (e) {
+        if (e is ScrollEndNotification) {
+          isJumping = false;
+        }
+        return false;
+      },
+      child: PageView.builder(
+        controller: _pageController,
+        scrollDirection: Axis.horizontal,
+        itemCount: 20,
+        itemBuilder: (BuildContext ctx, int index) => buildPageBody(ctx, index),
+      ),
     );
-    return Icon(
-      Mood.get(mood),
-      color: context.darkSafeThemeColor,
-    ).onTap(key: ValueKey(mood), () {
-      setState(() {
-        mood = Mood.next(mood);
-      });
-    }).animatedSwitched(d: const Duration(milliseconds: 400));
+  }
+
+  Widget buildTableHeader(BuildContext ctx) {
+    final weekdayAbbr = makeWeekdaysShortText();
+    return widget.$currentPos <<
+        (ctx, cur, _) => TimetableHeader(
+              weekdayAbbr: weekdayAbbr,
+              selectedDay: 0,
+              currentWeek: cur.week,
+              startDate: widget.initialDate,
+            );
   }
 
   void onPageChange() {
@@ -175,52 +160,15 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
   Widget buildPageBody(BuildContext ctx, int weekIndex) {
     final timetableWeek = timetable.weeks[weekIndex];
     if (timetableWeek != null) {
-      return [
-        buildLeftColumn(ctx).flexible(flex: 2),
-        TimetableSingleWeekView(
-          timetableWeek: timetableWeek,
-          courseKey2Entity: timetable.courseKey2Entity,
-          currentWeek: weekIndex,
-          cache: widget.tableCache,
-        ).flexible(flex: 21)
-      ].row(textDirection: TextDirection.ltr).scrolled();
+      return TimetableOneWeekView(
+        timetableWeek: timetableWeek,
+        courseKey2Entity: timetable.courseKey2Entity,
+        currentWeek: weekIndex,
+        cache: widget.tableCache,
+      ).scrolled();
     } else {
-      return [
-        buildLeftColumn(ctx).flexible(flex: 2),
-        buildFreeWeekTip(ctx, weekIndex).flexible(flex: 21),
-      ].row(textDirection: TextDirection.ltr);
+      return buildFreeWeekTip(ctx, weekIndex);
     }
-  }
-
-  /// 布局左侧边栏, 显示节次
-  Widget buildLeftColumn(BuildContext ctx) {
-    // 用 [GridView] 构造整个左侧边栏
-    return GridView.builder(
-      shrinkWrap: true,
-      itemCount: 11,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 1,
-        childAspectRatio: 22 / 23 * (1.sw) / (1.sh),
-      ),
-      itemBuilder: _buildCell,
-    );
-  }
-
-  /// 构建每一个格子
-  Widget _buildCell(BuildContext ctx, int index) {
-    final textStyle = ctx.textTheme.bodyText2;
-    final side = getBorderSide(ctx);
-
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(
-            top: index != 0 ? side : BorderSide.none,
-            right: side,
-            left: side,
-            bottom: side),
-      ),
-      child: (index + 1).text(style: textStyle).center(),
-    );
   }
 
   Widget buildFreeWeekTip(BuildContext ctx, int weekIndex) {
@@ -277,13 +225,13 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
   }
 }
 
-class TimetableSingleWeekView extends StatefulWidget {
+class TimetableOneWeekView extends StatefulWidget {
   final SitTimetableWeek timetableWeek;
   final List<SitCourse> courseKey2Entity;
   final TableCache cache;
   final int currentWeek;
 
-  const TimetableSingleWeekView({
+  const TimetableOneWeekView({
     super.key,
     required this.timetableWeek,
     required this.courseKey2Entity,
@@ -292,10 +240,10 @@ class TimetableSingleWeekView extends StatefulWidget {
   });
 
   @override
-  State<StatefulWidget> createState() => _TimetableSingleWeekViewState();
+  State<StatefulWidget> createState() => _TimetableOneWeekViewState();
 }
 
-class _TimetableSingleWeekViewState extends State<TimetableSingleWeekView> {
+class _TimetableOneWeekViewState extends State<TimetableOneWeekView> {
   @override
   void initState() {
     super.initState();
@@ -303,60 +251,64 @@ class _TimetableSingleWeekViewState extends State<TimetableSingleWeekView> {
 
   @override
   Widget build(BuildContext context) {
-    final rawColumnSize = MediaQuery.of(context).size;
-    final cellSize = Size(rawColumnSize.width * 3 / 23, rawColumnSize.height / 11);
-    return SizedBox(
-      width: rawColumnSize.width * 7,
-      height: rawColumnSize.height,
-      child: ListView.builder(
-        itemCount: 7,
-        scrollDirection: Axis.horizontal,
-        physics: const NeverScrollableScrollPhysics(), // The scrolling has been handled outside
-        itemBuilder: (BuildContext context, int index) =>
-            _buildCellsByDay(context, widget.timetableWeek.days[index], cellSize).center(),
-      ),
-    );
+    return [
+      for (int timeslot = 0; timeslot < widget.timetableWeek.days.length; timeslot++)
+        _buildCellsByDay(context, timeslot),
+    ].row();
   }
 
   /// 构建某一天的那一列格子.
-  Widget _buildCellsByDay(BuildContext context, SitTimetableDay day, Size cellSize) {
+  Widget _buildCellsByDay(BuildContext ctx, int timeslot) {
+    final day = widget.timetableWeek.days[timeslot];
+    final fullSize = ctx.mediaQuery.size;
+    // Don't ask me why it's `7.2` but not `7`, idk too.
+    final cellSize = Size(fullSize.width / 7.2, fullSize.height / 11);
     final cells = <Widget>[];
+    cells.add(const SizedBox(height: 60));
     for (int timeslot = 0; timeslot < day.timeslots2Lessons.length; timeslot++) {
       final lessons = day.timeslots2Lessons[timeslot];
       if (lessons.isEmpty) {
-        cells.add(const SizedBox().sized(width: cellSize.width, height: cellSize.height));
+        Widget cell = const SizedBox().inCard().sized(
+              width: cellSize.width,
+              height: cellSize.height,
+            );
+        cells.add(cell);
       } else {
         /// TODO: Multi-layer lessons
         final firstLayerLesson = lessons[0];
 
         /// TODO: Range checking
         final course = widget.courseKey2Entity[firstLayerLesson.courseKey];
-        final cell = _CourseCell(
+        Widget cell = _CourseCell(
+          timeslot: timeslot,
           lesson: firstLayerLesson,
           courseKey2Entity: widget.courseKey2Entity,
           course: course,
-        );
-        cells.add(cell.sized(width: cellSize.width, height: cellSize.height * firstLayerLesson.duration));
+        ).sized(width: cellSize.width, height: cellSize.height * firstLayerLesson.duration);
+        cells.add(cell);
 
         /// Skip to the end
         timeslot = firstLayerLesson.endIndex;
       }
     }
 
-    return SizedBox(
-      width: cellSize.width,
-      height: cellSize.height * 11,
-      child: Column(children: cells),
-    );
+    return Column(children: cells).scrolled();
   }
 }
 
 class _CourseCell extends StatefulWidget {
   final SitTimetableLesson lesson;
   final SitCourse course;
+  final int timeslot;
   final List<SitCourse> courseKey2Entity;
 
-  const _CourseCell({super.key, required this.lesson, required this.courseKey2Entity, required this.course});
+  const _CourseCell({
+    super.key,
+    required this.timeslot,
+    required this.lesson,
+    required this.courseKey2Entity,
+    required this.course,
+  });
 
   @override
   State<_CourseCell> createState() => _CourseCellState();
@@ -369,34 +321,19 @@ class _CourseCellState extends State<_CourseCell> {
 
   @override
   Widget build(BuildContext context) {
-    final size = context.mediaQuery.size;
-
     final colors = TimetablePalette.of(context).colors;
-    final decoration = BoxDecoration(
-      color: colors[course.courseCode.hashCode.abs() % colors.length].byTheme(context.theme),
-      borderRadius: const BorderRadius.all(Radius.circular(3.0)),
-      border: const Border(),
-    );
+    final color = colors[course.courseCode.hashCode.abs() % colors.length].byTheme(context.theme);
+    final info = <Widget>[];
+    info.add("${widget.timeslot + 1}".text());
+    info.add(stylizeCourseName(course.courseName).text());
 
-    return Container(
-      width: size.width - 3,
-      height: size.height * lesson.duration - 4,
-      decoration: decoration,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            buildText(stylizeCourseName(course.courseName), 3),
-            const SizedBox(height: 3),
-            buildText(formatPlace(course.place), 2),
-            const SizedBox(height: 3),
-            buildText(course.teachers.join(','), 2),
-          ],
-        ),
-      ),
-    ).onTap(() async {
+    return info
+        .column(maa: MainAxisAlignment.start, caa: CrossAxisAlignment.center)
+        .inCard(color: color, elevation: 8, margin: const EdgeInsets.all(1.5));
+    return [
+      buildText(formatPlace(course.place), 2),
+      buildText(course.teachers.join(','), 2),
+    ].column().inCard(color: color, elevation: 8).onTap(() async {
       /* await showModalBottomSheet(
           isScrollControlled: true,
           backgroundColor: Colors.transparent,
@@ -409,8 +346,22 @@ class _CourseCellState extends State<_CourseCell> {
     return Text(
       text,
       softWrap: true,
-      overflow: TextOverflow.ellipsis,
+      overflow: TextOverflow.visible,
       maxLines: maxLines,
     );
+  }
+}
+
+class TimeslotNumber extends StatelessWidget {
+  final int timeslot;
+
+  const TimeslotNumber({
+    super.key,
+    required this.timeslot,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }

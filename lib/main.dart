@@ -38,9 +38,6 @@ void main() async {
   iKite.install(DefaultFlutterDataAdapterPlugin);
   iKite.install(KiteAppDataAdapterPlugin);
   await Initializer.init();
-  if (kDebugMode) {
-    //rendering.debugPaintSizeEnabled = true;
-  }
   CatcherOptions buildCatcherConfig(bool releaseMode) => CatcherOptions(
         // 对话框和新页面的方式不是很好汉化, 且程序中存在连续抛异常的情况, 为不打扰用户直接静默上报
         SilentReportMode(),

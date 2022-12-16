@@ -21,7 +21,9 @@ import 'dart:ui';
 import 'package:animations/animations.dart';
 import 'package:catcher/core/catcher.dart';
 import 'package:dynamic_color_theme/dynamic_color_theme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -95,14 +97,11 @@ class _KiteAppState extends State<KiteApp> {
   }
 
   ThemeData _buildTheme(BuildContext context, Color primaryColor, bool isDark) {
-    const grey = 245;
     return ThemeData(
-      colorSchemeSeed: primaryColor,
-      textTheme: _buildTextTheme(isDark, primaryColor),
-      brightness: isDark ? Brightness.dark : Brightness.light,
-      useMaterial3: true,
-      scaffoldBackgroundColor: isDark ? null : const Color.fromARGB(255, grey, grey, grey),
-    );
+        colorSchemeSeed: primaryColor,
+        textTheme: _buildTextTheme(isDark, primaryColor),
+        brightness: isDark ? Brightness.dark : Brightness.light,
+        useMaterial3: true);
   }
 
   @override
@@ -125,21 +124,27 @@ class _KiteAppState extends State<KiteApp> {
       );
     });
     buildMaterialWithTheme(ThemeData theme) {
+      if (kDebugMode) {
+        debugPaintSizeEnabled = false;
+      }
       return MaterialApp(
         title: R.getAppName(basedOn: window.locale),
         theme: theme.copyWith(
-            pageTransitionsTheme: const PageTransitionsTheme(
-              builders: {
-                TargetPlatform.android:
-                    SharedAxisPageTransitionsBuilder(transitionType: SharedAxisTransitionType.horizontal),
-                TargetPlatform.iOS:
-                    SharedAxisPageTransitionsBuilder(transitionType: SharedAxisTransitionType.horizontal),
-                TargetPlatform.macOS: FadeThroughPageTransitionsBuilder(),
-                TargetPlatform.linux: FadeThroughPageTransitionsBuilder(),
-                TargetPlatform.windows: FadeThroughPageTransitionsBuilder(),
-              },
-            ),
-            visualDensity: VisualDensity.comfortable),
+          pageTransitionsTheme: const PageTransitionsTheme(
+            builders: {
+              TargetPlatform.android:
+                  SharedAxisPageTransitionsBuilder(transitionType: SharedAxisTransitionType.horizontal),
+              TargetPlatform.iOS: SharedAxisPageTransitionsBuilder(transitionType: SharedAxisTransitionType.horizontal),
+              TargetPlatform.macOS: FadeThroughPageTransitionsBuilder(),
+              TargetPlatform.linux: FadeThroughPageTransitionsBuilder(),
+              TargetPlatform.windows: FadeThroughPageTransitionsBuilder(),
+            },
+          ),
+          visualDensity: VisualDensity.comfortable,
+          appBarTheme: const AppBarTheme(
+            toolbarHeight: 40,
+          ),
+        ),
         initialRoute: RouteTable.root,
         debugShowCheckedModeBanner: false,
         navigatorKey: Catcher.navigatorKey,

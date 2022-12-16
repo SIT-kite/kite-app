@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/entities.dart';
 import 'package:quiver/core.dart';
 import 'package:rettulf/rettulf.dart';
@@ -42,6 +43,7 @@ class TimetablePosition {
   /// final weekIndex = position.week - 1;
   /// ```
   final int week;
+
   /// starts with 1
   /// If you want day index, please do
   /// ```dart
@@ -116,6 +118,10 @@ class _TimetableViewerState extends State<TimetableViewer> {
 
   @override
   Widget build(BuildContext context) {
+    return buildTimetableBody(context).padH(5.w);
+  }
+
+  Widget buildTimetableBody(BuildContext ctx) {
     return widget.$displayMode <<
         (ctx, mode, _) => (mode == DisplayMode.daily
                     ? DailyTimetable(
