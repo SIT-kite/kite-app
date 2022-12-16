@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 
 import '../cache.dart';
 import '../entity/course.dart';
+import '../entity/entity.dart';
 import '../entity/meta.dart';
 import '../user_widget/palette.dart';
 import '../user_widget/timetable.dart';
@@ -26,35 +27,34 @@ import '../using.dart';
 
 ///
 /// There is no need to persist a preview after activity destroyed.
-class TimetablePreviewPage extends StatelessWidget {
-  final TimetableMetaLegacy meta;
-  final List<Course> courses;
+class TimetablePreviewPage extends StatefulWidget {
+  final SitTimetable timetable;
 
-  const TimetablePreviewPage({
-    super.key,
-    required this.meta,
-    required this.courses,
-  });
+  const TimetablePreviewPage({super.key, required this.timetable});
+
+  @override
+  State<StatefulWidget> createState() => _TimetablePreviewPageState();
+}
+
+class _TimetablePreviewPageState extends State<TimetablePreviewPage> {
+  final ValueNotifier<DisplayMode> $displayMode = ValueNotifier(DisplayMode.weekly);
+  late final ValueNotifier<TimetablePosition> $currentPos = ValueNotifier(
+    TimetablePosition.locate(widget.timetable.startDate, DateTime.now()),
+  );
 
   @override
   Widget build(BuildContext context) {
-    final ValueNotifier<TimetablePosition> $currentPos = ValueNotifier(
-      TimetablePosition.locate(meta.startDate, DateTime.now()),
-    );
-    final ValueNotifier<DisplayMode> $displayMode = ValueNotifier(DisplayMode.weekly);
-
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            '${i18n.timetablePreviewTitle} ${meta.name}',
+            '${i18n.timetablePreviewTitle} ${widget.timetable.name}',
             overflow: TextOverflow.ellipsis,
           ),
         ),
         body: TimetablePaletteProv(
           child: TimetableViewer(
+            timetable: widget.timetable,
             $currentPos: $currentPos,
-            initialTableMeta: meta,
-            initialTableCourses: courses,
             tableCache: TableCache(),
             $displayMode: $displayMode,
           ),

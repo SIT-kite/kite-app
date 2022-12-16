@@ -18,6 +18,8 @@
 
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+
 import '../entity/course.dart';
 import '../entity/entity.dart';
 import '../using.dart';
@@ -52,6 +54,7 @@ class TimetableService {
     final List<dynamic> courseList = json['kbList'];
     final rawCourses = courseList.map((e) => CourseRaw.fromJson(e)).toList();
     final timetableEntity = SitTimetable.parse(rawCourses);
+    timetableEntity.id = UniqueKey().hashCode.toString();
     return timetableEntity;
   }
 }

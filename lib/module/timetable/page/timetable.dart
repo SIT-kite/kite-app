@@ -21,13 +21,11 @@ import 'package:rettulf/rettulf.dart';
 import '../cache.dart';
 import '../entity/course.dart';
 import '../entity/entity.dart';
-import '../entity/meta.dart';
 import '../init.dart';
 import '../user_widget/palette.dart';
 import '../user_widget/timetable.dart';
 import '../using.dart';
 import '../utils.dart';
-import 'export.dart';
 
 const DisplayMode defaultMode = DisplayMode.weekly;
 
@@ -176,9 +174,8 @@ class _TimetablePageState extends State<TimetablePage> {
   Widget buildBody(BuildContext ctx) {
     return TimetablePaletteProv(
       child: TimetableViewer(
-        initialTableMeta: meta,
+        timetable: timetable,
         $currentPos: $currentPos,
-        initialTableCourses: courses,
         tableCache: TableCache(),
         $displayMode: $displayMode,
       ),

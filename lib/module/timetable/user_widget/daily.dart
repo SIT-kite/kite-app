@@ -27,9 +27,11 @@ import 'header.dart';
 import 'palette.dart';
 import 'sheet.dart';
 import 'timetable.dart';
+const String _courseIconPath = 'assets/course/';
 
 class DailyTimetable extends StatefulWidget implements InitialTimeProtocol {
   final SitTimetable timetable;
+
   @override
   DateTime get initialDate => timetable.startDate;
 
@@ -50,7 +52,8 @@ class DailyTimetable extends StatefulWidget implements InitialTimeProtocol {
 }
 
 class DailyTimetableState extends State<DailyTimetable> {
-  static const String _courseIconPath = 'assets/course/';
+
+  SitTimetable get timetable => widget.timetable;
 
   TimetablePosition get currentPos => widget.$currentPos.value;
 
@@ -117,7 +120,7 @@ class DailyTimetableState extends State<DailyTimetable> {
             scrollDirection: Axis.horizontal,
             // TODO: 存储
             itemCount: 20 * 7,
-            itemBuilder: (_, int index) => _buildPage(context, index, widget.allCourses),
+            itemBuilder: (_, int index) => _buildPage(context, index),
           )).flexible(flex: 10)
     ].column();
   }
@@ -150,54 +153,34 @@ class DailyTimetableState extends State<DailyTimetable> {
   }
 
   /// 构建第 index 页视图
-  Widget _buildPage(BuildContext context, int index, List<Course> allCourses) {
-    int week = index ~/ 7 + 1;
-    int day = index % 7 + 1;
-    final List<Course> todayCourse = widget.tableCache.getCoursesWhen(allCourses, week: week, day: day);
-
-    return todayCourse.isNotEmpty
-        ? ListView(
-            controller: ScrollController(),
-            padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-            children: todayCourse.map((e) => _buildCourseCard(context, e, widget.allCourses)).toList())
-        : _buildEmptyPage();
-  }
-
-  Widget _buildCourseCard(BuildContext context, Course course, List<Course> allCourses) {
-    final TextStyle? textStyle = Theme.of(context).textTheme.bodyText2;
-    final Widget courseIcon = Image.asset('$_courseIconPath${CourseCategory.query(course.courseName)}.png');
-    final timetable = getBuildingTimetable(course.campus, course.place);
-    final description =
-        formatTimeIndex(timetable, course.timeIndex, '${course.weekText} 周${weekWord[course.dayIndex - 1]}\nss-ee');
-    final colors = TimetablePalette.of(context).colors;
-    return Card(
-        margin: const EdgeInsets.all(8),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-        ),
-        clipBehavior: Clip.antiAlias,
-        color: colors[course.courseId.hashCode.abs() % colors.length].byTheme(context.theme),
-        child: ListTile(
-          // 点击卡片打开课程详情.
-          onTap: () => showModalBottomSheet(
-            isScrollControlled: true,
-            backgroundColor: Colors.transparent,
-            builder: (BuildContext context) => Sheet(course.courseId, allCourses),
-            context: context,
-          ),
-          leading: courseIcon,
-          title: Text(stylizeCourseName(course.courseName), textScaleFactor: 1.1),
-          subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(course.teacher.join(','), style: textStyle),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(description, style: textStyle),
-                Text(formatPlace(course.place), softWrap: true, overflow: TextOverflow.ellipsis, style: textStyle),
-              ],
-            ),
-          ]),
-        ));
+  Widget _buildPage(BuildContext context, int index) {
+    int weekIndex = index ~/ 7 + 1;
+    int dayIndex = index % 7 + 1;
+    final week = timetable.weeks[weekIndex];
+    if (week == null) {
+      return _buildEmptyPage();
+    } else {
+      final day = week.days[dayIndex];
+      final lessonsInDay = day.getLessons(atLayer: 0).toList();
+      if (lessonsInDay.isEmpty) {
+        return _buildEmptyPage();
+      } else {
+        return ListView.builder(
+          controller: ScrollController(),
+          padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+          itemCount: lessonsInDay.length,
+          itemBuilder: (ctx, indexOfLessons) {
+            final lesson = lessonsInDay[indexOfLessons];
+            final course = timetable.courseKey2Entity[lesson.courseKey];
+            return LessonCard(
+              lesson: lessonsInDay[index],
+              course: course,
+              courseKey2Entity: timetable.courseKey2Entity,
+            );
+          },
+        );
+      }
+    }
   }
 
   Widget _buildEmptyPage() {
@@ -218,5 +201,59 @@ class DailyTimetableState extends State<DailyTimetable> {
   void dispose() {
     super.dispose();
     _pageController.dispose();
+  }
+}
+
+class LessonCard extends StatefulWidget {
+  final SitTimetableLesson lesson;
+  final SitCourse course;
+  final List<SitCourse> courseKey2Entity;
+
+  const LessonCard({super.key, required this.lesson, required this.course, required this.courseKey2Entity});
+
+  @override
+  State<LessonCard> createState() => _LessonCardState();
+}
+
+class _LessonCardState extends State<LessonCard> {
+  @override
+  Widget build(BuildContext context) {
+    final course = widget.course;
+    final TextStyle? textStyle = Theme.of(context).textTheme.bodyText2;
+    final Widget courseIcon = Image.asset('$_courseIconPath${CourseCategory.query(course.courseName)}.png');
+    final timetable = getBuildingTimetable(course.campus, course.place);
+/*    final description =
+        formatTimeIndex(timetable, course.timeIndex, '${course.weekText} 周${weekWord[course.dayIndex - 1]}\nss-ee');*/
+    final colors = TimetablePalette.of(context).colors;
+    return Card(
+        margin: const EdgeInsets.all(8),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        ),
+        clipBehavior: Clip.antiAlias,
+        color: colors[course.courseCode.hashCode.abs() % colors.length].byTheme(context.theme),
+        child: ListTile(
+          // 点击卡片打开课程详情.
+          onTap: () async{
+            /*await showModalBottomSheet(
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (BuildContext context) => Sheet(course.courseId, allCourses),
+              context: context,
+            );*/
+          },
+          leading: courseIcon,
+          title: Text(stylizeCourseName(course.courseName), textScaleFactor: 1.1),
+          subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(course.teachers.join(','), style: textStyle),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("description", style: textStyle),
+                Text(formatPlace(course.place), softWrap: true, overflow: TextOverflow.ellipsis, style: textStyle),
+              ],
+            ),
+          ]),
+        ));
   }
 }

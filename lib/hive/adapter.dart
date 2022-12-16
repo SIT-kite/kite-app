@@ -42,7 +42,7 @@ class HiveAdapter {
     // User Type
     ~UserEventAdapter();
     ~UserEventTypeAdapter();
-    ~TimetableMetaAdapter();
+    ~TimetableMetaLegacyAdapter();
     // Common Type
     ~VersionAdapter();
     ~SizeAdapter();

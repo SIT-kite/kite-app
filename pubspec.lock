@@ -882,7 +882,7 @@ packages:
     description:
       path: ikite-dart
       ref: master
-      resolved-ref: "2f02f78c116d5465655eada096d4cbd9a02cbf3e"
+      resolved-ref: "41293ab1469800e9b85badffea30546ea6a22e93"
       url: "https://github.com/SIT-kite/iKite.git"
     source: git
     version: "1.0.0"
@@ -891,7 +891,7 @@ packages:
     description:
       path: ikite-flutter
       ref: master
-      resolved-ref: "90e1bdf32e4867e00d140591634d0578ad325bc7"
+      resolved-ref: "41293ab1469800e9b85badffea30546ea6a22e93"
       url: "https://github.com/SIT-kite/iKite.git"
     source: git
     version: "0.0.1"

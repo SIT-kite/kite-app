@@ -18,8 +18,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/module/symbol.dart';
+import 'package:kite/module/timetable/storage/timetable.dart';
 import 'package:rettulf/rettulf.dart';
 
+import '../entity/entity.dart';
 import '../events.dart';
 import '../user_widget/picker.dart';
 import '../user_widget/timetable_editor.dart';
@@ -108,44 +110,53 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
   }
 
   Widget buildTimetables(BuildContext ctx) {
-    final tableNames = storage.tableNames ?? [];
-    if (tableNames.isEmpty) {
+    final timetables = storage.getAllSitTimetables();
+    if (timetables.isEmpty) {
       return _buildEmptyBody(ctx);
     }
-    final currentTableName = storage.currentTableName;
     return ListView(
-        children: tableNames.map((e) {
-      final meta = storage.getTableMetaByName(e);
-      if (meta == null) {
-        return const SizedBox();
-      } else {
-        return buildTimetableEntry(ctx, meta, isSelected: currentTableName == meta.name);
-      }
-    }).toList());
+      children: [for (final timetable in timetables) TimetableEntry(timetable: timetable)],
+    );
   }
+}
 
-  Widget buildTimetableEntry(BuildContext ctx, TimetableMetaLegacy meta, {required bool isSelected}) {
+class TimetableEntry extends StatefulWidget {
+  final SitTimetable timetable;
+
+  const TimetableEntry({super.key, required this.timetable});
+
+  @override
+  State<TimetableEntry> createState() => _TimetableEntryState();
+}
+
+class _TimetableEntryState extends State<TimetableEntry> {
+  SitTimetable get timetable => widget.timetable;
+  final storage = TimetableInit.timetableStorage;
+
+  @override
+  Widget build(BuildContext ctx) {
+    final isSelected = storage.currentTimetableId == timetable.id;
     return CupertinoContextMenu(
       actions: [
         CupertinoContextMenuAction(
           trailingIcon: CupertinoIcons.doc_text,
           onPressed: () async {
             Navigator.of(ctx).pop();
-            final changed = await ctx
+            /*    final changed = await ctx
                 .showSheet((context) => TimetableEditor(meta: meta).padOnly(b: MediaQuery.of(ctx).viewInsets.bottom));
 
             if (changed == true) {
               setState(() {});
-            }
+            }*/
           },
           child: i18n.timetableEdit.text(),
         ),
-        if (storage.currentTableName != meta.name)
+        if (!isSelected)
           CupertinoContextMenuAction(
             trailingIcon: CupertinoIcons.checkmark,
             onPressed: () {
               Navigator.of(ctx).pop();
-              storage.currentTableName = meta.name;
+              storage.currentTimetableId = timetable.id;
               setState(() {});
             },
             child: i18n.timetableSetToDefault.text(),
@@ -154,11 +165,11 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
           trailingIcon: CupertinoIcons.time,
           onPressed: () async {
             Navigator.of(ctx).pop();
-            final date = await pickDate(context, initial: meta.startDate);
+/*            final date = await pickDate(context, initial: meta.startDate);
             if (date != null) {
               meta.startDate = DateTime(date.year, date.month, date.day, 8, 20);
               storage.addTableMeta(meta.name, meta);
-            }
+            }*/
           },
           child: i18n.timetableSetStartDate.text(),
         ),
@@ -166,9 +177,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
           trailingIcon: CupertinoIcons.eye,
           onPressed: () async {
             Navigator.of(ctx).pop();
-            Navigator.of(ctx).push(MaterialPageRoute(
-                builder: (ctx) =>
-                    TimetablePreviewPage(meta: meta, courses: storage.getTableCourseByName(meta.name) ?? [])));
+            Navigator.of(ctx).push(MaterialPageRoute(builder: (ctx) => TimetablePreviewPage(timetable: timetable)));
           },
           child: i18n.timetablePreviewBtn.text(),
         ),
@@ -177,40 +186,40 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
           onPressed: () async {
             Navigator.of(ctx).pop();
             // Have to wait until the animation has been suspended because flutter is buggy without check `mounted` in _CupertinoContextMenuState.
-            await showDeleteTimetableRequest(ctx, meta);
+            await showDeleteTimetableRequest(ctx);
           },
           isDestructiveAction: true,
           child: i18n.timetableDelete.text(),
         ),
       ],
-      child: buildTimetableItemCard(ctx, meta, isSelected: isSelected),
-      previewBuilder: (ctx, animation, child) => buildTimetableItemCardPreview(ctx, meta, isSelected: isSelected),
+      child: buildTimetableItemCard(ctx, isSelected),
+      previewBuilder: (ctx, animation, child) => buildTimetableItemCardPreview(ctx, isSelected),
     );
   }
 
-  Widget buildTimetableItemCard(BuildContext ctx, TimetableMetaLegacy meta, {required bool isSelected}) {
+  Widget buildTimetableItemCard(BuildContext ctx, bool isSelected) {
     final bodyTextStyle = ctx.textTheme.titleSmall;
     return [
       [
-        meta.name.text(style: ctx.textTheme.titleMedium).expanded(),
+        timetable.name.text(style: ctx.textTheme.titleMedium).expanded(),
         if (isSelected) const Icon(Icons.check, color: Colors.green)
       ].row(maa: MainAxisAlignment.spaceBetween),
-      if (meta.description.isNotEmpty)
+      if (timetable.description.isNotEmpty)
         [
           const Icon(CupertinoIcons.doc_text),
-          meta.description.text(style: bodyTextStyle).padAll(10).expanded(),
+          timetable.description.text(style: bodyTextStyle).padAll(10).expanded(),
         ].row(maa: MainAxisAlignment.spaceBetween)
     ].column().scrolled().padAll(20).inCard(elevation: 5);
   }
 
-  Widget buildTimetableItemCardPreview(BuildContext ctx, TimetableMetaLegacy meta, {required bool isSelected}) {
-    final year = '${meta.schoolYear} - ${meta.schoolYear + 1}';
-    final semester = Semester.values[meta.semester].localized();
+  Widget buildTimetableItemCardPreview(BuildContext ctx, bool isSelected) {
+    final year = '${timetable.schoolYear} - ${timetable.schoolYear + 1}';
+    final semester = Semester.values[timetable.semester].localized();
     final bodyTextStyle = ctx.textTheme.titleSmall;
     return [
       [
         [
-          meta.name.text(style: ctx.textTheme.titleMedium).expanded(),
+          timetable.name.text(style: ctx.textTheme.titleMedium).expanded(),
           if (isSelected) const Icon(Icons.check, color: Colors.green),
         ].row(maa: MainAxisAlignment.spaceBetween),
         [
@@ -220,19 +229,19 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
       ].column().padSymmetric(v: 10, h: 20).inCard(elevation: 8),
       [
         const Icon(CupertinoIcons.doc_text),
-        if (meta.description.isNotEmpty)
-          meta.description.text(style: bodyTextStyle).padAll(10).expanded()
+        if (timetable.description.isNotEmpty)
+          timetable.description.text(style: bodyTextStyle).padAll(10).expanded()
         else
           i18n.timetableNoDescPlaceholder
               .text(style: bodyTextStyle?.copyWith(fontStyle: FontStyle.italic))
               .padAll(10)
               .expanded(),
       ].row(maa: MainAxisAlignment.spaceBetween).padAll(10),
-      i18n.timetableImportStartDate(ctx.dateNum(meta.startDate)).text(style: bodyTextStyle).padFromLTRB(20, 20, 20, 10),
+      i18n.timetableImportStartDate(ctx.dateNum(timetable.startDate)).text(style: bodyTextStyle).padFromLTRB(20, 20, 20, 10),
     ].column().scrolled().padAll(4).inCard(elevation: 5);
   }
 
-  Future<void> showDeleteTimetableRequest(BuildContext ctx, TimetableMetaLegacy meta) async {
+  Future<void> showDeleteTimetableRequest(BuildContext ctx) async {
     final confirm = await ctx.showRequest(
         title: i18n.timetableDeleteRequest,
         desc: i18n.timetableDeleteRequestDesc,
@@ -240,7 +249,7 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
         no: i18n.cancel,
         highlight: true);
     if (confirm == true) {
-      storage.removeTable(meta.name);
+      storage.deleteTimetableOf(timetable.id);
       if (storage.hasAnyTimetable) {
         // Refresh Mine page and show other timetables
         if (mounted) setState(() {});

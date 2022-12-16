@@ -68,6 +68,14 @@ class SitTimetableDay {
     }
   }
 
+  Iterable<SitTimetableLesson> getLessons({required int atLayer}) sync* {
+    for (final lessonsInTimeslot in timeslots2Lessons) {
+      if (0 <= atLayer && atLayer < lessonsInTimeslot.length) {
+        yield lessonsInTimeslot[atLayer];
+      }
+    }
+  }
+
   @override
   String toString() => "$timeslots2Lessons";
 }
@@ -84,6 +92,8 @@ class SitTimetableLesson {
   /// If there's no lesson, the [courseKey] is null.
   final int courseKey;
 
+  /// How many timeslots this lesson takes.
+  /// It's at least 1 timeslot.
   int get duration => endIndex - startIndex + 1;
 
   SitTimetableLesson(this.startIndex, this.endIndex, this.courseKey);
@@ -99,17 +109,27 @@ class SitCourse {
   final String classCode;
   final String campus;
   final String place;
+
+  /// e.g.: `1-5,14` means `from 1st week to 5th week` + `14th week`.
+  /// e.g.: `o2-9,12,14` means `only odd weeks from 2nd week to 9th week` + `12th week` + `14th week`
+  /// If the index is `o`(odd) or `e`(even), then it must be a range.
+  final List<String> weekIndices;
+
+  /// e.g.: `1-3` means `1st slot to 3rd slot`.
+  final String timeslots;
   final double courseCredit;
   final int creditHour;
   final List<String> teachers;
 
-  SitCourse(
+  const SitCourse(
     this.courseKey,
     this.courseName,
     this.courseCode,
     this.classCode,
     this.campus,
     this.place,
+    this.weekIndices,
+    this.timeslots,
     this.courseCredit,
     this.creditHour,
     this.teachers,
@@ -117,6 +137,65 @@ class SitCourse {
 
   @override
   String toString() => "[$courseKey] $courseName";
+
+  /// The result, week number, starts with 1.
+  /// week 1, week2, week 3 ...
+  static Iterable<int> weekIndices2EachWeekNumbers(List<String> weekIndices) sync* {
+    // Then the weeks can be ["1-5周","14周","8-10周(单)"]
+    for (final week in weekIndices) {
+      // don't worry about empty length.
+      final step = WeekStep.by(week[0]);
+      // realWeek is removed the WeekStep indicator at the head.
+      final realWeek = week.substring(1);
+      if (step == WeekStep.single) {
+        yield int.parse(realWeek);
+      } else {
+        final range = realWeek.split("-");
+        final start = int.parse(range[0]);
+        final end = int.parse(range[1]); // inclusive
+        for (int i = start; i <= end; i++) {
+          if (step == WeekStep.odd && i.isOdd) {
+            // odd week only
+            yield i;
+          } else if (step == WeekStep.even && i.isEven) {
+            //even week only
+            yield i;
+          } else {
+            // all week included
+            yield i;
+          }
+        }
+      }
+    }
+  }
+
+  /// Then the [weekText] could be `1-5周,14周,8-10周(单)`
+  /// The return value should be `a1-5,s14,o8-10`
+  static List<String> weekText2Indices(String weekText) {
+    final weeks = weekText.split(',');
+    // Then the weeks should be ["1-5周","14周","8-10周(单)"]
+    final res = <String>[];
+    for (final week in weeks) {
+      final isRange = week.contains("-");
+      if (week.endsWith("(单)") && isRange) {
+        final range = week.removeSuffix("周(单)");
+        res.add('${WeekStep.odd.indicator}$range');
+      } else if (week.endsWith("(双)") && isRange) {
+        final range = week.removeSuffix("周(双)");
+        res.add('${WeekStep.even.indicator}$range');
+      } else {
+        final number = week.removeSuffix("周");
+        if (number.isNotEmpty) {
+          if (number.contains("-")) {
+            res.add("${WeekStep.all.indicator}$number");
+          } else {
+            res.add("${WeekStep.single.indicator}$number");
+          }
+        }
+      }
+    }
+    return res;
+  }
 }
 
 class SitTimetableDataAdapter extends DataAdapter<SitTimetable> {
@@ -222,9 +301,11 @@ class SitCourseDataAdapter extends DataAdapter<SitCourse> {
       json["classCode"] as String,
       json["campus"] as String,
       json["place"] as String,
+      (json["weekIndices"] as List).cast<String>(),
+      json["timeslots"] as String,
       json["courseCredit"] as double,
       json["creditHour"] as int,
-      json["teachers"] as List<String>,
+      (json["teachers"] as List).cast<String>(),
     );
   }
 
@@ -237,6 +318,8 @@ class SitCourseDataAdapter extends DataAdapter<SitCourse> {
       "classCode": obj.classCode,
       "campus": obj.campus,
       "place": obj.place,
+      "weekIndices": obj.weekIndices,
+      "timeslots": obj.timeslots,
       "courseCredit": obj.courseCredit,
       "creditHour": obj.creditHour,
       "teachers": obj.teachers,

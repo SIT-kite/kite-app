@@ -16,6 +16,7 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import 'package:flutter/material.dart';
+import 'package:kite/module/timetable/storage/timetable.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../../entity/course.dart';
@@ -151,7 +152,12 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
       ..semester = semester.index;
     final saved = await ctx.showSheet((ctx) => MetaEditor(meta: meta).padOnly(b: MediaQuery.of(ctx).viewInsets.bottom));
     if (saved == true) {
-      storage.addTable(meta, courses);
+      timetable.name = meta.name;
+      timetable.description = meta.description;
+      timetable.schoolYear = year;
+      timetable.startDate = meta.startDate;
+      timetable.semester = semester.index;
+      storage.addTimetable(timetable);
       return true;
     }
     return false;
@@ -173,14 +179,19 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
                   //fetchMockCourses(),
                   Future.delayed(const Duration(milliseconds: 4500)),
                 ]).then((value) async {
+                  if (!mounted) return;
                   setState(() {
                     _status = ImportStatus.end;
                   });
                   final saved = await handleTimetableData(ctx, value[0] as SitTimetable, selectedYear, semester);
-                  if (mounted) Navigator.of(ctx).pop(saved);
+                  if (!mounted) return;
+                  Navigator.of(ctx).pop(saved);
                   setState(() {
                     _status = ImportStatus.none;
                   });
+                }).onError((error, stackTrace) {
+                  Log.error(error);
+                  Log.error(stackTrace);
                 });
               } catch (e) {
                 setState(() {

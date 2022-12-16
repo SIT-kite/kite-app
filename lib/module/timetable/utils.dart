@@ -26,8 +26,7 @@ import 'entity/meta.dart';
 
 const maxWeekLength = 20;
 
-List<String> makeWeekdaysShortText() =>
-    [
+List<String> makeWeekdaysShortText() => [
       i18n.weekdayShort1,
       i18n.weekdayShort2,
       i18n.weekdayShort3,
@@ -48,8 +47,7 @@ void _addEventForCourse(ICalendar cal, Course course, DateTime startDate, Durati
   final timeEnd = timetable[indexEnd - 1].end;
 
   final description =
-      '第 ${indexStart == indexEnd ? indexStart : '$indexStart-$indexEnd'} 节，${course.place}，${course.teacher.join(
-      ' ')}';
+      '第 ${indexStart == indexEnd ? indexStart : '$indexStart-$indexEnd'} 节，${course.place}，${course.teacher.join(' ')}';
 
   // 一学期最多有 20 周
   for (int currentWeek = 1; currentWeek < 20; ++currentWeek) {
@@ -72,9 +70,9 @@ void _addEventForCourse(ICalendar cal, Course course, DateTime startDate, Durati
       alarm: alarmBefore == null
           ? null
           : IAlarm.display(
-        trigger: eventStartTime.subtract(alarmBefore),
-        description: description,
-      ),
+              trigger: eventStartTime.subtract(alarmBefore),
+              description: description,
+            ),
     );
     cal.addElement(event);
   }
@@ -110,53 +108,31 @@ Future<void> exportTimetableToCalendar(TimetableMetaLegacy meta, List<Course> co
 
 final Map<String, int> _weekday2Index = {'星期一': 1, '星期二': 2, '星期三': 3, '星期四': 4, '星期五': 5, '星期六': 6, '星期日': 7};
 
-/// The result, week number, starts with 1.
-/// week 1, week2, week 3 ...
-Iterable<int> _weekText2WeekNumbers(String weekText) sync* {
-  final weeks = weekText.split(',');
-  // Then the weeks can be ["1-5周","14周","8-10周(单)"]
-  for (final week in weeks) {
-    if (week.endsWith("(单)")) {
-      final rangeText = week.removeSuffix("周(单)");
-      if (rangeText.contains("-")) {
-        // if the odd is specified, it must be a range
-        final range = rangeText.split("-");
-        final start = int.parse(range[0]);
-        final end = int.parse(range[1]); // inclusive
-        for (int i = start; i <= end; i++) {
-          if (i.isOdd) yield i;
-        }
-      }
-    } else if (week.endsWith("(双)")) {
-      final rangeText = week.removeSuffix("周(双)");
-      if (rangeText.contains("-")) {
-        // if the even is specified, it must be a range
-        final range = rangeText.split("-");
-        final start = int.parse(range[0]);
-        final end = int.parse(range[1]); // inclusive
-        for (int i = start; i <= end; i++) {
-          if (i.isEven) yield i;
-        }
-      }
-    } else {
-      final rangeText = week.removeSuffix("周");
-      if (rangeText.contains("-")) {
-        // a range
-        final range = rangeText.split("-");
-        final start = int.parse(range[0]);
-        final end = int.parse(range[1]); // inclusive
-        for (int i = start; i <= end; i++) {
-          yield i;
-        }
-      } else {
-        // a single number
-        yield int.parse(rangeText);
-      }
+enum WeekStep {
+  single('s'),
+  all('a'),
+  odd('o'),
+  even('e');
+
+  final String indicator;
+
+  const WeekStep(this.indicator);
+
+  static WeekStep by(String indicator) {
+    switch (indicator) {
+      case 'o':
+        return WeekStep.odd;
+      case 'e':
+        return WeekStep.even;
+      case 'a':
+        return WeekStep.all;
+      default: // case 's':
+        return WeekStep.single;
     }
   }
 }
 
-extension _StringEx on String {
+extension StringEx on String {
   String removeSuffix(String suffix) => endsWith(suffix) ? substring(0, length - suffix.length) : this;
 
   String removePrefix(String prefix) => startsWith(prefix) ? substring(prefix.length) : this;
@@ -174,6 +150,7 @@ SitTimetable parseTimetableEntity(List<CourseRaw> all) {
   var counter = 0;
   for (final raw in all) {
     final courseKey = counter++;
+    final weekIndices = SitCourse.weekText2Indices(raw.weekText);
     final course = SitCourse(
       courseKey,
       raw.courseName.trim(),
@@ -181,19 +158,22 @@ SitTimetable parseTimetableEntity(List<CourseRaw> all) {
       raw.classCode.trim(),
       raw.campus,
       raw.place,
+      weekIndices,
+      raw.timeslotsText,
       double.tryParse(raw.courseCredit) ?? 0.0,
       int.tryParse(raw.creditHour) ?? 0,
       raw.teachers.split(","),
     );
     courseKey2Entity.add(course);
-    final dayIndex = _weekday2Index[raw.weekDayText];
-    assert(dayIndex != null, "It's no corresponding dayIndex of ${raw.weekDayText}");
-    if (dayIndex == null) continue;
-    assert(0 <= dayIndex && dayIndex < 7, "dayIndex is out of range [0,6]");
+    final dayLiteral = _weekday2Index[raw.weekDayText];
+    assert(dayLiteral != null, "It's no corresponding dayIndex of ${raw.weekDayText}");
+    if (dayLiteral == null) continue;
+    final dayIndex = dayLiteral - 1;
+    assert(0 <= dayIndex && dayIndex < 7, "dayIndex is out of range [0,6] but $dayIndex");
     if (!(0 <= dayIndex && dayIndex < 7)) continue;
-    for (final weekNumber in _weekText2WeekNumbers(raw.weekText)) {
+    for (final weekNumber in SitCourse.weekIndices2EachWeekNumbers(weekIndices)) {
       final weekIndex = weekNumber - 1;
-      assert(0 <= weekIndex && weekIndex < maxWeekLength, "Week index is more out of range [0,$maxWeekLength).");
+      assert(0 <= weekIndex && weekIndex < maxWeekLength, "Week index is more out of range [0,$maxWeekLength) but $weekIndex.");
       if (0 <= weekIndex && weekIndex < maxWeekLength) {
         final week = getWeekAt(weekIndex);
         final day = week.days[dayIndex];
