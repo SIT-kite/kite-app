@@ -175,7 +175,7 @@ class _TimetablePageState extends State<TimetablePage> {
 
   Widget buildBody(BuildContext ctx) {
     return TimetablePaletteProv(
-      child: classic_ui.TimetableViewer(
+      child: new_ui.TimetableViewer(
         timetable: timetable,
         $currentPos: $currentPos,
         $displayMode: $displayMode,

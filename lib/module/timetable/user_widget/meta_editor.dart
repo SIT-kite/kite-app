@@ -20,7 +20,7 @@ import 'package:rettulf/rettulf.dart';
 
 import '../entity/meta.dart';
 import '../using.dart';
-import 'button.dart';
+import 'shared.dart';
 import 'picker.dart';
 
 class MetaEditor extends StatefulWidget {

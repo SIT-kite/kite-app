@@ -75,7 +75,7 @@ extension DesignExtension on BuildContext {
 
   Color chessBoardColor({required int at}) => getChessBoardColor(this, at);
 
-  Color get textColor => isDarkMode ? Colors.white70 : theme.primaryColor;
+  Color get textColor => isDarkMode ? Colors.white70 : Colors.black87;
 
   Tuple2<Color, Color> makeTabHeaderTextBgColors(bool isSelected) {
     final Color textColor;

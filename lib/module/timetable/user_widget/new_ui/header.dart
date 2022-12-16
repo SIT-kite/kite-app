@@ -77,7 +77,7 @@ class _TimetableHeaderState extends State<TimetableHeader> {
             }
           : null,
       child: buildDayHeader(context, day),
-    ).inCard(elevation:isSelected?20: 5).expanded();
+    ).inCard(elevation: isSelected ? 20 : 5).expanded();
   }
 
   Widget buildDayHeader(BuildContext ctx, int day) {

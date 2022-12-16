@@ -15,8 +15,12 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rettulf/rettulf.dart';
+import '../entity/entity.dart';
+import '../using.dart';
 
 Widget buildButton(BuildContext ctx, String text, {VoidCallback? onPressed}) {
   return ElevatedButton(
@@ -38,4 +42,22 @@ extension Wrapper on Widget {
       child: this,
     );
   }
+}
+
+Widget buildInfo(BuildContext ctx, SitCourse course) {
+  return AutoSizeText.rich(
+    TextSpan(children: [
+      TextSpan(
+        text: stylizeCourseName(course.courseName),
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.sp),
+      ),
+      TextSpan(
+        text: "\n${formatPlace(course.place)}\n${course.teachers.join(',')}",
+        style: TextStyle(color: ctx.textColor.withOpacity(0.65), fontSize: 12.sp),
+      ),
+    ]),
+    minFontSize: 0,
+    stepGranularity: 0.1,
+    textAlign: TextAlign.center,
+  );
 }

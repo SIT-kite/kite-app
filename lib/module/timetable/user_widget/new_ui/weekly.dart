@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,6 +27,7 @@ import '../../entity/course.dart';
 import '../../entity/entity.dart';
 import '../../using.dart';
 import '../../utils.dart';
+import '../shared.dart';
 import 'header.dart';
 import '../palette.dart';
 import '../sheet.dart';
@@ -210,7 +212,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
     }
     // WHAT? NO CLASS IN THE WHOLE TERM?
     // Alright, let's congratulate them!
-    if(!mounted) return;
+    if (!mounted) return;
     await ctx.showTip(title: i18n.congratulations, desc: i18n.timetableFreeTermTip, ok: i18n.thanks);
   }
 
@@ -315,21 +317,22 @@ class _CourseCellState extends State<_CourseCell> {
 
   @override
   Widget build(BuildContext context) {
+    final Widget res;
     final colors = TimetablePalette.of(context).colors;
     final color = colors[course.courseCode.hashCode.abs() % colors.length].byTheme(context.theme);
-    final info = <Widget>[];
-    final Widget res;
-    info.add(stylizeCourseName(course.courseName).text(textAlign: TextAlign.center));
     if (context.isPortrait) {
-      info.insert(0, TimeslotNumber(widget.timeslot));
-      res = info.column(maa: MainAxisAlignment.start, caa: CrossAxisAlignment.center);
+      res = [
+        TimeslotNumber(widget.timeslot).flexible(flex: 1),
+        buildInfo(context,course).flexible(flex: 3),
+      ].column();
     } else {
       res = [
-        TimeslotNumber(widget.timeslot + lesson.duration - 1).padAll(5).align(at: Alignment.bottomRight),
-        info.column(maa: MainAxisAlignment.start, caa: CrossAxisAlignment.center).center(),
+        TimeslotNumber(widget.timeslot + lesson.duration - 1).padAll(3).align(at: Alignment.bottomRight),
+        buildInfo(context,course).center().padOnly(b: 15.h),
       ].stack();
     }
-    return res.inCard(color: color, elevation: 8, margin: const EdgeInsets.all(1.5));
+
+    return res.inCard(color: color, elevation: 8, margin: EdgeInsets.all(1.5.w));
     return [
       buildText(formatPlace(course.place), 2),
       buildText(course.teachers.join(','), 2),
@@ -341,6 +344,8 @@ class _CourseCellState extends State<_CourseCell> {
           context: context);*/
     });
   }
+
+
 
   Text buildText(String text, int maxLines) {
     return Text(
@@ -363,14 +368,19 @@ class TimeslotNumber extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final number = (timeslot + 1).toString();
-    final double padding = number.length > 1 ? 1.8 : 2.8;
+    final double padding = number.length > 1 ? 1.0.w : 1.8.w;
+    final double fontSize = context.isPortrait? 12.sp : 6.sp;
     return Container(
       decoration: ShapeDecoration(
           shape: CircleBorder(
         side: BorderSide(color: context.theme.colorScheme.onSurface),
       )),
       padding: EdgeInsets.all(padding),
-      child: number.text(textAlign: TextAlign.center),
+      child: AutoSizeText(
+        number,
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: fontSize),
+      ),
     );
   }
 }

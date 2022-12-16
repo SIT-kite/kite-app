@@ -20,7 +20,7 @@ import 'package:kite/module/symbol.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../using.dart';
-import 'button.dart';
+import 'shared.dart';
 
 class TimetableEditor extends StatefulWidget {
   final TimetableMetaLegacy meta;

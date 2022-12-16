@@ -26,6 +26,7 @@ import '../../entity/course.dart';
 import '../../entity/entity.dart';
 import '../../using.dart';
 import '../../utils.dart';
+import '../shared.dart';
 import 'header.dart';
 import '../palette.dart';
 import '../sheet.dart';
@@ -96,14 +97,14 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
 
     return [
       [
-        buildMood(context).align(at: Alignment.center).flexible(flex: 2),
+        buildMood(context).align(at: Alignment.center).flexible(flex: 47),
         widget.$currentPos <<
             (ctx, cur, _) => TimetableHeader(
                   dayHeaders: dayHeaders,
                   selectedDay: 0,
                   currentWeek: cur.week,
                   startDate: widget.initialDate,
-                ).flexible(flex: 22)
+                ).flexible(flex: 500)
       ].row().container(
             decoration: BoxDecoration(
               border: Border(left: side, top: side, right: side, bottom: side),
@@ -367,37 +368,22 @@ class _CourseCellState extends State<_CourseCell> {
     final size = context.mediaQuery.size;
 
     final colors = TimetablePalette.of(context).colors;
+    final color = colors[course.courseCode.hashCode.abs() % colors.length].byTheme(context.theme);
     final decoration = BoxDecoration(
-      color: colors[course.courseCode.hashCode.abs() % colors.length].byTheme(context.theme),
-      borderRadius: const BorderRadius.all(Radius.circular(3.0)),
+      color: color,
+      borderRadius: BorderRadius.all(Radius.circular(3.0.w)),
       border: const Border(),
     );
-
+    final padding = context.isPortrait ? size.height / 40 : size.height / 80;
     return Container(
-      width: size.width - 3,
-      height: size.height * lesson.duration - 4,
-      decoration: decoration,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            buildText(stylizeCourseName(course.courseName), 3),
-            const SizedBox(height: 3),
-            buildText(formatPlace(course.place), 2),
-            const SizedBox(height: 3),
-            buildText(course.teachers.join(','), 2),
-          ],
-        ),
-      ),
-    ).onTap(() async {
-      /* await showModalBottomSheet(
+        decoration: decoration, margin: EdgeInsets.all(0.5.w), child: buildInfo(context, course).padOnly(t: padding));
+    /*).onTap(() async {
+       await showModalBottomSheet(
           isScrollControlled: true,
           backgroundColor: Colors.transparent,
           builder: (BuildContext context) => Sheet(course.courseCode, widget.allCourse),
-          context: context);*/
-    });
+          context: context);
+  }*/
   }
 
   Text buildText(String text, int maxLines) {
