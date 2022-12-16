@@ -19,15 +19,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rettulf/rettulf.dart';
 
-import '../cache.dart';
-import '../entity/course.dart';
-import '../entity/entity.dart';
-import '../using.dart';
-import '../utils.dart';
+import '../../cache.dart';
+import '../../entity/course.dart';
+import '../../entity/entity.dart';
+import '../../using.dart';
+import '../../utils.dart';
 import 'header.dart';
-import 'palette.dart';
-import 'sheet.dart';
-import 'timetable.dart';
+import '../palette.dart';
+import '../sheet.dart';
+import '../interface.dart';
 
 const String _courseIconPath = 'assets/course/';
 
@@ -37,9 +37,6 @@ class DailyTimetable extends StatefulWidget implements InitialTimeProtocol {
   @override
   DateTime get initialDate => timetable.startDate;
 
-  /// 课表缓存
-  final TableCache tableCache;
-
   final ValueNotifier<TimetablePosition> $currentPos;
 
   @override
@@ -48,7 +45,6 @@ class DailyTimetable extends StatefulWidget implements InitialTimeProtocol {
   const DailyTimetable({
     super.key,
     required this.timetable,
-    required this.tableCache,
     required this.$currentPos,
   });
 }
@@ -242,6 +238,7 @@ class DailyTimetableState extends State<DailyTimetable> {
     }
     // WHAT? NO CLASS IN THE WHOLE TERM?
     // Alright, let's congratulate them!
+    if(!mounted) return;
     await ctx.showTip(title: i18n.congratulations, desc: i18n.timetableFreeTermTip, ok: i18n.thanks);
   }
 

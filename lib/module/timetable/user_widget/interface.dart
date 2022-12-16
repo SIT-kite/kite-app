@@ -15,18 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/entities.dart';
 import 'package:quiver/core.dart';
-import 'package:rettulf/rettulf.dart';
 
-import '../cache.dart';
-import '../entity/course.dart';
-import '../entity/meta.dart';
 import '../using.dart';
-import 'daily.dart';
-import 'weekly.dart';
 
 abstract class InitialTimeProtocol {
   DateTime get initialDate;
@@ -80,62 +71,4 @@ class TimetablePosition {
 
   @override
   int get hashCode => hash2(week, day);
-}
-
-class TimetableViewer extends StatefulWidget {
-  final SitTimetable timetable;
-
-  final ValueNotifier<DisplayMode> $displayMode;
-
-  /// 课表视图使用的缓存
-  final TableCache tableCache;
-
-  final ValueNotifier<TimetablePosition> $currentPos;
-
-  const TimetableViewer({
-    required this.timetable,
-    required this.$displayMode,
-    required this.tableCache,
-    required this.$currentPos,
-    super.key,
-  });
-
-  @override
-  State<TimetableViewer> createState() => _TimetableViewerState();
-}
-
-class _TimetableViewerState extends State<TimetableViewer> {
-  /// 最大周数
-  /// TODO 还没用上
-  // static const int maxWeekCount = 20;
-  SitTimetable get timetable => widget.timetable;
-
-  @override
-  void initState() {
-    Log.info('TimetableViewer init');
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return buildTimetableBody(context).padH(5.w);
-  }
-
-  Widget buildTimetableBody(BuildContext ctx) {
-    return widget.$displayMode <<
-        (ctx, mode, _) => (mode == DisplayMode.daily
-                    ? DailyTimetable(
-                        $currentPos: widget.$currentPos,
-                        timetable: timetable,
-                        tableCache: widget.tableCache,
-                      )
-                    : WeeklyTimetable(
-                        $currentPos: widget.$currentPos,
-                        timetable: timetable,
-                        tableCache: widget.tableCache,
-                      ))
-                .animatedSwitched(
-              d: const Duration(milliseconds: 300),
-            );
-  }
 }

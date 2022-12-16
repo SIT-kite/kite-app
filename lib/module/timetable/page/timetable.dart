@@ -23,9 +23,11 @@ import '../entity/course.dart';
 import '../entity/entity.dart';
 import '../init.dart';
 import '../user_widget/palette.dart';
-import '../user_widget/timetable.dart';
+import '../user_widget/interface.dart';
 import '../using.dart';
 import '../utils.dart';
+import '../user_widget/new_ui/timetable.dart' as new_ui;
+import '../user_widget/classic_ui/timetable.dart' as classic_ui;
 
 const DisplayMode defaultMode = DisplayMode.weekly;
 
@@ -173,10 +175,9 @@ class _TimetablePageState extends State<TimetablePage> {
 
   Widget buildBody(BuildContext ctx) {
     return TimetablePaletteProv(
-      child: TimetableViewer(
+      child: classic_ui.TimetableViewer(
         timetable: timetable,
         $currentPos: $currentPos,
-        tableCache: TableCache(),
         $displayMode: $displayMode,
       ),
     );
