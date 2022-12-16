@@ -602,7 +602,7 @@
   "settingsLogoutKite": "Logout Kite",
   "settingsLogoutKiteSub": "Logout current Kite account",
   "settingsProxyAddress": "Proxy Address",
-  "settingsReload": "reload",
+  "settingsReload": "Reload",
   "settingsReloadSub": "Re-initialize all modules",
   "settingsStorageSelectTip": "Please select a box first.",
   "settingsTestConnect2School": "Test Connectivity",
@@ -757,5 +757,7 @@
   "congratulations": "Congratulations",
   "newsNewPersonalizationSystemIsComingSoon":"Excuse me, a new personalization system is coming soon!",
   "timetableUseOldSchoolPalette": "Use Old School Palette",
-  "thanks": "Thanks"
+  "thanks": "Thanks",
+  "timetableFindNearestWeekWithClassBtn": "Find a week with class",
+  "timetableFindNearestDayWithClassBtn": "Find a day with class"
 }

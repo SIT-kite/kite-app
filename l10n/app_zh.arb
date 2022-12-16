@@ -480,5 +480,7 @@
   "congratulations": "",
   "newsNewPersonalizationSystemIsComingSoon": "请等等，新的个性化系统还在路上！",
   "timetableUseOldSchoolPalette": "使用旧版课程表配色",
-  "thanks": ""
+  "thanks": "谢谢",
+  "timetableFindNearestWeekWithClassBtn": "找到有课的一周",
+  "timetableFindNearestDayWithClassBtn": "找到有课的一天"
 }

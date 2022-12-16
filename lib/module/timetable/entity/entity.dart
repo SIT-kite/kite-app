@@ -68,12 +68,35 @@ class SitTimetableDay {
     }
   }
 
-  Iterable<SitTimetableLesson> getLessons({required int atLayer}) sync* {
+  /// At all lessons [atLayer]
+  Iterable<SitTimetableLesson> browseLessons({required int atLayer}) sync* {
     for (final lessonsInTimeslot in timeslots2Lessons) {
       if (0 <= atLayer && atLayer < lessonsInTimeslot.length) {
         yield lessonsInTimeslot[atLayer];
       }
     }
+  }
+
+  /// At the unique lessons [atLayer].
+  /// So, if the [SitTimetableLesson.duration] is more than 1, it will only yield the first lesson.
+  Iterable<SitTimetableLesson> browseUniqueLessons({required int atLayer}) sync* {
+    for (int timeslot = 0; timeslot < timeslots2Lessons.length; timeslot++) {
+      final lessons = timeslots2Lessons[timeslot];
+      if (0 <= atLayer && atLayer < lessons.length) {
+        final lesson = lessons[atLayer];
+        yield lesson;
+        timeslot = lesson.endIndex;
+      }
+    }
+  }
+
+  bool hasAnyLesson({required int atLayer}) {
+    for (final lessonsInTimeslot in timeslots2Lessons) {
+      if (lessonsInTimeslot.isNotEmpty) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @override

@@ -172,37 +172,6 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
     }
   }
 
-  /// 布局左侧边栏, 显示节次
-  Widget buildLeftColumn(BuildContext ctx) {
-    /// 构建每一个格子
-    Widget buildCell(BuildContext ctx, int index) {
-      final textStyle = ctx.textTheme.bodyText2;
-      final side = getBorderSide(ctx);
-
-      return Container(
-        decoration: BoxDecoration(
-          border: Border(
-              top: index != 0 ? side : BorderSide.none,
-              right: side,
-              left: side,
-              bottom: index == 10 ? side : BorderSide.none),
-        ),
-        child: Center(child: Text((index + 1).toString(), style: textStyle)),
-      );
-    }
-
-    // 用 [GridView] 构造整个左侧边栏
-    return GridView.builder(
-      shrinkWrap: true,
-      itemCount: 11,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 1,
-        childAspectRatio: 22 / 23 * (1.sw) / (1.sh),
-      ),
-      itemBuilder: buildCell,
-    );
-  }
-
   Widget buildPageBody(BuildContext ctx, int weekIndex) {
     final timetableWeek = timetable.weeks[weekIndex];
     if (timetableWeek != null) {
@@ -221,6 +190,37 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
         buildFreeWeekTip(ctx, weekIndex).flexible(flex: 21),
       ].row(textDirection: TextDirection.ltr);
     }
+  }
+
+  /// 布局左侧边栏, 显示节次
+  Widget buildLeftColumn(BuildContext ctx) {
+    // 用 [GridView] 构造整个左侧边栏
+    return GridView.builder(
+      shrinkWrap: true,
+      itemCount: 11,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 1,
+        childAspectRatio: 22 / 23 * (1.sw) / (1.sh),
+      ),
+      itemBuilder: _buildCell,
+    );
+  }
+
+  /// 构建每一个格子
+  Widget _buildCell(BuildContext ctx, int index) {
+    final textStyle = ctx.textTheme.bodyText2;
+    final side = getBorderSide(ctx);
+
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+            top: index != 0 ? side : BorderSide.none,
+            right: side,
+            left: side,
+            bottom: side),
+      ),
+      child: (index + 1).text(style: textStyle).center(),
+    );
   }
 
   Widget buildFreeWeekTip(BuildContext ctx, int weekIndex) {
@@ -243,7 +243,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
       onPressed: () async {
         await jumpToNearestWeekWithClass(ctx, weekIndex);
       },
-      child: "Find a week with class".text(),
+      child: i18n.timetableFindNearestWeekWithClassBtn.text(),
     );
   }
 

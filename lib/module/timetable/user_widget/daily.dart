@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rettulf/rettulf.dart';
 
@@ -27,6 +28,7 @@ import 'header.dart';
 import 'palette.dart';
 import 'sheet.dart';
 import 'timetable.dart';
+
 const String _courseIconPath = 'assets/course/';
 
 class DailyTimetable extends StatefulWidget implements InitialTimeProtocol {
@@ -52,7 +54,6 @@ class DailyTimetable extends StatefulWidget implements InitialTimeProtocol {
 }
 
 class DailyTimetableState extends State<DailyTimetable> {
-
   SitTimetable get timetable => widget.timetable;
 
   TimetablePosition get currentPos => widget.$currentPos.value;
@@ -97,6 +98,7 @@ class DailyTimetableState extends State<DailyTimetable> {
       }
     });
     final dayHeaders = makeWeekdaysShortText();
+    final side = getBorderSide(context);
     return [
       widget.$currentPos <<
           (ctx, cur, _) => TimetableHeader(
@@ -107,7 +109,9 @@ class DailyTimetableState extends State<DailyTimetable> {
                 onDayTap: (selectedDay) {
                   currentPos = TimetablePosition(week: cur.week, day: selectedDay);
                 },
-              ).flexible(flex: 2),
+              )
+                  .container(decoration: BoxDecoration(border: Border(top: side, bottom: side, right: side)))
+                  .flexible(flex: 2),
       NotificationListener<ScrollNotification>(
           onNotification: (e) {
             if (e is ScrollEndNotification) {
@@ -153,17 +157,17 @@ class DailyTimetableState extends State<DailyTimetable> {
   }
 
   /// 构建第 index 页视图
-  Widget _buildPage(BuildContext context, int index) {
-    int weekIndex = index ~/ 7 + 1;
-    int dayIndex = index % 7 + 1;
+  Widget _buildPage(BuildContext ctx, int index) {
+    int weekIndex = index ~/ 7;
+    int dayIndex = index % 7;
     final week = timetable.weeks[weekIndex];
     if (week == null) {
-      return _buildFreeDayTip();
+      return _buildFreeDayTip(ctx, weekIndex, dayIndex);
     } else {
       final day = week.days[dayIndex];
-      final lessonsInDay = day.getLessons(atLayer: 0).toList();
+      final lessonsInDay = day.browseUniqueLessons(atLayer: 0).toList();
       if (lessonsInDay.isEmpty) {
-        return _buildFreeDayTip();
+        return _buildFreeDayTip(ctx, weekIndex, dayIndex);
       } else {
         return ListView.builder(
           controller: ScrollController(),
@@ -173,7 +177,7 @@ class DailyTimetableState extends State<DailyTimetable> {
             final lesson = lessonsInDay[indexOfLessons];
             final course = timetable.courseKey2Entity[lesson.courseKey];
             return LessonCard(
-              lesson: lessonsInDay[index],
+              lesson: lesson,
               course: course,
               courseKey2Entity: timetable.courseKey2Entity,
             );
@@ -183,8 +187,9 @@ class DailyTimetableState extends State<DailyTimetable> {
     }
   }
 
-  Widget _buildFreeDayTip() {
-    final isToday = widget.locateInTimetable(DateTime.now()) == currentPos;
+  Widget _buildFreeDayTip(BuildContext ctx, int weekIndex, int dayIndex) {
+    final todayPos = widget.locateInTimetable(DateTime.now());
+    final isToday = todayPos.week == weekIndex + 1 && todayPos.day == dayIndex + 1;
     final String desc;
     if (isToday) {
       desc = i18n.timetableFreeDayIsTodayTip;
@@ -194,7 +199,52 @@ class DailyTimetableState extends State<DailyTimetable> {
     return LeavingBlank(
       icon: Icons.free_cancellation_rounded,
       desc: desc,
+      subtitle: buildJumpToNearestDayWithClassBtn(ctx, weekIndex, dayIndex),
     );
+  }
+
+  Widget buildJumpToNearestDayWithClassBtn(BuildContext ctx, int weekIndex, int dayIndex) {
+    return CupertinoButton(
+      onPressed: () async {
+        await jumpToNearestDayWithClass(ctx, weekIndex, dayIndex);
+      },
+      child: i18n.timetableFindNearestDayWithClassBtn.text(),
+    );
+  }
+
+  /// Find the nearest day with class forward.
+  /// No need to look back to passed days, unless there's no day after [weekIndex] and [dayIndex] that has any class.
+  Future<void> jumpToNearestDayWithClass(BuildContext ctx, int weekIndex, int dayIndex) async {
+    for (int i = weekIndex; i < timetable.weeks.length; i++) {
+      final week = timetable.weeks[i];
+      if (week != null) {
+        final dayIndexStart = weekIndex == i ? dayIndex : 0;
+        for (int j = dayIndexStart; j < week.days.length; j++) {
+          final day = week.days[j];
+          if (day.hasAnyLesson(atLayer: 0)) {
+            currentPos = TimetablePosition(week: i + 1, day: j + 1);
+            return;
+          }
+        }
+      }
+    }
+    // Now there's no class forward, so let's search backward.
+    for (int i = weekIndex; 0 <= i; i--) {
+      final week = timetable.weeks[i];
+      if (week != null) {
+        final dayIndexStart = weekIndex == i ? dayIndex : week.days.length - 1;
+        for (int j = dayIndexStart; 0 <= j; j--) {
+          final day = week.days[j];
+          if (day.hasAnyLesson(atLayer: 0)) {
+            currentPos = TimetablePosition(week: i + 1, day: j + 1);
+            return;
+          }
+        }
+      }
+    }
+    // WHAT? NO CLASS IN THE WHOLE TERM?
+    // Alright, let's congratulate them!
+    await ctx.showTip(title: i18n.congratulations, desc: i18n.timetableFreeTermTip, ok: i18n.thanks);
   }
 
   @override
@@ -234,7 +284,7 @@ class _LessonCardState extends State<LessonCard> {
         color: colors[course.courseCode.hashCode.abs() % colors.length].byTheme(context.theme),
         child: ListTile(
           // 点击卡片打开课程详情.
-          onTap: () async{
+          onTap: () async {
             /*await showModalBottomSheet(
               isScrollControlled: true,
               backgroundColor: Colors.transparent,
