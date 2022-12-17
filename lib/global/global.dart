@@ -88,7 +88,7 @@ class Global {
               yes: i18n.openNetworkToolBtn,
               no: i18n.cancel)
           .then((confirm) {
-        if (confirm == true) Navigator.of(context).popAndPushNamed(RouteTable.networkTool);
+        if (confirm == true) Navigator.of(context).pushNamed(RouteTable.networkTool);
         inSsoErrorDialog = false;
       });
     }

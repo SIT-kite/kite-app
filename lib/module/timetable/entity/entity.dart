@@ -1,6 +1,7 @@
 import 'package:ikite/ikite.dart';
 
 import '../utils.dart';
+import '../using.dart';
 import 'course.dart';
 
 final _defaultStartDate = DateTime.utc(0);
@@ -133,15 +134,17 @@ class SitCourse {
   final String campus;
   final String place;
 
-  /// e.g.: `1-5,14` means `from 1st week to 5th week` + `14th week`.
-  /// e.g.: `o2-9,12,14` means `only odd weeks from 2nd week to 9th week` + `12th week` + `14th week`
-  /// If the index is `o`(odd) or `e`(even), then it must be a range.
-  final List<String> weekIndices;
+  /// e.g.: `a1-5,s14` means `from 1st week to 5th week` + `14th week`.
+  /// e.g.: `o2-9,s12,s14` means `only odd weeks from 2nd week to 9th week` + `12th week` + `14th week`
+  /// If the index is `o`(odd), `e`(even) or `a`(all), then it must be a range.
+  /// Starts with 1
+  final List<String> rangedWeekNumbers;
 
   /// e.g.: `1-3` means `1st slot to 3rd slot`.
   final String timeslots;
   final double courseCredit;
   final int creditHour;
+  final int dayIndex;
   final List<String> teachers;
 
   const SitCourse(
@@ -151,10 +154,11 @@ class SitCourse {
     this.classCode,
     this.campus,
     this.place,
-    this.weekIndices,
+    this.rangedWeekNumbers,
     this.timeslots,
     this.courseCredit,
     this.creditHour,
+    this.dayIndex,
     this.teachers,
   );
 
@@ -162,14 +166,16 @@ class SitCourse {
   String toString() => "[$courseKey] $courseName";
 
   /// The result, week number, starts with 1.
-  /// week 1, week2, week 3 ...
-  static Iterable<int> weekIndices2EachWeekNumbers(List<String> weekIndices) sync* {
+  /// e.g.:
+  /// [rangedWeekNumbers] is `a1-5,o7-12`.
+  /// return value is [[1,2,3,4,5,7,9,11]].
+  static Iterable<int> rangedWeekNumbers2EachWeekNumbers(List<String> rangedWeekNumbers) sync* {
     // Then the weeks can be ["1-5周","14周","8-10周(单)"]
-    for (final week in weekIndices) {
+    for (final rangedWeekNumber in rangedWeekNumbers) {
       // don't worry about empty length.
-      final step = WeekStep.by(week[0]);
+      final step = WeekStep.by(rangedWeekNumber[0]);
       // realWeek is removed the WeekStep indicator at the head.
-      final realWeek = week.substring(1);
+      final realWeek = rangedWeekNumber.substring(1);
       if (step == WeekStep.single) {
         yield int.parse(realWeek);
       } else {
@@ -194,7 +200,7 @@ class SitCourse {
 
   /// Then the [weekText] could be `1-5周,14周,8-10周(单)`
   /// The return value should be `a1-5,s14,o8-10`
-  static List<String> weekText2Indices(String weekText) {
+  static List<String> weekText2RangedNumbers(String weekText) {
     final weeks = weekText.split(',');
     // Then the weeks should be ["1-5周","14周","8-10周(单)"]
     final res = <String>[];
@@ -219,8 +225,38 @@ class SitCourse {
     }
     return res;
   }
-}
 
+  /// Then the [indices] could be ["a1-5", "s14", "o8-10"]
+  /// The return value should be:
+  /// - `1-5 周, 14 周, 8-10 单周` in Chinese.
+  /// - `1-5 wk, 14 wk, 8-10 odd wk`
+  /// This is used in Classic UI.
+  static List<String> rangedWeekNumbers2Localized(List<String> rangedWeekNumbers) {
+    final res = <String>[];
+    for (final rangedWeekNumber in rangedWeekNumbers) {
+      final step = WeekStep.by(rangedWeekNumber[0]);
+      final number = rangedWeekNumber.substring(1);
+      switch (step) {
+        case WeekStep.single:
+        case WeekStep.all:
+          res.add("$number ${i18n.timetableWeek}");
+          break;
+        case WeekStep.odd:
+          res.add("$number ${i18n.timetableOddWeek}");
+          break;
+        case WeekStep.even:
+          res.add("$number ${i18n.timetableEvenWeek}");
+          break;
+      }
+    }
+    return res;
+  }
+}
+extension SitCourseEx on SitCourse{
+  String localizedWeekNumbers({String separateBy = ", "}){
+    return SitCourse.rangedWeekNumbers2Localized(rangedWeekNumbers).join(separateBy);
+  }
+}
 class SitTimetableDataAdapter extends DataAdapter<SitTimetable> {
   @override
   String get typeName => "kite.SitTimetable";
@@ -328,6 +364,8 @@ class SitCourseDataAdapter extends DataAdapter<SitCourse> {
       json["timeslots"] as String,
       json["courseCredit"] as double,
       json["creditHour"] as int,
+      json["dayIndex"] as int? ?? 1,
+      // TODO: Temporarily
       (json["teachers"] as List).cast<String>(),
     );
   }
@@ -341,10 +379,11 @@ class SitCourseDataAdapter extends DataAdapter<SitCourse> {
       "classCode": obj.classCode,
       "campus": obj.campus,
       "place": obj.place,
-      "weekIndices": obj.weekIndices,
+      "weekIndices": obj.rangedWeekNumbers,
       "timeslots": obj.timeslots,
       "courseCredit": obj.courseCredit,
       "creditHour": obj.creditHour,
+      "dayIndex": obj.dayIndex,
       "teachers": obj.teachers,
     };
   }

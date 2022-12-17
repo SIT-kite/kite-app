@@ -23,7 +23,7 @@ import '../cache.dart';
 import '../entity/course.dart';
 import '../entity/entity.dart';
 import '../init.dart';
-import '../user_widget/palette.dart';
+import '../user_widget/style.dart';
 import '../user_widget/interface.dart';
 import '../using.dart';
 import '../utils.dart';

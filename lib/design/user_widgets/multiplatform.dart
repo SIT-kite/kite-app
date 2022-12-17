@@ -172,6 +172,7 @@ class $TextField$ extends StatelessWidget {
   /// On Material, it's the [InputDecoration.labelText]
   final String? labelText;
   final TextInputAction? textInputAction;
+  final ValueChanged<String>? onSubmit;
 
   const $TextField$({
     super.key,
@@ -181,7 +182,7 @@ class $TextField$ extends StatelessWidget {
     this.labelText,
     this.textInputAction,
     this.prefixIcon,
-    this.suffixIcon,
+    this.suffixIcon, this.onSubmit,
   });
 
   @override
@@ -194,6 +195,7 @@ class $TextField$ extends StatelessWidget {
           textInputAction: textInputAction,
           prefix: prefixIcon,
           suffix: suffixIcon,
+          onSubmitted: onSubmit,
           decoration: const BoxDecoration(
             color: CupertinoDynamicColor.withBrightness(
               color: CupertinoColors.white,
@@ -202,7 +204,10 @@ class $TextField$ extends StatelessWidget {
             border: _kDefaultRoundedBorder,
             borderRadius: BorderRadius.all(Radius.circular(8.0)),
           ),
-          style: CupertinoTheme.of(context).textTheme.textStyle);
+          style: CupertinoTheme
+              .of(context)
+              .textTheme
+              .textStyle);
     } else {
       return TextFormField(
         controller: controller,
@@ -214,6 +219,7 @@ class $TextField$ extends StatelessWidget {
           labelText: labelText,
           suffixIcon: suffixIcon,
         ),
+        onFieldSubmitted:onSubmit,
       );
     }
   }

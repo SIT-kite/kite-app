@@ -21,7 +21,7 @@ import '../cache.dart';
 import '../entity/course.dart';
 import '../entity/entity.dart';
 import '../entity/meta.dart';
-import '../user_widget/palette.dart';
+import '../user_widget/style.dart';
 import '../user_widget/interface.dart';
 import '../using.dart';
 import '../user_widget/new_ui/timetable.dart' as new_ui;

@@ -135,9 +135,9 @@ class _KiteAppState extends State<KiteApp> {
               TargetPlatform.android:
                   SharedAxisPageTransitionsBuilder(transitionType: SharedAxisTransitionType.horizontal),
               TargetPlatform.iOS: SharedAxisPageTransitionsBuilder(transitionType: SharedAxisTransitionType.horizontal),
-              TargetPlatform.macOS: FadeThroughPageTransitionsBuilder(),
-              TargetPlatform.linux: FadeThroughPageTransitionsBuilder(),
-              TargetPlatform.windows: FadeThroughPageTransitionsBuilder(),
+              TargetPlatform.macOS: SharedAxisPageTransitionsBuilder(transitionType: SharedAxisTransitionType.vertical),
+              TargetPlatform.linux: SharedAxisPageTransitionsBuilder(transitionType: SharedAxisTransitionType.vertical),
+              TargetPlatform.windows: SharedAxisPageTransitionsBuilder(transitionType: SharedAxisTransitionType.vertical),
             },
           ),
           visualDensity: VisualDensity.comfortable,

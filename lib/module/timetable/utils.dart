@@ -43,8 +43,8 @@ void _addEventForCourse(ICalendar cal, Course course, DateTime startDate, Durati
   final timetable = getBuildingTimetable(course.campus, course.place);
   final indexStart = getIndexStart(course.timeIndex);
   final indexEnd = getIndexEnd(indexStart, course.timeIndex);
-  final timeStart = timetable[indexStart - 1].start;
-  final timeEnd = timetable[indexEnd - 1].end;
+  final timeStart = timetable[indexStart - 1].classBegin;
+  final timeEnd = timetable[indexEnd - 1].classOver;
 
   final description =
       '第 ${indexStart == indexEnd ? indexStart : '$indexStart-$indexEnd'} 节，${course.place}，${course.teacher.join(' ')}';
@@ -150,7 +150,13 @@ SitTimetable parseTimetableEntity(List<CourseRaw> all) {
   var counter = 0;
   for (final raw in all) {
     final courseKey = counter++;
-    final weekIndices = SitCourse.weekText2Indices(raw.weekText);
+    final weekIndices = SitCourse.weekText2RangedNumbers(raw.weekText);
+    final dayLiteral = _weekday2Index[raw.weekDayText];
+    assert(dayLiteral != null, "It's no corresponding dayIndex of ${raw.weekDayText}");
+    if (dayLiteral == null) continue;
+    final dayIndex = dayLiteral - 1;
+    assert(0 <= dayIndex && dayIndex < 7, "dayIndex is out of range [0,6] but $dayIndex");
+    if (!(0 <= dayIndex && dayIndex < 7)) continue;
     final course = SitCourse(
       courseKey,
       raw.courseName.trim(),
@@ -162,18 +168,15 @@ SitTimetable parseTimetableEntity(List<CourseRaw> all) {
       raw.timeslotsText,
       double.tryParse(raw.courseCredit) ?? 0.0,
       int.tryParse(raw.creditHour) ?? 0,
+      dayIndex,
       raw.teachers.split(","),
     );
     courseKey2Entity.add(course);
-    final dayLiteral = _weekday2Index[raw.weekDayText];
-    assert(dayLiteral != null, "It's no corresponding dayIndex of ${raw.weekDayText}");
-    if (dayLiteral == null) continue;
-    final dayIndex = dayLiteral - 1;
-    assert(0 <= dayIndex && dayIndex < 7, "dayIndex is out of range [0,6] but $dayIndex");
-    if (!(0 <= dayIndex && dayIndex < 7)) continue;
-    for (final weekNumber in SitCourse.weekIndices2EachWeekNumbers(weekIndices)) {
+
+    for (final weekNumber in SitCourse.rangedWeekNumbers2EachWeekNumbers(weekIndices)) {
       final weekIndex = weekNumber - 1;
-      assert(0 <= weekIndex && weekIndex < maxWeekLength, "Week index is more out of range [0,$maxWeekLength) but $weekIndex.");
+      assert(0 <= weekIndex && weekIndex < maxWeekLength,
+          "Week index is more out of range [0,$maxWeekLength) but $weekIndex.");
       if (0 <= weekIndex && weekIndex < maxWeekLength) {
         final week = getWeekAt(weekIndex);
         final day = week.days[dayIndex];

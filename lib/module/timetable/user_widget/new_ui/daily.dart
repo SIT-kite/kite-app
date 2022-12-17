@@ -26,8 +26,8 @@ import '../../entity/entity.dart';
 import '../../using.dart';
 import '../../utils.dart';
 import 'header.dart';
-import '../palette.dart';
-import '../sheet.dart';
+import '../style.dart';
+import '../classic_ui/sheet.dart';
 import '../interface.dart';
 
 const String _courseIconPath = 'assets/course/';
@@ -188,7 +188,7 @@ class DailyTimetableState extends State<DailyTimetable> {
         for (int j = dayIndexStart; j < week.days.length; j++) {
           final day = week.days[j];
           if (day.hasAnyLesson(atLayer: 0)) {
-            currentPos = TimetablePosition(week: i + 1, day: j + 1);
+            eventBus.fire(JumpToPosEvent(TimetablePosition(week: i + 1, day: j + 1)));
             return;
           }
         }
@@ -202,7 +202,7 @@ class DailyTimetableState extends State<DailyTimetable> {
         for (int j = dayIndexStart; 0 <= j; j--) {
           final day = week.days[j];
           if (day.hasAnyLesson(atLayer: 0)) {
-            currentPos = TimetablePosition(week: i + 1, day: j + 1);
+            eventBus.fire(JumpToPosEvent(TimetablePosition(week: i + 1, day: j + 1)));
             return;
           }
         }

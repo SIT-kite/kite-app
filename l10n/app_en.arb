@@ -760,5 +760,8 @@
   "timetableUseOldNewUI": "Use Timetable New-UI",
   "thanks": "Thanks",
   "timetableFindNearestWeekWithClassBtn": "Find a week with class",
-  "timetableFindNearestDayWithClassBtn": "Find a day with class"
+  "timetableFindNearestDayWithClassBtn": "Find a day with class",
+  "timetableWeek": "wk",
+  "timetableOddWeek": "odd wk",
+  "timetableEvenWeek": "even wk"
 }

@@ -55,6 +55,7 @@ class _DetailPageState extends State<DetailPage> {
   void initState() {
     super.initState();
     fetchAnnounceDetail().then((value) {
+      if(!mounted) return;
       setState(() {
         _detail = value;
       });

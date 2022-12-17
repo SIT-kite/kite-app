@@ -25,8 +25,8 @@ import '../../entity/entity.dart';
 import '../../using.dart';
 import '../../utils.dart';
 import 'header.dart';
-import '../palette.dart';
-import '../sheet.dart';
+import '../style.dart';
+import 'sheet.dart';
 import '../interface.dart';
 
 const String _courseIconPath = 'assets/course/';
@@ -95,19 +95,20 @@ class DailyTimetableState extends State<DailyTimetable> {
     });
     final dayHeaders = makeWeekdaysShortText();
     final side = getBorderSide(context);
+    final weekdayNames = makeWeekdaysText();
     return [
       widget.$currentPos <<
-              (ctx, cur, _) => TimetableHeader(
-            dayHeaders: dayHeaders,
-            selectedDay: cur.day,
-            currentWeek: cur.week,
-            startDate: widget.initialDate,
-            onDayTap: (selectedDay) {
-              currentPos = TimetablePosition(week: cur.week, day: selectedDay);
-            },
-          )
-              .container(decoration: BoxDecoration(border: Border(top: side, bottom: side, right: side)))
-              .flexible(flex: 2),
+          (ctx, cur, _) => TimetableHeader(
+                dayHeaders: dayHeaders,
+                selectedDay: cur.day,
+                currentWeek: cur.week,
+                startDate: widget.initialDate,
+                onDayTap: (selectedDay) {
+                  currentPos = TimetablePosition(week: cur.week, day: selectedDay);
+                },
+              )
+                  .container(decoration: BoxDecoration(border: Border(top: side, bottom: side, right: side)))
+                  .flexible(flex: 2),
       NotificationListener<ScrollNotification>(
           onNotification: (e) {
             if (e is ScrollEndNotification) {
@@ -120,7 +121,7 @@ class DailyTimetableState extends State<DailyTimetable> {
             scrollDirection: Axis.horizontal,
             // TODO: 存储
             itemCount: 20 * 7,
-            itemBuilder: (_, int index) => _buildPage(context, index),
+            itemBuilder: (_, int index) => _buildPage(context, index, weekdayNames),
           )).flexible(flex: 10)
     ].column();
   }
@@ -153,7 +154,7 @@ class DailyTimetableState extends State<DailyTimetable> {
   }
 
   /// 构建第 index 页视图
-  Widget _buildPage(BuildContext ctx, int index) {
+  Widget _buildPage(BuildContext ctx, int index, List<String> weekdayNames) {
     int weekIndex = index ~/ 7;
     int dayIndex = index % 7;
     final week = timetable.weeks[weekIndex];
@@ -172,10 +173,11 @@ class DailyTimetableState extends State<DailyTimetable> {
           itemBuilder: (ctx, indexOfLessons) {
             final lesson = lessonsInDay[indexOfLessons];
             final course = timetable.courseKey2Entity[lesson.courseKey];
-            return LessonCard(
+            return LessonBlock(
               lesson: lesson,
               course: course,
               courseKey2Entity: timetable.courseKey2Entity,
+              weekdayNames: weekdayNames,
             );
           },
         );
@@ -240,7 +242,7 @@ class DailyTimetableState extends State<DailyTimetable> {
     }
     // WHAT? NO CLASS IN THE WHOLE TERM?
     // Alright, let's congratulate them!
-    if(!mounted) return;
+    if (!mounted) return;
     await ctx.showTip(title: i18n.congratulations, desc: i18n.timetableFreeTermTip, ok: i18n.thanks);
   }
 
@@ -251,56 +253,75 @@ class DailyTimetableState extends State<DailyTimetable> {
   }
 }
 
-class LessonCard extends StatefulWidget {
+class LessonBlock extends StatefulWidget {
   final SitTimetableLesson lesson;
   final SitCourse course;
   final List<SitCourse> courseKey2Entity;
+  final List<String> weekdayNames;
 
-  const LessonCard({super.key, required this.lesson, required this.course, required this.courseKey2Entity});
+  const LessonBlock({
+    super.key,
+    required this.lesson,
+    required this.course,
+    required this.courseKey2Entity,
+    required this.weekdayNames,
+  });
 
   @override
-  State<LessonCard> createState() => _LessonCardState();
+  State<LessonBlock> createState() => _LessonBlockState();
 }
 
-class _LessonCardState extends State<LessonCard> {
+class _LessonBlockState extends State<LessonBlock> {
+  static const iconSize = 45.0;
+
   @override
   Widget build(BuildContext context) {
     final course = widget.course;
     final TextStyle? textStyle = Theme.of(context).textTheme.bodyText2;
-    final Widget courseIcon = Image.asset('$_courseIconPath${CourseCategory.query(course.courseName)}.png');
+    final Widget courseIcon = Image.asset(
+      '$_courseIconPath${CourseCategory.query(course.courseName)}.png',
+      width: iconSize,
+      height: iconSize,
+    );
     final timetable = getBuildingTimetable(course.campus, course.place);
-/*    final description =
-        formatTimeIndex(timetable, course.timeIndex, '${course.weekText} 周${weekWord[course.dayIndex - 1]}\nss-ee');*/
+    final startIndex = widget.lesson.startIndex;
+    final endIndex = widget.lesson.endIndex;
+    final description = formatTimeslotIndex(
+        timetable, startIndex, endIndex, '${course.localizedWeekNumbers()} \n${widget.weekdayNames[1 - 1]} ss-ee');
     final colors = TimetableStyle.of(context).colors;
-    return Card(
+    final color = colors[course.courseCode.hashCode.abs() % colors.length].byTheme(context.theme);
+    return Container(
         margin: const EdgeInsets.all(8),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-        ),
+        decoration: ShapeDecoration(
+            color: color,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            )),
         clipBehavior: Clip.antiAlias,
-        color: colors[course.courseCode.hashCode.abs() % colors.length].byTheme(context.theme),
         child: ListTile(
-          // 点击卡片打开课程详情.
-          onTap: () async {
-            /*await showModalBottomSheet(
+          leading: courseIcon,
+          title: Text(stylizeCourseName(course.courseName), textScaleFactor: 1.1),
+          subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(course.teachers.join(', '), style: textStyle),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  description,
+                  style: textStyle,
+                  softWrap: true,
+                ),
+                Text(formatPlace(course.place), softWrap: true, overflow: TextOverflow.ellipsis, style: textStyle),
+              ],
+            ),
+          ]),
+        ).on(tap: () async {
+          /*await showModalBottomSheet(
               isScrollControlled: true,
               backgroundColor: Colors.transparent,
               builder: (BuildContext context) => Sheet(course.courseId, allCourses),
               context: context,
             );*/
-          },
-          leading: courseIcon,
-          title: Text(stylizeCourseName(course.courseName), textScaleFactor: 1.1),
-          subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(course.teachers.join(','), style: textStyle),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("description", style: textStyle),
-                Text(formatPlace(course.place), softWrap: true, overflow: TextOverflow.ellipsis, style: textStyle),
-              ],
-            ),
-          ]),
-        ));
+        }));
   }
 }

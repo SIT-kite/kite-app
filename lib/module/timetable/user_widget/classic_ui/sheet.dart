@@ -17,8 +17,8 @@
  */
 import 'package:flutter/material.dart';
 
-import '../entity/course.dart';
-import '../using.dart';
+import '../../entity/course.dart';
+import '../../using.dart';
 
 class Sheet extends StatelessWidget {
   final String courseId;

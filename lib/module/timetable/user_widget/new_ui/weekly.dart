@@ -30,8 +30,8 @@ import '../../using.dart';
 import '../../utils.dart';
 import '../shared.dart';
 import 'header.dart';
-import '../palette.dart';
-import '../sheet.dart';
+import '../style.dart';
+import '../classic_ui/sheet.dart';
 import '../interface.dart';
 
 class WeeklyTimetable extends StatefulWidget implements InitialTimeProtocol {
@@ -163,7 +163,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
     for (int i = weekIndex; i < timetable.weeks.length; i++) {
       final week = timetable.weeks[i];
       if (week != null) {
-        currentPos = currentPos.copyWith(week: i + 1);
+        eventBus.fire(JumpToPosEvent(currentPos.copyWith(week: i + 1)));
         return;
       }
     }
@@ -171,7 +171,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
     for (int i = weekIndex; 0 <= i; i--) {
       final week = timetable.weeks[i];
       if (week != null) {
-        currentPos = currentPos.copyWith(week: i + 1);
+        eventBus.fire(JumpToPosEvent(currentPos.copyWith(week: i + 1)));
         return;
       }
     }

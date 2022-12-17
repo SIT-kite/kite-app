@@ -207,82 +207,82 @@ class Time {
   String toString() => '$hour:${'$minute'.padLeft(2, '0')}';
 }
 
-class CourseEnd {
+class SchoolTimetable {
   /// 上课时间
-  final Time start;
+  final Time classBegin;
 
   /// 下课时间
-  final Time end;
+  final Time classOver;
 
-  const CourseEnd(this.start, this.end);
+  const SchoolTimetable(this.classBegin, this.classOver);
 }
 
-const fengxianCourseEnd = [
+const fengxianCampusTimetable = [
   // 上午
-  CourseEnd(Time(8, 20), Time(9, 05)),
-  CourseEnd(Time(9, 10), Time(9, 55)),
-  CourseEnd(Time(10, 15), Time(11, 00)),
-  CourseEnd(Time(11, 05), Time(11, 50)),
+  SchoolTimetable(Time(8, 20), Time(9, 05)),
+  SchoolTimetable(Time(9, 10), Time(9, 55)),
+  SchoolTimetable(Time(10, 15), Time(11, 00)),
+  SchoolTimetable(Time(11, 05), Time(11, 50)),
   // 下午
-  CourseEnd(Time(13, 00), Time(13, 45)),
-  CourseEnd(Time(13, 50), Time(14, 35)),
-  CourseEnd(Time(14, 55), Time(15, 40)),
-  CourseEnd(Time(15, 45), Time(16, 30)),
+  SchoolTimetable(Time(13, 00), Time(13, 45)),
+  SchoolTimetable(Time(13, 50), Time(14, 35)),
+  SchoolTimetable(Time(14, 55), Time(15, 40)),
+  SchoolTimetable(Time(15, 45), Time(16, 30)),
   // 晚上
-  CourseEnd(Time(18, 00), Time(18, 45)),
-  CourseEnd(Time(18, 50), Time(19, 35)),
-  CourseEnd(Time(19, 40), Time(20, 25)),
+  SchoolTimetable(Time(18, 00), Time(18, 45)),
+  SchoolTimetable(Time(18, 50), Time(19, 35)),
+  SchoolTimetable(Time(19, 40), Time(20, 25)),
 ];
 
-const building1CourseEnd = [
+const building1Timetable = [
   // 上午
-  CourseEnd(Time(8, 20), Time(9, 05)),
-  CourseEnd(Time(9, 10), Time(9, 55)),
-  CourseEnd(Time(10, 25), Time(11, 10)),
-  CourseEnd(Time(11, 15), Time(12, 00)),
+  SchoolTimetable(Time(8, 20), Time(9, 05)),
+  SchoolTimetable(Time(9, 10), Time(9, 55)),
+  SchoolTimetable(Time(10, 25), Time(11, 10)),
+  SchoolTimetable(Time(11, 15), Time(12, 00)),
   // 下午
-  CourseEnd(Time(13, 00), Time(13, 45)),
-  CourseEnd(Time(13, 50), Time(14, 35)),
-  CourseEnd(Time(14, 55), Time(15, 40)),
-  CourseEnd(Time(15, 45), Time(16, 30)),
+  SchoolTimetable(Time(13, 00), Time(13, 45)),
+  SchoolTimetable(Time(13, 50), Time(14, 35)),
+  SchoolTimetable(Time(14, 55), Time(15, 40)),
+  SchoolTimetable(Time(15, 45), Time(16, 30)),
   // 晚上
-  CourseEnd(Time(18, 00), Time(18, 45)),
-  CourseEnd(Time(18, 50), Time(19, 35)),
-  CourseEnd(Time(19, 40), Time(20, 25)),
+  SchoolTimetable(Time(18, 00), Time(18, 45)),
+  SchoolTimetable(Time(18, 50), Time(19, 35)),
+  SchoolTimetable(Time(19, 40), Time(20, 25)),
 ];
 
-const building2CourseEnd = [
+const building2Timetable = [
   // 上午 （3-4不下课）
-  CourseEnd(Time(8, 20), Time(9, 05)),
-  CourseEnd(Time(9, 10), Time(9, 55)),
-  CourseEnd(Time(10, 15), Time(11, 00)),
-  CourseEnd(Time(11, 00), Time(11, 45)),
+  SchoolTimetable(Time(8, 20), Time(9, 05)),
+  SchoolTimetable(Time(9, 10), Time(9, 55)),
+  SchoolTimetable(Time(10, 15), Time(11, 00)),
+  SchoolTimetable(Time(11, 00), Time(11, 45)),
   // 下午
-  CourseEnd(Time(13, 00), Time(13, 45)),
-  CourseEnd(Time(13, 50), Time(14, 35)),
-  CourseEnd(Time(14, 55), Time(15, 40)),
-  CourseEnd(Time(15, 45), Time(16, 30)),
+  SchoolTimetable(Time(13, 00), Time(13, 45)),
+  SchoolTimetable(Time(13, 50), Time(14, 35)),
+  SchoolTimetable(Time(14, 55), Time(15, 40)),
+  SchoolTimetable(Time(15, 45), Time(16, 30)),
   // 晚上
-  CourseEnd(Time(18, 00), Time(18, 45)),
-  CourseEnd(Time(18, 50), Time(19, 35)),
-  CourseEnd(Time(19, 40), Time(20, 25)),
+  SchoolTimetable(Time(18, 00), Time(18, 45)),
+  SchoolTimetable(Time(18, 50), Time(19, 35)),
+  SchoolTimetable(Time(19, 40), Time(20, 25)),
 ];
 
-const xuhuiCourseEnd = [
+const xuhuiTimetable = [
   // 上午
-  CourseEnd(Time(8, 00), Time(8, 45)),
-  CourseEnd(Time(8, 50), Time(9, 35)),
-  CourseEnd(Time(9, 55), Time(10, 40)),
-  CourseEnd(Time(10, 45), Time(11, 30)),
+  SchoolTimetable(Time(8, 00), Time(8, 45)),
+  SchoolTimetable(Time(8, 50), Time(9, 35)),
+  SchoolTimetable(Time(9, 55), Time(10, 40)),
+  SchoolTimetable(Time(10, 45), Time(11, 30)),
   // 下午
-  CourseEnd(Time(13, 00), Time(13, 45)),
-  CourseEnd(Time(13, 50), Time(14, 35)),
-  CourseEnd(Time(14, 55), Time(15, 40)),
-  CourseEnd(Time(15, 45), Time(16, 30)),
+  SchoolTimetable(Time(13, 00), Time(13, 45)),
+  SchoolTimetable(Time(13, 50), Time(14, 35)),
+  SchoolTimetable(Time(14, 55), Time(15, 40)),
+  SchoolTimetable(Time(15, 45), Time(16, 30)),
   // 晚上
-  CourseEnd(Time(18, 00), Time(18, 45)),
-  CourseEnd(Time(18, 50), Time(19, 35)),
-  CourseEnd(Time(19, 40), Time(20, 25)),
+  SchoolTimetable(Time(18, 00), Time(18, 45)),
+  SchoolTimetable(Time(18, 50), Time(19, 35)),
+  SchoolTimetable(Time(19, 40), Time(20, 25)),
 ];
 
 /// 解析 timeIndex, 得到第一节小课的序号. 如给出 1~4, 返回 1
@@ -306,16 +306,16 @@ int getIndexEnd(int start, int index) {
   return i;
 }
 
-List<CourseEnd> getBuildingTimetable(String campus, String place) {
+List<SchoolTimetable> getBuildingTimetable(String campus, String place) {
   if (campus.contains('徐汇')) {
-    return xuhuiCourseEnd;
+    return xuhuiTimetable;
   }
   if (place.startsWith('一教')) {
-    return building1CourseEnd;
+    return building1Timetable;
   } else if (place.startsWith('二教')) {
-    return building2CourseEnd;
+    return building2Timetable;
   }
-  return fengxianCourseEnd;
+  return fengxianCampusTimetable;
 }
 
 /// 将 "第几周、周几" 转换为日期. 如, 开学日期为 2021-9-1, 那么将第一周周一转换为 2021-9-1
@@ -329,17 +329,34 @@ DateTime getDateFromWeekDay(DateTime semesterBegin, int week, int day) {
 /// ee: 结束时间
 /// SS: 开始的节次
 /// EE: 结束的节次
-String formatTimeIndex(List<CourseEnd> timetable, int timeIndex, String format) {
+String formatTimeIndex(List<SchoolTimetable> timetable, int timeIndex, String format) {
   final indexStart = getIndexStart(timeIndex);
   final indexEnd = getIndexEnd(indexStart, timeIndex);
-  final timeStart = timetable[indexStart - 1].start;
-  final timeEnd = timetable[indexEnd - 1].end;
+  final timeStart = timetable[indexStart - 1].classBegin;
+  final timeEnd = timetable[indexEnd - 1].classOver;
 
   return format
       .replaceAll('ss', timeStart.toString())
       .replaceAll('ee', timeEnd.toString())
       .replaceAll('SS', indexStart.toString())
       .replaceAll('EE', indexEnd.toString());
+}
+
+/// 将 timeIndex 转换为对应的字符串
+///
+/// ss: 开始时间
+/// ee: 结束时间
+/// SS: 开始的节次
+/// EE: 结束的节次
+String formatTimeslotIndex(List<SchoolTimetable> timetable, int startIndex, int endIndex, String format) {
+  final timeStart = timetable[startIndex].classBegin;
+  final timeEnd = timetable[endIndex].classOver;
+
+  return format
+      .replaceAll('ss', timeStart.toString())
+      .replaceAll('ee', timeEnd.toString())
+      .replaceAll('SS', (startIndex + 1).toString())
+      .replaceAll('EE', (endIndex + 1).toString());
 }
 
 /// 删去 place 括号里的描述信息. 如, 二教F301（机电18中外合作专用）

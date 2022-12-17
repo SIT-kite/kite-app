@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kite/module/timetable/events.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../../entity/course.dart';
@@ -77,7 +78,11 @@ class _TimetableViewerState extends State<TimetableViewer> {
             selectedDay: cur.day,
             startDate: timetable.startDate,
             onDayTap: (selectedDay) {
-              widget.$currentPos.value = TimetablePosition(week: cur.week, day: selectedDay);
+              if (widget.$displayMode.value == DisplayMode.daily) {
+                eventBus.fire(JumpToPosEvent(TimetablePosition(week: cur.week, day: selectedDay)));
+              } else {
+                widget.$currentPos.value = TimetablePosition(week: cur.week, day: selectedDay);
+              }
             });
   }
 }

@@ -483,5 +483,8 @@
   "timetableUseOldNewUI": "使用課程表 New-UI",
   "thanks": "謝謝",
   "timetableFindNearestWeekWithClassBtn": "尋找有課的一周",
-  "timetableFindNearestDayWithClassBtn": "尋找有課的一天"
+  "timetableFindNearestDayWithClassBtn": "尋找有課的一天",
+  "timetableWeek": "周",
+  "timetableOddWeek": "單週",
+  "timetableEvenWeek": "雙週"
 }

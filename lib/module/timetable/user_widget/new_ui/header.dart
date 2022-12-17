@@ -69,14 +69,17 @@ class _TimetableHeaderState extends State<TimetableHeader> {
   ///每天的列
   Widget buildDayNameHeader(int day) {
     final onDayTap = widget.onDayTap;
-    return buildDayHeader(context, day)
-        .on(
-            tap: onDayTap == null
-                ? null
-                : () {
-                    widget.onDayTap?.call(day);
-                  })
-        .expanded();
+    Widget res = buildDayHeader(context, day).on(
+        tap: onDayTap == null
+            ? null
+            : () {
+                widget.onDayTap?.call(day);
+              });
+    res = MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: res,
+    );
+    return res.expanded();
   }
 
   Widget buildDayHeader(BuildContext ctx, int day) {

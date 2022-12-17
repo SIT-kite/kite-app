@@ -28,8 +28,8 @@ import '../../using.dart';
 import '../../utils.dart';
 import '../shared.dart';
 import 'header.dart';
-import '../palette.dart';
-import '../sheet.dart';
+import '../style.dart';
+import 'sheet.dart';
 import '../interface.dart';
 
 class WeeklyTimetable extends StatefulWidget implements InitialTimeProtocol {

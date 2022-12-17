@@ -36,7 +36,7 @@ class ScoreItem extends StatefulWidget {
 
 class _ScoreItemState extends State<ScoreItem> {
   ExamResult get result => widget.result;
-  static const size = 45.0;
+  static const iconSize = 45.0;
   List<ExamResultDetail>? details;
 
   @override
@@ -75,11 +75,11 @@ class _ScoreItemState extends State<ScoreItem> {
               controller.select(widget.index);
             });
           },
-        ).sized(key: const ValueKey("Checkbox"), width: size, height: size);
+        ).sized(key: const ValueKey("Checkbox"), width: iconSize, height: iconSize);
       } else {
         return Image.asset(
           'assets/course/${CourseCategory.query(result.course)}.png',
-        ).sized(key: const ValueKey("Icon"), width: size, height: size);
+        ).sized(key: const ValueKey("Icon"), width: iconSize, height: iconSize);
       }
     }
 

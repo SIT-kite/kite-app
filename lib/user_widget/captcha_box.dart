@@ -64,6 +64,9 @@ class _CaptchaBoxState extends State<CaptchaBox> {
           controller: $captcha,
           placeholder: i18n.enterCaptchaHint,
           prefixIcon: const Icon(Icons.image_search_rounded),
+          onSubmit: (value){
+            context.navigator.pop(value);
+          },
         ).padOnly(t: 15),
       ].column(mas: MainAxisSize.min).padAll(5),
     );
