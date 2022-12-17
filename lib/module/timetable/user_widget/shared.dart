@@ -58,6 +58,7 @@ Widget buildInfo(BuildContext ctx, SitCourse course) {
     ]),
     minFontSize: 0,
     stepGranularity: 0.1,
+    maxLines: ctx.isPortrait ? 6 : 5,
     textAlign: TextAlign.center,
   );
 }

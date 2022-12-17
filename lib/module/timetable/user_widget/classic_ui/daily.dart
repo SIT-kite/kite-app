@@ -296,7 +296,7 @@ class _LessonBlockState extends State<LessonBlock> {
             )),
         child: ListTile(
           leading: courseIcon,
-          title: Text(stylizeCourseName(course.courseName), textScaleFactor: 1.1),
+          title: Text(stylizeCourseName(course.courseName)),
           trailing: [
             Text(formatPlace(course.place), softWrap: true, overflow: TextOverflow.ellipsis),
             duration.localized().text(softWrap: true),

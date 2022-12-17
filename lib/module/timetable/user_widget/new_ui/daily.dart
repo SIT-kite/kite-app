@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kite/module/freshman/entity/relationship.dart';
 import 'package:kite/module/timetable/events.dart';
 import 'package:rettulf/rettulf.dart';
 
@@ -110,59 +110,30 @@ class DailyTimetableState extends State<DailyTimetable> {
       if (!day.hasAnyLesson()) {
         return _buildFreeDayTip(ctx, weekIndex, dayIndex);
       } else {
-        final rows = <Widget>[];
-        rows.add(const SizedBox(height: 60));
-        for (int timeslot = 0; timeslot < day.timeslots2Lessons.length; timeslot++) {
-          rows.add(buildLessonsInTimeslot(ctx, day.timeslots2Lessons[timeslot], timeslot));
+        final slotCount = day.timeslots2Lessons.length;
+        final builder = _RowBuilder();
+        builder.setup();
+        for (int timeslot = 0; timeslot < slotCount; timeslot++) {
+          builder.add(timeslot, buildLessonsInTimeslot(ctx, day.timeslots2Lessons[timeslot], timeslot));
         }
         // Since the course list is small, no need to use [ListView.builder].
         return ListView(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          children: rows,
+          children: builder.build(),
         );
       }
     }
   }
 
-  Widget buildLessonsInTimeslot(BuildContext ctx, List<SitTimetableLesson> lessonsInSlot, int timeslot) {
+  Widget? buildLessonsInTimeslot(BuildContext ctx, List<SitTimetableLesson> lessonsInSlot, int timeslot) {
     if (lessonsInSlot.isEmpty) {
-      return SizedBox();
+      return null;
     } else if (lessonsInSlot.length == 1) {
       final lesson = lessonsInSlot[0];
-      return buildSingleLesson(ctx, lesson, timeslot);
+      return timetable.buildSingleLesson(ctx, lesson, timeslot);
     } else {
-      for (int lessonIndex = 0; lessonIndex < lessonsInSlot.length; lessonIndex++) {
-        // TODO: Lesson overlap.
-      }
-      final lesson = lessonsInSlot[0];
-      return buildSingleLesson(ctx, lesson, timeslot);
+      return LessonOverlapGroup(lessonsInSlot, timeslot, timetable);
     }
-  }
-
-  Widget buildSingleLesson(BuildContext ctx, SitTimetableLesson lesson, int timeslot) {
-    final colors = TimetableStyle.of(ctx).colors;
-    final course = timetable.courseKey2Entity[lesson.courseKey];
-    final color = colors[course.courseCode.hashCode.abs() % colors.length].byTheme(context.theme);
-    final buildingTimetable = course.buildingTimetable;
-    final classTime = buildingTimetable[timeslot];
-    return [
-      ElevatedText(
-        color: color,
-        margin: 10,
-        elevation: 15,
-        child: [
-          classTime.begin.toStringPrefixed0().text(style: const TextStyle(fontWeight: FontWeight.bold)),
-          SizedBox(height: 5.h),
-          classTime.end.toStringPrefixed0().text(),
-        ].column(),
-      ),
-      LessonCard(
-        lesson: lesson,
-        course: course,
-        courseKey2Entity: timetable.courseKey2Entity,
-        color: color,
-      ).expanded()
-    ].row();
   }
 
   void onPageChange() {
@@ -175,7 +146,6 @@ class DailyTimetableState extends State<DailyTimetable> {
     });
   }
 
-  /// 跳转到指定星期与天
   void jumpTo(TimetablePosition pos) {
     if (_pageController.hasClients) {
       final targetOffset = pos2PageOffset(pos);
@@ -288,7 +258,10 @@ class _LessonCardState extends State<LessonCard> {
     );
     return ListTile(
       leading: courseIcon,
-      title: Text(stylizeCourseName(course.courseName), textScaleFactor: 1.1),
+      title: AutoSizeText(
+        stylizeCourseName(course.courseName),
+        maxLines: 1,
+      ),
       subtitle: [
         Text(formatPlace(course.place), softWrap: true, overflow: TextOverflow.ellipsis),
         course.teachers.join(', ').text(),
@@ -302,5 +275,109 @@ class _LessonCardState extends State<LessonCard> {
       elevation: 10,
       color: widget.color,
     );
+  }
+}
+
+extension _LessonCardEx on SitTimetable {
+  Widget buildSingleLesson(BuildContext ctx, SitTimetableLesson lesson, int timeslot) {
+    final colors = TimetableStyle.of(ctx).colors;
+    final course = courseKey2Entity[lesson.courseKey];
+    final color = colors[course.courseCode.hashCode.abs() % colors.length].byTheme(ctx.theme);
+    final classTime = course.buildingTimetable[timeslot];
+    return [
+      _buildClassTimeCard(color, classTime),
+      LessonCard(
+        lesson: lesson,
+        course: course,
+        courseKey2Entity: courseKey2Entity,
+        color: color,
+      ).expanded()
+    ].row();
+  }
+}
+
+Widget _buildClassTimeCard(Color color, ClassTime classTime) {
+  return ElevatedText(
+    color: color,
+    margin: 10,
+    elevation: 15,
+    child: [
+      classTime.begin.toStringPrefixed0().text(style: const TextStyle(fontWeight: FontWeight.bold)),
+      SizedBox(height: 5.h),
+      classTime.end.toStringPrefixed0().text(),
+    ].column(),
+  );
+}
+
+class LessonOverlapGroup extends StatelessWidget {
+  final List<SitTimetableLesson> lessonsInSlot;
+  final int timeslot;
+  final SitTimetable timetable;
+
+  const LessonOverlapGroup(this.lessonsInSlot, this.timeslot, this.timetable, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final List<Widget> all = [];
+    ClassTime? classTime;
+    final colors = TimetableStyle.of(context).colors;
+    for (int lessonIndex = 0; lessonIndex < lessonsInSlot.length; lessonIndex++) {
+      final lesson = lessonsInSlot[lessonIndex];
+      final course = timetable.courseKey2Entity[lesson.courseKey];
+      final color = colors[course.courseCode.hashCode.abs() % colors.length].byTheme(context.theme);
+      classTime = course.buildingTimetable[timeslot];
+      final row = LessonCard(
+        lesson: lesson,
+        course: course,
+        courseKey2Entity: timetable.courseKey2Entity,
+        color: color,
+      );
+      all.add(row);
+    }
+    return [
+      _buildClassTimeCard(colors[0].byTheme(context.theme), classTime!),
+      all.column().expanded(),
+    ].row().padAll(3).inCard();
+  }
+}
+
+enum _RowBuilderState {
+  row,
+  divider,
+  none;
+}
+
+class _RowBuilder {
+  final List<Widget> _rows = [];
+  _RowBuilderState lastAdded = _RowBuilderState.none;
+
+  void add(int index, Widget? row) {
+    // WOW! MEAL TIME!
+    // For each four classes, there's a meal.
+    if (index != 0 && index % 4 == 0 && lastAdded != _RowBuilderState.divider) {
+      _rows.add(const Divider(thickness: 2));
+      lastAdded = _RowBuilderState.divider;
+    }
+    if (row != null) {
+      _rows.add(row);
+      lastAdded = _RowBuilderState.row;
+    }
+  }
+
+  void setup() {
+    // Leave the room for header.
+    _rows.add(const SizedBox(height: 60));
+  }
+
+  List<Widget> build() {
+    // Remove surplus dividers.
+    for (int i = _rows.length - 1; 0 <= i; i--) {
+      if (_rows[i] is Divider) {
+        _rows.removeLast();
+      } else {
+        break;
+      }
+    }
+    return _rows;
   }
 }
