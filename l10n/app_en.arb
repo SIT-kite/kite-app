@@ -87,7 +87,7 @@
   "connectivityCheckerStatusConnecting": "It will take a few seconds, please ensure you have turned on the network on your device.",
   "connectivityCheckerStatusDisconnected": "Oops ! You can't access the campus network. Please check your network settings or use Easy Connect, and try again.",
   "connectivityCheckerStatusNone": "You need the access to campus network to continue. Let's check it now.",
-  "connectivityConnectFailedError": "Unable to connect to campus network. Troubleshooting:\n1. Attempt to connect to the school's Wi-Fi, \"i-SIT\",\"i-SIT-1x\" or \"eduroam\".\n2. Attempt to launch \"EasyConnect\" VPN to connect to School.\n3. Attempt to use a self-built proxy server to connect to campus network via Http proxy\nIf they all didn't work, it's probably due to school server downtime for maintenance or even crash, please try again later.",
+  "connectivityConnectFailedError": "Unable to connect to campus network. Troubleshooting:\n1. Attempt to connect to the school's Wi-Fi, \"i-SIT\",\"i-SIT-1x\" or \"eduroam\".\n2. Attempt to launch \"EasyConnect\" VPN to connect to School.\n3. Attempt to use a self-built proxy server to connect to campus network via Http proxy.\nIf they all didn't work, it's probably due to school server downtime for maintenance or even crash, please try again later.",
   "connectivityConnectedByProxy": "Connected to campus network by Http proxy.",
   "connectivityConnectedByVpn": "Connected to campus network by VPN.",
   "connectivityConnectedByWlan": "Connected to campus network by WLAN.",
@@ -755,7 +755,7 @@
   "timetableFreeWeekTip": "Wow, no class this week!",
   "timetableFreeTermTip": "Cool! You even have a free term! 🎉🎉🎉",
   "congratulations": "Congratulations",
-  "newsNewPersonalizationSystemIsComingSoon":"Excuse me, a new personalization system is coming soon!",
+  "newsNewPersonalizationSystemIsComingSoon": "Excuse me, a new personalization system is coming soon!",
   "timetableUseOldSchoolPalette": "Use Old School Palette",
   "timetableUseOldNewUI": "Use Timetable New-UI",
   "thanks": "Thanks",
@@ -763,5 +763,34 @@
   "timetableFindNearestDayWithClassBtn": "Find a day with class",
   "timetableWeek": "wk",
   "timetableOddWeek": "odd wk",
-  "timetableEvenWeek": "even wk"
+  "timetableEvenWeek": "even wk",
+  "minutes": "min",
+  "hour": "hour",
+  "hourMinuteF": "{hour} h {minute} min",
+  "@hourMinuteF": {
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      },
+      "minute": {
+        "type": "String"
+      }
+    }
+  },
+  "minuteF": "{minute} min",
+  "@minuteF": {
+    "placeholders": {
+      "minute": {
+        "type": "String"
+      }
+    }
+  },
+  "hourF": "{hour} h",
+  "@hourF": {
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      }
+    }
+  }
 }

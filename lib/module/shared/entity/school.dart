@@ -19,6 +19,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:hive/hive.dart';
+import 'package:kite/entities.dart';
 import 'package:kite/hive/type_id.dart';
 import 'package:kite/l10n/extension.dart';
 
@@ -194,95 +195,123 @@ const List<Color> colorList = [
   Color.fromARGB(178, 116, 185, 255)
 ];
 
-class Time {
+class Timepoint {
   /// 小时
   final int hour;
 
   /// 分
   final int minute;
 
-  const Time(this.hour, this.minute);
+  const Timepoint(this.hour, this.minute);
 
   @override
   String toString() => '$hour:${'$minute'.padLeft(2, '0')}';
+
+  TimeDuration operator -(Timepoint b) => TimeDuration.fromMinutes(totalMinutes - b.totalMinutes);
+
+  int get totalMinutes => hour * 60 + minute;
+}
+
+class TimeDuration {
+  final int hour;
+  final int minute;
+
+  int get totalMinutes => hour * 60 + minute;
+
+  const TimeDuration(this.hour, this.minute);
+
+  const TimeDuration.fromMinutes(int minutes)
+      : hour = minutes ~/ 60,
+        minute = minutes % 60;
+
+  String localized() {
+    final h = "$hour";
+    final min = "$minute".padLeft(2, '0');
+    if (hour == 0) {
+      return i18n.minuteF(min);
+    } else if (minute == 0) {
+      return i18n.hourF(h);
+    }
+    return i18n.hourMinuteF(h, min);
+  }
 }
 
 class SchoolTimetable {
   /// 上课时间
-  final Time classBegin;
+  final Timepoint classBegin;
 
   /// 下课时间
-  final Time classOver;
+  final Timepoint classOver;
 
   const SchoolTimetable(this.classBegin, this.classOver);
 }
 
 const fengxianCampusTimetable = [
   // 上午
-  SchoolTimetable(Time(8, 20), Time(9, 05)),
-  SchoolTimetable(Time(9, 10), Time(9, 55)),
-  SchoolTimetable(Time(10, 15), Time(11, 00)),
-  SchoolTimetable(Time(11, 05), Time(11, 50)),
+  SchoolTimetable(Timepoint(8, 20), Timepoint(9, 05)),
+  SchoolTimetable(Timepoint(9, 10), Timepoint(9, 55)),
+  SchoolTimetable(Timepoint(10, 15), Timepoint(11, 00)),
+  SchoolTimetable(Timepoint(11, 05), Timepoint(11, 50)),
   // 下午
-  SchoolTimetable(Time(13, 00), Time(13, 45)),
-  SchoolTimetable(Time(13, 50), Time(14, 35)),
-  SchoolTimetable(Time(14, 55), Time(15, 40)),
-  SchoolTimetable(Time(15, 45), Time(16, 30)),
+  SchoolTimetable(Timepoint(13, 00), Timepoint(13, 45)),
+  SchoolTimetable(Timepoint(13, 50), Timepoint(14, 35)),
+  SchoolTimetable(Timepoint(14, 55), Timepoint(15, 40)),
+  SchoolTimetable(Timepoint(15, 45), Timepoint(16, 30)),
   // 晚上
-  SchoolTimetable(Time(18, 00), Time(18, 45)),
-  SchoolTimetable(Time(18, 50), Time(19, 35)),
-  SchoolTimetable(Time(19, 40), Time(20, 25)),
+  SchoolTimetable(Timepoint(18, 00), Timepoint(18, 45)),
+  SchoolTimetable(Timepoint(18, 50), Timepoint(19, 35)),
+  SchoolTimetable(Timepoint(19, 40), Timepoint(20, 25)),
 ];
 
 const building1Timetable = [
   // 上午
-  SchoolTimetable(Time(8, 20), Time(9, 05)),
-  SchoolTimetable(Time(9, 10), Time(9, 55)),
-  SchoolTimetable(Time(10, 25), Time(11, 10)),
-  SchoolTimetable(Time(11, 15), Time(12, 00)),
+  SchoolTimetable(Timepoint(8, 20), Timepoint(9, 05)),
+  SchoolTimetable(Timepoint(9, 10), Timepoint(9, 55)),
+  SchoolTimetable(Timepoint(10, 25), Timepoint(11, 10)),
+  SchoolTimetable(Timepoint(11, 15), Timepoint(12, 00)),
   // 下午
-  SchoolTimetable(Time(13, 00), Time(13, 45)),
-  SchoolTimetable(Time(13, 50), Time(14, 35)),
-  SchoolTimetable(Time(14, 55), Time(15, 40)),
-  SchoolTimetable(Time(15, 45), Time(16, 30)),
+  SchoolTimetable(Timepoint(13, 00), Timepoint(13, 45)),
+  SchoolTimetable(Timepoint(13, 50), Timepoint(14, 35)),
+  SchoolTimetable(Timepoint(14, 55), Timepoint(15, 40)),
+  SchoolTimetable(Timepoint(15, 45), Timepoint(16, 30)),
   // 晚上
-  SchoolTimetable(Time(18, 00), Time(18, 45)),
-  SchoolTimetable(Time(18, 50), Time(19, 35)),
-  SchoolTimetable(Time(19, 40), Time(20, 25)),
+  SchoolTimetable(Timepoint(18, 00), Timepoint(18, 45)),
+  SchoolTimetable(Timepoint(18, 50), Timepoint(19, 35)),
+  SchoolTimetable(Timepoint(19, 40), Timepoint(20, 25)),
 ];
 
 const building2Timetable = [
   // 上午 （3-4不下课）
-  SchoolTimetable(Time(8, 20), Time(9, 05)),
-  SchoolTimetable(Time(9, 10), Time(9, 55)),
-  SchoolTimetable(Time(10, 15), Time(11, 00)),
-  SchoolTimetable(Time(11, 00), Time(11, 45)),
+  SchoolTimetable(Timepoint(8, 20), Timepoint(9, 05)),
+  SchoolTimetable(Timepoint(9, 10), Timepoint(9, 55)),
+  SchoolTimetable(Timepoint(10, 15), Timepoint(11, 00)),
+  SchoolTimetable(Timepoint(11, 00), Timepoint(11, 45)),
   // 下午
-  SchoolTimetable(Time(13, 00), Time(13, 45)),
-  SchoolTimetable(Time(13, 50), Time(14, 35)),
-  SchoolTimetable(Time(14, 55), Time(15, 40)),
-  SchoolTimetable(Time(15, 45), Time(16, 30)),
+  SchoolTimetable(Timepoint(13, 00), Timepoint(13, 45)),
+  SchoolTimetable(Timepoint(13, 50), Timepoint(14, 35)),
+  SchoolTimetable(Timepoint(14, 55), Timepoint(15, 40)),
+  SchoolTimetable(Timepoint(15, 45), Timepoint(16, 30)),
   // 晚上
-  SchoolTimetable(Time(18, 00), Time(18, 45)),
-  SchoolTimetable(Time(18, 50), Time(19, 35)),
-  SchoolTimetable(Time(19, 40), Time(20, 25)),
+  SchoolTimetable(Timepoint(18, 00), Timepoint(18, 45)),
+  SchoolTimetable(Timepoint(18, 50), Timepoint(19, 35)),
+  SchoolTimetable(Timepoint(19, 40), Timepoint(20, 25)),
 ];
 
 const xuhuiTimetable = [
   // 上午
-  SchoolTimetable(Time(8, 00), Time(8, 45)),
-  SchoolTimetable(Time(8, 50), Time(9, 35)),
-  SchoolTimetable(Time(9, 55), Time(10, 40)),
-  SchoolTimetable(Time(10, 45), Time(11, 30)),
+  SchoolTimetable(Timepoint(8, 00), Timepoint(8, 45)),
+  SchoolTimetable(Timepoint(8, 50), Timepoint(9, 35)),
+  SchoolTimetable(Timepoint(9, 55), Timepoint(10, 40)),
+  SchoolTimetable(Timepoint(10, 45), Timepoint(11, 30)),
   // 下午
-  SchoolTimetable(Time(13, 00), Time(13, 45)),
-  SchoolTimetable(Time(13, 50), Time(14, 35)),
-  SchoolTimetable(Time(14, 55), Time(15, 40)),
-  SchoolTimetable(Time(15, 45), Time(16, 30)),
+  SchoolTimetable(Timepoint(13, 00), Timepoint(13, 45)),
+  SchoolTimetable(Timepoint(13, 50), Timepoint(14, 35)),
+  SchoolTimetable(Timepoint(14, 55), Timepoint(15, 40)),
+  SchoolTimetable(Timepoint(15, 45), Timepoint(16, 30)),
   // 晚上
-  SchoolTimetable(Time(18, 00), Time(18, 45)),
-  SchoolTimetable(Time(18, 50), Time(19, 35)),
-  SchoolTimetable(Time(19, 40), Time(20, 25)),
+  SchoolTimetable(Timepoint(18, 00), Timepoint(18, 45)),
+  SchoolTimetable(Timepoint(18, 50), Timepoint(19, 35)),
+  SchoolTimetable(Timepoint(19, 40), Timepoint(20, 25)),
 ];
 
 /// 解析 timeIndex, 得到第一节小课的序号. 如给出 1~4, 返回 1
@@ -348,15 +377,15 @@ String formatTimeIndex(List<SchoolTimetable> timetable, int timeIndex, String fo
 /// ee: 结束时间
 /// SS: 开始的节次
 /// EE: 结束的节次
-String formatTimeslotIndex(List<SchoolTimetable> timetable, int startIndex, int endIndex, String format) {
-  final timeStart = timetable[startIndex].classBegin;
-  final timeEnd = timetable[endIndex].classOver;
+String formatTimeslotIndex(List<SchoolTimetable> timetable, SitTimetableLesson lesson, String format) {
+  final timeStart = timetable[lesson.startIndex].classBegin;
+  final timeEnd = timetable[lesson.endIndex].classOver;
 
   return format
       .replaceAll('ss', timeStart.toString())
       .replaceAll('ee', timeEnd.toString())
-      .replaceAll('SS', (startIndex + 1).toString())
-      .replaceAll('EE', (endIndex + 1).toString());
+      .replaceAll('SS', (lesson.startIndex + 1).toString())
+      .replaceAll('EE', (lesson.endIndex + 1).toString());
 }
 
 /// 删去 place 括号里的描述信息. 如, 二教F301（机电18中外合作专用）

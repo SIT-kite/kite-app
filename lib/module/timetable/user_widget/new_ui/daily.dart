@@ -131,7 +131,7 @@ class DailyTimetableState extends State<DailyTimetable> {
       return _buildFreeDayTip(ctx, weekIndex, dayIndex);
     } else {
       final day = week.days[dayIndex];
-      final lessonsInDay = day.browseUniqueLessons(atLayer: 0).toList();
+      final lessonsInDay = day.browseLessons(atLayer: 0).toList();
       if (lessonsInDay.isEmpty) {
         return _buildFreeDayTip(ctx, weekIndex, dayIndex);
       } else {
@@ -220,6 +220,9 @@ class DailyTimetableState extends State<DailyTimetable> {
     _pageController.dispose();
   }
 }
+
+
+
 
 class LessonCard extends StatefulWidget {
   final SitTimetableLesson lesson;

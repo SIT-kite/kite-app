@@ -141,9 +141,13 @@ class SitCourse {
   final List<String> rangedWeekNumbers;
 
   /// e.g.: `1-3` means `1st slot to 3rd slot`.
+  /// Starts with 0
   final String timeslots;
   final double courseCredit;
   final int creditHour;
+
+  /// e.g.: `0` means `Monday`
+  /// Starts with 0
   final int dayIndex;
   final List<String> teachers;
 
@@ -252,11 +256,40 @@ class SitCourse {
     return res;
   }
 }
-extension SitCourseEx on SitCourse{
-  String localizedWeekNumbers({String separateBy = ", "}){
+
+extension SitCourseEx on SitCourse {
+  String localizedWeekNumbers({String separateBy = ", "}) {
     return SitCourse.rangedWeekNumbers2Localized(rangedWeekNumbers).join(separateBy);
   }
+
+  List<SchoolTimetable> get buildingTimetable => getBuildingTimetable(campus, place);
+
+  /// Format [SitTimetableLesson.startIndex] and [SitTimetableLesson.endIndex]
+  ///
+  /// ss: The class beginning time
+  /// ee: The class over time
+  /// SS: The start timeslot(starts with 1).
+  /// EE: The end timeslot(starts with 1).
+  String formatTime(String format, {required SitTimetableLesson basedOn}) {
+    final timetable = buildingTimetable;
+    final classBegin = timetable[basedOn.startIndex].classBegin;
+    final classOver = timetable[basedOn.endIndex].classOver;
+
+    return format
+        .replaceAll('ss', classBegin.toString())
+        .replaceAll('ee', classOver.toString())
+        .replaceAll('SS', (basedOn.startIndex + 1).toString())
+        .replaceAll('EE', (basedOn.endIndex + 1).toString());
+  }
+
+  TimeDuration duration({required SitTimetableLesson basedOn}) {
+    final timetable = buildingTimetable;
+    final classBegin = timetable[basedOn.startIndex].classBegin;
+    final classOver = timetable[basedOn.endIndex].classOver;
+    return classOver - classBegin;
+  }
 }
+
 class SitTimetableDataAdapter extends DataAdapter<SitTimetable> {
   @override
   String get typeName => "kite.SitTimetable";
@@ -360,12 +393,11 @@ class SitCourseDataAdapter extends DataAdapter<SitCourse> {
       json["classCode"] as String,
       json["campus"] as String,
       json["place"] as String,
-      (json["weekIndices"] as List).cast<String>(),
+      (json["rangedWeekNumbers"] as List).cast<String>(),
       json["timeslots"] as String,
       json["courseCredit"] as double,
       json["creditHour"] as int,
-      json["dayIndex"] as int? ?? 1,
-      // TODO: Temporarily
+      json["dayIndex"] as int,
       (json["teachers"] as List).cast<String>(),
     );
   }
@@ -379,7 +411,7 @@ class SitCourseDataAdapter extends DataAdapter<SitCourse> {
       "classCode": obj.classCode,
       "campus": obj.campus,
       "place": obj.place,
-      "weekIndices": obj.rangedWeekNumbers,
+      "rangedWeekNumbers": obj.rangedWeekNumbers,
       "timeslots": obj.timeslots,
       "courseCredit": obj.courseCredit,
       "creditHour": obj.creditHour,

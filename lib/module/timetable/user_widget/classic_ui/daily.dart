@@ -283,11 +283,8 @@ class _LessonBlockState extends State<LessonBlock> {
       width: iconSize,
       height: iconSize,
     );
-    final timetable = getBuildingTimetable(course.campus, course.place);
-    final startIndex = widget.lesson.startIndex;
-    final endIndex = widget.lesson.endIndex;
-    final description = formatTimeslotIndex(
-        timetable, startIndex, endIndex, '${course.localizedWeekNumbers()} \n${widget.weekdayNames[1 - 1]} ss-ee');
+    final time = course.formatTime('ss - ee', basedOn: widget.lesson);
+    final duration = course.duration(basedOn: widget.lesson);
     final colors = TimetableStyle.of(context).colors;
     final color = colors[course.courseCode.hashCode.abs() % colors.length].byTheme(context.theme);
     return Container(
@@ -297,23 +294,17 @@ class _LessonBlockState extends State<LessonBlock> {
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(10.0)),
             )),
-        clipBehavior: Clip.antiAlias,
         child: ListTile(
           leading: courseIcon,
           title: Text(stylizeCourseName(course.courseName), textScaleFactor: 1.1),
+          trailing: [
+            Text(formatPlace(course.place), softWrap: true, overflow: TextOverflow.ellipsis, style: textStyle),
+            duration.localized().text(style: textStyle, softWrap: true),
+          ].column(maa:MainAxisAlignment.spaceBetween),
           subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(course.teachers.join(', '), style: textStyle),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  description,
-                  style: textStyle,
-                  softWrap: true,
-                ),
-                Text(formatPlace(course.place), softWrap: true, overflow: TextOverflow.ellipsis, style: textStyle),
-              ],
-            ),
+            course.localizedWeekNumbers().text(),
+            time.text(style: textStyle, softWrap: true),
           ]),
         ).on(tap: () async {
           /*await showModalBottomSheet(

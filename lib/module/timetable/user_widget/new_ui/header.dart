@@ -89,7 +89,7 @@ class _TimetableHeaderState extends State<TimetableHeader> {
     final bgColor = textNBgColors.item2;
 
     return AnimatedSlide(
-      offset: isSelected ? const Offset(0.00, -0.04) : Offset.zero,
+      offset: isSelected ? const Offset(0.01, -0.04) : Offset.zero,
       duration: const Duration(milliseconds: 100),
       child: AnimatedContainer(
         decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(10)),
