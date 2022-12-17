@@ -47,7 +47,7 @@ class _TimetableViewerState extends State<TimetableViewer> {
   @override
   Widget build(BuildContext context) {
     return [
-      buildTimetableBody(context).padH(5.w),
+      buildTimetableBody(context).safeArea(),
       buildTableHeader(context),
     ].stack();
   }

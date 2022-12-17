@@ -92,13 +92,10 @@ class DailyTimetableState extends State<DailyTimetable> {
         _pageController.jumpToPage(targetOffset);
       }
     });
-    final dayHeaders = makeWeekdaysShortText();
     final side = getBorderSide(context);
-    final weekdayNames = makeWeekdaysText();
     return [
       widget.$currentPos <<
           (ctx, cur, _) => TimetableHeader(
-                dayHeaders: dayHeaders,
                 selectedDay: cur.day,
                 currentWeek: cur.week,
                 startDate: widget.initialDate,
@@ -118,9 +115,19 @@ class DailyTimetableState extends State<DailyTimetable> {
           child: PageView.builder(
             controller: _pageController,
             scrollDirection: Axis.horizontal,
-            // TODO: 存储
             itemCount: 20 * 7,
-            itemBuilder: (_, int index) => _buildPage(context, index, weekdayNames),
+            itemBuilder: (_, int index) {
+              int weekIndex = index ~/ 7;
+              int dayIndex = index % 7;
+              final todayPos = widget.locateInTimetable(DateTime.now());
+              return _OneDayPage(
+                timetable: timetable,
+                todayPos: todayPos,
+                weekIndex: weekIndex,
+                dayIndex: dayIndex,
+                $currentPos: widget.$currentPos,
+              );
+            },
           )).flexible(flex: 10)
     ].column();
   }
@@ -152,10 +159,59 @@ class DailyTimetableState extends State<DailyTimetable> {
     }
   }
 
-  /// 构建第 index 页视图
-  Widget _buildPage(BuildContext ctx, int index, List<String> weekdayNames) {
-    int weekIndex = index ~/ 7;
-    int dayIndex = index % 7;
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
+  }
+}
+
+class _OneDayPage extends StatefulWidget {
+  final SitTimetable timetable;
+  final TimetablePosition todayPos;
+  final ValueNotifier<TimetablePosition> $currentPos;
+  final int weekIndex;
+  final int dayIndex;
+
+  const _OneDayPage({
+    super.key,
+    required this.timetable,
+    required this.todayPos,
+    required this.$currentPos,
+    required this.weekIndex,
+    required this.dayIndex,
+  });
+
+  @override
+  State<_OneDayPage> createState() => _OneDayPageState();
+}
+
+class _OneDayPageState extends State<_OneDayPage> with AutomaticKeepAliveClientMixin {
+  SitTimetable get timetable => widget.timetable;
+
+  TimetablePosition get currentPos => widget.$currentPos.value;
+
+  set currentPos(TimetablePosition newValue) => widget.$currentPos.value = newValue;
+
+  /// Cache the who page to avoid expensive rebuilding.
+  Widget? _cached;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final cache = _cached;
+    if (cache != null) {
+      return cache;
+    } else {
+      final res = buildPage(context);
+      _cached = res;
+      return res;
+    }
+  }
+
+  Widget buildPage(BuildContext ctx) {
+    int weekIndex = widget.weekIndex;
+    int dayIndex = widget.dayIndex;
     final week = timetable.weeks[weekIndex];
     if (week == null) {
       return _buildFreeDayTip(ctx, weekIndex, dayIndex);
@@ -176,7 +232,6 @@ class DailyTimetableState extends State<DailyTimetable> {
               lesson: lesson,
               course: course,
               courseKey2Entity: timetable.courseKey2Entity,
-              weekdayNames: weekdayNames,
             );
           },
         );
@@ -185,7 +240,7 @@ class DailyTimetableState extends State<DailyTimetable> {
   }
 
   Widget _buildFreeDayTip(BuildContext ctx, int weekIndex, int dayIndex) {
-    final todayPos = widget.locateInTimetable(DateTime.now());
+    final todayPos = widget.todayPos;
     final isToday = todayPos.week == weekIndex + 1 && todayPos.day == dayIndex + 1;
     final String desc;
     if (isToday) {
@@ -246,24 +301,19 @@ class DailyTimetableState extends State<DailyTimetable> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    _pageController.dispose();
-  }
+  bool get wantKeepAlive => true;
 }
 
 class LessonBlock extends StatefulWidget {
   final SitTimetableLesson lesson;
   final SitCourse course;
   final List<SitCourse> courseKey2Entity;
-  final List<String> weekdayNames;
 
   const LessonBlock({
     super.key,
     required this.lesson,
     required this.course,
     required this.courseKey2Entity,
-    required this.weekdayNames,
   });
 
   @override

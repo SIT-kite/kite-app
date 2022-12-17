@@ -17,13 +17,12 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:kite/module/timetable/utils.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../../using.dart';
 
 class TimetableHeader extends StatefulWidget {
-  final List<String> dayHeaders;
-
   /// 当前显示的周次
   final int currentWeek;
 
@@ -37,7 +36,6 @@ class TimetableHeader extends StatefulWidget {
 
   const TimetableHeader({
     super.key,
-    required this.dayHeaders,
     required this.currentWeek,
     required this.selectedDay,
     required this.startDate,
@@ -91,6 +89,7 @@ class _TimetableHeaderState extends State<TimetableHeader> {
 
   ///每天的列
   Widget buildDayNameHeader(int day) {
+    final dayHeaders= makeWeekdaysShortText();
     final date = getDateFromWeekDay(widget.startDate, widget.currentWeek, day);
     final dateString = '${date.month}/${date.day}';
     final onDayTap = widget.onDayTap;
@@ -102,7 +101,7 @@ class _TimetableHeaderState extends State<TimetableHeader> {
             widget.onDayTap?.call(day);
           }
               : null,
-          child: buildDayHeader(context, day, '${widget.dayHeaders[day - 1]}\n$dateString')),
+          child: buildDayHeader(context, day, '${dayHeaders[day - 1]}\n$dateString')),
     );
   }
 }
