@@ -231,7 +231,7 @@ class _OneDayPageState extends State<_OneDayPage> with AutomaticKeepAliveClientM
             return LessonBlock(
               lesson: lesson,
               course: course,
-              courseKey2Entity: timetable.courseKey2Entity,
+              timetable: timetable,
             );
           },
         );
@@ -307,13 +307,13 @@ class _OneDayPageState extends State<_OneDayPage> with AutomaticKeepAliveClientM
 class LessonBlock extends StatefulWidget {
   final SitTimetableLesson lesson;
   final SitCourse course;
-  final List<SitCourse> courseKey2Entity;
+  final SitTimetable timetable;
 
   const LessonBlock({
     super.key,
     required this.lesson,
     required this.course,
-    required this.courseKey2Entity,
+    required this.timetable,
   });
 
   @override
@@ -364,12 +364,8 @@ class _LessonBlockState extends State<LessonBlock> {
             course.localizedWeekNumbers().text(),
           ].column(caa: CrossAxisAlignment.start),
         ).on(tap: () async {
-          /*await showModalBottomSheet(
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              builder: (BuildContext context) => Sheet(course.courseId, allCourses),
-              context: context,
-            );*/
+          if (!mounted) return;
+          await context.showSheet((ctx) => Sheet(courseCode: course.courseCode, timetable: widget.timetable));
         }));
   }
 }

@@ -175,7 +175,6 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
     }
   }
 
-
   @override
   void dispose() {
     super.dispose();
@@ -232,7 +231,7 @@ class _OneWeekPageState extends State<_OneWeekPage> with AutomaticKeepAliveClien
         buildLeftColumn(ctx).flexible(flex: 2),
         TimetableSingleWeekView(
           timetableWeek: timetableWeek,
-          courseKey2Entity: timetable.courseKey2Entity,
+          timetable: timetable,
           currentWeek: weekIndex,
         ).flexible(flex: 21)
       ].row(textDirection: TextDirection.ltr).scrolled();
@@ -323,24 +322,26 @@ class _OneWeekPageState extends State<_OneWeekPage> with AutomaticKeepAliveClien
     if (!mounted) return;
     await ctx.showTip(title: i18n.congratulations, desc: i18n.timetableFreeTermTip, ok: i18n.thanks);
   }
+
   @override
   void dispose() {
     super.dispose();
     Log.info("disposed ${widget.weekIndex}");
   }
+
   @override
   bool get wantKeepAlive => true;
 }
 
 class TimetableSingleWeekView extends StatefulWidget {
   final SitTimetableWeek timetableWeek;
-  final List<SitCourse> courseKey2Entity;
+  final SitTimetable timetable;
   final int currentWeek;
 
   const TimetableSingleWeekView({
     super.key,
     required this.timetableWeek,
-    required this.courseKey2Entity,
+    required this.timetable,
     required this.currentWeek,
   });
 
@@ -383,10 +384,10 @@ class _TimetableSingleWeekViewState extends State<TimetableSingleWeekView> {
         final firstLayerLesson = lessons[0];
 
         /// TODO: Range checking
-        final course = widget.courseKey2Entity[firstLayerLesson.courseKey];
+        final course = widget.timetable.courseKey2Entity[firstLayerLesson.courseKey];
         final cell = _CourseCell(
           lesson: firstLayerLesson,
-          courseKey2Entity: widget.courseKey2Entity,
+          timetable: widget.timetable,
           course: course,
         );
         cells.add(cell.sized(width: cellSize.width, height: cellSize.height * firstLayerLesson.duration));
@@ -407,9 +408,14 @@ class _TimetableSingleWeekViewState extends State<TimetableSingleWeekView> {
 class _CourseCell extends StatefulWidget {
   final SitTimetableLesson lesson;
   final SitCourse course;
-  final List<SitCourse> courseKey2Entity;
+  final SitTimetable timetable;
 
-  const _CourseCell({super.key, required this.lesson, required this.courseKey2Entity, required this.course});
+  const _CourseCell({
+    super.key,
+    required this.lesson,
+    required this.timetable,
+    required this.course,
+  });
 
   @override
   State<_CourseCell> createState() => _CourseCellState();
@@ -440,20 +446,17 @@ class _CourseCellState extends State<_CourseCell> {
     );
     final padding = context.isPortrait ? size.height / 40 : size.height / 80;
     return Container(
-        decoration: decoration,
-        margin: EdgeInsets.all(0.5.w),
-        child: buildInfo(
-          context,
-          course,
-          maxLines: context.isPortrait ? 8 : 5,
-        ).padOnly(t: padding));
-    /*).onTap(() async {
-       await showModalBottomSheet(
-          isScrollControlled: true,
-          backgroundColor: Colors.transparent,
-          builder: (BuildContext context) => Sheet(course.courseCode, widget.allCourse),
-          context: context);
-  }*/
+            decoration: decoration,
+            margin: EdgeInsets.all(0.5.w),
+            child: buildInfo(
+              context,
+              course,
+              maxLines: context.isPortrait ? 8 : 5,
+            ).padOnly(t: padding))
+        .onTap(() async {
+      if (!mounted) return;
+      await context.showSheet((ctx) => Sheet(courseCode: course.courseCode, timetable: widget.timetable));
+    });
   }
 
   Text buildText(String text, int maxLines) {

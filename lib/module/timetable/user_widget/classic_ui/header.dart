@@ -90,7 +90,7 @@ class _TimetableHeaderState extends State<TimetableHeader> {
   ///每天的列
   Widget buildDayNameHeader(int day) {
     final dayHeaders= makeWeekdaysShortText();
-    final date = getDateFromWeekDay(widget.startDate, widget.currentWeek, day);
+    final date = convertWeekDayNumberToDate(week: widget.currentWeek,day: day,basedOn: widget.startDate);
     final dateString = '${date.month}/${date.day}';
     final onDayTap = widget.onDayTap;
     return Expanded(

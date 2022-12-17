@@ -65,7 +65,7 @@ void _addEventForCourse(ICalendar cal, Course course, DateTime startDate, Durati
     // 这里需要使用UTC时间
     // 实际测试得出，如果不使用UTC，有的手机会将其看作本地时间
     // 有的手机会将其看作UTC+0的时间从而导致实际显示时间与预期不一致
-    final date = getDateFromWeekDay(startDate, currentWeek, course.dayIndex).toUtc();
+    final date = convertWeekDayNumberToDate(week: currentWeek,day: course.dayIndex,basedOn: startDate);
     final eventStartTime = date.add(Duration(hours: timeStart.hour, minutes: timeStart.minute));
     final eventEndTime = date.add(Duration(hours: timeEnd.hour, minutes: timeEnd.minute));
     final IEvent event = IEvent(
@@ -146,6 +146,34 @@ extension StringEx on String {
   String removePrefix(String prefix) => startsWith(prefix) ? substring(prefix.length) : this;
 }
 
+/// Then the [weekText] could be `1-5周,14周,8-10周(单)`
+/// The return value should be `a1-5,s14,o8-10`
+List<String> _weekText2RangedNumbers(String weekText) {
+  final weeks = weekText.split(',');
+// Then the weeks should be ["1-5周","14周","8-10周(单)"]
+  final res = <String>[];
+  for (final week in weeks) {
+    final isRange = week.contains("-");
+    if (week.endsWith("(单)") && isRange) {
+      final range = week.removeSuffix("周(单)");
+      res.add('${WeekStep.odd.indicator}$range');
+    } else if (week.endsWith("(双)") && isRange) {
+      final range = week.removeSuffix("周(双)");
+      res.add('${WeekStep.even.indicator}$range');
+    } else {
+      final number = week.removeSuffix("周");
+      if (number.isNotEmpty) {
+        if (number.contains("-")) {
+          res.add("${WeekStep.all.indicator}$number");
+        } else {
+          res.add("${WeekStep.single.indicator}$number");
+        }
+      }
+    }
+  }
+  return res;
+}
+
 SitTimetable parseTimetableEntity(List<CourseRaw> all) {
   final List<SitTimetableWeek?> weeks = List.generate(20, (index) => null);
   SitTimetableWeek getWeekAt(int index) {
@@ -158,7 +186,7 @@ SitTimetable parseTimetableEntity(List<CourseRaw> all) {
   var counter = 0;
   for (final raw in all) {
     final courseKey = counter++;
-    final weekIndices = SitCourse.weekText2RangedNumbers(raw.weekText);
+    final weekIndices = _weekText2RangedNumbers(raw.weekText);
     final dayLiteral = _weekday2Index[raw.weekDayText];
     assert(dayLiteral != null, "It's no corresponding dayIndex of ${raw.weekDayText}");
     if (dayLiteral == null) continue;

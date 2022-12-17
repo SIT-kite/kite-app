@@ -103,7 +103,7 @@ class _TimetableHeaderState extends State<TimetableHeader> {
   }
 
   Widget buildHeaderText(BuildContext ctx, int day, Color textColor) {
-    final date = getDateFromWeekDay(widget.startDate, widget.currentWeek, day);
+    final date = convertWeekDayNumberToDate(week: widget.currentWeek,day: day,basedOn: widget.startDate);
     final name = '${widget.weekdayAbbr[day - 1]}\n${date.month}/${date.day}';
 
     return LayoutBuilder(builder: (ctx, box) {

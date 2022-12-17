@@ -17,32 +17,30 @@
  */
 import 'package:flutter/material.dart';
 
-import '../../entity/course.dart';
+import '../../entity/entity.dart';
 import '../../using.dart';
 
 class Sheet extends StatelessWidget {
-  final String courseId;
-  final List<Course> allCourses;
+  final String courseCode;
+  final SitTimetable timetable;
 
   /// 一门课可能包括实践和理论课. 由于正方不支持这种设置, 实际教务系统在处理中会把这两部分拆开, 但是它们的课程名称和课程代码是一样的
   /// classes 中存放的就是对应的所有课程, 我们在这把它称为班级.
-  late final List<Course> classes;
+  const Sheet({
+    super.key,
+    required this.courseCode,
+    required this.timetable,
+  });
 
-  Sheet(this.courseId, this.allCourses, {super.key}) {
-    // 初始化 classes
-    classes = allCourses.where((e) => e.courseId == courseId).toList();
-  }
+  List<SitCourse> get classes => timetable.findAndCacheCoursesByCourseCode(courseCode);
 
   /// 解析课程ID对应的不同时间段的课程信息
   List<String> generateTimeString() {
     return classes.map((e) {
-      final timetable = getBuildingTimetable(e.campus, e.place);
-
-      return formatTimeIndex(
-        timetable,
-        e.timeIndex,
-        '第${e.weekText} 周${weekWord[e.dayIndex - 1]}\nss - ee ${e.place}',
-      );
+      final weekNumbers = e.localizedWeekNumbers();
+      final fullClass = e.composeFullClassTime();
+      final timeText = "${fullClass.begin} - ${fullClass.end}";
+      return "$weekNumbers $timeText\n ${e.place}";
     }).toList();
   }
 
@@ -76,9 +74,9 @@ class Sheet extends StatelessWidget {
 
   List<Widget> _buildItems(BuildContext context) {
     final fixedItems = [
-      _buildItem(context, 'courseId.png', i18n.timetableDetailCourseId(courseId)),
-      _buildItem(context, 'dynClassId.png', i18n.timetableDetailClassId(classes[0].dynClassId)),
-      _buildItem(context, 'campus.png', classes[0].campus),
+      _buildItem(context, 'courseId.png', i18n.timetableDetailCourseId(courseCode)),
+      _buildItem(context, 'dynClassId.png', i18n.timetableDetailClassId(classes[0].classCode)),
+      _buildItem(context, 'campus.png', classes[0].localizedCampusName()),
     ];
     final List<String> timeStrings = generateTimeString();
     return fixedItems + timeStrings.map((e) => _buildItem(context, 'day.png', e)).toList();

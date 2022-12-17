@@ -373,8 +373,8 @@ List<ClassTime> getBuildingTimetable(String campus, String place) {
 }
 
 /// 将 "第几周、周几" 转换为日期. 如, 开学日期为 2021-9-1, 那么将第一周周一转换为 2021-9-1
-DateTime getDateFromWeekDay(DateTime semesterBegin, int week, int day) {
-  return semesterBegin.add(Duration(days: (week - 1) * 7 + day - 1));
+DateTime convertWeekDayNumberToDate({required DateTime basedOn,required int week, required int day}) {
+  return basedOn.add(Duration(days: (week - 1) * 7 + day - 1));
 }
 
 /// 将 timeIndex 转换为对应的字符串

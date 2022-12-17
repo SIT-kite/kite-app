@@ -1,4 +1,5 @@
 import 'package:ikite/ikite.dart';
+import 'package:kite/entities.dart';
 
 import '../utils.dart';
 import '../using.dart';
@@ -26,6 +27,23 @@ class SitTimetable {
   SitTimetable(this.weeks, this.courseKey2Entity, this.courseKeyCounter);
 
   static SitTimetable parse(List<CourseRaw> all) => parseTimetableEntity(all);
+  final Map<String, List<SitCourse>> _code2Courses = {};
+
+  List<SitCourse> findAndCacheCoursesByCourseCode(String courseCode) {
+    final found = _code2Courses[courseCode];
+    if (found != null) {
+      return found;
+    } else {
+      final res = <SitCourse>[];
+      for (final course in courseKey2Entity) {
+        if (course.courseCode == courseCode) {
+          res.add(course);
+        }
+      }
+      _code2Courses[courseCode] = res;
+      return res;
+    }
+  }
 
   @override
   String toString() => "[$courseKeyCounter]";
@@ -126,11 +144,12 @@ class SitTimetableLesson {
   String toString() => "[$courseKey] $startIndex-$endIndex";
 }
 
-extension SitTimetableLessonEx on SitTimetableLesson{
-  SitCourse getCourseIn(List<SitCourse> courseKey2Entity){
+extension SitTimetableLessonEx on SitTimetableLesson {
+  SitCourse getCourseIn(List<SitCourse> courseKey2Entity) {
     return courseKey2Entity[courseKey];
   }
 }
+
 class SitCourse {
   final int courseKey;
   final String courseName;
@@ -138,8 +157,10 @@ class SitCourse {
   final String classCode;
   final String campus;
   final String place;
+
   /// The icon name in
   final String iconName;
+
   /// e.g.: `a1-5,s14` means `from 1st week to 5th week` + `14th week`.
   /// e.g.: `o2-9,s12,s14` means `only odd weeks from 2nd week to 9th week` + `12th week` + `14th week`
   /// If the index is `o`(odd), `e`(even) or `a`(all), then it must be a range.
@@ -209,34 +230,6 @@ class SitCourse {
     }
   }
 
-  /// Then the [weekText] could be `1-5周,14周,8-10周(单)`
-  /// The return value should be `a1-5,s14,o8-10`
-  static List<String> weekText2RangedNumbers(String weekText) {
-    final weeks = weekText.split(',');
-    // Then the weeks should be ["1-5周","14周","8-10周(单)"]
-    final res = <String>[];
-    for (final week in weeks) {
-      final isRange = week.contains("-");
-      if (week.endsWith("(单)") && isRange) {
-        final range = week.removeSuffix("周(单)");
-        res.add('${WeekStep.odd.indicator}$range');
-      } else if (week.endsWith("(双)") && isRange) {
-        final range = week.removeSuffix("周(双)");
-        res.add('${WeekStep.even.indicator}$range');
-      } else {
-        final number = week.removeSuffix("周");
-        if (number.isNotEmpty) {
-          if (number.contains("-")) {
-            res.add("${WeekStep.all.indicator}$number");
-          } else {
-            res.add("${WeekStep.single.indicator}$number");
-          }
-        }
-      }
-    }
-    return res;
-  }
-
   /// Then the [indices] could be ["a1-5", "s14", "o8-10"]
   /// The return value should be:
   /// - `1-5 周, 14 周, 8-10 单周` in Chinese.
@@ -269,6 +262,14 @@ extension SitCourseEx on SitCourse {
     return SitCourse.rangedWeekNumbers2Localized(rangedWeekNumbers).join(separateBy);
   }
 
+  String localizedCampusName() {
+    if (campus.contains("徐汇")) {
+      return i18n.xuhui;
+    } else {
+      return i18n.fengxian;
+    }
+  }
+
   List<ClassTime> get buildingTimetable => getBuildingTimetable(campus, place);
 
   TimeDuration duration({required SitTimetableLesson basedOn}) {
@@ -276,6 +277,19 @@ extension SitCourseEx on SitCourse {
     final classBegin = timetable[basedOn.startIndex].begin;
     final classOver = timetable[basedOn.endIndex].end;
     return classOver.difference(classBegin);
+  }
+
+  /// Based on [SitCourse.timeslots], compose a full-length class time.
+  /// Starts with the first part starts.
+  /// Ends with the last part ends.
+  ClassTime composeFullClassTime() {
+    final timetable = buildingTimetable;
+    final range = timeslots.split("-");
+    final startIndex = int.parse(range[0]) - 1;
+    final endIndex = int.parse(range[1]) - 1;
+    final begin = timetable[startIndex].begin;
+    final end = timetable[endIndex].end;
+    return ClassTime(begin, end);
   }
 }
 
