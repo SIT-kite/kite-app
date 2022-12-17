@@ -17,6 +17,7 @@
  */
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rettulf/rettulf.dart';
 
 import '../../cache.dart';
@@ -289,11 +290,17 @@ class _LessonBlockState extends State<LessonBlock> {
     final color = colors[course.courseCode.hashCode.abs() % colors.length].byTheme(context.theme);
     return Container(
         margin: const EdgeInsets.all(8),
-        decoration: ShapeDecoration(
-            color: color,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            )),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.all(Radius.circular(8.0.w)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black87.withOpacity(0.5),
+              offset: const Offset(1.5, 1.5),
+              blurRadius: 3,
+            )
+          ],
+        ),
         child: ListTile(
           leading: courseIcon,
           title: Text(stylizeCourseName(course.courseName)),

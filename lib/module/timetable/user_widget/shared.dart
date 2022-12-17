@@ -44,7 +44,7 @@ extension Wrapper on Widget {
   }
 }
 
-Widget buildInfo(BuildContext ctx, SitCourse course) {
+Widget buildInfo(BuildContext ctx, SitCourse course, {required int maxLines}) {
   return AutoSizeText.rich(
     TextSpan(children: [
       TextSpan(
@@ -58,7 +58,7 @@ Widget buildInfo(BuildContext ctx, SitCourse course) {
     ]),
     minFontSize: 0,
     stepGranularity: 0.1,
-    maxLines: ctx.isPortrait ? 6 : 5,
+    maxLines: maxLines,
     textAlign: TextAlign.center,
   );
 }

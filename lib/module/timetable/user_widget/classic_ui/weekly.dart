@@ -371,12 +371,25 @@ class _CourseCellState extends State<_CourseCell> {
     final color = colors[course.courseCode.hashCode.abs() % colors.length].byTheme(context.theme);
     final decoration = BoxDecoration(
       color: color,
-      borderRadius: BorderRadius.all(Radius.circular(3.0.w)),
+      borderRadius: BorderRadius.all(Radius.circular(8.0.w)),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black87.withOpacity(0.35),
+          offset: const Offset(1.0, 1.0),
+          blurRadius: 1.5,
+        )
+      ],
       border: const Border(),
     );
     final padding = context.isPortrait ? size.height / 40 : size.height / 80;
     return Container(
-        decoration: decoration, margin: EdgeInsets.all(0.5.w), child: buildInfo(context, course).padOnly(t: padding));
+        decoration: decoration,
+        margin: EdgeInsets.all(0.5.w),
+        child: buildInfo(
+          context,
+          course,
+          maxLines: context.isPortrait ? 8 : 5,
+        ).padOnly(t: padding));
     /*).onTap(() async {
        await showModalBottomSheet(
           isScrollControlled: true,

@@ -128,6 +128,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
         timetableWeek: timetableWeek,
         courseKey2Entity: timetable.courseKey2Entity,
         currentWeek: weekIndex,
+        $currentPos: widget.$currentPos,
       ).scrolled();
     } else {
       return buildFreeWeekTip(ctx, weekIndex);
@@ -193,12 +194,14 @@ class TimetableOneWeekView extends StatefulWidget {
   final SitTimetableWeek timetableWeek;
   final List<SitCourse> courseKey2Entity;
   final int currentWeek;
+  final ValueNotifier<TimetablePosition> $currentPos;
 
   const TimetableOneWeekView({
     super.key,
     required this.timetableWeek,
     required this.courseKey2Entity,
     required this.currentWeek,
+    required this.$currentPos,
   });
 
   @override
@@ -214,26 +217,31 @@ class _TimetableOneWeekViewState extends State<TimetableOneWeekView> {
   @override
   Widget build(BuildContext context) {
     return [
-      for (int timeslot = 0; timeslot < widget.timetableWeek.days.length; timeslot++)
-        _buildCellsByDay(context, timeslot),
+      for (int dayIndex = 0; dayIndex < widget.timetableWeek.days.length; dayIndex++)
+        widget.$currentPos << (ctx, pos, _) => _buildCellsByDay(context, dayIndex),
     ].row();
   }
 
-  /// 构建某一天的那一列格子.
-  Widget _buildCellsByDay(BuildContext ctx, int timeslot) {
-    final day = widget.timetableWeek.days[timeslot];
+  Widget _buildCellsByDay(BuildContext ctx, int dayIndex) {
+    final day = widget.timetableWeek.days[dayIndex];
     final fullSize = ctx.mediaQuery.size;
     // Don't ask me why it's `7.2` but not `7`, idk too.
     final cellSize = Size(fullSize.width / 7.2, fullSize.height / 11);
     final cells = <Widget>[];
     cells.add(const SizedBox(height: 60));
+    final isSelected = widget.$currentPos.value.day - 1 == dayIndex;
     for (int timeslot = 0; timeslot < day.timeslots2Lessons.length; timeslot++) {
       final lessons = day.timeslots2Lessons[timeslot];
       if (lessons.isEmpty) {
-        Widget cell = const SizedBox().inCard().sized(
-              width: cellSize.width,
-              height: cellSize.height,
-            );
+        Widget cell = AnimatedSlide(
+                offset: isSelected ? const Offset(0.01, -0.01) : Offset.zero,
+                curve: Curves.fastLinearToSlowEaseIn,
+                duration: const Duration(milliseconds: 800),
+                child: const SizedBox().inCard(elevation: isSelected ? 10 : 1))
+            .sized(
+          width: cellSize.width,
+          height: cellSize.height,
+        );
         cells.add(cell);
       } else {
         /// TODO: Multi-layer lessons
@@ -241,12 +249,17 @@ class _TimetableOneWeekViewState extends State<TimetableOneWeekView> {
 
         /// TODO: Range checking
         final course = widget.courseKey2Entity[firstLayerLesson.courseKey];
-        Widget cell = _CourseCell(
-          timeslot: timeslot,
-          lesson: firstLayerLesson,
-          courseKey2Entity: widget.courseKey2Entity,
-          course: course,
-        ).sized(width: cellSize.width, height: cellSize.height * firstLayerLesson.duration);
+        Widget cell = AnimatedSlide(
+            offset: isSelected ? const Offset(0.02, -0.02) : Offset.zero,
+            curve: Curves.fastLinearToSlowEaseIn,
+            duration: const Duration(milliseconds: 800),
+            child: _CourseCell(
+              timeslot: timeslot,
+              lesson: firstLayerLesson,
+              courseKey2Entity: widget.courseKey2Entity,
+              course: course,
+              elevation: isSelected ? 80 : 8,
+            )).sized(width: cellSize.width, height: cellSize.height * firstLayerLesson.duration);
         cells.add(cell);
 
         /// Skip to the end
@@ -263,6 +276,7 @@ class _CourseCell extends StatefulWidget {
   final SitCourse course;
   final int timeslot;
   final List<SitCourse> courseKey2Entity;
+  final double elevation;
 
   const _CourseCell({
     super.key,
@@ -270,6 +284,7 @@ class _CourseCell extends StatefulWidget {
     required this.lesson,
     required this.courseKey2Entity,
     required this.course,
+    this.elevation = 8,
   });
 
   @override
@@ -286,6 +301,11 @@ class _CourseCellState extends State<_CourseCell> {
     final Widget res;
     final colors = TimetableStyle.of(context).colors;
     final color = colors[course.courseCode.hashCode.abs() % colors.length].byTheme(context.theme);
+    final info = buildInfo(
+      context,
+      course,
+      maxLines: context.isPortrait ? 8 : 5,
+    );
     if (context.isPortrait) {
       res = [
         ElevatedNumber(
@@ -294,7 +314,7 @@ class _CourseCellState extends State<_CourseCell> {
           margin: 3,
           elevation: 3,
         ).flexible(flex: 1),
-        buildInfo(context, course).flexible(flex: 3),
+        info.flexible(flex: 3),
       ].column();
     } else {
       res = [
@@ -304,11 +324,11 @@ class _CourseCellState extends State<_CourseCell> {
           margin: 5,
           elevation: 3,
         ).align(at: Alignment.bottomRight),
-        buildInfo(context, course).center().padOnly(b: 2.h),
+        info.center().padOnly(b: 2.h),
       ].stack();
     }
 
-    return res.inCard(color: color, elevation: 8, margin: EdgeInsets.all(1.5.w));
+    return res.inCard(color: color, elevation: widget.elevation, margin: EdgeInsets.all(1.5.w));
     return [
       buildText(formatPlace(course.place), 2),
       buildText(course.teachers.join(','), 2),

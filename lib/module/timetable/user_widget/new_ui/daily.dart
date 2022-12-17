@@ -318,6 +318,7 @@ class LessonOverlapGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if(lessonsInSlot.isEmpty) return const SizedBox();
     final List<Widget> all = [];
     ClassTime? classTime;
     final colors = TimetableStyle.of(context).colors;
@@ -334,6 +335,7 @@ class LessonOverlapGroup extends StatelessWidget {
       );
       all.add(row);
     }
+    // [classTime] must be nonnull.
     return [
       _buildClassTimeCard(colors[0].byTheme(context.theme), classTime!),
       all.column().expanded(),

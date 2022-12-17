@@ -88,7 +88,11 @@ class _TimetablePageState extends State<TimetablePage> {
           onLongPress: () {
             final today = TimetablePosition.locate(timetable.startDate, DateTime.now());
             if ($currentPos.value != today) {
-              $currentPos.value = today;
+              if (TimetableStyle.of(context).useNewUI) {
+                eventBus.fire(JumpToPosEvent(today));
+              } else {
+                $currentPos.value = today;
+              }
             }
           },
           child: FloatingActionButton(
@@ -163,7 +167,8 @@ class _TimetablePageState extends State<TimetablePage> {
         });
     controller.dispose();
     if (index2Go != null && index2Go != initialIndex) {
-      if (storage.useNewUI ?? false) {
+      if (!mounted) return;
+      if (TimetableStyle.of(ctx).useNewUI) {
         eventBus.fire(JumpToPosEvent($currentPos.value.copyWith(week: index2Go + 1)));
       } else {
         $currentPos.value = $currentPos.value.copyWith(week: index2Go + 1);
@@ -207,7 +212,8 @@ class _TimetablePageState extends State<TimetablePage> {
     final week2Go = indices2Go?.item1;
     final day2Go = indices2Go?.item2;
     if (week2Go != null && day2Go != null && (week2Go != initialWeekIndex || day2Go != initialDayIndex)) {
-      if (storage.useNewUI ?? false) {
+      if (!mounted) return;
+      if (TimetableStyle.of(ctx).useNewUI) {
         eventBus.fire(JumpToPosEvent(TimetablePosition(week: week2Go + 1, day: day2Go + 1)));
       } else {
         $currentPos.value = TimetablePosition(week: week2Go + 1, day: day2Go + 1);
