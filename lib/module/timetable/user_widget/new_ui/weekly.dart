@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -93,7 +92,15 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
       controller: _pageController,
       scrollDirection: Axis.horizontal,
       itemCount: 20,
-      itemBuilder: (BuildContext ctx, int index) => buildPageBody(ctx, index),
+      itemBuilder: (BuildContext ctx, int weekIndex) {
+        final todayPos = widget.locateInTimetable(DateTime.now());
+        return _OneWeekPage(
+          timetable: timetable,
+          todayPos: todayPos,
+          weekIndex: weekIndex,
+          $currentPos: widget.$currentPos,
+        );
+      },
     );
   }
 
@@ -107,7 +114,6 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
     });
   }
 
-  /// 跳到某一周
   void jumpTo(TimetablePosition pos) {
     if (_pageController.hasClients) {
       final targetOffset = week2PageOffset(pos.week);
@@ -121,7 +127,54 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
     }
   }
 
-  Widget buildPageBody(BuildContext ctx, int weekIndex) {
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
+  }
+}
+
+class _OneWeekPage extends StatefulWidget {
+  final SitTimetable timetable;
+  final ValueNotifier<TimetablePosition> $currentPos;
+  final int weekIndex;
+  final TimetablePosition todayPos;
+
+  const _OneWeekPage({
+    super.key,
+    required this.timetable,
+    required this.$currentPos,
+    required this.weekIndex,
+    required this.todayPos,
+  });
+
+  @override
+  State<_OneWeekPage> createState() => _OneWeekPageState();
+}
+
+class _OneWeekPageState extends State<_OneWeekPage> with AutomaticKeepAliveClientMixin {
+  SitTimetable get timetable => widget.timetable;
+
+  /// Cache the who page to avoid expensive rebuilding.
+  Widget? _cached;
+
+  TimetablePosition get currentPos => widget.$currentPos.value;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final cache = _cached;
+    if (cache != null) {
+      return cache;
+    } else {
+      final res = buildPage(context);
+      _cached = res;
+      return res;
+    }
+  }
+
+  Widget buildPage(BuildContext ctx) {
+    final weekIndex = widget.weekIndex;
     final timetableWeek = timetable.weeks[weekIndex];
     if (timetableWeek != null) {
       return [
@@ -141,7 +194,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
   }
 
   Widget buildFreeWeekTip(BuildContext ctx, int weekIndex) {
-    final isThisWeek = widget.locateInTimetable(DateTime.now()).week == (weekIndex + 1);
+    final isThisWeek = widget.todayPos.week == (weekIndex + 1);
     final String desc;
     if (isThisWeek) {
       desc = i18n.timetableFreeWeekIsThisWeekTip;
@@ -189,10 +242,7 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    _pageController.dispose();
-  }
+  bool get wantKeepAlive => true;
 }
 
 class _CourseDayColumn extends StatefulWidget {
@@ -260,7 +310,6 @@ class _CourseDayColumnState extends State<_CourseDayColumn> {
     final cells = <Widget>[];
     cells.add(const SizedBox(height: 60));
 
-    Log.info("built ${widget.dayIndex} ${DateTime.now().microsecondsSinceEpoch}");
     for (int timeslot = 0; timeslot < day.timeslots2Lessons.length; timeslot++) {
       final lessons = day.timeslots2Lessons[timeslot];
       if (lessons.isEmpty) {

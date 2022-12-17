@@ -96,7 +96,12 @@ class DailyTimetableState extends State<DailyTimetable> {
         int weekIndex = index ~/ 7;
         int dayIndex = index % 7;
         final todayPos = widget.locateInTimetable(DateTime.now());
-        return _OneDayPage(timetable: timetable, todayPos: todayPos, weekIndex: weekIndex, dayIndex: dayIndex);
+        return _OneDayPage(
+          timetable: timetable,
+          todayPos: todayPos,
+          weekIndex: weekIndex,
+          dayIndex: dayIndex,
+        );
       },
     );
   }
@@ -136,23 +141,28 @@ class _OneDayPage extends StatefulWidget {
   final TimetablePosition todayPos;
   final int weekIndex;
   final int dayIndex;
+
   const _OneDayPage({
     super.key,
     required this.timetable,
     required this.todayPos,
-    required this.weekIndex, required this.dayIndex,
+    required this.weekIndex,
+    required this.dayIndex,
   });
 
   @override
   State<_OneDayPage> createState() => _OneDayPageState();
 }
 
-class _OneDayPageState extends State<_OneDayPage> {
+class _OneDayPageState extends State<_OneDayPage> with AutomaticKeepAliveClientMixin {
   SitTimetable get timetable => widget.timetable;
+
   /// Cache the who page to avoid expensive rebuilding.
   Widget? _cached;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final cache = _cached;
     if (cache != null) {
       return cache;
@@ -260,6 +270,9 @@ class _OneDayPageState extends State<_OneDayPage> {
     if (!mounted) return;
     await ctx.showTip(title: i18n.congratulations, desc: i18n.timetableFreeTermTip, ok: i18n.thanks);
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class LessonCard extends StatefulWidget {
