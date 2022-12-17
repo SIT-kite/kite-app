@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kite/entities.dart';
 import 'package:rettulf/rettulf.dart';
+import '../../using.dart';
 
 class DailyTimeline extends StatefulWidget {
   final List<SitCourse> courseKey2Entity;
@@ -19,12 +20,18 @@ class DailyTimeline extends StatefulWidget {
 class _DailyTimelineState extends State<DailyTimeline> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return ListView.builder(itemCount: widget.day.timeslots2Lessons.length, itemBuilder: buildRow);
   }
 
-  Widget buildRow(BuildContext context, int timeslot){
+  Widget buildRow(BuildContext context, int timeslot) {
+    final lessons = widget.day.timeslots2Lessons[timeslot];
+    //getBuildingTimetable()
     return [
-      SizedBox()
+      SizedBox(),
     ].stack();
   }
+  /*Widget buildTime(){
+
+  }*/
 }
+

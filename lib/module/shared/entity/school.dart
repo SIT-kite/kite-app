@@ -15,8 +15,6 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import 'dart:math';
-import 'dart:ui';
 
 import 'package:hive/hive.dart';
 import 'package:kite/entities.dart';
@@ -169,7 +167,9 @@ class CourseCategory {
     'curriculum': ['论文'],
   };
 
-  static String query(String curriculum) {
+  static const _fallbackCat = "principle";
+
+  static String query(String curriculum, {String fallback = _fallbackCat}) {
     for (var title in _courseToCategory.keys) {
       for (var item in _courseToCategory[title]!) {
         if (curriculum.contains(item)) {
@@ -177,23 +177,25 @@ class CourseCategory {
         }
       }
     }
-    return 'principle';
+    return fallback;
+  }
+
+  static const String _courseIconDir = 'assets/course';
+
+  static String iconPathOf({String? courseName, String? iconName}) {
+    final String icon;
+    if (iconName != null && _courseToCategory.containsKey(iconName)) {
+      icon = iconName;
+    } else if (courseName != null) {
+      icon = query(courseName);
+    } else {
+      icon = _fallbackCat;
+    }
+    return "$_courseIconDir/$icon.png";
   }
 }
 
 final List<String> weekWord = ['一', '二', '三', '四', '五', '六', '日'];
-
-const List<Color> colorList = [
-  Color.fromARGB(178, 251, 83, 82),
-  Color.fromARGB(153, 115, 123, 250),
-  Color.fromARGB(178, 116, 185, 255),
-  Color.fromARGB(178, 118, 126, 253),
-  Color.fromARGB(178, 245, 175, 77),
-  Color.fromARGB(178, 187, 137, 106),
-  Color.fromARGB(178, 232, 67, 147),
-  Color.fromARGB(178, 188, 140, 240),
-  Color.fromARGB(178, 116, 185, 255)
-];
 
 class Timepoint {
   /// 小时
@@ -371,23 +373,6 @@ String formatTimeIndex(List<SchoolTimetable> timetable, int timeIndex, String fo
       .replaceAll('EE', indexEnd.toString());
 }
 
-/// 将 timeIndex 转换为对应的字符串
-///
-/// ss: 开始时间
-/// ee: 结束时间
-/// SS: 开始的节次
-/// EE: 结束的节次
-String formatTimeslotIndex(List<SchoolTimetable> timetable, SitTimetableLesson lesson, String format) {
-  final timeStart = timetable[lesson.startIndex].classBegin;
-  final timeEnd = timetable[lesson.endIndex].classOver;
-
-  return format
-      .replaceAll('ss', timeStart.toString())
-      .replaceAll('ee', timeEnd.toString())
-      .replaceAll('SS', (lesson.startIndex + 1).toString())
-      .replaceAll('EE', (lesson.endIndex + 1).toString());
-}
-
 /// 删去 place 括号里的描述信息. 如, 二教F301（机电18中外合作专用）
 String formatPlace(String place) {
   int indexOfBucket = place.indexOf('（');
@@ -407,9 +392,4 @@ extension DateTimeUtil on DateTime {
 /// Replace the full-width brackets to ASCII ones
 String stylizeCourseName(String name) {
   return name.replaceAll("（", "(").replaceAll("）", ")");
-}
-
-Duration calcuSwitchAnimationDuration(num distance) {
-  final time = sqrt(max(1, distance) * 100000);
-  return Duration(milliseconds: time.toInt());
 }

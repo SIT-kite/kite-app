@@ -486,5 +486,10 @@
   "timetableFindNearestDayWithClassBtn": "尋找有課的一天",
   "timetableWeek": "周",
   "timetableOddWeek": "單週",
-  "timetableEvenWeek": "雙週"
+  "timetableEvenWeek": "雙週",
+  "minutes": "分鐘",
+  "hour": "小時",
+  "hourMinuteF": "{hour}小時{minute}分鐘",
+  "minuteF": "{minute}分鐘",
+  "hourF": "{hour}小時"
 }

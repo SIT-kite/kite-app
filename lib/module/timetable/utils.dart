@@ -23,6 +23,7 @@ import 'using.dart';
 
 import 'entity/course.dart';
 import 'entity/meta.dart';
+import 'dart:math';
 
 const maxWeekLength = 20;
 
@@ -171,6 +172,7 @@ SitTimetable parseTimetableEntity(List<CourseRaw> all) {
       raw.classCode.trim(),
       raw.campus,
       raw.place,
+      CourseCategory.query(raw.courseName),
       weekIndices,
       raw.timeslotsText,
       double.tryParse(raw.courseCredit) ?? 0.0,
@@ -204,4 +206,9 @@ SitTimetable parseTimetableEntity(List<CourseRaw> all) {
   }
   final res = SitTimetable(weeks, courseKey2Entity, counter);
   return res;
+}
+
+Duration calcuSwitchAnimationDuration(num distance) {
+  final time = sqrt(max(1, distance) * 100000);
+  return Duration(milliseconds: time.toInt());
 }

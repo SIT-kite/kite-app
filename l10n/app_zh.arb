@@ -486,5 +486,10 @@
   "timetableFindNearestDayWithClassBtn": "找到有课的一天",
   "timetableWeek": "周",
   "timetableOddWeek": "单周",
-  "timetableEvenWeek": "双周"
+  "timetableEvenWeek": "双周",
+  "minutes": "分钟",
+  "hour": "小时",
+  "hourMinuteF": "{hour}小时{minute}分钟",
+  "minuteF": "{minute}分钟",
+  "hourF": "{hour}小时"
 }

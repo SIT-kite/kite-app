@@ -29,7 +29,6 @@ import '../style.dart';
 import 'sheet.dart';
 import '../interface.dart';
 
-const String _courseIconPath = 'assets/course/';
 
 class DailyTimetable extends StatefulWidget implements InitialTimeProtocol {
   final SitTimetable timetable;
@@ -279,7 +278,7 @@ class _LessonBlockState extends State<LessonBlock> {
     final course = widget.course;
     final TextStyle? textStyle = Theme.of(context).textTheme.bodyText2;
     final Widget courseIcon = Image.asset(
-      '$_courseIconPath${CourseCategory.query(course.courseName)}.png',
+      CourseCategory.iconPathOf(iconName :course.iconName),
       width: iconSize,
       height: iconSize,
     );

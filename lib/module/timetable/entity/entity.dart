@@ -133,7 +133,8 @@ class SitCourse {
   final String classCode;
   final String campus;
   final String place;
-
+  /// The icon name in
+  final String iconName;
   /// e.g.: `a1-5,s14` means `from 1st week to 5th week` + `14th week`.
   /// e.g.: `o2-9,s12,s14` means `only odd weeks from 2nd week to 9th week` + `12th week` + `14th week`
   /// If the index is `o`(odd), `e`(even) or `a`(all), then it must be a range.
@@ -158,6 +159,7 @@ class SitCourse {
     this.classCode,
     this.campus,
     this.place,
+    this.iconName,
     this.rangedWeekNumbers,
     this.timeslots,
     this.courseCredit,
@@ -393,6 +395,7 @@ class SitCourseDataAdapter extends DataAdapter<SitCourse> {
       json["classCode"] as String,
       json["campus"] as String,
       json["place"] as String,
+      json["iconName"] as String,
       (json["rangedWeekNumbers"] as List).cast<String>(),
       json["timeslots"] as String,
       json["courseCredit"] as double,
@@ -411,6 +414,7 @@ class SitCourseDataAdapter extends DataAdapter<SitCourse> {
       "classCode": obj.classCode,
       "campus": obj.campus,
       "place": obj.place,
+      "iconName": obj.place,
       "rangedWeekNumbers": obj.rangedWeekNumbers,
       "timeslots": obj.timeslots,
       "courseCredit": obj.courseCredit,

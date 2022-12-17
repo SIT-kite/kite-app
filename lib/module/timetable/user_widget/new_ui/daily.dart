@@ -29,6 +29,7 @@ import 'header.dart';
 import '../style.dart';
 import '../classic_ui/sheet.dart';
 import '../interface.dart';
+import 'timeline.dart';
 
 const String _courseIconPath = 'assets/course/';
 
@@ -135,6 +136,10 @@ class DailyTimetableState extends State<DailyTimetable> {
       if (lessonsInDay.isEmpty) {
         return _buildFreeDayTip(ctx, weekIndex, dayIndex);
       } else {
+        return DailyTimeline(
+          courseKey2Entity: timetable.courseKey2Entity,
+          day: day,
+        );
         return ListView.builder(
           controller: ScrollController(),
           padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -221,9 +226,6 @@ class DailyTimetableState extends State<DailyTimetable> {
   }
 }
 
-
-
-
 class LessonCard extends StatefulWidget {
   final SitTimetableLesson lesson;
   final SitCourse course;
@@ -240,7 +242,9 @@ class _LessonCardState extends State<LessonCard> {
   Widget build(BuildContext context) {
     final course = widget.course;
     final TextStyle? textStyle = Theme.of(context).textTheme.bodyText2;
-    final Widget courseIcon = Image.asset('$_courseIconPath${CourseCategory.query(course.courseName)}.png');
+    final Widget courseIcon = Image.asset(
+      CourseCategory.iconPathOf(iconName :course.iconName),
+    );
     final timetable = getBuildingTimetable(course.campus, course.place);
 /*    final description =
         formatTimeIndex(timetable, course.timeIndex, '${course.weekText} 周${weekWord[course.dayIndex - 1]}\nss-ee');*/

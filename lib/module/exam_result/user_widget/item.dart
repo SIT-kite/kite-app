@@ -78,7 +78,7 @@ class _ScoreItemState extends State<ScoreItem> {
         ).sized(key: const ValueKey("Checkbox"), width: iconSize, height: iconSize);
       } else {
         return Image.asset(
-          'assets/course/${CourseCategory.query(result.course)}.png',
+          CourseCategory.iconPathOf(courseName: result.course),
         ).sized(key: const ValueKey("Icon"), width: iconSize, height: iconSize);
       }
     }
