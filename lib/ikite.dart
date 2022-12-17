@@ -2,10 +2,20 @@
 
 import 'package:ikite/ikite.dart';
 import 'entities.dart';
-void KiteAppDataAdapterPlugin(IKite ikite){
+
+void KiteAppDataAdapterPlugin(IKite ikite) {
   ikite.registerAdapter(SitTimetableDataAdapter());
   ikite.registerAdapter(SitTimetableWeekDataAdapter());
   ikite.registerAdapter(SitTimetableDayDataAdapter());
   ikite.registerAdapter(SitTimetableLessonDataAdapter());
   ikite.registerAdapter(SitCourseDataAdapter());
+}
+
+void KiteAppDebugPlugin(IKite ikite) {
+  ikite.isDebug = true;
+  ikite.registerDebugMigration(Migration.of("kite.SitCourse", (from) {
+    final res = Map.of(from);
+    res.addAll({"iconName": "principle"});
+    return res;
+  }, to: 0));
 }

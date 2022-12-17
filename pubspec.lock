@@ -896,7 +896,7 @@ packages:
     description:
       path: ikite-dart
       ref: master
-      resolved-ref: "41293ab1469800e9b85badffea30546ea6a22e93"
+      resolved-ref: d527ffa76c0e8a8f22dbf40bfbf0e7bc8d799044
       url: "https://github.com/SIT-kite/iKite.git"
     source: git
     version: "1.0.0"
