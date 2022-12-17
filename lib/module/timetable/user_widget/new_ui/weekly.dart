@@ -124,12 +124,17 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
   Widget buildPageBody(BuildContext ctx, int weekIndex) {
     final timetableWeek = timetable.weeks[weekIndex];
     if (timetableWeek != null) {
-      return TimetableOneWeekView(
-        timetableWeek: timetableWeek,
-        courseKey2Entity: timetable.courseKey2Entity,
-        currentWeek: weekIndex,
-        $currentPos: widget.$currentPos,
-      ).scrolled();
+      return [
+        for (int dayIndex = 0; dayIndex < timetableWeek.days.length; dayIndex++)
+          widget.$currentPos <<
+              (ctx, pos, _) => _CourseDayColumn(
+                    timetableWeek: timetableWeek,
+                    courseKey2Entity: timetable.courseKey2Entity,
+                    currentWeek: weekIndex,
+                    currentPos: pos,
+                    dayIndex: dayIndex,
+                  ),
+      ].row().scrolled();
     } else {
       return buildFreeWeekTip(ctx, weekIndex);
     }
@@ -190,46 +195,72 @@ class WeeklyTimetableState extends State<WeeklyTimetable> {
   }
 }
 
-class TimetableOneWeekView extends StatefulWidget {
+class _CourseDayColumn extends StatefulWidget {
   final SitTimetableWeek timetableWeek;
   final List<SitCourse> courseKey2Entity;
   final int currentWeek;
-  final ValueNotifier<TimetablePosition> $currentPos;
+  final TimetablePosition currentPos;
+  final int dayIndex;
 
-  const TimetableOneWeekView({
+  const _CourseDayColumn({
     super.key,
     required this.timetableWeek,
     required this.courseKey2Entity,
     required this.currentWeek,
-    required this.$currentPos,
+    required this.currentPos,
+    required this.dayIndex,
   });
 
   @override
-  State<StatefulWidget> createState() => _TimetableOneWeekViewState();
+  State<_CourseDayColumn> createState() => _CourseDayColumnState();
 }
 
-class _TimetableOneWeekViewState extends State<TimetableOneWeekView> {
+class _CourseDayColumnState extends State<_CourseDayColumn> {
+  /// Cache the column to avoid expensive rebuilding.
+  Widget? _cached;
+  TimetablePosition? lastCurrentPos;
+  late bool isSelected;
+
   @override
   void initState() {
     super.initState();
+    isSelected = widget.currentPos.day - 1 == widget.dayIndex;
+  }
+
+  @override
+  void didUpdateWidget(covariant _CourseDayColumn oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final nowSelected = widget.currentPos.day - 1 == widget.dayIndex;
+    if (isSelected != nowSelected) {
+      setState(() {
+        _cached = null;
+        isSelected = nowSelected;
+        lastCurrentPos = widget.currentPos;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return [
-      for (int dayIndex = 0; dayIndex < widget.timetableWeek.days.length; dayIndex++)
-        widget.$currentPos << (ctx, pos, _) => _buildCellsByDay(context, dayIndex),
-    ].row();
+    final cache = _cached;
+    if (cache != null) {
+      return cache;
+    } else {
+      final res = buildCellsByDay(context);
+      _cached = res;
+      return res;
+    }
   }
 
-  Widget _buildCellsByDay(BuildContext ctx, int dayIndex) {
-    final day = widget.timetableWeek.days[dayIndex];
+  Widget buildCellsByDay(BuildContext ctx) {
+    final day = widget.timetableWeek.days[widget.dayIndex];
     final fullSize = ctx.mediaQuery.size;
     // Don't ask me why it's `7.2` but not `7`, idk too.
     final cellSize = Size(fullSize.width / 7.2, fullSize.height / 11);
     final cells = <Widget>[];
     cells.add(const SizedBox(height: 60));
-    final isSelected = widget.$currentPos.value.day - 1 == dayIndex;
+
+    Log.info("built ${widget.dayIndex} ${DateTime.now().microsecondsSinceEpoch}");
     for (int timeslot = 0; timeslot < day.timeslots2Lessons.length; timeslot++) {
       final lessons = day.timeslots2Lessons[timeslot];
       if (lessons.isEmpty) {

@@ -33,8 +33,6 @@ import '../classic_ui/sheet.dart';
 import '../interface.dart';
 import 'shared.dart';
 
-const String _courseIconPath = 'assets/course/';
-
 class DailyTimetable extends StatefulWidget implements InitialTimeProtocol {
   final SitTimetable timetable;
 
@@ -94,14 +92,80 @@ class DailyTimetableState extends State<DailyTimetable> {
       controller: _pageController,
       scrollDirection: Axis.horizontal,
       itemCount: 20 * 7,
-      itemBuilder: (_, int index) => _buildPage(context, index),
+      itemBuilder: (_, int index) {
+        int weekIndex = index ~/ 7;
+        int dayIndex = index % 7;
+        final todayPos = widget.locateInTimetable(DateTime.now());
+        return _OneDayPage(timetable: timetable, todayPos: todayPos, weekIndex: weekIndex, dayIndex: dayIndex);
+      },
     );
   }
 
-  /// 构建第 index 页视图
-  Widget _buildPage(BuildContext ctx, int index) {
-    int weekIndex = index ~/ 7;
-    int dayIndex = index % 7;
+  void onPageChange() {
+    setState(() {
+      final page = (_pageController.page ?? 0).round();
+      final newPos = page2Pos(page);
+      if (currentPos != newPos) {
+        currentPos = newPos;
+      }
+    });
+  }
+
+  void jumpTo(TimetablePosition pos) {
+    if (_pageController.hasClients) {
+      final targetOffset = pos2PageOffset(pos);
+      final currentPos = _pageController.page ?? targetOffset;
+      final distance = (targetOffset - currentPos).abs();
+      _pageController.animateToPage(
+        targetOffset,
+        duration: calcuSwitchAnimationDuration(distance),
+        curve: Curves.fastLinearToSlowEaseIn,
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
+  }
+}
+
+class _OneDayPage extends StatefulWidget {
+  final SitTimetable timetable;
+  final TimetablePosition todayPos;
+  final int weekIndex;
+  final int dayIndex;
+  const _OneDayPage({
+    super.key,
+    required this.timetable,
+    required this.todayPos,
+    required this.weekIndex, required this.dayIndex,
+  });
+
+  @override
+  State<_OneDayPage> createState() => _OneDayPageState();
+}
+
+class _OneDayPageState extends State<_OneDayPage> {
+  SitTimetable get timetable => widget.timetable;
+  /// Cache the who page to avoid expensive rebuilding.
+  Widget? _cached;
+  @override
+  Widget build(BuildContext context) {
+    final cache = _cached;
+    if (cache != null) {
+      return cache;
+    } else {
+      final res = buildPage(context);
+      _cached = res;
+      return res;
+    }
+  }
+
+  Widget buildPage(BuildContext ctx) {
+    int weekIndex = widget.weekIndex;
+    int dayIndex = widget.dayIndex;
     final week = timetable.weeks[weekIndex];
     if (week == null) {
       return _buildFreeDayTip(ctx, weekIndex, dayIndex);
@@ -136,31 +200,8 @@ class DailyTimetableState extends State<DailyTimetable> {
     }
   }
 
-  void onPageChange() {
-    setState(() {
-      final page = (_pageController.page ?? 0).round();
-      final newPos = page2Pos(page);
-      if (currentPos != newPos) {
-        currentPos = newPos;
-      }
-    });
-  }
-
-  void jumpTo(TimetablePosition pos) {
-    if (_pageController.hasClients) {
-      final targetOffset = pos2PageOffset(pos);
-      final currentPos = _pageController.page ?? targetOffset;
-      final distance = (targetOffset - currentPos).abs();
-      _pageController.animateToPage(
-        targetOffset,
-        duration: calcuSwitchAnimationDuration(distance),
-        curve: Curves.fastLinearToSlowEaseIn,
-      );
-    }
-  }
-
   Widget _buildFreeDayTip(BuildContext ctx, int weekIndex, int dayIndex) {
-    final todayPos = widget.locateInTimetable(DateTime.now());
+    final todayPos = widget.todayPos;
     final isToday = todayPos.week == weekIndex + 1 && todayPos.day == dayIndex + 1;
     final String desc;
     if (isToday) {
@@ -218,12 +259,6 @@ class DailyTimetableState extends State<DailyTimetable> {
     // Alright, let's congratulate them!
     if (!mounted) return;
     await ctx.showTip(title: i18n.congratulations, desc: i18n.timetableFreeTermTip, ok: i18n.thanks);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _pageController.dispose();
   }
 }
 
@@ -318,7 +353,7 @@ class LessonOverlapGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(lessonsInSlot.isEmpty) return const SizedBox();
+    if (lessonsInSlot.isEmpty) return const SizedBox();
     final List<Widget> all = [];
     ClassTime? classTime;
     final colors = TimetableStyle.of(context).colors;
