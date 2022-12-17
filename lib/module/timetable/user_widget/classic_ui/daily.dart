@@ -29,7 +29,6 @@ import '../style.dart';
 import 'sheet.dart';
 import '../interface.dart';
 
-
 class DailyTimetable extends StatefulWidget implements InitialTimeProtocol {
   final SitTimetable timetable;
 
@@ -161,7 +160,7 @@ class DailyTimetableState extends State<DailyTimetable> {
       return _buildFreeDayTip(ctx, weekIndex, dayIndex);
     } else {
       final day = week.days[dayIndex];
-      final lessonsInDay = day.browseUniqueLessons(atLayer: 0).toList();
+      final lessonsInDay = day.browseUniqueLessonsAt(layer: 0).toList();
       if (lessonsInDay.isEmpty) {
         return _buildFreeDayTip(ctx, weekIndex, dayIndex);
       } else {
@@ -218,7 +217,7 @@ class DailyTimetableState extends State<DailyTimetable> {
         final dayIndexStart = weekIndex == i ? dayIndex : 0;
         for (int j = dayIndexStart; j < week.days.length; j++) {
           final day = week.days[j];
-          if (day.hasAnyLesson(atLayer: 0)) {
+          if (day.hasAnyLesson()) {
             currentPos = TimetablePosition(week: i + 1, day: j + 1);
             return;
           }
@@ -232,7 +231,7 @@ class DailyTimetableState extends State<DailyTimetable> {
         final dayIndexStart = weekIndex == i ? dayIndex : week.days.length - 1;
         for (int j = dayIndexStart; 0 <= j; j--) {
           final day = week.days[j];
-          if (day.hasAnyLesson(atLayer: 0)) {
+          if (day.hasAnyLesson()) {
             currentPos = TimetablePosition(week: i + 1, day: j + 1);
             return;
           }
@@ -276,13 +275,15 @@ class _LessonBlockState extends State<LessonBlock> {
   @override
   Widget build(BuildContext context) {
     final course = widget.course;
-    final TextStyle? textStyle = Theme.of(context).textTheme.bodyText2;
     final Widget courseIcon = Image.asset(
-      CourseCategory.iconPathOf(iconName :course.iconName),
+      CourseCategory.iconPathOf(iconName: course.iconName),
       width: iconSize,
       height: iconSize,
     );
-    final time = course.formatTime('ss - ee', basedOn: widget.lesson);
+    final timetable = course.buildingTimetable;
+    final classBegin = timetable[widget.lesson.startIndex].begin;
+    final classEnd = timetable[widget.lesson.endIndex].end;
+    final time = "$classBegin - $classEnd";
     final duration = course.duration(basedOn: widget.lesson);
     final colors = TimetableStyle.of(context).colors;
     final color = colors[course.courseCode.hashCode.abs() % colors.length].byTheme(context.theme);
@@ -297,14 +298,14 @@ class _LessonBlockState extends State<LessonBlock> {
           leading: courseIcon,
           title: Text(stylizeCourseName(course.courseName), textScaleFactor: 1.1),
           trailing: [
-            Text(formatPlace(course.place), softWrap: true, overflow: TextOverflow.ellipsis, style: textStyle),
-            duration.localized().text(style: textStyle, softWrap: true),
-          ].column(maa:MainAxisAlignment.spaceBetween),
-          subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(course.teachers.join(', '), style: textStyle),
+            Text(formatPlace(course.place), softWrap: true, overflow: TextOverflow.ellipsis),
+            duration.localized().text(softWrap: true),
+          ].column(),
+          subtitle: [
+            time.text(style: const TextStyle(fontWeight: FontWeight.bold), softWrap: true),
+            course.teachers.join(', ').text(),
             course.localizedWeekNumbers().text(),
-            time.text(style: textStyle, softWrap: true),
-          ]),
+          ].column(caa: CrossAxisAlignment.start),
         ).on(tap: () async {
           /*await showModalBottomSheet(
               isScrollControlled: true,

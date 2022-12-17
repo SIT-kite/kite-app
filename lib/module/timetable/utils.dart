@@ -51,8 +51,8 @@ void _addEventForCourse(ICalendar cal, Course course, DateTime startDate, Durati
   final timetable = getBuildingTimetable(course.campus, course.place);
   final indexStart = getIndexStart(course.timeIndex);
   final indexEnd = getIndexEnd(indexStart, course.timeIndex);
-  final timeStart = timetable[indexStart - 1].classBegin;
-  final timeEnd = timetable[indexEnd - 1].classOver;
+  final timeStart = timetable[indexStart - 1].begin;
+  final timeEnd = timetable[indexEnd - 1].end;
 
   final description =
       '第 ${indexStart == indexEnd ? indexStart : '$indexStart-$indexEnd'} 节，${course.place}，${course.teacher.join(' ')}';

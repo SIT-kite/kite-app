@@ -69,29 +69,29 @@ class SitTimetableDay {
     }
   }
 
-  /// At all lessons [atLayer]
-  Iterable<SitTimetableLesson> browseLessons({required int atLayer}) sync* {
+  /// At all lessons [layer]
+  Iterable<SitTimetableLesson> browseLessonsAt({required int layer}) sync* {
     for (final lessonsInTimeslot in timeslots2Lessons) {
-      if (0 <= atLayer && atLayer < lessonsInTimeslot.length) {
-        yield lessonsInTimeslot[atLayer];
+      if (0 <= layer && layer < lessonsInTimeslot.length) {
+        yield lessonsInTimeslot[layer];
       }
     }
   }
 
-  /// At the unique lessons [atLayer].
+  /// At the unique lessons [layer].
   /// So, if the [SitTimetableLesson.duration] is more than 1, it will only yield the first lesson.
-  Iterable<SitTimetableLesson> browseUniqueLessons({required int atLayer}) sync* {
+  Iterable<SitTimetableLesson> browseUniqueLessonsAt({required int layer}) sync* {
     for (int timeslot = 0; timeslot < timeslots2Lessons.length; timeslot++) {
       final lessons = timeslots2Lessons[timeslot];
-      if (0 <= atLayer && atLayer < lessons.length) {
-        final lesson = lessons[atLayer];
+      if (0 <= layer && layer < lessons.length) {
+        final lesson = lessons[layer];
         yield lesson;
         timeslot = lesson.endIndex;
       }
     }
   }
 
-  bool hasAnyLesson({required int atLayer}) {
+  bool hasAnyLesson() {
     for (final lessonsInTimeslot in timeslots2Lessons) {
       if (lessonsInTimeslot.isNotEmpty) {
         return true;
@@ -126,6 +126,11 @@ class SitTimetableLesson {
   String toString() => "[$courseKey] $startIndex-$endIndex";
 }
 
+extension SitTimetableLessonEx on SitTimetableLesson{
+  SitCourse getCourseIn(List<SitCourse> courseKey2Entity){
+    return courseKey2Entity[courseKey];
+  }
+}
 class SitCourse {
   final int courseKey;
   final String courseName;
@@ -264,31 +269,13 @@ extension SitCourseEx on SitCourse {
     return SitCourse.rangedWeekNumbers2Localized(rangedWeekNumbers).join(separateBy);
   }
 
-  List<SchoolTimetable> get buildingTimetable => getBuildingTimetable(campus, place);
-
-  /// Format [SitTimetableLesson.startIndex] and [SitTimetableLesson.endIndex]
-  ///
-  /// ss: The class beginning time
-  /// ee: The class over time
-  /// SS: The start timeslot(starts with 1).
-  /// EE: The end timeslot(starts with 1).
-  String formatTime(String format, {required SitTimetableLesson basedOn}) {
-    final timetable = buildingTimetable;
-    final classBegin = timetable[basedOn.startIndex].classBegin;
-    final classOver = timetable[basedOn.endIndex].classOver;
-
-    return format
-        .replaceAll('ss', classBegin.toString())
-        .replaceAll('ee', classOver.toString())
-        .replaceAll('SS', (basedOn.startIndex + 1).toString())
-        .replaceAll('EE', (basedOn.endIndex + 1).toString());
-  }
+  List<ClassTime> get buildingTimetable => getBuildingTimetable(campus, place);
 
   TimeDuration duration({required SitTimetableLesson basedOn}) {
     final timetable = buildingTimetable;
-    final classBegin = timetable[basedOn.startIndex].classBegin;
-    final classOver = timetable[basedOn.endIndex].classOver;
-    return classOver - classBegin;
+    final classBegin = timetable[basedOn.startIndex].begin;
+    final classOver = timetable[basedOn.endIndex].end;
+    return classOver.difference(classBegin);
   }
 }
 
@@ -414,7 +401,7 @@ class SitCourseDataAdapter extends DataAdapter<SitCourse> {
       "classCode": obj.classCode,
       "campus": obj.campus,
       "place": obj.place,
-      "iconName": obj.place,
+      "iconName": obj.iconName,
       "rangedWeekNumbers": obj.rangedWeekNumbers,
       "timeslots": obj.timeslots,
       "courseCredit": obj.courseCredit,

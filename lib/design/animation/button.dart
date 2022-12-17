@@ -23,7 +23,7 @@ class Bouncing extends StatefulWidget {
   final Widget child;
 
   /// Callback on click event
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   /// Scale factor
   ///  < 0 => the bouncing will be reversed and widget will grow
@@ -41,7 +41,7 @@ class Bouncing extends StatefulWidget {
   const Bouncing({
     super.key,
     required this.child,
-    required this.onPressed,
+    this.onPressed,
     this.scaleFactor = 1,
     this.duration = const Duration(milliseconds: 200),
     this.stayOnBottom = false,
@@ -68,7 +68,7 @@ class _BouncingState extends State<Bouncing> with SingleTickerProviderStateMixin
   Widget get child => widget.child;
 
   /// Simple getter on widget's onPressed callback
-  VoidCallback get onPressed => widget.onPressed;
+  VoidCallback? get onPressed => widget.onPressed;
 
   /// Simple getter on widget's scaleFactor
   double get scaleFactor => widget.scaleFactor;
@@ -137,7 +137,7 @@ class _BouncingState extends State<Bouncing> with SingleTickerProviderStateMixin
 
   /// Simple method called when we need to notify the user of a press event
   void _triggerOnPressed() {
-    onPressed();
+    onPressed?.call();
   }
 
   /// We start the animation
@@ -209,8 +209,8 @@ class _BouncingState extends State<Bouncing> with SingleTickerProviderStateMixin
 }
 
 extension BouncingEx on Widget {
-  Bouncing withBouncing(
-    VoidCallback onTap, {
+  Bouncing withBouncing({
+    VoidCallback? onTap,
     Key? key,
     double scale = 1,
     Duration duration = const Duration(milliseconds: 200),

@@ -77,6 +77,8 @@ extension DesignExtension on BuildContext {
 
   Color get textColor => isDarkMode ? Colors.white70 : Colors.black;
 
+  Color get reversedTextColor => isDarkMode ? Colors.black : Colors.white70;
+
   Tuple2<Color, Color> makeTabHeaderTextBgColors(bool isSelected) {
     final Color textColor;
     final Color bgColor;

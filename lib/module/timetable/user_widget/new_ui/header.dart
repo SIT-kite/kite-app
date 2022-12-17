@@ -97,7 +97,7 @@ class _TimetableHeaderState extends State<TimetableHeader> {
         curve: Curves.fastLinearToSlowEaseIn,
         child: buildHeaderText(ctx, day, textColor),
       ).inCard(
-        elevation: isSelected ? 20 : 5,
+        elevation: isSelected ? 25 : 8,
       ),
     );
   }

@@ -13,7 +13,6 @@ import 'header.dart';
 import 'weekly.dart';
 
 export 'daily.dart';
-export 'weekly.dart';
 
 class TimetableViewer extends StatefulWidget {
   final SitTimetable timetable;

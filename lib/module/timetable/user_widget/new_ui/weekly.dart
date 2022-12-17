@@ -33,6 +33,7 @@ import 'header.dart';
 import '../style.dart';
 import '../classic_ui/sheet.dart';
 import '../interface.dart';
+import 'shared.dart';
 
 class WeeklyTimetable extends StatefulWidget implements InitialTimeProtocol {
   final SitTimetable timetable;
@@ -287,13 +288,23 @@ class _CourseCellState extends State<_CourseCell> {
     final color = colors[course.courseCode.hashCode.abs() % colors.length].byTheme(context.theme);
     if (context.isPortrait) {
       res = [
-        TimeslotNumber(widget.timeslot).flexible(flex: 1),
+        ElevatedNumber(
+          number: widget.timeslot + 1,
+          color: color.withOpacity(0.7),
+          margin: 3,
+          elevation: 3,
+        ).flexible(flex: 1),
         buildInfo(context, course).flexible(flex: 3),
       ].column();
     } else {
       res = [
-        TimeslotNumber(widget.timeslot + lesson.duration - 1).padAll(3).align(at: Alignment.bottomRight),
-        buildInfo(context, course).center().padOnly(b: 15.h),
+        ElevatedNumber(
+          number: widget.timeslot + lesson.duration,
+          color: color,
+          margin: 5,
+          elevation: 3,
+        ).align(at: Alignment.bottomRight),
+        buildInfo(context, course).center().padOnly(b: 2.h),
       ].stack();
     }
 
@@ -316,34 +327,6 @@ class _CourseCellState extends State<_CourseCell> {
       softWrap: true,
       overflow: TextOverflow.visible,
       maxLines: maxLines,
-    );
-  }
-}
-
-class TimeslotNumber extends StatelessWidget {
-  final int timeslot;
-
-  const TimeslotNumber(
-    this.timeslot, {
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final number = (timeslot + 1).toString();
-    final double padding = number.length > 1 ? 1.0.w : 1.8.w;
-    final double fontSize = context.isPortrait ? 12.sp : 6.sp;
-    return Container(
-      decoration: ShapeDecoration(
-          shape: CircleBorder(
-        side: BorderSide(color: context.theme.colorScheme.onSurface),
-      )),
-      padding: EdgeInsets.all(padding),
-      child: AutoSizeText(
-        number,
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: fontSize),
-      ),
     );
   }
 }
