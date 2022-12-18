@@ -13,4 +13,11 @@ void KiteAppDataAdapterPlugin(IKite ikite) {
 
 void KiteAppDebugPlugin(IKite ikite) {
   ikite.isDebug = true;
+  ikite.registerDebugMigration(Migration.of("kite.SitCourse", (from) {
+    final res = Map.of(from);
+    res["iconName"] ??= "principle";
+    res["rangedWeekNumbers"] ??= from["weekIndices"];
+    res["dayIndex"] ??= 0;
+    return res;
+  }, to: 0));
 }

@@ -21,8 +21,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rettulf/rettulf.dart';
 
-import '../../cache.dart';
-import '../../entity/course.dart';
 import '../../entity/entity.dart';
 import '../../using.dart';
 import '../../utils.dart';
@@ -210,8 +208,15 @@ class _OneWeekPageState extends State<_OneWeekPage> with AutomaticKeepAliveClien
 
   set currentPos(TimetablePosition newValue) => widget.$currentPos.value = newValue;
 
+  Size? lastSize;
+
   @override
   Widget build(BuildContext context) {
+    final size = context.mediaQuery.size;
+    if (lastSize != size) {
+      _cached = null;
+      lastSize = size;
+    }
     super.build(context);
     final cache = _cached;
     if (cache != null) {

@@ -21,7 +21,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rettulf/rettulf.dart';
 
-import '../../cache.dart';
 import '../../entity/course.dart';
 import '../../entity/entity.dart';
 import '../../events.dart';
@@ -182,14 +181,17 @@ class _OneWeekPageState extends State<_OneWeekPage> with AutomaticKeepAliveClien
           widget.$currentPos <<
               (ctx, pos, _) => _CourseDayColumn(
                     timetableWeek: timetableWeek,
-                    courseKey2Entity: timetable.courseKey2Entity,
+                    timetable: timetable,
                     currentWeek: weekIndex,
                     currentPos: pos,
                     dayIndex: dayIndex,
                   ),
       ].row().scrolled();
     } else {
-      return buildFreeWeekTip(ctx, weekIndex);
+      return [
+        const SizedBox(height: 60),
+        buildFreeWeekTip(ctx, weekIndex).expanded(),
+      ].column();
     }
   }
 
@@ -247,7 +249,7 @@ class _OneWeekPageState extends State<_OneWeekPage> with AutomaticKeepAliveClien
 
 class _CourseDayColumn extends StatefulWidget {
   final SitTimetableWeek timetableWeek;
-  final List<SitCourse> courseKey2Entity;
+  final SitTimetable timetable;
   final int currentWeek;
   final TimetablePosition currentPos;
   final int dayIndex;
@@ -255,7 +257,7 @@ class _CourseDayColumn extends StatefulWidget {
   const _CourseDayColumn({
     super.key,
     required this.timetableWeek,
-    required this.courseKey2Entity,
+    required this.timetable,
     required this.currentWeek,
     required this.currentPos,
     required this.dayIndex,
@@ -290,8 +292,15 @@ class _CourseDayColumnState extends State<_CourseDayColumn> {
     }
   }
 
+  Size? lastSize;
+
   @override
   Widget build(BuildContext context) {
+    final size = context.mediaQuery.size;
+    if (lastSize != size) {
+      _cached = null;
+      lastSize = size;
+    }
     final cache = _cached;
     if (cache != null) {
       return cache;
@@ -305,8 +314,7 @@ class _CourseDayColumnState extends State<_CourseDayColumn> {
   Widget buildCellsByDay(BuildContext ctx) {
     final day = widget.timetableWeek.days[widget.dayIndex];
     final fullSize = ctx.mediaQuery.size;
-    // Don't ask me why it's `7.2` but not `7`, idk too.
-    final cellSize = Size(fullSize.width / 7.2, fullSize.height / 11);
+    final cellSize = Size(fullSize.width / 7, fullSize.height / 11);
     final cells = <Widget>[];
     cells.add(const SizedBox(height: 60));
 
@@ -314,10 +322,10 @@ class _CourseDayColumnState extends State<_CourseDayColumn> {
       final lessons = day.timeslots2Lessons[timeslot];
       if (lessons.isEmpty) {
         Widget cell = AnimatedSlide(
-                offset: isSelected ? const Offset(0.01, -0.01) : Offset.zero,
+                offset: isSelected ? const Offset(0.012, -0.014) : Offset.zero,
                 curve: Curves.fastLinearToSlowEaseIn,
                 duration: const Duration(milliseconds: 800),
-                child: const SizedBox().inCard(elevation: isSelected ? 10 : 1))
+                child: const SizedBox().inCard(elevation: isSelected ? 5 : 1))
             .sized(
           width: cellSize.width,
           height: cellSize.height,
@@ -328,15 +336,15 @@ class _CourseDayColumnState extends State<_CourseDayColumn> {
         final firstLayerLesson = lessons[0];
 
         /// TODO: Range checking
-        final course = widget.courseKey2Entity[firstLayerLesson.courseKey];
+        final course = widget.timetable.courseKey2Entity[firstLayerLesson.courseKey];
         Widget cell = AnimatedSlide(
-            offset: isSelected ? const Offset(0.02, -0.02) : Offset.zero,
+            offset: isSelected ? const Offset(0.022, -0.0215) : Offset.zero,
             curve: Curves.fastLinearToSlowEaseIn,
             duration: const Duration(milliseconds: 800),
             child: _CourseCell(
               timeslot: timeslot,
               lesson: firstLayerLesson,
-              courseKey2Entity: widget.courseKey2Entity,
+              timetable: widget.timetable,
               course: course,
               elevation: isSelected ? 80 : 8,
             )).sized(width: cellSize.width, height: cellSize.height * firstLayerLesson.duration);
@@ -355,14 +363,14 @@ class _CourseCell extends StatefulWidget {
   final SitTimetableLesson lesson;
   final SitCourse course;
   final int timeslot;
-  final List<SitCourse> courseKey2Entity;
+  final SitTimetable timetable;
   final double elevation;
 
   const _CourseCell({
     super.key,
     required this.timeslot,
     required this.lesson,
-    required this.courseKey2Entity,
+    required this.timetable,
     required this.course,
     this.elevation = 8,
   });
@@ -408,16 +416,9 @@ class _CourseCellState extends State<_CourseCell> {
       ].stack();
     }
 
-    return res.inCard(color: color, elevation: widget.elevation, margin: EdgeInsets.all(1.5.w));
-    return [
-      buildText(formatPlace(course.place), 2),
-      buildText(course.teachers.join(','), 2),
-    ].column().inCard(color: color, elevation: 8).onTap(() async {
-      /* await showModalBottomSheet(
-          isScrollControlled: true,
-          backgroundColor: Colors.transparent,
-          builder: (BuildContext context) => Sheet(course.courseCode, widget.allCourse),
-          context: context);*/
+    return res.inCard(color: color, elevation: widget.elevation, margin: EdgeInsets.all(1.5.w)).onTap(() async {
+      if (!mounted) return;
+      await context.showSheet((ctx) => Sheet(courseCode: course.courseCode, timetable: widget.timetable));
     });
   }
 

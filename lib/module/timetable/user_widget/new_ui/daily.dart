@@ -22,7 +22,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/module/timetable/events.dart';
 import 'package:rettulf/rettulf.dart';
 
-import '../../cache.dart';
 import '../../entity/course.dart';
 import '../../entity/entity.dart';
 import '../../using.dart';
@@ -159,9 +158,15 @@ class _OneDayPageState extends State<_OneDayPage> with AutomaticKeepAliveClientM
 
   /// Cache the who page to avoid expensive rebuilding.
   Widget? _cached;
+  Size? lastSize;
 
   @override
   Widget build(BuildContext context) {
+    final size = context.mediaQuery.size;
+    if (lastSize != size) {
+      _cached = null;
+      lastSize = size;
+    }
     super.build(context);
     final cache = _cached;
     if (cache != null) {
@@ -178,11 +183,17 @@ class _OneDayPageState extends State<_OneDayPage> with AutomaticKeepAliveClientM
     int dayIndex = widget.dayIndex;
     final week = timetable.weeks[weekIndex];
     if (week == null) {
-      return _buildFreeDayTip(ctx, weekIndex, dayIndex);
+      return [
+        const SizedBox(height: 60),
+        _buildFreeDayTip(ctx, weekIndex, dayIndex).expanded(),
+      ].column();
     } else {
       final day = week.days[dayIndex];
       if (!day.hasAnyLesson()) {
-        return _buildFreeDayTip(ctx, weekIndex, dayIndex);
+        return [
+          const SizedBox(height: 60),
+          _buildFreeDayTip(ctx, weekIndex, dayIndex).expanded(),
+        ].column();
       } else {
         final slotCount = day.timeslots2Lessons.length;
         final builder = _RowBuilder();

@@ -19,7 +19,6 @@ import 'package:flutter/material.dart';
 import 'package:kite/module/timetable/events.dart';
 import 'package:rettulf/rettulf.dart';
 
-import '../cache.dart';
 import '../entity/course.dart';
 import '../entity/entity.dart';
 import '../init.dart';

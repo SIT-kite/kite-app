@@ -1,5 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kite/module/timetable/events.dart';
 import 'package:rettulf/rettulf.dart';
 
@@ -47,7 +46,7 @@ class _TimetableViewerState extends State<TimetableViewer> {
   @override
   Widget build(BuildContext context) {
     return [
-      buildTimetableBody(context).safeArea(),
+      buildTimetableBody(context),
       buildTableHeader(context),
     ].stack();
   }
