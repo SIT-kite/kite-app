@@ -42,9 +42,10 @@ class TimetableStyle extends InheritedWidget {
 }
 
 class TimetableStyleProv extends StatefulWidget {
-  final Widget child;
+  final Widget? child;
+  final WidgetBuilder? builder;
 
-  const TimetableStyleProv({super.key, required this.child});
+  const TimetableStyleProv({super.key, this.child, this.builder});
 
   @override
   TimetableStyleProvState createState() => TimetableStyleProvState();
@@ -64,12 +65,25 @@ class TimetableStyleProvState extends State<TimetableStyleProv> {
 
   @override
   Widget build(BuildContext context) {
+    assert(widget.builder != null || widget.child != null, "TimetableStyleProv should have at least one child.");
     return TimetableStyle(
       data: TimetableStyleData(
         storage.useOldSchoolColors == true ? CourseColor.oldSchool : CourseColor.v1_5,
         storage.useNewUI ?? false,
       ),
-      child: widget.child,
+      child:buildChild(),
     );
+  }
+
+  Widget buildChild() {
+    final child = widget.child;
+    if (child != null) {
+      return child;
+    }
+    final builder = widget.builder;
+    if (builder != null) {
+      return Builder(builder: builder);
+    }
+    return const SizedBox();
   }
 }

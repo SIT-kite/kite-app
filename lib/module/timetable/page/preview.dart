@@ -19,7 +19,6 @@ import 'package:flutter/material.dart';
 
 import '../entity/course.dart';
 import '../entity/entity.dart';
-import '../entity/meta.dart';
 import '../user_widget/style.dart';
 import '../user_widget/interface.dart';
 import '../using.dart';
@@ -51,13 +50,40 @@ class _TimetablePreviewPageState extends State<TimetablePreviewPage> {
             '${i18n.timetablePreviewTitle} ${widget.timetable.name}',
             overflow: TextOverflow.ellipsis,
           ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.swap_horiz_rounded),
+              onPressed: () {
+                $displayMode.value = $displayMode.value.toggle();
+              },
+            )
+          ],
         ),
         body: TimetableStyleProv(
-          child: new_ui.TimetableViewer(
-            timetable: widget.timetable,
-            $currentPos: $currentPos,
-            $displayMode: $displayMode,
-          ),
+          builder: (ctx) => buildBody(ctx),
         ));
+  }
+
+  Widget buildBody(BuildContext ctx) {
+    if (TimetableStyle.of(ctx).useNewUI) {
+      return new_ui.TimetableViewer(
+        timetable: widget.timetable,
+        $currentPos: $currentPos,
+        $displayMode: $displayMode,
+      );
+    } else {
+      return classic_ui.TimetableViewer(
+        timetable: widget.timetable,
+        $currentPos: $currentPos,
+        $displayMode: $displayMode,
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    $displayMode.dispose();
+    $currentPos.dispose();
   }
 }

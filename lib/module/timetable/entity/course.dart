@@ -34,6 +34,7 @@ enum DisplayMode {
     }
     return null;
   }
+  DisplayMode toggle() => DisplayMode.values[(index + 1) & 1];
 }
 
 @HiveType(typeId: HiveTypeId.course)

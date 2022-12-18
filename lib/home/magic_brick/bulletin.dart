@@ -46,9 +46,10 @@ class _KiteBulletinItemState extends State<KiteBulletinItem> {
   }
 
   void updateLatestBulletin() async {
-    final String? result = await _buildContent();
-    if (!mounted) return;
-    setState(() => content = result);
+    _buildContent().then((value) {
+      if (!mounted) return;
+      setState(() => content = value);
+    }).onError((error, stackTrace) {});
   }
 
   Future<String?> _buildContent() async {

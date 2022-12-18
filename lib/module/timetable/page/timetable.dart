@@ -128,7 +128,7 @@ class _TimetablePageState extends State<TimetablePage> {
     return IconButton(
       icon: const Icon(Icons.swap_horiz_rounded),
       onPressed: () {
-        $displayMode.value = DisplayMode.values[($displayMode.value.index + 1) & 1];
+        $displayMode.value = $displayMode.value.toggle();
       },
     );
   }
