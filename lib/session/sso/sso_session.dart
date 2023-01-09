@@ -371,6 +371,7 @@ class SsoSession with DioDownloaderMixin implements ISession {
           debug('识别验证码结果: $captcha');
         } while (captcha.length != 4);
       } catch (e) {
+        debug('进入手动验证码流程：$e');
         if (onNeedInputCaptcha != null) {
           // 验证码识别有误，进入手动验证码流程
           final c = await onNeedInputCaptcha!(captchaImage);
