@@ -5,6 +5,9 @@ PODS:
     - FlutterMacOS
   - catcher (0.0.1):
     - FlutterMacOS
+  - connectivity_plus (0.0.1):
+    - FlutterMacOS
+    - ReachabilitySwift
   - device_info_plus_macos (0.0.1):
     - FlutterMacOS
   - FlutterMacOS (1.0.0)
@@ -19,6 +22,7 @@ PODS:
     - FlutterMacOS
   - path_provider_macos (0.0.1):
     - FlutterMacOS
+  - ReachabilitySwift (5.0.0)
   - screen_retriever (0.0.1):
     - FlutterMacOS
   - shared_preferences_macos (0.0.1):
@@ -37,6 +41,7 @@ DEPENDENCIES:
   - audio_session (from `Flutter/ephemeral/.symlinks/plugins/audio_session/macos`)
   - audioplayers_darwin (from `Flutter/ephemeral/.symlinks/plugins/audioplayers_darwin/macos`)
   - catcher (from `Flutter/ephemeral/.symlinks/plugins/catcher/macos`)
+  - connectivity_plus (from `Flutter/ephemeral/.symlinks/plugins/connectivity_plus/macos`)
   - device_info_plus_macos (from `Flutter/ephemeral/.symlinks/plugins/device_info_plus_macos/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
   - just_audio (from `Flutter/ephemeral/.symlinks/plugins/just_audio/macos`)
@@ -53,6 +58,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - FMDB
+    - ReachabilitySwift
 
 EXTERNAL SOURCES:
   audio_session:
@@ -61,6 +67,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/audioplayers_darwin/macos
   catcher:
     :path: Flutter/ephemeral/.symlinks/plugins/catcher/macos
+  connectivity_plus:
+    :path: Flutter/ephemeral/.symlinks/plugins/connectivity_plus/macos
   device_info_plus_macos:
     :path: Flutter/ephemeral/.symlinks/plugins/device_info_plus_macos/macos
   FlutterMacOS:
@@ -89,20 +97,22 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   audio_session: dea1f41890dbf1718f04a56f1d6150fd50039b72
   audioplayers_darwin: dcad41de4fbd0099cb3749f7ab3b0cb8f70b810c
-  catcher: 0e54b4baacab1ab3fe1e63bd07e0c39a8a2d0e5d
-  device_info_plus_macos: 97eeb3077e065dc9630410b98b64b06f0df5cfdd
+  catcher: dc8ecb9a4d3e6e36bd403cd34e13673f7ed7ca70
+  connectivity_plus: 18d3c32514c886e046de60e9c13895109866c747
+  device_info_plus_macos: 1ad388a1ef433505c4038e7dd9605aadd1e2e9c7
   FlutterMacOS: ae6af50a8ea7d6103d888583d46bd8328a7e9811
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   just_audio: 9b67ca7b97c61cfc9784ea23cd8cc55eb226d489
   mobile_scanner: 35dc92ffdbd7934b0dbc411b1c731bc2ef23c2dc
-  package_info_plus_macos: 653b96af562fabb349a88935164864b5f16b5b2c
-  path_provider_macos: 7f02d5d549750547369e9c68223f954ef3539e72
+  package_info_plus_macos: f010621b07802a241d96d01876d6705f15e77c1c
+  path_provider_macos: 3c0c3b4b0d4a76d2bf989a913c2de869c5641a19
+  ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   screen_retriever: 59634572a57080243dd1bf715e55b6c54f241a38
-  shared_preferences_macos: 33a283075a27b1bb86af262383983fc22dad33af
+  shared_preferences_macos: a64dc611287ed6cbe28fd1297898db1336975727
   sqflite: a5789cceda41d54d23f31d6de539d65bb14100ea
-  url_launcher_macos: eac8bc4a91d00018e866205960559d73736b08dc
-  wakelock_macos: 8dafd5425dcdb437fc5a98db9c88198d4e74ff03
-  window_manager: 5f68caf0c4a543914a36e0115f072b922928ae77
+  url_launcher_macos: 597e05b8e514239626bcf4a850fcf9ef5c856ec3
+  wakelock_macos: bc3f2a9bd8d2e6c89fee1e1822e7ddac3bd004a9
+  window_manager: 3a1844359a6295ab1e47659b1a777e36773cd6e8
 
 PODFILE CHECKSUM: 69608711ca93a0af5aac7e2f834b34cf2422afce
 
