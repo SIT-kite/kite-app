@@ -415,7 +415,7 @@
   "@greetingHeaderL1": {
     "description": "The first line of greeting header"
   },
-  "greetingHeaderL2": "{days,plural, =1{For 1 Day} other{For {days} Days}",
+  "greetingHeaderL2": "{days,plural, =1{For 1 Day} other {For {days} Days}}",
   "@greetingHeaderL2": {
     "placeholders": {
       "days": {
@@ -481,7 +481,7 @@
   "notLoggedIn": "Not Logged In",
   "notNow": "Not Now",
   "numberOfPeopleBesidesMe": "Number of people besides me",
-  "oaAnnouncementAttachmentTip": "{count,plural, =1{Attachment} other{Attachments}",
+  "oaAnnouncementAttachmentTip": "{count,plural, =1{Attachment} other{Attachments}}",
   "@oaAnnouncementAttachmentTip": {
     "placeholders": {
       "count": {
