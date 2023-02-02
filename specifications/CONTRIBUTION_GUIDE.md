@@ -58,7 +58,7 @@ Be aware that Xcode 14 or higher doesn't work due to the compatibility issue of 
 Kite Team always works with the latest Flutter.
 As of press time, Kite Team uses:
 
-- Flutter 3.3.8
+- Flutter 3.7.0
 
 ## Code Style
 
