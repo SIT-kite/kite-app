@@ -230,7 +230,7 @@
   "fullName": "姓名",
   "gameLeaveRequest": "確認離開嗎?",
   "gameLeaveRequestDesc": "你的遊戲狀態不會被存儲。",
-  "gameWordleNoSuchWord": "沒有 \"{number}\" 這個單詞。",
+  "gameWordleNoSuchWord": "沒有 \"{word}\" 這個單詞。",
   "gender": "性別",
   "go": "出發",
   "gpaPointLabel": "{type} 績點: {point}",
