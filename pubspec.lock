@@ -998,24 +998,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.2"
-  ikite:
-    dependency: "direct main"
-    description:
-      path: ikite-dart
-      ref: master
-      resolved-ref: "6584bd43a1d519360970b8f75a51472a9e1a9d63"
-      url: "https://github.com/SIT-kite/iKite.git"
-    source: git
-    version: "1.0.0"
-  ikite_flutter:
-    dependency: "direct main"
-    description:
-      path: ikite-flutter
-      ref: master
-      resolved-ref: "6584bd43a1d519360970b8f75a51472a9e1a9d63"
-      url: "https://github.com/SIT-kite/iKite.git"
-    source: git
-    version: "0.0.1"
   image:
     dependency: transitive
     description:
