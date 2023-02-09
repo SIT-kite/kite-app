@@ -237,7 +237,7 @@ class _DetailPageState extends State<DetailPage> with AutomaticKeepAliveClientMi
       if (!mounted) return;
       showBasicFlash(context, Text(response));
     } catch (e) {
-      showBasicFlash(context, Text('错误: ${e.runtimeType}'), duration: const Duration(seconds: 3));
+      showBasicFlash(context, Text('错误: ${e.runtimeType}'));
       rethrow;
     }
   }

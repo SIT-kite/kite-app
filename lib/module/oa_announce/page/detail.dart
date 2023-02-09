@@ -139,7 +139,7 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Future<void> _onDownloadFile(AnnounceAttachment attachment) async {
-    showBasicFlash(context, i18n.downloading.text(), duration: const Duration(seconds: 1));
+    showBasicFlash(context, i18n.downloading.text());
     Log.info('下载文件: [${attachment.name}](${attachment.url})');
 
     String targetPath = '${(await getTemporaryDirectory()).path}/kite1/downloads/${attachment.name}';
