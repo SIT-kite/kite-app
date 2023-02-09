@@ -100,9 +100,6 @@ class Initializer {
       ssoSession: Global.ssoSession,
       box: HiveBoxInit.oaAnnounceCache,
     );
-    CampusCardInit.init(
-      session: Global.ssoSession,
-    );
     ConnectivityInit.init(
       ssoSession: Global.ssoSession,
     );

@@ -160,7 +160,6 @@ flutter:
     - assets/home/
     - assets/welcome/
     - assets/connectivity/
-    - assets/campus_card/
     - assets/report_temp/
     - assets/fonts/
     - assets/weather/

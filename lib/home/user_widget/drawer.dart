@@ -57,15 +57,6 @@ class KiteDrawer extends StatelessWidget {
               Navigator.of(context).pushNamed(RouteTable.networkTool);
             },
           ),
-          if (UniversalPlatform.isAndroid)
-            ListTile(
-              title: i18n.campusCardTool.text(),
-              leading: const Icon(Icons.credit_card),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.of(context).pushNamed(RouteTable.campusCard);
-              },
-            ),
           // Feedback
           ListTile(
             title: i18n.feedback.text(),

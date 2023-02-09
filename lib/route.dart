@@ -41,7 +41,6 @@ class RouteTable {
   static const about = '/about';
   static const activity = '/activity';
   static const application = '/application';
-  static const campusCard = '/campus_card';
   static const classroomBrowser = '/classroom_browser';
   static const networkTool = '/network_tool';
   static const easterEgg = '/easter_egg';
@@ -104,7 +103,6 @@ final defaultRouteTable = StaticRouteTable(
     RouteTable.about: (context, args) => const AboutPage(),
     RouteTable.expense: (context, args) => const ExpenseTrackerPage(),
     RouteTable.networkTool: (context, args) => const NetworkToolPage(),
-    RouteTable.campusCard: (context, args) => const CampusCardPage(),
     RouteTable.electricityBill: (context, args) => const ElectricityBillPage(),
     RouteTable.examResult: (context, args) => const ExamResultPage(),
     RouteTable.application: (context, args) => const ApplicationIndexPage(),

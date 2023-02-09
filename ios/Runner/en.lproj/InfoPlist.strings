@@ -10,4 +10,3 @@ NSCalendarsUsageDescription = "Kite requires calendar premission.";
 NSCameraUsageDescription = "Kite requires camera premission.";
 NSPhotoLibraryUsageDescription = "Kite requires album premission.";
 CFBundleDisplayName = "SIT Kite";
-NFCReaderUsageDescription = "Kite requires NFC premission.";

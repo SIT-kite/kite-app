@@ -17,7 +17,6 @@
 */
 export 'activity/symbol.dart';
 export 'application/symbol.dart';
-export 'campus_card/symbol.dart';
 export 'classroom_browser/symbol.dart';
 export 'easter_egg/symbol.dart';
 export 'edu_email/symbol.dart';
