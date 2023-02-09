@@ -32,6 +32,9 @@ class InAppViewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
+
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
@@ -39,7 +42,10 @@ class InAppViewPage extends StatelessWidget {
       body: MyFutureBuilder<List<WebViewCookie>>(
         future: ApplicationInit.cookieJar.loadAsWebViewCookie(Uri.parse(url)),
         builder: (context, data) {
-          return WebView(
+          final manager = WebViewCookieManager();
+          manager.setCookie(data);
+
+          return WebViewWidget(
             initialUrl: url,
             initialCookies: data,
           );

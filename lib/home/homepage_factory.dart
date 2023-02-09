@@ -22,7 +22,6 @@ import 'package:universal_platform/universal_platform.dart';
 import '../launcher.dart';
 import '../route.dart';
 import '../util/logger.dart';
-import '../util/scanner.dart';
 import 'entity/home.dart';
 import 'magic_brick/application.dart';
 import 'magic_brick/bulletin.dart';
@@ -102,18 +101,6 @@ class HomepageFactory {
               icon: SvgAssetIcon('assets/home/icon_bbs.svg'),
               title: FType.bbs.localized(),
               subtitle: FType.bbs.localizedDesc(),
-            ),
-    FType.scanner: UniversalPlatform.isDesktopOrWeb
-        ? null
-        : (context) => Brick(
-              onPressed: () async {
-                final result = await scan(context);
-                Log.info('扫码结果: $result');
-                if (result != null) GlobalLauncher.launch(result);
-              },
-              icon: SysIcon(Icons.qr_code_scanner),
-              title: FType.scanner.localized(),
-              subtitle: FType.scanner.localizedDesc(),
             ),
     FType.freshman: (context) => const FreshmanItem(),
     FType.switchAccount: (context) => Brick(

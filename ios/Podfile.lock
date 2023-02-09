@@ -112,9 +112,6 @@ PODS:
     - MLImage (= 1.0.0-beta3)
     - MLKitCommon (~> 8.0)
     - Protobuf (~> 3.12)
-  - mobile_scanner (0.0.1):
-    - Flutter
-    - GoogleMLKit/BarcodeScanning (~> 3.2.0)
   - nanopb (2.30909.0):
     - nanopb/decode (= 2.30909.0)
     - nanopb/encode (= 2.30909.0)

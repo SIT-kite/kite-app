@@ -32,7 +32,6 @@ import 'package:kite/override/entity.dart';
 import 'package:kite/override/init.dart';
 import 'package:kite/quick_button/init.dart';
 import 'package:kite/user_widget/color_saturation_widget.dart';
-import 'package:kite/util/scanner.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:rettulf/rettulf.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -316,20 +315,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-  Widget buildScannerButton(BuildContext context) {
-    return IconButton(
-      onPressed: () async {
-        final result = await scan(context);
-        Log.info('扫码结果: $result');
-        if (result != null) GlobalLauncher.launch(result);
-      },
-      icon: const Icon(
-        Icons.qr_code_scanner_outlined,
-        color: Colors.white70,
-      ),
-      iconSize: 30,
-    );
   }
 
   Widget buildBody(BuildContext context) {
@@ -356,7 +341,6 @@ class _HomePageState extends State<HomePage> {
                 ),
                 // AppBar
                 actions: [
-                  if (!UniversalPlatform.isDesktopOrWeb) buildScannerButton(context),
                   IconButton(
                     onPressed: () => Navigator.of(context).pushNamed(RouteTable.settings),
                     icon: const Icon(Icons.settings, color: Colors.white70),

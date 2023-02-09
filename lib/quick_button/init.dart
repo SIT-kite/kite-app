@@ -20,7 +20,6 @@ import 'package:kite/l10n/extension.dart';
 import 'package:kite/launcher.dart';
 import 'package:kite/route.dart';
 import 'package:kite/util/logger.dart';
-import 'package:kite/util/scanner.dart';
 import 'package:quick_actions/quick_actions.dart';
 import 'package:rettulf/rettulf.dart';
 
@@ -30,7 +29,6 @@ class _QuickAction {
   static const reportTemp = "reportTemp";
   static const timetable = "timetable";
   static const library = "library";
-  static const scanner = "scanner";
 }
 
 class QuickButton {
@@ -50,13 +48,6 @@ class QuickButton {
       case _QuickAction.library:
         ctx.navigator.pushNamed(RouteTable.library);
         break;
-      case _QuickAction.scanner:
-        scan(ctx).then((result) {
-          Log.info('扫码结果: $result');
-          if (result != null) GlobalLauncher.launch(result);
-        });
-        ctx.navigator.pushNamed(RouteTable.scanner);
-        break;
     }
   }
 
@@ -68,7 +59,6 @@ class QuickButton {
       ShortcutItem(type: 'reportTemp', localizedTitle: i18n.ftype_reportTemp, icon: null),
       ShortcutItem(type: 'timetable', localizedTitle: i18n.ftype_timetable, icon: null),
       ShortcutItem(type: 'library', localizedTitle: i18n.ftype_library, icon: null),
-      ShortcutItem(type: 'scanner', localizedTitle: i18n.ftype_scanner, icon: null),
     ]);
   }
 }

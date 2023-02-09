@@ -103,7 +103,6 @@ class BrickMaker {
     // Yellow pages are open for all no matter user type.
     // Freshman or Offline may need to look up the tel.
     r << FType.yellowPages;
-    r << FType.scanner;
     r << FType.separator;
     // Entertainment
     r << FType.game;

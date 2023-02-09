@@ -154,8 +154,6 @@ enum FType {
         return i18n.ftype_separator;
       case FType.bbs:
         return i18n.ftype_bbs;
-      case FType.scanner:
-        return i18n.ftype_scanner;
       case FType.freshman:
         return i18n.ftype_freshman;
       case FType.switchAccount:
@@ -205,8 +203,6 @@ enum FType {
         return i18n.ftype_separator_desc;
       case FType.bbs:
         return i18n.ftype_bbs_desc;
-      case FType.scanner:
-        return i18n.ftype_scanner_desc;
       case FType.freshman:
         return i18n.ftype_freshman_desc;
       case FType.switchAccount:

@@ -92,8 +92,6 @@ dependencies:
   flutter_native_splash: ^2.1.1 # Splash screen, upgradable
   flutter_platform_widgets: ^3.0.0 # Platform aware widgets
   flutter_weather_bg_null_safety: ^1.0.0 # Weather background
-  qr_flutter: ^4.0.0 # Qr code generate
-  mobile_scanner: ^2.1.0 # qrcode scanner
   audioplayers: ^3.0.1 # audio player
   flutter_staggered_grid_view: ^0.6.2
   cached_network_image: ^3.2.3
@@ -171,11 +169,9 @@ flutter:
     - assets/game/
     - assets/game/tetris/
     - assets/edu_email/
-    - assets/scanner/
     - assets/freshman/
     # Prompt sound.
     - assets/game/step.mp3
-    - assets/scanner/beep.mp3
     - assets/roomlist.json
     - assets/webview/
 

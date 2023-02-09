@@ -36,7 +36,6 @@ export 'lost_found/symbol.dart';
 export 'network_tool/symbol.dart';
 export 'oa_announce/symbol.dart';
 export 'report_temp/symbol.dart';
-export 'scanner/symbol.dart';
 export 'shared/symbol.dart';
 export 'simple_page/symbol.dart';
 export 'timetable/symbol.dart';

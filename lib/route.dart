@@ -72,7 +72,6 @@ class RouteTable {
   static const lostFound = '/lost_found';
   static const examArrangement = '/exam_arrangement';
   static const bbs = '/bbs';
-  static const scanner = '/scanner';
   static const browser = '/browser';
   static const freshman = '/freshman';
   static const freshmanLogin = '$freshman/login';
@@ -130,7 +129,6 @@ final defaultRouteTable = StaticRouteTable(
     RouteTable.examArrangement: (context, args) => const ExamArrangementPage(),
     RouteTable.easterEgg: (context, args) => const EggPage(),
     RouteTable.bbs: (context, args) => const BbsPage(),
-    RouteTable.scanner: (context, args) => const ScannerPage(),
     RouteTable.browser: (context, args) {
       return BrowserPage(
         initialUrl: args['initialUrl'],
