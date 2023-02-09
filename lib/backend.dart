@@ -16,5 +16,5 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 class Backend {
-  static const kite = "https://kite.sunnysab.cn";
+  static const kite = "https://api.kite.sunnysab.cn";
 }
