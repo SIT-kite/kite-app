@@ -18,12 +18,14 @@
 
 import 'dart:async';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:kite/user_widget/platform_widget.dart';
 import 'package:kite/util/logger.dart';
 import 'package:kite/util/rule.dart';
 import 'package:kite/util/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter_android/webview_flutter_android.dart';
 
 import '../unsupported_platform_launch.dart';
 
@@ -125,6 +127,20 @@ class _MyWebViewState extends State<MyWebView> {
   @override
   void initState() {
     super.initState();
+
+    if (_controller.platform is AndroidWebViewController) {
+      (_controller.platform as AndroidWebViewController).setOnShowFileSelector(
+        (FileSelectorParams params) async {
+          FilePickerResult? fpr = await FilePicker.platform.pickFiles(dialogTitle: '请选择待上传文件');
+          if (fpr == null) {
+            return [];
+          }
+          List<String> paths = fpr.paths.where((e) => e != null).map((e) => 'file://${e!}').toList();
+          Log.info(paths);
+          return paths;
+        },
+      );
+    }
     _controller
       ..setJavaScriptMode(widget.javaScriptMode)
       ..setNavigationDelegate(NavigationDelegate(

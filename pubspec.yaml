@@ -129,6 +129,7 @@ dependencies:
   msh_checkbox: ^2.0.0
   animated_toggle_switch: ^0.6.1
   quiver: ^3.2.1
+  webview_flutter_android: ^3.3.0
 
 dev_dependencies:
   flutter_test: { sdk: flutter }
