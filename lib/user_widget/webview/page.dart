@@ -29,6 +29,9 @@ import 'package:universal_platform/universal_platform.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class SimpleWebViewPage extends StatefulWidget {
+  /// WebView控制器
+  final WebViewController? controller;
+
   /// 初始的url
   final String initialUrl;
 
@@ -56,14 +59,11 @@ class SimpleWebViewPage extends StatefulWidget {
   /// 若该字段不为null，则表示使用post请求打开网页
   final Map<String, String>? postData;
 
-  /// WebView创建完毕时的回调
-  final WebViewCreatedCallback? onWebViewCreated;
-
   /// 网页加载完毕
-  final PageFinishedCallback? onPageFinished;
+  final void Function(String url)? onPageFinished;
 
   /// 暴露dart回调到js接口
-  final Set<JavascriptChannel>? javascriptChannels;
+  final Map<String, void Function(JavaScriptMessage)>? javaScriptChannels;
 
   /// 如果不支持 WebView，是否显示浏览器打开按钮
   final bool showLaunchButtonIfUnsupported;
@@ -83,10 +83,10 @@ class SimpleWebViewPage extends StatefulWidget {
   const SimpleWebViewPage({
     Key? key,
     required this.initialUrl,
+    this.controller,
     this.fixedTitle,
     this.injectJsRules,
     this.floatingActionButton,
-    this.onWebViewCreated,
     this.onPageFinished,
     this.showSharedButton = false,
     this.showRefreshButton = true,
@@ -94,7 +94,7 @@ class SimpleWebViewPage extends StatefulWidget {
     this.showTopProgressIndicator = true,
     this.userAgent,
     this.postData,
-    this.javascriptChannels,
+    this.javaScriptChannels,
     this.showLaunchButtonIfUnsupported = true,
     this.otherActions,
     this.followDarkMode = false,
@@ -106,17 +106,17 @@ class SimpleWebViewPage extends StatefulWidget {
 }
 
 class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
-  WebViewController? _controller;
+  late final WebViewController _controller = widget.controller ?? WebViewController();
 
   String title = i18n.untitled;
   int progress = 0;
 
   void _onRefresh() async {
-    await _controller?.reload();
+    await _controller.reload();
   }
 
   void _onShared() async {
-    Log.info('分享页面: ${await _controller?.currentUrl()}');
+    Log.info('分享页面: ${await _controller.currentUrl()}');
   }
 
   /// 构造进度条
@@ -159,8 +159,8 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
     final curTitle = widget.fixedTitle ?? title;
     return WillPopScope(
       onWillPop: () async {
-        final canGoBack = await _controller?.canGoBack() ?? false;
-        if (canGoBack) _controller?.goBack();
+        final canGoBack = await _controller.canGoBack();
+        if (canGoBack) _controller.goBack();
         // 如果wv能后退就不能退出路由
         return !canGoBack;
       },
@@ -179,10 +179,6 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
         floatingActionButton: widget.floatingActionButton,
         body: MyWebView(
           initialUrl: widget.initialUrl,
-          onWebViewCreated: (controller) async {
-            _controller = controller;
-            widget.onWebViewCreated?.call(controller);
-          },
           injectJsRules: () {
             return [
               if (widget.followDarkMode && Theme.of(context).isDark)
@@ -201,12 +197,12 @@ class _SimpleWebViewPageState extends State<SimpleWebViewPage> {
           onPageFinished: (url) async {
             widget.onPageFinished?.call(url);
             if (widget.fixedTitle == null) {
-              title = (await _controller?.getTitle()) ?? i18n.untitled;
+              title = (await _controller.getTitle()) ?? i18n.untitled;
               if (!mounted) return;
               setState(() {});
             }
           },
-          javascriptChannels: widget.javascriptChannels,
+          javaScriptChannels: widget.javaScriptChannels,
           userAgent: widget.userAgent,
           postData: widget.postData,
           showLaunchButtonIfUnsupported: widget.showLaunchButtonIfUnsupported,

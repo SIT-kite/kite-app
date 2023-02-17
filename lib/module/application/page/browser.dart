@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import 'package:flutter/material.dart';
+import 'package:kite/module/shared/user_widget/webview.dart';
 import 'package:kite/user_widget/future_builder.dart';
 import 'package:kite/util/cookie_util.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 import '../init.dart';
 
@@ -32,9 +32,6 @@ class InAppViewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
-
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
@@ -42,10 +39,7 @@ class InAppViewPage extends StatelessWidget {
       body: MyFutureBuilder<List<WebViewCookie>>(
         future: ApplicationInit.cookieJar.loadAsWebViewCookie(Uri.parse(url)),
         builder: (context, data) {
-          final manager = WebViewCookieManager();
-          manager.setCookie(data);
-
-          return WebViewWidget(
+          return MyWebView(
             initialUrl: url,
             initialCookies: data,
           );

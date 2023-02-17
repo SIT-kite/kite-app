@@ -41,22 +41,19 @@ function uploadGameRecord(obj){
   KiteGame.postMessage(JSON.stringify(obj));
 }''')
           ],
-          javascriptChannels: {
-            JavascriptChannel(
-              name: 'KiteGame',
-              onMessageReceived: (JavascriptMessage message) async {
-                final oaUser = Auth.oaCredential;
-                if (oaUser != null) {
-                  Log.info('收到上传游戏记录请求${message.message}');
-                  final record = GameRecord.fromJson(jsonDecode(message.message));
+          javaScriptChannels: {
+            'KiteGame': (JavaScriptMessage message) async {
+              final oaUser = Auth.oaCredential;
+              if (oaUser != null) {
+                Log.info('收到上传游戏记录请求${message.message}');
+                final record = GameRecord.fromJson(jsonDecode(message.message));
 
-                  Log.info('上传游戏记录$record');
-                  record.ts = DateTime.now();
+                Log.info('上传游戏记录$record');
+                record.ts = DateTime.now();
 
-                  await uploadGameRecord(context, oaUser, record);
-                }
-              },
-            ),
+                await uploadGameRecord(context, oaUser, record);
+              }
+            },
           },
         ));
   }

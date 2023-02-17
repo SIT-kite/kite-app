@@ -71,18 +71,18 @@ class InjectJsRuleItem {
 }
 
 class MyWebView extends StatefulWidget {
+  final WebViewController? controller;
   final String? initialUrl;
 
   /// js注入规则，判定某个url需要注入何种js代码
   final List<InjectJsRuleItem>? injectJsRules;
 
   /// 各种callback
-  final WebViewCreatedCallback? onWebViewCreated;
-  final PageStartedCallback? onPageStarted;
-  final PageFinishedCallback? onPageFinished;
-  final PageLoadingCallback? onProgress;
+  final void Function(String url)? onPageStarted;
+  final void Function(String url)? onPageFinished;
+  final void Function(int progress)? onProgress;
 
-  final JavascriptMode javascriptMode;
+  final JavaScriptMode javaScriptMode;
 
   /// 若该字段不为null，则表示使用post请求打开网页
   final Map<String, String>? postData;
@@ -94,24 +94,24 @@ class MyWebView extends StatefulWidget {
   final String? userAgent;
 
   /// 暴露dart回调到js接口
-  final Set<JavascriptChannel>? javascriptChannels;
+  final Map<String, void Function(JavaScriptMessage)>? javaScriptChannels;
 
   /// 如果不支持webview，是否显示浏览器打开按钮
   final bool showLaunchButtonIfUnsupported;
 
   const MyWebView({
     Key? key,
+    this.controller,
     this.initialUrl,
     this.injectJsRules,
-    this.onWebViewCreated,
     this.onPageStarted,
     this.onPageFinished,
     this.onProgress,
-    this.javascriptMode = JavascriptMode.unrestricted, // js支持默认启用
+    this.javaScriptMode = JavaScriptMode.unrestricted, // js支持默认启用
     this.userAgent,
     this.postData,
     this.initialCookies = const <WebViewCookie>[],
-    this.javascriptChannels,
+    this.javaScriptChannels,
     this.showLaunchButtonIfUnsupported = true,
   }) : super(key: key);
 
@@ -120,7 +120,51 @@ class MyWebView extends StatefulWidget {
 }
 
 class _MyWebViewState extends State<MyWebView> {
-  WebViewController? _controller;
+  late final _controller = widget.controller ?? WebViewController();
+
+  @override
+  void initState() {
+    super.initState();
+    _controller
+      ..setJavaScriptMode(widget.javaScriptMode)
+      ..setNavigationDelegate(NavigationDelegate(
+        onPageStarted: (url) async {
+          Log.info('开始加载url: $url');
+          await Future.wait(getAllMatchJs(url, InjectJsTime.onPageStarted).map(injectJs));
+          widget.onPageStarted?.call(url);
+        },
+        onPageFinished: (url) async {
+          Log.info('url加载完毕: $url');
+          await Future.wait(getAllMatchJs(url, InjectJsTime.onPageFinished).map(injectJs));
+          widget.onPageFinished?.call(url);
+        },
+        onProgress: widget.onProgress,
+        onWebResourceError: onResourceError,
+      ))
+      ..setUserAgent(widget.userAgent);
+
+    if (widget.initialUrl != null) {
+      Uri uri = Uri.parse(widget.initialUrl!);
+      if (widget.postData == null) {
+        _controller.loadRequest(uri);
+      } else {
+        _controller.loadRequest(
+          uri,
+          method: LoadRequestMethod.post,
+        );
+      }
+    }
+
+    if (widget.javaScriptChannels != null) {
+      for (final e in widget.javaScriptChannels!.entries) {
+        _controller.addJavaScriptChannel(e.key, onMessageReceived: e.value);
+      }
+    }
+
+    // WebViewCookieManager似乎是全局单例的？
+    final cookieManager = WebViewCookieManager();
+    widget.initialCookies.forEach(cookieManager.setCookie);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +176,9 @@ class _MyWebViewState extends State<MyWebView> {
         );
       },
       mobileBuilder: (context) {
-        return buildWebView(widget.initialCookies);
+        return WebViewWidget(
+          controller: _controller,
+        );
       },
     );
   }
@@ -149,67 +195,26 @@ class _MyWebViewState extends State<MyWebView> {
     // 同步获取js代码
     if (injectJsRule.javascript != null) {
       Log.info('执行了js注入');
-      await _controller?.runJavascript(injectJsRule.javascript!);
+      await _controller.runJavaScript(injectJsRule.javascript!);
     }
     // 异步获取js代码
     if (injectJsRule.asyncJavascript != null) {
       String? js = await injectJsRule.asyncJavascript;
       if (js != null) {
-        await _controller?.runJavascript(js);
+        await _controller.runJavaScript(js);
       }
     }
   }
 
-  String _buildFormHtml() {
-    if (widget.postData == null) {
-      return '';
+  void onResourceError(WebResourceError error) async {
+    String? url = await _controller.currentUrl();
+    if (url == null) {
+      return;
     }
-    return '''
-    <form method="post" action="${widget.initialUrl}">
-      ${widget.postData!.entries.map((e) => '''<input type="hidden" name="${e.key}" value="${e.value}">''').join('\n')}
-      <button hidden type="submit">
-    </form>
-    <script>
-      document.getElementsByTagName('form')[0].submit();
-    </script>
-    ''';
-  }
-
-  void onResourceError(WebResourceError error) {
-    if (!(error.failingUrl?.startsWith('http') ?? true)) {
-      launchUrlInBrowser(error.failingUrl!);
-      _controller?.goBack();
+    if (url.startsWith('http')) {
+      return;
     }
-  }
-
-  Widget buildWebView(List<WebViewCookie> initialCookies) {
-    return WebView(
-      initialUrl: widget.initialUrl,
-      initialCookies: initialCookies,
-      javascriptMode: widget.javascriptMode,
-      onWebViewCreated: (WebViewController webViewController) async {
-        Log.info('WebView已创建，已获取到controller');
-        _controller = webViewController;
-        if (widget.postData != null) {
-          Log.info('通过post请求打开页面: ${widget.initialUrl}');
-          await webViewController.loadHtmlString(_buildFormHtml());
-        }
-        widget.onWebViewCreated?.call(webViewController);
-      },
-      onWebResourceError: onResourceError,
-      userAgent: widget.userAgent,
-      onPageStarted: (String url) async {
-        Log.info('开始加载url: $url');
-        await Future.wait(getAllMatchJs(url, InjectJsTime.onPageStarted).map(injectJs));
-        widget.onPageStarted?.call(url);
-      },
-      javascriptChannels: widget.javascriptChannels,
-      onPageFinished: (String url) async {
-        Log.info('url加载完毕: $url');
-        await Future.wait(getAllMatchJs(url, InjectJsTime.onPageFinished).map(injectJs));
-        widget.onPageFinished?.call(url);
-      },
-      onProgress: widget.onProgress,
-    );
+    launchUrlInBrowser(url);
+    _controller.goBack();
   }
 }

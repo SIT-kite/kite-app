@@ -39,7 +39,7 @@ class WeatherPage extends StatefulWidget {
 
 class _WeatherPageState extends State<WeatherPage> {
   bool simple = true;
-  late WebViewController controller;
+  final controller = WebViewController();
 
   @override
   Widget build(BuildContext context) {
@@ -47,17 +47,14 @@ class _WeatherPageState extends State<WeatherPage> {
     return SimpleWebViewPage(
       initialUrl: url,
       fixedTitle: widget.title ?? i18n.weather,
-      onWebViewCreated: (controller) {
-        this.controller = controller;
-      },
       otherActions: [
         IconButton(
           onPressed: () {
             simple = !simple;
             if (simple) {
-              controller.loadUrl(url);
+              controller.loadRequest(Uri.parse(url));
             } else {
-              controller.loadUrl(_ventuskyUrl);
+              controller.loadRequest(Uri.parse(_ventuskyUrl));
             }
           },
           icon: const Icon(Icons.swap_horiz),

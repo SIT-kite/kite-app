@@ -44,13 +44,13 @@ class _EvaluationPageState extends State<EvaluationPage> {
 
   final _vn = ValueNotifier<int>(100);
 
-  WebViewController? _webViewController;
+  final _webViewController = WebViewController();
 
   @override
   void initState() {
     super.initState();
     _vn.addListener(() {
-      _webViewController?.runJavascript(
+      _webViewController.runJavaScript(
         "for(const e of document.getElementsByClassName('input-pjf')) e.value='${_vn.value}'",
       );
     });
@@ -73,10 +73,10 @@ class _EvaluationPageState extends State<EvaluationPage> {
               future: ExamResultInit.cookieJar.loadAsWebViewCookie(url),
               builder: (context, data) {
                 return SimpleWebViewPage(
+                  controller: _webViewController,
                   initialUrl: url.toString(),
                   fixedTitle: i18n.teacherEvalTitle,
                   initialCookies: data,
-                  onWebViewCreated: (controller) => _webViewController = controller,
                 );
               },
             ),

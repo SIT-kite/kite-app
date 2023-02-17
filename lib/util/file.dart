@@ -20,7 +20,6 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -57,7 +56,9 @@ class FileUtils {
     final path = '${(await getTemporaryDirectory()).path}/$filename';
     await writeToFile(content: content, filepath: path);
     Log.info('保存文件$filename到 $path');
-    OpenFileX.open(path, type: type);
+    // TODO
+    throw UnimplementedError();
+    // OpenFileX.open(path, type: type);
   }
 
   static Future<String?> pickImageByFilePicker() async {

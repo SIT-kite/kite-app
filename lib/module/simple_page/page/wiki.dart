@@ -15,8 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import 'dart:async';
-
 import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,7 +23,7 @@ import 'package:kite/design/utils.dart';
 import '../using.dart';
 
 class WikiPage extends StatelessWidget {
-  final _controller = Completer<WebViewController>();
+  final _controller = WebViewController();
   final String? customWikiUrl;
 
   WikiPage({this.customWikiUrl, Key? key}) : super(key: key);
@@ -33,6 +31,7 @@ class WikiPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SimpleWebViewPage(
+      controller: _controller,
       initialUrl: customWikiUrl ?? R.kiteWikiUrl,
       fixedTitle: i18n.ftype_wiki,
       injectJsRules: [
@@ -52,9 +51,6 @@ class WikiPage extends StatelessWidget {
             injectTime: InjectJsTime.onPageFinished,
           ),
       ],
-      onWebViewCreated: (WebViewController webViewController) {
-        _controller.complete(webViewController);
-      },
       userAgent: '${(() {
             try {
               return FkUserAgent.webViewUserAgent;
@@ -65,12 +61,11 @@ class WikiPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.menu),
         onPressed: () async {
-          final controller = await _controller.future;
           const String js = '''
             menuButton = document.querySelector('label.md-header__button:nth-child(2)');
             menuButton !== null && menuButton.click();
           ''';
-          controller.runJavascript(js);
+          _controller.runJavaScript(js);
         },
       ),
     );
