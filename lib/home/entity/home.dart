@@ -96,10 +96,6 @@ enum FType {
   @HiveField(17)
   bbs,
 
-  /// 扫码
-  @HiveField(18)
-  scanner,
-
   /// 迎新(入学信息)
   @HiveField(19)
   freshman,

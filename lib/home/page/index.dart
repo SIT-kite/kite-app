@@ -315,7 +315,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-  }
 
   Widget buildBody(BuildContext context) {
     return Stack(
@@ -369,23 +368,23 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     Global.eventBus.off(EventNameConstants.onCampusChange);
     Global.eventBus.off(EventNameConstants.onHomeItemReorder);
-    super.dispose();
     _refreshController.dispose();
+    super.dispose();
   }
 
   Widget? buildFloatingActionButton() {
-    return UniversalPlatform.isDesktopOrWeb
-        ? FloatingActionButton(
-            child: const Icon(Icons.refresh),
-            onPressed: () async {
-              // 刷新页面
-              Log.info('浮动按钮被点击');
-              // 触发下拉刷新
-              final pos = _refreshController.position!;
-              await pos.animateTo(-100,
-                  duration: const Duration(milliseconds: 800), curve: Curves.fastLinearToSlowEaseIn);
-            },
-          )
-        : null;
+    if (!UniversalPlatform.isDesktopOrWeb) {
+      return null;
+    }
+    return FloatingActionButton(
+      child: const Icon(Icons.refresh),
+      onPressed: () async {
+        // 刷新页面
+        Log.info('浮动按钮被点击');
+        // 触发下拉刷新
+        final pos = _refreshController.position!;
+        await pos.animateTo(-100, duration: const Duration(milliseconds: 800), curve: Curves.fastLinearToSlowEaseIn);
+      },
+    );
   }
 }
