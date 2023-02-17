@@ -30,7 +30,7 @@ class FunctionOverrideService implements FunctionOverrideServiceDao {
   @override
   Future<FunctionOverrideInfo> get() async {
     Log.info('获取拉取动态路由配置');
-    final response = await session.request('${Backend.kite}/override.json', ReqMethod.get);
+    final response = await session.request('${Backend.kiteStatic}/override.json', ReqMethod.get);
     return FunctionOverrideInfo.fromJson(response.data);
   }
 }

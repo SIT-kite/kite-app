@@ -31,16 +31,16 @@ class R {
   static final locale2AppName = {Lang.enLocale: appNameEn, Lang.zhLocale: appNameZhCn, Lang.zhTwLocale: appNameZhTw};
   static const appName = "上应小风筝";
   static const kiteUserAgreementName = "《上应小风筝用户协议》";
-  static const kiteUserAgreementUrl = "${Backend.kite}/license/";
-  static const kiteWikiUrlFeatures = "${Backend.kite}/wiki/kite-app/features/";
+  static const kiteUserAgreementUrl = "${Backend.kiteStatic}/license/";
+  static const kiteWikiUrlFeatures = "${Backend.kiteStatic}/wiki/kite-app/features/";
   static const forgotLoginPwdUrl =
       "https://authserver.sit.edu.cn/authserver/getBackPasswordMainPage.do?service=https%3A%2F%2Fmyportal.sit.edu.cn%3A443%2F";
   static const easyConnectDownloadUrl = "https://vpn1.sit.edu.cn/com/installClient.html";
-  static const kiteAboutUrl = "${Backend.kite}/about/";
+  static const kiteAboutUrl = "${Backend.kiteStatic}/about/";
   static const kiteStatusUrl = "http://status.kite.sunnysab.cn/status/current";
   static const kiteBbsUrl = "https://support.qq.com/products/386124";
   static const kiteFeedbackUrl = "https://support.qq.com/product/377648";
-  static const kiteWikiUrl = "${Backend.kite}/wiki/";
+  static const kiteWikiUrl = "${Backend.kiteStatic}/wiki/";
   static const defaultThemeColor = Color(0xff2196f3);
 
   /// The default window size is small enough for any modern desktop device.

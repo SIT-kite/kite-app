@@ -17,4 +17,5 @@
 */
 class Backend {
   static const kite = "https://api.kite.sunnysab.cn";
+  static const kiteStatic = "https://kite.sunnysab.cn";
 }
