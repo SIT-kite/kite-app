@@ -146,16 +146,12 @@ class Initializer {
       expenseBox: HiveBoxInit.expense2,
     );
 
-    await SharedInit.init(
-      kiteSession: kiteSession,
-    );
+    await SharedInit.init(kiteSession: kiteSession);
     await GameInit.init(
       gameBox: HiveBoxInit.game,
       kiteSession: kiteSession,
     );
-    await KiteBulletinInit.init(
-      session: DefaultDioSession(Global.dio),
-    );
+    await KiteBulletinInit.init(session: DefaultDioSession(Global.dio));
     await BoardInit.init(
       kiteSession: kiteSession,
     );
