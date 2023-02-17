@@ -18,6 +18,7 @@
 import 'package:kite/backend.dart';
 import 'package:kite/network/session.dart';
 import 'package:kite/util/logger.dart';
+import 'package:kite/util/upgrade.dart';
 
 import 'entity.dart';
 import 'interface.dart';
@@ -30,7 +31,8 @@ class FunctionOverrideService implements FunctionOverrideServiceDao {
   @override
   Future<FunctionOverrideInfo> get() async {
     Log.info('获取拉取动态路由配置');
-    final response = await session.request('${Backend.kiteStatic}/override.json', ReqMethod.get);
+    String version = await getCurrentVersion().then((e) => e.version);
+    final response = await session.request('${Backend.kiteStatic}/override.$version.json', ReqMethod.get);
     return FunctionOverrideInfo.fromJson(response.data);
   }
 }

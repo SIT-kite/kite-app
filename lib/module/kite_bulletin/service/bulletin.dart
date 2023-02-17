@@ -15,13 +15,15 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+import 'package:kite/util/logger.dart';
+
 import '../dao/remote.dart';
 import '../entity/bulletin.dart';
 import '../using.dart';
 
 class KiteBulletinService implements KiteBulletinServiceDao {
-  static const String _bulletinPath = '${Backend.kiteStatic}/bulletin.json';
-  static const String _bulletinMetaPath = '${Backend.kiteStatic}/bulletin_meta.json';
+  static const String _bulletinPath = '${Backend.kiteStatic}/bulletin/content.json';
+  static const String _bulletinMetaPath = '${Backend.kiteStatic}/bulletin/meta.json';
 
   final ISession session;
 
@@ -47,6 +49,7 @@ class KiteBulletinService implements KiteBulletinServiceDao {
 
   @override
   Future<KiteBulletinMeta> getBulletinMeta() async {
+    Log.info('请求：$_bulletinMetaPath');
     final response = await session.request(_bulletinMetaPath, ReqMethod.get);
     return KiteBulletinMeta.fromJson(response.data);
   }
