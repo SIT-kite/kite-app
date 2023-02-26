@@ -22,8 +22,8 @@ Future<DateTime?> pickDate(BuildContext ctx, {required DateTime initial}) async 
     context: ctx,
     initialDate: initial,
     currentDate: DateTime.now(),
-    firstDate: DateTime(DateTime.now().year),
-    lastDate: DateTime(DateTime.now().year + 2),
+    firstDate: DateTime(DateTime.now().year - 4),
+    lastDate: DateTime(DateTime.now().year + 4),
     selectableDayPredicate: (DateTime dataTime) => dataTime.weekday == DateTime.monday,
   );
 }

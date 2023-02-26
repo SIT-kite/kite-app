@@ -34,11 +34,6 @@ class _ImportTimetableIndexPageState extends State<ImportTimetableIndexPage> {
   bool canImport = false;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

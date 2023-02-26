@@ -125,67 +125,71 @@ class _MyTimetablePageState extends State<MyTimetablePage> {
   }
 
   Widget buildTimetableEntry(BuildContext ctx, TimetableMeta meta, {required bool isSelected}) {
-    return CupertinoContextMenu(
-      actions: [
-        CupertinoContextMenuAction(
-          trailingIcon: CupertinoIcons.doc_text,
-          onPressed: () async {
-            Navigator.of(ctx).pop();
-            final changed = await ctx
-                .showSheet((context) => TimetableEditor(meta: meta).padOnly(b: MediaQuery.of(ctx).viewInsets.bottom));
-
-            if (changed == true) {
-              setState(() {});
-            }
-          },
-          child: i18n.timetableEdit.text(),
-        ),
-        if (storage.currentTableName != meta.name)
+    return CupertinoContextMenu.builder(
+        actions: [
           CupertinoContextMenuAction(
-            trailingIcon: CupertinoIcons.checkmark,
-            onPressed: () {
+            trailingIcon: CupertinoIcons.doc_text,
+            onPressed: () async {
               Navigator.of(ctx).pop();
-              storage.currentTableName = meta.name;
-              setState(() {});
+              final changed = await ctx
+                  .showSheet((context) => TimetableEditor(meta: meta).padOnly(b: MediaQuery.of(ctx).viewInsets.bottom));
+
+              if (changed == true) {
+                setState(() {});
+              }
             },
-            child: i18n.timetableSetToDefault.text(),
+            child: i18n.timetableEdit.text(),
           ),
-        CupertinoContextMenuAction(
-          trailingIcon: CupertinoIcons.time,
-          onPressed: () async {
-            Navigator.of(ctx).pop();
-            final date = await pickDate(context, initial: meta.startDate);
-            if (date != null) {
-              meta.startDate = DateTime(date.year, date.month, date.day, 8, 20);
-              storage.addTableMeta(meta.name, meta);
-            }
-          },
-          child: i18n.timetableSetStartDate.text(),
-        ),
-        CupertinoContextMenuAction(
-          trailingIcon: CupertinoIcons.eye,
-          onPressed: () async {
-            Navigator.of(ctx).pop();
-            Navigator.of(ctx).push(MaterialPageRoute(
-                builder: (ctx) =>
-                    TimetablePreviewPage(meta: meta, courses: storage.getTableCourseByName(meta.name) ?? [])));
-          },
-          child: i18n.timetablePreviewBtn.text(),
-        ),
-        CupertinoContextMenuAction(
-          trailingIcon: CupertinoIcons.delete,
-          onPressed: () async {
-            Navigator.of(ctx).pop();
-            // Have to wait until the animation has been suspended because flutter is buggy without check `mounted` in _CupertinoContextMenuState.
-            await showDeleteTimetableRequest(ctx, meta);
-          },
-          isDestructiveAction: true,
-          child: i18n.timetableDelete.text(),
-        ),
-      ],
-      child: buildTimetableItemCard(ctx, meta, isSelected: isSelected),
-      previewBuilder: (ctx, animation, child) => buildTimetableItemCardPreview(ctx, meta, isSelected: isSelected),
-    );
+          if (storage.currentTableName != meta.name)
+            CupertinoContextMenuAction(
+              trailingIcon: CupertinoIcons.checkmark,
+              onPressed: () {
+                Navigator.of(ctx).pop();
+                storage.currentTableName = meta.name;
+                setState(() {});
+              },
+              child: i18n.timetableSetToDefault.text(),
+            ),
+          CupertinoContextMenuAction(
+            trailingIcon: CupertinoIcons.time,
+            onPressed: () async {
+              Navigator.of(ctx).pop();
+              final date = await pickDate(context, initial: meta.startDate);
+              if (date != null) {
+                meta.startDate = DateTime(date.year, date.month, date.day, 8, 20);
+                storage.addTableMeta(meta.name, meta);
+              }
+            },
+            child: i18n.timetableSetStartDate.text(),
+          ),
+          CupertinoContextMenuAction(
+            trailingIcon: CupertinoIcons.eye,
+            onPressed: () async {
+              Navigator.of(ctx).pop();
+              Navigator.of(ctx).push(MaterialPageRoute(
+                  builder: (ctx) =>
+                      TimetablePreviewPage(meta: meta, courses: storage.getTableCourseByName(meta.name) ?? [])));
+            },
+            child: i18n.timetablePreviewBtn.text(),
+          ),
+          CupertinoContextMenuAction(
+            trailingIcon: CupertinoIcons.delete,
+            onPressed: () async {
+              Navigator.of(ctx).pop();
+              // Have to wait until the animation has been suspended because flutter is buggy without check `mounted` in _CupertinoContextMenuState.
+              await showDeleteTimetableRequest(ctx, meta);
+            },
+            isDestructiveAction: true,
+            child: i18n.timetableDelete.text(),
+          ),
+        ],
+        builder: (ctx, animation) {
+          return buildTimetableItemCardPreview(
+            ctx,
+            meta,
+            isSelected: isSelected,
+          );
+        });
   }
 
   Widget buildTimetableItemCard(BuildContext ctx, TimetableMeta meta, {required bool isSelected}) {
