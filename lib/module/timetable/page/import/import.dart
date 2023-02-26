@@ -29,6 +29,19 @@ enum ImportStatus {
   importing,
   end,
   failed;
+
+  String get tipString {
+    switch (this) {
+      case ImportStatus.none:
+        return i18n.timetableSelectSemesterTip;
+      case ImportStatus.importing:
+        return i18n.timetableImportImporting;
+      case ImportStatus.end:
+        return i18n.timetableImportEndTip;
+      default:
+        return i18n.timetableImportFailedTip;
+    }
+  }
 }
 
 class ImportTimetablePage extends StatefulWidget {
@@ -43,16 +56,13 @@ class ImportTimetablePage extends StatefulWidget {
 class _ImportTimetablePageState extends State<ImportTimetablePage> {
   final service = TimetableInit.timetableService;
   final storage = TimetableInit.timetableStorage;
-  var _status = ImportStatus.none;
-  late ValueNotifier<DateTime> selectedDate = ValueNotifier(
-    widget.defaultStartDate != null
-        ? widget.defaultStartDate!
-        : Iterable.generate(7, (i) {
-            return DateTime.now().add(Duration(days: i));
-          }).firstWhere((e) => e.weekday == DateTime.monday),
-  );
-  late int selectedYear;
-  late Semester selectedSemester;
+
+  // 当前课表导入状态
+  late ImportStatus _status;
+  // 被选择的学年
+  late int _selectedYear;
+  // 被选择的学期
+  late Semester _selectedSemester;
 
   @override
   void initState() {
@@ -60,21 +70,9 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
     DateTime now = DateTime.now();
     now = DateTime(now.year, now.month, now.day, 8, 20);
     // 先根据当前时间估算出是哪个学期
-    selectedYear = (now.month >= 9 ? now.year : now.year - 1);
-    selectedSemester = (now.month >= 3 && now.month <= 7) ? Semester.secondTerm : Semester.firstTerm;
-  }
-
-  String getTip({required ImportStatus by}) {
-    switch (by) {
-      case ImportStatus.none:
-        return i18n.timetableSelectSemesterTip;
-      case ImportStatus.importing:
-        return i18n.timetableImportImporting;
-      case ImportStatus.end:
-        return i18n.timetableImportEndTip;
-      default:
-        return i18n.timetableImportFailedTip;
-    }
+    _selectedYear = (now.month >= 9 ? now.year : now.year - 1);
+    _selectedSemester = (now.month >= 3 && now.month <= 7) ? Semester.secondTerm : Semester.firstTerm;
+    _status = ImportStatus.none;
   }
 
   @override
@@ -83,19 +81,19 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
   }
 
   Widget buildTip(BuildContext ctx) {
-    final tip = getTip(by: _status);
     return AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        switchInCurve: Curves.fastLinearToSlowEaseIn,
-        switchOutCurve: Curves.fastLinearToSlowEaseIn,
-        transitionBuilder: (Widget child, Animation<double> animation) {
-          return FadeTransition(opacity: animation, child: child);
-        },
-        child: Text(
-          key: ValueKey(_status),
-          tip,
-          style: ctx.textTheme.titleLarge,
-        ));
+      duration: const Duration(milliseconds: 300),
+      switchInCurve: Curves.fastLinearToSlowEaseIn,
+      switchOutCurve: Curves.fastLinearToSlowEaseIn,
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        return FadeTransition(opacity: animation, child: child);
+      },
+      child: Text(
+        _status.tipString,
+        key: ValueKey(_status),
+        style: ctx.textTheme.titleLarge,
+      ),
+    );
   }
 
   Widget buildImportPage(BuildContext ctx) {
@@ -117,19 +115,20 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
         ),
         Padding(padding: const EdgeInsets.symmetric(vertical: 30), child: buildTip(ctx)),
         Padding(
-            padding: const EdgeInsets.symmetric(vertical: 30),
-            child: SemesterSelector(
-              onNewYearSelect: (year) {
-                setState(() => selectedYear = year);
-              },
-              onNewSemesterSelect: (semester) {
-                setState(() => selectedSemester = semester);
-              },
-              initialYear: selectedYear,
-              initialSemester: selectedSemester,
-              showEntireYear: false,
-              showNextYear: true,
-            )),
+          padding: const EdgeInsets.symmetric(vertical: 30),
+          child: SemesterSelector(
+            onNewYearSelect: (year) {
+              setState(() => _selectedYear = year);
+            },
+            onNewSemesterSelect: (semester) {
+              setState(() => _selectedSemester = semester);
+            },
+            initialYear: _selectedYear,
+            initialSemester: _selectedSemester,
+            showEntireYear: false,
+            showNextYear: true,
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.all(24),
           child: buildImportButton(ctx),
@@ -138,18 +137,16 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
     );
   }
 
-  Future<List<Course>> _fetchTimetable(SchoolYear year, Semester semester) async {
-    return await service.getTimetable(year, semester);
-  }
-
+  // 持久化课表数据
   Future<bool> handleTimetableData(BuildContext ctx, List<Course> courses, int year, Semester semester) async {
-    final defaultName = i18n.timetableInfoDefaultName(semester.localized(), year, year + 1);
     final meta = TimetableMeta()
-      ..name = defaultName
+      ..name = i18n.timetableInfoDefaultName(semester.localized(), year, year + 1)
       ..schoolYear = year
       ..semester = semester.index;
-    final saved = await ctx.showSheet((ctx) => MetaEditor(meta: meta).padOnly(b: MediaQuery.of(ctx).viewInsets.bottom));
-    if (saved == true) {
+    final saved = await ctx.showSheet((ctx) {
+      return MetaEditor(meta: meta).padOnly(b: MediaQuery.of(ctx).viewInsets.bottom);
+    });
+    if (saved) {
       storage.addTable(meta, courses);
       return true;
     }
@@ -157,29 +154,23 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
   }
 
   Widget buildImportButton(BuildContext ctx) {
+    final isImporting = _status == ImportStatus.importing;
     return ElevatedButton(
       onPressed: _status == ImportStatus.importing
           ? null
           : () async {
-              setState(() {
-                _status = ImportStatus.importing;
-              });
+              if (!mounted) return;
+              setState(() => isImporting);
               try {
-                final semester = selectedSemester;
-                final year = SchoolYear(selectedYear);
-                await Future.wait([
-                  _fetchTimetable(year, semester),
-                  //fetchMockCourses(),
-                  Future.delayed(const Duration(milliseconds: 4500)),
-                ]).then((value) async {
-                  setState(() {
-                    _status = ImportStatus.end;
-                  });
-                  final saved = await handleTimetableData(ctx, value[0], selectedYear, semester);
-                  if (mounted) Navigator.of(ctx).pop(saved);
-                  setState(() {
-                    _status = ImportStatus.none;
-                  });
+                final semester = _selectedSemester;
+                final year = SchoolYear(_selectedYear);
+                final timetable = await service.getTimetable(year, semester);
+                setState(() => _status = ImportStatus.end);
+                if (!mounted) return;
+                final saved = await handleTimetableData(ctx, timetable, _selectedYear, semester);
+                if (mounted) Navigator.of(ctx).pop(saved);
+                setState(() {
+                  _status = ImportStatus.none;
                 });
               } catch (e) {
                 setState(() {
@@ -187,9 +178,12 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
                 });
                 if (!mounted) return;
                 await context.showTip(
-                    title: i18n.timetableImportFailed, desc: i18n.timetableImportFailedDesc, ok: i18n.ok);
+                  title: i18n.timetableImportFailed,
+                  desc: i18n.timetableImportFailedDesc,
+                  ok: i18n.ok,
+                );
               } finally {
-                if (_status == ImportStatus.importing) {
+                if (isImporting) {
                   setState(() {
                     _status = ImportStatus.end;
                   });
@@ -197,11 +191,12 @@ class _ImportTimetablePageState extends State<ImportTimetablePage> {
               }
             },
       child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Text(
-            i18n.timetableImportImportBtn,
-            style: ctx.textTheme.titleLarge,
-          )),
+        padding: const EdgeInsets.all(12),
+        child: Text(
+          i18n.timetableImportImportBtn,
+          style: ctx.textTheme.titleLarge,
+        ),
+      ),
     );
   }
 }
